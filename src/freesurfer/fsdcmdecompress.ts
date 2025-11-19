@@ -11,7 +11,7 @@ const FSDCMDECOMPRESS_METADATA: Metadata = {
 };
 
 
-interface FsdcmdecompressParameters {
+interface FsdcmdecompressParamsDict {
     "@type"?: "freesurfer/fsdcmdecompress";
     "indcmfile": InputPathType;
     "outdcmfile": string;
@@ -20,11 +20,11 @@ interface FsdcmdecompressParameters {
     "rle": boolean;
     "gdcm": boolean;
 }
-type FsdcmdecompressParametersTagged = Required<Pick<FsdcmdecompressParameters, '@type'>> & FsdcmdecompressParameters;
+type FsdcmdecompressParamsDictTagged = Required<Pick<FsdcmdecompressParamsDict, '@type'>> & FsdcmdecompressParamsDict;
 
 
 /**
- * Output object returned when calling `FsdcmdecompressParameters(...)`.
+ * Output object returned when calling `FsdcmdecompressParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function fsdcmdecompress_params(
     jpeg: boolean = false,
     rle: boolean = false,
     gdcm: boolean = false,
-): FsdcmdecompressParametersTagged {
+): FsdcmdecompressParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsdcmdecompress" as const,
         "indcmfile": indcmfile,
@@ -82,7 +82,7 @@ function fsdcmdecompress_params(
  * @returns Command-line arguments.
  */
 function fsdcmdecompress_cargs(
-    params: FsdcmdecompressParameters,
+    params: FsdcmdecompressParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function fsdcmdecompress_cargs(
  * @returns Outputs object.
  */
 function fsdcmdecompress_outputs(
-    params: FsdcmdecompressParameters,
+    params: FsdcmdecompressParamsDict,
     execution: Execution,
 ): FsdcmdecompressOutputs {
     const ret: FsdcmdecompressOutputs = {
@@ -146,7 +146,7 @@ function fsdcmdecompress_outputs(
  * @returns NamedTuple of outputs (described in `FsdcmdecompressOutputs`).
  */
 function fsdcmdecompress_execute(
-    params: FsdcmdecompressParameters,
+    params: FsdcmdecompressParamsDict,
     runner: Runner | null = null,
 ): FsdcmdecompressOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function fsdcmdecompress(
 export {
       FSDCMDECOMPRESS_METADATA,
       FsdcmdecompressOutputs,
+      FsdcmdecompressParamsDict,
+      FsdcmdecompressParamsDictTagged,
       fsdcmdecompress,
       fsdcmdecompress_execute,
       fsdcmdecompress_params,

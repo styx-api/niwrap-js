@@ -11,18 +11,18 @@ const MRIS_LEFT_RIGHT_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MrisLeftRightRegisterParameters {
+interface MrisLeftRightRegisterParamsDict {
     "@type"?: "freesurfer/mris_left_right_register";
     "lh_sphere": InputPathType;
     "rh_sphere": InputPathType;
     "lh_sphere_left_right": string;
     "rh_sphere_left_right": string;
 }
-type MrisLeftRightRegisterParametersTagged = Required<Pick<MrisLeftRightRegisterParameters, '@type'>> & MrisLeftRightRegisterParameters;
+type MrisLeftRightRegisterParamsDictTagged = Required<Pick<MrisLeftRightRegisterParamsDict, '@type'>> & MrisLeftRightRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MrisLeftRightRegisterParameters(...)`.
+ * Output object returned when calling `MrisLeftRightRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function mris_left_right_register_params(
     rh_sphere: InputPathType,
     lh_sphere_left_right: string,
     rh_sphere_left_right: string,
-): MrisLeftRightRegisterParametersTagged {
+): MrisLeftRightRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_left_right_register" as const,
         "lh_sphere": lh_sphere,
@@ -78,7 +78,7 @@ function mris_left_right_register_params(
  * @returns Command-line arguments.
  */
 function mris_left_right_register_cargs(
-    params: MrisLeftRightRegisterParameters,
+    params: MrisLeftRightRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function mris_left_right_register_cargs(
  * @returns Outputs object.
  */
 function mris_left_right_register_outputs(
-    params: MrisLeftRightRegisterParameters,
+    params: MrisLeftRightRegisterParamsDict,
     execution: Execution,
 ): MrisLeftRightRegisterOutputs {
     const ret: MrisLeftRightRegisterOutputs = {
@@ -127,7 +127,7 @@ function mris_left_right_register_outputs(
  * @returns NamedTuple of outputs (described in `MrisLeftRightRegisterOutputs`).
  */
 function mris_left_right_register_execute(
-    params: MrisLeftRightRegisterParameters,
+    params: MrisLeftRightRegisterParamsDict,
     runner: Runner | null = null,
 ): MrisLeftRightRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function mris_left_right_register(
 export {
       MRIS_LEFT_RIGHT_REGISTER_METADATA,
       MrisLeftRightRegisterOutputs,
+      MrisLeftRightRegisterParamsDict,
+      MrisLeftRightRegisterParamsDictTagged,
       mris_left_right_register,
       mris_left_right_register_execute,
       mris_left_right_register_params,

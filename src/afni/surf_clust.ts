@@ -11,7 +11,7 @@ const SURF_CLUST_METADATA: Metadata = {
 };
 
 
-interface SurfClustParameters {
+interface SurfClustParamsDict {
     "@type"?: "afni/SurfClust";
     "specfile"?: InputPathType | null | undefined;
     "input_surface"?: string | null | undefined;
@@ -53,11 +53,11 @@ interface SurfClustParameters {
     "spx_help": boolean;
     "aspx_help": boolean;
 }
-type SurfClustParametersTagged = Required<Pick<SurfClustParameters, '@type'>> & SurfClustParameters;
+type SurfClustParamsDictTagged = Required<Pick<SurfClustParamsDict, '@type'>> & SurfClustParamsDict;
 
 
 /**
- * Output object returned when calling `SurfClustParameters(...)`.
+ * Output object returned when calling `SurfClustParamsDict(...)`.
  *
  * @interface
  */
@@ -166,7 +166,7 @@ function surf_clust_params(
     raw_help: boolean = false,
     spx_help: boolean = false,
     aspx_help: boolean = false,
-): SurfClustParametersTagged {
+): SurfClustParamsDictTagged {
     const params = {
         "@type": "afni/SurfClust" as const,
         "input_dataset": input_dataset,
@@ -250,7 +250,7 @@ function surf_clust_params(
  * @returns Command-line arguments.
  */
 function surf_clust_cargs(
-    params: SurfClustParameters,
+    params: SurfClustParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -429,7 +429,7 @@ function surf_clust_cargs(
  * @returns Outputs object.
  */
 function surf_clust_outputs(
-    params: SurfClustParameters,
+    params: SurfClustParamsDict,
     execution: Execution,
 ): SurfClustOutputs {
     const ret: SurfClustOutputs = {
@@ -457,7 +457,7 @@ function surf_clust_outputs(
  * @returns NamedTuple of outputs (described in `SurfClustOutputs`).
  */
 function surf_clust_execute(
-    params: SurfClustParameters,
+    params: SurfClustParamsDict,
     runner: Runner | null = null,
 ): SurfClustOutputs {
     runner = runner || getGlobalRunner();
@@ -572,6 +572,8 @@ function surf_clust(
 export {
       SURF_CLUST_METADATA,
       SurfClustOutputs,
+      SurfClustParamsDict,
+      SurfClustParamsDictTagged,
       surf_clust,
       surf_clust_execute,
       surf_clust_params,

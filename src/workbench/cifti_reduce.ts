@@ -10,24 +10,24 @@ const CIFTI_REDUCE_METADATA: Metadata = {
 };
 
 
-interface CiftiReduceExcludeOutliersParameters {
+interface CiftiReduceExcludeOutliersParamsDict {
     "@type"?: "exclude-outliers";
     "sigma-below": number;
     "sigma-above": number;
 }
-type CiftiReduceExcludeOutliersParametersTagged = Required<Pick<CiftiReduceExcludeOutliersParameters, '@type'>> & CiftiReduceExcludeOutliersParameters;
+type CiftiReduceExcludeOutliersParamsDictTagged = Required<Pick<CiftiReduceExcludeOutliersParamsDict, '@type'>> & CiftiReduceExcludeOutliersParamsDict;
 
 
-interface CiftiReduceParameters {
+interface CiftiReduceParamsDict {
     "@type"?: "workbench/cifti-reduce";
     "cifti-out": string;
     "direction"?: string | null | undefined;
-    "exclude-outliers"?: CiftiReduceExcludeOutliersParameters | null | undefined;
+    "exclude-outliers"?: CiftiReduceExcludeOutliersParamsDict | null | undefined;
     "only-numeric": boolean;
     "cifti-in": InputPathType;
     "operation": string;
 }
-type CiftiReduceParametersTagged = Required<Pick<CiftiReduceParameters, '@type'>> & CiftiReduceParameters;
+type CiftiReduceParamsDictTagged = Required<Pick<CiftiReduceParamsDict, '@type'>> & CiftiReduceParamsDict;
 
 
 /**
@@ -38,10 +38,10 @@ type CiftiReduceParametersTagged = Required<Pick<CiftiReduceParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function cifti_reduce_exclude_outliers_params(
+function cifti_reduce_exclude_outliers(
     sigma_below: number,
     sigma_above: number,
-): CiftiReduceExcludeOutliersParametersTagged {
+): CiftiReduceExcludeOutliersParamsDictTagged {
     const params = {
         "@type": "exclude-outliers" as const,
         "sigma-below": sigma_below,
@@ -60,7 +60,7 @@ function cifti_reduce_exclude_outliers_params(
  * @returns Command-line arguments.
  */
 function cifti_reduce_exclude_outliers_cargs(
-    params: CiftiReduceExcludeOutliersParameters,
+    params: CiftiReduceExcludeOutliersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -74,7 +74,7 @@ function cifti_reduce_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `CiftiReduceParameters(...)`.
+ * Output object returned when calling `CiftiReduceParamsDict(...)`.
  *
  * @interface
  */
@@ -109,9 +109,9 @@ function cifti_reduce_params(
     direction: string | null,
     cifti_in: InputPathType,
     operation: string,
-    exclude_outliers: CiftiReduceExcludeOutliersParameters | null = null,
+    exclude_outliers: CiftiReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
-): CiftiReduceParametersTagged {
+): CiftiReduceParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-reduce" as const,
         "cifti-out": cifti_out,
@@ -138,7 +138,7 @@ function cifti_reduce_params(
  * @returns Command-line arguments.
  */
 function cifti_reduce_cargs(
-    params: CiftiReduceParameters,
+    params: CiftiReduceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,7 +168,7 @@ function cifti_reduce_cargs(
  * @returns Outputs object.
  */
 function cifti_reduce_outputs(
-    params: CiftiReduceParameters,
+    params: CiftiReduceParamsDict,
     execution: Execution,
 ): CiftiReduceOutputs {
     const ret: CiftiReduceOutputs = {
@@ -208,7 +208,7 @@ function cifti_reduce_outputs(
  * @returns NamedTuple of outputs (described in `CiftiReduceOutputs`).
  */
 function cifti_reduce_execute(
-    params: CiftiReduceParameters,
+    params: CiftiReduceParamsDict,
     runner: Runner | null = null,
 ): CiftiReduceOutputs {
     runner = runner || getGlobalRunner();
@@ -261,7 +261,7 @@ function cifti_reduce(
     direction: string | null,
     cifti_in: InputPathType,
     operation: string,
-    exclude_outliers: CiftiReduceExcludeOutliersParameters | null = null,
+    exclude_outliers: CiftiReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiReduceOutputs {
@@ -272,9 +272,13 @@ function cifti_reduce(
 
 export {
       CIFTI_REDUCE_METADATA,
+      CiftiReduceExcludeOutliersParamsDict,
+      CiftiReduceExcludeOutliersParamsDictTagged,
       CiftiReduceOutputs,
+      CiftiReduceParamsDict,
+      CiftiReduceParamsDictTagged,
       cifti_reduce,
-      cifti_reduce_exclude_outliers_params,
+      cifti_reduce_exclude_outliers,
       cifti_reduce_execute,
       cifti_reduce_params,
 };

@@ -11,7 +11,7 @@ const RTVIEW_METADATA: Metadata = {
 };
 
 
-interface RtviewParameters {
+interface RtviewParamsDict {
     "@type"?: "freesurfer/rtview";
     "subject"?: string | null | undefined;
     "hemi"?: string | null | undefined;
@@ -28,11 +28,11 @@ interface RtviewParameters {
     "tcl_file"?: InputPathType | null | undefined;
     "no_cleanup": boolean;
 }
-type RtviewParametersTagged = Required<Pick<RtviewParameters, '@type'>> & RtviewParameters;
+type RtviewParamsDictTagged = Required<Pick<RtviewParamsDict, '@type'>> & RtviewParamsDict;
 
 
 /**
- * Output object returned when calling `RtviewParameters(...)`.
+ * Output object returned when calling `RtviewParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function rtview_params(
     patch: string | null = null,
     tcl_file: InputPathType | null = null,
     no_cleanup: boolean = false,
-): RtviewParametersTagged {
+): RtviewParamsDictTagged {
     const params = {
         "@type": "freesurfer/rtview" as const,
         "left_hemi": left_hemi,
@@ -126,7 +126,7 @@ function rtview_params(
  * @returns Command-line arguments.
  */
 function rtview_cargs(
-    params: RtviewParameters,
+    params: RtviewParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function rtview_cargs(
  * @returns Outputs object.
  */
 function rtview_outputs(
-    params: RtviewParameters,
+    params: RtviewParamsDict,
     execution: Execution,
 ): RtviewOutputs {
     const ret: RtviewOutputs = {
@@ -235,7 +235,7 @@ function rtview_outputs(
  * @returns NamedTuple of outputs (described in `RtviewOutputs`).
  */
 function rtview_execute(
-    params: RtviewParameters,
+    params: RtviewParamsDict,
     runner: Runner | null = null,
 ): RtviewOutputs {
     runner = runner || getGlobalRunner();
@@ -300,6 +300,8 @@ function rtview(
 export {
       RTVIEW_METADATA,
       RtviewOutputs,
+      RtviewParamsDict,
+      RtviewParamsDictTagged,
       rtview,
       rtview_execute,
       rtview_params,

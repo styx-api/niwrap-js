@@ -11,7 +11,7 @@ const GEN_SS_REVIEW_SCRIPTS_PY_METADATA: Metadata = {
 };
 
 
-interface GenSsReviewScriptsPyParameters {
+interface GenSsReviewScriptsPyParamsDict {
     "@type"?: "afni/gen_ss_review_scripts.py";
     "subject_id"?: string | null | undefined;
     "rm_trs"?: number | null | undefined;
@@ -33,11 +33,11 @@ interface GenSsReviewScriptsPyParameters {
     "uvars_json"?: InputPathType | null | undefined;
     "init_uvars_json"?: InputPathType | null | undefined;
 }
-type GenSsReviewScriptsPyParametersTagged = Required<Pick<GenSsReviewScriptsPyParameters, '@type'>> & GenSsReviewScriptsPyParameters;
+type GenSsReviewScriptsPyParamsDictTagged = Required<Pick<GenSsReviewScriptsPyParamsDict, '@type'>> & GenSsReviewScriptsPyParamsDict;
 
 
 /**
- * Output object returned when calling `GenSsReviewScriptsPyParameters(...)`.
+ * Output object returned when calling `GenSsReviewScriptsPyParamsDict(...)`.
  *
  * @interface
  */
@@ -106,7 +106,7 @@ function gen_ss_review_scripts_py_params(
     verbosity: number | null = null,
     uvars_json: InputPathType | null = null,
     init_uvars_json: InputPathType | null = null,
-): GenSsReviewScriptsPyParametersTagged {
+): GenSsReviewScriptsPyParamsDictTagged {
     const params = {
         "@type": "afni/gen_ss_review_scripts.py" as const,
     };
@@ -180,7 +180,7 @@ function gen_ss_review_scripts_py_params(
  * @returns Command-line arguments.
  */
 function gen_ss_review_scripts_py_cargs(
-    params: GenSsReviewScriptsPyParameters,
+    params: GenSsReviewScriptsPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -312,7 +312,7 @@ function gen_ss_review_scripts_py_cargs(
  * @returns Outputs object.
  */
 function gen_ss_review_scripts_py_outputs(
-    params: GenSsReviewScriptsPyParameters,
+    params: GenSsReviewScriptsPyParamsDict,
     execution: Execution,
 ): GenSsReviewScriptsPyOutputs {
     const ret: GenSsReviewScriptsPyOutputs = {
@@ -340,7 +340,7 @@ function gen_ss_review_scripts_py_outputs(
  * @returns NamedTuple of outputs (described in `GenSsReviewScriptsPyOutputs`).
  */
 function gen_ss_review_scripts_py_execute(
-    params: GenSsReviewScriptsPyParameters,
+    params: GenSsReviewScriptsPyParamsDict,
     runner: Runner | null = null,
 ): GenSsReviewScriptsPyOutputs {
     runner = runner || getGlobalRunner();
@@ -415,6 +415,8 @@ function gen_ss_review_scripts_py(
 export {
       GEN_SS_REVIEW_SCRIPTS_PY_METADATA,
       GenSsReviewScriptsPyOutputs,
+      GenSsReviewScriptsPyParamsDict,
+      GenSsReviewScriptsPyParamsDictTagged,
       gen_ss_review_scripts_py,
       gen_ss_review_scripts_py_execute,
       gen_ss_review_scripts_py_params,

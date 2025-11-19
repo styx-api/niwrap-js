@@ -11,17 +11,17 @@ const MRI_LOG_LIKELIHOOD_METADATA: Metadata = {
 };
 
 
-interface MriLogLikelihoodParameters {
+interface MriLogLikelihoodParamsDict {
     "@type"?: "freesurfer/mri_log_likelihood";
     "input_brain_images": Array<InputPathType>;
     "atlas_file": InputPathType;
     "transform_file": InputPathType;
 }
-type MriLogLikelihoodParametersTagged = Required<Pick<MriLogLikelihoodParameters, '@type'>> & MriLogLikelihoodParameters;
+type MriLogLikelihoodParamsDictTagged = Required<Pick<MriLogLikelihoodParamsDict, '@type'>> & MriLogLikelihoodParamsDict;
 
 
 /**
- * Output object returned when calling `MriLogLikelihoodParameters(...)`.
+ * Output object returned when calling `MriLogLikelihoodParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function mri_log_likelihood_params(
     input_brain_images: Array<InputPathType>,
     atlas_file: InputPathType,
     transform_file: InputPathType,
-): MriLogLikelihoodParametersTagged {
+): MriLogLikelihoodParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_log_likelihood" as const,
         "input_brain_images": input_brain_images,
@@ -66,7 +66,7 @@ function mri_log_likelihood_params(
  * @returns Command-line arguments.
  */
 function mri_log_likelihood_cargs(
-    params: MriLogLikelihoodParameters,
+    params: MriLogLikelihoodParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function mri_log_likelihood_cargs(
  * @returns Outputs object.
  */
 function mri_log_likelihood_outputs(
-    params: MriLogLikelihoodParameters,
+    params: MriLogLikelihoodParamsDict,
     execution: Execution,
 ): MriLogLikelihoodOutputs {
     const ret: MriLogLikelihoodOutputs = {
@@ -112,7 +112,7 @@ function mri_log_likelihood_outputs(
  * @returns NamedTuple of outputs (described in `MriLogLikelihoodOutputs`).
  */
 function mri_log_likelihood_execute(
-    params: MriLogLikelihoodParameters,
+    params: MriLogLikelihoodParamsDict,
     runner: Runner | null = null,
 ): MriLogLikelihoodOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function mri_log_likelihood(
 export {
       MRI_LOG_LIKELIHOOD_METADATA,
       MriLogLikelihoodOutputs,
+      MriLogLikelihoodParamsDict,
+      MriLogLikelihoodParamsDictTagged,
       mri_log_likelihood,
       mri_log_likelihood_execute,
       mri_log_likelihood_params,

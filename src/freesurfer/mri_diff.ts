@@ -11,7 +11,7 @@ const MRI_DIFF_METADATA: Metadata = {
 };
 
 
-interface MriDiffParameters {
+interface MriDiffParamsDict {
     "@type"?: "freesurfer/mri_diff";
     "vol1file": InputPathType;
     "vol2file": InputPathType;
@@ -45,11 +45,11 @@ interface MriDiffParameters {
     "verbose_mode": boolean;
     "check_options": boolean;
 }
-type MriDiffParametersTagged = Required<Pick<MriDiffParameters, '@type'>> & MriDiffParameters;
+type MriDiffParamsDictTagged = Required<Pick<MriDiffParamsDict, '@type'>> & MriDiffParamsDict;
 
 
 /**
- * Output object returned when calling `MriDiffParameters(...)`.
+ * Output object returned when calling `MriDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -142,7 +142,7 @@ function mri_diff_params(
     debug_mode: boolean = false,
     verbose_mode: boolean = false,
     check_options: boolean = false,
-): MriDiffParametersTagged {
+): MriDiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_diff" as const,
         "vol1file": vol1file,
@@ -206,7 +206,7 @@ function mri_diff_params(
  * @returns Command-line arguments.
  */
 function mri_diff_cargs(
-    params: MriDiffParameters,
+    params: MriDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -337,7 +337,7 @@ function mri_diff_cargs(
  * @returns Outputs object.
  */
 function mri_diff_outputs(
-    params: MriDiffParameters,
+    params: MriDiffParamsDict,
     execution: Execution,
 ): MriDiffOutputs {
     const ret: MriDiffOutputs = {
@@ -365,7 +365,7 @@ function mri_diff_outputs(
  * @returns NamedTuple of outputs (described in `MriDiffOutputs`).
  */
 function mri_diff_execute(
-    params: MriDiffParameters,
+    params: MriDiffParamsDict,
     runner: Runner | null = null,
 ): MriDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -464,6 +464,8 @@ function mri_diff(
 export {
       MRI_DIFF_METADATA,
       MriDiffOutputs,
+      MriDiffParamsDict,
+      MriDiffParamsDictTagged,
       mri_diff,
       mri_diff_execute,
       mri_diff_params,

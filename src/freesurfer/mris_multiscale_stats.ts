@@ -11,7 +11,7 @@ const MRIS_MULTISCALE_STATS_METADATA: Metadata = {
 };
 
 
-interface MrisMultiscaleStatsParameters {
+interface MrisMultiscaleStatsParamsDict {
     "@type"?: "freesurfer/mris_multiscale_stats";
     "output_subject": string;
     "hemi": string;
@@ -20,11 +20,11 @@ interface MrisMultiscaleStatsParameters {
     "class1_subjects": Array<string>;
     "class2_subjects": Array<string>;
 }
-type MrisMultiscaleStatsParametersTagged = Required<Pick<MrisMultiscaleStatsParameters, '@type'>> & MrisMultiscaleStatsParameters;
+type MrisMultiscaleStatsParamsDictTagged = Required<Pick<MrisMultiscaleStatsParamsDict, '@type'>> & MrisMultiscaleStatsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMultiscaleStatsParameters(...)`.
+ * Output object returned when calling `MrisMultiscaleStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function mris_multiscale_stats_params(
     curv: InputPathType,
     class1_subjects: Array<string>,
     class2_subjects: Array<string>,
-): MrisMultiscaleStatsParametersTagged {
+): MrisMultiscaleStatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_multiscale_stats" as const,
         "output_subject": output_subject,
@@ -78,7 +78,7 @@ function mris_multiscale_stats_params(
  * @returns Command-line arguments.
  */
 function mris_multiscale_stats_cargs(
-    params: MrisMultiscaleStatsParameters,
+    params: MrisMultiscaleStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function mris_multiscale_stats_cargs(
  * @returns Outputs object.
  */
 function mris_multiscale_stats_outputs(
-    params: MrisMultiscaleStatsParameters,
+    params: MrisMultiscaleStatsParamsDict,
     execution: Execution,
 ): MrisMultiscaleStatsOutputs {
     const ret: MrisMultiscaleStatsOutputs = {
@@ -130,7 +130,7 @@ function mris_multiscale_stats_outputs(
  * @returns NamedTuple of outputs (described in `MrisMultiscaleStatsOutputs`).
  */
 function mris_multiscale_stats_execute(
-    params: MrisMultiscaleStatsParameters,
+    params: MrisMultiscaleStatsParamsDict,
     runner: Runner | null = null,
 ): MrisMultiscaleStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function mris_multiscale_stats(
 export {
       MRIS_MULTISCALE_STATS_METADATA,
       MrisMultiscaleStatsOutputs,
+      MrisMultiscaleStatsParamsDict,
+      MrisMultiscaleStatsParamsDictTagged,
       mris_multiscale_stats,
       mris_multiscale_stats_execute,
       mris_multiscale_stats_params,

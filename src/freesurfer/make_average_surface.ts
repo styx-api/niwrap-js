@@ -11,7 +11,7 @@ const MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
 };
 
 
-interface MakeAverageSurfaceParameters {
+interface MakeAverageSurfaceParamsDict {
     "@type"?: "freesurfer/make_average_surface";
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
@@ -36,11 +36,11 @@ interface MakeAverageSurfaceParameters {
     "version": boolean;
     "echo": boolean;
 }
-type MakeAverageSurfaceParametersTagged = Required<Pick<MakeAverageSurfaceParameters, '@type'>> & MakeAverageSurfaceParameters;
+type MakeAverageSurfaceParamsDictTagged = Required<Pick<MakeAverageSurfaceParamsDict, '@type'>> & MakeAverageSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `MakeAverageSurfaceParameters(...)`.
+ * Output object returned when calling `MakeAverageSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function make_average_surface_params(
     no_symlink: boolean = false,
     version: boolean = false,
     echo: boolean = false,
-): MakeAverageSurfaceParametersTagged {
+): MakeAverageSurfaceParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_average_surface" as const,
         "subjects": subjects,
@@ -160,7 +160,7 @@ function make_average_surface_params(
  * @returns Command-line arguments.
  */
 function make_average_surface_cargs(
-    params: MakeAverageSurfaceParameters,
+    params: MakeAverageSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -269,7 +269,7 @@ function make_average_surface_cargs(
  * @returns Outputs object.
  */
 function make_average_surface_outputs(
-    params: MakeAverageSurfaceParameters,
+    params: MakeAverageSurfaceParamsDict,
     execution: Execution,
 ): MakeAverageSurfaceOutputs {
     const ret: MakeAverageSurfaceOutputs = {
@@ -294,7 +294,7 @@ function make_average_surface_outputs(
  * @returns NamedTuple of outputs (described in `MakeAverageSurfaceOutputs`).
  */
 function make_average_surface_execute(
-    params: MakeAverageSurfaceParameters,
+    params: MakeAverageSurfaceParamsDict,
     runner: Runner | null = null,
 ): MakeAverageSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -375,6 +375,8 @@ function make_average_surface(
 export {
       MAKE_AVERAGE_SURFACE_METADATA,
       MakeAverageSurfaceOutputs,
+      MakeAverageSurfaceParamsDict,
+      MakeAverageSurfaceParamsDictTagged,
       make_average_surface,
       make_average_surface_execute,
       make_average_surface_params,

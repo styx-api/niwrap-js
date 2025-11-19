@@ -11,7 +11,7 @@ const GTMSEG_METADATA: Metadata = {
 };
 
 
-interface GtmsegParameters {
+interface GtmsegParamsDict {
     "@type"?: "freesurfer/gtmseg";
     "subject": string;
     "outvol"?: string | null | undefined;
@@ -32,11 +32,11 @@ interface GtmsegParameters {
     "xcerseg": boolean;
     "debug": boolean;
 }
-type GtmsegParametersTagged = Required<Pick<GtmsegParameters, '@type'>> & GtmsegParameters;
+type GtmsegParamsDictTagged = Required<Pick<GtmsegParamsDict, '@type'>> & GtmsegParamsDict;
 
 
 /**
- * Output object returned when calling `GtmsegParameters(...)`.
+ * Output object returned when calling `GtmsegParamsDict(...)`.
  *
  * @interface
  */
@@ -99,7 +99,7 @@ function gtmseg_params(
     no_seg_stats: boolean = false,
     xcerseg: boolean = false,
     debug: boolean = false,
-): GtmsegParametersTagged {
+): GtmsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/gtmseg" as const,
         "subject": subject,
@@ -150,7 +150,7 @@ function gtmseg_params(
  * @returns Command-line arguments.
  */
 function gtmseg_cargs(
-    params: GtmsegParameters,
+    params: GtmsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -247,7 +247,7 @@ function gtmseg_cargs(
  * @returns Outputs object.
  */
 function gtmseg_outputs(
-    params: GtmsegParameters,
+    params: GtmsegParamsDict,
     execution: Execution,
 ): GtmsegOutputs {
     const ret: GtmsegOutputs = {
@@ -274,7 +274,7 @@ function gtmseg_outputs(
  * @returns NamedTuple of outputs (described in `GtmsegOutputs`).
  */
 function gtmseg_execute(
-    params: GtmsegParameters,
+    params: GtmsegParamsDict,
     runner: Runner | null = null,
 ): GtmsegOutputs {
     runner = runner || getGlobalRunner();
@@ -347,6 +347,8 @@ function gtmseg(
 export {
       GTMSEG_METADATA,
       GtmsegOutputs,
+      GtmsegParamsDict,
+      GtmsegParamsDictTagged,
       gtmseg,
       gtmseg_execute,
       gtmseg_params,

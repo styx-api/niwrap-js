@@ -11,7 +11,7 @@ const V__ROI_MODAL_GROW_METADATA: Metadata = {
 };
 
 
-interface VRoiModalGrowParameters {
+interface VRoiModalGrowParamsDict {
     "@type"?: "afni/@ROI_modal_grow";
     "input_dset": InputPathType;
     "niters": number;
@@ -20,11 +20,11 @@ interface VRoiModalGrowParameters {
     "prefix"?: string | null | undefined;
     "neighborhood_type"?: number | null | undefined;
 }
-type VRoiModalGrowParametersTagged = Required<Pick<VRoiModalGrowParameters, '@type'>> & VRoiModalGrowParameters;
+type VRoiModalGrowParamsDictTagged = Required<Pick<VRoiModalGrowParamsDict, '@type'>> & VRoiModalGrowParamsDict;
 
 
 /**
- * Output object returned when calling `VRoiModalGrowParameters(...)`.
+ * Output object returned when calling `VRoiModalGrowParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v__roi_modal_grow_params(
     mask: InputPathType | null = null,
     prefix: string | null = null,
     neighborhood_type: number | null = null,
-): VRoiModalGrowParametersTagged {
+): VRoiModalGrowParamsDictTagged {
     const params = {
         "@type": "afni/@ROI_modal_grow" as const,
         "input_dset": input_dset,
@@ -90,7 +90,7 @@ function v__roi_modal_grow_params(
  * @returns Command-line arguments.
  */
 function v__roi_modal_grow_cargs(
-    params: VRoiModalGrowParameters,
+    params: VRoiModalGrowParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function v__roi_modal_grow_cargs(
  * @returns Outputs object.
  */
 function v__roi_modal_grow_outputs(
-    params: VRoiModalGrowParameters,
+    params: VRoiModalGrowParamsDict,
     execution: Execution,
 ): VRoiModalGrowOutputs {
     const ret: VRoiModalGrowOutputs = {
@@ -166,7 +166,7 @@ function v__roi_modal_grow_outputs(
  * @returns NamedTuple of outputs (described in `VRoiModalGrowOutputs`).
  */
 function v__roi_modal_grow_execute(
-    params: VRoiModalGrowParameters,
+    params: VRoiModalGrowParamsDict,
     runner: Runner | null = null,
 ): VRoiModalGrowOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function v__roi_modal_grow(
 
 export {
       VRoiModalGrowOutputs,
+      VRoiModalGrowParamsDict,
+      VRoiModalGrowParamsDictTagged,
       V__ROI_MODAL_GROW_METADATA,
       v__roi_modal_grow,
       v__roi_modal_grow_execute,

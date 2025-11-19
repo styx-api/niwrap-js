@@ -11,15 +11,15 @@ const CREATE_LUT_METADATA: Metadata = {
 };
 
 
-interface CreateLutParameters {
+interface CreateLutParamsDict {
     "@type"?: "fsl/create_lut";
     "output_file_root": string;
 }
-type CreateLutParametersTagged = Required<Pick<CreateLutParameters, '@type'>> & CreateLutParameters;
+type CreateLutParamsDictTagged = Required<Pick<CreateLutParamsDict, '@type'>> & CreateLutParamsDict;
 
 
 /**
- * Output object returned when calling `CreateLutParameters(...)`.
+ * Output object returned when calling `CreateLutParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface CreateLutOutputs {
  */
 function create_lut_params(
     output_file_root: string,
-): CreateLutParametersTagged {
+): CreateLutParamsDictTagged {
     const params = {
         "@type": "fsl/create_lut" as const,
         "output_file_root": output_file_root,
@@ -58,7 +58,7 @@ function create_lut_params(
  * @returns Command-line arguments.
  */
 function create_lut_cargs(
-    params: CreateLutParameters,
+    params: CreateLutParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function create_lut_cargs(
  * @returns Outputs object.
  */
 function create_lut_outputs(
-    params: CreateLutParameters,
+    params: CreateLutParamsDict,
     execution: Execution,
 ): CreateLutOutputs {
     const ret: CreateLutOutputs = {
@@ -102,7 +102,7 @@ function create_lut_outputs(
  * @returns NamedTuple of outputs (described in `CreateLutOutputs`).
  */
 function create_lut_execute(
-    params: CreateLutParameters,
+    params: CreateLutParamsDict,
     runner: Runner | null = null,
 ): CreateLutOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function create_lut(
 export {
       CREATE_LUT_METADATA,
       CreateLutOutputs,
+      CreateLutParamsDict,
+      CreateLutParamsDictTagged,
       create_lut,
       create_lut_execute,
       create_lut_params,

@@ -11,7 +11,7 @@ const V__ELECTRO_GRID_METADATA: Metadata = {
 };
 
 
-interface VElectroGridParameters {
+interface VElectroGridParamsDict {
     "@type"?: "afni/@ElectroGrid";
     "strip"?: number | null | undefined;
     "grid"?: Array<number> | null | undefined;
@@ -20,11 +20,11 @@ interface VElectroGridParameters {
     "with_markers": boolean;
     "echo": boolean;
 }
-type VElectroGridParametersTagged = Required<Pick<VElectroGridParameters, '@type'>> & VElectroGridParameters;
+type VElectroGridParamsDictTagged = Required<Pick<VElectroGridParamsDict, '@type'>> & VElectroGridParamsDict;
 
 
 /**
- * Output object returned when calling `VElectroGridParameters(...)`.
+ * Output object returned when calling `VElectroGridParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v__electro_grid_params(
     coords: InputPathType | null = null,
     with_markers: boolean = false,
     echo: boolean = false,
-): VElectroGridParametersTagged {
+): VElectroGridParamsDictTagged {
     const params = {
         "@type": "afni/@ElectroGrid" as const,
         "with_markers": with_markers,
@@ -90,7 +90,7 @@ function v__electro_grid_params(
  * @returns Command-line arguments.
  */
 function v__electro_grid_cargs(
-    params: VElectroGridParameters,
+    params: VElectroGridParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function v__electro_grid_cargs(
  * @returns Outputs object.
  */
 function v__electro_grid_outputs(
-    params: VElectroGridParameters,
+    params: VElectroGridParamsDict,
     execution: Execution,
 ): VElectroGridOutputs {
     const ret: VElectroGridOutputs = {
@@ -164,7 +164,7 @@ function v__electro_grid_outputs(
  * @returns NamedTuple of outputs (described in `VElectroGridOutputs`).
  */
 function v__electro_grid_execute(
-    params: VElectroGridParameters,
+    params: VElectroGridParamsDict,
     runner: Runner | null = null,
 ): VElectroGridOutputs {
     runner = runner || getGlobalRunner();
@@ -212,6 +212,8 @@ function v__electro_grid(
 
 export {
       VElectroGridOutputs,
+      VElectroGridParamsDict,
+      VElectroGridParamsDictTagged,
       V__ELECTRO_GRID_METADATA,
       v__electro_grid,
       v__electro_grid_execute,

@@ -11,7 +11,7 @@ const XTRACT_STATS_METADATA: Metadata = {
 };
 
 
-interface XtractStatsParameters {
+interface XtractStatsParamsDict {
     "@type"?: "fsl/xtract_stats";
     "folder_basename": string;
     "XTRACT_dir": string;
@@ -23,11 +23,11 @@ interface XtractStatsParameters {
     "measurements"?: string | null | undefined;
     "keep_temp_files": boolean;
 }
-type XtractStatsParametersTagged = Required<Pick<XtractStatsParameters, '@type'>> & XtractStatsParameters;
+type XtractStatsParamsDictTagged = Required<Pick<XtractStatsParamsDict, '@type'>> & XtractStatsParamsDict;
 
 
 /**
- * Output object returned when calling `XtractStatsParameters(...)`.
+ * Output object returned when calling `XtractStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function xtract_stats_params(
     threshold: number | null = null,
     measurements: string | null = null,
     keep_temp_files: boolean = false,
-): XtractStatsParametersTagged {
+): XtractStatsParamsDictTagged {
     const params = {
         "@type": "fsl/xtract_stats" as const,
         "folder_basename": folder_basename,
@@ -104,7 +104,7 @@ function xtract_stats_params(
  * @returns Command-line arguments.
  */
 function xtract_stats_cargs(
-    params: XtractStatsParameters,
+    params: XtractStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function xtract_stats_cargs(
  * @returns Outputs object.
  */
 function xtract_stats_outputs(
-    params: XtractStatsParameters,
+    params: XtractStatsParamsDict,
     execution: Execution,
 ): XtractStatsOutputs {
     const ret: XtractStatsOutputs = {
@@ -193,7 +193,7 @@ function xtract_stats_outputs(
  * @returns NamedTuple of outputs (described in `XtractStatsOutputs`).
  */
 function xtract_stats_execute(
-    params: XtractStatsParameters,
+    params: XtractStatsParamsDict,
     runner: Runner | null = null,
 ): XtractStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function xtract_stats(
 export {
       XTRACT_STATS_METADATA,
       XtractStatsOutputs,
+      XtractStatsParamsDict,
+      XtractStatsParamsDictTagged,
       xtract_stats,
       xtract_stats_execute,
       xtract_stats_params,

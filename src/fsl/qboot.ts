@@ -11,7 +11,7 @@ const QBOOT_METADATA: Metadata = {
 };
 
 
-interface QbootParameters {
+interface QbootParamsDict {
     "@type"?: "fsl/qboot";
     "data_file": InputPathType;
     "mask_file": InputPathType;
@@ -35,11 +35,11 @@ interface QbootParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type QbootParametersTagged = Required<Pick<QbootParameters, '@type'>> & QbootParameters;
+type QbootParamsDictTagged = Required<Pick<QbootParamsDict, '@type'>> & QbootParamsDict;
 
 
 /**
- * Output object returned when calling `QbootParameters(...)`.
+ * Output object returned when calling `QbootParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function qboot_params(
     savemeancoeff_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): QbootParametersTagged {
+): QbootParamsDictTagged {
     const params = {
         "@type": "fsl/qboot" as const,
         "data_file": data_file,
@@ -164,7 +164,7 @@ function qboot_params(
  * @returns Command-line arguments.
  */
 function qboot_cargs(
-    params: QbootParameters,
+    params: QbootParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -282,7 +282,7 @@ function qboot_cargs(
  * @returns Outputs object.
  */
 function qboot_outputs(
-    params: QbootParameters,
+    params: QbootParamsDict,
     execution: Execution,
 ): QbootOutputs {
     const ret: QbootOutputs = {
@@ -308,7 +308,7 @@ function qboot_outputs(
  * @returns NamedTuple of outputs (described in `QbootOutputs`).
  */
 function qboot_execute(
-    params: QbootParameters,
+    params: QbootParamsDict,
     runner: Runner | null = null,
 ): QbootOutputs {
     runner = runner || getGlobalRunner();
@@ -387,6 +387,8 @@ function qboot(
 export {
       QBOOT_METADATA,
       QbootOutputs,
+      QbootParamsDict,
+      QbootParamsDictTagged,
       qboot,
       qboot_execute,
       qboot_params,

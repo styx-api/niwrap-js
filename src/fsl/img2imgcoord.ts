@@ -11,7 +11,7 @@ const IMG2IMGCOORD_METADATA: Metadata = {
 };
 
 
-interface Img2imgcoordParameters {
+interface Img2imgcoordParamsDict {
     "@type"?: "fsl/img2imgcoord";
     "coordinates_file": string;
     "source_image": InputPathType;
@@ -24,11 +24,11 @@ interface Img2imgcoordParameters {
     "verbose": boolean;
     "help": boolean;
 }
-type Img2imgcoordParametersTagged = Required<Pick<Img2imgcoordParameters, '@type'>> & Img2imgcoordParameters;
+type Img2imgcoordParamsDictTagged = Required<Pick<Img2imgcoordParamsDict, '@type'>> & Img2imgcoordParamsDict;
 
 
 /**
- * Output object returned when calling `Img2imgcoordParameters(...)`.
+ * Output object returned when calling `Img2imgcoordParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function img2imgcoord_params(
     coords_in_mm: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): Img2imgcoordParametersTagged {
+): Img2imgcoordParamsDictTagged {
     const params = {
         "@type": "fsl/img2imgcoord" as const,
         "coordinates_file": coordinates_file,
@@ -98,7 +98,7 @@ function img2imgcoord_params(
  * @returns Command-line arguments.
  */
 function img2imgcoord_cargs(
-    params: Img2imgcoordParameters,
+    params: Img2imgcoordParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function img2imgcoord_cargs(
  * @returns Outputs object.
  */
 function img2imgcoord_outputs(
-    params: Img2imgcoordParameters,
+    params: Img2imgcoordParamsDict,
     execution: Execution,
 ): Img2imgcoordOutputs {
     const ret: Img2imgcoordOutputs = {
@@ -178,7 +178,7 @@ function img2imgcoord_outputs(
  * @returns NamedTuple of outputs (described in `Img2imgcoordOutputs`).
  */
 function img2imgcoord_execute(
-    params: Img2imgcoordParameters,
+    params: Img2imgcoordParamsDict,
     runner: Runner | null = null,
 ): Img2imgcoordOutputs {
     runner = runner || getGlobalRunner();
@@ -235,6 +235,8 @@ function img2imgcoord(
 export {
       IMG2IMGCOORD_METADATA,
       Img2imgcoordOutputs,
+      Img2imgcoordParamsDict,
+      Img2imgcoordParamsDictTagged,
       img2imgcoord,
       img2imgcoord_execute,
       img2imgcoord_params,

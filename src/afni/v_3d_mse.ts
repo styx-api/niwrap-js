@@ -11,7 +11,7 @@ const V_3D_MSE_METADATA: Metadata = {
 };
 
 
-interface V3dMseParameters {
+interface V3dMseParamsDict {
     "@type"?: "afni/3dMSE";
     "polynomial_order"?: number | null | undefined;
     "autoclip": boolean;
@@ -23,11 +23,11 @@ interface V3dMseParameters {
     "rthresh"?: number | null | undefined;
     "dset": InputPathType;
 }
-type V3dMseParametersTagged = Required<Pick<V3dMseParameters, '@type'>> & V3dMseParameters;
+type V3dMseParamsDictTagged = Required<Pick<V3dMseParamsDict, '@type'>> & V3dMseParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMseParameters(...)`.
+ * Output object returned when calling `V3dMseParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_mse_params(
     scales: number | null = null,
     entwin: number | null = null,
     rthresh: number | null = null,
-): V3dMseParametersTagged {
+): V3dMseParamsDictTagged {
     const params = {
         "@type": "afni/3dMSE" as const,
         "autoclip": autoclip,
@@ -110,7 +110,7 @@ function v_3d_mse_params(
  * @returns Command-line arguments.
  */
 function v_3d_mse_cargs(
-    params: V3dMseParameters,
+    params: V3dMseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function v_3d_mse_cargs(
  * @returns Outputs object.
  */
 function v_3d_mse_outputs(
-    params: V3dMseParameters,
+    params: V3dMseParamsDict,
     execution: Execution,
 ): V3dMseOutputs {
     const ret: V3dMseOutputs = {
@@ -198,7 +198,7 @@ function v_3d_mse_outputs(
  * @returns NamedTuple of outputs (described in `V3dMseOutputs`).
  */
 function v_3d_mse_execute(
-    params: V3dMseParameters,
+    params: V3dMseParamsDict,
     runner: Runner | null = null,
 ): V3dMseOutputs {
     runner = runner || getGlobalRunner();
@@ -252,6 +252,8 @@ function v_3d_mse(
 
 export {
       V3dMseOutputs,
+      V3dMseParamsDict,
+      V3dMseParamsDictTagged,
       V_3D_MSE_METADATA,
       v_3d_mse,
       v_3d_mse_execute,

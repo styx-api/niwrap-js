@@ -11,7 +11,7 @@ const V__RETINO_PROC_METADATA: Metadata = {
 };
 
 
-interface VRetinoProcParameters {
+interface VRetinoProcParamsDict {
     "@type"?: "afni/@RetinoProc";
     "ccw"?: Array<InputPathType> | null | undefined;
     "clw"?: Array<InputPathType> | null | undefined;
@@ -54,11 +54,11 @@ interface VRetinoProcParameters {
     "a2e_opts"?: string | null | undefined;
     "aea_opts"?: string | null | undefined;
 }
-type VRetinoProcParametersTagged = Required<Pick<VRetinoProcParameters, '@type'>> & VRetinoProcParameters;
+type VRetinoProcParamsDictTagged = Required<Pick<VRetinoProcParamsDict, '@type'>> & VRetinoProcParamsDict;
 
 
 /**
- * Output object returned when calling `VRetinoProcParameters(...)`.
+ * Output object returned when calling `VRetinoProcParamsDict(...)`.
  *
  * @interface
  */
@@ -157,7 +157,7 @@ function v__retino_proc_params(
     echo_edu: boolean = false,
     a2e_opts: string | null = null,
     aea_opts: string | null = null,
-): VRetinoProcParametersTagged {
+): VRetinoProcParamsDictTagged {
     const params = {
         "@type": "afni/@RetinoProc" as const,
         "phase": phase,
@@ -278,7 +278,7 @@ function v__retino_proc_params(
  * @returns Command-line arguments.
  */
 function v__retino_proc_cargs(
-    params: VRetinoProcParameters,
+    params: VRetinoProcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -515,7 +515,7 @@ function v__retino_proc_cargs(
  * @returns Outputs object.
  */
 function v__retino_proc_outputs(
-    params: VRetinoProcParameters,
+    params: VRetinoProcParamsDict,
     execution: Execution,
 ): VRetinoProcOutputs {
     const ret: VRetinoProcOutputs = {
@@ -540,7 +540,7 @@ function v__retino_proc_outputs(
  * @returns NamedTuple of outputs (described in `VRetinoProcOutputs`).
  */
 function v__retino_proc_execute(
-    params: VRetinoProcParameters,
+    params: VRetinoProcParamsDict,
     runner: Runner | null = null,
 ): VRetinoProcOutputs {
     runner = runner || getGlobalRunner();
@@ -656,6 +656,8 @@ function v__retino_proc(
 
 export {
       VRetinoProcOutputs,
+      VRetinoProcParamsDict,
+      VRetinoProcParamsDictTagged,
       V__RETINO_PROC_METADATA,
       v__retino_proc,
       v__retino_proc_execute,

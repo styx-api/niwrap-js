@@ -11,15 +11,15 @@ const FABBER_METADATA: Metadata = {
 };
 
 
-interface FabberOptfileParameters {
+interface FabberOptfileParamsDict {
     "@type"?: "optfile";
     "optfile_short"?: InputPathType | null | undefined;
     "optfile_long"?: InputPathType | null | undefined;
 }
-type FabberOptfileParametersTagged = Required<Pick<FabberOptfileParameters, '@type'>> & FabberOptfileParameters;
+type FabberOptfileParamsDictTagged = Required<Pick<FabberOptfileParamsDict, '@type'>> & FabberOptfileParamsDict;
 
 
-interface FabberParameters {
+interface FabberParamsDict {
     "@type"?: "fsl/fabber";
     "output": string;
     "method": string;
@@ -38,7 +38,7 @@ interface FabberParameters {
     "link_to_latest": boolean;
     "load_models"?: InputPathType | null | undefined;
     "debug": boolean;
-    "optfile"?: FabberOptfileParameters | null | undefined;
+    "optfile"?: FabberOptfileParamsDict | null | undefined;
     "save_model_fit": boolean;
     "save_residuals": boolean;
     "save_model_extras": boolean;
@@ -58,7 +58,7 @@ interface FabberParameters {
     "list_outputs": boolean;
     "old_optfile"?: InputPathType | null | undefined;
 }
-type FabberParametersTagged = Required<Pick<FabberParameters, '@type'>> & FabberParameters;
+type FabberParamsDictTagged = Required<Pick<FabberParamsDict, '@type'>> & FabberParamsDict;
 
 
 /**
@@ -69,10 +69,10 @@ type FabberParametersTagged = Required<Pick<FabberParameters, '@type'>> & Fabber
  *
  * @returns Parameter dictionary
  */
-function fabber_optfile_params(
+function fabber_optfile(
     optfile_short: InputPathType | null = null,
     optfile_long: InputPathType | null = null,
-): FabberOptfileParametersTagged {
+): FabberOptfileParamsDictTagged {
     const params = {
         "@type": "optfile" as const,
     };
@@ -95,7 +95,7 @@ function fabber_optfile_params(
  * @returns Command-line arguments.
  */
 function fabber_optfile_cargs(
-    params: FabberOptfileParameters,
+    params: FabberOptfileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function fabber_optfile_cargs(
 
 
 /**
- * Output object returned when calling `FabberParameters(...)`.
+ * Output object returned when calling `FabberParamsDict(...)`.
  *
  * @interface
  */
@@ -236,7 +236,7 @@ function fabber_params(
     link_to_latest: boolean = false,
     load_models: InputPathType | null = null,
     debug: boolean = false,
-    optfile: FabberOptfileParameters | null = null,
+    optfile: FabberOptfileParamsDict | null = null,
     save_model_fit: boolean = false,
     save_residuals: boolean = false,
     save_model_extras: boolean = false,
@@ -255,7 +255,7 @@ function fabber_params(
     desc_params: boolean = false,
     list_outputs: boolean = false,
     old_optfile: InputPathType | null = null,
-): FabberParametersTagged {
+): FabberParamsDictTagged {
     const params = {
         "@type": "fsl/fabber" as const,
         "output": output,
@@ -330,7 +330,7 @@ function fabber_params(
  * @returns Command-line arguments.
  */
 function fabber_cargs(
-    params: FabberParameters,
+    params: FabberParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -490,7 +490,7 @@ function fabber_cargs(
  * @returns Outputs object.
  */
 function fabber_outputs(
-    params: FabberParameters,
+    params: FabberParamsDict,
     execution: Execution,
 ): FabberOutputs {
     const ret: FabberOutputs = {
@@ -527,7 +527,7 @@ function fabber_outputs(
  * @returns NamedTuple of outputs (described in `FabberOutputs`).
  */
 function fabber_execute(
-    params: FabberParameters,
+    params: FabberParamsDict,
     runner: Runner | null = null,
 ): FabberOutputs {
     runner = runner || getGlobalRunner();
@@ -607,7 +607,7 @@ function fabber(
     link_to_latest: boolean = false,
     load_models: InputPathType | null = null,
     debug: boolean = false,
-    optfile: FabberOptfileParameters | null = null,
+    optfile: FabberOptfileParamsDict | null = null,
     save_model_fit: boolean = false,
     save_residuals: boolean = false,
     save_model_extras: boolean = false,
@@ -635,9 +635,13 @@ function fabber(
 
 export {
       FABBER_METADATA,
+      FabberOptfileParamsDict,
+      FabberOptfileParamsDictTagged,
       FabberOutputs,
+      FabberParamsDict,
+      FabberParamsDictTagged,
       fabber,
       fabber_execute,
-      fabber_optfile_params,
+      fabber_optfile,
       fabber_params,
 };

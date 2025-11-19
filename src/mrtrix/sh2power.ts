@@ -11,15 +11,15 @@ const SH2POWER_METADATA: Metadata = {
 };
 
 
-interface Sh2powerConfigParameters {
+interface Sh2powerConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Sh2powerConfigParametersTagged = Required<Pick<Sh2powerConfigParameters, '@type'>> & Sh2powerConfigParameters;
+type Sh2powerConfigParamsDictTagged = Required<Pick<Sh2powerConfigParamsDict, '@type'>> & Sh2powerConfigParamsDict;
 
 
-interface Sh2powerParameters {
+interface Sh2powerParamsDict {
     "@type"?: "mrtrix/sh2power";
     "spectrum": boolean;
     "info": boolean;
@@ -27,13 +27,13 @@ interface Sh2powerParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Sh2powerConfigParameters> | null | undefined;
+    "config"?: Array<Sh2powerConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "SH": InputPathType;
     "power": string;
 }
-type Sh2powerParametersTagged = Required<Pick<Sh2powerParameters, '@type'>> & Sh2powerParameters;
+type Sh2powerParamsDictTagged = Required<Pick<Sh2powerParamsDict, '@type'>> & Sh2powerParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type Sh2powerParametersTagged = Required<Pick<Sh2powerParameters, '@type'>> & Sh
  *
  * @returns Parameter dictionary
  */
-function sh2power_config_params(
+function sh2power_config(
     key: string,
     value: string,
-): Sh2powerConfigParametersTagged {
+): Sh2powerConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function sh2power_config_params(
  * @returns Command-line arguments.
  */
 function sh2power_config_cargs(
-    params: Sh2powerConfigParameters,
+    params: Sh2powerConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function sh2power_config_cargs(
 
 
 /**
- * Output object returned when calling `Sh2powerParameters(...)`.
+ * Output object returned when calling `Sh2powerParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function sh2power_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2powerConfigParameters> | null = null,
+    config: Array<Sh2powerConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2powerParametersTagged {
+): Sh2powerParamsDictTagged {
     const params = {
         "@type": "mrtrix/sh2power" as const,
         "spectrum": spectrum,
@@ -155,7 +155,7 @@ function sh2power_params(
  * @returns Command-line arguments.
  */
 function sh2power_cargs(
-    params: Sh2powerParameters,
+    params: Sh2powerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -205,7 +205,7 @@ function sh2power_cargs(
  * @returns Outputs object.
  */
 function sh2power_outputs(
-    params: Sh2powerParameters,
+    params: Sh2powerParamsDict,
     execution: Execution,
 ): Sh2powerOutputs {
     const ret: Sh2powerOutputs = {
@@ -240,7 +240,7 @@ function sh2power_outputs(
  * @returns NamedTuple of outputs (described in `Sh2powerOutputs`).
  */
 function sh2power_execute(
-    params: Sh2powerParameters,
+    params: Sh2powerParamsDict,
     runner: Runner | null = null,
 ): Sh2powerOutputs {
     runner = runner || getGlobalRunner();
@@ -295,7 +295,7 @@ function sh2power(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2powerConfigParameters> | null = null,
+    config: Array<Sh2powerConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -307,9 +307,13 @@ function sh2power(
 
 export {
       SH2POWER_METADATA,
+      Sh2powerConfigParamsDict,
+      Sh2powerConfigParamsDictTagged,
       Sh2powerOutputs,
+      Sh2powerParamsDict,
+      Sh2powerParamsDictTagged,
       sh2power,
-      sh2power_config_params,
+      sh2power_config,
       sh2power_execute,
       sh2power_params,
 };

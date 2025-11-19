@@ -11,7 +11,7 @@ const V_3D_TOUTCOUNT_METADATA: Metadata = {
 };
 
 
-interface V3dToutcountParameters {
+interface V3dToutcountParamsDict {
     "@type"?: "afni/3dToutcount";
     "input_dataset": string;
     "output_prefix"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface V3dToutcountParameters {
     "polort_order"?: number | null | undefined;
     "legendre": boolean;
 }
-type V3dToutcountParametersTagged = Required<Pick<V3dToutcountParameters, '@type'>> & V3dToutcountParameters;
+type V3dToutcountParamsDictTagged = Required<Pick<V3dToutcountParamsDict, '@type'>> & V3dToutcountParamsDict;
 
 
 /**
- * Output object returned when calling `V3dToutcountParameters(...)`.
+ * Output object returned when calling `V3dToutcountParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function v_3d_toutcount_params(
     range: boolean = false,
     polort_order: number | null = null,
     legendre: boolean = false,
-): V3dToutcountParametersTagged {
+): V3dToutcountParamsDictTagged {
     const params = {
         "@type": "afni/3dToutcount" as const,
         "input_dataset": input_dataset,
@@ -110,7 +110,7 @@ function v_3d_toutcount_params(
  * @returns Command-line arguments.
  */
 function v_3d_toutcount_cargs(
-    params: V3dToutcountParameters,
+    params: V3dToutcountParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -165,7 +165,7 @@ function v_3d_toutcount_cargs(
  * @returns Outputs object.
  */
 function v_3d_toutcount_outputs(
-    params: V3dToutcountParameters,
+    params: V3dToutcountParamsDict,
     execution: Execution,
 ): V3dToutcountOutputs {
     const ret: V3dToutcountOutputs = {
@@ -192,7 +192,7 @@ function v_3d_toutcount_outputs(
  * @returns NamedTuple of outputs (described in `V3dToutcountOutputs`).
  */
 function v_3d_toutcount_execute(
-    params: V3dToutcountParameters,
+    params: V3dToutcountParamsDict,
     runner: Runner | null = null,
 ): V3dToutcountOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function v_3d_toutcount(
 
 export {
       V3dToutcountOutputs,
+      V3dToutcountParamsDict,
+      V3dToutcountParamsDictTagged,
       V_3D_TOUTCOUNT_METADATA,
       v_3d_toutcount,
       v_3d_toutcount_execute,

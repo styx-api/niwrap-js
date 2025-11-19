@@ -11,16 +11,16 @@ const FIX_SUBJECT_RH_METADATA: Metadata = {
 };
 
 
-interface FixSubjectRhParameters {
+interface FixSubjectRhParamsDict {
     "@type"?: "freesurfer/fix_subject-rh";
     "input_directory": string;
     "help_flag": boolean;
 }
-type FixSubjectRhParametersTagged = Required<Pick<FixSubjectRhParameters, '@type'>> & FixSubjectRhParameters;
+type FixSubjectRhParamsDictTagged = Required<Pick<FixSubjectRhParamsDict, '@type'>> & FixSubjectRhParamsDict;
 
 
 /**
- * Output object returned when calling `FixSubjectRhParameters(...)`.
+ * Output object returned when calling `FixSubjectRhParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FixSubjectRhOutputs {
 function fix_subject_rh_params(
     input_directory: string,
     help_flag: boolean = false,
-): FixSubjectRhParametersTagged {
+): FixSubjectRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/fix_subject-rh" as const,
         "input_directory": input_directory,
@@ -62,7 +62,7 @@ function fix_subject_rh_params(
  * @returns Command-line arguments.
  */
 function fix_subject_rh_cargs(
-    params: FixSubjectRhParameters,
+    params: FixSubjectRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function fix_subject_rh_cargs(
  * @returns Outputs object.
  */
 function fix_subject_rh_outputs(
-    params: FixSubjectRhParameters,
+    params: FixSubjectRhParamsDict,
     execution: Execution,
 ): FixSubjectRhOutputs {
     const ret: FixSubjectRhOutputs = {
@@ -112,7 +112,7 @@ function fix_subject_rh_outputs(
  * @returns NamedTuple of outputs (described in `FixSubjectRhOutputs`).
  */
 function fix_subject_rh_execute(
-    params: FixSubjectRhParameters,
+    params: FixSubjectRhParamsDict,
     runner: Runner | null = null,
 ): FixSubjectRhOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function fix_subject_rh(
 export {
       FIX_SUBJECT_RH_METADATA,
       FixSubjectRhOutputs,
+      FixSubjectRhParamsDict,
+      FixSubjectRhParamsDictTagged,
       fix_subject_rh,
       fix_subject_rh_execute,
       fix_subject_rh_params,

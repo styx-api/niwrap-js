@@ -11,7 +11,7 @@ const MRI_HAUSDORFF_DIST_METADATA: Metadata = {
 };
 
 
-interface MriHausdorffDistParameters {
+interface MriHausdorffDistParamsDict {
     "@type"?: "freesurfer/mri_hausdorff_dist";
     "vol1": InputPathType;
     "vol2": InputPathType;
@@ -22,11 +22,11 @@ interface MriHausdorffDistParameters {
     "max_flag": boolean;
     "label_index"?: number | null | undefined;
 }
-type MriHausdorffDistParametersTagged = Required<Pick<MriHausdorffDistParameters, '@type'>> & MriHausdorffDistParameters;
+type MriHausdorffDistParamsDictTagged = Required<Pick<MriHausdorffDistParamsDict, '@type'>> & MriHausdorffDistParamsDict;
 
 
 /**
- * Output object returned when calling `MriHausdorffDistParameters(...)`.
+ * Output object returned when calling `MriHausdorffDistParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function mri_hausdorff_dist_params(
     blur_sigma: number | null = null,
     max_flag: boolean = false,
     label_index: number | null = null,
-): MriHausdorffDistParametersTagged {
+): MriHausdorffDistParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_hausdorff_dist" as const,
         "vol1": vol1,
@@ -96,7 +96,7 @@ function mri_hausdorff_dist_params(
  * @returns Command-line arguments.
  */
 function mri_hausdorff_dist_cargs(
-    params: MriHausdorffDistParameters,
+    params: MriHausdorffDistParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function mri_hausdorff_dist_cargs(
  * @returns Outputs object.
  */
 function mri_hausdorff_dist_outputs(
-    params: MriHausdorffDistParameters,
+    params: MriHausdorffDistParamsDict,
     execution: Execution,
 ): MriHausdorffDistOutputs {
     const ret: MriHausdorffDistOutputs = {
@@ -167,7 +167,7 @@ function mri_hausdorff_dist_outputs(
  * @returns NamedTuple of outputs (described in `MriHausdorffDistOutputs`).
  */
 function mri_hausdorff_dist_execute(
-    params: MriHausdorffDistParameters,
+    params: MriHausdorffDistParamsDict,
     runner: Runner | null = null,
 ): MriHausdorffDistOutputs {
     runner = runner || getGlobalRunner();
@@ -220,6 +220,8 @@ function mri_hausdorff_dist(
 export {
       MRI_HAUSDORFF_DIST_METADATA,
       MriHausdorffDistOutputs,
+      MriHausdorffDistParamsDict,
+      MriHausdorffDistParamsDictTagged,
       mri_hausdorff_dist,
       mri_hausdorff_dist_execute,
       mri_hausdorff_dist_params,

@@ -11,7 +11,7 @@ const ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface AntsuseDeformationFieldToGetAffineTransformParameters {
+interface AntsuseDeformationFieldToGetAffineTransformParamsDict {
     "@type"?: "ants/ANTSUseDeformationFieldToGetAffineTransform";
     "deformation_field": InputPathType;
     "load_ratio": number;
@@ -19,11 +19,11 @@ interface AntsuseDeformationFieldToGetAffineTransformParameters {
     "output_affine": string;
     "mask"?: InputPathType | null | undefined;
 }
-type AntsuseDeformationFieldToGetAffineTransformParametersTagged = Required<Pick<AntsuseDeformationFieldToGetAffineTransformParameters, '@type'>> & AntsuseDeformationFieldToGetAffineTransformParameters;
+type AntsuseDeformationFieldToGetAffineTransformParamsDictTagged = Required<Pick<AntsuseDeformationFieldToGetAffineTransformParamsDict, '@type'>> & AntsuseDeformationFieldToGetAffineTransformParamsDict;
 
 
 /**
- * Output object returned when calling `AntsuseDeformationFieldToGetAffineTransformParameters(...)`.
+ * Output object returned when calling `AntsuseDeformationFieldToGetAffineTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function antsuse_deformation_field_to_get_affine_transform_params(
     transform_type: "rigid" | "affine",
     output_affine: string,
     mask: InputPathType | null = null,
-): AntsuseDeformationFieldToGetAffineTransformParametersTagged {
+): AntsuseDeformationFieldToGetAffineTransformParamsDictTagged {
     const params = {
         "@type": "ants/ANTSUseDeformationFieldToGetAffineTransform" as const,
         "deformation_field": deformation_field,
@@ -80,7 +80,7 @@ function antsuse_deformation_field_to_get_affine_transform_params(
  * @returns Command-line arguments.
  */
 function antsuse_deformation_field_to_get_affine_transform_cargs(
-    params: AntsuseDeformationFieldToGetAffineTransformParameters,
+    params: AntsuseDeformationFieldToGetAffineTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function antsuse_deformation_field_to_get_affine_transform_cargs(
  * @returns Outputs object.
  */
 function antsuse_deformation_field_to_get_affine_transform_outputs(
-    params: AntsuseDeformationFieldToGetAffineTransformParameters,
+    params: AntsuseDeformationFieldToGetAffineTransformParamsDict,
     execution: Execution,
 ): AntsuseDeformationFieldToGetAffineTransformOutputs {
     const ret: AntsuseDeformationFieldToGetAffineTransformOutputs = {
@@ -131,7 +131,7 @@ function antsuse_deformation_field_to_get_affine_transform_outputs(
  * @returns NamedTuple of outputs (described in `AntsuseDeformationFieldToGetAffineTransformOutputs`).
  */
 function antsuse_deformation_field_to_get_affine_transform_execute(
-    params: AntsuseDeformationFieldToGetAffineTransformParameters,
+    params: AntsuseDeformationFieldToGetAffineTransformParamsDict,
     runner: Runner | null = null,
 ): AntsuseDeformationFieldToGetAffineTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function antsuse_deformation_field_to_get_affine_transform(
 export {
       ANTSUSE_DEFORMATION_FIELD_TO_GET_AFFINE_TRANSFORM_METADATA,
       AntsuseDeformationFieldToGetAffineTransformOutputs,
+      AntsuseDeformationFieldToGetAffineTransformParamsDict,
+      AntsuseDeformationFieldToGetAffineTransformParamsDictTagged,
       antsuse_deformation_field_to_get_affine_transform,
       antsuse_deformation_field_to_get_affine_transform_execute,
       antsuse_deformation_field_to_get_affine_transform_params,

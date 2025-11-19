@@ -11,15 +11,15 @@ const REINFLATE_SUBJECT_LH_METADATA: Metadata = {
 };
 
 
-interface ReinflateSubjectLhParameters {
+interface ReinflateSubjectLhParamsDict {
     "@type"?: "freesurfer/reinflate_subject-lh";
     "subject_id": string;
 }
-type ReinflateSubjectLhParametersTagged = Required<Pick<ReinflateSubjectLhParameters, '@type'>> & ReinflateSubjectLhParameters;
+type ReinflateSubjectLhParamsDictTagged = Required<Pick<ReinflateSubjectLhParamsDict, '@type'>> & ReinflateSubjectLhParamsDict;
 
 
 /**
- * Output object returned when calling `ReinflateSubjectLhParameters(...)`.
+ * Output object returned when calling `ReinflateSubjectLhParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface ReinflateSubjectLhOutputs {
  */
 function reinflate_subject_lh_params(
     subject_id: string,
-): ReinflateSubjectLhParametersTagged {
+): ReinflateSubjectLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/reinflate_subject-lh" as const,
         "subject_id": subject_id,
@@ -62,7 +62,7 @@ function reinflate_subject_lh_params(
  * @returns Command-line arguments.
  */
 function reinflate_subject_lh_cargs(
-    params: ReinflateSubjectLhParameters,
+    params: ReinflateSubjectLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function reinflate_subject_lh_cargs(
  * @returns Outputs object.
  */
 function reinflate_subject_lh_outputs(
-    params: ReinflateSubjectLhParameters,
+    params: ReinflateSubjectLhParamsDict,
     execution: Execution,
 ): ReinflateSubjectLhOutputs {
     const ret: ReinflateSubjectLhOutputs = {
@@ -110,7 +110,7 @@ function reinflate_subject_lh_outputs(
  * @returns NamedTuple of outputs (described in `ReinflateSubjectLhOutputs`).
  */
 function reinflate_subject_lh_execute(
-    params: ReinflateSubjectLhParameters,
+    params: ReinflateSubjectLhParamsDict,
     runner: Runner | null = null,
 ): ReinflateSubjectLhOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function reinflate_subject_lh(
 export {
       REINFLATE_SUBJECT_LH_METADATA,
       ReinflateSubjectLhOutputs,
+      ReinflateSubjectLhParamsDict,
+      ReinflateSubjectLhParamsDictTagged,
       reinflate_subject_lh,
       reinflate_subject_lh_execute,
       reinflate_subject_lh_params,

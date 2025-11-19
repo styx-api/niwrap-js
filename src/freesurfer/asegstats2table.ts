@@ -11,7 +11,7 @@ const ASEGSTATS2TABLE_METADATA: Metadata = {
 };
 
 
-interface Asegstats2tableParameters {
+interface Asegstats2tableParamsDict {
     "@type"?: "freesurfer/asegstats2table";
     "subjects"?: Array<string> | null | undefined;
     "inputs"?: Array<string> | null | undefined;
@@ -38,11 +38,11 @@ interface Asegstats2tableParameters {
     "skip_missing_flag": boolean;
     "replace53_flag": boolean;
 }
-type Asegstats2tableParametersTagged = Required<Pick<Asegstats2tableParameters, '@type'>> & Asegstats2tableParameters;
+type Asegstats2tableParamsDictTagged = Required<Pick<Asegstats2tableParamsDict, '@type'>> & Asegstats2tableParamsDict;
 
 
 /**
- * Output object returned when calling `Asegstats2tableParameters(...)`.
+ * Output object returned when calling `Asegstats2tableParamsDict(...)`.
  *
  * @interface
  */
@@ -113,7 +113,7 @@ function asegstats2table_params(
     no_vol_extras_flag: boolean = false,
     skip_missing_flag: boolean = false,
     replace53_flag: boolean = false,
-): Asegstats2tableParametersTagged {
+): Asegstats2tableParamsDictTagged {
     const params = {
         "@type": "freesurfer/asegstats2table" as const,
         "tablefile": tablefile,
@@ -184,7 +184,7 @@ function asegstats2table_params(
  * @returns Command-line arguments.
  */
 function asegstats2table_cargs(
-    params: Asegstats2tableParameters,
+    params: Asegstats2tableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -320,7 +320,7 @@ function asegstats2table_cargs(
  * @returns Outputs object.
  */
 function asegstats2table_outputs(
-    params: Asegstats2tableParameters,
+    params: Asegstats2tableParamsDict,
     execution: Execution,
 ): Asegstats2tableOutputs {
     const ret: Asegstats2tableOutputs = {
@@ -346,7 +346,7 @@ function asegstats2table_outputs(
  * @returns NamedTuple of outputs (described in `Asegstats2tableOutputs`).
  */
 function asegstats2table_execute(
-    params: Asegstats2tableParameters,
+    params: Asegstats2tableParamsDict,
     runner: Runner | null = null,
 ): Asegstats2tableOutputs {
     runner = runner || getGlobalRunner();
@@ -431,6 +431,8 @@ function asegstats2table(
 export {
       ASEGSTATS2TABLE_METADATA,
       Asegstats2tableOutputs,
+      Asegstats2tableParamsDict,
+      Asegstats2tableParamsDictTagged,
       asegstats2table,
       asegstats2table_execute,
       asegstats2table_params,

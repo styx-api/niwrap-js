@@ -11,15 +11,15 @@ const V_1DMATCALC_METADATA: Metadata = {
 };
 
 
-interface V1dmatcalcParameters {
+interface V1dmatcalcParamsDict {
     "@type"?: "afni/1dmatcalc";
     "expression"?: string | null | undefined;
 }
-type V1dmatcalcParametersTagged = Required<Pick<V1dmatcalcParameters, '@type'>> & V1dmatcalcParameters;
+type V1dmatcalcParamsDictTagged = Required<Pick<V1dmatcalcParamsDict, '@type'>> & V1dmatcalcParamsDict;
 
 
 /**
- * Output object returned when calling `V1dmatcalcParameters(...)`.
+ * Output object returned when calling `V1dmatcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface V1dmatcalcOutputs {
  */
 function v_1dmatcalc_params(
     expression: string | null = null,
-): V1dmatcalcParametersTagged {
+): V1dmatcalcParamsDictTagged {
     const params = {
         "@type": "afni/1dmatcalc" as const,
     };
@@ -64,7 +64,7 @@ function v_1dmatcalc_params(
  * @returns Command-line arguments.
  */
 function v_1dmatcalc_cargs(
-    params: V1dmatcalcParameters,
+    params: V1dmatcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function v_1dmatcalc_cargs(
  * @returns Outputs object.
  */
 function v_1dmatcalc_outputs(
-    params: V1dmatcalcParameters,
+    params: V1dmatcalcParamsDict,
     execution: Execution,
 ): V1dmatcalcOutputs {
     const ret: V1dmatcalcOutputs = {
@@ -111,7 +111,7 @@ function v_1dmatcalc_outputs(
  * @returns NamedTuple of outputs (described in `V1dmatcalcOutputs`).
  */
 function v_1dmatcalc_execute(
-    params: V1dmatcalcParameters,
+    params: V1dmatcalcParamsDict,
     runner: Runner | null = null,
 ): V1dmatcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function v_1dmatcalc(
 
 export {
       V1dmatcalcOutputs,
+      V1dmatcalcParamsDict,
+      V1dmatcalcParamsDictTagged,
       V_1DMATCALC_METADATA,
       v_1dmatcalc,
       v_1dmatcalc_execute,

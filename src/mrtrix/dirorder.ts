@@ -11,15 +11,15 @@ const DIRORDER_METADATA: Metadata = {
 };
 
 
-interface DirorderConfigParameters {
+interface DirorderConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DirorderConfigParametersTagged = Required<Pick<DirorderConfigParameters, '@type'>> & DirorderConfigParameters;
+type DirorderConfigParamsDictTagged = Required<Pick<DirorderConfigParamsDict, '@type'>> & DirorderConfigParamsDict;
 
 
-interface DirorderParameters {
+interface DirorderParamsDict {
     "@type"?: "mrtrix/dirorder";
     "cartesian": boolean;
     "info": boolean;
@@ -27,13 +27,13 @@ interface DirorderParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DirorderConfigParameters> | null | undefined;
+    "config"?: Array<DirorderConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type DirorderParametersTagged = Required<Pick<DirorderParameters, '@type'>> & DirorderParameters;
+type DirorderParamsDictTagged = Required<Pick<DirorderParamsDict, '@type'>> & DirorderParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type DirorderParametersTagged = Required<Pick<DirorderParameters, '@type'>> & Di
  *
  * @returns Parameter dictionary
  */
-function dirorder_config_params(
+function dirorder_config(
     key: string,
     value: string,
-): DirorderConfigParametersTagged {
+): DirorderConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function dirorder_config_params(
  * @returns Command-line arguments.
  */
 function dirorder_config_cargs(
-    params: DirorderConfigParameters,
+    params: DirorderConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function dirorder_config_cargs(
 
 
 /**
- * Output object returned when calling `DirorderParameters(...)`.
+ * Output object returned when calling `DirorderParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function dirorder_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirorderConfigParameters> | null = null,
+    config: Array<DirorderConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirorderParametersTagged {
+): DirorderParamsDictTagged {
     const params = {
         "@type": "mrtrix/dirorder" as const,
         "cartesian": cartesian,
@@ -155,7 +155,7 @@ function dirorder_params(
  * @returns Command-line arguments.
  */
 function dirorder_cargs(
-    params: DirorderParameters,
+    params: DirorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -205,7 +205,7 @@ function dirorder_cargs(
  * @returns Outputs object.
  */
 function dirorder_outputs(
-    params: DirorderParameters,
+    params: DirorderParamsDict,
     execution: Execution,
 ): DirorderOutputs {
     const ret: DirorderOutputs = {
@@ -237,7 +237,7 @@ function dirorder_outputs(
  * @returns NamedTuple of outputs (described in `DirorderOutputs`).
  */
 function dirorder_execute(
-    params: DirorderParameters,
+    params: DirorderParamsDict,
     runner: Runner | null = null,
 ): DirorderOutputs {
     runner = runner || getGlobalRunner();
@@ -289,7 +289,7 @@ function dirorder(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirorderConfigParameters> | null = null,
+    config: Array<DirorderConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -301,9 +301,13 @@ function dirorder(
 
 export {
       DIRORDER_METADATA,
+      DirorderConfigParamsDict,
+      DirorderConfigParamsDictTagged,
       DirorderOutputs,
+      DirorderParamsDict,
+      DirorderParamsDictTagged,
       dirorder,
-      dirorder_config_params,
+      dirorder_config,
       dirorder_execute,
       dirorder_params,
 };

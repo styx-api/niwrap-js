@@ -11,18 +11,18 @@ const AVSCALE_METADATA: Metadata = {
 };
 
 
-interface AvscaleParameters {
+interface AvscaleParamsDict {
     "@type"?: "fsl/avscale";
     "allparams_flag": boolean;
     "inverteddies_flag": boolean;
     "matrix_file": InputPathType;
     "non_reference_volume"?: InputPathType | null | undefined;
 }
-type AvscaleParametersTagged = Required<Pick<AvscaleParameters, '@type'>> & AvscaleParameters;
+type AvscaleParamsDictTagged = Required<Pick<AvscaleParamsDict, '@type'>> & AvscaleParamsDict;
 
 
 /**
- * Output object returned when calling `AvscaleParameters(...)`.
+ * Output object returned when calling `AvscaleParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function avscale_params(
     allparams_flag: boolean = false,
     inverteddies_flag: boolean = false,
     non_reference_volume: InputPathType | null = null,
-): AvscaleParametersTagged {
+): AvscaleParamsDictTagged {
     const params = {
         "@type": "fsl/avscale" as const,
         "allparams_flag": allparams_flag,
@@ -76,7 +76,7 @@ function avscale_params(
  * @returns Command-line arguments.
  */
 function avscale_cargs(
-    params: AvscaleParameters,
+    params: AvscaleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function avscale_cargs(
  * @returns Outputs object.
  */
 function avscale_outputs(
-    params: AvscaleParameters,
+    params: AvscaleParamsDict,
     execution: Execution,
 ): AvscaleOutputs {
     const ret: AvscaleOutputs = {
@@ -130,7 +130,7 @@ function avscale_outputs(
  * @returns NamedTuple of outputs (described in `AvscaleOutputs`).
  */
 function avscale_execute(
-    params: AvscaleParameters,
+    params: AvscaleParamsDict,
     runner: Runner | null = null,
 ): AvscaleOutputs {
     runner = runner || getGlobalRunner();
@@ -175,6 +175,8 @@ function avscale(
 export {
       AVSCALE_METADATA,
       AvscaleOutputs,
+      AvscaleParamsDict,
+      AvscaleParamsDictTagged,
       avscale,
       avscale_execute,
       avscale_params,

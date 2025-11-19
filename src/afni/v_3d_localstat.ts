@@ -11,7 +11,7 @@ const V_3D_LOCALSTAT_METADATA: Metadata = {
 };
 
 
-interface V3dLocalstatParameters {
+interface V3dLocalstatParamsDict {
     "@type"?: "afni/3dLocalstat";
     "dataset": InputPathType;
     "nbhd": string;
@@ -34,11 +34,11 @@ interface V3dLocalstatParameters {
     "maskvalue"?: number | null | undefined;
     "maskvalue2"?: number | null | undefined;
 }
-type V3dLocalstatParametersTagged = Required<Pick<V3dLocalstatParameters, '@type'>> & V3dLocalstatParameters;
+type V3dLocalstatParamsDictTagged = Required<Pick<V3dLocalstatParamsDict, '@type'>> & V3dLocalstatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLocalstatParameters(...)`.
+ * Output object returned when calling `V3dLocalstatParamsDict(...)`.
  *
  * @interface
  */
@@ -101,7 +101,7 @@ function v_3d_localstat_params(
     unfillvalue: number | null = null,
     maskvalue: number | null = null,
     maskvalue2: number | null = null,
-): V3dLocalstatParametersTagged {
+): V3dLocalstatParamsDictTagged {
     const params = {
         "@type": "afni/3dLocalstat" as const,
         "dataset": dataset,
@@ -164,7 +164,7 @@ function v_3d_localstat_params(
  * @returns Command-line arguments.
  */
 function v_3d_localstat_cargs(
-    params: V3dLocalstatParameters,
+    params: V3dLocalstatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -280,7 +280,7 @@ function v_3d_localstat_cargs(
  * @returns Outputs object.
  */
 function v_3d_localstat_outputs(
-    params: V3dLocalstatParameters,
+    params: V3dLocalstatParamsDict,
     execution: Execution,
 ): V3dLocalstatOutputs {
     const ret: V3dLocalstatOutputs = {
@@ -306,7 +306,7 @@ function v_3d_localstat_outputs(
  * @returns NamedTuple of outputs (described in `V3dLocalstatOutputs`).
  */
 function v_3d_localstat_execute(
-    params: V3dLocalstatParameters,
+    params: V3dLocalstatParamsDict,
     runner: Runner | null = null,
 ): V3dLocalstatOutputs {
     runner = runner || getGlobalRunner();
@@ -382,6 +382,8 @@ function v_3d_localstat(
 
 export {
       V3dLocalstatOutputs,
+      V3dLocalstatParamsDict,
+      V3dLocalstatParamsDictTagged,
       V_3D_LOCALSTAT_METADATA,
       v_3d_localstat,
       v_3d_localstat_execute,

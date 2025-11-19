@@ -11,7 +11,7 @@ const MRI_CA_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MriCaRegisterParameters {
+interface MriCaRegisterParamsDict {
     "@type"?: "freesurfer/mri_ca_register";
     "input_volume": InputPathType;
     "template": InputPathType;
@@ -53,11 +53,11 @@ interface MriCaRegisterParameters {
     "second_pass_renorm": boolean;
     "threads"?: number | null | undefined;
 }
-type MriCaRegisterParametersTagged = Required<Pick<MriCaRegisterParameters, '@type'>> & MriCaRegisterParameters;
+type MriCaRegisterParamsDictTagged = Required<Pick<MriCaRegisterParamsDict, '@type'>> & MriCaRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MriCaRegisterParameters(...)`.
+ * Output object returned when calling `MriCaRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -158,7 +158,7 @@ function mri_ca_register_params(
     uncompress: boolean = false,
     second_pass_renorm: boolean = false,
     threads: number | null = null,
-): MriCaRegisterParametersTagged {
+): MriCaRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_ca_register" as const,
         "input_volume": input_volume,
@@ -262,7 +262,7 @@ function mri_ca_register_params(
  * @returns Command-line arguments.
  */
 function mri_ca_register_cargs(
-    params: MriCaRegisterParameters,
+    params: MriCaRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -463,7 +463,7 @@ function mri_ca_register_cargs(
  * @returns Outputs object.
  */
 function mri_ca_register_outputs(
-    params: MriCaRegisterParameters,
+    params: MriCaRegisterParamsDict,
     execution: Execution,
 ): MriCaRegisterOutputs {
     const ret: MriCaRegisterOutputs = {
@@ -489,7 +489,7 @@ function mri_ca_register_outputs(
  * @returns NamedTuple of outputs (described in `MriCaRegisterOutputs`).
  */
 function mri_ca_register_execute(
-    params: MriCaRegisterParameters,
+    params: MriCaRegisterParamsDict,
     runner: Runner | null = null,
 ): MriCaRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -604,6 +604,8 @@ function mri_ca_register(
 export {
       MRI_CA_REGISTER_METADATA,
       MriCaRegisterOutputs,
+      MriCaRegisterParamsDict,
+      MriCaRegisterParamsDictTagged,
       mri_ca_register,
       mri_ca_register_execute,
       mri_ca_register_params,

@@ -11,7 +11,7 @@ const V_3D_QWARP_METADATA: Metadata = {
 };
 
 
-interface V3dQwarpParameters {
+interface V3dQwarpParamsDict {
     "@type"?: "afni/3dQwarp";
     "base_dataset": InputPathType;
     "source_dataset": InputPathType;
@@ -34,11 +34,11 @@ interface V3dQwarpParameters {
     "verbose": boolean;
     "quiet": boolean;
 }
-type V3dQwarpParametersTagged = Required<Pick<V3dQwarpParameters, '@type'>> & V3dQwarpParameters;
+type V3dQwarpParamsDictTagged = Required<Pick<V3dQwarpParamsDict, '@type'>> & V3dQwarpParamsDict;
 
 
 /**
- * Output object returned when calling `V3dQwarpParameters(...)`.
+ * Output object returned when calling `V3dQwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function v_3d_qwarp_params(
     maxlev: number | null = null,
     verbose: boolean = false,
     quiet: boolean = false,
-): V3dQwarpParametersTagged {
+): V3dQwarpParamsDictTagged {
     const params = {
         "@type": "afni/3dQwarp" as const,
         "base_dataset": base_dataset,
@@ -150,7 +150,7 @@ function v_3d_qwarp_params(
  * @returns Command-line arguments.
  */
 function v_3d_qwarp_cargs(
-    params: V3dQwarpParameters,
+    params: V3dQwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -228,7 +228,7 @@ function v_3d_qwarp_cargs(
  * @returns Outputs object.
  */
 function v_3d_qwarp_outputs(
-    params: V3dQwarpParameters,
+    params: V3dQwarpParamsDict,
     execution: Execution,
 ): V3dQwarpOutputs {
     const ret: V3dQwarpOutputs = {
@@ -256,7 +256,7 @@ function v_3d_qwarp_outputs(
  * @returns NamedTuple of outputs (described in `V3dQwarpOutputs`).
  */
 function v_3d_qwarp_execute(
-    params: V3dQwarpParameters,
+    params: V3dQwarpParamsDict,
     runner: Runner | null = null,
 ): V3dQwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -332,6 +332,8 @@ function v_3d_qwarp(
 
 export {
       V3dQwarpOutputs,
+      V3dQwarpParamsDict,
+      V3dQwarpParamsDictTagged,
       V_3D_QWARP_METADATA,
       v_3d_qwarp,
       v_3d_qwarp_execute,

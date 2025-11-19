@@ -11,7 +11,7 @@ const UBER_SKEL_PY_METADATA: Metadata = {
 };
 
 
-interface UberSkelPyParameters {
+interface UberSkelPyParamsDict {
     "@type"?: "afni/uber_skel.py";
     "qt_options"?: string | null | undefined;
     "no_gui_flag": boolean;
@@ -25,11 +25,11 @@ interface UberSkelPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
-type UberSkelPyParametersTagged = Required<Pick<UberSkelPyParameters, '@type'>> & UberSkelPyParameters;
+type UberSkelPyParamsDictTagged = Required<Pick<UberSkelPyParamsDict, '@type'>> & UberSkelPyParamsDict;
 
 
 /**
- * Output object returned when calling `UberSkelPyParameters(...)`.
+ * Output object returned when calling `UberSkelPyParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function uber_skel_py_params(
     history: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): UberSkelPyParametersTagged {
+): UberSkelPyParamsDictTagged {
     const params = {
         "@type": "afni/uber_skel.py" as const,
         "no_gui_flag": no_gui_flag,
@@ -104,7 +104,7 @@ function uber_skel_py_params(
  * @returns Command-line arguments.
  */
 function uber_skel_py_cargs(
-    params: UberSkelPyParameters,
+    params: UberSkelPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function uber_skel_py_cargs(
  * @returns Outputs object.
  */
 function uber_skel_py_outputs(
-    params: UberSkelPyParameters,
+    params: UberSkelPyParamsDict,
     execution: Execution,
 ): UberSkelPyOutputs {
     const ret: UberSkelPyOutputs = {
@@ -189,7 +189,7 @@ function uber_skel_py_outputs(
  * @returns NamedTuple of outputs (described in `UberSkelPyOutputs`).
  */
 function uber_skel_py_execute(
-    params: UberSkelPyParameters,
+    params: UberSkelPyParamsDict,
     runner: Runner | null = null,
 ): UberSkelPyOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function uber_skel_py(
 export {
       UBER_SKEL_PY_METADATA,
       UberSkelPyOutputs,
+      UberSkelPyParamsDict,
+      UberSkelPyParamsDictTagged,
       uber_skel_py,
       uber_skel_py_execute,
       uber_skel_py_params,

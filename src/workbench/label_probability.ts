@@ -10,17 +10,17 @@ const LABEL_PROBABILITY_METADATA: Metadata = {
 };
 
 
-interface LabelProbabilityParameters {
+interface LabelProbabilityParamsDict {
     "@type"?: "workbench/label-probability";
     "probability-metric-out": string;
     "exclude-unlabeled": boolean;
     "label-maps": InputPathType;
 }
-type LabelProbabilityParametersTagged = Required<Pick<LabelProbabilityParameters, '@type'>> & LabelProbabilityParameters;
+type LabelProbabilityParamsDictTagged = Required<Pick<LabelProbabilityParamsDict, '@type'>> & LabelProbabilityParamsDict;
 
 
 /**
- * Output object returned when calling `LabelProbabilityParameters(...)`.
+ * Output object returned when calling `LabelProbabilityParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function label_probability_params(
     probability_metric_out: string,
     label_maps: InputPathType,
     exclude_unlabeled: boolean = false,
-): LabelProbabilityParametersTagged {
+): LabelProbabilityParamsDictTagged {
     const params = {
         "@type": "workbench/label-probability" as const,
         "probability-metric-out": probability_metric_out,
@@ -69,7 +69,7 @@ function label_probability_params(
  * @returns Command-line arguments.
  */
 function label_probability_cargs(
-    params: LabelProbabilityParameters,
+    params: LabelProbabilityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function label_probability_cargs(
  * @returns Outputs object.
  */
 function label_probability_outputs(
-    params: LabelProbabilityParameters,
+    params: LabelProbabilityParamsDict,
     execution: Execution,
 ): LabelProbabilityOutputs {
     const ret: LabelProbabilityOutputs = {
@@ -117,7 +117,7 @@ function label_probability_outputs(
  * @returns NamedTuple of outputs (described in `LabelProbabilityOutputs`).
  */
 function label_probability_execute(
-    params: LabelProbabilityParameters,
+    params: LabelProbabilityParamsDict,
     runner: Runner | null = null,
 ): LabelProbabilityOutputs {
     runner = runner || getGlobalRunner();
@@ -156,6 +156,8 @@ function label_probability(
 export {
       LABEL_PROBABILITY_METADATA,
       LabelProbabilityOutputs,
+      LabelProbabilityParamsDict,
+      LabelProbabilityParamsDictTagged,
       label_probability,
       label_probability_execute,
       label_probability_params,

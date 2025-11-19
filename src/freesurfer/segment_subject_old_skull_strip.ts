@@ -11,7 +11,7 @@ const SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA: Metadata = {
 };
 
 
-interface SegmentSubjectOldSkullStripParameters {
+interface SegmentSubjectOldSkullStripParamsDict {
     "@type"?: "freesurfer/segment_subject_old_skull_strip";
     "input_volume": InputPathType;
     "output_xfm": string;
@@ -20,11 +20,11 @@ interface SegmentSubjectOldSkullStripParameters {
     "debug_flag": boolean;
     "version_flag": boolean;
 }
-type SegmentSubjectOldSkullStripParametersTagged = Required<Pick<SegmentSubjectOldSkullStripParameters, '@type'>> & SegmentSubjectOldSkullStripParameters;
+type SegmentSubjectOldSkullStripParamsDictTagged = Required<Pick<SegmentSubjectOldSkullStripParamsDict, '@type'>> & SegmentSubjectOldSkullStripParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubjectOldSkullStripParameters(...)`.
+ * Output object returned when calling `SegmentSubjectOldSkullStripParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function segment_subject_old_skull_strip_params(
     help_flag: boolean = false,
     debug_flag: boolean = false,
     version_flag: boolean = false,
-): SegmentSubjectOldSkullStripParametersTagged {
+): SegmentSubjectOldSkullStripParamsDictTagged {
     const params = {
         "@type": "freesurfer/segment_subject_old_skull_strip" as const,
         "input_volume": input_volume,
@@ -88,7 +88,7 @@ function segment_subject_old_skull_strip_params(
  * @returns Command-line arguments.
  */
 function segment_subject_old_skull_strip_cargs(
-    params: SegmentSubjectOldSkullStripParameters,
+    params: SegmentSubjectOldSkullStripParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function segment_subject_old_skull_strip_cargs(
  * @returns Outputs object.
  */
 function segment_subject_old_skull_strip_outputs(
-    params: SegmentSubjectOldSkullStripParameters,
+    params: SegmentSubjectOldSkullStripParamsDict,
     execution: Execution,
 ): SegmentSubjectOldSkullStripOutputs {
     const ret: SegmentSubjectOldSkullStripOutputs = {
@@ -156,7 +156,7 @@ function segment_subject_old_skull_strip_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubjectOldSkullStripOutputs`).
  */
 function segment_subject_old_skull_strip_execute(
-    params: SegmentSubjectOldSkullStripParameters,
+    params: SegmentSubjectOldSkullStripParamsDict,
     runner: Runner | null = null,
 ): SegmentSubjectOldSkullStripOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function segment_subject_old_skull_strip(
 export {
       SEGMENT_SUBJECT_OLD_SKULL_STRIP_METADATA,
       SegmentSubjectOldSkullStripOutputs,
+      SegmentSubjectOldSkullStripParamsDict,
+      SegmentSubjectOldSkullStripParamsDictTagged,
       segment_subject_old_skull_strip,
       segment_subject_old_skull_strip_execute,
       segment_subject_old_skull_strip_params,

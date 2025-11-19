@@ -10,58 +10,58 @@ const CIFTI_SEPARATE_METADATA: Metadata = {
 };
 
 
-interface CiftiSeparateVolumeAllParameters {
+interface CiftiSeparateVolumeAllParamsDict {
     "@type"?: "volume-all";
     "volume-out": string;
     "roi-out"?: string | null | undefined;
     "label-out"?: string | null | undefined;
     "crop": boolean;
 }
-type CiftiSeparateVolumeAllParametersTagged = Required<Pick<CiftiSeparateVolumeAllParameters, '@type'>> & CiftiSeparateVolumeAllParameters;
+type CiftiSeparateVolumeAllParamsDictTagged = Required<Pick<CiftiSeparateVolumeAllParamsDict, '@type'>> & CiftiSeparateVolumeAllParamsDict;
 
 
-interface CiftiSeparateLabelParameters {
+interface CiftiSeparateLabelParamsDict {
     "@type"?: "label";
     "structure": string;
     "label-out": string;
     "roi-out"?: string | null | undefined;
 }
-type CiftiSeparateLabelParametersTagged = Required<Pick<CiftiSeparateLabelParameters, '@type'>> & CiftiSeparateLabelParameters;
+type CiftiSeparateLabelParamsDictTagged = Required<Pick<CiftiSeparateLabelParamsDict, '@type'>> & CiftiSeparateLabelParamsDict;
 
 
-interface CiftiSeparateMetricParameters {
+interface CiftiSeparateMetricParamsDict {
     "@type"?: "metric";
     "structure": string;
     "metric-out": string;
     "roi-out"?: string | null | undefined;
 }
-type CiftiSeparateMetricParametersTagged = Required<Pick<CiftiSeparateMetricParameters, '@type'>> & CiftiSeparateMetricParameters;
+type CiftiSeparateMetricParamsDictTagged = Required<Pick<CiftiSeparateMetricParamsDict, '@type'>> & CiftiSeparateMetricParamsDict;
 
 
-interface CiftiSeparateVolumeParameters {
+interface CiftiSeparateVolumeParamsDict {
     "@type"?: "volume";
     "structure": string;
     "volume-out": string;
     "roi-out"?: string | null | undefined;
     "crop": boolean;
 }
-type CiftiSeparateVolumeParametersTagged = Required<Pick<CiftiSeparateVolumeParameters, '@type'>> & CiftiSeparateVolumeParameters;
+type CiftiSeparateVolumeParamsDictTagged = Required<Pick<CiftiSeparateVolumeParamsDict, '@type'>> & CiftiSeparateVolumeParamsDict;
 
 
-interface CiftiSeparateParameters {
+interface CiftiSeparateParamsDict {
     "@type"?: "workbench/cifti-separate";
-    "volume-all"?: CiftiSeparateVolumeAllParameters | null | undefined;
-    "label"?: Array<CiftiSeparateLabelParameters> | null | undefined;
-    "metric"?: Array<CiftiSeparateMetricParameters> | null | undefined;
-    "volume"?: Array<CiftiSeparateVolumeParameters> | null | undefined;
+    "volume-all"?: CiftiSeparateVolumeAllParamsDict | null | undefined;
+    "label"?: Array<CiftiSeparateLabelParamsDict> | null | undefined;
+    "metric"?: Array<CiftiSeparateMetricParamsDict> | null | undefined;
+    "volume"?: Array<CiftiSeparateVolumeParamsDict> | null | undefined;
     "cifti-in": InputPathType;
     "direction": string;
 }
-type CiftiSeparateParametersTagged = Required<Pick<CiftiSeparateParameters, '@type'>> & CiftiSeparateParameters;
+type CiftiSeparateParamsDictTagged = Required<Pick<CiftiSeparateParamsDict, '@type'>> & CiftiSeparateParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiSeparateVolumeAllParameters | null(...)`.
+ * Output object returned when calling `CiftiSeparateVolumeAllParamsDict | null(...)`.
  *
  * @interface
  */
@@ -91,12 +91,12 @@ the label output volume
  *
  * @returns Parameter dictionary
  */
-function cifti_separate_volume_all_params(
+function cifti_separate_volume_all(
     volume_out: string,
     roi_out: string | null,
     label_out: string | null,
     crop: boolean = false,
-): CiftiSeparateVolumeAllParametersTagged {
+): CiftiSeparateVolumeAllParamsDictTagged {
     const params = {
         "@type": "volume-all" as const,
         "volume-out": volume_out,
@@ -121,7 +121,7 @@ function cifti_separate_volume_all_params(
  * @returns Command-line arguments.
  */
 function cifti_separate_volume_all_cargs(
-    params: CiftiSeparateVolumeAllParameters,
+    params: CiftiSeparateVolumeAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function cifti_separate_volume_all_cargs(
  * @returns Outputs object.
  */
 function cifti_separate_volume_all_outputs(
-    params: CiftiSeparateVolumeAllParameters,
+    params: CiftiSeparateVolumeAllParamsDict,
     execution: Execution,
 ): CiftiSeparateVolumeAllOutputs {
     const ret: CiftiSeparateVolumeAllOutputs = {
@@ -161,7 +161,7 @@ function cifti_separate_volume_all_outputs(
 
 
 /**
- * Output object returned when calling `Array<CiftiSeparateLabelParameters> | null(...)`.
+ * Output object returned when calling `Array<CiftiSeparateLabelParamsDict> | null(...)`.
  *
  * @interface
  */
@@ -188,11 +188,11 @@ the roi output metric
  *
  * @returns Parameter dictionary
  */
-function cifti_separate_label_params(
+function cifti_separate_label(
     structure: string,
     label_out: string,
     roi_out: string | null,
-): CiftiSeparateLabelParametersTagged {
+): CiftiSeparateLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
         "structure": structure,
@@ -214,7 +214,7 @@ function cifti_separate_label_params(
  * @returns Command-line arguments.
  */
 function cifti_separate_label_cargs(
-    params: CiftiSeparateLabelParameters,
+    params: CiftiSeparateLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -240,7 +240,7 @@ function cifti_separate_label_cargs(
  * @returns Outputs object.
  */
 function cifti_separate_label_outputs(
-    params: CiftiSeparateLabelParameters,
+    params: CiftiSeparateLabelParamsDict,
     execution: Execution,
 ): CiftiSeparateLabelOutputs {
     const ret: CiftiSeparateLabelOutputs = {
@@ -252,7 +252,7 @@ function cifti_separate_label_outputs(
 
 
 /**
- * Output object returned when calling `Array<CiftiSeparateMetricParameters> | null(...)`.
+ * Output object returned when calling `Array<CiftiSeparateMetricParamsDict> | null(...)`.
  *
  * @interface
  */
@@ -279,11 +279,11 @@ the roi output metric
  *
  * @returns Parameter dictionary
  */
-function cifti_separate_metric_params(
+function cifti_separate_metric(
     structure: string,
     metric_out: string,
     roi_out: string | null,
-): CiftiSeparateMetricParametersTagged {
+): CiftiSeparateMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
         "structure": structure,
@@ -305,7 +305,7 @@ function cifti_separate_metric_params(
  * @returns Command-line arguments.
  */
 function cifti_separate_metric_cargs(
-    params: CiftiSeparateMetricParameters,
+    params: CiftiSeparateMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -331,7 +331,7 @@ function cifti_separate_metric_cargs(
  * @returns Outputs object.
  */
 function cifti_separate_metric_outputs(
-    params: CiftiSeparateMetricParameters,
+    params: CiftiSeparateMetricParamsDict,
     execution: Execution,
 ): CiftiSeparateMetricOutputs {
     const ret: CiftiSeparateMetricOutputs = {
@@ -343,7 +343,7 @@ function cifti_separate_metric_outputs(
 
 
 /**
- * Output object returned when calling `Array<CiftiSeparateVolumeParameters> | null(...)`.
+ * Output object returned when calling `Array<CiftiSeparateVolumeParamsDict> | null(...)`.
  *
  * @interface
  */
@@ -371,12 +371,12 @@ the roi output volume
  *
  * @returns Parameter dictionary
  */
-function cifti_separate_volume_params(
+function cifti_separate_volume(
     structure: string,
     volume_out: string,
     roi_out: string | null,
     crop: boolean = false,
-): CiftiSeparateVolumeParametersTagged {
+): CiftiSeparateVolumeParamsDictTagged {
     const params = {
         "@type": "volume" as const,
         "structure": structure,
@@ -399,7 +399,7 @@ function cifti_separate_volume_params(
  * @returns Command-line arguments.
  */
 function cifti_separate_volume_cargs(
-    params: CiftiSeparateVolumeParameters,
+    params: CiftiSeparateVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -426,7 +426,7 @@ function cifti_separate_volume_cargs(
  * @returns Outputs object.
  */
 function cifti_separate_volume_outputs(
-    params: CiftiSeparateVolumeParameters,
+    params: CiftiSeparateVolumeParamsDict,
     execution: Execution,
 ): CiftiSeparateVolumeOutputs {
     const ret: CiftiSeparateVolumeOutputs = {
@@ -438,7 +438,7 @@ function cifti_separate_volume_outputs(
 
 
 /**
- * Output object returned when calling `CiftiSeparateParameters(...)`.
+ * Output object returned when calling `CiftiSeparateParamsDict(...)`.
  *
  * @interface
  */
@@ -481,11 +481,11 @@ interface CiftiSeparateOutputs {
 function cifti_separate_params(
     cifti_in: InputPathType,
     direction: string,
-    volume_all: CiftiSeparateVolumeAllParameters | null = null,
-    label: Array<CiftiSeparateLabelParameters> | null = null,
-    metric: Array<CiftiSeparateMetricParameters> | null = null,
-    volume: Array<CiftiSeparateVolumeParameters> | null = null,
-): CiftiSeparateParametersTagged {
+    volume_all: CiftiSeparateVolumeAllParamsDict | null = null,
+    label: Array<CiftiSeparateLabelParamsDict> | null = null,
+    metric: Array<CiftiSeparateMetricParamsDict> | null = null,
+    volume: Array<CiftiSeparateVolumeParamsDict> | null = null,
+): CiftiSeparateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-separate" as const,
         "cifti-in": cifti_in,
@@ -516,7 +516,7 @@ function cifti_separate_params(
  * @returns Command-line arguments.
  */
 function cifti_separate_cargs(
-    params: CiftiSeparateParameters,
+    params: CiftiSeparateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -545,7 +545,7 @@ function cifti_separate_cargs(
  * @returns Outputs object.
  */
 function cifti_separate_outputs(
-    params: CiftiSeparateParameters,
+    params: CiftiSeparateParamsDict,
     execution: Execution,
 ): CiftiSeparateOutputs {
     const ret: CiftiSeparateOutputs = {
@@ -610,7 +610,7 @@ function cifti_separate_outputs(
  * @returns NamedTuple of outputs (described in `CiftiSeparateOutputs`).
  */
 function cifti_separate_execute(
-    params: CiftiSeparateParameters,
+    params: CiftiSeparateParamsDict,
     runner: Runner | null = null,
 ): CiftiSeparateOutputs {
     runner = runner || getGlobalRunner();
@@ -681,10 +681,10 @@ function cifti_separate_execute(
 function cifti_separate(
     cifti_in: InputPathType,
     direction: string,
-    volume_all: CiftiSeparateVolumeAllParameters | null = null,
-    label: Array<CiftiSeparateLabelParameters> | null = null,
-    metric: Array<CiftiSeparateMetricParameters> | null = null,
-    volume: Array<CiftiSeparateVolumeParameters> | null = null,
+    volume_all: CiftiSeparateVolumeAllParamsDict | null = null,
+    label: Array<CiftiSeparateLabelParamsDict> | null = null,
+    metric: Array<CiftiSeparateMetricParamsDict> | null = null,
+    volume: Array<CiftiSeparateVolumeParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiSeparateOutputs {
     const params = cifti_separate_params(cifti_in, direction, volume_all, label, metric, volume)
@@ -695,15 +695,25 @@ function cifti_separate(
 export {
       CIFTI_SEPARATE_METADATA,
       CiftiSeparateLabelOutputs,
+      CiftiSeparateLabelParamsDict,
+      CiftiSeparateLabelParamsDictTagged,
       CiftiSeparateMetricOutputs,
+      CiftiSeparateMetricParamsDict,
+      CiftiSeparateMetricParamsDictTagged,
       CiftiSeparateOutputs,
+      CiftiSeparateParamsDict,
+      CiftiSeparateParamsDictTagged,
       CiftiSeparateVolumeAllOutputs,
+      CiftiSeparateVolumeAllParamsDict,
+      CiftiSeparateVolumeAllParamsDictTagged,
       CiftiSeparateVolumeOutputs,
+      CiftiSeparateVolumeParamsDict,
+      CiftiSeparateVolumeParamsDictTagged,
       cifti_separate,
       cifti_separate_execute,
-      cifti_separate_label_params,
-      cifti_separate_metric_params,
+      cifti_separate_label,
+      cifti_separate_metric,
       cifti_separate_params,
-      cifti_separate_volume_all_params,
-      cifti_separate_volume_params,
+      cifti_separate_volume,
+      cifti_separate_volume_all,
 };

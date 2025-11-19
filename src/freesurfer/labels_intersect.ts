@@ -11,17 +11,17 @@ const LABELS_INTERSECT_METADATA: Metadata = {
 };
 
 
-interface LabelsIntersectParameters {
+interface LabelsIntersectParamsDict {
     "@type"?: "freesurfer/labels_intersect";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
-type LabelsIntersectParametersTagged = Required<Pick<LabelsIntersectParameters, '@type'>> & LabelsIntersectParameters;
+type LabelsIntersectParamsDictTagged = Required<Pick<LabelsIntersectParamsDict, '@type'>> & LabelsIntersectParamsDict;
 
 
 /**
- * Output object returned when calling `LabelsIntersectParameters(...)`.
+ * Output object returned when calling `LabelsIntersectParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function labels_intersect_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
-): LabelsIntersectParametersTagged {
+): LabelsIntersectParamsDictTagged {
     const params = {
         "@type": "freesurfer/labels_intersect" as const,
         "label1": label1,
@@ -70,7 +70,7 @@ function labels_intersect_params(
  * @returns Command-line arguments.
  */
 function labels_intersect_cargs(
-    params: LabelsIntersectParameters,
+    params: LabelsIntersectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function labels_intersect_cargs(
  * @returns Outputs object.
  */
 function labels_intersect_outputs(
-    params: LabelsIntersectParameters,
+    params: LabelsIntersectParamsDict,
     execution: Execution,
 ): LabelsIntersectOutputs {
     const ret: LabelsIntersectOutputs = {
@@ -117,7 +117,7 @@ function labels_intersect_outputs(
  * @returns NamedTuple of outputs (described in `LabelsIntersectOutputs`).
  */
 function labels_intersect_execute(
-    params: LabelsIntersectParameters,
+    params: LabelsIntersectParamsDict,
     runner: Runner | null = null,
 ): LabelsIntersectOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function labels_intersect(
 export {
       LABELS_INTERSECT_METADATA,
       LabelsIntersectOutputs,
+      LabelsIntersectParamsDict,
+      LabelsIntersectParamsDictTagged,
       labels_intersect,
       labels_intersect_execute,
       labels_intersect_params,

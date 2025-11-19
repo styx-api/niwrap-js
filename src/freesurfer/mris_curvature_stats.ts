@@ -11,7 +11,7 @@ const MRIS_CURVATURE_STATS_METADATA: Metadata = {
 };
 
 
-interface MrisCurvatureStatsParameters {
+interface MrisCurvatureStatsParamsDict {
     "@type"?: "freesurfer/mris_curvature_stats";
     "subject_name": string;
     "hemisphere": string;
@@ -51,11 +51,11 @@ interface MrisCurvatureStatsParameters {
     "set_zero_vertex"?: number | null | undefined;
     "max_ulps"?: number | null | undefined;
 }
-type MrisCurvatureStatsParametersTagged = Required<Pick<MrisCurvatureStatsParameters, '@type'>> & MrisCurvatureStatsParameters;
+type MrisCurvatureStatsParamsDictTagged = Required<Pick<MrisCurvatureStatsParamsDict, '@type'>> & MrisCurvatureStatsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCurvatureStatsParameters(...)`.
+ * Output object returned when calling `MrisCurvatureStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -148,7 +148,7 @@ function mris_curvature_stats_params(
     version: boolean = false,
     set_zero_vertex: number | null = null,
     max_ulps: number | null = null,
-): MrisCurvatureStatsParametersTagged {
+): MrisCurvatureStatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_curvature_stats" as const,
         "subject_name": subject_name,
@@ -244,7 +244,7 @@ function mris_curvature_stats_params(
  * @returns Command-line arguments.
  */
 function mris_curvature_stats_cargs(
-    params: MrisCurvatureStatsParameters,
+    params: MrisCurvatureStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -429,7 +429,7 @@ function mris_curvature_stats_cargs(
  * @returns Outputs object.
  */
 function mris_curvature_stats_outputs(
-    params: MrisCurvatureStatsParameters,
+    params: MrisCurvatureStatsParamsDict,
     execution: Execution,
 ): MrisCurvatureStatsOutputs {
     const ret: MrisCurvatureStatsOutputs = {
@@ -454,7 +454,7 @@ function mris_curvature_stats_outputs(
  * @returns NamedTuple of outputs (described in `MrisCurvatureStatsOutputs`).
  */
 function mris_curvature_stats_execute(
-    params: MrisCurvatureStatsParameters,
+    params: MrisCurvatureStatsParamsDict,
     runner: Runner | null = null,
 ): MrisCurvatureStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -565,6 +565,8 @@ function mris_curvature_stats(
 export {
       MRIS_CURVATURE_STATS_METADATA,
       MrisCurvatureStatsOutputs,
+      MrisCurvatureStatsParamsDict,
+      MrisCurvatureStatsParamsDictTagged,
       mris_curvature_stats,
       mris_curvature_stats_execute,
       mris_curvature_stats_params,

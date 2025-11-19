@@ -11,7 +11,7 @@ const V__SUMA_ALIGN_TO_EXPERIMENT_METADATA: Metadata = {
 };
 
 
-interface VSumaAlignToExperimentParameters {
+interface VSumaAlignToExperimentParamsDict {
     "@type"?: "afni/@SUMA_AlignToExperiment";
     "exp_anat": InputPathType;
     "surf_anat": InputPathType;
@@ -34,11 +34,11 @@ interface VSumaAlignToExperimentParameters {
     "keep_tmp": boolean;
     "overwrite_resp"?: string | null | undefined;
 }
-type VSumaAlignToExperimentParametersTagged = Required<Pick<VSumaAlignToExperimentParameters, '@type'>> & VSumaAlignToExperimentParameters;
+type VSumaAlignToExperimentParamsDictTagged = Required<Pick<VSumaAlignToExperimentParamsDict, '@type'>> & VSumaAlignToExperimentParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaAlignToExperimentParameters(...)`.
+ * Output object returned when calling `VSumaAlignToExperimentParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function v__suma_align_to_experiment_params(
     echo: boolean = false,
     keep_tmp: boolean = false,
     overwrite_resp: string | null = null,
-): VSumaAlignToExperimentParametersTagged {
+): VSumaAlignToExperimentParamsDictTagged {
     const params = {
         "@type": "afni/@SUMA_AlignToExperiment" as const,
         "exp_anat": exp_anat,
@@ -164,7 +164,7 @@ function v__suma_align_to_experiment_params(
  * @returns Command-line arguments.
  */
 function v__suma_align_to_experiment_cargs(
-    params: VSumaAlignToExperimentParameters,
+    params: VSumaAlignToExperimentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -277,7 +277,7 @@ function v__suma_align_to_experiment_cargs(
  * @returns Outputs object.
  */
 function v__suma_align_to_experiment_outputs(
-    params: VSumaAlignToExperimentParameters,
+    params: VSumaAlignToExperimentParamsDict,
     execution: Execution,
 ): VSumaAlignToExperimentOutputs {
     const ret: VSumaAlignToExperimentOutputs = {
@@ -304,7 +304,7 @@ function v__suma_align_to_experiment_outputs(
  * @returns NamedTuple of outputs (described in `VSumaAlignToExperimentOutputs`).
  */
 function v__suma_align_to_experiment_execute(
-    params: VSumaAlignToExperimentParameters,
+    params: VSumaAlignToExperimentParamsDict,
     runner: Runner | null = null,
 ): VSumaAlignToExperimentOutputs {
     runner = runner || getGlobalRunner();
@@ -380,6 +380,8 @@ function v__suma_align_to_experiment(
 
 export {
       VSumaAlignToExperimentOutputs,
+      VSumaAlignToExperimentParamsDict,
+      VSumaAlignToExperimentParamsDictTagged,
       V__SUMA_ALIGN_TO_EXPERIMENT_METADATA,
       v__suma_align_to_experiment,
       v__suma_align_to_experiment_execute,

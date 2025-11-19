@@ -10,7 +10,7 @@ const SURFACE_GEODESIC_DISTANCE_ALL_TO_ALL_METADATA: Metadata = {
 };
 
 
-interface SurfaceGeodesicDistanceAllToAllParameters {
+interface SurfaceGeodesicDistanceAllToAllParamsDict {
     "@type"?: "workbench/surface-geodesic-distance-all-to-all";
     "cifti-out": string;
     "roi-metric"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface SurfaceGeodesicDistanceAllToAllParameters {
     "naive": boolean;
     "surface": InputPathType;
 }
-type SurfaceGeodesicDistanceAllToAllParametersTagged = Required<Pick<SurfaceGeodesicDistanceAllToAllParameters, '@type'>> & SurfaceGeodesicDistanceAllToAllParameters;
+type SurfaceGeodesicDistanceAllToAllParamsDictTagged = Required<Pick<SurfaceGeodesicDistanceAllToAllParamsDict, '@type'>> & SurfaceGeodesicDistanceAllToAllParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceGeodesicDistanceAllToAllParameters(...)`.
+ * Output object returned when calling `SurfaceGeodesicDistanceAllToAllParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function surface_geodesic_distance_all_to_all_params(
     area_metric: InputPathType | null,
     surface: InputPathType,
     naive: boolean = false,
-): SurfaceGeodesicDistanceAllToAllParametersTagged {
+): SurfaceGeodesicDistanceAllToAllParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-distance-all-to-all" as const,
         "cifti-out": cifti_out,
@@ -93,7 +93,7 @@ function surface_geodesic_distance_all_to_all_params(
  * @returns Command-line arguments.
  */
 function surface_geodesic_distance_all_to_all_cargs(
-    params: SurfaceGeodesicDistanceAllToAllParameters,
+    params: SurfaceGeodesicDistanceAllToAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function surface_geodesic_distance_all_to_all_cargs(
  * @returns Outputs object.
  */
 function surface_geodesic_distance_all_to_all_outputs(
-    params: SurfaceGeodesicDistanceAllToAllParameters,
+    params: SurfaceGeodesicDistanceAllToAllParamsDict,
     execution: Execution,
 ): SurfaceGeodesicDistanceAllToAllOutputs {
     const ret: SurfaceGeodesicDistanceAllToAllOutputs = {
@@ -153,7 +153,7 @@ function surface_geodesic_distance_all_to_all_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceAllToAllOutputs`).
  */
 function surface_geodesic_distance_all_to_all_execute(
-    params: SurfaceGeodesicDistanceAllToAllParameters,
+    params: SurfaceGeodesicDistanceAllToAllParamsDict,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceAllToAllOutputs {
     runner = runner || getGlobalRunner();
@@ -210,6 +210,8 @@ function surface_geodesic_distance_all_to_all(
 export {
       SURFACE_GEODESIC_DISTANCE_ALL_TO_ALL_METADATA,
       SurfaceGeodesicDistanceAllToAllOutputs,
+      SurfaceGeodesicDistanceAllToAllParamsDict,
+      SurfaceGeodesicDistanceAllToAllParamsDictTagged,
       surface_geodesic_distance_all_to_all,
       surface_geodesic_distance_all_to_all_execute,
       surface_geodesic_distance_all_to_all_params,

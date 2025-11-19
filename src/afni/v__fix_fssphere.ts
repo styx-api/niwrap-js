@@ -11,7 +11,7 @@ const V__FIX_FSSPHERE_METADATA: Metadata = {
 };
 
 
-interface VFixFssphereParameters {
+interface VFixFssphereParamsDict {
     "@type"?: "afni/@fix_FSsphere";
     "spec_file": InputPathType;
     "sphere_file": InputPathType;
@@ -20,11 +20,11 @@ interface VFixFssphereParameters {
     "project_first": boolean;
     "keep_temp": boolean;
 }
-type VFixFssphereParametersTagged = Required<Pick<VFixFssphereParameters, '@type'>> & VFixFssphereParameters;
+type VFixFssphereParamsDictTagged = Required<Pick<VFixFssphereParamsDict, '@type'>> & VFixFssphereParamsDict;
 
 
 /**
- * Output object returned when calling `VFixFssphereParameters(...)`.
+ * Output object returned when calling `VFixFssphereParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v__fix_fssphere_params(
     extent_lim: number | null = null,
     project_first: boolean = false,
     keep_temp: boolean = false,
-): VFixFssphereParametersTagged {
+): VFixFssphereParamsDictTagged {
     const params = {
         "@type": "afni/@fix_FSsphere" as const,
         "spec_file": spec_file,
@@ -86,7 +86,7 @@ function v__fix_fssphere_params(
  * @returns Command-line arguments.
  */
 function v__fix_fssphere_cargs(
-    params: VFixFssphereParameters,
+    params: VFixFssphereParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function v__fix_fssphere_cargs(
  * @returns Outputs object.
  */
 function v__fix_fssphere_outputs(
-    params: VFixFssphereParameters,
+    params: VFixFssphereParamsDict,
     execution: Execution,
 ): VFixFssphereOutputs {
     const ret: VFixFssphereOutputs = {
@@ -156,7 +156,7 @@ function v__fix_fssphere_outputs(
  * @returns NamedTuple of outputs (described in `VFixFssphereOutputs`).
  */
 function v__fix_fssphere_execute(
-    params: VFixFssphereParameters,
+    params: VFixFssphereParamsDict,
     runner: Runner | null = null,
 ): VFixFssphereOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function v__fix_fssphere(
 
 export {
       VFixFssphereOutputs,
+      VFixFssphereParamsDict,
+      VFixFssphereParamsDictTagged,
       V__FIX_FSSPHERE_METADATA,
       v__fix_fssphere,
       v__fix_fssphere_execute,

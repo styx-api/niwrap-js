@@ -11,7 +11,7 @@ const MRIS_MAKE_AVERAGE_SURFACE_METADATA: Metadata = {
 };
 
 
-interface MrisMakeAverageSurfaceParameters {
+interface MrisMakeAverageSurfaceParamsDict {
     "@type"?: "freesurfer/mris_make_average_surface";
     "hemi": string;
     "outsurfname": string;
@@ -29,11 +29,11 @@ interface MrisMakeAverageSurfaceParameters {
     "simple"?: Array<string> | null | undefined;
     "diagno"?: number | null | undefined;
 }
-type MrisMakeAverageSurfaceParametersTagged = Required<Pick<MrisMakeAverageSurfaceParameters, '@type'>> & MrisMakeAverageSurfaceParameters;
+type MrisMakeAverageSurfaceParamsDictTagged = Required<Pick<MrisMakeAverageSurfaceParamsDict, '@type'>> & MrisMakeAverageSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMakeAverageSurfaceParameters(...)`.
+ * Output object returned when calling `MrisMakeAverageSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function mris_make_average_surface_params(
     surf2surf_flag: boolean = false,
     simple: Array<string> | null = null,
     diagno: number | null = null,
-): MrisMakeAverageSurfaceParametersTagged {
+): MrisMakeAverageSurfaceParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_make_average_surface" as const,
         "hemi": hemi,
@@ -134,7 +134,7 @@ function mris_make_average_surface_params(
  * @returns Command-line arguments.
  */
 function mris_make_average_surface_cargs(
-    params: MrisMakeAverageSurfaceParameters,
+    params: MrisMakeAverageSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -211,7 +211,7 @@ function mris_make_average_surface_cargs(
  * @returns Outputs object.
  */
 function mris_make_average_surface_outputs(
-    params: MrisMakeAverageSurfaceParameters,
+    params: MrisMakeAverageSurfaceParamsDict,
     execution: Execution,
 ): MrisMakeAverageSurfaceOutputs {
     const ret: MrisMakeAverageSurfaceOutputs = {
@@ -237,7 +237,7 @@ function mris_make_average_surface_outputs(
  * @returns NamedTuple of outputs (described in `MrisMakeAverageSurfaceOutputs`).
  */
 function mris_make_average_surface_execute(
-    params: MrisMakeAverageSurfaceParameters,
+    params: MrisMakeAverageSurfaceParamsDict,
     runner: Runner | null = null,
 ): MrisMakeAverageSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -304,6 +304,8 @@ function mris_make_average_surface(
 export {
       MRIS_MAKE_AVERAGE_SURFACE_METADATA,
       MrisMakeAverageSurfaceOutputs,
+      MrisMakeAverageSurfaceParamsDict,
+      MrisMakeAverageSurfaceParamsDictTagged,
       mris_make_average_surface,
       mris_make_average_surface_execute,
       mris_make_average_surface_params,

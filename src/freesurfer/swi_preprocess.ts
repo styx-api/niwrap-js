@@ -11,7 +11,7 @@ const SWI_PREPROCESS_METADATA: Metadata = {
 };
 
 
-interface SwiPreprocessParameters {
+interface SwiPreprocessParamsDict {
     "@type"?: "freesurfer/swi_preprocess";
     "scanner": "ge" | "siemens" | "philips";
     "ge_file"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface SwiPreprocessParameters {
     "out_magnitude": string;
     "out_phase": string;
 }
-type SwiPreprocessParametersTagged = Required<Pick<SwiPreprocessParameters, '@type'>> & SwiPreprocessParameters;
+type SwiPreprocessParamsDictTagged = Required<Pick<SwiPreprocessParamsDict, '@type'>> & SwiPreprocessParamsDict;
 
 
 /**
- * Output object returned when calling `SwiPreprocessParameters(...)`.
+ * Output object returned when calling `SwiPreprocessParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function swi_preprocess_params(
     philips_file: InputPathType | null = null,
     siemens_magnitude: InputPathType | null = null,
     siemens_phase: InputPathType | null = null,
-): SwiPreprocessParametersTagged {
+): SwiPreprocessParamsDictTagged {
     const params = {
         "@type": "freesurfer/swi_preprocess" as const,
         "scanner": scanner,
@@ -98,7 +98,7 @@ function swi_preprocess_params(
  * @returns Command-line arguments.
  */
 function swi_preprocess_cargs(
-    params: SwiPreprocessParameters,
+    params: SwiPreprocessParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,7 +152,7 @@ function swi_preprocess_cargs(
  * @returns Outputs object.
  */
 function swi_preprocess_outputs(
-    params: SwiPreprocessParameters,
+    params: SwiPreprocessParamsDict,
     execution: Execution,
 ): SwiPreprocessOutputs {
     const ret: SwiPreprocessOutputs = {
@@ -179,7 +179,7 @@ function swi_preprocess_outputs(
  * @returns NamedTuple of outputs (described in `SwiPreprocessOutputs`).
  */
 function swi_preprocess_execute(
-    params: SwiPreprocessParameters,
+    params: SwiPreprocessParamsDict,
     runner: Runner | null = null,
 ): SwiPreprocessOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function swi_preprocess(
 export {
       SWI_PREPROCESS_METADATA,
       SwiPreprocessOutputs,
+      SwiPreprocessParamsDict,
+      SwiPreprocessParamsDictTagged,
       swi_preprocess,
       swi_preprocess_execute,
       swi_preprocess_params,

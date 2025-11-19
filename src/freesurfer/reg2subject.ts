@@ -11,15 +11,15 @@ const REG2SUBJECT_METADATA: Metadata = {
 };
 
 
-interface Reg2subjectParameters {
+interface Reg2subjectParamsDict {
     "@type"?: "freesurfer/reg2subject";
     "regfile": InputPathType;
 }
-type Reg2subjectParametersTagged = Required<Pick<Reg2subjectParameters, '@type'>> & Reg2subjectParameters;
+type Reg2subjectParamsDictTagged = Required<Pick<Reg2subjectParamsDict, '@type'>> & Reg2subjectParamsDict;
 
 
 /**
- * Output object returned when calling `Reg2subjectParameters(...)`.
+ * Output object returned when calling `Reg2subjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface Reg2subjectOutputs {
  */
 function reg2subject_params(
     regfile: InputPathType,
-): Reg2subjectParametersTagged {
+): Reg2subjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/reg2subject" as const,
         "regfile": regfile,
@@ -58,7 +58,7 @@ function reg2subject_params(
  * @returns Command-line arguments.
  */
 function reg2subject_cargs(
-    params: Reg2subjectParameters,
+    params: Reg2subjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function reg2subject_cargs(
  * @returns Outputs object.
  */
 function reg2subject_outputs(
-    params: Reg2subjectParameters,
+    params: Reg2subjectParamsDict,
     execution: Execution,
 ): Reg2subjectOutputs {
     const ret: Reg2subjectOutputs = {
@@ -105,7 +105,7 @@ function reg2subject_outputs(
  * @returns NamedTuple of outputs (described in `Reg2subjectOutputs`).
  */
 function reg2subject_execute(
-    params: Reg2subjectParameters,
+    params: Reg2subjectParamsDict,
     runner: Runner | null = null,
 ): Reg2subjectOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function reg2subject(
 export {
       REG2SUBJECT_METADATA,
       Reg2subjectOutputs,
+      Reg2subjectParamsDict,
+      Reg2subjectParamsDictTagged,
       reg2subject,
       reg2subject_execute,
       reg2subject_params,

@@ -11,7 +11,7 @@ const MRI_VESSEL_SEGMENT_METADATA: Metadata = {
 };
 
 
-interface MriVesselSegmentParameters {
+interface MriVesselSegmentParamsDict {
     "@type"?: "freesurfer/mri_vessel_segment";
     "t1_image": InputPathType;
     "t2_image": InputPathType;
@@ -19,11 +19,11 @@ interface MriVesselSegmentParameters {
     "output_file": string;
     "shape_flag": boolean;
 }
-type MriVesselSegmentParametersTagged = Required<Pick<MriVesselSegmentParameters, '@type'>> & MriVesselSegmentParameters;
+type MriVesselSegmentParamsDictTagged = Required<Pick<MriVesselSegmentParamsDict, '@type'>> & MriVesselSegmentParamsDict;
 
 
 /**
- * Output object returned when calling `MriVesselSegmentParameters(...)`.
+ * Output object returned when calling `MriVesselSegmentParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_vessel_segment_params(
     aseg_file: InputPathType,
     output_file: string,
     shape_flag: boolean = false,
-): MriVesselSegmentParametersTagged {
+): MriVesselSegmentParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_vessel_segment" as const,
         "t1_image": t1_image,
@@ -78,7 +78,7 @@ function mri_vessel_segment_params(
  * @returns Command-line arguments.
  */
 function mri_vessel_segment_cargs(
-    params: MriVesselSegmentParameters,
+    params: MriVesselSegmentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function mri_vessel_segment_cargs(
  * @returns Outputs object.
  */
 function mri_vessel_segment_outputs(
-    params: MriVesselSegmentParameters,
+    params: MriVesselSegmentParamsDict,
     execution: Execution,
 ): MriVesselSegmentOutputs {
     const ret: MriVesselSegmentOutputs = {
@@ -141,7 +141,7 @@ function mri_vessel_segment_outputs(
  * @returns NamedTuple of outputs (described in `MriVesselSegmentOutputs`).
  */
 function mri_vessel_segment_execute(
-    params: MriVesselSegmentParameters,
+    params: MriVesselSegmentParamsDict,
     runner: Runner | null = null,
 ): MriVesselSegmentOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function mri_vessel_segment(
 export {
       MRI_VESSEL_SEGMENT_METADATA,
       MriVesselSegmentOutputs,
+      MriVesselSegmentParamsDict,
+      MriVesselSegmentParamsDictTagged,
       mri_vessel_segment,
       mri_vessel_segment_execute,
       mri_vessel_segment_params,

@@ -11,18 +11,18 @@ const MRI_REMOVE_NECK_METADATA: Metadata = {
 };
 
 
-interface MriRemoveNeckParameters {
+interface MriRemoveNeckParamsDict {
     "@type"?: "freesurfer/mri_remove_neck";
     "input_volume": InputPathType;
     "transform": InputPathType;
     "gca": InputPathType;
     "output_volume": string;
 }
-type MriRemoveNeckParametersTagged = Required<Pick<MriRemoveNeckParameters, '@type'>> & MriRemoveNeckParameters;
+type MriRemoveNeckParamsDictTagged = Required<Pick<MriRemoveNeckParamsDict, '@type'>> & MriRemoveNeckParamsDict;
 
 
 /**
- * Output object returned when calling `MriRemoveNeckParameters(...)`.
+ * Output object returned when calling `MriRemoveNeckParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_remove_neck_params(
     transform: InputPathType,
     gca: InputPathType,
     output_volume: string,
-): MriRemoveNeckParametersTagged {
+): MriRemoveNeckParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_remove_neck" as const,
         "input_volume": input_volume,
@@ -74,7 +74,7 @@ function mri_remove_neck_params(
  * @returns Command-line arguments.
  */
 function mri_remove_neck_cargs(
-    params: MriRemoveNeckParameters,
+    params: MriRemoveNeckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_remove_neck_cargs(
  * @returns Outputs object.
  */
 function mri_remove_neck_outputs(
-    params: MriRemoveNeckParameters,
+    params: MriRemoveNeckParamsDict,
     execution: Execution,
 ): MriRemoveNeckOutputs {
     const ret: MriRemoveNeckOutputs = {
@@ -122,7 +122,7 @@ function mri_remove_neck_outputs(
  * @returns NamedTuple of outputs (described in `MriRemoveNeckOutputs`).
  */
 function mri_remove_neck_execute(
-    params: MriRemoveNeckParameters,
+    params: MriRemoveNeckParamsDict,
     runner: Runner | null = null,
 ): MriRemoveNeckOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mri_remove_neck(
 export {
       MRI_REMOVE_NECK_METADATA,
       MriRemoveNeckOutputs,
+      MriRemoveNeckParamsDict,
+      MriRemoveNeckParamsDictTagged,
       mri_remove_neck,
       mri_remove_neck_execute,
       mri_remove_neck_params,

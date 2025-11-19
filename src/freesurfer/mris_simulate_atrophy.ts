@@ -11,7 +11,7 @@ const MRIS_SIMULATE_ATROPHY_METADATA: Metadata = {
 };
 
 
-interface MrisSimulateAtrophyParameters {
+interface MrisSimulateAtrophyParamsDict {
     "@type"?: "freesurfer/mris_simulate_atrophy";
     "subject": string;
     "hemi": string;
@@ -21,11 +21,11 @@ interface MrisSimulateAtrophyParameters {
     "atrophy_percent"?: number | null | undefined;
     "noise_level"?: number | null | undefined;
 }
-type MrisSimulateAtrophyParametersTagged = Required<Pick<MrisSimulateAtrophyParameters, '@type'>> & MrisSimulateAtrophyParameters;
+type MrisSimulateAtrophyParamsDictTagged = Required<Pick<MrisSimulateAtrophyParamsDict, '@type'>> & MrisSimulateAtrophyParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSimulateAtrophyParameters(...)`.
+ * Output object returned when calling `MrisSimulateAtrophyParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_simulate_atrophy_params(
     output_volume: string,
     atrophy_percent: number | null = null,
     noise_level: number | null = null,
-): MrisSimulateAtrophyParametersTagged {
+): MrisSimulateAtrophyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_simulate_atrophy" as const,
         "subject": subject,
@@ -90,7 +90,7 @@ function mris_simulate_atrophy_params(
  * @returns Command-line arguments.
  */
 function mris_simulate_atrophy_cargs(
-    params: MrisSimulateAtrophyParameters,
+    params: MrisSimulateAtrophyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function mris_simulate_atrophy_cargs(
  * @returns Outputs object.
  */
 function mris_simulate_atrophy_outputs(
-    params: MrisSimulateAtrophyParameters,
+    params: MrisSimulateAtrophyParamsDict,
     execution: Execution,
 ): MrisSimulateAtrophyOutputs {
     const ret: MrisSimulateAtrophyOutputs = {
@@ -151,7 +151,7 @@ function mris_simulate_atrophy_outputs(
  * @returns NamedTuple of outputs (described in `MrisSimulateAtrophyOutputs`).
  */
 function mris_simulate_atrophy_execute(
-    params: MrisSimulateAtrophyParameters,
+    params: MrisSimulateAtrophyParamsDict,
     runner: Runner | null = null,
 ): MrisSimulateAtrophyOutputs {
     runner = runner || getGlobalRunner();
@@ -202,6 +202,8 @@ function mris_simulate_atrophy(
 export {
       MRIS_SIMULATE_ATROPHY_METADATA,
       MrisSimulateAtrophyOutputs,
+      MrisSimulateAtrophyParamsDict,
+      MrisSimulateAtrophyParamsDictTagged,
       mris_simulate_atrophy,
       mris_simulate_atrophy_execute,
       mris_simulate_atrophy_params,

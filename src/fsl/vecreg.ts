@@ -11,7 +11,7 @@ const VECREG_METADATA: Metadata = {
 };
 
 
-interface VecregParameters {
+interface VecregParamsDict {
     "@type"?: "fsl/vecreg";
     "input_file": InputPathType;
     "output_file": string;
@@ -25,11 +25,11 @@ interface VecregParameters {
     "brain_mask"?: InputPathType | null | undefined;
     "ref_brain_mask"?: InputPathType | null | undefined;
 }
-type VecregParametersTagged = Required<Pick<VecregParameters, '@type'>> & VecregParameters;
+type VecregParamsDictTagged = Required<Pick<VecregParamsDict, '@type'>> & VecregParamsDict;
 
 
 /**
- * Output object returned when calling `VecregParameters(...)`.
+ * Output object returned when calling `VecregParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function vecreg_params(
     interp_method: string | null = null,
     brain_mask: InputPathType | null = null,
     ref_brain_mask: InputPathType | null = null,
-): VecregParametersTagged {
+): VecregParamsDictTagged {
     const params = {
         "@type": "fsl/vecreg" as const,
         "input_file": input_file,
@@ -114,7 +114,7 @@ function vecreg_params(
  * @returns Command-line arguments.
  */
 function vecreg_cargs(
-    params: VecregParameters,
+    params: VecregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -186,7 +186,7 @@ function vecreg_cargs(
  * @returns Outputs object.
  */
 function vecreg_outputs(
-    params: VecregParameters,
+    params: VecregParamsDict,
     execution: Execution,
 ): VecregOutputs {
     const ret: VecregOutputs = {
@@ -212,7 +212,7 @@ function vecreg_outputs(
  * @returns NamedTuple of outputs (described in `VecregOutputs`).
  */
 function vecreg_execute(
-    params: VecregParameters,
+    params: VecregParamsDict,
     runner: Runner | null = null,
 ): VecregOutputs {
     runner = runner || getGlobalRunner();
@@ -271,6 +271,8 @@ function vecreg(
 export {
       VECREG_METADATA,
       VecregOutputs,
+      VecregParamsDict,
+      VecregParamsDictTagged,
       vecreg,
       vecreg_execute,
       vecreg_params,

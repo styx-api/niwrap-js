@@ -11,17 +11,17 @@ const V_3DMAXDISP_METADATA: Metadata = {
 };
 
 
-interface V3dmaxdispParameters {
+interface V3dmaxdispParamsDict {
     "@type"?: "afni/3dmaxdisp";
     "inset": InputPathType;
     "matrix": InputPathType;
     "verbose": boolean;
 }
-type V3dmaxdispParametersTagged = Required<Pick<V3dmaxdispParameters, '@type'>> & V3dmaxdispParameters;
+type V3dmaxdispParamsDictTagged = Required<Pick<V3dmaxdispParamsDict, '@type'>> & V3dmaxdispParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmaxdispParameters(...)`.
+ * Output object returned when calling `V3dmaxdispParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3dmaxdisp_params(
     inset: InputPathType,
     matrix: InputPathType,
     verbose: boolean = false,
-): V3dmaxdispParametersTagged {
+): V3dmaxdispParamsDictTagged {
     const params = {
         "@type": "afni/3dmaxdisp" as const,
         "inset": inset,
@@ -70,7 +70,7 @@ function v_3dmaxdisp_params(
  * @returns Command-line arguments.
  */
 function v_3dmaxdisp_cargs(
-    params: V3dmaxdispParameters,
+    params: V3dmaxdispParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function v_3dmaxdisp_cargs(
  * @returns Outputs object.
  */
 function v_3dmaxdisp_outputs(
-    params: V3dmaxdispParameters,
+    params: V3dmaxdispParamsDict,
     execution: Execution,
 ): V3dmaxdispOutputs {
     const ret: V3dmaxdispOutputs = {
@@ -125,7 +125,7 @@ function v_3dmaxdisp_outputs(
  * @returns NamedTuple of outputs (described in `V3dmaxdispOutputs`).
  */
 function v_3dmaxdisp_execute(
-    params: V3dmaxdispParameters,
+    params: V3dmaxdispParamsDict,
     runner: Runner | null = null,
 ): V3dmaxdispOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function v_3dmaxdisp(
 
 export {
       V3dmaxdispOutputs,
+      V3dmaxdispParamsDict,
+      V3dmaxdispParamsDictTagged,
       V_3DMAXDISP_METADATA,
       v_3dmaxdisp,
       v_3dmaxdisp_execute,

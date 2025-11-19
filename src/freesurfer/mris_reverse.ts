@@ -11,16 +11,16 @@ const MRIS_REVERSE_METADATA: Metadata = {
 };
 
 
-interface MrisReverseParameters {
+interface MrisReverseParamsDict {
     "@type"?: "freesurfer/mris_reverse";
     "input_surface": InputPathType;
     "output_surface": string;
 }
-type MrisReverseParametersTagged = Required<Pick<MrisReverseParameters, '@type'>> & MrisReverseParameters;
+type MrisReverseParamsDictTagged = Required<Pick<MrisReverseParamsDict, '@type'>> & MrisReverseParamsDict;
 
 
 /**
- * Output object returned when calling `MrisReverseParameters(...)`.
+ * Output object returned when calling `MrisReverseParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MrisReverseOutputs {
 function mris_reverse_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisReverseParametersTagged {
+): MrisReverseParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_reverse" as const,
         "input_surface": input_surface,
@@ -66,7 +66,7 @@ function mris_reverse_params(
  * @returns Command-line arguments.
  */
 function mris_reverse_cargs(
-    params: MrisReverseParameters,
+    params: MrisReverseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mris_reverse_cargs(
  * @returns Outputs object.
  */
 function mris_reverse_outputs(
-    params: MrisReverseParameters,
+    params: MrisReverseParamsDict,
     execution: Execution,
 ): MrisReverseOutputs {
     const ret: MrisReverseOutputs = {
@@ -112,7 +112,7 @@ function mris_reverse_outputs(
  * @returns NamedTuple of outputs (described in `MrisReverseOutputs`).
  */
 function mris_reverse_execute(
-    params: MrisReverseParameters,
+    params: MrisReverseParamsDict,
     runner: Runner | null = null,
 ): MrisReverseOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mris_reverse(
 export {
       MRIS_REVERSE_METADATA,
       MrisReverseOutputs,
+      MrisReverseParamsDict,
+      MrisReverseParamsDictTagged,
       mris_reverse,
       mris_reverse_execute,
       mris_reverse_params,

@@ -11,7 +11,7 @@ const MRIS_AUTODET_GWSTATS_METADATA: Metadata = {
 };
 
 
-interface MrisAutodetGwstatsParameters {
+interface MrisAutodetGwstatsParamsDict {
     "@type"?: "freesurfer/mris_autodet_gwstats";
     "output_file": string;
     "t1w_volume": InputPathType;
@@ -29,11 +29,11 @@ interface MrisAutodetGwstatsParameters {
     "min_gray_at_csf_border"?: number | null | undefined;
     "max_csf"?: number | null | undefined;
 }
-type MrisAutodetGwstatsParametersTagged = Required<Pick<MrisAutodetGwstatsParameters, '@type'>> & MrisAutodetGwstatsParameters;
+type MrisAutodetGwstatsParamsDictTagged = Required<Pick<MrisAutodetGwstatsParamsDict, '@type'>> & MrisAutodetGwstatsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisAutodetGwstatsParameters(...)`.
+ * Output object returned when calling `MrisAutodetGwstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function mris_autodet_gwstats_params(
     max_gray_at_csf_border: number | null = null,
     min_gray_at_csf_border: number | null = null,
     max_csf: number | null = null,
-): MrisAutodetGwstatsParametersTagged {
+): MrisAutodetGwstatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_autodet_gwstats" as const,
         "output_file": output_file,
@@ -136,7 +136,7 @@ function mris_autodet_gwstats_params(
  * @returns Command-line arguments.
  */
 function mris_autodet_gwstats_cargs(
-    params: MrisAutodetGwstatsParameters,
+    params: MrisAutodetGwstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -232,7 +232,7 @@ function mris_autodet_gwstats_cargs(
  * @returns Outputs object.
  */
 function mris_autodet_gwstats_outputs(
-    params: MrisAutodetGwstatsParameters,
+    params: MrisAutodetGwstatsParamsDict,
     execution: Execution,
 ): MrisAutodetGwstatsOutputs {
     const ret: MrisAutodetGwstatsOutputs = {
@@ -258,7 +258,7 @@ function mris_autodet_gwstats_outputs(
  * @returns NamedTuple of outputs (described in `MrisAutodetGwstatsOutputs`).
  */
 function mris_autodet_gwstats_execute(
-    params: MrisAutodetGwstatsParameters,
+    params: MrisAutodetGwstatsParamsDict,
     runner: Runner | null = null,
 ): MrisAutodetGwstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -325,6 +325,8 @@ function mris_autodet_gwstats(
 export {
       MRIS_AUTODET_GWSTATS_METADATA,
       MrisAutodetGwstatsOutputs,
+      MrisAutodetGwstatsParamsDict,
+      MrisAutodetGwstatsParamsDictTagged,
       mris_autodet_gwstats,
       mris_autodet_gwstats_execute,
       mris_autodet_gwstats_params,

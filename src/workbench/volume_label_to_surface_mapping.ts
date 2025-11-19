@@ -10,7 +10,7 @@ const VOLUME_LABEL_TO_SURFACE_MAPPING_METADATA: Metadata = {
 };
 
 
-interface VolumeLabelToSurfaceMappingRibbonConstrainedParameters {
+interface VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict {
     "@type"?: "ribbon-constrained";
     "inner-surf": InputPathType;
     "outer-surf": InputPathType;
@@ -19,18 +19,18 @@ interface VolumeLabelToSurfaceMappingRibbonConstrainedParameters {
     "subdiv-num"?: number | null | undefined;
     "thin-columns": boolean;
 }
-type VolumeLabelToSurfaceMappingRibbonConstrainedParametersTagged = Required<Pick<VolumeLabelToSurfaceMappingRibbonConstrainedParameters, '@type'>> & VolumeLabelToSurfaceMappingRibbonConstrainedParameters;
+type VolumeLabelToSurfaceMappingRibbonConstrainedParamsDictTagged = Required<Pick<VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict, '@type'>> & VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict;
 
 
-interface VolumeLabelToSurfaceMappingParameters {
+interface VolumeLabelToSurfaceMappingParamsDict {
     "@type"?: "workbench/volume-label-to-surface-mapping";
     "label-out": string;
-    "ribbon-constrained"?: VolumeLabelToSurfaceMappingRibbonConstrainedParameters | null | undefined;
+    "ribbon-constrained"?: VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict | null | undefined;
     "subvol"?: string | null | undefined;
     "volume": InputPathType;
     "surface": InputPathType;
 }
-type VolumeLabelToSurfaceMappingParametersTagged = Required<Pick<VolumeLabelToSurfaceMappingParameters, '@type'>> & VolumeLabelToSurfaceMappingParameters;
+type VolumeLabelToSurfaceMappingParamsDictTagged = Required<Pick<VolumeLabelToSurfaceMappingParamsDict, '@type'>> & VolumeLabelToSurfaceMappingParamsDict;
 
 
 /**
@@ -51,14 +51,14 @@ number of subdivisions, default 3
  *
  * @returns Parameter dictionary
  */
-function volume_label_to_surface_mapping_ribbon_constrained_params(
+function volume_label_to_surface_mapping_ribbon_constrained(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
     roi_volume: InputPathType | null,
     dist: number | null,
     subdiv_num: number | null,
     thin_columns: boolean = false,
-): VolumeLabelToSurfaceMappingRibbonConstrainedParametersTagged {
+): VolumeLabelToSurfaceMappingRibbonConstrainedParamsDictTagged {
     const params = {
         "@type": "ribbon-constrained" as const,
         "inner-surf": inner_surf,
@@ -87,7 +87,7 @@ function volume_label_to_surface_mapping_ribbon_constrained_params(
  * @returns Command-line arguments.
  */
 function volume_label_to_surface_mapping_ribbon_constrained_cargs(
-    params: VolumeLabelToSurfaceMappingRibbonConstrainedParameters,
+    params: VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function volume_label_to_surface_mapping_ribbon_constrained_cargs(
 
 
 /**
- * Output object returned when calling `VolumeLabelToSurfaceMappingParameters(...)`.
+ * Output object returned when calling `VolumeLabelToSurfaceMappingParamsDict(...)`.
  *
  * @interface
  */
@@ -144,8 +144,8 @@ function volume_label_to_surface_mapping_params(
     subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
-    ribbon_constrained: VolumeLabelToSurfaceMappingRibbonConstrainedParameters | null = null,
-): VolumeLabelToSurfaceMappingParametersTagged {
+    ribbon_constrained: VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict | null = null,
+): VolumeLabelToSurfaceMappingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-to-surface-mapping" as const,
         "label-out": label_out,
@@ -171,7 +171,7 @@ function volume_label_to_surface_mapping_params(
  * @returns Command-line arguments.
  */
 function volume_label_to_surface_mapping_cargs(
-    params: VolumeLabelToSurfaceMappingParameters,
+    params: VolumeLabelToSurfaceMappingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function volume_label_to_surface_mapping_cargs(
  * @returns Outputs object.
  */
 function volume_label_to_surface_mapping_outputs(
-    params: VolumeLabelToSurfaceMappingParameters,
+    params: VolumeLabelToSurfaceMappingParamsDict,
     execution: Execution,
 ): VolumeLabelToSurfaceMappingOutputs {
     const ret: VolumeLabelToSurfaceMappingOutputs = {
@@ -222,7 +222,7 @@ function volume_label_to_surface_mapping_outputs(
  * @returns NamedTuple of outputs (described in `VolumeLabelToSurfaceMappingOutputs`).
  */
 function volume_label_to_surface_mapping_execute(
-    params: VolumeLabelToSurfaceMappingParameters,
+    params: VolumeLabelToSurfaceMappingParamsDict,
     runner: Runner | null = null,
 ): VolumeLabelToSurfaceMappingOutputs {
     runner = runner || getGlobalRunner();
@@ -256,7 +256,7 @@ function volume_label_to_surface_mapping(
     subvol: string | null,
     volume: InputPathType,
     surface: InputPathType,
-    ribbon_constrained: VolumeLabelToSurfaceMappingRibbonConstrainedParameters | null = null,
+    ribbon_constrained: VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeLabelToSurfaceMappingOutputs {
     const params = volume_label_to_surface_mapping_params(label_out, subvol, volume, surface, ribbon_constrained)
@@ -267,8 +267,12 @@ function volume_label_to_surface_mapping(
 export {
       VOLUME_LABEL_TO_SURFACE_MAPPING_METADATA,
       VolumeLabelToSurfaceMappingOutputs,
+      VolumeLabelToSurfaceMappingParamsDict,
+      VolumeLabelToSurfaceMappingParamsDictTagged,
+      VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict,
+      VolumeLabelToSurfaceMappingRibbonConstrainedParamsDictTagged,
       volume_label_to_surface_mapping,
       volume_label_to_surface_mapping_execute,
       volume_label_to_surface_mapping_params,
-      volume_label_to_surface_mapping_ribbon_constrained_params,
+      volume_label_to_surface_mapping_ribbon_constrained,
 };

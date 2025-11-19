@@ -11,7 +11,7 @@ const UNPACKMINCDIR_METADATA: Metadata = {
 };
 
 
-interface UnpackmincdirParameters {
+interface UnpackmincdirParamsDict {
     "@type"?: "freesurfer/unpackmincdir";
     "source_directory": string;
     "target_directory": string;
@@ -22,11 +22,11 @@ interface UnpackmincdirParameters {
     "no_copy": boolean;
     "umask"?: string | null | undefined;
 }
-type UnpackmincdirParametersTagged = Required<Pick<UnpackmincdirParameters, '@type'>> & UnpackmincdirParameters;
+type UnpackmincdirParamsDictTagged = Required<Pick<UnpackmincdirParamsDict, '@type'>> & UnpackmincdirParamsDict;
 
 
 /**
- * Output object returned when calling `UnpackmincdirParameters(...)`.
+ * Output object returned when calling `UnpackmincdirParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function unpackmincdir_params(
     minc_only: boolean = false,
     no_copy: boolean = false,
     umask: string | null = null,
-): UnpackmincdirParametersTagged {
+): UnpackmincdirParamsDictTagged {
     const params = {
         "@type": "freesurfer/unpackmincdir" as const,
         "source_directory": source_directory,
@@ -94,7 +94,7 @@ function unpackmincdir_params(
  * @returns Command-line arguments.
  */
 function unpackmincdir_cargs(
-    params: UnpackmincdirParameters,
+    params: UnpackmincdirParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function unpackmincdir_cargs(
  * @returns Outputs object.
  */
 function unpackmincdir_outputs(
-    params: UnpackmincdirParameters,
+    params: UnpackmincdirParamsDict,
     execution: Execution,
 ): UnpackmincdirOutputs {
     const ret: UnpackmincdirOutputs = {
@@ -175,7 +175,7 @@ function unpackmincdir_outputs(
  * @returns NamedTuple of outputs (described in `UnpackmincdirOutputs`).
  */
 function unpackmincdir_execute(
-    params: UnpackmincdirParameters,
+    params: UnpackmincdirParamsDict,
     runner: Runner | null = null,
 ): UnpackmincdirOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function unpackmincdir(
 export {
       UNPACKMINCDIR_METADATA,
       UnpackmincdirOutputs,
+      UnpackmincdirParamsDict,
+      UnpackmincdirParamsDictTagged,
       unpackmincdir,
       unpackmincdir_execute,
       unpackmincdir_params,

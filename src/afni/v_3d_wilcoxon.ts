@@ -11,7 +11,7 @@ const V_3D_WILCOXON_METADATA: Metadata = {
 };
 
 
-interface V3dWilcoxonParameters {
+interface V3dWilcoxonParamsDict {
     "@type"?: "afni/3dWilcoxon";
     "workmem"?: number | null | undefined;
     "voxel"?: number | null | undefined;
@@ -19,11 +19,11 @@ interface V3dWilcoxonParameters {
     "dset2_y": Array<InputPathType>;
     "output_prefix": string;
 }
-type V3dWilcoxonParametersTagged = Required<Pick<V3dWilcoxonParameters, '@type'>> & V3dWilcoxonParameters;
+type V3dWilcoxonParamsDictTagged = Required<Pick<V3dWilcoxonParamsDict, '@type'>> & V3dWilcoxonParamsDict;
 
 
 /**
- * Output object returned when calling `V3dWilcoxonParameters(...)`.
+ * Output object returned when calling `V3dWilcoxonParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v_3d_wilcoxon_params(
     output_prefix: string,
     workmem: number | null = null,
     voxel: number | null = null,
-): V3dWilcoxonParametersTagged {
+): V3dWilcoxonParamsDictTagged {
     const params = {
         "@type": "afni/3dWilcoxon" as const,
         "dset1_x": dset1_x,
@@ -82,7 +82,7 @@ function v_3d_wilcoxon_params(
  * @returns Command-line arguments.
  */
 function v_3d_wilcoxon_cargs(
-    params: V3dWilcoxonParameters,
+    params: V3dWilcoxonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function v_3d_wilcoxon_cargs(
  * @returns Outputs object.
  */
 function v_3d_wilcoxon_outputs(
-    params: V3dWilcoxonParameters,
+    params: V3dWilcoxonParamsDict,
     execution: Execution,
 ): V3dWilcoxonOutputs {
     const ret: V3dWilcoxonOutputs = {
@@ -150,7 +150,7 @@ function v_3d_wilcoxon_outputs(
  * @returns NamedTuple of outputs (described in `V3dWilcoxonOutputs`).
  */
 function v_3d_wilcoxon_execute(
-    params: V3dWilcoxonParameters,
+    params: V3dWilcoxonParamsDict,
     runner: Runner | null = null,
 ): V3dWilcoxonOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function v_3d_wilcoxon(
 
 export {
       V3dWilcoxonOutputs,
+      V3dWilcoxonParamsDict,
+      V3dWilcoxonParamsDictTagged,
       V_3D_WILCOXON_METADATA,
       v_3d_wilcoxon,
       v_3d_wilcoxon_execute,

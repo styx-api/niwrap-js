@@ -10,7 +10,7 @@ const CIFTI_WEIGHTED_STATS_METADATA: Metadata = {
 };
 
 
-interface CiftiWeightedStatsSpatialWeightsParameters {
+interface CiftiWeightedStatsSpatialWeightsParamsDict {
     "@type"?: "spatial-weights";
     "left-surf"?: InputPathType | null | undefined;
     "right-surf"?: InputPathType | null | undefined;
@@ -19,23 +19,23 @@ interface CiftiWeightedStatsSpatialWeightsParameters {
     "right-metric"?: InputPathType | null | undefined;
     "cerebellum-metric"?: InputPathType | null | undefined;
 }
-type CiftiWeightedStatsSpatialWeightsParametersTagged = Required<Pick<CiftiWeightedStatsSpatialWeightsParameters, '@type'>> & CiftiWeightedStatsSpatialWeightsParameters;
+type CiftiWeightedStatsSpatialWeightsParamsDictTagged = Required<Pick<CiftiWeightedStatsSpatialWeightsParamsDict, '@type'>> & CiftiWeightedStatsSpatialWeightsParamsDict;
 
 
-interface CiftiWeightedStatsRoiParameters {
+interface CiftiWeightedStatsRoiParamsDict {
     "@type"?: "roi";
     "roi-cifti": InputPathType;
     "match-maps": boolean;
 }
-type CiftiWeightedStatsRoiParametersTagged = Required<Pick<CiftiWeightedStatsRoiParameters, '@type'>> & CiftiWeightedStatsRoiParameters;
+type CiftiWeightedStatsRoiParamsDictTagged = Required<Pick<CiftiWeightedStatsRoiParamsDict, '@type'>> & CiftiWeightedStatsRoiParamsDict;
 
 
-interface CiftiWeightedStatsParameters {
+interface CiftiWeightedStatsParamsDict {
     "@type"?: "workbench/cifti-weighted-stats";
-    "spatial-weights"?: CiftiWeightedStatsSpatialWeightsParameters | null | undefined;
+    "spatial-weights"?: CiftiWeightedStatsSpatialWeightsParamsDict | null | undefined;
     "weight-cifti"?: InputPathType | null | undefined;
     "column"?: number | null | undefined;
-    "roi"?: CiftiWeightedStatsRoiParameters | null | undefined;
+    "roi"?: CiftiWeightedStatsRoiParamsDict | null | undefined;
     "mean": boolean;
     "sample"?: boolean | null | undefined;
     "percent"?: number | null | undefined;
@@ -43,7 +43,7 @@ interface CiftiWeightedStatsParameters {
     "show-map-name": boolean;
     "cifti-in": InputPathType;
 }
-type CiftiWeightedStatsParametersTagged = Required<Pick<CiftiWeightedStatsParameters, '@type'>> & CiftiWeightedStatsParameters;
+type CiftiWeightedStatsParamsDictTagged = Required<Pick<CiftiWeightedStatsParamsDict, '@type'>> & CiftiWeightedStatsParamsDict;
 
 
 /**
@@ -70,14 +70,14 @@ metric file containing cerebellum vertex areas
  *
  * @returns Parameter dictionary
  */
-function cifti_weighted_stats_spatial_weights_params(
+function cifti_weighted_stats_spatial_weights(
     left_surf: InputPathType | null,
     right_surf: InputPathType | null,
     cerebellum_surf: InputPathType | null,
     left_metric: InputPathType | null,
     right_metric: InputPathType | null,
     cerebellum_metric: InputPathType | null,
-): CiftiWeightedStatsSpatialWeightsParametersTagged {
+): CiftiWeightedStatsSpatialWeightsParamsDictTagged {
     const params = {
         "@type": "spatial-weights" as const,
     };
@@ -112,7 +112,7 @@ function cifti_weighted_stats_spatial_weights_params(
  * @returns Command-line arguments.
  */
 function cifti_weighted_stats_spatial_weights_cargs(
-    params: CiftiWeightedStatsSpatialWeightsParameters,
+    params: CiftiWeightedStatsSpatialWeightsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,10 +145,10 @@ function cifti_weighted_stats_spatial_weights_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_weighted_stats_roi_params(
+function cifti_weighted_stats_roi(
     roi_cifti: InputPathType,
     match_maps: boolean = false,
-): CiftiWeightedStatsRoiParametersTagged {
+): CiftiWeightedStatsRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-cifti": roi_cifti,
@@ -167,7 +167,7 @@ function cifti_weighted_stats_roi_params(
  * @returns Command-line arguments.
  */
 function cifti_weighted_stats_roi_cargs(
-    params: CiftiWeightedStatsRoiParameters,
+    params: CiftiWeightedStatsRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,7 +183,7 @@ function cifti_weighted_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `CiftiWeightedStatsParameters(...)`.
+ * Output object returned when calling `CiftiWeightedStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -224,13 +224,13 @@ function cifti_weighted_stats_params(
     column: number | null,
     percent: number | null,
     cifti_in: InputPathType,
-    spatial_weights: CiftiWeightedStatsSpatialWeightsParameters | null = null,
-    roi: CiftiWeightedStatsRoiParameters | null = null,
+    spatial_weights: CiftiWeightedStatsSpatialWeightsParamsDict | null = null,
+    roi: CiftiWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
     sample: boolean | null = false,
     sum: boolean = false,
     show_map_name: boolean = false,
-): CiftiWeightedStatsParametersTagged {
+): CiftiWeightedStatsParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-weighted-stats" as const,
         "mean": mean,
@@ -269,7 +269,7 @@ function cifti_weighted_stats_params(
  * @returns Command-line arguments.
  */
 function cifti_weighted_stats_cargs(
-    params: CiftiWeightedStatsParameters,
+    params: CiftiWeightedStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -306,7 +306,7 @@ function cifti_weighted_stats_cargs(
  * @returns Outputs object.
  */
 function cifti_weighted_stats_outputs(
-    params: CiftiWeightedStatsParameters,
+    params: CiftiWeightedStatsParamsDict,
     execution: Execution,
 ): CiftiWeightedStatsOutputs {
     const ret: CiftiWeightedStatsOutputs = {
@@ -329,7 +329,7 @@ function cifti_weighted_stats_outputs(
  * @returns NamedTuple of outputs (described in `CiftiWeightedStatsOutputs`).
  */
 function cifti_weighted_stats_execute(
-    params: CiftiWeightedStatsParameters,
+    params: CiftiWeightedStatsParamsDict,
     runner: Runner | null = null,
 ): CiftiWeightedStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -376,8 +376,8 @@ function cifti_weighted_stats(
     column: number | null,
     percent: number | null,
     cifti_in: InputPathType,
-    spatial_weights: CiftiWeightedStatsSpatialWeightsParameters | null = null,
-    roi: CiftiWeightedStatsRoiParameters | null = null,
+    spatial_weights: CiftiWeightedStatsSpatialWeightsParamsDict | null = null,
+    roi: CiftiWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
     sample: boolean | null = false,
     sum: boolean = false,
@@ -392,9 +392,15 @@ function cifti_weighted_stats(
 export {
       CIFTI_WEIGHTED_STATS_METADATA,
       CiftiWeightedStatsOutputs,
+      CiftiWeightedStatsParamsDict,
+      CiftiWeightedStatsParamsDictTagged,
+      CiftiWeightedStatsRoiParamsDict,
+      CiftiWeightedStatsRoiParamsDictTagged,
+      CiftiWeightedStatsSpatialWeightsParamsDict,
+      CiftiWeightedStatsSpatialWeightsParamsDictTagged,
       cifti_weighted_stats,
       cifti_weighted_stats_execute,
       cifti_weighted_stats_params,
-      cifti_weighted_stats_roi_params,
-      cifti_weighted_stats_spatial_weights_params,
+      cifti_weighted_stats_roi,
+      cifti_weighted_stats_spatial_weights,
 };

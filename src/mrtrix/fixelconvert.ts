@@ -11,43 +11,43 @@ const FIXELCONVERT_METADATA: Metadata = {
 };
 
 
-interface FixelconvertConfigParameters {
+interface FixelconvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type FixelconvertConfigParametersTagged = Required<Pick<FixelconvertConfigParameters, '@type'>> & FixelconvertConfigParameters;
+type FixelconvertConfigParamsDictTagged = Required<Pick<FixelconvertConfigParamsDict, '@type'>> & FixelconvertConfigParamsDict;
 
 
-interface FixelconvertVariousStringParameters {
+interface FixelconvertVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type FixelconvertVariousStringParametersTagged = Required<Pick<FixelconvertVariousStringParameters, '@type'>> & FixelconvertVariousStringParameters;
+type FixelconvertVariousStringParamsDictTagged = Required<Pick<FixelconvertVariousStringParamsDict, '@type'>> & FixelconvertVariousStringParamsDict;
 
 
-interface FixelconvertVariousFileParameters {
+interface FixelconvertVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type FixelconvertVariousFileParametersTagged = Required<Pick<FixelconvertVariousFileParameters, '@type'>> & FixelconvertVariousFileParameters;
+type FixelconvertVariousFileParamsDictTagged = Required<Pick<FixelconvertVariousFileParamsDict, '@type'>> & FixelconvertVariousFileParamsDict;
 
 
-interface FixelconvertVariousString1Parameters {
+interface FixelconvertVariousString1ParamsDict {
     "@type"?: "VariousString_1";
     "obj": string;
 }
-type FixelconvertVariousString1ParametersTagged = Required<Pick<FixelconvertVariousString1Parameters, '@type'>> & FixelconvertVariousString1Parameters;
+type FixelconvertVariousString1ParamsDictTagged = Required<Pick<FixelconvertVariousString1ParamsDict, '@type'>> & FixelconvertVariousString1ParamsDict;
 
 
-interface FixelconvertVariousFile1Parameters {
+interface FixelconvertVariousFile1ParamsDict {
     "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
-type FixelconvertVariousFile1ParametersTagged = Required<Pick<FixelconvertVariousFile1Parameters, '@type'>> & FixelconvertVariousFile1Parameters;
+type FixelconvertVariousFile1ParamsDictTagged = Required<Pick<FixelconvertVariousFile1ParamsDict, '@type'>> & FixelconvertVariousFile1ParamsDict;
 
 
-interface FixelconvertParameters {
+interface FixelconvertParamsDict {
     "@type"?: "mrtrix/fixelconvert";
     "name"?: string | null | undefined;
     "nii": boolean;
@@ -60,13 +60,13 @@ interface FixelconvertParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<FixelconvertConfigParameters> | null | undefined;
+    "config"?: Array<FixelconvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "fixel_in": FixelconvertVariousStringParametersTagged | FixelconvertVariousFileParametersTagged;
-    "fixel_out": FixelconvertVariousString1ParametersTagged | FixelconvertVariousFile1ParametersTagged;
+    "fixel_in": FixelconvertVariousStringParamsDictTagged | FixelconvertVariousFileParamsDictTagged;
+    "fixel_out": FixelconvertVariousString1ParamsDictTagged | FixelconvertVariousFile1ParamsDictTagged;
 }
-type FixelconvertParametersTagged = Required<Pick<FixelconvertParameters, '@type'>> & FixelconvertParameters;
+type FixelconvertParamsDictTagged = Required<Pick<FixelconvertParamsDict, '@type'>> & FixelconvertParamsDict;
 
 
 /**
@@ -145,10 +145,10 @@ function fixelconvert_fixel_out_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function fixelconvert_config_params(
+function fixelconvert_config(
     key: string,
     value: string,
-): FixelconvertConfigParametersTagged {
+): FixelconvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -167,7 +167,7 @@ function fixelconvert_config_params(
  * @returns Command-line arguments.
  */
 function fixelconvert_config_cargs(
-    params: FixelconvertConfigParameters,
+    params: FixelconvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,9 +185,9 @@ function fixelconvert_config_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelconvert_various_string_params(
+function fixelconvert_various_string(
     obj: string,
-): FixelconvertVariousStringParametersTagged {
+): FixelconvertVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -205,7 +205,7 @@ function fixelconvert_various_string_params(
  * @returns Command-line arguments.
  */
 function fixelconvert_various_string_cargs(
-    params: FixelconvertVariousStringParameters,
+    params: FixelconvertVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -221,9 +221,9 @@ function fixelconvert_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelconvert_various_file_params(
+function fixelconvert_various_file(
     obj: InputPathType,
-): FixelconvertVariousFileParametersTagged {
+): FixelconvertVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -241,7 +241,7 @@ function fixelconvert_various_file_params(
  * @returns Command-line arguments.
  */
 function fixelconvert_various_file_cargs(
-    params: FixelconvertVariousFileParameters,
+    params: FixelconvertVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -257,9 +257,9 @@ function fixelconvert_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelconvert_various_string_1_params(
+function fixelconvert_various_string_1(
     obj: string,
-): FixelconvertVariousString1ParametersTagged {
+): FixelconvertVariousString1ParamsDictTagged {
     const params = {
         "@type": "VariousString_1" as const,
         "obj": obj,
@@ -277,7 +277,7 @@ function fixelconvert_various_string_1_params(
  * @returns Command-line arguments.
  */
 function fixelconvert_various_string_1_cargs(
-    params: FixelconvertVariousString1Parameters,
+    params: FixelconvertVariousString1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -293,9 +293,9 @@ function fixelconvert_various_string_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelconvert_various_file_1_params(
+function fixelconvert_various_file_1(
     obj: InputPathType,
-): FixelconvertVariousFile1ParametersTagged {
+): FixelconvertVariousFile1ParamsDictTagged {
     const params = {
         "@type": "VariousFile_1" as const,
         "obj": obj,
@@ -313,7 +313,7 @@ function fixelconvert_various_file_1_params(
  * @returns Command-line arguments.
  */
 function fixelconvert_various_file_1_cargs(
-    params: FixelconvertVariousFile1Parameters,
+    params: FixelconvertVariousFile1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -323,7 +323,7 @@ function fixelconvert_various_file_1_cargs(
 
 
 /**
- * Output object returned when calling `FixelconvertParameters(...)`.
+ * Output object returned when calling `FixelconvertParamsDict(...)`.
  *
  * @interface
  */
@@ -358,8 +358,8 @@ interface FixelconvertOutputs {
  * @returns Parameter dictionary
  */
 function fixelconvert_params(
-    fixel_in: FixelconvertVariousStringParametersTagged | FixelconvertVariousFileParametersTagged,
-    fixel_out: FixelconvertVariousString1ParametersTagged | FixelconvertVariousFile1ParametersTagged,
+    fixel_in: FixelconvertVariousStringParamsDictTagged | FixelconvertVariousFileParamsDictTagged,
+    fixel_out: FixelconvertVariousString1ParamsDictTagged | FixelconvertVariousFile1ParamsDictTagged,
     name: string | null = null,
     nii: boolean = false,
     out_size: boolean = false,
@@ -371,10 +371,10 @@ function fixelconvert_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelconvertConfigParameters> | null = null,
+    config: Array<FixelconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelconvertParametersTagged {
+): FixelconvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixelconvert" as const,
         "nii": nii,
@@ -419,7 +419,7 @@ function fixelconvert_params(
  * @returns Command-line arguments.
  */
 function fixelconvert_cargs(
-    params: FixelconvertParameters,
+    params: FixelconvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -496,7 +496,7 @@ function fixelconvert_cargs(
  * @returns Outputs object.
  */
 function fixelconvert_outputs(
-    params: FixelconvertParameters,
+    params: FixelconvertParamsDict,
     execution: Execution,
 ): FixelconvertOutputs {
     const ret: FixelconvertOutputs = {
@@ -527,7 +527,7 @@ function fixelconvert_outputs(
  * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
  */
 function fixelconvert_execute(
-    params: FixelconvertParameters,
+    params: FixelconvertParamsDict,
     runner: Runner | null = null,
 ): FixelconvertOutputs {
     runner = runner || getGlobalRunner();
@@ -576,8 +576,8 @@ function fixelconvert_execute(
  * @returns NamedTuple of outputs (described in `FixelconvertOutputs`).
  */
 function fixelconvert(
-    fixel_in: FixelconvertVariousStringParametersTagged | FixelconvertVariousFileParametersTagged,
-    fixel_out: FixelconvertVariousString1ParametersTagged | FixelconvertVariousFile1ParametersTagged,
+    fixel_in: FixelconvertVariousStringParamsDictTagged | FixelconvertVariousFileParamsDictTagged,
+    fixel_out: FixelconvertVariousString1ParamsDictTagged | FixelconvertVariousFile1ParamsDictTagged,
     name: string | null = null,
     nii: boolean = false,
     out_size: boolean = false,
@@ -589,7 +589,7 @@ function fixelconvert(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelconvertConfigParameters> | null = null,
+    config: Array<FixelconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -601,13 +601,25 @@ function fixelconvert(
 
 export {
       FIXELCONVERT_METADATA,
+      FixelconvertConfigParamsDict,
+      FixelconvertConfigParamsDictTagged,
       FixelconvertOutputs,
+      FixelconvertParamsDict,
+      FixelconvertParamsDictTagged,
+      FixelconvertVariousFile1ParamsDict,
+      FixelconvertVariousFile1ParamsDictTagged,
+      FixelconvertVariousFileParamsDict,
+      FixelconvertVariousFileParamsDictTagged,
+      FixelconvertVariousString1ParamsDict,
+      FixelconvertVariousString1ParamsDictTagged,
+      FixelconvertVariousStringParamsDict,
+      FixelconvertVariousStringParamsDictTagged,
       fixelconvert,
-      fixelconvert_config_params,
+      fixelconvert_config,
       fixelconvert_execute,
       fixelconvert_params,
-      fixelconvert_various_file_1_params,
-      fixelconvert_various_file_params,
-      fixelconvert_various_string_1_params,
-      fixelconvert_various_string_params,
+      fixelconvert_various_file,
+      fixelconvert_various_file_1,
+      fixelconvert_various_string,
+      fixelconvert_various_string_1,
 };

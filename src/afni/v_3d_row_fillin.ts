@@ -11,7 +11,7 @@ const V_3D_ROW_FILLIN_METADATA: Metadata = {
 };
 
 
-interface V3dRowFillinParameters {
+interface V3dRowFillinParamsDict {
     "@type"?: "afni/3dRowFillin";
     "maxgap"?: number | null | undefined;
     "dir"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface V3dRowFillinParameters {
     "prefix"?: string | null | undefined;
     "input_dataset": InputPathType;
 }
-type V3dRowFillinParametersTagged = Required<Pick<V3dRowFillinParameters, '@type'>> & V3dRowFillinParameters;
+type V3dRowFillinParamsDictTagged = Required<Pick<V3dRowFillinParamsDict, '@type'>> & V3dRowFillinParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRowFillinParameters(...)`.
+ * Output object returned when calling `V3dRowFillinParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function v_3d_row_fillin_params(
     dir: string | null = null,
     binary: boolean = false,
     prefix: string | null = null,
-): V3dRowFillinParametersTagged {
+): V3dRowFillinParamsDictTagged {
     const params = {
         "@type": "afni/3dRowFillin" as const,
         "binary": binary,
@@ -88,7 +88,7 @@ function v_3d_row_fillin_params(
  * @returns Command-line arguments.
  */
 function v_3d_row_fillin_cargs(
-    params: V3dRowFillinParameters,
+    params: V3dRowFillinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function v_3d_row_fillin_cargs(
  * @returns Outputs object.
  */
 function v_3d_row_fillin_outputs(
-    params: V3dRowFillinParameters,
+    params: V3dRowFillinParamsDict,
     execution: Execution,
 ): V3dRowFillinOutputs {
     const ret: V3dRowFillinOutputs = {
@@ -155,7 +155,7 @@ function v_3d_row_fillin_outputs(
  * @returns NamedTuple of outputs (described in `V3dRowFillinOutputs`).
  */
 function v_3d_row_fillin_execute(
-    params: V3dRowFillinParameters,
+    params: V3dRowFillinParamsDict,
     runner: Runner | null = null,
 ): V3dRowFillinOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function v_3d_row_fillin(
 
 export {
       V3dRowFillinOutputs,
+      V3dRowFillinParamsDict,
+      V3dRowFillinParamsDictTagged,
       V_3D_ROW_FILLIN_METADATA,
       v_3d_row_fillin,
       v_3d_row_fillin_execute,

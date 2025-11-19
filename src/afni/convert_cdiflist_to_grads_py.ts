@@ -11,7 +11,7 @@ const CONVERT_CDIFLIST_TO_GRADS_PY_METADATA: Metadata = {
 };
 
 
-interface ConvertCdiflistToGradsPyParameters {
+interface ConvertCdiflistToGradsPyParamsDict {
     "@type"?: "afni/convert_cdiflist_to_grads.py";
     "cdiflist": InputPathType;
     "bval_max": number;
@@ -21,11 +21,11 @@ interface ConvertCdiflistToGradsPyParameters {
     "help": boolean;
     "hview": boolean;
 }
-type ConvertCdiflistToGradsPyParametersTagged = Required<Pick<ConvertCdiflistToGradsPyParameters, '@type'>> & ConvertCdiflistToGradsPyParameters;
+type ConvertCdiflistToGradsPyParamsDictTagged = Required<Pick<ConvertCdiflistToGradsPyParamsDict, '@type'>> & ConvertCdiflistToGradsPyParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertCdiflistToGradsPyParameters(...)`.
+ * Output object returned when calling `ConvertCdiflistToGradsPyParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function convert_cdiflist_to_grads_py_params(
     date: boolean = false,
     help: boolean = false,
     hview: boolean = false,
-): ConvertCdiflistToGradsPyParametersTagged {
+): ConvertCdiflistToGradsPyParamsDictTagged {
     const params = {
         "@type": "afni/convert_cdiflist_to_grads.py" as const,
         "cdiflist": cdiflist,
@@ -94,7 +94,7 @@ function convert_cdiflist_to_grads_py_params(
  * @returns Command-line arguments.
  */
 function convert_cdiflist_to_grads_py_cargs(
-    params: ConvertCdiflistToGradsPyParameters,
+    params: ConvertCdiflistToGradsPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function convert_cdiflist_to_grads_py_cargs(
  * @returns Outputs object.
  */
 function convert_cdiflist_to_grads_py_outputs(
-    params: ConvertCdiflistToGradsPyParameters,
+    params: ConvertCdiflistToGradsPyParamsDict,
     execution: Execution,
 ): ConvertCdiflistToGradsPyOutputs {
     const ret: ConvertCdiflistToGradsPyOutputs = {
@@ -164,7 +164,7 @@ function convert_cdiflist_to_grads_py_outputs(
  * @returns NamedTuple of outputs (described in `ConvertCdiflistToGradsPyOutputs`).
  */
 function convert_cdiflist_to_grads_py_execute(
-    params: ConvertCdiflistToGradsPyParameters,
+    params: ConvertCdiflistToGradsPyParamsDict,
     runner: Runner | null = null,
 ): ConvertCdiflistToGradsPyOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function convert_cdiflist_to_grads_py(
 export {
       CONVERT_CDIFLIST_TO_GRADS_PY_METADATA,
       ConvertCdiflistToGradsPyOutputs,
+      ConvertCdiflistToGradsPyParamsDict,
+      ConvertCdiflistToGradsPyParamsDictTagged,
       convert_cdiflist_to_grads_py,
       convert_cdiflist_to_grads_py_execute,
       convert_cdiflist_to_grads_py_params,

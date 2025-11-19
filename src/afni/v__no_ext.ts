@@ -11,16 +11,16 @@ const V__NO_EXT_METADATA: Metadata = {
 };
 
 
-interface VNoExtParameters {
+interface VNoExtParamsDict {
     "@type"?: "afni/@NoExt";
     "inputfile": string;
     "extensions"?: Array<string> | null | undefined;
 }
-type VNoExtParametersTagged = Required<Pick<VNoExtParameters, '@type'>> & VNoExtParameters;
+type VNoExtParamsDictTagged = Required<Pick<VNoExtParamsDict, '@type'>> & VNoExtParamsDict;
 
 
 /**
- * Output object returned when calling `VNoExtParameters(...)`.
+ * Output object returned when calling `VNoExtParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface VNoExtOutputs {
 function v__no_ext_params(
     inputfile: string,
     extensions: Array<string> | null = null,
-): VNoExtParametersTagged {
+): VNoExtParamsDictTagged {
     const params = {
         "@type": "afni/@NoExt" as const,
         "inputfile": inputfile,
@@ -68,7 +68,7 @@ function v__no_ext_params(
  * @returns Command-line arguments.
  */
 function v__no_ext_cargs(
-    params: VNoExtParameters,
+    params: VNoExtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function v__no_ext_cargs(
  * @returns Outputs object.
  */
 function v__no_ext_outputs(
-    params: VNoExtParameters,
+    params: VNoExtParamsDict,
     execution: Execution,
 ): VNoExtOutputs {
     const ret: VNoExtOutputs = {
@@ -116,7 +116,7 @@ function v__no_ext_outputs(
  * @returns NamedTuple of outputs (described in `VNoExtOutputs`).
  */
 function v__no_ext_execute(
-    params: VNoExtParameters,
+    params: VNoExtParamsDict,
     runner: Runner | null = null,
 ): VNoExtOutputs {
     runner = runner || getGlobalRunner();
@@ -156,6 +156,8 @@ function v__no_ext(
 
 export {
       VNoExtOutputs,
+      VNoExtParamsDict,
+      VNoExtParamsDictTagged,
       V__NO_EXT_METADATA,
       v__no_ext,
       v__no_ext_execute,

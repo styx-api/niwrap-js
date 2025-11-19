@@ -11,15 +11,15 @@ const DWIDENOISE_METADATA: Metadata = {
 };
 
 
-interface DwidenoiseConfigParameters {
+interface DwidenoiseConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DwidenoiseConfigParametersTagged = Required<Pick<DwidenoiseConfigParameters, '@type'>> & DwidenoiseConfigParameters;
+type DwidenoiseConfigParamsDictTagged = Required<Pick<DwidenoiseConfigParamsDict, '@type'>> & DwidenoiseConfigParamsDict;
 
 
-interface DwidenoiseParameters {
+interface DwidenoiseParamsDict {
     "@type"?: "mrtrix/dwidenoise";
     "mask"?: InputPathType | null | undefined;
     "extent"?: Array<number> | null | undefined;
@@ -31,13 +31,13 @@ interface DwidenoiseParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DwidenoiseConfigParameters> | null | undefined;
+    "config"?: Array<DwidenoiseConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "dwi": InputPathType;
     "out": string;
 }
-type DwidenoiseParametersTagged = Required<Pick<DwidenoiseParameters, '@type'>> & DwidenoiseParameters;
+type DwidenoiseParamsDictTagged = Required<Pick<DwidenoiseParamsDict, '@type'>> & DwidenoiseParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type DwidenoiseParametersTagged = Required<Pick<DwidenoiseParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function dwidenoise_config_params(
+function dwidenoise_config(
     key: string,
     value: string,
-): DwidenoiseConfigParametersTagged {
+): DwidenoiseConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -70,7 +70,7 @@ function dwidenoise_config_params(
  * @returns Command-line arguments.
  */
 function dwidenoise_config_cargs(
-    params: DwidenoiseConfigParameters,
+    params: DwidenoiseConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function dwidenoise_config_cargs(
 
 
 /**
- * Output object returned when calling `DwidenoiseParameters(...)`.
+ * Output object returned when calling `DwidenoiseParamsDict(...)`.
  *
  * @interface
  */
@@ -138,10 +138,10 @@ function dwidenoise_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DwidenoiseConfigParameters> | null = null,
+    config: Array<DwidenoiseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DwidenoiseParametersTagged {
+): DwidenoiseParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwidenoise" as const,
         "info": info,
@@ -187,7 +187,7 @@ function dwidenoise_params(
  * @returns Command-line arguments.
  */
 function dwidenoise_cargs(
-    params: DwidenoiseParameters,
+    params: DwidenoiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -264,7 +264,7 @@ function dwidenoise_cargs(
  * @returns Outputs object.
  */
 function dwidenoise_outputs(
-    params: DwidenoiseParameters,
+    params: DwidenoiseParamsDict,
     execution: Execution,
 ): DwidenoiseOutputs {
     const ret: DwidenoiseOutputs = {
@@ -305,7 +305,7 @@ function dwidenoise_outputs(
  * @returns NamedTuple of outputs (described in `DwidenoiseOutputs`).
  */
 function dwidenoise_execute(
-    params: DwidenoiseParameters,
+    params: DwidenoiseParamsDict,
     runner: Runner | null = null,
 ): DwidenoiseOutputs {
     runner = runner || getGlobalRunner();
@@ -375,7 +375,7 @@ function dwidenoise(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DwidenoiseConfigParameters> | null = null,
+    config: Array<DwidenoiseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -387,9 +387,13 @@ function dwidenoise(
 
 export {
       DWIDENOISE_METADATA,
+      DwidenoiseConfigParamsDict,
+      DwidenoiseConfigParamsDictTagged,
       DwidenoiseOutputs,
+      DwidenoiseParamsDict,
+      DwidenoiseParamsDictTagged,
       dwidenoise,
-      dwidenoise_config_params,
+      dwidenoise_config,
       dwidenoise_execute,
       dwidenoise_params,
 };

@@ -11,7 +11,7 @@ const V_3D_LOMB_SCARGLE_METADATA: Metadata = {
 };
 
 
-interface V3dLombScargleParameters {
+interface V3dLombScargleParamsDict {
     "@type"?: "afni/3dLombScargle";
     "prefix": string;
     "inset": InputPathType;
@@ -22,11 +22,11 @@ interface V3dLombScargleParameters {
     "nyquist_multiplier"?: number | null | undefined;
     "nifti": boolean;
 }
-type V3dLombScargleParametersTagged = Required<Pick<V3dLombScargleParameters, '@type'>> & V3dLombScargleParameters;
+type V3dLombScargleParamsDictTagged = Required<Pick<V3dLombScargleParamsDict, '@type'>> & V3dLombScargleParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLombScargleParameters(...)`.
+ * Output object returned when calling `V3dLombScargleParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function v_3d_lomb_scargle_params(
     out_pow_spec: boolean = false,
     nyquist_multiplier: number | null = null,
     nifti: boolean = false,
-): V3dLombScargleParametersTagged {
+): V3dLombScargleParamsDictTagged {
     const params = {
         "@type": "afni/3dLombScargle" as const,
         "prefix": prefix,
@@ -110,7 +110,7 @@ function v_3d_lomb_scargle_params(
  * @returns Command-line arguments.
  */
 function v_3d_lomb_scargle_cargs(
-    params: V3dLombScargleParameters,
+    params: V3dLombScargleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -166,7 +166,7 @@ function v_3d_lomb_scargle_cargs(
  * @returns Outputs object.
  */
 function v_3d_lomb_scargle_outputs(
-    params: V3dLombScargleParameters,
+    params: V3dLombScargleParamsDict,
     execution: Execution,
 ): V3dLombScargleOutputs {
     const ret: V3dLombScargleOutputs = {
@@ -195,7 +195,7 @@ function v_3d_lomb_scargle_outputs(
  * @returns NamedTuple of outputs (described in `V3dLombScargleOutputs`).
  */
 function v_3d_lomb_scargle_execute(
-    params: V3dLombScargleParameters,
+    params: V3dLombScargleParamsDict,
     runner: Runner | null = null,
 ): V3dLombScargleOutputs {
     runner = runner || getGlobalRunner();
@@ -247,6 +247,8 @@ function v_3d_lomb_scargle(
 
 export {
       V3dLombScargleOutputs,
+      V3dLombScargleParamsDict,
+      V3dLombScargleParamsDictTagged,
       V_3D_LOMB_SCARGLE_METADATA,
       v_3d_lomb_scargle,
       v_3d_lomb_scargle_execute,

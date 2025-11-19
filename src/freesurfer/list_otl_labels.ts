@@ -11,15 +11,15 @@ const LIST_OTL_LABELS_METADATA: Metadata = {
 };
 
 
-interface ListOtlLabelsParameters {
+interface ListOtlLabelsParamsDict {
     "@type"?: "freesurfer/list_otl_labels";
     "input_file": InputPathType;
 }
-type ListOtlLabelsParametersTagged = Required<Pick<ListOtlLabelsParameters, '@type'>> & ListOtlLabelsParameters;
+type ListOtlLabelsParamsDictTagged = Required<Pick<ListOtlLabelsParamsDict, '@type'>> & ListOtlLabelsParamsDict;
 
 
 /**
- * Output object returned when calling `ListOtlLabelsParameters(...)`.
+ * Output object returned when calling `ListOtlLabelsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface ListOtlLabelsOutputs {
  */
 function list_otl_labels_params(
     input_file: InputPathType,
-): ListOtlLabelsParametersTagged {
+): ListOtlLabelsParamsDictTagged {
     const params = {
         "@type": "freesurfer/list_otl_labels" as const,
         "input_file": input_file,
@@ -58,7 +58,7 @@ function list_otl_labels_params(
  * @returns Command-line arguments.
  */
 function list_otl_labels_cargs(
-    params: ListOtlLabelsParameters,
+    params: ListOtlLabelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function list_otl_labels_cargs(
  * @returns Outputs object.
  */
 function list_otl_labels_outputs(
-    params: ListOtlLabelsParameters,
+    params: ListOtlLabelsParamsDict,
     execution: Execution,
 ): ListOtlLabelsOutputs {
     const ret: ListOtlLabelsOutputs = {
@@ -105,7 +105,7 @@ function list_otl_labels_outputs(
  * @returns NamedTuple of outputs (described in `ListOtlLabelsOutputs`).
  */
 function list_otl_labels_execute(
-    params: ListOtlLabelsParameters,
+    params: ListOtlLabelsParamsDict,
     runner: Runner | null = null,
 ): ListOtlLabelsOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function list_otl_labels(
 export {
       LIST_OTL_LABELS_METADATA,
       ListOtlLabelsOutputs,
+      ListOtlLabelsParamsDict,
+      ListOtlLabelsParamsDictTagged,
       list_otl_labels,
       list_otl_labels_execute,
       list_otl_labels_params,

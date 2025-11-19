@@ -11,15 +11,15 @@ const FIX_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface FixSubjectParameters {
+interface FixSubjectParamsDict {
     "@type"?: "freesurfer/fix_subject";
     "arguments"?: string | null | undefined;
 }
-type FixSubjectParametersTagged = Required<Pick<FixSubjectParameters, '@type'>> & FixSubjectParameters;
+type FixSubjectParamsDictTagged = Required<Pick<FixSubjectParamsDict, '@type'>> & FixSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `FixSubjectParameters(...)`.
+ * Output object returned when calling `FixSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FixSubjectOutputs {
  */
 function fix_subject_params(
     arguments_: string | null = null,
-): FixSubjectParametersTagged {
+): FixSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/fix_subject" as const,
     };
@@ -60,7 +60,7 @@ function fix_subject_params(
  * @returns Command-line arguments.
  */
 function fix_subject_cargs(
-    params: FixSubjectParameters,
+    params: FixSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function fix_subject_cargs(
  * @returns Outputs object.
  */
 function fix_subject_outputs(
-    params: FixSubjectParameters,
+    params: FixSubjectParamsDict,
     execution: Execution,
 ): FixSubjectOutputs {
     const ret: FixSubjectOutputs = {
@@ -106,7 +106,7 @@ function fix_subject_outputs(
  * @returns NamedTuple of outputs (described in `FixSubjectOutputs`).
  */
 function fix_subject_execute(
-    params: FixSubjectParameters,
+    params: FixSubjectParamsDict,
     runner: Runner | null = null,
 ): FixSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function fix_subject(
 export {
       FIX_SUBJECT_METADATA,
       FixSubjectOutputs,
+      FixSubjectParamsDict,
+      FixSubjectParamsDictTagged,
       fix_subject,
       fix_subject_execute,
       fix_subject_params,

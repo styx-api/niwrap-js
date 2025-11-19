@@ -10,18 +10,18 @@ const SIGNED_DISTANCE_TO_SURFACE_METADATA: Metadata = {
 };
 
 
-interface SignedDistanceToSurfaceParameters {
+interface SignedDistanceToSurfaceParamsDict {
     "@type"?: "workbench/signed-distance-to-surface";
     "metric": string;
     "method"?: string | null | undefined;
     "surface-comp": InputPathType;
     "surface-ref": InputPathType;
 }
-type SignedDistanceToSurfaceParametersTagged = Required<Pick<SignedDistanceToSurfaceParameters, '@type'>> & SignedDistanceToSurfaceParameters;
+type SignedDistanceToSurfaceParamsDictTagged = Required<Pick<SignedDistanceToSurfaceParamsDict, '@type'>> & SignedDistanceToSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `SignedDistanceToSurfaceParameters(...)`.
+ * Output object returned when calling `SignedDistanceToSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function signed_distance_to_surface_params(
     method: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
-): SignedDistanceToSurfaceParametersTagged {
+): SignedDistanceToSurfaceParamsDictTagged {
     const params = {
         "@type": "workbench/signed-distance-to-surface" as const,
         "metric": metric,
@@ -77,7 +77,7 @@ function signed_distance_to_surface_params(
  * @returns Command-line arguments.
  */
 function signed_distance_to_surface_cargs(
-    params: SignedDistanceToSurfaceParameters,
+    params: SignedDistanceToSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function signed_distance_to_surface_cargs(
  * @returns Outputs object.
  */
 function signed_distance_to_surface_outputs(
-    params: SignedDistanceToSurfaceParameters,
+    params: SignedDistanceToSurfaceParamsDict,
     execution: Execution,
 ): SignedDistanceToSurfaceOutputs {
     const ret: SignedDistanceToSurfaceOutputs = {
@@ -134,7 +134,7 @@ function signed_distance_to_surface_outputs(
  * @returns NamedTuple of outputs (described in `SignedDistanceToSurfaceOutputs`).
  */
 function signed_distance_to_surface_execute(
-    params: SignedDistanceToSurfaceParameters,
+    params: SignedDistanceToSurfaceParamsDict,
     runner: Runner | null = null,
 ): SignedDistanceToSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function signed_distance_to_surface(
 export {
       SIGNED_DISTANCE_TO_SURFACE_METADATA,
       SignedDistanceToSurfaceOutputs,
+      SignedDistanceToSurfaceParamsDict,
+      SignedDistanceToSurfaceParamsDictTagged,
       signed_distance_to_surface,
       signed_distance_to_surface_execute,
       signed_distance_to_surface_params,

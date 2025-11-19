@@ -11,15 +11,15 @@ const V__PARSE_AFNI_NAME_METADATA: Metadata = {
 };
 
 
-interface VParseAfniNameParameters {
+interface VParseAfniNameParamsDict {
     "@type"?: "afni/@parse_afni_name";
     "afni_name": string;
 }
-type VParseAfniNameParametersTagged = Required<Pick<VParseAfniNameParameters, '@type'>> & VParseAfniNameParameters;
+type VParseAfniNameParamsDictTagged = Required<Pick<VParseAfniNameParamsDict, '@type'>> & VParseAfniNameParamsDict;
 
 
 /**
- * Output object returned when calling `VParseAfniNameParameters(...)`.
+ * Output object returned when calling `VParseAfniNameParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ interface VParseAfniNameOutputs {
  */
 function v__parse_afni_name_params(
     afni_name: string,
-): VParseAfniNameParametersTagged {
+): VParseAfniNameParamsDictTagged {
     const params = {
         "@type": "afni/@parse_afni_name" as const,
         "afni_name": afni_name,
@@ -74,7 +74,7 @@ function v__parse_afni_name_params(
  * @returns Command-line arguments.
  */
 function v__parse_afni_name_cargs(
-    params: VParseAfniNameParameters,
+    params: VParseAfniNameParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function v__parse_afni_name_cargs(
  * @returns Outputs object.
  */
 function v__parse_afni_name_outputs(
-    params: VParseAfniNameParameters,
+    params: VParseAfniNameParamsDict,
     execution: Execution,
 ): VParseAfniNameOutputs {
     const ret: VParseAfniNameOutputs = {
@@ -122,7 +122,7 @@ function v__parse_afni_name_outputs(
  * @returns NamedTuple of outputs (described in `VParseAfniNameOutputs`).
  */
 function v__parse_afni_name_execute(
-    params: VParseAfniNameParameters,
+    params: VParseAfniNameParamsDict,
     runner: Runner | null = null,
 ): VParseAfniNameOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function v__parse_afni_name(
 
 export {
       VParseAfniNameOutputs,
+      VParseAfniNameParamsDict,
+      VParseAfniNameParamsDictTagged,
       V__PARSE_AFNI_NAME_METADATA,
       v__parse_afni_name,
       v__parse_afni_name_execute,

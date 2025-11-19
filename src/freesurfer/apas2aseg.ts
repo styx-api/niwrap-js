@@ -11,17 +11,17 @@ const APAS2ASEG_METADATA: Metadata = {
 };
 
 
-interface Apas2asegParameters {
+interface Apas2asegParamsDict {
     "@type"?: "freesurfer/apas2aseg";
     "subject"?: string | null | undefined;
     "input_aparc_aseg"?: InputPathType | null | undefined;
     "output_seg"?: string | null | undefined;
 }
-type Apas2asegParametersTagged = Required<Pick<Apas2asegParameters, '@type'>> & Apas2asegParameters;
+type Apas2asegParamsDictTagged = Required<Pick<Apas2asegParamsDict, '@type'>> & Apas2asegParamsDict;
 
 
 /**
- * Output object returned when calling `Apas2asegParameters(...)`.
+ * Output object returned when calling `Apas2asegParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function apas2aseg_params(
     subject: string | null = null,
     input_aparc_aseg: InputPathType | null = null,
     output_seg: string | null = null,
-): Apas2asegParametersTagged {
+): Apas2asegParamsDictTagged {
     const params = {
         "@type": "freesurfer/apas2aseg" as const,
     };
@@ -76,7 +76,7 @@ function apas2aseg_params(
  * @returns Command-line arguments.
  */
 function apas2aseg_cargs(
-    params: Apas2asegParameters,
+    params: Apas2asegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function apas2aseg_cargs(
  * @returns Outputs object.
  */
 function apas2aseg_outputs(
-    params: Apas2asegParameters,
+    params: Apas2asegParamsDict,
     execution: Execution,
 ): Apas2asegOutputs {
     const ret: Apas2asegOutputs = {
@@ -138,7 +138,7 @@ function apas2aseg_outputs(
  * @returns NamedTuple of outputs (described in `Apas2asegOutputs`).
  */
 function apas2aseg_execute(
-    params: Apas2asegParameters,
+    params: Apas2asegParamsDict,
     runner: Runner | null = null,
 ): Apas2asegOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function apas2aseg(
 export {
       APAS2ASEG_METADATA,
       Apas2asegOutputs,
+      Apas2asegParamsDict,
+      Apas2asegParamsDictTagged,
       apas2aseg,
       apas2aseg_execute,
       apas2aseg_params,

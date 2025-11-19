@@ -11,7 +11,7 @@ const SPMREGISTER_METADATA: Metadata = {
 };
 
 
-interface SpmregisterParameters {
+interface SpmregisterParamsDict {
     "@type"?: "freesurfer/spmregister";
     "subjid": string;
     "mov": string;
@@ -27,11 +27,11 @@ interface SpmregisterParameters {
     "version": boolean;
     "help": boolean;
 }
-type SpmregisterParametersTagged = Required<Pick<SpmregisterParameters, '@type'>> & SpmregisterParameters;
+type SpmregisterParamsDictTagged = Required<Pick<SpmregisterParamsDict, '@type'>> & SpmregisterParamsDict;
 
 
 /**
- * Output object returned when calling `SpmregisterParameters(...)`.
+ * Output object returned when calling `SpmregisterParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function spmregister_params(
     nocleanup: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): SpmregisterParametersTagged {
+): SpmregisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/spmregister" as const,
         "subjid": subjid,
@@ -124,7 +124,7 @@ function spmregister_params(
  * @returns Command-line arguments.
  */
 function spmregister_cargs(
-    params: SpmregisterParameters,
+    params: SpmregisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,7 +199,7 @@ function spmregister_cargs(
  * @returns Outputs object.
  */
 function spmregister_outputs(
-    params: SpmregisterParameters,
+    params: SpmregisterParamsDict,
     execution: Execution,
 ): SpmregisterOutputs {
     const ret: SpmregisterOutputs = {
@@ -226,7 +226,7 @@ function spmregister_outputs(
  * @returns NamedTuple of outputs (described in `SpmregisterOutputs`).
  */
 function spmregister_execute(
-    params: SpmregisterParameters,
+    params: SpmregisterParamsDict,
     runner: Runner | null = null,
 ): SpmregisterOutputs {
     runner = runner || getGlobalRunner();
@@ -289,6 +289,8 @@ function spmregister(
 export {
       SPMREGISTER_METADATA,
       SpmregisterOutputs,
+      SpmregisterParamsDict,
+      SpmregisterParamsDictTagged,
       spmregister,
       spmregister_execute,
       spmregister_params,

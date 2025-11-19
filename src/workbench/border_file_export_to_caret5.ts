@@ -10,20 +10,20 @@ const BORDER_FILE_EXPORT_TO_CARET5_METADATA: Metadata = {
 };
 
 
-interface BorderFileExportToCaret5SurfaceParameters {
+interface BorderFileExportToCaret5SurfaceParamsDict {
     "@type"?: "surface";
     "surface-in": InputPathType;
 }
-type BorderFileExportToCaret5SurfaceParametersTagged = Required<Pick<BorderFileExportToCaret5SurfaceParameters, '@type'>> & BorderFileExportToCaret5SurfaceParameters;
+type BorderFileExportToCaret5SurfaceParamsDictTagged = Required<Pick<BorderFileExportToCaret5SurfaceParamsDict, '@type'>> & BorderFileExportToCaret5SurfaceParamsDict;
 
 
-interface BorderFileExportToCaret5Parameters {
+interface BorderFileExportToCaret5ParamsDict {
     "@type"?: "workbench/border-file-export-to-caret5";
-    "surface"?: Array<BorderFileExportToCaret5SurfaceParameters> | null | undefined;
+    "surface"?: Array<BorderFileExportToCaret5SurfaceParamsDict> | null | undefined;
     "border-file": string;
     "output-file-prefix": string;
 }
-type BorderFileExportToCaret5ParametersTagged = Required<Pick<BorderFileExportToCaret5Parameters, '@type'>> & BorderFileExportToCaret5Parameters;
+type BorderFileExportToCaret5ParamsDictTagged = Required<Pick<BorderFileExportToCaret5ParamsDict, '@type'>> & BorderFileExportToCaret5ParamsDict;
 
 
 /**
@@ -33,9 +33,9 @@ type BorderFileExportToCaret5ParametersTagged = Required<Pick<BorderFileExportTo
  *
  * @returns Parameter dictionary
  */
-function border_file_export_to_caret5_surface_params(
+function border_file_export_to_caret5_surface(
     surface_in: InputPathType,
-): BorderFileExportToCaret5SurfaceParametersTagged {
+): BorderFileExportToCaret5SurfaceParamsDictTagged {
     const params = {
         "@type": "surface" as const,
         "surface-in": surface_in,
@@ -53,7 +53,7 @@ function border_file_export_to_caret5_surface_params(
  * @returns Command-line arguments.
  */
 function border_file_export_to_caret5_surface_cargs(
-    params: BorderFileExportToCaret5SurfaceParameters,
+    params: BorderFileExportToCaret5SurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -66,7 +66,7 @@ function border_file_export_to_caret5_surface_cargs(
 
 
 /**
- * Output object returned when calling `BorderFileExportToCaret5Parameters(...)`.
+ * Output object returned when calling `BorderFileExportToCaret5ParamsDict(...)`.
  *
  * @interface
  */
@@ -90,8 +90,8 @@ interface BorderFileExportToCaret5Outputs {
 function border_file_export_to_caret5_params(
     border_file: string,
     output_file_prefix: string,
-    surface: Array<BorderFileExportToCaret5SurfaceParameters> | null = null,
-): BorderFileExportToCaret5ParametersTagged {
+    surface: Array<BorderFileExportToCaret5SurfaceParamsDict> | null = null,
+): BorderFileExportToCaret5ParamsDictTagged {
     const params = {
         "@type": "workbench/border-file-export-to-caret5" as const,
         "border-file": border_file,
@@ -113,7 +113,7 @@ function border_file_export_to_caret5_params(
  * @returns Command-line arguments.
  */
 function border_file_export_to_caret5_cargs(
-    params: BorderFileExportToCaret5Parameters,
+    params: BorderFileExportToCaret5ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function border_file_export_to_caret5_cargs(
  * @returns Outputs object.
  */
 function border_file_export_to_caret5_outputs(
-    params: BorderFileExportToCaret5Parameters,
+    params: BorderFileExportToCaret5ParamsDict,
     execution: Execution,
 ): BorderFileExportToCaret5Outputs {
     const ret: BorderFileExportToCaret5Outputs = {
@@ -170,7 +170,7 @@ function border_file_export_to_caret5_outputs(
  * @returns NamedTuple of outputs (described in `BorderFileExportToCaret5Outputs`).
  */
 function border_file_export_to_caret5_execute(
-    params: BorderFileExportToCaret5Parameters,
+    params: BorderFileExportToCaret5ParamsDict,
     runner: Runner | null = null,
 ): BorderFileExportToCaret5Outputs {
     runner = runner || getGlobalRunner();
@@ -208,7 +208,7 @@ function border_file_export_to_caret5_execute(
 function border_file_export_to_caret5(
     border_file: string,
     output_file_prefix: string,
-    surface: Array<BorderFileExportToCaret5SurfaceParameters> | null = null,
+    surface: Array<BorderFileExportToCaret5SurfaceParamsDict> | null = null,
     runner: Runner | null = null,
 ): BorderFileExportToCaret5Outputs {
     const params = border_file_export_to_caret5_params(border_file, output_file_prefix, surface)
@@ -219,8 +219,12 @@ function border_file_export_to_caret5(
 export {
       BORDER_FILE_EXPORT_TO_CARET5_METADATA,
       BorderFileExportToCaret5Outputs,
+      BorderFileExportToCaret5ParamsDict,
+      BorderFileExportToCaret5ParamsDictTagged,
+      BorderFileExportToCaret5SurfaceParamsDict,
+      BorderFileExportToCaret5SurfaceParamsDictTagged,
       border_file_export_to_caret5,
       border_file_export_to_caret5_execute,
       border_file_export_to_caret5_params,
-      border_file_export_to_caret5_surface_params,
+      border_file_export_to_caret5_surface,
 };

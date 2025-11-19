@@ -11,7 +11,7 @@ const FABBER_ASL_METADATA: Metadata = {
 };
 
 
-interface FabberAslParameters {
+interface FabberAslParamsDict {
     "@type"?: "fsl/fabber_asl";
     "listmethods": boolean;
     "listmodels": boolean;
@@ -46,11 +46,11 @@ interface FabberAslParameters {
     "optfile"?: string | null | undefined;
     "debug": boolean;
 }
-type FabberAslParametersTagged = Required<Pick<FabberAslParameters, '@type'>> & FabberAslParameters;
+type FabberAslParamsDictTagged = Required<Pick<FabberAslParamsDict, '@type'>> & FabberAslParamsDict;
 
 
 /**
- * Output object returned when calling `FabberAslParameters(...)`.
+ * Output object returned when calling `FabberAslParamsDict(...)`.
  *
  * @interface
  */
@@ -181,7 +181,7 @@ function fabber_asl_params(
     save_free_energy: boolean = false,
     optfile: string | null = null,
     debug: boolean = false,
-): FabberAslParametersTagged {
+): FabberAslParamsDictTagged {
     const params = {
         "@type": "fsl/fabber_asl" as const,
         "listmethods": listmethods,
@@ -244,7 +244,7 @@ function fabber_asl_params(
  * @returns Command-line arguments.
  */
 function fabber_asl_cargs(
-    params: FabberAslParameters,
+    params: FabberAslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -350,7 +350,7 @@ function fabber_asl_cargs(
  * @returns Outputs object.
  */
 function fabber_asl_outputs(
-    params: FabberAslParameters,
+    params: FabberAslParamsDict,
     execution: Execution,
 ): FabberAslOutputs {
     const ret: FabberAslOutputs = {
@@ -387,7 +387,7 @@ function fabber_asl_outputs(
  * @returns NamedTuple of outputs (described in `FabberAslOutputs`).
  */
 function fabber_asl_execute(
-    params: FabberAslParameters,
+    params: FabberAslParamsDict,
     runner: Runner | null = null,
 ): FabberAslOutputs {
     runner = runner || getGlobalRunner();
@@ -488,6 +488,8 @@ function fabber_asl(
 export {
       FABBER_ASL_METADATA,
       FabberAslOutputs,
+      FabberAslParamsDict,
+      FabberAslParamsDictTagged,
       fabber_asl,
       fabber_asl_execute,
       fabber_asl_params,

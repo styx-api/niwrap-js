@@ -11,7 +11,7 @@ const V_3D_ECM_METADATA: Metadata = {
 };
 
 
-interface V3dEcmParameters {
+interface V3dEcmParamsDict {
     "@type"?: "afni/3dECM";
     "in_file": InputPathType;
     "autoclip": boolean;
@@ -31,11 +31,11 @@ interface V3dEcmParameters {
     "sparsity"?: number | null | undefined;
     "thresh"?: number | null | undefined;
 }
-type V3dEcmParametersTagged = Required<Pick<V3dEcmParameters, '@type'>> & V3dEcmParameters;
+type V3dEcmParamsDictTagged = Required<Pick<V3dEcmParamsDict, '@type'>> & V3dEcmParamsDict;
 
 
 /**
- * Output object returned when calling `V3dEcmParameters(...)`.
+ * Output object returned when calling `V3dEcmParamsDict(...)`.
  *
  * @interface
  */
@@ -96,7 +96,7 @@ function v_3d_ecm_params(
     shift: number | null = null,
     sparsity: number | null = null,
     thresh: number | null = null,
-): V3dEcmParametersTagged {
+): V3dEcmParamsDictTagged {
     const params = {
         "@type": "afni/3dECM" as const,
         "in_file": in_file,
@@ -154,7 +154,7 @@ function v_3d_ecm_params(
  * @returns Command-line arguments.
  */
 function v_3d_ecm_cargs(
-    params: V3dEcmParameters,
+    params: V3dEcmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -251,7 +251,7 @@ function v_3d_ecm_cargs(
  * @returns Outputs object.
  */
 function v_3d_ecm_outputs(
-    params: V3dEcmParameters,
+    params: V3dEcmParamsDict,
     execution: Execution,
 ): V3dEcmOutputs {
     const ret: V3dEcmOutputs = {
@@ -278,7 +278,7 @@ function v_3d_ecm_outputs(
  * @returns NamedTuple of outputs (described in `V3dEcmOutputs`).
  */
 function v_3d_ecm_execute(
-    params: V3dEcmParameters,
+    params: V3dEcmParamsDict,
     runner: Runner | null = null,
 ): V3dEcmOutputs {
     runner = runner || getGlobalRunner();
@@ -348,6 +348,8 @@ function v_3d_ecm(
 
 export {
       V3dEcmOutputs,
+      V3dEcmParamsDict,
+      V3dEcmParamsDictTagged,
       V_3D_ECM_METADATA,
       v_3d_ecm,
       v_3d_ecm_execute,

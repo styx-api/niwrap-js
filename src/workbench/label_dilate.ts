@@ -10,7 +10,7 @@ const LABEL_DILATE_METADATA: Metadata = {
 };
 
 
-interface LabelDilateParameters {
+interface LabelDilateParamsDict {
     "@type"?: "workbench/label-dilate";
     "label-out": string;
     "roi-metric"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface LabelDilateParameters {
     "surface": InputPathType;
     "dilate-dist": number;
 }
-type LabelDilateParametersTagged = Required<Pick<LabelDilateParameters, '@type'>> & LabelDilateParameters;
+type LabelDilateParamsDictTagged = Required<Pick<LabelDilateParamsDict, '@type'>> & LabelDilateParamsDict;
 
 
 /**
- * Output object returned when calling `LabelDilateParameters(...)`.
+ * Output object returned when calling `LabelDilateParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function label_dilate_params(
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
-): LabelDilateParametersTagged {
+): LabelDilateParamsDictTagged {
     const params = {
         "@type": "workbench/label-dilate" as const,
         "label-out": label_out,
@@ -97,7 +97,7 @@ function label_dilate_params(
  * @returns Command-line arguments.
  */
 function label_dilate_cargs(
-    params: LabelDilateParameters,
+    params: LabelDilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function label_dilate_cargs(
  * @returns Outputs object.
  */
 function label_dilate_outputs(
-    params: LabelDilateParameters,
+    params: LabelDilateParamsDict,
     execution: Execution,
 ): LabelDilateOutputs {
     const ret: LabelDilateOutputs = {
@@ -152,7 +152,7 @@ function label_dilate_outputs(
  * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
  */
 function label_dilate_execute(
-    params: LabelDilateParameters,
+    params: LabelDilateParamsDict,
     runner: Runner | null = null,
 ): LabelDilateOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function label_dilate(
 export {
       LABEL_DILATE_METADATA,
       LabelDilateOutputs,
+      LabelDilateParamsDict,
+      LabelDilateParamsDictTagged,
       label_dilate,
       label_dilate_execute,
       label_dilate_params,

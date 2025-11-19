@@ -11,7 +11,7 @@ const APARCSTATSDIFF_METADATA: Metadata = {
 };
 
 
-interface AparcstatsdiffParameters {
+interface AparcstatsdiffParamsDict {
     "@type"?: "freesurfer/aparcstatsdiff";
     "subj1": string;
     "subj2": string;
@@ -20,11 +20,11 @@ interface AparcstatsdiffParameters {
     "meas": string;
     "outdir"?: string | null | undefined;
 }
-type AparcstatsdiffParametersTagged = Required<Pick<AparcstatsdiffParameters, '@type'>> & AparcstatsdiffParameters;
+type AparcstatsdiffParamsDictTagged = Required<Pick<AparcstatsdiffParamsDict, '@type'>> & AparcstatsdiffParamsDict;
 
 
 /**
- * Output object returned when calling `AparcstatsdiffParameters(...)`.
+ * Output object returned when calling `AparcstatsdiffParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function aparcstatsdiff_params(
     parc: string,
     meas: string,
     outdir: string | null = null,
-): AparcstatsdiffParametersTagged {
+): AparcstatsdiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/aparcstatsdiff" as const,
         "subj1": subj1,
@@ -84,7 +84,7 @@ function aparcstatsdiff_params(
  * @returns Command-line arguments.
  */
 function aparcstatsdiff_cargs(
-    params: AparcstatsdiffParameters,
+    params: AparcstatsdiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function aparcstatsdiff_cargs(
  * @returns Outputs object.
  */
 function aparcstatsdiff_outputs(
-    params: AparcstatsdiffParameters,
+    params: AparcstatsdiffParamsDict,
     execution: Execution,
 ): AparcstatsdiffOutputs {
     const ret: AparcstatsdiffOutputs = {
@@ -136,7 +136,7 @@ function aparcstatsdiff_outputs(
  * @returns NamedTuple of outputs (described in `AparcstatsdiffOutputs`).
  */
 function aparcstatsdiff_execute(
-    params: AparcstatsdiffParameters,
+    params: AparcstatsdiffParamsDict,
     runner: Runner | null = null,
 ): AparcstatsdiffOutputs {
     runner = runner || getGlobalRunner();
@@ -185,6 +185,8 @@ function aparcstatsdiff(
 export {
       APARCSTATSDIFF_METADATA,
       AparcstatsdiffOutputs,
+      AparcstatsdiffParamsDict,
+      AparcstatsdiffParamsDictTagged,
       aparcstatsdiff,
       aparcstatsdiff_execute,
       aparcstatsdiff_params,

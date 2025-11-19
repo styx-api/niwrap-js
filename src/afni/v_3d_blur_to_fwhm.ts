@@ -11,7 +11,7 @@ const V_3D_BLUR_TO_FWHM_METADATA: Metadata = {
 };
 
 
-interface V3dBlurToFwhmParameters {
+interface V3dBlurToFwhmParamsDict {
     "@type"?: "afni/3dBlurToFWHM";
     "automask": boolean;
     "blurmaster"?: InputPathType | null | undefined;
@@ -22,11 +22,11 @@ interface V3dBlurToFwhmParameters {
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "prefix"?: string | null | undefined;
 }
-type V3dBlurToFwhmParametersTagged = Required<Pick<V3dBlurToFwhmParameters, '@type'>> & V3dBlurToFwhmParameters;
+type V3dBlurToFwhmParamsDictTagged = Required<Pick<V3dBlurToFwhmParamsDict, '@type'>> & V3dBlurToFwhmParamsDict;
 
 
 /**
- * Output object returned when calling `V3dBlurToFwhmParameters(...)`.
+ * Output object returned when calling `V3dBlurToFwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_blur_to_fwhm_params(
     mask: InputPathType | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     prefix: string | null = null,
-): V3dBlurToFwhmParametersTagged {
+): V3dBlurToFwhmParamsDictTagged {
     const params = {
         "@type": "afni/3dBlurToFWHM" as const,
         "automask": automask,
@@ -102,7 +102,7 @@ function v_3d_blur_to_fwhm_params(
  * @returns Command-line arguments.
  */
 function v_3d_blur_to_fwhm_cargs(
-    params: V3dBlurToFwhmParameters,
+    params: V3dBlurToFwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,7 +160,7 @@ function v_3d_blur_to_fwhm_cargs(
  * @returns Outputs object.
  */
 function v_3d_blur_to_fwhm_outputs(
-    params: V3dBlurToFwhmParameters,
+    params: V3dBlurToFwhmParamsDict,
     execution: Execution,
 ): V3dBlurToFwhmOutputs {
     const ret: V3dBlurToFwhmOutputs = {
@@ -186,7 +186,7 @@ function v_3d_blur_to_fwhm_outputs(
  * @returns NamedTuple of outputs (described in `V3dBlurToFwhmOutputs`).
  */
 function v_3d_blur_to_fwhm_execute(
-    params: V3dBlurToFwhmParameters,
+    params: V3dBlurToFwhmParamsDict,
     runner: Runner | null = null,
 ): V3dBlurToFwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function v_3d_blur_to_fwhm(
 
 export {
       V3dBlurToFwhmOutputs,
+      V3dBlurToFwhmParamsDict,
+      V3dBlurToFwhmParamsDictTagged,
       V_3D_BLUR_TO_FWHM_METADATA,
       v_3d_blur_to_fwhm,
       v_3d_blur_to_fwhm_execute,

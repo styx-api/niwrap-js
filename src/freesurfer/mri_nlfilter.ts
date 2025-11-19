@@ -11,7 +11,7 @@ const MRI_NLFILTER_METADATA: Metadata = {
 };
 
 
-interface MriNlfilterParameters {
+interface MriNlfilterParamsDict {
     "@type"?: "freesurfer/mri_nlfilter";
     "input_image": InputPathType;
     "output_image": string;
@@ -26,11 +26,11 @@ interface MriNlfilterParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
-type MriNlfilterParametersTagged = Required<Pick<MriNlfilterParameters, '@type'>> & MriNlfilterParameters;
+type MriNlfilterParamsDictTagged = Required<Pick<MriNlfilterParamsDict, '@type'>> & MriNlfilterParamsDict;
 
 
 /**
- * Output object returned when calling `MriNlfilterParameters(...)`.
+ * Output object returned when calling `MriNlfilterParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function mri_nlfilter_params(
     no_crop_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MriNlfilterParametersTagged {
+): MriNlfilterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_nlfilter" as const,
         "input_image": input_image,
@@ -112,7 +112,7 @@ function mri_nlfilter_params(
  * @returns Command-line arguments.
  */
 function mri_nlfilter_cargs(
-    params: MriNlfilterParameters,
+    params: MriNlfilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function mri_nlfilter_cargs(
  * @returns Outputs object.
  */
 function mri_nlfilter_outputs(
-    params: MriNlfilterParameters,
+    params: MriNlfilterParamsDict,
     execution: Execution,
 ): MriNlfilterOutputs {
     const ret: MriNlfilterOutputs = {
@@ -197,7 +197,7 @@ function mri_nlfilter_outputs(
  * @returns NamedTuple of outputs (described in `MriNlfilterOutputs`).
  */
 function mri_nlfilter_execute(
-    params: MriNlfilterParameters,
+    params: MriNlfilterParamsDict,
     runner: Runner | null = null,
 ): MriNlfilterOutputs {
     runner = runner || getGlobalRunner();
@@ -258,6 +258,8 @@ function mri_nlfilter(
 export {
       MRI_NLFILTER_METADATA,
       MriNlfilterOutputs,
+      MriNlfilterParamsDict,
+      MriNlfilterParamsDictTagged,
       mri_nlfilter,
       mri_nlfilter_execute,
       mri_nlfilter_params,

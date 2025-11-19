@@ -11,7 +11,7 @@ const VOL2SUBFIELD_METADATA: Metadata = {
 };
 
 
-interface Vol2subfieldParameters {
+interface Vol2subfieldParamsDict {
     "@type"?: "freesurfer/vol2subfield";
     "input_volume": InputPathType;
     "subfield_volume": InputPathType;
@@ -33,11 +33,11 @@ interface Vol2subfieldParameters {
     "preset_subfield_thalamus": boolean;
     "preset_subfield_brainstem": boolean;
 }
-type Vol2subfieldParametersTagged = Required<Pick<Vol2subfieldParameters, '@type'>> & Vol2subfieldParameters;
+type Vol2subfieldParamsDictTagged = Required<Pick<Vol2subfieldParamsDict, '@type'>> & Vol2subfieldParamsDict;
 
 
 /**
- * Output object returned when calling `Vol2subfieldParameters(...)`.
+ * Output object returned when calling `Vol2subfieldParamsDict(...)`.
  *
  * @interface
  */
@@ -114,7 +114,7 @@ function vol2subfield_params(
     preset_subfield_rh_hbt: boolean = false,
     preset_subfield_thalamus: boolean = false,
     preset_subfield_brainstem: boolean = false,
-): Vol2subfieldParametersTagged {
+): Vol2subfieldParamsDictTagged {
     const params = {
         "@type": "freesurfer/vol2subfield" as const,
         "input_volume": input_volume,
@@ -164,7 +164,7 @@ function vol2subfield_params(
  * @returns Command-line arguments.
  */
 function vol2subfield_cargs(
-    params: Vol2subfieldParameters,
+    params: Vol2subfieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -263,7 +263,7 @@ function vol2subfield_cargs(
  * @returns Outputs object.
  */
 function vol2subfield_outputs(
-    params: Vol2subfieldParameters,
+    params: Vol2subfieldParamsDict,
     execution: Execution,
 ): Vol2subfieldOutputs {
     const ret: Vol2subfieldOutputs = {
@@ -293,7 +293,7 @@ function vol2subfield_outputs(
  * @returns NamedTuple of outputs (described in `Vol2subfieldOutputs`).
  */
 function vol2subfield_execute(
-    params: Vol2subfieldParameters,
+    params: Vol2subfieldParamsDict,
     runner: Runner | null = null,
 ): Vol2subfieldOutputs {
     runner = runner || getGlobalRunner();
@@ -368,6 +368,8 @@ function vol2subfield(
 export {
       VOL2SUBFIELD_METADATA,
       Vol2subfieldOutputs,
+      Vol2subfieldParamsDict,
+      Vol2subfieldParamsDictTagged,
       vol2subfield,
       vol2subfield_execute,
       vol2subfield_params,

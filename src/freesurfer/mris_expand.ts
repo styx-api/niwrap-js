@@ -11,7 +11,7 @@ const MRIS_EXPAND_METADATA: Metadata = {
 };
 
 
-interface MrisExpandParameters {
+interface MrisExpandParamsDict {
     "@type"?: "freesurfer/mris_expand";
     "input_surface": InputPathType;
     "expansion_distance": number;
@@ -21,11 +21,11 @@ interface MrisExpandParameters {
     "tmap"?: string | null | undefined;
     "tmap_random"?: string | null | undefined;
 }
-type MrisExpandParametersTagged = Required<Pick<MrisExpandParameters, '@type'>> & MrisExpandParameters;
+type MrisExpandParamsDictTagged = Required<Pick<MrisExpandParamsDict, '@type'>> & MrisExpandParamsDict;
 
 
 /**
- * Output object returned when calling `MrisExpandParameters(...)`.
+ * Output object returned when calling `MrisExpandParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_expand_params(
     label: string | null = null,
     tmap: string | null = null,
     tmap_random: string | null = null,
-): MrisExpandParametersTagged {
+): MrisExpandParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_expand" as const,
         "input_surface": input_surface,
@@ -92,7 +92,7 @@ function mris_expand_params(
  * @returns Command-line arguments.
  */
 function mris_expand_cargs(
-    params: MrisExpandParameters,
+    params: MrisExpandParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function mris_expand_cargs(
  * @returns Outputs object.
  */
 function mris_expand_outputs(
-    params: MrisExpandParameters,
+    params: MrisExpandParamsDict,
     execution: Execution,
 ): MrisExpandOutputs {
     const ret: MrisExpandOutputs = {
@@ -160,7 +160,7 @@ function mris_expand_outputs(
  * @returns NamedTuple of outputs (described in `MrisExpandOutputs`).
  */
 function mris_expand_execute(
-    params: MrisExpandParameters,
+    params: MrisExpandParamsDict,
     runner: Runner | null = null,
 ): MrisExpandOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function mris_expand(
 export {
       MRIS_EXPAND_METADATA,
       MrisExpandOutputs,
+      MrisExpandParamsDict,
+      MrisExpandParamsDictTagged,
       mris_expand,
       mris_expand_execute,
       mris_expand_params,

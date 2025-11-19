@@ -11,7 +11,7 @@ const MRIS_CA_TRAIN_METADATA: Metadata = {
 };
 
 
-interface MrisCaTrainParameters {
+interface MrisCaTrainParamsDict {
     "@type"?: "freesurfer/mris_ca_train";
     "hemi": string;
     "canonsurf": InputPathType;
@@ -40,11 +40,11 @@ interface MrisCaTrainParameters {
     "help": boolean;
     "version": boolean;
 }
-type MrisCaTrainParametersTagged = Required<Pick<MrisCaTrainParameters, '@type'>> & MrisCaTrainParameters;
+type MrisCaTrainParamsDictTagged = Required<Pick<MrisCaTrainParamsDict, '@type'>> & MrisCaTrainParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCaTrainParameters(...)`.
+ * Output object returned when calling `MrisCaTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -119,7 +119,7 @@ function mris_ca_train_params(
     no_fill: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisCaTrainParametersTagged {
+): MrisCaTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_ca_train" as const,
         "hemi": hemi,
@@ -188,7 +188,7 @@ function mris_ca_train_params(
  * @returns Command-line arguments.
  */
 function mris_ca_train_cargs(
-    params: MrisCaTrainParameters,
+    params: MrisCaTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -313,7 +313,7 @@ function mris_ca_train_cargs(
  * @returns Outputs object.
  */
 function mris_ca_train_outputs(
-    params: MrisCaTrainParameters,
+    params: MrisCaTrainParamsDict,
     execution: Execution,
 ): MrisCaTrainOutputs {
     const ret: MrisCaTrainOutputs = {
@@ -339,7 +339,7 @@ function mris_ca_train_outputs(
  * @returns NamedTuple of outputs (described in `MrisCaTrainOutputs`).
  */
 function mris_ca_train_execute(
-    params: MrisCaTrainParameters,
+    params: MrisCaTrainParamsDict,
     runner: Runner | null = null,
 ): MrisCaTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -428,6 +428,8 @@ function mris_ca_train(
 export {
       MRIS_CA_TRAIN_METADATA,
       MrisCaTrainOutputs,
+      MrisCaTrainParamsDict,
+      MrisCaTrainParamsDictTagged,
       mris_ca_train,
       mris_ca_train_execute,
       mris_ca_train_params,

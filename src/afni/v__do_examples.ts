@@ -11,15 +11,15 @@ const V__DO_EXAMPLES_METADATA: Metadata = {
 };
 
 
-interface VDoExamplesParameters {
+interface VDoExamplesParamsDict {
     "@type"?: "afni/@DO.examples";
     "auto_test": boolean;
 }
-type VDoExamplesParametersTagged = Required<Pick<VDoExamplesParameters, '@type'>> & VDoExamplesParameters;
+type VDoExamplesParamsDictTagged = Required<Pick<VDoExamplesParamsDict, '@type'>> & VDoExamplesParamsDict;
 
 
 /**
- * Output object returned when calling `VDoExamplesParameters(...)`.
+ * Output object returned when calling `VDoExamplesParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VDoExamplesOutputs {
  */
 function v__do_examples_params(
     auto_test: boolean = false,
-): VDoExamplesParametersTagged {
+): VDoExamplesParamsDictTagged {
     const params = {
         "@type": "afni/@DO.examples" as const,
         "auto_test": auto_test,
@@ -62,7 +62,7 @@ function v__do_examples_params(
  * @returns Command-line arguments.
  */
 function v__do_examples_cargs(
-    params: VDoExamplesParameters,
+    params: VDoExamplesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -83,7 +83,7 @@ function v__do_examples_cargs(
  * @returns Outputs object.
  */
 function v__do_examples_outputs(
-    params: VDoExamplesParameters,
+    params: VDoExamplesParamsDict,
     execution: Execution,
 ): VDoExamplesOutputs {
     const ret: VDoExamplesOutputs = {
@@ -109,7 +109,7 @@ function v__do_examples_outputs(
  * @returns NamedTuple of outputs (described in `VDoExamplesOutputs`).
  */
 function v__do_examples_execute(
-    params: VDoExamplesParameters,
+    params: VDoExamplesParamsDict,
     runner: Runner | null = null,
 ): VDoExamplesOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function v__do_examples(
 
 export {
       VDoExamplesOutputs,
+      VDoExamplesParamsDict,
+      VDoExamplesParamsDictTagged,
       V__DO_EXAMPLES_METADATA,
       v__do_examples,
       v__do_examples_execute,

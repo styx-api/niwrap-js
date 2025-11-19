@@ -10,27 +10,27 @@ const METRIC_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface MetricResampleAreaSurfsParameters {
+interface MetricResampleAreaSurfsParamsDict {
     "@type"?: "area-surfs";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type MetricResampleAreaSurfsParametersTagged = Required<Pick<MetricResampleAreaSurfsParameters, '@type'>> & MetricResampleAreaSurfsParameters;
+type MetricResampleAreaSurfsParamsDictTagged = Required<Pick<MetricResampleAreaSurfsParamsDict, '@type'>> & MetricResampleAreaSurfsParamsDict;
 
 
-interface MetricResampleAreaMetricsParameters {
+interface MetricResampleAreaMetricsParamsDict {
     "@type"?: "area-metrics";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type MetricResampleAreaMetricsParametersTagged = Required<Pick<MetricResampleAreaMetricsParameters, '@type'>> & MetricResampleAreaMetricsParameters;
+type MetricResampleAreaMetricsParamsDictTagged = Required<Pick<MetricResampleAreaMetricsParamsDict, '@type'>> & MetricResampleAreaMetricsParamsDict;
 
 
-interface MetricResampleParameters {
+interface MetricResampleParamsDict {
     "@type"?: "workbench/metric-resample";
     "metric-out": string;
-    "area-surfs"?: MetricResampleAreaSurfsParameters | null | undefined;
-    "area-metrics"?: MetricResampleAreaMetricsParameters | null | undefined;
+    "area-surfs"?: MetricResampleAreaSurfsParamsDict | null | undefined;
+    "area-metrics"?: MetricResampleAreaMetricsParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-out"?: string | null | undefined;
     "largest": boolean;
@@ -40,7 +40,7 @@ interface MetricResampleParameters {
     "new-sphere": InputPathType;
     "method": string;
 }
-type MetricResampleParametersTagged = Required<Pick<MetricResampleParameters, '@type'>> & MetricResampleParameters;
+type MetricResampleParamsDictTagged = Required<Pick<MetricResampleParamsDict, '@type'>> & MetricResampleParamsDict;
 
 
 /**
@@ -51,10 +51,10 @@ type MetricResampleParametersTagged = Required<Pick<MetricResampleParameters, '@
  *
  * @returns Parameter dictionary
  */
-function metric_resample_area_surfs_params(
+function metric_resample_area_surfs(
     current_area: InputPathType,
     new_area: InputPathType,
-): MetricResampleAreaSurfsParametersTagged {
+): MetricResampleAreaSurfsParamsDictTagged {
     const params = {
         "@type": "area-surfs" as const,
         "current-area": current_area,
@@ -73,7 +73,7 @@ function metric_resample_area_surfs_params(
  * @returns Command-line arguments.
  */
 function metric_resample_area_surfs_cargs(
-    params: MetricResampleAreaSurfsParameters,
+    params: MetricResampleAreaSurfsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,10 +94,10 @@ function metric_resample_area_surfs_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_resample_area_metrics_params(
+function metric_resample_area_metrics(
     current_area: InputPathType,
     new_area: InputPathType,
-): MetricResampleAreaMetricsParametersTagged {
+): MetricResampleAreaMetricsParamsDictTagged {
     const params = {
         "@type": "area-metrics" as const,
         "current-area": current_area,
@@ -116,7 +116,7 @@ function metric_resample_area_metrics_params(
  * @returns Command-line arguments.
  */
 function metric_resample_area_metrics_cargs(
-    params: MetricResampleAreaMetricsParameters,
+    params: MetricResampleAreaMetricsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function metric_resample_area_metrics_cargs(
 
 
 /**
- * Output object returned when calling `MetricResampleParameters(...)`.
+ * Output object returned when calling `MetricResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -175,11 +175,11 @@ function metric_resample_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    area_surfs: MetricResampleAreaSurfsParameters | null = null,
-    area_metrics: MetricResampleAreaMetricsParameters | null = null,
+    area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
+    area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
-): MetricResampleParametersTagged {
+): MetricResampleParamsDictTagged {
     const params = {
         "@type": "workbench/metric-resample" as const,
         "metric-out": metric_out,
@@ -215,7 +215,7 @@ function metric_resample_params(
  * @returns Command-line arguments.
  */
 function metric_resample_cargs(
-    params: MetricResampleParameters,
+    params: MetricResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -251,7 +251,7 @@ function metric_resample_cargs(
  * @returns Outputs object.
  */
 function metric_resample_outputs(
-    params: MetricResampleParameters,
+    params: MetricResampleParamsDict,
     execution: Execution,
 ): MetricResampleOutputs {
     const ret: MetricResampleOutputs = {
@@ -285,7 +285,7 @@ function metric_resample_outputs(
  * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
  */
 function metric_resample_execute(
-    params: MetricResampleParameters,
+    params: MetricResampleParamsDict,
     runner: Runner | null = null,
 ): MetricResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -342,8 +342,8 @@ function metric_resample(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    area_surfs: MetricResampleAreaSurfsParameters | null = null,
-    area_metrics: MetricResampleAreaMetricsParameters | null = null,
+    area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
+    area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
@@ -355,10 +355,16 @@ function metric_resample(
 
 export {
       METRIC_RESAMPLE_METADATA,
+      MetricResampleAreaMetricsParamsDict,
+      MetricResampleAreaMetricsParamsDictTagged,
+      MetricResampleAreaSurfsParamsDict,
+      MetricResampleAreaSurfsParamsDictTagged,
       MetricResampleOutputs,
+      MetricResampleParamsDict,
+      MetricResampleParamsDictTagged,
       metric_resample,
-      metric_resample_area_metrics_params,
-      metric_resample_area_surfs_params,
+      metric_resample_area_metrics,
+      metric_resample_area_surfs,
       metric_resample_execute,
       metric_resample_params,
 };

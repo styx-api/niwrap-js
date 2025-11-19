@@ -11,15 +11,15 @@ const V__AFNI_ORIENT2_RAIMAP_METADATA: Metadata = {
 };
 
 
-interface VAfniOrient2RaimapParameters {
+interface VAfniOrient2RaimapParamsDict {
     "@type"?: "afni/@AfniOrient2RAImap";
     "orientation_code": string;
 }
-type VAfniOrient2RaimapParametersTagged = Required<Pick<VAfniOrient2RaimapParameters, '@type'>> & VAfniOrient2RaimapParameters;
+type VAfniOrient2RaimapParamsDictTagged = Required<Pick<VAfniOrient2RaimapParamsDict, '@type'>> & VAfniOrient2RaimapParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniOrient2RaimapParameters(...)`.
+ * Output object returned when calling `VAfniOrient2RaimapParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface VAfniOrient2RaimapOutputs {
  */
 function v__afni_orient2_raimap_params(
     orientation_code: string,
-): VAfniOrient2RaimapParametersTagged {
+): VAfniOrient2RaimapParamsDictTagged {
     const params = {
         "@type": "afni/@AfniOrient2RAImap" as const,
         "orientation_code": orientation_code,
@@ -58,7 +58,7 @@ function v__afni_orient2_raimap_params(
  * @returns Command-line arguments.
  */
 function v__afni_orient2_raimap_cargs(
-    params: VAfniOrient2RaimapParameters,
+    params: VAfniOrient2RaimapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function v__afni_orient2_raimap_cargs(
  * @returns Outputs object.
  */
 function v__afni_orient2_raimap_outputs(
-    params: VAfniOrient2RaimapParameters,
+    params: VAfniOrient2RaimapParamsDict,
     execution: Execution,
 ): VAfniOrient2RaimapOutputs {
     const ret: VAfniOrient2RaimapOutputs = {
@@ -102,7 +102,7 @@ function v__afni_orient2_raimap_outputs(
  * @returns NamedTuple of outputs (described in `VAfniOrient2RaimapOutputs`).
  */
 function v__afni_orient2_raimap_execute(
-    params: VAfniOrient2RaimapParameters,
+    params: VAfniOrient2RaimapParamsDict,
     runner: Runner | null = null,
 ): VAfniOrient2RaimapOutputs {
     runner = runner || getGlobalRunner();
@@ -140,6 +140,8 @@ function v__afni_orient2_raimap(
 
 export {
       VAfniOrient2RaimapOutputs,
+      VAfniOrient2RaimapParamsDict,
+      VAfniOrient2RaimapParamsDictTagged,
       V__AFNI_ORIENT2_RAIMAP_METADATA,
       v__afni_orient2_raimap,
       v__afni_orient2_raimap_execute,

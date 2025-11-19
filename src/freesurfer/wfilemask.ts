@@ -11,7 +11,7 @@ const WFILEMASK_METADATA: Metadata = {
 };
 
 
-interface WfilemaskParameters {
+interface WfilemaskParamsDict {
     "@type"?: "freesurfer/wfilemask";
     "w_file": InputPathType;
     "label_file": InputPathType;
@@ -20,11 +20,11 @@ interface WfilemaskParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
-type WfilemaskParametersTagged = Required<Pick<WfilemaskParameters, '@type'>> & WfilemaskParameters;
+type WfilemaskParamsDictTagged = Required<Pick<WfilemaskParamsDict, '@type'>> & WfilemaskParamsDict;
 
 
 /**
- * Output object returned when calling `WfilemaskParameters(...)`.
+ * Output object returned when calling `WfilemaskParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function wfilemask_params(
     permission_mask: string | null = null,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): WfilemaskParametersTagged {
+): WfilemaskParamsDictTagged {
     const params = {
         "@type": "freesurfer/wfilemask" as const,
         "w_file": w_file,
@@ -84,7 +84,7 @@ function wfilemask_params(
  * @returns Command-line arguments.
  */
 function wfilemask_cargs(
-    params: WfilemaskParameters,
+    params: WfilemaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function wfilemask_cargs(
  * @returns Outputs object.
  */
 function wfilemask_outputs(
-    params: WfilemaskParameters,
+    params: WfilemaskParamsDict,
     execution: Execution,
 ): WfilemaskOutputs {
     const ret: WfilemaskOutputs = {
@@ -152,7 +152,7 @@ function wfilemask_outputs(
  * @returns NamedTuple of outputs (described in `WfilemaskOutputs`).
  */
 function wfilemask_execute(
-    params: WfilemaskParameters,
+    params: WfilemaskParamsDict,
     runner: Runner | null = null,
 ): WfilemaskOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function wfilemask(
 export {
       WFILEMASK_METADATA,
       WfilemaskOutputs,
+      WfilemaskParamsDict,
+      WfilemaskParamsDictTagged,
       wfilemask,
       wfilemask_execute,
       wfilemask_params,

@@ -11,17 +11,17 @@ const CONNECTED_COMPONENTS_METADATA: Metadata = {
 };
 
 
-interface ConnectedComponentsParameters {
+interface ConnectedComponentsParamsDict {
     "@type"?: "freesurfer/connected_components";
     "input_image": InputPathType;
     "output_image": string;
     "threshold"?: number | null | undefined;
 }
-type ConnectedComponentsParametersTagged = Required<Pick<ConnectedComponentsParameters, '@type'>> & ConnectedComponentsParameters;
+type ConnectedComponentsParamsDictTagged = Required<Pick<ConnectedComponentsParamsDict, '@type'>> & ConnectedComponentsParamsDict;
 
 
 /**
- * Output object returned when calling `ConnectedComponentsParameters(...)`.
+ * Output object returned when calling `ConnectedComponentsParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function connected_components_params(
     input_image: InputPathType,
     output_image: string = "output_labelled_image",
     threshold: number | null = null,
-): ConnectedComponentsParametersTagged {
+): ConnectedComponentsParamsDictTagged {
     const params = {
         "@type": "freesurfer/connected_components" as const,
         "input_image": input_image,
@@ -72,7 +72,7 @@ function connected_components_params(
  * @returns Command-line arguments.
  */
 function connected_components_cargs(
-    params: ConnectedComponentsParameters,
+    params: ConnectedComponentsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function connected_components_cargs(
  * @returns Outputs object.
  */
 function connected_components_outputs(
-    params: ConnectedComponentsParameters,
+    params: ConnectedComponentsParamsDict,
     execution: Execution,
 ): ConnectedComponentsOutputs {
     const ret: ConnectedComponentsOutputs = {
@@ -127,7 +127,7 @@ function connected_components_outputs(
  * @returns NamedTuple of outputs (described in `ConnectedComponentsOutputs`).
  */
 function connected_components_execute(
-    params: ConnectedComponentsParameters,
+    params: ConnectedComponentsParamsDict,
     runner: Runner | null = null,
 ): ConnectedComponentsOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function connected_components(
 export {
       CONNECTED_COMPONENTS_METADATA,
       ConnectedComponentsOutputs,
+      ConnectedComponentsParamsDict,
+      ConnectedComponentsParamsDictTagged,
       connected_components,
       connected_components_execute,
       connected_components_params,

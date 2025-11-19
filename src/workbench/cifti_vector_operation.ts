@@ -10,7 +10,7 @@ const CIFTI_VECTOR_OPERATION_METADATA: Metadata = {
 };
 
 
-interface CiftiVectorOperationParameters {
+interface CiftiVectorOperationParamsDict {
     "@type"?: "workbench/cifti-vector-operation";
     "cifti-out": string;
     "normalize-a": boolean;
@@ -21,11 +21,11 @@ interface CiftiVectorOperationParameters {
     "vectors-b": InputPathType;
     "operation": string;
 }
-type CiftiVectorOperationParametersTagged = Required<Pick<CiftiVectorOperationParameters, '@type'>> & CiftiVectorOperationParameters;
+type CiftiVectorOperationParamsDictTagged = Required<Pick<CiftiVectorOperationParamsDict, '@type'>> & CiftiVectorOperationParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiVectorOperationParameters(...)`.
+ * Output object returned when calling `CiftiVectorOperationParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function cifti_vector_operation_params(
     normalize_b: boolean = false,
     normalize_output: boolean = false,
     magnitude: boolean = false,
-): CiftiVectorOperationParametersTagged {
+): CiftiVectorOperationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-vector-operation" as const,
         "cifti-out": cifti_out,
@@ -89,7 +89,7 @@ function cifti_vector_operation_params(
  * @returns Command-line arguments.
  */
 function cifti_vector_operation_cargs(
-    params: CiftiVectorOperationParameters,
+    params: CiftiVectorOperationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function cifti_vector_operation_cargs(
  * @returns Outputs object.
  */
 function cifti_vector_operation_outputs(
-    params: CiftiVectorOperationParameters,
+    params: CiftiVectorOperationParamsDict,
     execution: Execution,
 ): CiftiVectorOperationOutputs {
     const ret: CiftiVectorOperationOutputs = {
@@ -147,7 +147,7 @@ function cifti_vector_operation_outputs(
  * @returns NamedTuple of outputs (described in `CiftiVectorOperationOutputs`).
  */
 function cifti_vector_operation_execute(
-    params: CiftiVectorOperationParameters,
+    params: CiftiVectorOperationParamsDict,
     runner: Runner | null = null,
 ): CiftiVectorOperationOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function cifti_vector_operation(
 export {
       CIFTI_VECTOR_OPERATION_METADATA,
       CiftiVectorOperationOutputs,
+      CiftiVectorOperationParamsDict,
+      CiftiVectorOperationParamsDictTagged,
       cifti_vector_operation,
       cifti_vector_operation_execute,
       cifti_vector_operation_params,

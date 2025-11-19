@@ -11,7 +11,7 @@ const MAKE_AVERAGE_VOLUME_METADATA: Metadata = {
 };
 
 
-interface MakeAverageVolumeParameters {
+interface MakeAverageVolumeParamsDict {
     "@type"?: "freesurfer/make_average_volume";
     "subjects": Array<string>;
     "fsgd"?: InputPathType | null | undefined;
@@ -29,11 +29,11 @@ interface MakeAverageVolumeParameters {
     "debug_flag": boolean;
     "nocleanup_flag": boolean;
 }
-type MakeAverageVolumeParametersTagged = Required<Pick<MakeAverageVolumeParameters, '@type'>> & MakeAverageVolumeParameters;
+type MakeAverageVolumeParamsDictTagged = Required<Pick<MakeAverageVolumeParamsDict, '@type'>> & MakeAverageVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `MakeAverageVolumeParameters(...)`.
+ * Output object returned when calling `MakeAverageVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function make_average_volume_params(
     echo_flag: boolean = false,
     debug_flag: boolean = false,
     nocleanup_flag: boolean = false,
-): MakeAverageVolumeParametersTagged {
+): MakeAverageVolumeParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_average_volume" as const,
         "subjects": subjects,
@@ -126,7 +126,7 @@ function make_average_volume_params(
  * @returns Command-line arguments.
  */
 function make_average_volume_cargs(
-    params: MakeAverageVolumeParameters,
+    params: MakeAverageVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function make_average_volume_cargs(
  * @returns Outputs object.
  */
 function make_average_volume_outputs(
-    params: MakeAverageVolumeParameters,
+    params: MakeAverageVolumeParamsDict,
     execution: Execution,
 ): MakeAverageVolumeOutputs {
     const ret: MakeAverageVolumeOutputs = {
@@ -233,7 +233,7 @@ function make_average_volume_outputs(
  * @returns NamedTuple of outputs (described in `MakeAverageVolumeOutputs`).
  */
 function make_average_volume_execute(
-    params: MakeAverageVolumeParameters,
+    params: MakeAverageVolumeParamsDict,
     runner: Runner | null = null,
 ): MakeAverageVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -300,6 +300,8 @@ function make_average_volume(
 export {
       MAKE_AVERAGE_VOLUME_METADATA,
       MakeAverageVolumeOutputs,
+      MakeAverageVolumeParamsDict,
+      MakeAverageVolumeParamsDictTagged,
       make_average_volume,
       make_average_volume_execute,
       make_average_volume_params,

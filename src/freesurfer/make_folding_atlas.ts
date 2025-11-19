@@ -11,7 +11,7 @@ const MAKE_FOLDING_ATLAS_METADATA: Metadata = {
 };
 
 
-interface MakeFoldingAtlasParameters {
+interface MakeFoldingAtlasParamsDict {
     "@type"?: "freesurfer/make_folding_atlas";
     "subjlistfile"?: InputPathType | null | undefined;
     "fsgdfile"?: InputPathType | null | undefined;
@@ -34,11 +34,11 @@ interface MakeFoldingAtlasParameters {
     "threads"?: number | null | undefined;
     "slurm_account"?: string | null | undefined;
 }
-type MakeFoldingAtlasParametersTagged = Required<Pick<MakeFoldingAtlasParameters, '@type'>> & MakeFoldingAtlasParameters;
+type MakeFoldingAtlasParamsDictTagged = Required<Pick<MakeFoldingAtlasParamsDict, '@type'>> & MakeFoldingAtlasParamsDict;
 
 
 /**
- * Output object returned when calling `MakeFoldingAtlasParameters(...)`.
+ * Output object returned when calling `MakeFoldingAtlasParamsDict(...)`.
  *
  * @interface
  */
@@ -97,7 +97,7 @@ function make_folding_atlas_params(
     no_template_only: boolean = false,
     threads: number | null = null,
     slurm_account: string | null = null,
-): MakeFoldingAtlasParametersTagged {
+): MakeFoldingAtlasParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_folding_atlas" as const,
         "xhemi": xhemi,
@@ -154,7 +154,7 @@ function make_folding_atlas_params(
  * @returns Command-line arguments.
  */
 function make_folding_atlas_cargs(
-    params: MakeFoldingAtlasParameters,
+    params: MakeFoldingAtlasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -262,7 +262,7 @@ function make_folding_atlas_cargs(
  * @returns Outputs object.
  */
 function make_folding_atlas_outputs(
-    params: MakeFoldingAtlasParameters,
+    params: MakeFoldingAtlasParamsDict,
     execution: Execution,
 ): MakeFoldingAtlasOutputs {
     const ret: MakeFoldingAtlasOutputs = {
@@ -287,7 +287,7 @@ function make_folding_atlas_outputs(
  * @returns NamedTuple of outputs (described in `MakeFoldingAtlasOutputs`).
  */
 function make_folding_atlas_execute(
-    params: MakeFoldingAtlasParameters,
+    params: MakeFoldingAtlasParamsDict,
     runner: Runner | null = null,
 ): MakeFoldingAtlasOutputs {
     runner = runner || getGlobalRunner();
@@ -364,6 +364,8 @@ function make_folding_atlas(
 export {
       MAKE_FOLDING_ATLAS_METADATA,
       MakeFoldingAtlasOutputs,
+      MakeFoldingAtlasParamsDict,
+      MakeFoldingAtlasParamsDictTagged,
       make_folding_atlas,
       make_folding_atlas_execute,
       make_folding_atlas_params,

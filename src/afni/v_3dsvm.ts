@@ -11,7 +11,7 @@ const V_3DSVM_METADATA: Metadata = {
 };
 
 
-interface V3dsvmParameters {
+interface V3dsvmParamsDict {
     "@type"?: "afni/3dsvm";
     "train_vol"?: InputPathType | null | undefined;
     "train_labels"?: InputPathType | null | undefined;
@@ -41,11 +41,11 @@ interface V3dsvmParameters {
     "help": boolean;
     "version": boolean;
 }
-type V3dsvmParametersTagged = Required<Pick<V3dsvmParameters, '@type'>> & V3dsvmParameters;
+type V3dsvmParamsDictTagged = Required<Pick<V3dsvmParamsDict, '@type'>> & V3dsvmParamsDict;
 
 
 /**
- * Output object returned when calling `V3dsvmParameters(...)`.
+ * Output object returned when calling `V3dsvmParamsDict(...)`.
  *
  * @interface
  */
@@ -134,7 +134,7 @@ function v_3dsvm_params(
     multiclass: "DAG" | "vote" | null = null,
     help: boolean = false,
     version: boolean = false,
-): V3dsvmParametersTagged {
+): V3dsvmParamsDictTagged {
     const params = {
         "@type": "afni/3dsvm" as const,
         "no_model_mask": no_model_mask,
@@ -214,7 +214,7 @@ function v_3dsvm_params(
  * @returns Command-line arguments.
  */
 function v_3dsvm_cargs(
-    params: V3dsvmParameters,
+    params: V3dsvmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -368,7 +368,7 @@ function v_3dsvm_cargs(
  * @returns Outputs object.
  */
 function v_3dsvm_outputs(
-    params: V3dsvmParameters,
+    params: V3dsvmParamsDict,
     execution: Execution,
 ): V3dsvmOutputs {
     const ret: V3dsvmOutputs = {
@@ -397,7 +397,7 @@ function v_3dsvm_outputs(
  * @returns NamedTuple of outputs (described in `V3dsvmOutputs`).
  */
 function v_3dsvm_execute(
-    params: V3dsvmParameters,
+    params: V3dsvmParamsDict,
     runner: Runner | null = null,
 ): V3dsvmOutputs {
     runner = runner || getGlobalRunner();
@@ -487,6 +487,8 @@ function v_3dsvm(
 
 export {
       V3dsvmOutputs,
+      V3dsvmParamsDict,
+      V3dsvmParamsDictTagged,
       V_3DSVM_METADATA,
       v_3dsvm,
       v_3dsvm_execute,

@@ -11,7 +11,7 @@ const WHIRLGIF_METADATA: Metadata = {
 };
 
 
-interface WhirlgifParameters {
+interface WhirlgifParamsDict {
     "@type"?: "fsl/whirlgif";
     "outfile"?: InputPathType | null | undefined;
     "loop_count"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface WhirlgifParameters {
     "list_file"?: InputPathType | null | undefined;
     "input_files": Array<InputPathType>;
 }
-type WhirlgifParametersTagged = Required<Pick<WhirlgifParameters, '@type'>> & WhirlgifParameters;
+type WhirlgifParamsDictTagged = Required<Pick<WhirlgifParamsDict, '@type'>> & WhirlgifParamsDict;
 
 
 /**
- * Output object returned when calling `WhirlgifParameters(...)`.
+ * Output object returned when calling `WhirlgifParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function whirlgif_params(
     delay_time: number | null = null,
     disp_flag: "none" | "back" | "prev" | "not" | null = null,
     list_file: InputPathType | null = null,
-): WhirlgifParametersTagged {
+): WhirlgifParamsDictTagged {
     const params = {
         "@type": "fsl/whirlgif" as const,
         "input_files": input_files,
@@ -92,7 +92,7 @@ function whirlgif_params(
  * @returns Command-line arguments.
  */
 function whirlgif_cargs(
-    params: WhirlgifParameters,
+    params: WhirlgifParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function whirlgif_cargs(
  * @returns Outputs object.
  */
 function whirlgif_outputs(
-    params: WhirlgifParameters,
+    params: WhirlgifParamsDict,
     execution: Execution,
 ): WhirlgifOutputs {
     const ret: WhirlgifOutputs = {
@@ -167,7 +167,7 @@ function whirlgif_outputs(
  * @returns NamedTuple of outputs (described in `WhirlgifOutputs`).
  */
 function whirlgif_execute(
-    params: WhirlgifParameters,
+    params: WhirlgifParamsDict,
     runner: Runner | null = null,
 ): WhirlgifOutputs {
     runner = runner || getGlobalRunner();
@@ -216,6 +216,8 @@ function whirlgif(
 export {
       WHIRLGIF_METADATA,
       WhirlgifOutputs,
+      WhirlgifParamsDict,
+      WhirlgifParamsDictTagged,
       whirlgif,
       whirlgif_execute,
       whirlgif_params,

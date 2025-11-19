@@ -11,17 +11,17 @@ const FSLCPGEOM_METADATA: Metadata = {
 };
 
 
-interface FslcpgeomParameters {
+interface FslcpgeomParamsDict {
     "@type"?: "fsl/fslcpgeom";
     "source_file": InputPathType;
     "destination_file": InputPathType;
     "dimensions_flag": boolean;
 }
-type FslcpgeomParametersTagged = Required<Pick<FslcpgeomParameters, '@type'>> & FslcpgeomParameters;
+type FslcpgeomParamsDictTagged = Required<Pick<FslcpgeomParamsDict, '@type'>> & FslcpgeomParamsDict;
 
 
 /**
- * Output object returned when calling `FslcpgeomParameters(...)`.
+ * Output object returned when calling `FslcpgeomParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function fslcpgeom_params(
     source_file: InputPathType,
     destination_file: InputPathType,
     dimensions_flag: boolean = false,
-): FslcpgeomParametersTagged {
+): FslcpgeomParamsDictTagged {
     const params = {
         "@type": "fsl/fslcpgeom" as const,
         "source_file": source_file,
@@ -66,7 +66,7 @@ function fslcpgeom_params(
  * @returns Command-line arguments.
  */
 function fslcpgeom_cargs(
-    params: FslcpgeomParameters,
+    params: FslcpgeomParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function fslcpgeom_cargs(
  * @returns Outputs object.
  */
 function fslcpgeom_outputs(
-    params: FslcpgeomParameters,
+    params: FslcpgeomParamsDict,
     execution: Execution,
 ): FslcpgeomOutputs {
     const ret: FslcpgeomOutputs = {
@@ -114,7 +114,7 @@ function fslcpgeom_outputs(
  * @returns NamedTuple of outputs (described in `FslcpgeomOutputs`).
  */
 function fslcpgeom_execute(
-    params: FslcpgeomParameters,
+    params: FslcpgeomParamsDict,
     runner: Runner | null = null,
 ): FslcpgeomOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function fslcpgeom(
 export {
       FSLCPGEOM_METADATA,
       FslcpgeomOutputs,
+      FslcpgeomParamsDict,
+      FslcpgeomParamsDictTagged,
       fslcpgeom,
       fslcpgeom_execute,
       fslcpgeom_params,

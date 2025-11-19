@@ -11,7 +11,7 @@ const ABIDS_JSON_TOOL_PY_METADATA: Metadata = {
 };
 
 
-interface AbidsJsonToolPyParameters {
+interface AbidsJsonToolPyParamsDict {
     "@type"?: "afni/abids_json_tool.py";
     "input_file": InputPathType;
     "prefix": string;
@@ -27,11 +27,11 @@ interface AbidsJsonToolPyParameters {
     "literal_keys": boolean;
     "values_stay_str": boolean;
 }
-type AbidsJsonToolPyParametersTagged = Required<Pick<AbidsJsonToolPyParameters, '@type'>> & AbidsJsonToolPyParameters;
+type AbidsJsonToolPyParamsDictTagged = Required<Pick<AbidsJsonToolPyParamsDict, '@type'>> & AbidsJsonToolPyParamsDict;
 
 
 /**
- * Output object returned when calling `AbidsJsonToolPyParameters(...)`.
+ * Output object returned when calling `AbidsJsonToolPyParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function abids_json_tool_py_params(
     delimiter_minor: string | null = null,
     literal_keys: boolean = false,
     values_stay_str: boolean = false,
-): AbidsJsonToolPyParametersTagged {
+): AbidsJsonToolPyParamsDictTagged {
     const params = {
         "@type": "afni/abids_json_tool.py" as const,
         "input_file": input_file,
@@ -114,7 +114,7 @@ function abids_json_tool_py_params(
  * @returns Command-line arguments.
  */
 function abids_json_tool_py_cargs(
-    params: AbidsJsonToolPyParameters,
+    params: AbidsJsonToolPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function abids_json_tool_py_cargs(
  * @returns Outputs object.
  */
 function abids_json_tool_py_outputs(
-    params: AbidsJsonToolPyParameters,
+    params: AbidsJsonToolPyParamsDict,
     execution: Execution,
 ): AbidsJsonToolPyOutputs {
     const ret: AbidsJsonToolPyOutputs = {
@@ -210,7 +210,7 @@ function abids_json_tool_py_outputs(
  * @returns NamedTuple of outputs (described in `AbidsJsonToolPyOutputs`).
  */
 function abids_json_tool_py_execute(
-    params: AbidsJsonToolPyParameters,
+    params: AbidsJsonToolPyParamsDict,
     runner: Runner | null = null,
 ): AbidsJsonToolPyOutputs {
     runner = runner || getGlobalRunner();
@@ -273,6 +273,8 @@ function abids_json_tool_py(
 export {
       ABIDS_JSON_TOOL_PY_METADATA,
       AbidsJsonToolPyOutputs,
+      AbidsJsonToolPyParamsDict,
+      AbidsJsonToolPyParamsDictTagged,
       abids_json_tool_py,
       abids_json_tool_py_execute,
       abids_json_tool_py_params,

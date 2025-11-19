@@ -11,7 +11,7 @@ const MRI_TWOCLASS_METADATA: Metadata = {
 };
 
 
-interface MriTwoclassParameters {
+interface MriTwoclassParamsDict {
     "@type"?: "freesurfer/mri_twoclass";
     "segmentation_volume": InputPathType;
     "output_subject": string;
@@ -21,11 +21,11 @@ interface MriTwoclassParameters {
     "f_threshold"?: number | null | undefined;
     "bonferroni_correction": boolean;
 }
-type MriTwoclassParametersTagged = Required<Pick<MriTwoclassParameters, '@type'>> & MriTwoclassParameters;
+type MriTwoclassParamsDictTagged = Required<Pick<MriTwoclassParamsDict, '@type'>> & MriTwoclassParamsDict;
 
 
 /**
- * Output object returned when calling `MriTwoclassParameters(...)`.
+ * Output object returned when calling `MriTwoclassParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_twoclass_params(
     c2_subjects: Array<string>,
     f_threshold: number | null = null,
     bonferroni_correction: boolean = false,
-): MriTwoclassParametersTagged {
+): MriTwoclassParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_twoclass" as const,
         "segmentation_volume": segmentation_volume,
@@ -88,7 +88,7 @@ function mri_twoclass_params(
  * @returns Command-line arguments.
  */
 function mri_twoclass_cargs(
-    params: MriTwoclassParameters,
+    params: MriTwoclassParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function mri_twoclass_cargs(
  * @returns Outputs object.
  */
 function mri_twoclass_outputs(
-    params: MriTwoclassParameters,
+    params: MriTwoclassParamsDict,
     execution: Execution,
 ): MriTwoclassOutputs {
     const ret: MriTwoclassOutputs = {
@@ -146,7 +146,7 @@ function mri_twoclass_outputs(
  * @returns NamedTuple of outputs (described in `MriTwoclassOutputs`).
  */
 function mri_twoclass_execute(
-    params: MriTwoclassParameters,
+    params: MriTwoclassParamsDict,
     runner: Runner | null = null,
 ): MriTwoclassOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function mri_twoclass(
 export {
       MRI_TWOCLASS_METADATA,
       MriTwoclassOutputs,
+      MriTwoclassParamsDict,
+      MriTwoclassParamsDictTagged,
       mri_twoclass,
       mri_twoclass_execute,
       mri_twoclass_params,

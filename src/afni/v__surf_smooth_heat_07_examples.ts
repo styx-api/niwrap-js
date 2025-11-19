@@ -11,15 +11,15 @@ const V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA: Metadata = {
 };
 
 
-interface VSurfSmoothHeat07ExamplesParameters {
+interface VSurfSmoothHeat07ExamplesParamsDict {
     "@type"?: "afni/@SurfSmooth.HEAT_07.examples";
     "path_to_suma_demo": string;
 }
-type VSurfSmoothHeat07ExamplesParametersTagged = Required<Pick<VSurfSmoothHeat07ExamplesParameters, '@type'>> & VSurfSmoothHeat07ExamplesParameters;
+type VSurfSmoothHeat07ExamplesParamsDictTagged = Required<Pick<VSurfSmoothHeat07ExamplesParamsDict, '@type'>> & VSurfSmoothHeat07ExamplesParamsDict;
 
 
 /**
- * Output object returned when calling `VSurfSmoothHeat07ExamplesParameters(...)`.
+ * Output object returned when calling `VSurfSmoothHeat07ExamplesParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface VSurfSmoothHeat07ExamplesOutputs {
  */
 function v__surf_smooth_heat_07_examples_params(
     path_to_suma_demo: string,
-): VSurfSmoothHeat07ExamplesParametersTagged {
+): VSurfSmoothHeat07ExamplesParamsDictTagged {
     const params = {
         "@type": "afni/@SurfSmooth.HEAT_07.examples" as const,
         "path_to_suma_demo": path_to_suma_demo,
@@ -58,7 +58,7 @@ function v__surf_smooth_heat_07_examples_params(
  * @returns Command-line arguments.
  */
 function v__surf_smooth_heat_07_examples_cargs(
-    params: VSurfSmoothHeat07ExamplesParameters,
+    params: VSurfSmoothHeat07ExamplesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function v__surf_smooth_heat_07_examples_cargs(
  * @returns Outputs object.
  */
 function v__surf_smooth_heat_07_examples_outputs(
-    params: VSurfSmoothHeat07ExamplesParameters,
+    params: VSurfSmoothHeat07ExamplesParamsDict,
     execution: Execution,
 ): VSurfSmoothHeat07ExamplesOutputs {
     const ret: VSurfSmoothHeat07ExamplesOutputs = {
@@ -102,7 +102,7 @@ function v__surf_smooth_heat_07_examples_outputs(
  * @returns NamedTuple of outputs (described in `VSurfSmoothHeat07ExamplesOutputs`).
  */
 function v__surf_smooth_heat_07_examples_execute(
-    params: VSurfSmoothHeat07ExamplesParameters,
+    params: VSurfSmoothHeat07ExamplesParamsDict,
     runner: Runner | null = null,
 ): VSurfSmoothHeat07ExamplesOutputs {
     runner = runner || getGlobalRunner();
@@ -140,6 +140,8 @@ function v__surf_smooth_heat_07_examples(
 
 export {
       VSurfSmoothHeat07ExamplesOutputs,
+      VSurfSmoothHeat07ExamplesParamsDict,
+      VSurfSmoothHeat07ExamplesParamsDictTagged,
       V__SURF_SMOOTH_HEAT_07_EXAMPLES_METADATA,
       v__surf_smooth_heat_07_examples,
       v__surf_smooth_heat_07_examples_execute,

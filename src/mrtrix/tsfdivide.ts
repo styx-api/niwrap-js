@@ -11,29 +11,29 @@ const TSFDIVIDE_METADATA: Metadata = {
 };
 
 
-interface TsfdivideConfigParameters {
+interface TsfdivideConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TsfdivideConfigParametersTagged = Required<Pick<TsfdivideConfigParameters, '@type'>> & TsfdivideConfigParameters;
+type TsfdivideConfigParamsDictTagged = Required<Pick<TsfdivideConfigParamsDict, '@type'>> & TsfdivideConfigParamsDict;
 
 
-interface TsfdivideParameters {
+interface TsfdivideParamsDict {
     "@type"?: "mrtrix/tsfdivide";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TsfdivideConfigParameters> | null | undefined;
+    "config"?: Array<TsfdivideConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input1": InputPathType;
     "input2": InputPathType;
     "output": string;
 }
-type TsfdivideParametersTagged = Required<Pick<TsfdivideParameters, '@type'>> & TsfdivideParameters;
+type TsfdivideParamsDictTagged = Required<Pick<TsfdivideParamsDict, '@type'>> & TsfdivideParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type TsfdivideParametersTagged = Required<Pick<TsfdivideParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function tsfdivide_config_params(
+function tsfdivide_config(
     key: string,
     value: string,
-): TsfdivideConfigParametersTagged {
+): TsfdivideConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function tsfdivide_config_params(
  * @returns Command-line arguments.
  */
 function tsfdivide_config_cargs(
-    params: TsfdivideConfigParameters,
+    params: TsfdivideConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function tsfdivide_config_cargs(
 
 
 /**
- * Output object returned when calling `TsfdivideParameters(...)`.
+ * Output object returned when calling `TsfdivideParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function tsfdivide_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfdivideConfigParameters> | null = null,
+    config: Array<TsfdivideConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfdivideParametersTagged {
+): TsfdivideParamsDictTagged {
     const params = {
         "@type": "mrtrix/tsfdivide" as const,
         "info": info,
@@ -155,7 +155,7 @@ function tsfdivide_params(
  * @returns Command-line arguments.
  */
 function tsfdivide_cargs(
-    params: TsfdivideParameters,
+    params: TsfdivideParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function tsfdivide_cargs(
  * @returns Outputs object.
  */
 function tsfdivide_outputs(
-    params: TsfdivideParameters,
+    params: TsfdivideParamsDict,
     execution: Execution,
 ): TsfdivideOutputs {
     const ret: TsfdivideOutputs = {
@@ -235,7 +235,7 @@ function tsfdivide_outputs(
  * @returns NamedTuple of outputs (described in `TsfdivideOutputs`).
  */
 function tsfdivide_execute(
-    params: TsfdivideParameters,
+    params: TsfdivideParamsDict,
     runner: Runner | null = null,
 ): TsfdivideOutputs {
     runner = runner || getGlobalRunner();
@@ -287,7 +287,7 @@ function tsfdivide(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfdivideConfigParameters> | null = null,
+    config: Array<TsfdivideConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -299,9 +299,13 @@ function tsfdivide(
 
 export {
       TSFDIVIDE_METADATA,
+      TsfdivideConfigParamsDict,
+      TsfdivideConfigParamsDictTagged,
       TsfdivideOutputs,
+      TsfdivideParamsDict,
+      TsfdivideParamsDictTagged,
       tsfdivide,
-      tsfdivide_config_params,
+      tsfdivide_config,
       tsfdivide_execute,
       tsfdivide_params,
 };

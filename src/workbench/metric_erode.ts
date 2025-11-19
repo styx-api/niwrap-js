@@ -10,7 +10,7 @@ const METRIC_ERODE_METADATA: Metadata = {
 };
 
 
-interface MetricErodeParameters {
+interface MetricErodeParamsDict {
     "@type"?: "workbench/metric-erode";
     "metric-out": string;
     "roi-metric"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface MetricErodeParameters {
     "surface": InputPathType;
     "distance": number;
 }
-type MetricErodeParametersTagged = Required<Pick<MetricErodeParameters, '@type'>> & MetricErodeParameters;
+type MetricErodeParamsDictTagged = Required<Pick<MetricErodeParamsDict, '@type'>> & MetricErodeParamsDict;
 
 
 /**
- * Output object returned when calling `MetricErodeParameters(...)`.
+ * Output object returned when calling `MetricErodeParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function metric_erode_params(
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
-): MetricErodeParametersTagged {
+): MetricErodeParamsDictTagged {
     const params = {
         "@type": "workbench/metric-erode" as const,
         "metric-out": metric_out,
@@ -97,7 +97,7 @@ function metric_erode_params(
  * @returns Command-line arguments.
  */
 function metric_erode_cargs(
-    params: MetricErodeParameters,
+    params: MetricErodeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function metric_erode_cargs(
  * @returns Outputs object.
  */
 function metric_erode_outputs(
-    params: MetricErodeParameters,
+    params: MetricErodeParamsDict,
     execution: Execution,
 ): MetricErodeOutputs {
     const ret: MetricErodeOutputs = {
@@ -154,7 +154,7 @@ function metric_erode_outputs(
  * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
  */
 function metric_erode_execute(
-    params: MetricErodeParameters,
+    params: MetricErodeParamsDict,
     runner: Runner | null = null,
 ): MetricErodeOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function metric_erode(
 export {
       METRIC_ERODE_METADATA,
       MetricErodeOutputs,
+      MetricErodeParamsDict,
+      MetricErodeParamsDictTagged,
       metric_erode,
       metric_erode_execute,
       metric_erode_params,

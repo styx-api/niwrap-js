@@ -11,7 +11,7 @@ const FSLSWAPDIM_EXE_METADATA: Metadata = {
 };
 
 
-interface FslswapdimExeParameters {
+interface FslswapdimExeParamsDict {
     "@type"?: "fsl/fslswapdim_exe";
     "input_file": InputPathType;
     "axis_a": string;
@@ -20,11 +20,11 @@ interface FslswapdimExeParameters {
     "output_file"?: string | null | undefined;
     "checkLR_flag": boolean;
 }
-type FslswapdimExeParametersTagged = Required<Pick<FslswapdimExeParameters, '@type'>> & FslswapdimExeParameters;
+type FslswapdimExeParamsDictTagged = Required<Pick<FslswapdimExeParamsDict, '@type'>> & FslswapdimExeParamsDict;
 
 
 /**
- * Output object returned when calling `FslswapdimExeParameters(...)`.
+ * Output object returned when calling `FslswapdimExeParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function fslswapdim_exe_params(
     axis_c: string,
     output_file: string | null = null,
     check_lr_flag: boolean = false,
-): FslswapdimExeParametersTagged {
+): FslswapdimExeParamsDictTagged {
     const params = {
         "@type": "fsl/fslswapdim_exe" as const,
         "input_file": input_file,
@@ -84,7 +84,7 @@ function fslswapdim_exe_params(
  * @returns Command-line arguments.
  */
 function fslswapdim_exe_cargs(
-    params: FslswapdimExeParameters,
+    params: FslswapdimExeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function fslswapdim_exe_cargs(
  * @returns Outputs object.
  */
 function fslswapdim_exe_outputs(
-    params: FslswapdimExeParameters,
+    params: FslswapdimExeParamsDict,
     execution: Execution,
 ): FslswapdimExeOutputs {
     const ret: FslswapdimExeOutputs = {
@@ -138,7 +138,7 @@ function fslswapdim_exe_outputs(
  * @returns NamedTuple of outputs (described in `FslswapdimExeOutputs`).
  */
 function fslswapdim_exe_execute(
-    params: FslswapdimExeParameters,
+    params: FslswapdimExeParamsDict,
     runner: Runner | null = null,
 ): FslswapdimExeOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function fslswapdim_exe(
 export {
       FSLSWAPDIM_EXE_METADATA,
       FslswapdimExeOutputs,
+      FslswapdimExeParamsDict,
+      FslswapdimExeParamsDictTagged,
       fslswapdim_exe,
       fslswapdim_exe_execute,
       fslswapdim_exe_params,

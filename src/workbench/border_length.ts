@@ -10,7 +10,7 @@ const BORDER_LENGTH_METADATA: Metadata = {
 };
 
 
-interface BorderLengthParameters {
+interface BorderLengthParamsDict {
     "@type"?: "workbench/border-length";
     "area-metric"?: InputPathType | null | undefined;
     "separate-pieces": boolean;
@@ -18,11 +18,11 @@ interface BorderLengthParameters {
     "border": InputPathType;
     "surface": InputPathType;
 }
-type BorderLengthParametersTagged = Required<Pick<BorderLengthParameters, '@type'>> & BorderLengthParameters;
+type BorderLengthParamsDictTagged = Required<Pick<BorderLengthParamsDict, '@type'>> & BorderLengthParamsDict;
 
 
 /**
- * Output object returned when calling `BorderLengthParameters(...)`.
+ * Output object returned when calling `BorderLengthParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function border_length_params(
     surface: InputPathType,
     separate_pieces: boolean = false,
     hide_border_name: boolean = false,
-): BorderLengthParametersTagged {
+): BorderLengthParamsDictTagged {
     const params = {
         "@type": "workbench/border-length" as const,
         "separate-pieces": separate_pieces,
@@ -77,7 +77,7 @@ function border_length_params(
  * @returns Command-line arguments.
  */
 function border_length_cargs(
-    params: BorderLengthParameters,
+    params: BorderLengthParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function border_length_cargs(
  * @returns Outputs object.
  */
 function border_length_outputs(
-    params: BorderLengthParameters,
+    params: BorderLengthParamsDict,
     execution: Execution,
 ): BorderLengthOutputs {
     const ret: BorderLengthOutputs = {
@@ -129,7 +129,7 @@ function border_length_outputs(
  * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
  */
 function border_length_execute(
-    params: BorderLengthParameters,
+    params: BorderLengthParamsDict,
     runner: Runner | null = null,
 ): BorderLengthOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function border_length(
 export {
       BORDER_LENGTH_METADATA,
       BorderLengthOutputs,
+      BorderLengthParamsDict,
+      BorderLengthParamsDictTagged,
       border_length,
       border_length_execute,
       border_length_params,

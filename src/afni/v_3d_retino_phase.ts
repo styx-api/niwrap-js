@@ -11,7 +11,7 @@ const V_3D_RETINO_PHASE_METADATA: Metadata = {
 };
 
 
-interface V3dRetinoPhaseParameters {
+interface V3dRetinoPhaseParamsDict {
     "@type"?: "afni/3dRetinoPhase";
     "prefix": string;
     "dataset": InputPathType;
@@ -30,11 +30,11 @@ interface V3dRetinoPhaseParameters {
     "ref_ts"?: InputPathType | null | undefined;
     "multi_ref_ts"?: InputPathType | null | undefined;
 }
-type V3dRetinoPhaseParametersTagged = Required<Pick<V3dRetinoPhaseParameters, '@type'>> & V3dRetinoPhaseParameters;
+type V3dRetinoPhaseParamsDictTagged = Required<Pick<V3dRetinoPhaseParamsDict, '@type'>> & V3dRetinoPhaseParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRetinoPhaseParameters(...)`.
+ * Output object returned when calling `V3dRetinoPhaseParamsDict(...)`.
  *
  * @interface
  */
@@ -101,7 +101,7 @@ function v_3d_retino_phase_params(
     phase_estimate: string | null = null,
     ref_ts: InputPathType | null = null,
     multi_ref_ts: InputPathType | null = null,
-): V3dRetinoPhaseParametersTagged {
+): V3dRetinoPhaseParamsDictTagged {
     const params = {
         "@type": "afni/3dRetinoPhase" as const,
         "prefix": prefix,
@@ -160,7 +160,7 @@ function v_3d_retino_phase_params(
  * @returns Command-line arguments.
  */
 function v_3d_retino_phase_cargs(
-    params: V3dRetinoPhaseParameters,
+    params: V3dRetinoPhaseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -261,7 +261,7 @@ function v_3d_retino_phase_cargs(
  * @returns Outputs object.
  */
 function v_3d_retino_phase_outputs(
-    params: V3dRetinoPhaseParameters,
+    params: V3dRetinoPhaseParamsDict,
     execution: Execution,
 ): V3dRetinoPhaseOutputs {
     const ret: V3dRetinoPhaseOutputs = {
@@ -290,7 +290,7 @@ function v_3d_retino_phase_outputs(
  * @returns NamedTuple of outputs (described in `V3dRetinoPhaseOutputs`).
  */
 function v_3d_retino_phase_execute(
-    params: V3dRetinoPhaseParameters,
+    params: V3dRetinoPhaseParamsDict,
     runner: Runner | null = null,
 ): V3dRetinoPhaseOutputs {
     runner = runner || getGlobalRunner();
@@ -358,6 +358,8 @@ function v_3d_retino_phase(
 
 export {
       V3dRetinoPhaseOutputs,
+      V3dRetinoPhaseParamsDict,
+      V3dRetinoPhaseParamsDictTagged,
       V_3D_RETINO_PHASE_METADATA,
       v_3d_retino_phase,
       v_3d_retino_phase_execute,

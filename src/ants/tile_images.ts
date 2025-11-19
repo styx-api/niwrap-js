@@ -11,18 +11,18 @@ const TILE_IMAGES_METADATA: Metadata = {
 };
 
 
-interface TileImagesParameters {
+interface TileImagesParamsDict {
     "@type"?: "ants/TileImages";
     "image_dimension": number;
     "output_image": string;
     "layout": string;
     "input_images": Array<InputPathType>;
 }
-type TileImagesParametersTagged = Required<Pick<TileImagesParameters, '@type'>> & TileImagesParameters;
+type TileImagesParamsDictTagged = Required<Pick<TileImagesParamsDict, '@type'>> & TileImagesParamsDict;
 
 
 /**
- * Output object returned when calling `TileImagesParameters(...)`.
+ * Output object returned when calling `TileImagesParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function tile_images_params(
     output_image: string,
     layout: string,
     input_images: Array<InputPathType>,
-): TileImagesParametersTagged {
+): TileImagesParamsDictTagged {
     const params = {
         "@type": "ants/TileImages" as const,
         "image_dimension": image_dimension,
@@ -74,7 +74,7 @@ function tile_images_params(
  * @returns Command-line arguments.
  */
 function tile_images_cargs(
-    params: TileImagesParameters,
+    params: TileImagesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function tile_images_cargs(
  * @returns Outputs object.
  */
 function tile_images_outputs(
-    params: TileImagesParameters,
+    params: TileImagesParamsDict,
     execution: Execution,
 ): TileImagesOutputs {
     const ret: TileImagesOutputs = {
@@ -122,7 +122,7 @@ function tile_images_outputs(
  * @returns NamedTuple of outputs (described in `TileImagesOutputs`).
  */
 function tile_images_execute(
-    params: TileImagesParameters,
+    params: TileImagesParamsDict,
     runner: Runner | null = null,
 ): TileImagesOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function tile_images(
 export {
       TILE_IMAGES_METADATA,
       TileImagesOutputs,
+      TileImagesParamsDict,
+      TileImagesParamsDictTagged,
       tile_images,
       tile_images_execute,
       tile_images_params,

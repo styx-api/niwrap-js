@@ -11,7 +11,7 @@ const REG_ALADIN_METADATA: Metadata = {
 };
 
 
-interface RegAladinParameters {
+interface RegAladinParamsDict {
     "@type"?: "niftyreg/reg_aladin";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
@@ -27,11 +27,11 @@ interface RegAladinParameters {
     "percent_block"?: number | null | undefined;
     "percent_inlier"?: number | null | undefined;
 }
-type RegAladinParametersTagged = Required<Pick<RegAladinParameters, '@type'>> & RegAladinParameters;
+type RegAladinParamsDictTagged = Required<Pick<RegAladinParamsDict, '@type'>> & RegAladinParamsDict;
 
 
 /**
- * Output object returned when calling `RegAladinParameters(...)`.
+ * Output object returned when calling `RegAladinParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function reg_aladin_params(
     use_nifti_origin: boolean = false,
     percent_block: number | null = null,
     percent_inlier: number | null = null,
-): RegAladinParametersTagged {
+): RegAladinParamsDictTagged {
     const params = {
         "@type": "niftyreg/reg_aladin" as const,
         "reference_image": reference_image,
@@ -124,7 +124,7 @@ function reg_aladin_params(
  * @returns Command-line arguments.
  */
 function reg_aladin_cargs(
-    params: RegAladinParameters,
+    params: RegAladinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function reg_aladin_cargs(
  * @returns Outputs object.
  */
 function reg_aladin_outputs(
-    params: RegAladinParameters,
+    params: RegAladinParamsDict,
     execution: Execution,
 ): RegAladinOutputs {
     const ret: RegAladinOutputs = {
@@ -230,7 +230,7 @@ function reg_aladin_outputs(
  * @returns NamedTuple of outputs (described in `RegAladinOutputs`).
  */
 function reg_aladin_execute(
-    params: RegAladinParameters,
+    params: RegAladinParamsDict,
     runner: Runner | null = null,
 ): RegAladinOutputs {
     runner = runner || getGlobalRunner();
@@ -293,6 +293,8 @@ function reg_aladin(
 export {
       REG_ALADIN_METADATA,
       RegAladinOutputs,
+      RegAladinParamsDict,
+      RegAladinParamsDictTagged,
       reg_aladin,
       reg_aladin_execute,
       reg_aladin_params,

@@ -11,15 +11,15 @@ const TCKSIFT2_METADATA: Metadata = {
 };
 
 
-interface Tcksift2ConfigParameters {
+interface Tcksift2ConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Tcksift2ConfigParametersTagged = Required<Pick<Tcksift2ConfigParameters, '@type'>> & Tcksift2ConfigParameters;
+type Tcksift2ConfigParamsDictTagged = Required<Pick<Tcksift2ConfigParamsDict, '@type'>> & Tcksift2ConfigParamsDict;
 
 
-interface Tcksift2Parameters {
+interface Tcksift2ParamsDict {
     "@type"?: "mrtrix/tcksift2";
     "proc_mask"?: InputPathType | null | undefined;
     "act"?: InputPathType | null | undefined;
@@ -49,14 +49,14 @@ interface Tcksift2Parameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Tcksift2ConfigParameters> | null | undefined;
+    "config"?: Array<Tcksift2ConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in_tracks": InputPathType;
     "in_fod": InputPathType;
     "out_weights": string;
 }
-type Tcksift2ParametersTagged = Required<Pick<Tcksift2Parameters, '@type'>> & Tcksift2Parameters;
+type Tcksift2ParamsDictTagged = Required<Pick<Tcksift2ParamsDict, '@type'>> & Tcksift2ParamsDict;
 
 
 /**
@@ -67,10 +67,10 @@ type Tcksift2ParametersTagged = Required<Pick<Tcksift2Parameters, '@type'>> & Tc
  *
  * @returns Parameter dictionary
  */
-function tcksift2_config_params(
+function tcksift2_config(
     key: string,
     value: string,
-): Tcksift2ConfigParametersTagged {
+): Tcksift2ConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -89,7 +89,7 @@ function tcksift2_config_params(
  * @returns Command-line arguments.
  */
 function tcksift2_config_cargs(
-    params: Tcksift2ConfigParameters,
+    params: Tcksift2ConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function tcksift2_config_cargs(
 
 
 /**
- * Output object returned when calling `Tcksift2Parameters(...)`.
+ * Output object returned when calling `Tcksift2ParamsDict(...)`.
  *
  * @interface
  */
@@ -201,10 +201,10 @@ function tcksift2_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tcksift2ConfigParameters> | null = null,
+    config: Array<Tcksift2ConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Tcksift2ParametersTagged {
+): Tcksift2ParamsDictTagged {
     const params = {
         "@type": "mrtrix/tcksift2" as const,
         "fd_scale_gm": fd_scale_gm,
@@ -293,7 +293,7 @@ function tcksift2_params(
  * @returns Command-line arguments.
  */
 function tcksift2_cargs(
-    params: Tcksift2Parameters,
+    params: Tcksift2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -461,7 +461,7 @@ function tcksift2_cargs(
  * @returns Outputs object.
  */
 function tcksift2_outputs(
-    params: Tcksift2Parameters,
+    params: Tcksift2ParamsDict,
     execution: Execution,
 ): Tcksift2Outputs {
     const ret: Tcksift2Outputs = {
@@ -499,7 +499,7 @@ function tcksift2_outputs(
  * @returns NamedTuple of outputs (described in `Tcksift2Outputs`).
  */
 function tcksift2_execute(
-    params: Tcksift2Parameters,
+    params: Tcksift2ParamsDict,
     runner: Runner | null = null,
 ): Tcksift2Outputs {
     runner = runner || getGlobalRunner();
@@ -600,7 +600,7 @@ function tcksift2(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tcksift2ConfigParameters> | null = null,
+    config: Array<Tcksift2ConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -612,9 +612,13 @@ function tcksift2(
 
 export {
       TCKSIFT2_METADATA,
+      Tcksift2ConfigParamsDict,
+      Tcksift2ConfigParamsDictTagged,
       Tcksift2Outputs,
+      Tcksift2ParamsDict,
+      Tcksift2ParamsDictTagged,
       tcksift2,
-      tcksift2_config_params,
+      tcksift2_config,
       tcksift2_execute,
       tcksift2_params,
 };

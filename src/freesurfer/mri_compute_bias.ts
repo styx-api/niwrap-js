@@ -11,16 +11,16 @@ const MRI_COMPUTE_BIAS_METADATA: Metadata = {
 };
 
 
-interface MriComputeBiasParameters {
+interface MriComputeBiasParamsDict {
     "@type"?: "freesurfer/mri_compute_bias";
     "subjects": Array<string>;
     "output_volume": string;
 }
-type MriComputeBiasParametersTagged = Required<Pick<MriComputeBiasParameters, '@type'>> & MriComputeBiasParameters;
+type MriComputeBiasParamsDictTagged = Required<Pick<MriComputeBiasParamsDict, '@type'>> & MriComputeBiasParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeBiasParameters(...)`.
+ * Output object returned when calling `MriComputeBiasParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriComputeBiasOutputs {
 function mri_compute_bias_params(
     subjects: Array<string>,
     output_volume: string,
-): MriComputeBiasParametersTagged {
+): MriComputeBiasParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_bias" as const,
         "subjects": subjects,
@@ -66,7 +66,7 @@ function mri_compute_bias_params(
  * @returns Command-line arguments.
  */
 function mri_compute_bias_cargs(
-    params: MriComputeBiasParameters,
+    params: MriComputeBiasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_compute_bias_cargs(
  * @returns Outputs object.
  */
 function mri_compute_bias_outputs(
-    params: MriComputeBiasParameters,
+    params: MriComputeBiasParamsDict,
     execution: Execution,
 ): MriComputeBiasOutputs {
     const ret: MriComputeBiasOutputs = {
@@ -112,7 +112,7 @@ function mri_compute_bias_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeBiasOutputs`).
  */
 function mri_compute_bias_execute(
-    params: MriComputeBiasParameters,
+    params: MriComputeBiasParamsDict,
     runner: Runner | null = null,
 ): MriComputeBiasOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_compute_bias(
 export {
       MRI_COMPUTE_BIAS_METADATA,
       MriComputeBiasOutputs,
+      MriComputeBiasParamsDict,
+      MriComputeBiasParamsDictTagged,
       mri_compute_bias,
       mri_compute_bias_execute,
       mri_compute_bias_params,

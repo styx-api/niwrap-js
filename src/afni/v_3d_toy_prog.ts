@@ -11,7 +11,7 @@ const V_3D_TOY_PROG_METADATA: Metadata = {
 };
 
 
-interface V3dToyProgParameters {
+interface V3dToyProgParamsDict {
     "@type"?: "afni/3dToyProg";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
@@ -28,11 +28,11 @@ interface V3dToyProgParameters {
     "help_aspx": boolean;
     "help_all_opts": boolean;
 }
-type V3dToyProgParametersTagged = Required<Pick<V3dToyProgParameters, '@type'>> & V3dToyProgParameters;
+type V3dToyProgParamsDictTagged = Required<Pick<V3dToyProgParamsDict, '@type'>> & V3dToyProgParamsDict;
 
 
 /**
- * Output object returned when calling `V3dToyProgParameters(...)`.
+ * Output object returned when calling `V3dToyProgParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function v_3d_toy_prog_params(
     help_spx: boolean = false,
     help_aspx: boolean = false,
     help_all_opts: boolean = false,
-): V3dToyProgParametersTagged {
+): V3dToyProgParamsDictTagged {
     const params = {
         "@type": "afni/3dToyProg" as const,
         "input_dataset": input_dataset,
@@ -118,7 +118,7 @@ function v_3d_toy_prog_params(
  * @returns Command-line arguments.
  */
 function v_3d_toy_prog_cargs(
-    params: V3dToyProgParameters,
+    params: V3dToyProgParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -191,7 +191,7 @@ function v_3d_toy_prog_cargs(
  * @returns Outputs object.
  */
 function v_3d_toy_prog_outputs(
-    params: V3dToyProgParameters,
+    params: V3dToyProgParamsDict,
     execution: Execution,
 ): V3dToyProgOutputs {
     const ret: V3dToyProgOutputs = {
@@ -216,7 +216,7 @@ function v_3d_toy_prog_outputs(
  * @returns NamedTuple of outputs (described in `V3dToyProgOutputs`).
  */
 function v_3d_toy_prog_execute(
-    params: V3dToyProgParameters,
+    params: V3dToyProgParamsDict,
     runner: Runner | null = null,
 ): V3dToyProgOutputs {
     runner = runner || getGlobalRunner();
@@ -280,6 +280,8 @@ function v_3d_toy_prog(
 
 export {
       V3dToyProgOutputs,
+      V3dToyProgParamsDict,
+      V3dToyProgParamsDictTagged,
       V_3D_TOY_PROG_METADATA,
       v_3d_toy_prog,
       v_3d_toy_prog_execute,

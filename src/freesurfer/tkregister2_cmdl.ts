@@ -11,7 +11,7 @@ const TKREGISTER2_CMDL_METADATA: Metadata = {
 };
 
 
-interface Tkregister2CmdlParameters {
+interface Tkregister2CmdlParamsDict {
     "@type"?: "freesurfer/tkregister2_cmdl";
     "movable_volume": InputPathType;
     "target_volume": InputPathType;
@@ -74,11 +74,11 @@ interface Tkregister2CmdlParameters {
     "rot"?: Array<number> | null | undefined;
     "conf_targ_flag": boolean;
 }
-type Tkregister2CmdlParametersTagged = Required<Pick<Tkregister2CmdlParameters, '@type'>> & Tkregister2CmdlParameters;
+type Tkregister2CmdlParamsDictTagged = Required<Pick<Tkregister2CmdlParamsDict, '@type'>> & Tkregister2CmdlParamsDict;
 
 
 /**
- * Output object returned when calling `Tkregister2CmdlParameters(...)`.
+ * Output object returned when calling `Tkregister2CmdlParamsDict(...)`.
  *
  * @interface
  */
@@ -217,7 +217,7 @@ function tkregister2_cmdl_params(
     trans: Array<number> | null = null,
     rot: Array<number> | null = null,
     conf_targ_flag: boolean = false,
-): Tkregister2CmdlParametersTagged {
+): Tkregister2CmdlParamsDictTagged {
     const params = {
         "@type": "freesurfer/tkregister2_cmdl" as const,
         "movable_volume": movable_volume,
@@ -368,7 +368,7 @@ function tkregister2_cmdl_params(
  * @returns Command-line arguments.
  */
 function tkregister2_cmdl_cargs(
-    params: Tkregister2CmdlParameters,
+    params: Tkregister2CmdlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -679,7 +679,7 @@ function tkregister2_cmdl_cargs(
  * @returns Outputs object.
  */
 function tkregister2_cmdl_outputs(
-    params: Tkregister2CmdlParameters,
+    params: Tkregister2CmdlParamsDict,
     execution: Execution,
 ): Tkregister2CmdlOutputs {
     const ret: Tkregister2CmdlOutputs = {
@@ -704,7 +704,7 @@ function tkregister2_cmdl_outputs(
  * @returns NamedTuple of outputs (described in `Tkregister2CmdlOutputs`).
  */
 function tkregister2_cmdl_execute(
-    params: Tkregister2CmdlParameters,
+    params: Tkregister2CmdlParamsDict,
     runner: Runner | null = null,
 ): Tkregister2CmdlOutputs {
     runner = runner || getGlobalRunner();
@@ -861,6 +861,8 @@ function tkregister2_cmdl(
 export {
       TKREGISTER2_CMDL_METADATA,
       Tkregister2CmdlOutputs,
+      Tkregister2CmdlParamsDict,
+      Tkregister2CmdlParamsDictTagged,
       tkregister2_cmdl,
       tkregister2_cmdl_execute,
       tkregister2_cmdl_params,

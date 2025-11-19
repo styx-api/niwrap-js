@@ -11,7 +11,7 @@ const MRI_STOPMASK_METADATA: Metadata = {
 };
 
 
-interface MriStopmaskParameters {
+interface MriStopmaskParamsDict {
     "@type"?: "freesurfer/mri_stopmask";
     "output_mask": string;
     "filled": Array<InputPathType>;
@@ -26,11 +26,11 @@ interface MriStopmaskParameters {
     "no_wm": boolean;
     "no_bfs": boolean;
 }
-type MriStopmaskParametersTagged = Required<Pick<MriStopmaskParameters, '@type'>> & MriStopmaskParameters;
+type MriStopmaskParamsDictTagged = Required<Pick<MriStopmaskParamsDict, '@type'>> & MriStopmaskParamsDict;
 
 
 /**
- * Output object returned when calling `MriStopmaskParameters(...)`.
+ * Output object returned when calling `MriStopmaskParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function mri_stopmask_params(
     no_wmsa: boolean = false,
     no_wm: boolean = false,
     no_bfs: boolean = false,
-): MriStopmaskParametersTagged {
+): MriStopmaskParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_stopmask" as const,
         "output_mask": output_mask,
@@ -112,7 +112,7 @@ function mri_stopmask_params(
  * @returns Command-line arguments.
  */
 function mri_stopmask_cargs(
-    params: MriStopmaskParameters,
+    params: MriStopmaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -178,7 +178,7 @@ function mri_stopmask_cargs(
  * @returns Outputs object.
  */
 function mri_stopmask_outputs(
-    params: MriStopmaskParameters,
+    params: MriStopmaskParamsDict,
     execution: Execution,
 ): MriStopmaskOutputs {
     const ret: MriStopmaskOutputs = {
@@ -204,7 +204,7 @@ function mri_stopmask_outputs(
  * @returns NamedTuple of outputs (described in `MriStopmaskOutputs`).
  */
 function mri_stopmask_execute(
-    params: MriStopmaskParameters,
+    params: MriStopmaskParamsDict,
     runner: Runner | null = null,
 ): MriStopmaskOutputs {
     runner = runner || getGlobalRunner();
@@ -265,6 +265,8 @@ function mri_stopmask(
 export {
       MRI_STOPMASK_METADATA,
       MriStopmaskOutputs,
+      MriStopmaskParamsDict,
+      MriStopmaskParamsDictTagged,
       mri_stopmask,
       mri_stopmask_execute,
       mri_stopmask_params,

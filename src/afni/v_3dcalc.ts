@@ -11,7 +11,7 @@ const V_3DCALC_METADATA: Metadata = {
 };
 
 
-interface V3dcalcParameters {
+interface V3dcalcParamsDict {
     "@type"?: "afni/3dcalc";
     "in_file_a": InputPathType;
     "in_file_b"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface V3dcalcParameters {
     "expr": string;
     "prefix"?: string | null | undefined;
 }
-type V3dcalcParametersTagged = Required<Pick<V3dcalcParameters, '@type'>> & V3dcalcParameters;
+type V3dcalcParamsDictTagged = Required<Pick<V3dcalcParamsDict, '@type'>> & V3dcalcParamsDict;
 
 
 /**
- * Output object returned when calling `V3dcalcParameters(...)`.
+ * Output object returned when calling `V3dcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function v_3dcalc_params(
     start_idx: number | null = null,
     stop_idx: number | null = null,
     prefix: string | null = null,
-): V3dcalcParametersTagged {
+): V3dcalcParamsDictTagged {
     const params = {
         "@type": "afni/3dcalc" as const,
         "in_file_a": in_file_a,
@@ -112,7 +112,7 @@ function v_3dcalc_params(
  * @returns Command-line arguments.
  */
 function v_3dcalc_cargs(
-    params: V3dcalcParameters,
+    params: V3dcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function v_3dcalc_cargs(
  * @returns Outputs object.
  */
 function v_3dcalc_outputs(
-    params: V3dcalcParameters,
+    params: V3dcalcParamsDict,
     execution: Execution,
 ): V3dcalcOutputs {
     const ret: V3dcalcOutputs = {
@@ -197,7 +197,7 @@ function v_3dcalc_outputs(
  * @returns NamedTuple of outputs (described in `V3dcalcOutputs`).
  */
 function v_3dcalc_execute(
-    params: V3dcalcParameters,
+    params: V3dcalcParamsDict,
     runner: Runner | null = null,
 ): V3dcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -253,6 +253,8 @@ function v_3dcalc(
 
 export {
       V3dcalcOutputs,
+      V3dcalcParamsDict,
+      V3dcalcParamsDictTagged,
       V_3DCALC_METADATA,
       v_3dcalc,
       v_3dcalc_execute,

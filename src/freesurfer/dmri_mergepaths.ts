@@ -11,7 +11,7 @@ const DMRI_MERGEPATHS_METADATA: Metadata = {
 };
 
 
-interface DmriMergepathsParameters {
+interface DmriMergepathsParamsDict {
     "@type"?: "freesurfer/dmri_mergepaths";
     "input_volumes": Array<InputPathType>;
     "input_directory"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface DmriMergepathsParameters {
     "debug": boolean;
     "check_opts": boolean;
 }
-type DmriMergepathsParametersTagged = Required<Pick<DmriMergepathsParameters, '@type'>> & DmriMergepathsParameters;
+type DmriMergepathsParamsDictTagged = Required<Pick<DmriMergepathsParamsDict, '@type'>> & DmriMergepathsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriMergepathsParameters(...)`.
+ * Output object returned when calling `DmriMergepathsParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function dmri_mergepaths_params(
     input_directory: string | null = null,
     debug: boolean = false,
     check_opts: boolean = false,
-): DmriMergepathsParametersTagged {
+): DmriMergepathsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_mergepaths" as const,
         "input_volumes": input_volumes,
@@ -84,7 +84,7 @@ function dmri_mergepaths_params(
  * @returns Command-line arguments.
  */
 function dmri_mergepaths_cargs(
-    params: DmriMergepathsParameters,
+    params: DmriMergepathsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function dmri_mergepaths_cargs(
  * @returns Outputs object.
  */
 function dmri_mergepaths_outputs(
-    params: DmriMergepathsParameters,
+    params: DmriMergepathsParamsDict,
     execution: Execution,
 ): DmriMergepathsOutputs {
     const ret: DmriMergepathsOutputs = {
@@ -152,7 +152,7 @@ function dmri_mergepaths_outputs(
  * @returns NamedTuple of outputs (described in `DmriMergepathsOutputs`).
  */
 function dmri_mergepaths_execute(
-    params: DmriMergepathsParameters,
+    params: DmriMergepathsParamsDict,
     runner: Runner | null = null,
 ): DmriMergepathsOutputs {
     runner = runner || getGlobalRunner();
@@ -203,6 +203,8 @@ function dmri_mergepaths(
 export {
       DMRI_MERGEPATHS_METADATA,
       DmriMergepathsOutputs,
+      DmriMergepathsParamsDict,
+      DmriMergepathsParamsDictTagged,
       dmri_mergepaths,
       dmri_mergepaths_execute,
       dmri_mergepaths_params,

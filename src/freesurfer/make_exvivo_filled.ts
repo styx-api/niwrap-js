@@ -11,18 +11,18 @@ const MAKE_EXVIVO_FILLED_METADATA: Metadata = {
 };
 
 
-interface MakeExvivoFilledParameters {
+interface MakeExvivoFilledParamsDict {
     "@type"?: "freesurfer/make_exvivo_filled";
     "subject_name": string;
     "input_samseg": InputPathType;
     "input_intensity_vol": InputPathType;
     "hemi_both": string;
 }
-type MakeExvivoFilledParametersTagged = Required<Pick<MakeExvivoFilledParameters, '@type'>> & MakeExvivoFilledParameters;
+type MakeExvivoFilledParamsDictTagged = Required<Pick<MakeExvivoFilledParamsDict, '@type'>> & MakeExvivoFilledParamsDict;
 
 
 /**
- * Output object returned when calling `MakeExvivoFilledParameters(...)`.
+ * Output object returned when calling `MakeExvivoFilledParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function make_exvivo_filled_params(
     input_samseg: InputPathType,
     input_intensity_vol: InputPathType,
     hemi_both: string,
-): MakeExvivoFilledParametersTagged {
+): MakeExvivoFilledParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_exvivo_filled" as const,
         "subject_name": subject_name,
@@ -70,7 +70,7 @@ function make_exvivo_filled_params(
  * @returns Command-line arguments.
  */
 function make_exvivo_filled_cargs(
-    params: MakeExvivoFilledParameters,
+    params: MakeExvivoFilledParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function make_exvivo_filled_cargs(
  * @returns Outputs object.
  */
 function make_exvivo_filled_outputs(
-    params: MakeExvivoFilledParameters,
+    params: MakeExvivoFilledParamsDict,
     execution: Execution,
 ): MakeExvivoFilledOutputs {
     const ret: MakeExvivoFilledOutputs = {
@@ -117,7 +117,7 @@ function make_exvivo_filled_outputs(
  * @returns NamedTuple of outputs (described in `MakeExvivoFilledOutputs`).
  */
 function make_exvivo_filled_execute(
-    params: MakeExvivoFilledParameters,
+    params: MakeExvivoFilledParamsDict,
     runner: Runner | null = null,
 ): MakeExvivoFilledOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function make_exvivo_filled(
 export {
       MAKE_EXVIVO_FILLED_METADATA,
       MakeExvivoFilledOutputs,
+      MakeExvivoFilledParamsDict,
+      MakeExvivoFilledParamsDictTagged,
       make_exvivo_filled,
       make_exvivo_filled_execute,
       make_exvivo_filled_params,

@@ -11,7 +11,7 @@ const MAKE_BIANCA_MASK_METADATA: Metadata = {
 };
 
 
-interface MakeBiancaMaskParameters {
+interface MakeBiancaMaskParamsDict {
     "@type"?: "fsl/make_bianca_mask";
     "input_image": InputPathType;
     "output_image": string;
@@ -35,11 +35,11 @@ interface MakeBiancaMaskParameters {
     "verbose_flag": boolean;
     "debug_flag": boolean;
 }
-type MakeBiancaMaskParametersTagged = Required<Pick<MakeBiancaMaskParameters, '@type'>> & MakeBiancaMaskParameters;
+type MakeBiancaMaskParamsDictTagged = Required<Pick<MakeBiancaMaskParamsDict, '@type'>> & MakeBiancaMaskParamsDict;
 
 
 /**
- * Output object returned when calling `MakeBiancaMaskParameters(...)`.
+ * Output object returned when calling `MakeBiancaMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function make_bianca_mask_params(
     additional_surfaces_t2: InputPathType | null = null,
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
-): MakeBiancaMaskParametersTagged {
+): MakeBiancaMaskParamsDictTagged {
     const params = {
         "@type": "fsl/make_bianca_mask" as const,
         "input_image": input_image,
@@ -152,7 +152,7 @@ function make_bianca_mask_params(
  * @returns Command-line arguments.
  */
 function make_bianca_mask_cargs(
-    params: MakeBiancaMaskParameters,
+    params: MakeBiancaMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -244,7 +244,7 @@ function make_bianca_mask_cargs(
  * @returns Outputs object.
  */
 function make_bianca_mask_outputs(
-    params: MakeBiancaMaskParameters,
+    params: MakeBiancaMaskParamsDict,
     execution: Execution,
 ): MakeBiancaMaskOutputs {
     const ret: MakeBiancaMaskOutputs = {
@@ -270,7 +270,7 @@ function make_bianca_mask_outputs(
  * @returns NamedTuple of outputs (described in `MakeBiancaMaskOutputs`).
  */
 function make_bianca_mask_execute(
-    params: MakeBiancaMaskParameters,
+    params: MakeBiancaMaskParamsDict,
     runner: Runner | null = null,
 ): MakeBiancaMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -349,6 +349,8 @@ function make_bianca_mask(
 export {
       MAKE_BIANCA_MASK_METADATA,
       MakeBiancaMaskOutputs,
+      MakeBiancaMaskParamsDict,
+      MakeBiancaMaskParamsDictTagged,
       make_bianca_mask,
       make_bianca_mask_execute,
       make_bianca_mask_params,

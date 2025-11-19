@@ -11,7 +11,7 @@ const TABLE2MAP_METADATA: Metadata = {
 };
 
 
-interface Table2mapParameters {
+interface Table2mapParamsDict {
     "@type"?: "freesurfer/table2map";
     "input_table": InputPathType;
     "output_map": string;
@@ -20,11 +20,11 @@ interface Table2mapParameters {
     "columns"?: Array<string> | null | undefined;
     "lookup_table"?: InputPathType | null | undefined;
 }
-type Table2mapParametersTagged = Required<Pick<Table2mapParameters, '@type'>> & Table2mapParameters;
+type Table2mapParamsDictTagged = Required<Pick<Table2mapParamsDict, '@type'>> & Table2mapParamsDict;
 
 
 /**
- * Output object returned when calling `Table2mapParameters(...)`.
+ * Output object returned when calling `Table2mapParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function table2map_params(
     parcellation: InputPathType | null = null,
     columns: Array<string> | null = null,
     lookup_table: InputPathType | null = null,
-): Table2mapParametersTagged {
+): Table2mapParamsDictTagged {
     const params = {
         "@type": "freesurfer/table2map" as const,
         "input_table": input_table,
@@ -86,7 +86,7 @@ function table2map_params(
  * @returns Command-line arguments.
  */
 function table2map_cargs(
-    params: Table2mapParameters,
+    params: Table2mapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function table2map_cargs(
  * @returns Outputs object.
  */
 function table2map_outputs(
-    params: Table2mapParameters,
+    params: Table2mapParamsDict,
     execution: Execution,
 ): Table2mapOutputs {
     const ret: Table2mapOutputs = {
@@ -161,7 +161,7 @@ function table2map_outputs(
  * @returns NamedTuple of outputs (described in `Table2mapOutputs`).
  */
 function table2map_execute(
-    params: Table2mapParameters,
+    params: Table2mapParamsDict,
     runner: Runner | null = null,
 ): Table2mapOutputs {
     runner = runner || getGlobalRunner();
@@ -210,6 +210,8 @@ function table2map(
 export {
       TABLE2MAP_METADATA,
       Table2mapOutputs,
+      Table2mapParamsDict,
+      Table2mapParamsDictTagged,
       table2map,
       table2map_execute,
       table2map_params,

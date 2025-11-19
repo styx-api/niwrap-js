@@ -10,36 +10,36 @@ const VOLUME_MERGE_METADATA: Metadata = {
 };
 
 
-interface VolumeMergeUpToParameters {
+interface VolumeMergeUpToParamsDict {
     "@type"?: "up-to";
     "last-subvol": string;
     "reverse": boolean;
 }
-type VolumeMergeUpToParametersTagged = Required<Pick<VolumeMergeUpToParameters, '@type'>> & VolumeMergeUpToParameters;
+type VolumeMergeUpToParamsDictTagged = Required<Pick<VolumeMergeUpToParamsDict, '@type'>> & VolumeMergeUpToParamsDict;
 
 
-interface VolumeMergeSubvolumeParameters {
+interface VolumeMergeSubvolumeParamsDict {
     "@type"?: "subvolume";
     "subvol": string;
-    "up-to"?: VolumeMergeUpToParameters | null | undefined;
+    "up-to"?: VolumeMergeUpToParamsDict | null | undefined;
 }
-type VolumeMergeSubvolumeParametersTagged = Required<Pick<VolumeMergeSubvolumeParameters, '@type'>> & VolumeMergeSubvolumeParameters;
+type VolumeMergeSubvolumeParamsDictTagged = Required<Pick<VolumeMergeSubvolumeParamsDict, '@type'>> & VolumeMergeSubvolumeParamsDict;
 
 
-interface VolumeMergeVolumeParameters {
+interface VolumeMergeVolumeParamsDict {
     "@type"?: "volume";
     "volume-in": InputPathType;
-    "subvolume"?: Array<VolumeMergeSubvolumeParameters> | null | undefined;
+    "subvolume"?: Array<VolumeMergeSubvolumeParamsDict> | null | undefined;
 }
-type VolumeMergeVolumeParametersTagged = Required<Pick<VolumeMergeVolumeParameters, '@type'>> & VolumeMergeVolumeParameters;
+type VolumeMergeVolumeParamsDictTagged = Required<Pick<VolumeMergeVolumeParamsDict, '@type'>> & VolumeMergeVolumeParamsDict;
 
 
-interface VolumeMergeParameters {
+interface VolumeMergeParamsDict {
     "@type"?: "workbench/volume-merge";
     "volume-out": string;
-    "volume"?: Array<VolumeMergeVolumeParameters> | null | undefined;
+    "volume"?: Array<VolumeMergeVolumeParamsDict> | null | undefined;
 }
-type VolumeMergeParametersTagged = Required<Pick<VolumeMergeParameters, '@type'>> & VolumeMergeParameters;
+type VolumeMergeParamsDictTagged = Required<Pick<VolumeMergeParamsDict, '@type'>> & VolumeMergeParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type VolumeMergeParametersTagged = Required<Pick<VolumeMergeParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function volume_merge_up_to_params(
+function volume_merge_up_to(
     last_subvol: string,
     reverse: boolean = false,
-): VolumeMergeUpToParametersTagged {
+): VolumeMergeUpToParamsDictTagged {
     const params = {
         "@type": "up-to" as const,
         "last-subvol": last_subvol,
@@ -72,7 +72,7 @@ function volume_merge_up_to_params(
  * @returns Command-line arguments.
  */
 function volume_merge_up_to_cargs(
-    params: VolumeMergeUpToParameters,
+    params: VolumeMergeUpToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function volume_merge_up_to_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_merge_subvolume_params(
+function volume_merge_subvolume(
     subvol: string,
-    up_to: VolumeMergeUpToParameters | null = null,
-): VolumeMergeSubvolumeParametersTagged {
+    up_to: VolumeMergeUpToParamsDict | null = null,
+): VolumeMergeSubvolumeParamsDictTagged {
     const params = {
         "@type": "subvolume" as const,
         "subvol": subvol,
@@ -119,7 +119,7 @@ function volume_merge_subvolume_params(
  * @returns Command-line arguments.
  */
 function volume_merge_subvolume_cargs(
-    params: VolumeMergeSubvolumeParameters,
+    params: VolumeMergeSubvolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,10 +142,10 @@ function volume_merge_subvolume_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_merge_volume_params(
+function volume_merge_volume(
     volume_in: InputPathType,
-    subvolume: Array<VolumeMergeSubvolumeParameters> | null = null,
-): VolumeMergeVolumeParametersTagged {
+    subvolume: Array<VolumeMergeSubvolumeParamsDict> | null = null,
+): VolumeMergeVolumeParamsDictTagged {
     const params = {
         "@type": "volume" as const,
         "volume-in": volume_in,
@@ -166,7 +166,7 @@ function volume_merge_volume_params(
  * @returns Command-line arguments.
  */
 function volume_merge_volume_cargs(
-    params: VolumeMergeVolumeParameters,
+    params: VolumeMergeVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function volume_merge_volume_cargs(
 
 
 /**
- * Output object returned when calling `VolumeMergeParameters(...)`.
+ * Output object returned when calling `VolumeMergeParamsDict(...)`.
  *
  * @interface
  */
@@ -208,8 +208,8 @@ interface VolumeMergeOutputs {
  */
 function volume_merge_params(
     volume_out: string,
-    volume: Array<VolumeMergeVolumeParameters> | null = null,
-): VolumeMergeParametersTagged {
+    volume: Array<VolumeMergeVolumeParamsDict> | null = null,
+): VolumeMergeParamsDictTagged {
     const params = {
         "@type": "workbench/volume-merge" as const,
         "volume-out": volume_out,
@@ -230,7 +230,7 @@ function volume_merge_params(
  * @returns Command-line arguments.
  */
 function volume_merge_cargs(
-    params: VolumeMergeParameters,
+    params: VolumeMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,7 +255,7 @@ function volume_merge_cargs(
  * @returns Outputs object.
  */
 function volume_merge_outputs(
-    params: VolumeMergeParameters,
+    params: VolumeMergeParamsDict,
     execution: Execution,
 ): VolumeMergeOutputs {
     const ret: VolumeMergeOutputs = {
@@ -281,7 +281,7 @@ function volume_merge_outputs(
  * @returns NamedTuple of outputs (described in `VolumeMergeOutputs`).
  */
 function volume_merge_execute(
-    params: VolumeMergeParameters,
+    params: VolumeMergeParamsDict,
     runner: Runner | null = null,
 ): VolumeMergeOutputs {
     runner = runner || getGlobalRunner();
@@ -311,7 +311,7 @@ function volume_merge_execute(
  */
 function volume_merge(
     volume_out: string,
-    volume: Array<VolumeMergeVolumeParameters> | null = null,
+    volume: Array<VolumeMergeVolumeParamsDict> | null = null,
     runner: Runner | null = null,
 ): VolumeMergeOutputs {
     const params = volume_merge_params(volume_out, volume)
@@ -322,10 +322,18 @@ function volume_merge(
 export {
       VOLUME_MERGE_METADATA,
       VolumeMergeOutputs,
+      VolumeMergeParamsDict,
+      VolumeMergeParamsDictTagged,
+      VolumeMergeSubvolumeParamsDict,
+      VolumeMergeSubvolumeParamsDictTagged,
+      VolumeMergeUpToParamsDict,
+      VolumeMergeUpToParamsDictTagged,
+      VolumeMergeVolumeParamsDict,
+      VolumeMergeVolumeParamsDictTagged,
       volume_merge,
       volume_merge_execute,
       volume_merge_params,
-      volume_merge_subvolume_params,
-      volume_merge_up_to_params,
-      volume_merge_volume_params,
+      volume_merge_subvolume,
+      volume_merge_up_to,
+      volume_merge_volume,
 };

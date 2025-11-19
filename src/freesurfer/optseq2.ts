@@ -11,7 +11,7 @@ const OPTSEQ2_METADATA: Metadata = {
 };
 
 
-interface Optseq2Parameters {
+interface Optseq2ParamsDict {
     "@type"?: "freesurfer/optseq2";
     "ntp": number;
     "tr": number;
@@ -46,11 +46,11 @@ interface Optseq2Parameters {
     "help": boolean;
     "version": boolean;
 }
-type Optseq2ParametersTagged = Required<Pick<Optseq2Parameters, '@type'>> & Optseq2Parameters;
+type Optseq2ParamsDictTagged = Required<Pick<Optseq2ParamsDict, '@type'>> & Optseq2ParamsDict;
 
 
 /**
- * Output object returned when calling `Optseq2Parameters(...)`.
+ * Output object returned when calling `Optseq2ParamsDict(...)`.
  *
  * @interface
  */
@@ -157,7 +157,7 @@ function optseq2_params(
     nosearch: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): Optseq2ParametersTagged {
+): Optseq2ParamsDictTagged {
     const params = {
         "@type": "freesurfer/optseq2" as const,
         "ntp": ntp,
@@ -254,7 +254,7 @@ function optseq2_params(
  * @returns Command-line arguments.
  */
 function optseq2_cargs(
-    params: Optseq2Parameters,
+    params: Optseq2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -444,7 +444,7 @@ function optseq2_cargs(
  * @returns Outputs object.
  */
 function optseq2_outputs(
-    params: Optseq2Parameters,
+    params: Optseq2ParamsDict,
     execution: Execution,
 ): Optseq2Outputs {
     const ret: Optseq2Outputs = {
@@ -475,7 +475,7 @@ function optseq2_outputs(
  * @returns NamedTuple of outputs (described in `Optseq2Outputs`).
  */
 function optseq2_execute(
-    params: Optseq2Parameters,
+    params: Optseq2ParamsDict,
     runner: Runner | null = null,
 ): Optseq2Outputs {
     runner = runner || getGlobalRunner();
@@ -576,6 +576,8 @@ function optseq2(
 export {
       OPTSEQ2_METADATA,
       Optseq2Outputs,
+      Optseq2ParamsDict,
+      Optseq2ParamsDictTagged,
       optseq2,
       optseq2_execute,
       optseq2_params,

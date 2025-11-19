@@ -11,15 +11,15 @@ const FIXELCORRESPONDENCE_METADATA: Metadata = {
 };
 
 
-interface FixelcorrespondenceConfigParameters {
+interface FixelcorrespondenceConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type FixelcorrespondenceConfigParametersTagged = Required<Pick<FixelcorrespondenceConfigParameters, '@type'>> & FixelcorrespondenceConfigParameters;
+type FixelcorrespondenceConfigParamsDictTagged = Required<Pick<FixelcorrespondenceConfigParamsDict, '@type'>> & FixelcorrespondenceConfigParamsDict;
 
 
-interface FixelcorrespondenceParameters {
+interface FixelcorrespondenceParamsDict {
     "@type"?: "mrtrix/fixelcorrespondence";
     "angle"?: number | null | undefined;
     "info": boolean;
@@ -27,7 +27,7 @@ interface FixelcorrespondenceParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<FixelcorrespondenceConfigParameters> | null | undefined;
+    "config"?: Array<FixelcorrespondenceConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "subject_data": InputPathType;
@@ -35,7 +35,7 @@ interface FixelcorrespondenceParameters {
     "output_directory": string;
     "output_data": string;
 }
-type FixelcorrespondenceParametersTagged = Required<Pick<FixelcorrespondenceParameters, '@type'>> & FixelcorrespondenceParameters;
+type FixelcorrespondenceParamsDictTagged = Required<Pick<FixelcorrespondenceParamsDict, '@type'>> & FixelcorrespondenceParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type FixelcorrespondenceParametersTagged = Required<Pick<FixelcorrespondencePara
  *
  * @returns Parameter dictionary
  */
-function fixelcorrespondence_config_params(
+function fixelcorrespondence_config(
     key: string,
     value: string,
-): FixelcorrespondenceConfigParametersTagged {
+): FixelcorrespondenceConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -68,7 +68,7 @@ function fixelcorrespondence_config_params(
  * @returns Command-line arguments.
  */
 function fixelcorrespondence_config_cargs(
-    params: FixelcorrespondenceConfigParameters,
+    params: FixelcorrespondenceConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function fixelcorrespondence_config_cargs(
 
 
 /**
- * Output object returned when calling `FixelcorrespondenceParameters(...)`.
+ * Output object returned when calling `FixelcorrespondenceParamsDict(...)`.
  *
  * @interface
  */
@@ -122,10 +122,10 @@ function fixelcorrespondence_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelcorrespondenceConfigParameters> | null = null,
+    config: Array<FixelcorrespondenceConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelcorrespondenceParametersTagged {
+): FixelcorrespondenceParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixelcorrespondence" as const,
         "info": info,
@@ -161,7 +161,7 @@ function fixelcorrespondence_params(
  * @returns Command-line arguments.
  */
 function fixelcorrespondence_cargs(
-    params: FixelcorrespondenceParameters,
+    params: FixelcorrespondenceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -216,7 +216,7 @@ function fixelcorrespondence_cargs(
  * @returns Outputs object.
  */
 function fixelcorrespondence_outputs(
-    params: FixelcorrespondenceParameters,
+    params: FixelcorrespondenceParamsDict,
     execution: Execution,
 ): FixelcorrespondenceOutputs {
     const ret: FixelcorrespondenceOutputs = {
@@ -247,7 +247,7 @@ function fixelcorrespondence_outputs(
  * @returns NamedTuple of outputs (described in `FixelcorrespondenceOutputs`).
  */
 function fixelcorrespondence_execute(
-    params: FixelcorrespondenceParameters,
+    params: FixelcorrespondenceParamsDict,
     runner: Runner | null = null,
 ): FixelcorrespondenceOutputs {
     runner = runner || getGlobalRunner();
@@ -303,7 +303,7 @@ function fixelcorrespondence(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelcorrespondenceConfigParameters> | null = null,
+    config: Array<FixelcorrespondenceConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -315,9 +315,13 @@ function fixelcorrespondence(
 
 export {
       FIXELCORRESPONDENCE_METADATA,
+      FixelcorrespondenceConfigParamsDict,
+      FixelcorrespondenceConfigParamsDictTagged,
       FixelcorrespondenceOutputs,
+      FixelcorrespondenceParamsDict,
+      FixelcorrespondenceParamsDictTagged,
       fixelcorrespondence,
-      fixelcorrespondence_config_params,
+      fixelcorrespondence_config,
       fixelcorrespondence_execute,
       fixelcorrespondence_params,
 };

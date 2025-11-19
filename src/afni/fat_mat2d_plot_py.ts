@@ -11,7 +11,7 @@ const FAT_MAT2D_PLOT_PY_METADATA: Metadata = {
 };
 
 
-interface FatMat2dPlotPyParameters {
+interface FatMat2dPlotPyParamsDict {
     "@type"?: "afni/fat_mat2d_plot.py";
     "input_file": InputPathType;
     "matrices"?: Array<string> | null | undefined;
@@ -39,11 +39,11 @@ interface FatMat2dPlotPyParameters {
     "help": boolean;
     "help_view": boolean;
 }
-type FatMat2dPlotPyParametersTagged = Required<Pick<FatMat2dPlotPyParameters, '@type'>> & FatMat2dPlotPyParameters;
+type FatMat2dPlotPyParamsDictTagged = Required<Pick<FatMat2dPlotPyParamsDict, '@type'>> & FatMat2dPlotPyParamsDict;
 
 
 /**
- * Output object returned when calling `FatMat2dPlotPyParameters(...)`.
+ * Output object returned when calling `FatMat2dPlotPyParamsDict(...)`.
  *
  * @interface
  */
@@ -116,7 +116,7 @@ function fat_mat2d_plot_py_params(
     date: boolean = false,
     help: boolean = false,
     help_view: boolean = false,
-): FatMat2dPlotPyParametersTagged {
+): FatMat2dPlotPyParamsDictTagged {
     const params = {
         "@type": "afni/fat_mat2d_plot.py" as const,
         "input_file": input_file,
@@ -188,7 +188,7 @@ function fat_mat2d_plot_py_params(
  * @returns Command-line arguments.
  */
 function fat_mat2d_plot_py_cargs(
-    params: FatMat2dPlotPyParameters,
+    params: FatMat2dPlotPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -279,7 +279,7 @@ function fat_mat2d_plot_py_cargs(
  * @returns Outputs object.
  */
 function fat_mat2d_plot_py_outputs(
-    params: FatMat2dPlotPyParameters,
+    params: FatMat2dPlotPyParamsDict,
     execution: Execution,
 ): FatMat2dPlotPyOutputs {
     const ret: FatMat2dPlotPyOutputs = {
@@ -305,7 +305,7 @@ function fat_mat2d_plot_py_outputs(
  * @returns NamedTuple of outputs (described in `FatMat2dPlotPyOutputs`).
  */
 function fat_mat2d_plot_py_execute(
-    params: FatMat2dPlotPyParameters,
+    params: FatMat2dPlotPyParamsDict,
     runner: Runner | null = null,
 ): FatMat2dPlotPyOutputs {
     runner = runner || getGlobalRunner();
@@ -392,6 +392,8 @@ function fat_mat2d_plot_py(
 export {
       FAT_MAT2D_PLOT_PY_METADATA,
       FatMat2dPlotPyOutputs,
+      FatMat2dPlotPyParamsDict,
+      FatMat2dPlotPyParamsDictTagged,
       fat_mat2d_plot_py,
       fat_mat2d_plot_py_execute,
       fat_mat2d_plot_py_params,

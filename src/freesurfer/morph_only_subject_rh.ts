@@ -11,15 +11,15 @@ const MORPH_ONLY_SUBJECT_RH_METADATA: Metadata = {
 };
 
 
-interface MorphOnlySubjectRhParameters {
+interface MorphOnlySubjectRhParamsDict {
     "@type"?: "freesurfer/morph_only_subject-rh";
     "subject_dir": InputPathType;
 }
-type MorphOnlySubjectRhParametersTagged = Required<Pick<MorphOnlySubjectRhParameters, '@type'>> & MorphOnlySubjectRhParameters;
+type MorphOnlySubjectRhParamsDictTagged = Required<Pick<MorphOnlySubjectRhParamsDict, '@type'>> & MorphOnlySubjectRhParamsDict;
 
 
 /**
- * Output object returned when calling `MorphOnlySubjectRhParameters(...)`.
+ * Output object returned when calling `MorphOnlySubjectRhParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface MorphOnlySubjectRhOutputs {
  */
 function morph_only_subject_rh_params(
     subject_dir: InputPathType,
-): MorphOnlySubjectRhParametersTagged {
+): MorphOnlySubjectRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_only_subject-rh" as const,
         "subject_dir": subject_dir,
@@ -62,7 +62,7 @@ function morph_only_subject_rh_params(
  * @returns Command-line arguments.
  */
 function morph_only_subject_rh_cargs(
-    params: MorphOnlySubjectRhParameters,
+    params: MorphOnlySubjectRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function morph_only_subject_rh_cargs(
  * @returns Outputs object.
  */
 function morph_only_subject_rh_outputs(
-    params: MorphOnlySubjectRhParameters,
+    params: MorphOnlySubjectRhParamsDict,
     execution: Execution,
 ): MorphOnlySubjectRhOutputs {
     const ret: MorphOnlySubjectRhOutputs = {
@@ -110,7 +110,7 @@ function morph_only_subject_rh_outputs(
  * @returns NamedTuple of outputs (described in `MorphOnlySubjectRhOutputs`).
  */
 function morph_only_subject_rh_execute(
-    params: MorphOnlySubjectRhParameters,
+    params: MorphOnlySubjectRhParamsDict,
     runner: Runner | null = null,
 ): MorphOnlySubjectRhOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function morph_only_subject_rh(
 export {
       MORPH_ONLY_SUBJECT_RH_METADATA,
       MorphOnlySubjectRhOutputs,
+      MorphOnlySubjectRhParamsDict,
+      MorphOnlySubjectRhParamsDictTagged,
       morph_only_subject_rh,
       morph_only_subject_rh_execute,
       morph_only_subject_rh_params,

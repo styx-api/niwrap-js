@@ -11,18 +11,18 @@ const NICAT_METADATA: Metadata = {
 };
 
 
-interface NicatParameters {
+interface NicatParamsDict {
     "@type"?: "afni/nicat";
     "stream_spec": string;
     "reopen"?: string | null | undefined;
     "copy_stream": boolean;
     "read_only": boolean;
 }
-type NicatParametersTagged = Required<Pick<NicatParameters, '@type'>> & NicatParameters;
+type NicatParamsDictTagged = Required<Pick<NicatParamsDict, '@type'>> & NicatParamsDict;
 
 
 /**
- * Output object returned when calling `NicatParameters(...)`.
+ * Output object returned when calling `NicatParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function nicat_params(
     reopen: string | null = null,
     copy_stream: boolean = false,
     read_only: boolean = false,
-): NicatParametersTagged {
+): NicatParamsDictTagged {
     const params = {
         "@type": "afni/nicat" as const,
         "stream_spec": stream_spec,
@@ -72,7 +72,7 @@ function nicat_params(
  * @returns Command-line arguments.
  */
 function nicat_cargs(
-    params: NicatParameters,
+    params: NicatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function nicat_cargs(
  * @returns Outputs object.
  */
 function nicat_outputs(
-    params: NicatParameters,
+    params: NicatParamsDict,
     execution: Execution,
 ): NicatOutputs {
     const ret: NicatOutputs = {
@@ -128,7 +128,7 @@ function nicat_outputs(
  * @returns NamedTuple of outputs (described in `NicatOutputs`).
  */
 function nicat_execute(
-    params: NicatParameters,
+    params: NicatParamsDict,
     runner: Runner | null = null,
 ): NicatOutputs {
     runner = runner || getGlobalRunner();
@@ -173,6 +173,8 @@ function nicat(
 export {
       NICAT_METADATA,
       NicatOutputs,
+      NicatParamsDict,
+      NicatParamsDictTagged,
       nicat,
       nicat_execute,
       nicat_params,

@@ -11,7 +11,7 @@ const CONF2HIRES_METADATA: Metadata = {
 };
 
 
-interface Conf2hiresParameters {
+interface Conf2hiresParamsDict {
     "@type"?: "freesurfer/conf2hires";
     "subject": string;
     "t2": boolean;
@@ -35,11 +35,11 @@ interface Conf2hiresParameters {
     "expert"?: string | null | undefined;
     "force_update": boolean;
 }
-type Conf2hiresParametersTagged = Required<Pick<Conf2hiresParameters, '@type'>> & Conf2hiresParameters;
+type Conf2hiresParamsDictTagged = Required<Pick<Conf2hiresParamsDict, '@type'>> & Conf2hiresParamsDict;
 
 
 /**
- * Output object returned when calling `Conf2hiresParameters(...)`.
+ * Output object returned when calling `Conf2hiresParamsDict(...)`.
  *
  * @interface
  */
@@ -100,7 +100,7 @@ function conf2hires_params(
     stopmask: string | null = null,
     expert: string | null = null,
     force_update: boolean = false,
-): Conf2hiresParametersTagged {
+): Conf2hiresParamsDictTagged {
     const params = {
         "@type": "freesurfer/conf2hires" as const,
         "subject": subject,
@@ -148,7 +148,7 @@ function conf2hires_params(
  * @returns Command-line arguments.
  */
 function conf2hires_cargs(
-    params: Conf2hiresParameters,
+    params: Conf2hiresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -245,7 +245,7 @@ function conf2hires_cargs(
  * @returns Outputs object.
  */
 function conf2hires_outputs(
-    params: Conf2hiresParameters,
+    params: Conf2hiresParamsDict,
     execution: Execution,
 ): Conf2hiresOutputs {
     const ret: Conf2hiresOutputs = {
@@ -270,7 +270,7 @@ function conf2hires_outputs(
  * @returns NamedTuple of outputs (described in `Conf2hiresOutputs`).
  */
 function conf2hires_execute(
-    params: Conf2hiresParameters,
+    params: Conf2hiresParamsDict,
     runner: Runner | null = null,
 ): Conf2hiresOutputs {
     runner = runner || getGlobalRunner();
@@ -349,6 +349,8 @@ function conf2hires(
 export {
       CONF2HIRES_METADATA,
       Conf2hiresOutputs,
+      Conf2hiresParamsDict,
+      Conf2hiresParamsDictTagged,
       conf2hires,
       conf2hires_execute,
       conf2hires_params,

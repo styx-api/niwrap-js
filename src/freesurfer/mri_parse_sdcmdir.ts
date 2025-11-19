@@ -11,7 +11,7 @@ const MRI_PARSE_SDCMDIR_METADATA: Metadata = {
 };
 
 
-interface MriParseSdcmdirParameters {
+interface MriParseSdcmdirParamsDict {
     "@type"?: "freesurfer/mri_parse_sdcmdir";
     "sdicomdir": string;
     "outfile"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface MriParseSdcmdirParameters {
     "summarize": boolean;
     "dwi": boolean;
 }
-type MriParseSdcmdirParametersTagged = Required<Pick<MriParseSdcmdirParameters, '@type'>> & MriParseSdcmdirParameters;
+type MriParseSdcmdirParamsDictTagged = Required<Pick<MriParseSdcmdirParamsDict, '@type'>> & MriParseSdcmdirParamsDict;
 
 
 /**
- * Output object returned when calling `MriParseSdcmdirParameters(...)`.
+ * Output object returned when calling `MriParseSdcmdirParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function mri_parse_sdcmdir_params(
     sortbyrun: boolean = false,
     summarize: boolean = false,
     dwi: boolean = false,
-): MriParseSdcmdirParametersTagged {
+): MriParseSdcmdirParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_parse_sdcmdir" as const,
         "sdicomdir": sdicomdir,
@@ -76,7 +76,7 @@ function mri_parse_sdcmdir_params(
  * @returns Command-line arguments.
  */
 function mri_parse_sdcmdir_cargs(
-    params: MriParseSdcmdirParameters,
+    params: MriParseSdcmdirParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function mri_parse_sdcmdir_cargs(
  * @returns Outputs object.
  */
 function mri_parse_sdcmdir_outputs(
-    params: MriParseSdcmdirParameters,
+    params: MriParseSdcmdirParamsDict,
     execution: Execution,
 ): MriParseSdcmdirOutputs {
     const ret: MriParseSdcmdirOutputs = {
@@ -138,7 +138,7 @@ function mri_parse_sdcmdir_outputs(
  * @returns NamedTuple of outputs (described in `MriParseSdcmdirOutputs`).
  */
 function mri_parse_sdcmdir_execute(
-    params: MriParseSdcmdirParameters,
+    params: MriParseSdcmdirParamsDict,
     runner: Runner | null = null,
 ): MriParseSdcmdirOutputs {
     runner = runner || getGlobalRunner();
@@ -185,6 +185,8 @@ function mri_parse_sdcmdir(
 export {
       MRI_PARSE_SDCMDIR_METADATA,
       MriParseSdcmdirOutputs,
+      MriParseSdcmdirParamsDict,
+      MriParseSdcmdirParamsDictTagged,
       mri_parse_sdcmdir,
       mri_parse_sdcmdir_execute,
       mri_parse_sdcmdir_params,

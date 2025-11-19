@@ -11,1266 +11,1266 @@ const C2D_METADATA: Metadata = {
 };
 
 
-interface C2dAccumParameters {
+interface C2dAccumParamsDict {
     "@type"?: "accum";
     "accum": string;
 }
-type C2dAccumParametersTagged = Required<Pick<C2dAccumParameters, '@type'>> & C2dAccumParameters;
+type C2dAccumParamsDictTagged = Required<Pick<C2dAccumParamsDict, '@type'>> & C2dAccumParamsDict;
 
 
-interface C2dAcosParameters {
+interface C2dAcosParamsDict {
     "@type"?: "acos";
     "acos": string;
 }
-type C2dAcosParametersTagged = Required<Pick<C2dAcosParameters, '@type'>> & C2dAcosParameters;
+type C2dAcosParamsDictTagged = Required<Pick<C2dAcosParamsDict, '@type'>> & C2dAcosParamsDict;
 
 
-interface C2dAddParameters {
+interface C2dAddParamsDict {
     "@type"?: "add";
     "add": string;
 }
-type C2dAddParametersTagged = Required<Pick<C2dAddParameters, '@type'>> & C2dAddParameters;
+type C2dAddParamsDictTagged = Required<Pick<C2dAddParamsDict, '@type'>> & C2dAddParamsDict;
 
 
-interface C2dAlignLandmarksParameters {
+interface C2dAlignLandmarksParamsDict {
     "@type"?: "align_landmarks";
     "align_landmarks": string;
 }
-type C2dAlignLandmarksParametersTagged = Required<Pick<C2dAlignLandmarksParameters, '@type'>> & C2dAlignLandmarksParameters;
+type C2dAlignLandmarksParamsDictTagged = Required<Pick<C2dAlignLandmarksParamsDict, '@type'>> & C2dAlignLandmarksParamsDict;
 
 
-interface C2dAnisotropicDiffusionParameters {
+interface C2dAnisotropicDiffusionParamsDict {
     "@type"?: "anisotropic_diffusion";
     "anisotropic_diffusion": string;
 }
-type C2dAnisotropicDiffusionParametersTagged = Required<Pick<C2dAnisotropicDiffusionParameters, '@type'>> & C2dAnisotropicDiffusionParameters;
+type C2dAnisotropicDiffusionParamsDictTagged = Required<Pick<C2dAnisotropicDiffusionParamsDict, '@type'>> & C2dAnisotropicDiffusionParamsDict;
 
 
-interface C2dAntialiasParameters {
+interface C2dAntialiasParamsDict {
     "@type"?: "antialias";
     "antialias": string;
 }
-type C2dAntialiasParametersTagged = Required<Pick<C2dAntialiasParameters, '@type'>> & C2dAntialiasParameters;
+type C2dAntialiasParamsDictTagged = Required<Pick<C2dAntialiasParamsDict, '@type'>> & C2dAntialiasParamsDict;
 
 
-interface C2dSetParameters {
+interface C2dSetParamsDict {
     "@type"?: "set";
     "set": string;
 }
-type C2dSetParametersTagged = Required<Pick<C2dSetParameters, '@type'>> & C2dSetParameters;
+type C2dSetParamsDictTagged = Required<Pick<C2dSetParamsDict, '@type'>> & C2dSetParamsDict;
 
 
-interface C2dAsinParameters {
+interface C2dAsinParamsDict {
     "@type"?: "asin";
     "asin": string;
 }
-type C2dAsinParametersTagged = Required<Pick<C2dAsinParameters, '@type'>> & C2dAsinParameters;
+type C2dAsinParamsDictTagged = Required<Pick<C2dAsinParamsDict, '@type'>> & C2dAsinParamsDict;
 
 
-interface C2dAtan2Parameters {
+interface C2dAtan2ParamsDict {
     "@type"?: "atan2";
     "atan2": string;
 }
-type C2dAtan2ParametersTagged = Required<Pick<C2dAtan2Parameters, '@type'>> & C2dAtan2Parameters;
+type C2dAtan2ParamsDictTagged = Required<Pick<C2dAtan2ParamsDict, '@type'>> & C2dAtan2ParamsDict;
 
 
-interface C2dBackgroundParameters {
+interface C2dBackgroundParamsDict {
     "@type"?: "background";
     "background": string;
 }
-type C2dBackgroundParametersTagged = Required<Pick<C2dBackgroundParameters, '@type'>> & C2dBackgroundParameters;
+type C2dBackgroundParamsDictTagged = Required<Pick<C2dBackgroundParamsDict, '@type'>> & C2dBackgroundParamsDict;
 
 
-interface C2dN4BiasCorrectionParameters {
+interface C2dN4BiasCorrectionParamsDict {
     "@type"?: "n4_bias_correction";
     "n4_bias_correction": string;
 }
-type C2dN4BiasCorrectionParametersTagged = Required<Pick<C2dN4BiasCorrectionParameters, '@type'>> & C2dN4BiasCorrectionParameters;
+type C2dN4BiasCorrectionParamsDictTagged = Required<Pick<C2dN4BiasCorrectionParamsDict, '@type'>> & C2dN4BiasCorrectionParamsDict;
 
 
-interface C2dBinarizeParameters {
+interface C2dBinarizeParamsDict {
     "@type"?: "binarize";
     "binarize": string;
 }
-type C2dBinarizeParametersTagged = Required<Pick<C2dBinarizeParameters, '@type'>> & C2dBinarizeParameters;
+type C2dBinarizeParamsDictTagged = Required<Pick<C2dBinarizeParamsDict, '@type'>> & C2dBinarizeParamsDict;
 
 
-interface C2dCannyParameters {
+interface C2dCannyParamsDict {
     "@type"?: "canny";
     "canny": string;
 }
-type C2dCannyParametersTagged = Required<Pick<C2dCannyParameters, '@type'>> & C2dCannyParameters;
+type C2dCannyParamsDictTagged = Required<Pick<C2dCannyParamsDict, '@type'>> & C2dCannyParamsDict;
 
 
-interface C2dCeilParameters {
+interface C2dCeilParamsDict {
     "@type"?: "ceil";
     "ceil": string;
 }
-type C2dCeilParametersTagged = Required<Pick<C2dCeilParameters, '@type'>> & C2dCeilParameters;
+type C2dCeilParamsDictTagged = Required<Pick<C2dCeilParamsDict, '@type'>> & C2dCeilParamsDict;
 
 
-interface C2dCentroidParameters {
+interface C2dCentroidParamsDict {
     "@type"?: "centroid";
     "centroid": string;
 }
-type C2dCentroidParametersTagged = Required<Pick<C2dCentroidParameters, '@type'>> & C2dCentroidParameters;
+type C2dCentroidParamsDictTagged = Required<Pick<C2dCentroidParamsDict, '@type'>> & C2dCentroidParamsDict;
 
 
-interface C2dCentroidMarkParameters {
+interface C2dCentroidMarkParamsDict {
     "@type"?: "centroid_mark";
     "centroid_mark": string;
 }
-type C2dCentroidMarkParametersTagged = Required<Pick<C2dCentroidMarkParameters, '@type'>> & C2dCentroidMarkParameters;
+type C2dCentroidMarkParamsDictTagged = Required<Pick<C2dCentroidMarkParamsDict, '@type'>> & C2dCentroidMarkParamsDict;
 
 
-interface C2dConnectedComponentsParameters {
+interface C2dConnectedComponentsParamsDict {
     "@type"?: "connected_components";
     "connected_components": string;
 }
-type C2dConnectedComponentsParametersTagged = Required<Pick<C2dConnectedComponentsParameters, '@type'>> & C2dConnectedComponentsParameters;
+type C2dConnectedComponentsParamsDictTagged = Required<Pick<C2dConnectedComponentsParamsDict, '@type'>> & C2dConnectedComponentsParamsDict;
 
 
-interface C2dClearParameters {
+interface C2dClearParamsDict {
     "@type"?: "clear";
     "clear": string;
 }
-type C2dClearParametersTagged = Required<Pick<C2dClearParameters, '@type'>> & C2dClearParameters;
+type C2dClearParamsDictTagged = Required<Pick<C2dClearParamsDict, '@type'>> & C2dClearParamsDict;
 
 
-interface C2dClipParameters {
+interface C2dClipParamsDict {
     "@type"?: "clip";
     "clip": string;
 }
-type C2dClipParametersTagged = Required<Pick<C2dClipParameters, '@type'>> & C2dClipParameters;
+type C2dClipParamsDictTagged = Required<Pick<C2dClipParamsDict, '@type'>> & C2dClipParamsDict;
 
 
-interface C2dColorMapParameters {
+interface C2dColorMapParamsDict {
     "@type"?: "color_map";
     "color_map": string;
 }
-type C2dColorMapParametersTagged = Required<Pick<C2dColorMapParameters, '@type'>> & C2dColorMapParameters;
+type C2dColorMapParamsDictTagged = Required<Pick<C2dColorMapParamsDict, '@type'>> & C2dColorMapParamsDict;
 
 
-interface C2dCompressParameters {
+interface C2dCompressParamsDict {
     "@type"?: "compress";
     "compress": string;
 }
-type C2dCompressParametersTagged = Required<Pick<C2dCompressParameters, '@type'>> & C2dCompressParameters;
+type C2dCompressParamsDictTagged = Required<Pick<C2dCompressParamsDict, '@type'>> & C2dCompressParamsDict;
 
 
-interface C2dNoCompressParameters {
+interface C2dNoCompressParamsDict {
     "@type"?: "no_compress";
     "no_compress": string;
 }
-type C2dNoCompressParametersTagged = Required<Pick<C2dNoCompressParameters, '@type'>> & C2dNoCompressParameters;
+type C2dNoCompressParamsDictTagged = Required<Pick<C2dNoCompressParamsDict, '@type'>> & C2dNoCompressParamsDict;
 
 
-interface C2dConvParameters {
+interface C2dConvParamsDict {
     "@type"?: "conv";
     "conv": string;
 }
-type C2dConvParametersTagged = Required<Pick<C2dConvParameters, '@type'>> & C2dConvParameters;
+type C2dConvParamsDictTagged = Required<Pick<C2dConvParamsDict, '@type'>> & C2dConvParamsDict;
 
 
-interface C2dCoordinateMapVoxelParameters {
+interface C2dCoordinateMapVoxelParamsDict {
     "@type"?: "coordinate_map_voxel";
     "coordinate_map_voxel": string;
 }
-type C2dCoordinateMapVoxelParametersTagged = Required<Pick<C2dCoordinateMapVoxelParameters, '@type'>> & C2dCoordinateMapVoxelParameters;
+type C2dCoordinateMapVoxelParamsDictTagged = Required<Pick<C2dCoordinateMapVoxelParamsDict, '@type'>> & C2dCoordinateMapVoxelParamsDict;
 
 
-interface C2dCoordinateMapPhysicalParameters {
+interface C2dCoordinateMapPhysicalParamsDict {
     "@type"?: "coordinate_map_physical";
     "coordinate_map_physical": string;
 }
-type C2dCoordinateMapPhysicalParametersTagged = Required<Pick<C2dCoordinateMapPhysicalParameters, '@type'>> & C2dCoordinateMapPhysicalParameters;
+type C2dCoordinateMapPhysicalParamsDictTagged = Required<Pick<C2dCoordinateMapPhysicalParamsDict, '@type'>> & C2dCoordinateMapPhysicalParamsDict;
 
 
-interface C2dCopyTransformParameters {
+interface C2dCopyTransformParamsDict {
     "@type"?: "copy_transform";
     "copy_transform": string;
 }
-type C2dCopyTransformParametersTagged = Required<Pick<C2dCopyTransformParameters, '@type'>> & C2dCopyTransformParameters;
+type C2dCopyTransformParamsDictTagged = Required<Pick<C2dCopyTransformParamsDict, '@type'>> & C2dCopyTransformParamsDict;
 
 
-interface C2dCosParameters {
+interface C2dCosParamsDict {
     "@type"?: "cos";
     "cos": string;
 }
-type C2dCosParametersTagged = Required<Pick<C2dCosParameters, '@type'>> & C2dCosParameters;
+type C2dCosParamsDictTagged = Required<Pick<C2dCosParamsDict, '@type'>> & C2dCosParamsDict;
 
 
-interface C2dCreateParameters {
+interface C2dCreateParamsDict {
     "@type"?: "create";
     "create": string;
 }
-type C2dCreateParametersTagged = Required<Pick<C2dCreateParameters, '@type'>> & C2dCreateParameters;
+type C2dCreateParamsDictTagged = Required<Pick<C2dCreateParamsDict, '@type'>> & C2dCreateParamsDict;
 
 
-interface C2dDicomSeriesListParameters {
+interface C2dDicomSeriesListParamsDict {
     "@type"?: "dicom_series_list";
     "dicom_series_list": string;
 }
-type C2dDicomSeriesListParametersTagged = Required<Pick<C2dDicomSeriesListParameters, '@type'>> & C2dDicomSeriesListParameters;
+type C2dDicomSeriesListParamsDictTagged = Required<Pick<C2dDicomSeriesListParamsDict, '@type'>> & C2dDicomSeriesListParamsDict;
 
 
-interface C2dDicomSeriesReadParameters {
+interface C2dDicomSeriesReadParamsDict {
     "@type"?: "dicom_series_read";
     "dicom_series_read": string;
 }
-type C2dDicomSeriesReadParametersTagged = Required<Pick<C2dDicomSeriesReadParameters, '@type'>> & C2dDicomSeriesReadParameters;
+type C2dDicomSeriesReadParamsDictTagged = Required<Pick<C2dDicomSeriesReadParamsDict, '@type'>> & C2dDicomSeriesReadParamsDict;
 
 
-interface C2dDilateParameters {
+interface C2dDilateParamsDict {
     "@type"?: "dilate";
     "dilate": string;
 }
-type C2dDilateParametersTagged = Required<Pick<C2dDilateParameters, '@type'>> & C2dDilateParameters;
+type C2dDilateParamsDictTagged = Required<Pick<C2dDilateParamsDict, '@type'>> & C2dDilateParamsDict;
 
 
-interface C2dDivideParameters {
+interface C2dDivideParamsDict {
     "@type"?: "divide";
     "divide": string;
 }
-type C2dDivideParametersTagged = Required<Pick<C2dDivideParameters, '@type'>> & C2dDivideParameters;
+type C2dDivideParamsDictTagged = Required<Pick<C2dDivideParamsDict, '@type'>> & C2dDivideParamsDict;
 
 
-interface C2dDuplicateParameters {
+interface C2dDuplicateParamsDict {
     "@type"?: "duplicate";
     "duplicate": string;
 }
-type C2dDuplicateParametersTagged = Required<Pick<C2dDuplicateParameters, '@type'>> & C2dDuplicateParameters;
+type C2dDuplicateParamsDictTagged = Required<Pick<C2dDuplicateParamsDict, '@type'>> & C2dDuplicateParamsDict;
 
 
-interface C2dEndaccumParameters {
+interface C2dEndaccumParamsDict {
     "@type"?: "endaccum";
     "endaccum": string;
 }
-type C2dEndaccumParametersTagged = Required<Pick<C2dEndaccumParameters, '@type'>> & C2dEndaccumParameters;
+type C2dEndaccumParamsDictTagged = Required<Pick<C2dEndaccumParamsDict, '@type'>> & C2dEndaccumParamsDict;
 
 
-interface C2dEndforParameters {
+interface C2dEndforParamsDict {
     "@type"?: "endfor";
     "endfor": string;
 }
-type C2dEndforParametersTagged = Required<Pick<C2dEndforParameters, '@type'>> & C2dEndforParameters;
+type C2dEndforParamsDictTagged = Required<Pick<C2dEndforParamsDict, '@type'>> & C2dEndforParamsDict;
 
 
-interface C2dErodeParameters {
+interface C2dErodeParamsDict {
     "@type"?: "erode";
     "erode": string;
 }
-type C2dErodeParametersTagged = Required<Pick<C2dErodeParameters, '@type'>> & C2dErodeParameters;
+type C2dErodeParamsDictTagged = Required<Pick<C2dErodeParamsDict, '@type'>> & C2dErodeParamsDict;
 
 
-interface C2dErfParameters {
+interface C2dErfParamsDict {
     "@type"?: "erf";
     "erf": string;
 }
-type C2dErfParametersTagged = Required<Pick<C2dErfParameters, '@type'>> & C2dErfParameters;
+type C2dErfParamsDictTagged = Required<Pick<C2dErfParamsDict, '@type'>> & C2dErfParamsDict;
 
 
-interface C2dExpParameters {
+interface C2dExpParamsDict {
     "@type"?: "exp";
     "exp": string;
 }
-type C2dExpParametersTagged = Required<Pick<C2dExpParameters, '@type'>> & C2dExpParameters;
+type C2dExpParamsDictTagged = Required<Pick<C2dExpParamsDict, '@type'>> & C2dExpParamsDict;
 
 
-interface C2dExportPatchesParameters {
+interface C2dExportPatchesParamsDict {
     "@type"?: "export_patches";
     "export_patches": string;
 }
-type C2dExportPatchesParametersTagged = Required<Pick<C2dExportPatchesParameters, '@type'>> & C2dExportPatchesParameters;
+type C2dExportPatchesParamsDictTagged = Required<Pick<C2dExportPatchesParamsDict, '@type'>> & C2dExportPatchesParamsDict;
 
 
-interface C2dExportPatchesAugParameters {
+interface C2dExportPatchesAugParamsDict {
     "@type"?: "export_patches_aug";
     "export_patches_aug": string;
 }
-type C2dExportPatchesAugParametersTagged = Required<Pick<C2dExportPatchesAugParameters, '@type'>> & C2dExportPatchesAugParameters;
+type C2dExportPatchesAugParamsDictTagged = Required<Pick<C2dExportPatchesAugParamsDict, '@type'>> & C2dExportPatchesAugParamsDict;
 
 
-interface C2dExtrudeSegParameters {
+interface C2dExtrudeSegParamsDict {
     "@type"?: "extrude_seg";
     "extrude_seg": string;
 }
-type C2dExtrudeSegParametersTagged = Required<Pick<C2dExtrudeSegParameters, '@type'>> & C2dExtrudeSegParameters;
+type C2dExtrudeSegParamsDictTagged = Required<Pick<C2dExtrudeSegParamsDict, '@type'>> & C2dExtrudeSegParamsDict;
 
 
-interface C2dFillBackgroundWithNoiseParameters {
+interface C2dFillBackgroundWithNoiseParamsDict {
     "@type"?: "fill_background_with_noise";
     "fill_background_with_noise": string;
 }
-type C2dFillBackgroundWithNoiseParametersTagged = Required<Pick<C2dFillBackgroundWithNoiseParameters, '@type'>> & C2dFillBackgroundWithNoiseParameters;
+type C2dFillBackgroundWithNoiseParamsDictTagged = Required<Pick<C2dFillBackgroundWithNoiseParamsDict, '@type'>> & C2dFillBackgroundWithNoiseParamsDict;
 
 
-interface C2dFftParameters {
+interface C2dFftParamsDict {
     "@type"?: "fft";
     "fft": string;
 }
-type C2dFftParametersTagged = Required<Pick<C2dFftParameters, '@type'>> & C2dFftParameters;
+type C2dFftParamsDictTagged = Required<Pick<C2dFftParamsDict, '@type'>> & C2dFftParamsDict;
 
 
-interface C2dFlipParameters {
+interface C2dFlipParamsDict {
     "@type"?: "flip";
     "flip": string;
 }
-type C2dFlipParametersTagged = Required<Pick<C2dFlipParameters, '@type'>> & C2dFlipParameters;
+type C2dFlipParamsDictTagged = Required<Pick<C2dFlipParamsDict, '@type'>> & C2dFlipParamsDict;
 
 
-interface C2dFloorParameters {
+interface C2dFloorParamsDict {
     "@type"?: "floor";
     "floor": string;
 }
-type C2dFloorParametersTagged = Required<Pick<C2dFloorParameters, '@type'>> & C2dFloorParameters;
+type C2dFloorParamsDictTagged = Required<Pick<C2dFloorParamsDict, '@type'>> & C2dFloorParamsDict;
 
 
-interface C2dForeachParameters {
+interface C2dForeachParamsDict {
     "@type"?: "foreach";
     "foreach": string;
 }
-type C2dForeachParametersTagged = Required<Pick<C2dForeachParameters, '@type'>> & C2dForeachParameters;
+type C2dForeachParamsDictTagged = Required<Pick<C2dForeachParamsDict, '@type'>> & C2dForeachParamsDict;
 
 
-interface C2dForeachCompParameters {
+interface C2dForeachCompParamsDict {
     "@type"?: "foreach_comp";
     "foreach_comp": string;
 }
-type C2dForeachCompParametersTagged = Required<Pick<C2dForeachCompParameters, '@type'>> & C2dForeachCompParameters;
+type C2dForeachCompParamsDictTagged = Required<Pick<C2dForeachCompParamsDict, '@type'>> & C2dForeachCompParamsDict;
 
 
-interface C2dGlmParameters {
+interface C2dGlmParamsDict {
     "@type"?: "glm";
     "glm": string;
 }
-type C2dGlmParametersTagged = Required<Pick<C2dGlmParameters, '@type'>> & C2dGlmParameters;
+type C2dGlmParamsDictTagged = Required<Pick<C2dGlmParamsDict, '@type'>> & C2dGlmParamsDict;
 
 
-interface C2dGradientParameters {
+interface C2dGradientParamsDict {
     "@type"?: "gradient";
     "gradient": string;
 }
-type C2dGradientParametersTagged = Required<Pick<C2dGradientParameters, '@type'>> & C2dGradientParameters;
+type C2dGradientParamsDictTagged = Required<Pick<C2dGradientParamsDict, '@type'>> & C2dGradientParamsDict;
 
 
-interface C2dHelpParameters {
+interface C2dHelpParamsDict {
     "@type"?: "_help";
     "_help": string;
 }
-type C2dHelpParametersTagged = Required<Pick<C2dHelpParameters, '@type'>> & C2dHelpParameters;
+type C2dHelpParamsDictTagged = Required<Pick<C2dHelpParamsDict, '@type'>> & C2dHelpParamsDict;
 
 
-interface C2dHolefillParameters {
+interface C2dHolefillParamsDict {
     "@type"?: "holefill";
     "holefill": string;
 }
-type C2dHolefillParametersTagged = Required<Pick<C2dHolefillParameters, '@type'>> & C2dHolefillParameters;
+type C2dHolefillParamsDictTagged = Required<Pick<C2dHolefillParamsDict, '@type'>> & C2dHolefillParamsDict;
 
 
-interface C2dHessianEigenvaluesParameters {
+interface C2dHessianEigenvaluesParamsDict {
     "@type"?: "hessian_eigenvalues";
     "hessian_eigenvalues": string;
 }
-type C2dHessianEigenvaluesParametersTagged = Required<Pick<C2dHessianEigenvaluesParameters, '@type'>> & C2dHessianEigenvaluesParameters;
+type C2dHessianEigenvaluesParamsDictTagged = Required<Pick<C2dHessianEigenvaluesParamsDict, '@type'>> & C2dHessianEigenvaluesParamsDict;
 
 
-interface C2dHessianObjectnessParameters {
+interface C2dHessianObjectnessParamsDict {
     "@type"?: "hessian_objectness";
     "hessian_objectness": string;
 }
-type C2dHessianObjectnessParametersTagged = Required<Pick<C2dHessianObjectnessParameters, '@type'>> & C2dHessianObjectnessParameters;
+type C2dHessianObjectnessParamsDictTagged = Required<Pick<C2dHessianObjectnessParamsDict, '@type'>> & C2dHessianObjectnessParamsDict;
 
 
-interface C2dHistogramMatchParameters {
+interface C2dHistogramMatchParamsDict {
     "@type"?: "histogram_match";
     "histogram_match": string;
 }
-type C2dHistogramMatchParametersTagged = Required<Pick<C2dHistogramMatchParameters, '@type'>> & C2dHistogramMatchParameters;
+type C2dHistogramMatchParamsDictTagged = Required<Pick<C2dHistogramMatchParamsDict, '@type'>> & C2dHistogramMatchParamsDict;
 
 
-interface C2dInfoParameters {
+interface C2dInfoParamsDict {
     "@type"?: "info";
     "info": string;
 }
-type C2dInfoParametersTagged = Required<Pick<C2dInfoParameters, '@type'>> & C2dInfoParameters;
+type C2dInfoParamsDictTagged = Required<Pick<C2dInfoParamsDict, '@type'>> & C2dInfoParamsDict;
 
 
-interface C2dInfoFullParameters {
+interface C2dInfoFullParamsDict {
     "@type"?: "info_full";
     "info_full": string;
 }
-type C2dInfoFullParametersTagged = Required<Pick<C2dInfoFullParameters, '@type'>> & C2dInfoFullParameters;
+type C2dInfoFullParamsDictTagged = Required<Pick<C2dInfoFullParamsDict, '@type'>> & C2dInfoFullParamsDict;
 
 
-interface C2dInsertParameters {
+interface C2dInsertParamsDict {
     "@type"?: "insert";
     "insert": string;
 }
-type C2dInsertParametersTagged = Required<Pick<C2dInsertParameters, '@type'>> & C2dInsertParameters;
+type C2dInsertParamsDictTagged = Required<Pick<C2dInsertParamsDict, '@type'>> & C2dInsertParamsDict;
 
 
-interface C2dInterpolationParameters {
+interface C2dInterpolationParamsDict {
     "@type"?: "interpolation";
     "interpolation": string;
 }
-type C2dInterpolationParametersTagged = Required<Pick<C2dInterpolationParameters, '@type'>> & C2dInterpolationParameters;
+type C2dInterpolationParamsDictTagged = Required<Pick<C2dInterpolationParamsDict, '@type'>> & C2dInterpolationParamsDict;
 
 
-interface C2dIterationsParameters {
+interface C2dIterationsParamsDict {
     "@type"?: "iterations";
     "iterations": string;
 }
-type C2dIterationsParametersTagged = Required<Pick<C2dIterationsParameters, '@type'>> & C2dIterationsParameters;
+type C2dIterationsParamsDictTagged = Required<Pick<C2dIterationsParamsDict, '@type'>> & C2dIterationsParamsDict;
 
 
-interface C2dLabelOverlapParameters {
+interface C2dLabelOverlapParamsDict {
     "@type"?: "label_overlap";
     "label_overlap": string;
 }
-type C2dLabelOverlapParametersTagged = Required<Pick<C2dLabelOverlapParameters, '@type'>> & C2dLabelOverlapParameters;
+type C2dLabelOverlapParamsDictTagged = Required<Pick<C2dLabelOverlapParamsDict, '@type'>> & C2dLabelOverlapParamsDict;
 
 
-interface C2dLabelStatisticsParameters {
+interface C2dLabelStatisticsParamsDict {
     "@type"?: "label_statistics";
     "label_statistics": string;
 }
-type C2dLabelStatisticsParametersTagged = Required<Pick<C2dLabelStatisticsParameters, '@type'>> & C2dLabelStatisticsParameters;
+type C2dLabelStatisticsParamsDictTagged = Required<Pick<C2dLabelStatisticsParamsDict, '@type'>> & C2dLabelStatisticsParamsDict;
 
 
-interface C2dLandmarksToSpheresParameters {
+interface C2dLandmarksToSpheresParamsDict {
     "@type"?: "landmarks_to_spheres";
     "landmarks_to_spheres": string;
 }
-type C2dLandmarksToSpheresParametersTagged = Required<Pick<C2dLandmarksToSpheresParameters, '@type'>> & C2dLandmarksToSpheresParameters;
+type C2dLandmarksToSpheresParamsDictTagged = Required<Pick<C2dLandmarksToSpheresParamsDict, '@type'>> & C2dLandmarksToSpheresParamsDict;
 
 
-interface C2dLaplacianParameters {
+interface C2dLaplacianParamsDict {
     "@type"?: "laplacian";
     "laplacian": string;
 }
-type C2dLaplacianParametersTagged = Required<Pick<C2dLaplacianParameters, '@type'>> & C2dLaplacianParameters;
+type C2dLaplacianParamsDictTagged = Required<Pick<C2dLaplacianParamsDict, '@type'>> & C2dLaplacianParamsDict;
 
 
-interface C2dLevelsetParameters {
+interface C2dLevelsetParamsDict {
     "@type"?: "levelset";
     "levelset": string;
 }
-type C2dLevelsetParametersTagged = Required<Pick<C2dLevelsetParameters, '@type'>> & C2dLevelsetParameters;
+type C2dLevelsetParamsDictTagged = Required<Pick<C2dLevelsetParamsDict, '@type'>> & C2dLevelsetParamsDict;
 
 
-interface C2dLevelsetCurvatureParameters {
+interface C2dLevelsetCurvatureParamsDict {
     "@type"?: "levelset_curvature";
     "levelset_curvature": string;
 }
-type C2dLevelsetCurvatureParametersTagged = Required<Pick<C2dLevelsetCurvatureParameters, '@type'>> & C2dLevelsetCurvatureParameters;
+type C2dLevelsetCurvatureParamsDictTagged = Required<Pick<C2dLevelsetCurvatureParamsDict, '@type'>> & C2dLevelsetCurvatureParamsDict;
 
 
-interface C2dLevelsetAdvectionParameters {
+interface C2dLevelsetAdvectionParamsDict {
     "@type"?: "levelset_advection";
     "levelset_advection": string;
 }
-type C2dLevelsetAdvectionParametersTagged = Required<Pick<C2dLevelsetAdvectionParameters, '@type'>> & C2dLevelsetAdvectionParameters;
+type C2dLevelsetAdvectionParamsDictTagged = Required<Pick<C2dLevelsetAdvectionParamsDict, '@type'>> & C2dLevelsetAdvectionParamsDict;
 
 
-interface C2dLogParameters {
+interface C2dLogParamsDict {
     "@type"?: "log";
     "log": string;
 }
-type C2dLogParametersTagged = Required<Pick<C2dLogParameters, '@type'>> & C2dLogParameters;
+type C2dLogParamsDictTagged = Required<Pick<C2dLogParamsDict, '@type'>> & C2dLogParamsDict;
 
 
-interface C2dLog10Parameters {
+interface C2dLog10ParamsDict {
     "@type"?: "log10";
     "log10": string;
 }
-type C2dLog10ParametersTagged = Required<Pick<C2dLog10Parameters, '@type'>> & C2dLog10Parameters;
+type C2dLog10ParamsDictTagged = Required<Pick<C2dLog10ParamsDict, '@type'>> & C2dLog10ParamsDict;
 
 
-interface C2dManualParameters {
+interface C2dManualParamsDict {
     "@type"?: "manual";
     "manual": string;
 }
-type C2dManualParametersTagged = Required<Pick<C2dManualParameters, '@type'>> & C2dManualParameters;
+type C2dManualParamsDictTagged = Required<Pick<C2dManualParamsDict, '@type'>> & C2dManualParamsDict;
 
 
-interface C2dMatchBoundingBoxParameters {
+interface C2dMatchBoundingBoxParamsDict {
     "@type"?: "match_bounding_box";
     "match_bounding_box": string;
 }
-type C2dMatchBoundingBoxParametersTagged = Required<Pick<C2dMatchBoundingBoxParameters, '@type'>> & C2dMatchBoundingBoxParameters;
+type C2dMatchBoundingBoxParamsDictTagged = Required<Pick<C2dMatchBoundingBoxParamsDict, '@type'>> & C2dMatchBoundingBoxParamsDict;
 
 
-interface C2dMaximumParameters {
+interface C2dMaximumParamsDict {
     "@type"?: "maximum";
     "maximum": string;
 }
-type C2dMaximumParametersTagged = Required<Pick<C2dMaximumParameters, '@type'>> & C2dMaximumParameters;
+type C2dMaximumParamsDictTagged = Required<Pick<C2dMaximumParamsDict, '@type'>> & C2dMaximumParamsDict;
 
 
-interface C2dMulticomponentSplitParameters {
+interface C2dMulticomponentSplitParamsDict {
     "@type"?: "multicomponent_split";
     "multicomponent_split": string;
 }
-type C2dMulticomponentSplitParametersTagged = Required<Pick<C2dMulticomponentSplitParameters, '@type'>> & C2dMulticomponentSplitParameters;
+type C2dMulticomponentSplitParamsDictTagged = Required<Pick<C2dMulticomponentSplitParamsDict, '@type'>> & C2dMulticomponentSplitParamsDict;
 
 
-interface C2dMeanParameters {
+interface C2dMeanParamsDict {
     "@type"?: "mean";
     "mean": string;
 }
-type C2dMeanParametersTagged = Required<Pick<C2dMeanParameters, '@type'>> & C2dMeanParameters;
+type C2dMeanParamsDictTagged = Required<Pick<C2dMeanParamsDict, '@type'>> & C2dMeanParamsDict;
 
 
-interface C2dMedianFilterParameters {
+interface C2dMedianFilterParamsDict {
     "@type"?: "median_filter";
     "median_filter": string;
 }
-type C2dMedianFilterParametersTagged = Required<Pick<C2dMedianFilterParameters, '@type'>> & C2dMedianFilterParameters;
+type C2dMedianFilterParamsDictTagged = Required<Pick<C2dMedianFilterParamsDict, '@type'>> & C2dMedianFilterParamsDict;
 
 
-interface C2dMergeParameters {
+interface C2dMergeParamsDict {
     "@type"?: "merge";
     "merge": string;
 }
-type C2dMergeParametersTagged = Required<Pick<C2dMergeParameters, '@type'>> & C2dMergeParameters;
+type C2dMergeParamsDictTagged = Required<Pick<C2dMergeParamsDict, '@type'>> & C2dMergeParamsDict;
 
 
-interface C2dMeanFilterParameters {
+interface C2dMeanFilterParamsDict {
     "@type"?: "mean_filter";
     "mean_filter": string;
 }
-type C2dMeanFilterParametersTagged = Required<Pick<C2dMeanFilterParameters, '@type'>> & C2dMeanFilterParameters;
+type C2dMeanFilterParamsDictTagged = Required<Pick<C2dMeanFilterParamsDict, '@type'>> & C2dMeanFilterParamsDict;
 
 
-interface C2dMutualInfoParameters {
+interface C2dMutualInfoParamsDict {
     "@type"?: "mutual_info";
     "mutual_info": string;
 }
-type C2dMutualInfoParametersTagged = Required<Pick<C2dMutualInfoParameters, '@type'>> & C2dMutualInfoParameters;
+type C2dMutualInfoParamsDictTagged = Required<Pick<C2dMutualInfoParamsDict, '@type'>> & C2dMutualInfoParamsDict;
 
 
-interface C2dMinimumParameters {
+interface C2dMinimumParamsDict {
     "@type"?: "minimum";
     "minimum": string;
 }
-type C2dMinimumParametersTagged = Required<Pick<C2dMinimumParameters, '@type'>> & C2dMinimumParameters;
+type C2dMinimumParamsDictTagged = Required<Pick<C2dMinimumParamsDict, '@type'>> & C2dMinimumParamsDict;
 
 
-interface C2dMixtureModelParameters {
+interface C2dMixtureModelParamsDict {
     "@type"?: "mixture_model";
     "mixture_model": string;
 }
-type C2dMixtureModelParametersTagged = Required<Pick<C2dMixtureModelParameters, '@type'>> & C2dMixtureModelParameters;
+type C2dMixtureModelParamsDictTagged = Required<Pick<C2dMixtureModelParamsDict, '@type'>> & C2dMixtureModelParamsDict;
 
 
-interface C2dMomentsParameters {
+interface C2dMomentsParamsDict {
     "@type"?: "moments";
     "moments": string;
 }
-type C2dMomentsParametersTagged = Required<Pick<C2dMomentsParameters, '@type'>> & C2dMomentsParameters;
+type C2dMomentsParamsDictTagged = Required<Pick<C2dMomentsParamsDict, '@type'>> & C2dMomentsParamsDict;
 
 
-interface C2dMattesMutualInfoParameters {
+interface C2dMattesMutualInfoParamsDict {
     "@type"?: "mattes_mutual_info";
     "mattes_mutual_info": string;
 }
-type C2dMattesMutualInfoParametersTagged = Required<Pick<C2dMattesMutualInfoParameters, '@type'>> & C2dMattesMutualInfoParameters;
+type C2dMattesMutualInfoParamsDictTagged = Required<Pick<C2dMattesMutualInfoParamsDict, '@type'>> & C2dMattesMutualInfoParamsDict;
 
 
-interface C2dMeanSquareParameters {
+interface C2dMeanSquareParamsDict {
     "@type"?: "mean_square";
     "mean_square": string;
 }
-type C2dMeanSquareParametersTagged = Required<Pick<C2dMeanSquareParameters, '@type'>> & C2dMeanSquareParameters;
+type C2dMeanSquareParamsDictTagged = Required<Pick<C2dMeanSquareParamsDict, '@type'>> & C2dMeanSquareParamsDict;
 
 
-interface C2dMultiplyParameters {
+interface C2dMultiplyParamsDict {
     "@type"?: "multiply";
     "multiply": string;
 }
-type C2dMultiplyParametersTagged = Required<Pick<C2dMultiplyParameters, '@type'>> & C2dMultiplyParameters;
+type C2dMultiplyParamsDictTagged = Required<Pick<C2dMultiplyParamsDict, '@type'>> & C2dMultiplyParamsDict;
 
 
-interface C2dNormalizedCrossCorrelationParameters {
+interface C2dNormalizedCrossCorrelationParamsDict {
     "@type"?: "normalized_cross_correlation";
     "normalized_cross_correlation": string;
 }
-type C2dNormalizedCrossCorrelationParametersTagged = Required<Pick<C2dNormalizedCrossCorrelationParameters, '@type'>> & C2dNormalizedCrossCorrelationParameters;
+type C2dNormalizedCrossCorrelationParamsDictTagged = Required<Pick<C2dNormalizedCrossCorrelationParamsDict, '@type'>> & C2dNormalizedCrossCorrelationParamsDict;
 
 
-interface C2dNormalizedCorrelationParameters {
+interface C2dNormalizedCorrelationParamsDict {
     "@type"?: "normalized_correlation";
     "normalized_correlation": string;
 }
-type C2dNormalizedCorrelationParametersTagged = Required<Pick<C2dNormalizedCorrelationParameters, '@type'>> & C2dNormalizedCorrelationParameters;
+type C2dNormalizedCorrelationParamsDictTagged = Required<Pick<C2dNormalizedCorrelationParamsDict, '@type'>> & C2dNormalizedCorrelationParamsDict;
 
 
-interface C2dNormalizedMutualInfoParameters {
+interface C2dNormalizedMutualInfoParamsDict {
     "@type"?: "normalized_mutual_info";
     "normalized_mutual_info": string;
 }
-type C2dNormalizedMutualInfoParametersTagged = Required<Pick<C2dNormalizedMutualInfoParameters, '@type'>> & C2dNormalizedMutualInfoParameters;
+type C2dNormalizedMutualInfoParamsDictTagged = Required<Pick<C2dNormalizedMutualInfoParamsDict, '@type'>> & C2dNormalizedMutualInfoParamsDict;
 
 
-interface C2dNoiseGaussianParameters {
+interface C2dNoiseGaussianParamsDict {
     "@type"?: "noise_gaussian";
     "noise_gaussian": string;
 }
-type C2dNoiseGaussianParametersTagged = Required<Pick<C2dNoiseGaussianParameters, '@type'>> & C2dNoiseGaussianParameters;
+type C2dNoiseGaussianParamsDictTagged = Required<Pick<C2dNoiseGaussianParamsDict, '@type'>> & C2dNoiseGaussianParamsDict;
 
 
-interface C2dNoisePoissonParameters {
+interface C2dNoisePoissonParamsDict {
     "@type"?: "noise_poisson";
     "noise_poisson": string;
 }
-type C2dNoisePoissonParametersTagged = Required<Pick<C2dNoisePoissonParameters, '@type'>> & C2dNoisePoissonParameters;
+type C2dNoisePoissonParamsDictTagged = Required<Pick<C2dNoisePoissonParamsDict, '@type'>> & C2dNoisePoissonParamsDict;
 
 
-interface C2dNoiseSpeckleParameters {
+interface C2dNoiseSpeckleParamsDict {
     "@type"?: "noise_speckle";
     "noise_speckle": string;
 }
-type C2dNoiseSpeckleParametersTagged = Required<Pick<C2dNoiseSpeckleParameters, '@type'>> & C2dNoiseSpeckleParameters;
+type C2dNoiseSpeckleParamsDictTagged = Required<Pick<C2dNoiseSpeckleParamsDict, '@type'>> & C2dNoiseSpeckleParamsDict;
 
 
-interface C2dNoiseSaltPepperParameters {
+interface C2dNoiseSaltPepperParamsDict {
     "@type"?: "noise_salt_pepper";
     "noise_salt_pepper": string;
 }
-type C2dNoiseSaltPepperParametersTagged = Required<Pick<C2dNoiseSaltPepperParameters, '@type'>> & C2dNoiseSaltPepperParameters;
+type C2dNoiseSaltPepperParamsDictTagged = Required<Pick<C2dNoiseSaltPepperParamsDict, '@type'>> & C2dNoiseSaltPepperParamsDict;
 
 
-interface C2dNoMulticomponentSplitParameters {
+interface C2dNoMulticomponentSplitParamsDict {
     "@type"?: "no_multicomponent_split";
     "no_multicomponent_split": string;
 }
-type C2dNoMulticomponentSplitParametersTagged = Required<Pick<C2dNoMulticomponentSplitParameters, '@type'>> & C2dNoMulticomponentSplitParameters;
+type C2dNoMulticomponentSplitParamsDictTagged = Required<Pick<C2dNoMulticomponentSplitParamsDict, '@type'>> & C2dNoMulticomponentSplitParamsDict;
 
 
-interface C2dNormalizeLocalWindowParameters {
+interface C2dNormalizeLocalWindowParamsDict {
     "@type"?: "normalize_local_window";
     "normalize_local_window": string;
 }
-type C2dNormalizeLocalWindowParametersTagged = Required<Pick<C2dNormalizeLocalWindowParameters, '@type'>> & C2dNormalizeLocalWindowParameters;
+type C2dNormalizeLocalWindowParamsDictTagged = Required<Pick<C2dNormalizeLocalWindowParamsDict, '@type'>> & C2dNormalizeLocalWindowParamsDict;
 
 
-interface C2dNormpdfParameters {
+interface C2dNormpdfParamsDict {
     "@type"?: "normpdf";
     "normpdf": string;
 }
-type C2dNormpdfParametersTagged = Required<Pick<C2dNormpdfParameters, '@type'>> & C2dNormpdfParameters;
+type C2dNormpdfParamsDictTagged = Required<Pick<C2dNormpdfParamsDict, '@type'>> & C2dNormpdfParamsDict;
 
 
-interface C2dNoroundParameters {
+interface C2dNoroundParamsDict {
     "@type"?: "noround";
     "noround": string;
 }
-type C2dNoroundParametersTagged = Required<Pick<C2dNoroundParameters, '@type'>> & C2dNoroundParameters;
+type C2dNoroundParamsDictTagged = Required<Pick<C2dNoroundParamsDict, '@type'>> & C2dNoroundParamsDict;
 
 
-interface C2dNospmParameters {
+interface C2dNospmParamsDict {
     "@type"?: "nospm";
     "nospm": string;
 }
-type C2dNospmParametersTagged = Required<Pick<C2dNospmParameters, '@type'>> & C2dNospmParameters;
+type C2dNospmParamsDictTagged = Required<Pick<C2dNospmParamsDict, '@type'>> & C2dNospmParamsDict;
 
 
-interface C2dOutputParameters {
+interface C2dOutputParamsDict {
     "@type"?: "output";
     "output": string;
 }
-type C2dOutputParametersTagged = Required<Pick<C2dOutputParameters, '@type'>> & C2dOutputParameters;
+type C2dOutputParamsDictTagged = Required<Pick<C2dOutputParamsDict, '@type'>> & C2dOutputParamsDict;
 
 
-interface C2dOutputMulticomponentParameters {
+interface C2dOutputMulticomponentParamsDict {
     "@type"?: "output_multicomponent";
     "output_multicomponent": string;
 }
-type C2dOutputMulticomponentParametersTagged = Required<Pick<C2dOutputMulticomponentParameters, '@type'>> & C2dOutputMulticomponentParameters;
+type C2dOutputMulticomponentParamsDictTagged = Required<Pick<C2dOutputMulticomponentParamsDict, '@type'>> & C2dOutputMulticomponentParamsDict;
 
 
-interface C2dOutputMultipleMulticomponentParameters {
+interface C2dOutputMultipleMulticomponentParamsDict {
     "@type"?: "output_multiple_multicomponent";
     "output_multiple_multicomponent": string;
 }
-type C2dOutputMultipleMulticomponentParametersTagged = Required<Pick<C2dOutputMultipleMulticomponentParameters, '@type'>> & C2dOutputMultipleMulticomponentParameters;
+type C2dOutputMultipleMulticomponentParamsDictTagged = Required<Pick<C2dOutputMultipleMulticomponentParamsDict, '@type'>> & C2dOutputMultipleMulticomponentParamsDict;
 
 
-interface C2dOrientParameters {
+interface C2dOrientParamsDict {
     "@type"?: "orient";
     "orient": string;
 }
-type C2dOrientParametersTagged = Required<Pick<C2dOrientParameters, '@type'>> & C2dOrientParameters;
+type C2dOrientParamsDictTagged = Required<Pick<C2dOrientParamsDict, '@type'>> & C2dOrientParamsDict;
 
 
-interface C2dOutputMultipleParameters {
+interface C2dOutputMultipleParamsDict {
     "@type"?: "output_multiple";
     "output_multiple": string;
 }
-type C2dOutputMultipleParametersTagged = Required<Pick<C2dOutputMultipleParameters, '@type'>> & C2dOutputMultipleParameters;
+type C2dOutputMultipleParamsDictTagged = Required<Pick<C2dOutputMultipleParamsDict, '@type'>> & C2dOutputMultipleParamsDict;
 
 
-interface C2dOrient1Parameters {
+interface C2dOrient1ParamsDict {
     "@type"?: "orient_1";
     "orient": string;
 }
-type C2dOrient1ParametersTagged = Required<Pick<C2dOrient1Parameters, '@type'>> & C2dOrient1Parameters;
+type C2dOrient1ParamsDictTagged = Required<Pick<C2dOrient1ParamsDict, '@type'>> & C2dOrient1ParamsDict;
 
 
-interface C2dOriginParameters {
+interface C2dOriginParamsDict {
     "@type"?: "origin";
     "origin": string;
 }
-type C2dOriginParametersTagged = Required<Pick<C2dOriginParameters, '@type'>> & C2dOriginParameters;
+type C2dOriginParamsDictTagged = Required<Pick<C2dOriginParamsDict, '@type'>> & C2dOriginParamsDict;
 
 
-interface C2dOriginVoxelParameters {
+interface C2dOriginVoxelParamsDict {
     "@type"?: "origin_voxel";
     "origin_voxel": string;
 }
-type C2dOriginVoxelParametersTagged = Required<Pick<C2dOriginVoxelParameters, '@type'>> & C2dOriginVoxelParameters;
+type C2dOriginVoxelParamsDictTagged = Required<Pick<C2dOriginVoxelParamsDict, '@type'>> & C2dOriginVoxelParamsDict;
 
 
-interface C2dOriginVoxelCoordParameters {
+interface C2dOriginVoxelCoordParamsDict {
     "@type"?: "origin_voxel_coord";
     "origin_voxel_coord": string;
 }
-type C2dOriginVoxelCoordParametersTagged = Required<Pick<C2dOriginVoxelCoordParameters, '@type'>> & C2dOriginVoxelCoordParameters;
+type C2dOriginVoxelCoordParamsDictTagged = Required<Pick<C2dOriginVoxelCoordParamsDict, '@type'>> & C2dOriginVoxelCoordParamsDict;
 
 
-interface C2dOverlapParameters {
+interface C2dOverlapParamsDict {
     "@type"?: "overlap";
     "overlap": string;
 }
-type C2dOverlapParametersTagged = Required<Pick<C2dOverlapParameters, '@type'>> & C2dOverlapParameters;
+type C2dOverlapParamsDictTagged = Required<Pick<C2dOverlapParamsDict, '@type'>> & C2dOverlapParamsDict;
 
 
-interface C2dOverlayLabelImageParameters {
+interface C2dOverlayLabelImageParamsDict {
     "@type"?: "overlay_label_image";
     "overlay_label_image": string;
 }
-type C2dOverlayLabelImageParametersTagged = Required<Pick<C2dOverlayLabelImageParameters, '@type'>> & C2dOverlayLabelImageParameters;
+type C2dOverlayLabelImageParamsDictTagged = Required<Pick<C2dOverlayLabelImageParamsDict, '@type'>> & C2dOverlayLabelImageParamsDict;
 
 
-interface C2dPadParameters {
+interface C2dPadParamsDict {
     "@type"?: "pad";
     "pad": string;
 }
-type C2dPadParametersTagged = Required<Pick<C2dPadParameters, '@type'>> & C2dPadParameters;
+type C2dPadParamsDictTagged = Required<Pick<C2dPadParamsDict, '@type'>> & C2dPadParamsDict;
 
 
-interface C2dPadToParameters {
+interface C2dPadToParamsDict {
     "@type"?: "pad_to";
     "pad_to": string;
 }
-type C2dPadToParametersTagged = Required<Pick<C2dPadToParameters, '@type'>> & C2dPadToParameters;
+type C2dPadToParamsDictTagged = Required<Pick<C2dPadToParamsDict, '@type'>> & C2dPadToParamsDict;
 
 
-interface C2dPcaParameters {
+interface C2dPcaParamsDict {
     "@type"?: "pca";
     "pca": string;
 }
-type C2dPcaParametersTagged = Required<Pick<C2dPcaParameters, '@type'>> & C2dPcaParameters;
+type C2dPcaParamsDictTagged = Required<Pick<C2dPcaParamsDict, '@type'>> & C2dPcaParamsDict;
 
 
-interface C2dPercentIntensityModeParameters {
+interface C2dPercentIntensityModeParamsDict {
     "@type"?: "percent_intensity_mode";
     "percent_intensity_mode": string;
 }
-type C2dPercentIntensityModeParametersTagged = Required<Pick<C2dPercentIntensityModeParameters, '@type'>> & C2dPercentIntensityModeParameters;
+type C2dPercentIntensityModeParamsDictTagged = Required<Pick<C2dPercentIntensityModeParamsDict, '@type'>> & C2dPercentIntensityModeParamsDict;
 
 
-interface C2dPixelParameters {
+interface C2dPixelParamsDict {
     "@type"?: "pixel";
     "pixel": string;
 }
-type C2dPixelParametersTagged = Required<Pick<C2dPixelParameters, '@type'>> & C2dPixelParameters;
+type C2dPixelParamsDictTagged = Required<Pick<C2dPixelParamsDict, '@type'>> & C2dPixelParamsDict;
 
 
-interface C2dPopParameters {
+interface C2dPopParamsDict {
     "@type"?: "pop";
     "pop": string;
 }
-type C2dPopParametersTagged = Required<Pick<C2dPopParameters, '@type'>> & C2dPopParameters;
+type C2dPopParamsDictTagged = Required<Pick<C2dPopParamsDict, '@type'>> & C2dPopParamsDict;
 
 
-interface C2dPopasParameters {
+interface C2dPopasParamsDict {
     "@type"?: "popas";
     "popas": string;
 }
-type C2dPopasParametersTagged = Required<Pick<C2dPopasParameters, '@type'>> & C2dPopasParameters;
+type C2dPopasParamsDictTagged = Required<Pick<C2dPopasParamsDict, '@type'>> & C2dPopasParamsDict;
 
 
-interface C2dProbeParameters {
+interface C2dProbeParamsDict {
     "@type"?: "probe";
     "probe": string;
 }
-type C2dProbeParametersTagged = Required<Pick<C2dProbeParameters, '@type'>> & C2dProbeParameters;
+type C2dProbeParamsDictTagged = Required<Pick<C2dProbeParamsDict, '@type'>> & C2dProbeParamsDict;
 
 
-interface C2dPushParameters {
+interface C2dPushParamsDict {
     "@type"?: "push";
     "push": string;
 }
-type C2dPushParametersTagged = Required<Pick<C2dPushParameters, '@type'>> & C2dPushParameters;
+type C2dPushParamsDictTagged = Required<Pick<C2dPushParamsDict, '@type'>> & C2dPushParamsDict;
 
 
-interface C2dRankParameters {
+interface C2dRankParamsDict {
     "@type"?: "rank";
     "rank": string;
 }
-type C2dRankParametersTagged = Required<Pick<C2dRankParameters, '@type'>> & C2dRankParameters;
+type C2dRankParamsDictTagged = Required<Pick<C2dRankParamsDict, '@type'>> & C2dRankParamsDict;
 
 
-interface C2dReciprocalParameters {
+interface C2dReciprocalParamsDict {
     "@type"?: "reciprocal";
     "reciprocal": string;
 }
-type C2dReciprocalParametersTagged = Required<Pick<C2dReciprocalParameters, '@type'>> & C2dReciprocalParameters;
+type C2dReciprocalParamsDictTagged = Required<Pick<C2dReciprocalParamsDict, '@type'>> & C2dReciprocalParamsDict;
 
 
-interface C2dRegionParameters {
+interface C2dRegionParamsDict {
     "@type"?: "region";
     "region": string;
 }
-type C2dRegionParametersTagged = Required<Pick<C2dRegionParameters, '@type'>> & C2dRegionParameters;
+type C2dRegionParamsDictTagged = Required<Pick<C2dRegionParamsDict, '@type'>> & C2dRegionParamsDict;
 
 
-interface C2dReorderParameters {
+interface C2dReorderParamsDict {
     "@type"?: "reorder";
     "reorder": string;
 }
-type C2dReorderParametersTagged = Required<Pick<C2dReorderParameters, '@type'>> & C2dReorderParameters;
+type C2dReorderParamsDictTagged = Required<Pick<C2dReorderParamsDict, '@type'>> & C2dReorderParamsDict;
 
 
-interface C2dRetainLabelsParameters {
+interface C2dRetainLabelsParamsDict {
     "@type"?: "retain_labels";
     "retain_labels": string;
 }
-type C2dRetainLabelsParametersTagged = Required<Pick<C2dRetainLabelsParameters, '@type'>> & C2dRetainLabelsParameters;
+type C2dRetainLabelsParamsDictTagged = Required<Pick<C2dRetainLabelsParamsDict, '@type'>> & C2dRetainLabelsParamsDict;
 
 
-interface C2dRfApplyParameters {
+interface C2dRfApplyParamsDict {
     "@type"?: "rf_apply";
     "rf_apply": string;
 }
-type C2dRfApplyParametersTagged = Required<Pick<C2dRfApplyParameters, '@type'>> & C2dRfApplyParameters;
+type C2dRfApplyParamsDictTagged = Required<Pick<C2dRfApplyParamsDict, '@type'>> & C2dRfApplyParamsDict;
 
 
-interface C2dRfTrainParameters {
+interface C2dRfTrainParamsDict {
     "@type"?: "rf_train";
     "rf_train": string;
 }
-type C2dRfTrainParametersTagged = Required<Pick<C2dRfTrainParameters, '@type'>> & C2dRfTrainParameters;
+type C2dRfTrainParamsDictTagged = Required<Pick<C2dRfTrainParamsDict, '@type'>> & C2dRfTrainParamsDict;
 
 
-interface C2dRfParamPatchParameters {
+interface C2dRfParamPatchParamsDict {
     "@type"?: "rf_param_patch";
     "rf_param_patch": string;
 }
-type C2dRfParamPatchParametersTagged = Required<Pick<C2dRfParamPatchParameters, '@type'>> & C2dRfParamPatchParameters;
+type C2dRfParamPatchParamsDictTagged = Required<Pick<C2dRfParamPatchParamsDict, '@type'>> & C2dRfParamPatchParamsDict;
 
 
-interface C2dRfParamUsexyzParameters {
+interface C2dRfParamUsexyzParamsDict {
     "@type"?: "rf_param_usexyz";
     "rf_param_usexyz": string;
 }
-type C2dRfParamUsexyzParametersTagged = Required<Pick<C2dRfParamUsexyzParameters, '@type'>> & C2dRfParamUsexyzParameters;
+type C2dRfParamUsexyzParamsDictTagged = Required<Pick<C2dRfParamUsexyzParamsDict, '@type'>> & C2dRfParamUsexyzParamsDict;
 
 
-interface C2dRfParamNousexyzParameters {
+interface C2dRfParamNousexyzParamsDict {
     "@type"?: "rf_param_nousexyz";
     "rf_param_nousexyz": string;
 }
-type C2dRfParamNousexyzParametersTagged = Required<Pick<C2dRfParamNousexyzParameters, '@type'>> & C2dRfParamNousexyzParameters;
+type C2dRfParamNousexyzParamsDictTagged = Required<Pick<C2dRfParamNousexyzParamsDict, '@type'>> & C2dRfParamNousexyzParamsDict;
 
 
-interface C2dRfParamNtreesParameters {
+interface C2dRfParamNtreesParamsDict {
     "@type"?: "rf_param_ntrees";
     "rf_param_ntrees": string;
 }
-type C2dRfParamNtreesParametersTagged = Required<Pick<C2dRfParamNtreesParameters, '@type'>> & C2dRfParamNtreesParameters;
+type C2dRfParamNtreesParamsDictTagged = Required<Pick<C2dRfParamNtreesParamsDict, '@type'>> & C2dRfParamNtreesParamsDict;
 
 
-interface C2dRfParamTreedepthParameters {
+interface C2dRfParamTreedepthParamsDict {
     "@type"?: "rf_param_treedepth";
     "rf_param_treedepth": string;
 }
-type C2dRfParamTreedepthParametersTagged = Required<Pick<C2dRfParamTreedepthParameters, '@type'>> & C2dRfParamTreedepthParameters;
+type C2dRfParamTreedepthParamsDictTagged = Required<Pick<C2dRfParamTreedepthParamsDict, '@type'>> & C2dRfParamTreedepthParamsDict;
 
 
-interface C2dSetSformParameters {
+interface C2dSetSformParamsDict {
     "@type"?: "set_sform";
     "set_sform": string;
 }
-type C2dSetSformParametersTagged = Required<Pick<C2dSetSformParameters, '@type'>> & C2dSetSformParameters;
+type C2dSetSformParamsDictTagged = Required<Pick<C2dSetSformParamsDict, '@type'>> & C2dSetSformParamsDict;
 
 
-interface C2dReplaceParameters {
+interface C2dReplaceParamsDict {
     "@type"?: "replace";
     "replace": string;
 }
-type C2dReplaceParametersTagged = Required<Pick<C2dReplaceParameters, '@type'>> & C2dReplaceParameters;
+type C2dReplaceParamsDictTagged = Required<Pick<C2dReplaceParamsDict, '@type'>> & C2dReplaceParamsDict;
 
 
-interface C2dResampleParameters {
+interface C2dResampleParamsDict {
     "@type"?: "resample";
     "resample": string;
 }
-type C2dResampleParametersTagged = Required<Pick<C2dResampleParameters, '@type'>> & C2dResampleParameters;
+type C2dResampleParamsDictTagged = Required<Pick<C2dResampleParamsDict, '@type'>> & C2dResampleParamsDict;
 
 
-interface C2dResampleIsoParameters {
+interface C2dResampleIsoParamsDict {
     "@type"?: "resample_iso";
     "resample_iso": string;
 }
-type C2dResampleIsoParametersTagged = Required<Pick<C2dResampleIsoParameters, '@type'>> & C2dResampleIsoParameters;
+type C2dResampleIsoParamsDictTagged = Required<Pick<C2dResampleIsoParamsDict, '@type'>> & C2dResampleIsoParamsDict;
 
 
-interface C2dResampleMmParameters {
+interface C2dResampleMmParamsDict {
     "@type"?: "resample_mm";
     "resample_mm": string;
 }
-type C2dResampleMmParametersTagged = Required<Pick<C2dResampleMmParameters, '@type'>> & C2dResampleMmParameters;
+type C2dResampleMmParamsDictTagged = Required<Pick<C2dResampleMmParamsDict, '@type'>> & C2dResampleMmParamsDict;
 
 
-interface C2dResliceItkParameters {
+interface C2dResliceItkParamsDict {
     "@type"?: "reslice_itk";
     "reslice_itk": string;
 }
-type C2dResliceItkParametersTagged = Required<Pick<C2dResliceItkParameters, '@type'>> & C2dResliceItkParameters;
+type C2dResliceItkParamsDictTagged = Required<Pick<C2dResliceItkParamsDict, '@type'>> & C2dResliceItkParamsDict;
 
 
-interface C2dResliceMatrixParameters {
+interface C2dResliceMatrixParamsDict {
     "@type"?: "reslice_matrix";
     "reslice_matrix": string;
 }
-type C2dResliceMatrixParametersTagged = Required<Pick<C2dResliceMatrixParameters, '@type'>> & C2dResliceMatrixParameters;
+type C2dResliceMatrixParamsDictTagged = Required<Pick<C2dResliceMatrixParamsDict, '@type'>> & C2dResliceMatrixParamsDict;
 
 
-interface C2dResliceIdentityParameters {
+interface C2dResliceIdentityParamsDict {
     "@type"?: "reslice_identity";
     "reslice_identity": string;
 }
-type C2dResliceIdentityParametersTagged = Required<Pick<C2dResliceIdentityParameters, '@type'>> & C2dResliceIdentityParameters;
+type C2dResliceIdentityParamsDictTagged = Required<Pick<C2dResliceIdentityParamsDict, '@type'>> & C2dResliceIdentityParamsDict;
 
 
-interface C2dRgb2hsvParameters {
+interface C2dRgb2hsvParamsDict {
     "@type"?: "rgb2hsv";
     "rgb2hsv": string;
 }
-type C2dRgb2hsvParametersTagged = Required<Pick<C2dRgb2hsvParameters, '@type'>> & C2dRgb2hsvParameters;
+type C2dRgb2hsvParamsDictTagged = Required<Pick<C2dRgb2hsvParamsDict, '@type'>> & C2dRgb2hsvParamsDict;
 
 
-interface C2dRmsParameters {
+interface C2dRmsParamsDict {
     "@type"?: "rms";
     "rms": string;
 }
-type C2dRmsParametersTagged = Required<Pick<C2dRmsParameters, '@type'>> & C2dRmsParameters;
+type C2dRmsParamsDictTagged = Required<Pick<C2dRmsParamsDict, '@type'>> & C2dRmsParamsDict;
 
 
-interface C2dRoundParameters {
+interface C2dRoundParamsDict {
     "@type"?: "round";
     "round": string;
 }
-type C2dRoundParametersTagged = Required<Pick<C2dRoundParameters, '@type'>> & C2dRoundParameters;
+type C2dRoundParamsDictTagged = Required<Pick<C2dRoundParamsDict, '@type'>> & C2dRoundParamsDict;
 
 
-interface C2dScaleParameters {
+interface C2dScaleParamsDict {
     "@type"?: "scale";
     "scale": string;
 }
-type C2dScaleParametersTagged = Required<Pick<C2dScaleParameters, '@type'>> & C2dScaleParameters;
+type C2dScaleParamsDictTagged = Required<Pick<C2dScaleParamsDict, '@type'>> & C2dScaleParamsDict;
 
 
-interface C2dSetSform1Parameters {
+interface C2dSetSform1ParamsDict {
     "@type"?: "set_sform_1";
     "set_sform": string;
 }
-type C2dSetSform1ParametersTagged = Required<Pick<C2dSetSform1Parameters, '@type'>> & C2dSetSform1Parameters;
+type C2dSetSform1ParamsDictTagged = Required<Pick<C2dSetSform1ParamsDict, '@type'>> & C2dSetSform1ParamsDict;
 
 
-interface C2dSinParameters {
+interface C2dSinParamsDict {
     "@type"?: "sin";
     "sin": string;
 }
-type C2dSinParametersTagged = Required<Pick<C2dSinParameters, '@type'>> & C2dSinParameters;
+type C2dSinParamsDictTagged = Required<Pick<C2dSinParamsDict, '@type'>> & C2dSinParamsDict;
 
 
-interface C2dSliceParameters {
+interface C2dSliceParamsDict {
     "@type"?: "slice";
     "slice": string;
 }
-type C2dSliceParametersTagged = Required<Pick<C2dSliceParameters, '@type'>> & C2dSliceParameters;
+type C2dSliceParamsDictTagged = Required<Pick<C2dSliceParamsDict, '@type'>> & C2dSliceParamsDict;
 
 
-interface C2dSliceAllParameters {
+interface C2dSliceAllParamsDict {
     "@type"?: "slice_all";
     "slice_all": string;
 }
-type C2dSliceAllParametersTagged = Required<Pick<C2dSliceAllParameters, '@type'>> & C2dSliceAllParameters;
+type C2dSliceAllParamsDictTagged = Required<Pick<C2dSliceAllParamsDict, '@type'>> & C2dSliceAllParamsDict;
 
 
-interface C2dSharpenParameters {
+interface C2dSharpenParamsDict {
     "@type"?: "sharpen";
     "sharpen": string;
 }
-type C2dSharpenParametersTagged = Required<Pick<C2dSharpenParameters, '@type'>> & C2dSharpenParameters;
+type C2dSharpenParamsDictTagged = Required<Pick<C2dSharpenParamsDict, '@type'>> & C2dSharpenParamsDict;
 
 
-interface C2dShiftParameters {
+interface C2dShiftParamsDict {
     "@type"?: "shift";
     "shift": string;
 }
-type C2dShiftParametersTagged = Required<Pick<C2dShiftParameters, '@type'>> & C2dShiftParameters;
+type C2dShiftParamsDictTagged = Required<Pick<C2dShiftParamsDict, '@type'>> & C2dShiftParamsDict;
 
 
-interface C2dSignedDistanceTransformParameters {
+interface C2dSignedDistanceTransformParamsDict {
     "@type"?: "signed_distance_transform";
     "signed_distance_transform": string;
 }
-type C2dSignedDistanceTransformParametersTagged = Required<Pick<C2dSignedDistanceTransformParameters, '@type'>> & C2dSignedDistanceTransformParameters;
+type C2dSignedDistanceTransformParamsDictTagged = Required<Pick<C2dSignedDistanceTransformParamsDict, '@type'>> & C2dSignedDistanceTransformParamsDict;
 
 
-interface C2dSmoothParameters {
+interface C2dSmoothParamsDict {
     "@type"?: "smooth";
     "smooth": string;
 }
-type C2dSmoothParametersTagged = Required<Pick<C2dSmoothParameters, '@type'>> & C2dSmoothParameters;
+type C2dSmoothParamsDictTagged = Required<Pick<C2dSmoothParamsDict, '@type'>> & C2dSmoothParamsDict;
 
 
-interface C2dSmoothFastParameters {
+interface C2dSmoothFastParamsDict {
     "@type"?: "smooth_fast";
     "smooth_fast": string;
 }
-type C2dSmoothFastParametersTagged = Required<Pick<C2dSmoothFastParameters, '@type'>> & C2dSmoothFastParameters;
+type C2dSmoothFastParamsDictTagged = Required<Pick<C2dSmoothFastParamsDict, '@type'>> & C2dSmoothFastParamsDict;
 
 
-interface C2dSpacingParameters {
+interface C2dSpacingParamsDict {
     "@type"?: "spacing";
     "spacing": string;
 }
-type C2dSpacingParametersTagged = Required<Pick<C2dSpacingParameters, '@type'>> & C2dSpacingParameters;
+type C2dSpacingParamsDictTagged = Required<Pick<C2dSpacingParamsDict, '@type'>> & C2dSpacingParamsDict;
 
 
-interface C2dSplitParameters {
+interface C2dSplitParamsDict {
     "@type"?: "split";
     "split": string;
 }
-type C2dSplitParametersTagged = Required<Pick<C2dSplitParameters, '@type'>> & C2dSplitParameters;
+type C2dSplitParamsDictTagged = Required<Pick<C2dSplitParamsDict, '@type'>> & C2dSplitParamsDict;
 
 
-interface C2dSqrtParameters {
+interface C2dSqrtParamsDict {
     "@type"?: "sqrt";
     "sqrt": string;
 }
-type C2dSqrtParametersTagged = Required<Pick<C2dSqrtParameters, '@type'>> & C2dSqrtParameters;
+type C2dSqrtParamsDictTagged = Required<Pick<C2dSqrtParamsDict, '@type'>> & C2dSqrtParamsDict;
 
 
-interface C2dStapleParameters {
+interface C2dStapleParamsDict {
     "@type"?: "staple";
     "staple": string;
 }
-type C2dStapleParametersTagged = Required<Pick<C2dStapleParameters, '@type'>> & C2dStapleParameters;
+type C2dStapleParamsDictTagged = Required<Pick<C2dStapleParamsDict, '@type'>> & C2dStapleParamsDict;
 
 
-interface C2dStructureTensorEigenvaluesParameters {
+interface C2dStructureTensorEigenvaluesParamsDict {
     "@type"?: "structure_tensor_eigenvalues";
     "structure_tensor_eigenvalues": string;
 }
-type C2dStructureTensorEigenvaluesParametersTagged = Required<Pick<C2dStructureTensorEigenvaluesParameters, '@type'>> & C2dStructureTensorEigenvaluesParameters;
+type C2dStructureTensorEigenvaluesParamsDictTagged = Required<Pick<C2dStructureTensorEigenvaluesParamsDict, '@type'>> & C2dStructureTensorEigenvaluesParamsDict;
 
 
-interface C2dSpmParameters {
+interface C2dSpmParamsDict {
     "@type"?: "spm";
     "spm": string;
 }
-type C2dSpmParametersTagged = Required<Pick<C2dSpmParameters, '@type'>> & C2dSpmParameters;
+type C2dSpmParamsDictTagged = Required<Pick<C2dSpmParamsDict, '@type'>> & C2dSpmParamsDict;
 
 
-interface C2dSubtractParameters {
+interface C2dSubtractParamsDict {
     "@type"?: "subtract";
     "subtract": string;
 }
-type C2dSubtractParametersTagged = Required<Pick<C2dSubtractParameters, '@type'>> & C2dSubtractParameters;
+type C2dSubtractParamsDictTagged = Required<Pick<C2dSubtractParamsDict, '@type'>> & C2dSubtractParamsDict;
 
 
-interface C2dSupervoxelParameters {
+interface C2dSupervoxelParamsDict {
     "@type"?: "supervoxel";
     "supervoxel": string;
 }
-type C2dSupervoxelParametersTagged = Required<Pick<C2dSupervoxelParameters, '@type'>> & C2dSupervoxelParameters;
+type C2dSupervoxelParamsDictTagged = Required<Pick<C2dSupervoxelParamsDict, '@type'>> & C2dSupervoxelParamsDict;
 
 
-interface C2dStretchParameters {
+interface C2dStretchParamsDict {
     "@type"?: "stretch";
     "stretch": string;
 }
-type C2dStretchParametersTagged = Required<Pick<C2dStretchParameters, '@type'>> & C2dStretchParameters;
+type C2dStretchParamsDictTagged = Required<Pick<C2dStretchParamsDict, '@type'>> & C2dStretchParamsDict;
 
 
-interface C2dSwapdimParameters {
+interface C2dSwapdimParamsDict {
     "@type"?: "swapdim";
     "swapdim": string;
 }
-type C2dSwapdimParametersTagged = Required<Pick<C2dSwapdimParameters, '@type'>> & C2dSwapdimParameters;
+type C2dSwapdimParamsDictTagged = Required<Pick<C2dSwapdimParamsDict, '@type'>> & C2dSwapdimParamsDict;
 
 
-interface C2dTestImageParameters {
+interface C2dTestImageParamsDict {
     "@type"?: "test_image";
     "test_image": string;
 }
-type C2dTestImageParametersTagged = Required<Pick<C2dTestImageParameters, '@type'>> & C2dTestImageParameters;
+type C2dTestImageParamsDictTagged = Required<Pick<C2dTestImageParamsDict, '@type'>> & C2dTestImageParamsDict;
 
 
-interface C2dTestProbeParameters {
+interface C2dTestProbeParamsDict {
     "@type"?: "test_probe";
     "test_probe": string;
 }
-type C2dTestProbeParametersTagged = Required<Pick<C2dTestProbeParameters, '@type'>> & C2dTestProbeParameters;
+type C2dTestProbeParamsDictTagged = Required<Pick<C2dTestProbeParamsDict, '@type'>> & C2dTestProbeParamsDict;
 
 
-interface C2dThresholdParameters {
+interface C2dThresholdParamsDict {
     "@type"?: "threshold";
     "threshold": string;
 }
-type C2dThresholdParametersTagged = Required<Pick<C2dThresholdParameters, '@type'>> & C2dThresholdParameters;
+type C2dThresholdParamsDictTagged = Required<Pick<C2dThresholdParamsDict, '@type'>> & C2dThresholdParamsDict;
 
 
-interface C2dTileParameters {
+interface C2dTileParamsDict {
     "@type"?: "tile";
     "tile": string;
 }
-type C2dTileParametersTagged = Required<Pick<C2dTileParameters, '@type'>> & C2dTileParameters;
+type C2dTileParamsDictTagged = Required<Pick<C2dTileParamsDict, '@type'>> & C2dTileParamsDict;
 
 
-interface C2dTrimParameters {
+interface C2dTrimParamsDict {
     "@type"?: "trim";
     "trim": string;
 }
-type C2dTrimParametersTagged = Required<Pick<C2dTrimParameters, '@type'>> & C2dTrimParameters;
+type C2dTrimParamsDictTagged = Required<Pick<C2dTrimParamsDict, '@type'>> & C2dTrimParamsDict;
 
 
-interface C2dTrimToSizeParameters {
+interface C2dTrimToSizeParamsDict {
     "@type"?: "trim_to_size";
     "trim_to_size": string;
 }
-type C2dTrimToSizeParametersTagged = Required<Pick<C2dTrimToSizeParameters, '@type'>> & C2dTrimToSizeParameters;
+type C2dTrimToSizeParamsDictTagged = Required<Pick<C2dTrimToSizeParamsDict, '@type'>> & C2dTrimToSizeParamsDict;
 
 
-interface C2dTypeParameters {
+interface C2dTypeParamsDict {
     "@type"?: "type";
     "type": string;
 }
-type C2dTypeParametersTagged = Required<Pick<C2dTypeParameters, '@type'>> & C2dTypeParameters;
+type C2dTypeParamsDictTagged = Required<Pick<C2dTypeParamsDict, '@type'>> & C2dTypeParamsDict;
 
 
-interface C2dVerboseParameters {
+interface C2dVerboseParamsDict {
     "@type"?: "verbose";
     "verbose": string;
 }
-type C2dVerboseParametersTagged = Required<Pick<C2dVerboseParameters, '@type'>> & C2dVerboseParameters;
+type C2dVerboseParamsDictTagged = Required<Pick<C2dVerboseParamsDict, '@type'>> & C2dVerboseParamsDict;
 
 
-interface C2dNoverboseParameters {
+interface C2dNoverboseParamsDict {
     "@type"?: "noverbose";
     "noverbose": string;
 }
-type C2dNoverboseParametersTagged = Required<Pick<C2dNoverboseParameters, '@type'>> & C2dNoverboseParameters;
+type C2dNoverboseParamsDictTagged = Required<Pick<C2dNoverboseParamsDict, '@type'>> & C2dNoverboseParamsDict;
 
 
-interface C2dVersionParameters {
+interface C2dVersionParamsDict {
     "@type"?: "version";
     "version": string;
 }
-type C2dVersionParametersTagged = Required<Pick<C2dVersionParameters, '@type'>> & C2dVersionParameters;
+type C2dVersionParamsDictTagged = Required<Pick<C2dVersionParamsDict, '@type'>> & C2dVersionParamsDict;
 
 
-interface C2dVoteParameters {
+interface C2dVoteParamsDict {
     "@type"?: "vote";
     "vote": string;
 }
-type C2dVoteParametersTagged = Required<Pick<C2dVoteParameters, '@type'>> & C2dVoteParameters;
+type C2dVoteParamsDictTagged = Required<Pick<C2dVoteParamsDict, '@type'>> & C2dVoteParamsDict;
 
 
-interface C2dVoteMrfParameters {
+interface C2dVoteMrfParamsDict {
     "@type"?: "vote_mrf";
     "vote_mrf": string;
 }
-type C2dVoteMrfParametersTagged = Required<Pick<C2dVoteMrfParameters, '@type'>> & C2dVoteMrfParameters;
+type C2dVoteMrfParamsDictTagged = Required<Pick<C2dVoteMrfParamsDict, '@type'>> & C2dVoteMrfParamsDict;
 
 
-interface C2dVoteLabelParameters {
+interface C2dVoteLabelParamsDict {
     "@type"?: "vote_label";
     "vote_label": string;
 }
-type C2dVoteLabelParametersTagged = Required<Pick<C2dVoteLabelParameters, '@type'>> & C2dVoteLabelParameters;
+type C2dVoteLabelParamsDictTagged = Required<Pick<C2dVoteLabelParamsDict, '@type'>> & C2dVoteLabelParamsDict;
 
 
-interface C2dVoxelSumParameters {
+interface C2dVoxelSumParamsDict {
     "@type"?: "voxel_sum";
     "voxel_sum": string;
 }
-type C2dVoxelSumParametersTagged = Required<Pick<C2dVoxelSumParameters, '@type'>> & C2dVoxelSumParameters;
+type C2dVoxelSumParamsDictTagged = Required<Pick<C2dVoxelSumParamsDict, '@type'>> & C2dVoxelSumParamsDict;
 
 
-interface C2dVoxelIntegralParameters {
+interface C2dVoxelIntegralParamsDict {
     "@type"?: "voxel_integral";
     "voxel_integral": string;
 }
-type C2dVoxelIntegralParametersTagged = Required<Pick<C2dVoxelIntegralParameters, '@type'>> & C2dVoxelIntegralParameters;
+type C2dVoxelIntegralParamsDictTagged = Required<Pick<C2dVoxelIntegralParamsDict, '@type'>> & C2dVoxelIntegralParamsDict;
 
 
-interface C2dVoxelwiseRegressionParameters {
+interface C2dVoxelwiseRegressionParamsDict {
     "@type"?: "voxelwise_regression";
     "voxelwise_regression": string;
 }
-type C2dVoxelwiseRegressionParametersTagged = Required<Pick<C2dVoxelwiseRegressionParameters, '@type'>> & C2dVoxelwiseRegressionParameters;
+type C2dVoxelwiseRegressionParamsDictTagged = Required<Pick<C2dVoxelwiseRegressionParamsDict, '@type'>> & C2dVoxelwiseRegressionParamsDict;
 
 
-interface C2dWarpParameters {
+interface C2dWarpParamsDict {
     "@type"?: "warp";
     "warp": string;
 }
-type C2dWarpParametersTagged = Required<Pick<C2dWarpParameters, '@type'>> & C2dWarpParameters;
+type C2dWarpParamsDictTagged = Required<Pick<C2dWarpParamsDict, '@type'>> & C2dWarpParamsDict;
 
 
-interface C2dWarpLabelParameters {
+interface C2dWarpLabelParamsDict {
     "@type"?: "warp_label";
     "warp_label": string;
 }
-type C2dWarpLabelParametersTagged = Required<Pick<C2dWarpLabelParameters, '@type'>> & C2dWarpLabelParameters;
+type C2dWarpLabelParamsDictTagged = Required<Pick<C2dWarpLabelParamsDict, '@type'>> & C2dWarpLabelParamsDict;
 
 
-interface C2dWrapParameters {
+interface C2dWrapParamsDict {
     "@type"?: "wrap";
     "wrap": string;
 }
-type C2dWrapParametersTagged = Required<Pick<C2dWrapParameters, '@type'>> & C2dWrapParameters;
+type C2dWrapParamsDictTagged = Required<Pick<C2dWrapParamsDict, '@type'>> & C2dWrapParamsDict;
 
 
-interface C2dWeightedSumParameters {
+interface C2dWeightedSumParamsDict {
     "@type"?: "weighted_sum";
     "weighted_sum": string;
 }
-type C2dWeightedSumParametersTagged = Required<Pick<C2dWeightedSumParameters, '@type'>> & C2dWeightedSumParameters;
+type C2dWeightedSumParamsDictTagged = Required<Pick<C2dWeightedSumParamsDict, '@type'>> & C2dWeightedSumParamsDict;
 
 
-interface C2dWeightedSumVoxelwiseParameters {
+interface C2dWeightedSumVoxelwiseParamsDict {
     "@type"?: "weighted_sum_voxelwise";
     "weighted_sum_voxelwise": string;
 }
-type C2dWeightedSumVoxelwiseParametersTagged = Required<Pick<C2dWeightedSumVoxelwiseParameters, '@type'>> & C2dWeightedSumVoxelwiseParameters;
+type C2dWeightedSumVoxelwiseParamsDictTagged = Required<Pick<C2dWeightedSumVoxelwiseParamsDict, '@type'>> & C2dWeightedSumVoxelwiseParamsDict;
 
 
-interface C2dParameters {
+interface C2dParamsDict {
     "@type"?: "c3d/c2d";
     "input": Array<InputPathType>;
-    "operations": Array<C2dAccumParametersTagged | C2dAcosParametersTagged | C2dAddParametersTagged | C2dAlignLandmarksParametersTagged | C2dAnisotropicDiffusionParametersTagged | C2dAntialiasParametersTagged | C2dSetParametersTagged | C2dAsinParametersTagged | C2dAtan2ParametersTagged | C2dBackgroundParametersTagged | C2dN4BiasCorrectionParametersTagged | C2dBinarizeParametersTagged | C2dCannyParametersTagged | C2dCeilParametersTagged | C2dCentroidParametersTagged | C2dCentroidMarkParametersTagged | C2dConnectedComponentsParametersTagged | C2dClearParametersTagged | C2dClipParametersTagged | C2dColorMapParametersTagged | C2dCompressParametersTagged | C2dNoCompressParametersTagged | C2dConvParametersTagged | C2dCoordinateMapVoxelParametersTagged | C2dCoordinateMapPhysicalParametersTagged | C2dCopyTransformParametersTagged | C2dCosParametersTagged | C2dCreateParametersTagged | C2dDicomSeriesListParametersTagged | C2dDicomSeriesReadParametersTagged | C2dDilateParametersTagged | C2dDivideParametersTagged | C2dDuplicateParametersTagged | C2dEndaccumParametersTagged | C2dEndforParametersTagged | C2dErodeParametersTagged | C2dErfParametersTagged | C2dExpParametersTagged | C2dExportPatchesParametersTagged | C2dExportPatchesAugParametersTagged | C2dExtrudeSegParametersTagged | C2dFillBackgroundWithNoiseParametersTagged | C2dFftParametersTagged | C2dFlipParametersTagged | C2dFloorParametersTagged | C2dForeachParametersTagged | C2dForeachCompParametersTagged | C2dGlmParametersTagged | C2dGradientParametersTagged | C2dHelpParametersTagged | C2dHolefillParametersTagged | C2dHessianEigenvaluesParametersTagged | C2dHessianObjectnessParametersTagged | C2dHistogramMatchParametersTagged | C2dInfoParametersTagged | C2dInfoFullParametersTagged | C2dInsertParametersTagged | C2dInterpolationParametersTagged | C2dIterationsParametersTagged | C2dLabelOverlapParametersTagged | C2dLabelStatisticsParametersTagged | C2dLandmarksToSpheresParametersTagged | C2dLaplacianParametersTagged | C2dLevelsetParametersTagged | C2dLevelsetCurvatureParametersTagged | C2dLevelsetAdvectionParametersTagged | C2dLogParametersTagged | C2dLog10ParametersTagged | C2dManualParametersTagged | C2dMatchBoundingBoxParametersTagged | C2dMaximumParametersTagged | C2dMulticomponentSplitParametersTagged | C2dMeanParametersTagged | C2dMedianFilterParametersTagged | C2dMergeParametersTagged | C2dMeanFilterParametersTagged | C2dMutualInfoParametersTagged | C2dMinimumParametersTagged | C2dMixtureModelParametersTagged | C2dMomentsParametersTagged | C2dMattesMutualInfoParametersTagged | C2dMeanSquareParametersTagged | C2dMultiplyParametersTagged | C2dNormalizedCrossCorrelationParametersTagged | C2dNormalizedCorrelationParametersTagged | C2dNormalizedMutualInfoParametersTagged | C2dNoiseGaussianParametersTagged | C2dNoisePoissonParametersTagged | C2dNoiseSpeckleParametersTagged | C2dNoiseSaltPepperParametersTagged | C2dNoMulticomponentSplitParametersTagged | C2dNormalizeLocalWindowParametersTagged | C2dNormpdfParametersTagged | C2dNoroundParametersTagged | C2dNospmParametersTagged | C2dOutputParametersTagged | C2dOutputMulticomponentParametersTagged | C2dOutputMultipleMulticomponentParametersTagged | C2dOrientParametersTagged | C2dOutputMultipleParametersTagged | C2dOrient1ParametersTagged | C2dOriginParametersTagged | C2dOriginVoxelParametersTagged | C2dOriginVoxelCoordParametersTagged | C2dOverlapParametersTagged | C2dOverlayLabelImageParametersTagged | C2dPadParametersTagged | C2dPadToParametersTagged | C2dPcaParametersTagged | C2dPercentIntensityModeParametersTagged | C2dPixelParametersTagged | C2dPopParametersTagged | C2dPopasParametersTagged | C2dProbeParametersTagged | C2dPushParametersTagged | C2dRankParametersTagged | C2dReciprocalParametersTagged | C2dRegionParametersTagged | C2dReorderParametersTagged | C2dRetainLabelsParametersTagged | C2dRfApplyParametersTagged | C2dRfTrainParametersTagged | C2dRfParamPatchParametersTagged | C2dRfParamUsexyzParametersTagged | C2dRfParamNousexyzParametersTagged | C2dRfParamNtreesParametersTagged | C2dRfParamTreedepthParametersTagged | C2dSetSformParametersTagged | C2dReplaceParametersTagged | C2dResampleParametersTagged | C2dResampleIsoParametersTagged | C2dResampleMmParametersTagged | C2dResliceItkParametersTagged | C2dResliceMatrixParametersTagged | C2dResliceIdentityParametersTagged | C2dRgb2hsvParametersTagged | C2dRmsParametersTagged | C2dRoundParametersTagged | C2dScaleParametersTagged | C2dSetSform1ParametersTagged | C2dSinParametersTagged | C2dSliceParametersTagged | C2dSliceAllParametersTagged | C2dSharpenParametersTagged | C2dShiftParametersTagged | C2dSignedDistanceTransformParametersTagged | C2dSmoothParametersTagged | C2dSmoothFastParametersTagged | C2dSpacingParametersTagged | C2dSplitParametersTagged | C2dSqrtParametersTagged | C2dStapleParametersTagged | C2dStructureTensorEigenvaluesParametersTagged | C2dSpmParametersTagged | C2dSubtractParametersTagged | C2dSupervoxelParametersTagged | C2dStretchParametersTagged | C2dSwapdimParametersTagged | C2dTestImageParametersTagged | C2dTestProbeParametersTagged | C2dThresholdParametersTagged | C2dTileParametersTagged | C2dTrimParametersTagged | C2dTrimToSizeParametersTagged | C2dTypeParametersTagged | C2dVerboseParametersTagged | C2dNoverboseParametersTagged | C2dVersionParametersTagged | C2dVoteParametersTagged | C2dVoteMrfParametersTagged | C2dVoteLabelParametersTagged | C2dVoxelSumParametersTagged | C2dVoxelIntegralParametersTagged | C2dVoxelwiseRegressionParametersTagged | C2dWarpParametersTagged | C2dWarpLabelParametersTagged | C2dWrapParametersTagged | C2dWeightedSumParametersTagged | C2dWeightedSumVoxelwiseParametersTagged>;
+    "operations": Array<C2dAccumParamsDictTagged | C2dAcosParamsDictTagged | C2dAddParamsDictTagged | C2dAlignLandmarksParamsDictTagged | C2dAnisotropicDiffusionParamsDictTagged | C2dAntialiasParamsDictTagged | C2dSetParamsDictTagged | C2dAsinParamsDictTagged | C2dAtan2ParamsDictTagged | C2dBackgroundParamsDictTagged | C2dN4BiasCorrectionParamsDictTagged | C2dBinarizeParamsDictTagged | C2dCannyParamsDictTagged | C2dCeilParamsDictTagged | C2dCentroidParamsDictTagged | C2dCentroidMarkParamsDictTagged | C2dConnectedComponentsParamsDictTagged | C2dClearParamsDictTagged | C2dClipParamsDictTagged | C2dColorMapParamsDictTagged | C2dCompressParamsDictTagged | C2dNoCompressParamsDictTagged | C2dConvParamsDictTagged | C2dCoordinateMapVoxelParamsDictTagged | C2dCoordinateMapPhysicalParamsDictTagged | C2dCopyTransformParamsDictTagged | C2dCosParamsDictTagged | C2dCreateParamsDictTagged | C2dDicomSeriesListParamsDictTagged | C2dDicomSeriesReadParamsDictTagged | C2dDilateParamsDictTagged | C2dDivideParamsDictTagged | C2dDuplicateParamsDictTagged | C2dEndaccumParamsDictTagged | C2dEndforParamsDictTagged | C2dErodeParamsDictTagged | C2dErfParamsDictTagged | C2dExpParamsDictTagged | C2dExportPatchesParamsDictTagged | C2dExportPatchesAugParamsDictTagged | C2dExtrudeSegParamsDictTagged | C2dFillBackgroundWithNoiseParamsDictTagged | C2dFftParamsDictTagged | C2dFlipParamsDictTagged | C2dFloorParamsDictTagged | C2dForeachParamsDictTagged | C2dForeachCompParamsDictTagged | C2dGlmParamsDictTagged | C2dGradientParamsDictTagged | C2dHelpParamsDictTagged | C2dHolefillParamsDictTagged | C2dHessianEigenvaluesParamsDictTagged | C2dHessianObjectnessParamsDictTagged | C2dHistogramMatchParamsDictTagged | C2dInfoParamsDictTagged | C2dInfoFullParamsDictTagged | C2dInsertParamsDictTagged | C2dInterpolationParamsDictTagged | C2dIterationsParamsDictTagged | C2dLabelOverlapParamsDictTagged | C2dLabelStatisticsParamsDictTagged | C2dLandmarksToSpheresParamsDictTagged | C2dLaplacianParamsDictTagged | C2dLevelsetParamsDictTagged | C2dLevelsetCurvatureParamsDictTagged | C2dLevelsetAdvectionParamsDictTagged | C2dLogParamsDictTagged | C2dLog10ParamsDictTagged | C2dManualParamsDictTagged | C2dMatchBoundingBoxParamsDictTagged | C2dMaximumParamsDictTagged | C2dMulticomponentSplitParamsDictTagged | C2dMeanParamsDictTagged | C2dMedianFilterParamsDictTagged | C2dMergeParamsDictTagged | C2dMeanFilterParamsDictTagged | C2dMutualInfoParamsDictTagged | C2dMinimumParamsDictTagged | C2dMixtureModelParamsDictTagged | C2dMomentsParamsDictTagged | C2dMattesMutualInfoParamsDictTagged | C2dMeanSquareParamsDictTagged | C2dMultiplyParamsDictTagged | C2dNormalizedCrossCorrelationParamsDictTagged | C2dNormalizedCorrelationParamsDictTagged | C2dNormalizedMutualInfoParamsDictTagged | C2dNoiseGaussianParamsDictTagged | C2dNoisePoissonParamsDictTagged | C2dNoiseSpeckleParamsDictTagged | C2dNoiseSaltPepperParamsDictTagged | C2dNoMulticomponentSplitParamsDictTagged | C2dNormalizeLocalWindowParamsDictTagged | C2dNormpdfParamsDictTagged | C2dNoroundParamsDictTagged | C2dNospmParamsDictTagged | C2dOutputParamsDictTagged | C2dOutputMulticomponentParamsDictTagged | C2dOutputMultipleMulticomponentParamsDictTagged | C2dOrientParamsDictTagged | C2dOutputMultipleParamsDictTagged | C2dOrient1ParamsDictTagged | C2dOriginParamsDictTagged | C2dOriginVoxelParamsDictTagged | C2dOriginVoxelCoordParamsDictTagged | C2dOverlapParamsDictTagged | C2dOverlayLabelImageParamsDictTagged | C2dPadParamsDictTagged | C2dPadToParamsDictTagged | C2dPcaParamsDictTagged | C2dPercentIntensityModeParamsDictTagged | C2dPixelParamsDictTagged | C2dPopParamsDictTagged | C2dPopasParamsDictTagged | C2dProbeParamsDictTagged | C2dPushParamsDictTagged | C2dRankParamsDictTagged | C2dReciprocalParamsDictTagged | C2dRegionParamsDictTagged | C2dReorderParamsDictTagged | C2dRetainLabelsParamsDictTagged | C2dRfApplyParamsDictTagged | C2dRfTrainParamsDictTagged | C2dRfParamPatchParamsDictTagged | C2dRfParamUsexyzParamsDictTagged | C2dRfParamNousexyzParamsDictTagged | C2dRfParamNtreesParamsDictTagged | C2dRfParamTreedepthParamsDictTagged | C2dSetSformParamsDictTagged | C2dReplaceParamsDictTagged | C2dResampleParamsDictTagged | C2dResampleIsoParamsDictTagged | C2dResampleMmParamsDictTagged | C2dResliceItkParamsDictTagged | C2dResliceMatrixParamsDictTagged | C2dResliceIdentityParamsDictTagged | C2dRgb2hsvParamsDictTagged | C2dRmsParamsDictTagged | C2dRoundParamsDictTagged | C2dScaleParamsDictTagged | C2dSetSform1ParamsDictTagged | C2dSinParamsDictTagged | C2dSliceParamsDictTagged | C2dSliceAllParamsDictTagged | C2dSharpenParamsDictTagged | C2dShiftParamsDictTagged | C2dSignedDistanceTransformParamsDictTagged | C2dSmoothParamsDictTagged | C2dSmoothFastParamsDictTagged | C2dSpacingParamsDictTagged | C2dSplitParamsDictTagged | C2dSqrtParamsDictTagged | C2dStapleParamsDictTagged | C2dStructureTensorEigenvaluesParamsDictTagged | C2dSpmParamsDictTagged | C2dSubtractParamsDictTagged | C2dSupervoxelParamsDictTagged | C2dStretchParamsDictTagged | C2dSwapdimParamsDictTagged | C2dTestImageParamsDictTagged | C2dTestProbeParamsDictTagged | C2dThresholdParamsDictTagged | C2dTileParamsDictTagged | C2dTrimParamsDictTagged | C2dTrimToSizeParamsDictTagged | C2dTypeParamsDictTagged | C2dVerboseParamsDictTagged | C2dNoverboseParamsDictTagged | C2dVersionParamsDictTagged | C2dVoteParamsDictTagged | C2dVoteMrfParamsDictTagged | C2dVoteLabelParamsDictTagged | C2dVoxelSumParamsDictTagged | C2dVoxelIntegralParamsDictTagged | C2dVoxelwiseRegressionParamsDictTagged | C2dWarpParamsDictTagged | C2dWarpLabelParamsDictTagged | C2dWrapParamsDictTagged | C2dWeightedSumParamsDictTagged | C2dWeightedSumVoxelwiseParamsDictTagged>;
     "output": string;
 }
-type C2dParametersTagged = Required<Pick<C2dParameters, '@type'>> & C2dParameters;
+type C2dParamsDictTagged = Required<Pick<C2dParamsDict, '@type'>> & C2dParamsDict;
 
 
 /**
@@ -1498,9 +1498,9 @@ Apply a binary operation (such as addition or multiplication) to all the images 
  *
  * @returns Parameter dictionary
  */
-function c2d_accum_params(
+function c2d_accum(
     accum: string,
-): C2dAccumParametersTagged {
+): C2dAccumParamsDictTagged {
     const params = {
         "@type": "accum" as const,
         "accum": accum,
@@ -1518,7 +1518,7 @@ function c2d_accum_params(
  * @returns Command-line arguments.
  */
 function c2d_accum_cargs(
-    params: C2dAccumParameters,
+    params: C2dAccumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1537,9 +1537,9 @@ function c2d_accum_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_acos_params(
+function c2d_acos(
     acos: string,
-): C2dAcosParametersTagged {
+): C2dAcosParamsDictTagged {
     const params = {
         "@type": "acos" as const,
         "acos": acos,
@@ -1557,7 +1557,7 @@ function c2d_acos_params(
  * @returns Command-line arguments.
  */
 function c2d_acos_cargs(
-    params: C2dAcosParameters,
+    params: C2dAcosParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1590,9 +1590,9 @@ Adds the last two images on the stack, and places the sum at the end of the stac
  *
  * @returns Parameter dictionary
  */
-function c2d_add_params(
+function c2d_add(
     add: string,
-): C2dAddParametersTagged {
+): C2dAddParamsDictTagged {
     const params = {
         "@type": "add" as const,
         "add": add,
@@ -1610,7 +1610,7 @@ function c2d_add_params(
  * @returns Command-line arguments.
  */
 function c2d_add_cargs(
-    params: C2dAddParameters,
+    params: C2dAddParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1636,9 +1636,9 @@ Performs rigid or affine alignment between to sets of landmark images. A landmar
  *
  * @returns Parameter dictionary
  */
-function c2d_align_landmarks_params(
+function c2d_align_landmarks(
     align_landmarks: string,
-): C2dAlignLandmarksParametersTagged {
+): C2dAlignLandmarksParamsDictTagged {
     const params = {
         "@type": "align_landmarks" as const,
         "align_landmarks": align_landmarks,
@@ -1656,7 +1656,7 @@ function c2d_align_landmarks_params(
  * @returns Command-line arguments.
  */
 function c2d_align_landmarks_cargs(
-    params: C2dAlignLandmarksParameters,
+    params: C2dAlignLandmarksParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1689,9 +1689,9 @@ Adds the last two images on the stack, and places the sum at the end of the stac
  *
  * @returns Parameter dictionary
  */
-function c2d_anisotropic_diffusion_params(
+function c2d_anisotropic_diffusion(
     anisotropic_diffusion: string,
-): C2dAnisotropicDiffusionParametersTagged {
+): C2dAnisotropicDiffusionParamsDictTagged {
     const params = {
         "@type": "anisotropic_diffusion" as const,
         "anisotropic_diffusion": anisotropic_diffusion,
@@ -1709,7 +1709,7 @@ function c2d_anisotropic_diffusion_params(
  * @returns Command-line arguments.
  */
 function c2d_anisotropic_diffusion_cargs(
-    params: C2dAnisotropicDiffusionParameters,
+    params: C2dAnisotropicDiffusionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1728,9 +1728,9 @@ function c2d_anisotropic_diffusion_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_antialias_params(
+function c2d_antialias(
     antialias: string,
-): C2dAntialiasParametersTagged {
+): C2dAntialiasParamsDictTagged {
     const params = {
         "@type": "antialias" as const,
         "antialias": antialias,
@@ -1748,7 +1748,7 @@ function c2d_antialias_params(
  * @returns Command-line arguments.
  */
 function c2d_antialias_cargs(
-    params: C2dAntialiasParameters,
+    params: C2dAntialiasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1773,9 +1773,9 @@ Associates the image currently at the end of the stack with variable name 'var'.
  *
  * @returns Parameter dictionary
  */
-function c2d_set_params(
+function c2d_set(
     set_: string,
-): C2dSetParametersTagged {
+): C2dSetParamsDictTagged {
     const params = {
         "@type": "set" as const,
         "set": set_,
@@ -1793,7 +1793,7 @@ function c2d_set_params(
  * @returns Command-line arguments.
  */
 function c2d_set_cargs(
-    params: C2dSetParameters,
+    params: C2dSetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1812,9 +1812,9 @@ function c2d_set_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_asin_params(
+function c2d_asin(
     asin: string,
-): C2dAsinParametersTagged {
+): C2dAsinParamsDictTagged {
     const params = {
         "@type": "asin" as const,
         "asin": asin,
@@ -1832,7 +1832,7 @@ function c2d_asin_params(
  * @returns Command-line arguments.
  */
 function c2d_asin_cargs(
-    params: C2dAsinParameters,
+    params: C2dAsinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1857,9 +1857,9 @@ Computes the angle in radians from images containing sine and cosine. This is a 
  *
  * @returns Parameter dictionary
  */
-function c2d_atan2_params(
+function c2d_atan2(
     atan2: string,
-): C2dAtan2ParametersTagged {
+): C2dAtan2ParamsDictTagged {
     const params = {
         "@type": "atan2" as const,
         "atan2": atan2,
@@ -1877,7 +1877,7 @@ function c2d_atan2_params(
  * @returns Command-line arguments.
  */
 function c2d_atan2_cargs(
-    params: C2dAtan2Parameters,
+    params: C2dAtan2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1900,9 +1900,9 @@ Sets the background intensity for interpolation and other operations where some 
  *
  * @returns Parameter dictionary
  */
-function c2d_background_params(
+function c2d_background(
     background: string,
-): C2dBackgroundParametersTagged {
+): C2dBackgroundParamsDictTagged {
     const params = {
         "@type": "background" as const,
         "background": background,
@@ -1920,7 +1920,7 @@ function c2d_background_params(
  * @returns Command-line arguments.
  */
 function c2d_background_cargs(
-    params: C2dBackgroundParameters,
+    params: C2dBackgroundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1945,9 +1945,9 @@ Performs automatic bias field correction for MRI images. This feature uses the [
  *
  * @returns Parameter dictionary
  */
-function c2d_n4_bias_correction_params(
+function c2d_n4_bias_correction(
     n4_bias_correction: string,
-): C2dN4BiasCorrectionParametersTagged {
+): C2dN4BiasCorrectionParamsDictTagged {
     const params = {
         "@type": "n4_bias_correction" as const,
         "n4_bias_correction": n4_bias_correction,
@@ -1965,7 +1965,7 @@ function c2d_n4_bias_correction_params(
  * @returns Command-line arguments.
  */
 function c2d_n4_bias_correction_cargs(
-    params: C2dN4BiasCorrectionParameters,
+    params: C2dN4BiasCorrectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1992,9 +1992,9 @@ Converts an image to binary by mapping all background values (the background is 
  *
  * @returns Parameter dictionary
  */
-function c2d_binarize_params(
+function c2d_binarize(
     binarize: string,
-): C2dBinarizeParametersTagged {
+): C2dBinarizeParamsDictTagged {
     const params = {
         "@type": "binarize" as const,
         "binarize": binarize,
@@ -2012,7 +2012,7 @@ function c2d_binarize_params(
  * @returns Command-line arguments.
  */
 function c2d_binarize_cargs(
-    params: C2dBinarizeParameters,
+    params: C2dBinarizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2035,9 +2035,9 @@ Performs edge detection on the last image on the stack using the Canny filter. T
  *
  * @returns Parameter dictionary
  */
-function c2d_canny_params(
+function c2d_canny(
     canny: string,
-): C2dCannyParametersTagged {
+): C2dCannyParamsDictTagged {
     const params = {
         "@type": "canny" as const,
         "canny": canny,
@@ -2055,7 +2055,7 @@ function c2d_canny_params(
  * @returns Command-line arguments.
  */
 function c2d_canny_cargs(
-    params: C2dCannyParameters,
+    params: C2dCannyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2080,9 +2080,9 @@ Each image intensity is replaced by the smallest integer larger or equal to it
  *
  * @returns Parameter dictionary
  */
-function c2d_ceil_params(
+function c2d_ceil(
     ceil: string,
-): C2dCeilParametersTagged {
+): C2dCeilParamsDictTagged {
     const params = {
         "@type": "ceil" as const,
         "ceil": ceil,
@@ -2100,7 +2100,7 @@ function c2d_ceil_params(
  * @returns Command-line arguments.
  */
 function c2d_ceil_cargs(
-    params: C2dCeilParameters,
+    params: C2dCeilParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2128,9 +2128,9 @@ Reports the centroid, in physical coordinates, of all foreground voxels in the i
  *
  * @returns Parameter dictionary
  */
-function c2d_centroid_params(
+function c2d_centroid(
     centroid: string,
-): C2dCentroidParametersTagged {
+): C2dCentroidParamsDictTagged {
     const params = {
         "@type": "centroid" as const,
         "centroid": centroid,
@@ -2148,7 +2148,7 @@ function c2d_centroid_params(
  * @returns Command-line arguments.
  */
 function c2d_centroid_cargs(
-    params: C2dCentroidParameters,
+    params: C2dCentroidParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2174,9 +2174,9 @@ Marks the centroid of the foreground voxels in an image. Unlike **-centroid**, t
  *
  * @returns Parameter dictionary
  */
-function c2d_centroid_mark_params(
+function c2d_centroid_mark(
     centroid_mark: string,
-): C2dCentroidMarkParametersTagged {
+): C2dCentroidMarkParamsDictTagged {
     const params = {
         "@type": "centroid_mark" as const,
         "centroid_mark": centroid_mark,
@@ -2194,7 +2194,7 @@ function c2d_centroid_mark_params(
  * @returns Command-line arguments.
  */
 function c2d_centroid_mark_cargs(
-    params: C2dCentroidMarkParameters,
+    params: C2dCentroidMarkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2220,9 +2220,9 @@ Computes the connected components of a binary image. Each connected component is
  *
  * @returns Parameter dictionary
  */
-function c2d_connected_components_params(
+function c2d_connected_components(
     connected_components: string,
-): C2dConnectedComponentsParametersTagged {
+): C2dConnectedComponentsParamsDictTagged {
     const params = {
         "@type": "connected_components" as const,
         "connected_components": connected_components,
@@ -2240,7 +2240,7 @@ function c2d_connected_components_params(
  * @returns Command-line arguments.
  */
 function c2d_connected_components_cargs(
-    params: C2dConnectedComponentsParameters,
+    params: C2dConnectedComponentsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2263,9 +2263,9 @@ Clears the image stack. Images assigned a name with the **-as** command will rem
  *
  * @returns Parameter dictionary
  */
-function c2d_clear_params(
+function c2d_clear(
     clear: string,
-): C2dClearParametersTagged {
+): C2dClearParamsDictTagged {
     const params = {
         "@type": "clear" as const,
         "clear": clear,
@@ -2283,7 +2283,7 @@ function c2d_clear_params(
  * @returns Command-line arguments.
  */
 function c2d_clear_cargs(
-    params: C2dClearParameters,
+    params: C2dClearParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2310,9 +2310,9 @@ Clips image intensities, so that the values below *iMin* are converted to *iMin*
  *
  * @returns Parameter dictionary
  */
-function c2d_clip_params(
+function c2d_clip(
     clip: string,
-): C2dClipParametersTagged {
+): C2dClipParamsDictTagged {
     const params = {
         "@type": "clip" as const,
         "clip": clip,
@@ -2330,7 +2330,7 @@ function c2d_clip_params(
  * @returns Command-line arguments.
  */
 function c2d_clip_cargs(
-    params: C2dClipParameters,
+    params: C2dClipParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2359,9 +2359,9 @@ By default the full image intensity range is mapped. The optional **min** and **
  *
  * @returns Parameter dictionary
  */
-function c2d_color_map_params(
+function c2d_color_map(
     color_map: string,
-): C2dColorMapParametersTagged {
+): C2dColorMapParamsDictTagged {
     const params = {
         "@type": "color_map" as const,
         "color_map": color_map,
@@ -2379,7 +2379,7 @@ function c2d_color_map_params(
  * @returns Command-line arguments.
  */
 function c2d_color_map_cargs(
-    params: C2dColorMapParameters,
+    params: C2dColorMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2405,9 +2405,9 @@ Turns on compressing for image file formats that support it. For some file forma
  *
  * @returns Parameter dictionary
  */
-function c2d_compress_params(
+function c2d_compress(
     compress: string,
-): C2dCompressParametersTagged {
+): C2dCompressParamsDictTagged {
     const params = {
         "@type": "compress" as const,
         "compress": compress,
@@ -2425,7 +2425,7 @@ function c2d_compress_params(
  * @returns Command-line arguments.
  */
 function c2d_compress_cargs(
-    params: C2dCompressParameters,
+    params: C2dCompressParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2451,9 +2451,9 @@ Turns on compressing for image file formats that support it. For some file forma
  *
  * @returns Parameter dictionary
  */
-function c2d_no_compress_params(
+function c2d_no_compress(
     no_compress: string,
-): C2dNoCompressParametersTagged {
+): C2dNoCompressParamsDictTagged {
     const params = {
         "@type": "no_compress" as const,
         "no_compress": no_compress,
@@ -2471,7 +2471,7 @@ function c2d_no_compress_params(
  * @returns Command-line arguments.
  */
 function c2d_no_compress_cargs(
-    params: C2dNoCompressParameters,
+    params: C2dNoCompressParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2499,9 +2499,9 @@ Performs convolution between the last two images on the stack. The convolution i
  *
  * @returns Parameter dictionary
  */
-function c2d_conv_params(
+function c2d_conv(
     conv: string,
-): C2dConvParametersTagged {
+): C2dConvParamsDictTagged {
     const params = {
         "@type": "conv" as const,
         "conv": conv,
@@ -2519,7 +2519,7 @@ function c2d_conv_params(
  * @returns Command-line arguments.
  */
 function c2d_conv_cargs(
-    params: C2dConvParameters,
+    params: C2dConvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2551,9 +2551,9 @@ One can use this command to split a brain segmentation image into a left hemisph
  *
  * @returns Parameter dictionary
  */
-function c2d_coordinate_map_voxel_params(
+function c2d_coordinate_map_voxel(
     coordinate_map_voxel: string,
-): C2dCoordinateMapVoxelParametersTagged {
+): C2dCoordinateMapVoxelParamsDictTagged {
     const params = {
         "@type": "coordinate_map_voxel" as const,
         "coordinate_map_voxel": coordinate_map_voxel,
@@ -2571,7 +2571,7 @@ function c2d_coordinate_map_voxel_params(
  * @returns Command-line arguments.
  */
 function c2d_coordinate_map_voxel_cargs(
-    params: C2dCoordinateMapVoxelParameters,
+    params: C2dCoordinateMapVoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2594,9 +2594,9 @@ This command is similar to **-cmv** (**-coordinate-map-voxel**), but the output 
  *
  * @returns Parameter dictionary
  */
-function c2d_coordinate_map_physical_params(
+function c2d_coordinate_map_physical(
     coordinate_map_physical: string,
-): C2dCoordinateMapPhysicalParametersTagged {
+): C2dCoordinateMapPhysicalParamsDictTagged {
     const params = {
         "@type": "coordinate_map_physical" as const,
         "coordinate_map_physical": coordinate_map_physical,
@@ -2614,7 +2614,7 @@ function c2d_coordinate_map_physical_params(
  * @returns Command-line arguments.
  */
 function c2d_coordinate_map_physical_cargs(
-    params: C2dCoordinateMapPhysicalParameters,
+    params: C2dCoordinateMapPhysicalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2639,9 +2639,9 @@ Copies the image header, specifically the image to physical space transform (ori
  *
  * @returns Parameter dictionary
  */
-function c2d_copy_transform_params(
+function c2d_copy_transform(
     copy_transform: string,
-): C2dCopyTransformParametersTagged {
+): C2dCopyTransformParamsDictTagged {
     const params = {
         "@type": "copy_transform" as const,
         "copy_transform": copy_transform,
@@ -2659,7 +2659,7 @@ function c2d_copy_transform_params(
  * @returns Command-line arguments.
  */
 function c2d_copy_transform_cargs(
-    params: C2dCopyTransformParameters,
+    params: C2dCopyTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2678,9 +2678,9 @@ function c2d_copy_transform_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_cos_params(
+function c2d_cos(
     cos: string,
-): C2dCosParametersTagged {
+): C2dCosParamsDictTagged {
     const params = {
         "@type": "cos" as const,
         "cos": cos,
@@ -2698,7 +2698,7 @@ function c2d_cos_params(
  * @returns Command-line arguments.
  */
 function c2d_cos_cargs(
-    params: C2dCosParameters,
+    params: C2dCosParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2724,9 +2724,9 @@ Creates a new blank image with specified dimensions and voxel size, and places i
  *
  * @returns Parameter dictionary
  */
-function c2d_create_params(
+function c2d_create(
     create: string,
-): C2dCreateParametersTagged {
+): C2dCreateParamsDictTagged {
     const params = {
         "@type": "create" as const,
         "create": create,
@@ -2744,7 +2744,7 @@ function c2d_create_params(
  * @returns Command-line arguments.
  */
 function c2d_create_cargs(
-    params: C2dCreateParameters,
+    params: C2dCreateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2767,9 +2767,9 @@ Prints out a table of DICOM series ids and corresponding image information to st
  *
  * @returns Parameter dictionary
  */
-function c2d_dicom_series_list_params(
+function c2d_dicom_series_list(
     dicom_series_list: string,
-): C2dDicomSeriesListParametersTagged {
+): C2dDicomSeriesListParamsDictTagged {
     const params = {
         "@type": "dicom_series_list" as const,
         "dicom_series_list": dicom_series_list,
@@ -2787,7 +2787,7 @@ function c2d_dicom_series_list_params(
  * @returns Command-line arguments.
  */
 function c2d_dicom_series_list_cargs(
-    params: C2dDicomSeriesListParameters,
+    params: C2dDicomSeriesListParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2811,9 +2811,9 @@ The **seried_id** is a string identifier for the series that can be obtained by 
  *
  * @returns Parameter dictionary
  */
-function c2d_dicom_series_read_params(
+function c2d_dicom_series_read(
     dicom_series_read: string,
-): C2dDicomSeriesReadParametersTagged {
+): C2dDicomSeriesReadParamsDictTagged {
     const params = {
         "@type": "dicom_series_read" as const,
         "dicom_series_read": dicom_series_read,
@@ -2831,7 +2831,7 @@ function c2d_dicom_series_read_params(
  * @returns Command-line arguments.
  */
 function c2d_dicom_series_read_cargs(
-    params: C2dDicomSeriesReadParameters,
+    params: C2dDicomSeriesReadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2856,9 +2856,9 @@ Applies the dilation [mathematical morphology][5] operation to a binary image. T
  *
  * @returns Parameter dictionary
  */
-function c2d_dilate_params(
+function c2d_dilate(
     dilate: string,
-): C2dDilateParametersTagged {
+): C2dDilateParamsDictTagged {
     const params = {
         "@type": "dilate" as const,
         "dilate": dilate,
@@ -2876,7 +2876,7 @@ function c2d_dilate_params(
  * @returns Command-line arguments.
  */
 function c2d_dilate_cargs(
-    params: C2dDilateParameters,
+    params: C2dDilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2905,9 +2905,9 @@ Divison may generate infinite and not-a-number (NaN) values if B contains zeros.
  *
  * @returns Parameter dictionary
  */
-function c2d_divide_params(
+function c2d_divide(
     divide: string,
-): C2dDivideParametersTagged {
+): C2dDivideParamsDictTagged {
     const params = {
         "@type": "divide" as const,
         "divide": divide,
@@ -2925,7 +2925,7 @@ function c2d_divide_params(
  * @returns Command-line arguments.
  */
 function c2d_divide_cargs(
-    params: C2dDivideParameters,
+    params: C2dDivideParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2952,9 +2952,9 @@ Duplicates the image at the end of the stack. This is equivalent to **-as var -p
  *
  * @returns Parameter dictionary
  */
-function c2d_duplicate_params(
+function c2d_duplicate(
     duplicate: string,
-): C2dDuplicateParametersTagged {
+): C2dDuplicateParamsDictTagged {
     const params = {
         "@type": "duplicate" as const,
         "duplicate": duplicate,
@@ -2972,7 +2972,7 @@ function c2d_duplicate_params(
  * @returns Command-line arguments.
  */
 function c2d_duplicate_cargs(
-    params: C2dDuplicateParameters,
+    params: C2dDuplicateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2997,9 +2997,9 @@ Apply a binary operation (such as addition or multiplication) to all the images 
  *
  * @returns Parameter dictionary
  */
-function c2d_endaccum_params(
+function c2d_endaccum(
     endaccum: string,
-): C2dEndaccumParametersTagged {
+): C2dEndaccumParamsDictTagged {
     const params = {
         "@type": "endaccum" as const,
         "endaccum": endaccum,
@@ -3017,7 +3017,7 @@ function c2d_endaccum_params(
  * @returns Command-line arguments.
  */
 function c2d_endaccum_cargs(
-    params: C2dEndaccumParameters,
+    params: C2dEndaccumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3042,9 +3042,9 @@ This command forces the commands between **-foreach** and **-endfor** to be appl
  *
  * @returns Parameter dictionary
  */
-function c2d_endfor_params(
+function c2d_endfor(
     endfor: string,
-): C2dEndforParametersTagged {
+): C2dEndforParamsDictTagged {
     const params = {
         "@type": "endfor" as const,
         "endfor": endfor,
@@ -3062,7 +3062,7 @@ function c2d_endfor_params(
  * @returns Command-line arguments.
  */
 function c2d_endfor_cargs(
-    params: C2dEndforParameters,
+    params: C2dEndforParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3087,9 +3087,9 @@ Applies erosion [mathematical morphology][5] operation to a binary image. The fi
  *
  * @returns Parameter dictionary
  */
-function c2d_erode_params(
+function c2d_erode(
     erode: string,
-): C2dErodeParametersTagged {
+): C2dErodeParamsDictTagged {
     const params = {
         "@type": "erode" as const,
         "erode": erode,
@@ -3107,7 +3107,7 @@ function c2d_erode_params(
  * @returns Command-line arguments.
  */
 function c2d_erode_cargs(
-    params: C2dErodeParameters,
+    params: C2dErodeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3132,9 +3132,9 @@ Computes the standard error function. This is useful for applying soft threshold
  *
  * @returns Parameter dictionary
  */
-function c2d_erf_params(
+function c2d_erf(
     erf: string,
-): C2dErfParametersTagged {
+): C2dErfParamsDictTagged {
     const params = {
         "@type": "erf" as const,
         "erf": erf,
@@ -3152,7 +3152,7 @@ function c2d_erf_params(
  * @returns Command-line arguments.
  */
 function c2d_erf_cargs(
-    params: C2dErfParameters,
+    params: C2dErfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3177,9 +3177,9 @@ Computes exponent of each voxel in the last image on the stack.
  *
  * @returns Parameter dictionary
  */
-function c2d_exp_params(
+function c2d_exp(
     exp: string,
-): C2dExpParametersTagged {
+): C2dExpParamsDictTagged {
     const params = {
         "@type": "exp" as const,
         "exp": exp,
@@ -3197,7 +3197,7 @@ function c2d_exp_params(
  * @returns Command-line arguments.
  */
 function c2d_exp_cargs(
-    params: C2dExpParameters,
+    params: C2dExpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3242,9 +3242,9 @@ In the above example, **-centroid-mark** transforms the lesion segmentation into
  *
  * @returns Parameter dictionary
  */
-function c2d_export_patches_params(
+function c2d_export_patches(
     export_patches: string,
-): C2dExportPatchesParametersTagged {
+): C2dExportPatchesParamsDictTagged {
     const params = {
         "@type": "export_patches" as const,
         "export_patches": export_patches,
@@ -3262,7 +3262,7 @@ function c2d_export_patches_params(
  * @returns Command-line arguments.
  */
 function c2d_export_patches_cargs(
-    params: C2dExportPatchesParameters,
+    params: C2dExportPatchesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3287,9 +3287,9 @@ This command must precede the `-export-patches (-xp)` command and instructs this
  *
  * @returns Parameter dictionary
  */
-function c2d_export_patches_aug_params(
+function c2d_export_patches_aug(
     export_patches_aug: string,
-): C2dExportPatchesAugParametersTagged {
+): C2dExportPatchesAugParamsDictTagged {
     const params = {
         "@type": "export_patches_aug" as const,
         "export_patches_aug": export_patches_aug,
@@ -3307,7 +3307,7 @@ function c2d_export_patches_aug_params(
  * @returns Command-line arguments.
  */
 function c2d_export_patches_aug_cargs(
-    params: C2dExportPatchesAugParameters,
+    params: C2dExportPatchesAugParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3326,9 +3326,9 @@ function c2d_export_patches_aug_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_extrude_seg_params(
+function c2d_extrude_seg(
     extrude_seg: string,
-): C2dExtrudeSegParametersTagged {
+): C2dExtrudeSegParamsDictTagged {
     const params = {
         "@type": "extrude_seg" as const,
         "extrude_seg": extrude_seg,
@@ -3346,7 +3346,7 @@ function c2d_extrude_seg_params(
  * @returns Command-line arguments.
  */
 function c2d_extrude_seg_cargs(
-    params: C2dExtrudeSegParameters,
+    params: C2dExtrudeSegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3365,9 +3365,9 @@ function c2d_extrude_seg_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_fill_background_with_noise_params(
+function c2d_fill_background_with_noise(
     fill_background_with_noise: string,
-): C2dFillBackgroundWithNoiseParametersTagged {
+): C2dFillBackgroundWithNoiseParamsDictTagged {
     const params = {
         "@type": "fill_background_with_noise" as const,
         "fill_background_with_noise": fill_background_with_noise,
@@ -3385,7 +3385,7 @@ function c2d_fill_background_with_noise_params(
  * @returns Command-line arguments.
  */
 function c2d_fill_background_with_noise_cargs(
-    params: C2dFillBackgroundWithNoiseParameters,
+    params: C2dFillBackgroundWithNoiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3410,9 +3410,9 @@ Computes the Fourier transform of a real-valued image at the end of the stack. T
  *
  * @returns Parameter dictionary
  */
-function c2d_fft_params(
+function c2d_fft(
     fft: string,
-): C2dFftParametersTagged {
+): C2dFftParamsDictTagged {
     const params = {
         "@type": "fft" as const,
         "fft": fft,
@@ -3430,7 +3430,7 @@ function c2d_fft_params(
  * @returns Command-line arguments.
  */
 function c2d_fft_cargs(
-    params: C2dFftParameters,
+    params: C2dFftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3455,9 +3455,9 @@ Flips the image around specified axes. The parameter 'axes' may be any combinati
  *
  * @returns Parameter dictionary
  */
-function c2d_flip_params(
+function c2d_flip(
     flip: string,
-): C2dFlipParametersTagged {
+): C2dFlipParamsDictTagged {
     const params = {
         "@type": "flip" as const,
         "flip": flip,
@@ -3475,7 +3475,7 @@ function c2d_flip_params(
  * @returns Command-line arguments.
  */
 function c2d_flip_cargs(
-    params: C2dFlipParameters,
+    params: C2dFlipParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3504,9 +3504,9 @@ To round each intensity to the closest integer, use
  *
  * @returns Parameter dictionary
  */
-function c2d_floor_params(
+function c2d_floor(
     floor: string,
-): C2dFloorParametersTagged {
+): C2dFloorParamsDictTagged {
     const params = {
         "@type": "floor" as const,
         "floor": floor,
@@ -3524,7 +3524,7 @@ function c2d_floor_params(
  * @returns Command-line arguments.
  */
 function c2d_floor_cargs(
-    params: C2dFloorParameters,
+    params: C2dFloorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3549,9 +3549,9 @@ This command forces the commands between **-foreach** and **-endfor** to be appl
  *
  * @returns Parameter dictionary
  */
-function c2d_foreach_params(
+function c2d_foreach(
     foreach: string,
-): C2dForeachParametersTagged {
+): C2dForeachParamsDictTagged {
     const params = {
         "@type": "foreach" as const,
         "foreach": foreach,
@@ -3569,7 +3569,7 @@ function c2d_foreach_params(
  * @returns Command-line arguments.
  */
 function c2d_foreach_cargs(
-    params: C2dForeachParameters,
+    params: C2dForeachParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3594,9 +3594,9 @@ This command runs the list of commands separately for each component of a set of
  *
  * @returns Parameter dictionary
  */
-function c2d_foreach_comp_params(
+function c2d_foreach_comp(
     foreach_comp: string,
-): C2dForeachCompParametersTagged {
+): C2dForeachCompParamsDictTagged {
     const params = {
         "@type": "foreach_comp" as const,
         "foreach_comp": foreach_comp,
@@ -3614,7 +3614,7 @@ function c2d_foreach_comp_params(
  * @returns Command-line arguments.
  */
 function c2d_foreach_comp_cargs(
-    params: C2dForeachCompParameters,
+    params: C2dForeachCompParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3644,9 +3644,9 @@ Applies voxel-wise general linear model to a set of images. More precisely, the 
  *
  * @returns Parameter dictionary
  */
-function c2d_glm_params(
+function c2d_glm(
     glm: string,
-): C2dGlmParametersTagged {
+): C2dGlmParamsDictTagged {
     const params = {
         "@type": "glm" as const,
         "glm": glm,
@@ -3664,7 +3664,7 @@ function c2d_glm_params(
  * @returns Command-line arguments.
  */
 function c2d_glm_cargs(
-    params: C2dGlmParameters,
+    params: C2dGlmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3689,9 +3689,9 @@ Computes the gradient of the image. Each component of the gradient is placed on 
  *
  * @returns Parameter dictionary
  */
-function c2d_gradient_params(
+function c2d_gradient(
     gradient: string,
-): C2dGradientParametersTagged {
+): C2dGradientParamsDictTagged {
     const params = {
         "@type": "gradient" as const,
         "gradient": gradient,
@@ -3709,7 +3709,7 @@ function c2d_gradient_params(
  * @returns Command-line arguments.
  */
 function c2d_gradient_cargs(
-    params: C2dGradientParameters,
+    params: C2dGradientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3734,9 +3734,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  *
  * @returns Parameter dictionary
  */
-function c2d__help_params(
+function c2d__help(
     v__help: string,
-): C2dHelpParametersTagged {
+): C2dHelpParamsDictTagged {
     const params = {
         "@type": "_help" as const,
         "_help": v__help,
@@ -3754,7 +3754,7 @@ function c2d__help_params(
  * @returns Command-line arguments.
  */
 function c2d__help_cargs(
-    params: C2dHelpParameters,
+    params: C2dHelpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3779,9 +3779,9 @@ Apply the binary hole filling algorithm to a particular intensity value in the i
  *
  * @returns Parameter dictionary
  */
-function c2d_holefill_params(
+function c2d_holefill(
     holefill: string,
-): C2dHolefillParametersTagged {
+): C2dHolefillParamsDictTagged {
     const params = {
         "@type": "holefill" as const,
         "holefill": holefill,
@@ -3799,7 +3799,7 @@ function c2d_holefill_params(
  * @returns Command-line arguments.
  */
 function c2d_holefill_cargs(
-    params: C2dHolefillParameters,
+    params: C2dHolefillParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3824,9 +3824,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  *
  * @returns Parameter dictionary
  */
-function c2d_hessian_eigenvalues_params(
+function c2d_hessian_eigenvalues(
     hessian_eigenvalues: string,
-): C2dHessianEigenvaluesParametersTagged {
+): C2dHessianEigenvaluesParamsDictTagged {
     const params = {
         "@type": "hessian_eigenvalues" as const,
         "hessian_eigenvalues": hessian_eigenvalues,
@@ -3844,7 +3844,7 @@ function c2d_hessian_eigenvalues_params(
  * @returns Command-line arguments.
  */
 function c2d_hessian_eigenvalues_cargs(
-    params: C2dHessianEigenvaluesParameters,
+    params: C2dHessianEigenvaluesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3874,9 +3874,9 @@ Parameter `dimension` is an integer that determines the kind of features that ar
  *
  * @returns Parameter dictionary
  */
-function c2d_hessian_objectness_params(
+function c2d_hessian_objectness(
     hessian_objectness: string,
-): C2dHessianObjectnessParametersTagged {
+): C2dHessianObjectnessParamsDictTagged {
     const params = {
         "@type": "hessian_objectness" as const,
         "hessian_objectness": hessian_objectness,
@@ -3894,7 +3894,7 @@ function c2d_hessian_objectness_params(
  * @returns Command-line arguments.
  */
 function c2d_hessian_objectness_cargs(
-    params: C2dHessianObjectnessParameters,
+    params: C2dHessianObjectnessParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3913,9 +3913,9 @@ function c2d_hessian_objectness_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_histogram_match_params(
+function c2d_histogram_match(
     histogram_match: string,
-): C2dHistogramMatchParametersTagged {
+): C2dHistogramMatchParamsDictTagged {
     const params = {
         "@type": "histogram_match" as const,
         "histogram_match": histogram_match,
@@ -3933,7 +3933,7 @@ function c2d_histogram_match_params(
  * @returns Command-line arguments.
  */
 function c2d_histogram_match_cargs(
-    params: C2dHistogramMatchParameters,
+    params: C2dHistogramMatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3962,9 +3962,9 @@ Use with the **-foreach** command to get information on multiple images
  *
  * @returns Parameter dictionary
  */
-function c2d_info_params(
+function c2d_info(
     info: string,
-): C2dInfoParametersTagged {
+): C2dInfoParamsDictTagged {
     const params = {
         "@type": "info" as const,
         "info": info,
@@ -3982,7 +3982,7 @@ function c2d_info_params(
  * @returns Command-line arguments.
  */
 function c2d_info_cargs(
-    params: C2dInfoParameters,
+    params: C2dInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4007,9 +4007,9 @@ Prints extended information about the last image on the stack, such as the metad
  *
  * @returns Parameter dictionary
  */
-function c2d_info_full_params(
+function c2d_info_full(
     info_full: string,
-): C2dInfoFullParametersTagged {
+): C2dInfoFullParamsDictTagged {
     const params = {
         "@type": "info_full" as const,
         "info_full": info_full,
@@ -4027,7 +4027,7 @@ function c2d_info_full_params(
  * @returns Command-line arguments.
  */
 function c2d_info_full_cargs(
-    params: C2dInfoFullParameters,
+    params: C2dInfoFullParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4050,9 +4050,9 @@ This command is similar to **-push**, but allows you to insert the image associa
  *
  * @returns Parameter dictionary
  */
-function c2d_insert_params(
+function c2d_insert(
     insert: string,
-): C2dInsertParametersTagged {
+): C2dInsertParamsDictTagged {
     const params = {
         "@type": "insert" as const,
         "insert": insert,
@@ -4070,7 +4070,7 @@ function c2d_insert_params(
  * @returns Command-line arguments.
  */
 function c2d_insert_cargs(
-    params: C2dInsertParameters,
+    params: C2dInsertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4097,9 +4097,9 @@ Shorthand 0 can be used for *NearestNeighbor*, 1 for *Linear* and 3 for *Cubic*.
  *
  * @returns Parameter dictionary
  */
-function c2d_interpolation_params(
+function c2d_interpolation(
     interpolation: string,
-): C2dInterpolationParametersTagged {
+): C2dInterpolationParamsDictTagged {
     const params = {
         "@type": "interpolation" as const,
         "interpolation": interpolation,
@@ -4117,7 +4117,7 @@ function c2d_interpolation_params(
  * @returns Command-line arguments.
  */
 function c2d_interpolation_cargs(
-    params: C2dInterpolationParameters,
+    params: C2dInterpolationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4136,9 +4136,9 @@ function c2d_interpolation_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_iterations_params(
+function c2d_iterations(
     iterations: string,
-): C2dIterationsParametersTagged {
+): C2dIterationsParamsDictTagged {
     const params = {
         "@type": "iterations" as const,
         "iterations": iterations,
@@ -4156,7 +4156,7 @@ function c2d_iterations_params(
  * @returns Command-line arguments.
  */
 function c2d_iterations_cargs(
-    params: C2dIterationsParameters,
+    params: C2dIterationsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4175,9 +4175,9 @@ function c2d_iterations_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_label_overlap_params(
+function c2d_label_overlap(
     label_overlap: string,
-): C2dLabelOverlapParametersTagged {
+): C2dLabelOverlapParamsDictTagged {
     const params = {
         "@type": "label_overlap" as const,
         "label_overlap": label_overlap,
@@ -4195,7 +4195,7 @@ function c2d_label_overlap_params(
  * @returns Command-line arguments.
  */
 function c2d_label_overlap_cargs(
-    params: C2dLabelOverlapParameters,
+    params: C2dLabelOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4224,9 +4224,9 @@ The output contains the mean, standard deviation, maximum intensity and minimum 
  *
  * @returns Parameter dictionary
  */
-function c2d_label_statistics_params(
+function c2d_label_statistics(
     label_statistics: string,
-): C2dLabelStatisticsParametersTagged {
+): C2dLabelStatisticsParamsDictTagged {
     const params = {
         "@type": "label_statistics" as const,
         "label_statistics": label_statistics,
@@ -4244,7 +4244,7 @@ function c2d_label_statistics_params(
  * @returns Command-line arguments.
  */
 function c2d_label_statistics_cargs(
-    params: C2dLabelStatisticsParameters,
+    params: C2dLabelStatisticsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4263,9 +4263,9 @@ function c2d_label_statistics_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_landmarks_to_spheres_params(
+function c2d_landmarks_to_spheres(
     landmarks_to_spheres: string,
-): C2dLandmarksToSpheresParametersTagged {
+): C2dLandmarksToSpheresParamsDictTagged {
     const params = {
         "@type": "landmarks_to_spheres" as const,
         "landmarks_to_spheres": landmarks_to_spheres,
@@ -4283,7 +4283,7 @@ function c2d_landmarks_to_spheres_params(
  * @returns Command-line arguments.
  */
 function c2d_landmarks_to_spheres_cargs(
-    params: C2dLandmarksToSpheresParameters,
+    params: C2dLandmarksToSpheresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4308,9 +4308,9 @@ Applies the Laplacian filter to the image. Used to detect ridges of intensity. T
  *
  * @returns Parameter dictionary
  */
-function c2d_laplacian_params(
+function c2d_laplacian(
     laplacian: string,
-): C2dLaplacianParametersTagged {
+): C2dLaplacianParamsDictTagged {
     const params = {
         "@type": "laplacian" as const,
         "laplacian": laplacian,
@@ -4328,7 +4328,7 @@ function c2d_laplacian_params(
  * @returns Command-line arguments.
  */
 function c2d_laplacian_cargs(
-    params: C2dLaplacianParameters,
+    params: C2dLaplacianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4372,9 +4372,9 @@ Another example of smoothing a binary image that is useful for cleaning up manua
  *
  * @returns Parameter dictionary
  */
-function c2d_levelset_params(
+function c2d_levelset(
     levelset: string,
-): C2dLevelsetParametersTagged {
+): C2dLevelsetParamsDictTagged {
     const params = {
         "@type": "levelset" as const,
         "levelset": levelset,
@@ -4392,7 +4392,7 @@ function c2d_levelset_params(
  * @returns Command-line arguments.
  */
 function c2d_levelset_cargs(
-    params: C2dLevelsetParameters,
+    params: C2dLevelsetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4411,9 +4411,9 @@ function c2d_levelset_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_levelset_curvature_params(
+function c2d_levelset_curvature(
     levelset_curvature: string,
-): C2dLevelsetCurvatureParametersTagged {
+): C2dLevelsetCurvatureParamsDictTagged {
     const params = {
         "@type": "levelset_curvature" as const,
         "levelset_curvature": levelset_curvature,
@@ -4431,7 +4431,7 @@ function c2d_levelset_curvature_params(
  * @returns Command-line arguments.
  */
 function c2d_levelset_curvature_cargs(
-    params: C2dLevelsetCurvatureParameters,
+    params: C2dLevelsetCurvatureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4450,9 +4450,9 @@ function c2d_levelset_curvature_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_levelset_advection_params(
+function c2d_levelset_advection(
     levelset_advection: string,
-): C2dLevelsetAdvectionParametersTagged {
+): C2dLevelsetAdvectionParamsDictTagged {
     const params = {
         "@type": "levelset_advection" as const,
         "levelset_advection": levelset_advection,
@@ -4470,7 +4470,7 @@ function c2d_levelset_advection_params(
  * @returns Command-line arguments.
  */
 function c2d_levelset_advection_cargs(
-    params: C2dLevelsetAdvectionParameters,
+    params: C2dLevelsetAdvectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4493,9 +4493,9 @@ Computes natural logarithm of each voxel in the last image on the stack.
  *
  * @returns Parameter dictionary
  */
-function c2d_log_params(
+function c2d_log(
     log: string,
-): C2dLogParametersTagged {
+): C2dLogParamsDictTagged {
     const params = {
         "@type": "log" as const,
         "log": log,
@@ -4513,7 +4513,7 @@ function c2d_log_params(
  * @returns Command-line arguments.
  */
 function c2d_log_cargs(
-    params: C2dLogParameters,
+    params: C2dLogParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4536,9 +4536,9 @@ Computes base 10 logarithm of each voxel in the last image on the stack.
  *
  * @returns Parameter dictionary
  */
-function c2d_log10_params(
+function c2d_log10(
     log10: string,
-): C2dLog10ParametersTagged {
+): C2dLog10ParamsDictTagged {
     const params = {
         "@type": "log10" as const,
         "log10": log10,
@@ -4556,7 +4556,7 @@ function c2d_log10_params(
  * @returns Command-line arguments.
  */
 function c2d_log10_cargs(
-    params: C2dLog10Parameters,
+    params: C2dLog10ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4575,9 +4575,9 @@ function c2d_log10_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_manual_params(
+function c2d_manual(
     manual: string,
-): C2dManualParametersTagged {
+): C2dManualParamsDictTagged {
     const params = {
         "@type": "manual" as const,
         "manual": manual,
@@ -4595,7 +4595,7 @@ function c2d_manual_params(
  * @returns Command-line arguments.
  */
 function c2d_manual_cargs(
-    params: C2dManualParameters,
+    params: C2dManualParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4620,9 +4620,9 @@ Given two images on the stack (reference and target), sets the header of the tar
  *
  * @returns Parameter dictionary
  */
-function c2d_match_bounding_box_params(
+function c2d_match_bounding_box(
     match_bounding_box: string,
-): C2dMatchBoundingBoxParametersTagged {
+): C2dMatchBoundingBoxParamsDictTagged {
     const params = {
         "@type": "match_bounding_box" as const,
         "match_bounding_box": match_bounding_box,
@@ -4640,7 +4640,7 @@ function c2d_match_bounding_box_params(
  * @returns Command-line arguments.
  */
 function c2d_match_bounding_box_cargs(
-    params: C2dMatchBoundingBoxParameters,
+    params: C2dMatchBoundingBoxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4666,9 +4666,9 @@ Computes the voxel-wise maximum of two images. Can be used with the **-accum** c
  *
  * @returns Parameter dictionary
  */
-function c2d_maximum_params(
+function c2d_maximum(
     maximum: string,
-): C2dMaximumParametersTagged {
+): C2dMaximumParamsDictTagged {
     const params = {
         "@type": "maximum" as const,
         "maximum": maximum,
@@ -4686,7 +4686,7 @@ function c2d_maximum_params(
  * @returns Command-line arguments.
  */
 function c2d_maximum_cargs(
-    params: C2dMaximumParameters,
+    params: C2dMaximumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4717,9 +4717,9 @@ Enable reading of multi-component images. By default, when a multi-component ima
  *
  * @returns Parameter dictionary
  */
-function c2d_multicomponent_split_params(
+function c2d_multicomponent_split(
     multicomponent_split: string,
-): C2dMulticomponentSplitParametersTagged {
+): C2dMulticomponentSplitParamsDictTagged {
     const params = {
         "@type": "multicomponent_split" as const,
         "multicomponent_split": multicomponent_split,
@@ -4737,7 +4737,7 @@ function c2d_multicomponent_split_params(
  * @returns Command-line arguments.
  */
 function c2d_multicomponent_split_cargs(
-    params: C2dMulticomponentSplitParameters,
+    params: C2dMulticomponentSplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4762,9 +4762,9 @@ Computes the mean of all the images on the stack. All images on the stack are re
  *
  * @returns Parameter dictionary
  */
-function c2d_mean_params(
+function c2d_mean(
     mean: string,
-): C2dMeanParametersTagged {
+): C2dMeanParamsDictTagged {
     const params = {
         "@type": "mean" as const,
         "mean": mean,
@@ -4782,7 +4782,7 @@ function c2d_mean_params(
  * @returns Command-line arguments.
  */
 function c2d_mean_cargs(
-    params: C2dMeanParameters,
+    params: C2dMeanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4807,9 +4807,9 @@ Applies the median filter: the intensity of each voxel is replaced by the median
  *
  * @returns Parameter dictionary
  */
-function c2d_median_filter_params(
+function c2d_median_filter(
     median_filter: string,
-): C2dMedianFilterParametersTagged {
+): C2dMedianFilterParamsDictTagged {
     const params = {
         "@type": "median_filter" as const,
         "median_filter": median_filter,
@@ -4827,7 +4827,7 @@ function c2d_median_filter_params(
  * @returns Command-line arguments.
  */
 function c2d_median_filter_cargs(
-    params: C2dMedianFilterParameters,
+    params: C2dMedianFilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4850,9 +4850,9 @@ Works in conjunction with the **-split** command. Has similar behavior to **-vot
  *
  * @returns Parameter dictionary
  */
-function c2d_merge_params(
+function c2d_merge(
     merge: string,
-): C2dMergeParametersTagged {
+): C2dMergeParamsDictTagged {
     const params = {
         "@type": "merge" as const,
         "merge": merge,
@@ -4870,7 +4870,7 @@ function c2d_merge_params(
  * @returns Command-line arguments.
  */
 function c2d_merge_cargs(
-    params: C2dMergeParameters,
+    params: C2dMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4895,9 +4895,9 @@ Applies the mean filter: the intensity of each voxel is replaced by the mean of 
  *
  * @returns Parameter dictionary
  */
-function c2d_mean_filter_params(
+function c2d_mean_filter(
     mean_filter: string,
-): C2dMeanFilterParametersTagged {
+): C2dMeanFilterParamsDictTagged {
     const params = {
         "@type": "mean_filter" as const,
         "mean_filter": mean_filter,
@@ -4915,7 +4915,7 @@ function c2d_mean_filter_params(
  * @returns Command-line arguments.
  */
 function c2d_mean_filter_cargs(
-    params: C2dMeanFilterParameters,
+    params: C2dMeanFilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4941,9 +4941,9 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
  *
  * @returns Parameter dictionary
  */
-function c2d_mutual_info_params(
+function c2d_mutual_info(
     mutual_info: string,
-): C2dMutualInfoParametersTagged {
+): C2dMutualInfoParamsDictTagged {
     const params = {
         "@type": "mutual_info" as const,
         "mutual_info": mutual_info,
@@ -4961,7 +4961,7 @@ function c2d_mutual_info_params(
  * @returns Command-line arguments.
  */
 function c2d_mutual_info_cargs(
-    params: C2dMutualInfoParameters,
+    params: C2dMutualInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4987,9 +4987,9 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
  *
  * @returns Parameter dictionary
  */
-function c2d_minimum_params(
+function c2d_minimum(
     minimum: string,
-): C2dMinimumParametersTagged {
+): C2dMinimumParamsDictTagged {
     const params = {
         "@type": "minimum" as const,
         "minimum": minimum,
@@ -5007,7 +5007,7 @@ function c2d_minimum_params(
  * @returns Command-line arguments.
  */
 function c2d_minimum_cargs(
-    params: C2dMinimumParameters,
+    params: C2dMinimumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5026,9 +5026,9 @@ function c2d_minimum_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_mixture_model_params(
+function c2d_mixture_model(
     mixture_model: string,
-): C2dMixtureModelParametersTagged {
+): C2dMixtureModelParamsDictTagged {
     const params = {
         "@type": "mixture_model" as const,
         "mixture_model": mixture_model,
@@ -5046,7 +5046,7 @@ function c2d_mixture_model_params(
  * @returns Command-line arguments.
  */
 function c2d_mixture_model_cargs(
-    params: C2dMixtureModelParameters,
+    params: C2dMixtureModelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5065,9 +5065,9 @@ function c2d_mixture_model_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_moments_params(
+function c2d_moments(
     moments: string,
-): C2dMomentsParametersTagged {
+): C2dMomentsParamsDictTagged {
     const params = {
         "@type": "moments" as const,
         "moments": moments,
@@ -5085,7 +5085,7 @@ function c2d_moments_params(
  * @returns Command-line arguments.
  */
 function c2d_moments_cargs(
-    params: C2dMomentsParameters,
+    params: C2dMomentsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5104,9 +5104,9 @@ function c2d_moments_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_mattes_mutual_info_params(
+function c2d_mattes_mutual_info(
     mattes_mutual_info: string,
-): C2dMattesMutualInfoParametersTagged {
+): C2dMattesMutualInfoParamsDictTagged {
     const params = {
         "@type": "mattes_mutual_info" as const,
         "mattes_mutual_info": mattes_mutual_info,
@@ -5124,7 +5124,7 @@ function c2d_mattes_mutual_info_params(
  * @returns Command-line arguments.
  */
 function c2d_mattes_mutual_info_cargs(
-    params: C2dMattesMutualInfoParameters,
+    params: C2dMattesMutualInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5156,9 +5156,9 @@ Compute the mean square difference metric between the last two images on the sta
  *
  * @returns Parameter dictionary
  */
-function c2d_mean_square_params(
+function c2d_mean_square(
     mean_square: string,
-): C2dMeanSquareParametersTagged {
+): C2dMeanSquareParamsDictTagged {
     const params = {
         "@type": "mean_square" as const,
         "mean_square": mean_square,
@@ -5176,7 +5176,7 @@ function c2d_mean_square_params(
  * @returns Command-line arguments.
  */
 function c2d_mean_square_cargs(
-    params: C2dMeanSquareParameters,
+    params: C2dMeanSquareParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5210,9 +5210,9 @@ Combine with the **-dup** command to compute voxelwise square of the image
  *
  * @returns Parameter dictionary
  */
-function c2d_multiply_params(
+function c2d_multiply(
     multiply: string,
-): C2dMultiplyParametersTagged {
+): C2dMultiplyParamsDictTagged {
     const params = {
         "@type": "multiply" as const,
         "multiply": multiply,
@@ -5230,7 +5230,7 @@ function c2d_multiply_params(
  * @returns Command-line arguments.
  */
 function c2d_multiply_cargs(
-    params: C2dMultiplyParameters,
+    params: C2dMultiplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5253,9 +5253,9 @@ Computes normalized cross-correlation between two images that occupy the same ph
  *
  * @returns Parameter dictionary
  */
-function c2d_normalized_cross_correlation_params(
+function c2d_normalized_cross_correlation(
     normalized_cross_correlation: string,
-): C2dNormalizedCrossCorrelationParametersTagged {
+): C2dNormalizedCrossCorrelationParamsDictTagged {
     const params = {
         "@type": "normalized_cross_correlation" as const,
         "normalized_cross_correlation": normalized_cross_correlation,
@@ -5273,7 +5273,7 @@ function c2d_normalized_cross_correlation_params(
  * @returns Command-line arguments.
  */
 function c2d_normalized_cross_correlation_cargs(
-    params: C2dNormalizedCrossCorrelationParameters,
+    params: C2dNormalizedCrossCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5296,9 +5296,9 @@ Syntax: `-ncor [movtransform.mat] [reftransform.mat]`
  *
  * @returns Parameter dictionary
  */
-function c2d_normalized_correlation_params(
+function c2d_normalized_correlation(
     normalized_correlation: string,
-): C2dNormalizedCorrelationParametersTagged {
+): C2dNormalizedCorrelationParamsDictTagged {
     const params = {
         "@type": "normalized_correlation" as const,
         "normalized_correlation": normalized_correlation,
@@ -5316,7 +5316,7 @@ function c2d_normalized_correlation_params(
  * @returns Command-line arguments.
  */
 function c2d_normalized_correlation_cargs(
-    params: C2dNormalizedCorrelationParameters,
+    params: C2dNormalizedCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5339,9 +5339,9 @@ Compute the Mattes mutual information metric between the last two images on the 
  *
  * @returns Parameter dictionary
  */
-function c2d_normalized_mutual_info_params(
+function c2d_normalized_mutual_info(
     normalized_mutual_info: string,
-): C2dNormalizedMutualInfoParametersTagged {
+): C2dNormalizedMutualInfoParamsDictTagged {
     const params = {
         "@type": "normalized_mutual_info" as const,
         "normalized_mutual_info": normalized_mutual_info,
@@ -5359,7 +5359,7 @@ function c2d_normalized_mutual_info_params(
  * @returns Command-line arguments.
  */
 function c2d_normalized_mutual_info_cargs(
-    params: C2dNormalizedMutualInfoParameters,
+    params: C2dNormalizedMutualInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5384,9 +5384,9 @@ Adds Gaussian noise to an image with zero mean and standard deviation sigma. Ple
  *
  * @returns Parameter dictionary
  */
-function c2d_noise_gaussian_params(
+function c2d_noise_gaussian(
     noise_gaussian: string,
-): C2dNoiseGaussianParametersTagged {
+): C2dNoiseGaussianParamsDictTagged {
     const params = {
         "@type": "noise_gaussian" as const,
         "noise_gaussian": noise_gaussian,
@@ -5404,7 +5404,7 @@ function c2d_noise_gaussian_params(
  * @returns Command-line arguments.
  */
 function c2d_noise_gaussian_cargs(
-    params: C2dNoiseGaussianParameters,
+    params: C2dNoiseGaussianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5428,9 +5428,9 @@ Applies Poisson (shot) noise to an image with given scale. Please see [Noise sim
  *
  * @returns Parameter dictionary
  */
-function c2d_noise_poisson_params(
+function c2d_noise_poisson(
     noise_poisson: string,
-): C2dNoisePoissonParametersTagged {
+): C2dNoisePoissonParamsDictTagged {
     const params = {
         "@type": "noise_poisson" as const,
         "noise_poisson": noise_poisson,
@@ -5448,7 +5448,7 @@ function c2d_noise_poisson_params(
  * @returns Command-line arguments.
  */
 function c2d_noise_poisson_cargs(
-    params: C2dNoisePoissonParameters,
+    params: C2dNoisePoissonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5472,9 +5472,9 @@ Applies Speckle noise to an image with given standard deviation. Please see [Noi
  *
  * @returns Parameter dictionary
  */
-function c2d_noise_speckle_params(
+function c2d_noise_speckle(
     noise_speckle: string,
-): C2dNoiseSpeckleParametersTagged {
+): C2dNoiseSpeckleParamsDictTagged {
     const params = {
         "@type": "noise_speckle" as const,
         "noise_speckle": noise_speckle,
@@ -5492,7 +5492,7 @@ function c2d_noise_speckle_params(
  * @returns Command-line arguments.
  */
 function c2d_noise_speckle_cargs(
-    params: C2dNoiseSpeckleParameters,
+    params: C2dNoiseSpeckleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5516,9 +5516,9 @@ Applies salt and pepper noise to an image with given probability. Please see [No
  *
  * @returns Parameter dictionary
  */
-function c2d_noise_salt_pepper_params(
+function c2d_noise_salt_pepper(
     noise_salt_pepper: string,
-): C2dNoiseSaltPepperParametersTagged {
+): C2dNoiseSaltPepperParamsDictTagged {
     const params = {
         "@type": "noise_salt_pepper" as const,
         "noise_salt_pepper": noise_salt_pepper,
@@ -5536,7 +5536,7 @@ function c2d_noise_salt_pepper_params(
  * @returns Command-line arguments.
  */
 function c2d_noise_salt_pepper_cargs(
-    params: C2dNoiseSaltPepperParameters,
+    params: C2dNoiseSaltPepperParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5559,9 +5559,9 @@ Used to reverse the effect of previous **-mcs** command.
  *
  * @returns Parameter dictionary
  */
-function c2d_no_multicomponent_split_params(
+function c2d_no_multicomponent_split(
     no_multicomponent_split: string,
-): C2dNoMulticomponentSplitParametersTagged {
+): C2dNoMulticomponentSplitParamsDictTagged {
     const params = {
         "@type": "no_multicomponent_split" as const,
         "no_multicomponent_split": no_multicomponent_split,
@@ -5579,7 +5579,7 @@ function c2d_no_multicomponent_split_params(
  * @returns Command-line arguments.
  */
 function c2d_no_multicomponent_split_cargs(
-    params: C2dNoMulticomponentSplitParameters,
+    params: C2dNoMulticomponentSplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5604,9 +5604,9 @@ This command takes as inputs an image and a mask image. At each voxel, the mean 
  *
  * @returns Parameter dictionary
  */
-function c2d_normalize_local_window_params(
+function c2d_normalize_local_window(
     normalize_local_window: string,
-): C2dNormalizeLocalWindowParametersTagged {
+): C2dNormalizeLocalWindowParamsDictTagged {
     const params = {
         "@type": "normalize_local_window" as const,
         "normalize_local_window": normalize_local_window,
@@ -5624,7 +5624,7 @@ function c2d_normalize_local_window_params(
  * @returns Command-line arguments.
  */
 function c2d_normalize_local_window_cargs(
-    params: C2dNormalizeLocalWindowParameters,
+    params: C2dNormalizeLocalWindowParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5643,9 +5643,9 @@ function c2d_normalize_local_window_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_normpdf_params(
+function c2d_normpdf(
     normpdf: string,
-): C2dNormpdfParametersTagged {
+): C2dNormpdfParamsDictTagged {
     const params = {
         "@type": "normpdf" as const,
         "normpdf": normpdf,
@@ -5663,7 +5663,7 @@ function c2d_normpdf_params(
  * @returns Command-line arguments.
  */
 function c2d_normpdf_cargs(
-    params: C2dNormpdfParameters,
+    params: C2dNormpdfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5688,9 +5688,9 @@ By default, **convert3d** will round floating point values when converting to an
  *
  * @returns Parameter dictionary
  */
-function c2d_noround_params(
+function c2d_noround(
     noround: string,
-): C2dNoroundParametersTagged {
+): C2dNoroundParamsDictTagged {
     const params = {
         "@type": "noround" as const,
         "noround": noround,
@@ -5708,7 +5708,7 @@ function c2d_noround_params(
  * @returns Command-line arguments.
  */
 function c2d_noround_cargs(
-    params: C2dNoroundParameters,
+    params: C2dNoroundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5733,9 +5733,9 @@ These options specify whether use the SPM extension to the Analyze (.hdr,.img) f
  *
  * @returns Parameter dictionary
  */
-function c2d_nospm_params(
+function c2d_nospm(
     nospm: string,
-): C2dNospmParametersTagged {
+): C2dNospmParamsDictTagged {
     const params = {
         "@type": "nospm" as const,
         "nospm": nospm,
@@ -5753,7 +5753,7 @@ function c2d_nospm_params(
  * @returns Command-line arguments.
  */
 function c2d_nospm_cargs(
-    params: C2dNospmParameters,
+    params: C2dNospmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5766,7 +5766,7 @@ function c2d_nospm_cargs(
 
 
 /**
- * Output object returned when calling `C2dOutputParameters(...)`.
+ * Output object returned when calling `C2dOutputParamsDict(...)`.
  *
  * @interface
  */
@@ -5799,9 +5799,9 @@ The **-o** option can also be used to save an intermediate image in the stack:
  *
  * @returns Parameter dictionary
  */
-function c2d_output_params(
+function c2d_output(
     output: string,
-): C2dOutputParametersTagged {
+): C2dOutputParamsDictTagged {
     const params = {
         "@type": "output" as const,
         "output": output,
@@ -5819,7 +5819,7 @@ function c2d_output_params(
  * @returns Command-line arguments.
  */
 function c2d_output_cargs(
-    params: C2dOutputParameters,
+    params: C2dOutputParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5840,7 +5840,7 @@ function c2d_output_cargs(
  * @returns Outputs object.
  */
 function c2d_output_outputs(
-    params: C2dOutputParameters,
+    params: C2dOutputParamsDict,
     execution: Execution,
 ): C2dOutputOutputs {
     const ret: C2dOutputOutputs = {
@@ -5868,9 +5868,9 @@ For 2D images, this command can be used to generate color PNG files:
  *
  * @returns Parameter dictionary
  */
-function c2d_output_multicomponent_params(
+function c2d_output_multicomponent(
     output_multicomponent: string,
-): C2dOutputMulticomponentParametersTagged {
+): C2dOutputMulticomponentParamsDictTagged {
     const params = {
         "@type": "output_multicomponent" as const,
         "output_multicomponent": output_multicomponent,
@@ -5888,7 +5888,7 @@ function c2d_output_multicomponent_params(
  * @returns Command-line arguments.
  */
 function c2d_output_multicomponent_cargs(
-    params: C2dOutputMulticomponentParameters,
+    params: C2dOutputMulticomponentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5917,9 +5917,9 @@ Sometimes, for complex operations, it is useful to change the order of the image
  *
  * @returns Parameter dictionary
  */
-function c2d_output_multiple_multicomponent_params(
+function c2d_output_multiple_multicomponent(
     output_multiple_multicomponent: string,
-): C2dOutputMultipleMulticomponentParametersTagged {
+): C2dOutputMultipleMulticomponentParamsDictTagged {
     const params = {
         "@type": "output_multiple_multicomponent" as const,
         "output_multiple_multicomponent": output_multiple_multicomponent,
@@ -5937,7 +5937,7 @@ function c2d_output_multiple_multicomponent_params(
  * @returns Command-line arguments.
  */
 function c2d_output_multiple_multicomponent_cargs(
-    params: C2dOutputMultipleMulticomponentParameters,
+    params: C2dOutputMultipleMulticomponentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5967,9 +5967,9 @@ This command has the same behavior as the 'Reorient Image' menu option in ITK-SN
  *
  * @returns Parameter dictionary
  */
-function c2d_orient_params(
+function c2d_orient(
     orient: string,
-): C2dOrientParametersTagged {
+): C2dOrientParamsDictTagged {
     const params = {
         "@type": "orient" as const,
         "orient": orient,
@@ -5987,7 +5987,7 @@ function c2d_orient_params(
  * @returns Command-line arguments.
  */
 function c2d_orient_cargs(
-    params: C2dOrientParameters,
+    params: C2dOrientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6020,9 +6020,9 @@ will generate images *label00.nii*, *label01.nii*, *label02.nii* and so on. The 
  *
  * @returns Parameter dictionary
  */
-function c2d_output_multiple_params(
+function c2d_output_multiple(
     output_multiple: string,
-): C2dOutputMultipleParametersTagged {
+): C2dOutputMultipleParamsDictTagged {
     const params = {
         "@type": "output_multiple" as const,
         "output_multiple": output_multiple,
@@ -6040,7 +6040,7 @@ function c2d_output_multiple_params(
  * @returns Command-line arguments.
  */
 function c2d_output_multiple_cargs(
-    params: C2dOutputMultipleParameters,
+    params: C2dOutputMultipleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6070,9 +6070,9 @@ This command has the same behavior as the 'Reorient Image' menu option in ITK-SN
  *
  * @returns Parameter dictionary
  */
-function c2d_orient_1_params(
+function c2d_orient_1(
     orient: string,
-): C2dOrient1ParametersTagged {
+): C2dOrient1ParamsDictTagged {
     const params = {
         "@type": "orient_1" as const,
         "orient": orient,
@@ -6090,7 +6090,7 @@ function c2d_orient_1_params(
  * @returns Command-line arguments.
  */
 function c2d_orient_1_cargs(
-    params: C2dOrient1Parameters,
+    params: C2dOrient1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6115,9 +6115,9 @@ Set the origin of the image. The origin is the world coordinate (in NIfTI coordi
  *
  * @returns Parameter dictionary
  */
-function c2d_origin_params(
+function c2d_origin(
     origin: string,
-): C2dOriginParametersTagged {
+): C2dOriginParamsDictTagged {
     const params = {
         "@type": "origin" as const,
         "origin": origin,
@@ -6135,7 +6135,7 @@ function c2d_origin_params(
  * @returns Command-line arguments.
  */
 function c2d_origin_cargs(
-    params: C2dOriginParameters,
+    params: C2dOriginParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6161,9 +6161,9 @@ Set the origin of the image by specifying the voxel coordinates of the center of
  *
  * @returns Parameter dictionary
  */
-function c2d_origin_voxel_params(
+function c2d_origin_voxel(
     origin_voxel: string,
-): C2dOriginVoxelParametersTagged {
+): C2dOriginVoxelParamsDictTagged {
     const params = {
         "@type": "origin_voxel" as const,
         "origin_voxel": origin_voxel,
@@ -6181,7 +6181,7 @@ function c2d_origin_voxel_params(
  * @returns Command-line arguments.
  */
 function c2d_origin_voxel_cargs(
-    params: C2dOriginVoxelParameters,
+    params: C2dOriginVoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6206,9 +6206,9 @@ This command updates the origin of the image such that the specifed voxel has th
  *
  * @returns Parameter dictionary
  */
-function c2d_origin_voxel_coord_params(
+function c2d_origin_voxel_coord(
     origin_voxel_coord: string,
-): C2dOriginVoxelCoordParametersTagged {
+): C2dOriginVoxelCoordParamsDictTagged {
     const params = {
         "@type": "origin_voxel_coord" as const,
         "origin_voxel_coord": origin_voxel_coord,
@@ -6226,7 +6226,7 @@ function c2d_origin_voxel_coord_params(
  * @returns Command-line arguments.
  */
 function c2d_origin_voxel_coord_cargs(
-    params: C2dOriginVoxelCoordParameters,
+    params: C2dOriginVoxelCoordParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6267,9 +6267,9 @@ This command does not alter the stack.
  *
  * @returns Parameter dictionary
  */
-function c2d_overlap_params(
+function c2d_overlap(
     overlap: string,
-): C2dOverlapParametersTagged {
+): C2dOverlapParamsDictTagged {
     const params = {
         "@type": "overlap" as const,
         "overlap": overlap,
@@ -6287,7 +6287,7 @@ function c2d_overlap_params(
  * @returns Command-line arguments.
  */
 function c2d_overlap_cargs(
-    params: C2dOverlapParameters,
+    params: C2dOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6324,9 +6324,9 @@ Here is a more complex example, used to visualize a segmentation result. We do a
  *
  * @returns Parameter dictionary
  */
-function c2d_overlay_label_image_params(
+function c2d_overlay_label_image(
     overlay_label_image: string,
-): C2dOverlayLabelImageParametersTagged {
+): C2dOverlayLabelImageParamsDictTagged {
     const params = {
         "@type": "overlay_label_image" as const,
         "overlay_label_image": overlay_label_image,
@@ -6344,7 +6344,7 @@ function c2d_overlay_label_image_params(
  * @returns Command-line arguments.
  */
 function c2d_overlay_label_image_cargs(
-    params: C2dOverlayLabelImageParameters,
+    params: C2dOverlayLabelImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6381,9 +6381,9 @@ Adds 10% to all sides of the image, and fills the new voxels with the value 1.
  *
  * @returns Parameter dictionary
  */
-function c2d_pad_params(
+function c2d_pad(
     pad: string,
-): C2dPadParametersTagged {
+): C2dPadParamsDictTagged {
     const params = {
         "@type": "pad" as const,
         "pad": pad,
@@ -6401,7 +6401,7 @@ function c2d_pad_params(
  * @returns Command-line arguments.
  */
 function c2d_pad_cargs(
-    params: C2dPadParameters,
+    params: C2dPadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6420,9 +6420,9 @@ function c2d_pad_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_pad_to_params(
+function c2d_pad_to(
     pad_to: string,
-): C2dPadToParametersTagged {
+): C2dPadToParamsDictTagged {
     const params = {
         "@type": "pad_to" as const,
         "pad_to": pad_to,
@@ -6440,7 +6440,7 @@ function c2d_pad_to_params(
  * @returns Command-line arguments.
  */
 function c2d_pad_to_cargs(
-    params: C2dPadToParameters,
+    params: C2dPadToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6467,9 +6467,9 @@ Similar to the *-centroid* command, computes the centroid and prinicipal compone
  *
  * @returns Parameter dictionary
  */
-function c2d_pca_params(
+function c2d_pca(
     pca: string,
-): C2dPcaParametersTagged {
+): C2dPcaParamsDictTagged {
     const params = {
         "@type": "pca" as const,
         "pca": pca,
@@ -6487,7 +6487,7 @@ function c2d_pca_params(
  * @returns Command-line arguments.
  */
 function c2d_pca_cargs(
-    params: C2dPcaParameters,
+    params: C2dPcaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6519,9 +6519,9 @@ This options changes how the percent sign (%) is interpreted when specifying int
  *
  * @returns Parameter dictionary
  */
-function c2d_percent_intensity_mode_params(
+function c2d_percent_intensity_mode(
     percent_intensity_mode: string,
-): C2dPercentIntensityModeParametersTagged {
+): C2dPercentIntensityModeParamsDictTagged {
     const params = {
         "@type": "percent_intensity_mode" as const,
         "percent_intensity_mode": percent_intensity_mode,
@@ -6539,7 +6539,7 @@ function c2d_percent_intensity_mode_params(
  * @returns Command-line arguments.
  */
 function c2d_percent_intensity_mode_cargs(
-    params: C2dPercentIntensityModeParameters,
+    params: C2dPercentIntensityModeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6558,9 +6558,9 @@ function c2d_percent_intensity_mode_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_pixel_params(
+function c2d_pixel(
     pixel: string,
-): C2dPixelParametersTagged {
+): C2dPixelParamsDictTagged {
     const params = {
         "@type": "pixel" as const,
         "pixel": pixel,
@@ -6578,7 +6578,7 @@ function c2d_pixel_params(
  * @returns Command-line arguments.
  */
 function c2d_pixel_cargs(
-    params: C2dPixelParameters,
+    params: C2dPixelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6601,9 +6601,9 @@ Removes the last image from the image stack. Images assigned a name with the **-
  *
  * @returns Parameter dictionary
  */
-function c2d_pop_params(
+function c2d_pop(
     pop: string,
-): C2dPopParametersTagged {
+): C2dPopParamsDictTagged {
     const params = {
         "@type": "pop" as const,
         "pop": pop,
@@ -6621,7 +6621,7 @@ function c2d_pop_params(
  * @returns Command-line arguments.
  */
 function c2d_pop_cargs(
-    params: C2dPopParameters,
+    params: C2dPopParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6644,9 +6644,9 @@ Removes the last image from the stack, but also assigns it the name 'var', keepi
  *
  * @returns Parameter dictionary
  */
-function c2d_popas_params(
+function c2d_popas(
     popas: string,
-): C2dPopasParametersTagged {
+): C2dPopasParamsDictTagged {
     const params = {
         "@type": "popas" as const,
         "popas": popas,
@@ -6664,7 +6664,7 @@ function c2d_popas_params(
  * @returns Command-line arguments.
  */
 function c2d_popas_cargs(
-    params: C2dPopasParameters,
+    params: C2dPopasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6691,9 +6691,9 @@ Prints the value of the image at the position specified by the parameter `point_
  *
  * @returns Parameter dictionary
  */
-function c2d_probe_params(
+function c2d_probe(
     probe: string,
-): C2dProbeParametersTagged {
+): C2dProbeParamsDictTagged {
     const params = {
         "@type": "probe" as const,
         "probe": probe,
@@ -6711,7 +6711,7 @@ function c2d_probe_params(
  * @returns Command-line arguments.
  */
 function c2d_probe_cargs(
-    params: C2dProbeParameters,
+    params: C2dProbeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6736,9 +6736,9 @@ Places the image associated with variable name 'var' on end of the image stack. 
  *
  * @returns Parameter dictionary
  */
-function c2d_push_params(
+function c2d_push(
     push: string,
-): C2dPushParametersTagged {
+): C2dPushParamsDictTagged {
     const params = {
         "@type": "push" as const,
         "push": push,
@@ -6756,7 +6756,7 @@ function c2d_push_params(
  * @returns Command-line arguments.
  */
 function c2d_push_cargs(
-    params: C2dPushParameters,
+    params: C2dPushParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6781,9 +6781,9 @@ This command takes N images as the input (all the images on the stack are used).
  *
  * @returns Parameter dictionary
  */
-function c2d_rank_params(
+function c2d_rank(
     rank: string,
-): C2dRankParametersTagged {
+): C2dRankParamsDictTagged {
     const params = {
         "@type": "rank" as const,
         "rank": rank,
@@ -6801,7 +6801,7 @@ function c2d_rank_params(
  * @returns Command-line arguments.
  */
 function c2d_rank_cargs(
-    params: C2dRankParameters,
+    params: C2dRankParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6826,9 +6826,9 @@ Computes the reciprocal of an image. For instance to compute B = 1 / A, use the 
  *
  * @returns Parameter dictionary
  */
-function c2d_reciprocal_params(
+function c2d_reciprocal(
     reciprocal: string,
-): C2dReciprocalParametersTagged {
+): C2dReciprocalParamsDictTagged {
     const params = {
         "@type": "reciprocal" as const,
         "reciprocal": reciprocal,
@@ -6846,7 +6846,7 @@ function c2d_reciprocal_params(
  * @returns Command-line arguments.
  */
 function c2d_reciprocal_cargs(
-    params: C2dReciprocalParameters,
+    params: C2dReciprocalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6872,9 +6872,9 @@ Extract a rectangular region from the image. The first parameter is the position
  *
  * @returns Parameter dictionary
  */
-function c2d_region_params(
+function c2d_region(
     region: string,
-): C2dRegionParametersTagged {
+): C2dRegionParamsDictTagged {
     const params = {
         "@type": "region" as const,
         "region": region,
@@ -6892,7 +6892,7 @@ function c2d_region_params(
  * @returns Command-line arguments.
  */
 function c2d_region_cargs(
-    params: C2dRegionParameters,
+    params: C2dRegionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6929,9 +6929,9 @@ is equivalent to the command
  *
  * @returns Parameter dictionary
  */
-function c2d_reorder_params(
+function c2d_reorder(
     reorder: string,
-): C2dReorderParametersTagged {
+): C2dReorderParamsDictTagged {
     const params = {
         "@type": "reorder" as const,
         "reorder": reorder,
@@ -6949,7 +6949,7 @@ function c2d_reorder_params(
  * @returns Command-line arguments.
  */
 function c2d_reorder_cargs(
-    params: C2dReorderParameters,
+    params: C2dReorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6974,9 +6974,9 @@ Assuming that the input is a multi-label segmentation image, this command keeps 
  *
  * @returns Parameter dictionary
  */
-function c2d_retain_labels_params(
+function c2d_retain_labels(
     retain_labels: string,
-): C2dRetainLabelsParametersTagged {
+): C2dRetainLabelsParamsDictTagged {
     const params = {
         "@type": "retain_labels" as const,
         "retain_labels": retain_labels,
@@ -6994,7 +6994,7 @@ function c2d_retain_labels_params(
  * @returns Command-line arguments.
  */
 function c2d_retain_labels_cargs(
-    params: C2dRetainLabelsParameters,
+    params: C2dRetainLabelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7017,9 +7017,9 @@ This command applies a classifier trained previously by **-rf-train**. The stack
  *
  * @returns Parameter dictionary
  */
-function c2d_rf_apply_params(
+function c2d_rf_apply(
     rf_apply: string,
-): C2dRfApplyParametersTagged {
+): C2dRfApplyParamsDictTagged {
     const params = {
         "@type": "rf_apply" as const,
         "rf_apply": rf_apply,
@@ -7037,7 +7037,7 @@ function c2d_rf_apply_params(
  * @returns Command-line arguments.
  */
 function c2d_rf_apply_cargs(
-    params: C2dRfApplyParameters,
+    params: C2dRfApplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7083,9 +7083,9 @@ The commands are meant to replicate the "classification" pre-segmentation mode i
  *
  * @returns Parameter dictionary
  */
-function c2d_rf_train_params(
+function c2d_rf_train(
     rf_train: string,
-): C2dRfTrainParametersTagged {
+): C2dRfTrainParamsDictTagged {
     const params = {
         "@type": "rf_train" as const,
         "rf_train": rf_train,
@@ -7103,7 +7103,7 @@ function c2d_rf_train_params(
  * @returns Command-line arguments.
  */
 function c2d_rf_train_cargs(
-    params: C2dRfTrainParameters,
+    params: C2dRfTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7129,9 +7129,9 @@ Set the radius of the patch used to generate features for the RF classifier. By 
  *
  * @returns Parameter dictionary
  */
-function c2d_rf_param_patch_params(
+function c2d_rf_param_patch(
     rf_param_patch: string,
-): C2dRfParamPatchParametersTagged {
+): C2dRfParamPatchParamsDictTagged {
     const params = {
         "@type": "rf_param_patch" as const,
         "rf_param_patch": rf_param_patch,
@@ -7149,7 +7149,7 @@ function c2d_rf_param_patch_params(
  * @returns Command-line arguments.
  */
 function c2d_rf_param_patch_cargs(
-    params: C2dRfParamPatchParameters,
+    params: C2dRfParamPatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7172,9 +7172,9 @@ Use the coordinates of voxels as additional features. This allows some geometric
  *
  * @returns Parameter dictionary
  */
-function c2d_rf_param_usexyz_params(
+function c2d_rf_param_usexyz(
     rf_param_usexyz: string,
-): C2dRfParamUsexyzParametersTagged {
+): C2dRfParamUsexyzParamsDictTagged {
     const params = {
         "@type": "rf_param_usexyz" as const,
         "rf_param_usexyz": rf_param_usexyz,
@@ -7192,7 +7192,7 @@ function c2d_rf_param_usexyz_params(
  * @returns Command-line arguments.
  */
 function c2d_rf_param_usexyz_cargs(
-    params: C2dRfParamUsexyzParameters,
+    params: C2dRfParamUsexyzParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7211,9 +7211,9 @@ function c2d_rf_param_usexyz_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_rf_param_nousexyz_params(
+function c2d_rf_param_nousexyz(
     rf_param_nousexyz: string,
-): C2dRfParamNousexyzParametersTagged {
+): C2dRfParamNousexyzParamsDictTagged {
     const params = {
         "@type": "rf_param_nousexyz" as const,
         "rf_param_nousexyz": rf_param_nousexyz,
@@ -7231,7 +7231,7 @@ function c2d_rf_param_nousexyz_params(
  * @returns Command-line arguments.
  */
 function c2d_rf_param_nousexyz_cargs(
-    params: C2dRfParamNousexyzParameters,
+    params: C2dRfParamNousexyzParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7254,9 +7254,9 @@ Sets the number of trees in the forest. Default value is 50. Larger forests are 
  *
  * @returns Parameter dictionary
  */
-function c2d_rf_param_ntrees_params(
+function c2d_rf_param_ntrees(
     rf_param_ntrees: string,
-): C2dRfParamNtreesParametersTagged {
+): C2dRfParamNtreesParamsDictTagged {
     const params = {
         "@type": "rf_param_ntrees" as const,
         "rf_param_ntrees": rf_param_ntrees,
@@ -7274,7 +7274,7 @@ function c2d_rf_param_ntrees_params(
  * @returns Command-line arguments.
  */
 function c2d_rf_param_ntrees_cargs(
-    params: C2dRfParamNtreesParameters,
+    params: C2dRfParamNtreesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7297,9 +7297,9 @@ Sets the depth of the trees in the classifier. Default value is 30. Deeper trees
  *
  * @returns Parameter dictionary
  */
-function c2d_rf_param_treedepth_params(
+function c2d_rf_param_treedepth(
     rf_param_treedepth: string,
-): C2dRfParamTreedepthParametersTagged {
+): C2dRfParamTreedepthParamsDictTagged {
     const params = {
         "@type": "rf_param_treedepth" as const,
         "rf_param_treedepth": rf_param_treedepth,
@@ -7317,7 +7317,7 @@ function c2d_rf_param_treedepth_params(
  * @returns Command-line arguments.
  */
 function c2d_rf_param_treedepth_cargs(
-    params: C2dRfParamTreedepthParameters,
+    params: C2dRfParamTreedepthParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7340,9 +7340,9 @@ Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
  *
  * @returns Parameter dictionary
  */
-function c2d_set_sform_params(
+function c2d_set_sform(
     set_sform: string,
-): C2dSetSformParametersTagged {
+): C2dSetSformParamsDictTagged {
     const params = {
         "@type": "set_sform" as const,
         "set_sform": set_sform,
@@ -7360,7 +7360,7 @@ function c2d_set_sform_params(
  * @returns Command-line arguments.
  */
 function c2d_set_sform_cargs(
-    params: C2dSetSformParameters,
+    params: C2dSetSformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7385,9 +7385,9 @@ Replace intensity I1 by J1, I2 by J2 and so on. Allowed values of intensity incl
  *
  * @returns Parameter dictionary
  */
-function c2d_replace_params(
+function c2d_replace(
     replace: string,
-): C2dReplaceParametersTagged {
+): C2dReplaceParamsDictTagged {
     const params = {
         "@type": "replace" as const,
         "replace": replace,
@@ -7405,7 +7405,7 @@ function c2d_replace_params(
  * @returns Command-line arguments.
  */
 function c2d_replace_cargs(
-    params: C2dReplaceParameters,
+    params: C2dReplaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7433,9 +7433,9 @@ Resamples the image, keeping the bounding box the same, but changing the number 
  *
  * @returns Parameter dictionary
  */
-function c2d_resample_params(
+function c2d_resample(
     resample: string,
-): C2dResampleParametersTagged {
+): C2dResampleParamsDictTagged {
     const params = {
         "@type": "resample" as const,
         "resample": resample,
@@ -7453,7 +7453,7 @@ function c2d_resample_params(
  * @returns Command-line arguments.
  */
 function c2d_resample_cargs(
-    params: C2dResampleParameters,
+    params: C2dResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7478,9 +7478,9 @@ Resamples the image to have approximately isotropic resolution, either based on 
  *
  * @returns Parameter dictionary
  */
-function c2d_resample_iso_params(
+function c2d_resample_iso(
     resample_iso: string,
-): C2dResampleIsoParametersTagged {
+): C2dResampleIsoParamsDictTagged {
     const params = {
         "@type": "resample_iso" as const,
         "resample_iso": resample_iso,
@@ -7498,7 +7498,7 @@ function c2d_resample_iso_params(
  * @returns Command-line arguments.
  */
 function c2d_resample_iso_cargs(
-    params: C2dResampleIsoParameters,
+    params: C2dResampleIsoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7523,9 +7523,9 @@ Resamples the image as in **-resample**, but the user specifies the new voxel si
  *
  * @returns Parameter dictionary
  */
-function c2d_resample_mm_params(
+function c2d_resample_mm(
     resample_mm: string,
-): C2dResampleMmParametersTagged {
+): C2dResampleMmParamsDictTagged {
     const params = {
         "@type": "resample_mm" as const,
         "resample_mm": resample_mm,
@@ -7543,7 +7543,7 @@ function c2d_resample_mm_params(
  * @returns Command-line arguments.
  */
 function c2d_resample_mm_cargs(
-    params: C2dResampleMmParameters,
+    params: C2dResampleMmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7566,9 +7566,9 @@ Applies affine (or other) transform in ITK (ANTs) format to an image. See notes 
  *
  * @returns Parameter dictionary
  */
-function c2d_reslice_itk_params(
+function c2d_reslice_itk(
     reslice_itk: string,
-): C2dResliceItkParametersTagged {
+): C2dResliceItkParamsDictTagged {
     const params = {
         "@type": "reslice_itk" as const,
         "reslice_itk": reslice_itk,
@@ -7586,7 +7586,7 @@ function c2d_reslice_itk_params(
  * @returns Command-line arguments.
  */
 function c2d_reslice_itk_cargs(
-    params: C2dResliceItkParameters,
+    params: C2dResliceItkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7605,9 +7605,9 @@ function c2d_reslice_itk_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_reslice_matrix_params(
+function c2d_reslice_matrix(
     reslice_matrix: string,
-): C2dResliceMatrixParametersTagged {
+): C2dResliceMatrixParamsDictTagged {
     const params = {
         "@type": "reslice_matrix" as const,
         "reslice_matrix": reslice_matrix,
@@ -7625,7 +7625,7 @@ function c2d_reslice_matrix_params(
  * @returns Command-line arguments.
  */
 function c2d_reslice_matrix_cargs(
-    params: C2dResliceMatrixParameters,
+    params: C2dResliceMatrixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7650,9 +7650,9 @@ Applies the **-reslice-matrix** command with the identity transform. This is use
  *
  * @returns Parameter dictionary
  */
-function c2d_reslice_identity_params(
+function c2d_reslice_identity(
     reslice_identity: string,
-): C2dResliceIdentityParametersTagged {
+): C2dResliceIdentityParamsDictTagged {
     const params = {
         "@type": "reslice_identity" as const,
         "reslice_identity": reslice_identity,
@@ -7670,7 +7670,7 @@ function c2d_reslice_identity_params(
  * @returns Command-line arguments.
  */
 function c2d_reslice_identity_cargs(
-    params: C2dResliceIdentityParameters,
+    params: C2dResliceIdentityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7695,9 +7695,9 @@ Takes the last three images on the stack and treats them as red, green, and blue
  *
  * @returns Parameter dictionary
  */
-function c2d_rgb2hsv_params(
+function c2d_rgb2hsv(
     rgb2hsv: string,
-): C2dRgb2hsvParametersTagged {
+): C2dRgb2hsvParamsDictTagged {
     const params = {
         "@type": "rgb2hsv" as const,
         "rgb2hsv": rgb2hsv,
@@ -7715,7 +7715,7 @@ function c2d_rgb2hsv_params(
  * @returns Command-line arguments.
  */
 function c2d_rgb2hsv_cargs(
-    params: C2dRgb2hsvParameters,
+    params: C2dRgb2hsvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7745,9 +7745,9 @@ The equivalent of this command is
  *
  * @returns Parameter dictionary
  */
-function c2d_rms_params(
+function c2d_rms(
     rms: string,
-): C2dRmsParametersTagged {
+): C2dRmsParamsDictTagged {
     const params = {
         "@type": "rms" as const,
         "rms": rms,
@@ -7765,7 +7765,7 @@ function c2d_rms_params(
  * @returns Command-line arguments.
  */
 function c2d_rms_cargs(
-    params: C2dRmsParameters,
+    params: C2dRmsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7790,9 +7790,9 @@ By default, **convert3d** will round floating point values when converting to an
  *
  * @returns Parameter dictionary
  */
-function c2d_round_params(
+function c2d_round(
     round: string,
-): C2dRoundParametersTagged {
+): C2dRoundParamsDictTagged {
     const params = {
         "@type": "round" as const,
         "round": round,
@@ -7810,7 +7810,7 @@ function c2d_round_params(
  * @returns Command-line arguments.
  */
 function c2d_round_cargs(
-    params: C2dRoundParameters,
+    params: C2dRoundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7835,9 +7835,9 @@ Multiplies the intensity of each voxel in the last image on the stack by the giv
  *
  * @returns Parameter dictionary
  */
-function c2d_scale_params(
+function c2d_scale(
     scale: string,
-): C2dScaleParametersTagged {
+): C2dScaleParamsDictTagged {
     const params = {
         "@type": "scale" as const,
         "scale": scale,
@@ -7855,7 +7855,7 @@ function c2d_scale_params(
  * @returns Command-line arguments.
  */
 function c2d_scale_cargs(
-    params: C2dScaleParameters,
+    params: C2dScaleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7878,9 +7878,9 @@ Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
  *
  * @returns Parameter dictionary
  */
-function c2d_set_sform_1_params(
+function c2d_set_sform_1(
     set_sform: string,
-): C2dSetSform1ParametersTagged {
+): C2dSetSform1ParamsDictTagged {
     const params = {
         "@type": "set_sform_1" as const,
         "set_sform": set_sform,
@@ -7898,7 +7898,7 @@ function c2d_set_sform_1_params(
  * @returns Command-line arguments.
  */
 function c2d_set_sform_1_cargs(
-    params: C2dSetSform1Parameters,
+    params: C2dSetSform1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7921,9 +7921,9 @@ Replaces the last image on the stack with the cosine trigonometric operation app
  *
  * @returns Parameter dictionary
  */
-function c2d_sin_params(
+function c2d_sin(
     sin: string,
-): C2dSinParametersTagged {
+): C2dSinParamsDictTagged {
     const params = {
         "@type": "sin" as const,
         "sin": sin,
@@ -7941,7 +7941,7 @@ function c2d_sin_params(
  * @returns Command-line arguments.
  */
 function c2d_sin_cargs(
-    params: C2dSinParameters,
+    params: C2dSinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7974,9 +7974,9 @@ With the new command **c2d**, the **-slice** command can be used to extract volu
  *
  * @returns Parameter dictionary
  */
-function c2d_slice_params(
+function c2d_slice(
     slice: string,
-): C2dSliceParametersTagged {
+): C2dSliceParamsDictTagged {
     const params = {
         "@type": "slice" as const,
         "slice": slice,
@@ -7994,7 +7994,7 @@ function c2d_slice_params(
  * @returns Command-line arguments.
  */
 function c2d_slice_cargs(
-    params: C2dSliceParameters,
+    params: C2dSliceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8019,9 +8019,9 @@ This command behaves identical to the **-slice** command, but all images on the 
  *
  * @returns Parameter dictionary
  */
-function c2d_slice_all_params(
+function c2d_slice_all(
     slice_all: string,
-): C2dSliceAllParametersTagged {
+): C2dSliceAllParamsDictTagged {
     const params = {
         "@type": "slice_all" as const,
         "slice_all": slice_all,
@@ -8039,7 +8039,7 @@ function c2d_slice_all_params(
  * @returns Command-line arguments.
  */
 function c2d_slice_all_cargs(
-    params: C2dSliceAllParameters,
+    params: C2dSliceAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8064,9 +8064,9 @@ Applies the Laplacian sharpening filter from ITK, which accentuates the edges in
  *
  * @returns Parameter dictionary
  */
-function c2d_sharpen_params(
+function c2d_sharpen(
     sharpen: string,
-): C2dSharpenParametersTagged {
+): C2dSharpenParamsDictTagged {
     const params = {
         "@type": "sharpen" as const,
         "sharpen": sharpen,
@@ -8084,7 +8084,7 @@ function c2d_sharpen_params(
  * @returns Command-line arguments.
  */
 function c2d_sharpen_cargs(
-    params: C2dSharpenParameters,
+    params: C2dSharpenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8109,9 +8109,9 @@ Adds the given constant to every voxel.
  *
  * @returns Parameter dictionary
  */
-function c2d_shift_params(
+function c2d_shift(
     shift: string,
-): C2dShiftParametersTagged {
+): C2dShiftParamsDictTagged {
     const params = {
         "@type": "shift" as const,
         "shift": shift,
@@ -8129,7 +8129,7 @@ function c2d_shift_params(
  * @returns Command-line arguments.
  */
 function c2d_shift_cargs(
-    params: C2dShiftParameters,
+    params: C2dShiftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8154,9 +8154,9 @@ Computes the signed distance transform of a binary image. Voxels where the binar
  *
  * @returns Parameter dictionary
  */
-function c2d_signed_distance_transform_params(
+function c2d_signed_distance_transform(
     signed_distance_transform: string,
-): C2dSignedDistanceTransformParametersTagged {
+): C2dSignedDistanceTransformParamsDictTagged {
     const params = {
         "@type": "signed_distance_transform" as const,
         "signed_distance_transform": signed_distance_transform,
@@ -8174,7 +8174,7 @@ function c2d_signed_distance_transform_params(
  * @returns Command-line arguments.
  */
 function c2d_signed_distance_transform_cargs(
-    params: C2dSignedDistanceTransformParameters,
+    params: C2dSignedDistanceTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8199,9 +8199,9 @@ Applies Gaussian smoothing to the image. The parameter vector specifies the stan
  *
  * @returns Parameter dictionary
  */
-function c2d_smooth_params(
+function c2d_smooth(
     smooth: string,
-): C2dSmoothParametersTagged {
+): C2dSmoothParamsDictTagged {
     const params = {
         "@type": "smooth" as const,
         "smooth": smooth,
@@ -8219,7 +8219,7 @@ function c2d_smooth_params(
  * @returns Command-line arguments.
  */
 function c2d_smooth_cargs(
-    params: C2dSmoothParameters,
+    params: C2dSmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8244,9 +8244,9 @@ Applies Gaussian smoothing to the image using the fast [Deriche recursive smooth
  *
  * @returns Parameter dictionary
  */
-function c2d_smooth_fast_params(
+function c2d_smooth_fast(
     smooth_fast: string,
-): C2dSmoothFastParametersTagged {
+): C2dSmoothFastParamsDictTagged {
     const params = {
         "@type": "smooth_fast" as const,
         "smooth_fast": smooth_fast,
@@ -8264,7 +8264,7 @@ function c2d_smooth_fast_params(
  * @returns Command-line arguments.
  */
 function c2d_smooth_fast_cargs(
-    params: C2dSmoothFastParameters,
+    params: C2dSmoothFastParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8289,9 +8289,9 @@ Sets the voxel spacing of the image. This should always be a vector with positiv
  *
  * @returns Parameter dictionary
  */
-function c2d_spacing_params(
+function c2d_spacing(
     spacing: string,
-): C2dSpacingParametersTagged {
+): C2dSpacingParamsDictTagged {
     const params = {
         "@type": "spacing" as const,
         "spacing": spacing,
@@ -8309,7 +8309,7 @@ function c2d_spacing_params(
  * @returns Command-line arguments.
  */
 function c2d_spacing_cargs(
-    params: C2dSpacingParameters,
+    params: C2dSpacingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8336,9 +8336,9 @@ Also of note is that the **-split** command will disregard infinite intensity va
  *
  * @returns Parameter dictionary
  */
-function c2d_split_params(
+function c2d_split(
     split: string,
-): C2dSplitParametersTagged {
+): C2dSplitParamsDictTagged {
     const params = {
         "@type": "split" as const,
         "split": split,
@@ -8356,7 +8356,7 @@ function c2d_split_params(
  * @returns Command-line arguments.
  */
 function c2d_split_cargs(
-    params: C2dSplitParameters,
+    params: C2dSplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8381,9 +8381,9 @@ Computes square root of each voxel in the image.
  *
  * @returns Parameter dictionary
  */
-function c2d_sqrt_params(
+function c2d_sqrt(
     sqrt: string,
-): C2dSqrtParametersTagged {
+): C2dSqrtParamsDictTagged {
     const params = {
         "@type": "sqrt" as const,
         "sqrt": sqrt,
@@ -8401,7 +8401,7 @@ function c2d_sqrt_params(
  * @returns Command-line arguments.
  */
 function c2d_sqrt_cargs(
-    params: C2dSqrtParameters,
+    params: C2dSqrtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8427,9 +8427,9 @@ Runs the ITK implementation of the STAPLE algorithm ([See Paper][11]). STAPLE ge
  *
  * @returns Parameter dictionary
  */
-function c2d_staple_params(
+function c2d_staple(
     staple: string,
-): C2dStapleParametersTagged {
+): C2dStapleParamsDictTagged {
     const params = {
         "@type": "staple" as const,
         "staple": staple,
@@ -8447,7 +8447,7 @@ function c2d_staple_params(
  * @returns Command-line arguments.
  */
 function c2d_staple_cargs(
-    params: C2dStapleParameters,
+    params: C2dStapleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8472,9 +8472,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  *
  * @returns Parameter dictionary
  */
-function c2d_structure_tensor_eigenvalues_params(
+function c2d_structure_tensor_eigenvalues(
     structure_tensor_eigenvalues: string,
-): C2dStructureTensorEigenvaluesParametersTagged {
+): C2dStructureTensorEigenvaluesParamsDictTagged {
     const params = {
         "@type": "structure_tensor_eigenvalues" as const,
         "structure_tensor_eigenvalues": structure_tensor_eigenvalues,
@@ -8492,7 +8492,7 @@ function c2d_structure_tensor_eigenvalues_params(
  * @returns Command-line arguments.
  */
 function c2d_structure_tensor_eigenvalues_cargs(
-    params: C2dStructureTensorEigenvaluesParameters,
+    params: C2dStructureTensorEigenvaluesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8517,9 +8517,9 @@ These options specify whether use the SPM extension to the Analyze (.hdr,.img) f
  *
  * @returns Parameter dictionary
  */
-function c2d_spm_params(
+function c2d_spm(
     spm: string,
-): C2dSpmParametersTagged {
+): C2dSpmParamsDictTagged {
     const params = {
         "@type": "spm" as const,
         "spm": spm,
@@ -8537,7 +8537,7 @@ function c2d_spm_params(
  * @returns Command-line arguments.
  */
 function c2d_spm_cargs(
-    params: C2dSpmParameters,
+    params: C2dSpmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8556,9 +8556,9 @@ function c2d_spm_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_subtract_params(
+function c2d_subtract(
     subtract: string,
-): C2dSubtractParametersTagged {
+): C2dSubtractParamsDictTagged {
     const params = {
         "@type": "subtract" as const,
         "subtract": subtract,
@@ -8576,7 +8576,7 @@ function c2d_subtract_params(
  * @returns Command-line arguments.
  */
 function c2d_subtract_cargs(
-    params: C2dSubtractParameters,
+    params: C2dSubtractParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8595,9 +8595,9 @@ function c2d_subtract_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_supervoxel_params(
+function c2d_supervoxel(
     supervoxel: string,
-): C2dSupervoxelParametersTagged {
+): C2dSupervoxelParamsDictTagged {
     const params = {
         "@type": "supervoxel" as const,
         "supervoxel": supervoxel,
@@ -8615,7 +8615,7 @@ function c2d_supervoxel_params(
  * @returns Command-line arguments.
  */
 function c2d_supervoxel_cargs(
-    params: C2dSupervoxelParameters,
+    params: C2dSupervoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8640,9 +8640,9 @@ Stretches the intensities in the image linearly, such that u1 maps to v1 and u2 
  *
  * @returns Parameter dictionary
  */
-function c2d_stretch_params(
+function c2d_stretch(
     stretch: string,
-): C2dStretchParametersTagged {
+): C2dStretchParamsDictTagged {
     const params = {
         "@type": "stretch" as const,
         "stretch": stretch,
@@ -8660,7 +8660,7 @@ function c2d_stretch_params(
  * @returns Command-line arguments.
  */
 function c2d_stretch_cargs(
-    params: C2dStretchParameters,
+    params: C2dStretchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8690,9 +8690,9 @@ The following commands invoke an action that is applied to images. Unary command
  *
  * @returns Parameter dictionary
  */
-function c2d_swapdim_params(
+function c2d_swapdim(
     swapdim: string,
-): C2dSwapdimParametersTagged {
+): C2dSwapdimParamsDictTagged {
     const params = {
         "@type": "swapdim" as const,
         "swapdim": swapdim,
@@ -8710,7 +8710,7 @@ function c2d_swapdim_params(
  * @returns Command-line arguments.
  */
 function c2d_swapdim_cargs(
-    params: C2dSwapdimParameters,
+    params: C2dSwapdimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8741,9 +8741,9 @@ These advanced commands (with more to come in the future) are primarily meant to
  *
  * @returns Parameter dictionary
  */
-function c2d_test_image_params(
+function c2d_test_image(
     test_image: string,
-): C2dTestImageParametersTagged {
+): C2dTestImageParamsDictTagged {
     const params = {
         "@type": "test_image" as const,
         "test_image": test_image,
@@ -8761,7 +8761,7 @@ function c2d_test_image_params(
  * @returns Command-line arguments.
  */
 function c2d_test_image_cargs(
-    params: C2dTestImageParameters,
+    params: C2dTestImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8792,9 +8792,9 @@ These advanced commands (with more to come in the future) are primarily meant to
  *
  * @returns Parameter dictionary
  */
-function c2d_test_probe_params(
+function c2d_test_probe(
     test_probe: string,
-): C2dTestProbeParametersTagged {
+): C2dTestProbeParamsDictTagged {
     const params = {
         "@type": "test_probe" as const,
         "test_probe": test_probe,
@@ -8812,7 +8812,7 @@ function c2d_test_probe_params(
  * @returns Command-line arguments.
  */
 function c2d_test_probe_cargs(
-    params: C2dTestProbeParameters,
+    params: C2dTestProbeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8838,9 +8838,9 @@ Thresholds the image, setting voxels whose intensity is in the range [u1,u2] to 
  *
  * @returns Parameter dictionary
  */
-function c2d_threshold_params(
+function c2d_threshold(
     threshold: string,
-): C2dThresholdParametersTagged {
+): C2dThresholdParamsDictTagged {
     const params = {
         "@type": "threshold" as const,
         "threshold": threshold,
@@ -8858,7 +8858,7 @@ function c2d_threshold_params(
  * @returns Command-line arguments.
  */
 function c2d_threshold_cargs(
-    params: C2dThresholdParameters,
+    params: C2dThresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8887,9 +8887,9 @@ And to arrange the same 2D slices into a 2D montage of 4 images per row, we woul
  *
  * @returns Parameter dictionary
  */
-function c2d_tile_params(
+function c2d_tile(
     tile: string,
-): C2dTileParametersTagged {
+): C2dTileParamsDictTagged {
     const params = {
         "@type": "tile" as const,
         "tile": tile,
@@ -8907,7 +8907,7 @@ function c2d_tile_params(
  * @returns Command-line arguments.
  */
 function c2d_tile_cargs(
-    params: C2dTileParameters,
+    params: C2dTileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8932,9 +8932,9 @@ Use this command to trim background in an image. When most of the image is fille
  *
  * @returns Parameter dictionary
  */
-function c2d_trim_params(
+function c2d_trim(
     trim: string,
-): C2dTrimParametersTagged {
+): C2dTrimParamsDictTagged {
     const params = {
         "@type": "trim" as const,
         "trim": trim,
@@ -8952,7 +8952,7 @@ function c2d_trim_params(
  * @returns Command-line arguments.
  */
 function c2d_trim_cargs(
-    params: C2dTrimParameters,
+    params: C2dTrimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8977,9 +8977,9 @@ Like **-trim**, this command trims the background in an image. However, instead 
  *
  * @returns Parameter dictionary
  */
-function c2d_trim_to_size_params(
+function c2d_trim_to_size(
     trim_to_size: string,
-): C2dTrimToSizeParametersTagged {
+): C2dTrimToSizeParamsDictTagged {
     const params = {
         "@type": "trim_to_size" as const,
         "trim_to_size": trim_to_size,
@@ -8997,7 +8997,7 @@ function c2d_trim_to_size_params(
  * @returns Command-line arguments.
  */
 function c2d_trim_to_size_cargs(
-    params: C2dTrimToSizeParameters,
+    params: C2dTrimToSizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9024,9 +9024,9 @@ Some images require data in certain types. For example, to save PNG images, ucha
  *
  * @returns Parameter dictionary
  */
-function c2d_type_params(
+function c2d_type(
     type_: string,
-): C2dTypeParametersTagged {
+): C2dTypeParamsDictTagged {
     const params = {
         "@type": "type" as const,
         "type": type_,
@@ -9044,7 +9044,7 @@ function c2d_type_params(
  * @returns Command-line arguments.
  */
 function c2d_type_cargs(
-    params: C2dTypeParameters,
+    params: C2dTypeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9069,9 +9069,9 @@ Commands entered after the **-verbose** command will print debugging information
  *
  * @returns Parameter dictionary
  */
-function c2d_verbose_params(
+function c2d_verbose(
     verbose: string,
-): C2dVerboseParametersTagged {
+): C2dVerboseParamsDictTagged {
     const params = {
         "@type": "verbose" as const,
         "verbose": verbose,
@@ -9089,7 +9089,7 @@ function c2d_verbose_params(
  * @returns Command-line arguments.
  */
 function c2d_verbose_cargs(
-    params: C2dVerboseParameters,
+    params: C2dVerboseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9108,9 +9108,9 @@ function c2d_verbose_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_noverbose_params(
+function c2d_noverbose(
     noverbose: string,
-): C2dNoverboseParametersTagged {
+): C2dNoverboseParamsDictTagged {
     const params = {
         "@type": "noverbose" as const,
         "noverbose": noverbose,
@@ -9128,7 +9128,7 @@ function c2d_noverbose_params(
  * @returns Command-line arguments.
  */
 function c2d_noverbose_cargs(
-    params: C2dNoverboseParameters,
+    params: C2dNoverboseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9147,9 +9147,9 @@ function c2d_noverbose_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_version_params(
+function c2d_version(
     version: string,
-): C2dVersionParametersTagged {
+): C2dVersionParamsDictTagged {
     const params = {
         "@type": "version" as const,
         "version": version,
@@ -9167,7 +9167,7 @@ function c2d_version_params(
  * @returns Command-line arguments.
  */
 function c2d_version_cargs(
-    params: C2dVersionParameters,
+    params: C2dVersionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9194,9 +9194,9 @@ The value assigned to each image is based on its position from the bottom of the
  *
  * @returns Parameter dictionary
  */
-function c2d_vote_params(
+function c2d_vote(
     vote: string,
-): C2dVoteParametersTagged {
+): C2dVoteParamsDictTagged {
     const params = {
         "@type": "vote" as const,
         "vote": vote,
@@ -9214,7 +9214,7 @@ function c2d_vote_params(
  * @returns Command-line arguments.
  */
 function c2d_vote_cargs(
-    params: C2dVoteParameters,
+    params: C2dVoteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9263,9 +9263,9 @@ The example below illustrates applying **-vote-mrf** with a user-specified mask.
  *
  * @returns Parameter dictionary
  */
-function c2d_vote_mrf_params(
+function c2d_vote_mrf(
     vote_mrf: string,
-): C2dVoteMrfParametersTagged {
+): C2dVoteMrfParamsDictTagged {
     const params = {
         "@type": "vote_mrf" as const,
         "vote_mrf": vote_mrf,
@@ -9283,7 +9283,7 @@ function c2d_vote_mrf_params(
  * @returns Command-line arguments.
  */
 function c2d_vote_mrf_cargs(
-    params: C2dVoteMrfParameters,
+    params: C2dVoteMrfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9302,9 +9302,9 @@ function c2d_vote_mrf_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_vote_label_params(
+function c2d_vote_label(
     vote_label: string,
-): C2dVoteLabelParametersTagged {
+): C2dVoteLabelParamsDictTagged {
     const params = {
         "@type": "vote_label" as const,
         "vote_label": vote_label,
@@ -9322,7 +9322,7 @@ function c2d_vote_label_params(
  * @returns Command-line arguments.
  */
 function c2d_vote_label_cargs(
-    params: C2dVoteLabelParameters,
+    params: C2dVoteLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9348,9 +9348,9 @@ Print the sum of all voxels in the image.
  *
  * @returns Parameter dictionary
  */
-function c2d_voxel_sum_params(
+function c2d_voxel_sum(
     voxel_sum: string,
-): C2dVoxelSumParametersTagged {
+): C2dVoxelSumParamsDictTagged {
     const params = {
         "@type": "voxel_sum" as const,
         "voxel_sum": voxel_sum,
@@ -9368,7 +9368,7 @@ function c2d_voxel_sum_params(
  * @returns Command-line arguments.
  */
 function c2d_voxel_sum_cargs(
-    params: C2dVoxelSumParameters,
+    params: C2dVoxelSumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9394,9 +9394,9 @@ Like **-voxel-sum**, but multiplies the sum of voxel intensities by voxel volume
  *
  * @returns Parameter dictionary
  */
-function c2d_voxel_integral_params(
+function c2d_voxel_integral(
     voxel_integral: string,
-): C2dVoxelIntegralParametersTagged {
+): C2dVoxelIntegralParamsDictTagged {
     const params = {
         "@type": "voxel_integral" as const,
         "voxel_integral": voxel_integral,
@@ -9414,7 +9414,7 @@ function c2d_voxel_integral_params(
  * @returns Command-line arguments.
  */
 function c2d_voxel_integral_cargs(
-    params: C2dVoxelIntegralParameters,
+    params: C2dVoxelIntegralParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9445,9 +9445,9 @@ Perform regression between corresponding voxels in two images. This command take
  *
  * @returns Parameter dictionary
  */
-function c2d_voxelwise_regression_params(
+function c2d_voxelwise_regression(
     voxelwise_regression: string,
-): C2dVoxelwiseRegressionParametersTagged {
+): C2dVoxelwiseRegressionParamsDictTagged {
     const params = {
         "@type": "voxelwise_regression" as const,
         "voxelwise_regression": voxelwise_regression,
@@ -9465,7 +9465,7 @@ function c2d_voxelwise_regression_params(
  * @returns Command-line arguments.
  */
 function c2d_voxelwise_regression_cargs(
-    params: C2dVoxelwiseRegressionParameters,
+    params: C2dVoxelwiseRegressionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9484,9 +9484,9 @@ function c2d_voxelwise_regression_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_warp_params(
+function c2d_warp(
     warp: string,
-): C2dWarpParametersTagged {
+): C2dWarpParamsDictTagged {
     const params = {
         "@type": "warp" as const,
         "warp": warp,
@@ -9504,7 +9504,7 @@ function c2d_warp_params(
  * @returns Command-line arguments.
  */
 function c2d_warp_cargs(
-    params: C2dWarpParameters,
+    params: C2dWarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9523,9 +9523,9 @@ function c2d_warp_cargs(
  *
  * @returns Parameter dictionary
  */
-function c2d_warp_label_params(
+function c2d_warp_label(
     warp_label: string,
-): C2dWarpLabelParametersTagged {
+): C2dWarpLabelParamsDictTagged {
     const params = {
         "@type": "warp_label" as const,
         "warp_label": warp_label,
@@ -9543,7 +9543,7 @@ function c2d_warp_label_params(
  * @returns Command-line arguments.
  */
 function c2d_warp_label_cargs(
-    params: C2dWarpLabelParameters,
+    params: C2dWarpLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9575,9 +9575,9 @@ Options change the behavior of commands that *appear later on the command line*.
  *
  * @returns Parameter dictionary
  */
-function c2d_wrap_params(
+function c2d_wrap(
     wrap: string,
-): C2dWrapParametersTagged {
+): C2dWrapParamsDictTagged {
     const params = {
         "@type": "wrap" as const,
         "wrap": wrap,
@@ -9595,7 +9595,7 @@ function c2d_wrap_params(
  * @returns Command-line arguments.
  */
 function c2d_wrap_cargs(
-    params: C2dWrapParameters,
+    params: C2dWrapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9624,9 +9624,9 @@ This command is particularly useful for combining components in a multicomponent
  *
  * @returns Parameter dictionary
  */
-function c2d_weighted_sum_params(
+function c2d_weighted_sum(
     weighted_sum: string,
-): C2dWeightedSumParametersTagged {
+): C2dWeightedSumParamsDictTagged {
     const params = {
         "@type": "weighted_sum" as const,
         "weighted_sum": weighted_sum,
@@ -9644,7 +9644,7 @@ function c2d_weighted_sum_params(
  * @returns Command-line arguments.
  */
 function c2d_weighted_sum_cargs(
-    params: C2dWeightedSumParameters,
+    params: C2dWeightedSumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9675,9 +9675,9 @@ The **-reorder** command can simplify loading the images:
  *
  * @returns Parameter dictionary
  */
-function c2d_weighted_sum_voxelwise_params(
+function c2d_weighted_sum_voxelwise(
     weighted_sum_voxelwise: string,
-): C2dWeightedSumVoxelwiseParametersTagged {
+): C2dWeightedSumVoxelwiseParamsDictTagged {
     const params = {
         "@type": "weighted_sum_voxelwise" as const,
         "weighted_sum_voxelwise": weighted_sum_voxelwise,
@@ -9695,7 +9695,7 @@ function c2d_weighted_sum_voxelwise_params(
  * @returns Command-line arguments.
  */
 function c2d_weighted_sum_voxelwise_cargs(
-    params: C2dWeightedSumVoxelwiseParameters,
+    params: C2dWeightedSumVoxelwiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9708,7 +9708,7 @@ function c2d_weighted_sum_voxelwise_cargs(
 
 
 /**
- * Output object returned when calling `C2dParameters(...)`.
+ * Output object returned when calling `C2dParamsDict(...)`.
  *
  * @interface
  */
@@ -9718,7 +9718,7 @@ interface C2dOutputs {
      */
     root: OutputPathType;
     /**
-     * Outputs from `C2dOutputParameters`.This is a list of outputs with the same length and order as the inputs.
+     * Outputs from `C2dOutputParamsDict`.This is a list of outputs with the same length and order as the inputs.
      */
     operations: Array<C2dOutputOutputs>;
 }
@@ -9735,9 +9735,9 @@ interface C2dOutputs {
  */
 function c2d_params(
     input: Array<InputPathType>,
-    operations: Array<C2dAccumParametersTagged | C2dAcosParametersTagged | C2dAddParametersTagged | C2dAlignLandmarksParametersTagged | C2dAnisotropicDiffusionParametersTagged | C2dAntialiasParametersTagged | C2dSetParametersTagged | C2dAsinParametersTagged | C2dAtan2ParametersTagged | C2dBackgroundParametersTagged | C2dN4BiasCorrectionParametersTagged | C2dBinarizeParametersTagged | C2dCannyParametersTagged | C2dCeilParametersTagged | C2dCentroidParametersTagged | C2dCentroidMarkParametersTagged | C2dConnectedComponentsParametersTagged | C2dClearParametersTagged | C2dClipParametersTagged | C2dColorMapParametersTagged | C2dCompressParametersTagged | C2dNoCompressParametersTagged | C2dConvParametersTagged | C2dCoordinateMapVoxelParametersTagged | C2dCoordinateMapPhysicalParametersTagged | C2dCopyTransformParametersTagged | C2dCosParametersTagged | C2dCreateParametersTagged | C2dDicomSeriesListParametersTagged | C2dDicomSeriesReadParametersTagged | C2dDilateParametersTagged | C2dDivideParametersTagged | C2dDuplicateParametersTagged | C2dEndaccumParametersTagged | C2dEndforParametersTagged | C2dErodeParametersTagged | C2dErfParametersTagged | C2dExpParametersTagged | C2dExportPatchesParametersTagged | C2dExportPatchesAugParametersTagged | C2dExtrudeSegParametersTagged | C2dFillBackgroundWithNoiseParametersTagged | C2dFftParametersTagged | C2dFlipParametersTagged | C2dFloorParametersTagged | C2dForeachParametersTagged | C2dForeachCompParametersTagged | C2dGlmParametersTagged | C2dGradientParametersTagged | C2dHelpParametersTagged | C2dHolefillParametersTagged | C2dHessianEigenvaluesParametersTagged | C2dHessianObjectnessParametersTagged | C2dHistogramMatchParametersTagged | C2dInfoParametersTagged | C2dInfoFullParametersTagged | C2dInsertParametersTagged | C2dInterpolationParametersTagged | C2dIterationsParametersTagged | C2dLabelOverlapParametersTagged | C2dLabelStatisticsParametersTagged | C2dLandmarksToSpheresParametersTagged | C2dLaplacianParametersTagged | C2dLevelsetParametersTagged | C2dLevelsetCurvatureParametersTagged | C2dLevelsetAdvectionParametersTagged | C2dLogParametersTagged | C2dLog10ParametersTagged | C2dManualParametersTagged | C2dMatchBoundingBoxParametersTagged | C2dMaximumParametersTagged | C2dMulticomponentSplitParametersTagged | C2dMeanParametersTagged | C2dMedianFilterParametersTagged | C2dMergeParametersTagged | C2dMeanFilterParametersTagged | C2dMutualInfoParametersTagged | C2dMinimumParametersTagged | C2dMixtureModelParametersTagged | C2dMomentsParametersTagged | C2dMattesMutualInfoParametersTagged | C2dMeanSquareParametersTagged | C2dMultiplyParametersTagged | C2dNormalizedCrossCorrelationParametersTagged | C2dNormalizedCorrelationParametersTagged | C2dNormalizedMutualInfoParametersTagged | C2dNoiseGaussianParametersTagged | C2dNoisePoissonParametersTagged | C2dNoiseSpeckleParametersTagged | C2dNoiseSaltPepperParametersTagged | C2dNoMulticomponentSplitParametersTagged | C2dNormalizeLocalWindowParametersTagged | C2dNormpdfParametersTagged | C2dNoroundParametersTagged | C2dNospmParametersTagged | C2dOutputParametersTagged | C2dOutputMulticomponentParametersTagged | C2dOutputMultipleMulticomponentParametersTagged | C2dOrientParametersTagged | C2dOutputMultipleParametersTagged | C2dOrient1ParametersTagged | C2dOriginParametersTagged | C2dOriginVoxelParametersTagged | C2dOriginVoxelCoordParametersTagged | C2dOverlapParametersTagged | C2dOverlayLabelImageParametersTagged | C2dPadParametersTagged | C2dPadToParametersTagged | C2dPcaParametersTagged | C2dPercentIntensityModeParametersTagged | C2dPixelParametersTagged | C2dPopParametersTagged | C2dPopasParametersTagged | C2dProbeParametersTagged | C2dPushParametersTagged | C2dRankParametersTagged | C2dReciprocalParametersTagged | C2dRegionParametersTagged | C2dReorderParametersTagged | C2dRetainLabelsParametersTagged | C2dRfApplyParametersTagged | C2dRfTrainParametersTagged | C2dRfParamPatchParametersTagged | C2dRfParamUsexyzParametersTagged | C2dRfParamNousexyzParametersTagged | C2dRfParamNtreesParametersTagged | C2dRfParamTreedepthParametersTagged | C2dSetSformParametersTagged | C2dReplaceParametersTagged | C2dResampleParametersTagged | C2dResampleIsoParametersTagged | C2dResampleMmParametersTagged | C2dResliceItkParametersTagged | C2dResliceMatrixParametersTagged | C2dResliceIdentityParametersTagged | C2dRgb2hsvParametersTagged | C2dRmsParametersTagged | C2dRoundParametersTagged | C2dScaleParametersTagged | C2dSetSform1ParametersTagged | C2dSinParametersTagged | C2dSliceParametersTagged | C2dSliceAllParametersTagged | C2dSharpenParametersTagged | C2dShiftParametersTagged | C2dSignedDistanceTransformParametersTagged | C2dSmoothParametersTagged | C2dSmoothFastParametersTagged | C2dSpacingParametersTagged | C2dSplitParametersTagged | C2dSqrtParametersTagged | C2dStapleParametersTagged | C2dStructureTensorEigenvaluesParametersTagged | C2dSpmParametersTagged | C2dSubtractParametersTagged | C2dSupervoxelParametersTagged | C2dStretchParametersTagged | C2dSwapdimParametersTagged | C2dTestImageParametersTagged | C2dTestProbeParametersTagged | C2dThresholdParametersTagged | C2dTileParametersTagged | C2dTrimParametersTagged | C2dTrimToSizeParametersTagged | C2dTypeParametersTagged | C2dVerboseParametersTagged | C2dNoverboseParametersTagged | C2dVersionParametersTagged | C2dVoteParametersTagged | C2dVoteMrfParametersTagged | C2dVoteLabelParametersTagged | C2dVoxelSumParametersTagged | C2dVoxelIntegralParametersTagged | C2dVoxelwiseRegressionParametersTagged | C2dWarpParametersTagged | C2dWarpLabelParametersTagged | C2dWrapParametersTagged | C2dWeightedSumParametersTagged | C2dWeightedSumVoxelwiseParametersTagged>,
+    operations: Array<C2dAccumParamsDictTagged | C2dAcosParamsDictTagged | C2dAddParamsDictTagged | C2dAlignLandmarksParamsDictTagged | C2dAnisotropicDiffusionParamsDictTagged | C2dAntialiasParamsDictTagged | C2dSetParamsDictTagged | C2dAsinParamsDictTagged | C2dAtan2ParamsDictTagged | C2dBackgroundParamsDictTagged | C2dN4BiasCorrectionParamsDictTagged | C2dBinarizeParamsDictTagged | C2dCannyParamsDictTagged | C2dCeilParamsDictTagged | C2dCentroidParamsDictTagged | C2dCentroidMarkParamsDictTagged | C2dConnectedComponentsParamsDictTagged | C2dClearParamsDictTagged | C2dClipParamsDictTagged | C2dColorMapParamsDictTagged | C2dCompressParamsDictTagged | C2dNoCompressParamsDictTagged | C2dConvParamsDictTagged | C2dCoordinateMapVoxelParamsDictTagged | C2dCoordinateMapPhysicalParamsDictTagged | C2dCopyTransformParamsDictTagged | C2dCosParamsDictTagged | C2dCreateParamsDictTagged | C2dDicomSeriesListParamsDictTagged | C2dDicomSeriesReadParamsDictTagged | C2dDilateParamsDictTagged | C2dDivideParamsDictTagged | C2dDuplicateParamsDictTagged | C2dEndaccumParamsDictTagged | C2dEndforParamsDictTagged | C2dErodeParamsDictTagged | C2dErfParamsDictTagged | C2dExpParamsDictTagged | C2dExportPatchesParamsDictTagged | C2dExportPatchesAugParamsDictTagged | C2dExtrudeSegParamsDictTagged | C2dFillBackgroundWithNoiseParamsDictTagged | C2dFftParamsDictTagged | C2dFlipParamsDictTagged | C2dFloorParamsDictTagged | C2dForeachParamsDictTagged | C2dForeachCompParamsDictTagged | C2dGlmParamsDictTagged | C2dGradientParamsDictTagged | C2dHelpParamsDictTagged | C2dHolefillParamsDictTagged | C2dHessianEigenvaluesParamsDictTagged | C2dHessianObjectnessParamsDictTagged | C2dHistogramMatchParamsDictTagged | C2dInfoParamsDictTagged | C2dInfoFullParamsDictTagged | C2dInsertParamsDictTagged | C2dInterpolationParamsDictTagged | C2dIterationsParamsDictTagged | C2dLabelOverlapParamsDictTagged | C2dLabelStatisticsParamsDictTagged | C2dLandmarksToSpheresParamsDictTagged | C2dLaplacianParamsDictTagged | C2dLevelsetParamsDictTagged | C2dLevelsetCurvatureParamsDictTagged | C2dLevelsetAdvectionParamsDictTagged | C2dLogParamsDictTagged | C2dLog10ParamsDictTagged | C2dManualParamsDictTagged | C2dMatchBoundingBoxParamsDictTagged | C2dMaximumParamsDictTagged | C2dMulticomponentSplitParamsDictTagged | C2dMeanParamsDictTagged | C2dMedianFilterParamsDictTagged | C2dMergeParamsDictTagged | C2dMeanFilterParamsDictTagged | C2dMutualInfoParamsDictTagged | C2dMinimumParamsDictTagged | C2dMixtureModelParamsDictTagged | C2dMomentsParamsDictTagged | C2dMattesMutualInfoParamsDictTagged | C2dMeanSquareParamsDictTagged | C2dMultiplyParamsDictTagged | C2dNormalizedCrossCorrelationParamsDictTagged | C2dNormalizedCorrelationParamsDictTagged | C2dNormalizedMutualInfoParamsDictTagged | C2dNoiseGaussianParamsDictTagged | C2dNoisePoissonParamsDictTagged | C2dNoiseSpeckleParamsDictTagged | C2dNoiseSaltPepperParamsDictTagged | C2dNoMulticomponentSplitParamsDictTagged | C2dNormalizeLocalWindowParamsDictTagged | C2dNormpdfParamsDictTagged | C2dNoroundParamsDictTagged | C2dNospmParamsDictTagged | C2dOutputParamsDictTagged | C2dOutputMulticomponentParamsDictTagged | C2dOutputMultipleMulticomponentParamsDictTagged | C2dOrientParamsDictTagged | C2dOutputMultipleParamsDictTagged | C2dOrient1ParamsDictTagged | C2dOriginParamsDictTagged | C2dOriginVoxelParamsDictTagged | C2dOriginVoxelCoordParamsDictTagged | C2dOverlapParamsDictTagged | C2dOverlayLabelImageParamsDictTagged | C2dPadParamsDictTagged | C2dPadToParamsDictTagged | C2dPcaParamsDictTagged | C2dPercentIntensityModeParamsDictTagged | C2dPixelParamsDictTagged | C2dPopParamsDictTagged | C2dPopasParamsDictTagged | C2dProbeParamsDictTagged | C2dPushParamsDictTagged | C2dRankParamsDictTagged | C2dReciprocalParamsDictTagged | C2dRegionParamsDictTagged | C2dReorderParamsDictTagged | C2dRetainLabelsParamsDictTagged | C2dRfApplyParamsDictTagged | C2dRfTrainParamsDictTagged | C2dRfParamPatchParamsDictTagged | C2dRfParamUsexyzParamsDictTagged | C2dRfParamNousexyzParamsDictTagged | C2dRfParamNtreesParamsDictTagged | C2dRfParamTreedepthParamsDictTagged | C2dSetSformParamsDictTagged | C2dReplaceParamsDictTagged | C2dResampleParamsDictTagged | C2dResampleIsoParamsDictTagged | C2dResampleMmParamsDictTagged | C2dResliceItkParamsDictTagged | C2dResliceMatrixParamsDictTagged | C2dResliceIdentityParamsDictTagged | C2dRgb2hsvParamsDictTagged | C2dRmsParamsDictTagged | C2dRoundParamsDictTagged | C2dScaleParamsDictTagged | C2dSetSform1ParamsDictTagged | C2dSinParamsDictTagged | C2dSliceParamsDictTagged | C2dSliceAllParamsDictTagged | C2dSharpenParamsDictTagged | C2dShiftParamsDictTagged | C2dSignedDistanceTransformParamsDictTagged | C2dSmoothParamsDictTagged | C2dSmoothFastParamsDictTagged | C2dSpacingParamsDictTagged | C2dSplitParamsDictTagged | C2dSqrtParamsDictTagged | C2dStapleParamsDictTagged | C2dStructureTensorEigenvaluesParamsDictTagged | C2dSpmParamsDictTagged | C2dSubtractParamsDictTagged | C2dSupervoxelParamsDictTagged | C2dStretchParamsDictTagged | C2dSwapdimParamsDictTagged | C2dTestImageParamsDictTagged | C2dTestProbeParamsDictTagged | C2dThresholdParamsDictTagged | C2dTileParamsDictTagged | C2dTrimParamsDictTagged | C2dTrimToSizeParamsDictTagged | C2dTypeParamsDictTagged | C2dVerboseParamsDictTagged | C2dNoverboseParamsDictTagged | C2dVersionParamsDictTagged | C2dVoteParamsDictTagged | C2dVoteMrfParamsDictTagged | C2dVoteLabelParamsDictTagged | C2dVoxelSumParamsDictTagged | C2dVoxelIntegralParamsDictTagged | C2dVoxelwiseRegressionParamsDictTagged | C2dWarpParamsDictTagged | C2dWarpLabelParamsDictTagged | C2dWrapParamsDictTagged | C2dWeightedSumParamsDictTagged | C2dWeightedSumVoxelwiseParamsDictTagged>,
     output: string,
-): C2dParametersTagged {
+): C2dParamsDictTagged {
     const params = {
         "@type": "c3d/c2d" as const,
         "input": input,
@@ -9757,7 +9757,7 @@ function c2d_params(
  * @returns Command-line arguments.
  */
 function c2d_cargs(
-    params: C2dParameters,
+    params: C2dParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9781,7 +9781,7 @@ function c2d_cargs(
  * @returns Outputs object.
  */
 function c2d_outputs(
-    params: C2dParameters,
+    params: C2dParamsDict,
     execution: Execution,
 ): C2dOutputs {
     const ret: C2dOutputs = {
@@ -9807,7 +9807,7 @@ function c2d_outputs(
  * @returns NamedTuple of outputs (described in `C2dOutputs`).
  */
 function c2d_execute(
-    params: C2dParameters,
+    params: C2dParamsDict,
     runner: Runner | null = null,
 ): C2dOutputs {
     runner = runner || getGlobalRunner();
@@ -9838,7 +9838,7 @@ function c2d_execute(
  */
 function c2d(
     input: Array<InputPathType>,
-    operations: Array<C2dAccumParametersTagged | C2dAcosParametersTagged | C2dAddParametersTagged | C2dAlignLandmarksParametersTagged | C2dAnisotropicDiffusionParametersTagged | C2dAntialiasParametersTagged | C2dSetParametersTagged | C2dAsinParametersTagged | C2dAtan2ParametersTagged | C2dBackgroundParametersTagged | C2dN4BiasCorrectionParametersTagged | C2dBinarizeParametersTagged | C2dCannyParametersTagged | C2dCeilParametersTagged | C2dCentroidParametersTagged | C2dCentroidMarkParametersTagged | C2dConnectedComponentsParametersTagged | C2dClearParametersTagged | C2dClipParametersTagged | C2dColorMapParametersTagged | C2dCompressParametersTagged | C2dNoCompressParametersTagged | C2dConvParametersTagged | C2dCoordinateMapVoxelParametersTagged | C2dCoordinateMapPhysicalParametersTagged | C2dCopyTransformParametersTagged | C2dCosParametersTagged | C2dCreateParametersTagged | C2dDicomSeriesListParametersTagged | C2dDicomSeriesReadParametersTagged | C2dDilateParametersTagged | C2dDivideParametersTagged | C2dDuplicateParametersTagged | C2dEndaccumParametersTagged | C2dEndforParametersTagged | C2dErodeParametersTagged | C2dErfParametersTagged | C2dExpParametersTagged | C2dExportPatchesParametersTagged | C2dExportPatchesAugParametersTagged | C2dExtrudeSegParametersTagged | C2dFillBackgroundWithNoiseParametersTagged | C2dFftParametersTagged | C2dFlipParametersTagged | C2dFloorParametersTagged | C2dForeachParametersTagged | C2dForeachCompParametersTagged | C2dGlmParametersTagged | C2dGradientParametersTagged | C2dHelpParametersTagged | C2dHolefillParametersTagged | C2dHessianEigenvaluesParametersTagged | C2dHessianObjectnessParametersTagged | C2dHistogramMatchParametersTagged | C2dInfoParametersTagged | C2dInfoFullParametersTagged | C2dInsertParametersTagged | C2dInterpolationParametersTagged | C2dIterationsParametersTagged | C2dLabelOverlapParametersTagged | C2dLabelStatisticsParametersTagged | C2dLandmarksToSpheresParametersTagged | C2dLaplacianParametersTagged | C2dLevelsetParametersTagged | C2dLevelsetCurvatureParametersTagged | C2dLevelsetAdvectionParametersTagged | C2dLogParametersTagged | C2dLog10ParametersTagged | C2dManualParametersTagged | C2dMatchBoundingBoxParametersTagged | C2dMaximumParametersTagged | C2dMulticomponentSplitParametersTagged | C2dMeanParametersTagged | C2dMedianFilterParametersTagged | C2dMergeParametersTagged | C2dMeanFilterParametersTagged | C2dMutualInfoParametersTagged | C2dMinimumParametersTagged | C2dMixtureModelParametersTagged | C2dMomentsParametersTagged | C2dMattesMutualInfoParametersTagged | C2dMeanSquareParametersTagged | C2dMultiplyParametersTagged | C2dNormalizedCrossCorrelationParametersTagged | C2dNormalizedCorrelationParametersTagged | C2dNormalizedMutualInfoParametersTagged | C2dNoiseGaussianParametersTagged | C2dNoisePoissonParametersTagged | C2dNoiseSpeckleParametersTagged | C2dNoiseSaltPepperParametersTagged | C2dNoMulticomponentSplitParametersTagged | C2dNormalizeLocalWindowParametersTagged | C2dNormpdfParametersTagged | C2dNoroundParametersTagged | C2dNospmParametersTagged | C2dOutputParametersTagged | C2dOutputMulticomponentParametersTagged | C2dOutputMultipleMulticomponentParametersTagged | C2dOrientParametersTagged | C2dOutputMultipleParametersTagged | C2dOrient1ParametersTagged | C2dOriginParametersTagged | C2dOriginVoxelParametersTagged | C2dOriginVoxelCoordParametersTagged | C2dOverlapParametersTagged | C2dOverlayLabelImageParametersTagged | C2dPadParametersTagged | C2dPadToParametersTagged | C2dPcaParametersTagged | C2dPercentIntensityModeParametersTagged | C2dPixelParametersTagged | C2dPopParametersTagged | C2dPopasParametersTagged | C2dProbeParametersTagged | C2dPushParametersTagged | C2dRankParametersTagged | C2dReciprocalParametersTagged | C2dRegionParametersTagged | C2dReorderParametersTagged | C2dRetainLabelsParametersTagged | C2dRfApplyParametersTagged | C2dRfTrainParametersTagged | C2dRfParamPatchParametersTagged | C2dRfParamUsexyzParametersTagged | C2dRfParamNousexyzParametersTagged | C2dRfParamNtreesParametersTagged | C2dRfParamTreedepthParametersTagged | C2dSetSformParametersTagged | C2dReplaceParametersTagged | C2dResampleParametersTagged | C2dResampleIsoParametersTagged | C2dResampleMmParametersTagged | C2dResliceItkParametersTagged | C2dResliceMatrixParametersTagged | C2dResliceIdentityParametersTagged | C2dRgb2hsvParametersTagged | C2dRmsParametersTagged | C2dRoundParametersTagged | C2dScaleParametersTagged | C2dSetSform1ParametersTagged | C2dSinParametersTagged | C2dSliceParametersTagged | C2dSliceAllParametersTagged | C2dSharpenParametersTagged | C2dShiftParametersTagged | C2dSignedDistanceTransformParametersTagged | C2dSmoothParametersTagged | C2dSmoothFastParametersTagged | C2dSpacingParametersTagged | C2dSplitParametersTagged | C2dSqrtParametersTagged | C2dStapleParametersTagged | C2dStructureTensorEigenvaluesParametersTagged | C2dSpmParametersTagged | C2dSubtractParametersTagged | C2dSupervoxelParametersTagged | C2dStretchParametersTagged | C2dSwapdimParametersTagged | C2dTestImageParametersTagged | C2dTestProbeParametersTagged | C2dThresholdParametersTagged | C2dTileParametersTagged | C2dTrimParametersTagged | C2dTrimToSizeParametersTagged | C2dTypeParametersTagged | C2dVerboseParametersTagged | C2dNoverboseParametersTagged | C2dVersionParametersTagged | C2dVoteParametersTagged | C2dVoteMrfParametersTagged | C2dVoteLabelParametersTagged | C2dVoxelSumParametersTagged | C2dVoxelIntegralParametersTagged | C2dVoxelwiseRegressionParametersTagged | C2dWarpParametersTagged | C2dWarpLabelParametersTagged | C2dWrapParametersTagged | C2dWeightedSumParametersTagged | C2dWeightedSumVoxelwiseParametersTagged>,
+    operations: Array<C2dAccumParamsDictTagged | C2dAcosParamsDictTagged | C2dAddParamsDictTagged | C2dAlignLandmarksParamsDictTagged | C2dAnisotropicDiffusionParamsDictTagged | C2dAntialiasParamsDictTagged | C2dSetParamsDictTagged | C2dAsinParamsDictTagged | C2dAtan2ParamsDictTagged | C2dBackgroundParamsDictTagged | C2dN4BiasCorrectionParamsDictTagged | C2dBinarizeParamsDictTagged | C2dCannyParamsDictTagged | C2dCeilParamsDictTagged | C2dCentroidParamsDictTagged | C2dCentroidMarkParamsDictTagged | C2dConnectedComponentsParamsDictTagged | C2dClearParamsDictTagged | C2dClipParamsDictTagged | C2dColorMapParamsDictTagged | C2dCompressParamsDictTagged | C2dNoCompressParamsDictTagged | C2dConvParamsDictTagged | C2dCoordinateMapVoxelParamsDictTagged | C2dCoordinateMapPhysicalParamsDictTagged | C2dCopyTransformParamsDictTagged | C2dCosParamsDictTagged | C2dCreateParamsDictTagged | C2dDicomSeriesListParamsDictTagged | C2dDicomSeriesReadParamsDictTagged | C2dDilateParamsDictTagged | C2dDivideParamsDictTagged | C2dDuplicateParamsDictTagged | C2dEndaccumParamsDictTagged | C2dEndforParamsDictTagged | C2dErodeParamsDictTagged | C2dErfParamsDictTagged | C2dExpParamsDictTagged | C2dExportPatchesParamsDictTagged | C2dExportPatchesAugParamsDictTagged | C2dExtrudeSegParamsDictTagged | C2dFillBackgroundWithNoiseParamsDictTagged | C2dFftParamsDictTagged | C2dFlipParamsDictTagged | C2dFloorParamsDictTagged | C2dForeachParamsDictTagged | C2dForeachCompParamsDictTagged | C2dGlmParamsDictTagged | C2dGradientParamsDictTagged | C2dHelpParamsDictTagged | C2dHolefillParamsDictTagged | C2dHessianEigenvaluesParamsDictTagged | C2dHessianObjectnessParamsDictTagged | C2dHistogramMatchParamsDictTagged | C2dInfoParamsDictTagged | C2dInfoFullParamsDictTagged | C2dInsertParamsDictTagged | C2dInterpolationParamsDictTagged | C2dIterationsParamsDictTagged | C2dLabelOverlapParamsDictTagged | C2dLabelStatisticsParamsDictTagged | C2dLandmarksToSpheresParamsDictTagged | C2dLaplacianParamsDictTagged | C2dLevelsetParamsDictTagged | C2dLevelsetCurvatureParamsDictTagged | C2dLevelsetAdvectionParamsDictTagged | C2dLogParamsDictTagged | C2dLog10ParamsDictTagged | C2dManualParamsDictTagged | C2dMatchBoundingBoxParamsDictTagged | C2dMaximumParamsDictTagged | C2dMulticomponentSplitParamsDictTagged | C2dMeanParamsDictTagged | C2dMedianFilterParamsDictTagged | C2dMergeParamsDictTagged | C2dMeanFilterParamsDictTagged | C2dMutualInfoParamsDictTagged | C2dMinimumParamsDictTagged | C2dMixtureModelParamsDictTagged | C2dMomentsParamsDictTagged | C2dMattesMutualInfoParamsDictTagged | C2dMeanSquareParamsDictTagged | C2dMultiplyParamsDictTagged | C2dNormalizedCrossCorrelationParamsDictTagged | C2dNormalizedCorrelationParamsDictTagged | C2dNormalizedMutualInfoParamsDictTagged | C2dNoiseGaussianParamsDictTagged | C2dNoisePoissonParamsDictTagged | C2dNoiseSpeckleParamsDictTagged | C2dNoiseSaltPepperParamsDictTagged | C2dNoMulticomponentSplitParamsDictTagged | C2dNormalizeLocalWindowParamsDictTagged | C2dNormpdfParamsDictTagged | C2dNoroundParamsDictTagged | C2dNospmParamsDictTagged | C2dOutputParamsDictTagged | C2dOutputMulticomponentParamsDictTagged | C2dOutputMultipleMulticomponentParamsDictTagged | C2dOrientParamsDictTagged | C2dOutputMultipleParamsDictTagged | C2dOrient1ParamsDictTagged | C2dOriginParamsDictTagged | C2dOriginVoxelParamsDictTagged | C2dOriginVoxelCoordParamsDictTagged | C2dOverlapParamsDictTagged | C2dOverlayLabelImageParamsDictTagged | C2dPadParamsDictTagged | C2dPadToParamsDictTagged | C2dPcaParamsDictTagged | C2dPercentIntensityModeParamsDictTagged | C2dPixelParamsDictTagged | C2dPopParamsDictTagged | C2dPopasParamsDictTagged | C2dProbeParamsDictTagged | C2dPushParamsDictTagged | C2dRankParamsDictTagged | C2dReciprocalParamsDictTagged | C2dRegionParamsDictTagged | C2dReorderParamsDictTagged | C2dRetainLabelsParamsDictTagged | C2dRfApplyParamsDictTagged | C2dRfTrainParamsDictTagged | C2dRfParamPatchParamsDictTagged | C2dRfParamUsexyzParamsDictTagged | C2dRfParamNousexyzParamsDictTagged | C2dRfParamNtreesParamsDictTagged | C2dRfParamTreedepthParamsDictTagged | C2dSetSformParamsDictTagged | C2dReplaceParamsDictTagged | C2dResampleParamsDictTagged | C2dResampleIsoParamsDictTagged | C2dResampleMmParamsDictTagged | C2dResliceItkParamsDictTagged | C2dResliceMatrixParamsDictTagged | C2dResliceIdentityParamsDictTagged | C2dRgb2hsvParamsDictTagged | C2dRmsParamsDictTagged | C2dRoundParamsDictTagged | C2dScaleParamsDictTagged | C2dSetSform1ParamsDictTagged | C2dSinParamsDictTagged | C2dSliceParamsDictTagged | C2dSliceAllParamsDictTagged | C2dSharpenParamsDictTagged | C2dShiftParamsDictTagged | C2dSignedDistanceTransformParamsDictTagged | C2dSmoothParamsDictTagged | C2dSmoothFastParamsDictTagged | C2dSpacingParamsDictTagged | C2dSplitParamsDictTagged | C2dSqrtParamsDictTagged | C2dStapleParamsDictTagged | C2dStructureTensorEigenvaluesParamsDictTagged | C2dSpmParamsDictTagged | C2dSubtractParamsDictTagged | C2dSupervoxelParamsDictTagged | C2dStretchParamsDictTagged | C2dSwapdimParamsDictTagged | C2dTestImageParamsDictTagged | C2dTestProbeParamsDictTagged | C2dThresholdParamsDictTagged | C2dTileParamsDictTagged | C2dTrimParamsDictTagged | C2dTrimToSizeParamsDictTagged | C2dTypeParamsDictTagged | C2dVerboseParamsDictTagged | C2dNoverboseParamsDictTagged | C2dVersionParamsDictTagged | C2dVoteParamsDictTagged | C2dVoteMrfParamsDictTagged | C2dVoteLabelParamsDictTagged | C2dVoxelSumParamsDictTagged | C2dVoxelIntegralParamsDictTagged | C2dVoxelwiseRegressionParamsDictTagged | C2dWarpParamsDictTagged | C2dWarpLabelParamsDictTagged | C2dWrapParamsDictTagged | C2dWeightedSumParamsDictTagged | C2dWeightedSumVoxelwiseParamsDictTagged>,
     output: string,
     runner: Runner | null = null,
 ): C2dOutputs {
@@ -9849,188 +9849,548 @@ function c2d(
 
 export {
       C2D_METADATA,
+      C2dAccumParamsDict,
+      C2dAccumParamsDictTagged,
+      C2dAcosParamsDict,
+      C2dAcosParamsDictTagged,
+      C2dAddParamsDict,
+      C2dAddParamsDictTagged,
+      C2dAlignLandmarksParamsDict,
+      C2dAlignLandmarksParamsDictTagged,
+      C2dAnisotropicDiffusionParamsDict,
+      C2dAnisotropicDiffusionParamsDictTagged,
+      C2dAntialiasParamsDict,
+      C2dAntialiasParamsDictTagged,
+      C2dAsinParamsDict,
+      C2dAsinParamsDictTagged,
+      C2dAtan2ParamsDict,
+      C2dAtan2ParamsDictTagged,
+      C2dBackgroundParamsDict,
+      C2dBackgroundParamsDictTagged,
+      C2dBinarizeParamsDict,
+      C2dBinarizeParamsDictTagged,
+      C2dCannyParamsDict,
+      C2dCannyParamsDictTagged,
+      C2dCeilParamsDict,
+      C2dCeilParamsDictTagged,
+      C2dCentroidMarkParamsDict,
+      C2dCentroidMarkParamsDictTagged,
+      C2dCentroidParamsDict,
+      C2dCentroidParamsDictTagged,
+      C2dClearParamsDict,
+      C2dClearParamsDictTagged,
+      C2dClipParamsDict,
+      C2dClipParamsDictTagged,
+      C2dColorMapParamsDict,
+      C2dColorMapParamsDictTagged,
+      C2dCompressParamsDict,
+      C2dCompressParamsDictTagged,
+      C2dConnectedComponentsParamsDict,
+      C2dConnectedComponentsParamsDictTagged,
+      C2dConvParamsDict,
+      C2dConvParamsDictTagged,
+      C2dCoordinateMapPhysicalParamsDict,
+      C2dCoordinateMapPhysicalParamsDictTagged,
+      C2dCoordinateMapVoxelParamsDict,
+      C2dCoordinateMapVoxelParamsDictTagged,
+      C2dCopyTransformParamsDict,
+      C2dCopyTransformParamsDictTagged,
+      C2dCosParamsDict,
+      C2dCosParamsDictTagged,
+      C2dCreateParamsDict,
+      C2dCreateParamsDictTagged,
+      C2dDicomSeriesListParamsDict,
+      C2dDicomSeriesListParamsDictTagged,
+      C2dDicomSeriesReadParamsDict,
+      C2dDicomSeriesReadParamsDictTagged,
+      C2dDilateParamsDict,
+      C2dDilateParamsDictTagged,
+      C2dDivideParamsDict,
+      C2dDivideParamsDictTagged,
+      C2dDuplicateParamsDict,
+      C2dDuplicateParamsDictTagged,
+      C2dEndaccumParamsDict,
+      C2dEndaccumParamsDictTagged,
+      C2dEndforParamsDict,
+      C2dEndforParamsDictTagged,
+      C2dErfParamsDict,
+      C2dErfParamsDictTagged,
+      C2dErodeParamsDict,
+      C2dErodeParamsDictTagged,
+      C2dExpParamsDict,
+      C2dExpParamsDictTagged,
+      C2dExportPatchesAugParamsDict,
+      C2dExportPatchesAugParamsDictTagged,
+      C2dExportPatchesParamsDict,
+      C2dExportPatchesParamsDictTagged,
+      C2dExtrudeSegParamsDict,
+      C2dExtrudeSegParamsDictTagged,
+      C2dFftParamsDict,
+      C2dFftParamsDictTagged,
+      C2dFillBackgroundWithNoiseParamsDict,
+      C2dFillBackgroundWithNoiseParamsDictTagged,
+      C2dFlipParamsDict,
+      C2dFlipParamsDictTagged,
+      C2dFloorParamsDict,
+      C2dFloorParamsDictTagged,
+      C2dForeachCompParamsDict,
+      C2dForeachCompParamsDictTagged,
+      C2dForeachParamsDict,
+      C2dForeachParamsDictTagged,
+      C2dGlmParamsDict,
+      C2dGlmParamsDictTagged,
+      C2dGradientParamsDict,
+      C2dGradientParamsDictTagged,
+      C2dHelpParamsDict,
+      C2dHelpParamsDictTagged,
+      C2dHessianEigenvaluesParamsDict,
+      C2dHessianEigenvaluesParamsDictTagged,
+      C2dHessianObjectnessParamsDict,
+      C2dHessianObjectnessParamsDictTagged,
+      C2dHistogramMatchParamsDict,
+      C2dHistogramMatchParamsDictTagged,
+      C2dHolefillParamsDict,
+      C2dHolefillParamsDictTagged,
+      C2dInfoFullParamsDict,
+      C2dInfoFullParamsDictTagged,
+      C2dInfoParamsDict,
+      C2dInfoParamsDictTagged,
+      C2dInsertParamsDict,
+      C2dInsertParamsDictTagged,
+      C2dInterpolationParamsDict,
+      C2dInterpolationParamsDictTagged,
+      C2dIterationsParamsDict,
+      C2dIterationsParamsDictTagged,
+      C2dLabelOverlapParamsDict,
+      C2dLabelOverlapParamsDictTagged,
+      C2dLabelStatisticsParamsDict,
+      C2dLabelStatisticsParamsDictTagged,
+      C2dLandmarksToSpheresParamsDict,
+      C2dLandmarksToSpheresParamsDictTagged,
+      C2dLaplacianParamsDict,
+      C2dLaplacianParamsDictTagged,
+      C2dLevelsetAdvectionParamsDict,
+      C2dLevelsetAdvectionParamsDictTagged,
+      C2dLevelsetCurvatureParamsDict,
+      C2dLevelsetCurvatureParamsDictTagged,
+      C2dLevelsetParamsDict,
+      C2dLevelsetParamsDictTagged,
+      C2dLog10ParamsDict,
+      C2dLog10ParamsDictTagged,
+      C2dLogParamsDict,
+      C2dLogParamsDictTagged,
+      C2dManualParamsDict,
+      C2dManualParamsDictTagged,
+      C2dMatchBoundingBoxParamsDict,
+      C2dMatchBoundingBoxParamsDictTagged,
+      C2dMattesMutualInfoParamsDict,
+      C2dMattesMutualInfoParamsDictTagged,
+      C2dMaximumParamsDict,
+      C2dMaximumParamsDictTagged,
+      C2dMeanFilterParamsDict,
+      C2dMeanFilterParamsDictTagged,
+      C2dMeanParamsDict,
+      C2dMeanParamsDictTagged,
+      C2dMeanSquareParamsDict,
+      C2dMeanSquareParamsDictTagged,
+      C2dMedianFilterParamsDict,
+      C2dMedianFilterParamsDictTagged,
+      C2dMergeParamsDict,
+      C2dMergeParamsDictTagged,
+      C2dMinimumParamsDict,
+      C2dMinimumParamsDictTagged,
+      C2dMixtureModelParamsDict,
+      C2dMixtureModelParamsDictTagged,
+      C2dMomentsParamsDict,
+      C2dMomentsParamsDictTagged,
+      C2dMulticomponentSplitParamsDict,
+      C2dMulticomponentSplitParamsDictTagged,
+      C2dMultiplyParamsDict,
+      C2dMultiplyParamsDictTagged,
+      C2dMutualInfoParamsDict,
+      C2dMutualInfoParamsDictTagged,
+      C2dN4BiasCorrectionParamsDict,
+      C2dN4BiasCorrectionParamsDictTagged,
+      C2dNoCompressParamsDict,
+      C2dNoCompressParamsDictTagged,
+      C2dNoMulticomponentSplitParamsDict,
+      C2dNoMulticomponentSplitParamsDictTagged,
+      C2dNoiseGaussianParamsDict,
+      C2dNoiseGaussianParamsDictTagged,
+      C2dNoisePoissonParamsDict,
+      C2dNoisePoissonParamsDictTagged,
+      C2dNoiseSaltPepperParamsDict,
+      C2dNoiseSaltPepperParamsDictTagged,
+      C2dNoiseSpeckleParamsDict,
+      C2dNoiseSpeckleParamsDictTagged,
+      C2dNormalizeLocalWindowParamsDict,
+      C2dNormalizeLocalWindowParamsDictTagged,
+      C2dNormalizedCorrelationParamsDict,
+      C2dNormalizedCorrelationParamsDictTagged,
+      C2dNormalizedCrossCorrelationParamsDict,
+      C2dNormalizedCrossCorrelationParamsDictTagged,
+      C2dNormalizedMutualInfoParamsDict,
+      C2dNormalizedMutualInfoParamsDictTagged,
+      C2dNormpdfParamsDict,
+      C2dNormpdfParamsDictTagged,
+      C2dNoroundParamsDict,
+      C2dNoroundParamsDictTagged,
+      C2dNospmParamsDict,
+      C2dNospmParamsDictTagged,
+      C2dNoverboseParamsDict,
+      C2dNoverboseParamsDictTagged,
+      C2dOrient1ParamsDict,
+      C2dOrient1ParamsDictTagged,
+      C2dOrientParamsDict,
+      C2dOrientParamsDictTagged,
+      C2dOriginParamsDict,
+      C2dOriginParamsDictTagged,
+      C2dOriginVoxelCoordParamsDict,
+      C2dOriginVoxelCoordParamsDictTagged,
+      C2dOriginVoxelParamsDict,
+      C2dOriginVoxelParamsDictTagged,
+      C2dOutputMulticomponentParamsDict,
+      C2dOutputMulticomponentParamsDictTagged,
+      C2dOutputMultipleMulticomponentParamsDict,
+      C2dOutputMultipleMulticomponentParamsDictTagged,
+      C2dOutputMultipleParamsDict,
+      C2dOutputMultipleParamsDictTagged,
       C2dOutputOutputs,
+      C2dOutputParamsDict,
+      C2dOutputParamsDictTagged,
       C2dOutputs,
+      C2dOverlapParamsDict,
+      C2dOverlapParamsDictTagged,
+      C2dOverlayLabelImageParamsDict,
+      C2dOverlayLabelImageParamsDictTagged,
+      C2dPadParamsDict,
+      C2dPadParamsDictTagged,
+      C2dPadToParamsDict,
+      C2dPadToParamsDictTagged,
+      C2dParamsDict,
+      C2dParamsDictTagged,
+      C2dPcaParamsDict,
+      C2dPcaParamsDictTagged,
+      C2dPercentIntensityModeParamsDict,
+      C2dPercentIntensityModeParamsDictTagged,
+      C2dPixelParamsDict,
+      C2dPixelParamsDictTagged,
+      C2dPopParamsDict,
+      C2dPopParamsDictTagged,
+      C2dPopasParamsDict,
+      C2dPopasParamsDictTagged,
+      C2dProbeParamsDict,
+      C2dProbeParamsDictTagged,
+      C2dPushParamsDict,
+      C2dPushParamsDictTagged,
+      C2dRankParamsDict,
+      C2dRankParamsDictTagged,
+      C2dReciprocalParamsDict,
+      C2dReciprocalParamsDictTagged,
+      C2dRegionParamsDict,
+      C2dRegionParamsDictTagged,
+      C2dReorderParamsDict,
+      C2dReorderParamsDictTagged,
+      C2dReplaceParamsDict,
+      C2dReplaceParamsDictTagged,
+      C2dResampleIsoParamsDict,
+      C2dResampleIsoParamsDictTagged,
+      C2dResampleMmParamsDict,
+      C2dResampleMmParamsDictTagged,
+      C2dResampleParamsDict,
+      C2dResampleParamsDictTagged,
+      C2dResliceIdentityParamsDict,
+      C2dResliceIdentityParamsDictTagged,
+      C2dResliceItkParamsDict,
+      C2dResliceItkParamsDictTagged,
+      C2dResliceMatrixParamsDict,
+      C2dResliceMatrixParamsDictTagged,
+      C2dRetainLabelsParamsDict,
+      C2dRetainLabelsParamsDictTagged,
+      C2dRfApplyParamsDict,
+      C2dRfApplyParamsDictTagged,
+      C2dRfParamNousexyzParamsDict,
+      C2dRfParamNousexyzParamsDictTagged,
+      C2dRfParamNtreesParamsDict,
+      C2dRfParamNtreesParamsDictTagged,
+      C2dRfParamPatchParamsDict,
+      C2dRfParamPatchParamsDictTagged,
+      C2dRfParamTreedepthParamsDict,
+      C2dRfParamTreedepthParamsDictTagged,
+      C2dRfParamUsexyzParamsDict,
+      C2dRfParamUsexyzParamsDictTagged,
+      C2dRfTrainParamsDict,
+      C2dRfTrainParamsDictTagged,
+      C2dRgb2hsvParamsDict,
+      C2dRgb2hsvParamsDictTagged,
+      C2dRmsParamsDict,
+      C2dRmsParamsDictTagged,
+      C2dRoundParamsDict,
+      C2dRoundParamsDictTagged,
+      C2dScaleParamsDict,
+      C2dScaleParamsDictTagged,
+      C2dSetParamsDict,
+      C2dSetParamsDictTagged,
+      C2dSetSform1ParamsDict,
+      C2dSetSform1ParamsDictTagged,
+      C2dSetSformParamsDict,
+      C2dSetSformParamsDictTagged,
+      C2dSharpenParamsDict,
+      C2dSharpenParamsDictTagged,
+      C2dShiftParamsDict,
+      C2dShiftParamsDictTagged,
+      C2dSignedDistanceTransformParamsDict,
+      C2dSignedDistanceTransformParamsDictTagged,
+      C2dSinParamsDict,
+      C2dSinParamsDictTagged,
+      C2dSliceAllParamsDict,
+      C2dSliceAllParamsDictTagged,
+      C2dSliceParamsDict,
+      C2dSliceParamsDictTagged,
+      C2dSmoothFastParamsDict,
+      C2dSmoothFastParamsDictTagged,
+      C2dSmoothParamsDict,
+      C2dSmoothParamsDictTagged,
+      C2dSpacingParamsDict,
+      C2dSpacingParamsDictTagged,
+      C2dSplitParamsDict,
+      C2dSplitParamsDictTagged,
+      C2dSpmParamsDict,
+      C2dSpmParamsDictTagged,
+      C2dSqrtParamsDict,
+      C2dSqrtParamsDictTagged,
+      C2dStapleParamsDict,
+      C2dStapleParamsDictTagged,
+      C2dStretchParamsDict,
+      C2dStretchParamsDictTagged,
+      C2dStructureTensorEigenvaluesParamsDict,
+      C2dStructureTensorEigenvaluesParamsDictTagged,
+      C2dSubtractParamsDict,
+      C2dSubtractParamsDictTagged,
+      C2dSupervoxelParamsDict,
+      C2dSupervoxelParamsDictTagged,
+      C2dSwapdimParamsDict,
+      C2dSwapdimParamsDictTagged,
+      C2dTestImageParamsDict,
+      C2dTestImageParamsDictTagged,
+      C2dTestProbeParamsDict,
+      C2dTestProbeParamsDictTagged,
+      C2dThresholdParamsDict,
+      C2dThresholdParamsDictTagged,
+      C2dTileParamsDict,
+      C2dTileParamsDictTagged,
+      C2dTrimParamsDict,
+      C2dTrimParamsDictTagged,
+      C2dTrimToSizeParamsDict,
+      C2dTrimToSizeParamsDictTagged,
+      C2dTypeParamsDict,
+      C2dTypeParamsDictTagged,
+      C2dVerboseParamsDict,
+      C2dVerboseParamsDictTagged,
+      C2dVersionParamsDict,
+      C2dVersionParamsDictTagged,
+      C2dVoteLabelParamsDict,
+      C2dVoteLabelParamsDictTagged,
+      C2dVoteMrfParamsDict,
+      C2dVoteMrfParamsDictTagged,
+      C2dVoteParamsDict,
+      C2dVoteParamsDictTagged,
+      C2dVoxelIntegralParamsDict,
+      C2dVoxelIntegralParamsDictTagged,
+      C2dVoxelSumParamsDict,
+      C2dVoxelSumParamsDictTagged,
+      C2dVoxelwiseRegressionParamsDict,
+      C2dVoxelwiseRegressionParamsDictTagged,
+      C2dWarpLabelParamsDict,
+      C2dWarpLabelParamsDictTagged,
+      C2dWarpParamsDict,
+      C2dWarpParamsDictTagged,
+      C2dWeightedSumParamsDict,
+      C2dWeightedSumParamsDictTagged,
+      C2dWeightedSumVoxelwiseParamsDict,
+      C2dWeightedSumVoxelwiseParamsDictTagged,
+      C2dWrapParamsDict,
+      C2dWrapParamsDictTagged,
       c2d,
-      c2d__help_params,
-      c2d_accum_params,
-      c2d_acos_params,
-      c2d_add_params,
-      c2d_align_landmarks_params,
-      c2d_anisotropic_diffusion_params,
-      c2d_antialias_params,
-      c2d_asin_params,
-      c2d_atan2_params,
-      c2d_background_params,
-      c2d_binarize_params,
-      c2d_canny_params,
-      c2d_ceil_params,
-      c2d_centroid_mark_params,
-      c2d_centroid_params,
-      c2d_clear_params,
-      c2d_clip_params,
-      c2d_color_map_params,
-      c2d_compress_params,
-      c2d_connected_components_params,
-      c2d_conv_params,
-      c2d_coordinate_map_physical_params,
-      c2d_coordinate_map_voxel_params,
-      c2d_copy_transform_params,
-      c2d_cos_params,
-      c2d_create_params,
-      c2d_dicom_series_list_params,
-      c2d_dicom_series_read_params,
-      c2d_dilate_params,
-      c2d_divide_params,
-      c2d_duplicate_params,
-      c2d_endaccum_params,
-      c2d_endfor_params,
-      c2d_erf_params,
-      c2d_erode_params,
+      c2d__help,
+      c2d_accum,
+      c2d_acos,
+      c2d_add,
+      c2d_align_landmarks,
+      c2d_anisotropic_diffusion,
+      c2d_antialias,
+      c2d_asin,
+      c2d_atan2,
+      c2d_background,
+      c2d_binarize,
+      c2d_canny,
+      c2d_ceil,
+      c2d_centroid,
+      c2d_centroid_mark,
+      c2d_clear,
+      c2d_clip,
+      c2d_color_map,
+      c2d_compress,
+      c2d_connected_components,
+      c2d_conv,
+      c2d_coordinate_map_physical,
+      c2d_coordinate_map_voxel,
+      c2d_copy_transform,
+      c2d_cos,
+      c2d_create,
+      c2d_dicom_series_list,
+      c2d_dicom_series_read,
+      c2d_dilate,
+      c2d_divide,
+      c2d_duplicate,
+      c2d_endaccum,
+      c2d_endfor,
+      c2d_erf,
+      c2d_erode,
       c2d_execute,
-      c2d_exp_params,
-      c2d_export_patches_aug_params,
-      c2d_export_patches_params,
-      c2d_extrude_seg_params,
-      c2d_fft_params,
-      c2d_fill_background_with_noise_params,
-      c2d_flip_params,
-      c2d_floor_params,
-      c2d_foreach_comp_params,
-      c2d_foreach_params,
-      c2d_glm_params,
-      c2d_gradient_params,
-      c2d_hessian_eigenvalues_params,
-      c2d_hessian_objectness_params,
-      c2d_histogram_match_params,
-      c2d_holefill_params,
-      c2d_info_full_params,
-      c2d_info_params,
-      c2d_insert_params,
-      c2d_interpolation_params,
-      c2d_iterations_params,
-      c2d_label_overlap_params,
-      c2d_label_statistics_params,
-      c2d_landmarks_to_spheres_params,
-      c2d_laplacian_params,
-      c2d_levelset_advection_params,
-      c2d_levelset_curvature_params,
-      c2d_levelset_params,
-      c2d_log10_params,
-      c2d_log_params,
-      c2d_manual_params,
-      c2d_match_bounding_box_params,
-      c2d_mattes_mutual_info_params,
-      c2d_maximum_params,
-      c2d_mean_filter_params,
-      c2d_mean_params,
-      c2d_mean_square_params,
-      c2d_median_filter_params,
-      c2d_merge_params,
-      c2d_minimum_params,
-      c2d_mixture_model_params,
-      c2d_moments_params,
-      c2d_multicomponent_split_params,
-      c2d_multiply_params,
-      c2d_mutual_info_params,
-      c2d_n4_bias_correction_params,
-      c2d_no_compress_params,
-      c2d_no_multicomponent_split_params,
-      c2d_noise_gaussian_params,
-      c2d_noise_poisson_params,
-      c2d_noise_salt_pepper_params,
-      c2d_noise_speckle_params,
-      c2d_normalize_local_window_params,
-      c2d_normalized_correlation_params,
-      c2d_normalized_cross_correlation_params,
-      c2d_normalized_mutual_info_params,
-      c2d_normpdf_params,
-      c2d_noround_params,
-      c2d_nospm_params,
-      c2d_noverbose_params,
-      c2d_orient_1_params,
-      c2d_orient_params,
-      c2d_origin_params,
-      c2d_origin_voxel_coord_params,
-      c2d_origin_voxel_params,
-      c2d_output_multicomponent_params,
-      c2d_output_multiple_multicomponent_params,
-      c2d_output_multiple_params,
-      c2d_output_params,
-      c2d_overlap_params,
-      c2d_overlay_label_image_params,
-      c2d_pad_params,
-      c2d_pad_to_params,
+      c2d_exp,
+      c2d_export_patches,
+      c2d_export_patches_aug,
+      c2d_extrude_seg,
+      c2d_fft,
+      c2d_fill_background_with_noise,
+      c2d_flip,
+      c2d_floor,
+      c2d_foreach,
+      c2d_foreach_comp,
+      c2d_glm,
+      c2d_gradient,
+      c2d_hessian_eigenvalues,
+      c2d_hessian_objectness,
+      c2d_histogram_match,
+      c2d_holefill,
+      c2d_info,
+      c2d_info_full,
+      c2d_insert,
+      c2d_interpolation,
+      c2d_iterations,
+      c2d_label_overlap,
+      c2d_label_statistics,
+      c2d_landmarks_to_spheres,
+      c2d_laplacian,
+      c2d_levelset,
+      c2d_levelset_advection,
+      c2d_levelset_curvature,
+      c2d_log,
+      c2d_log10,
+      c2d_manual,
+      c2d_match_bounding_box,
+      c2d_mattes_mutual_info,
+      c2d_maximum,
+      c2d_mean,
+      c2d_mean_filter,
+      c2d_mean_square,
+      c2d_median_filter,
+      c2d_merge,
+      c2d_minimum,
+      c2d_mixture_model,
+      c2d_moments,
+      c2d_multicomponent_split,
+      c2d_multiply,
+      c2d_mutual_info,
+      c2d_n4_bias_correction,
+      c2d_no_compress,
+      c2d_no_multicomponent_split,
+      c2d_noise_gaussian,
+      c2d_noise_poisson,
+      c2d_noise_salt_pepper,
+      c2d_noise_speckle,
+      c2d_normalize_local_window,
+      c2d_normalized_correlation,
+      c2d_normalized_cross_correlation,
+      c2d_normalized_mutual_info,
+      c2d_normpdf,
+      c2d_noround,
+      c2d_nospm,
+      c2d_noverbose,
+      c2d_orient,
+      c2d_orient_1,
+      c2d_origin,
+      c2d_origin_voxel,
+      c2d_origin_voxel_coord,
+      c2d_output,
+      c2d_output_multicomponent,
+      c2d_output_multiple,
+      c2d_output_multiple_multicomponent,
+      c2d_overlap,
+      c2d_overlay_label_image,
+      c2d_pad,
+      c2d_pad_to,
       c2d_params,
-      c2d_pca_params,
-      c2d_percent_intensity_mode_params,
-      c2d_pixel_params,
-      c2d_pop_params,
-      c2d_popas_params,
-      c2d_probe_params,
-      c2d_push_params,
-      c2d_rank_params,
-      c2d_reciprocal_params,
-      c2d_region_params,
-      c2d_reorder_params,
-      c2d_replace_params,
-      c2d_resample_iso_params,
-      c2d_resample_mm_params,
-      c2d_resample_params,
-      c2d_reslice_identity_params,
-      c2d_reslice_itk_params,
-      c2d_reslice_matrix_params,
-      c2d_retain_labels_params,
-      c2d_rf_apply_params,
-      c2d_rf_param_nousexyz_params,
-      c2d_rf_param_ntrees_params,
-      c2d_rf_param_patch_params,
-      c2d_rf_param_treedepth_params,
-      c2d_rf_param_usexyz_params,
-      c2d_rf_train_params,
-      c2d_rgb2hsv_params,
-      c2d_rms_params,
-      c2d_round_params,
-      c2d_scale_params,
-      c2d_set_params,
-      c2d_set_sform_1_params,
-      c2d_set_sform_params,
-      c2d_sharpen_params,
-      c2d_shift_params,
-      c2d_signed_distance_transform_params,
-      c2d_sin_params,
-      c2d_slice_all_params,
-      c2d_slice_params,
-      c2d_smooth_fast_params,
-      c2d_smooth_params,
-      c2d_spacing_params,
-      c2d_split_params,
-      c2d_spm_params,
-      c2d_sqrt_params,
-      c2d_staple_params,
-      c2d_stretch_params,
-      c2d_structure_tensor_eigenvalues_params,
-      c2d_subtract_params,
-      c2d_supervoxel_params,
-      c2d_swapdim_params,
-      c2d_test_image_params,
-      c2d_test_probe_params,
-      c2d_threshold_params,
-      c2d_tile_params,
-      c2d_trim_params,
-      c2d_trim_to_size_params,
-      c2d_type_params,
-      c2d_verbose_params,
-      c2d_version_params,
-      c2d_vote_label_params,
-      c2d_vote_mrf_params,
-      c2d_vote_params,
-      c2d_voxel_integral_params,
-      c2d_voxel_sum_params,
-      c2d_voxelwise_regression_params,
-      c2d_warp_label_params,
-      c2d_warp_params,
-      c2d_weighted_sum_params,
-      c2d_weighted_sum_voxelwise_params,
-      c2d_wrap_params,
+      c2d_pca,
+      c2d_percent_intensity_mode,
+      c2d_pixel,
+      c2d_pop,
+      c2d_popas,
+      c2d_probe,
+      c2d_push,
+      c2d_rank,
+      c2d_reciprocal,
+      c2d_region,
+      c2d_reorder,
+      c2d_replace,
+      c2d_resample,
+      c2d_resample_iso,
+      c2d_resample_mm,
+      c2d_reslice_identity,
+      c2d_reslice_itk,
+      c2d_reslice_matrix,
+      c2d_retain_labels,
+      c2d_rf_apply,
+      c2d_rf_param_nousexyz,
+      c2d_rf_param_ntrees,
+      c2d_rf_param_patch,
+      c2d_rf_param_treedepth,
+      c2d_rf_param_usexyz,
+      c2d_rf_train,
+      c2d_rgb2hsv,
+      c2d_rms,
+      c2d_round,
+      c2d_scale,
+      c2d_set,
+      c2d_set_sform,
+      c2d_set_sform_1,
+      c2d_sharpen,
+      c2d_shift,
+      c2d_signed_distance_transform,
+      c2d_sin,
+      c2d_slice,
+      c2d_slice_all,
+      c2d_smooth,
+      c2d_smooth_fast,
+      c2d_spacing,
+      c2d_split,
+      c2d_spm,
+      c2d_sqrt,
+      c2d_staple,
+      c2d_stretch,
+      c2d_structure_tensor_eigenvalues,
+      c2d_subtract,
+      c2d_supervoxel,
+      c2d_swapdim,
+      c2d_test_image,
+      c2d_test_probe,
+      c2d_threshold,
+      c2d_tile,
+      c2d_trim,
+      c2d_trim_to_size,
+      c2d_type,
+      c2d_verbose,
+      c2d_version,
+      c2d_vote,
+      c2d_vote_label,
+      c2d_vote_mrf,
+      c2d_voxel_integral,
+      c2d_voxel_sum,
+      c2d_voxelwise_regression,
+      c2d_warp,
+      c2d_warp_label,
+      c2d_weighted_sum,
+      c2d_weighted_sum_voxelwise,
+      c2d_wrap,
 };

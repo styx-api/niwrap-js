@@ -10,17 +10,17 @@ const SURFACE_SET_COORDINATES_METADATA: Metadata = {
 };
 
 
-interface SurfaceSetCoordinatesParameters {
+interface SurfaceSetCoordinatesParamsDict {
     "@type"?: "workbench/surface-set-coordinates";
     "surface-out": string;
     "surface-in": InputPathType;
     "coord-metric": InputPathType;
 }
-type SurfaceSetCoordinatesParametersTagged = Required<Pick<SurfaceSetCoordinatesParameters, '@type'>> & SurfaceSetCoordinatesParameters;
+type SurfaceSetCoordinatesParamsDictTagged = Required<Pick<SurfaceSetCoordinatesParamsDict, '@type'>> & SurfaceSetCoordinatesParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceSetCoordinatesParameters(...)`.
+ * Output object returned when calling `SurfaceSetCoordinatesParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function surface_set_coordinates_params(
     surface_out: string,
     surface_in: InputPathType,
     coord_metric: InputPathType,
-): SurfaceSetCoordinatesParametersTagged {
+): SurfaceSetCoordinatesParamsDictTagged {
     const params = {
         "@type": "workbench/surface-set-coordinates" as const,
         "surface-out": surface_out,
@@ -69,7 +69,7 @@ function surface_set_coordinates_params(
  * @returns Command-line arguments.
  */
 function surface_set_coordinates_cargs(
-    params: SurfaceSetCoordinatesParameters,
+    params: SurfaceSetCoordinatesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function surface_set_coordinates_cargs(
  * @returns Outputs object.
  */
 function surface_set_coordinates_outputs(
-    params: SurfaceSetCoordinatesParameters,
+    params: SurfaceSetCoordinatesParamsDict,
     execution: Execution,
 ): SurfaceSetCoordinatesOutputs {
     const ret: SurfaceSetCoordinatesOutputs = {
@@ -117,7 +117,7 @@ function surface_set_coordinates_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceSetCoordinatesOutputs`).
  */
 function surface_set_coordinates_execute(
-    params: SurfaceSetCoordinatesParameters,
+    params: SurfaceSetCoordinatesParamsDict,
     runner: Runner | null = null,
 ): SurfaceSetCoordinatesOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function surface_set_coordinates(
 export {
       SURFACE_SET_COORDINATES_METADATA,
       SurfaceSetCoordinatesOutputs,
+      SurfaceSetCoordinatesParamsDict,
+      SurfaceSetCoordinatesParamsDictTagged,
       surface_set_coordinates,
       surface_set_coordinates_execute,
       surface_set_coordinates_params,

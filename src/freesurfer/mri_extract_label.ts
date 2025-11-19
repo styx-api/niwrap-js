@@ -11,7 +11,7 @@ const MRI_EXTRACT_LABEL_METADATA: Metadata = {
 };
 
 
-interface MriExtractLabelParameters {
+interface MriExtractLabelParamsDict {
     "@type"?: "freesurfer/mri_extract_label";
     "input_volume": InputPathType;
     "labels": Array<string>;
@@ -22,11 +22,11 @@ interface MriExtractLabelParameters {
     "dilate"?: number | null | undefined;
     "erode"?: number | null | undefined;
 }
-type MriExtractLabelParametersTagged = Required<Pick<MriExtractLabelParameters, '@type'>> & MriExtractLabelParameters;
+type MriExtractLabelParamsDictTagged = Required<Pick<MriExtractLabelParamsDict, '@type'>> & MriExtractLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MriExtractLabelParameters(...)`.
+ * Output object returned when calling `MriExtractLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function mri_extract_label_params(
     exit_none_found: boolean = false,
     dilate: number | null = null,
     erode: number | null = null,
-): MriExtractLabelParametersTagged {
+): MriExtractLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_extract_label" as const,
         "input_volume": input_volume,
@@ -98,7 +98,7 @@ function mri_extract_label_params(
  * @returns Command-line arguments.
  */
 function mri_extract_label_cargs(
-    params: MriExtractLabelParameters,
+    params: MriExtractLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -146,7 +146,7 @@ function mri_extract_label_cargs(
  * @returns Outputs object.
  */
 function mri_extract_label_outputs(
-    params: MriExtractLabelParameters,
+    params: MriExtractLabelParamsDict,
     execution: Execution,
 ): MriExtractLabelOutputs {
     const ret: MriExtractLabelOutputs = {
@@ -172,7 +172,7 @@ function mri_extract_label_outputs(
  * @returns NamedTuple of outputs (described in `MriExtractLabelOutputs`).
  */
 function mri_extract_label_execute(
-    params: MriExtractLabelParameters,
+    params: MriExtractLabelParamsDict,
     runner: Runner | null = null,
 ): MriExtractLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -225,6 +225,8 @@ function mri_extract_label(
 export {
       MRI_EXTRACT_LABEL_METADATA,
       MriExtractLabelOutputs,
+      MriExtractLabelParamsDict,
+      MriExtractLabelParamsDictTagged,
       mri_extract_label,
       mri_extract_label_execute,
       mri_extract_label_params,

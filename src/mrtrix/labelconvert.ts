@@ -11,15 +11,15 @@ const LABELCONVERT_METADATA: Metadata = {
 };
 
 
-interface LabelconvertConfigParameters {
+interface LabelconvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type LabelconvertConfigParametersTagged = Required<Pick<LabelconvertConfigParameters, '@type'>> & LabelconvertConfigParameters;
+type LabelconvertConfigParamsDictTagged = Required<Pick<LabelconvertConfigParamsDict, '@type'>> & LabelconvertConfigParamsDict;
 
 
-interface LabelconvertParameters {
+interface LabelconvertParamsDict {
     "@type"?: "mrtrix/labelconvert";
     "spine"?: InputPathType | null | undefined;
     "info": boolean;
@@ -27,7 +27,7 @@ interface LabelconvertParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<LabelconvertConfigParameters> | null | undefined;
+    "config"?: Array<LabelconvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "path_in": InputPathType;
@@ -35,7 +35,7 @@ interface LabelconvertParameters {
     "lut_out": InputPathType;
     "image_out": string;
 }
-type LabelconvertParametersTagged = Required<Pick<LabelconvertParameters, '@type'>> & LabelconvertParameters;
+type LabelconvertParamsDictTagged = Required<Pick<LabelconvertParamsDict, '@type'>> & LabelconvertParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type LabelconvertParametersTagged = Required<Pick<LabelconvertParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function labelconvert_config_params(
+function labelconvert_config(
     key: string,
     value: string,
-): LabelconvertConfigParametersTagged {
+): LabelconvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -68,7 +68,7 @@ function labelconvert_config_params(
  * @returns Command-line arguments.
  */
 function labelconvert_config_cargs(
-    params: LabelconvertConfigParameters,
+    params: LabelconvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function labelconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `LabelconvertParameters(...)`.
+ * Output object returned when calling `LabelconvertParamsDict(...)`.
  *
  * @interface
  */
@@ -126,10 +126,10 @@ function labelconvert_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<LabelconvertConfigParameters> | null = null,
+    config: Array<LabelconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): LabelconvertParametersTagged {
+): LabelconvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/labelconvert" as const,
         "info": info,
@@ -165,7 +165,7 @@ function labelconvert_params(
  * @returns Command-line arguments.
  */
 function labelconvert_cargs(
-    params: LabelconvertParameters,
+    params: LabelconvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -220,7 +220,7 @@ function labelconvert_cargs(
  * @returns Outputs object.
  */
 function labelconvert_outputs(
-    params: LabelconvertParameters,
+    params: LabelconvertParamsDict,
     execution: Execution,
 ): LabelconvertOutputs {
     const ret: LabelconvertOutputs = {
@@ -252,7 +252,7 @@ function labelconvert_outputs(
  * @returns NamedTuple of outputs (described in `LabelconvertOutputs`).
  */
 function labelconvert_execute(
-    params: LabelconvertParameters,
+    params: LabelconvertParamsDict,
     runner: Runner | null = null,
 ): LabelconvertOutputs {
     runner = runner || getGlobalRunner();
@@ -308,7 +308,7 @@ function labelconvert(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<LabelconvertConfigParameters> | null = null,
+    config: Array<LabelconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -320,9 +320,13 @@ function labelconvert(
 
 export {
       LABELCONVERT_METADATA,
+      LabelconvertConfigParamsDict,
+      LabelconvertConfigParamsDictTagged,
       LabelconvertOutputs,
+      LabelconvertParamsDict,
+      LabelconvertParamsDictTagged,
       labelconvert,
-      labelconvert_config_params,
+      labelconvert_config,
       labelconvert_execute,
       labelconvert_params,
 };

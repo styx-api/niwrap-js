@@ -11,7 +11,7 @@ const FIND_VARIANCE_LINES_TCSH_METADATA: Metadata = {
 };
 
 
-interface FindVarianceLinesTcshParameters {
+interface FindVarianceLinesTcshParamsDict {
     "@type"?: "afni/find_variance_lines.tcsh";
     "input_files": Array<InputPathType>;
     "mask"?: string | null | undefined;
@@ -29,11 +29,11 @@ interface FindVarianceLinesTcshParameters {
     "hist": boolean;
     "ver": boolean;
 }
-type FindVarianceLinesTcshParametersTagged = Required<Pick<FindVarianceLinesTcshParameters, '@type'>> & FindVarianceLinesTcshParameters;
+type FindVarianceLinesTcshParamsDictTagged = Required<Pick<FindVarianceLinesTcshParamsDict, '@type'>> & FindVarianceLinesTcshParamsDict;
 
 
 /**
- * Output object returned when calling `FindVarianceLinesTcshParameters(...)`.
+ * Output object returned when calling `FindVarianceLinesTcshParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function find_variance_lines_tcsh_params(
     help: boolean = false,
     hist: boolean = false,
     ver: boolean = false,
-): FindVarianceLinesTcshParametersTagged {
+): FindVarianceLinesTcshParamsDictTagged {
     const params = {
         "@type": "afni/find_variance_lines.tcsh" as const,
         "input_files": input_files,
@@ -138,7 +138,7 @@ function find_variance_lines_tcsh_params(
  * @returns Command-line arguments.
  */
 function find_variance_lines_tcsh_cargs(
-    params: FindVarianceLinesTcshParameters,
+    params: FindVarianceLinesTcshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -229,7 +229,7 @@ function find_variance_lines_tcsh_cargs(
  * @returns Outputs object.
  */
 function find_variance_lines_tcsh_outputs(
-    params: FindVarianceLinesTcshParameters,
+    params: FindVarianceLinesTcshParamsDict,
     execution: Execution,
 ): FindVarianceLinesTcshOutputs {
     const ret: FindVarianceLinesTcshOutputs = {
@@ -255,7 +255,7 @@ function find_variance_lines_tcsh_outputs(
  * @returns NamedTuple of outputs (described in `FindVarianceLinesTcshOutputs`).
  */
 function find_variance_lines_tcsh_execute(
-    params: FindVarianceLinesTcshParameters,
+    params: FindVarianceLinesTcshParamsDict,
     runner: Runner | null = null,
 ): FindVarianceLinesTcshOutputs {
     runner = runner || getGlobalRunner();
@@ -322,6 +322,8 @@ function find_variance_lines_tcsh(
 export {
       FIND_VARIANCE_LINES_TCSH_METADATA,
       FindVarianceLinesTcshOutputs,
+      FindVarianceLinesTcshParamsDict,
+      FindVarianceLinesTcshParamsDictTagged,
       find_variance_lines_tcsh,
       find_variance_lines_tcsh_execute,
       find_variance_lines_tcsh_params,

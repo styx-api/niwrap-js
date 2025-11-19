@@ -11,15 +11,15 @@ const V__DEMO_PROMPT_METADATA: Metadata = {
 };
 
 
-interface VDemoPromptParameters {
+interface VDemoPromptParamsDict {
     "@type"?: "afni/@demo_prompt";
     "message": string;
 }
-type VDemoPromptParametersTagged = Required<Pick<VDemoPromptParameters, '@type'>> & VDemoPromptParameters;
+type VDemoPromptParamsDictTagged = Required<Pick<VDemoPromptParamsDict, '@type'>> & VDemoPromptParamsDict;
 
 
 /**
- * Output object returned when calling `VDemoPromptParameters(...)`.
+ * Output object returned when calling `VDemoPromptParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VDemoPromptOutputs {
  */
 function v__demo_prompt_params(
     message: string,
-): VDemoPromptParametersTagged {
+): VDemoPromptParamsDictTagged {
     const params = {
         "@type": "afni/@demo_prompt" as const,
         "message": message,
@@ -62,7 +62,7 @@ function v__demo_prompt_params(
  * @returns Command-line arguments.
  */
 function v__demo_prompt_cargs(
-    params: VDemoPromptParameters,
+    params: VDemoPromptParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__demo_prompt_cargs(
  * @returns Outputs object.
  */
 function v__demo_prompt_outputs(
-    params: VDemoPromptParameters,
+    params: VDemoPromptParamsDict,
     execution: Execution,
 ): VDemoPromptOutputs {
     const ret: VDemoPromptOutputs = {
@@ -107,7 +107,7 @@ function v__demo_prompt_outputs(
  * @returns NamedTuple of outputs (described in `VDemoPromptOutputs`).
  */
 function v__demo_prompt_execute(
-    params: VDemoPromptParameters,
+    params: VDemoPromptParamsDict,
     runner: Runner | null = null,
 ): VDemoPromptOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__demo_prompt(
 
 export {
       VDemoPromptOutputs,
+      VDemoPromptParamsDict,
+      VDemoPromptParamsDictTagged,
       V__DEMO_PROMPT_METADATA,
       v__demo_prompt,
       v__demo_prompt_execute,

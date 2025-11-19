@@ -11,46 +11,46 @@ const MRINFO_METADATA: Metadata = {
 };
 
 
-interface MrinfoPropertyParameters {
+interface MrinfoPropertyParamsDict {
     "@type"?: "property";
     "key": string;
 }
-type MrinfoPropertyParametersTagged = Required<Pick<MrinfoPropertyParameters, '@type'>> & MrinfoPropertyParameters;
+type MrinfoPropertyParamsDictTagged = Required<Pick<MrinfoPropertyParamsDict, '@type'>> & MrinfoPropertyParamsDict;
 
 
-interface MrinfoFslgradParameters {
+interface MrinfoFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type MrinfoFslgradParametersTagged = Required<Pick<MrinfoFslgradParameters, '@type'>> & MrinfoFslgradParameters;
+type MrinfoFslgradParamsDictTagged = Required<Pick<MrinfoFslgradParamsDict, '@type'>> & MrinfoFslgradParamsDict;
 
 
-interface MrinfoExportGradFslParameters {
+interface MrinfoExportGradFslParamsDict {
     "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
-type MrinfoExportGradFslParametersTagged = Required<Pick<MrinfoExportGradFslParameters, '@type'>> & MrinfoExportGradFslParameters;
+type MrinfoExportGradFslParamsDictTagged = Required<Pick<MrinfoExportGradFslParamsDict, '@type'>> & MrinfoExportGradFslParamsDict;
 
 
-interface MrinfoExportPeEddyParameters {
+interface MrinfoExportPeEddyParamsDict {
     "@type"?: "export_pe_eddy";
     "config": string;
     "indices": string;
 }
-type MrinfoExportPeEddyParametersTagged = Required<Pick<MrinfoExportPeEddyParameters, '@type'>> & MrinfoExportPeEddyParameters;
+type MrinfoExportPeEddyParamsDictTagged = Required<Pick<MrinfoExportPeEddyParamsDict, '@type'>> & MrinfoExportPeEddyParamsDict;
 
 
-interface MrinfoConfigParameters {
+interface MrinfoConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrinfoConfigParametersTagged = Required<Pick<MrinfoConfigParameters, '@type'>> & MrinfoConfigParameters;
+type MrinfoConfigParamsDictTagged = Required<Pick<MrinfoConfigParamsDict, '@type'>> & MrinfoConfigParamsDict;
 
 
-interface MrinfoParameters {
+interface MrinfoParamsDict {
     "@type"?: "mrtrix/mrinfo";
     "all": boolean;
     "name": boolean;
@@ -63,20 +63,20 @@ interface MrinfoParameters {
     "offset": boolean;
     "multiplier": boolean;
     "transform": boolean;
-    "property"?: Array<MrinfoPropertyParameters> | null | undefined;
+    "property"?: Array<MrinfoPropertyParamsDict> | null | undefined;
     "json_keyval"?: string | null | undefined;
     "json_all"?: string | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: MrinfoFslgradParameters | null | undefined;
+    "fslgrad"?: MrinfoFslgradParamsDict | null | undefined;
     "bvalue_scaling"?: string | null | undefined;
     "export_grad_mrtrix"?: string | null | undefined;
-    "export_grad_fsl"?: MrinfoExportGradFslParameters | null | undefined;
+    "export_grad_fsl"?: MrinfoExportGradFslParamsDict | null | undefined;
     "dwgrad": boolean;
     "shell_bvalues": boolean;
     "shell_sizes": boolean;
     "shell_indices": boolean;
     "export_pe_table"?: string | null | undefined;
-    "export_pe_eddy"?: MrinfoExportPeEddyParameters | null | undefined;
+    "export_pe_eddy"?: MrinfoExportPeEddyParamsDict | null | undefined;
     "petable": boolean;
     "nodelete": boolean;
     "info": boolean;
@@ -84,12 +84,12 @@ interface MrinfoParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrinfoConfigParameters> | null | undefined;
+    "config"?: Array<MrinfoConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image": Array<InputPathType>;
 }
-type MrinfoParametersTagged = Required<Pick<MrinfoParameters, '@type'>> & MrinfoParameters;
+type MrinfoParamsDictTagged = Required<Pick<MrinfoParamsDict, '@type'>> & MrinfoParamsDict;
 
 
 /**
@@ -99,9 +99,9 @@ type MrinfoParametersTagged = Required<Pick<MrinfoParameters, '@type'>> & Mrinfo
  *
  * @returns Parameter dictionary
  */
-function mrinfo_property_params(
+function mrinfo_property(
     key: string,
-): MrinfoPropertyParametersTagged {
+): MrinfoPropertyParamsDictTagged {
     const params = {
         "@type": "property" as const,
         "key": key,
@@ -119,7 +119,7 @@ function mrinfo_property_params(
  * @returns Command-line arguments.
  */
 function mrinfo_property_cargs(
-    params: MrinfoPropertyParameters,
+    params: MrinfoPropertyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -137,10 +137,10 @@ function mrinfo_property_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrinfo_fslgrad_params(
+function mrinfo_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): MrinfoFslgradParametersTagged {
+): MrinfoFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -159,7 +159,7 @@ function mrinfo_fslgrad_params(
  * @returns Command-line arguments.
  */
 function mrinfo_fslgrad_cargs(
-    params: MrinfoFslgradParameters,
+    params: MrinfoFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function mrinfo_fslgrad_cargs(
 
 
 /**
- * Output object returned when calling `MrinfoExportGradFslParameters | null(...)`.
+ * Output object returned when calling `MrinfoExportGradFslParamsDict | null(...)`.
  *
  * @interface
  */
@@ -199,10 +199,10 @@ interface MrinfoExportGradFslOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrinfo_export_grad_fsl_params(
+function mrinfo_export_grad_fsl(
     bvecs_path: string,
     bvals_path: string,
-): MrinfoExportGradFslParametersTagged {
+): MrinfoExportGradFslParamsDictTagged {
     const params = {
         "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
@@ -221,7 +221,7 @@ function mrinfo_export_grad_fsl_params(
  * @returns Command-line arguments.
  */
 function mrinfo_export_grad_fsl_cargs(
-    params: MrinfoExportGradFslParameters,
+    params: MrinfoExportGradFslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -241,7 +241,7 @@ function mrinfo_export_grad_fsl_cargs(
  * @returns Outputs object.
  */
 function mrinfo_export_grad_fsl_outputs(
-    params: MrinfoExportGradFslParameters,
+    params: MrinfoExportGradFslParamsDict,
     execution: Execution,
 ): MrinfoExportGradFslOutputs {
     const ret: MrinfoExportGradFslOutputs = {
@@ -254,7 +254,7 @@ function mrinfo_export_grad_fsl_outputs(
 
 
 /**
- * Output object returned when calling `MrinfoExportPeEddyParameters | null(...)`.
+ * Output object returned when calling `MrinfoExportPeEddyParamsDict | null(...)`.
  *
  * @interface
  */
@@ -282,10 +282,10 @@ interface MrinfoExportPeEddyOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrinfo_export_pe_eddy_params(
+function mrinfo_export_pe_eddy(
     config: string,
     indices: string,
-): MrinfoExportPeEddyParametersTagged {
+): MrinfoExportPeEddyParamsDictTagged {
     const params = {
         "@type": "export_pe_eddy" as const,
         "config": config,
@@ -304,7 +304,7 @@ function mrinfo_export_pe_eddy_params(
  * @returns Command-line arguments.
  */
 function mrinfo_export_pe_eddy_cargs(
-    params: MrinfoExportPeEddyParameters,
+    params: MrinfoExportPeEddyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -324,7 +324,7 @@ function mrinfo_export_pe_eddy_cargs(
  * @returns Outputs object.
  */
 function mrinfo_export_pe_eddy_outputs(
-    params: MrinfoExportPeEddyParameters,
+    params: MrinfoExportPeEddyParamsDict,
     execution: Execution,
 ): MrinfoExportPeEddyOutputs {
     const ret: MrinfoExportPeEddyOutputs = {
@@ -344,10 +344,10 @@ function mrinfo_export_pe_eddy_outputs(
  *
  * @returns Parameter dictionary
  */
-function mrinfo_config_params(
+function mrinfo_config(
     key: string,
     value: string,
-): MrinfoConfigParametersTagged {
+): MrinfoConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -366,7 +366,7 @@ function mrinfo_config_params(
  * @returns Command-line arguments.
  */
 function mrinfo_config_cargs(
-    params: MrinfoConfigParameters,
+    params: MrinfoConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -378,7 +378,7 @@ function mrinfo_config_cargs(
 
 
 /**
- * Output object returned when calling `MrinfoParameters(...)`.
+ * Output object returned when calling `MrinfoParamsDict(...)`.
  *
  * @interface
  */
@@ -469,20 +469,20 @@ function mrinfo_params(
     offset: boolean = false,
     multiplier: boolean = false,
     transform: boolean = false,
-    property: Array<MrinfoPropertyParameters> | null = null,
+    property: Array<MrinfoPropertyParamsDict> | null = null,
     json_keyval: string | null = null,
     json_all: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: MrinfoFslgradParameters | null = null,
+    fslgrad: MrinfoFslgradParamsDict | null = null,
     bvalue_scaling: string | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: MrinfoExportGradFslParameters | null = null,
+    export_grad_fsl: MrinfoExportGradFslParamsDict | null = null,
     dwgrad: boolean = false,
     shell_bvalues: boolean = false,
     shell_sizes: boolean = false,
     shell_indices: boolean = false,
     export_pe_table: string | null = null,
-    export_pe_eddy: MrinfoExportPeEddyParameters | null = null,
+    export_pe_eddy: MrinfoExportPeEddyParamsDict | null = null,
     petable: boolean = false,
     nodelete: boolean = false,
     info: boolean = false,
@@ -490,10 +490,10 @@ function mrinfo_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrinfoConfigParameters> | null = null,
+    config: Array<MrinfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrinfoParametersTagged {
+): MrinfoParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrinfo" as const,
         "all": all,
@@ -570,7 +570,7 @@ function mrinfo_params(
  * @returns Command-line arguments.
  */
 function mrinfo_cargs(
-    params: MrinfoParameters,
+    params: MrinfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -715,7 +715,7 @@ function mrinfo_cargs(
  * @returns Outputs object.
  */
 function mrinfo_outputs(
-    params: MrinfoParameters,
+    params: MrinfoParamsDict,
     execution: Execution,
 ): MrinfoOutputs {
     const ret: MrinfoOutputs = {
@@ -760,7 +760,7 @@ function mrinfo_outputs(
  * @returns NamedTuple of outputs (described in `MrinfoOutputs`).
  */
 function mrinfo_execute(
-    params: MrinfoParameters,
+    params: MrinfoParamsDict,
     runner: Runner | null = null,
 ): MrinfoOutputs {
     runner = runner || getGlobalRunner();
@@ -849,20 +849,20 @@ function mrinfo(
     offset: boolean = false,
     multiplier: boolean = false,
     transform: boolean = false,
-    property: Array<MrinfoPropertyParameters> | null = null,
+    property: Array<MrinfoPropertyParamsDict> | null = null,
     json_keyval: string | null = null,
     json_all: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: MrinfoFslgradParameters | null = null,
+    fslgrad: MrinfoFslgradParamsDict | null = null,
     bvalue_scaling: string | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: MrinfoExportGradFslParameters | null = null,
+    export_grad_fsl: MrinfoExportGradFslParamsDict | null = null,
     dwgrad: boolean = false,
     shell_bvalues: boolean = false,
     shell_sizes: boolean = false,
     shell_indices: boolean = false,
     export_pe_table: string | null = null,
-    export_pe_eddy: MrinfoExportPeEddyParameters | null = null,
+    export_pe_eddy: MrinfoExportPeEddyParamsDict | null = null,
     petable: boolean = false,
     nodelete: boolean = false,
     info: boolean = false,
@@ -870,7 +870,7 @@ function mrinfo(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrinfoConfigParameters> | null = null,
+    config: Array<MrinfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -882,15 +882,27 @@ function mrinfo(
 
 export {
       MRINFO_METADATA,
+      MrinfoConfigParamsDict,
+      MrinfoConfigParamsDictTagged,
       MrinfoExportGradFslOutputs,
+      MrinfoExportGradFslParamsDict,
+      MrinfoExportGradFslParamsDictTagged,
       MrinfoExportPeEddyOutputs,
+      MrinfoExportPeEddyParamsDict,
+      MrinfoExportPeEddyParamsDictTagged,
+      MrinfoFslgradParamsDict,
+      MrinfoFslgradParamsDictTagged,
       MrinfoOutputs,
+      MrinfoParamsDict,
+      MrinfoParamsDictTagged,
+      MrinfoPropertyParamsDict,
+      MrinfoPropertyParamsDictTagged,
       mrinfo,
-      mrinfo_config_params,
+      mrinfo_config,
       mrinfo_execute,
-      mrinfo_export_grad_fsl_params,
-      mrinfo_export_pe_eddy_params,
-      mrinfo_fslgrad_params,
+      mrinfo_export_grad_fsl,
+      mrinfo_export_pe_eddy,
+      mrinfo_fslgrad,
       mrinfo_params,
-      mrinfo_property_params,
+      mrinfo_property,
 };

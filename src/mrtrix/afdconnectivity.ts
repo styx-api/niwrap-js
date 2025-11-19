@@ -11,15 +11,15 @@ const AFDCONNECTIVITY_METADATA: Metadata = {
 };
 
 
-interface AfdconnectivityConfigParameters {
+interface AfdconnectivityConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type AfdconnectivityConfigParametersTagged = Required<Pick<AfdconnectivityConfigParameters, '@type'>> & AfdconnectivityConfigParameters;
+type AfdconnectivityConfigParamsDictTagged = Required<Pick<AfdconnectivityConfigParamsDict, '@type'>> & AfdconnectivityConfigParamsDict;
 
 
-interface AfdconnectivityParameters {
+interface AfdconnectivityParamsDict {
     "@type"?: "mrtrix/afdconnectivity";
     "wbft"?: InputPathType | null | undefined;
     "afd_map"?: string | null | undefined;
@@ -29,13 +29,13 @@ interface AfdconnectivityParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<AfdconnectivityConfigParameters> | null | undefined;
+    "config"?: Array<AfdconnectivityConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image": InputPathType;
     "tracks": InputPathType;
 }
-type AfdconnectivityParametersTagged = Required<Pick<AfdconnectivityParameters, '@type'>> & AfdconnectivityParameters;
+type AfdconnectivityParamsDictTagged = Required<Pick<AfdconnectivityParamsDict, '@type'>> & AfdconnectivityParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type AfdconnectivityParametersTagged = Required<Pick<AfdconnectivityParameters, 
  *
  * @returns Parameter dictionary
  */
-function afdconnectivity_config_params(
+function afdconnectivity_config(
     key: string,
     value: string,
-): AfdconnectivityConfigParametersTagged {
+): AfdconnectivityConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -68,7 +68,7 @@ function afdconnectivity_config_params(
  * @returns Command-line arguments.
  */
 function afdconnectivity_config_cargs(
-    params: AfdconnectivityConfigParameters,
+    params: AfdconnectivityConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function afdconnectivity_config_cargs(
 
 
 /**
- * Output object returned when calling `AfdconnectivityParameters(...)`.
+ * Output object returned when calling `AfdconnectivityParamsDict(...)`.
  *
  * @interface
  */
@@ -126,10 +126,10 @@ function afdconnectivity_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<AfdconnectivityConfigParameters> | null = null,
+    config: Array<AfdconnectivityConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): AfdconnectivityParametersTagged {
+): AfdconnectivityParamsDictTagged {
     const params = {
         "@type": "mrtrix/afdconnectivity" as const,
         "all_fixels": all_fixels,
@@ -167,7 +167,7 @@ function afdconnectivity_params(
  * @returns Command-line arguments.
  */
 function afdconnectivity_cargs(
-    params: AfdconnectivityParameters,
+    params: AfdconnectivityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -229,7 +229,7 @@ function afdconnectivity_cargs(
  * @returns Outputs object.
  */
 function afdconnectivity_outputs(
-    params: AfdconnectivityParameters,
+    params: AfdconnectivityParamsDict,
     execution: Execution,
 ): AfdconnectivityOutputs {
     const ret: AfdconnectivityOutputs = {
@@ -271,7 +271,7 @@ function afdconnectivity_outputs(
  * @returns NamedTuple of outputs (described in `AfdconnectivityOutputs`).
  */
 function afdconnectivity_execute(
-    params: AfdconnectivityParameters,
+    params: AfdconnectivityParamsDict,
     runner: Runner | null = null,
 ): AfdconnectivityOutputs {
     runner = runner || getGlobalRunner();
@@ -337,7 +337,7 @@ function afdconnectivity(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<AfdconnectivityConfigParameters> | null = null,
+    config: Array<AfdconnectivityConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -349,9 +349,13 @@ function afdconnectivity(
 
 export {
       AFDCONNECTIVITY_METADATA,
+      AfdconnectivityConfigParamsDict,
+      AfdconnectivityConfigParamsDictTagged,
       AfdconnectivityOutputs,
+      AfdconnectivityParamsDict,
+      AfdconnectivityParamsDictTagged,
       afdconnectivity,
-      afdconnectivity_config_params,
+      afdconnectivity_config,
       afdconnectivity_execute,
       afdconnectivity_params,
 };

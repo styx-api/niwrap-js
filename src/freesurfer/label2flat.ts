@@ -11,18 +11,18 @@ const LABEL2FLAT_METADATA: Metadata = {
 };
 
 
-interface Label2flatParameters {
+interface Label2flatParamsDict {
     "@type"?: "freesurfer/label2flat";
     "subject_name": string;
     "label_file": InputPathType;
     "patch_file": InputPathType;
     "output_file": string;
 }
-type Label2flatParametersTagged = Required<Pick<Label2flatParameters, '@type'>> & Label2flatParameters;
+type Label2flatParamsDictTagged = Required<Pick<Label2flatParamsDict, '@type'>> & Label2flatParamsDict;
 
 
 /**
- * Output object returned when calling `Label2flatParameters(...)`.
+ * Output object returned when calling `Label2flatParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function label2flat_params(
     label_file: InputPathType,
     patch_file: InputPathType,
     output_file: string,
-): Label2flatParametersTagged {
+): Label2flatParamsDictTagged {
     const params = {
         "@type": "freesurfer/label2flat" as const,
         "subject_name": subject_name,
@@ -74,7 +74,7 @@ function label2flat_params(
  * @returns Command-line arguments.
  */
 function label2flat_cargs(
-    params: Label2flatParameters,
+    params: Label2flatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function label2flat_cargs(
  * @returns Outputs object.
  */
 function label2flat_outputs(
-    params: Label2flatParameters,
+    params: Label2flatParamsDict,
     execution: Execution,
 ): Label2flatOutputs {
     const ret: Label2flatOutputs = {
@@ -122,7 +122,7 @@ function label2flat_outputs(
  * @returns NamedTuple of outputs (described in `Label2flatOutputs`).
  */
 function label2flat_execute(
-    params: Label2flatParameters,
+    params: Label2flatParamsDict,
     runner: Runner | null = null,
 ): Label2flatOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function label2flat(
 export {
       LABEL2FLAT_METADATA,
       Label2flatOutputs,
+      Label2flatParamsDict,
+      Label2flatParamsDictTagged,
       label2flat,
       label2flat_execute,
       label2flat_params,

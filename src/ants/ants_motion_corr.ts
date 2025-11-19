@@ -11,7 +11,7 @@ const ANTS_MOTION_CORR_METADATA: Metadata = {
 };
 
 
-interface AntsMotionCorrParameters {
+interface AntsMotionCorrParamsDict {
     "@type"?: "ants/antsMotionCorr";
     "dimensionality"?: 2 | 3 | null | undefined;
     "n_images"?: number | null | undefined;
@@ -30,11 +30,11 @@ interface AntsMotionCorrParameters {
     "interpolation"?: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null | undefined;
     "verbose"?: boolean | null | undefined;
 }
-type AntsMotionCorrParametersTagged = Required<Pick<AntsMotionCorrParameters, '@type'>> & AntsMotionCorrParameters;
+type AntsMotionCorrParamsDictTagged = Required<Pick<AntsMotionCorrParamsDict, '@type'>> & AntsMotionCorrParamsDict;
 
 
 /**
- * Output object returned when calling `AntsMotionCorrParameters(...)`.
+ * Output object returned when calling `AntsMotionCorrParamsDict(...)`.
  *
  * @interface
  */
@@ -97,7 +97,7 @@ function ants_motion_corr_params(
     random_seed: number | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "BSpline" | "BlackmanWindowedSinc" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: boolean | null = null,
-): AntsMotionCorrParametersTagged {
+): AntsMotionCorrParamsDictTagged {
     const params = {
         "@type": "ants/antsMotionCorr" as const,
         "use_scales_estimator": use_scales_estimator,
@@ -156,7 +156,7 @@ function ants_motion_corr_params(
  * @returns Command-line arguments.
  */
 function ants_motion_corr_cargs(
-    params: AntsMotionCorrParameters,
+    params: AntsMotionCorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -261,7 +261,7 @@ function ants_motion_corr_cargs(
  * @returns Outputs object.
  */
 function ants_motion_corr_outputs(
-    params: AntsMotionCorrParameters,
+    params: AntsMotionCorrParamsDict,
     execution: Execution,
 ): AntsMotionCorrOutputs {
     const ret: AntsMotionCorrOutputs = {
@@ -289,7 +289,7 @@ function ants_motion_corr_outputs(
  * @returns NamedTuple of outputs (described in `AntsMotionCorrOutputs`).
  */
 function ants_motion_corr_execute(
-    params: AntsMotionCorrParameters,
+    params: AntsMotionCorrParamsDict,
     runner: Runner | null = null,
 ): AntsMotionCorrOutputs {
     runner = runner || getGlobalRunner();
@@ -358,6 +358,8 @@ function ants_motion_corr(
 export {
       ANTS_MOTION_CORR_METADATA,
       AntsMotionCorrOutputs,
+      AntsMotionCorrParamsDict,
+      AntsMotionCorrParamsDictTagged,
       ants_motion_corr,
       ants_motion_corr_execute,
       ants_motion_corr_params,

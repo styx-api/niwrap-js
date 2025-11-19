@@ -11,7 +11,7 @@ const FSL_BOXPLOT_METADATA: Metadata = {
 };
 
 
-interface FslBoxplotParameters {
+interface FslBoxplotParamsDict {
     "@type"?: "fsl/fsl_boxplot";
     "input_files": Array<InputPathType>;
     "output_image": string;
@@ -23,11 +23,11 @@ interface FslBoxplotParameters {
     "plot_height"?: number | null | undefined;
     "plot_width"?: number | null | undefined;
 }
-type FslBoxplotParametersTagged = Required<Pick<FslBoxplotParameters, '@type'>> & FslBoxplotParameters;
+type FslBoxplotParamsDictTagged = Required<Pick<FslBoxplotParamsDict, '@type'>> & FslBoxplotParamsDict;
 
 
 /**
- * Output object returned when calling `FslBoxplotParameters(...)`.
+ * Output object returned when calling `FslBoxplotParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function fsl_boxplot_params(
     y_label: string | null = null,
     plot_height: number | null = null,
     plot_width: number | null = null,
-): FslBoxplotParametersTagged {
+): FslBoxplotParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_boxplot" as const,
         "input_files": input_files,
@@ -106,7 +106,7 @@ function fsl_boxplot_params(
  * @returns Command-line arguments.
  */
 function fsl_boxplot_cargs(
-    params: FslBoxplotParameters,
+    params: FslBoxplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function fsl_boxplot_cargs(
  * @returns Outputs object.
  */
 function fsl_boxplot_outputs(
-    params: FslBoxplotParameters,
+    params: FslBoxplotParamsDict,
     execution: Execution,
 ): FslBoxplotOutputs {
     const ret: FslBoxplotOutputs = {
@@ -197,7 +197,7 @@ function fsl_boxplot_outputs(
  * @returns NamedTuple of outputs (described in `FslBoxplotOutputs`).
  */
 function fsl_boxplot_execute(
-    params: FslBoxplotParameters,
+    params: FslBoxplotParamsDict,
     runner: Runner | null = null,
 ): FslBoxplotOutputs {
     runner = runner || getGlobalRunner();
@@ -252,6 +252,8 @@ function fsl_boxplot(
 export {
       FSL_BOXPLOT_METADATA,
       FslBoxplotOutputs,
+      FslBoxplotParamsDict,
+      FslBoxplotParamsDictTagged,
       fsl_boxplot,
       fsl_boxplot_execute,
       fsl_boxplot_params,

@@ -11,16 +11,16 @@ const IMCP_METADATA: Metadata = {
 };
 
 
-interface ImcpParameters {
+interface ImcpParamsDict {
     "@type"?: "fsl/imcp";
     "infiles": Array<InputPathType>;
     "output_location": string;
 }
-type ImcpParametersTagged = Required<Pick<ImcpParameters, '@type'>> & ImcpParameters;
+type ImcpParamsDictTagged = Required<Pick<ImcpParamsDict, '@type'>> & ImcpParamsDict;
 
 
 /**
- * Output object returned when calling `ImcpParameters(...)`.
+ * Output object returned when calling `ImcpParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface ImcpOutputs {
 function imcp_params(
     infiles: Array<InputPathType>,
     output_location: string,
-): ImcpParametersTagged {
+): ImcpParamsDictTagged {
     const params = {
         "@type": "fsl/imcp" as const,
         "infiles": infiles,
@@ -66,7 +66,7 @@ function imcp_params(
  * @returns Command-line arguments.
  */
 function imcp_cargs(
-    params: ImcpParameters,
+    params: ImcpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function imcp_cargs(
  * @returns Outputs object.
  */
 function imcp_outputs(
-    params: ImcpParameters,
+    params: ImcpParamsDict,
     execution: Execution,
 ): ImcpOutputs {
     const ret: ImcpOutputs = {
@@ -112,7 +112,7 @@ function imcp_outputs(
  * @returns NamedTuple of outputs (described in `ImcpOutputs`).
  */
 function imcp_execute(
-    params: ImcpParameters,
+    params: ImcpParamsDict,
     runner: Runner | null = null,
 ): ImcpOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function imcp(
 export {
       IMCP_METADATA,
       ImcpOutputs,
+      ImcpParamsDict,
+      ImcpParamsDictTagged,
       imcp,
       imcp_execute,
       imcp_params,

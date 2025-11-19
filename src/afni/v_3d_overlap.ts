@@ -11,17 +11,17 @@ const V_3D_OVERLAP_METADATA: Metadata = {
 };
 
 
-interface V3dOverlapParameters {
+interface V3dOverlapParamsDict {
     "@type"?: "afni/3dOverlap";
     "dataset1": InputPathType;
     "dataset2": Array<InputPathType>;
     "save_prefix"?: string | null | undefined;
 }
-type V3dOverlapParametersTagged = Required<Pick<V3dOverlapParameters, '@type'>> & V3dOverlapParameters;
+type V3dOverlapParamsDictTagged = Required<Pick<V3dOverlapParamsDict, '@type'>> & V3dOverlapParamsDict;
 
 
 /**
- * Output object returned when calling `V3dOverlapParameters(...)`.
+ * Output object returned when calling `V3dOverlapParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function v_3d_overlap_params(
     dataset1: InputPathType,
     dataset2: Array<InputPathType>,
     save_prefix: string | null = null,
-): V3dOverlapParametersTagged {
+): V3dOverlapParamsDictTagged {
     const params = {
         "@type": "afni/3dOverlap" as const,
         "dataset1": dataset1,
@@ -76,7 +76,7 @@ function v_3d_overlap_params(
  * @returns Command-line arguments.
  */
 function v_3d_overlap_cargs(
-    params: V3dOverlapParameters,
+    params: V3dOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -102,7 +102,7 @@ function v_3d_overlap_cargs(
  * @returns Outputs object.
  */
 function v_3d_overlap_outputs(
-    params: V3dOverlapParameters,
+    params: V3dOverlapParamsDict,
     execution: Execution,
 ): V3dOverlapOutputs {
     const ret: V3dOverlapOutputs = {
@@ -129,7 +129,7 @@ function v_3d_overlap_outputs(
  * @returns NamedTuple of outputs (described in `V3dOverlapOutputs`).
  */
 function v_3d_overlap_execute(
-    params: V3dOverlapParameters,
+    params: V3dOverlapParamsDict,
     runner: Runner | null = null,
 ): V3dOverlapOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function v_3d_overlap(
 
 export {
       V3dOverlapOutputs,
+      V3dOverlapParamsDict,
+      V3dOverlapParamsDictTagged,
       V_3D_OVERLAP_METADATA,
       v_3d_overlap,
       v_3d_overlap_execute,

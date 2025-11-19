@@ -11,7 +11,7 @@ const V_3DEDGEDOG_METADATA: Metadata = {
 };
 
 
-interface V3dedgedogParameters {
+interface V3dedgedogParamsDict {
     "@type"?: "afni/3dedgedog";
     "input": InputPathType;
     "prefix": string;
@@ -26,11 +26,11 @@ interface V3dedgedogParameters {
     "edge_bnd_scale": boolean;
     "only2d"?: string | null | undefined;
 }
-type V3dedgedogParametersTagged = Required<Pick<V3dedgedogParameters, '@type'>> & V3dedgedogParameters;
+type V3dedgedogParamsDictTagged = Required<Pick<V3dedgedogParamsDict, '@type'>> & V3dedgedogParamsDict;
 
 
 /**
- * Output object returned when calling `V3dedgedogParameters(...)`.
+ * Output object returned when calling `V3dedgedogParamsDict(...)`.
  *
  * @interface
  */
@@ -93,7 +93,7 @@ function v_3dedgedog_params(
     edge_bnd_side: string | null = null,
     edge_bnd_scale: boolean = false,
     only2d: string | null = null,
-): V3dedgedogParametersTagged {
+): V3dedgedogParamsDictTagged {
     const params = {
         "@type": "afni/3dedgedog" as const,
         "input": input,
@@ -138,7 +138,7 @@ function v_3dedgedog_params(
  * @returns Command-line arguments.
  */
 function v_3dedgedog_cargs(
-    params: V3dedgedogParameters,
+    params: V3dedgedogParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function v_3dedgedog_cargs(
  * @returns Outputs object.
  */
 function v_3dedgedog_outputs(
-    params: V3dedgedogParameters,
+    params: V3dedgedogParamsDict,
     execution: Execution,
 ): V3dedgedogOutputs {
     const ret: V3dedgedogOutputs = {
@@ -242,7 +242,7 @@ function v_3dedgedog_outputs(
  * @returns NamedTuple of outputs (described in `V3dedgedogOutputs`).
  */
 function v_3dedgedog_execute(
-    params: V3dedgedogParameters,
+    params: V3dedgedogParamsDict,
     runner: Runner | null = null,
 ): V3dedgedogOutputs {
     runner = runner || getGlobalRunner();
@@ -302,6 +302,8 @@ function v_3dedgedog(
 
 export {
       V3dedgedogOutputs,
+      V3dedgedogParamsDict,
+      V3dedgedogParamsDictTagged,
       V_3DEDGEDOG_METADATA,
       v_3dedgedog,
       v_3dedgedog_execute,

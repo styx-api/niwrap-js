@@ -11,7 +11,7 @@ const MRI_ROBUST_TEMPLATE_METADATA: Metadata = {
 };
 
 
-interface MriRobustTemplateParameters {
+interface MriRobustTemplateParamsDict {
     "@type"?: "freesurfer/mri_robust_template";
     "mov_files": Array<InputPathType>;
     "template_file": string;
@@ -51,11 +51,11 @@ interface MriRobustTemplateParameters {
     "frobnorm_thresh"?: number | null | undefined;
     "debug_flag": boolean;
 }
-type MriRobustTemplateParametersTagged = Required<Pick<MriRobustTemplateParameters, '@type'>> & MriRobustTemplateParameters;
+type MriRobustTemplateParamsDictTagged = Required<Pick<MriRobustTemplateParamsDict, '@type'>> & MriRobustTemplateParamsDict;
 
 
 /**
- * Output object returned when calling `MriRobustTemplateParameters(...)`.
+ * Output object returned when calling `MriRobustTemplateParamsDict(...)`.
  *
  * @interface
  */
@@ -164,7 +164,7 @@ function mri_robust_template_params(
     res_thresh: number | null = null,
     frobnorm_thresh: number | null = null,
     debug_flag: boolean = false,
-): MriRobustTemplateParametersTagged {
+): MriRobustTemplateParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_robust_template" as const,
         "mov_files": mov_files,
@@ -256,7 +256,7 @@ function mri_robust_template_params(
  * @returns Command-line arguments.
  */
 function mri_robust_template_cargs(
-    params: MriRobustTemplateParameters,
+    params: MriRobustTemplateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -444,7 +444,7 @@ function mri_robust_template_cargs(
  * @returns Outputs object.
  */
 function mri_robust_template_outputs(
-    params: MriRobustTemplateParameters,
+    params: MriRobustTemplateParamsDict,
     execution: Execution,
 ): MriRobustTemplateOutputs {
     const ret: MriRobustTemplateOutputs = {
@@ -473,7 +473,7 @@ function mri_robust_template_outputs(
  * @returns NamedTuple of outputs (described in `MriRobustTemplateOutputs`).
  */
 function mri_robust_template_execute(
-    params: MriRobustTemplateParameters,
+    params: MriRobustTemplateParamsDict,
     runner: Runner | null = null,
 ): MriRobustTemplateOutputs {
     runner = runner || getGlobalRunner();
@@ -584,6 +584,8 @@ function mri_robust_template(
 export {
       MRI_ROBUST_TEMPLATE_METADATA,
       MriRobustTemplateOutputs,
+      MriRobustTemplateParamsDict,
+      MriRobustTemplateParamsDictTagged,
       mri_robust_template,
       mri_robust_template_execute,
       mri_robust_template_params,

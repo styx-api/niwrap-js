@@ -11,16 +11,16 @@ const CONVERT_TO_JPG_METADATA: Metadata = {
 };
 
 
-interface ConvertToJpgParameters {
+interface ConvertToJpgParamsDict {
     "@type"?: "ants/ConvertToJpg";
     "infile": InputPathType;
     "outfile": string;
 }
-type ConvertToJpgParametersTagged = Required<Pick<ConvertToJpgParameters, '@type'>> & ConvertToJpgParameters;
+type ConvertToJpgParamsDictTagged = Required<Pick<ConvertToJpgParamsDict, '@type'>> & ConvertToJpgParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertToJpgParameters(...)`.
+ * Output object returned when calling `ConvertToJpgParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface ConvertToJpgOutputs {
 function convert_to_jpg_params(
     infile: InputPathType,
     outfile: string,
-): ConvertToJpgParametersTagged {
+): ConvertToJpgParamsDictTagged {
     const params = {
         "@type": "ants/ConvertToJpg" as const,
         "infile": infile,
@@ -66,7 +66,7 @@ function convert_to_jpg_params(
  * @returns Command-line arguments.
  */
 function convert_to_jpg_cargs(
-    params: ConvertToJpgParameters,
+    params: ConvertToJpgParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function convert_to_jpg_cargs(
  * @returns Outputs object.
  */
 function convert_to_jpg_outputs(
-    params: ConvertToJpgParameters,
+    params: ConvertToJpgParamsDict,
     execution: Execution,
 ): ConvertToJpgOutputs {
     const ret: ConvertToJpgOutputs = {
@@ -112,7 +112,7 @@ function convert_to_jpg_outputs(
  * @returns NamedTuple of outputs (described in `ConvertToJpgOutputs`).
  */
 function convert_to_jpg_execute(
-    params: ConvertToJpgParameters,
+    params: ConvertToJpgParamsDict,
     runner: Runner | null = null,
 ): ConvertToJpgOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function convert_to_jpg(
 export {
       CONVERT_TO_JPG_METADATA,
       ConvertToJpgOutputs,
+      ConvertToJpgParamsDict,
+      ConvertToJpgParamsDictTagged,
       convert_to_jpg,
       convert_to_jpg_execute,
       convert_to_jpg_params,

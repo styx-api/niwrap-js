@@ -11,7 +11,7 @@ const MRI_NL_ALIGN_METADATA: Metadata = {
 };
 
 
-interface MriNlAlignParameters {
+interface MriNlAlignParamsDict {
     "@type"?: "freesurfer/mri_nl_align";
     "source": InputPathType;
     "target": InputPathType;
@@ -62,11 +62,11 @@ interface MriNlAlignParameters {
     "exp_k"?: number | null | undefined;
     "diagnostics"?: number | null | undefined;
 }
-type MriNlAlignParametersTagged = Required<Pick<MriNlAlignParameters, '@type'>> & MriNlAlignParameters;
+type MriNlAlignParamsDictTagged = Required<Pick<MriNlAlignParamsDict, '@type'>> & MriNlAlignParamsDict;
 
 
 /**
- * Output object returned when calling `MriNlAlignParameters(...)`.
+ * Output object returned when calling `MriNlAlignParamsDict(...)`.
  *
  * @interface
  */
@@ -185,7 +185,7 @@ function mri_nl_align_params(
     smooth_averages: number | null = null,
     exp_k: number | null = null,
     diagnostics: number | null = null,
-): MriNlAlignParametersTagged {
+): MriNlAlignParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_nl_align" as const,
         "source": source,
@@ -326,7 +326,7 @@ function mri_nl_align_params(
  * @returns Command-line arguments.
  */
 function mri_nl_align_cargs(
-    params: MriNlAlignParameters,
+    params: MriNlAlignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -596,7 +596,7 @@ function mri_nl_align_cargs(
  * @returns Outputs object.
  */
 function mri_nl_align_outputs(
-    params: MriNlAlignParameters,
+    params: MriNlAlignParamsDict,
     execution: Execution,
 ): MriNlAlignOutputs {
     const ret: MriNlAlignOutputs = {
@@ -622,7 +622,7 @@ function mri_nl_align_outputs(
  * @returns NamedTuple of outputs (described in `MriNlAlignOutputs`).
  */
 function mri_nl_align_execute(
-    params: MriNlAlignParameters,
+    params: MriNlAlignParamsDict,
     runner: Runner | null = null,
 ): MriNlAlignOutputs {
     runner = runner || getGlobalRunner();
@@ -755,6 +755,8 @@ function mri_nl_align(
 export {
       MRI_NL_ALIGN_METADATA,
       MriNlAlignOutputs,
+      MriNlAlignParamsDict,
+      MriNlAlignParamsDictTagged,
       mri_nl_align,
       mri_nl_align_execute,
       mri_nl_align_params,

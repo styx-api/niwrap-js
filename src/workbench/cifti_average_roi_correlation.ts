@@ -10,25 +10,25 @@ const CIFTI_AVERAGE_ROI_CORRELATION_METADATA: Metadata = {
 };
 
 
-interface CiftiAverageRoiCorrelationCiftiRoiParameters {
+interface CiftiAverageRoiCorrelationCiftiRoiParamsDict {
     "@type"?: "cifti-roi";
     "roi-cifti": InputPathType;
     "in-memory": boolean;
 }
-type CiftiAverageRoiCorrelationCiftiRoiParametersTagged = Required<Pick<CiftiAverageRoiCorrelationCiftiRoiParameters, '@type'>> & CiftiAverageRoiCorrelationCiftiRoiParameters;
+type CiftiAverageRoiCorrelationCiftiRoiParamsDictTagged = Required<Pick<CiftiAverageRoiCorrelationCiftiRoiParamsDict, '@type'>> & CiftiAverageRoiCorrelationCiftiRoiParamsDict;
 
 
-interface CiftiAverageRoiCorrelationCiftiParameters {
+interface CiftiAverageRoiCorrelationCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
 }
-type CiftiAverageRoiCorrelationCiftiParametersTagged = Required<Pick<CiftiAverageRoiCorrelationCiftiParameters, '@type'>> & CiftiAverageRoiCorrelationCiftiParameters;
+type CiftiAverageRoiCorrelationCiftiParamsDictTagged = Required<Pick<CiftiAverageRoiCorrelationCiftiParamsDict, '@type'>> & CiftiAverageRoiCorrelationCiftiParamsDict;
 
 
-interface CiftiAverageRoiCorrelationParameters {
+interface CiftiAverageRoiCorrelationParamsDict {
     "@type"?: "workbench/cifti-average-roi-correlation";
     "cifti-out": string;
-    "cifti-roi"?: CiftiAverageRoiCorrelationCiftiRoiParameters | null | undefined;
+    "cifti-roi"?: CiftiAverageRoiCorrelationCiftiRoiParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
@@ -36,9 +36,9 @@ interface CiftiAverageRoiCorrelationParameters {
     "left-surf"?: InputPathType | null | undefined;
     "right-surf"?: InputPathType | null | undefined;
     "cerebellum-surf"?: InputPathType | null | undefined;
-    "cifti"?: Array<CiftiAverageRoiCorrelationCiftiParameters> | null | undefined;
+    "cifti"?: Array<CiftiAverageRoiCorrelationCiftiParamsDict> | null | undefined;
 }
-type CiftiAverageRoiCorrelationParametersTagged = Required<Pick<CiftiAverageRoiCorrelationParameters, '@type'>> & CiftiAverageRoiCorrelationParameters;
+type CiftiAverageRoiCorrelationParamsDictTagged = Required<Pick<CiftiAverageRoiCorrelationParamsDict, '@type'>> & CiftiAverageRoiCorrelationParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type CiftiAverageRoiCorrelationParametersTagged = Required<Pick<CiftiAverageRoiC
  *
  * @returns Parameter dictionary
  */
-function cifti_average_roi_correlation_cifti_roi_params(
+function cifti_average_roi_correlation_cifti_roi(
     roi_cifti: InputPathType,
     in_memory: boolean = false,
-): CiftiAverageRoiCorrelationCiftiRoiParametersTagged {
+): CiftiAverageRoiCorrelationCiftiRoiParamsDictTagged {
     const params = {
         "@type": "cifti-roi" as const,
         "roi-cifti": roi_cifti,
@@ -71,7 +71,7 @@ function cifti_average_roi_correlation_cifti_roi_params(
  * @returns Command-line arguments.
  */
 function cifti_average_roi_correlation_cifti_roi_cargs(
-    params: CiftiAverageRoiCorrelationCiftiRoiParameters,
+    params: CiftiAverageRoiCorrelationCiftiRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,9 +93,9 @@ function cifti_average_roi_correlation_cifti_roi_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_average_roi_correlation_cifti_params(
+function cifti_average_roi_correlation_cifti(
     cifti_in: InputPathType,
-): CiftiAverageRoiCorrelationCiftiParametersTagged {
+): CiftiAverageRoiCorrelationCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -113,7 +113,7 @@ function cifti_average_roi_correlation_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_average_roi_correlation_cifti_cargs(
-    params: CiftiAverageRoiCorrelationCiftiParameters,
+    params: CiftiAverageRoiCorrelationCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function cifti_average_roi_correlation_cifti_cargs(
 
 
 /**
- * Output object returned when calling `CiftiAverageRoiCorrelationParameters(...)`.
+ * Output object returned when calling `CiftiAverageRoiCorrelationParamsDict(...)`.
  *
  * @interface
  */
@@ -181,9 +181,9 @@ function cifti_average_roi_correlation_params(
     left_surf: InputPathType | null,
     right_surf: InputPathType | null,
     cerebellum_surf: InputPathType | null,
-    cifti_roi: CiftiAverageRoiCorrelationCiftiRoiParameters | null = null,
-    cifti: Array<CiftiAverageRoiCorrelationCiftiParameters> | null = null,
-): CiftiAverageRoiCorrelationParametersTagged {
+    cifti_roi: CiftiAverageRoiCorrelationCiftiRoiParamsDict | null = null,
+    cifti: Array<CiftiAverageRoiCorrelationCiftiParamsDict> | null = null,
+): CiftiAverageRoiCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-average-roi-correlation" as const,
         "cifti-out": cifti_out,
@@ -228,7 +228,7 @@ function cifti_average_roi_correlation_params(
  * @returns Command-line arguments.
  */
 function cifti_average_roi_correlation_cargs(
-    params: CiftiAverageRoiCorrelationParameters,
+    params: CiftiAverageRoiCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function cifti_average_roi_correlation_cargs(
  * @returns Outputs object.
  */
 function cifti_average_roi_correlation_outputs(
-    params: CiftiAverageRoiCorrelationParameters,
+    params: CiftiAverageRoiCorrelationParamsDict,
     execution: Execution,
 ): CiftiAverageRoiCorrelationOutputs {
     const ret: CiftiAverageRoiCorrelationOutputs = {
@@ -290,7 +290,7 @@ function cifti_average_roi_correlation_outputs(
  * @returns NamedTuple of outputs (described in `CiftiAverageRoiCorrelationOutputs`).
  */
 function cifti_average_roi_correlation_execute(
-    params: CiftiAverageRoiCorrelationParameters,
+    params: CiftiAverageRoiCorrelationParamsDict,
     runner: Runner | null = null,
 ): CiftiAverageRoiCorrelationOutputs {
     runner = runner || getGlobalRunner();
@@ -345,8 +345,8 @@ function cifti_average_roi_correlation(
     left_surf: InputPathType | null,
     right_surf: InputPathType | null,
     cerebellum_surf: InputPathType | null,
-    cifti_roi: CiftiAverageRoiCorrelationCiftiRoiParameters | null = null,
-    cifti: Array<CiftiAverageRoiCorrelationCiftiParameters> | null = null,
+    cifti_roi: CiftiAverageRoiCorrelationCiftiRoiParamsDict | null = null,
+    cifti: Array<CiftiAverageRoiCorrelationCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageRoiCorrelationOutputs {
     const params = cifti_average_roi_correlation_params(cifti_out, roi_metric, roi_metric_, roi_metric_2, roi_vol, left_surf, right_surf, cerebellum_surf, cifti_roi, cifti)
@@ -356,10 +356,16 @@ function cifti_average_roi_correlation(
 
 export {
       CIFTI_AVERAGE_ROI_CORRELATION_METADATA,
+      CiftiAverageRoiCorrelationCiftiParamsDict,
+      CiftiAverageRoiCorrelationCiftiParamsDictTagged,
+      CiftiAverageRoiCorrelationCiftiRoiParamsDict,
+      CiftiAverageRoiCorrelationCiftiRoiParamsDictTagged,
       CiftiAverageRoiCorrelationOutputs,
+      CiftiAverageRoiCorrelationParamsDict,
+      CiftiAverageRoiCorrelationParamsDictTagged,
       cifti_average_roi_correlation,
-      cifti_average_roi_correlation_cifti_params,
-      cifti_average_roi_correlation_cifti_roi_params,
+      cifti_average_roi_correlation_cifti,
+      cifti_average_roi_correlation_cifti_roi,
       cifti_average_roi_correlation_execute,
       cifti_average_roi_correlation_params,
 };

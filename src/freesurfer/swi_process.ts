@@ -11,7 +11,7 @@ const SWI_PROCESS_METADATA: Metadata = {
 };
 
 
-interface SwiProcessParameters {
+interface SwiProcessParamsDict {
     "@type"?: "freesurfer/swi_process";
     "magnitude_image": InputPathType;
     "phase_image": InputPathType;
@@ -25,11 +25,11 @@ interface SwiProcessParameters {
     "mip_level"?: number | null | undefined;
     "phase_mask_method"?: string | null | undefined;
 }
-type SwiProcessParametersTagged = Required<Pick<SwiProcessParameters, '@type'>> & SwiProcessParameters;
+type SwiProcessParamsDictTagged = Required<Pick<SwiProcessParamsDict, '@type'>> & SwiProcessParamsDict;
 
 
 /**
- * Output object returned when calling `SwiProcessParameters(...)`.
+ * Output object returned when calling `SwiProcessParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function swi_process_params(
     phase_multiplications: number | null = null,
     mip_level: number | null = null,
     phase_mask_method: string | null = null,
-): SwiProcessParametersTagged {
+): SwiProcessParamsDictTagged {
     const params = {
         "@type": "freesurfer/swi_process" as const,
         "magnitude_image": magnitude_image,
@@ -118,7 +118,7 @@ function swi_process_params(
  * @returns Command-line arguments.
  */
 function swi_process_cargs(
-    params: SwiProcessParameters,
+    params: SwiProcessParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -187,7 +187,7 @@ function swi_process_cargs(
  * @returns Outputs object.
  */
 function swi_process_outputs(
-    params: SwiProcessParameters,
+    params: SwiProcessParamsDict,
     execution: Execution,
 ): SwiProcessOutputs {
     const ret: SwiProcessOutputs = {
@@ -213,7 +213,7 @@ function swi_process_outputs(
  * @returns NamedTuple of outputs (described in `SwiProcessOutputs`).
  */
 function swi_process_execute(
-    params: SwiProcessParameters,
+    params: SwiProcessParamsDict,
     runner: Runner | null = null,
 ): SwiProcessOutputs {
     runner = runner || getGlobalRunner();
@@ -272,6 +272,8 @@ function swi_process(
 export {
       SWI_PROCESS_METADATA,
       SwiProcessOutputs,
+      SwiProcessParamsDict,
+      SwiProcessParamsDictTagged,
       swi_process,
       swi_process_execute,
       swi_process_params,

@@ -11,7 +11,7 @@ const AP_RUN_SIMPLE_REST_TCSH_METADATA: Metadata = {
 };
 
 
-interface ApRunSimpleRestTcshParameters {
+interface ApRunSimpleRestTcshParamsDict {
     "@type"?: "afni/ap_run_simple_rest.tcsh";
     "anat"?: InputPathType | null | undefined;
     "epi": Array<InputPathType>;
@@ -24,11 +24,11 @@ interface ApRunSimpleRestTcshParameters {
     "verb"?: number | null | undefined;
     "echo": boolean;
 }
-type ApRunSimpleRestTcshParametersTagged = Required<Pick<ApRunSimpleRestTcshParameters, '@type'>> & ApRunSimpleRestTcshParameters;
+type ApRunSimpleRestTcshParamsDictTagged = Required<Pick<ApRunSimpleRestTcshParamsDict, '@type'>> & ApRunSimpleRestTcshParamsDict;
 
 
 /**
- * Output object returned when calling `ApRunSimpleRestTcshParameters(...)`.
+ * Output object returned when calling `ApRunSimpleRestTcshParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function ap_run_simple_rest_tcsh_params(
     compressor: string | null = null,
     verb: number | null = null,
     echo: boolean = false,
-): ApRunSimpleRestTcshParametersTagged {
+): ApRunSimpleRestTcshParamsDictTagged {
     const params = {
         "@type": "afni/ap_run_simple_rest.tcsh" as const,
         "epi": epi,
@@ -118,7 +118,7 @@ function ap_run_simple_rest_tcsh_params(
  * @returns Command-line arguments.
  */
 function ap_run_simple_rest_tcsh_cargs(
-    params: ApRunSimpleRestTcshParameters,
+    params: ApRunSimpleRestTcshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function ap_run_simple_rest_tcsh_cargs(
  * @returns Outputs object.
  */
 function ap_run_simple_rest_tcsh_outputs(
-    params: ApRunSimpleRestTcshParameters,
+    params: ApRunSimpleRestTcshParamsDict,
     execution: Execution,
 ): ApRunSimpleRestTcshOutputs {
     const ret: ApRunSimpleRestTcshOutputs = {
@@ -213,7 +213,7 @@ function ap_run_simple_rest_tcsh_outputs(
  * @returns NamedTuple of outputs (described in `ApRunSimpleRestTcshOutputs`).
  */
 function ap_run_simple_rest_tcsh_execute(
-    params: ApRunSimpleRestTcshParameters,
+    params: ApRunSimpleRestTcshParamsDict,
     runner: Runner | null = null,
 ): ApRunSimpleRestTcshOutputs {
     runner = runner || getGlobalRunner();
@@ -270,6 +270,8 @@ function ap_run_simple_rest_tcsh(
 export {
       AP_RUN_SIMPLE_REST_TCSH_METADATA,
       ApRunSimpleRestTcshOutputs,
+      ApRunSimpleRestTcshParamsDict,
+      ApRunSimpleRestTcshParamsDictTagged,
       ap_run_simple_rest_tcsh,
       ap_run_simple_rest_tcsh_execute,
       ap_run_simple_rest_tcsh_params,

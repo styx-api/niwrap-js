@@ -11,7 +11,7 @@ const V__FSLABEL2DSET_METADATA: Metadata = {
 };
 
 
-interface VFslabel2dsetParameters {
+interface VFslabel2dsetParamsDict {
     "@type"?: "afni/@FSlabel2dset";
     "fs_label_file": InputPathType;
     "val"?: number | null | undefined;
@@ -19,11 +19,11 @@ interface VFslabel2dsetParameters {
     "echo": boolean;
     "keep_tmp": boolean;
 }
-type VFslabel2dsetParametersTagged = Required<Pick<VFslabel2dsetParameters, '@type'>> & VFslabel2dsetParameters;
+type VFslabel2dsetParamsDictTagged = Required<Pick<VFslabel2dsetParamsDict, '@type'>> & VFslabel2dsetParamsDict;
 
 
 /**
- * Output object returned when calling `VFslabel2dsetParameters(...)`.
+ * Output object returned when calling `VFslabel2dsetParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function v__fslabel2dset_params(
     help: boolean = false,
     echo: boolean = false,
     keep_tmp: boolean = false,
-): VFslabel2dsetParametersTagged {
+): VFslabel2dsetParamsDictTagged {
     const params = {
         "@type": "afni/@FSlabel2dset" as const,
         "fs_label_file": fs_label_file,
@@ -76,7 +76,7 @@ function v__fslabel2dset_params(
  * @returns Command-line arguments.
  */
 function v__fslabel2dset_cargs(
-    params: VFslabel2dsetParameters,
+    params: VFslabel2dsetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function v__fslabel2dset_cargs(
  * @returns Outputs object.
  */
 function v__fslabel2dset_outputs(
-    params: VFslabel2dsetParameters,
+    params: VFslabel2dsetParamsDict,
     execution: Execution,
 ): VFslabel2dsetOutputs {
     const ret: VFslabel2dsetOutputs = {
@@ -138,7 +138,7 @@ function v__fslabel2dset_outputs(
  * @returns NamedTuple of outputs (described in `VFslabel2dsetOutputs`).
  */
 function v__fslabel2dset_execute(
-    params: VFslabel2dsetParameters,
+    params: VFslabel2dsetParamsDict,
     runner: Runner | null = null,
 ): VFslabel2dsetOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function v__fslabel2dset(
 
 export {
       VFslabel2dsetOutputs,
+      VFslabel2dsetParamsDict,
+      VFslabel2dsetParamsDictTagged,
       V__FSLABEL2DSET_METADATA,
       v__fslabel2dset,
       v__fslabel2dset_execute,

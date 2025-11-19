@@ -11,7 +11,7 @@ const WM_ANAT_SNR_METADATA: Metadata = {
 };
 
 
-interface WmAnatSnrParameters {
+interface WmAnatSnrParamsDict {
     "@type"?: "freesurfer/wm-anat-snr";
     "subject": string;
     "output_file": string;
@@ -21,11 +21,11 @@ interface WmAnatSnrParameters {
     "cleanup": boolean;
     "no_cleanup": boolean;
 }
-type WmAnatSnrParametersTagged = Required<Pick<WmAnatSnrParameters, '@type'>> & WmAnatSnrParameters;
+type WmAnatSnrParamsDictTagged = Required<Pick<WmAnatSnrParamsDict, '@type'>> & WmAnatSnrParamsDict;
 
 
 /**
- * Output object returned when calling `WmAnatSnrParameters(...)`.
+ * Output object returned when calling `WmAnatSnrParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function wm_anat_snr_params(
     tmp_dir: string | null = null,
     cleanup: boolean = false,
     no_cleanup: boolean = false,
-): WmAnatSnrParametersTagged {
+): WmAnatSnrParamsDictTagged {
     const params = {
         "@type": "freesurfer/wm-anat-snr" as const,
         "subject": subject,
@@ -90,7 +90,7 @@ function wm_anat_snr_params(
  * @returns Command-line arguments.
  */
 function wm_anat_snr_cargs(
-    params: WmAnatSnrParameters,
+    params: WmAnatSnrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -137,7 +137,7 @@ function wm_anat_snr_cargs(
  * @returns Outputs object.
  */
 function wm_anat_snr_outputs(
-    params: WmAnatSnrParameters,
+    params: WmAnatSnrParamsDict,
     execution: Execution,
 ): WmAnatSnrOutputs {
     const ret: WmAnatSnrOutputs = {
@@ -163,7 +163,7 @@ function wm_anat_snr_outputs(
  * @returns NamedTuple of outputs (described in `WmAnatSnrOutputs`).
  */
 function wm_anat_snr_execute(
-    params: WmAnatSnrParameters,
+    params: WmAnatSnrParamsDict,
     runner: Runner | null = null,
 ): WmAnatSnrOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function wm_anat_snr(
 export {
       WM_ANAT_SNR_METADATA,
       WmAnatSnrOutputs,
+      WmAnatSnrParamsDict,
+      WmAnatSnrParamsDictTagged,
       wm_anat_snr,
       wm_anat_snr_execute,
       wm_anat_snr_params,

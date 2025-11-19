@@ -11,15 +11,15 @@ const MRIS_ERRORS_METADATA: Metadata = {
 };
 
 
-interface MrisErrorsParameters {
+interface MrisErrorsParamsDict {
     "@type"?: "freesurfer/mris_errors";
     "input_image_file": InputPathType;
 }
-type MrisErrorsParametersTagged = Required<Pick<MrisErrorsParameters, '@type'>> & MrisErrorsParameters;
+type MrisErrorsParamsDictTagged = Required<Pick<MrisErrorsParamsDict, '@type'>> & MrisErrorsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisErrorsParameters(...)`.
+ * Output object returned when calling `MrisErrorsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MrisErrorsOutputs {
  */
 function mris_errors_params(
     input_image_file: InputPathType,
-): MrisErrorsParametersTagged {
+): MrisErrorsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_errors" as const,
         "input_image_file": input_image_file,
@@ -58,7 +58,7 @@ function mris_errors_params(
  * @returns Command-line arguments.
  */
 function mris_errors_cargs(
-    params: MrisErrorsParameters,
+    params: MrisErrorsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function mris_errors_cargs(
  * @returns Outputs object.
  */
 function mris_errors_outputs(
-    params: MrisErrorsParameters,
+    params: MrisErrorsParamsDict,
     execution: Execution,
 ): MrisErrorsOutputs {
     const ret: MrisErrorsOutputs = {
@@ -102,7 +102,7 @@ function mris_errors_outputs(
  * @returns NamedTuple of outputs (described in `MrisErrorsOutputs`).
  */
 function mris_errors_execute(
-    params: MrisErrorsParameters,
+    params: MrisErrorsParamsDict,
     runner: Runner | null = null,
 ): MrisErrorsOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function mris_errors(
 export {
       MRIS_ERRORS_METADATA,
       MrisErrorsOutputs,
+      MrisErrorsParamsDict,
+      MrisErrorsParamsDictTagged,
       mris_errors,
       mris_errors_execute,
       mris_errors_params,

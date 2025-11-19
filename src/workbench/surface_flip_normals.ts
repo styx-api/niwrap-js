@@ -10,16 +10,16 @@ const SURFACE_FLIP_NORMALS_METADATA: Metadata = {
 };
 
 
-interface SurfaceFlipNormalsParameters {
+interface SurfaceFlipNormalsParamsDict {
     "@type"?: "workbench/surface-flip-normals";
     "surface-out": string;
     "surface": InputPathType;
 }
-type SurfaceFlipNormalsParametersTagged = Required<Pick<SurfaceFlipNormalsParameters, '@type'>> & SurfaceFlipNormalsParameters;
+type SurfaceFlipNormalsParamsDictTagged = Required<Pick<SurfaceFlipNormalsParamsDict, '@type'>> & SurfaceFlipNormalsParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceFlipNormalsParameters(...)`.
+ * Output object returned when calling `SurfaceFlipNormalsParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface SurfaceFlipNormalsOutputs {
 function surface_flip_normals_params(
     surface_out: string,
     surface: InputPathType,
-): SurfaceFlipNormalsParametersTagged {
+): SurfaceFlipNormalsParamsDictTagged {
     const params = {
         "@type": "workbench/surface-flip-normals" as const,
         "surface-out": surface_out,
@@ -65,7 +65,7 @@ function surface_flip_normals_params(
  * @returns Command-line arguments.
  */
 function surface_flip_normals_cargs(
-    params: SurfaceFlipNormalsParameters,
+    params: SurfaceFlipNormalsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function surface_flip_normals_cargs(
  * @returns Outputs object.
  */
 function surface_flip_normals_outputs(
-    params: SurfaceFlipNormalsParameters,
+    params: SurfaceFlipNormalsParamsDict,
     execution: Execution,
 ): SurfaceFlipNormalsOutputs {
     const ret: SurfaceFlipNormalsOutputs = {
@@ -110,7 +110,7 @@ function surface_flip_normals_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
  */
 function surface_flip_normals_execute(
-    params: SurfaceFlipNormalsParameters,
+    params: SurfaceFlipNormalsParamsDict,
     runner: Runner | null = null,
 ): SurfaceFlipNormalsOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function surface_flip_normals(
 export {
       SURFACE_FLIP_NORMALS_METADATA,
       SurfaceFlipNormalsOutputs,
+      SurfaceFlipNormalsParamsDict,
+      SurfaceFlipNormalsParamsDictTagged,
       surface_flip_normals,
       surface_flip_normals_execute,
       surface_flip_normals_params,

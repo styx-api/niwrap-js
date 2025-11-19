@@ -11,7 +11,7 @@ const SAMSEG_LONG_METADATA: Metadata = {
 };
 
 
-interface SamsegLongParameters {
+interface SamsegLongParamsDict {
     "@type"?: "freesurfer/samseg-long";
     "output_dir": string;
     "input_files": Array<InputPathType>;
@@ -21,11 +21,11 @@ interface SamsegLongParameters {
     "save_posteriors": boolean;
     "force_update": boolean;
 }
-type SamsegLongParametersTagged = Required<Pick<SamsegLongParameters, '@type'>> & SamsegLongParameters;
+type SamsegLongParamsDictTagged = Required<Pick<SamsegLongParamsDict, '@type'>> & SamsegLongParamsDict;
 
 
 /**
- * Output object returned when calling `SamsegLongParameters(...)`.
+ * Output object returned when calling `SamsegLongParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function samseg_long_params(
     threads: number | null = null,
     save_posteriors: boolean = false,
     force_update: boolean = false,
-): SamsegLongParametersTagged {
+): SamsegLongParamsDictTagged {
     const params = {
         "@type": "freesurfer/samseg-long" as const,
         "output_dir": output_dir,
@@ -96,7 +96,7 @@ function samseg_long_params(
  * @returns Command-line arguments.
  */
 function samseg_long_cargs(
-    params: SamsegLongParameters,
+    params: SamsegLongParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function samseg_long_cargs(
  * @returns Outputs object.
  */
 function samseg_long_outputs(
-    params: SamsegLongParameters,
+    params: SamsegLongParamsDict,
     execution: Execution,
 ): SamsegLongOutputs {
     const ret: SamsegLongOutputs = {
@@ -168,7 +168,7 @@ function samseg_long_outputs(
  * @returns NamedTuple of outputs (described in `SamsegLongOutputs`).
  */
 function samseg_long_execute(
-    params: SamsegLongParameters,
+    params: SamsegLongParamsDict,
     runner: Runner | null = null,
 ): SamsegLongOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function samseg_long(
 export {
       SAMSEG_LONG_METADATA,
       SamsegLongOutputs,
+      SamsegLongParamsDict,
+      SamsegLongParamsDictTagged,
       samseg_long,
       samseg_long_execute,
       samseg_long_params,

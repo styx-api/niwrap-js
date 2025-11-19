@@ -11,26 +11,26 @@ const WARP2METRIC_METADATA: Metadata = {
 };
 
 
-interface Warp2metricFcParameters {
+interface Warp2metricFcParamsDict {
     "@type"?: "fc";
     "template_fixel_directory": InputPathType;
     "output_fixel_directory": string;
     "output_fixel_data": string;
 }
-type Warp2metricFcParametersTagged = Required<Pick<Warp2metricFcParameters, '@type'>> & Warp2metricFcParameters;
+type Warp2metricFcParamsDictTagged = Required<Pick<Warp2metricFcParamsDict, '@type'>> & Warp2metricFcParamsDict;
 
 
-interface Warp2metricConfigParameters {
+interface Warp2metricConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Warp2metricConfigParametersTagged = Required<Pick<Warp2metricConfigParameters, '@type'>> & Warp2metricConfigParameters;
+type Warp2metricConfigParamsDictTagged = Required<Pick<Warp2metricConfigParamsDict, '@type'>> & Warp2metricConfigParamsDict;
 
 
-interface Warp2metricParameters {
+interface Warp2metricParamsDict {
     "@type"?: "mrtrix/warp2metric";
-    "fc"?: Warp2metricFcParameters | null | undefined;
+    "fc"?: Warp2metricFcParamsDict | null | undefined;
     "jmat"?: string | null | undefined;
     "jdet"?: string | null | undefined;
     "info": boolean;
@@ -38,12 +38,12 @@ interface Warp2metricParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Warp2metricConfigParameters> | null | undefined;
+    "config"?: Array<Warp2metricConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in": InputPathType;
 }
-type Warp2metricParametersTagged = Required<Pick<Warp2metricParameters, '@type'>> & Warp2metricParameters;
+type Warp2metricParamsDictTagged = Required<Pick<Warp2metricParamsDict, '@type'>> & Warp2metricParamsDict;
 
 
 /**
@@ -55,11 +55,11 @@ type Warp2metricParametersTagged = Required<Pick<Warp2metricParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function warp2metric_fc_params(
+function warp2metric_fc(
     template_fixel_directory: InputPathType,
     output_fixel_directory: string,
     output_fixel_data: string,
-): Warp2metricFcParametersTagged {
+): Warp2metricFcParamsDictTagged {
     const params = {
         "@type": "fc" as const,
         "template_fixel_directory": template_fixel_directory,
@@ -79,7 +79,7 @@ function warp2metric_fc_params(
  * @returns Command-line arguments.
  */
 function warp2metric_fc_cargs(
-    params: Warp2metricFcParameters,
+    params: Warp2metricFcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,10 +99,10 @@ function warp2metric_fc_cargs(
  *
  * @returns Parameter dictionary
  */
-function warp2metric_config_params(
+function warp2metric_config(
     key: string,
     value: string,
-): Warp2metricConfigParametersTagged {
+): Warp2metricConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -121,7 +121,7 @@ function warp2metric_config_params(
  * @returns Command-line arguments.
  */
 function warp2metric_config_cargs(
-    params: Warp2metricConfigParameters,
+    params: Warp2metricConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function warp2metric_config_cargs(
 
 
 /**
- * Output object returned when calling `Warp2metricParameters(...)`.
+ * Output object returned when calling `Warp2metricParamsDict(...)`.
  *
  * @interface
  */
@@ -173,7 +173,7 @@ interface Warp2metricOutputs {
  */
 function warp2metric_params(
     in_: InputPathType,
-    fc: Warp2metricFcParameters | null = null,
+    fc: Warp2metricFcParamsDict | null = null,
     jmat: string | null = null,
     jdet: string | null = null,
     info: boolean = false,
@@ -181,10 +181,10 @@ function warp2metric_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Warp2metricConfigParameters> | null = null,
+    config: Array<Warp2metricConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Warp2metricParametersTagged {
+): Warp2metricParamsDictTagged {
     const params = {
         "@type": "mrtrix/warp2metric" as const,
         "info": info,
@@ -223,7 +223,7 @@ function warp2metric_params(
  * @returns Command-line arguments.
  */
 function warp2metric_cargs(
-    params: Warp2metricParameters,
+    params: Warp2metricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -284,7 +284,7 @@ function warp2metric_cargs(
  * @returns Outputs object.
  */
 function warp2metric_outputs(
-    params: Warp2metricParameters,
+    params: Warp2metricParamsDict,
     execution: Execution,
 ): Warp2metricOutputs {
     const ret: Warp2metricOutputs = {
@@ -317,7 +317,7 @@ function warp2metric_outputs(
  * @returns NamedTuple of outputs (described in `Warp2metricOutputs`).
  */
 function warp2metric_execute(
-    params: Warp2metricParameters,
+    params: Warp2metricParamsDict,
     runner: Runner | null = null,
 ): Warp2metricOutputs {
     runner = runner || getGlobalRunner();
@@ -363,7 +363,7 @@ function warp2metric_execute(
  */
 function warp2metric(
     in_: InputPathType,
-    fc: Warp2metricFcParameters | null = null,
+    fc: Warp2metricFcParamsDict | null = null,
     jmat: string | null = null,
     jdet: string | null = null,
     info: boolean = false,
@@ -371,7 +371,7 @@ function warp2metric(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Warp2metricConfigParameters> | null = null,
+    config: Array<Warp2metricConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -383,10 +383,16 @@ function warp2metric(
 
 export {
       WARP2METRIC_METADATA,
+      Warp2metricConfigParamsDict,
+      Warp2metricConfigParamsDictTagged,
+      Warp2metricFcParamsDict,
+      Warp2metricFcParamsDictTagged,
       Warp2metricOutputs,
+      Warp2metricParamsDict,
+      Warp2metricParamsDictTagged,
       warp2metric,
-      warp2metric_config_params,
+      warp2metric_config,
       warp2metric_execute,
-      warp2metric_fc_params,
+      warp2metric_fc,
       warp2metric_params,
 };

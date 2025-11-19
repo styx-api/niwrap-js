@@ -11,17 +11,17 @@ const BIANCA_OVERLAP_MEASURES_METADATA: Metadata = {
 };
 
 
-interface BiancaOverlapMeasuresParameters {
+interface BiancaOverlapMeasuresParamsDict {
     "@type"?: "fsl/bianca_overlap_measures";
     "lesion_mask": InputPathType;
     "manual_mask": InputPathType;
     "output_dir": string;
 }
-type BiancaOverlapMeasuresParametersTagged = Required<Pick<BiancaOverlapMeasuresParameters, '@type'>> & BiancaOverlapMeasuresParameters;
+type BiancaOverlapMeasuresParamsDictTagged = Required<Pick<BiancaOverlapMeasuresParamsDict, '@type'>> & BiancaOverlapMeasuresParamsDict;
 
 
 /**
- * Output object returned when calling `BiancaOverlapMeasuresParameters(...)`.
+ * Output object returned when calling `BiancaOverlapMeasuresParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function bianca_overlap_measures_params(
     lesion_mask: InputPathType,
     manual_mask: InputPathType,
     output_dir: string,
-): BiancaOverlapMeasuresParametersTagged {
+): BiancaOverlapMeasuresParamsDictTagged {
     const params = {
         "@type": "fsl/bianca_overlap_measures" as const,
         "lesion_mask": lesion_mask,
@@ -98,7 +98,7 @@ function bianca_overlap_measures_params(
  * @returns Command-line arguments.
  */
 function bianca_overlap_measures_cargs(
-    params: BiancaOverlapMeasuresParameters,
+    params: BiancaOverlapMeasuresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function bianca_overlap_measures_cargs(
  * @returns Outputs object.
  */
 function bianca_overlap_measures_outputs(
-    params: BiancaOverlapMeasuresParameters,
+    params: BiancaOverlapMeasuresParamsDict,
     execution: Execution,
 ): BiancaOverlapMeasuresOutputs {
     const ret: BiancaOverlapMeasuresOutputs = {
@@ -152,7 +152,7 @@ function bianca_overlap_measures_outputs(
  * @returns NamedTuple of outputs (described in `BiancaOverlapMeasuresOutputs`).
  */
 function bianca_overlap_measures_execute(
-    params: BiancaOverlapMeasuresParameters,
+    params: BiancaOverlapMeasuresParamsDict,
     runner: Runner | null = null,
 ): BiancaOverlapMeasuresOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function bianca_overlap_measures(
 export {
       BIANCA_OVERLAP_MEASURES_METADATA,
       BiancaOverlapMeasuresOutputs,
+      BiancaOverlapMeasuresParamsDict,
+      BiancaOverlapMeasuresParamsDictTagged,
       bianca_overlap_measures,
       bianca_overlap_measures_execute,
       bianca_overlap_measures_params,

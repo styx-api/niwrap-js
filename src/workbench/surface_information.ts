@@ -10,15 +10,15 @@ const SURFACE_INFORMATION_METADATA: Metadata = {
 };
 
 
-interface SurfaceInformationParameters {
+interface SurfaceInformationParamsDict {
     "@type"?: "workbench/surface-information";
     "Surface File": InputPathType;
 }
-type SurfaceInformationParametersTagged = Required<Pick<SurfaceInformationParameters, '@type'>> & SurfaceInformationParameters;
+type SurfaceInformationParamsDictTagged = Required<Pick<SurfaceInformationParamsDict, '@type'>> & SurfaceInformationParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceInformationParameters(...)`.
+ * Output object returned when calling `SurfaceInformationParamsDict(...)`.
  *
  * @interface
  */
@@ -39,7 +39,7 @@ interface SurfaceInformationOutputs {
  */
 function surface_information_params(
     surface_file: InputPathType,
-): SurfaceInformationParametersTagged {
+): SurfaceInformationParamsDictTagged {
     const params = {
         "@type": "workbench/surface-information" as const,
         "Surface File": surface_file,
@@ -57,7 +57,7 @@ function surface_information_params(
  * @returns Command-line arguments.
  */
 function surface_information_cargs(
-    params: SurfaceInformationParameters,
+    params: SurfaceInformationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function surface_information_cargs(
  * @returns Outputs object.
  */
 function surface_information_outputs(
-    params: SurfaceInformationParameters,
+    params: SurfaceInformationParamsDict,
     execution: Execution,
 ): SurfaceInformationOutputs {
     const ret: SurfaceInformationOutputs = {
@@ -101,7 +101,7 @@ function surface_information_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceInformationOutputs`).
  */
 function surface_information_execute(
-    params: SurfaceInformationParameters,
+    params: SurfaceInformationParamsDict,
     runner: Runner | null = null,
 ): SurfaceInformationOutputs {
     runner = runner || getGlobalRunner();
@@ -137,6 +137,8 @@ function surface_information(
 export {
       SURFACE_INFORMATION_METADATA,
       SurfaceInformationOutputs,
+      SurfaceInformationParamsDict,
+      SurfaceInformationParamsDictTagged,
       surface_information,
       surface_information_execute,
       surface_information_params,

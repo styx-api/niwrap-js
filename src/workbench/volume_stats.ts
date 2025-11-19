@@ -10,24 +10,24 @@ const VOLUME_STATS_METADATA: Metadata = {
 };
 
 
-interface VolumeStatsRoiParameters {
+interface VolumeStatsRoiParamsDict {
     "@type"?: "roi";
     "roi-volume": InputPathType;
     "match-maps": boolean;
 }
-type VolumeStatsRoiParametersTagged = Required<Pick<VolumeStatsRoiParameters, '@type'>> & VolumeStatsRoiParameters;
+type VolumeStatsRoiParamsDictTagged = Required<Pick<VolumeStatsRoiParamsDict, '@type'>> & VolumeStatsRoiParamsDict;
 
 
-interface VolumeStatsParameters {
+interface VolumeStatsParamsDict {
     "@type"?: "workbench/volume-stats";
     "operation"?: string | null | undefined;
     "percent"?: number | null | undefined;
     "subvolume"?: string | null | undefined;
-    "roi"?: VolumeStatsRoiParameters | null | undefined;
+    "roi"?: VolumeStatsRoiParamsDict | null | undefined;
     "show-map-name": boolean;
     "volume-in": InputPathType;
 }
-type VolumeStatsParametersTagged = Required<Pick<VolumeStatsParameters, '@type'>> & VolumeStatsParameters;
+type VolumeStatsParamsDictTagged = Required<Pick<VolumeStatsParamsDict, '@type'>> & VolumeStatsParamsDict;
 
 
 /**
@@ -38,10 +38,10 @@ type VolumeStatsParametersTagged = Required<Pick<VolumeStatsParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function volume_stats_roi_params(
+function volume_stats_roi(
     roi_volume: InputPathType,
     match_maps: boolean = false,
-): VolumeStatsRoiParametersTagged {
+): VolumeStatsRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-volume": roi_volume,
@@ -60,7 +60,7 @@ function volume_stats_roi_params(
  * @returns Command-line arguments.
  */
 function volume_stats_roi_cargs(
-    params: VolumeStatsRoiParameters,
+    params: VolumeStatsRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -76,7 +76,7 @@ function volume_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `VolumeStatsParameters(...)`.
+ * Output object returned when calling `VolumeStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -111,9 +111,9 @@ function volume_stats_params(
     percent: number | null,
     subvolume: string | null,
     volume_in: InputPathType,
-    roi: VolumeStatsRoiParameters | null = null,
+    roi: VolumeStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
-): VolumeStatsParametersTagged {
+): VolumeStatsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-stats" as const,
         "show-map-name": show_map_name,
@@ -144,7 +144,7 @@ function volume_stats_params(
  * @returns Command-line arguments.
  */
 function volume_stats_cargs(
-    params: VolumeStatsParameters,
+    params: VolumeStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -176,7 +176,7 @@ function volume_stats_cargs(
  * @returns Outputs object.
  */
 function volume_stats_outputs(
-    params: VolumeStatsParameters,
+    params: VolumeStatsParamsDict,
     execution: Execution,
 ): VolumeStatsOutputs {
     const ret: VolumeStatsOutputs = {
@@ -217,7 +217,7 @@ function volume_stats_outputs(
  * @returns NamedTuple of outputs (described in `VolumeStatsOutputs`).
  */
 function volume_stats_execute(
-    params: VolumeStatsParameters,
+    params: VolumeStatsParamsDict,
     runner: Runner | null = null,
 ): VolumeStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -276,7 +276,7 @@ function volume_stats(
     percent: number | null,
     subvolume: string | null,
     volume_in: InputPathType,
-    roi: VolumeStatsRoiParameters | null = null,
+    roi: VolumeStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): VolumeStatsOutputs {
@@ -288,8 +288,12 @@ function volume_stats(
 export {
       VOLUME_STATS_METADATA,
       VolumeStatsOutputs,
+      VolumeStatsParamsDict,
+      VolumeStatsParamsDictTagged,
+      VolumeStatsRoiParamsDict,
+      VolumeStatsRoiParamsDictTagged,
       volume_stats,
       volume_stats_execute,
       volume_stats_params,
-      volume_stats_roi_params,
+      volume_stats_roi,
 };

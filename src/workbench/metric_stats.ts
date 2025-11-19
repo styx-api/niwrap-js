@@ -10,24 +10,24 @@ const METRIC_STATS_METADATA: Metadata = {
 };
 
 
-interface MetricStatsRoiParameters {
+interface MetricStatsRoiParamsDict {
     "@type"?: "roi";
     "roi-metric": InputPathType;
     "match-maps": boolean;
 }
-type MetricStatsRoiParametersTagged = Required<Pick<MetricStatsRoiParameters, '@type'>> & MetricStatsRoiParameters;
+type MetricStatsRoiParamsDictTagged = Required<Pick<MetricStatsRoiParamsDict, '@type'>> & MetricStatsRoiParamsDict;
 
 
-interface MetricStatsParameters {
+interface MetricStatsParamsDict {
     "@type"?: "workbench/metric-stats";
     "operation"?: string | null | undefined;
     "percent"?: number | null | undefined;
     "column"?: string | null | undefined;
-    "roi"?: MetricStatsRoiParameters | null | undefined;
+    "roi"?: MetricStatsRoiParamsDict | null | undefined;
     "show-map-name": boolean;
     "metric-in": InputPathType;
 }
-type MetricStatsParametersTagged = Required<Pick<MetricStatsParameters, '@type'>> & MetricStatsParameters;
+type MetricStatsParamsDictTagged = Required<Pick<MetricStatsParamsDict, '@type'>> & MetricStatsParamsDict;
 
 
 /**
@@ -38,10 +38,10 @@ type MetricStatsParametersTagged = Required<Pick<MetricStatsParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function metric_stats_roi_params(
+function metric_stats_roi(
     roi_metric: InputPathType,
     match_maps: boolean = false,
-): MetricStatsRoiParametersTagged {
+): MetricStatsRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-metric": roi_metric,
@@ -60,7 +60,7 @@ function metric_stats_roi_params(
  * @returns Command-line arguments.
  */
 function metric_stats_roi_cargs(
-    params: MetricStatsRoiParameters,
+    params: MetricStatsRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -76,7 +76,7 @@ function metric_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `MetricStatsParameters(...)`.
+ * Output object returned when calling `MetricStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -111,9 +111,9 @@ function metric_stats_params(
     percent: number | null,
     column: string | null,
     metric_in: InputPathType,
-    roi: MetricStatsRoiParameters | null = null,
+    roi: MetricStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
-): MetricStatsParametersTagged {
+): MetricStatsParamsDictTagged {
     const params = {
         "@type": "workbench/metric-stats" as const,
         "show-map-name": show_map_name,
@@ -144,7 +144,7 @@ function metric_stats_params(
  * @returns Command-line arguments.
  */
 function metric_stats_cargs(
-    params: MetricStatsParameters,
+    params: MetricStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -176,7 +176,7 @@ function metric_stats_cargs(
  * @returns Outputs object.
  */
 function metric_stats_outputs(
-    params: MetricStatsParameters,
+    params: MetricStatsParamsDict,
     execution: Execution,
 ): MetricStatsOutputs {
     const ret: MetricStatsOutputs = {
@@ -217,7 +217,7 @@ function metric_stats_outputs(
  * @returns NamedTuple of outputs (described in `MetricStatsOutputs`).
  */
 function metric_stats_execute(
-    params: MetricStatsParameters,
+    params: MetricStatsParamsDict,
     runner: Runner | null = null,
 ): MetricStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -276,7 +276,7 @@ function metric_stats(
     percent: number | null,
     column: string | null,
     metric_in: InputPathType,
-    roi: MetricStatsRoiParameters | null = null,
+    roi: MetricStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricStatsOutputs {
@@ -288,8 +288,12 @@ function metric_stats(
 export {
       METRIC_STATS_METADATA,
       MetricStatsOutputs,
+      MetricStatsParamsDict,
+      MetricStatsParamsDictTagged,
+      MetricStatsRoiParamsDict,
+      MetricStatsRoiParamsDictTagged,
       metric_stats,
       metric_stats_execute,
       metric_stats_params,
-      metric_stats_roi_params,
+      metric_stats_roi,
 };

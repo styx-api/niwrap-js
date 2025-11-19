@@ -11,17 +11,17 @@ const MRI_EDIT_SEGMENTATION_METADATA: Metadata = {
 };
 
 
-interface MriEditSegmentationParameters {
+interface MriEditSegmentationParamsDict {
     "@type"?: "freesurfer/mri_edit_segmentation";
     "input_segmentation": InputPathType;
     "t1_volume": InputPathType;
     "output_segmentation": string;
 }
-type MriEditSegmentationParametersTagged = Required<Pick<MriEditSegmentationParameters, '@type'>> & MriEditSegmentationParameters;
+type MriEditSegmentationParamsDictTagged = Required<Pick<MriEditSegmentationParamsDict, '@type'>> & MriEditSegmentationParamsDict;
 
 
 /**
- * Output object returned when calling `MriEditSegmentationParameters(...)`.
+ * Output object returned when calling `MriEditSegmentationParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_edit_segmentation_params(
     input_segmentation: InputPathType,
     t1_volume: InputPathType,
     output_segmentation: string,
-): MriEditSegmentationParametersTagged {
+): MriEditSegmentationParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_edit_segmentation" as const,
         "input_segmentation": input_segmentation,
@@ -70,7 +70,7 @@ function mri_edit_segmentation_params(
  * @returns Command-line arguments.
  */
 function mri_edit_segmentation_cargs(
-    params: MriEditSegmentationParameters,
+    params: MriEditSegmentationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_edit_segmentation_cargs(
  * @returns Outputs object.
  */
 function mri_edit_segmentation_outputs(
-    params: MriEditSegmentationParameters,
+    params: MriEditSegmentationParamsDict,
     execution: Execution,
 ): MriEditSegmentationOutputs {
     const ret: MriEditSegmentationOutputs = {
@@ -117,7 +117,7 @@ function mri_edit_segmentation_outputs(
  * @returns NamedTuple of outputs (described in `MriEditSegmentationOutputs`).
  */
 function mri_edit_segmentation_execute(
-    params: MriEditSegmentationParameters,
+    params: MriEditSegmentationParamsDict,
     runner: Runner | null = null,
 ): MriEditSegmentationOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_edit_segmentation(
 export {
       MRI_EDIT_SEGMENTATION_METADATA,
       MriEditSegmentationOutputs,
+      MriEditSegmentationParamsDict,
+      MriEditSegmentationParamsDictTagged,
       mri_edit_segmentation,
       mri_edit_segmentation_execute,
       mri_edit_segmentation_params,

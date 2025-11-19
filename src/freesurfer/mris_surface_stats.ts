@@ -11,7 +11,7 @@ const MRIS_SURFACE_STATS_METADATA: Metadata = {
 };
 
 
-interface MrisSurfaceStatsParameters {
+interface MrisSurfaceStatsParamsDict {
     "@type"?: "freesurfer/mris_surface_stats";
     "nsmooth"?: number | null | undefined;
     "surf_name": InputPathType;
@@ -27,11 +27,11 @@ interface MrisSurfaceStatsParameters {
     "debug"?: number | null | undefined;
     "data_files": Array<InputPathType>;
 }
-type MrisSurfaceStatsParametersTagged = Required<Pick<MrisSurfaceStatsParameters, '@type'>> & MrisSurfaceStatsParameters;
+type MrisSurfaceStatsParamsDictTagged = Required<Pick<MrisSurfaceStatsParamsDict, '@type'>> & MrisSurfaceStatsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSurfaceStatsParameters(...)`.
+ * Output object returned when calling `MrisSurfaceStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -96,7 +96,7 @@ function mris_surface_stats_params(
     src_type: string | null = null,
     trg_type: string | null = null,
     debug: number | null = null,
-): MrisSurfaceStatsParametersTagged {
+): MrisSurfaceStatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_surface_stats" as const,
         "surf_name": surf_name,
@@ -146,7 +146,7 @@ function mris_surface_stats_params(
  * @returns Command-line arguments.
  */
 function mris_surface_stats_cargs(
-    params: MrisSurfaceStatsParameters,
+    params: MrisSurfaceStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -233,7 +233,7 @@ function mris_surface_stats_cargs(
  * @returns Outputs object.
  */
 function mris_surface_stats_outputs(
-    params: MrisSurfaceStatsParameters,
+    params: MrisSurfaceStatsParamsDict,
     execution: Execution,
 ): MrisSurfaceStatsOutputs {
     const ret: MrisSurfaceStatsOutputs = {
@@ -263,7 +263,7 @@ function mris_surface_stats_outputs(
  * @returns NamedTuple of outputs (described in `MrisSurfaceStatsOutputs`).
  */
 function mris_surface_stats_execute(
-    params: MrisSurfaceStatsParameters,
+    params: MrisSurfaceStatsParamsDict,
     runner: Runner | null = null,
 ): MrisSurfaceStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -326,6 +326,8 @@ function mris_surface_stats(
 export {
       MRIS_SURFACE_STATS_METADATA,
       MrisSurfaceStatsOutputs,
+      MrisSurfaceStatsParamsDict,
+      MrisSurfaceStatsParamsDictTagged,
       mris_surface_stats,
       mris_surface_stats_execute,
       mris_surface_stats_params,

@@ -11,17 +11,17 @@ const MRI_JOINT_DENSITY_METADATA: Metadata = {
 };
 
 
-interface MriJointDensityParameters {
+interface MriJointDensityParamsDict {
     "@type"?: "freesurfer/mri_joint_density";
     "vol1": InputPathType;
     "vol2": InputPathType;
     "output_density_file": string;
 }
-type MriJointDensityParametersTagged = Required<Pick<MriJointDensityParameters, '@type'>> & MriJointDensityParameters;
+type MriJointDensityParamsDictTagged = Required<Pick<MriJointDensityParamsDict, '@type'>> & MriJointDensityParamsDict;
 
 
 /**
- * Output object returned when calling `MriJointDensityParameters(...)`.
+ * Output object returned when calling `MriJointDensityParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_joint_density_params(
     vol1: InputPathType,
     vol2: InputPathType,
     output_density_file: string,
-): MriJointDensityParametersTagged {
+): MriJointDensityParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_joint_density" as const,
         "vol1": vol1,
@@ -70,7 +70,7 @@ function mri_joint_density_params(
  * @returns Command-line arguments.
  */
 function mri_joint_density_cargs(
-    params: MriJointDensityParameters,
+    params: MriJointDensityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_joint_density_cargs(
  * @returns Outputs object.
  */
 function mri_joint_density_outputs(
-    params: MriJointDensityParameters,
+    params: MriJointDensityParamsDict,
     execution: Execution,
 ): MriJointDensityOutputs {
     const ret: MriJointDensityOutputs = {
@@ -117,7 +117,7 @@ function mri_joint_density_outputs(
  * @returns NamedTuple of outputs (described in `MriJointDensityOutputs`).
  */
 function mri_joint_density_execute(
-    params: MriJointDensityParameters,
+    params: MriJointDensityParamsDict,
     runner: Runner | null = null,
 ): MriJointDensityOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_joint_density(
 export {
       MRI_JOINT_DENSITY_METADATA,
       MriJointDensityOutputs,
+      MriJointDensityParamsDict,
+      MriJointDensityParamsDictTagged,
       mri_joint_density,
       mri_joint_density_execute,
       mri_joint_density_params,

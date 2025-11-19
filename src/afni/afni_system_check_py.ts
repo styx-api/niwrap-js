@@ -11,7 +11,7 @@ const AFNI_SYSTEM_CHECK_PY_METADATA: Metadata = {
 };
 
 
-interface AfniSystemCheckPyParameters {
+interface AfniSystemCheckPyParamsDict {
     "@type"?: "afni/afni_system_check.py";
     "check_all": boolean;
     "find_prog"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface AfniSystemCheckPyParameters {
     "casematch"?: string | null | undefined;
     "data_root"?: string | null | undefined;
 }
-type AfniSystemCheckPyParametersTagged = Required<Pick<AfniSystemCheckPyParameters, '@type'>> & AfniSystemCheckPyParameters;
+type AfniSystemCheckPyParamsDictTagged = Required<Pick<AfniSystemCheckPyParamsDict, '@type'>> & AfniSystemCheckPyParamsDict;
 
 
 /**
- * Output object returned when calling `AfniSystemCheckPyParameters(...)`.
+ * Output object returned when calling `AfniSystemCheckPyParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function afni_system_check_py_params(
     dot_file_pack: string | null = null,
     casematch: string | null = null,
     data_root: string | null = null,
-): AfniSystemCheckPyParametersTagged {
+): AfniSystemCheckPyParamsDictTagged {
     const params = {
         "@type": "afni/afni_system_check.py" as const,
         "check_all": check_all,
@@ -104,7 +104,7 @@ function afni_system_check_py_params(
  * @returns Command-line arguments.
  */
 function afni_system_check_py_cargs(
-    params: AfniSystemCheckPyParameters,
+    params: AfniSystemCheckPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function afni_system_check_py_cargs(
  * @returns Outputs object.
  */
 function afni_system_check_py_outputs(
-    params: AfniSystemCheckPyParameters,
+    params: AfniSystemCheckPyParamsDict,
     execution: Execution,
 ): AfniSystemCheckPyOutputs {
     const ret: AfniSystemCheckPyOutputs = {
@@ -192,7 +192,7 @@ function afni_system_check_py_outputs(
  * @returns NamedTuple of outputs (described in `AfniSystemCheckPyOutputs`).
  */
 function afni_system_check_py_execute(
-    params: AfniSystemCheckPyParameters,
+    params: AfniSystemCheckPyParamsDict,
     runner: Runner | null = null,
 ): AfniSystemCheckPyOutputs {
     runner = runner || getGlobalRunner();
@@ -249,6 +249,8 @@ function afni_system_check_py(
 export {
       AFNI_SYSTEM_CHECK_PY_METADATA,
       AfniSystemCheckPyOutputs,
+      AfniSystemCheckPyParamsDict,
+      AfniSystemCheckPyParamsDictTagged,
       afni_system_check_py,
       afni_system_check_py_execute,
       afni_system_check_py_params,

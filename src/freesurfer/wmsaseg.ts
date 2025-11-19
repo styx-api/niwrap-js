@@ -11,7 +11,7 @@ const WMSASEG_METADATA: Metadata = {
 };
 
 
-interface WmsasegParameters {
+interface WmsasegParamsDict {
     "@type"?: "freesurfer/wmsaseg";
     "subject": string;
     "source_orig"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface WmsasegParameters {
     "halo1": boolean;
     "halo2": boolean;
 }
-type WmsasegParametersTagged = Required<Pick<WmsasegParameters, '@type'>> & WmsasegParameters;
+type WmsasegParamsDictTagged = Required<Pick<WmsasegParamsDict, '@type'>> & WmsasegParamsDict;
 
 
 /**
- * Output object returned when calling `WmsasegParameters(...)`.
+ * Output object returned when calling `WmsasegParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function wmsaseg_params(
     reg_only: boolean = false,
     halo1: boolean = false,
     halo2: boolean = false,
-): WmsasegParametersTagged {
+): WmsasegParamsDictTagged {
     const params = {
         "@type": "freesurfer/wmsaseg" as const,
         "subject": subject,
@@ -112,7 +112,7 @@ function wmsaseg_params(
  * @returns Command-line arguments.
  */
 function wmsaseg_cargs(
-    params: WmsasegParameters,
+    params: WmsasegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -173,7 +173,7 @@ function wmsaseg_cargs(
  * @returns Outputs object.
  */
 function wmsaseg_outputs(
-    params: WmsasegParameters,
+    params: WmsasegParamsDict,
     execution: Execution,
 ): WmsasegOutputs {
     const ret: WmsasegOutputs = {
@@ -200,7 +200,7 @@ function wmsaseg_outputs(
  * @returns NamedTuple of outputs (described in `WmsasegOutputs`).
  */
 function wmsaseg_execute(
-    params: WmsasegParameters,
+    params: WmsasegParamsDict,
     runner: Runner | null = null,
 ): WmsasegOutputs {
     runner = runner || getGlobalRunner();
@@ -259,6 +259,8 @@ function wmsaseg(
 export {
       WMSASEG_METADATA,
       WmsasegOutputs,
+      WmsasegParamsDict,
+      WmsasegParamsDictTagged,
       wmsaseg,
       wmsaseg_execute,
       wmsaseg_params,

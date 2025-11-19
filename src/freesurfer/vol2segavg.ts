@@ -11,7 +11,7 @@ const VOL2SEGAVG_METADATA: Metadata = {
 };
 
 
-interface Vol2segavgParameters {
+interface Vol2segavgParamsDict {
     "@type"?: "freesurfer/vol2segavg";
     "output_file": string;
     "input_volume": InputPathType;
@@ -29,11 +29,11 @@ interface Vol2segavgParameters {
     "xcsf_flag": boolean;
     "remove_mean_flag": boolean;
 }
-type Vol2segavgParametersTagged = Required<Pick<Vol2segavgParameters, '@type'>> & Vol2segavgParameters;
+type Vol2segavgParamsDictTagged = Required<Pick<Vol2segavgParamsDict, '@type'>> & Vol2segavgParamsDict;
 
 
 /**
- * Output object returned when calling `Vol2segavgParameters(...)`.
+ * Output object returned when calling `Vol2segavgParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function vol2segavg_params(
     vcsf_flag: boolean = false,
     xcsf_flag: boolean = false,
     remove_mean_flag: boolean = false,
-): Vol2segavgParametersTagged {
+): Vol2segavgParamsDictTagged {
     const params = {
         "@type": "freesurfer/vol2segavg" as const,
         "output_file": output_file,
@@ -128,7 +128,7 @@ function vol2segavg_params(
  * @returns Command-line arguments.
  */
 function vol2segavg_cargs(
-    params: Vol2segavgParameters,
+    params: Vol2segavgParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function vol2segavg_cargs(
  * @returns Outputs object.
  */
 function vol2segavg_outputs(
-    params: Vol2segavgParameters,
+    params: Vol2segavgParamsDict,
     execution: Execution,
 ): Vol2segavgOutputs {
     const ret: Vol2segavgOutputs = {
@@ -236,7 +236,7 @@ function vol2segavg_outputs(
  * @returns NamedTuple of outputs (described in `Vol2segavgOutputs`).
  */
 function vol2segavg_execute(
-    params: Vol2segavgParameters,
+    params: Vol2segavgParamsDict,
     runner: Runner | null = null,
 ): Vol2segavgOutputs {
     runner = runner || getGlobalRunner();
@@ -303,6 +303,8 @@ function vol2segavg(
 export {
       VOL2SEGAVG_METADATA,
       Vol2segavgOutputs,
+      Vol2segavgParamsDict,
+      Vol2segavgParamsDictTagged,
       vol2segavg,
       vol2segavg_execute,
       vol2segavg_params,

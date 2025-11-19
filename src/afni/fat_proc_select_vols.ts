@@ -11,7 +11,7 @@ const FAT_PROC_SELECT_VOLS_METADATA: Metadata = {
 };
 
 
-interface FatProcSelectVolsParameters {
+interface FatProcSelectVolsParamsDict {
     "@type"?: "afni/fat_proc_select_vols";
     "dwi_input": InputPathType;
     "img_input": InputPathType;
@@ -22,11 +22,11 @@ interface FatProcSelectVolsParameters {
     "workdir"?: string | null | undefined;
     "no_cmd_out": boolean;
 }
-type FatProcSelectVolsParametersTagged = Required<Pick<FatProcSelectVolsParameters, '@type'>> & FatProcSelectVolsParameters;
+type FatProcSelectVolsParamsDictTagged = Required<Pick<FatProcSelectVolsParamsDict, '@type'>> & FatProcSelectVolsParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcSelectVolsParameters(...)`.
+ * Output object returned when calling `FatProcSelectVolsParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function fat_proc_select_vols_params(
     do_movie: string | null = null,
     workdir: string | null = null,
     no_cmd_out: boolean = false,
-): FatProcSelectVolsParametersTagged {
+): FatProcSelectVolsParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_select_vols" as const,
         "dwi_input": dwi_input,
@@ -96,7 +96,7 @@ function fat_proc_select_vols_params(
  * @returns Command-line arguments.
  */
 function fat_proc_select_vols_cargs(
-    params: FatProcSelectVolsParameters,
+    params: FatProcSelectVolsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function fat_proc_select_vols_cargs(
  * @returns Outputs object.
  */
 function fat_proc_select_vols_outputs(
-    params: FatProcSelectVolsParameters,
+    params: FatProcSelectVolsParamsDict,
     execution: Execution,
 ): FatProcSelectVolsOutputs {
     const ret: FatProcSelectVolsOutputs = {
@@ -176,7 +176,7 @@ function fat_proc_select_vols_outputs(
  * @returns NamedTuple of outputs (described in `FatProcSelectVolsOutputs`).
  */
 function fat_proc_select_vols_execute(
-    params: FatProcSelectVolsParameters,
+    params: FatProcSelectVolsParamsDict,
     runner: Runner | null = null,
 ): FatProcSelectVolsOutputs {
     runner = runner || getGlobalRunner();
@@ -229,6 +229,8 @@ function fat_proc_select_vols(
 export {
       FAT_PROC_SELECT_VOLS_METADATA,
       FatProcSelectVolsOutputs,
+      FatProcSelectVolsParamsDict,
+      FatProcSelectVolsParamsDictTagged,
       fat_proc_select_vols,
       fat_proc_select_vols_execute,
       fat_proc_select_vols_params,

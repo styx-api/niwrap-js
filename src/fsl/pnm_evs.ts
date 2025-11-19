@@ -11,7 +11,7 @@ const PNM_EVS_METADATA: Metadata = {
 };
 
 
-interface PnmEvsParameters {
+interface PnmEvsParamsDict {
     "@type"?: "fsl/pnm_evs";
     "input_file": InputPathType;
     "output_file": string;
@@ -34,11 +34,11 @@ interface PnmEvsParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type PnmEvsParametersTagged = Required<Pick<PnmEvsParameters, '@type'>> & PnmEvsParameters;
+type PnmEvsParamsDictTagged = Required<Pick<PnmEvsParamsDict, '@type'>> & PnmEvsParamsDict;
 
 
 /**
- * Output object returned when calling `PnmEvsParameters(...)`.
+ * Output object returned when calling `PnmEvsParamsDict(...)`.
  *
  * @interface
  */
@@ -101,7 +101,7 @@ function pnm_evs_params(
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): PnmEvsParametersTagged {
+): PnmEvsParamsDictTagged {
     const params = {
         "@type": "fsl/pnm_evs" as const,
         "input_file": input_file,
@@ -166,7 +166,7 @@ function pnm_evs_params(
  * @returns Command-line arguments.
  */
 function pnm_evs_cargs(
-    params: PnmEvsParameters,
+    params: PnmEvsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -289,7 +289,7 @@ function pnm_evs_cargs(
  * @returns Outputs object.
  */
 function pnm_evs_outputs(
-    params: PnmEvsParameters,
+    params: PnmEvsParamsDict,
     execution: Execution,
 ): PnmEvsOutputs {
     const ret: PnmEvsOutputs = {
@@ -315,7 +315,7 @@ function pnm_evs_outputs(
  * @returns NamedTuple of outputs (described in `PnmEvsOutputs`).
  */
 function pnm_evs_execute(
-    params: PnmEvsParameters,
+    params: PnmEvsParamsDict,
     runner: Runner | null = null,
 ): PnmEvsOutputs {
     runner = runner || getGlobalRunner();
@@ -392,6 +392,8 @@ function pnm_evs(
 export {
       PNM_EVS_METADATA,
       PnmEvsOutputs,
+      PnmEvsParamsDict,
+      PnmEvsParamsDictTagged,
       pnm_evs,
       pnm_evs_execute,
       pnm_evs_params,

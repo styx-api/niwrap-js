@@ -10,7 +10,7 @@ const VOLUME_SET_SPACE_METADATA: Metadata = {
 };
 
 
-interface VolumeSetSpacePlumbParameters {
+interface VolumeSetSpacePlumbParamsDict {
     "@type"?: "plumb";
     "axis-order": string;
     "x-spacing": number;
@@ -20,10 +20,10 @@ interface VolumeSetSpacePlumbParameters {
     "y-offset": number;
     "z-offset": number;
 }
-type VolumeSetSpacePlumbParametersTagged = Required<Pick<VolumeSetSpacePlumbParameters, '@type'>> & VolumeSetSpacePlumbParameters;
+type VolumeSetSpacePlumbParamsDictTagged = Required<Pick<VolumeSetSpacePlumbParamsDict, '@type'>> & VolumeSetSpacePlumbParamsDict;
 
 
-interface VolumeSetSpaceSformParameters {
+interface VolumeSetSpaceSformParamsDict {
     "@type"?: "sform";
     "xi-spacing": number;
     "xj-spacing": number;
@@ -38,26 +38,26 @@ interface VolumeSetSpaceSformParameters {
     "zk-spacing": number;
     "z-offset": number;
 }
-type VolumeSetSpaceSformParametersTagged = Required<Pick<VolumeSetSpaceSformParameters, '@type'>> & VolumeSetSpaceSformParameters;
+type VolumeSetSpaceSformParamsDictTagged = Required<Pick<VolumeSetSpaceSformParamsDict, '@type'>> & VolumeSetSpaceSformParamsDict;
 
 
-interface VolumeSetSpaceFileParameters {
+interface VolumeSetSpaceFileParamsDict {
     "@type"?: "file";
     "volume-ref": string;
     "ignore-dims": boolean;
 }
-type VolumeSetSpaceFileParametersTagged = Required<Pick<VolumeSetSpaceFileParameters, '@type'>> & VolumeSetSpaceFileParameters;
+type VolumeSetSpaceFileParamsDictTagged = Required<Pick<VolumeSetSpaceFileParamsDict, '@type'>> & VolumeSetSpaceFileParamsDict;
 
 
-interface VolumeSetSpaceParameters {
+interface VolumeSetSpaceParamsDict {
     "@type"?: "workbench/volume-set-space";
-    "plumb"?: VolumeSetSpacePlumbParameters | null | undefined;
-    "sform"?: VolumeSetSpaceSformParameters | null | undefined;
-    "file"?: VolumeSetSpaceFileParameters | null | undefined;
+    "plumb"?: VolumeSetSpacePlumbParamsDict | null | undefined;
+    "sform"?: VolumeSetSpaceSformParamsDict | null | undefined;
+    "file"?: VolumeSetSpaceFileParamsDict | null | undefined;
     "volume-in": InputPathType;
     "volume-out": string;
 }
-type VolumeSetSpaceParametersTagged = Required<Pick<VolumeSetSpaceParameters, '@type'>> & VolumeSetSpaceParameters;
+type VolumeSetSpaceParamsDictTagged = Required<Pick<VolumeSetSpaceParamsDict, '@type'>> & VolumeSetSpaceParamsDict;
 
 
 /**
@@ -73,7 +73,7 @@ type VolumeSetSpaceParametersTagged = Required<Pick<VolumeSetSpaceParameters, '@
  *
  * @returns Parameter dictionary
  */
-function volume_set_space_plumb_params(
+function volume_set_space_plumb(
     axis_order: string,
     x_spacing: number,
     y_spacing: number,
@@ -81,7 +81,7 @@ function volume_set_space_plumb_params(
     x_offset: number,
     y_offset: number,
     z_offset: number,
-): VolumeSetSpacePlumbParametersTagged {
+): VolumeSetSpacePlumbParamsDictTagged {
     const params = {
         "@type": "plumb" as const,
         "axis-order": axis_order,
@@ -105,7 +105,7 @@ function volume_set_space_plumb_params(
  * @returns Command-line arguments.
  */
 function volume_set_space_plumb_cargs(
-    params: VolumeSetSpacePlumbParameters,
+    params: VolumeSetSpacePlumbParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function volume_set_space_plumb_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_set_space_sform_params(
+function volume_set_space_sform(
     xi_spacing: number,
     xj_spacing: number,
     xk_spacing: number,
@@ -154,7 +154,7 @@ function volume_set_space_sform_params(
     zj_spacing: number,
     zk_spacing: number,
     z_offset: number,
-): VolumeSetSpaceSformParametersTagged {
+): VolumeSetSpaceSformParamsDictTagged {
     const params = {
         "@type": "sform" as const,
         "xi-spacing": xi_spacing,
@@ -183,7 +183,7 @@ function volume_set_space_sform_params(
  * @returns Command-line arguments.
  */
 function volume_set_space_sform_cargs(
-    params: VolumeSetSpaceSformParameters,
+    params: VolumeSetSpaceSformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -214,10 +214,10 @@ function volume_set_space_sform_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_set_space_file_params(
+function volume_set_space_file(
     volume_ref: string,
     ignore_dims: boolean = false,
-): VolumeSetSpaceFileParametersTagged {
+): VolumeSetSpaceFileParamsDictTagged {
     const params = {
         "@type": "file" as const,
         "volume-ref": volume_ref,
@@ -236,7 +236,7 @@ function volume_set_space_file_params(
  * @returns Command-line arguments.
  */
 function volume_set_space_file_cargs(
-    params: VolumeSetSpaceFileParameters,
+    params: VolumeSetSpaceFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -252,7 +252,7 @@ function volume_set_space_file_cargs(
 
 
 /**
- * Output object returned when calling `VolumeSetSpaceParameters(...)`.
+ * Output object returned when calling `VolumeSetSpaceParamsDict(...)`.
  *
  * @interface
  */
@@ -278,10 +278,10 @@ interface VolumeSetSpaceOutputs {
 function volume_set_space_params(
     volume_in: InputPathType,
     volume_out: string,
-    plumb: VolumeSetSpacePlumbParameters | null = null,
-    sform: VolumeSetSpaceSformParameters | null = null,
-    file: VolumeSetSpaceFileParameters | null = null,
-): VolumeSetSpaceParametersTagged {
+    plumb: VolumeSetSpacePlumbParamsDict | null = null,
+    sform: VolumeSetSpaceSformParamsDict | null = null,
+    file: VolumeSetSpaceFileParamsDict | null = null,
+): VolumeSetSpaceParamsDictTagged {
     const params = {
         "@type": "workbench/volume-set-space" as const,
         "volume-in": volume_in,
@@ -309,7 +309,7 @@ function volume_set_space_params(
  * @returns Command-line arguments.
  */
 function volume_set_space_cargs(
-    params: VolumeSetSpaceParameters,
+    params: VolumeSetSpaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -337,7 +337,7 @@ function volume_set_space_cargs(
  * @returns Outputs object.
  */
 function volume_set_space_outputs(
-    params: VolumeSetSpaceParameters,
+    params: VolumeSetSpaceParamsDict,
     execution: Execution,
 ): VolumeSetSpaceOutputs {
     const ret: VolumeSetSpaceOutputs = {
@@ -358,7 +358,7 @@ function volume_set_space_outputs(
  * @returns NamedTuple of outputs (described in `VolumeSetSpaceOutputs`).
  */
 function volume_set_space_execute(
-    params: VolumeSetSpaceParameters,
+    params: VolumeSetSpaceParamsDict,
     runner: Runner | null = null,
 ): VolumeSetSpaceOutputs {
     runner = runner || getGlobalRunner();
@@ -388,9 +388,9 @@ function volume_set_space_execute(
 function volume_set_space(
     volume_in: InputPathType,
     volume_out: string,
-    plumb: VolumeSetSpacePlumbParameters | null = null,
-    sform: VolumeSetSpaceSformParameters | null = null,
-    file: VolumeSetSpaceFileParameters | null = null,
+    plumb: VolumeSetSpacePlumbParamsDict | null = null,
+    sform: VolumeSetSpaceSformParamsDict | null = null,
+    file: VolumeSetSpaceFileParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeSetSpaceOutputs {
     const params = volume_set_space_params(volume_in, volume_out, plumb, sform, file)
@@ -400,11 +400,19 @@ function volume_set_space(
 
 export {
       VOLUME_SET_SPACE_METADATA,
+      VolumeSetSpaceFileParamsDict,
+      VolumeSetSpaceFileParamsDictTagged,
       VolumeSetSpaceOutputs,
+      VolumeSetSpaceParamsDict,
+      VolumeSetSpaceParamsDictTagged,
+      VolumeSetSpacePlumbParamsDict,
+      VolumeSetSpacePlumbParamsDictTagged,
+      VolumeSetSpaceSformParamsDict,
+      VolumeSetSpaceSformParamsDictTagged,
       volume_set_space,
       volume_set_space_execute,
-      volume_set_space_file_params,
+      volume_set_space_file,
       volume_set_space_params,
-      volume_set_space_plumb_params,
-      volume_set_space_sform_params,
+      volume_set_space_plumb,
+      volume_set_space_sform,
 };

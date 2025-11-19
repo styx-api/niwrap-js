@@ -11,7 +11,7 @@ const V_1DPLOT_PY_METADATA: Metadata = {
 };
 
 
-interface V1dplotPyParameters {
+interface V1dplotPyParamsDict {
     "@type"?: "afni/1dplot.py";
     "infiles": Array<InputPathType>;
     "prefix": string;
@@ -46,11 +46,11 @@ interface V1dplotPyParameters {
     "censor_rgb"?: string | null | undefined;
     "bkgd_color"?: string | null | undefined;
 }
-type V1dplotPyParametersTagged = Required<Pick<V1dplotPyParameters, '@type'>> & V1dplotPyParameters;
+type V1dplotPyParamsDictTagged = Required<Pick<V1dplotPyParamsDict, '@type'>> & V1dplotPyParamsDict;
 
 
 /**
- * Output object returned when calling `V1dplotPyParameters(...)`.
+ * Output object returned when calling `V1dplotPyParamsDict(...)`.
  *
  * @interface
  */
@@ -137,7 +137,7 @@ function v_1dplot_py_params(
     censor_hline: Array<string> | null = null,
     censor_rgb: string | null = null,
     bkgd_color: string | null = null,
-): V1dplotPyParametersTagged {
+): V1dplotPyParamsDictTagged {
     const params = {
         "@type": "afni/1dplot.py" as const,
         "infiles": infiles,
@@ -232,7 +232,7 @@ function v_1dplot_py_params(
  * @returns Command-line arguments.
  */
 function v_1dplot_py_cargs(
-    params: V1dplotPyParameters,
+    params: V1dplotPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -417,7 +417,7 @@ function v_1dplot_py_cargs(
  * @returns Outputs object.
  */
 function v_1dplot_py_outputs(
-    params: V1dplotPyParameters,
+    params: V1dplotPyParamsDict,
     execution: Execution,
 ): V1dplotPyOutputs {
     const ret: V1dplotPyOutputs = {
@@ -443,7 +443,7 @@ function v_1dplot_py_outputs(
  * @returns NamedTuple of outputs (described in `V1dplotPyOutputs`).
  */
 function v_1dplot_py_execute(
-    params: V1dplotPyParameters,
+    params: V1dplotPyParamsDict,
     runner: Runner | null = null,
 ): V1dplotPyOutputs {
     runner = runner || getGlobalRunner();
@@ -543,6 +543,8 @@ function v_1dplot_py(
 
 export {
       V1dplotPyOutputs,
+      V1dplotPyParamsDict,
+      V1dplotPyParamsDictTagged,
       V_1DPLOT_PY_METADATA,
       v_1dplot_py,
       v_1dplot_py_execute,

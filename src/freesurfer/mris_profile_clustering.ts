@@ -11,17 +11,17 @@ const MRIS_PROFILE_CLUSTERING_METADATA: Metadata = {
 };
 
 
-interface MrisProfileClusteringParameters {
+interface MrisProfileClusteringParamsDict {
     "@type"?: "freesurfer/mris_profileClustering";
     "input_file": InputPathType;
     "output_file": string;
     "other_options"?: string | null | undefined;
 }
-type MrisProfileClusteringParametersTagged = Required<Pick<MrisProfileClusteringParameters, '@type'>> & MrisProfileClusteringParameters;
+type MrisProfileClusteringParamsDictTagged = Required<Pick<MrisProfileClusteringParamsDict, '@type'>> & MrisProfileClusteringParamsDict;
 
 
 /**
- * Output object returned when calling `MrisProfileClusteringParameters(...)`.
+ * Output object returned when calling `MrisProfileClusteringParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_profile_clustering_params(
     input_file: InputPathType,
     output_file: string,
     other_options: string | null = null,
-): MrisProfileClusteringParametersTagged {
+): MrisProfileClusteringParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_profileClustering" as const,
         "input_file": input_file,
@@ -72,7 +72,7 @@ function mris_profile_clustering_params(
  * @returns Command-line arguments.
  */
 function mris_profile_clustering_cargs(
-    params: MrisProfileClusteringParameters,
+    params: MrisProfileClusteringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function mris_profile_clustering_cargs(
  * @returns Outputs object.
  */
 function mris_profile_clustering_outputs(
-    params: MrisProfileClusteringParameters,
+    params: MrisProfileClusteringParamsDict,
     execution: Execution,
 ): MrisProfileClusteringOutputs {
     const ret: MrisProfileClusteringOutputs = {
@@ -121,7 +121,7 @@ function mris_profile_clustering_outputs(
  * @returns NamedTuple of outputs (described in `MrisProfileClusteringOutputs`).
  */
 function mris_profile_clustering_execute(
-    params: MrisProfileClusteringParameters,
+    params: MrisProfileClusteringParamsDict,
     runner: Runner | null = null,
 ): MrisProfileClusteringOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function mris_profile_clustering(
 export {
       MRIS_PROFILE_CLUSTERING_METADATA,
       MrisProfileClusteringOutputs,
+      MrisProfileClusteringParamsDict,
+      MrisProfileClusteringParamsDictTagged,
       mris_profile_clustering,
       mris_profile_clustering_execute,
       mris_profile_clustering_params,

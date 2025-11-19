@@ -11,7 +11,7 @@ const MEAN_METADATA: Metadata = {
 };
 
 
-interface MeanParameters {
+interface MeanParamsDict {
     "@type"?: "fsl/mean";
     "datafile": InputPathType;
     "maskfile": InputPathType;
@@ -33,11 +33,11 @@ interface MeanParameters {
     "prior_std"?: number | null | undefined;
     "help_flag": boolean;
 }
-type MeanParametersTagged = Required<Pick<MeanParameters, '@type'>> & MeanParameters;
+type MeanParamsDictTagged = Required<Pick<MeanParamsDict, '@type'>> & MeanParamsDict;
 
 
 /**
- * Output object returned when calling `MeanParameters(...)`.
+ * Output object returned when calling `MeanParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function mean_params(
     prior_mean: number | null = null,
     prior_std: number | null = null,
     help_flag: boolean = false,
-): MeanParametersTagged {
+): MeanParamsDictTagged {
     const params = {
         "@type": "fsl/mean" as const,
         "datafile": datafile,
@@ -158,7 +158,7 @@ function mean_params(
  * @returns Command-line arguments.
  */
 function mean_cargs(
-    params: MeanParameters,
+    params: MeanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -271,7 +271,7 @@ function mean_cargs(
  * @returns Outputs object.
  */
 function mean_outputs(
-    params: MeanParameters,
+    params: MeanParamsDict,
     execution: Execution,
 ): MeanOutputs {
     const ret: MeanOutputs = {
@@ -297,7 +297,7 @@ function mean_outputs(
  * @returns NamedTuple of outputs (described in `MeanOutputs`).
  */
 function mean_execute(
-    params: MeanParameters,
+    params: MeanParamsDict,
     runner: Runner | null = null,
 ): MeanOutputs {
     runner = runner || getGlobalRunner();
@@ -372,6 +372,8 @@ function mean(
 export {
       MEAN_METADATA,
       MeanOutputs,
+      MeanParamsDict,
+      MeanParamsDictTagged,
       mean,
       mean_execute,
       mean_params,

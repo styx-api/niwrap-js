@@ -11,7 +11,7 @@ const V__SUMA_REPREFIXIZE_SPEC_METADATA: Metadata = {
 };
 
 
-interface VSumaReprefixizeSpecParameters {
+interface VSumaReprefixizeSpecParamsDict {
     "@type"?: "afni/@suma_reprefixize_spec";
     "input_file": InputPathType;
     "prefix": string;
@@ -19,11 +19,11 @@ interface VSumaReprefixizeSpecParameters {
     "work_dir": string;
     "no_clean": boolean;
 }
-type VSumaReprefixizeSpecParametersTagged = Required<Pick<VSumaReprefixizeSpecParameters, '@type'>> & VSumaReprefixizeSpecParameters;
+type VSumaReprefixizeSpecParamsDictTagged = Required<Pick<VSumaReprefixizeSpecParamsDict, '@type'>> & VSumaReprefixizeSpecParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaReprefixizeSpecParameters(...)`.
+ * Output object returned when calling `VSumaReprefixizeSpecParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function v__suma_reprefixize_spec_params(
     output_dir: string,
     work_dir: string,
     no_clean: boolean = false,
-): VSumaReprefixizeSpecParametersTagged {
+): VSumaReprefixizeSpecParamsDictTagged {
     const params = {
         "@type": "afni/@suma_reprefixize_spec" as const,
         "input_file": input_file,
@@ -74,7 +74,7 @@ function v__suma_reprefixize_spec_params(
  * @returns Command-line arguments.
  */
 function v__suma_reprefixize_spec_cargs(
-    params: VSumaReprefixizeSpecParameters,
+    params: VSumaReprefixizeSpecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function v__suma_reprefixize_spec_cargs(
  * @returns Outputs object.
  */
 function v__suma_reprefixize_spec_outputs(
-    params: VSumaReprefixizeSpecParameters,
+    params: VSumaReprefixizeSpecParamsDict,
     execution: Execution,
 ): VSumaReprefixizeSpecOutputs {
     const ret: VSumaReprefixizeSpecOutputs = {
@@ -136,7 +136,7 @@ function v__suma_reprefixize_spec_outputs(
  * @returns NamedTuple of outputs (described in `VSumaReprefixizeSpecOutputs`).
  */
 function v__suma_reprefixize_spec_execute(
-    params: VSumaReprefixizeSpecParameters,
+    params: VSumaReprefixizeSpecParamsDict,
     runner: Runner | null = null,
 ): VSumaReprefixizeSpecOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function v__suma_reprefixize_spec(
 
 export {
       VSumaReprefixizeSpecOutputs,
+      VSumaReprefixizeSpecParamsDict,
+      VSumaReprefixizeSpecParamsDictTagged,
       V__SUMA_REPREFIXIZE_SPEC_METADATA,
       v__suma_reprefixize_spec,
       v__suma_reprefixize_spec_execute,

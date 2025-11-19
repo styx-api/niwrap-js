@@ -11,7 +11,7 @@ const V_1DNORM_METADATA: Metadata = {
 };
 
 
-interface V1dnormParameters {
+interface V1dnormParamsDict {
     "@type"?: "afni/1dnorm";
     "infile": InputPathType;
     "outfile": string;
@@ -20,11 +20,11 @@ interface V1dnormParameters {
     "demean": boolean;
     "demed": boolean;
 }
-type V1dnormParametersTagged = Required<Pick<V1dnormParameters, '@type'>> & V1dnormParameters;
+type V1dnormParamsDictTagged = Required<Pick<V1dnormParamsDict, '@type'>> & V1dnormParamsDict;
 
 
 /**
- * Output object returned when calling `V1dnormParameters(...)`.
+ * Output object returned when calling `V1dnormParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_1dnorm_params(
     normx: boolean = false,
     demean: boolean = false,
     demed: boolean = false,
-): V1dnormParametersTagged {
+): V1dnormParamsDictTagged {
     const params = {
         "@type": "afni/1dnorm" as const,
         "infile": infile,
@@ -82,7 +82,7 @@ function v_1dnorm_params(
  * @returns Command-line arguments.
  */
 function v_1dnorm_cargs(
-    params: V1dnormParameters,
+    params: V1dnormParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function v_1dnorm_cargs(
  * @returns Outputs object.
  */
 function v_1dnorm_outputs(
-    params: V1dnormParameters,
+    params: V1dnormParamsDict,
     execution: Execution,
 ): V1dnormOutputs {
     const ret: V1dnormOutputs = {
@@ -140,7 +140,7 @@ function v_1dnorm_outputs(
  * @returns NamedTuple of outputs (described in `V1dnormOutputs`).
  */
 function v_1dnorm_execute(
-    params: V1dnormParameters,
+    params: V1dnormParamsDict,
     runner: Runner | null = null,
 ): V1dnormOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function v_1dnorm(
 
 export {
       V1dnormOutputs,
+      V1dnormParamsDict,
+      V1dnormParamsDictTagged,
       V_1DNORM_METADATA,
       v_1dnorm,
       v_1dnorm_execute,

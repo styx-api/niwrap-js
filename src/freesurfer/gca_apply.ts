@@ -11,7 +11,7 @@ const GCA_APPLY_METADATA: Metadata = {
 };
 
 
-interface GcaApplyParameters {
+interface GcaApplyParamsDict {
     "@type"?: "freesurfer/gca-apply";
     "gcafile": InputPathType;
     "subject": string;
@@ -32,11 +32,11 @@ interface GcaApplyParameters {
     "force_update": boolean;
     "gcareg_iters"?: number | null | undefined;
 }
-type GcaApplyParametersTagged = Required<Pick<GcaApplyParameters, '@type'>> & GcaApplyParameters;
+type GcaApplyParamsDictTagged = Required<Pick<GcaApplyParamsDict, '@type'>> & GcaApplyParamsDict;
 
 
 /**
- * Output object returned when calling `GcaApplyParameters(...)`.
+ * Output object returned when calling `GcaApplyParamsDict(...)`.
  *
  * @interface
  */
@@ -111,7 +111,7 @@ function gca_apply_params(
     gca_rb_2016: boolean = false,
     force_update: boolean = false,
     gcareg_iters: number | null = null,
-): GcaApplyParametersTagged {
+): GcaApplyParamsDictTagged {
     const params = {
         "@type": "freesurfer/gca-apply" as const,
         "gcafile": gcafile,
@@ -170,7 +170,7 @@ function gca_apply_params(
  * @returns Command-line arguments.
  */
 function gca_apply_cargs(
-    params: GcaApplyParameters,
+    params: GcaApplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -274,7 +274,7 @@ function gca_apply_cargs(
  * @returns Outputs object.
  */
 function gca_apply_outputs(
-    params: GcaApplyParameters,
+    params: GcaApplyParamsDict,
     execution: Execution,
 ): GcaApplyOutputs {
     const ret: GcaApplyOutputs = {
@@ -304,7 +304,7 @@ function gca_apply_outputs(
  * @returns NamedTuple of outputs (described in `GcaApplyOutputs`).
  */
 function gca_apply_execute(
-    params: GcaApplyParameters,
+    params: GcaApplyParamsDict,
     runner: Runner | null = null,
 ): GcaApplyOutputs {
     runner = runner || getGlobalRunner();
@@ -377,6 +377,8 @@ function gca_apply(
 export {
       GCA_APPLY_METADATA,
       GcaApplyOutputs,
+      GcaApplyParamsDict,
+      GcaApplyParamsDictTagged,
       gca_apply,
       gca_apply_execute,
       gca_apply_params,

@@ -11,31 +11,31 @@ const DWIGRADCHECK_METADATA: Metadata = {
 };
 
 
-interface DwigradcheckFslgradParameters {
+interface DwigradcheckFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type DwigradcheckFslgradParametersTagged = Required<Pick<DwigradcheckFslgradParameters, '@type'>> & DwigradcheckFslgradParameters;
+type DwigradcheckFslgradParamsDictTagged = Required<Pick<DwigradcheckFslgradParamsDict, '@type'>> & DwigradcheckFslgradParamsDict;
 
 
-interface DwigradcheckExportGradFslParameters {
+interface DwigradcheckExportGradFslParamsDict {
     "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
-type DwigradcheckExportGradFslParametersTagged = Required<Pick<DwigradcheckExportGradFslParameters, '@type'>> & DwigradcheckExportGradFslParameters;
+type DwigradcheckExportGradFslParamsDictTagged = Required<Pick<DwigradcheckExportGradFslParamsDict, '@type'>> & DwigradcheckExportGradFslParamsDict;
 
 
-interface DwigradcheckParameters {
+interface DwigradcheckParamsDict {
     "@type"?: "mrtrix/dwigradcheck";
     "input_image": InputPathType;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: DwigradcheckFslgradParameters | null | undefined;
+    "fslgrad"?: DwigradcheckFslgradParamsDict | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "number"?: number | null | undefined;
     "export_grad_mrtrix"?: string | null | undefined;
-    "export_grad_fsl"?: DwigradcheckExportGradFslParameters | null | undefined;
+    "export_grad_fsl"?: DwigradcheckExportGradFslParamsDict | null | undefined;
     "nocleanup": boolean;
     "scratch_dir"?: InputPathType | null | undefined;
     "continue_scratch_dir"?: Array<InputPathType> | null | undefined;
@@ -48,7 +48,7 @@ interface DwigradcheckParameters {
     "help": boolean;
     "version": boolean;
 }
-type DwigradcheckParametersTagged = Required<Pick<DwigradcheckParameters, '@type'>> & DwigradcheckParameters;
+type DwigradcheckParamsDictTagged = Required<Pick<DwigradcheckParamsDict, '@type'>> & DwigradcheckParamsDict;
 
 
 /**
@@ -59,10 +59,10 @@ type DwigradcheckParametersTagged = Required<Pick<DwigradcheckParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function dwigradcheck_fslgrad_params(
+function dwigradcheck_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DwigradcheckFslgradParametersTagged {
+): DwigradcheckFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -81,7 +81,7 @@ function dwigradcheck_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dwigradcheck_fslgrad_cargs(
-    params: DwigradcheckFslgradParameters,
+    params: DwigradcheckFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function dwigradcheck_fslgrad_cargs(
 
 
 /**
- * Output object returned when calling `DwigradcheckExportGradFslParameters | null(...)`.
+ * Output object returned when calling `DwigradcheckExportGradFslParamsDict | null(...)`.
  *
  * @interface
  */
@@ -121,10 +121,10 @@ interface DwigradcheckExportGradFslOutputs {
  *
  * @returns Parameter dictionary
  */
-function dwigradcheck_export_grad_fsl_params(
+function dwigradcheck_export_grad_fsl(
     bvecs_path: string,
     bvals_path: string,
-): DwigradcheckExportGradFslParametersTagged {
+): DwigradcheckExportGradFslParamsDictTagged {
     const params = {
         "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
@@ -143,7 +143,7 @@ function dwigradcheck_export_grad_fsl_params(
  * @returns Command-line arguments.
  */
 function dwigradcheck_export_grad_fsl_cargs(
-    params: DwigradcheckExportGradFslParameters,
+    params: DwigradcheckExportGradFslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function dwigradcheck_export_grad_fsl_cargs(
  * @returns Outputs object.
  */
 function dwigradcheck_export_grad_fsl_outputs(
-    params: DwigradcheckExportGradFslParameters,
+    params: DwigradcheckExportGradFslParamsDict,
     execution: Execution,
 ): DwigradcheckExportGradFslOutputs {
     const ret: DwigradcheckExportGradFslOutputs = {
@@ -176,7 +176,7 @@ function dwigradcheck_export_grad_fsl_outputs(
 
 
 /**
- * Output object returned when calling `DwigradcheckParameters(...)`.
+ * Output object returned when calling `DwigradcheckParamsDict(...)`.
  *
  * @interface
  */
@@ -227,11 +227,11 @@ interface DwigradcheckOutputs {
 function dwigradcheck_params(
     input_image: InputPathType,
     grad: InputPathType | null = null,
-    fslgrad: DwigradcheckFslgradParameters | null = null,
+    fslgrad: DwigradcheckFslgradParamsDict | null = null,
     mask_image: InputPathType | null = null,
     number_: number | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: DwigradcheckExportGradFslParameters | null = null,
+    export_grad_fsl: DwigradcheckExportGradFslParamsDict | null = null,
     nocleanup: boolean = false,
     scratch_dir: InputPathType | null = null,
     continue_scratch_dir: Array<InputPathType> | null = null,
@@ -243,7 +243,7 @@ function dwigradcheck_params(
     config: Array<string> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DwigradcheckParametersTagged {
+): DwigradcheckParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwigradcheck" as const,
         "input_image": input_image,
@@ -298,7 +298,7 @@ function dwigradcheck_params(
  * @returns Command-line arguments.
  */
 function dwigradcheck_cargs(
-    params: DwigradcheckParameters,
+    params: DwigradcheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -392,7 +392,7 @@ function dwigradcheck_cargs(
  * @returns Outputs object.
  */
 function dwigradcheck_outputs(
-    params: DwigradcheckParameters,
+    params: DwigradcheckParamsDict,
     execution: Execution,
 ): DwigradcheckOutputs {
     const ret: DwigradcheckOutputs = {
@@ -420,7 +420,7 @@ function dwigradcheck_outputs(
  * @returns NamedTuple of outputs (described in `DwigradcheckOutputs`).
  */
 function dwigradcheck_execute(
-    params: DwigradcheckParameters,
+    params: DwigradcheckParamsDict,
     runner: Runner | null = null,
 ): DwigradcheckOutputs {
     runner = runner || getGlobalRunner();
@@ -467,11 +467,11 @@ function dwigradcheck_execute(
 function dwigradcheck(
     input_image: InputPathType,
     grad: InputPathType | null = null,
-    fslgrad: DwigradcheckFslgradParameters | null = null,
+    fslgrad: DwigradcheckFslgradParamsDict | null = null,
     mask_image: InputPathType | null = null,
     number_: number | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: DwigradcheckExportGradFslParameters | null = null,
+    export_grad_fsl: DwigradcheckExportGradFslParamsDict | null = null,
     nocleanup: boolean = false,
     scratch_dir: InputPathType | null = null,
     continue_scratch_dir: Array<InputPathType> | null = null,
@@ -493,10 +493,16 @@ function dwigradcheck(
 export {
       DWIGRADCHECK_METADATA,
       DwigradcheckExportGradFslOutputs,
+      DwigradcheckExportGradFslParamsDict,
+      DwigradcheckExportGradFslParamsDictTagged,
+      DwigradcheckFslgradParamsDict,
+      DwigradcheckFslgradParamsDictTagged,
       DwigradcheckOutputs,
+      DwigradcheckParamsDict,
+      DwigradcheckParamsDictTagged,
       dwigradcheck,
       dwigradcheck_execute,
-      dwigradcheck_export_grad_fsl_params,
-      dwigradcheck_fslgrad_params,
+      dwigradcheck_export_grad_fsl,
+      dwigradcheck_fslgrad,
       dwigradcheck_params,
 };

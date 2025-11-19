@@ -10,7 +10,7 @@ const CIFTI_PAIRWISE_CORRELATION_METADATA: Metadata = {
 };
 
 
-interface CiftiPairwiseCorrelationParameters {
+interface CiftiPairwiseCorrelationParamsDict {
     "@type"?: "workbench/cifti-pairwise-correlation";
     "cifti-out": string;
     "fisher-z": boolean;
@@ -18,11 +18,11 @@ interface CiftiPairwiseCorrelationParameters {
     "cifti-a": InputPathType;
     "cifti-b": InputPathType;
 }
-type CiftiPairwiseCorrelationParametersTagged = Required<Pick<CiftiPairwiseCorrelationParameters, '@type'>> & CiftiPairwiseCorrelationParameters;
+type CiftiPairwiseCorrelationParamsDictTagged = Required<Pick<CiftiPairwiseCorrelationParamsDict, '@type'>> & CiftiPairwiseCorrelationParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiPairwiseCorrelationParameters(...)`.
+ * Output object returned when calling `CiftiPairwiseCorrelationParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function cifti_pairwise_correlation_params(
     cifti_b: InputPathType,
     fisher_z: boolean = false,
     override_mapping_check: boolean = false,
-): CiftiPairwiseCorrelationParametersTagged {
+): CiftiPairwiseCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-pairwise-correlation" as const,
         "cifti-out": cifti_out,
@@ -77,7 +77,7 @@ function cifti_pairwise_correlation_params(
  * @returns Command-line arguments.
  */
 function cifti_pairwise_correlation_cargs(
-    params: CiftiPairwiseCorrelationParameters,
+    params: CiftiPairwiseCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function cifti_pairwise_correlation_cargs(
  * @returns Outputs object.
  */
 function cifti_pairwise_correlation_outputs(
-    params: CiftiPairwiseCorrelationParameters,
+    params: CiftiPairwiseCorrelationParamsDict,
     execution: Execution,
 ): CiftiPairwiseCorrelationOutputs {
     const ret: CiftiPairwiseCorrelationOutputs = {
@@ -127,7 +127,7 @@ function cifti_pairwise_correlation_outputs(
  * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
  */
 function cifti_pairwise_correlation_execute(
-    params: CiftiPairwiseCorrelationParameters,
+    params: CiftiPairwiseCorrelationParamsDict,
     runner: Runner | null = null,
 ): CiftiPairwiseCorrelationOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function cifti_pairwise_correlation(
 export {
       CIFTI_PAIRWISE_CORRELATION_METADATA,
       CiftiPairwiseCorrelationOutputs,
+      CiftiPairwiseCorrelationParamsDict,
+      CiftiPairwiseCorrelationParamsDictTagged,
       cifti_pairwise_correlation,
       cifti_pairwise_correlation_execute,
       cifti_pairwise_correlation_params,

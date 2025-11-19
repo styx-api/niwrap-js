@@ -11,7 +11,7 @@ const FAT_MAT_SEL_PY_METADATA: Metadata = {
 };
 
 
-interface FatMatSelPyParameters {
+interface FatMatSelPyParamsDict {
     "@type"?: "afni/fat_mat_sel.py";
     "parameters": string;
     "matr_in"?: string | null | undefined;
@@ -37,11 +37,11 @@ interface FatMatSelPyParameters {
     "specifier"?: string | null | undefined;
     "xtick_lab_off": boolean;
 }
-type FatMatSelPyParametersTagged = Required<Pick<FatMatSelPyParameters, '@type'>> & FatMatSelPyParameters;
+type FatMatSelPyParamsDictTagged = Required<Pick<FatMatSelPyParamsDict, '@type'>> & FatMatSelPyParamsDict;
 
 
 /**
- * Output object returned when calling `FatMatSelPyParameters(...)`.
+ * Output object returned when calling `FatMatSelPyParamsDict(...)`.
  *
  * @interface
  */
@@ -118,7 +118,7 @@ function fat_mat_sel_py_params(
     width_cbar_perc: number | null = null,
     specifier: string | null = null,
     xtick_lab_off: boolean = false,
-): FatMatSelPyParametersTagged {
+): FatMatSelPyParamsDictTagged {
     const params = {
         "@type": "afni/fat_mat_sel.py" as const,
         "parameters": parameters,
@@ -186,7 +186,7 @@ function fat_mat_sel_py_params(
  * @returns Command-line arguments.
  */
 function fat_mat_sel_py_cargs(
-    params: FatMatSelPyParameters,
+    params: FatMatSelPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -316,7 +316,7 @@ function fat_mat_sel_py_cargs(
  * @returns Outputs object.
  */
 function fat_mat_sel_py_outputs(
-    params: FatMatSelPyParameters,
+    params: FatMatSelPyParamsDict,
     execution: Execution,
 ): FatMatSelPyOutputs {
     const ret: FatMatSelPyOutputs = {
@@ -344,7 +344,7 @@ function fat_mat_sel_py_outputs(
  * @returns NamedTuple of outputs (described in `FatMatSelPyOutputs`).
  */
 function fat_mat_sel_py_execute(
-    params: FatMatSelPyParameters,
+    params: FatMatSelPyParamsDict,
     runner: Runner | null = null,
 ): FatMatSelPyOutputs {
     runner = runner || getGlobalRunner();
@@ -427,6 +427,8 @@ function fat_mat_sel_py(
 export {
       FAT_MAT_SEL_PY_METADATA,
       FatMatSelPyOutputs,
+      FatMatSelPyParamsDict,
+      FatMatSelPyParamsDictTagged,
       fat_mat_sel_py,
       fat_mat_sel_py_execute,
       fat_mat_sel_py_params,

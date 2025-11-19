@@ -11,7 +11,7 @@ const MRIS_MAKE_TEMPLATE_METADATA: Metadata = {
 };
 
 
-interface MrisMakeTemplateParameters {
+interface MrisMakeTemplateParamsDict {
     "@type"?: "freesurfer/mris_make_template";
     "hemi": string;
     "surface_name": string;
@@ -29,11 +29,11 @@ interface MrisMakeTemplateParameters {
     "smooth_iterations"?: number | null | undefined;
     "subjects_dir"?: string | null | undefined;
 }
-type MrisMakeTemplateParametersTagged = Required<Pick<MrisMakeTemplateParameters, '@type'>> & MrisMakeTemplateParameters;
+type MrisMakeTemplateParamsDictTagged = Required<Pick<MrisMakeTemplateParamsDict, '@type'>> & MrisMakeTemplateParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMakeTemplateParameters(...)`.
+ * Output object returned when calling `MrisMakeTemplateParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function mris_make_template_params(
     surf_dir: string | null = null,
     smooth_iterations: number | null = null,
     subjects_dir: string | null = null,
-): MrisMakeTemplateParametersTagged {
+): MrisMakeTemplateParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_make_template" as const,
         "hemi": hemi,
@@ -128,7 +128,7 @@ function mris_make_template_params(
  * @returns Command-line arguments.
  */
 function mris_make_template_cargs(
-    params: MrisMakeTemplateParameters,
+    params: MrisMakeTemplateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function mris_make_template_cargs(
  * @returns Outputs object.
  */
 function mris_make_template_outputs(
-    params: MrisMakeTemplateParameters,
+    params: MrisMakeTemplateParamsDict,
     execution: Execution,
 ): MrisMakeTemplateOutputs {
     const ret: MrisMakeTemplateOutputs = {
@@ -229,7 +229,7 @@ function mris_make_template_outputs(
  * @returns NamedTuple of outputs (described in `MrisMakeTemplateOutputs`).
  */
 function mris_make_template_execute(
-    params: MrisMakeTemplateParameters,
+    params: MrisMakeTemplateParamsDict,
     runner: Runner | null = null,
 ): MrisMakeTemplateOutputs {
     runner = runner || getGlobalRunner();
@@ -296,6 +296,8 @@ function mris_make_template(
 export {
       MRIS_MAKE_TEMPLATE_METADATA,
       MrisMakeTemplateOutputs,
+      MrisMakeTemplateParamsDict,
+      MrisMakeTemplateParamsDictTagged,
       mris_make_template,
       mris_make_template_execute,
       mris_make_template_params,

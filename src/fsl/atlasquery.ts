@@ -11,7 +11,7 @@ const ATLASQUERY_METADATA: Metadata = {
 };
 
 
-interface AtlasqueryParameters {
+interface AtlasqueryParamsDict {
     "@type"?: "fsl/atlasquery";
     "dumpatlases_flag": boolean;
     "atlas"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface AtlasqueryParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type AtlasqueryParametersTagged = Required<Pick<AtlasqueryParameters, '@type'>> & AtlasqueryParameters;
+type AtlasqueryParamsDictTagged = Required<Pick<AtlasqueryParamsDict, '@type'>> & AtlasqueryParamsDict;
 
 
 /**
- * Output object returned when calling `AtlasqueryParameters(...)`.
+ * Output object returned when calling `AtlasqueryParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function atlasquery_params(
     mask: InputPathType | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): AtlasqueryParametersTagged {
+): AtlasqueryParamsDictTagged {
     const params = {
         "@type": "fsl/atlasquery" as const,
         "dumpatlases_flag": dumpatlases_flag,
@@ -84,7 +84,7 @@ function atlasquery_params(
  * @returns Command-line arguments.
  */
 function atlasquery_cargs(
-    params: AtlasqueryParameters,
+    params: AtlasqueryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function atlasquery_cargs(
  * @returns Outputs object.
  */
 function atlasquery_outputs(
-    params: AtlasqueryParameters,
+    params: AtlasqueryParamsDict,
     execution: Execution,
 ): AtlasqueryOutputs {
     const ret: AtlasqueryOutputs = {
@@ -154,7 +154,7 @@ function atlasquery_outputs(
  * @returns NamedTuple of outputs (described in `AtlasqueryOutputs`).
  */
 function atlasquery_execute(
-    params: AtlasqueryParameters,
+    params: AtlasqueryParamsDict,
     runner: Runner | null = null,
 ): AtlasqueryOutputs {
     runner = runner || getGlobalRunner();
@@ -203,6 +203,8 @@ function atlasquery(
 export {
       ATLASQUERY_METADATA,
       AtlasqueryOutputs,
+      AtlasqueryParamsDict,
+      AtlasqueryParamsDictTagged,
       atlasquery,
       atlasquery_execute,
       atlasquery_params,

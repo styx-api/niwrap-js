@@ -11,7 +11,7 @@ const FSPALM_METADATA: Metadata = {
 };
 
 
-interface FspalmParameters {
+interface FspalmParamsDict {
     "@type"?: "freesurfer/fspalm";
     "glmdir": string;
     "cft": number;
@@ -28,11 +28,11 @@ interface FspalmParameters {
     "3spaces": boolean;
     "pargs"?: string | null | undefined;
 }
-type FspalmParametersTagged = Required<Pick<FspalmParameters, '@type'>> & FspalmParameters;
+type FspalmParamsDictTagged = Required<Pick<FspalmParamsDict, '@type'>> & FspalmParamsDict;
 
 
 /**
- * Output object returned when calling `FspalmParameters(...)`.
+ * Output object returned when calling `FspalmParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function fspalm_params(
     v_2spaces: boolean = false,
     v_3spaces: boolean = false,
     pargs: string | null = null,
-): FspalmParametersTagged {
+): FspalmParamsDictTagged {
     const params = {
         "@type": "freesurfer/fspalm" as const,
         "glmdir": glmdir,
@@ -116,7 +116,7 @@ function fspalm_params(
  * @returns Command-line arguments.
  */
 function fspalm_cargs(
-    params: FspalmParameters,
+    params: FspalmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,7 +188,7 @@ function fspalm_cargs(
  * @returns Outputs object.
  */
 function fspalm_outputs(
-    params: FspalmParameters,
+    params: FspalmParamsDict,
     execution: Execution,
 ): FspalmOutputs {
     const ret: FspalmOutputs = {
@@ -213,7 +213,7 @@ function fspalm_outputs(
  * @returns NamedTuple of outputs (described in `FspalmOutputs`).
  */
 function fspalm_execute(
-    params: FspalmParameters,
+    params: FspalmParamsDict,
     runner: Runner | null = null,
 ): FspalmOutputs {
     runner = runner || getGlobalRunner();
@@ -278,6 +278,8 @@ function fspalm(
 export {
       FSPALM_METADATA,
       FspalmOutputs,
+      FspalmParamsDict,
+      FspalmParamsDictTagged,
       fspalm,
       fspalm_execute,
       fspalm_params,

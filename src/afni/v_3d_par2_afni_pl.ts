@@ -11,7 +11,7 @@ const V_3D_PAR2_AFNI_PL_METADATA: Metadata = {
 };
 
 
-interface V3dPar2AfniPlParameters {
+interface V3dPar2AfniPlParamsDict {
     "@type"?: "afni/3dPAR2AFNI.pl";
     "input_file": InputPathType;
     "skip_outliers_test": boolean;
@@ -24,11 +24,11 @@ interface V3dPar2AfniPlParameters {
     "byte_swap_4": boolean;
     "help_flag": boolean;
 }
-type V3dPar2AfniPlParametersTagged = Required<Pick<V3dPar2AfniPlParameters, '@type'>> & V3dPar2AfniPlParameters;
+type V3dPar2AfniPlParamsDictTagged = Required<Pick<V3dPar2AfniPlParamsDict, '@type'>> & V3dPar2AfniPlParamsDict;
 
 
 /**
- * Output object returned when calling `V3dPar2AfniPlParameters(...)`.
+ * Output object returned when calling `V3dPar2AfniPlParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function v_3d_par2_afni_pl_params(
     byte_swap_2: boolean = false,
     byte_swap_4: boolean = false,
     help_flag: boolean = false,
-): V3dPar2AfniPlParametersTagged {
+): V3dPar2AfniPlParamsDictTagged {
     const params = {
         "@type": "afni/3dPAR2AFNI.pl" as const,
         "input_file": input_file,
@@ -100,7 +100,7 @@ function v_3d_par2_afni_pl_params(
  * @returns Command-line arguments.
  */
 function v_3d_par2_afni_pl_cargs(
-    params: V3dPar2AfniPlParameters,
+    params: V3dPar2AfniPlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function v_3d_par2_afni_pl_cargs(
  * @returns Outputs object.
  */
 function v_3d_par2_afni_pl_outputs(
-    params: V3dPar2AfniPlParameters,
+    params: V3dPar2AfniPlParamsDict,
     execution: Execution,
 ): V3dPar2AfniPlOutputs {
     const ret: V3dPar2AfniPlOutputs = {
@@ -175,7 +175,7 @@ function v_3d_par2_afni_pl_outputs(
  * @returns NamedTuple of outputs (described in `V3dPar2AfniPlOutputs`).
  */
 function v_3d_par2_afni_pl_execute(
-    params: V3dPar2AfniPlParameters,
+    params: V3dPar2AfniPlParamsDict,
     runner: Runner | null = null,
 ): V3dPar2AfniPlOutputs {
     runner = runner || getGlobalRunner();
@@ -231,6 +231,8 @@ function v_3d_par2_afni_pl(
 
 export {
       V3dPar2AfniPlOutputs,
+      V3dPar2AfniPlParamsDict,
+      V3dPar2AfniPlParamsDictTagged,
       V_3D_PAR2_AFNI_PL_METADATA,
       v_3d_par2_afni_pl,
       v_3d_par2_afni_pl_execute,

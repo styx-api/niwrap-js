@@ -11,17 +11,17 @@ const RCA_BASE_INIT_METADATA: Metadata = {
 };
 
 
-interface RcaBaseInitParameters {
+interface RcaBaseInitParamsDict {
     "@type"?: "freesurfer/rca-base-init";
     "log_file"?: string | null | undefined;
     "status_file"?: string | null | undefined;
     "cmd_file"?: string | null | undefined;
 }
-type RcaBaseInitParametersTagged = Required<Pick<RcaBaseInitParameters, '@type'>> & RcaBaseInitParameters;
+type RcaBaseInitParamsDictTagged = Required<Pick<RcaBaseInitParamsDict, '@type'>> & RcaBaseInitParamsDict;
 
 
 /**
- * Output object returned when calling `RcaBaseInitParameters(...)`.
+ * Output object returned when calling `RcaBaseInitParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function rca_base_init_params(
     log_file: string | null = null,
     status_file: string | null = null,
     cmd_file: string | null = null,
-): RcaBaseInitParametersTagged {
+): RcaBaseInitParamsDictTagged {
     const params = {
         "@type": "freesurfer/rca-base-init" as const,
     };
@@ -72,7 +72,7 @@ function rca_base_init_params(
  * @returns Command-line arguments.
  */
 function rca_base_init_cargs(
-    params: RcaBaseInitParameters,
+    params: RcaBaseInitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -102,7 +102,7 @@ function rca_base_init_cargs(
  * @returns Outputs object.
  */
 function rca_base_init_outputs(
-    params: RcaBaseInitParameters,
+    params: RcaBaseInitParamsDict,
     execution: Execution,
 ): RcaBaseInitOutputs {
     const ret: RcaBaseInitOutputs = {
@@ -127,7 +127,7 @@ function rca_base_init_outputs(
  * @returns NamedTuple of outputs (described in `RcaBaseInitOutputs`).
  */
 function rca_base_init_execute(
-    params: RcaBaseInitParameters,
+    params: RcaBaseInitParamsDict,
     runner: Runner | null = null,
 ): RcaBaseInitOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function rca_base_init(
 export {
       RCA_BASE_INIT_METADATA,
       RcaBaseInitOutputs,
+      RcaBaseInitParamsDict,
+      RcaBaseInitParamsDictTagged,
       rca_base_init,
       rca_base_init_execute,
       rca_base_init_params,

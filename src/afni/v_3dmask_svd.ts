@@ -11,7 +11,7 @@ const V_3DMASK_SVD_METADATA: Metadata = {
 };
 
 
-interface V3dmaskSvdParameters {
+interface V3dmaskSvdParamsDict {
     "@type"?: "afni/3dmaskSVD";
     "input_dataset": InputPathType;
     "vnorm": boolean;
@@ -23,11 +23,11 @@ interface V3dmaskSvdParameters {
     "ort"?: Array<InputPathType> | null | undefined;
     "alt_input"?: InputPathType | null | undefined;
 }
-type V3dmaskSvdParametersTagged = Required<Pick<V3dmaskSvdParameters, '@type'>> & V3dmaskSvdParameters;
+type V3dmaskSvdParamsDictTagged = Required<Pick<V3dmaskSvdParamsDict, '@type'>> & V3dmaskSvdParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmaskSvdParameters(...)`.
+ * Output object returned when calling `V3dmaskSvdParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_3dmask_svd_params(
     bandpass: Array<string> | null = null,
     ort: Array<InputPathType> | null = null,
     alt_input: InputPathType | null = null,
-): V3dmaskSvdParametersTagged {
+): V3dmaskSvdParamsDictTagged {
     const params = {
         "@type": "afni/3dmaskSVD" as const,
         "input_dataset": input_dataset,
@@ -106,7 +106,7 @@ function v_3dmask_svd_params(
  * @returns Command-line arguments.
  */
 function v_3dmask_svd_cargs(
-    params: V3dmaskSvdParameters,
+    params: V3dmaskSvdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function v_3dmask_svd_cargs(
  * @returns Outputs object.
  */
 function v_3dmask_svd_outputs(
-    params: V3dmaskSvdParameters,
+    params: V3dmaskSvdParamsDict,
     execution: Execution,
 ): V3dmaskSvdOutputs {
     const ret: V3dmaskSvdOutputs = {
@@ -193,7 +193,7 @@ function v_3dmask_svd_outputs(
  * @returns NamedTuple of outputs (described in `V3dmaskSvdOutputs`).
  */
 function v_3dmask_svd_execute(
-    params: V3dmaskSvdParameters,
+    params: V3dmaskSvdParamsDict,
     runner: Runner | null = null,
 ): V3dmaskSvdOutputs {
     runner = runner || getGlobalRunner();
@@ -247,6 +247,8 @@ function v_3dmask_svd(
 
 export {
       V3dmaskSvdOutputs,
+      V3dmaskSvdParamsDict,
+      V3dmaskSvdParamsDictTagged,
       V_3DMASK_SVD_METADATA,
       v_3dmask_svd,
       v_3dmask_svd_execute,

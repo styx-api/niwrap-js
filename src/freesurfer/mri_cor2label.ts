@@ -11,7 +11,7 @@ const MRI_COR2LABEL_METADATA: Metadata = {
 };
 
 
-interface MriCor2labelParameters {
+interface MriCor2labelParamsDict {
     "@type"?: "freesurfer/mri_cor2label";
     "input_file": InputPathType;
     "label_id": number;
@@ -26,11 +26,11 @@ interface MriCor2labelParameters {
     "erode"?: number | null | undefined;
     "help": boolean;
 }
-type MriCor2labelParametersTagged = Required<Pick<MriCor2labelParameters, '@type'>> & MriCor2labelParameters;
+type MriCor2labelParamsDictTagged = Required<Pick<MriCor2labelParamsDict, '@type'>> & MriCor2labelParamsDict;
 
 
 /**
- * Output object returned when calling `MriCor2labelParameters(...)`.
+ * Output object returned when calling `MriCor2labelParamsDict(...)`.
  *
  * @interface
  */
@@ -81,7 +81,7 @@ function mri_cor2label_params(
     dilate: number | null = null,
     erode: number | null = null,
     help: boolean = false,
-): MriCor2labelParametersTagged {
+): MriCor2labelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_cor2label" as const,
         "input_file": input_file,
@@ -124,7 +124,7 @@ function mri_cor2label_params(
  * @returns Command-line arguments.
  */
 function mri_cor2label_cargs(
-    params: MriCor2labelParameters,
+    params: MriCor2labelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -202,7 +202,7 @@ function mri_cor2label_cargs(
  * @returns Outputs object.
  */
 function mri_cor2label_outputs(
-    params: MriCor2labelParameters,
+    params: MriCor2labelParamsDict,
     execution: Execution,
 ): MriCor2labelOutputs {
     const ret: MriCor2labelOutputs = {
@@ -229,7 +229,7 @@ function mri_cor2label_outputs(
  * @returns NamedTuple of outputs (described in `MriCor2labelOutputs`).
  */
 function mri_cor2label_execute(
-    params: MriCor2labelParameters,
+    params: MriCor2labelParamsDict,
     runner: Runner | null = null,
 ): MriCor2labelOutputs {
     runner = runner || getGlobalRunner();
@@ -290,6 +290,8 @@ function mri_cor2label(
 export {
       MRI_COR2LABEL_METADATA,
       MriCor2labelOutputs,
+      MriCor2labelParamsDict,
+      MriCor2labelParamsDictTagged,
       mri_cor2label,
       mri_cor2label_execute,
       mri_cor2label_params,

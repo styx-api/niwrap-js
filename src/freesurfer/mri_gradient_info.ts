@@ -11,15 +11,15 @@ const MRI_GRADIENT_INFO_METADATA: Metadata = {
 };
 
 
-interface MriGradientInfoParameters {
+interface MriGradientInfoParamsDict {
     "@type"?: "freesurfer/mri_gradient_info";
     "input_image": InputPathType;
 }
-type MriGradientInfoParametersTagged = Required<Pick<MriGradientInfoParameters, '@type'>> & MriGradientInfoParameters;
+type MriGradientInfoParamsDictTagged = Required<Pick<MriGradientInfoParamsDict, '@type'>> & MriGradientInfoParamsDict;
 
 
 /**
- * Output object returned when calling `MriGradientInfoParameters(...)`.
+ * Output object returned when calling `MriGradientInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface MriGradientInfoOutputs {
  */
 function mri_gradient_info_params(
     input_image: InputPathType,
-): MriGradientInfoParametersTagged {
+): MriGradientInfoParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gradient_info" as const,
         "input_image": input_image,
@@ -62,7 +62,7 @@ function mri_gradient_info_params(
  * @returns Command-line arguments.
  */
 function mri_gradient_info_cargs(
-    params: MriGradientInfoParameters,
+    params: MriGradientInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function mri_gradient_info_cargs(
  * @returns Outputs object.
  */
 function mri_gradient_info_outputs(
-    params: MriGradientInfoParameters,
+    params: MriGradientInfoParamsDict,
     execution: Execution,
 ): MriGradientInfoOutputs {
     const ret: MriGradientInfoOutputs = {
@@ -107,7 +107,7 @@ function mri_gradient_info_outputs(
  * @returns NamedTuple of outputs (described in `MriGradientInfoOutputs`).
  */
 function mri_gradient_info_execute(
-    params: MriGradientInfoParameters,
+    params: MriGradientInfoParamsDict,
     runner: Runner | null = null,
 ): MriGradientInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function mri_gradient_info(
 export {
       MRI_GRADIENT_INFO_METADATA,
       MriGradientInfoOutputs,
+      MriGradientInfoParamsDict,
+      MriGradientInfoParamsDictTagged,
       mri_gradient_info,
       mri_gradient_info_execute,
       mri_gradient_info_params,

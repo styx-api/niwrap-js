@@ -10,7 +10,7 @@ const CIFTI_ROI_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface CiftiRoiAverageParameters {
+interface CiftiRoiAverageParamsDict {
     "@type"?: "workbench/cifti-roi-average";
     "roi-cifti"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface CiftiRoiAverageParameters {
     "cifti-in": InputPathType;
     "text-out": string;
 }
-type CiftiRoiAverageParametersTagged = Required<Pick<CiftiRoiAverageParameters, '@type'>> & CiftiRoiAverageParameters;
+type CiftiRoiAverageParamsDictTagged = Required<Pick<CiftiRoiAverageParamsDict, '@type'>> & CiftiRoiAverageParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiRoiAverageParameters(...)`.
+ * Output object returned when calling `CiftiRoiAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function cifti_roi_average_params(
     roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     text_out: string,
-): CiftiRoiAverageParametersTagged {
+): CiftiRoiAverageParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-roi-average" as const,
         "cifti-in": cifti_in,
@@ -101,7 +101,7 @@ function cifti_roi_average_params(
  * @returns Command-line arguments.
  */
 function cifti_roi_average_cargs(
-    params: CiftiRoiAverageParameters,
+    params: CiftiRoiAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function cifti_roi_average_cargs(
  * @returns Outputs object.
  */
 function cifti_roi_average_outputs(
-    params: CiftiRoiAverageParameters,
+    params: CiftiRoiAverageParamsDict,
     execution: Execution,
 ): CiftiRoiAverageOutputs {
     const ret: CiftiRoiAverageOutputs = {
@@ -157,7 +157,7 @@ function cifti_roi_average_outputs(
  * @returns NamedTuple of outputs (described in `CiftiRoiAverageOutputs`).
  */
 function cifti_roi_average_execute(
-    params: CiftiRoiAverageParameters,
+    params: CiftiRoiAverageParamsDict,
     runner: Runner | null = null,
 ): CiftiRoiAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function cifti_roi_average(
 export {
       CIFTI_ROI_AVERAGE_METADATA,
       CiftiRoiAverageOutputs,
+      CiftiRoiAverageParamsDict,
+      CiftiRoiAverageParamsDictTagged,
       cifti_roi_average,
       cifti_roi_average_execute,
       cifti_roi_average_params,

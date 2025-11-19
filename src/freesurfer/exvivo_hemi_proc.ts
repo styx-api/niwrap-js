@@ -11,7 +11,7 @@ const EXVIVO_HEMI_PROC_METADATA: Metadata = {
 };
 
 
-interface ExvivoHemiProcParameters {
+interface ExvivoHemiProcParamsDict {
     "@type"?: "freesurfer/exvivo-hemi-proc";
     "flashdir": string;
     "outdir": string;
@@ -29,11 +29,11 @@ interface ExvivoHemiProcParameters {
     "stop_mmppsp_after"?: string | null | undefined;
     "force": boolean;
 }
-type ExvivoHemiProcParametersTagged = Required<Pick<ExvivoHemiProcParameters, '@type'>> & ExvivoHemiProcParameters;
+type ExvivoHemiProcParamsDictTagged = Required<Pick<ExvivoHemiProcParamsDict, '@type'>> & ExvivoHemiProcParamsDict;
 
 
 /**
- * Output object returned when calling `ExvivoHemiProcParameters(...)`.
+ * Output object returned when calling `ExvivoHemiProcParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function exvivo_hemi_proc_params(
     samseg_only: boolean = false,
     stop_mmppsp_after: string | null = null,
     force: boolean = false,
-): ExvivoHemiProcParametersTagged {
+): ExvivoHemiProcParamsDictTagged {
     const params = {
         "@type": "freesurfer/exvivo-hemi-proc" as const,
         "flashdir": flashdir,
@@ -120,7 +120,7 @@ function exvivo_hemi_proc_params(
  * @returns Command-line arguments.
  */
 function exvivo_hemi_proc_cargs(
-    params: ExvivoHemiProcParameters,
+    params: ExvivoHemiProcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -195,7 +195,7 @@ function exvivo_hemi_proc_cargs(
  * @returns Outputs object.
  */
 function exvivo_hemi_proc_outputs(
-    params: ExvivoHemiProcParameters,
+    params: ExvivoHemiProcParamsDict,
     execution: Execution,
 ): ExvivoHemiProcOutputs {
     const ret: ExvivoHemiProcOutputs = {
@@ -220,7 +220,7 @@ function exvivo_hemi_proc_outputs(
  * @returns NamedTuple of outputs (described in `ExvivoHemiProcOutputs`).
  */
 function exvivo_hemi_proc_execute(
-    params: ExvivoHemiProcParameters,
+    params: ExvivoHemiProcParamsDict,
     runner: Runner | null = null,
 ): ExvivoHemiProcOutputs {
     runner = runner || getGlobalRunner();
@@ -287,6 +287,8 @@ function exvivo_hemi_proc(
 export {
       EXVIVO_HEMI_PROC_METADATA,
       ExvivoHemiProcOutputs,
+      ExvivoHemiProcParamsDict,
+      ExvivoHemiProcParamsDictTagged,
       exvivo_hemi_proc,
       exvivo_hemi_proc_execute,
       exvivo_hemi_proc_params,

@@ -11,93 +11,93 @@ const ANTS_REGISTRATION_METADATA: Metadata = {
 };
 
 
-interface AntsRegistrationInitialMovingTransformParameters {
+interface AntsRegistrationInitialMovingTransformParamsDict {
     "@type"?: "initial_moving_transform";
     "initial_moving_transform": InputPathType;
 }
-type AntsRegistrationInitialMovingTransformParametersTagged = Required<Pick<AntsRegistrationInitialMovingTransformParameters, '@type'>> & AntsRegistrationInitialMovingTransformParameters;
+type AntsRegistrationInitialMovingTransformParamsDictTagged = Required<Pick<AntsRegistrationInitialMovingTransformParamsDict, '@type'>> & AntsRegistrationInitialMovingTransformParamsDict;
 
 
-interface AntsRegistrationInitialMovingTransformUseInverseParameters {
+interface AntsRegistrationInitialMovingTransformUseInverseParamsDict {
     "@type"?: "initial_moving_transform_use_inverse";
     "initial_moving_transform": InputPathType;
     "use_inverse"?: boolean | null | undefined;
 }
-type AntsRegistrationInitialMovingTransformUseInverseParametersTagged = Required<Pick<AntsRegistrationInitialMovingTransformUseInverseParameters, '@type'>> & AntsRegistrationInitialMovingTransformUseInverseParameters;
+type AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged = Required<Pick<AntsRegistrationInitialMovingTransformUseInverseParamsDict, '@type'>> & AntsRegistrationInitialMovingTransformUseInverseParamsDict;
 
 
-interface AntsRegistrationInitialMovingTransformInitializationFeatureParameters {
+interface AntsRegistrationInitialMovingTransformInitializationFeatureParamsDict {
     "@type"?: "initial_moving_transform_initialization_feature";
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "initialization_feature": 0 | 1 | 2;
 }
-type AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged = Required<Pick<AntsRegistrationInitialMovingTransformInitializationFeatureParameters, '@type'>> & AntsRegistrationInitialMovingTransformInitializationFeatureParameters;
+type AntsRegistrationInitialMovingTransformInitializationFeatureParamsDictTagged = Required<Pick<AntsRegistrationInitialMovingTransformInitializationFeatureParamsDict, '@type'>> & AntsRegistrationInitialMovingTransformInitializationFeatureParamsDict;
 
 
-interface AntsRegistrationTransformRigidParameters {
+interface AntsRegistrationTransformRigidParamsDict {
     "@type"?: "transform_rigid";
     "gradient_step": number;
 }
-type AntsRegistrationTransformRigidParametersTagged = Required<Pick<AntsRegistrationTransformRigidParameters, '@type'>> & AntsRegistrationTransformRigidParameters;
+type AntsRegistrationTransformRigidParamsDictTagged = Required<Pick<AntsRegistrationTransformRigidParamsDict, '@type'>> & AntsRegistrationTransformRigidParamsDict;
 
 
-interface AntsRegistrationTransformAffineParameters {
+interface AntsRegistrationTransformAffineParamsDict {
     "@type"?: "transform_affine";
     "gradient_step": number;
 }
-type AntsRegistrationTransformAffineParametersTagged = Required<Pick<AntsRegistrationTransformAffineParameters, '@type'>> & AntsRegistrationTransformAffineParameters;
+type AntsRegistrationTransformAffineParamsDictTagged = Required<Pick<AntsRegistrationTransformAffineParamsDict, '@type'>> & AntsRegistrationTransformAffineParamsDict;
 
 
-interface AntsRegistrationTransformCompositeAffineParameters {
+interface AntsRegistrationTransformCompositeAffineParamsDict {
     "@type"?: "transform_composite_affine";
     "gradient_step": number;
 }
-type AntsRegistrationTransformCompositeAffineParametersTagged = Required<Pick<AntsRegistrationTransformCompositeAffineParameters, '@type'>> & AntsRegistrationTransformCompositeAffineParameters;
+type AntsRegistrationTransformCompositeAffineParamsDictTagged = Required<Pick<AntsRegistrationTransformCompositeAffineParamsDict, '@type'>> & AntsRegistrationTransformCompositeAffineParamsDict;
 
 
-interface AntsRegistrationTransformSimilarityParameters {
+interface AntsRegistrationTransformSimilarityParamsDict {
     "@type"?: "transform_similarity";
     "gradient_step": number;
 }
-type AntsRegistrationTransformSimilarityParametersTagged = Required<Pick<AntsRegistrationTransformSimilarityParameters, '@type'>> & AntsRegistrationTransformSimilarityParameters;
+type AntsRegistrationTransformSimilarityParamsDictTagged = Required<Pick<AntsRegistrationTransformSimilarityParamsDict, '@type'>> & AntsRegistrationTransformSimilarityParamsDict;
 
 
-interface AntsRegistrationTransformTranslationParameters {
+interface AntsRegistrationTransformTranslationParamsDict {
     "@type"?: "transform_translation";
     "gradient_step": number;
 }
-type AntsRegistrationTransformTranslationParametersTagged = Required<Pick<AntsRegistrationTransformTranslationParameters, '@type'>> & AntsRegistrationTransformTranslationParameters;
+type AntsRegistrationTransformTranslationParamsDictTagged = Required<Pick<AntsRegistrationTransformTranslationParamsDict, '@type'>> & AntsRegistrationTransformTranslationParamsDict;
 
 
-interface AntsRegistrationTransformBsplineParameters {
+interface AntsRegistrationTransformBsplineParamsDict {
     "@type"?: "transform_bspline";
     "gradient_step": number;
     "mesh_size_at_base_level": number;
 }
-type AntsRegistrationTransformBsplineParametersTagged = Required<Pick<AntsRegistrationTransformBsplineParameters, '@type'>> & AntsRegistrationTransformBsplineParameters;
+type AntsRegistrationTransformBsplineParamsDictTagged = Required<Pick<AntsRegistrationTransformBsplineParamsDict, '@type'>> & AntsRegistrationTransformBsplineParamsDict;
 
 
-interface AntsRegistrationTransformGaussianDisplacementFieldParameters {
+interface AntsRegistrationTransformGaussianDisplacementFieldParamsDict {
     "@type"?: "transform_gaussian_displacement_field";
     "gradient_step": number;
     "update_field_variance_in_voxel_space": number;
     "total_field_variance_in_voxel_space": number;
 }
-type AntsRegistrationTransformGaussianDisplacementFieldParametersTagged = Required<Pick<AntsRegistrationTransformGaussianDisplacementFieldParameters, '@type'>> & AntsRegistrationTransformGaussianDisplacementFieldParameters;
+type AntsRegistrationTransformGaussianDisplacementFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformGaussianDisplacementFieldParamsDict, '@type'>> & AntsRegistrationTransformGaussianDisplacementFieldParamsDict;
 
 
-interface AntsRegistrationTransformBsplineDisplacementFieldParameters {
+interface AntsRegistrationTransformBsplineDisplacementFieldParamsDict {
     "@type"?: "transform_bspline_displacement_field";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
     "total_field_mesh_size_at_base_level"?: number | null | undefined;
     "spline_order"?: number | null | undefined;
 }
-type AntsRegistrationTransformBsplineDisplacementFieldParametersTagged = Required<Pick<AntsRegistrationTransformBsplineDisplacementFieldParameters, '@type'>> & AntsRegistrationTransformBsplineDisplacementFieldParameters;
+type AntsRegistrationTransformBsplineDisplacementFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformBsplineDisplacementFieldParamsDict, '@type'>> & AntsRegistrationTransformBsplineDisplacementFieldParamsDict;
 
 
-interface AntsRegistrationTransformTimeVaryingVelocityFieldParameters {
+interface AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict {
     "@type"?: "transform_time_varying_velocity_field";
     "gradient_step": number;
     "number_of_time_indices": number;
@@ -106,49 +106,49 @@ interface AntsRegistrationTransformTimeVaryingVelocityFieldParameters {
     "total_field_variance_in_voxel_space": number;
     "total_field_time_variance": number;
 }
-type AntsRegistrationTransformTimeVaryingVelocityFieldParametersTagged = Required<Pick<AntsRegistrationTransformTimeVaryingVelocityFieldParameters, '@type'>> & AntsRegistrationTransformTimeVaryingVelocityFieldParameters;
+type AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict, '@type'>> & AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict;
 
 
-interface AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters {
+interface AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict {
     "@type"?: "transform_time_varying_bspline_velocity_field";
     "gradient_step": number;
     "velocity_field_mesh_size": number;
     "number_of_time_point_samples"?: number | null | undefined;
     "spline_order"?: number | null | undefined;
 }
-type AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParametersTagged = Required<Pick<AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters, '@type'>> & AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters;
+type AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict, '@type'>> & AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict;
 
 
-interface AntsRegistrationTransformSynParameters {
+interface AntsRegistrationTransformSynParamsDict {
     "@type"?: "transform_syn";
     "gradient_step": number;
     "update_field_variance_in_voxel_space": number;
     "total_field_variance_in_voxel_space": number;
 }
-type AntsRegistrationTransformSynParametersTagged = Required<Pick<AntsRegistrationTransformSynParameters, '@type'>> & AntsRegistrationTransformSynParameters;
+type AntsRegistrationTransformSynParamsDictTagged = Required<Pick<AntsRegistrationTransformSynParamsDict, '@type'>> & AntsRegistrationTransformSynParamsDict;
 
 
-interface AntsRegistrationTransformBsplineSynParameters {
+interface AntsRegistrationTransformBsplineSynParamsDict {
     "@type"?: "transform_bspline_syn";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
     "total_field_mesh_size_at_base_level"?: number | null | undefined;
     "spline_order"?: number | null | undefined;
 }
-type AntsRegistrationTransformBsplineSynParametersTagged = Required<Pick<AntsRegistrationTransformBsplineSynParameters, '@type'>> & AntsRegistrationTransformBsplineSynParameters;
+type AntsRegistrationTransformBsplineSynParamsDictTagged = Required<Pick<AntsRegistrationTransformBsplineSynParamsDict, '@type'>> & AntsRegistrationTransformBsplineSynParamsDict;
 
 
-interface AntsRegistrationTransformExponentialParameters {
+interface AntsRegistrationTransformExponentialParamsDict {
     "@type"?: "transform_exponential";
     "gradient_step": number;
     "update_field_variance_in_voxel_space": number;
     "velocity_field_variance_in_voxel_space": number;
     "number_of_integration_steps": number;
 }
-type AntsRegistrationTransformExponentialParametersTagged = Required<Pick<AntsRegistrationTransformExponentialParameters, '@type'>> & AntsRegistrationTransformExponentialParameters;
+type AntsRegistrationTransformExponentialParamsDictTagged = Required<Pick<AntsRegistrationTransformExponentialParamsDict, '@type'>> & AntsRegistrationTransformExponentialParamsDict;
 
 
-interface AntsRegistrationTransformBsplineExponentialParameters {
+interface AntsRegistrationTransformBsplineExponentialParamsDict {
     "@type"?: "transform_bspline_exponential";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
@@ -156,10 +156,10 @@ interface AntsRegistrationTransformBsplineExponentialParameters {
     "number_of_integration_steps"?: number | null | undefined;
     "spline_order"?: number | null | undefined;
 }
-type AntsRegistrationTransformBsplineExponentialParametersTagged = Required<Pick<AntsRegistrationTransformBsplineExponentialParameters, '@type'>> & AntsRegistrationTransformBsplineExponentialParameters;
+type AntsRegistrationTransformBsplineExponentialParamsDictTagged = Required<Pick<AntsRegistrationTransformBsplineExponentialParamsDict, '@type'>> & AntsRegistrationTransformBsplineExponentialParamsDict;
 
 
-interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters {
+interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict {
     "@type"?: "metric_ants_neighbourhood_cross_correlation";
     "fixed_image": string;
     "moving_image": string;
@@ -169,10 +169,10 @@ interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters {
     "sampling_percentage"?: number | null | undefined;
     "use_gradient_filter"?: boolean | null | undefined;
 }
-type AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParametersTagged = Required<Pick<AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters, '@type'>> & AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters;
+type AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged = Required<Pick<AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict, '@type'>> & AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict;
 
 
-interface AntsRegistrationMetricMutualInformationParameters {
+interface AntsRegistrationMetricMutualInformationParamsDict {
     "@type"?: "metric_mutual_information";
     "fixed_image": string;
     "moving_image": string;
@@ -182,10 +182,10 @@ interface AntsRegistrationMetricMutualInformationParameters {
     "sampling_percentage"?: number | null | undefined;
     "use_gradient_filter"?: boolean | null | undefined;
 }
-type AntsRegistrationMetricMutualInformationParametersTagged = Required<Pick<AntsRegistrationMetricMutualInformationParameters, '@type'>> & AntsRegistrationMetricMutualInformationParameters;
+type AntsRegistrationMetricMutualInformationParamsDictTagged = Required<Pick<AntsRegistrationMetricMutualInformationParamsDict, '@type'>> & AntsRegistrationMetricMutualInformationParamsDict;
 
 
-interface AntsRegistrationMetricMattesParameters {
+interface AntsRegistrationMetricMattesParamsDict {
     "@type"?: "metric_mattes";
     "fixed_image": string;
     "moving_image": string;
@@ -195,10 +195,10 @@ interface AntsRegistrationMetricMattesParameters {
     "sampling_percentage"?: number | null | undefined;
     "use_gradient_filter"?: boolean | null | undefined;
 }
-type AntsRegistrationMetricMattesParametersTagged = Required<Pick<AntsRegistrationMetricMattesParameters, '@type'>> & AntsRegistrationMetricMattesParameters;
+type AntsRegistrationMetricMattesParamsDictTagged = Required<Pick<AntsRegistrationMetricMattesParamsDict, '@type'>> & AntsRegistrationMetricMattesParamsDict;
 
 
-interface AntsRegistrationMetricMeanSquaresParameters {
+interface AntsRegistrationMetricMeanSquaresParamsDict {
     "@type"?: "metric_mean_squares";
     "fixed_image": string;
     "moving_image": string;
@@ -208,10 +208,10 @@ interface AntsRegistrationMetricMeanSquaresParameters {
     "sampling_percentage"?: number | null | undefined;
     "use_gradient_filter"?: boolean | null | undefined;
 }
-type AntsRegistrationMetricMeanSquaresParametersTagged = Required<Pick<AntsRegistrationMetricMeanSquaresParameters, '@type'>> & AntsRegistrationMetricMeanSquaresParameters;
+type AntsRegistrationMetricMeanSquaresParamsDictTagged = Required<Pick<AntsRegistrationMetricMeanSquaresParamsDict, '@type'>> & AntsRegistrationMetricMeanSquaresParamsDict;
 
 
-interface AntsRegistrationMetricDemonsParameters {
+interface AntsRegistrationMetricDemonsParamsDict {
     "@type"?: "metric_demons";
     "fixed_image": string;
     "moving_image": string;
@@ -221,10 +221,10 @@ interface AntsRegistrationMetricDemonsParameters {
     "sampling_percentage"?: number | null | undefined;
     "use_gradient_filter"?: boolean | null | undefined;
 }
-type AntsRegistrationMetricDemonsParametersTagged = Required<Pick<AntsRegistrationMetricDemonsParameters, '@type'>> & AntsRegistrationMetricDemonsParameters;
+type AntsRegistrationMetricDemonsParamsDictTagged = Required<Pick<AntsRegistrationMetricDemonsParamsDict, '@type'>> & AntsRegistrationMetricDemonsParamsDict;
 
 
-interface AntsRegistrationMetricGlobalCorrelationParameters {
+interface AntsRegistrationMetricGlobalCorrelationParamsDict {
     "@type"?: "metric_global_correlation";
     "fixed_image": string;
     "moving_image": string;
@@ -234,10 +234,10 @@ interface AntsRegistrationMetricGlobalCorrelationParameters {
     "sampling_percentage"?: number | null | undefined;
     "use_gradient_filter"?: boolean | null | undefined;
 }
-type AntsRegistrationMetricGlobalCorrelationParametersTagged = Required<Pick<AntsRegistrationMetricGlobalCorrelationParameters, '@type'>> & AntsRegistrationMetricGlobalCorrelationParameters;
+type AntsRegistrationMetricGlobalCorrelationParamsDictTagged = Required<Pick<AntsRegistrationMetricGlobalCorrelationParamsDict, '@type'>> & AntsRegistrationMetricGlobalCorrelationParamsDict;
 
 
-interface AntsRegistrationMetricEuclideanIcpParameters {
+interface AntsRegistrationMetricEuclideanIcpParamsDict {
     "@type"?: "metric_euclidean_icp";
     "fixed_point_set": string;
     "moving_point_set": string;
@@ -245,19 +245,19 @@ interface AntsRegistrationMetricEuclideanIcpParameters {
     "sampling_percentage"?: number | null | undefined;
     "boundary_points_only"?: "0" | null | undefined;
 }
-type AntsRegistrationMetricEuclideanIcpParametersTagged = Required<Pick<AntsRegistrationMetricEuclideanIcpParameters, '@type'>> & AntsRegistrationMetricEuclideanIcpParameters;
+type AntsRegistrationMetricEuclideanIcpParamsDictTagged = Required<Pick<AntsRegistrationMetricEuclideanIcpParamsDict, '@type'>> & AntsRegistrationMetricEuclideanIcpParamsDict;
 
 
-interface AntsRegistrationMetricPointSetExpectationParameters {
+interface AntsRegistrationMetricPointSetExpectationParamsDict {
     "@type"?: "metric_point_set_expectation";
     "metric_weight": number;
     "point_set_sigma"?: number | null | undefined;
     "sampling_percentage"?: number | null | undefined;
 }
-type AntsRegistrationMetricPointSetExpectationParametersTagged = Required<Pick<AntsRegistrationMetricPointSetExpectationParameters, '@type'>> & AntsRegistrationMetricPointSetExpectationParameters;
+type AntsRegistrationMetricPointSetExpectationParamsDictTagged = Required<Pick<AntsRegistrationMetricPointSetExpectationParamsDict, '@type'>> & AntsRegistrationMetricPointSetExpectationParamsDict;
 
 
-interface AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters {
+interface AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict {
     "@type"?: "metric_jensen_havrda_charvet_tsallis";
     "fixed_point_set": string;
     "moving_point_set": string;
@@ -267,53 +267,53 @@ interface AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters {
     "point_set_sigma"?: number | null | undefined;
     "k_neighborhood"?: number | null | undefined;
 }
-type AntsRegistrationMetricJensenHavrdaCharvetTsallisParametersTagged = Required<Pick<AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters, '@type'>> & AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters;
+type AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged = Required<Pick<AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict, '@type'>> & AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict;
 
 
-interface AntsRegistrationMetricIgdmParameters {
+interface AntsRegistrationMetricIgdmParamsDict {
     "@type"?: "metric_igdm";
 }
-type AntsRegistrationMetricIgdmParametersTagged = Required<Pick<AntsRegistrationMetricIgdmParameters, '@type'>> & AntsRegistrationMetricIgdmParameters;
+type AntsRegistrationMetricIgdmParamsDictTagged = Required<Pick<AntsRegistrationMetricIgdmParamsDict, '@type'>> & AntsRegistrationMetricIgdmParamsDict;
 
 
-interface AntsRegistrationConvergenceParameters {
+interface AntsRegistrationConvergenceParamsDict {
     "@type"?: "convergence";
     "convergence": string;
     "convergence_threshold": number;
     "convergence_window_size": number;
 }
-type AntsRegistrationConvergenceParametersTagged = Required<Pick<AntsRegistrationConvergenceParameters, '@type'>> & AntsRegistrationConvergenceParameters;
+type AntsRegistrationConvergenceParamsDictTagged = Required<Pick<AntsRegistrationConvergenceParamsDict, '@type'>> & AntsRegistrationConvergenceParamsDict;
 
 
-interface AntsRegistrationStageParameters {
+interface AntsRegistrationStageParamsDict {
     "@type"?: "stage";
-    "transform": AntsRegistrationTransformRigidParametersTagged | AntsRegistrationTransformAffineParametersTagged | AntsRegistrationTransformCompositeAffineParametersTagged | AntsRegistrationTransformSimilarityParametersTagged | AntsRegistrationTransformTranslationParametersTagged | AntsRegistrationTransformBsplineParametersTagged | AntsRegistrationTransformGaussianDisplacementFieldParametersTagged | AntsRegistrationTransformBsplineDisplacementFieldParametersTagged | AntsRegistrationTransformTimeVaryingVelocityFieldParametersTagged | AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParametersTagged | AntsRegistrationTransformSynParametersTagged | AntsRegistrationTransformBsplineSynParametersTagged | AntsRegistrationTransformExponentialParametersTagged | AntsRegistrationTransformBsplineExponentialParametersTagged;
-    "metric": AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParametersTagged | AntsRegistrationMetricMutualInformationParametersTagged | AntsRegistrationMetricMattesParametersTagged | AntsRegistrationMetricMeanSquaresParametersTagged | AntsRegistrationMetricDemonsParametersTagged | AntsRegistrationMetricGlobalCorrelationParametersTagged | AntsRegistrationMetricEuclideanIcpParametersTagged | AntsRegistrationMetricPointSetExpectationParametersTagged | AntsRegistrationMetricJensenHavrdaCharvetTsallisParametersTagged | AntsRegistrationMetricIgdmParametersTagged;
-    "convergence": AntsRegistrationConvergenceParameters;
+    "transform": AntsRegistrationTransformRigidParamsDictTagged | AntsRegistrationTransformAffineParamsDictTagged | AntsRegistrationTransformCompositeAffineParamsDictTagged | AntsRegistrationTransformSimilarityParamsDictTagged | AntsRegistrationTransformTranslationParamsDictTagged | AntsRegistrationTransformBsplineParamsDictTagged | AntsRegistrationTransformGaussianDisplacementFieldParamsDictTagged | AntsRegistrationTransformBsplineDisplacementFieldParamsDictTagged | AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged | AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged | AntsRegistrationTransformSynParamsDictTagged | AntsRegistrationTransformBsplineSynParamsDictTagged | AntsRegistrationTransformExponentialParamsDictTagged | AntsRegistrationTransformBsplineExponentialParamsDictTagged;
+    "metric": AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged | AntsRegistrationMetricMutualInformationParamsDictTagged | AntsRegistrationMetricMattesParamsDictTagged | AntsRegistrationMetricMeanSquaresParamsDictTagged | AntsRegistrationMetricDemonsParamsDictTagged | AntsRegistrationMetricGlobalCorrelationParamsDictTagged | AntsRegistrationMetricEuclideanIcpParamsDictTagged | AntsRegistrationMetricPointSetExpectationParamsDictTagged | AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged | AntsRegistrationMetricIgdmParamsDictTagged;
+    "convergence": AntsRegistrationConvergenceParamsDict;
     "smoothing_sigmas": string;
     "shrink_factors": string;
     "use_histogram_matching"?: boolean | null | undefined;
 }
-type AntsRegistrationStageParametersTagged = Required<Pick<AntsRegistrationStageParameters, '@type'>> & AntsRegistrationStageParameters;
+type AntsRegistrationStageParamsDictTagged = Required<Pick<AntsRegistrationStageParamsDict, '@type'>> & AntsRegistrationStageParamsDict;
 
 
-interface AntsRegistrationWinsorizeImageIntensitiesParameters {
+interface AntsRegistrationWinsorizeImageIntensitiesParamsDict {
     "@type"?: "winsorize_image_intensities";
     "lower_quantile": number;
     "upper_quantile": number;
 }
-type AntsRegistrationWinsorizeImageIntensitiesParametersTagged = Required<Pick<AntsRegistrationWinsorizeImageIntensitiesParameters, '@type'>> & AntsRegistrationWinsorizeImageIntensitiesParameters;
+type AntsRegistrationWinsorizeImageIntensitiesParamsDictTagged = Required<Pick<AntsRegistrationWinsorizeImageIntensitiesParamsDict, '@type'>> & AntsRegistrationWinsorizeImageIntensitiesParamsDict;
 
 
-interface AntsRegistrationMasksParameters {
+interface AntsRegistrationMasksParamsDict {
     "@type"?: "masks";
     "fixed_mask"?: string | null | undefined;
     "moving_mask"?: string | null | undefined;
 }
-type AntsRegistrationMasksParametersTagged = Required<Pick<AntsRegistrationMasksParameters, '@type'>> & AntsRegistrationMasksParameters;
+type AntsRegistrationMasksParamsDictTagged = Required<Pick<AntsRegistrationMasksParamsDict, '@type'>> & AntsRegistrationMasksParamsDict;
 
 
-interface AntsRegistrationParameters {
+interface AntsRegistrationParamsDict {
     "@type"?: "ants/antsRegistration";
     "dimensionality"?: 2 | 3 | 4 | null | undefined;
     "output"?: string | null | undefined;
@@ -327,16 +327,16 @@ interface AntsRegistrationParameters {
     "interpolation"?: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null | undefined;
     "restrict_deformation"?: Array<boolean> | null | undefined;
     "initial_fixed_transform"?: string | null | undefined;
-    "initial_moving_transform"?: AntsRegistrationInitialMovingTransformParametersTagged | AntsRegistrationInitialMovingTransformUseInverseParametersTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged | null | undefined;
-    "stages": Array<AntsRegistrationStageParameters>;
-    "winsorize_image_intensities"?: AntsRegistrationWinsorizeImageIntensitiesParameters | null | undefined;
-    "masks"?: AntsRegistrationMasksParameters | null | undefined;
+    "initial_moving_transform"?: AntsRegistrationInitialMovingTransformParamsDictTagged | AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParamsDictTagged | null | undefined;
+    "stages": Array<AntsRegistrationStageParamsDict>;
+    "winsorize_image_intensities"?: AntsRegistrationWinsorizeImageIntensitiesParamsDict | null | undefined;
+    "masks"?: AntsRegistrationMasksParamsDict | null | undefined;
     "minc"?: boolean | null | undefined;
     "random_seed"?: number | null | undefined;
     "verbose"?: boolean | null | undefined;
     "float"?: boolean | null | undefined;
 }
-type AntsRegistrationParametersTagged = Required<Pick<AntsRegistrationParameters, '@type'>> & AntsRegistrationParameters;
+type AntsRegistrationParamsDictTagged = Required<Pick<AntsRegistrationParamsDict, '@type'>> & AntsRegistrationParamsDict;
 
 
 /**
@@ -468,9 +468,9 @@ function ants_registration_metric_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_initial_moving_transform_params(
+function ants_registration_initial_moving_transform(
     initial_moving_transform: InputPathType,
-): AntsRegistrationInitialMovingTransformParametersTagged {
+): AntsRegistrationInitialMovingTransformParamsDictTagged {
     const params = {
         "@type": "initial_moving_transform" as const,
         "initial_moving_transform": initial_moving_transform,
@@ -488,7 +488,7 @@ function ants_registration_initial_moving_transform_params(
  * @returns Command-line arguments.
  */
 function ants_registration_initial_moving_transform_cargs(
-    params: AntsRegistrationInitialMovingTransformParameters,
+    params: AntsRegistrationInitialMovingTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -504,10 +504,10 @@ function ants_registration_initial_moving_transform_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_initial_moving_transform_use_inverse_params(
+function ants_registration_initial_moving_transform_use_inverse(
     initial_moving_transform: InputPathType,
     use_inverse: boolean | null = null,
-): AntsRegistrationInitialMovingTransformUseInverseParametersTagged {
+): AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged {
     const params = {
         "@type": "initial_moving_transform_use_inverse" as const,
         "initial_moving_transform": initial_moving_transform,
@@ -528,7 +528,7 @@ function ants_registration_initial_moving_transform_use_inverse_params(
  * @returns Command-line arguments.
  */
 function ants_registration_initial_moving_transform_use_inverse_cargs(
-    params: AntsRegistrationInitialMovingTransformUseInverseParameters,
+    params: AntsRegistrationInitialMovingTransformUseInverseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -546,11 +546,11 @@ function ants_registration_initial_moving_transform_use_inverse_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_initial_moving_transform_initialization_feature_params(
+function ants_registration_initial_moving_transform_initialization_feature(
     fixed_image: InputPathType,
     moving_image: InputPathType,
     initialization_feature: 0 | 1 | 2,
-): AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged {
+): AntsRegistrationInitialMovingTransformInitializationFeatureParamsDictTagged {
     const params = {
         "@type": "initial_moving_transform_initialization_feature" as const,
         "fixed_image": fixed_image,
@@ -570,7 +570,7 @@ function ants_registration_initial_moving_transform_initialization_feature_param
  * @returns Command-line arguments.
  */
 function ants_registration_initial_moving_transform_initialization_feature_cargs(
-    params: AntsRegistrationInitialMovingTransformInitializationFeatureParameters,
+    params: AntsRegistrationInitialMovingTransformInitializationFeatureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -585,9 +585,9 @@ function ants_registration_initial_moving_transform_initialization_feature_cargs
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_rigid_params(
+function ants_registration_transform_rigid(
     gradient_step: number,
-): AntsRegistrationTransformRigidParametersTagged {
+): AntsRegistrationTransformRigidParamsDictTagged {
     const params = {
         "@type": "transform_rigid" as const,
         "gradient_step": gradient_step,
@@ -605,7 +605,7 @@ function ants_registration_transform_rigid_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_rigid_cargs(
-    params: AntsRegistrationTransformRigidParameters,
+    params: AntsRegistrationTransformRigidParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -620,9 +620,9 @@ function ants_registration_transform_rigid_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_affine_params(
+function ants_registration_transform_affine(
     gradient_step: number,
-): AntsRegistrationTransformAffineParametersTagged {
+): AntsRegistrationTransformAffineParamsDictTagged {
     const params = {
         "@type": "transform_affine" as const,
         "gradient_step": gradient_step,
@@ -640,7 +640,7 @@ function ants_registration_transform_affine_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_affine_cargs(
-    params: AntsRegistrationTransformAffineParameters,
+    params: AntsRegistrationTransformAffineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -655,9 +655,9 @@ function ants_registration_transform_affine_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_composite_affine_params(
+function ants_registration_transform_composite_affine(
     gradient_step: number,
-): AntsRegistrationTransformCompositeAffineParametersTagged {
+): AntsRegistrationTransformCompositeAffineParamsDictTagged {
     const params = {
         "@type": "transform_composite_affine" as const,
         "gradient_step": gradient_step,
@@ -675,7 +675,7 @@ function ants_registration_transform_composite_affine_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_composite_affine_cargs(
-    params: AntsRegistrationTransformCompositeAffineParameters,
+    params: AntsRegistrationTransformCompositeAffineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -690,9 +690,9 @@ function ants_registration_transform_composite_affine_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_similarity_params(
+function ants_registration_transform_similarity(
     gradient_step: number,
-): AntsRegistrationTransformSimilarityParametersTagged {
+): AntsRegistrationTransformSimilarityParamsDictTagged {
     const params = {
         "@type": "transform_similarity" as const,
         "gradient_step": gradient_step,
@@ -710,7 +710,7 @@ function ants_registration_transform_similarity_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_similarity_cargs(
-    params: AntsRegistrationTransformSimilarityParameters,
+    params: AntsRegistrationTransformSimilarityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -725,9 +725,9 @@ function ants_registration_transform_similarity_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_translation_params(
+function ants_registration_transform_translation(
     gradient_step: number,
-): AntsRegistrationTransformTranslationParametersTagged {
+): AntsRegistrationTransformTranslationParamsDictTagged {
     const params = {
         "@type": "transform_translation" as const,
         "gradient_step": gradient_step,
@@ -745,7 +745,7 @@ function ants_registration_transform_translation_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_translation_cargs(
-    params: AntsRegistrationTransformTranslationParameters,
+    params: AntsRegistrationTransformTranslationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -760,10 +760,10 @@ function ants_registration_transform_translation_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_bspline_params(
+function ants_registration_transform_bspline(
     gradient_step: number,
     mesh_size_at_base_level: number,
-): AntsRegistrationTransformBsplineParametersTagged {
+): AntsRegistrationTransformBsplineParamsDictTagged {
     const params = {
         "@type": "transform_bspline" as const,
         "gradient_step": gradient_step,
@@ -782,7 +782,7 @@ function ants_registration_transform_bspline_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_bspline_cargs(
-    params: AntsRegistrationTransformBsplineParameters,
+    params: AntsRegistrationTransformBsplineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -797,11 +797,11 @@ function ants_registration_transform_bspline_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_gaussian_displacement_field_params(
+function ants_registration_transform_gaussian_displacement_field(
     gradient_step: number,
     update_field_variance_in_voxel_space: number,
     total_field_variance_in_voxel_space: number,
-): AntsRegistrationTransformGaussianDisplacementFieldParametersTagged {
+): AntsRegistrationTransformGaussianDisplacementFieldParamsDictTagged {
     const params = {
         "@type": "transform_gaussian_displacement_field" as const,
         "gradient_step": gradient_step,
@@ -821,7 +821,7 @@ function ants_registration_transform_gaussian_displacement_field_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_gaussian_displacement_field_cargs(
-    params: AntsRegistrationTransformGaussianDisplacementFieldParameters,
+    params: AntsRegistrationTransformGaussianDisplacementFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -836,12 +836,12 @@ function ants_registration_transform_gaussian_displacement_field_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_bspline_displacement_field_params(
+function ants_registration_transform_bspline_displacement_field(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
     total_field_mesh_size_at_base_level: number | null = null,
     spline_order: number | null = null,
-): AntsRegistrationTransformBsplineDisplacementFieldParametersTagged {
+): AntsRegistrationTransformBsplineDisplacementFieldParamsDictTagged {
     const params = {
         "@type": "transform_bspline_displacement_field" as const,
         "gradient_step": gradient_step,
@@ -866,7 +866,7 @@ function ants_registration_transform_bspline_displacement_field_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_bspline_displacement_field_cargs(
-    params: AntsRegistrationTransformBsplineDisplacementFieldParameters,
+    params: AntsRegistrationTransformBsplineDisplacementFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -883,14 +883,14 @@ function ants_registration_transform_bspline_displacement_field_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_time_varying_velocity_field_params(
+function ants_registration_transform_time_varying_velocity_field(
     gradient_step: number,
     number_of_time_indices: number,
     update_field_variance_in_voxel_space: number,
     update_field_time_variance: number,
     total_field_variance_in_voxel_space: number,
     total_field_time_variance: number,
-): AntsRegistrationTransformTimeVaryingVelocityFieldParametersTagged {
+): AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged {
     const params = {
         "@type": "transform_time_varying_velocity_field" as const,
         "gradient_step": gradient_step,
@@ -913,7 +913,7 @@ function ants_registration_transform_time_varying_velocity_field_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_time_varying_velocity_field_cargs(
-    params: AntsRegistrationTransformTimeVaryingVelocityFieldParameters,
+    params: AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -928,12 +928,12 @@ function ants_registration_transform_time_varying_velocity_field_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_time_varying_bspline_velocity_field_params(
+function ants_registration_transform_time_varying_bspline_velocity_field(
     gradient_step: number,
     velocity_field_mesh_size: number,
     number_of_time_point_samples: number | null = null,
     spline_order: number | null = null,
-): AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParametersTagged {
+): AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged {
     const params = {
         "@type": "transform_time_varying_bspline_velocity_field" as const,
         "gradient_step": gradient_step,
@@ -958,7 +958,7 @@ function ants_registration_transform_time_varying_bspline_velocity_field_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
-    params: AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParameters,
+    params: AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -975,11 +975,11 @@ function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_syn_params(
+function ants_registration_transform_syn(
     gradient_step: number,
     update_field_variance_in_voxel_space: number,
     total_field_variance_in_voxel_space: number,
-): AntsRegistrationTransformSynParametersTagged {
+): AntsRegistrationTransformSynParamsDictTagged {
     const params = {
         "@type": "transform_syn" as const,
         "gradient_step": gradient_step,
@@ -999,7 +999,7 @@ function ants_registration_transform_syn_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_syn_cargs(
-    params: AntsRegistrationTransformSynParameters,
+    params: AntsRegistrationTransformSynParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1014,12 +1014,12 @@ function ants_registration_transform_syn_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_bspline_syn_params(
+function ants_registration_transform_bspline_syn(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
     total_field_mesh_size_at_base_level: number | null = null,
     spline_order: number | null = null,
-): AntsRegistrationTransformBsplineSynParametersTagged {
+): AntsRegistrationTransformBsplineSynParamsDictTagged {
     const params = {
         "@type": "transform_bspline_syn" as const,
         "gradient_step": gradient_step,
@@ -1044,7 +1044,7 @@ function ants_registration_transform_bspline_syn_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_bspline_syn_cargs(
-    params: AntsRegistrationTransformBsplineSynParameters,
+    params: AntsRegistrationTransformBsplineSynParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1061,12 +1061,12 @@ function ants_registration_transform_bspline_syn_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_exponential_params(
+function ants_registration_transform_exponential(
     gradient_step: number,
     update_field_variance_in_voxel_space: number,
     velocity_field_variance_in_voxel_space: number,
     number_of_integration_steps: number,
-): AntsRegistrationTransformExponentialParametersTagged {
+): AntsRegistrationTransformExponentialParamsDictTagged {
     const params = {
         "@type": "transform_exponential" as const,
         "gradient_step": gradient_step,
@@ -1087,7 +1087,7 @@ function ants_registration_transform_exponential_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_exponential_cargs(
-    params: AntsRegistrationTransformExponentialParameters,
+    params: AntsRegistrationTransformExponentialParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1102,13 +1102,13 @@ function ants_registration_transform_exponential_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_transform_bspline_exponential_params(
+function ants_registration_transform_bspline_exponential(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
     velocity_field_mesh_size_at_base_level: number | null = null,
     number_of_integration_steps: number | null = null,
     spline_order: number | null = null,
-): AntsRegistrationTransformBsplineExponentialParametersTagged {
+): AntsRegistrationTransformBsplineExponentialParamsDictTagged {
     const params = {
         "@type": "transform_bspline_exponential" as const,
         "gradient_step": gradient_step,
@@ -1136,7 +1136,7 @@ function ants_registration_transform_bspline_exponential_params(
  * @returns Command-line arguments.
  */
 function ants_registration_transform_bspline_exponential_cargs(
-    params: AntsRegistrationTransformBsplineExponentialParameters,
+    params: AntsRegistrationTransformBsplineExponentialParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1153,7 +1153,7 @@ function ants_registration_transform_bspline_exponential_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_ants_neighbourhood_cross_correlation_params(
+function ants_registration_metric_ants_neighbourhood_cross_correlation(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
@@ -1161,7 +1161,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_params(
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
     use_gradient_filter: boolean | null = null,
-): AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParametersTagged {
+): AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged {
     const params = {
         "@type": "metric_ants_neighbourhood_cross_correlation" as const,
         "fixed_image": fixed_image,
@@ -1193,7 +1193,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
-    params: AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParameters,
+    params: AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1210,7 +1210,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_mutual_information_params(
+function ants_registration_metric_mutual_information(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
@@ -1218,7 +1218,7 @@ function ants_registration_metric_mutual_information_params(
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
     use_gradient_filter: boolean | null = null,
-): AntsRegistrationMetricMutualInformationParametersTagged {
+): AntsRegistrationMetricMutualInformationParamsDictTagged {
     const params = {
         "@type": "metric_mutual_information" as const,
         "fixed_image": fixed_image,
@@ -1250,7 +1250,7 @@ function ants_registration_metric_mutual_information_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_mutual_information_cargs(
-    params: AntsRegistrationMetricMutualInformationParameters,
+    params: AntsRegistrationMetricMutualInformationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1267,7 +1267,7 @@ function ants_registration_metric_mutual_information_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_mattes_params(
+function ants_registration_metric_mattes(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
@@ -1275,7 +1275,7 @@ function ants_registration_metric_mattes_params(
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
     use_gradient_filter: boolean | null = null,
-): AntsRegistrationMetricMattesParametersTagged {
+): AntsRegistrationMetricMattesParamsDictTagged {
     const params = {
         "@type": "metric_mattes" as const,
         "fixed_image": fixed_image,
@@ -1307,7 +1307,7 @@ function ants_registration_metric_mattes_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_mattes_cargs(
-    params: AntsRegistrationMetricMattesParameters,
+    params: AntsRegistrationMetricMattesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1324,7 +1324,7 @@ function ants_registration_metric_mattes_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_mean_squares_params(
+function ants_registration_metric_mean_squares(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
@@ -1332,7 +1332,7 @@ function ants_registration_metric_mean_squares_params(
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
     use_gradient_filter: boolean | null = null,
-): AntsRegistrationMetricMeanSquaresParametersTagged {
+): AntsRegistrationMetricMeanSquaresParamsDictTagged {
     const params = {
         "@type": "metric_mean_squares" as const,
         "fixed_image": fixed_image,
@@ -1364,7 +1364,7 @@ function ants_registration_metric_mean_squares_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_mean_squares_cargs(
-    params: AntsRegistrationMetricMeanSquaresParameters,
+    params: AntsRegistrationMetricMeanSquaresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1381,7 +1381,7 @@ function ants_registration_metric_mean_squares_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_demons_params(
+function ants_registration_metric_demons(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
@@ -1389,7 +1389,7 @@ function ants_registration_metric_demons_params(
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
     use_gradient_filter: boolean | null = null,
-): AntsRegistrationMetricDemonsParametersTagged {
+): AntsRegistrationMetricDemonsParamsDictTagged {
     const params = {
         "@type": "metric_demons" as const,
         "fixed_image": fixed_image,
@@ -1421,7 +1421,7 @@ function ants_registration_metric_demons_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_demons_cargs(
-    params: AntsRegistrationMetricDemonsParameters,
+    params: AntsRegistrationMetricDemonsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1438,7 +1438,7 @@ function ants_registration_metric_demons_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_global_correlation_params(
+function ants_registration_metric_global_correlation(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
@@ -1446,7 +1446,7 @@ function ants_registration_metric_global_correlation_params(
     sampling_strategy: "None" | "Regular" | "Random" | null = null,
     sampling_percentage: number | null = null,
     use_gradient_filter: boolean | null = null,
-): AntsRegistrationMetricGlobalCorrelationParametersTagged {
+): AntsRegistrationMetricGlobalCorrelationParamsDictTagged {
     const params = {
         "@type": "metric_global_correlation" as const,
         "fixed_image": fixed_image,
@@ -1478,7 +1478,7 @@ function ants_registration_metric_global_correlation_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_global_correlation_cargs(
-    params: AntsRegistrationMetricGlobalCorrelationParameters,
+    params: AntsRegistrationMetricGlobalCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1495,13 +1495,13 @@ function ants_registration_metric_global_correlation_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_euclidean_icp_params(
+function ants_registration_metric_euclidean_icp(
     fixed_point_set: string,
     moving_point_set: string,
     metric_weight: number,
     sampling_percentage: number | null = null,
     boundary_points_only: "0" | null = null,
-): AntsRegistrationMetricEuclideanIcpParametersTagged {
+): AntsRegistrationMetricEuclideanIcpParamsDictTagged {
     const params = {
         "@type": "metric_euclidean_icp" as const,
         "fixed_point_set": fixed_point_set,
@@ -1527,7 +1527,7 @@ function ants_registration_metric_euclidean_icp_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_euclidean_icp_cargs(
-    params: AntsRegistrationMetricEuclideanIcpParameters,
+    params: AntsRegistrationMetricEuclideanIcpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1544,11 +1544,11 @@ function ants_registration_metric_euclidean_icp_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_point_set_expectation_params(
+function ants_registration_metric_point_set_expectation(
     metric_weight: number,
     point_set_sigma: number | null = null,
     sampling_percentage: number | null = null,
-): AntsRegistrationMetricPointSetExpectationParametersTagged {
+): AntsRegistrationMetricPointSetExpectationParamsDictTagged {
     const params = {
         "@type": "metric_point_set_expectation" as const,
         "metric_weight": metric_weight,
@@ -1572,7 +1572,7 @@ function ants_registration_metric_point_set_expectation_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_point_set_expectation_cargs(
-    params: AntsRegistrationMetricPointSetExpectationParameters,
+    params: AntsRegistrationMetricPointSetExpectationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1589,7 +1589,7 @@ function ants_registration_metric_point_set_expectation_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_jensen_havrda_charvet_tsallis_params(
+function ants_registration_metric_jensen_havrda_charvet_tsallis(
     fixed_point_set: string,
     moving_point_set: string,
     metric_weight: number,
@@ -1597,7 +1597,7 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_params(
     boundary_points_only: "0" | null = null,
     point_set_sigma: number | null = null,
     k_neighborhood: number | null = null,
-): AntsRegistrationMetricJensenHavrdaCharvetTsallisParametersTagged {
+): AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged {
     const params = {
         "@type": "metric_jensen_havrda_charvet_tsallis" as const,
         "fixed_point_set": fixed_point_set,
@@ -1629,7 +1629,7 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
-    params: AntsRegistrationMetricJensenHavrdaCharvetTsallisParameters,
+    params: AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1645,8 +1645,8 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_metric_igdm_params(
-): AntsRegistrationMetricIgdmParametersTagged {
+function ants_registration_metric_igdm(
+): AntsRegistrationMetricIgdmParamsDictTagged {
     const params = {
         "@type": "metric_igdm" as const,
     };
@@ -1663,7 +1663,7 @@ function ants_registration_metric_igdm_params(
  * @returns Command-line arguments.
  */
 function ants_registration_metric_igdm_cargs(
-    params: AntsRegistrationMetricIgdmParameters,
+    params: AntsRegistrationMetricIgdmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1678,11 +1678,11 @@ function ants_registration_metric_igdm_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_convergence_params(
+function ants_registration_convergence(
     convergence: string,
     convergence_threshold: number,
     convergence_window_size: number,
-): AntsRegistrationConvergenceParametersTagged {
+): AntsRegistrationConvergenceParamsDictTagged {
     const params = {
         "@type": "convergence" as const,
         "convergence": convergence,
@@ -1702,7 +1702,7 @@ function ants_registration_convergence_params(
  * @returns Command-line arguments.
  */
 function ants_registration_convergence_cargs(
-    params: AntsRegistrationConvergenceParameters,
+    params: AntsRegistrationConvergenceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1723,14 +1723,14 @@ function ants_registration_convergence_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_stage_params(
-    transform: AntsRegistrationTransformRigidParametersTagged | AntsRegistrationTransformAffineParametersTagged | AntsRegistrationTransformCompositeAffineParametersTagged | AntsRegistrationTransformSimilarityParametersTagged | AntsRegistrationTransformTranslationParametersTagged | AntsRegistrationTransformBsplineParametersTagged | AntsRegistrationTransformGaussianDisplacementFieldParametersTagged | AntsRegistrationTransformBsplineDisplacementFieldParametersTagged | AntsRegistrationTransformTimeVaryingVelocityFieldParametersTagged | AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParametersTagged | AntsRegistrationTransformSynParametersTagged | AntsRegistrationTransformBsplineSynParametersTagged | AntsRegistrationTransformExponentialParametersTagged | AntsRegistrationTransformBsplineExponentialParametersTagged,
-    metric: AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParametersTagged | AntsRegistrationMetricMutualInformationParametersTagged | AntsRegistrationMetricMattesParametersTagged | AntsRegistrationMetricMeanSquaresParametersTagged | AntsRegistrationMetricDemonsParametersTagged | AntsRegistrationMetricGlobalCorrelationParametersTagged | AntsRegistrationMetricEuclideanIcpParametersTagged | AntsRegistrationMetricPointSetExpectationParametersTagged | AntsRegistrationMetricJensenHavrdaCharvetTsallisParametersTagged | AntsRegistrationMetricIgdmParametersTagged,
-    convergence: AntsRegistrationConvergenceParameters,
+function ants_registration_stage(
+    transform: AntsRegistrationTransformRigidParamsDictTagged | AntsRegistrationTransformAffineParamsDictTagged | AntsRegistrationTransformCompositeAffineParamsDictTagged | AntsRegistrationTransformSimilarityParamsDictTagged | AntsRegistrationTransformTranslationParamsDictTagged | AntsRegistrationTransformBsplineParamsDictTagged | AntsRegistrationTransformGaussianDisplacementFieldParamsDictTagged | AntsRegistrationTransformBsplineDisplacementFieldParamsDictTagged | AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged | AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged | AntsRegistrationTransformSynParamsDictTagged | AntsRegistrationTransformBsplineSynParamsDictTagged | AntsRegistrationTransformExponentialParamsDictTagged | AntsRegistrationTransformBsplineExponentialParamsDictTagged,
+    metric: AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged | AntsRegistrationMetricMutualInformationParamsDictTagged | AntsRegistrationMetricMattesParamsDictTagged | AntsRegistrationMetricMeanSquaresParamsDictTagged | AntsRegistrationMetricDemonsParamsDictTagged | AntsRegistrationMetricGlobalCorrelationParamsDictTagged | AntsRegistrationMetricEuclideanIcpParamsDictTagged | AntsRegistrationMetricPointSetExpectationParamsDictTagged | AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged | AntsRegistrationMetricIgdmParamsDictTagged,
+    convergence: AntsRegistrationConvergenceParamsDict,
     smoothing_sigmas: string,
     shrink_factors: string,
     use_histogram_matching: boolean | null = null,
-): AntsRegistrationStageParametersTagged {
+): AntsRegistrationStageParamsDictTagged {
     const params = {
         "@type": "stage" as const,
         "transform": transform,
@@ -1755,7 +1755,7 @@ function ants_registration_stage_params(
  * @returns Command-line arguments.
  */
 function ants_registration_stage_cargs(
-    params: AntsRegistrationStageParameters,
+    params: AntsRegistrationStageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1795,10 +1795,10 @@ function ants_registration_stage_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_winsorize_image_intensities_params(
+function ants_registration_winsorize_image_intensities(
     lower_quantile: number,
     upper_quantile: number,
-): AntsRegistrationWinsorizeImageIntensitiesParametersTagged {
+): AntsRegistrationWinsorizeImageIntensitiesParamsDictTagged {
     const params = {
         "@type": "winsorize_image_intensities" as const,
         "lower_quantile": lower_quantile,
@@ -1817,7 +1817,7 @@ function ants_registration_winsorize_image_intensities_params(
  * @returns Command-line arguments.
  */
 function ants_registration_winsorize_image_intensities_cargs(
-    params: AntsRegistrationWinsorizeImageIntensitiesParameters,
+    params: AntsRegistrationWinsorizeImageIntensitiesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1832,10 +1832,10 @@ function ants_registration_winsorize_image_intensities_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_registration_masks_params(
+function ants_registration_masks(
     fixed_mask: string | null = null,
     moving_mask: string | null = null,
-): AntsRegistrationMasksParametersTagged {
+): AntsRegistrationMasksParamsDictTagged {
     const params = {
         "@type": "masks" as const,
     };
@@ -1858,7 +1858,7 @@ function ants_registration_masks_params(
  * @returns Command-line arguments.
  */
 function ants_registration_masks_cargs(
-    params: AntsRegistrationMasksParameters,
+    params: AntsRegistrationMasksParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1870,7 +1870,7 @@ function ants_registration_masks_cargs(
 
 
 /**
- * Output object returned when calling `AntsRegistrationParameters(...)`.
+ * Output object returned when calling `AntsRegistrationParamsDict(...)`.
  *
  * @interface
  */
@@ -1930,7 +1930,7 @@ Similarly, all adjacent displacement field transforms are combined when written 
  * @returns Parameter dictionary
  */
 function ants_registration_params(
-    stages: Array<AntsRegistrationStageParameters>,
+    stages: Array<AntsRegistrationStageParamsDict>,
     dimensionality: 2 | 3 | 4 | null = null,
     output: string | null = null,
     save_state: string | null = null,
@@ -1943,14 +1943,14 @@ function ants_registration_params(
     interpolation: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null = null,
     restrict_deformation: Array<boolean> | null = null,
     initial_fixed_transform: string | null = null,
-    initial_moving_transform: AntsRegistrationInitialMovingTransformParametersTagged | AntsRegistrationInitialMovingTransformUseInverseParametersTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged | null = null,
-    winsorize_image_intensities: AntsRegistrationWinsorizeImageIntensitiesParameters | null = null,
-    masks: AntsRegistrationMasksParameters | null = null,
+    initial_moving_transform: AntsRegistrationInitialMovingTransformParamsDictTagged | AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParamsDictTagged | null = null,
+    winsorize_image_intensities: AntsRegistrationWinsorizeImageIntensitiesParamsDict | null = null,
+    masks: AntsRegistrationMasksParamsDict | null = null,
     minc: boolean | null = null,
     random_seed: number | null = null,
     verbose: boolean | null = null,
     float: boolean | null = null,
-): AntsRegistrationParametersTagged {
+): AntsRegistrationParamsDictTagged {
     const params = {
         "@type": "ants/antsRegistration" as const,
         "stages": stages,
@@ -2025,7 +2025,7 @@ function ants_registration_params(
  * @returns Command-line arguments.
  */
 function ants_registration_cargs(
-    params: AntsRegistrationParameters,
+    params: AntsRegistrationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2158,7 +2158,7 @@ function ants_registration_cargs(
  * @returns Outputs object.
  */
 function ants_registration_outputs(
-    params: AntsRegistrationParameters,
+    params: AntsRegistrationParamsDict,
     execution: Execution,
 ): AntsRegistrationOutputs {
     const ret: AntsRegistrationOutputs = {
@@ -2188,7 +2188,7 @@ function ants_registration_outputs(
  * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
  */
 function ants_registration_execute(
-    params: AntsRegistrationParameters,
+    params: AntsRegistrationParamsDict,
     runner: Runner | null = null,
 ): AntsRegistrationOutputs {
     runner = runner || getGlobalRunner();
@@ -2236,7 +2236,7 @@ Similarly, all adjacent displacement field transforms are combined when written 
  * @returns NamedTuple of outputs (described in `AntsRegistrationOutputs`).
  */
 function ants_registration(
-    stages: Array<AntsRegistrationStageParameters>,
+    stages: Array<AntsRegistrationStageParamsDict>,
     dimensionality: 2 | 3 | 4 | null = null,
     output: string | null = null,
     save_state: string | null = null,
@@ -2249,9 +2249,9 @@ function ants_registration(
     interpolation: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null = null,
     restrict_deformation: Array<boolean> | null = null,
     initial_fixed_transform: string | null = null,
-    initial_moving_transform: AntsRegistrationInitialMovingTransformParametersTagged | AntsRegistrationInitialMovingTransformUseInverseParametersTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParametersTagged | null = null,
-    winsorize_image_intensities: AntsRegistrationWinsorizeImageIntensitiesParameters | null = null,
-    masks: AntsRegistrationMasksParameters | null = null,
+    initial_moving_transform: AntsRegistrationInitialMovingTransformParamsDictTagged | AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged | AntsRegistrationInitialMovingTransformInitializationFeatureParamsDictTagged | null = null,
+    winsorize_image_intensities: AntsRegistrationWinsorizeImageIntensitiesParamsDict | null = null,
+    masks: AntsRegistrationMasksParamsDict | null = null,
     minc: boolean | null = null,
     random_seed: number | null = null,
     verbose: boolean | null = null,
@@ -2265,39 +2265,103 @@ function ants_registration(
 
 export {
       ANTS_REGISTRATION_METADATA,
+      AntsRegistrationConvergenceParamsDict,
+      AntsRegistrationConvergenceParamsDictTagged,
+      AntsRegistrationInitialMovingTransformInitializationFeatureParamsDict,
+      AntsRegistrationInitialMovingTransformInitializationFeatureParamsDictTagged,
+      AntsRegistrationInitialMovingTransformParamsDict,
+      AntsRegistrationInitialMovingTransformParamsDictTagged,
+      AntsRegistrationInitialMovingTransformUseInverseParamsDict,
+      AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged,
+      AntsRegistrationMasksParamsDict,
+      AntsRegistrationMasksParamsDictTagged,
+      AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict,
+      AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged,
+      AntsRegistrationMetricDemonsParamsDict,
+      AntsRegistrationMetricDemonsParamsDictTagged,
+      AntsRegistrationMetricEuclideanIcpParamsDict,
+      AntsRegistrationMetricEuclideanIcpParamsDictTagged,
+      AntsRegistrationMetricGlobalCorrelationParamsDict,
+      AntsRegistrationMetricGlobalCorrelationParamsDictTagged,
+      AntsRegistrationMetricIgdmParamsDict,
+      AntsRegistrationMetricIgdmParamsDictTagged,
+      AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict,
+      AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged,
+      AntsRegistrationMetricMattesParamsDict,
+      AntsRegistrationMetricMattesParamsDictTagged,
+      AntsRegistrationMetricMeanSquaresParamsDict,
+      AntsRegistrationMetricMeanSquaresParamsDictTagged,
+      AntsRegistrationMetricMutualInformationParamsDict,
+      AntsRegistrationMetricMutualInformationParamsDictTagged,
+      AntsRegistrationMetricPointSetExpectationParamsDict,
+      AntsRegistrationMetricPointSetExpectationParamsDictTagged,
       AntsRegistrationOutputs,
+      AntsRegistrationParamsDict,
+      AntsRegistrationParamsDictTagged,
+      AntsRegistrationStageParamsDict,
+      AntsRegistrationStageParamsDictTagged,
+      AntsRegistrationTransformAffineParamsDict,
+      AntsRegistrationTransformAffineParamsDictTagged,
+      AntsRegistrationTransformBsplineDisplacementFieldParamsDict,
+      AntsRegistrationTransformBsplineDisplacementFieldParamsDictTagged,
+      AntsRegistrationTransformBsplineExponentialParamsDict,
+      AntsRegistrationTransformBsplineExponentialParamsDictTagged,
+      AntsRegistrationTransformBsplineParamsDict,
+      AntsRegistrationTransformBsplineParamsDictTagged,
+      AntsRegistrationTransformBsplineSynParamsDict,
+      AntsRegistrationTransformBsplineSynParamsDictTagged,
+      AntsRegistrationTransformCompositeAffineParamsDict,
+      AntsRegistrationTransformCompositeAffineParamsDictTagged,
+      AntsRegistrationTransformExponentialParamsDict,
+      AntsRegistrationTransformExponentialParamsDictTagged,
+      AntsRegistrationTransformGaussianDisplacementFieldParamsDict,
+      AntsRegistrationTransformGaussianDisplacementFieldParamsDictTagged,
+      AntsRegistrationTransformRigidParamsDict,
+      AntsRegistrationTransformRigidParamsDictTagged,
+      AntsRegistrationTransformSimilarityParamsDict,
+      AntsRegistrationTransformSimilarityParamsDictTagged,
+      AntsRegistrationTransformSynParamsDict,
+      AntsRegistrationTransformSynParamsDictTagged,
+      AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict,
+      AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged,
+      AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict,
+      AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged,
+      AntsRegistrationTransformTranslationParamsDict,
+      AntsRegistrationTransformTranslationParamsDictTagged,
+      AntsRegistrationWinsorizeImageIntensitiesParamsDict,
+      AntsRegistrationWinsorizeImageIntensitiesParamsDictTagged,
       ants_registration,
-      ants_registration_convergence_params,
+      ants_registration_convergence,
       ants_registration_execute,
-      ants_registration_initial_moving_transform_initialization_feature_params,
-      ants_registration_initial_moving_transform_params,
-      ants_registration_initial_moving_transform_use_inverse_params,
-      ants_registration_masks_params,
-      ants_registration_metric_ants_neighbourhood_cross_correlation_params,
-      ants_registration_metric_demons_params,
-      ants_registration_metric_euclidean_icp_params,
-      ants_registration_metric_global_correlation_params,
-      ants_registration_metric_igdm_params,
-      ants_registration_metric_jensen_havrda_charvet_tsallis_params,
-      ants_registration_metric_mattes_params,
-      ants_registration_metric_mean_squares_params,
-      ants_registration_metric_mutual_information_params,
-      ants_registration_metric_point_set_expectation_params,
+      ants_registration_initial_moving_transform,
+      ants_registration_initial_moving_transform_initialization_feature,
+      ants_registration_initial_moving_transform_use_inverse,
+      ants_registration_masks,
+      ants_registration_metric_ants_neighbourhood_cross_correlation,
+      ants_registration_metric_demons,
+      ants_registration_metric_euclidean_icp,
+      ants_registration_metric_global_correlation,
+      ants_registration_metric_igdm,
+      ants_registration_metric_jensen_havrda_charvet_tsallis,
+      ants_registration_metric_mattes,
+      ants_registration_metric_mean_squares,
+      ants_registration_metric_mutual_information,
+      ants_registration_metric_point_set_expectation,
       ants_registration_params,
-      ants_registration_stage_params,
-      ants_registration_transform_affine_params,
-      ants_registration_transform_bspline_displacement_field_params,
-      ants_registration_transform_bspline_exponential_params,
-      ants_registration_transform_bspline_params,
-      ants_registration_transform_bspline_syn_params,
-      ants_registration_transform_composite_affine_params,
-      ants_registration_transform_exponential_params,
-      ants_registration_transform_gaussian_displacement_field_params,
-      ants_registration_transform_rigid_params,
-      ants_registration_transform_similarity_params,
-      ants_registration_transform_syn_params,
-      ants_registration_transform_time_varying_bspline_velocity_field_params,
-      ants_registration_transform_time_varying_velocity_field_params,
-      ants_registration_transform_translation_params,
-      ants_registration_winsorize_image_intensities_params,
+      ants_registration_stage,
+      ants_registration_transform_affine,
+      ants_registration_transform_bspline,
+      ants_registration_transform_bspline_displacement_field,
+      ants_registration_transform_bspline_exponential,
+      ants_registration_transform_bspline_syn,
+      ants_registration_transform_composite_affine,
+      ants_registration_transform_exponential,
+      ants_registration_transform_gaussian_displacement_field,
+      ants_registration_transform_rigid,
+      ants_registration_transform_similarity,
+      ants_registration_transform_syn,
+      ants_registration_transform_time_varying_bspline_velocity_field,
+      ants_registration_transform_time_varying_velocity_field,
+      ants_registration_transform_translation,
+      ants_registration_winsorize_image_intensities,
 };

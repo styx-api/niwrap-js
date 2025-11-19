@@ -11,7 +11,7 @@ const MRI_MCSIM_METADATA: Metadata = {
 };
 
 
-interface MriMcsimParameters {
+interface MriMcsimParamsDict {
     "@type"?: "freesurfer/mri_mcsim";
     "top_output_dir": string;
     "base_name": string;
@@ -37,11 +37,11 @@ interface MriMcsimParameters {
     "help": boolean;
     "version": boolean;
 }
-type MriMcsimParametersTagged = Required<Pick<MriMcsimParameters, '@type'>> & MriMcsimParameters;
+type MriMcsimParamsDictTagged = Required<Pick<MriMcsimParamsDict, '@type'>> & MriMcsimParamsDict;
 
 
 /**
- * Output object returned when calling `MriMcsimParameters(...)`.
+ * Output object returned when calling `MriMcsimParamsDict(...)`.
  *
  * @interface
  */
@@ -122,7 +122,7 @@ function mri_mcsim_params(
     check_opts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MriMcsimParametersTagged {
+): MriMcsimParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_mcsim" as const,
         "top_output_dir": top_output_dir,
@@ -184,7 +184,7 @@ function mri_mcsim_params(
  * @returns Command-line arguments.
  */
 function mri_mcsim_cargs(
-    params: MriMcsimParameters,
+    params: MriMcsimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -308,7 +308,7 @@ function mri_mcsim_cargs(
  * @returns Outputs object.
  */
 function mri_mcsim_outputs(
-    params: MriMcsimParameters,
+    params: MriMcsimParamsDict,
     execution: Execution,
 ): MriMcsimOutputs {
     const ret: MriMcsimOutputs = {
@@ -337,7 +337,7 @@ function mri_mcsim_outputs(
  * @returns NamedTuple of outputs (described in `MriMcsimOutputs`).
  */
 function mri_mcsim_execute(
-    params: MriMcsimParameters,
+    params: MriMcsimParamsDict,
     runner: Runner | null = null,
 ): MriMcsimOutputs {
     runner = runner || getGlobalRunner();
@@ -420,6 +420,8 @@ function mri_mcsim(
 export {
       MRI_MCSIM_METADATA,
       MriMcsimOutputs,
+      MriMcsimParamsDict,
+      MriMcsimParamsDictTagged,
       mri_mcsim,
       mri_mcsim_execute,
       mri_mcsim_params,

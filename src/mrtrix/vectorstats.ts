@@ -11,22 +11,22 @@ const VECTORSTATS_METADATA: Metadata = {
 };
 
 
-interface VectorstatsColumnParameters {
+interface VectorstatsColumnParamsDict {
     "@type"?: "column";
     "path": InputPathType;
 }
-type VectorstatsColumnParametersTagged = Required<Pick<VectorstatsColumnParameters, '@type'>> & VectorstatsColumnParameters;
+type VectorstatsColumnParamsDictTagged = Required<Pick<VectorstatsColumnParamsDict, '@type'>> & VectorstatsColumnParamsDict;
 
 
-interface VectorstatsConfigParameters {
+interface VectorstatsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type VectorstatsConfigParametersTagged = Required<Pick<VectorstatsConfigParameters, '@type'>> & VectorstatsConfigParameters;
+type VectorstatsConfigParamsDictTagged = Required<Pick<VectorstatsConfigParamsDict, '@type'>> & VectorstatsConfigParamsDict;
 
 
-interface VectorstatsParameters {
+interface VectorstatsParamsDict {
     "@type"?: "mrtrix/vectorstats";
     "notest": boolean;
     "errors"?: string | null | undefined;
@@ -38,13 +38,13 @@ interface VectorstatsParameters {
     "variance"?: InputPathType | null | undefined;
     "ftests"?: InputPathType | null | undefined;
     "fonly": boolean;
-    "column"?: Array<VectorstatsColumnParameters> | null | undefined;
+    "column"?: Array<VectorstatsColumnParamsDict> | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<VectorstatsConfigParameters> | null | undefined;
+    "config"?: Array<VectorstatsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
@@ -52,7 +52,7 @@ interface VectorstatsParameters {
     "contrast": InputPathType;
     "output": string;
 }
-type VectorstatsParametersTagged = Required<Pick<VectorstatsParameters, '@type'>> & VectorstatsParameters;
+type VectorstatsParamsDictTagged = Required<Pick<VectorstatsParamsDict, '@type'>> & VectorstatsParamsDict;
 
 
 /**
@@ -62,9 +62,9 @@ type VectorstatsParametersTagged = Required<Pick<VectorstatsParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function vectorstats_column_params(
+function vectorstats_column(
     path: InputPathType,
-): VectorstatsColumnParametersTagged {
+): VectorstatsColumnParamsDictTagged {
     const params = {
         "@type": "column" as const,
         "path": path,
@@ -82,7 +82,7 @@ function vectorstats_column_params(
  * @returns Command-line arguments.
  */
 function vectorstats_column_cargs(
-    params: VectorstatsColumnParameters,
+    params: VectorstatsColumnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,10 +100,10 @@ function vectorstats_column_cargs(
  *
  * @returns Parameter dictionary
  */
-function vectorstats_config_params(
+function vectorstats_config(
     key: string,
     value: string,
-): VectorstatsConfigParametersTagged {
+): VectorstatsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -122,7 +122,7 @@ function vectorstats_config_params(
  * @returns Command-line arguments.
  */
 function vectorstats_config_cargs(
-    params: VectorstatsConfigParameters,
+    params: VectorstatsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function vectorstats_config_cargs(
 
 
 /**
- * Output object returned when calling `VectorstatsParameters(...)`.
+ * Output object returned when calling `VectorstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -190,16 +190,16 @@ function vectorstats_params(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<VectorstatsColumnParameters> | null = null,
+    column: Array<VectorstatsColumnParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<VectorstatsConfigParameters> | null = null,
+    config: Array<VectorstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): VectorstatsParametersTagged {
+): VectorstatsParamsDictTagged {
     const params = {
         "@type": "mrtrix/vectorstats" as const,
         "notest": notest,
@@ -259,7 +259,7 @@ function vectorstats_params(
  * @returns Command-line arguments.
  */
 function vectorstats_cargs(
-    params: VectorstatsParameters,
+    params: VectorstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -362,7 +362,7 @@ function vectorstats_cargs(
  * @returns Outputs object.
  */
 function vectorstats_outputs(
-    params: VectorstatsParameters,
+    params: VectorstatsParamsDict,
     execution: Execution,
 ): VectorstatsOutputs {
     const ret: VectorstatsOutputs = {
@@ -395,7 +395,7 @@ function vectorstats_outputs(
  * @returns NamedTuple of outputs (described in `VectorstatsOutputs`).
  */
 function vectorstats_execute(
-    params: VectorstatsParameters,
+    params: VectorstatsParamsDict,
     runner: Runner | null = null,
 ): VectorstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -467,13 +467,13 @@ function vectorstats(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<VectorstatsColumnParameters> | null = null,
+    column: Array<VectorstatsColumnParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<VectorstatsConfigParameters> | null = null,
+    config: Array<VectorstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -485,10 +485,16 @@ function vectorstats(
 
 export {
       VECTORSTATS_METADATA,
+      VectorstatsColumnParamsDict,
+      VectorstatsColumnParamsDictTagged,
+      VectorstatsConfigParamsDict,
+      VectorstatsConfigParamsDictTagged,
       VectorstatsOutputs,
+      VectorstatsParamsDict,
+      VectorstatsParamsDictTagged,
       vectorstats,
-      vectorstats_column_params,
-      vectorstats_config_params,
+      vectorstats_column,
+      vectorstats_config,
       vectorstats_execute,
       vectorstats_params,
 };

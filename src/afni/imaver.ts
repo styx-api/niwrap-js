@@ -11,17 +11,17 @@ const IMAVER_METADATA: Metadata = {
 };
 
 
-interface ImaverParameters {
+interface ImaverParamsDict {
     "@type"?: "afni/imaver";
     "out_ave"?: string | null | undefined;
     "out_sig"?: string | null | undefined;
     "input_images": Array<InputPathType>;
 }
-type ImaverParametersTagged = Required<Pick<ImaverParameters, '@type'>> & ImaverParameters;
+type ImaverParamsDictTagged = Required<Pick<ImaverParamsDict, '@type'>> & ImaverParamsDict;
 
 
 /**
- * Output object returned when calling `ImaverParameters(...)`.
+ * Output object returned when calling `ImaverParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function imaver_params(
     input_images: Array<InputPathType>,
     out_ave: string | null = null,
     out_sig: string | null = null,
-): ImaverParametersTagged {
+): ImaverParamsDictTagged {
     const params = {
         "@type": "afni/imaver" as const,
         "input_images": input_images,
@@ -78,7 +78,7 @@ function imaver_params(
  * @returns Command-line arguments.
  */
 function imaver_cargs(
-    params: ImaverParameters,
+    params: ImaverParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function imaver_cargs(
  * @returns Outputs object.
  */
 function imaver_outputs(
-    params: ImaverParameters,
+    params: ImaverParamsDict,
     execution: Execution,
 ): ImaverOutputs {
     const ret: ImaverOutputs = {
@@ -130,7 +130,7 @@ function imaver_outputs(
  * @returns NamedTuple of outputs (described in `ImaverOutputs`).
  */
 function imaver_execute(
-    params: ImaverParameters,
+    params: ImaverParamsDict,
     runner: Runner | null = null,
 ): ImaverOutputs {
     runner = runner || getGlobalRunner();
@@ -173,6 +173,8 @@ function imaver(
 export {
       IMAVER_METADATA,
       ImaverOutputs,
+      ImaverParamsDict,
+      ImaverParamsDictTagged,
       imaver,
       imaver_execute,
       imaver_params,

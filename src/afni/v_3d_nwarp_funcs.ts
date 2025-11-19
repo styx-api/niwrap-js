@@ -11,7 +11,7 @@ const V_3D_NWARP_FUNCS_METADATA: Metadata = {
 };
 
 
-interface V3dNwarpFuncsParameters {
+interface V3dNwarpFuncsParamsDict {
     "@type"?: "afni/3dNwarpFuncs";
     "input_warp": InputPathType;
     "output_prefix": string;
@@ -20,11 +20,11 @@ interface V3dNwarpFuncsParameters {
     "vorticity_flag": boolean;
     "all_flag": boolean;
 }
-type V3dNwarpFuncsParametersTagged = Required<Pick<V3dNwarpFuncsParameters, '@type'>> & V3dNwarpFuncsParameters;
+type V3dNwarpFuncsParamsDictTagged = Required<Pick<V3dNwarpFuncsParamsDict, '@type'>> & V3dNwarpFuncsParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNwarpFuncsParameters(...)`.
+ * Output object returned when calling `V3dNwarpFuncsParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_nwarp_funcs_params(
     shear_flag: boolean = false,
     vorticity_flag: boolean = false,
     all_flag: boolean = false,
-): V3dNwarpFuncsParametersTagged {
+): V3dNwarpFuncsParamsDictTagged {
     const params = {
         "@type": "afni/3dNwarpFuncs" as const,
         "input_warp": input_warp,
@@ -82,7 +82,7 @@ function v_3d_nwarp_funcs_params(
  * @returns Command-line arguments.
  */
 function v_3d_nwarp_funcs_cargs(
-    params: V3dNwarpFuncsParameters,
+    params: V3dNwarpFuncsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function v_3d_nwarp_funcs_cargs(
  * @returns Outputs object.
  */
 function v_3d_nwarp_funcs_outputs(
-    params: V3dNwarpFuncsParameters,
+    params: V3dNwarpFuncsParamsDict,
     execution: Execution,
 ): V3dNwarpFuncsOutputs {
     const ret: V3dNwarpFuncsOutputs = {
@@ -146,7 +146,7 @@ function v_3d_nwarp_funcs_outputs(
  * @returns NamedTuple of outputs (described in `V3dNwarpFuncsOutputs`).
  */
 function v_3d_nwarp_funcs_execute(
-    params: V3dNwarpFuncsParameters,
+    params: V3dNwarpFuncsParamsDict,
     runner: Runner | null = null,
 ): V3dNwarpFuncsOutputs {
     runner = runner || getGlobalRunner();
@@ -194,6 +194,8 @@ function v_3d_nwarp_funcs(
 
 export {
       V3dNwarpFuncsOutputs,
+      V3dNwarpFuncsParamsDict,
+      V3dNwarpFuncsParamsDictTagged,
       V_3D_NWARP_FUNCS_METADATA,
       v_3d_nwarp_funcs,
       v_3d_nwarp_funcs_execute,

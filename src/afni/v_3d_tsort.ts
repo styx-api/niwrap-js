@@ -11,7 +11,7 @@ const V_3D_TSORT_METADATA: Metadata = {
 };
 
 
-interface V3dTsortParameters {
+interface V3dTsortParamsDict {
     "@type"?: "afni/3dTsort";
     "input_file": InputPathType;
     "prefix"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface V3dTsortParameters {
     "randft": boolean;
     "datum"?: string | null | undefined;
 }
-type V3dTsortParametersTagged = Required<Pick<V3dTsortParameters, '@type'>> & V3dTsortParameters;
+type V3dTsortParamsDictTagged = Required<Pick<V3dTsortParamsDict, '@type'>> & V3dTsortParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTsortParameters(...)`.
+ * Output object returned when calling `V3dTsortParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function v_3d_tsort_params(
     ranfft: boolean = false,
     randft: boolean = false,
     datum: string | null = null,
-): V3dTsortParametersTagged {
+): V3dTsortParamsDictTagged {
     const params = {
         "@type": "afni/3dTsort" as const,
         "input_file": input_file,
@@ -106,7 +106,7 @@ function v_3d_tsort_params(
  * @returns Command-line arguments.
  */
 function v_3d_tsort_cargs(
-    params: V3dTsortParameters,
+    params: V3dTsortParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function v_3d_tsort_cargs(
  * @returns Outputs object.
  */
 function v_3d_tsort_outputs(
-    params: V3dTsortParameters,
+    params: V3dTsortParamsDict,
     execution: Execution,
 ): V3dTsortOutputs {
     const ret: V3dTsortOutputs = {
@@ -187,7 +187,7 @@ function v_3d_tsort_outputs(
  * @returns NamedTuple of outputs (described in `V3dTsortOutputs`).
  */
 function v_3d_tsort_execute(
-    params: V3dTsortParameters,
+    params: V3dTsortParamsDict,
     runner: Runner | null = null,
 ): V3dTsortOutputs {
     runner = runner || getGlobalRunner();
@@ -245,6 +245,8 @@ function v_3d_tsort(
 
 export {
       V3dTsortOutputs,
+      V3dTsortParamsDict,
+      V3dTsortParamsDictTagged,
       V_3D_TSORT_METADATA,
       v_3d_tsort,
       v_3d_tsort_execute,

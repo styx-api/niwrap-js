@@ -11,7 +11,7 @@ const MRIS_EXTRACT_VALUES_METADATA: Metadata = {
 };
 
 
-interface MrisExtractValuesParameters {
+interface MrisExtractValuesParamsDict {
     "@type"?: "freesurfer/mris_extract_values";
     "surface": InputPathType;
     "overlay": InputPathType;
@@ -20,11 +20,11 @@ interface MrisExtractValuesParameters {
     "num_images": number;
     "image_files": Array<InputPathType>;
 }
-type MrisExtractValuesParametersTagged = Required<Pick<MrisExtractValuesParameters, '@type'>> & MrisExtractValuesParameters;
+type MrisExtractValuesParamsDictTagged = Required<Pick<MrisExtractValuesParamsDict, '@type'>> & MrisExtractValuesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisExtractValuesParameters(...)`.
+ * Output object returned when calling `MrisExtractValuesParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_extract_values_params(
     csvfile: string,
     num_images: number,
     image_files: Array<InputPathType>,
-): MrisExtractValuesParametersTagged {
+): MrisExtractValuesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_extract_values" as const,
         "surface": surface,
@@ -82,7 +82,7 @@ function mris_extract_values_params(
  * @returns Command-line arguments.
  */
 function mris_extract_values_cargs(
-    params: MrisExtractValuesParameters,
+    params: MrisExtractValuesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function mris_extract_values_cargs(
  * @returns Outputs object.
  */
 function mris_extract_values_outputs(
-    params: MrisExtractValuesParameters,
+    params: MrisExtractValuesParamsDict,
     execution: Execution,
 ): MrisExtractValuesOutputs {
     const ret: MrisExtractValuesOutputs = {
@@ -150,7 +150,7 @@ function mris_extract_values_outputs(
  * @returns NamedTuple of outputs (described in `MrisExtractValuesOutputs`).
  */
 function mris_extract_values_execute(
-    params: MrisExtractValuesParameters,
+    params: MrisExtractValuesParamsDict,
     runner: Runner | null = null,
 ): MrisExtractValuesOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function mris_extract_values(
 export {
       MRIS_EXTRACT_VALUES_METADATA,
       MrisExtractValuesOutputs,
+      MrisExtractValuesParamsDict,
+      MrisExtractValuesParamsDictTagged,
       mris_extract_values,
       mris_extract_values_execute,
       mris_extract_values_params,

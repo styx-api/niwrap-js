@@ -10,16 +10,16 @@ const VOLUME_REMOVE_ISLANDS_METADATA: Metadata = {
 };
 
 
-interface VolumeRemoveIslandsParameters {
+interface VolumeRemoveIslandsParamsDict {
     "@type"?: "workbench/volume-remove-islands";
     "volume-out": string;
     "volume-in": InputPathType;
 }
-type VolumeRemoveIslandsParametersTagged = Required<Pick<VolumeRemoveIslandsParameters, '@type'>> & VolumeRemoveIslandsParameters;
+type VolumeRemoveIslandsParamsDictTagged = Required<Pick<VolumeRemoveIslandsParamsDict, '@type'>> & VolumeRemoveIslandsParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeRemoveIslandsParameters(...)`.
+ * Output object returned when calling `VolumeRemoveIslandsParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface VolumeRemoveIslandsOutputs {
 function volume_remove_islands_params(
     volume_out: string,
     volume_in: InputPathType,
-): VolumeRemoveIslandsParametersTagged {
+): VolumeRemoveIslandsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-remove-islands" as const,
         "volume-out": volume_out,
@@ -65,7 +65,7 @@ function volume_remove_islands_params(
  * @returns Command-line arguments.
  */
 function volume_remove_islands_cargs(
-    params: VolumeRemoveIslandsParameters,
+    params: VolumeRemoveIslandsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function volume_remove_islands_cargs(
  * @returns Outputs object.
  */
 function volume_remove_islands_outputs(
-    params: VolumeRemoveIslandsParameters,
+    params: VolumeRemoveIslandsParamsDict,
     execution: Execution,
 ): VolumeRemoveIslandsOutputs {
     const ret: VolumeRemoveIslandsOutputs = {
@@ -110,7 +110,7 @@ function volume_remove_islands_outputs(
  * @returns NamedTuple of outputs (described in `VolumeRemoveIslandsOutputs`).
  */
 function volume_remove_islands_execute(
-    params: VolumeRemoveIslandsParameters,
+    params: VolumeRemoveIslandsParamsDict,
     runner: Runner | null = null,
 ): VolumeRemoveIslandsOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function volume_remove_islands(
 export {
       VOLUME_REMOVE_ISLANDS_METADATA,
       VolumeRemoveIslandsOutputs,
+      VolumeRemoveIslandsParamsDict,
+      VolumeRemoveIslandsParamsDictTagged,
       volume_remove_islands,
       volume_remove_islands_execute,
       volume_remove_islands_params,

@@ -11,17 +11,17 @@ const V_3DNVALS_METADATA: Metadata = {
 };
 
 
-interface V3dnvalsParameters {
+interface V3dnvalsParamsDict {
     "@type"?: "afni/3dnvals";
     "datasets": Array<InputPathType>;
     "all_flag": boolean;
     "verbose_flag": boolean;
 }
-type V3dnvalsParametersTagged = Required<Pick<V3dnvalsParameters, '@type'>> & V3dnvalsParameters;
+type V3dnvalsParamsDictTagged = Required<Pick<V3dnvalsParamsDict, '@type'>> & V3dnvalsParamsDict;
 
 
 /**
- * Output object returned when calling `V3dnvalsParameters(...)`.
+ * Output object returned when calling `V3dnvalsParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function v_3dnvals_params(
     datasets: Array<InputPathType>,
     all_flag: boolean = false,
     verbose_flag: boolean = false,
-): V3dnvalsParametersTagged {
+): V3dnvalsParamsDictTagged {
     const params = {
         "@type": "afni/3dnvals" as const,
         "datasets": datasets,
@@ -66,7 +66,7 @@ function v_3dnvals_params(
  * @returns Command-line arguments.
  */
 function v_3dnvals_cargs(
-    params: V3dnvalsParameters,
+    params: V3dnvalsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function v_3dnvals_cargs(
  * @returns Outputs object.
  */
 function v_3dnvals_outputs(
-    params: V3dnvalsParameters,
+    params: V3dnvalsParamsDict,
     execution: Execution,
 ): V3dnvalsOutputs {
     const ret: V3dnvalsOutputs = {
@@ -116,7 +116,7 @@ function v_3dnvals_outputs(
  * @returns NamedTuple of outputs (described in `V3dnvalsOutputs`).
  */
 function v_3dnvals_execute(
-    params: V3dnvalsParameters,
+    params: V3dnvalsParamsDict,
     runner: Runner | null = null,
 ): V3dnvalsOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function v_3dnvals(
 
 export {
       V3dnvalsOutputs,
+      V3dnvalsParamsDict,
+      V3dnvalsParamsDictTagged,
       V_3DNVALS_METADATA,
       v_3dnvals,
       v_3dnvals_execute,

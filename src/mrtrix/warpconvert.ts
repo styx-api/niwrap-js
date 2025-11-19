@@ -11,15 +11,15 @@ const WARPCONVERT_METADATA: Metadata = {
 };
 
 
-interface WarpconvertConfigParameters {
+interface WarpconvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type WarpconvertConfigParametersTagged = Required<Pick<WarpconvertConfigParameters, '@type'>> & WarpconvertConfigParameters;
+type WarpconvertConfigParamsDictTagged = Required<Pick<WarpconvertConfigParamsDict, '@type'>> & WarpconvertConfigParamsDict;
 
 
-interface WarpconvertParameters {
+interface WarpconvertParamsDict {
     "@type"?: "mrtrix/warpconvert";
     "template"?: InputPathType | null | undefined;
     "midway_space": boolean;
@@ -29,14 +29,14 @@ interface WarpconvertParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<WarpconvertConfigParameters> | null | undefined;
+    "config"?: Array<WarpconvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in": InputPathType;
     "type": string;
     "out": string;
 }
-type WarpconvertParametersTagged = Required<Pick<WarpconvertParameters, '@type'>> & WarpconvertParameters;
+type WarpconvertParamsDictTagged = Required<Pick<WarpconvertParamsDict, '@type'>> & WarpconvertParamsDict;
 
 
 /**
@@ -47,10 +47,10 @@ type WarpconvertParametersTagged = Required<Pick<WarpconvertParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function warpconvert_config_params(
+function warpconvert_config(
     key: string,
     value: string,
-): WarpconvertConfigParametersTagged {
+): WarpconvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -69,7 +69,7 @@ function warpconvert_config_params(
  * @returns Command-line arguments.
  */
 function warpconvert_config_cargs(
-    params: WarpconvertConfigParameters,
+    params: WarpconvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function warpconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `WarpconvertParameters(...)`.
+ * Output object returned when calling `WarpconvertParamsDict(...)`.
  *
  * @interface
  */
@@ -129,10 +129,10 @@ function warpconvert_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpconvertConfigParameters> | null = null,
+    config: Array<WarpconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): WarpconvertParametersTagged {
+): WarpconvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/warpconvert" as const,
         "midway_space": midway_space,
@@ -171,7 +171,7 @@ function warpconvert_params(
  * @returns Command-line arguments.
  */
 function warpconvert_cargs(
-    params: WarpconvertParameters,
+    params: WarpconvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -234,7 +234,7 @@ function warpconvert_cargs(
  * @returns Outputs object.
  */
 function warpconvert_outputs(
-    params: WarpconvertParameters,
+    params: WarpconvertParamsDict,
     execution: Execution,
 ): WarpconvertOutputs {
     const ret: WarpconvertOutputs = {
@@ -266,7 +266,7 @@ function warpconvert_outputs(
  * @returns NamedTuple of outputs (described in `WarpconvertOutputs`).
  */
 function warpconvert_execute(
-    params: WarpconvertParameters,
+    params: WarpconvertParamsDict,
     runner: Runner | null = null,
 ): WarpconvertOutputs {
     runner = runner || getGlobalRunner();
@@ -324,7 +324,7 @@ function warpconvert(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpconvertConfigParameters> | null = null,
+    config: Array<WarpconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -336,9 +336,13 @@ function warpconvert(
 
 export {
       WARPCONVERT_METADATA,
+      WarpconvertConfigParamsDict,
+      WarpconvertConfigParamsDictTagged,
       WarpconvertOutputs,
+      WarpconvertParamsDict,
+      WarpconvertParamsDictTagged,
       warpconvert,
-      warpconvert_config_params,
+      warpconvert_config,
       warpconvert_execute,
       warpconvert_params,
 };

@@ -11,18 +11,18 @@ const RECON_ALL_CLINICAL_SH_METADATA: Metadata = {
 };
 
 
-interface ReconAllClinicalShParameters {
+interface ReconAllClinicalShParamsDict {
     "@type"?: "freesurfer/recon-all-clinical.sh";
     "input_scan": InputPathType;
     "subject_id": string;
     "threads": number;
     "subject_dir"?: string | null | undefined;
 }
-type ReconAllClinicalShParametersTagged = Required<Pick<ReconAllClinicalShParameters, '@type'>> & ReconAllClinicalShParameters;
+type ReconAllClinicalShParamsDictTagged = Required<Pick<ReconAllClinicalShParamsDict, '@type'>> & ReconAllClinicalShParamsDict;
 
 
 /**
- * Output object returned when calling `ReconAllClinicalShParameters(...)`.
+ * Output object returned when calling `ReconAllClinicalShParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function recon_all_clinical_sh_params(
     subject_id: string,
     threads: number,
     subject_dir: string | null = null,
-): ReconAllClinicalShParametersTagged {
+): ReconAllClinicalShParamsDictTagged {
     const params = {
         "@type": "freesurfer/recon-all-clinical.sh" as const,
         "input_scan": input_scan,
@@ -72,7 +72,7 @@ function recon_all_clinical_sh_params(
  * @returns Command-line arguments.
  */
 function recon_all_clinical_sh_cargs(
-    params: ReconAllClinicalShParameters,
+    params: ReconAllClinicalShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function recon_all_clinical_sh_cargs(
  * @returns Outputs object.
  */
 function recon_all_clinical_sh_outputs(
-    params: ReconAllClinicalShParameters,
+    params: ReconAllClinicalShParamsDict,
     execution: Execution,
 ): ReconAllClinicalShOutputs {
     const ret: ReconAllClinicalShOutputs = {
@@ -121,7 +121,7 @@ function recon_all_clinical_sh_outputs(
  * @returns NamedTuple of outputs (described in `ReconAllClinicalShOutputs`).
  */
 function recon_all_clinical_sh_execute(
-    params: ReconAllClinicalShParameters,
+    params: ReconAllClinicalShParamsDict,
     runner: Runner | null = null,
 ): ReconAllClinicalShOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function recon_all_clinical_sh(
 export {
       RECON_ALL_CLINICAL_SH_METADATA,
       ReconAllClinicalShOutputs,
+      ReconAllClinicalShParamsDict,
+      ReconAllClinicalShParamsDictTagged,
       recon_all_clinical_sh,
       recon_all_clinical_sh_execute,
       recon_all_clinical_sh_params,

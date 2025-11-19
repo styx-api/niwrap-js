@@ -11,7 +11,7 @@ const QATOOLS_PY_METADATA: Metadata = {
 };
 
 
-interface QatoolsPyParameters {
+interface QatoolsPyParamsDict {
     "@type"?: "freesurfer/qatools.py";
     "subjects_dir": string;
     "output_dir": string;
@@ -21,11 +21,11 @@ interface QatoolsPyParameters {
     "outlier": boolean;
     "outlier_table"?: InputPathType | null | undefined;
 }
-type QatoolsPyParametersTagged = Required<Pick<QatoolsPyParameters, '@type'>> & QatoolsPyParameters;
+type QatoolsPyParamsDictTagged = Required<Pick<QatoolsPyParamsDict, '@type'>> & QatoolsPyParamsDict;
 
 
 /**
- * Output object returned when calling `QatoolsPyParameters(...)`.
+ * Output object returned when calling `QatoolsPyParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function qatools_py_params(
     fornix: boolean = false,
     outlier: boolean = false,
     outlier_table: InputPathType | null = null,
-): QatoolsPyParametersTagged {
+): QatoolsPyParamsDictTagged {
     const params = {
         "@type": "freesurfer/qatools.py" as const,
         "subjects_dir": subjects_dir,
@@ -94,7 +94,7 @@ function qatools_py_params(
  * @returns Command-line arguments.
  */
 function qatools_py_cargs(
-    params: QatoolsPyParameters,
+    params: QatoolsPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function qatools_py_cargs(
  * @returns Outputs object.
  */
 function qatools_py_outputs(
-    params: QatoolsPyParameters,
+    params: QatoolsPyParamsDict,
     execution: Execution,
 ): QatoolsPyOutputs {
     const ret: QatoolsPyOutputs = {
@@ -168,7 +168,7 @@ function qatools_py_outputs(
  * @returns NamedTuple of outputs (described in `QatoolsPyOutputs`).
  */
 function qatools_py_execute(
-    params: QatoolsPyParameters,
+    params: QatoolsPyParamsDict,
     runner: Runner | null = null,
 ): QatoolsPyOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function qatools_py(
 export {
       QATOOLS_PY_METADATA,
       QatoolsPyOutputs,
+      QatoolsPyParamsDict,
+      QatoolsPyParamsDictTagged,
       qatools_py,
       qatools_py_execute,
       qatools_py_params,

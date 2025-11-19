@@ -10,16 +10,16 @@ const BACKEND_AVERAGE_ROI_CORRELATION_METADATA: Metadata = {
 };
 
 
-interface BackendAverageRoiCorrelationParameters {
+interface BackendAverageRoiCorrelationParamsDict {
     "@type"?: "workbench/backend-average-roi-correlation";
     "index-list": string;
     "out-file": string;
 }
-type BackendAverageRoiCorrelationParametersTagged = Required<Pick<BackendAverageRoiCorrelationParameters, '@type'>> & BackendAverageRoiCorrelationParameters;
+type BackendAverageRoiCorrelationParamsDictTagged = Required<Pick<BackendAverageRoiCorrelationParamsDict, '@type'>> & BackendAverageRoiCorrelationParamsDict;
 
 
 /**
- * Output object returned when calling `BackendAverageRoiCorrelationParameters(...)`.
+ * Output object returned when calling `BackendAverageRoiCorrelationParamsDict(...)`.
  *
  * @interface
  */
@@ -42,7 +42,7 @@ interface BackendAverageRoiCorrelationOutputs {
 function backend_average_roi_correlation_params(
     index_list: string,
     out_file: string,
-): BackendAverageRoiCorrelationParametersTagged {
+): BackendAverageRoiCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/backend-average-roi-correlation" as const,
         "index-list": index_list,
@@ -61,7 +61,7 @@ function backend_average_roi_correlation_params(
  * @returns Command-line arguments.
  */
 function backend_average_roi_correlation_cargs(
-    params: BackendAverageRoiCorrelationParameters,
+    params: BackendAverageRoiCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function backend_average_roi_correlation_cargs(
  * @returns Outputs object.
  */
 function backend_average_roi_correlation_outputs(
-    params: BackendAverageRoiCorrelationParameters,
+    params: BackendAverageRoiCorrelationParamsDict,
     execution: Execution,
 ): BackendAverageRoiCorrelationOutputs {
     const ret: BackendAverageRoiCorrelationOutputs = {
@@ -105,7 +105,7 @@ function backend_average_roi_correlation_outputs(
  * @returns NamedTuple of outputs (described in `BackendAverageRoiCorrelationOutputs`).
  */
 function backend_average_roi_correlation_execute(
-    params: BackendAverageRoiCorrelationParameters,
+    params: BackendAverageRoiCorrelationParamsDict,
     runner: Runner | null = null,
 ): BackendAverageRoiCorrelationOutputs {
     runner = runner || getGlobalRunner();
@@ -142,6 +142,8 @@ function backend_average_roi_correlation(
 export {
       BACKEND_AVERAGE_ROI_CORRELATION_METADATA,
       BackendAverageRoiCorrelationOutputs,
+      BackendAverageRoiCorrelationParamsDict,
+      BackendAverageRoiCorrelationParamsDictTagged,
       backend_average_roi_correlation,
       backend_average_roi_correlation_execute,
       backend_average_roi_correlation_params,

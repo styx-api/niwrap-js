@@ -11,7 +11,7 @@ const MRI_RF_LONG_TRAIN_METADATA: Metadata = {
 };
 
 
-interface MriRfLongTrainParameters {
+interface MriRfLongTrainParamsDict {
     "@type"?: "freesurfer/mri_rf_long_train";
     "seg_dir": string;
     "xform": string;
@@ -23,11 +23,11 @@ interface MriRfLongTrainParameters {
     "subjects": Array<string>;
     "output_rfa": string;
 }
-type MriRfLongTrainParametersTagged = Required<Pick<MriRfLongTrainParameters, '@type'>> & MriRfLongTrainParameters;
+type MriRfLongTrainParamsDictTagged = Required<Pick<MriRfLongTrainParamsDict, '@type'>> & MriRfLongTrainParamsDict;
 
 
 /**
- * Output object returned when calling `MriRfLongTrainParameters(...)`.
+ * Output object returned when calling `MriRfLongTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function mri_rf_long_train_params(
     prior_spacing: number | null = null,
     input_data: Array<string> | null = null,
     check: boolean = false,
-): MriRfLongTrainParametersTagged {
+): MriRfLongTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_rf_long_train" as const,
         "seg_dir": seg_dir,
@@ -102,7 +102,7 @@ function mri_rf_long_train_params(
  * @returns Command-line arguments.
  */
 function mri_rf_long_train_cargs(
-    params: MriRfLongTrainParameters,
+    params: MriRfLongTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -157,7 +157,7 @@ function mri_rf_long_train_cargs(
  * @returns Outputs object.
  */
 function mri_rf_long_train_outputs(
-    params: MriRfLongTrainParameters,
+    params: MriRfLongTrainParamsDict,
     execution: Execution,
 ): MriRfLongTrainOutputs {
     const ret: MriRfLongTrainOutputs = {
@@ -183,7 +183,7 @@ function mri_rf_long_train_outputs(
  * @returns NamedTuple of outputs (described in `MriRfLongTrainOutputs`).
  */
 function mri_rf_long_train_execute(
-    params: MriRfLongTrainParameters,
+    params: MriRfLongTrainParamsDict,
     runner: Runner | null = null,
 ): MriRfLongTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function mri_rf_long_train(
 export {
       MRI_RF_LONG_TRAIN_METADATA,
       MriRfLongTrainOutputs,
+      MriRfLongTrainParamsDict,
+      MriRfLongTrainParamsDictTagged,
       mri_rf_long_train,
       mri_rf_long_train_execute,
       mri_rf_long_train_params,

@@ -11,7 +11,7 @@ const FSL_ANAT_METADATA: Metadata = {
 };
 
 
-interface FslAnatParameters {
+interface FslAnatParamsDict {
     "@type"?: "fsl/fsl_anat";
     "structural_image"?: InputPathType | null | undefined;
     "existing_anat_dir"?: string | null | undefined;
@@ -32,11 +32,11 @@ interface FslAnatParameters {
     "bet_f_param"?: number | null | undefined;
     "nocleanup_flag": boolean;
 }
-type FslAnatParametersTagged = Required<Pick<FslAnatParameters, '@type'>> & FslAnatParameters;
+type FslAnatParamsDictTagged = Required<Pick<FslAnatParamsDict, '@type'>> & FslAnatParamsDict;
 
 
 /**
- * Output object returned when calling `FslAnatParameters(...)`.
+ * Output object returned when calling `FslAnatParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function fsl_anat_params(
     nosearch_flag: boolean = false,
     bet_f_param: number | null = null,
     nocleanup_flag: boolean = false,
-): FslAnatParametersTagged {
+): FslAnatParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_anat" as const,
         "clobber_flag": clobber_flag,
@@ -142,7 +142,7 @@ function fsl_anat_params(
  * @returns Command-line arguments.
  */
 function fsl_anat_cargs(
-    params: FslAnatParameters,
+    params: FslAnatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -232,7 +232,7 @@ function fsl_anat_cargs(
  * @returns Outputs object.
  */
 function fsl_anat_outputs(
-    params: FslAnatParameters,
+    params: FslAnatParamsDict,
     execution: Execution,
 ): FslAnatOutputs {
     const ret: FslAnatOutputs = {
@@ -258,7 +258,7 @@ function fsl_anat_outputs(
  * @returns NamedTuple of outputs (described in `FslAnatOutputs`).
  */
 function fsl_anat_execute(
-    params: FslAnatParameters,
+    params: FslAnatParamsDict,
     runner: Runner | null = null,
 ): FslAnatOutputs {
     runner = runner || getGlobalRunner();
@@ -331,6 +331,8 @@ function fsl_anat(
 export {
       FSL_ANAT_METADATA,
       FslAnatOutputs,
+      FslAnatParamsDict,
+      FslAnatParamsDictTagged,
       fsl_anat,
       fsl_anat_execute,
       fsl_anat_params,

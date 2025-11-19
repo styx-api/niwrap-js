@@ -11,17 +11,17 @@ const LABELS_DISJOINT_METADATA: Metadata = {
 };
 
 
-interface LabelsDisjointParameters {
+interface LabelsDisjointParamsDict {
     "@type"?: "freesurfer/labels_disjoint";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
-type LabelsDisjointParametersTagged = Required<Pick<LabelsDisjointParameters, '@type'>> & LabelsDisjointParameters;
+type LabelsDisjointParamsDictTagged = Required<Pick<LabelsDisjointParamsDict, '@type'>> & LabelsDisjointParamsDict;
 
 
 /**
- * Output object returned when calling `LabelsDisjointParameters(...)`.
+ * Output object returned when calling `LabelsDisjointParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function labels_disjoint_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
-): LabelsDisjointParametersTagged {
+): LabelsDisjointParamsDictTagged {
     const params = {
         "@type": "freesurfer/labels_disjoint" as const,
         "label1": label1,
@@ -70,7 +70,7 @@ function labels_disjoint_params(
  * @returns Command-line arguments.
  */
 function labels_disjoint_cargs(
-    params: LabelsDisjointParameters,
+    params: LabelsDisjointParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function labels_disjoint_cargs(
  * @returns Outputs object.
  */
 function labels_disjoint_outputs(
-    params: LabelsDisjointParameters,
+    params: LabelsDisjointParamsDict,
     execution: Execution,
 ): LabelsDisjointOutputs {
     const ret: LabelsDisjointOutputs = {
@@ -117,7 +117,7 @@ function labels_disjoint_outputs(
  * @returns NamedTuple of outputs (described in `LabelsDisjointOutputs`).
  */
 function labels_disjoint_execute(
-    params: LabelsDisjointParameters,
+    params: LabelsDisjointParamsDict,
     runner: Runner | null = null,
 ): LabelsDisjointOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function labels_disjoint(
 export {
       LABELS_DISJOINT_METADATA,
       LabelsDisjointOutputs,
+      LabelsDisjointParamsDict,
+      LabelsDisjointParamsDictTagged,
       labels_disjoint,
       labels_disjoint_execute,
       labels_disjoint_params,

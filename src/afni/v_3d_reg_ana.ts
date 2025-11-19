@@ -11,7 +11,7 @@ const V_3D_REG_ANA_METADATA: Metadata = {
 };
 
 
-interface V3dRegAnaParameters {
+interface V3dRegAnaParamsDict {
     "@type"?: "afni/3dRegAna";
     "rows": number;
     "cols": number;
@@ -29,11 +29,11 @@ interface V3dRegAnaParameters {
     "brick"?: Array<string> | null | undefined;
     "datum"?: string | null | undefined;
 }
-type V3dRegAnaParametersTagged = Required<Pick<V3dRegAnaParameters, '@type'>> & V3dRegAnaParameters;
+type V3dRegAnaParamsDictTagged = Required<Pick<V3dRegAnaParamsDict, '@type'>> & V3dRegAnaParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRegAnaParameters(...)`.
+ * Output object returned when calling `V3dRegAnaParamsDict(...)`.
  *
  * @interface
  */
@@ -102,7 +102,7 @@ function v_3d_reg_ana_params(
     bucket: string | null = null,
     brick: Array<string> | null = null,
     datum: string | null = null,
-): V3dRegAnaParametersTagged {
+): V3dRegAnaParamsDictTagged {
     const params = {
         "@type": "afni/3dRegAna" as const,
         "rows": rows,
@@ -154,7 +154,7 @@ function v_3d_reg_ana_params(
  * @returns Command-line arguments.
  */
 function v_3d_reg_ana_cargs(
-    params: V3dRegAnaParameters,
+    params: V3dRegAnaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -251,7 +251,7 @@ function v_3d_reg_ana_cargs(
  * @returns Outputs object.
  */
 function v_3d_reg_ana_outputs(
-    params: V3dRegAnaParameters,
+    params: V3dRegAnaParamsDict,
     execution: Execution,
 ): V3dRegAnaOutputs {
     const ret: V3dRegAnaOutputs = {
@@ -281,7 +281,7 @@ function v_3d_reg_ana_outputs(
  * @returns NamedTuple of outputs (described in `V3dRegAnaOutputs`).
  */
 function v_3d_reg_ana_execute(
-    params: V3dRegAnaParameters,
+    params: V3dRegAnaParamsDict,
     runner: Runner | null = null,
 ): V3dRegAnaOutputs {
     runner = runner || getGlobalRunner();
@@ -347,6 +347,8 @@ function v_3d_reg_ana(
 
 export {
       V3dRegAnaOutputs,
+      V3dRegAnaParamsDict,
+      V3dRegAnaParamsDictTagged,
       V_3D_REG_ANA_METADATA,
       v_3d_reg_ana,
       v_3d_reg_ana_execute,

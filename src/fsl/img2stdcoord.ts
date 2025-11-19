@@ -11,7 +11,7 @@ const IMG2STDCOORD_METADATA: Metadata = {
 };
 
 
-interface Img2stdcoordParameters {
+interface Img2stdcoordParamsDict {
     "@type"?: "fsl/img2stdcoord";
     "coordinate_file": string;
     "input_image": InputPathType;
@@ -25,11 +25,11 @@ interface Img2stdcoordParameters {
     "verbose_flag_2": boolean;
     "help_flag": boolean;
 }
-type Img2stdcoordParametersTagged = Required<Pick<Img2stdcoordParameters, '@type'>> & Img2stdcoordParameters;
+type Img2stdcoordParamsDictTagged = Required<Pick<Img2stdcoordParamsDict, '@type'>> & Img2stdcoordParamsDict;
 
 
 /**
- * Output object returned when calling `Img2stdcoordParameters(...)`.
+ * Output object returned when calling `Img2stdcoordParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function img2stdcoord_params(
     verbose_flag_1: boolean = false,
     verbose_flag_2: boolean = false,
     help_flag: boolean = false,
-): Img2stdcoordParametersTagged {
+): Img2stdcoordParamsDictTagged {
     const params = {
         "@type": "fsl/img2stdcoord" as const,
         "coordinate_file": coordinate_file,
@@ -106,7 +106,7 @@ function img2stdcoord_params(
  * @returns Command-line arguments.
  */
 function img2stdcoord_cargs(
-    params: Img2stdcoordParameters,
+    params: Img2stdcoordParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,7 +168,7 @@ function img2stdcoord_cargs(
  * @returns Outputs object.
  */
 function img2stdcoord_outputs(
-    params: Img2stdcoordParameters,
+    params: Img2stdcoordParamsDict,
     execution: Execution,
 ): Img2stdcoordOutputs {
     const ret: Img2stdcoordOutputs = {
@@ -193,7 +193,7 @@ function img2stdcoord_outputs(
  * @returns NamedTuple of outputs (described in `Img2stdcoordOutputs`).
  */
 function img2stdcoord_execute(
-    params: Img2stdcoordParameters,
+    params: Img2stdcoordParamsDict,
     runner: Runner | null = null,
 ): Img2stdcoordOutputs {
     runner = runner || getGlobalRunner();
@@ -252,6 +252,8 @@ function img2stdcoord(
 export {
       IMG2STDCOORD_METADATA,
       Img2stdcoordOutputs,
+      Img2stdcoordParamsDict,
+      Img2stdcoordParamsDictTagged,
       img2stdcoord,
       img2stdcoord_execute,
       img2stdcoord_params,

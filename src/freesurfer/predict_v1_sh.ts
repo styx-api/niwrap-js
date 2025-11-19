@@ -11,7 +11,7 @@ const PREDICT_V1_SH_METADATA: Metadata = {
 };
 
 
-interface PredictV1ShParameters {
+interface PredictV1ShParamsDict {
     "@type"?: "freesurfer/predict_v1.sh";
     "template"?: string | null | undefined;
     "inflated_surface_flag": boolean;
@@ -20,11 +20,11 @@ interface PredictV1ShParameters {
     "subjects": Array<string>;
     "usage_flag": boolean;
 }
-type PredictV1ShParametersTagged = Required<Pick<PredictV1ShParameters, '@type'>> & PredictV1ShParameters;
+type PredictV1ShParamsDictTagged = Required<Pick<PredictV1ShParamsDict, '@type'>> & PredictV1ShParamsDict;
 
 
 /**
- * Output object returned when calling `PredictV1ShParameters(...)`.
+ * Output object returned when calling `PredictV1ShParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function predict_v1_sh_params(
     hemisphere: string | null = null,
     print_mode_flag: boolean = false,
     usage_flag: boolean = false,
-): PredictV1ShParametersTagged {
+): PredictV1ShParamsDictTagged {
     const params = {
         "@type": "freesurfer/predict_v1.sh" as const,
         "inflated_surface_flag": inflated_surface_flag,
@@ -82,7 +82,7 @@ function predict_v1_sh_params(
  * @returns Command-line arguments.
  */
 function predict_v1_sh_cargs(
-    params: PredictV1ShParameters,
+    params: PredictV1ShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function predict_v1_sh_cargs(
  * @returns Outputs object.
  */
 function predict_v1_sh_outputs(
-    params: PredictV1ShParameters,
+    params: PredictV1ShParamsDict,
     execution: Execution,
 ): PredictV1ShOutputs {
     const ret: PredictV1ShOutputs = {
@@ -147,7 +147,7 @@ function predict_v1_sh_outputs(
  * @returns NamedTuple of outputs (described in `PredictV1ShOutputs`).
  */
 function predict_v1_sh_execute(
-    params: PredictV1ShParameters,
+    params: PredictV1ShParamsDict,
     runner: Runner | null = null,
 ): PredictV1ShOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function predict_v1_sh(
 export {
       PREDICT_V1_SH_METADATA,
       PredictV1ShOutputs,
+      PredictV1ShParamsDict,
+      PredictV1ShParamsDictTagged,
       predict_v1_sh,
       predict_v1_sh_execute,
       predict_v1_sh_params,

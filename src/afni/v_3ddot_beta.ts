@@ -11,18 +11,18 @@ const V_3DDOT_BETA_METADATA: Metadata = {
 };
 
 
-interface V3ddotBetaParameters {
+interface V3ddotBetaParamsDict {
     "@type"?: "afni/3ddot_beta";
     "input_file": InputPathType;
     "prefix": string;
     "doeta2": boolean;
     "mask"?: InputPathType | null | undefined;
 }
-type V3ddotBetaParametersTagged = Required<Pick<V3ddotBetaParameters, '@type'>> & V3ddotBetaParameters;
+type V3ddotBetaParamsDictTagged = Required<Pick<V3ddotBetaParamsDict, '@type'>> & V3ddotBetaParamsDict;
 
 
 /**
- * Output object returned when calling `V3ddotBetaParameters(...)`.
+ * Output object returned when calling `V3ddotBetaParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function v_3ddot_beta_params(
     prefix: string,
     doeta2: boolean = false,
     mask: InputPathType | null = null,
-): V3ddotBetaParametersTagged {
+): V3ddotBetaParamsDictTagged {
     const params = {
         "@type": "afni/3ddot_beta" as const,
         "input_file": input_file,
@@ -76,7 +76,7 @@ function v_3ddot_beta_params(
  * @returns Command-line arguments.
  */
 function v_3ddot_beta_cargs(
-    params: V3ddotBetaParameters,
+    params: V3ddotBetaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function v_3ddot_beta_cargs(
  * @returns Outputs object.
  */
 function v_3ddot_beta_outputs(
-    params: V3ddotBetaParameters,
+    params: V3ddotBetaParamsDict,
     execution: Execution,
 ): V3ddotBetaOutputs {
     const ret: V3ddotBetaOutputs = {
@@ -137,7 +137,7 @@ function v_3ddot_beta_outputs(
  * @returns NamedTuple of outputs (described in `V3ddotBetaOutputs`).
  */
 function v_3ddot_beta_execute(
-    params: V3ddotBetaParameters,
+    params: V3ddotBetaParamsDict,
     runner: Runner | null = null,
 ): V3ddotBetaOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function v_3ddot_beta(
 
 export {
       V3ddotBetaOutputs,
+      V3ddotBetaParamsDict,
+      V3ddotBetaParamsDictTagged,
       V_3DDOT_BETA_METADATA,
       v_3ddot_beta,
       v_3ddot_beta_execute,

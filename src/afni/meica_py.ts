@@ -11,7 +11,7 @@ const MEICA_PY_METADATA: Metadata = {
 };
 
 
-interface MeicaPyParameters {
+interface MeicaPyParamsDict {
     "@type"?: "afni/meica.py";
     "infile": InputPathType;
     "echo_times": string;
@@ -22,11 +22,11 @@ interface MeicaPyParameters {
     "threshold"?: number | null | undefined;
     "debug": boolean;
 }
-type MeicaPyParametersTagged = Required<Pick<MeicaPyParameters, '@type'>> & MeicaPyParameters;
+type MeicaPyParamsDictTagged = Required<Pick<MeicaPyParamsDict, '@type'>> & MeicaPyParamsDict;
 
 
 /**
- * Output object returned when calling `MeicaPyParameters(...)`.
+ * Output object returned when calling `MeicaPyParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function meica_py_params(
     talairach: boolean = false,
     threshold: number | null = null,
     debug: boolean = false,
-): MeicaPyParametersTagged {
+): MeicaPyParamsDictTagged {
     const params = {
         "@type": "afni/meica.py" as const,
         "infile": infile,
@@ -98,7 +98,7 @@ function meica_py_params(
  * @returns Command-line arguments.
  */
 function meica_py_cargs(
-    params: MeicaPyParameters,
+    params: MeicaPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function meica_py_cargs(
  * @returns Outputs object.
  */
 function meica_py_outputs(
-    params: MeicaPyParameters,
+    params: MeicaPyParamsDict,
     execution: Execution,
 ): MeicaPyOutputs {
     const ret: MeicaPyOutputs = {
@@ -177,7 +177,7 @@ function meica_py_outputs(
  * @returns NamedTuple of outputs (described in `MeicaPyOutputs`).
  */
 function meica_py_execute(
-    params: MeicaPyParameters,
+    params: MeicaPyParamsDict,
     runner: Runner | null = null,
 ): MeicaPyOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function meica_py(
 export {
       MEICA_PY_METADATA,
       MeicaPyOutputs,
+      MeicaPyParamsDict,
+      MeicaPyParamsDictTagged,
       meica_py,
       meica_py_execute,
       meica_py_params,

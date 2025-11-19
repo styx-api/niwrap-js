@@ -11,16 +11,16 @@ const SEGMENT_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
 };
 
 
-interface SegmentThalamicNucleiShParameters {
+interface SegmentThalamicNucleiShParamsDict {
     "@type"?: "freesurfer/segmentThalamicNuclei.sh";
     "subject_id": string;
     "output_dir": string;
 }
-type SegmentThalamicNucleiShParametersTagged = Required<Pick<SegmentThalamicNucleiShParameters, '@type'>> & SegmentThalamicNucleiShParameters;
+type SegmentThalamicNucleiShParamsDictTagged = Required<Pick<SegmentThalamicNucleiShParamsDict, '@type'>> & SegmentThalamicNucleiShParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentThalamicNucleiShParameters(...)`.
+ * Output object returned when calling `SegmentThalamicNucleiShParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface SegmentThalamicNucleiShOutputs {
 function segment_thalamic_nuclei_sh_params(
     subject_id: string,
     output_dir: string,
-): SegmentThalamicNucleiShParametersTagged {
+): SegmentThalamicNucleiShParamsDictTagged {
     const params = {
         "@type": "freesurfer/segmentThalamicNuclei.sh" as const,
         "subject_id": subject_id,
@@ -66,7 +66,7 @@ function segment_thalamic_nuclei_sh_params(
  * @returns Command-line arguments.
  */
 function segment_thalamic_nuclei_sh_cargs(
-    params: SegmentThalamicNucleiShParameters,
+    params: SegmentThalamicNucleiShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function segment_thalamic_nuclei_sh_cargs(
  * @returns Outputs object.
  */
 function segment_thalamic_nuclei_sh_outputs(
-    params: SegmentThalamicNucleiShParameters,
+    params: SegmentThalamicNucleiShParamsDict,
     execution: Execution,
 ): SegmentThalamicNucleiShOutputs {
     const ret: SegmentThalamicNucleiShOutputs = {
@@ -112,7 +112,7 @@ function segment_thalamic_nuclei_sh_outputs(
  * @returns NamedTuple of outputs (described in `SegmentThalamicNucleiShOutputs`).
  */
 function segment_thalamic_nuclei_sh_execute(
-    params: SegmentThalamicNucleiShParameters,
+    params: SegmentThalamicNucleiShParamsDict,
     runner: Runner | null = null,
 ): SegmentThalamicNucleiShOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function segment_thalamic_nuclei_sh(
 export {
       SEGMENT_THALAMIC_NUCLEI_SH_METADATA,
       SegmentThalamicNucleiShOutputs,
+      SegmentThalamicNucleiShParamsDict,
+      SegmentThalamicNucleiShParamsDictTagged,
       segment_thalamic_nuclei_sh,
       segment_thalamic_nuclei_sh_execute,
       segment_thalamic_nuclei_sh_params,

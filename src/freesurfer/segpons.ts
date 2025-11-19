@@ -11,7 +11,7 @@ const SEGPONS_METADATA: Metadata = {
 };
 
 
-interface SegponsParameters {
+interface SegponsParamsDict {
     "@type"?: "freesurfer/segpons";
     "subject": string;
     "aseg": boolean;
@@ -20,11 +20,11 @@ interface SegponsParameters {
     "no_refine": boolean;
     "pons152_mask"?: InputPathType | null | undefined;
 }
-type SegponsParametersTagged = Required<Pick<SegponsParameters, '@type'>> & SegponsParameters;
+type SegponsParamsDictTagged = Required<Pick<SegponsParamsDict, '@type'>> & SegponsParamsDict;
 
 
 /**
- * Output object returned when calling `SegponsParameters(...)`.
+ * Output object returned when calling `SegponsParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function segpons_params(
     seg: InputPathType | null = null,
     no_refine: boolean = false,
     pons152_mask: InputPathType | null = null,
-): SegponsParametersTagged {
+): SegponsParamsDictTagged {
     const params = {
         "@type": "freesurfer/segpons" as const,
         "subject": subject,
@@ -86,7 +86,7 @@ function segpons_params(
  * @returns Command-line arguments.
  */
 function segpons_cargs(
-    params: SegponsParameters,
+    params: SegponsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function segpons_cargs(
  * @returns Outputs object.
  */
 function segpons_outputs(
-    params: SegponsParameters,
+    params: SegponsParamsDict,
     execution: Execution,
 ): SegponsOutputs {
     const ret: SegponsOutputs = {
@@ -155,7 +155,7 @@ function segpons_outputs(
  * @returns NamedTuple of outputs (described in `SegponsOutputs`).
  */
 function segpons_execute(
-    params: SegponsParameters,
+    params: SegponsParamsDict,
     runner: Runner | null = null,
 ): SegponsOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function segpons(
 export {
       SEGPONS_METADATA,
       SegponsOutputs,
+      SegponsParamsDict,
+      SegponsParamsDictTagged,
       segpons,
       segpons_execute,
       segpons_params,

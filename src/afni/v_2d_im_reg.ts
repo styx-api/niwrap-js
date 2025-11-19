@@ -11,7 +11,7 @@ const V_2D_IM_REG_METADATA: Metadata = {
 };
 
 
-interface V2dImRegParameters {
+interface V2dImRegParamsDict {
     "@type"?: "afni/2dImReg";
     "input_file": InputPathType;
     "base_file"?: InputPathType | null | undefined;
@@ -26,11 +26,11 @@ interface V2dImRegParameters {
     "rprefix"?: string | null | undefined;
     "debug": boolean;
 }
-type V2dImRegParametersTagged = Required<Pick<V2dImRegParameters, '@type'>> & V2dImRegParameters;
+type V2dImRegParamsDictTagged = Required<Pick<V2dImRegParamsDict, '@type'>> & V2dImRegParamsDict;
 
 
 /**
- * Output object returned when calling `V2dImRegParameters(...)`.
+ * Output object returned when calling `V2dImRegParamsDict(...)`.
  *
  * @interface
  */
@@ -97,7 +97,7 @@ function v_2d_im_reg_params(
     dmm: boolean = false,
     rprefix: string | null = null,
     debug: boolean = false,
-): V2dImRegParametersTagged {
+): V2dImRegParamsDictTagged {
     const params = {
         "@type": "afni/2dImReg" as const,
         "input_file": input_file,
@@ -140,7 +140,7 @@ function v_2d_im_reg_params(
  * @returns Command-line arguments.
  */
 function v_2d_im_reg_cargs(
-    params: V2dImRegParameters,
+    params: V2dImRegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -190,7 +190,7 @@ function v_2d_im_reg_cargs(
  * @returns Outputs object.
  */
 function v_2d_im_reg_outputs(
-    params: V2dImRegParameters,
+    params: V2dImRegParamsDict,
     execution: Execution,
 ): V2dImRegOutputs {
     const ret: V2dImRegOutputs = {
@@ -221,7 +221,7 @@ function v_2d_im_reg_outputs(
  * @returns NamedTuple of outputs (described in `V2dImRegOutputs`).
  */
 function v_2d_im_reg_execute(
-    params: V2dImRegParameters,
+    params: V2dImRegParamsDict,
     runner: Runner | null = null,
 ): V2dImRegOutputs {
     runner = runner || getGlobalRunner();
@@ -281,6 +281,8 @@ function v_2d_im_reg(
 
 export {
       V2dImRegOutputs,
+      V2dImRegParamsDict,
+      V2dImRegParamsDictTagged,
       V_2D_IM_REG_METADATA,
       v_2d_im_reg,
       v_2d_im_reg_execute,

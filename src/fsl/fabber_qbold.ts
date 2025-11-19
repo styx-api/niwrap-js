@@ -11,7 +11,7 @@ const FABBER_QBOLD_METADATA: Metadata = {
 };
 
 
-interface FabberQboldParameters {
+interface FabberQboldParamsDict {
     "@type"?: "fsl/fabber_qbold";
     "output_dir": string;
     "method": string;
@@ -49,11 +49,11 @@ interface FabberQboldParameters {
     "optfile"?: InputPathType | null | undefined;
     "debug": boolean;
 }
-type FabberQboldParametersTagged = Required<Pick<FabberQboldParameters, '@type'>> & FabberQboldParameters;
+type FabberQboldParamsDictTagged = Required<Pick<FabberQboldParamsDict, '@type'>> & FabberQboldParamsDict;
 
 
 /**
- * Output object returned when calling `FabberQboldParameters(...)`.
+ * Output object returned when calling `FabberQboldParamsDict(...)`.
  *
  * @interface
  */
@@ -194,7 +194,7 @@ function fabber_qbold_params(
     save_free_energy: boolean = false,
     optfile: InputPathType | null = null,
     debug: boolean = false,
-): FabberQboldParametersTagged {
+): FabberQboldParamsDictTagged {
     const params = {
         "@type": "fsl/fabber_qbold" as const,
         "output_dir": output_dir,
@@ -266,7 +266,7 @@ function fabber_qbold_params(
  * @returns Command-line arguments.
  */
 function fabber_qbold_cargs(
-    params: FabberQboldParameters,
+    params: FabberQboldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -423,7 +423,7 @@ function fabber_qbold_cargs(
  * @returns Outputs object.
  */
 function fabber_qbold_outputs(
-    params: FabberQboldParameters,
+    params: FabberQboldParamsDict,
     execution: Execution,
 ): FabberQboldOutputs {
     const ret: FabberQboldOutputs = {
@@ -461,7 +461,7 @@ function fabber_qbold_outputs(
  * @returns NamedTuple of outputs (described in `FabberQboldOutputs`).
  */
 function fabber_qbold_execute(
-    params: FabberQboldParameters,
+    params: FabberQboldParamsDict,
     runner: Runner | null = null,
 ): FabberQboldOutputs {
     runner = runner || getGlobalRunner();
@@ -568,6 +568,8 @@ function fabber_qbold(
 export {
       FABBER_QBOLD_METADATA,
       FabberQboldOutputs,
+      FabberQboldParamsDict,
+      FabberQboldParamsDictTagged,
       fabber_qbold,
       fabber_qbold_execute,
       fabber_qbold_params,

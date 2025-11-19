@@ -11,7 +11,7 @@ const FSL_REG_METADATA: Metadata = {
 };
 
 
-interface FslRegParameters {
+interface FslRegParamsDict {
     "@type"?: "fsl/fsl_reg";
     "input_file": InputPathType;
     "reference_file": InputPathType;
@@ -22,11 +22,11 @@ interface FslRegParameters {
     "flirt_options"?: string | null | undefined;
     "fnirt_options"?: string | null | undefined;
 }
-type FslRegParametersTagged = Required<Pick<FslRegParameters, '@type'>> & FslRegParameters;
+type FslRegParamsDictTagged = Required<Pick<FslRegParamsDict, '@type'>> & FslRegParamsDict;
 
 
 /**
- * Output object returned when calling `FslRegParameters(...)`.
+ * Output object returned when calling `FslRegParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function fsl_reg_params(
     fnirt_fa_config_flag: boolean = false,
     flirt_options: string | null = null,
     fnirt_options: string | null = null,
-): FslRegParametersTagged {
+): FslRegParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_reg" as const,
         "input_file": input_file,
@@ -94,7 +94,7 @@ function fsl_reg_params(
  * @returns Command-line arguments.
  */
 function fsl_reg_cargs(
-    params: FslRegParameters,
+    params: FslRegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function fsl_reg_cargs(
  * @returns Outputs object.
  */
 function fsl_reg_outputs(
-    params: FslRegParameters,
+    params: FslRegParamsDict,
     execution: Execution,
 ): FslRegOutputs {
     const ret: FslRegOutputs = {
@@ -162,7 +162,7 @@ function fsl_reg_outputs(
  * @returns NamedTuple of outputs (described in `FslRegOutputs`).
  */
 function fsl_reg_execute(
-    params: FslRegParameters,
+    params: FslRegParamsDict,
     runner: Runner | null = null,
 ): FslRegOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function fsl_reg(
 export {
       FSL_REG_METADATA,
       FslRegOutputs,
+      FslRegParamsDict,
+      FslRegParamsDictTagged,
       fsl_reg,
       fsl_reg_execute,
       fsl_reg_params,

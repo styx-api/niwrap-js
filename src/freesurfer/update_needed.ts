@@ -11,17 +11,17 @@ const UPDATE_NEEDED_METADATA: Metadata = {
 };
 
 
-interface UpdateNeededParameters {
+interface UpdateNeededParamsDict {
     "@type"?: "freesurfer/UpdateNeeded";
     "target_file": InputPathType;
     "source_file": InputPathType;
     "additional_source_files"?: Array<InputPathType> | null | undefined;
 }
-type UpdateNeededParametersTagged = Required<Pick<UpdateNeededParameters, '@type'>> & UpdateNeededParameters;
+type UpdateNeededParamsDictTagged = Required<Pick<UpdateNeededParamsDict, '@type'>> & UpdateNeededParamsDict;
 
 
 /**
- * Output object returned when calling `UpdateNeededParameters(...)`.
+ * Output object returned when calling `UpdateNeededParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function update_needed_params(
     target_file: InputPathType,
     source_file: InputPathType,
     additional_source_files: Array<InputPathType> | null = null,
-): UpdateNeededParametersTagged {
+): UpdateNeededParamsDictTagged {
     const params = {
         "@type": "freesurfer/UpdateNeeded" as const,
         "target_file": target_file,
@@ -68,7 +68,7 @@ function update_needed_params(
  * @returns Command-line arguments.
  */
 function update_needed_cargs(
-    params: UpdateNeededParameters,
+    params: UpdateNeededParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function update_needed_cargs(
  * @returns Outputs object.
  */
 function update_needed_outputs(
-    params: UpdateNeededParameters,
+    params: UpdateNeededParamsDict,
     execution: Execution,
 ): UpdateNeededOutputs {
     const ret: UpdateNeededOutputs = {
@@ -116,7 +116,7 @@ function update_needed_outputs(
  * @returns NamedTuple of outputs (described in `UpdateNeededOutputs`).
  */
 function update_needed_execute(
-    params: UpdateNeededParameters,
+    params: UpdateNeededParamsDict,
     runner: Runner | null = null,
 ): UpdateNeededOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function update_needed(
 export {
       UPDATE_NEEDED_METADATA,
       UpdateNeededOutputs,
+      UpdateNeededParamsDict,
+      UpdateNeededParamsDictTagged,
       update_needed,
       update_needed_execute,
       update_needed_params,

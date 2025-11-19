@@ -11,7 +11,7 @@ const ANTS_NEUROIMAGING_BATTERY_METADATA: Metadata = {
 };
 
 
-interface AntsNeuroimagingBatteryParameters {
+interface AntsNeuroimagingBatteryParamsDict {
     "@type"?: "ants/antsNeuroimagingBattery";
     "input_directory": string;
     "output_directory": string;
@@ -33,11 +33,11 @@ interface AntsNeuroimagingBatteryParameters {
     "help": boolean;
     "info_only": boolean;
 }
-type AntsNeuroimagingBatteryParametersTagged = Required<Pick<AntsNeuroimagingBatteryParameters, '@type'>> & AntsNeuroimagingBatteryParameters;
+type AntsNeuroimagingBatteryParamsDictTagged = Required<Pick<AntsNeuroimagingBatteryParamsDict, '@type'>> & AntsNeuroimagingBatteryParamsDict;
 
 
 /**
- * Output object returned when calling `AntsNeuroimagingBatteryParameters(...)`.
+ * Output object returned when calling `AntsNeuroimagingBatteryParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function ants_neuroimaging_battery_params(
     temp_directory: string | null = null,
     help: boolean = false,
     info_only: boolean = false,
-): AntsNeuroimagingBatteryParametersTagged {
+): AntsNeuroimagingBatteryParamsDictTagged {
     const params = {
         "@type": "ants/antsNeuroimagingBattery" as const,
         "input_directory": input_directory,
@@ -158,7 +158,7 @@ function ants_neuroimaging_battery_params(
  * @returns Command-line arguments.
  */
 function ants_neuroimaging_battery_cargs(
-    params: AntsNeuroimagingBatteryParameters,
+    params: AntsNeuroimagingBatteryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -274,7 +274,7 @@ function ants_neuroimaging_battery_cargs(
  * @returns Outputs object.
  */
 function ants_neuroimaging_battery_outputs(
-    params: AntsNeuroimagingBatteryParameters,
+    params: AntsNeuroimagingBatteryParamsDict,
     execution: Execution,
 ): AntsNeuroimagingBatteryOutputs {
     const ret: AntsNeuroimagingBatteryOutputs = {
@@ -300,7 +300,7 @@ function ants_neuroimaging_battery_outputs(
  * @returns NamedTuple of outputs (described in `AntsNeuroimagingBatteryOutputs`).
  */
 function ants_neuroimaging_battery_execute(
-    params: AntsNeuroimagingBatteryParameters,
+    params: AntsNeuroimagingBatteryParamsDict,
     runner: Runner | null = null,
 ): AntsNeuroimagingBatteryOutputs {
     runner = runner || getGlobalRunner();
@@ -375,6 +375,8 @@ function ants_neuroimaging_battery(
 export {
       ANTS_NEUROIMAGING_BATTERY_METADATA,
       AntsNeuroimagingBatteryOutputs,
+      AntsNeuroimagingBatteryParamsDict,
+      AntsNeuroimagingBatteryParamsDictTagged,
       ants_neuroimaging_battery,
       ants_neuroimaging_battery_execute,
       ants_neuroimaging_battery_params,

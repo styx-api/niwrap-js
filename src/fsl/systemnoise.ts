@@ -11,7 +11,7 @@ const SYSTEMNOISE_METADATA: Metadata = {
 };
 
 
-interface SystemnoiseParameters {
+interface SystemnoiseParamsDict {
     "@type"?: "fsl/systemnoise";
     "input_signal": InputPathType;
     "output_signal": string;
@@ -20,11 +20,11 @@ interface SystemnoiseParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type SystemnoiseParametersTagged = Required<Pick<SystemnoiseParameters, '@type'>> & SystemnoiseParameters;
+type SystemnoiseParamsDictTagged = Required<Pick<SystemnoiseParamsDict, '@type'>> & SystemnoiseParamsDict;
 
 
 /**
- * Output object returned when calling `SystemnoiseParameters(...)`.
+ * Output object returned when calling `SystemnoiseParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function systemnoise_params(
     seed: number | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): SystemnoiseParametersTagged {
+): SystemnoiseParamsDictTagged {
     const params = {
         "@type": "fsl/systemnoise" as const,
         "input_signal": input_signal,
@@ -84,7 +84,7 @@ function systemnoise_params(
  * @returns Command-line arguments.
  */
 function systemnoise_cargs(
-    params: SystemnoiseParameters,
+    params: SystemnoiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function systemnoise_cargs(
  * @returns Outputs object.
  */
 function systemnoise_outputs(
-    params: SystemnoiseParameters,
+    params: SystemnoiseParamsDict,
     execution: Execution,
 ): SystemnoiseOutputs {
     const ret: SystemnoiseOutputs = {
@@ -152,7 +152,7 @@ function systemnoise_outputs(
  * @returns NamedTuple of outputs (described in `SystemnoiseOutputs`).
  */
 function systemnoise_execute(
-    params: SystemnoiseParameters,
+    params: SystemnoiseParamsDict,
     runner: Runner | null = null,
 ): SystemnoiseOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function systemnoise(
 export {
       SYSTEMNOISE_METADATA,
       SystemnoiseOutputs,
+      SystemnoiseParamsDict,
+      SystemnoiseParamsDictTagged,
       systemnoise,
       systemnoise_execute,
       systemnoise_params,

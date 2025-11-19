@@ -11,7 +11,7 @@ const UBER_ALIGN_TEST_PY_METADATA: Metadata = {
 };
 
 
-interface UberAlignTestPyParameters {
+interface UberAlignTestPyParamsDict {
     "@type"?: "afni/uber_align_test.py";
     "no_gui": boolean;
     "print_script": boolean;
@@ -24,11 +24,11 @@ interface UberAlignTestPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
-type UberAlignTestPyParametersTagged = Required<Pick<UberAlignTestPyParameters, '@type'>> & UberAlignTestPyParameters;
+type UberAlignTestPyParamsDictTagged = Required<Pick<UberAlignTestPyParamsDict, '@type'>> & UberAlignTestPyParamsDict;
 
 
 /**
- * Output object returned when calling `UberAlignTestPyParameters(...)`.
+ * Output object returned when calling `UberAlignTestPyParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function uber_align_test_py_params(
     history: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): UberAlignTestPyParametersTagged {
+): UberAlignTestPyParamsDictTagged {
     const params = {
         "@type": "afni/uber_align_test.py" as const,
         "no_gui": no_gui,
@@ -100,7 +100,7 @@ function uber_align_test_py_params(
  * @returns Command-line arguments.
  */
 function uber_align_test_py_cargs(
-    params: UberAlignTestPyParameters,
+    params: UberAlignTestPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -157,7 +157,7 @@ function uber_align_test_py_cargs(
  * @returns Outputs object.
  */
 function uber_align_test_py_outputs(
-    params: UberAlignTestPyParameters,
+    params: UberAlignTestPyParamsDict,
     execution: Execution,
 ): UberAlignTestPyOutputs {
     const ret: UberAlignTestPyOutputs = {
@@ -182,7 +182,7 @@ function uber_align_test_py_outputs(
  * @returns NamedTuple of outputs (described in `UberAlignTestPyOutputs`).
  */
 function uber_align_test_py_execute(
-    params: UberAlignTestPyParameters,
+    params: UberAlignTestPyParamsDict,
     runner: Runner | null = null,
 ): UberAlignTestPyOutputs {
     runner = runner || getGlobalRunner();
@@ -239,6 +239,8 @@ function uber_align_test_py(
 export {
       UBER_ALIGN_TEST_PY_METADATA,
       UberAlignTestPyOutputs,
+      UberAlignTestPyParamsDict,
+      UberAlignTestPyParamsDictTagged,
       uber_align_test_py,
       uber_align_test_py_execute,
       uber_align_test_py_params,

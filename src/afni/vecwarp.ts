@@ -11,7 +11,7 @@ const VECWARP_METADATA: Metadata = {
 };
 
 
-interface VecwarpParameters {
+interface VecwarpParamsDict {
     "@type"?: "afni/Vecwarp";
     "apar"?: InputPathType | null | undefined;
     "matvec"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface VecwarpParameters {
     "output"?: string | null | undefined;
     "force": boolean;
 }
-type VecwarpParametersTagged = Required<Pick<VecwarpParameters, '@type'>> & VecwarpParameters;
+type VecwarpParamsDictTagged = Required<Pick<VecwarpParamsDict, '@type'>> & VecwarpParamsDict;
 
 
 /**
- * Output object returned when calling `VecwarpParameters(...)`.
+ * Output object returned when calling `VecwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function vecwarp_params(
     input: InputPathType | null = null,
     output: string | null = null,
     force: boolean = false,
-): VecwarpParametersTagged {
+): VecwarpParamsDictTagged {
     const params = {
         "@type": "afni/Vecwarp" as const,
         "forward": forward,
@@ -94,7 +94,7 @@ function vecwarp_params(
  * @returns Command-line arguments.
  */
 function vecwarp_cargs(
-    params: VecwarpParameters,
+    params: VecwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function vecwarp_cargs(
  * @returns Outputs object.
  */
 function vecwarp_outputs(
-    params: VecwarpParameters,
+    params: VecwarpParamsDict,
     execution: Execution,
 ): VecwarpOutputs {
     const ret: VecwarpOutputs = {
@@ -171,7 +171,7 @@ function vecwarp_outputs(
  * @returns NamedTuple of outputs (described in `VecwarpOutputs`).
  */
 function vecwarp_execute(
-    params: VecwarpParameters,
+    params: VecwarpParamsDict,
     runner: Runner | null = null,
 ): VecwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -222,6 +222,8 @@ function vecwarp(
 export {
       VECWARP_METADATA,
       VecwarpOutputs,
+      VecwarpParamsDict,
+      VecwarpParamsDictTagged,
       vecwarp,
       vecwarp_execute,
       vecwarp_params,

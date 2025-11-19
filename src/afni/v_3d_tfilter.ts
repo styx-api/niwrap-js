@@ -11,17 +11,17 @@ const V_3D_TFILTER_METADATA: Metadata = {
 };
 
 
-interface V3dTfilterParameters {
+interface V3dTfilterParamsDict {
     "@type"?: "afni/3dTfilter";
     "inputdataset": InputPathType;
     "outputdataset": string;
     "filters": Array<string>;
 }
-type V3dTfilterParametersTagged = Required<Pick<V3dTfilterParameters, '@type'>> & V3dTfilterParameters;
+type V3dTfilterParamsDictTagged = Required<Pick<V3dTfilterParamsDict, '@type'>> & V3dTfilterParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTfilterParameters(...)`.
+ * Output object returned when calling `V3dTfilterParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3d_tfilter_params(
     inputdataset: InputPathType,
     outputdataset: string,
     filters: Array<string>,
-): V3dTfilterParametersTagged {
+): V3dTfilterParamsDictTagged {
     const params = {
         "@type": "afni/3dTfilter" as const,
         "inputdataset": inputdataset,
@@ -70,7 +70,7 @@ function v_3d_tfilter_params(
  * @returns Command-line arguments.
  */
 function v_3d_tfilter_cargs(
-    params: V3dTfilterParameters,
+    params: V3dTfilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function v_3d_tfilter_cargs(
  * @returns Outputs object.
  */
 function v_3d_tfilter_outputs(
-    params: V3dTfilterParameters,
+    params: V3dTfilterParamsDict,
     execution: Execution,
 ): V3dTfilterOutputs {
     const ret: V3dTfilterOutputs = {
@@ -126,7 +126,7 @@ function v_3d_tfilter_outputs(
  * @returns NamedTuple of outputs (described in `V3dTfilterOutputs`).
  */
 function v_3d_tfilter_execute(
-    params: V3dTfilterParameters,
+    params: V3dTfilterParamsDict,
     runner: Runner | null = null,
 ): V3dTfilterOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function v_3d_tfilter(
 
 export {
       V3dTfilterOutputs,
+      V3dTfilterParamsDict,
+      V3dTfilterParamsDictTagged,
       V_3D_TFILTER_METADATA,
       v_3d_tfilter,
       v_3d_tfilter_execute,

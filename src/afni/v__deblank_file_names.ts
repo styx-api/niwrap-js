@@ -11,7 +11,7 @@ const V__DEBLANK_FILE_NAMES_METADATA: Metadata = {
 };
 
 
-interface VDeblankFileNamesParameters {
+interface VDeblankFileNamesParamsDict {
     "@type"?: "afni/@DeblankFileNames";
     "move": boolean;
     "nobrac": boolean;
@@ -20,11 +20,11 @@ interface VDeblankFileNamesParameters {
     "help": boolean;
     "files"?: Array<InputPathType> | null | undefined;
 }
-type VDeblankFileNamesParametersTagged = Required<Pick<VDeblankFileNamesParameters, '@type'>> & VDeblankFileNamesParameters;
+type VDeblankFileNamesParamsDictTagged = Required<Pick<VDeblankFileNamesParamsDict, '@type'>> & VDeblankFileNamesParamsDict;
 
 
 /**
- * Output object returned when calling `VDeblankFileNamesParameters(...)`.
+ * Output object returned when calling `VDeblankFileNamesParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function v__deblank_file_names_params(
     echo: boolean = false,
     help: boolean = false,
     files: Array<InputPathType> | null = null,
-): VDeblankFileNamesParametersTagged {
+): VDeblankFileNamesParamsDictTagged {
     const params = {
         "@type": "afni/@DeblankFileNames" as const,
         "move": move,
@@ -80,7 +80,7 @@ function v__deblank_file_names_params(
  * @returns Command-line arguments.
  */
 function v__deblank_file_names_cargs(
-    params: VDeblankFileNamesParameters,
+    params: VDeblankFileNamesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function v__deblank_file_names_cargs(
  * @returns Outputs object.
  */
 function v__deblank_file_names_outputs(
-    params: VDeblankFileNamesParameters,
+    params: VDeblankFileNamesParamsDict,
     execution: Execution,
 ): VDeblankFileNamesOutputs {
     const ret: VDeblankFileNamesOutputs = {
@@ -141,7 +141,7 @@ function v__deblank_file_names_outputs(
  * @returns NamedTuple of outputs (described in `VDeblankFileNamesOutputs`).
  */
 function v__deblank_file_names_execute(
-    params: VDeblankFileNamesParameters,
+    params: VDeblankFileNamesParamsDict,
     runner: Runner | null = null,
 ): VDeblankFileNamesOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function v__deblank_file_names(
 
 export {
       VDeblankFileNamesOutputs,
+      VDeblankFileNamesParamsDict,
+      VDeblankFileNamesParamsDictTagged,
       V__DEBLANK_FILE_NAMES_METADATA,
       v__deblank_file_names,
       v__deblank_file_names_execute,

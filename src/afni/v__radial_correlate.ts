@@ -11,7 +11,7 @@ const V__RADIAL_CORRELATE_METADATA: Metadata = {
 };
 
 
-interface VRadialCorrelateParameters {
+interface VRadialCorrelateParamsDict {
     "@type"?: "afni/@radial_correlate";
     "input_files": Array<InputPathType>;
     "results_dir"?: string | null | undefined;
@@ -34,11 +34,11 @@ interface VRadialCorrelateParameters {
     "polort"?: number | null | undefined;
     "merge_frad"?: number | null | undefined;
 }
-type VRadialCorrelateParametersTagged = Required<Pick<VRadialCorrelateParameters, '@type'>> & VRadialCorrelateParameters;
+type VRadialCorrelateParamsDictTagged = Required<Pick<VRadialCorrelateParamsDict, '@type'>> & VRadialCorrelateParamsDict;
 
 
 /**
- * Output object returned when calling `VRadialCorrelateParameters(...)`.
+ * Output object returned when calling `VRadialCorrelateParamsDict(...)`.
  *
  * @interface
  */
@@ -101,7 +101,7 @@ function v__radial_correlate_params(
     do_clean: string | null = null,
     polort: number | null = null,
     merge_frad: number | null = null,
-): VRadialCorrelateParametersTagged {
+): VRadialCorrelateParamsDictTagged {
     const params = {
         "@type": "afni/@radial_correlate" as const,
         "input_files": input_files,
@@ -168,7 +168,7 @@ function v__radial_correlate_params(
  * @returns Command-line arguments.
  */
 function v__radial_correlate_cargs(
-    params: VRadialCorrelateParameters,
+    params: VRadialCorrelateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -289,7 +289,7 @@ function v__radial_correlate_cargs(
  * @returns Outputs object.
  */
 function v__radial_correlate_outputs(
-    params: VRadialCorrelateParameters,
+    params: VRadialCorrelateParamsDict,
     execution: Execution,
 ): VRadialCorrelateOutputs {
     const ret: VRadialCorrelateOutputs = {
@@ -315,7 +315,7 @@ function v__radial_correlate_outputs(
  * @returns NamedTuple of outputs (described in `VRadialCorrelateOutputs`).
  */
 function v__radial_correlate_execute(
-    params: VRadialCorrelateParameters,
+    params: VRadialCorrelateParamsDict,
     runner: Runner | null = null,
 ): VRadialCorrelateOutputs {
     runner = runner || getGlobalRunner();
@@ -391,6 +391,8 @@ function v__radial_correlate(
 
 export {
       VRadialCorrelateOutputs,
+      VRadialCorrelateParamsDict,
+      VRadialCorrelateParamsDictTagged,
       V__RADIAL_CORRELATE_METADATA,
       v__radial_correlate,
       v__radial_correlate_execute,

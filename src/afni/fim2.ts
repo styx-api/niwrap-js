@@ -11,7 +11,7 @@ const FIM2_METADATA: Metadata = {
 };
 
 
-interface Fim2Parameters {
+interface Fim2ParamsDict {
     "@type"?: "afni/fim2";
     "image_files": Array<InputPathType>;
     "pcnt"?: number | null | undefined;
@@ -37,11 +37,11 @@ interface Fim2Parameters {
     "dfspace": boolean;
     "regbase"?: string | null | undefined;
 }
-type Fim2ParametersTagged = Required<Pick<Fim2Parameters, '@type'>> & Fim2Parameters;
+type Fim2ParamsDictTagged = Required<Pick<Fim2ParamsDict, '@type'>> & Fim2ParamsDict;
 
 
 /**
- * Output object returned when calling `Fim2Parameters(...)`.
+ * Output object returned when calling `Fim2ParamsDict(...)`.
  *
  * @interface
  */
@@ -130,7 +130,7 @@ function fim2_params(
     q: boolean = false,
     dfspace: boolean = false,
     regbase: string | null = null,
-): Fim2ParametersTagged {
+): Fim2ParamsDictTagged {
     const params = {
         "@type": "afni/fim2" as const,
         "image_files": image_files,
@@ -200,7 +200,7 @@ function fim2_params(
  * @returns Command-line arguments.
  */
 function fim2_cargs(
-    params: Fim2Parameters,
+    params: Fim2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -330,7 +330,7 @@ function fim2_cargs(
  * @returns Outputs object.
  */
 function fim2_outputs(
-    params: Fim2Parameters,
+    params: Fim2ParamsDict,
     execution: Execution,
 ): Fim2Outputs {
     const ret: Fim2Outputs = {
@@ -361,7 +361,7 @@ function fim2_outputs(
  * @returns NamedTuple of outputs (described in `Fim2Outputs`).
  */
 function fim2_execute(
-    params: Fim2Parameters,
+    params: Fim2ParamsDict,
     runner: Runner | null = null,
 ): Fim2Outputs {
     runner = runner || getGlobalRunner();
@@ -444,6 +444,8 @@ function fim2(
 export {
       FIM2_METADATA,
       Fim2Outputs,
+      Fim2ParamsDict,
+      Fim2ParamsDictTagged,
       fim2,
       fim2_execute,
       fim2_params,

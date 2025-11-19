@@ -11,15 +11,15 @@ const CHECK_RECONS_SH_METADATA: Metadata = {
 };
 
 
-interface CheckReconsShParameters {
+interface CheckReconsShParamsDict {
     "@type"?: "freesurfer/check_recons.sh";
     "subject_directory"?: string | null | undefined;
 }
-type CheckReconsShParametersTagged = Required<Pick<CheckReconsShParameters, '@type'>> & CheckReconsShParameters;
+type CheckReconsShParamsDictTagged = Required<Pick<CheckReconsShParamsDict, '@type'>> & CheckReconsShParamsDict;
 
 
 /**
- * Output object returned when calling `CheckReconsShParameters(...)`.
+ * Output object returned when calling `CheckReconsShParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface CheckReconsShOutputs {
  */
 function check_recons_sh_params(
     subject_directory: string | null = null,
-): CheckReconsShParametersTagged {
+): CheckReconsShParamsDictTagged {
     const params = {
         "@type": "freesurfer/check_recons.sh" as const,
     };
@@ -60,7 +60,7 @@ function check_recons_sh_params(
  * @returns Command-line arguments.
  */
 function check_recons_sh_cargs(
-    params: CheckReconsShParameters,
+    params: CheckReconsShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function check_recons_sh_cargs(
  * @returns Outputs object.
  */
 function check_recons_sh_outputs(
-    params: CheckReconsShParameters,
+    params: CheckReconsShParamsDict,
     execution: Execution,
 ): CheckReconsShOutputs {
     const ret: CheckReconsShOutputs = {
@@ -106,7 +106,7 @@ function check_recons_sh_outputs(
  * @returns NamedTuple of outputs (described in `CheckReconsShOutputs`).
  */
 function check_recons_sh_execute(
-    params: CheckReconsShParameters,
+    params: CheckReconsShParamsDict,
     runner: Runner | null = null,
 ): CheckReconsShOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function check_recons_sh(
 export {
       CHECK_RECONS_SH_METADATA,
       CheckReconsShOutputs,
+      CheckReconsShParamsDict,
+      CheckReconsShParamsDictTagged,
       check_recons_sh,
       check_recons_sh_execute,
       check_recons_sh_params,

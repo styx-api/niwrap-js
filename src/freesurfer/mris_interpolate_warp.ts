@@ -11,17 +11,17 @@ const MRIS_INTERPOLATE_WARP_METADATA: Metadata = {
 };
 
 
-interface MrisInterpolateWarpParameters {
+interface MrisInterpolateWarpParamsDict {
     "@type"?: "freesurfer/mris_interpolate_warp";
     "start_surface": InputPathType;
     "end_surface": InputPathType;
     "warp_field": InputPathType;
 }
-type MrisInterpolateWarpParametersTagged = Required<Pick<MrisInterpolateWarpParameters, '@type'>> & MrisInterpolateWarpParameters;
+type MrisInterpolateWarpParamsDictTagged = Required<Pick<MrisInterpolateWarpParamsDict, '@type'>> & MrisInterpolateWarpParamsDict;
 
 
 /**
- * Output object returned when calling `MrisInterpolateWarpParameters(...)`.
+ * Output object returned when calling `MrisInterpolateWarpParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function mris_interpolate_warp_params(
     start_surface: InputPathType,
     end_surface: InputPathType,
     warp_field: InputPathType,
-): MrisInterpolateWarpParametersTagged {
+): MrisInterpolateWarpParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_interpolate_warp" as const,
         "start_surface": start_surface,
@@ -66,7 +66,7 @@ function mris_interpolate_warp_params(
  * @returns Command-line arguments.
  */
 function mris_interpolate_warp_cargs(
-    params: MrisInterpolateWarpParameters,
+    params: MrisInterpolateWarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function mris_interpolate_warp_cargs(
  * @returns Outputs object.
  */
 function mris_interpolate_warp_outputs(
-    params: MrisInterpolateWarpParameters,
+    params: MrisInterpolateWarpParamsDict,
     execution: Execution,
 ): MrisInterpolateWarpOutputs {
     const ret: MrisInterpolateWarpOutputs = {
@@ -112,7 +112,7 @@ function mris_interpolate_warp_outputs(
  * @returns NamedTuple of outputs (described in `MrisInterpolateWarpOutputs`).
  */
 function mris_interpolate_warp_execute(
-    params: MrisInterpolateWarpParameters,
+    params: MrisInterpolateWarpParamsDict,
     runner: Runner | null = null,
 ): MrisInterpolateWarpOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function mris_interpolate_warp(
 export {
       MRIS_INTERPOLATE_WARP_METADATA,
       MrisInterpolateWarpOutputs,
+      MrisInterpolateWarpParamsDict,
+      MrisInterpolateWarpParamsDictTagged,
       mris_interpolate_warp,
       mris_interpolate_warp_execute,
       mris_interpolate_warp_params,

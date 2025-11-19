@@ -11,7 +11,7 @@ const FSL_MVLM_METADATA: Metadata = {
 };
 
 
-interface FslMvlmParameters {
+interface FslMvlmParamsDict {
     "@type"?: "fsl/fsl_mvlm";
     "input_file": InputPathType;
     "basename_output_files": string;
@@ -27,11 +27,11 @@ interface FslMvlmParameters {
     "out_data"?: string | null | undefined;
     "out_vnscales"?: string | null | undefined;
 }
-type FslMvlmParametersTagged = Required<Pick<FslMvlmParameters, '@type'>> & FslMvlmParameters;
+type FslMvlmParamsDictTagged = Required<Pick<FslMvlmParamsDict, '@type'>> & FslMvlmParamsDict;
 
 
 /**
- * Output object returned when calling `FslMvlmParameters(...)`.
+ * Output object returned when calling `FslMvlmParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function fsl_mvlm_params(
     verbose: boolean = false,
     out_data: string | null = null,
     out_vnscales: string | null = null,
-): FslMvlmParametersTagged {
+): FslMvlmParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_mvlm" as const,
         "input_file": input_file,
@@ -132,7 +132,7 @@ function fsl_mvlm_params(
  * @returns Command-line arguments.
  */
 function fsl_mvlm_cargs(
-    params: FslMvlmParameters,
+    params: FslMvlmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function fsl_mvlm_cargs(
  * @returns Outputs object.
  */
 function fsl_mvlm_outputs(
-    params: FslMvlmParameters,
+    params: FslMvlmParamsDict,
     execution: Execution,
 ): FslMvlmOutputs {
     const ret: FslMvlmOutputs = {
@@ -240,7 +240,7 @@ function fsl_mvlm_outputs(
  * @returns NamedTuple of outputs (described in `FslMvlmOutputs`).
  */
 function fsl_mvlm_execute(
-    params: FslMvlmParameters,
+    params: FslMvlmParamsDict,
     runner: Runner | null = null,
 ): FslMvlmOutputs {
     runner = runner || getGlobalRunner();
@@ -303,6 +303,8 @@ function fsl_mvlm(
 export {
       FSL_MVLM_METADATA,
       FslMvlmOutputs,
+      FslMvlmParamsDict,
+      FslMvlmParamsDictTagged,
       fsl_mvlm,
       fsl_mvlm_execute,
       fsl_mvlm_params,

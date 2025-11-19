@@ -10,7 +10,7 @@ const VOLUME_CREATE_METADATA: Metadata = {
 };
 
 
-interface VolumeCreatePlumbParameters {
+interface VolumeCreatePlumbParamsDict {
     "@type"?: "plumb";
     "axis-order": string;
     "x-spacing": number;
@@ -20,10 +20,10 @@ interface VolumeCreatePlumbParameters {
     "y-offset": number;
     "z-offset": number;
 }
-type VolumeCreatePlumbParametersTagged = Required<Pick<VolumeCreatePlumbParameters, '@type'>> & VolumeCreatePlumbParameters;
+type VolumeCreatePlumbParamsDictTagged = Required<Pick<VolumeCreatePlumbParamsDict, '@type'>> & VolumeCreatePlumbParamsDict;
 
 
-interface VolumeCreateSformParameters {
+interface VolumeCreateSformParamsDict {
     "@type"?: "sform";
     "xi-spacing": number;
     "xj-spacing": number;
@@ -38,19 +38,19 @@ interface VolumeCreateSformParameters {
     "zk-spacing": number;
     "z-offset": number;
 }
-type VolumeCreateSformParametersTagged = Required<Pick<VolumeCreateSformParameters, '@type'>> & VolumeCreateSformParameters;
+type VolumeCreateSformParamsDictTagged = Required<Pick<VolumeCreateSformParamsDict, '@type'>> & VolumeCreateSformParamsDict;
 
 
-interface VolumeCreateParameters {
+interface VolumeCreateParamsDict {
     "@type"?: "workbench/volume-create";
     "volume-out": string;
-    "plumb"?: VolumeCreatePlumbParameters | null | undefined;
-    "sform"?: VolumeCreateSformParameters | null | undefined;
+    "plumb"?: VolumeCreatePlumbParamsDict | null | undefined;
+    "sform"?: VolumeCreateSformParamsDict | null | undefined;
     "i-dim": number;
     "j-dim": number;
     "k-dim": number;
 }
-type VolumeCreateParametersTagged = Required<Pick<VolumeCreateParameters, '@type'>> & VolumeCreateParameters;
+type VolumeCreateParamsDictTagged = Required<Pick<VolumeCreateParamsDict, '@type'>> & VolumeCreateParamsDict;
 
 
 /**
@@ -66,7 +66,7 @@ type VolumeCreateParametersTagged = Required<Pick<VolumeCreateParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function volume_create_plumb_params(
+function volume_create_plumb(
     axis_order: string,
     x_spacing: number,
     y_spacing: number,
@@ -74,7 +74,7 @@ function volume_create_plumb_params(
     x_offset: number,
     y_offset: number,
     z_offset: number,
-): VolumeCreatePlumbParametersTagged {
+): VolumeCreatePlumbParamsDictTagged {
     const params = {
         "@type": "plumb" as const,
         "axis-order": axis_order,
@@ -98,7 +98,7 @@ function volume_create_plumb_params(
  * @returns Command-line arguments.
  */
 function volume_create_plumb_cargs(
-    params: VolumeCreatePlumbParameters,
+    params: VolumeCreatePlumbParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function volume_create_plumb_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_create_sform_params(
+function volume_create_sform(
     xi_spacing: number,
     xj_spacing: number,
     xk_spacing: number,
@@ -147,7 +147,7 @@ function volume_create_sform_params(
     zj_spacing: number,
     zk_spacing: number,
     z_offset: number,
-): VolumeCreateSformParametersTagged {
+): VolumeCreateSformParamsDictTagged {
     const params = {
         "@type": "sform" as const,
         "xi-spacing": xi_spacing,
@@ -176,7 +176,7 @@ function volume_create_sform_params(
  * @returns Command-line arguments.
  */
 function volume_create_sform_cargs(
-    params: VolumeCreateSformParameters,
+    params: VolumeCreateSformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function volume_create_sform_cargs(
 
 
 /**
- * Output object returned when calling `VolumeCreateParameters(...)`.
+ * Output object returned when calling `VolumeCreateParamsDict(...)`.
  *
  * @interface
  */
@@ -233,9 +233,9 @@ function volume_create_params(
     i_dim: number,
     j_dim: number,
     k_dim: number,
-    plumb: VolumeCreatePlumbParameters | null = null,
-    sform: VolumeCreateSformParameters | null = null,
-): VolumeCreateParametersTagged {
+    plumb: VolumeCreatePlumbParamsDict | null = null,
+    sform: VolumeCreateSformParamsDict | null = null,
+): VolumeCreateParamsDictTagged {
     const params = {
         "@type": "workbench/volume-create" as const,
         "volume-out": volume_out,
@@ -262,7 +262,7 @@ function volume_create_params(
  * @returns Command-line arguments.
  */
 function volume_create_cargs(
-    params: VolumeCreateParameters,
+    params: VolumeCreateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -291,7 +291,7 @@ function volume_create_cargs(
  * @returns Outputs object.
  */
 function volume_create_outputs(
-    params: VolumeCreateParameters,
+    params: VolumeCreateParamsDict,
     execution: Execution,
 ): VolumeCreateOutputs {
     const ret: VolumeCreateOutputs = {
@@ -313,7 +313,7 @@ function volume_create_outputs(
  * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
  */
 function volume_create_execute(
-    params: VolumeCreateParameters,
+    params: VolumeCreateParamsDict,
     runner: Runner | null = null,
 ): VolumeCreateOutputs {
     runner = runner || getGlobalRunner();
@@ -346,8 +346,8 @@ function volume_create(
     i_dim: number,
     j_dim: number,
     k_dim: number,
-    plumb: VolumeCreatePlumbParameters | null = null,
-    sform: VolumeCreateSformParameters | null = null,
+    plumb: VolumeCreatePlumbParamsDict | null = null,
+    sform: VolumeCreateSformParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeCreateOutputs {
     const params = volume_create_params(volume_out, i_dim, j_dim, k_dim, plumb, sform)
@@ -358,9 +358,15 @@ function volume_create(
 export {
       VOLUME_CREATE_METADATA,
       VolumeCreateOutputs,
+      VolumeCreateParamsDict,
+      VolumeCreateParamsDictTagged,
+      VolumeCreatePlumbParamsDict,
+      VolumeCreatePlumbParamsDictTagged,
+      VolumeCreateSformParamsDict,
+      VolumeCreateSformParamsDictTagged,
       volume_create,
       volume_create_execute,
       volume_create_params,
-      volume_create_plumb_params,
-      volume_create_sform_params,
+      volume_create_plumb,
+      volume_create_sform,
 };

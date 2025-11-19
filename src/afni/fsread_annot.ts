@@ -11,7 +11,7 @@ const FSREAD_ANNOT_METADATA: Metadata = {
 };
 
 
-interface FsreadAnnotParameters {
+interface FsreadAnnotParamsDict {
     "@type"?: "afni/FSread_annot";
     "infile": InputPathType;
     "hemi"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface FsreadAnnotParameters {
     "dset"?: string | null | undefined;
     "help": boolean;
 }
-type FsreadAnnotParametersTagged = Required<Pick<FsreadAnnotParameters, '@type'>> & FsreadAnnotParameters;
+type FsreadAnnotParamsDictTagged = Required<Pick<FsreadAnnotParamsDict, '@type'>> & FsreadAnnotParamsDict;
 
 
 /**
- * Output object returned when calling `FsreadAnnotParameters(...)`.
+ * Output object returned when calling `FsreadAnnotParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function fsread_annot_params(
     show_fscmap: boolean = false,
     dset: string | null = null,
     help: boolean = false,
-): FsreadAnnotParametersTagged {
+): FsreadAnnotParamsDictTagged {
     const params = {
         "@type": "afni/FSread_annot" as const,
         "infile": infile,
@@ -130,7 +130,7 @@ function fsread_annot_params(
  * @returns Command-line arguments.
  */
 function fsread_annot_cargs(
-    params: FsreadAnnotParameters,
+    params: FsreadAnnotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -206,7 +206,7 @@ function fsread_annot_cargs(
  * @returns Outputs object.
  */
 function fsread_annot_outputs(
-    params: FsreadAnnotParameters,
+    params: FsreadAnnotParamsDict,
     execution: Execution,
 ): FsreadAnnotOutputs {
     const ret: FsreadAnnotOutputs = {
@@ -235,7 +235,7 @@ function fsread_annot_outputs(
  * @returns NamedTuple of outputs (described in `FsreadAnnotOutputs`).
  */
 function fsread_annot_execute(
-    params: FsreadAnnotParameters,
+    params: FsreadAnnotParamsDict,
     runner: Runner | null = null,
 ): FsreadAnnotOutputs {
     runner = runner || getGlobalRunner();
@@ -294,6 +294,8 @@ function fsread_annot(
 export {
       FSREAD_ANNOT_METADATA,
       FsreadAnnotOutputs,
+      FsreadAnnotParamsDict,
+      FsreadAnnotParamsDictTagged,
       fsread_annot,
       fsread_annot_execute,
       fsread_annot_params,

@@ -11,18 +11,18 @@ const MRI_CA_TISSUE_PARMS_METADATA: Metadata = {
 };
 
 
-interface MriCaTissueParmsParameters {
+interface MriCaTissueParmsParamsDict {
     "@type"?: "freesurfer/mri_ca_tissue_parms";
     "subjects": Array<string>;
     "output_file": string;
     "spacing_flag": boolean;
     "gradient_flag": boolean;
 }
-type MriCaTissueParmsParametersTagged = Required<Pick<MriCaTissueParmsParameters, '@type'>> & MriCaTissueParmsParameters;
+type MriCaTissueParmsParamsDictTagged = Required<Pick<MriCaTissueParmsParamsDict, '@type'>> & MriCaTissueParmsParamsDict;
 
 
 /**
- * Output object returned when calling `MriCaTissueParmsParameters(...)`.
+ * Output object returned when calling `MriCaTissueParmsParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_ca_tissue_parms_params(
     output_file: string,
     spacing_flag: boolean = false,
     gradient_flag: boolean = false,
-): MriCaTissueParmsParametersTagged {
+): MriCaTissueParmsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_ca_tissue_parms" as const,
         "subjects": subjects,
@@ -74,7 +74,7 @@ function mri_ca_tissue_parms_params(
  * @returns Command-line arguments.
  */
 function mri_ca_tissue_parms_cargs(
-    params: MriCaTissueParmsParameters,
+    params: MriCaTissueParmsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function mri_ca_tissue_parms_cargs(
  * @returns Outputs object.
  */
 function mri_ca_tissue_parms_outputs(
-    params: MriCaTissueParmsParameters,
+    params: MriCaTissueParmsParamsDict,
     execution: Execution,
 ): MriCaTissueParmsOutputs {
     const ret: MriCaTissueParmsOutputs = {
@@ -126,7 +126,7 @@ function mri_ca_tissue_parms_outputs(
  * @returns NamedTuple of outputs (described in `MriCaTissueParmsOutputs`).
  */
 function mri_ca_tissue_parms_execute(
-    params: MriCaTissueParmsParameters,
+    params: MriCaTissueParmsParamsDict,
     runner: Runner | null = null,
 ): MriCaTissueParmsOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function mri_ca_tissue_parms(
 export {
       MRI_CA_TISSUE_PARMS_METADATA,
       MriCaTissueParmsOutputs,
+      MriCaTissueParmsParamsDict,
+      MriCaTissueParmsParamsDictTagged,
       mri_ca_tissue_parms,
       mri_ca_tissue_parms_execute,
       mri_ca_tissue_parms_params,

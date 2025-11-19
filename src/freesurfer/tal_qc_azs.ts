@@ -11,15 +11,15 @@ const TAL_QC_AZS_METADATA: Metadata = {
 };
 
 
-interface TalQcAzsParameters {
+interface TalQcAzsParamsDict {
     "@type"?: "freesurfer/tal_QC_AZS";
     "logfile": InputPathType;
 }
-type TalQcAzsParametersTagged = Required<Pick<TalQcAzsParameters, '@type'>> & TalQcAzsParameters;
+type TalQcAzsParamsDictTagged = Required<Pick<TalQcAzsParamsDict, '@type'>> & TalQcAzsParamsDict;
 
 
 /**
- * Output object returned when calling `TalQcAzsParameters(...)`.
+ * Output object returned when calling `TalQcAzsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface TalQcAzsOutputs {
  */
 function tal_qc_azs_params(
     logfile: InputPathType,
-): TalQcAzsParametersTagged {
+): TalQcAzsParamsDictTagged {
     const params = {
         "@type": "freesurfer/tal_QC_AZS" as const,
         "logfile": logfile,
@@ -58,7 +58,7 @@ function tal_qc_azs_params(
  * @returns Command-line arguments.
  */
 function tal_qc_azs_cargs(
-    params: TalQcAzsParameters,
+    params: TalQcAzsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function tal_qc_azs_cargs(
  * @returns Outputs object.
  */
 function tal_qc_azs_outputs(
-    params: TalQcAzsParameters,
+    params: TalQcAzsParamsDict,
     execution: Execution,
 ): TalQcAzsOutputs {
     const ret: TalQcAzsOutputs = {
@@ -102,7 +102,7 @@ function tal_qc_azs_outputs(
  * @returns NamedTuple of outputs (described in `TalQcAzsOutputs`).
  */
 function tal_qc_azs_execute(
-    params: TalQcAzsParameters,
+    params: TalQcAzsParamsDict,
     runner: Runner | null = null,
 ): TalQcAzsOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function tal_qc_azs(
 export {
       TAL_QC_AZS_METADATA,
       TalQcAzsOutputs,
+      TalQcAzsParamsDict,
+      TalQcAzsParamsDictTagged,
       tal_qc_azs,
       tal_qc_azs_execute,
       tal_qc_azs_params,

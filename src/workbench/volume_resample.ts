@@ -10,58 +10,58 @@ const VOLUME_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface VolumeResampleFlirtParameters {
+interface VolumeResampleFlirtParamsDict {
     "@type"?: "flirt";
     "source-volume": string;
     "target-volume": string;
 }
-type VolumeResampleFlirtParametersTagged = Required<Pick<VolumeResampleFlirtParameters, '@type'>> & VolumeResampleFlirtParameters;
+type VolumeResampleFlirtParamsDictTagged = Required<Pick<VolumeResampleFlirtParamsDict, '@type'>> & VolumeResampleFlirtParamsDict;
 
 
-interface VolumeResampleAffineParameters {
+interface VolumeResampleAffineParamsDict {
     "@type"?: "affine";
     "affine": string;
-    "flirt"?: VolumeResampleFlirtParameters | null | undefined;
+    "flirt"?: VolumeResampleFlirtParamsDict | null | undefined;
 }
-type VolumeResampleAffineParametersTagged = Required<Pick<VolumeResampleAffineParameters, '@type'>> & VolumeResampleAffineParameters;
+type VolumeResampleAffineParamsDictTagged = Required<Pick<VolumeResampleAffineParamsDict, '@type'>> & VolumeResampleAffineParamsDict;
 
 
-interface VolumeResampleFlirtParameters_ {
+interface VolumeResampleFlirtParamsDict_ {
     "@type"?: "flirt";
     "source-volume": string;
     "target-volume": string;
 }
-type VolumeResampleFlirtParametersTagged_ = Required<Pick<VolumeResampleFlirtParameters_, '@type'>> & VolumeResampleFlirtParameters_;
+type VolumeResampleFlirtParamsDictTagged_ = Required<Pick<VolumeResampleFlirtParamsDict_, '@type'>> & VolumeResampleFlirtParamsDict_;
 
 
-interface VolumeResampleAffineSeriesParameters {
+interface VolumeResampleAffineSeriesParamsDict {
     "@type"?: "affine-series";
     "affine-series": string;
-    "flirt"?: VolumeResampleFlirtParameters_ | null | undefined;
+    "flirt"?: VolumeResampleFlirtParamsDict_ | null | undefined;
 }
-type VolumeResampleAffineSeriesParametersTagged = Required<Pick<VolumeResampleAffineSeriesParameters, '@type'>> & VolumeResampleAffineSeriesParameters;
+type VolumeResampleAffineSeriesParamsDictTagged = Required<Pick<VolumeResampleAffineSeriesParamsDict, '@type'>> & VolumeResampleAffineSeriesParamsDict;
 
 
-interface VolumeResampleWarpParameters {
+interface VolumeResampleWarpParamsDict {
     "@type"?: "warp";
     "warpfield": string;
     "source-volume"?: string | null | undefined;
 }
-type VolumeResampleWarpParametersTagged = Required<Pick<VolumeResampleWarpParameters, '@type'>> & VolumeResampleWarpParameters;
+type VolumeResampleWarpParamsDictTagged = Required<Pick<VolumeResampleWarpParamsDict, '@type'>> & VolumeResampleWarpParamsDict;
 
 
-interface VolumeResampleParameters {
+interface VolumeResampleParamsDict {
     "@type"?: "workbench/volume-resample";
     "volume-out": string;
     "value"?: number | null | undefined;
-    "affine"?: Array<VolumeResampleAffineParameters> | null | undefined;
-    "affine-series"?: Array<VolumeResampleAffineSeriesParameters> | null | undefined;
-    "warp"?: Array<VolumeResampleWarpParameters> | null | undefined;
+    "affine"?: Array<VolumeResampleAffineParamsDict> | null | undefined;
+    "affine-series"?: Array<VolumeResampleAffineSeriesParamsDict> | null | undefined;
+    "warp"?: Array<VolumeResampleWarpParamsDict> | null | undefined;
     "volume-in": InputPathType;
     "volume-space": string;
     "method": string;
 }
-type VolumeResampleParametersTagged = Required<Pick<VolumeResampleParameters, '@type'>> & VolumeResampleParameters;
+type VolumeResampleParamsDictTagged = Required<Pick<VolumeResampleParamsDict, '@type'>> & VolumeResampleParamsDict;
 
 
 /**
@@ -72,10 +72,10 @@ type VolumeResampleParametersTagged = Required<Pick<VolumeResampleParameters, '@
  *
  * @returns Parameter dictionary
  */
-function volume_resample_flirt_params(
+function volume_resample_flirt(
     source_volume: string,
     target_volume: string,
-): VolumeResampleFlirtParametersTagged {
+): VolumeResampleFlirtParamsDictTagged {
     const params = {
         "@type": "flirt" as const,
         "source-volume": source_volume,
@@ -94,7 +94,7 @@ function volume_resample_flirt_params(
  * @returns Command-line arguments.
  */
 function volume_resample_flirt_cargs(
-    params: VolumeResampleFlirtParameters,
+    params: VolumeResampleFlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,10 +115,10 @@ function volume_resample_flirt_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_resample_affine_params(
+function volume_resample_affine(
     affine: string,
-    flirt: VolumeResampleFlirtParameters | null = null,
-): VolumeResampleAffineParametersTagged {
+    flirt: VolumeResampleFlirtParamsDict | null = null,
+): VolumeResampleAffineParamsDictTagged {
     const params = {
         "@type": "affine" as const,
         "affine": affine,
@@ -139,7 +139,7 @@ function volume_resample_affine_params(
  * @returns Command-line arguments.
  */
 function volume_resample_affine_cargs(
-    params: VolumeResampleAffineParameters,
+    params: VolumeResampleAffineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,10 +162,10 @@ function volume_resample_affine_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_resample_flirt_params_(
+function volume_resample_flirt_(
     source_volume: string,
     target_volume: string,
-): VolumeResampleFlirtParametersTagged_ {
+): VolumeResampleFlirtParamsDictTagged_ {
     const params = {
         "@type": "flirt" as const,
         "source-volume": source_volume,
@@ -184,7 +184,7 @@ function volume_resample_flirt_params_(
  * @returns Command-line arguments.
  */
 function volume_resample_flirt_cargs_(
-    params: VolumeResampleFlirtParameters_,
+    params: VolumeResampleFlirtParamsDict_,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -205,10 +205,10 @@ function volume_resample_flirt_cargs_(
  *
  * @returns Parameter dictionary
  */
-function volume_resample_affine_series_params(
+function volume_resample_affine_series(
     affine_series: string,
-    flirt: VolumeResampleFlirtParameters_ | null = null,
-): VolumeResampleAffineSeriesParametersTagged {
+    flirt: VolumeResampleFlirtParamsDict_ | null = null,
+): VolumeResampleAffineSeriesParamsDictTagged {
     const params = {
         "@type": "affine-series" as const,
         "affine-series": affine_series,
@@ -229,7 +229,7 @@ function volume_resample_affine_series_params(
  * @returns Command-line arguments.
  */
 function volume_resample_affine_series_cargs(
-    params: VolumeResampleAffineSeriesParameters,
+    params: VolumeResampleAffineSeriesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -254,10 +254,10 @@ the source volume used when generating the warpfield
  *
  * @returns Parameter dictionary
  */
-function volume_resample_warp_params(
+function volume_resample_warp(
     warpfield: string,
     source_volume: string | null,
-): VolumeResampleWarpParametersTagged {
+): VolumeResampleWarpParamsDictTagged {
     const params = {
         "@type": "warp" as const,
         "warpfield": warpfield,
@@ -278,7 +278,7 @@ function volume_resample_warp_params(
  * @returns Command-line arguments.
  */
 function volume_resample_warp_cargs(
-    params: VolumeResampleWarpParameters,
+    params: VolumeResampleWarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -295,7 +295,7 @@ function volume_resample_warp_cargs(
 
 
 /**
- * Output object returned when calling `VolumeResampleParameters(...)`.
+ * Output object returned when calling `VolumeResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -333,10 +333,10 @@ function volume_resample_params(
     volume_in: InputPathType,
     volume_space: string,
     method: string,
-    affine: Array<VolumeResampleAffineParameters> | null = null,
-    affine_series: Array<VolumeResampleAffineSeriesParameters> | null = null,
-    warp: Array<VolumeResampleWarpParameters> | null = null,
-): VolumeResampleParametersTagged {
+    affine: Array<VolumeResampleAffineParamsDict> | null = null,
+    affine_series: Array<VolumeResampleAffineSeriesParamsDict> | null = null,
+    warp: Array<VolumeResampleWarpParamsDict> | null = null,
+): VolumeResampleParamsDictTagged {
     const params = {
         "@type": "workbench/volume-resample" as const,
         "volume-out": volume_out,
@@ -369,7 +369,7 @@ function volume_resample_params(
  * @returns Command-line arguments.
  */
 function volume_resample_cargs(
-    params: VolumeResampleParameters,
+    params: VolumeResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -401,7 +401,7 @@ function volume_resample_cargs(
  * @returns Outputs object.
  */
 function volume_resample_outputs(
-    params: VolumeResampleParameters,
+    params: VolumeResampleParamsDict,
     execution: Execution,
 ): VolumeResampleOutputs {
     const ret: VolumeResampleOutputs = {
@@ -427,7 +427,7 @@ function volume_resample_outputs(
  * @returns NamedTuple of outputs (described in `VolumeResampleOutputs`).
  */
 function volume_resample_execute(
-    params: VolumeResampleParameters,
+    params: VolumeResampleParamsDict,
     runner: Runner | null = null,
 ): VolumeResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -469,9 +469,9 @@ function volume_resample(
     volume_in: InputPathType,
     volume_space: string,
     method: string,
-    affine: Array<VolumeResampleAffineParameters> | null = null,
-    affine_series: Array<VolumeResampleAffineSeriesParameters> | null = null,
-    warp: Array<VolumeResampleWarpParameters> | null = null,
+    affine: Array<VolumeResampleAffineParamsDict> | null = null,
+    affine_series: Array<VolumeResampleAffineSeriesParamsDict> | null = null,
+    warp: Array<VolumeResampleWarpParamsDict> | null = null,
     runner: Runner | null = null,
 ): VolumeResampleOutputs {
     const params = volume_resample_params(volume_out, value, volume_in, volume_space, method, affine, affine_series, warp)
@@ -481,13 +481,25 @@ function volume_resample(
 
 export {
       VOLUME_RESAMPLE_METADATA,
+      VolumeResampleAffineParamsDict,
+      VolumeResampleAffineParamsDictTagged,
+      VolumeResampleAffineSeriesParamsDict,
+      VolumeResampleAffineSeriesParamsDictTagged,
+      VolumeResampleFlirtParamsDict,
+      VolumeResampleFlirtParamsDictTagged,
+      VolumeResampleFlirtParamsDictTagged_,
+      VolumeResampleFlirtParamsDict_,
       VolumeResampleOutputs,
+      VolumeResampleParamsDict,
+      VolumeResampleParamsDictTagged,
+      VolumeResampleWarpParamsDict,
+      VolumeResampleWarpParamsDictTagged,
       volume_resample,
-      volume_resample_affine_params,
-      volume_resample_affine_series_params,
+      volume_resample_affine,
+      volume_resample_affine_series,
       volume_resample_execute,
-      volume_resample_flirt_params,
-      volume_resample_flirt_params_,
+      volume_resample_flirt,
+      volume_resample_flirt_,
       volume_resample_params,
-      volume_resample_warp_params,
+      volume_resample_warp,
 };

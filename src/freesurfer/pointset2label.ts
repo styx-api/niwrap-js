@@ -11,7 +11,7 @@ const POINTSET2LABEL_METADATA: Metadata = {
 };
 
 
-interface Pointset2labelParameters {
+interface Pointset2labelParamsDict {
     "@type"?: "freesurfer/pointset2label";
     "waypoint_file": InputPathType;
     "input_volume": InputPathType;
@@ -19,11 +19,11 @@ interface Pointset2labelParameters {
     "output_volume": string;
     "clear_option": boolean;
 }
-type Pointset2labelParametersTagged = Required<Pick<Pointset2labelParameters, '@type'>> & Pointset2labelParameters;
+type Pointset2labelParamsDictTagged = Required<Pick<Pointset2labelParamsDict, '@type'>> & Pointset2labelParamsDict;
 
 
 /**
- * Output object returned when calling `Pointset2labelParameters(...)`.
+ * Output object returned when calling `Pointset2labelParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function pointset2label_params(
     label_value: number,
     output_volume: string,
     clear_option: boolean = false,
-): Pointset2labelParametersTagged {
+): Pointset2labelParamsDictTagged {
     const params = {
         "@type": "freesurfer/pointset2label" as const,
         "waypoint_file": waypoint_file,
@@ -78,7 +78,7 @@ function pointset2label_params(
  * @returns Command-line arguments.
  */
 function pointset2label_cargs(
-    params: Pointset2labelParameters,
+    params: Pointset2labelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function pointset2label_cargs(
  * @returns Outputs object.
  */
 function pointset2label_outputs(
-    params: Pointset2labelParameters,
+    params: Pointset2labelParamsDict,
     execution: Execution,
 ): Pointset2labelOutputs {
     const ret: Pointset2labelOutputs = {
@@ -129,7 +129,7 @@ function pointset2label_outputs(
  * @returns NamedTuple of outputs (described in `Pointset2labelOutputs`).
  */
 function pointset2label_execute(
-    params: Pointset2labelParameters,
+    params: Pointset2labelParamsDict,
     runner: Runner | null = null,
 ): Pointset2labelOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function pointset2label(
 export {
       POINTSET2LABEL_METADATA,
       Pointset2labelOutputs,
+      Pointset2labelParamsDict,
+      Pointset2labelParamsDictTagged,
       pointset2label,
       pointset2label_execute,
       pointset2label_params,

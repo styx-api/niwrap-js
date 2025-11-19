@@ -10,17 +10,17 @@ const SURFACE_AFFINE_REGRESSION_METADATA: Metadata = {
 };
 
 
-interface SurfaceAffineRegressionParameters {
+interface SurfaceAffineRegressionParamsDict {
     "@type"?: "workbench/surface-affine-regression";
     "source": InputPathType;
     "target": InputPathType;
     "affine-out": string;
 }
-type SurfaceAffineRegressionParametersTagged = Required<Pick<SurfaceAffineRegressionParameters, '@type'>> & SurfaceAffineRegressionParameters;
+type SurfaceAffineRegressionParamsDictTagged = Required<Pick<SurfaceAffineRegressionParamsDict, '@type'>> & SurfaceAffineRegressionParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceAffineRegressionParameters(...)`.
+ * Output object returned when calling `SurfaceAffineRegressionParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function surface_affine_regression_params(
     source: InputPathType,
     target: InputPathType,
     affine_out: string,
-): SurfaceAffineRegressionParametersTagged {
+): SurfaceAffineRegressionParamsDictTagged {
     const params = {
         "@type": "workbench/surface-affine-regression" as const,
         "source": source,
@@ -65,7 +65,7 @@ function surface_affine_regression_params(
  * @returns Command-line arguments.
  */
 function surface_affine_regression_cargs(
-    params: SurfaceAffineRegressionParameters,
+    params: SurfaceAffineRegressionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function surface_affine_regression_cargs(
  * @returns Outputs object.
  */
 function surface_affine_regression_outputs(
-    params: SurfaceAffineRegressionParameters,
+    params: SurfaceAffineRegressionParamsDict,
     execution: Execution,
 ): SurfaceAffineRegressionOutputs {
     const ret: SurfaceAffineRegressionOutputs = {
@@ -110,7 +110,7 @@ function surface_affine_regression_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceAffineRegressionOutputs`).
  */
 function surface_affine_regression_execute(
-    params: SurfaceAffineRegressionParameters,
+    params: SurfaceAffineRegressionParamsDict,
     runner: Runner | null = null,
 ): SurfaceAffineRegressionOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function surface_affine_regression(
 export {
       SURFACE_AFFINE_REGRESSION_METADATA,
       SurfaceAffineRegressionOutputs,
+      SurfaceAffineRegressionParamsDict,
+      SurfaceAffineRegressionParamsDictTagged,
       surface_affine_regression,
       surface_affine_regression_execute,
       surface_affine_regression_params,

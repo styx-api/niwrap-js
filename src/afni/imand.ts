@@ -11,17 +11,17 @@ const IMAND_METADATA: Metadata = {
 };
 
 
-interface ImandParameters {
+interface ImandParamsDict {
     "@type"?: "afni/imand";
     "threshold"?: number | null | undefined;
     "input_images": Array<InputPathType>;
     "output_image": string;
 }
-type ImandParametersTagged = Required<Pick<ImandParameters, '@type'>> & ImandParameters;
+type ImandParamsDictTagged = Required<Pick<ImandParamsDict, '@type'>> & ImandParamsDict;
 
 
 /**
- * Output object returned when calling `ImandParameters(...)`.
+ * Output object returned when calling `ImandParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function imand_params(
     input_images: Array<InputPathType>,
     output_image: string,
     threshold: number | null = null,
-): ImandParametersTagged {
+): ImandParamsDictTagged {
     const params = {
         "@type": "afni/imand" as const,
         "input_images": input_images,
@@ -72,7 +72,7 @@ function imand_params(
  * @returns Command-line arguments.
  */
 function imand_cargs(
-    params: ImandParameters,
+    params: ImandParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function imand_cargs(
  * @returns Outputs object.
  */
 function imand_outputs(
-    params: ImandParameters,
+    params: ImandParamsDict,
     execution: Execution,
 ): ImandOutputs {
     const ret: ImandOutputs = {
@@ -124,7 +124,7 @@ function imand_outputs(
  * @returns NamedTuple of outputs (described in `ImandOutputs`).
  */
 function imand_execute(
-    params: ImandParameters,
+    params: ImandParamsDict,
     runner: Runner | null = null,
 ): ImandOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function imand(
 export {
       IMAND_METADATA,
       ImandOutputs,
+      ImandParamsDict,
+      ImandParamsDictTagged,
       imand,
       imand_execute,
       imand_params,

@@ -11,7 +11,7 @@ const MRI_ENTOWM_SEG_METADATA: Metadata = {
 };
 
 
-interface MriEntowmSegParameters {
+interface MriEntowmSegParamsDict {
     "@type"?: "freesurfer/mri_entowm_seg";
     "input_image"?: InputPathType | null | undefined;
     "output_segmentation"?: string | null | undefined;
@@ -39,11 +39,11 @@ interface MriEntowmSegParameters {
     "no_cite_sclimbic": boolean;
     "nchannels"?: number | null | undefined;
 }
-type MriEntowmSegParametersTagged = Required<Pick<MriEntowmSegParameters, '@type'>> & MriEntowmSegParameters;
+type MriEntowmSegParamsDictTagged = Required<Pick<MriEntowmSegParamsDict, '@type'>> & MriEntowmSegParamsDict;
 
 
 /**
- * Output object returned when calling `MriEntowmSegParameters(...)`.
+ * Output object returned when calling `MriEntowmSegParamsDict(...)`.
  *
  * @interface
  */
@@ -128,7 +128,7 @@ function mri_entowm_seg_params(
     output_base: string | null = null,
     no_cite_sclimbic: boolean = false,
     nchannels: number | null = null,
-): MriEntowmSegParametersTagged {
+): MriEntowmSegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_entowm_seg" as const,
         "conform": conform,
@@ -198,7 +198,7 @@ function mri_entowm_seg_params(
  * @returns Command-line arguments.
  */
 function mri_entowm_seg_cargs(
-    params: MriEntowmSegParameters,
+    params: MriEntowmSegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -333,7 +333,7 @@ function mri_entowm_seg_cargs(
  * @returns Outputs object.
  */
 function mri_entowm_seg_outputs(
-    params: MriEntowmSegParameters,
+    params: MriEntowmSegParamsDict,
     execution: Execution,
 ): MriEntowmSegOutputs {
     const ret: MriEntowmSegOutputs = {
@@ -362,7 +362,7 @@ function mri_entowm_seg_outputs(
  * @returns NamedTuple of outputs (described in `MriEntowmSegOutputs`).
  */
 function mri_entowm_seg_execute(
-    params: MriEntowmSegParameters,
+    params: MriEntowmSegParamsDict,
     runner: Runner | null = null,
 ): MriEntowmSegOutputs {
     runner = runner || getGlobalRunner();
@@ -449,6 +449,8 @@ function mri_entowm_seg(
 export {
       MRI_ENTOWM_SEG_METADATA,
       MriEntowmSegOutputs,
+      MriEntowmSegParamsDict,
+      MriEntowmSegParamsDictTagged,
       mri_entowm_seg,
       mri_entowm_seg_execute,
       mri_entowm_seg_params,

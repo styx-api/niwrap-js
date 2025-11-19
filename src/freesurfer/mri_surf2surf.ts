@@ -11,7 +11,7 @@ const MRI_SURF2SURF_METADATA: Metadata = {
 };
 
 
-interface MriSurf2surfParameters {
+interface MriSurf2surfParamsDict {
     "@type"?: "freesurfer/mri_surf2surf";
     "src_subject": string;
     "sval_path"?: InputPathType | null | undefined;
@@ -70,11 +70,11 @@ interface MriSurf2surfParameters {
     "rms"?: InputPathType | null | undefined;
     "rms_mask"?: InputPathType | null | undefined;
 }
-type MriSurf2surfParametersTagged = Required<Pick<MriSurf2surfParameters, '@type'>> & MriSurf2surfParameters;
+type MriSurf2surfParamsDictTagged = Required<Pick<MriSurf2surfParamsDict, '@type'>> & MriSurf2surfParamsDict;
 
 
 /**
- * Output object returned when calling `MriSurf2surfParameters(...)`.
+ * Output object returned when calling `MriSurf2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -213,7 +213,7 @@ function mri_surf2surf_params(
     reg_diff: string | null = null,
     rms: InputPathType | null = null,
     rms_mask: InputPathType | null = null,
-): MriSurf2surfParametersTagged {
+): MriSurf2surfParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_surf2surf" as const,
         "src_subject": src_subject,
@@ -370,7 +370,7 @@ function mri_surf2surf_params(
  * @returns Command-line arguments.
  */
 function mri_surf2surf_cargs(
-    params: MriSurf2surfParameters,
+    params: MriSurf2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -684,7 +684,7 @@ function mri_surf2surf_cargs(
  * @returns Outputs object.
  */
 function mri_surf2surf_outputs(
-    params: MriSurf2surfParameters,
+    params: MriSurf2surfParamsDict,
     execution: Execution,
 ): MriSurf2surfOutputs {
     const ret: MriSurf2surfOutputs = {
@@ -711,7 +711,7 @@ function mri_surf2surf_outputs(
  * @returns NamedTuple of outputs (described in `MriSurf2surfOutputs`).
  */
 function mri_surf2surf_execute(
-    params: MriSurf2surfParameters,
+    params: MriSurf2surfParamsDict,
     runner: Runner | null = null,
 ): MriSurf2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -860,6 +860,8 @@ function mri_surf2surf(
 export {
       MRI_SURF2SURF_METADATA,
       MriSurf2surfOutputs,
+      MriSurf2surfParamsDict,
+      MriSurf2surfParamsDictTagged,
       mri_surf2surf,
       mri_surf2surf_execute,
       mri_surf2surf_params,

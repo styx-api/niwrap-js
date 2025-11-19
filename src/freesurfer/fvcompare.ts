@@ -11,7 +11,7 @@ const FVCOMPARE_METADATA: Metadata = {
 };
 
 
-interface FvcompareParameters {
+interface FvcompareParamsDict {
     "@type"?: "freesurfer/fvcompare";
     "subject1": string;
     "subject2": string;
@@ -39,11 +39,11 @@ interface FvcompareParameters {
     "pointset"?: InputPathType | null | undefined;
     "wot2": boolean;
 }
-type FvcompareParametersTagged = Required<Pick<FvcompareParameters, '@type'>> & FvcompareParameters;
+type FvcompareParamsDictTagged = Required<Pick<FvcompareParamsDict, '@type'>> & FvcompareParamsDict;
 
 
 /**
- * Output object returned when calling `FvcompareParameters(...)`.
+ * Output object returned when calling `FvcompareParamsDict(...)`.
  *
  * @interface
  */
@@ -112,7 +112,7 @@ function fvcompare_params(
     surf_name: string | null = null,
     pointset: InputPathType | null = null,
     wot2: boolean = false,
-): FvcompareParametersTagged {
+): FvcompareParamsDictTagged {
     const params = {
         "@type": "freesurfer/fvcompare" as const,
         "subject1": subject1,
@@ -180,7 +180,7 @@ function fvcompare_params(
  * @returns Command-line arguments.
  */
 function fvcompare_cargs(
-    params: FvcompareParameters,
+    params: FvcompareParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -314,7 +314,7 @@ function fvcompare_cargs(
  * @returns Outputs object.
  */
 function fvcompare_outputs(
-    params: FvcompareParameters,
+    params: FvcompareParamsDict,
     execution: Execution,
 ): FvcompareOutputs {
     const ret: FvcompareOutputs = {
@@ -339,7 +339,7 @@ function fvcompare_outputs(
  * @returns NamedTuple of outputs (described in `FvcompareOutputs`).
  */
 function fvcompare_execute(
-    params: FvcompareParameters,
+    params: FvcompareParamsDict,
     runner: Runner | null = null,
 ): FvcompareOutputs {
     runner = runner || getGlobalRunner();
@@ -426,6 +426,8 @@ function fvcompare(
 export {
       FVCOMPARE_METADATA,
       FvcompareOutputs,
+      FvcompareParamsDict,
+      FvcompareParamsDictTagged,
       fvcompare,
       fvcompare_execute,
       fvcompare_params,

@@ -11,16 +11,16 @@ const AFNI_RUN_R_METADATA: Metadata = {
 };
 
 
-interface AfniRunRParameters {
+interface AfniRunRParamsDict {
     "@type"?: "afni/afni_run_R";
     "r_script": InputPathType;
     "r_args": Array<string>;
 }
-type AfniRunRParametersTagged = Required<Pick<AfniRunRParameters, '@type'>> & AfniRunRParameters;
+type AfniRunRParamsDictTagged = Required<Pick<AfniRunRParamsDict, '@type'>> & AfniRunRParamsDict;
 
 
 /**
- * Output object returned when calling `AfniRunRParameters(...)`.
+ * Output object returned when calling `AfniRunRParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface AfniRunROutputs {
 function afni_run_r_params(
     r_script: InputPathType,
     r_args: Array<string>,
-): AfniRunRParametersTagged {
+): AfniRunRParamsDictTagged {
     const params = {
         "@type": "afni/afni_run_R" as const,
         "r_script": r_script,
@@ -62,7 +62,7 @@ function afni_run_r_params(
  * @returns Command-line arguments.
  */
 function afni_run_r_cargs(
-    params: AfniRunRParameters,
+    params: AfniRunRParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function afni_run_r_cargs(
  * @returns Outputs object.
  */
 function afni_run_r_outputs(
-    params: AfniRunRParameters,
+    params: AfniRunRParamsDict,
     execution: Execution,
 ): AfniRunROutputs {
     const ret: AfniRunROutputs = {
@@ -107,7 +107,7 @@ function afni_run_r_outputs(
  * @returns NamedTuple of outputs (described in `AfniRunROutputs`).
  */
 function afni_run_r_execute(
-    params: AfniRunRParameters,
+    params: AfniRunRParamsDict,
     runner: Runner | null = null,
 ): AfniRunROutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function afni_run_r(
 export {
       AFNI_RUN_R_METADATA,
       AfniRunROutputs,
+      AfniRunRParamsDict,
+      AfniRunRParamsDictTagged,
       afni_run_r,
       afni_run_r_execute,
       afni_run_r_params,

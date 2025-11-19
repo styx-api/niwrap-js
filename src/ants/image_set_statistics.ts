@@ -11,7 +11,7 @@ const IMAGE_SET_STATISTICS_METADATA: Metadata = {
 };
 
 
-interface ImageSetStatisticsParameters {
+interface ImageSetStatisticsParamsDict {
     "@type"?: "ants/ImageSetStatistics";
     "image_dimension": number;
     "controls_list": InputPathType;
@@ -20,11 +20,11 @@ interface ImageSetStatisticsParameters {
     "roi"?: InputPathType | null | undefined;
     "imagelist2"?: InputPathType | null | undefined;
 }
-type ImageSetStatisticsParametersTagged = Required<Pick<ImageSetStatisticsParameters, '@type'>> & ImageSetStatisticsParameters;
+type ImageSetStatisticsParamsDictTagged = Required<Pick<ImageSetStatisticsParamsDict, '@type'>> & ImageSetStatisticsParamsDict;
 
 
 /**
- * Output object returned when calling `ImageSetStatisticsParameters(...)`.
+ * Output object returned when calling `ImageSetStatisticsParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function image_set_statistics_params(
     which_stat: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7,
     roi: InputPathType | null = null,
     imagelist2: InputPathType | null = null,
-): ImageSetStatisticsParametersTagged {
+): ImageSetStatisticsParamsDictTagged {
     const params = {
         "@type": "ants/ImageSetStatistics" as const,
         "image_dimension": image_dimension,
@@ -86,7 +86,7 @@ function image_set_statistics_params(
  * @returns Command-line arguments.
  */
 function image_set_statistics_cargs(
-    params: ImageSetStatisticsParameters,
+    params: ImageSetStatisticsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function image_set_statistics_cargs(
  * @returns Outputs object.
  */
 function image_set_statistics_outputs(
-    params: ImageSetStatisticsParameters,
+    params: ImageSetStatisticsParamsDict,
     execution: Execution,
 ): ImageSetStatisticsOutputs {
     const ret: ImageSetStatisticsOutputs = {
@@ -155,7 +155,7 @@ function image_set_statistics_outputs(
  * @returns NamedTuple of outputs (described in `ImageSetStatisticsOutputs`).
  */
 function image_set_statistics_execute(
-    params: ImageSetStatisticsParameters,
+    params: ImageSetStatisticsParamsDict,
     runner: Runner | null = null,
 ): ImageSetStatisticsOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function image_set_statistics(
 export {
       IMAGE_SET_STATISTICS_METADATA,
       ImageSetStatisticsOutputs,
+      ImageSetStatisticsParamsDict,
+      ImageSetStatisticsParamsDictTagged,
       image_set_statistics,
       image_set_statistics_execute,
       image_set_statistics_params,

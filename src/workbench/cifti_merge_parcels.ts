@@ -10,20 +10,20 @@ const CIFTI_MERGE_PARCELS_METADATA: Metadata = {
 };
 
 
-interface CiftiMergeParcelsCiftiParameters {
+interface CiftiMergeParcelsCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
 }
-type CiftiMergeParcelsCiftiParametersTagged = Required<Pick<CiftiMergeParcelsCiftiParameters, '@type'>> & CiftiMergeParcelsCiftiParameters;
+type CiftiMergeParcelsCiftiParamsDictTagged = Required<Pick<CiftiMergeParcelsCiftiParamsDict, '@type'>> & CiftiMergeParcelsCiftiParamsDict;
 
 
-interface CiftiMergeParcelsParameters {
+interface CiftiMergeParcelsParamsDict {
     "@type"?: "workbench/cifti-merge-parcels";
     "cifti-out": string;
-    "cifti"?: Array<CiftiMergeParcelsCiftiParameters> | null | undefined;
+    "cifti"?: Array<CiftiMergeParcelsCiftiParamsDict> | null | undefined;
     "direction": string;
 }
-type CiftiMergeParcelsParametersTagged = Required<Pick<CiftiMergeParcelsParameters, '@type'>> & CiftiMergeParcelsParameters;
+type CiftiMergeParcelsParamsDictTagged = Required<Pick<CiftiMergeParcelsParamsDict, '@type'>> & CiftiMergeParcelsParamsDict;
 
 
 /**
@@ -33,9 +33,9 @@ type CiftiMergeParcelsParametersTagged = Required<Pick<CiftiMergeParcelsParamete
  *
  * @returns Parameter dictionary
  */
-function cifti_merge_parcels_cifti_params(
+function cifti_merge_parcels_cifti(
     cifti_in: InputPathType,
-): CiftiMergeParcelsCiftiParametersTagged {
+): CiftiMergeParcelsCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -53,7 +53,7 @@ function cifti_merge_parcels_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_parcels_cifti_cargs(
-    params: CiftiMergeParcelsCiftiParameters,
+    params: CiftiMergeParcelsCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -66,7 +66,7 @@ function cifti_merge_parcels_cifti_cargs(
 
 
 /**
- * Output object returned when calling `CiftiMergeParcelsParameters(...)`.
+ * Output object returned when calling `CiftiMergeParcelsParamsDict(...)`.
  *
  * @interface
  */
@@ -94,8 +94,8 @@ interface CiftiMergeParcelsOutputs {
 function cifti_merge_parcels_params(
     cifti_out: string,
     direction: string,
-    cifti: Array<CiftiMergeParcelsCiftiParameters> | null = null,
-): CiftiMergeParcelsParametersTagged {
+    cifti: Array<CiftiMergeParcelsCiftiParamsDict> | null = null,
+): CiftiMergeParcelsParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-merge-parcels" as const,
         "cifti-out": cifti_out,
@@ -117,7 +117,7 @@ function cifti_merge_parcels_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_parcels_cargs(
-    params: CiftiMergeParcelsParameters,
+    params: CiftiMergeParcelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function cifti_merge_parcels_cargs(
  * @returns Outputs object.
  */
 function cifti_merge_parcels_outputs(
-    params: CiftiMergeParcelsParameters,
+    params: CiftiMergeParcelsParamsDict,
     execution: Execution,
 ): CiftiMergeParcelsOutputs {
     const ret: CiftiMergeParcelsOutputs = {
@@ -165,7 +165,7 @@ function cifti_merge_parcels_outputs(
  * @returns NamedTuple of outputs (described in `CiftiMergeParcelsOutputs`).
  */
 function cifti_merge_parcels_execute(
-    params: CiftiMergeParcelsParameters,
+    params: CiftiMergeParcelsParamsDict,
     runner: Runner | null = null,
 ): CiftiMergeParcelsOutputs {
     runner = runner || getGlobalRunner();
@@ -193,7 +193,7 @@ function cifti_merge_parcels_execute(
 function cifti_merge_parcels(
     cifti_out: string,
     direction: string,
-    cifti: Array<CiftiMergeParcelsCiftiParameters> | null = null,
+    cifti: Array<CiftiMergeParcelsCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeParcelsOutputs {
     const params = cifti_merge_parcels_params(cifti_out, direction, cifti)
@@ -203,9 +203,13 @@ function cifti_merge_parcels(
 
 export {
       CIFTI_MERGE_PARCELS_METADATA,
+      CiftiMergeParcelsCiftiParamsDict,
+      CiftiMergeParcelsCiftiParamsDictTagged,
       CiftiMergeParcelsOutputs,
+      CiftiMergeParcelsParamsDict,
+      CiftiMergeParcelsParamsDictTagged,
       cifti_merge_parcels,
-      cifti_merge_parcels_cifti_params,
+      cifti_merge_parcels_cifti,
       cifti_merge_parcels_execute,
       cifti_merge_parcels_params,
 };

@@ -10,16 +10,16 @@ const SURFACE_VERTEX_AREAS_METADATA: Metadata = {
 };
 
 
-interface SurfaceVertexAreasParameters {
+interface SurfaceVertexAreasParamsDict {
     "@type"?: "workbench/surface-vertex-areas";
     "metric": string;
     "surface": InputPathType;
 }
-type SurfaceVertexAreasParametersTagged = Required<Pick<SurfaceVertexAreasParameters, '@type'>> & SurfaceVertexAreasParameters;
+type SurfaceVertexAreasParamsDictTagged = Required<Pick<SurfaceVertexAreasParamsDict, '@type'>> & SurfaceVertexAreasParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceVertexAreasParameters(...)`.
+ * Output object returned when calling `SurfaceVertexAreasParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface SurfaceVertexAreasOutputs {
 function surface_vertex_areas_params(
     metric: string,
     surface: InputPathType,
-): SurfaceVertexAreasParametersTagged {
+): SurfaceVertexAreasParamsDictTagged {
     const params = {
         "@type": "workbench/surface-vertex-areas" as const,
         "metric": metric,
@@ -65,7 +65,7 @@ function surface_vertex_areas_params(
  * @returns Command-line arguments.
  */
 function surface_vertex_areas_cargs(
-    params: SurfaceVertexAreasParameters,
+    params: SurfaceVertexAreasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function surface_vertex_areas_cargs(
  * @returns Outputs object.
  */
 function surface_vertex_areas_outputs(
-    params: SurfaceVertexAreasParameters,
+    params: SurfaceVertexAreasParamsDict,
     execution: Execution,
 ): SurfaceVertexAreasOutputs {
     const ret: SurfaceVertexAreasOutputs = {
@@ -110,7 +110,7 @@ function surface_vertex_areas_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceVertexAreasOutputs`).
  */
 function surface_vertex_areas_execute(
-    params: SurfaceVertexAreasParameters,
+    params: SurfaceVertexAreasParamsDict,
     runner: Runner | null = null,
 ): SurfaceVertexAreasOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function surface_vertex_areas(
 export {
       SURFACE_VERTEX_AREAS_METADATA,
       SurfaceVertexAreasOutputs,
+      SurfaceVertexAreasParamsDict,
+      SurfaceVertexAreasParamsDictTagged,
       surface_vertex_areas,
       surface_vertex_areas_execute,
       surface_vertex_areas_params,

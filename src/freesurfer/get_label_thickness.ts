@@ -11,15 +11,15 @@ const GET_LABEL_THICKNESS_METADATA: Metadata = {
 };
 
 
-interface GetLabelThicknessParameters {
+interface GetLabelThicknessParamsDict {
     "@type"?: "freesurfer/get_label_thickness";
     "infile": InputPathType;
 }
-type GetLabelThicknessParametersTagged = Required<Pick<GetLabelThicknessParameters, '@type'>> & GetLabelThicknessParameters;
+type GetLabelThicknessParamsDictTagged = Required<Pick<GetLabelThicknessParamsDict, '@type'>> & GetLabelThicknessParamsDict;
 
 
 /**
- * Output object returned when calling `GetLabelThicknessParameters(...)`.
+ * Output object returned when calling `GetLabelThicknessParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface GetLabelThicknessOutputs {
  */
 function get_label_thickness_params(
     infile: InputPathType,
-): GetLabelThicknessParametersTagged {
+): GetLabelThicknessParamsDictTagged {
     const params = {
         "@type": "freesurfer/get_label_thickness" as const,
         "infile": infile,
@@ -58,7 +58,7 @@ function get_label_thickness_params(
  * @returns Command-line arguments.
  */
 function get_label_thickness_cargs(
-    params: GetLabelThicknessParameters,
+    params: GetLabelThicknessParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function get_label_thickness_cargs(
  * @returns Outputs object.
  */
 function get_label_thickness_outputs(
-    params: GetLabelThicknessParameters,
+    params: GetLabelThicknessParamsDict,
     execution: Execution,
 ): GetLabelThicknessOutputs {
     const ret: GetLabelThicknessOutputs = {
@@ -102,7 +102,7 @@ function get_label_thickness_outputs(
  * @returns NamedTuple of outputs (described in `GetLabelThicknessOutputs`).
  */
 function get_label_thickness_execute(
-    params: GetLabelThicknessParameters,
+    params: GetLabelThicknessParamsDict,
     runner: Runner | null = null,
 ): GetLabelThicknessOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function get_label_thickness(
 export {
       GET_LABEL_THICKNESS_METADATA,
       GetLabelThicknessOutputs,
+      GetLabelThicknessParamsDict,
+      GetLabelThicknessParamsDictTagged,
       get_label_thickness,
       get_label_thickness_execute,
       get_label_thickness_params,

@@ -11,7 +11,7 @@ const V_3DEDGE3_METADATA: Metadata = {
 };
 
 
-interface V3dedge3Parameters {
+interface V3dedge3ParamsDict {
     "@type"?: "afni/3dedge3";
     "input_file": InputPathType;
     "verbose": boolean;
@@ -23,11 +23,11 @@ interface V3dedge3Parameters {
     "scale_floats"?: number | null | undefined;
     "automask": boolean;
 }
-type V3dedge3ParametersTagged = Required<Pick<V3dedge3Parameters, '@type'>> & V3dedge3Parameters;
+type V3dedge3ParamsDictTagged = Required<Pick<V3dedge3ParamsDict, '@type'>> & V3dedge3ParamsDict;
 
 
 /**
- * Output object returned when calling `V3dedge3Parameters(...)`.
+ * Output object returned when calling `V3dedge3ParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_3dedge3_params(
     nscale: boolean = false,
     scale_floats: number | null = null,
     automask: boolean = false,
-): V3dedge3ParametersTagged {
+): V3dedge3ParamsDictTagged {
     const params = {
         "@type": "afni/3dedge3" as const,
         "input_file": input_file,
@@ -100,7 +100,7 @@ function v_3dedge3_params(
  * @returns Command-line arguments.
  */
 function v_3dedge3_cargs(
-    params: V3dedge3Parameters,
+    params: V3dedge3ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,7 +155,7 @@ function v_3dedge3_cargs(
  * @returns Outputs object.
  */
 function v_3dedge3_outputs(
-    params: V3dedge3Parameters,
+    params: V3dedge3ParamsDict,
     execution: Execution,
 ): V3dedge3Outputs {
     const ret: V3dedge3Outputs = {
@@ -181,7 +181,7 @@ function v_3dedge3_outputs(
  * @returns NamedTuple of outputs (described in `V3dedge3Outputs`).
  */
 function v_3dedge3_execute(
-    params: V3dedge3Parameters,
+    params: V3dedge3ParamsDict,
     runner: Runner | null = null,
 ): V3dedge3Outputs {
     runner = runner || getGlobalRunner();
@@ -235,6 +235,8 @@ function v_3dedge3(
 
 export {
       V3dedge3Outputs,
+      V3dedge3ParamsDict,
+      V3dedge3ParamsDictTagged,
       V_3DEDGE3_METADATA,
       v_3dedge3,
       v_3dedge3_execute,

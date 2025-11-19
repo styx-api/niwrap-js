@@ -11,7 +11,7 @@ const MRIS_REGISTER_TO_VOLUME_METADATA: Metadata = {
 };
 
 
-interface MrisRegisterToVolumeParameters {
+interface MrisRegisterToVolumeParamsDict {
     "@type"?: "freesurfer/mris_register_to_volume";
     "surface": string;
     "pial": string;
@@ -42,11 +42,11 @@ interface MrisRegisterToVolumeParameters {
     "label"?: string | null | undefined;
     "out_reg"?: string | null | undefined;
 }
-type MrisRegisterToVolumeParametersTagged = Required<Pick<MrisRegisterToVolumeParameters, '@type'>> & MrisRegisterToVolumeParameters;
+type MrisRegisterToVolumeParamsDictTagged = Required<Pick<MrisRegisterToVolumeParamsDict, '@type'>> & MrisRegisterToVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRegisterToVolumeParameters(...)`.
+ * Output object returned when calling `MrisRegisterToVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -121,7 +121,7 @@ function mris_register_to_volume_params(
     patch: string | null = null,
     label: string | null = null,
     out_reg: string | null = null,
-): MrisRegisterToVolumeParametersTagged {
+): MrisRegisterToVolumeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_register_to_volume" as const,
         "surface": surface,
@@ -208,7 +208,7 @@ function mris_register_to_volume_params(
  * @returns Command-line arguments.
  */
 function mris_register_to_volume_cargs(
-    params: MrisRegisterToVolumeParameters,
+    params: MrisRegisterToVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -377,7 +377,7 @@ function mris_register_to_volume_cargs(
  * @returns Outputs object.
  */
 function mris_register_to_volume_outputs(
-    params: MrisRegisterToVolumeParameters,
+    params: MrisRegisterToVolumeParamsDict,
     execution: Execution,
 ): MrisRegisterToVolumeOutputs {
     const ret: MrisRegisterToVolumeOutputs = {
@@ -402,7 +402,7 @@ function mris_register_to_volume_outputs(
  * @returns NamedTuple of outputs (described in `MrisRegisterToVolumeOutputs`).
  */
 function mris_register_to_volume_execute(
-    params: MrisRegisterToVolumeParameters,
+    params: MrisRegisterToVolumeParamsDict,
     runner: Runner | null = null,
 ): MrisRegisterToVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -495,6 +495,8 @@ function mris_register_to_volume(
 export {
       MRIS_REGISTER_TO_VOLUME_METADATA,
       MrisRegisterToVolumeOutputs,
+      MrisRegisterToVolumeParamsDict,
+      MrisRegisterToVolumeParamsDictTagged,
       mris_register_to_volume,
       mris_register_to_volume_execute,
       mris_register_to_volume_params,

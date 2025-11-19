@@ -11,7 +11,7 @@ const IMCUTUP_METADATA: Metadata = {
 };
 
 
-interface ImcutupParameters {
+interface ImcutupParamsDict {
     "@type"?: "afni/imcutup";
     "prefix"?: string | null | undefined;
     "xynum": boolean;
@@ -22,11 +22,11 @@ interface ImcutupParameters {
     "ny": number;
     "input_file": InputPathType;
 }
-type ImcutupParametersTagged = Required<Pick<ImcutupParameters, '@type'>> & ImcutupParameters;
+type ImcutupParamsDictTagged = Required<Pick<ImcutupParamsDict, '@type'>> & ImcutupParamsDict;
 
 
 /**
- * Output object returned when calling `ImcutupParameters(...)`.
+ * Output object returned when calling `ImcutupParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function imcutup_params(
     yxnum: boolean = false,
     xynum_format: boolean = false,
     yxnum_format: boolean = false,
-): ImcutupParametersTagged {
+): ImcutupParamsDictTagged {
     const params = {
         "@type": "afni/imcutup" as const,
         "xynum": xynum,
@@ -88,7 +88,7 @@ function imcutup_params(
  * @returns Command-line arguments.
  */
 function imcutup_cargs(
-    params: ImcutupParameters,
+    params: ImcutupParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function imcutup_cargs(
  * @returns Outputs object.
  */
 function imcutup_outputs(
-    params: ImcutupParameters,
+    params: ImcutupParamsDict,
     execution: Execution,
 ): ImcutupOutputs {
     const ret: ImcutupOutputs = {
@@ -152,7 +152,7 @@ function imcutup_outputs(
  * @returns NamedTuple of outputs (described in `ImcutupOutputs`).
  */
 function imcutup_execute(
-    params: ImcutupParameters,
+    params: ImcutupParamsDict,
     runner: Runner | null = null,
 ): ImcutupOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function imcutup(
 export {
       IMCUTUP_METADATA,
       ImcutupOutputs,
+      ImcutupParamsDict,
+      ImcutupParamsDictTagged,
       imcutup,
       imcutup_execute,
       imcutup_params,

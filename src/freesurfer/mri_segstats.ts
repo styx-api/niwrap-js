@@ -11,7 +11,7 @@ const MRI_SEGSTATS_METADATA: Metadata = {
 };
 
 
-interface MriSegstatsParameters {
+interface MriSegstatsParamsDict {
     "@type"?: "freesurfer/mri_segstats";
     "segvol": InputPathType;
     "annot_subject"?: string | null | undefined;
@@ -74,11 +74,11 @@ interface MriSegstatsParameters {
     "subjects_dir"?: string | null | undefined;
     "random_seed"?: number | null | undefined;
 }
-type MriSegstatsParametersTagged = Required<Pick<MriSegstatsParameters, '@type'>> & MriSegstatsParameters;
+type MriSegstatsParamsDictTagged = Required<Pick<MriSegstatsParamsDict, '@type'>> & MriSegstatsParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegstatsParameters(...)`.
+ * Output object returned when calling `MriSegstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -237,7 +237,7 @@ function mri_segstats_params(
     qa_stats_file: string | null = null,
     subjects_dir: string | null = null,
     random_seed: number | null = null,
-): MriSegstatsParametersTagged {
+): MriSegstatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_segstats" as const,
         "segvol": segvol,
@@ -386,7 +386,7 @@ function mri_segstats_params(
  * @returns Command-line arguments.
  */
 function mri_segstats_cargs(
-    params: MriSegstatsParameters,
+    params: MriSegstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -682,7 +682,7 @@ function mri_segstats_cargs(
  * @returns Outputs object.
  */
 function mri_segstats_outputs(
-    params: MriSegstatsParameters,
+    params: MriSegstatsParamsDict,
     execution: Execution,
 ): MriSegstatsOutputs {
     const ret: MriSegstatsOutputs = {
@@ -713,7 +713,7 @@ function mri_segstats_outputs(
  * @returns NamedTuple of outputs (described in `MriSegstatsOutputs`).
  */
 function mri_segstats_execute(
-    params: MriSegstatsParameters,
+    params: MriSegstatsParamsDict,
     runner: Runner | null = null,
 ): MriSegstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -866,6 +866,8 @@ function mri_segstats(
 export {
       MRI_SEGSTATS_METADATA,
       MriSegstatsOutputs,
+      MriSegstatsParamsDict,
+      MriSegstatsParamsDictTagged,
       mri_segstats,
       mri_segstats_execute,
       mri_segstats_params,

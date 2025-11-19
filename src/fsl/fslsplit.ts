@@ -11,7 +11,7 @@ const FSLSPLIT_METADATA: Metadata = {
 };
 
 
-interface FslsplitParameters {
+interface FslsplitParamsDict {
     "@type"?: "fsl/fslsplit";
     "infile": InputPathType;
     "output_basename"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface FslsplitParameters {
     "separation_z": boolean;
     "separation_time": boolean;
 }
-type FslsplitParametersTagged = Required<Pick<FslsplitParameters, '@type'>> & FslsplitParameters;
+type FslsplitParamsDictTagged = Required<Pick<FslsplitParamsDict, '@type'>> & FslsplitParamsDict;
 
 
 /**
- * Output object returned when calling `FslsplitParameters(...)`.
+ * Output object returned when calling `FslsplitParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function fslsplit_params(
     separation_y: boolean = false,
     separation_z: boolean = false,
     separation_time: boolean = false,
-): FslsplitParametersTagged {
+): FslsplitParamsDictTagged {
     const params = {
         "@type": "fsl/fslsplit" as const,
         "infile": infile,
@@ -84,7 +84,7 @@ function fslsplit_params(
  * @returns Command-line arguments.
  */
 function fslsplit_cargs(
-    params: FslsplitParameters,
+    params: FslsplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function fslsplit_cargs(
  * @returns Outputs object.
  */
 function fslsplit_outputs(
-    params: FslsplitParameters,
+    params: FslsplitParamsDict,
     execution: Execution,
 ): FslsplitOutputs {
     const ret: FslsplitOutputs = {
@@ -144,7 +144,7 @@ function fslsplit_outputs(
  * @returns NamedTuple of outputs (described in `FslsplitOutputs`).
  */
 function fslsplit_execute(
-    params: FslsplitParameters,
+    params: FslsplitParamsDict,
     runner: Runner | null = null,
 ): FslsplitOutputs {
     runner = runner || getGlobalRunner();
@@ -193,6 +193,8 @@ function fslsplit(
 export {
       FSLSPLIT_METADATA,
       FslsplitOutputs,
+      FslsplitParamsDict,
+      FslsplitParamsDictTagged,
       fslsplit,
       fslsplit_execute,
       fslsplit_params,

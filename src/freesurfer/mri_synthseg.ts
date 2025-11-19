@@ -11,7 +11,7 @@ const MRI_SYNTHSEG_METADATA: Metadata = {
 };
 
 
-interface MriSynthsegParameters {
+interface MriSynthsegParamsDict {
     "@type"?: "freesurfer/mri_synthseg";
     "input_image": InputPathType;
     "output_segmentation": string;
@@ -29,11 +29,11 @@ interface MriSynthsegParameters {
     "version_1": boolean;
     "photo_synthseg"?: string | null | undefined;
 }
-type MriSynthsegParametersTagged = Required<Pick<MriSynthsegParameters, '@type'>> & MriSynthsegParameters;
+type MriSynthsegParamsDictTagged = Required<Pick<MriSynthsegParamsDict, '@type'>> & MriSynthsegParamsDict;
 
 
 /**
- * Output object returned when calling `MriSynthsegParameters(...)`.
+ * Output object returned when calling `MriSynthsegParamsDict(...)`.
  *
  * @interface
  */
@@ -102,7 +102,7 @@ function mri_synthseg_params(
     cpu: boolean = false,
     version_1: boolean = false,
     photo_synthseg: string | null = null,
-): MriSynthsegParametersTagged {
+): MriSynthsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_synthseg" as const,
         "input_image": input_image,
@@ -148,7 +148,7 @@ function mri_synthseg_params(
  * @returns Command-line arguments.
  */
 function mri_synthseg_cargs(
-    params: MriSynthsegParameters,
+    params: MriSynthsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -207,7 +207,7 @@ function mri_synthseg_cargs(
  * @returns Outputs object.
  */
 function mri_synthseg_outputs(
-    params: MriSynthsegParameters,
+    params: MriSynthsegParamsDict,
     execution: Execution,
 ): MriSynthsegOutputs {
     const ret: MriSynthsegOutputs = {
@@ -237,7 +237,7 @@ function mri_synthseg_outputs(
  * @returns NamedTuple of outputs (described in `MriSynthsegOutputs`).
  */
 function mri_synthseg_execute(
-    params: MriSynthsegParameters,
+    params: MriSynthsegParamsDict,
     runner: Runner | null = null,
 ): MriSynthsegOutputs {
     runner = runner || getGlobalRunner();
@@ -304,6 +304,8 @@ function mri_synthseg(
 export {
       MRI_SYNTHSEG_METADATA,
       MriSynthsegOutputs,
+      MriSynthsegParamsDict,
+      MriSynthsegParamsDictTagged,
       mri_synthseg,
       mri_synthseg_execute,
       mri_synthseg_params,

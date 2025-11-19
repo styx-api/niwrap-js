@@ -11,7 +11,7 @@ const EDDY_METADATA: Metadata = {
 };
 
 
-interface EddyParameters {
+interface EddyParamsDict {
     "@type"?: "fsl/eddy";
     "imain": InputPathType;
     "mask": InputPathType;
@@ -58,11 +58,11 @@ interface EddyParameters {
     "data_is_shelled": boolean;
     "verbose": boolean;
 }
-type EddyParametersTagged = Required<Pick<EddyParameters, '@type'>> & EddyParameters;
+type EddyParamsDictTagged = Required<Pick<EddyParamsDict, '@type'>> & EddyParamsDict;
 
 
 /**
- * Output object returned when calling `EddyParameters(...)`.
+ * Output object returned when calling `EddyParamsDict(...)`.
  *
  * @interface
  */
@@ -245,7 +245,7 @@ function eddy_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyParametersTagged {
+): EddyParamsDictTagged {
     const params = {
         "@type": "fsl/eddy" as const,
         "imain": imain,
@@ -358,7 +358,7 @@ function eddy_params(
  * @returns Command-line arguments.
  */
 function eddy_cargs(
-    params: EddyParameters,
+    params: EddyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -494,7 +494,7 @@ function eddy_cargs(
  * @returns Outputs object.
  */
 function eddy_outputs(
-    params: EddyParameters,
+    params: EddyParamsDict,
     execution: Execution,
 ): EddyOutputs {
     const ret: EddyOutputs = {
@@ -538,7 +538,7 @@ function eddy_outputs(
  * @returns NamedTuple of outputs (described in `EddyOutputs`).
  */
 function eddy_execute(
-    params: EddyParameters,
+    params: EddyParamsDict,
     runner: Runner | null = null,
 ): EddyOutputs {
     runner = runner || getGlobalRunner();
@@ -663,6 +663,8 @@ function eddy(
 export {
       EDDY_METADATA,
       EddyOutputs,
+      EddyParamsDict,
+      EddyParamsDictTagged,
       eddy,
       eddy_execute,
       eddy_params,

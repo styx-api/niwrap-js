@@ -11,18 +11,18 @@ const MRI_EXTRACT_FCD_FEATURES_METADATA: Metadata = {
 };
 
 
-interface MriExtractFcdFeaturesParameters {
+interface MriExtractFcdFeaturesParamsDict {
     "@type"?: "freesurfer/mri_extract_fcd_features";
     "subject": string;
     "hemi": string;
     "output_file": InputPathType;
     "subjects_dir"?: string | null | undefined;
 }
-type MriExtractFcdFeaturesParametersTagged = Required<Pick<MriExtractFcdFeaturesParameters, '@type'>> & MriExtractFcdFeaturesParameters;
+type MriExtractFcdFeaturesParamsDictTagged = Required<Pick<MriExtractFcdFeaturesParamsDict, '@type'>> & MriExtractFcdFeaturesParamsDict;
 
 
 /**
- * Output object returned when calling `MriExtractFcdFeaturesParameters(...)`.
+ * Output object returned when calling `MriExtractFcdFeaturesParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function mri_extract_fcd_features_params(
     hemi: string,
     output_file: InputPathType,
     subjects_dir: string | null = null,
-): MriExtractFcdFeaturesParametersTagged {
+): MriExtractFcdFeaturesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_extract_fcd_features" as const,
         "subject": subject,
@@ -72,7 +72,7 @@ function mri_extract_fcd_features_params(
  * @returns Command-line arguments.
  */
 function mri_extract_fcd_features_cargs(
-    params: MriExtractFcdFeaturesParameters,
+    params: MriExtractFcdFeaturesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function mri_extract_fcd_features_cargs(
  * @returns Outputs object.
  */
 function mri_extract_fcd_features_outputs(
-    params: MriExtractFcdFeaturesParameters,
+    params: MriExtractFcdFeaturesParamsDict,
     execution: Execution,
 ): MriExtractFcdFeaturesOutputs {
     const ret: MriExtractFcdFeaturesOutputs = {
@@ -124,7 +124,7 @@ function mri_extract_fcd_features_outputs(
  * @returns NamedTuple of outputs (described in `MriExtractFcdFeaturesOutputs`).
  */
 function mri_extract_fcd_features_execute(
-    params: MriExtractFcdFeaturesParameters,
+    params: MriExtractFcdFeaturesParamsDict,
     runner: Runner | null = null,
 ): MriExtractFcdFeaturesOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function mri_extract_fcd_features(
 export {
       MRI_EXTRACT_FCD_FEATURES_METADATA,
       MriExtractFcdFeaturesOutputs,
+      MriExtractFcdFeaturesParamsDict,
+      MriExtractFcdFeaturesParamsDictTagged,
       mri_extract_fcd_features,
       mri_extract_fcd_features_execute,
       mri_extract_fcd_features_params,

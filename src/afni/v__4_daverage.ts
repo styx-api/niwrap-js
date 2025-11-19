@@ -11,16 +11,16 @@ const V__4_DAVERAGE_METADATA: Metadata = {
 };
 
 
-interface V4DaverageParameters {
+interface V4DaverageParamsDict {
     "@type"?: "afni/@4Daverage";
     "output_prefix": string;
     "input_files": Array<InputPathType>;
 }
-type V4DaverageParametersTagged = Required<Pick<V4DaverageParameters, '@type'>> & V4DaverageParameters;
+type V4DaverageParamsDictTagged = Required<Pick<V4DaverageParamsDict, '@type'>> & V4DaverageParamsDict;
 
 
 /**
- * Output object returned when calling `V4DaverageParameters(...)`.
+ * Output object returned when calling `V4DaverageParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface V4DaverageOutputs {
 function v__4_daverage_params(
     output_prefix: string,
     input_files: Array<InputPathType>,
-): V4DaverageParametersTagged {
+): V4DaverageParamsDictTagged {
     const params = {
         "@type": "afni/@4Daverage" as const,
         "output_prefix": output_prefix,
@@ -62,7 +62,7 @@ function v__4_daverage_params(
  * @returns Command-line arguments.
  */
 function v__4_daverage_cargs(
-    params: V4DaverageParameters,
+    params: V4DaverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function v__4_daverage_cargs(
  * @returns Outputs object.
  */
 function v__4_daverage_outputs(
-    params: V4DaverageParameters,
+    params: V4DaverageParamsDict,
     execution: Execution,
 ): V4DaverageOutputs {
     const ret: V4DaverageOutputs = {
@@ -107,7 +107,7 @@ function v__4_daverage_outputs(
  * @returns NamedTuple of outputs (described in `V4DaverageOutputs`).
  */
 function v__4_daverage_execute(
-    params: V4DaverageParameters,
+    params: V4DaverageParamsDict,
     runner: Runner | null = null,
 ): V4DaverageOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function v__4_daverage(
 
 export {
       V4DaverageOutputs,
+      V4DaverageParamsDict,
+      V4DaverageParamsDictTagged,
       V__4_DAVERAGE_METADATA,
       v__4_daverage,
       v__4_daverage_execute,

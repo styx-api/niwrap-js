@@ -11,7 +11,7 @@ const V_3D_LOCAL_HISTOG_METADATA: Metadata = {
 };
 
 
-interface V3dLocalHistogParameters {
+interface V3dLocalHistogParamsDict {
     "@type"?: "afni/3dLocalHistog";
     "nbhd_option"?: string | null | undefined;
     "prefix": string;
@@ -24,11 +24,11 @@ interface V3dLocalHistogParameters {
     "quiet": boolean;
     "input_datasets": Array<InputPathType>;
 }
-type V3dLocalHistogParametersTagged = Required<Pick<V3dLocalHistogParameters, '@type'>> & V3dLocalHistogParameters;
+type V3dLocalHistogParamsDictTagged = Required<Pick<V3dLocalHistogParamsDict, '@type'>> & V3dLocalHistogParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLocalHistogParameters(...)`.
+ * Output object returned when calling `V3dLocalHistogParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function v_3d_local_histog_params(
     mincount: number | null = null,
     probability: boolean = false,
     quiet: boolean = false,
-): V3dLocalHistogParametersTagged {
+): V3dLocalHistogParamsDictTagged {
     const params = {
         "@type": "afni/3dLocalHistog" as const,
         "prefix": prefix,
@@ -116,7 +116,7 @@ function v_3d_local_histog_params(
  * @returns Command-line arguments.
  */
 function v_3d_local_histog_cargs(
-    params: V3dLocalHistogParameters,
+    params: V3dLocalHistogParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -178,7 +178,7 @@ function v_3d_local_histog_cargs(
  * @returns Outputs object.
  */
 function v_3d_local_histog_outputs(
-    params: V3dLocalHistogParameters,
+    params: V3dLocalHistogParamsDict,
     execution: Execution,
 ): V3dLocalHistogOutputs {
     const ret: V3dLocalHistogOutputs = {
@@ -206,7 +206,7 @@ function v_3d_local_histog_outputs(
  * @returns NamedTuple of outputs (described in `V3dLocalHistogOutputs`).
  */
 function v_3d_local_histog_execute(
-    params: V3dLocalHistogParameters,
+    params: V3dLocalHistogParamsDict,
     runner: Runner | null = null,
 ): V3dLocalHistogOutputs {
     runner = runner || getGlobalRunner();
@@ -262,6 +262,8 @@ function v_3d_local_histog(
 
 export {
       V3dLocalHistogOutputs,
+      V3dLocalHistogParamsDict,
+      V3dLocalHistogParamsDictTagged,
       V_3D_LOCAL_HISTOG_METADATA,
       v_3d_local_histog,
       v_3d_local_histog_execute,

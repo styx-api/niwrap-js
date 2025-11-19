@@ -11,56 +11,56 @@ const SH2AMP_METADATA: Metadata = {
 };
 
 
-interface Sh2ampFslgradParameters {
+interface Sh2ampFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type Sh2ampFslgradParametersTagged = Required<Pick<Sh2ampFslgradParameters, '@type'>> & Sh2ampFslgradParameters;
+type Sh2ampFslgradParamsDictTagged = Required<Pick<Sh2ampFslgradParamsDict, '@type'>> & Sh2ampFslgradParamsDict;
 
 
-interface Sh2ampVariousStringParameters {
+interface Sh2ampVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type Sh2ampVariousStringParametersTagged = Required<Pick<Sh2ampVariousStringParameters, '@type'>> & Sh2ampVariousStringParameters;
+type Sh2ampVariousStringParamsDictTagged = Required<Pick<Sh2ampVariousStringParamsDict, '@type'>> & Sh2ampVariousStringParamsDict;
 
 
-interface Sh2ampVariousFileParameters {
+interface Sh2ampVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type Sh2ampVariousFileParametersTagged = Required<Pick<Sh2ampVariousFileParameters, '@type'>> & Sh2ampVariousFileParameters;
+type Sh2ampVariousFileParamsDictTagged = Required<Pick<Sh2ampVariousFileParamsDict, '@type'>> & Sh2ampVariousFileParamsDict;
 
 
-interface Sh2ampConfigParameters {
+interface Sh2ampConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Sh2ampConfigParametersTagged = Required<Pick<Sh2ampConfigParameters, '@type'>> & Sh2ampConfigParameters;
+type Sh2ampConfigParamsDictTagged = Required<Pick<Sh2ampConfigParamsDict, '@type'>> & Sh2ampConfigParamsDict;
 
 
-interface Sh2ampParameters {
+interface Sh2ampParamsDict {
     "@type"?: "mrtrix/sh2amp";
     "nonnegative": boolean;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: Sh2ampFslgradParameters | null | undefined;
-    "strides"?: Sh2ampVariousStringParametersTagged | Sh2ampVariousFileParametersTagged | null | undefined;
+    "fslgrad"?: Sh2ampFslgradParamsDict | null | undefined;
+    "strides"?: Sh2ampVariousStringParamsDictTagged | Sh2ampVariousFileParamsDictTagged | null | undefined;
     "datatype"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Sh2ampConfigParameters> | null | undefined;
+    "config"?: Array<Sh2ampConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "directions": InputPathType;
     "output": string;
 }
-type Sh2ampParametersTagged = Required<Pick<Sh2ampParameters, '@type'>> & Sh2ampParameters;
+type Sh2ampParamsDictTagged = Required<Pick<Sh2ampParamsDict, '@type'>> & Sh2ampParamsDict;
 
 
 /**
@@ -105,10 +105,10 @@ function sh2amp_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function sh2amp_fslgrad_params(
+function sh2amp_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Sh2ampFslgradParametersTagged {
+): Sh2ampFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -127,7 +127,7 @@ function sh2amp_fslgrad_params(
  * @returns Command-line arguments.
  */
 function sh2amp_fslgrad_cargs(
-    params: Sh2ampFslgradParameters,
+    params: Sh2ampFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,9 +145,9 @@ function sh2amp_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function sh2amp_various_string_params(
+function sh2amp_various_string(
     obj: string,
-): Sh2ampVariousStringParametersTagged {
+): Sh2ampVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -165,7 +165,7 @@ function sh2amp_various_string_params(
  * @returns Command-line arguments.
  */
 function sh2amp_various_string_cargs(
-    params: Sh2ampVariousStringParameters,
+    params: Sh2ampVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -181,9 +181,9 @@ function sh2amp_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function sh2amp_various_file_params(
+function sh2amp_various_file(
     obj: InputPathType,
-): Sh2ampVariousFileParametersTagged {
+): Sh2ampVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -201,7 +201,7 @@ function sh2amp_various_file_params(
  * @returns Command-line arguments.
  */
 function sh2amp_various_file_cargs(
-    params: Sh2ampVariousFileParameters,
+    params: Sh2ampVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -218,10 +218,10 @@ function sh2amp_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function sh2amp_config_params(
+function sh2amp_config(
     key: string,
     value: string,
-): Sh2ampConfigParametersTagged {
+): Sh2ampConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -240,7 +240,7 @@ function sh2amp_config_params(
  * @returns Command-line arguments.
  */
 function sh2amp_config_cargs(
-    params: Sh2ampConfigParameters,
+    params: Sh2ampConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -252,7 +252,7 @@ function sh2amp_config_cargs(
 
 
 /**
- * Output object returned when calling `Sh2ampParameters(...)`.
+ * Output object returned when calling `Sh2ampParamsDict(...)`.
  *
  * @interface
  */
@@ -296,18 +296,18 @@ function sh2amp_params(
     output: string,
     nonnegative: boolean = false,
     grad: InputPathType | null = null,
-    fslgrad: Sh2ampFslgradParameters | null = null,
-    strides: Sh2ampVariousStringParametersTagged | Sh2ampVariousFileParametersTagged | null = null,
+    fslgrad: Sh2ampFslgradParamsDict | null = null,
+    strides: Sh2ampVariousStringParamsDictTagged | Sh2ampVariousFileParamsDictTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2ampConfigParameters> | null = null,
+    config: Array<Sh2ampConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2ampParametersTagged {
+): Sh2ampParamsDictTagged {
     const params = {
         "@type": "mrtrix/sh2amp" as const,
         "nonnegative": nonnegative,
@@ -352,7 +352,7 @@ function sh2amp_params(
  * @returns Command-line arguments.
  */
 function sh2amp_cargs(
-    params: Sh2ampParameters,
+    params: Sh2ampParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -424,7 +424,7 @@ function sh2amp_cargs(
  * @returns Outputs object.
  */
 function sh2amp_outputs(
-    params: Sh2ampParameters,
+    params: Sh2ampParamsDict,
     execution: Execution,
 ): Sh2ampOutputs {
     const ret: Sh2ampOutputs = {
@@ -469,7 +469,7 @@ function sh2amp_outputs(
  * @returns NamedTuple of outputs (described in `Sh2ampOutputs`).
  */
 function sh2amp_execute(
-    params: Sh2ampParameters,
+    params: Sh2ampParamsDict,
     runner: Runner | null = null,
 ): Sh2ampOutputs {
     runner = runner || getGlobalRunner();
@@ -536,15 +536,15 @@ function sh2amp(
     output: string,
     nonnegative: boolean = false,
     grad: InputPathType | null = null,
-    fslgrad: Sh2ampFslgradParameters | null = null,
-    strides: Sh2ampVariousStringParametersTagged | Sh2ampVariousFileParametersTagged | null = null,
+    fslgrad: Sh2ampFslgradParamsDict | null = null,
+    strides: Sh2ampVariousStringParamsDictTagged | Sh2ampVariousFileParamsDictTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2ampConfigParameters> | null = null,
+    config: Array<Sh2ampConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -556,12 +556,22 @@ function sh2amp(
 
 export {
       SH2AMP_METADATA,
+      Sh2ampConfigParamsDict,
+      Sh2ampConfigParamsDictTagged,
+      Sh2ampFslgradParamsDict,
+      Sh2ampFslgradParamsDictTagged,
       Sh2ampOutputs,
+      Sh2ampParamsDict,
+      Sh2ampParamsDictTagged,
+      Sh2ampVariousFileParamsDict,
+      Sh2ampVariousFileParamsDictTagged,
+      Sh2ampVariousStringParamsDict,
+      Sh2ampVariousStringParamsDictTagged,
       sh2amp,
-      sh2amp_config_params,
+      sh2amp_config,
       sh2amp_execute,
-      sh2amp_fslgrad_params,
+      sh2amp_fslgrad,
       sh2amp_params,
-      sh2amp_various_file_params,
-      sh2amp_various_string_params,
+      sh2amp_various_file,
+      sh2amp_various_string,
 };

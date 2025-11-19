@@ -11,7 +11,7 @@ const V__QUIET_TALKERS_METADATA: Metadata = {
 };
 
 
-interface VQuietTalkersParameters {
+interface VQuietTalkersParamsDict {
     "@type"?: "afni/@Quiet_Talkers";
     "sudo": boolean;
     "prog"?: Array<string> | null | undefined;
@@ -22,11 +22,11 @@ interface VQuietTalkersParameters {
     "list": boolean;
     "quiet": boolean;
 }
-type VQuietTalkersParametersTagged = Required<Pick<VQuietTalkersParameters, '@type'>> & VQuietTalkersParameters;
+type VQuietTalkersParamsDictTagged = Required<Pick<VQuietTalkersParamsDict, '@type'>> & VQuietTalkersParamsDict;
 
 
 /**
- * Output object returned when calling `VQuietTalkersParameters(...)`.
+ * Output object returned when calling `VQuietTalkersParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function v__quiet_talkers_params(
     no_npb: boolean = false,
     list: boolean = false,
     quiet: boolean = false,
-): VQuietTalkersParametersTagged {
+): VQuietTalkersParamsDictTagged {
     const params = {
         "@type": "afni/@Quiet_Talkers" as const,
         "sudo": sudo,
@@ -94,7 +94,7 @@ function v__quiet_talkers_params(
  * @returns Command-line arguments.
  */
 function v__quiet_talkers_cargs(
-    params: VQuietTalkersParameters,
+    params: VQuietTalkersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -148,7 +148,7 @@ function v__quiet_talkers_cargs(
  * @returns Outputs object.
  */
 function v__quiet_talkers_outputs(
-    params: VQuietTalkersParameters,
+    params: VQuietTalkersParamsDict,
     execution: Execution,
 ): VQuietTalkersOutputs {
     const ret: VQuietTalkersOutputs = {
@@ -173,7 +173,7 @@ function v__quiet_talkers_outputs(
  * @returns NamedTuple of outputs (described in `VQuietTalkersOutputs`).
  */
 function v__quiet_talkers_execute(
-    params: VQuietTalkersParameters,
+    params: VQuietTalkersParamsDict,
     runner: Runner | null = null,
 ): VQuietTalkersOutputs {
     runner = runner || getGlobalRunner();
@@ -225,6 +225,8 @@ function v__quiet_talkers(
 
 export {
       VQuietTalkersOutputs,
+      VQuietTalkersParamsDict,
+      VQuietTalkersParamsDictTagged,
       V__QUIET_TALKERS_METADATA,
       v__quiet_talkers,
       v__quiet_talkers_execute,

@@ -11,15 +11,15 @@ const FOD2FIXEL_METADATA: Metadata = {
 };
 
 
-interface Fod2fixelConfigParameters {
+interface Fod2fixelConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Fod2fixelConfigParametersTagged = Required<Pick<Fod2fixelConfigParameters, '@type'>> & Fod2fixelConfigParameters;
+type Fod2fixelConfigParamsDictTagged = Required<Pick<Fod2fixelConfigParamsDict, '@type'>> & Fod2fixelConfigParamsDict;
 
 
-interface Fod2fixelParameters {
+interface Fod2fixelParamsDict {
     "@type"?: "mrtrix/fod2fixel";
     "afd"?: string | null | undefined;
     "peak_amp"?: string | null | undefined;
@@ -37,13 +37,13 @@ interface Fod2fixelParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Fod2fixelConfigParameters> | null | undefined;
+    "config"?: Array<Fod2fixelConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "fod": InputPathType;
     "fixel_directory": string;
 }
-type Fod2fixelParametersTagged = Required<Pick<Fod2fixelParameters, '@type'>> & Fod2fixelParameters;
+type Fod2fixelParamsDictTagged = Required<Pick<Fod2fixelParamsDict, '@type'>> & Fod2fixelParamsDict;
 
 
 /**
@@ -54,10 +54,10 @@ type Fod2fixelParametersTagged = Required<Pick<Fod2fixelParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function fod2fixel_config_params(
+function fod2fixel_config(
     key: string,
     value: string,
-): Fod2fixelConfigParametersTagged {
+): Fod2fixelConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -76,7 +76,7 @@ function fod2fixel_config_params(
  * @returns Command-line arguments.
  */
 function fod2fixel_config_cargs(
-    params: Fod2fixelConfigParameters,
+    params: Fod2fixelConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function fod2fixel_config_cargs(
 
 
 /**
- * Output object returned when calling `Fod2fixelParameters(...)`.
+ * Output object returned when calling `Fod2fixelParamsDict(...)`.
  *
  * @interface
  */
@@ -162,10 +162,10 @@ function fod2fixel_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fod2fixelConfigParameters> | null = null,
+    config: Array<Fod2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fod2fixelParametersTagged {
+): Fod2fixelParamsDictTagged {
     const params = {
         "@type": "mrtrix/fod2fixel" as const,
         "fmls_no_thresholds": fmls_no_thresholds,
@@ -223,7 +223,7 @@ function fod2fixel_params(
  * @returns Command-line arguments.
  */
 function fod2fixel_cargs(
-    params: Fod2fixelParameters,
+    params: Fod2fixelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -327,7 +327,7 @@ function fod2fixel_cargs(
  * @returns Outputs object.
  */
 function fod2fixel_outputs(
-    params: Fod2fixelParameters,
+    params: Fod2fixelParamsDict,
     execution: Execution,
 ): Fod2fixelOutputs {
     const ret: Fod2fixelOutputs = {
@@ -366,7 +366,7 @@ function fod2fixel_outputs(
  * @returns NamedTuple of outputs (described in `Fod2fixelOutputs`).
  */
 function fod2fixel_execute(
-    params: Fod2fixelParameters,
+    params: Fod2fixelParamsDict,
     runner: Runner | null = null,
 ): Fod2fixelOutputs {
     runner = runner || getGlobalRunner();
@@ -442,7 +442,7 @@ function fod2fixel(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fod2fixelConfigParameters> | null = null,
+    config: Array<Fod2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -454,9 +454,13 @@ function fod2fixel(
 
 export {
       FOD2FIXEL_METADATA,
+      Fod2fixelConfigParamsDict,
+      Fod2fixelConfigParamsDictTagged,
       Fod2fixelOutputs,
+      Fod2fixelParamsDict,
+      Fod2fixelParamsDictTagged,
       fod2fixel,
-      fod2fixel_config_params,
+      fod2fixel_config,
       fod2fixel_execute,
       fod2fixel_params,
 };

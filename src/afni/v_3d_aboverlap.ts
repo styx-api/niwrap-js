@@ -11,7 +11,7 @@ const V_3D_ABOVERLAP_METADATA: Metadata = {
 };
 
 
-interface V3dAboverlapParameters {
+interface V3dAboverlapParamsDict {
     "@type"?: "afni/3dABoverlap";
     "dataset_a": InputPathType;
     "dataset_b": InputPathType;
@@ -19,11 +19,11 @@ interface V3dAboverlapParameters {
     "quiet": boolean;
     "verbose": boolean;
 }
-type V3dAboverlapParametersTagged = Required<Pick<V3dAboverlapParameters, '@type'>> & V3dAboverlapParameters;
+type V3dAboverlapParamsDictTagged = Required<Pick<V3dAboverlapParamsDict, '@type'>> & V3dAboverlapParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAboverlapParameters(...)`.
+ * Output object returned when calling `V3dAboverlapParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function v_3d_aboverlap_params(
     no_automask: boolean = false,
     quiet: boolean = false,
     verbose: boolean = false,
-): V3dAboverlapParametersTagged {
+): V3dAboverlapParamsDictTagged {
     const params = {
         "@type": "afni/3dABoverlap" as const,
         "dataset_a": dataset_a,
@@ -74,7 +74,7 @@ function v_3d_aboverlap_params(
  * @returns Command-line arguments.
  */
 function v_3d_aboverlap_cargs(
-    params: V3dAboverlapParameters,
+    params: V3dAboverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function v_3d_aboverlap_cargs(
  * @returns Outputs object.
  */
 function v_3d_aboverlap_outputs(
-    params: V3dAboverlapParameters,
+    params: V3dAboverlapParamsDict,
     execution: Execution,
 ): V3dAboverlapOutputs {
     const ret: V3dAboverlapOutputs = {
@@ -128,7 +128,7 @@ function v_3d_aboverlap_outputs(
  * @returns NamedTuple of outputs (described in `V3dAboverlapOutputs`).
  */
 function v_3d_aboverlap_execute(
-    params: V3dAboverlapParameters,
+    params: V3dAboverlapParamsDict,
     runner: Runner | null = null,
 ): V3dAboverlapOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function v_3d_aboverlap(
 
 export {
       V3dAboverlapOutputs,
+      V3dAboverlapParamsDict,
+      V3dAboverlapParamsDictTagged,
       V_3D_ABOVERLAP_METADATA,
       v_3d_aboverlap,
       v_3d_aboverlap_execute,

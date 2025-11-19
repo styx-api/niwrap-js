@@ -11,7 +11,7 @@ const V_3D_PFM_METADATA: Metadata = {
 };
 
 
-interface V3dPfmParameters {
+interface V3dPfmParamsDict {
     "@type"?: "afni/3dPFM";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -29,11 +29,11 @@ interface V3dPfmParameters {
     "nSeg"?: number | null | undefined;
     "verb"?: number | null | undefined;
 }
-type V3dPfmParametersTagged = Required<Pick<V3dPfmParameters, '@type'>> & V3dPfmParameters;
+type V3dPfmParamsDictTagged = Required<Pick<V3dPfmParamsDict, '@type'>> & V3dPfmParamsDict;
 
 
 /**
- * Output object returned when calling `V3dPfmParameters(...)`.
+ * Output object returned when calling `V3dPfmParamsDict(...)`.
  *
  * @interface
  */
@@ -186,7 +186,7 @@ function v_3d_pfm_params(
     jobs: number | null = null,
     n_seg: number | null = null,
     verb: number | null = null,
-): V3dPfmParametersTagged {
+): V3dPfmParamsDictTagged {
     const params = {
         "@type": "afni/3dPFM" as const,
         "input": input,
@@ -246,7 +246,7 @@ function v_3d_pfm_params(
  * @returns Command-line arguments.
  */
 function v_3d_pfm_cargs(
-    params: V3dPfmParameters,
+    params: V3dPfmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -352,7 +352,7 @@ function v_3d_pfm_cargs(
  * @returns Outputs object.
  */
 function v_3d_pfm_outputs(
-    params: V3dPfmParameters,
+    params: V3dPfmParamsDict,
     execution: Execution,
 ): V3dPfmOutputs {
     const ret: V3dPfmOutputs = {
@@ -403,7 +403,7 @@ function v_3d_pfm_outputs(
  * @returns NamedTuple of outputs (described in `V3dPfmOutputs`).
  */
 function v_3d_pfm_execute(
-    params: V3dPfmParameters,
+    params: V3dPfmParamsDict,
     runner: Runner | null = null,
 ): V3dPfmOutputs {
     runner = runner || getGlobalRunner();
@@ -469,6 +469,8 @@ function v_3d_pfm(
 
 export {
       V3dPfmOutputs,
+      V3dPfmParamsDict,
+      V3dPfmParamsDictTagged,
       V_3D_PFM_METADATA,
       v_3d_pfm,
       v_3d_pfm_execute,

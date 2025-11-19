@@ -11,7 +11,7 @@ const GRAD_UNWARP_METADATA: Metadata = {
 };
 
 
-interface GradUnwarpParameters {
+interface GradUnwarpParamsDict {
     "@type"?: "freesurfer/grad_unwarp";
     "infile": InputPathType;
     "seriesno"?: string | null | undefined;
@@ -23,11 +23,11 @@ interface GradUnwarpParameters {
     "outfile": string;
     "matlab_binary"?: string | null | undefined;
 }
-type GradUnwarpParametersTagged = Required<Pick<GradUnwarpParameters, '@type'>> & GradUnwarpParameters;
+type GradUnwarpParamsDictTagged = Required<Pick<GradUnwarpParamsDict, '@type'>> & GradUnwarpParamsDict;
 
 
 /**
- * Output object returned when calling `GradUnwarpParameters(...)`.
+ * Output object returned when calling `GradUnwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function grad_unwarp_params(
     cor: boolean = false,
     interp: string | null = null,
     matlab_binary: string | null = null,
-): GradUnwarpParametersTagged {
+): GradUnwarpParamsDictTagged {
     const params = {
         "@type": "freesurfer/grad_unwarp" as const,
         "infile": infile,
@@ -106,7 +106,7 @@ function grad_unwarp_params(
  * @returns Command-line arguments.
  */
 function grad_unwarp_cargs(
-    params: GradUnwarpParameters,
+    params: GradUnwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,7 +162,7 @@ function grad_unwarp_cargs(
  * @returns Outputs object.
  */
 function grad_unwarp_outputs(
-    params: GradUnwarpParameters,
+    params: GradUnwarpParamsDict,
     execution: Execution,
 ): GradUnwarpOutputs {
     const ret: GradUnwarpOutputs = {
@@ -189,7 +189,7 @@ function grad_unwarp_outputs(
  * @returns NamedTuple of outputs (described in `GradUnwarpOutputs`).
  */
 function grad_unwarp_execute(
-    params: GradUnwarpParameters,
+    params: GradUnwarpParamsDict,
     runner: Runner | null = null,
 ): GradUnwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -244,6 +244,8 @@ function grad_unwarp(
 export {
       GRAD_UNWARP_METADATA,
       GradUnwarpOutputs,
+      GradUnwarpParamsDict,
+      GradUnwarpParamsDictTagged,
       grad_unwarp,
       grad_unwarp_execute,
       grad_unwarp_params,

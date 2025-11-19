@@ -11,7 +11,7 @@ const FSLMERGE_METADATA: Metadata = {
 };
 
 
-interface FslmergeParameters {
+interface FslmergeParamsDict {
     "@type"?: "fsl/fslmerge";
     "merge_time": boolean;
     "merge_x": boolean;
@@ -24,11 +24,11 @@ interface FslmergeParameters {
     "volume_number"?: number | null | undefined;
     "tr_value"?: number | null | undefined;
 }
-type FslmergeParametersTagged = Required<Pick<FslmergeParameters, '@type'>> & FslmergeParameters;
+type FslmergeParamsDictTagged = Required<Pick<FslmergeParamsDict, '@type'>> & FslmergeParamsDict;
 
 
 /**
- * Output object returned when calling `FslmergeParameters(...)`.
+ * Output object returned when calling `FslmergeParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function fslmerge_params(
     merge_set_tr: boolean = false,
     volume_number: number | null = null,
     tr_value: number | null = null,
-): FslmergeParametersTagged {
+): FslmergeParamsDictTagged {
     const params = {
         "@type": "fsl/fslmerge" as const,
         "merge_time": merge_time,
@@ -102,7 +102,7 @@ function fslmerge_params(
  * @returns Command-line arguments.
  */
 function fslmerge_cargs(
-    params: FslmergeParameters,
+    params: FslmergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function fslmerge_cargs(
  * @returns Outputs object.
  */
 function fslmerge_outputs(
-    params: FslmergeParameters,
+    params: FslmergeParamsDict,
     execution: Execution,
 ): FslmergeOutputs {
     const ret: FslmergeOutputs = {
@@ -175,7 +175,7 @@ function fslmerge_outputs(
  * @returns NamedTuple of outputs (described in `FslmergeOutputs`).
  */
 function fslmerge_execute(
-    params: FslmergeParameters,
+    params: FslmergeParamsDict,
     runner: Runner | null = null,
 ): FslmergeOutputs {
     runner = runner || getGlobalRunner();
@@ -232,6 +232,8 @@ function fslmerge(
 export {
       FSLMERGE_METADATA,
       FslmergeOutputs,
+      FslmergeParamsDict,
+      FslmergeParamsDictTagged,
       fslmerge,
       fslmerge_execute,
       fslmerge_params,

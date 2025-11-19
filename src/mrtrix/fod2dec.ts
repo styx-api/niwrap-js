@@ -11,15 +11,15 @@ const FOD2DEC_METADATA: Metadata = {
 };
 
 
-interface Fod2decConfigParameters {
+interface Fod2decConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Fod2decConfigParametersTagged = Required<Pick<Fod2decConfigParameters, '@type'>> & Fod2decConfigParameters;
+type Fod2decConfigParamsDictTagged = Required<Pick<Fod2decConfigParamsDict, '@type'>> & Fod2decConfigParamsDict;
 
 
-interface Fod2decParameters {
+interface Fod2decParamsDict {
     "@type"?: "mrtrix/fod2dec";
     "mask"?: InputPathType | null | undefined;
     "contrast"?: InputPathType | null | undefined;
@@ -33,13 +33,13 @@ interface Fod2decParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Fod2decConfigParameters> | null | undefined;
+    "config"?: Array<Fod2decConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type Fod2decParametersTagged = Required<Pick<Fod2decParameters, '@type'>> & Fod2decParameters;
+type Fod2decParamsDictTagged = Required<Pick<Fod2decParamsDict, '@type'>> & Fod2decParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type Fod2decParametersTagged = Required<Pick<Fod2decParameters, '@type'>> & Fod2
  *
  * @returns Parameter dictionary
  */
-function fod2dec_config_params(
+function fod2dec_config(
     key: string,
     value: string,
-): Fod2decConfigParametersTagged {
+): Fod2decConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -72,7 +72,7 @@ function fod2dec_config_params(
  * @returns Command-line arguments.
  */
 function fod2dec_config_cargs(
-    params: Fod2decConfigParameters,
+    params: Fod2decConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function fod2dec_config_cargs(
 
 
 /**
- * Output object returned when calling `Fod2decParameters(...)`.
+ * Output object returned when calling `Fod2decParamsDict(...)`.
  *
  * @interface
  */
@@ -141,10 +141,10 @@ function fod2dec_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fod2decConfigParameters> | null = null,
+    config: Array<Fod2decConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fod2decParametersTagged {
+): Fod2decParamsDictTagged {
     const params = {
         "@type": "mrtrix/fod2dec" as const,
         "lum": lum,
@@ -192,7 +192,7 @@ function fod2dec_params(
  * @returns Command-line arguments.
  */
 function fod2dec_cargs(
-    params: Fod2decParameters,
+    params: Fod2decParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -275,7 +275,7 @@ function fod2dec_cargs(
  * @returns Outputs object.
  */
 function fod2dec_outputs(
-    params: Fod2decParameters,
+    params: Fod2decParamsDict,
     execution: Execution,
 ): Fod2decOutputs {
     const ret: Fod2decOutputs = {
@@ -309,7 +309,7 @@ function fod2dec_outputs(
  * @returns NamedTuple of outputs (described in `Fod2decOutputs`).
  */
 function fod2dec_execute(
-    params: Fod2decParameters,
+    params: Fod2decParamsDict,
     runner: Runner | null = null,
 ): Fod2decOutputs {
     runner = runner || getGlobalRunner();
@@ -378,7 +378,7 @@ function fod2dec(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fod2decConfigParameters> | null = null,
+    config: Array<Fod2decConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -390,9 +390,13 @@ function fod2dec(
 
 export {
       FOD2DEC_METADATA,
+      Fod2decConfigParamsDict,
+      Fod2decConfigParamsDictTagged,
       Fod2decOutputs,
+      Fod2decParamsDict,
+      Fod2decParamsDictTagged,
       fod2dec,
-      fod2dec_config_params,
+      fod2dec_config,
       fod2dec_execute,
       fod2dec_params,
 };

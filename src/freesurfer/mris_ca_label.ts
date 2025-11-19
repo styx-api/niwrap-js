@@ -11,7 +11,7 @@ const MRIS_CA_LABEL_METADATA: Metadata = {
 };
 
 
-interface MrisCaLabelParameters {
+interface MrisCaLabelParamsDict {
     "@type"?: "freesurfer/mris_ca_label";
     "subject": string;
     "hemi": string;
@@ -33,11 +33,11 @@ interface MrisCaLabelParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
-type MrisCaLabelParametersTagged = Required<Pick<MrisCaLabelParameters, '@type'>> & MrisCaLabelParameters;
+type MrisCaLabelParamsDictTagged = Required<Pick<MrisCaLabelParamsDict, '@type'>> & MrisCaLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCaLabelParameters(...)`.
+ * Output object returned when calling `MrisCaLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function mris_ca_label_params(
     w: string | null = null,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): MrisCaLabelParametersTagged {
+): MrisCaLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_ca_label" as const,
         "subject": subject,
@@ -154,7 +154,7 @@ function mris_ca_label_params(
  * @returns Command-line arguments.
  */
 function mris_ca_label_cargs(
-    params: MrisCaLabelParameters,
+    params: MrisCaLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -249,7 +249,7 @@ function mris_ca_label_cargs(
  * @returns Outputs object.
  */
 function mris_ca_label_outputs(
-    params: MrisCaLabelParameters,
+    params: MrisCaLabelParamsDict,
     execution: Execution,
 ): MrisCaLabelOutputs {
     const ret: MrisCaLabelOutputs = {
@@ -275,7 +275,7 @@ function mris_ca_label_outputs(
  * @returns NamedTuple of outputs (described in `MrisCaLabelOutputs`).
  */
 function mris_ca_label_execute(
-    params: MrisCaLabelParameters,
+    params: MrisCaLabelParamsDict,
     runner: Runner | null = null,
 ): MrisCaLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -350,6 +350,8 @@ function mris_ca_label(
 export {
       MRIS_CA_LABEL_METADATA,
       MrisCaLabelOutputs,
+      MrisCaLabelParamsDict,
+      MrisCaLabelParamsDictTagged,
       mris_ca_label,
       mris_ca_label_execute,
       mris_ca_label_params,

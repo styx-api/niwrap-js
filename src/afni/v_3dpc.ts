@@ -11,7 +11,7 @@ const V_3DPC_METADATA: Metadata = {
 };
 
 
-interface V3dpcParameters {
+interface V3dpcParamsDict {
     "@type"?: "afni/3dpc";
     "datasets": Array<InputPathType>;
     "dmean": boolean;
@@ -29,11 +29,11 @@ interface V3dpcParameters {
     "float": boolean;
     "mask"?: InputPathType | null | undefined;
 }
-type V3dpcParametersTagged = Required<Pick<V3dpcParameters, '@type'>> & V3dpcParameters;
+type V3dpcParamsDictTagged = Required<Pick<V3dpcParamsDict, '@type'>> & V3dpcParamsDict;
 
 
 /**
- * Output object returned when calling `V3dpcParameters(...)`.
+ * Output object returned when calling `V3dpcParamsDict(...)`.
  *
  * @interface
  */
@@ -102,7 +102,7 @@ function v_3dpc_params(
     eigonly: boolean = false,
     float: boolean = false,
     mask: InputPathType | null = null,
-): V3dpcParametersTagged {
+): V3dpcParamsDictTagged {
     const params = {
         "@type": "afni/3dpc" as const,
         "datasets": datasets,
@@ -144,7 +144,7 @@ function v_3dpc_params(
  * @returns Command-line arguments.
  */
 function v_3dpc_cargs(
-    params: V3dpcParameters,
+    params: V3dpcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -220,7 +220,7 @@ function v_3dpc_cargs(
  * @returns Outputs object.
  */
 function v_3dpc_outputs(
-    params: V3dpcParameters,
+    params: V3dpcParamsDict,
     execution: Execution,
 ): V3dpcOutputs {
     const ret: V3dpcOutputs = {
@@ -250,7 +250,7 @@ function v_3dpc_outputs(
  * @returns NamedTuple of outputs (described in `V3dpcOutputs`).
  */
 function v_3dpc_execute(
-    params: V3dpcParameters,
+    params: V3dpcParamsDict,
     runner: Runner | null = null,
 ): V3dpcOutputs {
     runner = runner || getGlobalRunner();
@@ -316,6 +316,8 @@ function v_3dpc(
 
 export {
       V3dpcOutputs,
+      V3dpcParamsDict,
+      V3dpcParamsDictTagged,
       V_3DPC_METADATA,
       v_3dpc,
       v_3dpc_execute,

@@ -10,7 +10,7 @@ const CIFTI_RESTRICT_DENSE_MAP_METADATA: Metadata = {
 };
 
 
-interface CiftiRestrictDenseMapParameters {
+interface CiftiRestrictDenseMapParamsDict {
     "@type"?: "workbench/cifti-restrict-dense-map";
     "cifti-out": string;
     "roi-cifti"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface CiftiRestrictDenseMapParameters {
     "cifti-in": InputPathType;
     "direction": string;
 }
-type CiftiRestrictDenseMapParametersTagged = Required<Pick<CiftiRestrictDenseMapParameters, '@type'>> & CiftiRestrictDenseMapParameters;
+type CiftiRestrictDenseMapParamsDictTagged = Required<Pick<CiftiRestrictDenseMapParamsDict, '@type'>> & CiftiRestrictDenseMapParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiRestrictDenseMapParameters(...)`.
+ * Output object returned when calling `CiftiRestrictDenseMapParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function cifti_restrict_dense_map_params(
     roi_vol: InputPathType | null,
     cifti_in: InputPathType,
     direction: string,
-): CiftiRestrictDenseMapParametersTagged {
+): CiftiRestrictDenseMapParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-restrict-dense-map" as const,
         "cifti-out": cifti_out,
@@ -109,7 +109,7 @@ function cifti_restrict_dense_map_params(
  * @returns Command-line arguments.
  */
 function cifti_restrict_dense_map_cargs(
-    params: CiftiRestrictDenseMapParameters,
+    params: CiftiRestrictDenseMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function cifti_restrict_dense_map_cargs(
  * @returns Outputs object.
  */
 function cifti_restrict_dense_map_outputs(
-    params: CiftiRestrictDenseMapParameters,
+    params: CiftiRestrictDenseMapParamsDict,
     execution: Execution,
 ): CiftiRestrictDenseMapOutputs {
     const ret: CiftiRestrictDenseMapOutputs = {
@@ -167,7 +167,7 @@ function cifti_restrict_dense_map_outputs(
  * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
  */
 function cifti_restrict_dense_map_execute(
-    params: CiftiRestrictDenseMapParameters,
+    params: CiftiRestrictDenseMapParamsDict,
     runner: Runner | null = null,
 ): CiftiRestrictDenseMapOutputs {
     runner = runner || getGlobalRunner();
@@ -226,6 +226,8 @@ function cifti_restrict_dense_map(
 export {
       CIFTI_RESTRICT_DENSE_MAP_METADATA,
       CiftiRestrictDenseMapOutputs,
+      CiftiRestrictDenseMapParamsDict,
+      CiftiRestrictDenseMapParamsDictTagged,
       cifti_restrict_dense_map,
       cifti_restrict_dense_map_execute,
       cifti_restrict_dense_map_params,

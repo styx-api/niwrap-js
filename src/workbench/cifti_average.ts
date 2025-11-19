@@ -10,30 +10,30 @@ const CIFTI_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface CiftiAverageExcludeOutliersParameters {
+interface CiftiAverageExcludeOutliersParamsDict {
     "@type"?: "exclude-outliers";
     "sigma-below": number;
     "sigma-above": number;
 }
-type CiftiAverageExcludeOutliersParametersTagged = Required<Pick<CiftiAverageExcludeOutliersParameters, '@type'>> & CiftiAverageExcludeOutliersParameters;
+type CiftiAverageExcludeOutliersParamsDictTagged = Required<Pick<CiftiAverageExcludeOutliersParamsDict, '@type'>> & CiftiAverageExcludeOutliersParamsDict;
 
 
-interface CiftiAverageCiftiParameters {
+interface CiftiAverageCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
     "weight"?: number | null | undefined;
 }
-type CiftiAverageCiftiParametersTagged = Required<Pick<CiftiAverageCiftiParameters, '@type'>> & CiftiAverageCiftiParameters;
+type CiftiAverageCiftiParamsDictTagged = Required<Pick<CiftiAverageCiftiParamsDict, '@type'>> & CiftiAverageCiftiParamsDict;
 
 
-interface CiftiAverageParameters {
+interface CiftiAverageParamsDict {
     "@type"?: "workbench/cifti-average";
     "cifti-out": string;
-    "exclude-outliers"?: CiftiAverageExcludeOutliersParameters | null | undefined;
+    "exclude-outliers"?: CiftiAverageExcludeOutliersParamsDict | null | undefined;
     "limit-GB"?: number | null | undefined;
-    "cifti"?: Array<CiftiAverageCiftiParameters> | null | undefined;
+    "cifti"?: Array<CiftiAverageCiftiParamsDict> | null | undefined;
 }
-type CiftiAverageParametersTagged = Required<Pick<CiftiAverageParameters, '@type'>> & CiftiAverageParameters;
+type CiftiAverageParamsDictTagged = Required<Pick<CiftiAverageParamsDict, '@type'>> & CiftiAverageParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type CiftiAverageParametersTagged = Required<Pick<CiftiAverageParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function cifti_average_exclude_outliers_params(
+function cifti_average_exclude_outliers(
     sigma_below: number,
     sigma_above: number,
-): CiftiAverageExcludeOutliersParametersTagged {
+): CiftiAverageExcludeOutliersParamsDictTagged {
     const params = {
         "@type": "exclude-outliers" as const,
         "sigma-below": sigma_below,
@@ -66,7 +66,7 @@ function cifti_average_exclude_outliers_params(
  * @returns Command-line arguments.
  */
 function cifti_average_exclude_outliers_cargs(
-    params: CiftiAverageExcludeOutliersParameters,
+    params: CiftiAverageExcludeOutliersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,10 +89,10 @@ the weight to use
  *
  * @returns Parameter dictionary
  */
-function cifti_average_cifti_params(
+function cifti_average_cifti(
     cifti_in: InputPathType,
     weight: number | null,
-): CiftiAverageCiftiParametersTagged {
+): CiftiAverageCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -113,7 +113,7 @@ function cifti_average_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_average_cifti_cargs(
-    params: CiftiAverageCiftiParameters,
+    params: CiftiAverageCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function cifti_average_cifti_cargs(
 
 
 /**
- * Output object returned when calling `CiftiAverageParameters(...)`.
+ * Output object returned when calling `CiftiAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -161,9 +161,9 @@ memory limit in gigabytes
 function cifti_average_params(
     cifti_out: string,
     limit_gb: number | null,
-    exclude_outliers: CiftiAverageExcludeOutliersParameters | null = null,
-    cifti: Array<CiftiAverageCiftiParameters> | null = null,
-): CiftiAverageParametersTagged {
+    exclude_outliers: CiftiAverageExcludeOutliersParamsDict | null = null,
+    cifti: Array<CiftiAverageCiftiParamsDict> | null = null,
+): CiftiAverageParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-average" as const,
         "cifti-out": cifti_out,
@@ -190,7 +190,7 @@ function cifti_average_params(
  * @returns Command-line arguments.
  */
 function cifti_average_cargs(
-    params: CiftiAverageParameters,
+    params: CiftiAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -218,7 +218,7 @@ function cifti_average_cargs(
  * @returns Outputs object.
  */
 function cifti_average_outputs(
-    params: CiftiAverageParameters,
+    params: CiftiAverageParamsDict,
     execution: Execution,
 ): CiftiAverageOutputs {
     const ret: CiftiAverageOutputs = {
@@ -240,7 +240,7 @@ function cifti_average_outputs(
  * @returns NamedTuple of outputs (described in `CiftiAverageOutputs`).
  */
 function cifti_average_execute(
-    params: CiftiAverageParameters,
+    params: CiftiAverageParamsDict,
     runner: Runner | null = null,
 ): CiftiAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -271,8 +271,8 @@ memory limit in gigabytes
 function cifti_average(
     cifti_out: string,
     limit_gb: number | null,
-    exclude_outliers: CiftiAverageExcludeOutliersParameters | null = null,
-    cifti: Array<CiftiAverageCiftiParameters> | null = null,
+    exclude_outliers: CiftiAverageExcludeOutliersParamsDict | null = null,
+    cifti: Array<CiftiAverageCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageOutputs {
     const params = cifti_average_params(cifti_out, limit_gb, exclude_outliers, cifti)
@@ -282,10 +282,16 @@ function cifti_average(
 
 export {
       CIFTI_AVERAGE_METADATA,
+      CiftiAverageCiftiParamsDict,
+      CiftiAverageCiftiParamsDictTagged,
+      CiftiAverageExcludeOutliersParamsDict,
+      CiftiAverageExcludeOutliersParamsDictTagged,
       CiftiAverageOutputs,
+      CiftiAverageParamsDict,
+      CiftiAverageParamsDictTagged,
       cifti_average,
-      cifti_average_cifti_params,
-      cifti_average_exclude_outliers_params,
+      cifti_average_cifti,
+      cifti_average_exclude_outliers,
       cifti_average_execute,
       cifti_average_params,
 };

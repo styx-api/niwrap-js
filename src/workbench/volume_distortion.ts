@@ -10,7 +10,7 @@ const VOLUME_DISTORTION_METADATA: Metadata = {
 };
 
 
-interface VolumeDistortionParameters {
+interface VolumeDistortionParamsDict {
     "@type"?: "workbench/volume-distortion";
     "volume-out": string;
     "source-volume"?: string | null | undefined;
@@ -18,11 +18,11 @@ interface VolumeDistortionParameters {
     "log2": boolean;
     "warpfield": string;
 }
-type VolumeDistortionParametersTagged = Required<Pick<VolumeDistortionParameters, '@type'>> & VolumeDistortionParameters;
+type VolumeDistortionParamsDictTagged = Required<Pick<VolumeDistortionParamsDict, '@type'>> & VolumeDistortionParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeDistortionParameters(...)`.
+ * Output object returned when calling `VolumeDistortionParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function volume_distortion_params(
     warpfield: string,
     circular: boolean = false,
     log2: boolean = false,
-): VolumeDistortionParametersTagged {
+): VolumeDistortionParamsDictTagged {
     const params = {
         "@type": "workbench/volume-distortion" as const,
         "volume-out": volume_out,
@@ -81,7 +81,7 @@ function volume_distortion_params(
  * @returns Command-line arguments.
  */
 function volume_distortion_cargs(
-    params: VolumeDistortionParameters,
+    params: VolumeDistortionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function volume_distortion_cargs(
  * @returns Outputs object.
  */
 function volume_distortion_outputs(
-    params: VolumeDistortionParameters,
+    params: VolumeDistortionParamsDict,
     execution: Execution,
 ): VolumeDistortionOutputs {
     const ret: VolumeDistortionOutputs = {
@@ -134,7 +134,7 @@ function volume_distortion_outputs(
  * @returns NamedTuple of outputs (described in `VolumeDistortionOutputs`).
  */
 function volume_distortion_execute(
-    params: VolumeDistortionParameters,
+    params: VolumeDistortionParamsDict,
     runner: Runner | null = null,
 ): VolumeDistortionOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function volume_distortion(
 export {
       VOLUME_DISTORTION_METADATA,
       VolumeDistortionOutputs,
+      VolumeDistortionParamsDict,
+      VolumeDistortionParamsDictTagged,
       volume_distortion,
       volume_distortion_execute,
       volume_distortion_params,

@@ -11,15 +11,15 @@ const MRI_ALIGN_LONG_CSH_METADATA: Metadata = {
 };
 
 
-interface MriAlignLongCshParameters {
+interface MriAlignLongCshParamsDict {
     "@type"?: "freesurfer/mri_align_long.csh";
     "base_id": string;
 }
-type MriAlignLongCshParametersTagged = Required<Pick<MriAlignLongCshParameters, '@type'>> & MriAlignLongCshParameters;
+type MriAlignLongCshParamsDictTagged = Required<Pick<MriAlignLongCshParamsDict, '@type'>> & MriAlignLongCshParamsDict;
 
 
 /**
- * Output object returned when calling `MriAlignLongCshParameters(...)`.
+ * Output object returned when calling `MriAlignLongCshParamsDict(...)`.
  *
  * @interface
  */
@@ -48,7 +48,7 @@ interface MriAlignLongCshOutputs {
  */
 function mri_align_long_csh_params(
     base_id: string,
-): MriAlignLongCshParametersTagged {
+): MriAlignLongCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_align_long.csh" as const,
         "base_id": base_id,
@@ -66,7 +66,7 @@ function mri_align_long_csh_params(
  * @returns Command-line arguments.
  */
 function mri_align_long_csh_cargs(
-    params: MriAlignLongCshParameters,
+    params: MriAlignLongCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function mri_align_long_csh_cargs(
  * @returns Outputs object.
  */
 function mri_align_long_csh_outputs(
-    params: MriAlignLongCshParameters,
+    params: MriAlignLongCshParamsDict,
     execution: Execution,
 ): MriAlignLongCshOutputs {
     const ret: MriAlignLongCshOutputs = {
@@ -112,7 +112,7 @@ function mri_align_long_csh_outputs(
  * @returns NamedTuple of outputs (described in `MriAlignLongCshOutputs`).
  */
 function mri_align_long_csh_execute(
-    params: MriAlignLongCshParameters,
+    params: MriAlignLongCshParamsDict,
     runner: Runner | null = null,
 ): MriAlignLongCshOutputs {
     runner = runner || getGlobalRunner();
@@ -151,6 +151,8 @@ function mri_align_long_csh(
 export {
       MRI_ALIGN_LONG_CSH_METADATA,
       MriAlignLongCshOutputs,
+      MriAlignLongCshParamsDict,
+      MriAlignLongCshParamsDictTagged,
       mri_align_long_csh,
       mri_align_long_csh_execute,
       mri_align_long_csh_params,

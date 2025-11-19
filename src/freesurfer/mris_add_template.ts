@@ -11,15 +11,15 @@ const MRIS_ADD_TEMPLATE_METADATA: Metadata = {
 };
 
 
-interface MrisAddTemplateParameters {
+interface MrisAddTemplateParamsDict {
     "@type"?: "freesurfer/mris_add_template";
     "placeholder_input"?: string | null | undefined;
 }
-type MrisAddTemplateParametersTagged = Required<Pick<MrisAddTemplateParameters, '@type'>> & MrisAddTemplateParameters;
+type MrisAddTemplateParamsDictTagged = Required<Pick<MrisAddTemplateParamsDict, '@type'>> & MrisAddTemplateParamsDict;
 
 
 /**
- * Output object returned when calling `MrisAddTemplateParameters(...)`.
+ * Output object returned when calling `MrisAddTemplateParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface MrisAddTemplateOutputs {
  */
 function mris_add_template_params(
     placeholder_input: string | null = null,
-): MrisAddTemplateParametersTagged {
+): MrisAddTemplateParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_add_template" as const,
     };
@@ -64,7 +64,7 @@ function mris_add_template_params(
  * @returns Command-line arguments.
  */
 function mris_add_template_cargs(
-    params: MrisAddTemplateParameters,
+    params: MrisAddTemplateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function mris_add_template_cargs(
  * @returns Outputs object.
  */
 function mris_add_template_outputs(
-    params: MrisAddTemplateParameters,
+    params: MrisAddTemplateParamsDict,
     execution: Execution,
 ): MrisAddTemplateOutputs {
     const ret: MrisAddTemplateOutputs = {
@@ -111,7 +111,7 @@ function mris_add_template_outputs(
  * @returns NamedTuple of outputs (described in `MrisAddTemplateOutputs`).
  */
 function mris_add_template_execute(
-    params: MrisAddTemplateParameters,
+    params: MrisAddTemplateParamsDict,
     runner: Runner | null = null,
 ): MrisAddTemplateOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function mris_add_template(
 export {
       MRIS_ADD_TEMPLATE_METADATA,
       MrisAddTemplateOutputs,
+      MrisAddTemplateParamsDict,
+      MrisAddTemplateParamsDictTagged,
       mris_add_template,
       mris_add_template_execute,
       mris_add_template_params,

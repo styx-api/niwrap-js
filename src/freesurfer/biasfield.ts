@@ -11,7 +11,7 @@ const BIASFIELD_METADATA: Metadata = {
 };
 
 
-interface BiasfieldParameters {
+interface BiasfieldParamsDict {
     "@type"?: "freesurfer/biasfield";
     "subject": string;
     "tmpdir"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface BiasfieldParameters {
     "debug": boolean;
     "version": boolean;
 }
-type BiasfieldParametersTagged = Required<Pick<BiasfieldParameters, '@type'>> & BiasfieldParameters;
+type BiasfieldParamsDictTagged = Required<Pick<BiasfieldParamsDict, '@type'>> & BiasfieldParamsDict;
 
 
 /**
- * Output object returned when calling `BiasfieldParameters(...)`.
+ * Output object returned when calling `BiasfieldParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function biasfield_params(
     help: boolean = false,
     debug: boolean = false,
     version: boolean = false,
-): BiasfieldParametersTagged {
+): BiasfieldParamsDictTagged {
     const params = {
         "@type": "freesurfer/biasfield" as const,
         "subject": subject,
@@ -88,7 +88,7 @@ function biasfield_params(
  * @returns Command-line arguments.
  */
 function biasfield_cargs(
-    params: BiasfieldParameters,
+    params: BiasfieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function biasfield_cargs(
  * @returns Outputs object.
  */
 function biasfield_outputs(
-    params: BiasfieldParameters,
+    params: BiasfieldParamsDict,
     execution: Execution,
 ): BiasfieldOutputs {
     const ret: BiasfieldOutputs = {
@@ -155,7 +155,7 @@ function biasfield_outputs(
  * @returns NamedTuple of outputs (described in `BiasfieldOutputs`).
  */
 function biasfield_execute(
-    params: BiasfieldParameters,
+    params: BiasfieldParamsDict,
     runner: Runner | null = null,
 ): BiasfieldOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function biasfield(
 export {
       BIASFIELD_METADATA,
       BiasfieldOutputs,
+      BiasfieldParamsDict,
+      BiasfieldParamsDictTagged,
       biasfield,
       biasfield_execute,
       biasfield_params,

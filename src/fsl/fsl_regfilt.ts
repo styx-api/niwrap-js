@@ -11,7 +11,7 @@ const FSL_REGFILT_METADATA: Metadata = {
 };
 
 
-interface FslRegfiltParameters {
+interface FslRegfiltParamsDict {
     "@type"?: "fsl/fsl_regfilt";
     "infile": InputPathType;
     "designfile": InputPathType;
@@ -31,11 +31,11 @@ interface FslRegfiltParameters {
     "out_mix"?: string | null | undefined;
     "out_vnscales"?: string | null | undefined;
 }
-type FslRegfiltParametersTagged = Required<Pick<FslRegfiltParameters, '@type'>> & FslRegfiltParameters;
+type FslRegfiltParamsDictTagged = Required<Pick<FslRegfiltParamsDict, '@type'>> & FslRegfiltParamsDict;
 
 
 /**
- * Output object returned when calling `FslRegfiltParameters(...)`.
+ * Output object returned when calling `FslRegfiltParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function fsl_regfilt_params(
     out_data: string | null = null,
     out_mix: string | null = null,
     out_vnscales: string | null = null,
-): FslRegfiltParametersTagged {
+): FslRegfiltParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_regfilt" as const,
         "infile": infile,
@@ -154,7 +154,7 @@ function fsl_regfilt_params(
  * @returns Command-line arguments.
  */
 function fsl_regfilt_cargs(
-    params: FslRegfiltParameters,
+    params: FslRegfiltParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -250,7 +250,7 @@ function fsl_regfilt_cargs(
  * @returns Outputs object.
  */
 function fsl_regfilt_outputs(
-    params: FslRegfiltParameters,
+    params: FslRegfiltParamsDict,
     execution: Execution,
 ): FslRegfiltOutputs {
     const ret: FslRegfiltOutputs = {
@@ -279,7 +279,7 @@ function fsl_regfilt_outputs(
  * @returns NamedTuple of outputs (described in `FslRegfiltOutputs`).
  */
 function fsl_regfilt_execute(
-    params: FslRegfiltParameters,
+    params: FslRegfiltParamsDict,
     runner: Runner | null = null,
 ): FslRegfiltOutputs {
     runner = runner || getGlobalRunner();
@@ -350,6 +350,8 @@ function fsl_regfilt(
 export {
       FSL_REGFILT_METADATA,
       FslRegfiltOutputs,
+      FslRegfiltParamsDict,
+      FslRegfiltParamsDictTagged,
       fsl_regfilt,
       fsl_regfilt_execute,
       fsl_regfilt_params,

@@ -11,7 +11,7 @@ const V_3DINFO_METADATA: Metadata = {
 };
 
 
-interface V3dinfoParameters {
+interface V3dinfoParamsDict {
     "@type"?: "afni/3dinfo";
     "orient": boolean;
     "Lextent": boolean;
@@ -127,11 +127,11 @@ interface V3dinfoParameters {
     "monog_pairs": boolean;
     "dataset": Array<InputPathType>;
 }
-type V3dinfoParametersTagged = Required<Pick<V3dinfoParameters, '@type'>> & V3dinfoParameters;
+type V3dinfoParamsDictTagged = Required<Pick<V3dinfoParamsDict, '@type'>> & V3dinfoParamsDict;
 
 
 /**
- * Output object returned when calling `V3dinfoParameters(...)`.
+ * Output object returned when calling `V3dinfoParamsDict(...)`.
  *
  * @interface
  */
@@ -380,7 +380,7 @@ function v_3dinfo_params(
     val_diff: boolean = false,
     sval_diff: boolean = false,
     monog_pairs: boolean = false,
-): V3dinfoParametersTagged {
+): V3dinfoParamsDictTagged {
     const params = {
         "@type": "afni/3dinfo" as const,
         "orient": orient,
@@ -522,7 +522,7 @@ function v_3dinfo_params(
  * @returns Command-line arguments.
  */
 function v_3dinfo_cargs(
-    params: V3dinfoParameters,
+    params: V3dinfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -895,7 +895,7 @@ function v_3dinfo_cargs(
  * @returns Outputs object.
  */
 function v_3dinfo_outputs(
-    params: V3dinfoParameters,
+    params: V3dinfoParamsDict,
     execution: Execution,
 ): V3dinfoOutputs {
     const ret: V3dinfoOutputs = {
@@ -921,7 +921,7 @@ function v_3dinfo_outputs(
  * @returns NamedTuple of outputs (described in `V3dinfoOutputs`).
  */
 function v_3dinfo_execute(
-    params: V3dinfoParameters,
+    params: V3dinfoParamsDict,
     runner: Runner | null = null,
 ): V3dinfoOutputs {
     runner = runner || getGlobalRunner();
@@ -1183,6 +1183,8 @@ function v_3dinfo(
 
 export {
       V3dinfoOutputs,
+      V3dinfoParamsDict,
+      V3dinfoParamsDictTagged,
       V_3DINFO_METADATA,
       v_3dinfo,
       v_3dinfo_execute,

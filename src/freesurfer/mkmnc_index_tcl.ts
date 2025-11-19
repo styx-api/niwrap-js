@@ -11,16 +11,16 @@ const MKMNC_INDEX_TCL_METADATA: Metadata = {
 };
 
 
-interface MkmncIndexTclParameters {
+interface MkmncIndexTclParamsDict {
     "@type"?: "freesurfer/mkmnc_index.tcl";
     "infile": InputPathType;
     "outfile": string;
 }
-type MkmncIndexTclParametersTagged = Required<Pick<MkmncIndexTclParameters, '@type'>> & MkmncIndexTclParameters;
+type MkmncIndexTclParamsDictTagged = Required<Pick<MkmncIndexTclParamsDict, '@type'>> & MkmncIndexTclParamsDict;
 
 
 /**
- * Output object returned when calling `MkmncIndexTclParameters(...)`.
+ * Output object returned when calling `MkmncIndexTclParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MkmncIndexTclOutputs {
 function mkmnc_index_tcl_params(
     infile: InputPathType,
     outfile: string,
-): MkmncIndexTclParametersTagged {
+): MkmncIndexTclParamsDictTagged {
     const params = {
         "@type": "freesurfer/mkmnc_index.tcl" as const,
         "infile": infile,
@@ -66,7 +66,7 @@ function mkmnc_index_tcl_params(
  * @returns Command-line arguments.
  */
 function mkmnc_index_tcl_cargs(
-    params: MkmncIndexTclParameters,
+    params: MkmncIndexTclParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mkmnc_index_tcl_cargs(
  * @returns Outputs object.
  */
 function mkmnc_index_tcl_outputs(
-    params: MkmncIndexTclParameters,
+    params: MkmncIndexTclParamsDict,
     execution: Execution,
 ): MkmncIndexTclOutputs {
     const ret: MkmncIndexTclOutputs = {
@@ -112,7 +112,7 @@ function mkmnc_index_tcl_outputs(
  * @returns NamedTuple of outputs (described in `MkmncIndexTclOutputs`).
  */
 function mkmnc_index_tcl_execute(
-    params: MkmncIndexTclParameters,
+    params: MkmncIndexTclParamsDict,
     runner: Runner | null = null,
 ): MkmncIndexTclOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mkmnc_index_tcl(
 export {
       MKMNC_INDEX_TCL_METADATA,
       MkmncIndexTclOutputs,
+      MkmncIndexTclParamsDict,
+      MkmncIndexTclParamsDictTagged,
       mkmnc_index_tcl,
       mkmnc_index_tcl_execute,
       mkmnc_index_tcl_params,

@@ -11,7 +11,7 @@ const V_3D_BRICK_STAT_METADATA: Metadata = {
 };
 
 
-interface V3dBrickStatParameters {
+interface V3dBrickStatParamsDict {
     "@type"?: "afni/3dBrickStat";
     "dataset": string;
     "quick": boolean;
@@ -44,11 +44,11 @@ interface V3dBrickStatParameters {
     "ver": boolean;
     "help": boolean;
 }
-type V3dBrickStatParametersTagged = Required<Pick<V3dBrickStatParameters, '@type'>> & V3dBrickStatParameters;
+type V3dBrickStatParamsDictTagged = Required<Pick<V3dBrickStatParamsDict, '@type'>> & V3dBrickStatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dBrickStatParameters(...)`.
+ * Output object returned when calling `V3dBrickStatParamsDict(...)`.
  *
  * @interface
  */
@@ -131,7 +131,7 @@ function v_3d_brick_stat_params(
     perc_quiet: boolean = false,
     ver: boolean = false,
     help: boolean = false,
-): V3dBrickStatParametersTagged {
+): V3dBrickStatParamsDictTagged {
     const params = {
         "@type": "afni/3dBrickStat" as const,
         "dataset": dataset,
@@ -188,7 +188,7 @@ function v_3d_brick_stat_params(
  * @returns Command-line arguments.
  */
 function v_3d_brick_stat_cargs(
-    params: V3dBrickStatParameters,
+    params: V3dBrickStatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -309,7 +309,7 @@ function v_3d_brick_stat_cargs(
  * @returns Outputs object.
  */
 function v_3d_brick_stat_outputs(
-    params: V3dBrickStatParameters,
+    params: V3dBrickStatParamsDict,
     execution: Execution,
 ): V3dBrickStatOutputs {
     const ret: V3dBrickStatOutputs = {
@@ -335,7 +335,7 @@ function v_3d_brick_stat_outputs(
  * @returns NamedTuple of outputs (described in `V3dBrickStatOutputs`).
  */
 function v_3d_brick_stat_execute(
-    params: V3dBrickStatParameters,
+    params: V3dBrickStatParamsDict,
     runner: Runner | null = null,
 ): V3dBrickStatOutputs {
     runner = runner || getGlobalRunner();
@@ -431,6 +431,8 @@ function v_3d_brick_stat(
 
 export {
       V3dBrickStatOutputs,
+      V3dBrickStatParamsDict,
+      V3dBrickStatParamsDictTagged,
       V_3D_BRICK_STAT_METADATA,
       v_3d_brick_stat,
       v_3d_brick_stat_execute,

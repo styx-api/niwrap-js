@@ -11,7 +11,7 @@ const V_3D_SETUP_GROUP_IN_CORR_METADATA: Metadata = {
 };
 
 
-interface V3dSetupGroupInCorrParameters {
+interface V3dSetupGroupInCorrParamsDict {
     "@type"?: "afni/3dSetupGroupInCorr";
     "datasets": Array<InputPathType>;
     "mask_dataset"?: InputPathType | null | undefined;
@@ -23,11 +23,11 @@ interface V3dSetupGroupInCorrParameters {
     "prep_method"?: string | null | undefined;
     "lr_pairs"?: Array<string> | null | undefined;
 }
-type V3dSetupGroupInCorrParametersTagged = Required<Pick<V3dSetupGroupInCorrParameters, '@type'>> & V3dSetupGroupInCorrParameters;
+type V3dSetupGroupInCorrParamsDictTagged = Required<Pick<V3dSetupGroupInCorrParamsDict, '@type'>> & V3dSetupGroupInCorrParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSetupGroupInCorrParameters(...)`.
+ * Output object returned when calling `V3dSetupGroupInCorrParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_setup_group_in_corr_params(
     delete_flag: boolean = false,
     prep_method: string | null = null,
     lr_pairs: Array<string> | null = null,
-): V3dSetupGroupInCorrParametersTagged {
+): V3dSetupGroupInCorrParamsDictTagged {
     const params = {
         "@type": "afni/3dSetupGroupInCorr" as const,
         "datasets": datasets,
@@ -106,7 +106,7 @@ function v_3d_setup_group_in_corr_params(
  * @returns Command-line arguments.
  */
 function v_3d_setup_group_in_corr_cargs(
-    params: V3dSetupGroupInCorrParameters,
+    params: V3dSetupGroupInCorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,7 +162,7 @@ function v_3d_setup_group_in_corr_cargs(
  * @returns Outputs object.
  */
 function v_3d_setup_group_in_corr_outputs(
-    params: V3dSetupGroupInCorrParameters,
+    params: V3dSetupGroupInCorrParamsDict,
     execution: Execution,
 ): V3dSetupGroupInCorrOutputs {
     const ret: V3dSetupGroupInCorrOutputs = {
@@ -189,7 +189,7 @@ function v_3d_setup_group_in_corr_outputs(
  * @returns NamedTuple of outputs (described in `V3dSetupGroupInCorrOutputs`).
  */
 function v_3d_setup_group_in_corr_execute(
-    params: V3dSetupGroupInCorrParameters,
+    params: V3dSetupGroupInCorrParamsDict,
     runner: Runner | null = null,
 ): V3dSetupGroupInCorrOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function v_3d_setup_group_in_corr(
 
 export {
       V3dSetupGroupInCorrOutputs,
+      V3dSetupGroupInCorrParamsDict,
+      V3dSetupGroupInCorrParamsDictTagged,
       V_3D_SETUP_GROUP_IN_CORR_METADATA,
       v_3d_setup_group_in_corr,
       v_3d_setup_group_in_corr_execute,

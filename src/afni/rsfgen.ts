@@ -11,7 +11,7 @@ const RSFGEN_METADATA: Metadata = {
 };
 
 
-interface RsfgenParameters {
+interface RsfgenParamsDict {
     "@type"?: "afni/RSFgen";
     "length": number;
     "num_experimental_conditions": number;
@@ -27,11 +27,11 @@ interface RsfgenParameters {
     "prob_zero"?: number | null | undefined;
     "input_table"?: InputPathType | null | undefined;
 }
-type RsfgenParametersTagged = Required<Pick<RsfgenParameters, '@type'>> & RsfgenParameters;
+type RsfgenParamsDictTagged = Required<Pick<RsfgenParamsDict, '@type'>> & RsfgenParamsDict;
 
 
 /**
- * Output object returned when calling `RsfgenParameters(...)`.
+ * Output object returned when calling `RsfgenParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function rsfgen_params(
     markov_file: InputPathType | null = null,
     prob_zero: number | null = null,
     input_table: InputPathType | null = null,
-): RsfgenParametersTagged {
+): RsfgenParamsDictTagged {
     const params = {
         "@type": "afni/RSFgen" as const,
         "length": length,
@@ -126,7 +126,7 @@ function rsfgen_params(
  * @returns Command-line arguments.
  */
 function rsfgen_cargs(
-    params: RsfgenParameters,
+    params: RsfgenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -209,7 +209,7 @@ function rsfgen_cargs(
  * @returns Outputs object.
  */
 function rsfgen_outputs(
-    params: RsfgenParameters,
+    params: RsfgenParamsDict,
     execution: Execution,
 ): RsfgenOutputs {
     const ret: RsfgenOutputs = {
@@ -235,7 +235,7 @@ function rsfgen_outputs(
  * @returns NamedTuple of outputs (described in `RsfgenOutputs`).
  */
 function rsfgen_execute(
-    params: RsfgenParameters,
+    params: RsfgenParamsDict,
     runner: Runner | null = null,
 ): RsfgenOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function rsfgen(
 export {
       RSFGEN_METADATA,
       RsfgenOutputs,
+      RsfgenParamsDict,
+      RsfgenParamsDictTagged,
       rsfgen,
       rsfgen_execute,
       rsfgen_params,

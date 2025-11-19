@@ -11,7 +11,7 @@ const V__ALIGN_CENTERS_METADATA: Metadata = {
 };
 
 
-interface VAlignCentersParameters {
+interface VAlignCentersParamsDict {
     "@type"?: "afni/@Align_Centers";
     "base": InputPathType;
     "dset": InputPathType;
@@ -28,11 +28,11 @@ interface VAlignCentersParameters {
     "shift_xform"?: InputPathType | null | undefined;
     "shift_xform_inv"?: InputPathType | null | undefined;
 }
-type VAlignCentersParametersTagged = Required<Pick<VAlignCentersParameters, '@type'>> & VAlignCentersParameters;
+type VAlignCentersParamsDictTagged = Required<Pick<VAlignCentersParamsDict, '@type'>> & VAlignCentersParamsDict;
 
 
 /**
- * Output object returned when calling `VAlignCentersParameters(...)`.
+ * Output object returned when calling `VAlignCentersParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function v__align_centers_params(
     center_cm_no_amask: boolean = false,
     shift_xform: InputPathType | null = null,
     shift_xform_inv: InputPathType | null = null,
-): VAlignCentersParametersTagged {
+): VAlignCentersParamsDictTagged {
     const params = {
         "@type": "afni/@Align_Centers" as const,
         "base": base,
@@ -130,7 +130,7 @@ function v__align_centers_params(
  * @returns Command-line arguments.
  */
 function v__align_centers_cargs(
-    params: VAlignCentersParameters,
+    params: VAlignCentersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -198,7 +198,7 @@ function v__align_centers_cargs(
  * @returns Outputs object.
  */
 function v__align_centers_outputs(
-    params: VAlignCentersParameters,
+    params: VAlignCentersParamsDict,
     execution: Execution,
 ): VAlignCentersOutputs {
     const ret: VAlignCentersOutputs = {
@@ -226,7 +226,7 @@ function v__align_centers_outputs(
  * @returns NamedTuple of outputs (described in `VAlignCentersOutputs`).
  */
 function v__align_centers_execute(
-    params: VAlignCentersParameters,
+    params: VAlignCentersParamsDict,
     runner: Runner | null = null,
 ): VAlignCentersOutputs {
     runner = runner || getGlobalRunner();
@@ -290,6 +290,8 @@ function v__align_centers(
 
 export {
       VAlignCentersOutputs,
+      VAlignCentersParamsDict,
+      VAlignCentersParamsDictTagged,
       V__ALIGN_CENTERS_METADATA,
       v__align_centers,
       v__align_centers_execute,

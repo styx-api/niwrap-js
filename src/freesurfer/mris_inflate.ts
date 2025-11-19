@@ -11,7 +11,7 @@ const MRIS_INFLATE_METADATA: Metadata = {
 };
 
 
-interface MrisInflateParameters {
+interface MrisInflateParamsDict {
     "@type"?: "freesurfer/mris_inflate";
     "input_surface": InputPathType;
     "output_surface": string;
@@ -23,11 +23,11 @@ interface MrisInflateParameters {
     "mm_flag": boolean;
     "scale_flag"?: number | null | undefined;
 }
-type MrisInflateParametersTagged = Required<Pick<MrisInflateParameters, '@type'>> & MrisInflateParameters;
+type MrisInflateParamsDictTagged = Required<Pick<MrisInflateParamsDict, '@type'>> & MrisInflateParamsDict;
 
 
 /**
- * Output object returned when calling `MrisInflateParameters(...)`.
+ * Output object returned when calling `MrisInflateParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function mris_inflate_params(
     sulcname: string | null = null,
     mm_flag: boolean = false,
     scale_flag: number | null = null,
-): MrisInflateParametersTagged {
+): MrisInflateParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_inflate" as const,
         "input_surface": input_surface,
@@ -104,7 +104,7 @@ function mris_inflate_params(
  * @returns Command-line arguments.
  */
 function mris_inflate_cargs(
-    params: MrisInflateParameters,
+    params: MrisInflateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,7 +160,7 @@ function mris_inflate_cargs(
  * @returns Outputs object.
  */
 function mris_inflate_outputs(
-    params: MrisInflateParameters,
+    params: MrisInflateParamsDict,
     execution: Execution,
 ): MrisInflateOutputs {
     const ret: MrisInflateOutputs = {
@@ -186,7 +186,7 @@ function mris_inflate_outputs(
  * @returns NamedTuple of outputs (described in `MrisInflateOutputs`).
  */
 function mris_inflate_execute(
-    params: MrisInflateParameters,
+    params: MrisInflateParamsDict,
     runner: Runner | null = null,
 ): MrisInflateOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function mris_inflate(
 export {
       MRIS_INFLATE_METADATA,
       MrisInflateOutputs,
+      MrisInflateParamsDict,
+      MrisInflateParamsDictTagged,
       mris_inflate,
       mris_inflate_execute,
       mris_inflate_params,

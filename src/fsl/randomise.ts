@@ -11,7 +11,7 @@ const RANDOMISE_METADATA: Metadata = {
 };
 
 
-interface RandomiseParameters {
+interface RandomiseParamsDict {
     "@type"?: "fsl/randomise";
     "in_file": InputPathType;
     "base_name"?: string | null | undefined;
@@ -42,11 +42,11 @@ interface RandomiseParameters {
     "vox_p_values": boolean;
     "x_block_labels"?: InputPathType | null | undefined;
 }
-type RandomiseParametersTagged = Required<Pick<RandomiseParameters, '@type'>> & RandomiseParameters;
+type RandomiseParamsDictTagged = Required<Pick<RandomiseParamsDict, '@type'>> & RandomiseParamsDict;
 
 
 /**
- * Output object returned when calling `RandomiseParameters(...)`.
+ * Output object returned when calling `RandomiseParamsDict(...)`.
  *
  * @interface
  */
@@ -145,7 +145,7 @@ function randomise_params(
     var_smooth: number | null = null,
     vox_p_values: boolean = false,
     x_block_labels: InputPathType | null = null,
-): RandomiseParametersTagged {
+): RandomiseParamsDictTagged {
     const params = {
         "@type": "fsl/randomise" as const,
         "in_file": in_file,
@@ -224,7 +224,7 @@ function randomise_params(
  * @returns Command-line arguments.
  */
 function randomise_cargs(
-    params: RandomiseParameters,
+    params: RandomiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -363,7 +363,7 @@ function randomise_cargs(
  * @returns Outputs object.
  */
 function randomise_outputs(
-    params: RandomiseParameters,
+    params: RandomiseParamsDict,
     execution: Execution,
 ): RandomiseOutputs {
     const ret: RandomiseOutputs = {
@@ -394,7 +394,7 @@ function randomise_outputs(
  * @returns NamedTuple of outputs (described in `RandomiseOutputs`).
  */
 function randomise_execute(
-    params: RandomiseParameters,
+    params: RandomiseParamsDict,
     runner: Runner | null = null,
 ): RandomiseOutputs {
     runner = runner || getGlobalRunner();
@@ -487,6 +487,8 @@ function randomise(
 export {
       RANDOMISE_METADATA,
       RandomiseOutputs,
+      RandomiseParamsDict,
+      RandomiseParamsDictTagged,
       randomise,
       randomise_execute,
       randomise_params,

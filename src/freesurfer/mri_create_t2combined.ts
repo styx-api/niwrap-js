@@ -11,7 +11,7 @@ const MRI_CREATE_T2COMBINED_METADATA: Metadata = {
 };
 
 
-interface MriCreateT2combinedParameters {
+interface MriCreateT2combinedParamsDict {
     "@type"?: "freesurfer/mri_create_t2combined";
     "subjid": string;
     "t1wb": InputPathType;
@@ -21,11 +21,11 @@ interface MriCreateT2combinedParameters {
     "t2combined": string;
     "show": boolean;
 }
-type MriCreateT2combinedParametersTagged = Required<Pick<MriCreateT2combinedParameters, '@type'>> & MriCreateT2combinedParameters;
+type MriCreateT2combinedParamsDictTagged = Required<Pick<MriCreateT2combinedParamsDict, '@type'>> & MriCreateT2combinedParamsDict;
 
 
 /**
- * Output object returned when calling `MriCreateT2combinedParameters(...)`.
+ * Output object returned when calling `MriCreateT2combinedParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function mri_create_t2combined_params(
     t2combined: string,
     t2middle: InputPathType | null = null,
     show: boolean = false,
-): MriCreateT2combinedParametersTagged {
+): MriCreateT2combinedParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_create_t2combined" as const,
         "subjid": subjid,
@@ -92,7 +92,7 @@ function mri_create_t2combined_params(
  * @returns Command-line arguments.
  */
 function mri_create_t2combined_cargs(
-    params: MriCreateT2combinedParameters,
+    params: MriCreateT2combinedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function mri_create_t2combined_cargs(
  * @returns Outputs object.
  */
 function mri_create_t2combined_outputs(
-    params: MriCreateT2combinedParameters,
+    params: MriCreateT2combinedParamsDict,
     execution: Execution,
 ): MriCreateT2combinedOutputs {
     const ret: MriCreateT2combinedOutputs = {
@@ -148,7 +148,7 @@ function mri_create_t2combined_outputs(
  * @returns NamedTuple of outputs (described in `MriCreateT2combinedOutputs`).
  */
 function mri_create_t2combined_execute(
-    params: MriCreateT2combinedParameters,
+    params: MriCreateT2combinedParamsDict,
     runner: Runner | null = null,
 ): MriCreateT2combinedOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function mri_create_t2combined(
 export {
       MRI_CREATE_T2COMBINED_METADATA,
       MriCreateT2combinedOutputs,
+      MriCreateT2combinedParamsDict,
+      MriCreateT2combinedParamsDictTagged,
       mri_create_t2combined,
       mri_create_t2combined_execute,
       mri_create_t2combined_params,

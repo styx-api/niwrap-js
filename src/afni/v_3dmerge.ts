@@ -11,7 +11,7 @@ const V_3DMERGE_METADATA: Metadata = {
 };
 
 
-interface V3dmergeParameters {
+interface V3dmergeParamsDict {
     "@type"?: "afni/3dmerge";
     "input_files": Array<InputPathType>;
     "output_file": string;
@@ -26,11 +26,11 @@ interface V3dmergeParameters {
     "gmax": boolean;
     "quiet": boolean;
 }
-type V3dmergeParametersTagged = Required<Pick<V3dmergeParameters, '@type'>> & V3dmergeParameters;
+type V3dmergeParamsDictTagged = Required<Pick<V3dmergeParamsDict, '@type'>> & V3dmergeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmergeParameters(...)`.
+ * Output object returned when calling `V3dmergeParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function v_3dmerge_params(
     gmean: boolean = false,
     gmax: boolean = false,
     quiet: boolean = false,
-): V3dmergeParametersTagged {
+): V3dmergeParamsDictTagged {
     const params = {
         "@type": "afni/3dmerge" as const,
         "input_files": input_files,
@@ -116,7 +116,7 @@ function v_3dmerge_params(
  * @returns Command-line arguments.
  */
 function v_3dmerge_cargs(
-    params: V3dmergeParameters,
+    params: V3dmergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -184,7 +184,7 @@ function v_3dmerge_cargs(
  * @returns Outputs object.
  */
 function v_3dmerge_outputs(
-    params: V3dmergeParameters,
+    params: V3dmergeParamsDict,
     execution: Execution,
 ): V3dmergeOutputs {
     const ret: V3dmergeOutputs = {
@@ -210,7 +210,7 @@ function v_3dmerge_outputs(
  * @returns NamedTuple of outputs (described in `V3dmergeOutputs`).
  */
 function v_3dmerge_execute(
-    params: V3dmergeParameters,
+    params: V3dmergeParamsDict,
     runner: Runner | null = null,
 ): V3dmergeOutputs {
     runner = runner || getGlobalRunner();
@@ -270,6 +270,8 @@ function v_3dmerge(
 
 export {
       V3dmergeOutputs,
+      V3dmergeParamsDict,
+      V3dmergeParamsDictTagged,
       V_3DMERGE_METADATA,
       v_3dmerge,
       v_3dmerge_execute,

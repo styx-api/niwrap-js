@@ -11,18 +11,18 @@ const V_3D_AFNITO_NIML_METADATA: Metadata = {
 };
 
 
-interface V3dAfnitoNimlParameters {
+interface V3dAfnitoNimlParamsDict {
     "@type"?: "afni/3dAFNItoNIML";
     "dset": InputPathType;
     "data": boolean;
     "ascii": boolean;
     "tcp"?: string | null | undefined;
 }
-type V3dAfnitoNimlParametersTagged = Required<Pick<V3dAfnitoNimlParameters, '@type'>> & V3dAfnitoNimlParameters;
+type V3dAfnitoNimlParamsDictTagged = Required<Pick<V3dAfnitoNimlParamsDict, '@type'>> & V3dAfnitoNimlParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAfnitoNimlParameters(...)`.
+ * Output object returned when calling `V3dAfnitoNimlParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function v_3d_afnito_niml_params(
     data: boolean = false,
     ascii: boolean = false,
     tcp: string | null = null,
-): V3dAfnitoNimlParametersTagged {
+): V3dAfnitoNimlParamsDictTagged {
     const params = {
         "@type": "afni/3dAFNItoNIML" as const,
         "dset": dset,
@@ -72,7 +72,7 @@ function v_3d_afnito_niml_params(
  * @returns Command-line arguments.
  */
 function v_3d_afnito_niml_cargs(
-    params: V3dAfnitoNimlParameters,
+    params: V3dAfnitoNimlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function v_3d_afnito_niml_cargs(
  * @returns Outputs object.
  */
 function v_3d_afnito_niml_outputs(
-    params: V3dAfnitoNimlParameters,
+    params: V3dAfnitoNimlParamsDict,
     execution: Execution,
 ): V3dAfnitoNimlOutputs {
     const ret: V3dAfnitoNimlOutputs = {
@@ -128,7 +128,7 @@ function v_3d_afnito_niml_outputs(
  * @returns NamedTuple of outputs (described in `V3dAfnitoNimlOutputs`).
  */
 function v_3d_afnito_niml_execute(
-    params: V3dAfnitoNimlParameters,
+    params: V3dAfnitoNimlParamsDict,
     runner: Runner | null = null,
 ): V3dAfnitoNimlOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function v_3d_afnito_niml(
 
 export {
       V3dAfnitoNimlOutputs,
+      V3dAfnitoNimlParamsDict,
+      V3dAfnitoNimlParamsDictTagged,
       V_3D_AFNITO_NIML_METADATA,
       v_3d_afnito_niml,
       v_3d_afnito_niml_execute,

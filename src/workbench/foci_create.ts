@@ -10,21 +10,21 @@ const FOCI_CREATE_METADATA: Metadata = {
 };
 
 
-interface FociCreateClassParameters {
+interface FociCreateClassParamsDict {
     "@type"?: "class";
     "class-name": string;
     "foci-list-file": string;
     "surface": InputPathType;
 }
-type FociCreateClassParametersTagged = Required<Pick<FociCreateClassParameters, '@type'>> & FociCreateClassParameters;
+type FociCreateClassParamsDictTagged = Required<Pick<FociCreateClassParamsDict, '@type'>> & FociCreateClassParamsDict;
 
 
-interface FociCreateParameters {
+interface FociCreateParamsDict {
     "@type"?: "workbench/foci-create";
     "output": string;
-    "class"?: Array<FociCreateClassParameters> | null | undefined;
+    "class"?: Array<FociCreateClassParamsDict> | null | undefined;
 }
-type FociCreateParametersTagged = Required<Pick<FociCreateParameters, '@type'>> & FociCreateParameters;
+type FociCreateParamsDictTagged = Required<Pick<FociCreateParamsDict, '@type'>> & FociCreateParamsDict;
 
 
 /**
@@ -36,11 +36,11 @@ type FociCreateParametersTagged = Required<Pick<FociCreateParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function foci_create_class_params(
+function foci_create_class(
     class_name: string,
     foci_list_file: string,
     surface: InputPathType,
-): FociCreateClassParametersTagged {
+): FociCreateClassParamsDictTagged {
     const params = {
         "@type": "class" as const,
         "class-name": class_name,
@@ -60,7 +60,7 @@ function foci_create_class_params(
  * @returns Command-line arguments.
  */
 function foci_create_class_cargs(
-    params: FociCreateClassParameters,
+    params: FociCreateClassParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -75,7 +75,7 @@ function foci_create_class_cargs(
 
 
 /**
- * Output object returned when calling `FociCreateParameters(...)`.
+ * Output object returned when calling `FociCreateParamsDict(...)`.
  *
  * @interface
  */
@@ -101,8 +101,8 @@ interface FociCreateOutputs {
  */
 function foci_create_params(
     output: string,
-    class_: Array<FociCreateClassParameters> | null = null,
-): FociCreateParametersTagged {
+    class_: Array<FociCreateClassParamsDict> | null = null,
+): FociCreateParamsDictTagged {
     const params = {
         "@type": "workbench/foci-create" as const,
         "output": output,
@@ -123,7 +123,7 @@ function foci_create_params(
  * @returns Command-line arguments.
  */
 function foci_create_cargs(
-    params: FociCreateParameters,
+    params: FociCreateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -148,7 +148,7 @@ function foci_create_cargs(
  * @returns Outputs object.
  */
 function foci_create_outputs(
-    params: FociCreateParameters,
+    params: FociCreateParamsDict,
     execution: Execution,
 ): FociCreateOutputs {
     const ret: FociCreateOutputs = {
@@ -180,7 +180,7 @@ function foci_create_outputs(
  * @returns NamedTuple of outputs (described in `FociCreateOutputs`).
  */
 function foci_create_execute(
-    params: FociCreateParameters,
+    params: FociCreateParamsDict,
     runner: Runner | null = null,
 ): FociCreateOutputs {
     runner = runner || getGlobalRunner();
@@ -216,7 +216,7 @@ function foci_create_execute(
  */
 function foci_create(
     output: string,
-    class_: Array<FociCreateClassParameters> | null = null,
+    class_: Array<FociCreateClassParamsDict> | null = null,
     runner: Runner | null = null,
 ): FociCreateOutputs {
     const params = foci_create_params(output, class_)
@@ -226,9 +226,13 @@ function foci_create(
 
 export {
       FOCI_CREATE_METADATA,
+      FociCreateClassParamsDict,
+      FociCreateClassParamsDictTagged,
       FociCreateOutputs,
+      FociCreateParamsDict,
+      FociCreateParamsDictTagged,
       foci_create,
-      foci_create_class_params,
+      foci_create_class,
       foci_create_execute,
       foci_create_params,
 };

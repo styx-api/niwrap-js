@@ -11,7 +11,7 @@ const DIMON_METADATA: Metadata = {
 };
 
 
-interface DimonParameters {
+interface DimonParamsDict {
     "@type"?: "afni/Dimon";
     "infile_prefix": string;
     "infile_pattern"?: string | null | undefined;
@@ -23,11 +23,11 @@ interface DimonParameters {
     "te_list"?: string | null | undefined;
     "sort_method"?: string | null | undefined;
 }
-type DimonParametersTagged = Required<Pick<DimonParameters, '@type'>> & DimonParameters;
+type DimonParamsDictTagged = Required<Pick<DimonParamsDict, '@type'>> & DimonParamsDict;
 
 
 /**
- * Output object returned when calling `DimonParameters(...)`.
+ * Output object returned when calling `DimonParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function dimon_params(
     drive_wait: string | null = null,
     te_list: string | null = null,
     sort_method: string | null = null,
-): DimonParametersTagged {
+): DimonParamsDictTagged {
     const params = {
         "@type": "afni/Dimon" as const,
         "infile_prefix": infile_prefix,
@@ -110,7 +110,7 @@ function dimon_params(
  * @returns Command-line arguments.
  */
 function dimon_cargs(
-    params: DimonParameters,
+    params: DimonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -180,7 +180,7 @@ function dimon_cargs(
  * @returns Outputs object.
  */
 function dimon_outputs(
-    params: DimonParameters,
+    params: DimonParamsDict,
     execution: Execution,
 ): DimonOutputs {
     const ret: DimonOutputs = {
@@ -206,7 +206,7 @@ function dimon_outputs(
  * @returns NamedTuple of outputs (described in `DimonOutputs`).
  */
 function dimon_execute(
-    params: DimonParameters,
+    params: DimonParamsDict,
     runner: Runner | null = null,
 ): DimonOutputs {
     runner = runner || getGlobalRunner();
@@ -261,6 +261,8 @@ function dimon(
 export {
       DIMON_METADATA,
       DimonOutputs,
+      DimonParamsDict,
+      DimonParamsDictTagged,
       dimon,
       dimon_execute,
       dimon_params,

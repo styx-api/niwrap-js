@@ -11,17 +11,17 @@ const V_24SWAP_METADATA: Metadata = {
 };
 
 
-interface V24swapParameters {
+interface V24swapParamsDict {
     "@type"?: "afni/24swap";
     "quiet": boolean;
     "pattern"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
-type V24swapParametersTagged = Required<Pick<V24swapParameters, '@type'>> & V24swapParameters;
+type V24swapParamsDictTagged = Required<Pick<V24swapParamsDict, '@type'>> & V24swapParamsDict;
 
 
 /**
- * Output object returned when calling `V24swapParameters(...)`.
+ * Output object returned when calling `V24swapParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function v_24swap_params(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
     pattern: string | null = null,
-): V24swapParametersTagged {
+): V24swapParamsDictTagged {
     const params = {
         "@type": "afni/24swap" as const,
         "quiet": quiet,
@@ -68,7 +68,7 @@ function v_24swap_params(
  * @returns Command-line arguments.
  */
 function v_24swap_cargs(
-    params: V24swapParameters,
+    params: V24swapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function v_24swap_cargs(
  * @returns Outputs object.
  */
 function v_24swap_outputs(
-    params: V24swapParameters,
+    params: V24swapParamsDict,
     execution: Execution,
 ): V24swapOutputs {
     const ret: V24swapOutputs = {
@@ -121,7 +121,7 @@ function v_24swap_outputs(
  * @returns NamedTuple of outputs (described in `V24swapOutputs`).
  */
 function v_24swap_execute(
-    params: V24swapParameters,
+    params: V24swapParamsDict,
     runner: Runner | null = null,
 ): V24swapOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function v_24swap(
 
 export {
       V24swapOutputs,
+      V24swapParamsDict,
+      V24swapParamsDictTagged,
       V_24SWAP_METADATA,
       v_24swap,
       v_24swap_execute,

@@ -10,23 +10,23 @@ const VOLUME_WARPFIELD_AFFINE_REGRESSION_METADATA: Metadata = {
 };
 
 
-interface VolumeWarpfieldAffineRegressionFlirtOutParameters {
+interface VolumeWarpfieldAffineRegressionFlirtOutParamsDict {
     "@type"?: "flirt-out";
     "source-volume": string;
     "target-volume": string;
 }
-type VolumeWarpfieldAffineRegressionFlirtOutParametersTagged = Required<Pick<VolumeWarpfieldAffineRegressionFlirtOutParameters, '@type'>> & VolumeWarpfieldAffineRegressionFlirtOutParameters;
+type VolumeWarpfieldAffineRegressionFlirtOutParamsDictTagged = Required<Pick<VolumeWarpfieldAffineRegressionFlirtOutParamsDict, '@type'>> & VolumeWarpfieldAffineRegressionFlirtOutParamsDict;
 
 
-interface VolumeWarpfieldAffineRegressionParameters {
+interface VolumeWarpfieldAffineRegressionParamsDict {
     "@type"?: "workbench/volume-warpfield-affine-regression";
     "roi-vol"?: InputPathType | null | undefined;
     "source-volume"?: string | null | undefined;
-    "flirt-out"?: VolumeWarpfieldAffineRegressionFlirtOutParameters | null | undefined;
+    "flirt-out"?: VolumeWarpfieldAffineRegressionFlirtOutParamsDict | null | undefined;
     "warpfield": string;
     "affine-out": string;
 }
-type VolumeWarpfieldAffineRegressionParametersTagged = Required<Pick<VolumeWarpfieldAffineRegressionParameters, '@type'>> & VolumeWarpfieldAffineRegressionParameters;
+type VolumeWarpfieldAffineRegressionParamsDictTagged = Required<Pick<VolumeWarpfieldAffineRegressionParamsDict, '@type'>> & VolumeWarpfieldAffineRegressionParamsDict;
 
 
 /**
@@ -37,10 +37,10 @@ type VolumeWarpfieldAffineRegressionParametersTagged = Required<Pick<VolumeWarpf
  *
  * @returns Parameter dictionary
  */
-function volume_warpfield_affine_regression_flirt_out_params(
+function volume_warpfield_affine_regression_flirt_out(
     source_volume: string,
     target_volume: string,
-): VolumeWarpfieldAffineRegressionFlirtOutParametersTagged {
+): VolumeWarpfieldAffineRegressionFlirtOutParamsDictTagged {
     const params = {
         "@type": "flirt-out" as const,
         "source-volume": source_volume,
@@ -59,7 +59,7 @@ function volume_warpfield_affine_regression_flirt_out_params(
  * @returns Command-line arguments.
  */
 function volume_warpfield_affine_regression_flirt_out_cargs(
-    params: VolumeWarpfieldAffineRegressionFlirtOutParameters,
+    params: VolumeWarpfieldAffineRegressionFlirtOutParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -73,7 +73,7 @@ function volume_warpfield_affine_regression_flirt_out_cargs(
 
 
 /**
- * Output object returned when calling `VolumeWarpfieldAffineRegressionParameters(...)`.
+ * Output object returned when calling `VolumeWarpfieldAffineRegressionParamsDict(...)`.
  *
  * @interface
  */
@@ -105,8 +105,8 @@ function volume_warpfield_affine_regression_params(
     source_volume: string | null,
     warpfield: string,
     affine_out: string,
-    flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParameters | null = null,
-): VolumeWarpfieldAffineRegressionParametersTagged {
+    flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParamsDict | null = null,
+): VolumeWarpfieldAffineRegressionParamsDictTagged {
     const params = {
         "@type": "workbench/volume-warpfield-affine-regression" as const,
         "warpfield": warpfield,
@@ -134,7 +134,7 @@ function volume_warpfield_affine_regression_params(
  * @returns Command-line arguments.
  */
 function volume_warpfield_affine_regression_cargs(
-    params: VolumeWarpfieldAffineRegressionParameters,
+    params: VolumeWarpfieldAffineRegressionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function volume_warpfield_affine_regression_cargs(
  * @returns Outputs object.
  */
 function volume_warpfield_affine_regression_outputs(
-    params: VolumeWarpfieldAffineRegressionParameters,
+    params: VolumeWarpfieldAffineRegressionParamsDict,
     execution: Execution,
 ): VolumeWarpfieldAffineRegressionOutputs {
     const ret: VolumeWarpfieldAffineRegressionOutputs = {
@@ -187,7 +187,7 @@ function volume_warpfield_affine_regression_outputs(
  * @returns NamedTuple of outputs (described in `VolumeWarpfieldAffineRegressionOutputs`).
  */
 function volume_warpfield_affine_regression_execute(
-    params: VolumeWarpfieldAffineRegressionParameters,
+    params: VolumeWarpfieldAffineRegressionParamsDict,
     runner: Runner | null = null,
 ): VolumeWarpfieldAffineRegressionOutputs {
     runner = runner || getGlobalRunner();
@@ -225,7 +225,7 @@ function volume_warpfield_affine_regression(
     source_volume: string | null,
     warpfield: string,
     affine_out: string,
-    flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParameters | null = null,
+    flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeWarpfieldAffineRegressionOutputs {
     const params = volume_warpfield_affine_regression_params(roi_vol, source_volume, warpfield, affine_out, flirt_out)
@@ -235,9 +235,13 @@ function volume_warpfield_affine_regression(
 
 export {
       VOLUME_WARPFIELD_AFFINE_REGRESSION_METADATA,
+      VolumeWarpfieldAffineRegressionFlirtOutParamsDict,
+      VolumeWarpfieldAffineRegressionFlirtOutParamsDictTagged,
       VolumeWarpfieldAffineRegressionOutputs,
+      VolumeWarpfieldAffineRegressionParamsDict,
+      VolumeWarpfieldAffineRegressionParamsDictTagged,
       volume_warpfield_affine_regression,
       volume_warpfield_affine_regression_execute,
-      volume_warpfield_affine_regression_flirt_out_params,
+      volume_warpfield_affine_regression_flirt_out,
       volume_warpfield_affine_regression_params,
 };

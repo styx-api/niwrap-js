@@ -11,7 +11,7 @@ const ANTS_REGISTRATION_SY_NQUICK_SH_METADATA: Metadata = {
 };
 
 
-interface AntsRegistrationSyNquickShParameters {
+interface AntsRegistrationSyNquickShParamsDict {
     "@type"?: "ants/antsRegistrationSyNQuick.sh";
     "dimensionality": 2 | 3;
     "fixed_image": InputPathType;
@@ -19,11 +19,11 @@ interface AntsRegistrationSyNquickShParameters {
     "output_prefix": string;
     "transform_type"?: "s" | "b" | null | undefined;
 }
-type AntsRegistrationSyNquickShParametersTagged = Required<Pick<AntsRegistrationSyNquickShParameters, '@type'>> & AntsRegistrationSyNquickShParameters;
+type AntsRegistrationSyNquickShParamsDictTagged = Required<Pick<AntsRegistrationSyNquickShParamsDict, '@type'>> & AntsRegistrationSyNquickShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsRegistrationSyNquickShParameters(...)`.
+ * Output object returned when calling `AntsRegistrationSyNquickShParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function ants_registration_sy_nquick_sh_params(
     moving_image: InputPathType,
     output_prefix: string,
     transform_type: "s" | "b" | null = null,
-): AntsRegistrationSyNquickShParametersTagged {
+): AntsRegistrationSyNquickShParamsDictTagged {
     const params = {
         "@type": "ants/antsRegistrationSyNQuick.sh" as const,
         "dimensionality": dimensionality,
@@ -92,7 +92,7 @@ function ants_registration_sy_nquick_sh_params(
  * @returns Command-line arguments.
  */
 function ants_registration_sy_nquick_sh_cargs(
-    params: AntsRegistrationSyNquickShParameters,
+    params: AntsRegistrationSyNquickShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function ants_registration_sy_nquick_sh_cargs(
  * @returns Outputs object.
  */
 function ants_registration_sy_nquick_sh_outputs(
-    params: AntsRegistrationSyNquickShParameters,
+    params: AntsRegistrationSyNquickShParamsDict,
     execution: Execution,
 ): AntsRegistrationSyNquickShOutputs {
     const ret: AntsRegistrationSyNquickShOutputs = {
@@ -158,7 +158,7 @@ function ants_registration_sy_nquick_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsRegistrationSyNquickShOutputs`).
  */
 function ants_registration_sy_nquick_sh_execute(
-    params: AntsRegistrationSyNquickShParameters,
+    params: AntsRegistrationSyNquickShParamsDict,
     runner: Runner | null = null,
 ): AntsRegistrationSyNquickShOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function ants_registration_sy_nquick_sh(
 export {
       ANTS_REGISTRATION_SY_NQUICK_SH_METADATA,
       AntsRegistrationSyNquickShOutputs,
+      AntsRegistrationSyNquickShParamsDict,
+      AntsRegistrationSyNquickShParamsDictTagged,
       ants_registration_sy_nquick_sh,
       ants_registration_sy_nquick_sh_execute,
       ants_registration_sy_nquick_sh_params,

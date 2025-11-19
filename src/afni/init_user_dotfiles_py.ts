@@ -11,7 +11,7 @@ const INIT_USER_DOTFILES_PY_METADATA: Metadata = {
 };
 
 
-interface InitUserDotfilesPyParameters {
+interface InitUserDotfilesPyParamsDict {
     "@type"?: "afni/init_user_dotfiles.py";
     "help": boolean;
     "help_dotfiles_all": boolean;
@@ -31,11 +31,11 @@ interface InitUserDotfilesPyParameters {
     "test": boolean;
     "verbosity_level"?: number | null | undefined;
 }
-type InitUserDotfilesPyParametersTagged = Required<Pick<InitUserDotfilesPyParameters, '@type'>> & InitUserDotfilesPyParameters;
+type InitUserDotfilesPyParamsDictTagged = Required<Pick<InitUserDotfilesPyParamsDict, '@type'>> & InitUserDotfilesPyParamsDict;
 
 
 /**
- * Output object returned when calling `InitUserDotfilesPyParameters(...)`.
+ * Output object returned when calling `InitUserDotfilesPyParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function init_user_dotfiles_py_params(
     shell_list: Array<string> | null = null,
     test: boolean = false,
     verbosity_level: number | null = null,
-): InitUserDotfilesPyParametersTagged {
+): InitUserDotfilesPyParamsDictTagged {
     const params = {
         "@type": "afni/init_user_dotfiles.py" as const,
         "help": help,
@@ -136,7 +136,7 @@ function init_user_dotfiles_py_params(
  * @returns Command-line arguments.
  */
 function init_user_dotfiles_py_cargs(
-    params: InitUserDotfilesPyParameters,
+    params: InitUserDotfilesPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -226,7 +226,7 @@ function init_user_dotfiles_py_cargs(
  * @returns Outputs object.
  */
 function init_user_dotfiles_py_outputs(
-    params: InitUserDotfilesPyParameters,
+    params: InitUserDotfilesPyParamsDict,
     execution: Execution,
 ): InitUserDotfilesPyOutputs {
     const ret: InitUserDotfilesPyOutputs = {
@@ -251,7 +251,7 @@ function init_user_dotfiles_py_outputs(
  * @returns NamedTuple of outputs (described in `InitUserDotfilesPyOutputs`).
  */
 function init_user_dotfiles_py_execute(
-    params: InitUserDotfilesPyParameters,
+    params: InitUserDotfilesPyParamsDict,
     runner: Runner | null = null,
 ): InitUserDotfilesPyOutputs {
     runner = runner || getGlobalRunner();
@@ -322,6 +322,8 @@ function init_user_dotfiles_py(
 export {
       INIT_USER_DOTFILES_PY_METADATA,
       InitUserDotfilesPyOutputs,
+      InitUserDotfilesPyParamsDict,
+      InitUserDotfilesPyParamsDictTagged,
       init_user_dotfiles_py,
       init_user_dotfiles_py_execute,
       init_user_dotfiles_py_params,

@@ -11,16 +11,16 @@ const V__SUMA_FSVOL_TO_BRIK_METADATA: Metadata = {
 };
 
 
-interface VSumaFsvolToBrikParameters {
+interface VSumaFsvolToBrikParamsDict {
     "@type"?: "afni/@SUMA_FSvolToBRIK";
     "fs_vol_data": InputPathType;
     "prefix": string;
 }
-type VSumaFsvolToBrikParametersTagged = Required<Pick<VSumaFsvolToBrikParameters, '@type'>> & VSumaFsvolToBrikParameters;
+type VSumaFsvolToBrikParamsDictTagged = Required<Pick<VSumaFsvolToBrikParamsDict, '@type'>> & VSumaFsvolToBrikParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaFsvolToBrikParameters(...)`.
+ * Output object returned when calling `VSumaFsvolToBrikParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface VSumaFsvolToBrikOutputs {
 function v__suma_fsvol_to_brik_params(
     fs_vol_data: InputPathType,
     prefix: string,
-): VSumaFsvolToBrikParametersTagged {
+): VSumaFsvolToBrikParamsDictTagged {
     const params = {
         "@type": "afni/@SUMA_FSvolToBRIK" as const,
         "fs_vol_data": fs_vol_data,
@@ -70,7 +70,7 @@ function v__suma_fsvol_to_brik_params(
  * @returns Command-line arguments.
  */
 function v__suma_fsvol_to_brik_cargs(
-    params: VSumaFsvolToBrikParameters,
+    params: VSumaFsvolToBrikParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function v__suma_fsvol_to_brik_cargs(
  * @returns Outputs object.
  */
 function v__suma_fsvol_to_brik_outputs(
-    params: VSumaFsvolToBrikParameters,
+    params: VSumaFsvolToBrikParamsDict,
     execution: Execution,
 ): VSumaFsvolToBrikOutputs {
     const ret: VSumaFsvolToBrikOutputs = {
@@ -117,7 +117,7 @@ function v__suma_fsvol_to_brik_outputs(
  * @returns NamedTuple of outputs (described in `VSumaFsvolToBrikOutputs`).
  */
 function v__suma_fsvol_to_brik_execute(
-    params: VSumaFsvolToBrikParameters,
+    params: VSumaFsvolToBrikParamsDict,
     runner: Runner | null = null,
 ): VSumaFsvolToBrikOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function v__suma_fsvol_to_brik(
 
 export {
       VSumaFsvolToBrikOutputs,
+      VSumaFsvolToBrikParamsDict,
+      VSumaFsvolToBrikParamsDictTagged,
       V__SUMA_FSVOL_TO_BRIK_METADATA,
       v__suma_fsvol_to_brik,
       v__suma_fsvol_to_brik_execute,

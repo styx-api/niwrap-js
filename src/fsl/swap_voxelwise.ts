@@ -11,7 +11,7 @@ const SWAP_VOXELWISE_METADATA: Metadata = {
 };
 
 
-interface SwapVoxelwiseParameters {
+interface SwapVoxelwiseParamsDict {
     "@type"?: "fsl/swap_voxelwise";
     "vectors_file_list": InputPathType;
     "scalars_file_list"?: InputPathType | null | undefined;
@@ -22,11 +22,11 @@ interface SwapVoxelwiseParameters {
     "crossing_thresh"?: number | null | undefined;
     "verbose_flag": boolean;
 }
-type SwapVoxelwiseParametersTagged = Required<Pick<SwapVoxelwiseParameters, '@type'>> & SwapVoxelwiseParameters;
+type SwapVoxelwiseParamsDictTagged = Required<Pick<SwapVoxelwiseParamsDict, '@type'>> & SwapVoxelwiseParamsDict;
 
 
 /**
- * Output object returned when calling `SwapVoxelwiseParameters(...)`.
+ * Output object returned when calling `SwapVoxelwiseParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function swap_voxelwise_params(
     init_mask: InputPathType | null = null,
     crossing_thresh: number | null = null,
     verbose_flag: boolean = false,
-): SwapVoxelwiseParametersTagged {
+): SwapVoxelwiseParamsDictTagged {
     const params = {
         "@type": "fsl/swap_voxelwise" as const,
         "vectors_file_list": vectors_file_list,
@@ -100,7 +100,7 @@ function swap_voxelwise_params(
  * @returns Command-line arguments.
  */
 function swap_voxelwise_cargs(
-    params: SwapVoxelwiseParameters,
+    params: SwapVoxelwiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function swap_voxelwise_cargs(
  * @returns Outputs object.
  */
 function swap_voxelwise_outputs(
-    params: SwapVoxelwiseParameters,
+    params: SwapVoxelwiseParamsDict,
     execution: Execution,
 ): SwapVoxelwiseOutputs {
     const ret: SwapVoxelwiseOutputs = {
@@ -185,7 +185,7 @@ function swap_voxelwise_outputs(
  * @returns NamedTuple of outputs (described in `SwapVoxelwiseOutputs`).
  */
 function swap_voxelwise_execute(
-    params: SwapVoxelwiseParameters,
+    params: SwapVoxelwiseParamsDict,
     runner: Runner | null = null,
 ): SwapVoxelwiseOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function swap_voxelwise(
 export {
       SWAP_VOXELWISE_METADATA,
       SwapVoxelwiseOutputs,
+      SwapVoxelwiseParamsDict,
+      SwapVoxelwiseParamsDictTagged,
       swap_voxelwise,
       swap_voxelwise_execute,
       swap_voxelwise_params,

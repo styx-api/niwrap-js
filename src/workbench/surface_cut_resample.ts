@@ -10,18 +10,18 @@ const SURFACE_CUT_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface SurfaceCutResampleParameters {
+interface SurfaceCutResampleParamsDict {
     "@type"?: "workbench/surface-cut-resample";
     "surface-out": string;
     "surface-in": InputPathType;
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
 }
-type SurfaceCutResampleParametersTagged = Required<Pick<SurfaceCutResampleParameters, '@type'>> & SurfaceCutResampleParameters;
+type SurfaceCutResampleParamsDictTagged = Required<Pick<SurfaceCutResampleParamsDict, '@type'>> & SurfaceCutResampleParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceCutResampleParameters(...)`.
+ * Output object returned when calling `SurfaceCutResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function surface_cut_resample_params(
     surface_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
-): SurfaceCutResampleParametersTagged {
+): SurfaceCutResampleParamsDictTagged {
     const params = {
         "@type": "workbench/surface-cut-resample" as const,
         "surface-out": surface_out,
@@ -73,7 +73,7 @@ function surface_cut_resample_params(
  * @returns Command-line arguments.
  */
 function surface_cut_resample_cargs(
-    params: SurfaceCutResampleParameters,
+    params: SurfaceCutResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function surface_cut_resample_cargs(
  * @returns Outputs object.
  */
 function surface_cut_resample_outputs(
-    params: SurfaceCutResampleParameters,
+    params: SurfaceCutResampleParamsDict,
     execution: Execution,
 ): SurfaceCutResampleOutputs {
     const ret: SurfaceCutResampleOutputs = {
@@ -120,7 +120,7 @@ function surface_cut_resample_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceCutResampleOutputs`).
  */
 function surface_cut_resample_execute(
-    params: SurfaceCutResampleParameters,
+    params: SurfaceCutResampleParamsDict,
     runner: Runner | null = null,
 ): SurfaceCutResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function surface_cut_resample(
 export {
       SURFACE_CUT_RESAMPLE_METADATA,
       SurfaceCutResampleOutputs,
+      SurfaceCutResampleParamsDict,
+      SurfaceCutResampleParamsDictTagged,
       surface_cut_resample,
       surface_cut_resample_execute,
       surface_cut_resample_params,

@@ -11,28 +11,28 @@ const TSFVALIDATE_METADATA: Metadata = {
 };
 
 
-interface TsfvalidateConfigParameters {
+interface TsfvalidateConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TsfvalidateConfigParametersTagged = Required<Pick<TsfvalidateConfigParameters, '@type'>> & TsfvalidateConfigParameters;
+type TsfvalidateConfigParamsDictTagged = Required<Pick<TsfvalidateConfigParamsDict, '@type'>> & TsfvalidateConfigParamsDict;
 
 
-interface TsfvalidateParameters {
+interface TsfvalidateParamsDict {
     "@type"?: "mrtrix/tsfvalidate";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TsfvalidateConfigParameters> | null | undefined;
+    "config"?: Array<TsfvalidateConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tsf": InputPathType;
     "tracks": InputPathType;
 }
-type TsfvalidateParametersTagged = Required<Pick<TsfvalidateParameters, '@type'>> & TsfvalidateParameters;
+type TsfvalidateParamsDictTagged = Required<Pick<TsfvalidateParamsDict, '@type'>> & TsfvalidateParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type TsfvalidateParametersTagged = Required<Pick<TsfvalidateParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function tsfvalidate_config_params(
+function tsfvalidate_config(
     key: string,
     value: string,
-): TsfvalidateConfigParametersTagged {
+): TsfvalidateConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function tsfvalidate_config_params(
  * @returns Command-line arguments.
  */
 function tsfvalidate_config_cargs(
-    params: TsfvalidateConfigParameters,
+    params: TsfvalidateConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function tsfvalidate_config_cargs(
 
 
 /**
- * Output object returned when calling `TsfvalidateParameters(...)`.
+ * Output object returned when calling `TsfvalidateParamsDict(...)`.
  *
  * @interface
  */
@@ -113,10 +113,10 @@ function tsfvalidate_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfvalidateConfigParameters> | null = null,
+    config: Array<TsfvalidateConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfvalidateParametersTagged {
+): TsfvalidateParamsDictTagged {
     const params = {
         "@type": "mrtrix/tsfvalidate" as const,
         "info": info,
@@ -147,7 +147,7 @@ function tsfvalidate_params(
  * @returns Command-line arguments.
  */
 function tsfvalidate_cargs(
-    params: TsfvalidateParameters,
+    params: TsfvalidateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -194,7 +194,7 @@ function tsfvalidate_cargs(
  * @returns Outputs object.
  */
 function tsfvalidate_outputs(
-    params: TsfvalidateParameters,
+    params: TsfvalidateParamsDict,
     execution: Execution,
 ): TsfvalidateOutputs {
     const ret: TsfvalidateOutputs = {
@@ -225,7 +225,7 @@ function tsfvalidate_outputs(
  * @returns NamedTuple of outputs (described in `TsfvalidateOutputs`).
  */
 function tsfvalidate_execute(
-    params: TsfvalidateParameters,
+    params: TsfvalidateParamsDict,
     runner: Runner | null = null,
 ): TsfvalidateOutputs {
     runner = runner || getGlobalRunner();
@@ -275,7 +275,7 @@ function tsfvalidate(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfvalidateConfigParameters> | null = null,
+    config: Array<TsfvalidateConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -287,9 +287,13 @@ function tsfvalidate(
 
 export {
       TSFVALIDATE_METADATA,
+      TsfvalidateConfigParamsDict,
+      TsfvalidateConfigParamsDictTagged,
       TsfvalidateOutputs,
+      TsfvalidateParamsDict,
+      TsfvalidateParamsDictTagged,
       tsfvalidate,
-      tsfvalidate_config_params,
+      tsfvalidate_config,
       tsfvalidate_execute,
       tsfvalidate_params,
 };

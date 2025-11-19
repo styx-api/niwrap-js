@@ -11,17 +11,17 @@ const XFMROT_METADATA: Metadata = {
 };
 
 
-interface XfmrotParameters {
+interface XfmrotParamsDict {
     "@type"?: "freesurfer/xfmrot";
     "transform_file": InputPathType;
     "input_vector_file": InputPathType;
     "output_vector_file"?: string | null | undefined;
 }
-type XfmrotParametersTagged = Required<Pick<XfmrotParameters, '@type'>> & XfmrotParameters;
+type XfmrotParamsDictTagged = Required<Pick<XfmrotParamsDict, '@type'>> & XfmrotParamsDict;
 
 
 /**
- * Output object returned when calling `XfmrotParameters(...)`.
+ * Output object returned when calling `XfmrotParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function xfmrot_params(
     transform_file: InputPathType,
     input_vector_file: InputPathType,
     output_vector_file: string | null = null,
-): XfmrotParametersTagged {
+): XfmrotParamsDictTagged {
     const params = {
         "@type": "freesurfer/xfmrot" as const,
         "transform_file": transform_file,
@@ -72,7 +72,7 @@ function xfmrot_params(
  * @returns Command-line arguments.
  */
 function xfmrot_cargs(
-    params: XfmrotParameters,
+    params: XfmrotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function xfmrot_cargs(
  * @returns Outputs object.
  */
 function xfmrot_outputs(
-    params: XfmrotParameters,
+    params: XfmrotParamsDict,
     execution: Execution,
 ): XfmrotOutputs {
     const ret: XfmrotOutputs = {
@@ -121,7 +121,7 @@ function xfmrot_outputs(
  * @returns NamedTuple of outputs (described in `XfmrotOutputs`).
  */
 function xfmrot_execute(
-    params: XfmrotParameters,
+    params: XfmrotParamsDict,
     runner: Runner | null = null,
 ): XfmrotOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function xfmrot(
 export {
       XFMROT_METADATA,
       XfmrotOutputs,
+      XfmrotParamsDict,
+      XfmrotParamsDictTagged,
       xfmrot,
       xfmrot_execute,
       xfmrot_params,

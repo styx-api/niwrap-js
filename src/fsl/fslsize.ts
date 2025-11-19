@@ -11,16 +11,16 @@ const FSLSIZE_METADATA: Metadata = {
 };
 
 
-interface FslsizeParameters {
+interface FslsizeParamsDict {
     "@type"?: "fsl/fslsize";
     "input_file": InputPathType;
     "short_format_flag": boolean;
 }
-type FslsizeParametersTagged = Required<Pick<FslsizeParameters, '@type'>> & FslsizeParameters;
+type FslsizeParamsDictTagged = Required<Pick<FslsizeParamsDict, '@type'>> & FslsizeParamsDict;
 
 
 /**
- * Output object returned when calling `FslsizeParameters(...)`.
+ * Output object returned when calling `FslsizeParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FslsizeOutputs {
 function fslsize_params(
     input_file: InputPathType,
     short_format_flag: boolean = false,
-): FslsizeParametersTagged {
+): FslsizeParamsDictTagged {
     const params = {
         "@type": "fsl/fslsize" as const,
         "input_file": input_file,
@@ -62,7 +62,7 @@ function fslsize_params(
  * @returns Command-line arguments.
  */
 function fslsize_cargs(
-    params: FslsizeParameters,
+    params: FslsizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function fslsize_cargs(
  * @returns Outputs object.
  */
 function fslsize_outputs(
-    params: FslsizeParameters,
+    params: FslsizeParamsDict,
     execution: Execution,
 ): FslsizeOutputs {
     const ret: FslsizeOutputs = {
@@ -109,7 +109,7 @@ function fslsize_outputs(
  * @returns NamedTuple of outputs (described in `FslsizeOutputs`).
  */
 function fslsize_execute(
-    params: FslsizeParameters,
+    params: FslsizeParamsDict,
     runner: Runner | null = null,
 ): FslsizeOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function fslsize(
 export {
       FSLSIZE_METADATA,
       FslsizeOutputs,
+      FslsizeParamsDict,
+      FslsizeParamsDictTagged,
       fslsize,
       fslsize_execute,
       fslsize_params,

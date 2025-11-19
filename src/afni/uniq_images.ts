@@ -11,15 +11,15 @@ const UNIQ_IMAGES_METADATA: Metadata = {
 };
 
 
-interface UniqImagesParameters {
+interface UniqImagesParamsDict {
     "@type"?: "afni/uniq_images";
     "input_files": Array<InputPathType>;
 }
-type UniqImagesParametersTagged = Required<Pick<UniqImagesParameters, '@type'>> & UniqImagesParameters;
+type UniqImagesParamsDictTagged = Required<Pick<UniqImagesParamsDict, '@type'>> & UniqImagesParamsDict;
 
 
 /**
- * Output object returned when calling `UniqImagesParameters(...)`.
+ * Output object returned when calling `UniqImagesParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface UniqImagesOutputs {
  */
 function uniq_images_params(
     input_files: Array<InputPathType>,
-): UniqImagesParametersTagged {
+): UniqImagesParamsDictTagged {
     const params = {
         "@type": "afni/uniq_images" as const,
         "input_files": input_files,
@@ -62,7 +62,7 @@ function uniq_images_params(
  * @returns Command-line arguments.
  */
 function uniq_images_cargs(
-    params: UniqImagesParameters,
+    params: UniqImagesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function uniq_images_cargs(
  * @returns Outputs object.
  */
 function uniq_images_outputs(
-    params: UniqImagesParameters,
+    params: UniqImagesParamsDict,
     execution: Execution,
 ): UniqImagesOutputs {
     const ret: UniqImagesOutputs = {
@@ -107,7 +107,7 @@ function uniq_images_outputs(
  * @returns NamedTuple of outputs (described in `UniqImagesOutputs`).
  */
 function uniq_images_execute(
-    params: UniqImagesParameters,
+    params: UniqImagesParamsDict,
     runner: Runner | null = null,
 ): UniqImagesOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function uniq_images(
 export {
       UNIQ_IMAGES_METADATA,
       UniqImagesOutputs,
+      UniqImagesParamsDict,
+      UniqImagesParamsDictTagged,
       uniq_images,
       uniq_images_execute,
       uniq_images_params,

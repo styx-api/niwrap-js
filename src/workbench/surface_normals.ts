@@ -10,16 +10,16 @@ const SURFACE_NORMALS_METADATA: Metadata = {
 };
 
 
-interface SurfaceNormalsParameters {
+interface SurfaceNormalsParamsDict {
     "@type"?: "workbench/surface-normals";
     "metric-out": string;
     "surface": InputPathType;
 }
-type SurfaceNormalsParametersTagged = Required<Pick<SurfaceNormalsParameters, '@type'>> & SurfaceNormalsParameters;
+type SurfaceNormalsParamsDictTagged = Required<Pick<SurfaceNormalsParamsDict, '@type'>> & SurfaceNormalsParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceNormalsParameters(...)`.
+ * Output object returned when calling `SurfaceNormalsParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface SurfaceNormalsOutputs {
 function surface_normals_params(
     metric_out: string,
     surface: InputPathType,
-): SurfaceNormalsParametersTagged {
+): SurfaceNormalsParamsDictTagged {
     const params = {
         "@type": "workbench/surface-normals" as const,
         "metric-out": metric_out,
@@ -65,7 +65,7 @@ function surface_normals_params(
  * @returns Command-line arguments.
  */
 function surface_normals_cargs(
-    params: SurfaceNormalsParameters,
+    params: SurfaceNormalsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function surface_normals_cargs(
  * @returns Outputs object.
  */
 function surface_normals_outputs(
-    params: SurfaceNormalsParameters,
+    params: SurfaceNormalsParamsDict,
     execution: Execution,
 ): SurfaceNormalsOutputs {
     const ret: SurfaceNormalsOutputs = {
@@ -110,7 +110,7 @@ function surface_normals_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceNormalsOutputs`).
  */
 function surface_normals_execute(
-    params: SurfaceNormalsParameters,
+    params: SurfaceNormalsParamsDict,
     runner: Runner | null = null,
 ): SurfaceNormalsOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function surface_normals(
 export {
       SURFACE_NORMALS_METADATA,
       SurfaceNormalsOutputs,
+      SurfaceNormalsParamsDict,
+      SurfaceNormalsParamsDictTagged,
       surface_normals,
       surface_normals_execute,
       surface_normals_params,

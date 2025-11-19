@@ -11,17 +11,17 @@ const FSLCHFILETYPE_METADATA: Metadata = {
 };
 
 
-interface FslchfiletypeParameters {
+interface FslchfiletypeParamsDict {
     "@type"?: "fsl/fslchfiletype";
     "filetype": string;
     "filename": InputPathType;
     "filename2"?: string | null | undefined;
 }
-type FslchfiletypeParametersTagged = Required<Pick<FslchfiletypeParameters, '@type'>> & FslchfiletypeParameters;
+type FslchfiletypeParamsDictTagged = Required<Pick<FslchfiletypeParamsDict, '@type'>> & FslchfiletypeParamsDict;
 
 
 /**
- * Output object returned when calling `FslchfiletypeParameters(...)`.
+ * Output object returned when calling `FslchfiletypeParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function fslchfiletype_params(
     filetype: string,
     filename: InputPathType,
     filename2: string | null = null,
-): FslchfiletypeParametersTagged {
+): FslchfiletypeParamsDictTagged {
     const params = {
         "@type": "fsl/fslchfiletype" as const,
         "filetype": filetype,
@@ -72,7 +72,7 @@ function fslchfiletype_params(
  * @returns Command-line arguments.
  */
 function fslchfiletype_cargs(
-    params: FslchfiletypeParameters,
+    params: FslchfiletypeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function fslchfiletype_cargs(
  * @returns Outputs object.
  */
 function fslchfiletype_outputs(
-    params: FslchfiletypeParameters,
+    params: FslchfiletypeParamsDict,
     execution: Execution,
 ): FslchfiletypeOutputs {
     const ret: FslchfiletypeOutputs = {
@@ -121,7 +121,7 @@ function fslchfiletype_outputs(
  * @returns NamedTuple of outputs (described in `FslchfiletypeOutputs`).
  */
 function fslchfiletype_execute(
-    params: FslchfiletypeParameters,
+    params: FslchfiletypeParamsDict,
     runner: Runner | null = null,
 ): FslchfiletypeOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function fslchfiletype(
 export {
       FSLCHFILETYPE_METADATA,
       FslchfiletypeOutputs,
+      FslchfiletypeParamsDict,
+      FslchfiletypeParamsDictTagged,
       fslchfiletype,
       fslchfiletype_execute,
       fslchfiletype_params,

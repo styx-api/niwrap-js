@@ -11,15 +11,15 @@ const RCA_CONFIG2CSH_METADATA: Metadata = {
 };
 
 
-interface RcaConfig2cshParameters {
+interface RcaConfig2cshParamsDict {
     "@type"?: "freesurfer/rca-config2csh";
     "configfile": InputPathType;
 }
-type RcaConfig2cshParametersTagged = Required<Pick<RcaConfig2cshParameters, '@type'>> & RcaConfig2cshParameters;
+type RcaConfig2cshParamsDictTagged = Required<Pick<RcaConfig2cshParamsDict, '@type'>> & RcaConfig2cshParamsDict;
 
 
 /**
- * Output object returned when calling `RcaConfig2cshParameters(...)`.
+ * Output object returned when calling `RcaConfig2cshParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface RcaConfig2cshOutputs {
  */
 function rca_config2csh_params(
     configfile: InputPathType,
-): RcaConfig2cshParametersTagged {
+): RcaConfig2cshParamsDictTagged {
     const params = {
         "@type": "freesurfer/rca-config2csh" as const,
         "configfile": configfile,
@@ -58,7 +58,7 @@ function rca_config2csh_params(
  * @returns Command-line arguments.
  */
 function rca_config2csh_cargs(
-    params: RcaConfig2cshParameters,
+    params: RcaConfig2cshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function rca_config2csh_cargs(
  * @returns Outputs object.
  */
 function rca_config2csh_outputs(
-    params: RcaConfig2cshParameters,
+    params: RcaConfig2cshParamsDict,
     execution: Execution,
 ): RcaConfig2cshOutputs {
     const ret: RcaConfig2cshOutputs = {
@@ -105,7 +105,7 @@ function rca_config2csh_outputs(
  * @returns NamedTuple of outputs (described in `RcaConfig2cshOutputs`).
  */
 function rca_config2csh_execute(
-    params: RcaConfig2cshParameters,
+    params: RcaConfig2cshParamsDict,
     runner: Runner | null = null,
 ): RcaConfig2cshOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function rca_config2csh(
 export {
       RCA_CONFIG2CSH_METADATA,
       RcaConfig2cshOutputs,
+      RcaConfig2cshParamsDict,
+      RcaConfig2cshParamsDictTagged,
       rca_config2csh,
       rca_config2csh_execute,
       rca_config2csh_params,

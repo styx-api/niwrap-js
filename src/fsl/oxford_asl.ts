@@ -11,7 +11,7 @@ const OXFORD_ASL_METADATA: Metadata = {
 };
 
 
-interface OxfordAslParameters {
+interface OxfordAslParamsDict {
     "@type"?: "fsl/oxford_asl";
     "asl_data": InputPathType;
     "output_dir_name": string;
@@ -43,11 +43,11 @@ interface OxfordAslParameters {
     "calibration_image"?: InputPathType | null | undefined;
     "calibration_method"?: string | null | undefined;
 }
-type OxfordAslParametersTagged = Required<Pick<OxfordAslParameters, '@type'>> & OxfordAslParameters;
+type OxfordAslParamsDictTagged = Required<Pick<OxfordAslParamsDict, '@type'>> & OxfordAslParamsDict;
 
 
 /**
- * Output object returned when calling `OxfordAslParameters(...)`.
+ * Output object returned when calling `OxfordAslParamsDict(...)`.
  *
  * @interface
  */
@@ -128,7 +128,7 @@ function oxford_asl_params(
     tr_calibration_data: number | null = null,
     calibration_image: InputPathType | null = null,
     calibration_method: string | null = null,
-): OxfordAslParametersTagged {
+): OxfordAslParamsDictTagged {
     const params = {
         "@type": "fsl/oxford_asl" as const,
         "asl_data": asl_data,
@@ -216,7 +216,7 @@ function oxford_asl_params(
  * @returns Command-line arguments.
  */
 function oxford_asl_cargs(
-    params: OxfordAslParameters,
+    params: OxfordAslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -386,7 +386,7 @@ function oxford_asl_cargs(
  * @returns Outputs object.
  */
 function oxford_asl_outputs(
-    params: OxfordAslParameters,
+    params: OxfordAslParamsDict,
     execution: Execution,
 ): OxfordAslOutputs {
     const ret: OxfordAslOutputs = {
@@ -412,7 +412,7 @@ function oxford_asl_outputs(
  * @returns NamedTuple of outputs (described in `OxfordAslOutputs`).
  */
 function oxford_asl_execute(
-    params: OxfordAslParameters,
+    params: OxfordAslParamsDict,
     runner: Runner | null = null,
 ): OxfordAslOutputs {
     runner = runner || getGlobalRunner();
@@ -507,6 +507,8 @@ function oxford_asl(
 export {
       OXFORD_ASL_METADATA,
       OxfordAslOutputs,
+      OxfordAslParamsDict,
+      OxfordAslParamsDictTagged,
       oxford_asl,
       oxford_asl_execute,
       oxford_asl_params,

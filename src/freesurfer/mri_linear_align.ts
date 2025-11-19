@@ -11,17 +11,17 @@ const MRI_LINEAR_ALIGN_METADATA: Metadata = {
 };
 
 
-interface MriLinearAlignParameters {
+interface MriLinearAlignParamsDict {
     "@type"?: "freesurfer/mri_linear_align";
     "source": InputPathType;
     "target": InputPathType;
     "output_xform": string;
 }
-type MriLinearAlignParametersTagged = Required<Pick<MriLinearAlignParameters, '@type'>> & MriLinearAlignParameters;
+type MriLinearAlignParamsDictTagged = Required<Pick<MriLinearAlignParamsDict, '@type'>> & MriLinearAlignParamsDict;
 
 
 /**
- * Output object returned when calling `MriLinearAlignParameters(...)`.
+ * Output object returned when calling `MriLinearAlignParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function mri_linear_align_params(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
-): MriLinearAlignParametersTagged {
+): MriLinearAlignParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_linear_align" as const,
         "source": source,
@@ -66,7 +66,7 @@ function mri_linear_align_params(
  * @returns Command-line arguments.
  */
 function mri_linear_align_cargs(
-    params: MriLinearAlignParameters,
+    params: MriLinearAlignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function mri_linear_align_cargs(
  * @returns Outputs object.
  */
 function mri_linear_align_outputs(
-    params: MriLinearAlignParameters,
+    params: MriLinearAlignParamsDict,
     execution: Execution,
 ): MriLinearAlignOutputs {
     const ret: MriLinearAlignOutputs = {
@@ -112,7 +112,7 @@ function mri_linear_align_outputs(
  * @returns NamedTuple of outputs (described in `MriLinearAlignOutputs`).
  */
 function mri_linear_align_execute(
-    params: MriLinearAlignParameters,
+    params: MriLinearAlignParamsDict,
     runner: Runner | null = null,
 ): MriLinearAlignOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function mri_linear_align(
 export {
       MRI_LINEAR_ALIGN_METADATA,
       MriLinearAlignOutputs,
+      MriLinearAlignParamsDict,
+      MriLinearAlignParamsDictTagged,
       mri_linear_align,
       mri_linear_align_execute,
       mri_linear_align_params,

@@ -11,7 +11,7 @@ const V_1DGEN_ARMA11_METADATA: Metadata = {
 };
 
 
-interface V1dgenArma11Parameters {
+interface V1dgenArma11ParamsDict {
     "@type"?: "afni/1dgenARMA11";
     "length"?: number | null | undefined;
     "length_alt"?: number | null | undefined;
@@ -26,11 +26,11 @@ interface V1dgenArma11Parameters {
     "arma31"?: string | null | undefined;
     "arma51"?: string | null | undefined;
 }
-type V1dgenArma11ParametersTagged = Required<Pick<V1dgenArma11Parameters, '@type'>> & V1dgenArma11Parameters;
+type V1dgenArma11ParamsDictTagged = Required<Pick<V1dgenArma11ParamsDict, '@type'>> & V1dgenArma11ParamsDict;
 
 
 /**
- * Output object returned when calling `V1dgenArma11Parameters(...)`.
+ * Output object returned when calling `V1dgenArma11ParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function v_1dgen_arma11_params(
     corcut: number | null = null,
     arma31: string | null = null,
     arma51: string | null = null,
-): V1dgenArma11ParametersTagged {
+): V1dgenArma11ParamsDictTagged {
     const params = {
         "@type": "afni/1dgenARMA11" as const,
         "normalize": normalize,
@@ -128,7 +128,7 @@ function v_1dgen_arma11_params(
  * @returns Command-line arguments.
  */
 function v_1dgen_arma11_cargs(
-    params: V1dgenArma11Parameters,
+    params: V1dgenArma11ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -215,7 +215,7 @@ function v_1dgen_arma11_cargs(
  * @returns Outputs object.
  */
 function v_1dgen_arma11_outputs(
-    params: V1dgenArma11Parameters,
+    params: V1dgenArma11ParamsDict,
     execution: Execution,
 ): V1dgenArma11Outputs {
     const ret: V1dgenArma11Outputs = {
@@ -241,7 +241,7 @@ function v_1dgen_arma11_outputs(
  * @returns NamedTuple of outputs (described in `V1dgenArma11Outputs`).
  */
 function v_1dgen_arma11_execute(
-    params: V1dgenArma11Parameters,
+    params: V1dgenArma11ParamsDict,
     runner: Runner | null = null,
 ): V1dgenArma11Outputs {
     runner = runner || getGlobalRunner();
@@ -301,6 +301,8 @@ function v_1dgen_arma11(
 
 export {
       V1dgenArma11Outputs,
+      V1dgenArma11ParamsDict,
+      V1dgenArma11ParamsDictTagged,
       V_1DGEN_ARMA11_METADATA,
       v_1dgen_arma11,
       v_1dgen_arma11_execute,

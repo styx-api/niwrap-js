@@ -11,15 +11,15 @@ const V__FLOAT_FIX_METADATA: Metadata = {
 };
 
 
-interface VFloatFixParameters {
+interface VFloatFixParamsDict {
     "@type"?: "afni/@float_fix";
     "input_files": Array<InputPathType>;
 }
-type VFloatFixParametersTagged = Required<Pick<VFloatFixParameters, '@type'>> & VFloatFixParameters;
+type VFloatFixParamsDictTagged = Required<Pick<VFloatFixParamsDict, '@type'>> & VFloatFixParamsDict;
 
 
 /**
- * Output object returned when calling `VFloatFixParameters(...)`.
+ * Output object returned when calling `VFloatFixParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface VFloatFixOutputs {
  */
 function v__float_fix_params(
     input_files: Array<InputPathType>,
-): VFloatFixParametersTagged {
+): VFloatFixParamsDictTagged {
     const params = {
         "@type": "afni/@float_fix" as const,
         "input_files": input_files,
@@ -58,7 +58,7 @@ function v__float_fix_params(
  * @returns Command-line arguments.
  */
 function v__float_fix_cargs(
-    params: VFloatFixParameters,
+    params: VFloatFixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function v__float_fix_cargs(
  * @returns Outputs object.
  */
 function v__float_fix_outputs(
-    params: VFloatFixParameters,
+    params: VFloatFixParamsDict,
     execution: Execution,
 ): VFloatFixOutputs {
     const ret: VFloatFixOutputs = {
@@ -102,7 +102,7 @@ function v__float_fix_outputs(
  * @returns NamedTuple of outputs (described in `VFloatFixOutputs`).
  */
 function v__float_fix_execute(
-    params: VFloatFixParameters,
+    params: VFloatFixParamsDict,
     runner: Runner | null = null,
 ): VFloatFixOutputs {
     runner = runner || getGlobalRunner();
@@ -140,6 +140,8 @@ function v__float_fix(
 
 export {
       VFloatFixOutputs,
+      VFloatFixParamsDict,
+      VFloatFixParamsDictTagged,
       V__FLOAT_FIX_METADATA,
       v__float_fix,
       v__float_fix_execute,

@@ -11,18 +11,18 @@ const FS_LIB_CHECK_METADATA: Metadata = {
 };
 
 
-interface FsLibCheckParameters {
+interface FsLibCheckParamsDict {
     "@type"?: "freesurfer/fs_lib_check";
     "use_ldconfig": boolean;
     "use_rpm": boolean;
     "show_help": boolean;
     "show_version": boolean;
 }
-type FsLibCheckParametersTagged = Required<Pick<FsLibCheckParameters, '@type'>> & FsLibCheckParameters;
+type FsLibCheckParamsDictTagged = Required<Pick<FsLibCheckParamsDict, '@type'>> & FsLibCheckParamsDict;
 
 
 /**
- * Output object returned when calling `FsLibCheckParameters(...)`.
+ * Output object returned when calling `FsLibCheckParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function fs_lib_check_params(
     use_rpm: boolean = false,
     show_help: boolean = false,
     show_version: boolean = false,
-): FsLibCheckParametersTagged {
+): FsLibCheckParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_lib_check" as const,
         "use_ldconfig": use_ldconfig,
@@ -70,7 +70,7 @@ function fs_lib_check_params(
  * @returns Command-line arguments.
  */
 function fs_lib_check_cargs(
-    params: FsLibCheckParameters,
+    params: FsLibCheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function fs_lib_check_cargs(
  * @returns Outputs object.
  */
 function fs_lib_check_outputs(
-    params: FsLibCheckParameters,
+    params: FsLibCheckParamsDict,
     execution: Execution,
 ): FsLibCheckOutputs {
     const ret: FsLibCheckOutputs = {
@@ -125,7 +125,7 @@ function fs_lib_check_outputs(
  * @returns NamedTuple of outputs (described in `FsLibCheckOutputs`).
  */
 function fs_lib_check_execute(
-    params: FsLibCheckParameters,
+    params: FsLibCheckParamsDict,
     runner: Runner | null = null,
 ): FsLibCheckOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function fs_lib_check(
 export {
       FS_LIB_CHECK_METADATA,
       FsLibCheckOutputs,
+      FsLibCheckParamsDict,
+      FsLibCheckParamsDictTagged,
       fs_lib_check,
       fs_lib_check_execute,
       fs_lib_check_params,

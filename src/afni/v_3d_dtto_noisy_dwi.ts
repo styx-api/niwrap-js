@@ -11,7 +11,7 @@ const V_3D_DTTO_NOISY_DWI_METADATA: Metadata = {
 };
 
 
-interface V3dDttoNoisyDwiParameters {
+interface V3dDttoNoisyDwiParamsDict {
     "@type"?: "afni/3dDTtoNoisyDWI";
     "dt_file": InputPathType;
     "grad_file": InputPathType;
@@ -22,11 +22,11 @@ interface V3dDttoNoisyDwiParameters {
     "bval"?: number | null | undefined;
     "s0"?: number | null | undefined;
 }
-type V3dDttoNoisyDwiParametersTagged = Required<Pick<V3dDttoNoisyDwiParameters, '@type'>> & V3dDttoNoisyDwiParameters;
+type V3dDttoNoisyDwiParamsDictTagged = Required<Pick<V3dDttoNoisyDwiParamsDict, '@type'>> & V3dDttoNoisyDwiParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDttoNoisyDwiParameters(...)`.
+ * Output object returned when calling `V3dDttoNoisyDwiParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_dtto_noisy_dwi_params(
     mask: InputPathType | null = null,
     bval: number | null = null,
     s0: number | null = null,
-): V3dDttoNoisyDwiParametersTagged {
+): V3dDttoNoisyDwiParamsDictTagged {
     const params = {
         "@type": "afni/3dDTtoNoisyDWI" as const,
         "dt_file": dt_file,
@@ -98,7 +98,7 @@ function v_3d_dtto_noisy_dwi_params(
  * @returns Command-line arguments.
  */
 function v_3d_dtto_noisy_dwi_cargs(
-    params: V3dDttoNoisyDwiParameters,
+    params: V3dDttoNoisyDwiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function v_3d_dtto_noisy_dwi_cargs(
  * @returns Outputs object.
  */
 function v_3d_dtto_noisy_dwi_outputs(
-    params: V3dDttoNoisyDwiParameters,
+    params: V3dDttoNoisyDwiParamsDict,
     execution: Execution,
 ): V3dDttoNoisyDwiOutputs {
     const ret: V3dDttoNoisyDwiOutputs = {
@@ -176,7 +176,7 @@ function v_3d_dtto_noisy_dwi_outputs(
  * @returns NamedTuple of outputs (described in `V3dDttoNoisyDwiOutputs`).
  */
 function v_3d_dtto_noisy_dwi_execute(
-    params: V3dDttoNoisyDwiParameters,
+    params: V3dDttoNoisyDwiParamsDict,
     runner: Runner | null = null,
 ): V3dDttoNoisyDwiOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function v_3d_dtto_noisy_dwi(
 
 export {
       V3dDttoNoisyDwiOutputs,
+      V3dDttoNoisyDwiParamsDict,
+      V3dDttoNoisyDwiParamsDictTagged,
       V_3D_DTTO_NOISY_DWI_METADATA,
       v_3d_dtto_noisy_dwi,
       v_3d_dtto_noisy_dwi_execute,

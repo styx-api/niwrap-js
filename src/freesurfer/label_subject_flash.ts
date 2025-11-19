@@ -11,7 +11,7 @@ const LABEL_SUBJECT_FLASH_METADATA: Metadata = {
 };
 
 
-interface LabelSubjectFlashParameters {
+interface LabelSubjectFlashParamsDict {
     "@type"?: "freesurfer/label_subject_flash";
     "tissue_params": InputPathType;
     "norm_volume": InputPathType;
@@ -19,11 +19,11 @@ interface LabelSubjectFlashParameters {
     "classifier_array": InputPathType;
     "aseg_output": string;
 }
-type LabelSubjectFlashParametersTagged = Required<Pick<LabelSubjectFlashParameters, '@type'>> & LabelSubjectFlashParameters;
+type LabelSubjectFlashParamsDictTagged = Required<Pick<LabelSubjectFlashParamsDict, '@type'>> & LabelSubjectFlashParamsDict;
 
 
 /**
- * Output object returned when calling `LabelSubjectFlashParameters(...)`.
+ * Output object returned when calling `LabelSubjectFlashParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function label_subject_flash_params(
     transform_file: InputPathType,
     classifier_array: InputPathType,
     aseg_output: string,
-): LabelSubjectFlashParametersTagged {
+): LabelSubjectFlashParamsDictTagged {
     const params = {
         "@type": "freesurfer/label_subject_flash" as const,
         "tissue_params": tissue_params,
@@ -78,7 +78,7 @@ function label_subject_flash_params(
  * @returns Command-line arguments.
  */
 function label_subject_flash_cargs(
-    params: LabelSubjectFlashParameters,
+    params: LabelSubjectFlashParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function label_subject_flash_cargs(
  * @returns Outputs object.
  */
 function label_subject_flash_outputs(
-    params: LabelSubjectFlashParameters,
+    params: LabelSubjectFlashParamsDict,
     execution: Execution,
 ): LabelSubjectFlashOutputs {
     const ret: LabelSubjectFlashOutputs = {
@@ -130,7 +130,7 @@ function label_subject_flash_outputs(
  * @returns NamedTuple of outputs (described in `LabelSubjectFlashOutputs`).
  */
 function label_subject_flash_execute(
-    params: LabelSubjectFlashParameters,
+    params: LabelSubjectFlashParamsDict,
     runner: Runner | null = null,
 ): LabelSubjectFlashOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function label_subject_flash(
 export {
       LABEL_SUBJECT_FLASH_METADATA,
       LabelSubjectFlashOutputs,
+      LabelSubjectFlashParamsDict,
+      LabelSubjectFlashParamsDictTagged,
       label_subject_flash,
       label_subject_flash_execute,
       label_subject_flash_params,

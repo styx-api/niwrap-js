@@ -11,16 +11,16 @@ const MRI_REDUCE_METADATA: Metadata = {
 };
 
 
-interface MriReduceParameters {
+interface MriReduceParamsDict {
     "@type"?: "freesurfer/mri_reduce";
     "input_file": InputPathType;
     "output_file": string;
 }
-type MriReduceParametersTagged = Required<Pick<MriReduceParameters, '@type'>> & MriReduceParameters;
+type MriReduceParamsDictTagged = Required<Pick<MriReduceParamsDict, '@type'>> & MriReduceParamsDict;
 
 
 /**
- * Output object returned when calling `MriReduceParameters(...)`.
+ * Output object returned when calling `MriReduceParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriReduceOutputs {
 function mri_reduce_params(
     input_file: InputPathType,
     output_file: string,
-): MriReduceParametersTagged {
+): MriReduceParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_reduce" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function mri_reduce_params(
  * @returns Command-line arguments.
  */
 function mri_reduce_cargs(
-    params: MriReduceParameters,
+    params: MriReduceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_reduce_cargs(
  * @returns Outputs object.
  */
 function mri_reduce_outputs(
-    params: MriReduceParameters,
+    params: MriReduceParamsDict,
     execution: Execution,
 ): MriReduceOutputs {
     const ret: MriReduceOutputs = {
@@ -112,7 +112,7 @@ function mri_reduce_outputs(
  * @returns NamedTuple of outputs (described in `MriReduceOutputs`).
  */
 function mri_reduce_execute(
-    params: MriReduceParameters,
+    params: MriReduceParamsDict,
     runner: Runner | null = null,
 ): MriReduceOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_reduce(
 export {
       MRI_REDUCE_METADATA,
       MriReduceOutputs,
+      MriReduceParamsDict,
+      MriReduceParamsDictTagged,
       mri_reduce,
       mri_reduce_execute,
       mri_reduce_params,

@@ -11,17 +11,17 @@ const V__DJUNCT_DWI_SELECTOR_TCSH_METADATA: Metadata = {
 };
 
 
-interface VDjunctDwiSelectorTcshParameters {
+interface VDjunctDwiSelectorTcshParamsDict {
     "@type"?: "afni/@djunct_dwi_selector.tcsh";
     "dwi": InputPathType;
     "png": InputPathType;
     "outfile": string;
 }
-type VDjunctDwiSelectorTcshParametersTagged = Required<Pick<VDjunctDwiSelectorTcshParameters, '@type'>> & VDjunctDwiSelectorTcshParameters;
+type VDjunctDwiSelectorTcshParamsDictTagged = Required<Pick<VDjunctDwiSelectorTcshParamsDict, '@type'>> & VDjunctDwiSelectorTcshParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunctDwiSelectorTcshParameters(...)`.
+ * Output object returned when calling `VDjunctDwiSelectorTcshParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v__djunct_dwi_selector_tcsh_params(
     dwi: InputPathType,
     png: InputPathType,
     outfile: string,
-): VDjunctDwiSelectorTcshParametersTagged {
+): VDjunctDwiSelectorTcshParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_dwi_selector.tcsh" as const,
         "dwi": dwi,
@@ -70,7 +70,7 @@ function v__djunct_dwi_selector_tcsh_params(
  * @returns Command-line arguments.
  */
 function v__djunct_dwi_selector_tcsh_cargs(
-    params: VDjunctDwiSelectorTcshParameters,
+    params: VDjunctDwiSelectorTcshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function v__djunct_dwi_selector_tcsh_cargs(
  * @returns Outputs object.
  */
 function v__djunct_dwi_selector_tcsh_outputs(
-    params: VDjunctDwiSelectorTcshParameters,
+    params: VDjunctDwiSelectorTcshParamsDict,
     execution: Execution,
 ): VDjunctDwiSelectorTcshOutputs {
     const ret: VDjunctDwiSelectorTcshOutputs = {
@@ -117,7 +117,7 @@ function v__djunct_dwi_selector_tcsh_outputs(
  * @returns NamedTuple of outputs (described in `VDjunctDwiSelectorTcshOutputs`).
  */
 function v__djunct_dwi_selector_tcsh_execute(
-    params: VDjunctDwiSelectorTcshParameters,
+    params: VDjunctDwiSelectorTcshParamsDict,
     runner: Runner | null = null,
 ): VDjunctDwiSelectorTcshOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function v__djunct_dwi_selector_tcsh(
 
 export {
       VDjunctDwiSelectorTcshOutputs,
+      VDjunctDwiSelectorTcshParamsDict,
+      VDjunctDwiSelectorTcshParamsDictTagged,
       V__DJUNCT_DWI_SELECTOR_TCSH_METADATA,
       v__djunct_dwi_selector_tcsh,
       v__djunct_dwi_selector_tcsh_execute,

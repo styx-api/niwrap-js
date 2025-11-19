@@ -11,15 +11,15 @@ const DIRFLIP_METADATA: Metadata = {
 };
 
 
-interface DirflipConfigParameters {
+interface DirflipConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DirflipConfigParametersTagged = Required<Pick<DirflipConfigParameters, '@type'>> & DirflipConfigParameters;
+type DirflipConfigParamsDictTagged = Required<Pick<DirflipConfigParamsDict, '@type'>> & DirflipConfigParamsDict;
 
 
-interface DirflipParameters {
+interface DirflipParamsDict {
     "@type"?: "mrtrix/dirflip";
     "permutations"?: number | null | undefined;
     "cartesian": boolean;
@@ -28,13 +28,13 @@ interface DirflipParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DirflipConfigParameters> | null | undefined;
+    "config"?: Array<DirflipConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in": InputPathType;
     "out": string;
 }
-type DirflipParametersTagged = Required<Pick<DirflipParameters, '@type'>> & DirflipParameters;
+type DirflipParamsDictTagged = Required<Pick<DirflipParamsDict, '@type'>> & DirflipParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type DirflipParametersTagged = Required<Pick<DirflipParameters, '@type'>> & Dirf
  *
  * @returns Parameter dictionary
  */
-function dirflip_config_params(
+function dirflip_config(
     key: string,
     value: string,
-): DirflipConfigParametersTagged {
+): DirflipConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function dirflip_config_params(
  * @returns Command-line arguments.
  */
 function dirflip_config_cargs(
-    params: DirflipConfigParameters,
+    params: DirflipConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function dirflip_config_cargs(
 
 
 /**
- * Output object returned when calling `DirflipParameters(...)`.
+ * Output object returned when calling `DirflipParamsDict(...)`.
  *
  * @interface
  */
@@ -123,10 +123,10 @@ function dirflip_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirflipConfigParameters> | null = null,
+    config: Array<DirflipConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirflipParametersTagged {
+): DirflipParamsDictTagged {
     const params = {
         "@type": "mrtrix/dirflip" as const,
         "cartesian": cartesian,
@@ -161,7 +161,7 @@ function dirflip_params(
  * @returns Command-line arguments.
  */
 function dirflip_cargs(
-    params: DirflipParameters,
+    params: DirflipParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -217,7 +217,7 @@ function dirflip_cargs(
  * @returns Outputs object.
  */
 function dirflip_outputs(
-    params: DirflipParameters,
+    params: DirflipParamsDict,
     execution: Execution,
 ): DirflipOutputs {
     const ret: DirflipOutputs = {
@@ -249,7 +249,7 @@ function dirflip_outputs(
  * @returns NamedTuple of outputs (described in `DirflipOutputs`).
  */
 function dirflip_execute(
-    params: DirflipParameters,
+    params: DirflipParamsDict,
     runner: Runner | null = null,
 ): DirflipOutputs {
     runner = runner || getGlobalRunner();
@@ -303,7 +303,7 @@ function dirflip(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirflipConfigParameters> | null = null,
+    config: Array<DirflipConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -315,9 +315,13 @@ function dirflip(
 
 export {
       DIRFLIP_METADATA,
+      DirflipConfigParamsDict,
+      DirflipConfigParamsDictTagged,
       DirflipOutputs,
+      DirflipParamsDict,
+      DirflipParamsDictTagged,
       dirflip,
-      dirflip_config_params,
+      dirflip_config,
       dirflip_execute,
       dirflip_params,
 };

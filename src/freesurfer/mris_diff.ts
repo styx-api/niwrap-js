@@ -11,7 +11,7 @@ const MRIS_DIFF_METADATA: Metadata = {
 };
 
 
-interface MrisDiffParameters {
+interface MrisDiffParamsDict {
     "@type"?: "freesurfer/mris_diff";
     "surface1": InputPathType;
     "surface2": InputPathType;
@@ -43,11 +43,11 @@ interface MrisDiffParameters {
     "help": boolean;
     "version": boolean;
 }
-type MrisDiffParametersTagged = Required<Pick<MrisDiffParameters, '@type'>> & MrisDiffParameters;
+type MrisDiffParamsDictTagged = Required<Pick<MrisDiffParamsDict, '@type'>> & MrisDiffParamsDict;
 
 
 /**
- * Output object returned when calling `MrisDiffParameters(...)`.
+ * Output object returned when calling `MrisDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -124,7 +124,7 @@ function mris_diff_params(
     check_opts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisDiffParametersTagged {
+): MrisDiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_diff" as const,
         "surface1": surface1,
@@ -200,7 +200,7 @@ function mris_diff_params(
  * @returns Command-line arguments.
  */
 function mris_diff_cargs(
-    params: MrisDiffParameters,
+    params: MrisDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -349,7 +349,7 @@ function mris_diff_cargs(
  * @returns Outputs object.
  */
 function mris_diff_outputs(
-    params: MrisDiffParameters,
+    params: MrisDiffParamsDict,
     execution: Execution,
 ): MrisDiffOutputs {
     const ret: MrisDiffOutputs = {
@@ -374,7 +374,7 @@ function mris_diff_outputs(
  * @returns NamedTuple of outputs (described in `MrisDiffOutputs`).
  */
 function mris_diff_execute(
-    params: MrisDiffParameters,
+    params: MrisDiffParamsDict,
     runner: Runner | null = null,
 ): MrisDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -469,6 +469,8 @@ function mris_diff(
 export {
       MRIS_DIFF_METADATA,
       MrisDiffOutputs,
+      MrisDiffParamsDict,
+      MrisDiffParamsDictTagged,
       mris_diff,
       mris_diff_execute,
       mris_diff_params,

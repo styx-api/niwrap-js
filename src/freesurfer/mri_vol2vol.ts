@@ -11,7 +11,7 @@ const MRI_VOL2VOL_METADATA: Metadata = {
 };
 
 
-interface MriVol2volParameters {
+interface MriVol2volParamsDict {
     "@type"?: "freesurfer/mri_vol2vol";
     "movvol": InputPathType;
     "targvol": InputPathType;
@@ -58,11 +58,11 @@ interface MriVol2volParameters {
     "debug": boolean;
     "version": boolean;
 }
-type MriVol2volParametersTagged = Required<Pick<MriVol2volParameters, '@type'>> & MriVol2volParameters;
+type MriVol2volParamsDictTagged = Required<Pick<MriVol2volParamsDict, '@type'>> & MriVol2volParamsDict;
 
 
 /**
- * Output object returned when calling `MriVol2volParameters(...)`.
+ * Output object returned when calling `MriVol2volParamsDict(...)`.
  *
  * @interface
  */
@@ -173,7 +173,7 @@ function mri_vol2vol_params(
     save_reg: boolean = false,
     debug: boolean = false,
     version: boolean = false,
-): MriVol2volParametersTagged {
+): MriVol2volParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_vol2vol" as const,
         "movvol": movvol,
@@ -288,7 +288,7 @@ function mri_vol2vol_params(
  * @returns Command-line arguments.
  */
 function mri_vol2vol_cargs(
-    params: MriVol2volParameters,
+    params: MriVol2volParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -513,7 +513,7 @@ function mri_vol2vol_cargs(
  * @returns Outputs object.
  */
 function mri_vol2vol_outputs(
-    params: MriVol2volParameters,
+    params: MriVol2volParamsDict,
     execution: Execution,
 ): MriVol2volOutputs {
     const ret: MriVol2volOutputs = {
@@ -539,7 +539,7 @@ function mri_vol2vol_outputs(
  * @returns NamedTuple of outputs (described in `MriVol2volOutputs`).
  */
 function mri_vol2vol_execute(
-    params: MriVol2volParameters,
+    params: MriVol2volParamsDict,
     runner: Runner | null = null,
 ): MriVol2volOutputs {
     runner = runner || getGlobalRunner();
@@ -664,6 +664,8 @@ function mri_vol2vol(
 export {
       MRI_VOL2VOL_METADATA,
       MriVol2volOutputs,
+      MriVol2volParamsDict,
+      MriVol2volParamsDictTagged,
       mri_vol2vol,
       mri_vol2vol_execute,
       mri_vol2vol_params,

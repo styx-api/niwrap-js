@@ -11,29 +11,29 @@ const TCKCONVERT_METADATA: Metadata = {
 };
 
 
-interface TckconvertConfigParameters {
+interface TckconvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckconvertConfigParametersTagged = Required<Pick<TckconvertConfigParameters, '@type'>> & TckconvertConfigParameters;
+type TckconvertConfigParamsDictTagged = Required<Pick<TckconvertConfigParamsDict, '@type'>> & TckconvertConfigParamsDict;
 
 
-interface TckconvertVariousStringParameters {
+interface TckconvertVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type TckconvertVariousStringParametersTagged = Required<Pick<TckconvertVariousStringParameters, '@type'>> & TckconvertVariousStringParameters;
+type TckconvertVariousStringParamsDictTagged = Required<Pick<TckconvertVariousStringParamsDict, '@type'>> & TckconvertVariousStringParamsDict;
 
 
-interface TckconvertVariousFileParameters {
+interface TckconvertVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type TckconvertVariousFileParametersTagged = Required<Pick<TckconvertVariousFileParameters, '@type'>> & TckconvertVariousFileParameters;
+type TckconvertVariousFileParamsDictTagged = Required<Pick<TckconvertVariousFileParamsDict, '@type'>> & TckconvertVariousFileParamsDict;
 
 
-interface TckconvertParameters {
+interface TckconvertParamsDict {
     "@type"?: "mrtrix/tckconvert";
     "scanner2voxel"?: InputPathType | null | undefined;
     "scanner2image"?: InputPathType | null | undefined;
@@ -50,13 +50,13 @@ interface TckconvertParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckconvertConfigParameters> | null | undefined;
+    "config"?: Array<TckconvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "input": TckconvertVariousStringParametersTagged | TckconvertVariousFileParametersTagged;
+    "input": TckconvertVariousStringParamsDictTagged | TckconvertVariousFileParamsDictTagged;
     "output": string;
 }
-type TckconvertParametersTagged = Required<Pick<TckconvertParameters, '@type'>> & TckconvertParameters;
+type TckconvertParamsDictTagged = Required<Pick<TckconvertParamsDict, '@type'>> & TckconvertParamsDict;
 
 
 /**
@@ -101,10 +101,10 @@ function tckconvert_input_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function tckconvert_config_params(
+function tckconvert_config(
     key: string,
     value: string,
-): TckconvertConfigParametersTagged {
+): TckconvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -123,7 +123,7 @@ function tckconvert_config_params(
  * @returns Command-line arguments.
  */
 function tckconvert_config_cargs(
-    params: TckconvertConfigParameters,
+    params: TckconvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,9 +141,9 @@ function tckconvert_config_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckconvert_various_string_params(
+function tckconvert_various_string(
     obj: string,
-): TckconvertVariousStringParametersTagged {
+): TckconvertVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -161,7 +161,7 @@ function tckconvert_various_string_params(
  * @returns Command-line arguments.
  */
 function tckconvert_various_string_cargs(
-    params: TckconvertVariousStringParameters,
+    params: TckconvertVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,9 +177,9 @@ function tckconvert_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckconvert_various_file_params(
+function tckconvert_various_file(
     obj: InputPathType,
-): TckconvertVariousFileParametersTagged {
+): TckconvertVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -197,7 +197,7 @@ function tckconvert_various_file_params(
  * @returns Command-line arguments.
  */
 function tckconvert_various_file_cargs(
-    params: TckconvertVariousFileParameters,
+    params: TckconvertVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -207,7 +207,7 @@ function tckconvert_various_file_cargs(
 
 
 /**
- * Output object returned when calling `TckconvertParameters(...)`.
+ * Output object returned when calling `TckconvertParamsDict(...)`.
  *
  * @interface
  */
@@ -250,7 +250,7 @@ interface TckconvertOutputs {
  * @returns Parameter dictionary
  */
 function tckconvert_params(
-    input: TckconvertVariousStringParametersTagged | TckconvertVariousFileParametersTagged,
+    input: TckconvertVariousStringParamsDictTagged | TckconvertVariousFileParamsDictTagged,
     output: string,
     scanner2voxel: InputPathType | null = null,
     scanner2image: InputPathType | null = null,
@@ -267,10 +267,10 @@ function tckconvert_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckconvertConfigParameters> | null = null,
+    config: Array<TckconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckconvertParametersTagged {
+): TckconvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckconvert" as const,
         "dec": dec,
@@ -325,7 +325,7 @@ function tckconvert_params(
  * @returns Command-line arguments.
  */
 function tckconvert_cargs(
-    params: TckconvertParameters,
+    params: TckconvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -423,7 +423,7 @@ function tckconvert_cargs(
  * @returns Outputs object.
  */
 function tckconvert_outputs(
-    params: TckconvertParameters,
+    params: TckconvertParamsDict,
     execution: Execution,
 ): TckconvertOutputs {
     const ret: TckconvertOutputs = {
@@ -461,7 +461,7 @@ function tckconvert_outputs(
  * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
  */
 function tckconvert_execute(
-    params: TckconvertParameters,
+    params: TckconvertParamsDict,
     runner: Runner | null = null,
 ): TckconvertOutputs {
     runner = runner || getGlobalRunner();
@@ -520,7 +520,7 @@ function tckconvert_execute(
  * @returns NamedTuple of outputs (described in `TckconvertOutputs`).
  */
 function tckconvert(
-    input: TckconvertVariousStringParametersTagged | TckconvertVariousFileParametersTagged,
+    input: TckconvertVariousStringParamsDictTagged | TckconvertVariousFileParamsDictTagged,
     output: string,
     scanner2voxel: InputPathType | null = null,
     scanner2image: InputPathType | null = null,
@@ -537,7 +537,7 @@ function tckconvert(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckconvertConfigParameters> | null = null,
+    config: Array<TckconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -549,11 +549,19 @@ function tckconvert(
 
 export {
       TCKCONVERT_METADATA,
+      TckconvertConfigParamsDict,
+      TckconvertConfigParamsDictTagged,
       TckconvertOutputs,
+      TckconvertParamsDict,
+      TckconvertParamsDictTagged,
+      TckconvertVariousFileParamsDict,
+      TckconvertVariousFileParamsDictTagged,
+      TckconvertVariousStringParamsDict,
+      TckconvertVariousStringParamsDictTagged,
       tckconvert,
-      tckconvert_config_params,
+      tckconvert_config,
       tckconvert_execute,
       tckconvert_params,
-      tckconvert_various_file_params,
-      tckconvert_various_string_params,
+      tckconvert_various_file,
+      tckconvert_various_string,
 };

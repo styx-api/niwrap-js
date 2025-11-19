@@ -11,17 +11,17 @@ const MRIS_COPY_HEADER_METADATA: Metadata = {
 };
 
 
-interface MrisCopyHeaderParameters {
+interface MrisCopyHeaderParamsDict {
     "@type"?: "freesurfer/mris_copy_header";
     "input_surface": InputPathType;
     "template_surface": InputPathType;
     "output_surface": string;
 }
-type MrisCopyHeaderParametersTagged = Required<Pick<MrisCopyHeaderParameters, '@type'>> & MrisCopyHeaderParameters;
+type MrisCopyHeaderParamsDictTagged = Required<Pick<MrisCopyHeaderParamsDict, '@type'>> & MrisCopyHeaderParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCopyHeaderParameters(...)`.
+ * Output object returned when calling `MrisCopyHeaderParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_copy_header_params(
     input_surface: InputPathType,
     template_surface: InputPathType,
     output_surface: string,
-): MrisCopyHeaderParametersTagged {
+): MrisCopyHeaderParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_copy_header" as const,
         "input_surface": input_surface,
@@ -70,7 +70,7 @@ function mris_copy_header_params(
  * @returns Command-line arguments.
  */
 function mris_copy_header_cargs(
-    params: MrisCopyHeaderParameters,
+    params: MrisCopyHeaderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mris_copy_header_cargs(
  * @returns Outputs object.
  */
 function mris_copy_header_outputs(
-    params: MrisCopyHeaderParameters,
+    params: MrisCopyHeaderParamsDict,
     execution: Execution,
 ): MrisCopyHeaderOutputs {
     const ret: MrisCopyHeaderOutputs = {
@@ -117,7 +117,7 @@ function mris_copy_header_outputs(
  * @returns NamedTuple of outputs (described in `MrisCopyHeaderOutputs`).
  */
 function mris_copy_header_execute(
-    params: MrisCopyHeaderParameters,
+    params: MrisCopyHeaderParamsDict,
     runner: Runner | null = null,
 ): MrisCopyHeaderOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mris_copy_header(
 export {
       MRIS_COPY_HEADER_METADATA,
       MrisCopyHeaderOutputs,
+      MrisCopyHeaderParamsDict,
+      MrisCopyHeaderParamsDictTagged,
       mris_copy_header,
       mris_copy_header_execute,
       mris_copy_header_params,

@@ -10,57 +10,57 @@ const CIFTI_SMOOTHING_METADATA: Metadata = {
 };
 
 
-interface CiftiSmoothingLeftSurfaceParameters {
+interface CiftiSmoothingLeftSurfaceParamsDict {
     "@type"?: "left-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiSmoothingLeftSurfaceParametersTagged = Required<Pick<CiftiSmoothingLeftSurfaceParameters, '@type'>> & CiftiSmoothingLeftSurfaceParameters;
+type CiftiSmoothingLeftSurfaceParamsDictTagged = Required<Pick<CiftiSmoothingLeftSurfaceParamsDict, '@type'>> & CiftiSmoothingLeftSurfaceParamsDict;
 
 
-interface CiftiSmoothingRightSurfaceParameters {
+interface CiftiSmoothingRightSurfaceParamsDict {
     "@type"?: "right-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiSmoothingRightSurfaceParametersTagged = Required<Pick<CiftiSmoothingRightSurfaceParameters, '@type'>> & CiftiSmoothingRightSurfaceParameters;
+type CiftiSmoothingRightSurfaceParamsDictTagged = Required<Pick<CiftiSmoothingRightSurfaceParamsDict, '@type'>> & CiftiSmoothingRightSurfaceParamsDict;
 
 
-interface CiftiSmoothingCerebellumSurfaceParameters {
+interface CiftiSmoothingCerebellumSurfaceParamsDict {
     "@type"?: "cerebellum-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiSmoothingCerebellumSurfaceParametersTagged = Required<Pick<CiftiSmoothingCerebellumSurfaceParameters, '@type'>> & CiftiSmoothingCerebellumSurfaceParameters;
+type CiftiSmoothingCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiSmoothingCerebellumSurfaceParamsDict, '@type'>> & CiftiSmoothingCerebellumSurfaceParamsDict;
 
 
-interface CiftiSmoothingSurfaceParameters {
+interface CiftiSmoothingSurfaceParamsDict {
     "@type"?: "surface";
     "structure": string;
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiSmoothingSurfaceParametersTagged = Required<Pick<CiftiSmoothingSurfaceParameters, '@type'>> & CiftiSmoothingSurfaceParameters;
+type CiftiSmoothingSurfaceParamsDictTagged = Required<Pick<CiftiSmoothingSurfaceParamsDict, '@type'>> & CiftiSmoothingSurfaceParamsDict;
 
 
-interface CiftiSmoothingParameters {
+interface CiftiSmoothingParamsDict {
     "@type"?: "workbench/cifti-smoothing";
     "cifti-out": string;
     "fwhm": boolean;
-    "left-surface"?: CiftiSmoothingLeftSurfaceParameters | null | undefined;
-    "right-surface"?: CiftiSmoothingRightSurfaceParameters | null | undefined;
-    "cerebellum-surface"?: CiftiSmoothingCerebellumSurfaceParameters | null | undefined;
+    "left-surface"?: CiftiSmoothingLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiSmoothingRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiSmoothingCerebellumSurfaceParamsDict | null | undefined;
     "roi-cifti"?: InputPathType | null | undefined;
     "fix-zeros-volume": boolean;
     "fix-zeros-surface": boolean;
     "merged-volume": boolean;
-    "surface"?: Array<CiftiSmoothingSurfaceParameters> | null | undefined;
+    "surface"?: Array<CiftiSmoothingSurfaceParamsDict> | null | undefined;
     "cifti": InputPathType;
     "surface-kernel": number;
     "volume-kernel": number;
     "direction": string;
 }
-type CiftiSmoothingParametersTagged = Required<Pick<CiftiSmoothingParameters, '@type'>> & CiftiSmoothingParameters;
+type CiftiSmoothingParamsDictTagged = Required<Pick<CiftiSmoothingParamsDict, '@type'>> & CiftiSmoothingParamsDict;
 
 
 /**
@@ -73,10 +73,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_smoothing_left_surface_params(
+function cifti_smoothing_left_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiSmoothingLeftSurfaceParametersTagged {
+): CiftiSmoothingLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
         "surface": surface,
@@ -97,7 +97,7 @@ function cifti_smoothing_left_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_smoothing_left_surface_cargs(
-    params: CiftiSmoothingLeftSurfaceParameters,
+    params: CiftiSmoothingLeftSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,10 +123,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_smoothing_right_surface_params(
+function cifti_smoothing_right_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiSmoothingRightSurfaceParametersTagged {
+): CiftiSmoothingRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
         "surface": surface,
@@ -147,7 +147,7 @@ function cifti_smoothing_right_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_smoothing_right_surface_cargs(
-    params: CiftiSmoothingRightSurfaceParameters,
+    params: CiftiSmoothingRightSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -173,10 +173,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_smoothing_cerebellum_surface_params(
+function cifti_smoothing_cerebellum_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiSmoothingCerebellumSurfaceParametersTagged {
+): CiftiSmoothingCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
         "surface": surface,
@@ -197,7 +197,7 @@ function cifti_smoothing_cerebellum_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_smoothing_cerebellum_surface_cargs(
-    params: CiftiSmoothingCerebellumSurfaceParameters,
+    params: CiftiSmoothingCerebellumSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -224,11 +224,11 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_smoothing_surface_params(
+function cifti_smoothing_surface(
     structure: string,
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiSmoothingSurfaceParametersTagged {
+): CiftiSmoothingSurfaceParamsDictTagged {
     const params = {
         "@type": "surface" as const,
         "structure": structure,
@@ -250,7 +250,7 @@ function cifti_smoothing_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_smoothing_surface_cargs(
-    params: CiftiSmoothingSurfaceParameters,
+    params: CiftiSmoothingSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function cifti_smoothing_surface_cargs(
 
 
 /**
- * Output object returned when calling `CiftiSmoothingParameters(...)`.
+ * Output object returned when calling `CiftiSmoothingParamsDict(...)`.
  *
  * @interface
  */
@@ -314,14 +314,14 @@ function cifti_smoothing_params(
     volume_kernel: number,
     direction: string,
     fwhm: boolean = false,
-    left_surface: CiftiSmoothingLeftSurfaceParameters | null = null,
-    right_surface: CiftiSmoothingRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiSmoothingCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
     fix_zeros_volume: boolean = false,
     fix_zeros_surface: boolean = false,
     merged_volume: boolean = false,
-    surface: Array<CiftiSmoothingSurfaceParameters> | null = null,
-): CiftiSmoothingParametersTagged {
+    surface: Array<CiftiSmoothingSurfaceParamsDict> | null = null,
+): CiftiSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-smoothing" as const,
         "cifti-out": cifti_out,
@@ -362,7 +362,7 @@ function cifti_smoothing_params(
  * @returns Command-line arguments.
  */
 function cifti_smoothing_cargs(
-    params: CiftiSmoothingParameters,
+    params: CiftiSmoothingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -400,7 +400,7 @@ function cifti_smoothing_cargs(
  * @returns Outputs object.
  */
 function cifti_smoothing_outputs(
-    params: CiftiSmoothingParameters,
+    params: CiftiSmoothingParamsDict,
     execution: Execution,
 ): CiftiSmoothingOutputs {
     const ret: CiftiSmoothingOutputs = {
@@ -464,7 +464,7 @@ function cifti_smoothing_outputs(
  * @returns NamedTuple of outputs (described in `CiftiSmoothingOutputs`).
  */
 function cifti_smoothing_execute(
-    params: CiftiSmoothingParameters,
+    params: CiftiSmoothingParamsDict,
     runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
     runner = runner || getGlobalRunner();
@@ -552,13 +552,13 @@ function cifti_smoothing(
     volume_kernel: number,
     direction: string,
     fwhm: boolean = false,
-    left_surface: CiftiSmoothingLeftSurfaceParameters | null = null,
-    right_surface: CiftiSmoothingRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiSmoothingCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
     fix_zeros_volume: boolean = false,
     fix_zeros_surface: boolean = false,
     merged_volume: boolean = false,
-    surface: Array<CiftiSmoothingSurfaceParameters> | null = null,
+    surface: Array<CiftiSmoothingSurfaceParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
     const params = cifti_smoothing_params(cifti_out, roi_cifti, cifti, surface_kernel, volume_kernel, direction, fwhm, left_surface, right_surface, cerebellum_surface, fix_zeros_volume, fix_zeros_surface, merged_volume, surface)
@@ -568,12 +568,22 @@ function cifti_smoothing(
 
 export {
       CIFTI_SMOOTHING_METADATA,
+      CiftiSmoothingCerebellumSurfaceParamsDict,
+      CiftiSmoothingCerebellumSurfaceParamsDictTagged,
+      CiftiSmoothingLeftSurfaceParamsDict,
+      CiftiSmoothingLeftSurfaceParamsDictTagged,
       CiftiSmoothingOutputs,
+      CiftiSmoothingParamsDict,
+      CiftiSmoothingParamsDictTagged,
+      CiftiSmoothingRightSurfaceParamsDict,
+      CiftiSmoothingRightSurfaceParamsDictTagged,
+      CiftiSmoothingSurfaceParamsDict,
+      CiftiSmoothingSurfaceParamsDictTagged,
       cifti_smoothing,
-      cifti_smoothing_cerebellum_surface_params,
+      cifti_smoothing_cerebellum_surface,
       cifti_smoothing_execute,
-      cifti_smoothing_left_surface_params,
+      cifti_smoothing_left_surface,
       cifti_smoothing_params,
-      cifti_smoothing_right_surface_params,
-      cifti_smoothing_surface_params,
+      cifti_smoothing_right_surface,
+      cifti_smoothing_surface,
 };

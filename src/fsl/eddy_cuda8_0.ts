@@ -11,7 +11,7 @@ const EDDY_CUDA8_0_METADATA: Metadata = {
 };
 
 
-interface EddyCuda80Parameters {
+interface EddyCuda80ParamsDict {
     "@type"?: "fsl/eddy_cuda8.0";
     "imain": InputPathType;
     "mask": InputPathType;
@@ -58,11 +58,11 @@ interface EddyCuda80Parameters {
     "data_is_shelled": boolean;
     "verbose": boolean;
 }
-type EddyCuda80ParametersTagged = Required<Pick<EddyCuda80Parameters, '@type'>> & EddyCuda80Parameters;
+type EddyCuda80ParamsDictTagged = Required<Pick<EddyCuda80ParamsDict, '@type'>> & EddyCuda80ParamsDict;
 
 
 /**
- * Output object returned when calling `EddyCuda80Parameters(...)`.
+ * Output object returned when calling `EddyCuda80ParamsDict(...)`.
  *
  * @interface
  */
@@ -245,7 +245,7 @@ function eddy_cuda8_0_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyCuda80ParametersTagged {
+): EddyCuda80ParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_cuda8.0" as const,
         "imain": imain,
@@ -358,7 +358,7 @@ function eddy_cuda8_0_params(
  * @returns Command-line arguments.
  */
 function eddy_cuda8_0_cargs(
-    params: EddyCuda80Parameters,
+    params: EddyCuda80ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -494,7 +494,7 @@ function eddy_cuda8_0_cargs(
  * @returns Outputs object.
  */
 function eddy_cuda8_0_outputs(
-    params: EddyCuda80Parameters,
+    params: EddyCuda80ParamsDict,
     execution: Execution,
 ): EddyCuda80Outputs {
     const ret: EddyCuda80Outputs = {
@@ -538,7 +538,7 @@ function eddy_cuda8_0_outputs(
  * @returns NamedTuple of outputs (described in `EddyCuda80Outputs`).
  */
 function eddy_cuda8_0_execute(
-    params: EddyCuda80Parameters,
+    params: EddyCuda80ParamsDict,
     runner: Runner | null = null,
 ): EddyCuda80Outputs {
     runner = runner || getGlobalRunner();
@@ -663,6 +663,8 @@ function eddy_cuda8_0(
 export {
       EDDY_CUDA8_0_METADATA,
       EddyCuda80Outputs,
+      EddyCuda80ParamsDict,
+      EddyCuda80ParamsDictTagged,
       eddy_cuda8_0,
       eddy_cuda8_0_execute,
       eddy_cuda8_0_params,

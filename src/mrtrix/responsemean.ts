@@ -11,7 +11,7 @@ const RESPONSEMEAN_METADATA: Metadata = {
 };
 
 
-interface ResponsemeanParameters {
+interface ResponsemeanParamsDict {
     "@type"?: "mrtrix/responsemean";
     "input_response": Array<InputPathType>;
     "output_response": string;
@@ -28,11 +28,11 @@ interface ResponsemeanParameters {
     "help": boolean;
     "version": boolean;
 }
-type ResponsemeanParametersTagged = Required<Pick<ResponsemeanParameters, '@type'>> & ResponsemeanParameters;
+type ResponsemeanParamsDictTagged = Required<Pick<ResponsemeanParamsDict, '@type'>> & ResponsemeanParamsDict;
 
 
 /**
- * Output object returned when calling `ResponsemeanParameters(...)`.
+ * Output object returned when calling `ResponsemeanParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function responsemean_params(
     config: Array<string> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ResponsemeanParametersTagged {
+): ResponsemeanParamsDictTagged {
     const params = {
         "@type": "mrtrix/responsemean" as const,
         "input_response": input_response,
@@ -122,7 +122,7 @@ function responsemean_params(
  * @returns Command-line arguments.
  */
 function responsemean_cargs(
-    params: ResponsemeanParameters,
+    params: ResponsemeanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -190,7 +190,7 @@ function responsemean_cargs(
  * @returns Outputs object.
  */
 function responsemean_outputs(
-    params: ResponsemeanParameters,
+    params: ResponsemeanParamsDict,
     execution: Execution,
 ): ResponsemeanOutputs {
     const ret: ResponsemeanOutputs = {
@@ -216,7 +216,7 @@ function responsemean_outputs(
  * @returns NamedTuple of outputs (described in `ResponsemeanOutputs`).
  */
 function responsemean_execute(
-    params: ResponsemeanParameters,
+    params: ResponsemeanParamsDict,
     runner: Runner | null = null,
 ): ResponsemeanOutputs {
     runner = runner || getGlobalRunner();
@@ -281,6 +281,8 @@ function responsemean(
 export {
       RESPONSEMEAN_METADATA,
       ResponsemeanOutputs,
+      ResponsemeanParamsDict,
+      ResponsemeanParamsDictTagged,
       responsemean,
       responsemean_execute,
       responsemean_params,

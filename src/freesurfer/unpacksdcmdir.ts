@@ -11,16 +11,16 @@ const UNPACKSDCMDIR_METADATA: Metadata = {
 };
 
 
-interface UnpacksdcmdirParameters {
+interface UnpacksdcmdirParamsDict {
     "@type"?: "freesurfer/unpacksdcmdir";
     "input_directory": string;
     "output_directory": string;
 }
-type UnpacksdcmdirParametersTagged = Required<Pick<UnpacksdcmdirParameters, '@type'>> & UnpacksdcmdirParameters;
+type UnpacksdcmdirParamsDictTagged = Required<Pick<UnpacksdcmdirParamsDict, '@type'>> & UnpacksdcmdirParamsDict;
 
 
 /**
- * Output object returned when calling `UnpacksdcmdirParameters(...)`.
+ * Output object returned when calling `UnpacksdcmdirParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface UnpacksdcmdirOutputs {
 function unpacksdcmdir_params(
     input_directory: string,
     output_directory: string,
-): UnpacksdcmdirParametersTagged {
+): UnpacksdcmdirParamsDictTagged {
     const params = {
         "@type": "freesurfer/unpacksdcmdir" as const,
         "input_directory": input_directory,
@@ -66,7 +66,7 @@ function unpacksdcmdir_params(
  * @returns Command-line arguments.
  */
 function unpacksdcmdir_cargs(
-    params: UnpacksdcmdirParameters,
+    params: UnpacksdcmdirParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function unpacksdcmdir_cargs(
  * @returns Outputs object.
  */
 function unpacksdcmdir_outputs(
-    params: UnpacksdcmdirParameters,
+    params: UnpacksdcmdirParamsDict,
     execution: Execution,
 ): UnpacksdcmdirOutputs {
     const ret: UnpacksdcmdirOutputs = {
@@ -112,7 +112,7 @@ function unpacksdcmdir_outputs(
  * @returns NamedTuple of outputs (described in `UnpacksdcmdirOutputs`).
  */
 function unpacksdcmdir_execute(
-    params: UnpacksdcmdirParameters,
+    params: UnpacksdcmdirParamsDict,
     runner: Runner | null = null,
 ): UnpacksdcmdirOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function unpacksdcmdir(
 export {
       UNPACKSDCMDIR_METADATA,
       UnpacksdcmdirOutputs,
+      UnpacksdcmdirParamsDict,
+      UnpacksdcmdirParamsDictTagged,
       unpacksdcmdir,
       unpacksdcmdir_execute,
       unpacksdcmdir_params,

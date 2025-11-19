@@ -11,15 +11,15 @@ const BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA: Metadata = {
 };
 
 
-interface BuildDesikanKillianyGcsCshParameters {
+interface BuildDesikanKillianyGcsCshParamsDict {
     "@type"?: "freesurfer/build_desikan_killiany_gcs.csh";
     "hemi": string;
 }
-type BuildDesikanKillianyGcsCshParametersTagged = Required<Pick<BuildDesikanKillianyGcsCshParameters, '@type'>> & BuildDesikanKillianyGcsCshParameters;
+type BuildDesikanKillianyGcsCshParamsDictTagged = Required<Pick<BuildDesikanKillianyGcsCshParamsDict, '@type'>> & BuildDesikanKillianyGcsCshParamsDict;
 
 
 /**
- * Output object returned when calling `BuildDesikanKillianyGcsCshParameters(...)`.
+ * Output object returned when calling `BuildDesikanKillianyGcsCshParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface BuildDesikanKillianyGcsCshOutputs {
  */
 function build_desikan_killiany_gcs_csh_params(
     hemi: string,
-): BuildDesikanKillianyGcsCshParametersTagged {
+): BuildDesikanKillianyGcsCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/build_desikan_killiany_gcs.csh" as const,
         "hemi": hemi,
@@ -58,7 +58,7 @@ function build_desikan_killiany_gcs_csh_params(
  * @returns Command-line arguments.
  */
 function build_desikan_killiany_gcs_csh_cargs(
-    params: BuildDesikanKillianyGcsCshParameters,
+    params: BuildDesikanKillianyGcsCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function build_desikan_killiany_gcs_csh_cargs(
  * @returns Outputs object.
  */
 function build_desikan_killiany_gcs_csh_outputs(
-    params: BuildDesikanKillianyGcsCshParameters,
+    params: BuildDesikanKillianyGcsCshParamsDict,
     execution: Execution,
 ): BuildDesikanKillianyGcsCshOutputs {
     const ret: BuildDesikanKillianyGcsCshOutputs = {
@@ -102,7 +102,7 @@ function build_desikan_killiany_gcs_csh_outputs(
  * @returns NamedTuple of outputs (described in `BuildDesikanKillianyGcsCshOutputs`).
  */
 function build_desikan_killiany_gcs_csh_execute(
-    params: BuildDesikanKillianyGcsCshParameters,
+    params: BuildDesikanKillianyGcsCshParamsDict,
     runner: Runner | null = null,
 ): BuildDesikanKillianyGcsCshOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function build_desikan_killiany_gcs_csh(
 export {
       BUILD_DESIKAN_KILLIANY_GCS_CSH_METADATA,
       BuildDesikanKillianyGcsCshOutputs,
+      BuildDesikanKillianyGcsCshParamsDict,
+      BuildDesikanKillianyGcsCshParamsDictTagged,
       build_desikan_killiany_gcs_csh,
       build_desikan_killiany_gcs_csh_execute,
       build_desikan_killiany_gcs_csh_params,

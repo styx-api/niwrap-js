@@ -11,7 +11,7 @@ const V_3D_DEPTH_MAP_METADATA: Metadata = {
 };
 
 
-interface V3dDepthMapParameters {
+interface V3dDepthMapParamsDict {
     "@type"?: "afni/3dDepthMap";
     "input_dataset": InputPathType;
     "output_prefix": string;
@@ -27,11 +27,11 @@ interface V3dDepthMapParameters {
     "binary_only": boolean;
     "verbosity"?: number | null | undefined;
 }
-type V3dDepthMapParametersTagged = Required<Pick<V3dDepthMapParameters, '@type'>> & V3dDepthMapParameters;
+type V3dDepthMapParamsDictTagged = Required<Pick<V3dDepthMapParamsDict, '@type'>> & V3dDepthMapParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDepthMapParameters(...)`.
+ * Output object returned when calling `V3dDepthMapParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function v_3d_depth_map_params(
     only2_d: string | null = null,
     binary_only: boolean = false,
     verbosity: number | null = null,
-): V3dDepthMapParametersTagged {
+): V3dDepthMapParamsDictTagged {
     const params = {
         "@type": "afni/3dDepthMap" as const,
         "input_dataset": input_dataset,
@@ -118,7 +118,7 @@ function v_3d_depth_map_params(
  * @returns Command-line arguments.
  */
 function v_3d_depth_map_cargs(
-    params: V3dDepthMapParameters,
+    params: V3dDepthMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -189,7 +189,7 @@ function v_3d_depth_map_cargs(
  * @returns Outputs object.
  */
 function v_3d_depth_map_outputs(
-    params: V3dDepthMapParameters,
+    params: V3dDepthMapParamsDict,
     execution: Execution,
 ): V3dDepthMapOutputs {
     const ret: V3dDepthMapOutputs = {
@@ -215,7 +215,7 @@ function v_3d_depth_map_outputs(
  * @returns NamedTuple of outputs (described in `V3dDepthMapOutputs`).
  */
 function v_3d_depth_map_execute(
-    params: V3dDepthMapParameters,
+    params: V3dDepthMapParamsDict,
     runner: Runner | null = null,
 ): V3dDepthMapOutputs {
     runner = runner || getGlobalRunner();
@@ -277,6 +277,8 @@ function v_3d_depth_map(
 
 export {
       V3dDepthMapOutputs,
+      V3dDepthMapParamsDict,
+      V3dDepthMapParamsDictTagged,
       V_3D_DEPTH_MAP_METADATA,
       v_3d_depth_map,
       v_3d_depth_map_execute,

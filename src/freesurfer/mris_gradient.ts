@@ -11,17 +11,17 @@ const MRIS_GRADIENT_METADATA: Metadata = {
 };
 
 
-interface MrisGradientParameters {
+interface MrisGradientParamsDict {
     "@type"?: "freesurfer/mris_gradient";
     "input_surface": InputPathType;
     "input_vector_field": InputPathType;
     "output_gradient_file": string;
 }
-type MrisGradientParametersTagged = Required<Pick<MrisGradientParameters, '@type'>> & MrisGradientParameters;
+type MrisGradientParamsDictTagged = Required<Pick<MrisGradientParamsDict, '@type'>> & MrisGradientParamsDict;
 
 
 /**
- * Output object returned when calling `MrisGradientParameters(...)`.
+ * Output object returned when calling `MrisGradientParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_gradient_params(
     input_surface: InputPathType,
     input_vector_field: InputPathType,
     output_gradient_file: string,
-): MrisGradientParametersTagged {
+): MrisGradientParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_gradient" as const,
         "input_surface": input_surface,
@@ -70,7 +70,7 @@ function mris_gradient_params(
  * @returns Command-line arguments.
  */
 function mris_gradient_cargs(
-    params: MrisGradientParameters,
+    params: MrisGradientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mris_gradient_cargs(
  * @returns Outputs object.
  */
 function mris_gradient_outputs(
-    params: MrisGradientParameters,
+    params: MrisGradientParamsDict,
     execution: Execution,
 ): MrisGradientOutputs {
     const ret: MrisGradientOutputs = {
@@ -117,7 +117,7 @@ function mris_gradient_outputs(
  * @returns NamedTuple of outputs (described in `MrisGradientOutputs`).
  */
 function mris_gradient_execute(
-    params: MrisGradientParameters,
+    params: MrisGradientParamsDict,
     runner: Runner | null = null,
 ): MrisGradientOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mris_gradient(
 export {
       MRIS_GRADIENT_METADATA,
       MrisGradientOutputs,
+      MrisGradientParamsDict,
+      MrisGradientParamsDictTagged,
       mris_gradient,
       mris_gradient_execute,
       mris_gradient_params,

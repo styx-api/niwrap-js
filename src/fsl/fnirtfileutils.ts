@@ -11,7 +11,7 @@ const FNIRTFILEUTILS_METADATA: Metadata = {
 };
 
 
-interface FnirtfileutilsParameters {
+interface FnirtfileutilsParamsDict {
     "@type"?: "fsl/fnirtfileutils";
     "input_coefs": InputPathType;
     "ref_volume"?: InputPathType | null | undefined;
@@ -25,11 +25,11 @@ interface FnirtfileutilsParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type FnirtfileutilsParametersTagged = Required<Pick<FnirtfileutilsParameters, '@type'>> & FnirtfileutilsParameters;
+type FnirtfileutilsParamsDictTagged = Required<Pick<FnirtfileutilsParamsDict, '@type'>> & FnirtfileutilsParamsDict;
 
 
 /**
- * Output object returned when calling `FnirtfileutilsParameters(...)`.
+ * Output object returned when calling `FnirtfileutilsParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function fnirtfileutils_params(
     with_aff: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FnirtfileutilsParametersTagged {
+): FnirtfileutilsParamsDictTagged {
     const params = {
         "@type": "fsl/fnirtfileutils" as const,
         "input_coefs": input_coefs,
@@ -124,7 +124,7 @@ function fnirtfileutils_params(
  * @returns Command-line arguments.
  */
 function fnirtfileutils_cargs(
-    params: FnirtfileutilsParameters,
+    params: FnirtfileutilsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -197,7 +197,7 @@ function fnirtfileutils_cargs(
  * @returns Outputs object.
  */
 function fnirtfileutils_outputs(
-    params: FnirtfileutilsParameters,
+    params: FnirtfileutilsParamsDict,
     execution: Execution,
 ): FnirtfileutilsOutputs {
     const ret: FnirtfileutilsOutputs = {
@@ -225,7 +225,7 @@ function fnirtfileutils_outputs(
  * @returns NamedTuple of outputs (described in `FnirtfileutilsOutputs`).
  */
 function fnirtfileutils_execute(
-    params: FnirtfileutilsParameters,
+    params: FnirtfileutilsParamsDict,
     runner: Runner | null = null,
 ): FnirtfileutilsOutputs {
     runner = runner || getGlobalRunner();
@@ -284,6 +284,8 @@ function fnirtfileutils(
 export {
       FNIRTFILEUTILS_METADATA,
       FnirtfileutilsOutputs,
+      FnirtfileutilsParamsDict,
+      FnirtfileutilsParamsDictTagged,
       fnirtfileutils,
       fnirtfileutils_execute,
       fnirtfileutils_params,

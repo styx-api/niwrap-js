@@ -11,18 +11,18 @@ const ESTNOISE_METADATA: Metadata = {
 };
 
 
-interface EstnoiseParameters {
+interface EstnoiseParamsDict {
     "@type"?: "fsl/estnoise";
     "input_4d_data": InputPathType;
     "spatial_sigma"?: number | null | undefined;
     "temp_hp_sigma"?: number | null | undefined;
     "temp_lp_sigma"?: number | null | undefined;
 }
-type EstnoiseParametersTagged = Required<Pick<EstnoiseParameters, '@type'>> & EstnoiseParameters;
+type EstnoiseParamsDictTagged = Required<Pick<EstnoiseParamsDict, '@type'>> & EstnoiseParamsDict;
 
 
 /**
- * Output object returned when calling `EstnoiseParameters(...)`.
+ * Output object returned when calling `EstnoiseParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function estnoise_params(
     spatial_sigma: number | null = null,
     temp_hp_sigma: number | null = null,
     temp_lp_sigma: number | null = null,
-): EstnoiseParametersTagged {
+): EstnoiseParamsDictTagged {
     const params = {
         "@type": "fsl/estnoise" as const,
         "input_4d_data": input_4d_data,
@@ -80,7 +80,7 @@ function estnoise_params(
  * @returns Command-line arguments.
  */
 function estnoise_cargs(
-    params: EstnoiseParameters,
+    params: EstnoiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function estnoise_cargs(
  * @returns Outputs object.
  */
 function estnoise_outputs(
-    params: EstnoiseParameters,
+    params: EstnoiseParamsDict,
     execution: Execution,
 ): EstnoiseOutputs {
     const ret: EstnoiseOutputs = {
@@ -134,7 +134,7 @@ function estnoise_outputs(
  * @returns NamedTuple of outputs (described in `EstnoiseOutputs`).
  */
 function estnoise_execute(
-    params: EstnoiseParameters,
+    params: EstnoiseParamsDict,
     runner: Runner | null = null,
 ): EstnoiseOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function estnoise(
 export {
       ESTNOISE_METADATA,
       EstnoiseOutputs,
+      EstnoiseParamsDict,
+      EstnoiseParamsDictTagged,
       estnoise,
       estnoise_execute,
       estnoise_params,

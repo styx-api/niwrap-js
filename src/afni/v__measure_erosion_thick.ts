@@ -11,7 +11,7 @@ const V__MEASURE_EROSION_THICK_METADATA: Metadata = {
 };
 
 
-interface VMeasureErosionThickParameters {
+interface VMeasureErosionThickParamsDict {
     "@type"?: "afni/@measure_erosion_thick";
     "maskset": InputPathType;
     "surfset": InputPathType;
@@ -24,11 +24,11 @@ interface VMeasureErosionThickParameters {
     "keep_temp_files": boolean;
     "surfsmooth_method"?: string | null | undefined;
 }
-type VMeasureErosionThickParametersTagged = Required<Pick<VMeasureErosionThickParameters, '@type'>> & VMeasureErosionThickParameters;
+type VMeasureErosionThickParamsDictTagged = Required<Pick<VMeasureErosionThickParamsDict, '@type'>> & VMeasureErosionThickParamsDict;
 
 
 /**
- * Output object returned when calling `VMeasureErosionThickParameters(...)`.
+ * Output object returned when calling `VMeasureErosionThickParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function v__measure_erosion_thick_params(
     depthsearch: number | null = null,
     keep_temp_files: boolean = false,
     surfsmooth_method: string | null = null,
-): VMeasureErosionThickParametersTagged {
+): VMeasureErosionThickParamsDictTagged {
     const params = {
         "@type": "afni/@measure_erosion_thick" as const,
         "maskset": maskset,
@@ -144,7 +144,7 @@ function v__measure_erosion_thick_params(
  * @returns Command-line arguments.
  */
 function v__measure_erosion_thick_cargs(
-    params: VMeasureErosionThickParameters,
+    params: VMeasureErosionThickParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -215,7 +215,7 @@ function v__measure_erosion_thick_cargs(
  * @returns Outputs object.
  */
 function v__measure_erosion_thick_outputs(
-    params: VMeasureErosionThickParameters,
+    params: VMeasureErosionThickParamsDict,
     execution: Execution,
 ): VMeasureErosionThickOutputs {
     const ret: VMeasureErosionThickOutputs = {
@@ -249,7 +249,7 @@ function v__measure_erosion_thick_outputs(
  * @returns NamedTuple of outputs (described in `VMeasureErosionThickOutputs`).
  */
 function v__measure_erosion_thick_execute(
-    params: VMeasureErosionThickParameters,
+    params: VMeasureErosionThickParamsDict,
     runner: Runner | null = null,
 ): VMeasureErosionThickOutputs {
     runner = runner || getGlobalRunner();
@@ -305,6 +305,8 @@ function v__measure_erosion_thick(
 
 export {
       VMeasureErosionThickOutputs,
+      VMeasureErosionThickParamsDict,
+      VMeasureErosionThickParamsDictTagged,
       V__MEASURE_EROSION_THICK_METADATA,
       v__measure_erosion_thick,
       v__measure_erosion_thick_execute,

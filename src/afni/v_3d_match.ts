@@ -11,7 +11,7 @@ const V_3D_MATCH_METADATA: Metadata = {
 };
 
 
-interface V3dMatchParameters {
+interface V3dMatchParamsDict {
     "@type"?: "afni/3dMatch";
     "inset": InputPathType;
     "refset": InputPathType;
@@ -23,11 +23,11 @@ interface V3dMatchParameters {
     "prefix": string;
     "only_dice_thr": boolean;
 }
-type V3dMatchParametersTagged = Required<Pick<V3dMatchParameters, '@type'>> & V3dMatchParameters;
+type V3dMatchParamsDictTagged = Required<Pick<V3dMatchParamsDict, '@type'>> & V3dMatchParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMatchParameters(...)`.
+ * Output object returned when calling `V3dMatchParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function v_3d_match_params(
     ref_min: number | null = null,
     ref_max: number | null = null,
     only_dice_thr: boolean = false,
-): V3dMatchParametersTagged {
+): V3dMatchParamsDictTagged {
     const params = {
         "@type": "afni/3dMatch" as const,
         "inset": inset,
@@ -116,7 +116,7 @@ function v_3d_match_params(
  * @returns Command-line arguments.
  */
 function v_3d_match_cargs(
-    params: V3dMatchParameters,
+    params: V3dMatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -179,7 +179,7 @@ function v_3d_match_cargs(
  * @returns Outputs object.
  */
 function v_3d_match_outputs(
-    params: V3dMatchParameters,
+    params: V3dMatchParamsDict,
     execution: Execution,
 ): V3dMatchOutputs {
     const ret: V3dMatchOutputs = {
@@ -208,7 +208,7 @@ function v_3d_match_outputs(
  * @returns NamedTuple of outputs (described in `V3dMatchOutputs`).
  */
 function v_3d_match_execute(
-    params: V3dMatchParameters,
+    params: V3dMatchParamsDict,
     runner: Runner | null = null,
 ): V3dMatchOutputs {
     runner = runner || getGlobalRunner();
@@ -262,6 +262,8 @@ function v_3d_match(
 
 export {
       V3dMatchOutputs,
+      V3dMatchParamsDict,
+      V3dMatchParamsDictTagged,
       V_3D_MATCH_METADATA,
       v_3d_match,
       v_3d_match_execute,

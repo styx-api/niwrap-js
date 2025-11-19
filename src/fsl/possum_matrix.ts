@@ -11,7 +11,7 @@ const POSSUM_MATRIX_METADATA: Metadata = {
 };
 
 
-interface PossumMatrixParameters {
+interface PossumMatrixParamsDict {
     "@type"?: "fsl/possum_matrix";
     "pulse_sequence": string;
     "motion_matrix": string;
@@ -21,11 +21,11 @@ interface PossumMatrixParameters {
     "old_version_flag": boolean;
     "segment_size"?: number | null | undefined;
 }
-type PossumMatrixParametersTagged = Required<Pick<PossumMatrixParameters, '@type'>> & PossumMatrixParameters;
+type PossumMatrixParamsDictTagged = Required<Pick<PossumMatrixParamsDict, '@type'>> & PossumMatrixParamsDict;
 
 
 /**
- * Output object returned when calling `PossumMatrixParameters(...)`.
+ * Output object returned when calling `PossumMatrixParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function possum_matrix_params(
     help_flag: boolean = false,
     old_version_flag: boolean = false,
     segment_size: number | null = null,
-): PossumMatrixParametersTagged {
+): PossumMatrixParamsDictTagged {
     const params = {
         "@type": "fsl/possum_matrix" as const,
         "pulse_sequence": pulse_sequence,
@@ -88,7 +88,7 @@ function possum_matrix_params(
  * @returns Command-line arguments.
  */
 function possum_matrix_cargs(
-    params: PossumMatrixParameters,
+    params: PossumMatrixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function possum_matrix_cargs(
  * @returns Outputs object.
  */
 function possum_matrix_outputs(
-    params: PossumMatrixParameters,
+    params: PossumMatrixParamsDict,
     execution: Execution,
 ): PossumMatrixOutputs {
     const ret: PossumMatrixOutputs = {
@@ -159,7 +159,7 @@ function possum_matrix_outputs(
  * @returns NamedTuple of outputs (described in `PossumMatrixOutputs`).
  */
 function possum_matrix_execute(
-    params: PossumMatrixParameters,
+    params: PossumMatrixParamsDict,
     runner: Runner | null = null,
 ): PossumMatrixOutputs {
     runner = runner || getGlobalRunner();
@@ -210,6 +210,8 @@ function possum_matrix(
 export {
       POSSUM_MATRIX_METADATA,
       PossumMatrixOutputs,
+      PossumMatrixParamsDict,
+      PossumMatrixParamsDictTagged,
       possum_matrix,
       possum_matrix_execute,
       possum_matrix_params,

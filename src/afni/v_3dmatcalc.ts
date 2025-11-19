@@ -11,18 +11,18 @@ const V_3DMATCALC_METADATA: Metadata = {
 };
 
 
-interface V3dmatcalcParameters {
+interface V3dmatcalcParamsDict {
     "@type"?: "afni/3dmatcalc";
     "input_dataset": InputPathType;
     "input_matrix": InputPathType;
     "output_dataset": string;
     "mask"?: InputPathType | null | undefined;
 }
-type V3dmatcalcParametersTagged = Required<Pick<V3dmatcalcParameters, '@type'>> & V3dmatcalcParameters;
+type V3dmatcalcParamsDictTagged = Required<Pick<V3dmatcalcParamsDict, '@type'>> & V3dmatcalcParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmatcalcParameters(...)`.
+ * Output object returned when calling `V3dmatcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function v_3dmatcalc_params(
     input_matrix: InputPathType,
     output_dataset: string,
     mask: InputPathType | null = null,
-): V3dmatcalcParametersTagged {
+): V3dmatcalcParamsDictTagged {
     const params = {
         "@type": "afni/3dmatcalc" as const,
         "input_dataset": input_dataset,
@@ -80,7 +80,7 @@ function v_3dmatcalc_params(
  * @returns Command-line arguments.
  */
 function v_3dmatcalc_cargs(
-    params: V3dmatcalcParameters,
+    params: V3dmatcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function v_3dmatcalc_cargs(
  * @returns Outputs object.
  */
 function v_3dmatcalc_outputs(
-    params: V3dmatcalcParameters,
+    params: V3dmatcalcParamsDict,
     execution: Execution,
 ): V3dmatcalcOutputs {
     const ret: V3dmatcalcOutputs = {
@@ -143,7 +143,7 @@ function v_3dmatcalc_outputs(
  * @returns NamedTuple of outputs (described in `V3dmatcalcOutputs`).
  */
 function v_3dmatcalc_execute(
-    params: V3dmatcalcParameters,
+    params: V3dmatcalcParamsDict,
     runner: Runner | null = null,
 ): V3dmatcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function v_3dmatcalc(
 
 export {
       V3dmatcalcOutputs,
+      V3dmatcalcParamsDict,
+      V3dmatcalcParamsDictTagged,
       V_3DMATCALC_METADATA,
       v_3dmatcalc,
       v_3dmatcalc_execute,

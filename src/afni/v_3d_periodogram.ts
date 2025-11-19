@@ -11,18 +11,18 @@ const V_3D_PERIODOGRAM_METADATA: Metadata = {
 };
 
 
-interface V3dPeriodogramParameters {
+interface V3dPeriodogramParamsDict {
     "@type"?: "afni/3dPeriodogram";
     "prefix"?: string | null | undefined;
     "taper"?: number | null | undefined;
     "nfft"?: number | null | undefined;
     "dataset": InputPathType;
 }
-type V3dPeriodogramParametersTagged = Required<Pick<V3dPeriodogramParameters, '@type'>> & V3dPeriodogramParameters;
+type V3dPeriodogramParamsDictTagged = Required<Pick<V3dPeriodogramParamsDict, '@type'>> & V3dPeriodogramParamsDict;
 
 
 /**
- * Output object returned when calling `V3dPeriodogramParameters(...)`.
+ * Output object returned when calling `V3dPeriodogramParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function v_3d_periodogram_params(
     prefix: string | null = null,
     taper: number | null = null,
     nfft: number | null = null,
-): V3dPeriodogramParametersTagged {
+): V3dPeriodogramParamsDictTagged {
     const params = {
         "@type": "afni/3dPeriodogram" as const,
         "dataset": dataset,
@@ -84,7 +84,7 @@ function v_3d_periodogram_params(
  * @returns Command-line arguments.
  */
 function v_3d_periodogram_cargs(
-    params: V3dPeriodogramParameters,
+    params: V3dPeriodogramParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function v_3d_periodogram_cargs(
  * @returns Outputs object.
  */
 function v_3d_periodogram_outputs(
-    params: V3dPeriodogramParameters,
+    params: V3dPeriodogramParamsDict,
     execution: Execution,
 ): V3dPeriodogramOutputs {
     const ret: V3dPeriodogramOutputs = {
@@ -148,7 +148,7 @@ function v_3d_periodogram_outputs(
  * @returns NamedTuple of outputs (described in `V3dPeriodogramOutputs`).
  */
 function v_3d_periodogram_execute(
-    params: V3dPeriodogramParameters,
+    params: V3dPeriodogramParamsDict,
     runner: Runner | null = null,
 ): V3dPeriodogramOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function v_3d_periodogram(
 
 export {
       V3dPeriodogramOutputs,
+      V3dPeriodogramParamsDict,
+      V3dPeriodogramParamsDictTagged,
       V_3D_PERIODOGRAM_METADATA,
       v_3d_periodogram,
       v_3d_periodogram_execute,

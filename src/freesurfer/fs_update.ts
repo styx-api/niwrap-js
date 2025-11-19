@@ -11,18 +11,18 @@ const FS_UPDATE_METADATA: Metadata = {
 };
 
 
-interface FsUpdateParameters {
+interface FsUpdateParamsDict {
     "@type"?: "freesurfer/fs_update";
     "update_path"?: string | null | undefined;
     "help_short": boolean;
     "help_medium": boolean;
     "help_long": boolean;
 }
-type FsUpdateParametersTagged = Required<Pick<FsUpdateParameters, '@type'>> & FsUpdateParameters;
+type FsUpdateParamsDictTagged = Required<Pick<FsUpdateParamsDict, '@type'>> & FsUpdateParamsDict;
 
 
 /**
- * Output object returned when calling `FsUpdateParameters(...)`.
+ * Output object returned when calling `FsUpdateParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ function fs_update_params(
     help_short: boolean = false,
     help_medium: boolean = false,
     help_long: boolean = false,
-): FsUpdateParametersTagged {
+): FsUpdateParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_update" as const,
         "help_short": help_short,
@@ -70,7 +70,7 @@ function fs_update_params(
  * @returns Command-line arguments.
  */
 function fs_update_cargs(
-    params: FsUpdateParameters,
+    params: FsUpdateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function fs_update_cargs(
  * @returns Outputs object.
  */
 function fs_update_outputs(
-    params: FsUpdateParameters,
+    params: FsUpdateParamsDict,
     execution: Execution,
 ): FsUpdateOutputs {
     const ret: FsUpdateOutputs = {
@@ -125,7 +125,7 @@ function fs_update_outputs(
  * @returns NamedTuple of outputs (described in `FsUpdateOutputs`).
  */
 function fs_update_execute(
-    params: FsUpdateParameters,
+    params: FsUpdateParamsDict,
     runner: Runner | null = null,
 ): FsUpdateOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function fs_update(
 export {
       FS_UPDATE_METADATA,
       FsUpdateOutputs,
+      FsUpdateParamsDict,
+      FsUpdateParamsDictTagged,
       fs_update,
       fs_update_execute,
       fs_update_params,

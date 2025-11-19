@@ -11,7 +11,7 @@ const SEGMENT_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface SegmentSubjectParameters {
+interface SegmentSubjectParamsDict {
     "@type"?: "freesurfer/segment_subject";
     "input_volume": InputPathType;
     "output_xfm": string;
@@ -20,11 +20,11 @@ interface SegmentSubjectParameters {
     "debug_flag": boolean;
     "version_flag": boolean;
 }
-type SegmentSubjectParametersTagged = Required<Pick<SegmentSubjectParameters, '@type'>> & SegmentSubjectParameters;
+type SegmentSubjectParamsDictTagged = Required<Pick<SegmentSubjectParamsDict, '@type'>> & SegmentSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubjectParameters(...)`.
+ * Output object returned when calling `SegmentSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function segment_subject_params(
     help_flag: boolean = false,
     debug_flag: boolean = false,
     version_flag: boolean = false,
-): SegmentSubjectParametersTagged {
+): SegmentSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/segment_subject" as const,
         "input_volume": input_volume,
@@ -84,7 +84,7 @@ function segment_subject_params(
  * @returns Command-line arguments.
  */
 function segment_subject_cargs(
-    params: SegmentSubjectParameters,
+    params: SegmentSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function segment_subject_cargs(
  * @returns Outputs object.
  */
 function segment_subject_outputs(
-    params: SegmentSubjectParameters,
+    params: SegmentSubjectParamsDict,
     execution: Execution,
 ): SegmentSubjectOutputs {
     const ret: SegmentSubjectOutputs = {
@@ -151,7 +151,7 @@ function segment_subject_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubjectOutputs`).
  */
 function segment_subject_execute(
-    params: SegmentSubjectParameters,
+    params: SegmentSubjectParamsDict,
     runner: Runner | null = null,
 ): SegmentSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function segment_subject(
 export {
       SEGMENT_SUBJECT_METADATA,
       SegmentSubjectOutputs,
+      SegmentSubjectParamsDict,
+      SegmentSubjectParamsDictTagged,
       segment_subject,
       segment_subject_execute,
       segment_subject_params,

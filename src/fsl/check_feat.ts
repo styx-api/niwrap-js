@@ -11,16 +11,16 @@ const CHECK_FEAT_METADATA: Metadata = {
 };
 
 
-interface CheckFeatParameters {
+interface CheckFeatParamsDict {
     "@type"?: "fsl/checkFEAT";
     "report_file": InputPathType;
     "report_log_file": InputPathType;
 }
-type CheckFeatParametersTagged = Required<Pick<CheckFeatParameters, '@type'>> & CheckFeatParameters;
+type CheckFeatParamsDictTagged = Required<Pick<CheckFeatParamsDict, '@type'>> & CheckFeatParamsDict;
 
 
 /**
- * Output object returned when calling `CheckFeatParameters(...)`.
+ * Output object returned when calling `CheckFeatParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface CheckFeatOutputs {
 function check_feat_params(
     report_file: InputPathType,
     report_log_file: InputPathType,
-): CheckFeatParametersTagged {
+): CheckFeatParamsDictTagged {
     const params = {
         "@type": "fsl/checkFEAT" as const,
         "report_file": report_file,
@@ -70,7 +70,7 @@ function check_feat_params(
  * @returns Command-line arguments.
  */
 function check_feat_cargs(
-    params: CheckFeatParameters,
+    params: CheckFeatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function check_feat_cargs(
  * @returns Outputs object.
  */
 function check_feat_outputs(
-    params: CheckFeatParameters,
+    params: CheckFeatParamsDict,
     execution: Execution,
 ): CheckFeatOutputs {
     const ret: CheckFeatOutputs = {
@@ -117,7 +117,7 @@ function check_feat_outputs(
  * @returns NamedTuple of outputs (described in `CheckFeatOutputs`).
  */
 function check_feat_execute(
-    params: CheckFeatParameters,
+    params: CheckFeatParamsDict,
     runner: Runner | null = null,
 ): CheckFeatOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function check_feat(
 export {
       CHECK_FEAT_METADATA,
       CheckFeatOutputs,
+      CheckFeatParamsDict,
+      CheckFeatParamsDictTagged,
       check_feat,
       check_feat_execute,
       check_feat_params,

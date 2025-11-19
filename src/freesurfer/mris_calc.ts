@@ -11,7 +11,7 @@ const MRIS_CALC_METADATA: Metadata = {
 };
 
 
-interface MrisCalcParameters {
+interface MrisCalcParamsDict {
     "@type"?: "freesurfer/mris_calc";
     "input_file1": InputPathType;
     "action": string;
@@ -20,11 +20,11 @@ interface MrisCalcParameters {
     "label_file"?: InputPathType | null | undefined;
     "verbosity"?: string | null | undefined;
 }
-type MrisCalcParametersTagged = Required<Pick<MrisCalcParameters, '@type'>> & MrisCalcParameters;
+type MrisCalcParamsDictTagged = Required<Pick<MrisCalcParamsDict, '@type'>> & MrisCalcParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCalcParameters(...)`.
+ * Output object returned when calling `MrisCalcParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_calc_params(
     output_file: string | null = null,
     label_file: InputPathType | null = null,
     verbosity: string | null = null,
-): MrisCalcParametersTagged {
+): MrisCalcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_calc" as const,
         "input_file1": input_file1,
@@ -90,7 +90,7 @@ function mris_calc_params(
  * @returns Command-line arguments.
  */
 function mris_calc_cargs(
-    params: MrisCalcParameters,
+    params: MrisCalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -131,7 +131,7 @@ function mris_calc_cargs(
  * @returns Outputs object.
  */
 function mris_calc_outputs(
-    params: MrisCalcParameters,
+    params: MrisCalcParamsDict,
     execution: Execution,
 ): MrisCalcOutputs {
     const ret: MrisCalcOutputs = {
@@ -157,7 +157,7 @@ function mris_calc_outputs(
  * @returns NamedTuple of outputs (described in `MrisCalcOutputs`).
  */
 function mris_calc_execute(
-    params: MrisCalcParameters,
+    params: MrisCalcParamsDict,
     runner: Runner | null = null,
 ): MrisCalcOutputs {
     runner = runner || getGlobalRunner();
@@ -206,6 +206,8 @@ function mris_calc(
 export {
       MRIS_CALC_METADATA,
       MrisCalcOutputs,
+      MrisCalcParamsDict,
+      MrisCalcParamsDictTagged,
       mris_calc,
       mris_calc_execute,
       mris_calc_params,

@@ -11,15 +11,15 @@ const SEGMENT_BS_SH_METADATA: Metadata = {
 };
 
 
-interface SegmentBsShParameters {
+interface SegmentBsShParamsDict {
     "@type"?: "freesurfer/segmentBS.sh";
     "matlab_runtime"?: string | null | undefined;
 }
-type SegmentBsShParametersTagged = Required<Pick<SegmentBsShParameters, '@type'>> & SegmentBsShParameters;
+type SegmentBsShParamsDictTagged = Required<Pick<SegmentBsShParamsDict, '@type'>> & SegmentBsShParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentBsShParameters(...)`.
+ * Output object returned when calling `SegmentBsShParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface SegmentBsShOutputs {
  */
 function segment_bs_sh_params(
     matlab_runtime: string | null = null,
-): SegmentBsShParametersTagged {
+): SegmentBsShParamsDictTagged {
     const params = {
         "@type": "freesurfer/segmentBS.sh" as const,
     };
@@ -60,7 +60,7 @@ function segment_bs_sh_params(
  * @returns Command-line arguments.
  */
 function segment_bs_sh_cargs(
-    params: SegmentBsShParameters,
+    params: SegmentBsShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function segment_bs_sh_cargs(
  * @returns Outputs object.
  */
 function segment_bs_sh_outputs(
-    params: SegmentBsShParameters,
+    params: SegmentBsShParamsDict,
     execution: Execution,
 ): SegmentBsShOutputs {
     const ret: SegmentBsShOutputs = {
@@ -106,7 +106,7 @@ function segment_bs_sh_outputs(
  * @returns NamedTuple of outputs (described in `SegmentBsShOutputs`).
  */
 function segment_bs_sh_execute(
-    params: SegmentBsShParameters,
+    params: SegmentBsShParamsDict,
     runner: Runner | null = null,
 ): SegmentBsShOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function segment_bs_sh(
 export {
       SEGMENT_BS_SH_METADATA,
       SegmentBsShOutputs,
+      SegmentBsShParamsDict,
+      SegmentBsShParamsDictTagged,
       segment_bs_sh,
       segment_bs_sh_execute,
       segment_bs_sh_params,

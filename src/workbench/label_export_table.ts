@@ -10,17 +10,17 @@ const LABEL_EXPORT_TABLE_METADATA: Metadata = {
 };
 
 
-interface LabelExportTableParameters {
+interface LabelExportTableParamsDict {
     "@type"?: "workbench/label-export-table";
     "json-out"?: string | null | undefined;
     "label-in": InputPathType;
     "table-out": string;
 }
-type LabelExportTableParametersTagged = Required<Pick<LabelExportTableParameters, '@type'>> & LabelExportTableParameters;
+type LabelExportTableParamsDictTagged = Required<Pick<LabelExportTableParamsDict, '@type'>> & LabelExportTableParamsDict;
 
 
 /**
- * Output object returned when calling `LabelExportTableParameters(...)`.
+ * Output object returned when calling `LabelExportTableParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ function label_export_table_params(
     json_out: string | null,
     label_in: InputPathType,
     table_out: string,
-): LabelExportTableParametersTagged {
+): LabelExportTableParamsDictTagged {
     const params = {
         "@type": "workbench/label-export-table" as const,
         "label-in": label_in,
@@ -69,7 +69,7 @@ function label_export_table_params(
  * @returns Command-line arguments.
  */
 function label_export_table_cargs(
-    params: LabelExportTableParameters,
+    params: LabelExportTableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function label_export_table_cargs(
  * @returns Outputs object.
  */
 function label_export_table_outputs(
-    params: LabelExportTableParameters,
+    params: LabelExportTableParamsDict,
     execution: Execution,
 ): LabelExportTableOutputs {
     const ret: LabelExportTableOutputs = {
@@ -117,7 +117,7 @@ function label_export_table_outputs(
  * @returns NamedTuple of outputs (described in `LabelExportTableOutputs`).
  */
 function label_export_table_execute(
-    params: LabelExportTableParameters,
+    params: LabelExportTableParamsDict,
     runner: Runner | null = null,
 ): LabelExportTableOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function label_export_table(
 export {
       LABEL_EXPORT_TABLE_METADATA,
       LabelExportTableOutputs,
+      LabelExportTableParamsDict,
+      LabelExportTableParamsDictTagged,
       label_export_table,
       label_export_table_execute,
       label_export_table_params,

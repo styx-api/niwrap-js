@@ -11,16 +11,16 @@ const V_1DTRANSPOSE_METADATA: Metadata = {
 };
 
 
-interface V1dtransposeParameters {
+interface V1dtransposeParamsDict {
     "@type"?: "afni/1dtranspose";
     "infile": InputPathType;
     "outfile"?: string | null | undefined;
 }
-type V1dtransposeParametersTagged = Required<Pick<V1dtransposeParameters, '@type'>> & V1dtransposeParameters;
+type V1dtransposeParamsDictTagged = Required<Pick<V1dtransposeParamsDict, '@type'>> & V1dtransposeParamsDict;
 
 
 /**
- * Output object returned when calling `V1dtransposeParameters(...)`.
+ * Output object returned when calling `V1dtransposeParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface V1dtransposeOutputs {
 function v_1dtranspose_params(
     infile: InputPathType,
     outfile: string | null = null,
-): V1dtransposeParametersTagged {
+): V1dtransposeParamsDictTagged {
     const params = {
         "@type": "afni/1dtranspose" as const,
         "infile": infile,
@@ -68,7 +68,7 @@ function v_1dtranspose_params(
  * @returns Command-line arguments.
  */
 function v_1dtranspose_cargs(
-    params: V1dtransposeParameters,
+    params: V1dtransposeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function v_1dtranspose_cargs(
  * @returns Outputs object.
  */
 function v_1dtranspose_outputs(
-    params: V1dtransposeParameters,
+    params: V1dtransposeParamsDict,
     execution: Execution,
 ): V1dtransposeOutputs {
     const ret: V1dtransposeOutputs = {
@@ -116,7 +116,7 @@ function v_1dtranspose_outputs(
  * @returns NamedTuple of outputs (described in `V1dtransposeOutputs`).
  */
 function v_1dtranspose_execute(
-    params: V1dtransposeParameters,
+    params: V1dtransposeParamsDict,
     runner: Runner | null = null,
 ): V1dtransposeOutputs {
     runner = runner || getGlobalRunner();
@@ -156,6 +156,8 @@ function v_1dtranspose(
 
 export {
       V1dtransposeOutputs,
+      V1dtransposeParamsDict,
+      V1dtransposeParamsDictTagged,
       V_1DTRANSPOSE_METADATA,
       v_1dtranspose,
       v_1dtranspose_execute,

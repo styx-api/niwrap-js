@@ -11,15 +11,15 @@ const FSLINFO_METADATA: Metadata = {
 };
 
 
-interface FslinfoParameters {
+interface FslinfoParamsDict {
     "@type"?: "fsl/fslinfo";
     "filename": InputPathType;
 }
-type FslinfoParametersTagged = Required<Pick<FslinfoParameters, '@type'>> & FslinfoParameters;
+type FslinfoParamsDictTagged = Required<Pick<FslinfoParamsDict, '@type'>> & FslinfoParamsDict;
 
 
 /**
- * Output object returned when calling `FslinfoParameters(...)`.
+ * Output object returned when calling `FslinfoParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FslinfoOutputs {
  */
 function fslinfo_params(
     filename: InputPathType,
-): FslinfoParametersTagged {
+): FslinfoParamsDictTagged {
     const params = {
         "@type": "fsl/fslinfo" as const,
         "filename": filename,
@@ -58,7 +58,7 @@ function fslinfo_params(
  * @returns Command-line arguments.
  */
 function fslinfo_cargs(
-    params: FslinfoParameters,
+    params: FslinfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function fslinfo_cargs(
  * @returns Outputs object.
  */
 function fslinfo_outputs(
-    params: FslinfoParameters,
+    params: FslinfoParamsDict,
     execution: Execution,
 ): FslinfoOutputs {
     const ret: FslinfoOutputs = {
@@ -102,7 +102,7 @@ function fslinfo_outputs(
  * @returns NamedTuple of outputs (described in `FslinfoOutputs`).
  */
 function fslinfo_execute(
-    params: FslinfoParameters,
+    params: FslinfoParamsDict,
     runner: Runner | null = null,
 ): FslinfoOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function fslinfo(
 export {
       FSLINFO_METADATA,
       FslinfoOutputs,
+      FslinfoParamsDict,
+      FslinfoParamsDictTagged,
       fslinfo,
       fslinfo_execute,
       fslinfo_params,

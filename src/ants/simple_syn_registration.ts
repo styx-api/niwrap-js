@@ -11,18 +11,18 @@ const SIMPLE_SYN_REGISTRATION_METADATA: Metadata = {
 };
 
 
-interface SimpleSynRegistrationParameters {
+interface SimpleSynRegistrationParamsDict {
     "@type"?: "ants/simpleSynRegistration";
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "initial_transform": string;
     "output_prefix": string;
 }
-type SimpleSynRegistrationParametersTagged = Required<Pick<SimpleSynRegistrationParameters, '@type'>> & SimpleSynRegistrationParameters;
+type SimpleSynRegistrationParamsDictTagged = Required<Pick<SimpleSynRegistrationParamsDict, '@type'>> & SimpleSynRegistrationParamsDict;
 
 
 /**
- * Output object returned when calling `SimpleSynRegistrationParameters(...)`.
+ * Output object returned when calling `SimpleSynRegistrationParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function simple_syn_registration_params(
     moving_image: InputPathType,
     initial_transform: string,
     output_prefix: string,
-): SimpleSynRegistrationParametersTagged {
+): SimpleSynRegistrationParamsDictTagged {
     const params = {
         "@type": "ants/simpleSynRegistration" as const,
         "fixed_image": fixed_image,
@@ -78,7 +78,7 @@ function simple_syn_registration_params(
  * @returns Command-line arguments.
  */
 function simple_syn_registration_cargs(
-    params: SimpleSynRegistrationParameters,
+    params: SimpleSynRegistrationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function simple_syn_registration_cargs(
  * @returns Outputs object.
  */
 function simple_syn_registration_outputs(
-    params: SimpleSynRegistrationParameters,
+    params: SimpleSynRegistrationParamsDict,
     execution: Execution,
 ): SimpleSynRegistrationOutputs {
     const ret: SimpleSynRegistrationOutputs = {
@@ -127,7 +127,7 @@ function simple_syn_registration_outputs(
  * @returns NamedTuple of outputs (described in `SimpleSynRegistrationOutputs`).
  */
 function simple_syn_registration_execute(
-    params: SimpleSynRegistrationParameters,
+    params: SimpleSynRegistrationParamsDict,
     runner: Runner | null = null,
 ): SimpleSynRegistrationOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function simple_syn_registration(
 export {
       SIMPLE_SYN_REGISTRATION_METADATA,
       SimpleSynRegistrationOutputs,
+      SimpleSynRegistrationParamsDict,
+      SimpleSynRegistrationParamsDictTagged,
       simple_syn_registration,
       simple_syn_registration_execute,
       simple_syn_registration_params,

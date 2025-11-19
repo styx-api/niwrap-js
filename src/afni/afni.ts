@@ -11,7 +11,7 @@ const AFNI_METADATA: Metadata = {
 };
 
 
-interface AfniParameters {
+interface AfniParamsDict {
     "@type"?: "afni/afni";
     "session_directories"?: string | null | undefined;
     "bysub"?: Array<string> | null | undefined;
@@ -39,11 +39,11 @@ interface AfniParameters {
     "com"?: string | null | undefined;
     "comsep"?: string | null | undefined;
 }
-type AfniParametersTagged = Required<Pick<AfniParameters, '@type'>> & AfniParameters;
+type AfniParamsDictTagged = Required<Pick<AfniParamsDict, '@type'>> & AfniParamsDict;
 
 
 /**
- * Output object returned when calling `AfniParameters(...)`.
+ * Output object returned when calling `AfniParamsDict(...)`.
  *
  * @interface
  */
@@ -116,7 +116,7 @@ function afni_params(
     npb: number | null = null,
     com: string | null = null,
     comsep: string | null = null,
-): AfniParametersTagged {
+): AfniParamsDictTagged {
     const params = {
         "@type": "afni/afni" as const,
         "all_dsets": all_dsets,
@@ -176,7 +176,7 @@ function afni_params(
  * @returns Command-line arguments.
  */
 function afni_cargs(
-    params: AfniParameters,
+    params: AfniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -293,7 +293,7 @@ function afni_cargs(
  * @returns Outputs object.
  */
 function afni_outputs(
-    params: AfniParameters,
+    params: AfniParamsDict,
     execution: Execution,
 ): AfniOutputs {
     const ret: AfniOutputs = {
@@ -319,7 +319,7 @@ function afni_outputs(
  * @returns NamedTuple of outputs (described in `AfniOutputs`).
  */
 function afni_execute(
-    params: AfniParameters,
+    params: AfniParamsDict,
     runner: Runner | null = null,
 ): AfniOutputs {
     runner = runner || getGlobalRunner();
@@ -406,6 +406,8 @@ function afni_(
 export {
       AFNI_METADATA,
       AfniOutputs,
+      AfniParamsDict,
+      AfniParamsDictTagged,
       afni_,
       afni_execute,
       afni_params,

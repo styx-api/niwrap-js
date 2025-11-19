@@ -11,7 +11,7 @@ const CONVERT_SCALAR_IMAGE_TO_RGB_METADATA: Metadata = {
 };
 
 
-interface ConvertScalarImageToRgbParameters {
+interface ConvertScalarImageToRgbParamsDict {
     "@type"?: "ants/ConvertScalarImageToRGB";
     "image_dimension": number;
     "input_image": InputPathType;
@@ -25,11 +25,11 @@ interface ConvertScalarImageToRgbParameters {
     "maximum_rgb_output"?: number | null | undefined;
     "vtk_lookup_table"?: string | null | undefined;
 }
-type ConvertScalarImageToRgbParametersTagged = Required<Pick<ConvertScalarImageToRgbParameters, '@type'>> & ConvertScalarImageToRgbParameters;
+type ConvertScalarImageToRgbParamsDictTagged = Required<Pick<ConvertScalarImageToRgbParamsDict, '@type'>> & ConvertScalarImageToRgbParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertScalarImageToRgbParameters(...)`.
+ * Output object returned when calling `ConvertScalarImageToRgbParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function convert_scalar_image_to_rgb_params(
     minimum_rgb_output: number | null = null,
     maximum_rgb_output: number | null = null,
     vtk_lookup_table: string | null = null,
-): ConvertScalarImageToRgbParametersTagged {
+): ConvertScalarImageToRgbParamsDictTagged {
     const params = {
         "@type": "ants/ConvertScalarImageToRGB" as const,
         "image_dimension": image_dimension,
@@ -114,7 +114,7 @@ function convert_scalar_image_to_rgb_params(
  * @returns Command-line arguments.
  */
 function convert_scalar_image_to_rgb_cargs(
-    params: ConvertScalarImageToRgbParameters,
+    params: ConvertScalarImageToRgbParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,7 +155,7 @@ function convert_scalar_image_to_rgb_cargs(
  * @returns Outputs object.
  */
 function convert_scalar_image_to_rgb_outputs(
-    params: ConvertScalarImageToRgbParameters,
+    params: ConvertScalarImageToRgbParamsDict,
     execution: Execution,
 ): ConvertScalarImageToRgbOutputs {
     const ret: ConvertScalarImageToRgbOutputs = {
@@ -181,7 +181,7 @@ function convert_scalar_image_to_rgb_outputs(
  * @returns NamedTuple of outputs (described in `ConvertScalarImageToRgbOutputs`).
  */
 function convert_scalar_image_to_rgb_execute(
-    params: ConvertScalarImageToRgbParameters,
+    params: ConvertScalarImageToRgbParamsDict,
     runner: Runner | null = null,
 ): ConvertScalarImageToRgbOutputs {
     runner = runner || getGlobalRunner();
@@ -240,6 +240,8 @@ function convert_scalar_image_to_rgb(
 export {
       CONVERT_SCALAR_IMAGE_TO_RGB_METADATA,
       ConvertScalarImageToRgbOutputs,
+      ConvertScalarImageToRgbParamsDict,
+      ConvertScalarImageToRgbParamsDictTagged,
       convert_scalar_image_to_rgb,
       convert_scalar_image_to_rgb_execute,
       convert_scalar_image_to_rgb_params,

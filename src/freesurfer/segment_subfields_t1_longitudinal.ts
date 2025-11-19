@@ -11,17 +11,17 @@ const SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA: Metadata = {
 };
 
 
-interface SegmentSubfieldsT1LongitudinalParameters {
+interface SegmentSubfieldsT1LongitudinalParamsDict {
     "@type"?: "freesurfer/SegmentSubfieldsT1Longitudinal";
     "subject_id": string;
     "input_image": InputPathType;
     "output_dir": string;
 }
-type SegmentSubfieldsT1LongitudinalParametersTagged = Required<Pick<SegmentSubfieldsT1LongitudinalParameters, '@type'>> & SegmentSubfieldsT1LongitudinalParameters;
+type SegmentSubfieldsT1LongitudinalParamsDictTagged = Required<Pick<SegmentSubfieldsT1LongitudinalParamsDict, '@type'>> & SegmentSubfieldsT1LongitudinalParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubfieldsT1LongitudinalParameters(...)`.
+ * Output object returned when calling `SegmentSubfieldsT1LongitudinalParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function segment_subfields_t1_longitudinal_params(
     subject_id: string,
     input_image: InputPathType,
     output_dir: string,
-): SegmentSubfieldsT1LongitudinalParametersTagged {
+): SegmentSubfieldsT1LongitudinalParamsDictTagged {
     const params = {
         "@type": "freesurfer/SegmentSubfieldsT1Longitudinal" as const,
         "subject_id": subject_id,
@@ -70,7 +70,7 @@ function segment_subfields_t1_longitudinal_params(
  * @returns Command-line arguments.
  */
 function segment_subfields_t1_longitudinal_cargs(
-    params: SegmentSubfieldsT1LongitudinalParameters,
+    params: SegmentSubfieldsT1LongitudinalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function segment_subfields_t1_longitudinal_cargs(
  * @returns Outputs object.
  */
 function segment_subfields_t1_longitudinal_outputs(
-    params: SegmentSubfieldsT1LongitudinalParameters,
+    params: SegmentSubfieldsT1LongitudinalParamsDict,
     execution: Execution,
 ): SegmentSubfieldsT1LongitudinalOutputs {
     const ret: SegmentSubfieldsT1LongitudinalOutputs = {
@@ -117,7 +117,7 @@ function segment_subfields_t1_longitudinal_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubfieldsT1LongitudinalOutputs`).
  */
 function segment_subfields_t1_longitudinal_execute(
-    params: SegmentSubfieldsT1LongitudinalParameters,
+    params: SegmentSubfieldsT1LongitudinalParamsDict,
     runner: Runner | null = null,
 ): SegmentSubfieldsT1LongitudinalOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function segment_subfields_t1_longitudinal(
 export {
       SEGMENT_SUBFIELDS_T1_LONGITUDINAL_METADATA,
       SegmentSubfieldsT1LongitudinalOutputs,
+      SegmentSubfieldsT1LongitudinalParamsDict,
+      SegmentSubfieldsT1LongitudinalParamsDictTagged,
       segment_subfields_t1_longitudinal,
       segment_subfields_t1_longitudinal_execute,
       segment_subfields_t1_longitudinal_params,

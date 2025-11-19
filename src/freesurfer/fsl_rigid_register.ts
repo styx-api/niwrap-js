@@ -11,7 +11,7 @@ const FSL_RIGID_REGISTER_METADATA: Metadata = {
 };
 
 
-interface FslRigidRegisterParameters {
+interface FslRigidRegisterParamsDict {
     "@type"?: "freesurfer/fsl_rigid_register";
     "refvol": InputPathType;
     "inputvol": InputPathType;
@@ -36,11 +36,11 @@ interface FslRigidRegisterParameters {
     "version": boolean;
     "help": boolean;
 }
-type FslRigidRegisterParametersTagged = Required<Pick<FslRigidRegisterParameters, '@type'>> & FslRigidRegisterParameters;
+type FslRigidRegisterParamsDictTagged = Required<Pick<FslRigidRegisterParamsDict, '@type'>> & FslRigidRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `FslRigidRegisterParameters(...)`.
+ * Output object returned when calling `FslRigidRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -107,7 +107,7 @@ function fsl_rigid_register_params(
     subject: string | null = null,
     version: boolean = false,
     help: boolean = false,
-): FslRigidRegisterParametersTagged {
+): FslRigidRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsl_rigid_register" as const,
         "refvol": refvol,
@@ -172,7 +172,7 @@ function fsl_rigid_register_params(
  * @returns Command-line arguments.
  */
 function fsl_rigid_register_cargs(
-    params: FslRigidRegisterParameters,
+    params: FslRigidRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -298,7 +298,7 @@ function fsl_rigid_register_cargs(
  * @returns Outputs object.
  */
 function fsl_rigid_register_outputs(
-    params: FslRigidRegisterParameters,
+    params: FslRigidRegisterParamsDict,
     execution: Execution,
 ): FslRigidRegisterOutputs {
     const ret: FslRigidRegisterOutputs = {
@@ -324,7 +324,7 @@ function fsl_rigid_register_outputs(
  * @returns NamedTuple of outputs (described in `FslRigidRegisterOutputs`).
  */
 function fsl_rigid_register_execute(
-    params: FslRigidRegisterParameters,
+    params: FslRigidRegisterParamsDict,
     runner: Runner | null = null,
 ): FslRigidRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -405,6 +405,8 @@ function fsl_rigid_register(
 export {
       FSL_RIGID_REGISTER_METADATA,
       FslRigidRegisterOutputs,
+      FslRigidRegisterParamsDict,
+      FslRigidRegisterParamsDictTagged,
       fsl_rigid_register,
       fsl_rigid_register_execute,
       fsl_rigid_register_params,

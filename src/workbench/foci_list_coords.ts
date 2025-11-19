@@ -10,17 +10,17 @@ const FOCI_LIST_COORDS_METADATA: Metadata = {
 };
 
 
-interface FociListCoordsParameters {
+interface FociListCoordsParamsDict {
     "@type"?: "workbench/foci-list-coords";
     "names-file-out"?: string | null | undefined;
     "foci-file": InputPathType;
     "coord-file-out": string;
 }
-type FociListCoordsParametersTagged = Required<Pick<FociListCoordsParameters, '@type'>> & FociListCoordsParameters;
+type FociListCoordsParamsDictTagged = Required<Pick<FociListCoordsParamsDict, '@type'>> & FociListCoordsParamsDict;
 
 
 /**
- * Output object returned when calling `FociListCoordsParameters(...)`.
+ * Output object returned when calling `FociListCoordsParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ function foci_list_coords_params(
     names_file_out: string | null,
     foci_file: InputPathType,
     coord_file_out: string,
-): FociListCoordsParametersTagged {
+): FociListCoordsParamsDictTagged {
     const params = {
         "@type": "workbench/foci-list-coords" as const,
         "foci-file": foci_file,
@@ -69,7 +69,7 @@ function foci_list_coords_params(
  * @returns Command-line arguments.
  */
 function foci_list_coords_cargs(
-    params: FociListCoordsParameters,
+    params: FociListCoordsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function foci_list_coords_cargs(
  * @returns Outputs object.
  */
 function foci_list_coords_outputs(
-    params: FociListCoordsParameters,
+    params: FociListCoordsParamsDict,
     execution: Execution,
 ): FociListCoordsOutputs {
     const ret: FociListCoordsOutputs = {
@@ -117,7 +117,7 @@ function foci_list_coords_outputs(
  * @returns NamedTuple of outputs (described in `FociListCoordsOutputs`).
  */
 function foci_list_coords_execute(
-    params: FociListCoordsParameters,
+    params: FociListCoordsParamsDict,
     runner: Runner | null = null,
 ): FociListCoordsOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function foci_list_coords(
 export {
       FOCI_LIST_COORDS_METADATA,
       FociListCoordsOutputs,
+      FociListCoordsParamsDict,
+      FociListCoordsParamsDictTagged,
       foci_list_coords,
       foci_list_coords_execute,
       foci_list_coords_params,

@@ -11,17 +11,17 @@ const UNPACK_MNC_TCL_METADATA: Metadata = {
 };
 
 
-interface UnpackMncTclParameters {
+interface UnpackMncTclParamsDict {
     "@type"?: "freesurfer/unpack_mnc.tcl";
     "verbose": boolean;
     "output_dir"?: string | null | undefined;
     "input_file"?: InputPathType | null | undefined;
 }
-type UnpackMncTclParametersTagged = Required<Pick<UnpackMncTclParameters, '@type'>> & UnpackMncTclParameters;
+type UnpackMncTclParamsDictTagged = Required<Pick<UnpackMncTclParamsDict, '@type'>> & UnpackMncTclParamsDict;
 
 
 /**
- * Output object returned when calling `UnpackMncTclParameters(...)`.
+ * Output object returned when calling `UnpackMncTclParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function unpack_mnc_tcl_params(
     verbose: boolean = false,
     output_dir: string | null = null,
     input_file: InputPathType | null = null,
-): UnpackMncTclParametersTagged {
+): UnpackMncTclParamsDictTagged {
     const params = {
         "@type": "freesurfer/unpack_mnc.tcl" as const,
         "verbose": verbose,
@@ -74,7 +74,7 @@ function unpack_mnc_tcl_params(
  * @returns Command-line arguments.
  */
 function unpack_mnc_tcl_cargs(
-    params: UnpackMncTclParameters,
+    params: UnpackMncTclParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function unpack_mnc_tcl_cargs(
  * @returns Outputs object.
  */
 function unpack_mnc_tcl_outputs(
-    params: UnpackMncTclParameters,
+    params: UnpackMncTclParamsDict,
     execution: Execution,
 ): UnpackMncTclOutputs {
     const ret: UnpackMncTclOutputs = {
@@ -133,7 +133,7 @@ function unpack_mnc_tcl_outputs(
  * @returns NamedTuple of outputs (described in `UnpackMncTclOutputs`).
  */
 function unpack_mnc_tcl_execute(
-    params: UnpackMncTclParameters,
+    params: UnpackMncTclParamsDict,
     runner: Runner | null = null,
 ): UnpackMncTclOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function unpack_mnc_tcl(
 export {
       UNPACK_MNC_TCL_METADATA,
       UnpackMncTclOutputs,
+      UnpackMncTclParamsDict,
+      UnpackMncTclParamsDictTagged,
       unpack_mnc_tcl,
       unpack_mnc_tcl_execute,
       unpack_mnc_tcl_params,

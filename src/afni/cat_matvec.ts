@@ -11,18 +11,18 @@ const CAT_MATVEC_METADATA: Metadata = {
 };
 
 
-interface CatMatvecParameters {
+interface CatMatvecParamsDict {
     "@type"?: "afni/cat_matvec";
     "matrix_format": boolean;
     "oneline_format": boolean;
     "four_by_four_format": boolean;
     "matvec_spec": Array<string>;
 }
-type CatMatvecParametersTagged = Required<Pick<CatMatvecParameters, '@type'>> & CatMatvecParameters;
+type CatMatvecParamsDictTagged = Required<Pick<CatMatvecParamsDict, '@type'>> & CatMatvecParamsDict;
 
 
 /**
- * Output object returned when calling `CatMatvecParameters(...)`.
+ * Output object returned when calling `CatMatvecParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function cat_matvec_params(
     matrix_format: boolean = false,
     oneline_format: boolean = false,
     four_by_four_format: boolean = false,
-): CatMatvecParametersTagged {
+): CatMatvecParamsDictTagged {
     const params = {
         "@type": "afni/cat_matvec" as const,
         "matrix_format": matrix_format,
@@ -70,7 +70,7 @@ function cat_matvec_params(
  * @returns Command-line arguments.
  */
 function cat_matvec_cargs(
-    params: CatMatvecParameters,
+    params: CatMatvecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function cat_matvec_cargs(
  * @returns Outputs object.
  */
 function cat_matvec_outputs(
-    params: CatMatvecParameters,
+    params: CatMatvecParamsDict,
     execution: Execution,
 ): CatMatvecOutputs {
     const ret: CatMatvecOutputs = {
@@ -123,7 +123,7 @@ function cat_matvec_outputs(
  * @returns NamedTuple of outputs (described in `CatMatvecOutputs`).
  */
 function cat_matvec_execute(
-    params: CatMatvecParameters,
+    params: CatMatvecParamsDict,
     runner: Runner | null = null,
 ): CatMatvecOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function cat_matvec(
 export {
       CAT_MATVEC_METADATA,
       CatMatvecOutputs,
+      CatMatvecParamsDict,
+      CatMatvecParamsDictTagged,
       cat_matvec,
       cat_matvec_execute,
       cat_matvec_params,

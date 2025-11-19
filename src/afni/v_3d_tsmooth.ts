@@ -11,7 +11,7 @@ const V_3D_TSMOOTH_METADATA: Metadata = {
 };
 
 
-interface V3dTsmoothParameters {
+interface V3dTsmoothParamsDict {
     "@type"?: "afni/3dTsmooth";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
@@ -28,11 +28,11 @@ interface V3dTsmoothParameters {
     "trend": boolean;
     "adaptive"?: number | null | undefined;
 }
-type V3dTsmoothParametersTagged = Required<Pick<V3dTsmoothParameters, '@type'>> & V3dTsmoothParameters;
+type V3dTsmoothParamsDictTagged = Required<Pick<V3dTsmoothParamsDict, '@type'>> & V3dTsmoothParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTsmoothParameters(...)`.
+ * Output object returned when calling `V3dTsmoothParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function v_3d_tsmooth_params(
     zero: boolean = false,
     trend: boolean = false,
     adaptive: number | null = null,
-): V3dTsmoothParametersTagged {
+): V3dTsmoothParamsDictTagged {
     const params = {
         "@type": "afni/3dTsmooth" as const,
         "input_dataset": input_dataset,
@@ -128,7 +128,7 @@ function v_3d_tsmooth_params(
  * @returns Command-line arguments.
  */
 function v_3d_tsmooth_cargs(
-    params: V3dTsmoothParameters,
+    params: V3dTsmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -207,7 +207,7 @@ function v_3d_tsmooth_cargs(
  * @returns Outputs object.
  */
 function v_3d_tsmooth_outputs(
-    params: V3dTsmoothParameters,
+    params: V3dTsmoothParamsDict,
     execution: Execution,
 ): V3dTsmoothOutputs {
     const ret: V3dTsmoothOutputs = {
@@ -233,7 +233,7 @@ function v_3d_tsmooth_outputs(
  * @returns NamedTuple of outputs (described in `V3dTsmoothOutputs`).
  */
 function v_3d_tsmooth_execute(
-    params: V3dTsmoothParameters,
+    params: V3dTsmoothParamsDict,
     runner: Runner | null = null,
 ): V3dTsmoothOutputs {
     runner = runner || getGlobalRunner();
@@ -297,6 +297,8 @@ function v_3d_tsmooth(
 
 export {
       V3dTsmoothOutputs,
+      V3dTsmoothParamsDict,
+      V3dTsmoothParamsDictTagged,
       V_3D_TSMOOTH_METADATA,
       v_3d_tsmooth,
       v_3d_tsmooth_execute,

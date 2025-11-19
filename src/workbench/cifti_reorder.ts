@@ -10,18 +10,18 @@ const CIFTI_REORDER_METADATA: Metadata = {
 };
 
 
-interface CiftiReorderParameters {
+interface CiftiReorderParamsDict {
     "@type"?: "workbench/cifti-reorder";
     "cifti-out": string;
     "cifti-in": InputPathType;
     "direction": string;
     "reorder-list": string;
 }
-type CiftiReorderParametersTagged = Required<Pick<CiftiReorderParameters, '@type'>> & CiftiReorderParameters;
+type CiftiReorderParamsDictTagged = Required<Pick<CiftiReorderParamsDict, '@type'>> & CiftiReorderParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiReorderParameters(...)`.
+ * Output object returned when calling `CiftiReorderParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function cifti_reorder_params(
     cifti_in: InputPathType,
     direction: string,
     reorder_list: string,
-): CiftiReorderParametersTagged {
+): CiftiReorderParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-reorder" as const,
         "cifti-out": cifti_out,
@@ -73,7 +73,7 @@ function cifti_reorder_params(
  * @returns Command-line arguments.
  */
 function cifti_reorder_cargs(
-    params: CiftiReorderParameters,
+    params: CiftiReorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function cifti_reorder_cargs(
  * @returns Outputs object.
  */
 function cifti_reorder_outputs(
-    params: CiftiReorderParameters,
+    params: CiftiReorderParamsDict,
     execution: Execution,
 ): CiftiReorderOutputs {
     const ret: CiftiReorderOutputs = {
@@ -120,7 +120,7 @@ function cifti_reorder_outputs(
  * @returns NamedTuple of outputs (described in `CiftiReorderOutputs`).
  */
 function cifti_reorder_execute(
-    params: CiftiReorderParameters,
+    params: CiftiReorderParamsDict,
     runner: Runner | null = null,
 ): CiftiReorderOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function cifti_reorder(
 export {
       CIFTI_REORDER_METADATA,
       CiftiReorderOutputs,
+      CiftiReorderParamsDict,
+      CiftiReorderParamsDictTagged,
       cifti_reorder,
       cifti_reorder_execute,
       cifti_reorder_params,

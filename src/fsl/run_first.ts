@@ -11,7 +11,7 @@ const RUN_FIRST_METADATA: Metadata = {
 };
 
 
-interface RunFirstParameters {
+interface RunFirstParamsDict {
     "@type"?: "fsl/run_first";
     "input_image": InputPathType;
     "transformation_matrix": InputPathType;
@@ -23,11 +23,11 @@ interface RunFirstParameters {
     "load_bvars"?: InputPathType | null | undefined;
     "multiple_images_flag": boolean;
 }
-type RunFirstParametersTagged = Required<Pick<RunFirstParameters, '@type'>> & RunFirstParameters;
+type RunFirstParamsDictTagged = Required<Pick<RunFirstParamsDict, '@type'>> & RunFirstParamsDict;
 
 
 /**
- * Output object returned when calling `RunFirstParameters(...)`.
+ * Output object returned when calling `RunFirstParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function run_first_params(
     intref_model_name: string | null = null,
     load_bvars: InputPathType | null = null,
     multiple_images_flag: boolean = false,
-): RunFirstParametersTagged {
+): RunFirstParamsDictTagged {
     const params = {
         "@type": "fsl/run_first" as const,
         "input_image": input_image,
@@ -94,7 +94,7 @@ function run_first_params(
  * @returns Command-line arguments.
  */
 function run_first_cargs(
-    params: RunFirstParameters,
+    params: RunFirstParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function run_first_cargs(
  * @returns Outputs object.
  */
 function run_first_outputs(
-    params: RunFirstParameters,
+    params: RunFirstParamsDict,
     execution: Execution,
 ): RunFirstOutputs {
     const ret: RunFirstOutputs = {
@@ -175,7 +175,7 @@ function run_first_outputs(
  * @returns NamedTuple of outputs (described in `RunFirstOutputs`).
  */
 function run_first_execute(
-    params: RunFirstParameters,
+    params: RunFirstParamsDict,
     runner: Runner | null = null,
 ): RunFirstOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function run_first(
 export {
       RUN_FIRST_METADATA,
       RunFirstOutputs,
+      RunFirstParamsDict,
+      RunFirstParamsDictTagged,
       run_first,
       run_first_execute,
       run_first_params,

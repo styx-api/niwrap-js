@@ -10,17 +10,17 @@ const VOLUME_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 };
 
 
-interface VolumeAllLabelsToRoisParameters {
+interface VolumeAllLabelsToRoisParamsDict {
     "@type"?: "workbench/volume-all-labels-to-rois";
     "volume-out": string;
     "label-in": InputPathType;
     "map": string;
 }
-type VolumeAllLabelsToRoisParametersTagged = Required<Pick<VolumeAllLabelsToRoisParameters, '@type'>> & VolumeAllLabelsToRoisParameters;
+type VolumeAllLabelsToRoisParamsDictTagged = Required<Pick<VolumeAllLabelsToRoisParamsDict, '@type'>> & VolumeAllLabelsToRoisParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeAllLabelsToRoisParameters(...)`.
+ * Output object returned when calling `VolumeAllLabelsToRoisParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function volume_all_labels_to_rois_params(
     volume_out: string,
     label_in: InputPathType,
     map: string,
-): VolumeAllLabelsToRoisParametersTagged {
+): VolumeAllLabelsToRoisParamsDictTagged {
     const params = {
         "@type": "workbench/volume-all-labels-to-rois" as const,
         "volume-out": volume_out,
@@ -69,7 +69,7 @@ function volume_all_labels_to_rois_params(
  * @returns Command-line arguments.
  */
 function volume_all_labels_to_rois_cargs(
-    params: VolumeAllLabelsToRoisParameters,
+    params: VolumeAllLabelsToRoisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function volume_all_labels_to_rois_cargs(
  * @returns Outputs object.
  */
 function volume_all_labels_to_rois_outputs(
-    params: VolumeAllLabelsToRoisParameters,
+    params: VolumeAllLabelsToRoisParamsDict,
     execution: Execution,
 ): VolumeAllLabelsToRoisOutputs {
     const ret: VolumeAllLabelsToRoisOutputs = {
@@ -115,7 +115,7 @@ function volume_all_labels_to_rois_outputs(
  * @returns NamedTuple of outputs (described in `VolumeAllLabelsToRoisOutputs`).
  */
 function volume_all_labels_to_rois_execute(
-    params: VolumeAllLabelsToRoisParameters,
+    params: VolumeAllLabelsToRoisParamsDict,
     runner: Runner | null = null,
 ): VolumeAllLabelsToRoisOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function volume_all_labels_to_rois(
 export {
       VOLUME_ALL_LABELS_TO_ROIS_METADATA,
       VolumeAllLabelsToRoisOutputs,
+      VolumeAllLabelsToRoisParamsDict,
+      VolumeAllLabelsToRoisParamsDictTagged,
       volume_all_labels_to_rois,
       volume_all_labels_to_rois_execute,
       volume_all_labels_to_rois_params,

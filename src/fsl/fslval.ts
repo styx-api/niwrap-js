@@ -11,16 +11,16 @@ const FSLVAL_METADATA: Metadata = {
 };
 
 
-interface FslvalParameters {
+interface FslvalParamsDict {
     "@type"?: "fsl/fslval";
     "input_file": InputPathType;
     "keyword": string;
 }
-type FslvalParametersTagged = Required<Pick<FslvalParameters, '@type'>> & FslvalParameters;
+type FslvalParamsDictTagged = Required<Pick<FslvalParamsDict, '@type'>> & FslvalParamsDict;
 
 
 /**
- * Output object returned when calling `FslvalParameters(...)`.
+ * Output object returned when calling `FslvalParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FslvalOutputs {
 function fslval_params(
     input_file: InputPathType,
     keyword: string,
-): FslvalParametersTagged {
+): FslvalParamsDictTagged {
     const params = {
         "@type": "fsl/fslval" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function fslval_params(
  * @returns Command-line arguments.
  */
 function fslval_cargs(
-    params: FslvalParameters,
+    params: FslvalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function fslval_cargs(
  * @returns Outputs object.
  */
 function fslval_outputs(
-    params: FslvalParameters,
+    params: FslvalParamsDict,
     execution: Execution,
 ): FslvalOutputs {
     const ret: FslvalOutputs = {
@@ -112,7 +112,7 @@ function fslval_outputs(
  * @returns NamedTuple of outputs (described in `FslvalOutputs`).
  */
 function fslval_execute(
-    params: FslvalParameters,
+    params: FslvalParamsDict,
     runner: Runner | null = null,
 ): FslvalOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function fslval(
 export {
       FSLVAL_METADATA,
       FslvalOutputs,
+      FslvalParamsDict,
+      FslvalParamsDictTagged,
       fslval,
       fslval_execute,
       fslval_params,

@@ -11,22 +11,22 @@ const MRCLUSTERSTATS_METADATA: Metadata = {
 };
 
 
-interface MrclusterstatsColumnParameters {
+interface MrclusterstatsColumnParamsDict {
     "@type"?: "column";
     "path": InputPathType;
 }
-type MrclusterstatsColumnParametersTagged = Required<Pick<MrclusterstatsColumnParameters, '@type'>> & MrclusterstatsColumnParameters;
+type MrclusterstatsColumnParamsDictTagged = Required<Pick<MrclusterstatsColumnParamsDict, '@type'>> & MrclusterstatsColumnParamsDict;
 
 
-interface MrclusterstatsConfigParameters {
+interface MrclusterstatsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrclusterstatsConfigParametersTagged = Required<Pick<MrclusterstatsConfigParameters, '@type'>> & MrclusterstatsConfigParameters;
+type MrclusterstatsConfigParamsDictTagged = Required<Pick<MrclusterstatsConfigParamsDict, '@type'>> & MrclusterstatsConfigParamsDict;
 
 
-interface MrclusterstatsParameters {
+interface MrclusterstatsParamsDict {
     "@type"?: "mrtrix/mrclusterstats";
     "notest": boolean;
     "errors"?: string | null | undefined;
@@ -45,7 +45,7 @@ interface MrclusterstatsParameters {
     "variance"?: InputPathType | null | undefined;
     "ftests"?: InputPathType | null | undefined;
     "fonly": boolean;
-    "column"?: Array<MrclusterstatsColumnParameters> | null | undefined;
+    "column"?: Array<MrclusterstatsColumnParamsDict> | null | undefined;
     "threshold"?: number | null | undefined;
     "connectivity": boolean;
     "info": boolean;
@@ -53,7 +53,7 @@ interface MrclusterstatsParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrclusterstatsConfigParameters> | null | undefined;
+    "config"?: Array<MrclusterstatsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
@@ -62,7 +62,7 @@ interface MrclusterstatsParameters {
     "mask": InputPathType;
     "output": string;
 }
-type MrclusterstatsParametersTagged = Required<Pick<MrclusterstatsParameters, '@type'>> & MrclusterstatsParameters;
+type MrclusterstatsParamsDictTagged = Required<Pick<MrclusterstatsParamsDict, '@type'>> & MrclusterstatsParamsDict;
 
 
 /**
@@ -72,9 +72,9 @@ type MrclusterstatsParametersTagged = Required<Pick<MrclusterstatsParameters, '@
  *
  * @returns Parameter dictionary
  */
-function mrclusterstats_column_params(
+function mrclusterstats_column(
     path: InputPathType,
-): MrclusterstatsColumnParametersTagged {
+): MrclusterstatsColumnParamsDictTagged {
     const params = {
         "@type": "column" as const,
         "path": path,
@@ -92,7 +92,7 @@ function mrclusterstats_column_params(
  * @returns Command-line arguments.
  */
 function mrclusterstats_column_cargs(
-    params: MrclusterstatsColumnParameters,
+    params: MrclusterstatsColumnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,10 +110,10 @@ function mrclusterstats_column_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrclusterstats_config_params(
+function mrclusterstats_config(
     key: string,
     value: string,
-): MrclusterstatsConfigParametersTagged {
+): MrclusterstatsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -132,7 +132,7 @@ function mrclusterstats_config_params(
  * @returns Command-line arguments.
  */
 function mrclusterstats_config_cargs(
-    params: MrclusterstatsConfigParameters,
+    params: MrclusterstatsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function mrclusterstats_config_cargs(
 
 
 /**
- * Output object returned when calling `MrclusterstatsParameters(...)`.
+ * Output object returned when calling `MrclusterstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -218,7 +218,7 @@ function mrclusterstats_params(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<MrclusterstatsColumnParameters> | null = null,
+    column: Array<MrclusterstatsColumnParamsDict> | null = null,
     threshold: number | null = null,
     connectivity: boolean = false,
     info: boolean = false,
@@ -226,10 +226,10 @@ function mrclusterstats_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrclusterstatsConfigParameters> | null = null,
+    config: Array<MrclusterstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrclusterstatsParametersTagged {
+): MrclusterstatsParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrclusterstats" as const,
         "notest": notest,
@@ -313,7 +313,7 @@ function mrclusterstats_params(
  * @returns Command-line arguments.
  */
 function mrclusterstats_cargs(
-    params: MrclusterstatsParameters,
+    params: MrclusterstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -465,7 +465,7 @@ function mrclusterstats_cargs(
  * @returns Outputs object.
  */
 function mrclusterstats_outputs(
-    params: MrclusterstatsParameters,
+    params: MrclusterstatsParamsDict,
     execution: Execution,
 ): MrclusterstatsOutputs {
     const ret: MrclusterstatsOutputs = {
@@ -500,7 +500,7 @@ function mrclusterstats_outputs(
  * @returns NamedTuple of outputs (described in `MrclusterstatsOutputs`).
  */
 function mrclusterstats_execute(
-    params: MrclusterstatsParameters,
+    params: MrclusterstatsParamsDict,
     runner: Runner | null = null,
 ): MrclusterstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -592,7 +592,7 @@ function mrclusterstats(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<MrclusterstatsColumnParameters> | null = null,
+    column: Array<MrclusterstatsColumnParamsDict> | null = null,
     threshold: number | null = null,
     connectivity: boolean = false,
     info: boolean = false,
@@ -600,7 +600,7 @@ function mrclusterstats(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrclusterstatsConfigParameters> | null = null,
+    config: Array<MrclusterstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -612,10 +612,16 @@ function mrclusterstats(
 
 export {
       MRCLUSTERSTATS_METADATA,
+      MrclusterstatsColumnParamsDict,
+      MrclusterstatsColumnParamsDictTagged,
+      MrclusterstatsConfigParamsDict,
+      MrclusterstatsConfigParamsDictTagged,
       MrclusterstatsOutputs,
+      MrclusterstatsParamsDict,
+      MrclusterstatsParamsDictTagged,
       mrclusterstats,
-      mrclusterstats_column_params,
-      mrclusterstats_config_params,
+      mrclusterstats_column,
+      mrclusterstats_config,
       mrclusterstats_execute,
       mrclusterstats_params,
 };

@@ -11,17 +11,17 @@ const V_1D_UPSAMPLE_METADATA: Metadata = {
 };
 
 
-interface V1dUpsampleParameters {
+interface V1dUpsampleParamsDict {
     "@type"?: "afni/1dUpsample";
     "upsample_factor": number;
     "input_file": InputPathType;
     "linear_interpolation": boolean;
 }
-type V1dUpsampleParametersTagged = Required<Pick<V1dUpsampleParameters, '@type'>> & V1dUpsampleParameters;
+type V1dUpsampleParamsDictTagged = Required<Pick<V1dUpsampleParamsDict, '@type'>> & V1dUpsampleParamsDict;
 
 
 /**
- * Output object returned when calling `V1dUpsampleParameters(...)`.
+ * Output object returned when calling `V1dUpsampleParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_1d_upsample_params(
     upsample_factor: number,
     input_file: InputPathType,
     linear_interpolation: boolean = false,
-): V1dUpsampleParametersTagged {
+): V1dUpsampleParamsDictTagged {
     const params = {
         "@type": "afni/1dUpsample" as const,
         "upsample_factor": upsample_factor,
@@ -70,7 +70,7 @@ function v_1d_upsample_params(
  * @returns Command-line arguments.
  */
 function v_1d_upsample_cargs(
-    params: V1dUpsampleParameters,
+    params: V1dUpsampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function v_1d_upsample_cargs(
  * @returns Outputs object.
  */
 function v_1d_upsample_outputs(
-    params: V1dUpsampleParameters,
+    params: V1dUpsampleParamsDict,
     execution: Execution,
 ): V1dUpsampleOutputs {
     const ret: V1dUpsampleOutputs = {
@@ -119,7 +119,7 @@ function v_1d_upsample_outputs(
  * @returns NamedTuple of outputs (described in `V1dUpsampleOutputs`).
  */
 function v_1d_upsample_execute(
-    params: V1dUpsampleParameters,
+    params: V1dUpsampleParamsDict,
     runner: Runner | null = null,
 ): V1dUpsampleOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function v_1d_upsample(
 
 export {
       V1dUpsampleOutputs,
+      V1dUpsampleParamsDict,
+      V1dUpsampleParamsDictTagged,
       V_1D_UPSAMPLE_METADATA,
       v_1d_upsample,
       v_1d_upsample_execute,

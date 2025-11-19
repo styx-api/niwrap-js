@@ -11,7 +11,7 @@ const FIRST_MULT_BCORR_METADATA: Metadata = {
 };
 
 
-interface FirstMultBcorrParameters {
+interface FirstMultBcorrParamsDict {
     "@type"?: "fsl/first_mult_bcorr";
     "input_image": InputPathType;
     "corrected_4d_labels": InputPathType;
@@ -20,11 +20,11 @@ interface FirstMultBcorrParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type FirstMultBcorrParametersTagged = Required<Pick<FirstMultBcorrParameters, '@type'>> & FirstMultBcorrParameters;
+type FirstMultBcorrParamsDictTagged = Required<Pick<FirstMultBcorrParamsDict, '@type'>> & FirstMultBcorrParamsDict;
 
 
 /**
- * Output object returned when calling `FirstMultBcorrParameters(...)`.
+ * Output object returned when calling `FirstMultBcorrParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function first_mult_bcorr_params(
     output_image: string,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FirstMultBcorrParametersTagged {
+): FirstMultBcorrParamsDictTagged {
     const params = {
         "@type": "fsl/first_mult_bcorr" as const,
         "input_image": input_image,
@@ -82,7 +82,7 @@ function first_mult_bcorr_params(
  * @returns Command-line arguments.
  */
 function first_mult_bcorr_cargs(
-    params: FirstMultBcorrParameters,
+    params: FirstMultBcorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function first_mult_bcorr_cargs(
  * @returns Outputs object.
  */
 function first_mult_bcorr_outputs(
-    params: FirstMultBcorrParameters,
+    params: FirstMultBcorrParamsDict,
     execution: Execution,
 ): FirstMultBcorrOutputs {
     const ret: FirstMultBcorrOutputs = {
@@ -148,7 +148,7 @@ function first_mult_bcorr_outputs(
  * @returns NamedTuple of outputs (described in `FirstMultBcorrOutputs`).
  */
 function first_mult_bcorr_execute(
-    params: FirstMultBcorrParameters,
+    params: FirstMultBcorrParamsDict,
     runner: Runner | null = null,
 ): FirstMultBcorrOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function first_mult_bcorr(
 export {
       FIRST_MULT_BCORR_METADATA,
       FirstMultBcorrOutputs,
+      FirstMultBcorrParamsDict,
+      FirstMultBcorrParamsDictTagged,
       first_mult_bcorr,
       first_mult_bcorr_execute,
       first_mult_bcorr_params,

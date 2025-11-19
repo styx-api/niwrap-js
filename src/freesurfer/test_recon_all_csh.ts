@@ -11,7 +11,7 @@ const TEST_RECON_ALL_CSH_METADATA: Metadata = {
 };
 
 
-interface TestReconAllCshParameters {
+interface TestReconAllCshParamsDict {
     "@type"?: "freesurfer/test_recon-all.csh";
     "reference_subj_source_dir"?: string | null | undefined;
     "reference_subjid"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface TestReconAllCshParameters {
     "freesurfer_home"?: string | null | undefined;
     "norecon": boolean;
 }
-type TestReconAllCshParametersTagged = Required<Pick<TestReconAllCshParameters, '@type'>> & TestReconAllCshParameters;
+type TestReconAllCshParamsDictTagged = Required<Pick<TestReconAllCshParamsDict, '@type'>> & TestReconAllCshParamsDict;
 
 
 /**
- * Output object returned when calling `TestReconAllCshParameters(...)`.
+ * Output object returned when calling `TestReconAllCshParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function test_recon_all_csh_params(
     test_subjid: string | null = null,
     freesurfer_home: string | null = null,
     norecon: boolean = false,
-): TestReconAllCshParametersTagged {
+): TestReconAllCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/test_recon-all.csh" as const,
         "norecon": norecon,
@@ -124,7 +124,7 @@ function test_recon_all_csh_params(
  * @returns Command-line arguments.
  */
 function test_recon_all_csh_cargs(
-    params: TestReconAllCshParameters,
+    params: TestReconAllCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -175,7 +175,7 @@ function test_recon_all_csh_cargs(
  * @returns Outputs object.
  */
 function test_recon_all_csh_outputs(
-    params: TestReconAllCshParameters,
+    params: TestReconAllCshParamsDict,
     execution: Execution,
 ): TestReconAllCshOutputs {
     const ret: TestReconAllCshOutputs = {
@@ -209,7 +209,7 @@ function test_recon_all_csh_outputs(
  * @returns NamedTuple of outputs (described in `TestReconAllCshOutputs`).
  */
 function test_recon_all_csh_execute(
-    params: TestReconAllCshParameters,
+    params: TestReconAllCshParamsDict,
     runner: Runner | null = null,
 ): TestReconAllCshOutputs {
     runner = runner || getGlobalRunner();
@@ -258,6 +258,8 @@ function test_recon_all_csh(
 export {
       TEST_RECON_ALL_CSH_METADATA,
       TestReconAllCshOutputs,
+      TestReconAllCshParamsDict,
+      TestReconAllCshParamsDictTagged,
       test_recon_all_csh,
       test_recon_all_csh_execute,
       test_recon_all_csh_params,

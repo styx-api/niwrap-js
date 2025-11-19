@@ -11,15 +11,15 @@ const SEGMENT_MONKEY_METADATA: Metadata = {
 };
 
 
-interface SegmentMonkeyParameters {
+interface SegmentMonkeyParamsDict {
     "@type"?: "freesurfer/segment_monkey";
     "control_points": Array<string>;
 }
-type SegmentMonkeyParametersTagged = Required<Pick<SegmentMonkeyParameters, '@type'>> & SegmentMonkeyParameters;
+type SegmentMonkeyParamsDictTagged = Required<Pick<SegmentMonkeyParamsDict, '@type'>> & SegmentMonkeyParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentMonkeyParameters(...)`.
+ * Output object returned when calling `SegmentMonkeyParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface SegmentMonkeyOutputs {
  */
 function segment_monkey_params(
     control_points: Array<string>,
-): SegmentMonkeyParametersTagged {
+): SegmentMonkeyParamsDictTagged {
     const params = {
         "@type": "freesurfer/segment_monkey" as const,
         "control_points": control_points,
@@ -58,7 +58,7 @@ function segment_monkey_params(
  * @returns Command-line arguments.
  */
 function segment_monkey_cargs(
-    params: SegmentMonkeyParameters,
+    params: SegmentMonkeyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function segment_monkey_cargs(
  * @returns Outputs object.
  */
 function segment_monkey_outputs(
-    params: SegmentMonkeyParameters,
+    params: SegmentMonkeyParamsDict,
     execution: Execution,
 ): SegmentMonkeyOutputs {
     const ret: SegmentMonkeyOutputs = {
@@ -102,7 +102,7 @@ function segment_monkey_outputs(
  * @returns NamedTuple of outputs (described in `SegmentMonkeyOutputs`).
  */
 function segment_monkey_execute(
-    params: SegmentMonkeyParameters,
+    params: SegmentMonkeyParamsDict,
     runner: Runner | null = null,
 ): SegmentMonkeyOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function segment_monkey(
 export {
       SEGMENT_MONKEY_METADATA,
       SegmentMonkeyOutputs,
+      SegmentMonkeyParamsDict,
+      SegmentMonkeyParamsDictTagged,
       segment_monkey,
       segment_monkey_execute,
       segment_monkey_params,

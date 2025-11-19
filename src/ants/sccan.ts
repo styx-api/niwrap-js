@@ -11,7 +11,7 @@ const SCCAN_METADATA: Metadata = {
 };
 
 
-interface SccanParameters {
+interface SccanParamsDict {
     "@type"?: "ants/sccan";
     "output"?: string | null | undefined;
     "n_permutations"?: number | null | undefined;
@@ -41,11 +41,11 @@ interface SccanParameters {
     "scca"?: string | null | undefined;
     "svd"?: string | null | undefined;
 }
-type SccanParametersTagged = Required<Pick<SccanParameters, '@type'>> & SccanParameters;
+type SccanParamsDictTagged = Required<Pick<SccanParamsDict, '@type'>> & SccanParamsDict;
 
 
 /**
- * Output object returned when calling `SccanParameters(...)`.
+ * Output object returned when calling `SccanParamsDict(...)`.
  *
  * @interface
  */
@@ -118,7 +118,7 @@ function sccan_params(
     imageset_to_projections: string | null = null,
     scca: string | null = null,
     svd: string | null = null,
-): SccanParametersTagged {
+): SccanParamsDictTagged {
     const params = {
         "@type": "ants/sccan" as const,
     };
@@ -216,7 +216,7 @@ function sccan_params(
  * @returns Command-line arguments.
  */
 function sccan_cargs(
-    params: SccanParameters,
+    params: SccanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -396,7 +396,7 @@ function sccan_cargs(
  * @returns Outputs object.
  */
 function sccan_outputs(
-    params: SccanParameters,
+    params: SccanParamsDict,
     execution: Execution,
 ): SccanOutputs {
     const ret: SccanOutputs = {
@@ -421,7 +421,7 @@ function sccan_outputs(
  * @returns NamedTuple of outputs (described in `SccanOutputs`).
  */
 function sccan_execute(
-    params: SccanParameters,
+    params: SccanParamsDict,
     runner: Runner | null = null,
 ): SccanOutputs {
     runner = runner || getGlobalRunner();
@@ -512,6 +512,8 @@ function sccan(
 export {
       SCCAN_METADATA,
       SccanOutputs,
+      SccanParamsDict,
+      SccanParamsDictTagged,
       sccan,
       sccan_execute,
       sccan_params,

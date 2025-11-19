@@ -10,19 +10,19 @@ const METRIC_SMOOTHING_METADATA: Metadata = {
 };
 
 
-interface MetricSmoothingRoiParameters {
+interface MetricSmoothingRoiParamsDict {
     "@type"?: "roi";
     "roi-metric": InputPathType;
     "match-columns": boolean;
 }
-type MetricSmoothingRoiParametersTagged = Required<Pick<MetricSmoothingRoiParameters, '@type'>> & MetricSmoothingRoiParameters;
+type MetricSmoothingRoiParamsDictTagged = Required<Pick<MetricSmoothingRoiParamsDict, '@type'>> & MetricSmoothingRoiParamsDict;
 
 
-interface MetricSmoothingParameters {
+interface MetricSmoothingParamsDict {
     "@type"?: "workbench/metric-smoothing";
     "metric-out": string;
     "fwhm": boolean;
-    "roi"?: MetricSmoothingRoiParameters | null | undefined;
+    "roi"?: MetricSmoothingRoiParamsDict | null | undefined;
     "fix-zeros": boolean;
     "column"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
@@ -31,7 +31,7 @@ interface MetricSmoothingParameters {
     "metric-in": InputPathType;
     "smoothing-kernel": number;
 }
-type MetricSmoothingParametersTagged = Required<Pick<MetricSmoothingParameters, '@type'>> & MetricSmoothingParameters;
+type MetricSmoothingParamsDictTagged = Required<Pick<MetricSmoothingParamsDict, '@type'>> & MetricSmoothingParamsDict;
 
 
 /**
@@ -42,10 +42,10 @@ type MetricSmoothingParametersTagged = Required<Pick<MetricSmoothingParameters, 
  *
  * @returns Parameter dictionary
  */
-function metric_smoothing_roi_params(
+function metric_smoothing_roi(
     roi_metric: InputPathType,
     match_columns: boolean = false,
-): MetricSmoothingRoiParametersTagged {
+): MetricSmoothingRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-metric": roi_metric,
@@ -64,7 +64,7 @@ function metric_smoothing_roi_params(
  * @returns Command-line arguments.
  */
 function metric_smoothing_roi_cargs(
-    params: MetricSmoothingRoiParameters,
+    params: MetricSmoothingRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function metric_smoothing_roi_cargs(
 
 
 /**
- * Output object returned when calling `MetricSmoothingParameters(...)`.
+ * Output object returned when calling `MetricSmoothingParamsDict(...)`.
  *
  * @interface
  */
@@ -127,9 +127,9 @@ function metric_smoothing_params(
     metric_in: InputPathType,
     smoothing_kernel: number,
     fwhm: boolean = false,
-    roi: MetricSmoothingRoiParameters | null = null,
+    roi: MetricSmoothingRoiParamsDict | null = null,
     fix_zeros: boolean = false,
-): MetricSmoothingParametersTagged {
+): MetricSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/metric-smoothing" as const,
         "metric-out": metric_out,
@@ -164,7 +164,7 @@ function metric_smoothing_params(
  * @returns Command-line arguments.
  */
 function metric_smoothing_cargs(
-    params: MetricSmoothingParameters,
+    params: MetricSmoothingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function metric_smoothing_cargs(
  * @returns Outputs object.
  */
 function metric_smoothing_outputs(
-    params: MetricSmoothingParameters,
+    params: MetricSmoothingParamsDict,
     execution: Execution,
 ): MetricSmoothingOutputs {
     const ret: MetricSmoothingOutputs = {
@@ -238,7 +238,7 @@ function metric_smoothing_outputs(
  * @returns NamedTuple of outputs (described in `MetricSmoothingOutputs`).
  */
 function metric_smoothing_execute(
-    params: MetricSmoothingParameters,
+    params: MetricSmoothingParamsDict,
     runner: Runner | null = null,
 ): MetricSmoothingOutputs {
     runner = runner || getGlobalRunner();
@@ -301,7 +301,7 @@ function metric_smoothing(
     metric_in: InputPathType,
     smoothing_kernel: number,
     fwhm: boolean = false,
-    roi: MetricSmoothingRoiParameters | null = null,
+    roi: MetricSmoothingRoiParamsDict | null = null,
     fix_zeros: boolean = false,
     runner: Runner | null = null,
 ): MetricSmoothingOutputs {
@@ -313,8 +313,12 @@ function metric_smoothing(
 export {
       METRIC_SMOOTHING_METADATA,
       MetricSmoothingOutputs,
+      MetricSmoothingParamsDict,
+      MetricSmoothingParamsDictTagged,
+      MetricSmoothingRoiParamsDict,
+      MetricSmoothingRoiParamsDictTagged,
       metric_smoothing,
       metric_smoothing_execute,
       metric_smoothing_params,
-      metric_smoothing_roi_params,
+      metric_smoothing_roi,
 };

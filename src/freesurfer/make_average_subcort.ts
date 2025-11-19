@@ -11,16 +11,16 @@ const MAKE_AVERAGE_SUBCORT_METADATA: Metadata = {
 };
 
 
-interface MakeAverageSubcortParameters {
+interface MakeAverageSubcortParamsDict {
     "@type"?: "freesurfer/make_average_subcort";
     "subjects": Array<string>;
     "output_volume": string;
 }
-type MakeAverageSubcortParametersTagged = Required<Pick<MakeAverageSubcortParameters, '@type'>> & MakeAverageSubcortParameters;
+type MakeAverageSubcortParamsDictTagged = Required<Pick<MakeAverageSubcortParamsDict, '@type'>> & MakeAverageSubcortParamsDict;
 
 
 /**
- * Output object returned when calling `MakeAverageSubcortParameters(...)`.
+ * Output object returned when calling `MakeAverageSubcortParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MakeAverageSubcortOutputs {
 function make_average_subcort_params(
     subjects: Array<string>,
     output_volume: string,
-): MakeAverageSubcortParametersTagged {
+): MakeAverageSubcortParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_average_subcort" as const,
         "subjects": subjects,
@@ -66,7 +66,7 @@ function make_average_subcort_params(
  * @returns Command-line arguments.
  */
 function make_average_subcort_cargs(
-    params: MakeAverageSubcortParameters,
+    params: MakeAverageSubcortParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function make_average_subcort_cargs(
  * @returns Outputs object.
  */
 function make_average_subcort_outputs(
-    params: MakeAverageSubcortParameters,
+    params: MakeAverageSubcortParamsDict,
     execution: Execution,
 ): MakeAverageSubcortOutputs {
     const ret: MakeAverageSubcortOutputs = {
@@ -115,7 +115,7 @@ function make_average_subcort_outputs(
  * @returns NamedTuple of outputs (described in `MakeAverageSubcortOutputs`).
  */
 function make_average_subcort_execute(
-    params: MakeAverageSubcortParameters,
+    params: MakeAverageSubcortParamsDict,
     runner: Runner | null = null,
 ): MakeAverageSubcortOutputs {
     runner = runner || getGlobalRunner();
@@ -156,6 +156,8 @@ function make_average_subcort(
 export {
       MAKE_AVERAGE_SUBCORT_METADATA,
       MakeAverageSubcortOutputs,
+      MakeAverageSubcortParamsDict,
+      MakeAverageSubcortParamsDictTagged,
       make_average_subcort,
       make_average_subcort_execute,
       make_average_subcort_params,

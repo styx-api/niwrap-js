@@ -11,58 +11,58 @@ const AMP2SH_METADATA: Metadata = {
 };
 
 
-interface Amp2shFslgradParameters {
+interface Amp2shFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type Amp2shFslgradParametersTagged = Required<Pick<Amp2shFslgradParameters, '@type'>> & Amp2shFslgradParameters;
+type Amp2shFslgradParamsDictTagged = Required<Pick<Amp2shFslgradParamsDict, '@type'>> & Amp2shFslgradParamsDict;
 
 
-interface Amp2shVariousStringParameters {
+interface Amp2shVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type Amp2shVariousStringParametersTagged = Required<Pick<Amp2shVariousStringParameters, '@type'>> & Amp2shVariousStringParameters;
+type Amp2shVariousStringParamsDictTagged = Required<Pick<Amp2shVariousStringParamsDict, '@type'>> & Amp2shVariousStringParamsDict;
 
 
-interface Amp2shVariousFileParameters {
+interface Amp2shVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type Amp2shVariousFileParametersTagged = Required<Pick<Amp2shVariousFileParameters, '@type'>> & Amp2shVariousFileParameters;
+type Amp2shVariousFileParamsDictTagged = Required<Pick<Amp2shVariousFileParamsDict, '@type'>> & Amp2shVariousFileParamsDict;
 
 
-interface Amp2shConfigParameters {
+interface Amp2shConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Amp2shConfigParametersTagged = Required<Pick<Amp2shConfigParameters, '@type'>> & Amp2shConfigParameters;
+type Amp2shConfigParamsDictTagged = Required<Pick<Amp2shConfigParamsDict, '@type'>> & Amp2shConfigParamsDict;
 
 
-interface Amp2shParameters {
+interface Amp2shParamsDict {
     "@type"?: "mrtrix/amp2sh";
     "lmax"?: number | null | undefined;
     "normalise": boolean;
     "directions"?: InputPathType | null | undefined;
     "rician"?: InputPathType | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: Amp2shFslgradParameters | null | undefined;
+    "fslgrad"?: Amp2shFslgradParamsDict | null | undefined;
     "shells"?: Array<number> | null | undefined;
-    "strides"?: Amp2shVariousStringParametersTagged | Amp2shVariousFileParametersTagged | null | undefined;
+    "strides"?: Amp2shVariousStringParamsDictTagged | Amp2shVariousFileParamsDictTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Amp2shConfigParameters> | null | undefined;
+    "config"?: Array<Amp2shConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "amp": InputPathType;
     "SH": string;
 }
-type Amp2shParametersTagged = Required<Pick<Amp2shParameters, '@type'>> & Amp2shParameters;
+type Amp2shParamsDictTagged = Required<Pick<Amp2shParamsDict, '@type'>> & Amp2shParamsDict;
 
 
 /**
@@ -107,10 +107,10 @@ function amp2sh_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function amp2sh_fslgrad_params(
+function amp2sh_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Amp2shFslgradParametersTagged {
+): Amp2shFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -129,7 +129,7 @@ function amp2sh_fslgrad_params(
  * @returns Command-line arguments.
  */
 function amp2sh_fslgrad_cargs(
-    params: Amp2shFslgradParameters,
+    params: Amp2shFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,9 +147,9 @@ function amp2sh_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function amp2sh_various_string_params(
+function amp2sh_various_string(
     obj: string,
-): Amp2shVariousStringParametersTagged {
+): Amp2shVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -167,7 +167,7 @@ function amp2sh_various_string_params(
  * @returns Command-line arguments.
  */
 function amp2sh_various_string_cargs(
-    params: Amp2shVariousStringParameters,
+    params: Amp2shVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,9 +183,9 @@ function amp2sh_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function amp2sh_various_file_params(
+function amp2sh_various_file(
     obj: InputPathType,
-): Amp2shVariousFileParametersTagged {
+): Amp2shVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -203,7 +203,7 @@ function amp2sh_various_file_params(
  * @returns Command-line arguments.
  */
 function amp2sh_various_file_cargs(
-    params: Amp2shVariousFileParameters,
+    params: Amp2shVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -220,10 +220,10 @@ function amp2sh_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function amp2sh_config_params(
+function amp2sh_config(
     key: string,
     value: string,
-): Amp2shConfigParametersTagged {
+): Amp2shConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -242,7 +242,7 @@ function amp2sh_config_params(
  * @returns Command-line arguments.
  */
 function amp2sh_config_cargs(
-    params: Amp2shConfigParameters,
+    params: Amp2shConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -254,7 +254,7 @@ function amp2sh_config_cargs(
 
 
 /**
- * Output object returned when calling `Amp2shParameters(...)`.
+ * Output object returned when calling `Amp2shParamsDict(...)`.
  *
  * @interface
  */
@@ -303,18 +303,18 @@ function amp2sh_params(
     directions: InputPathType | null = null,
     rician: InputPathType | null = null,
     grad: InputPathType | null = null,
-    fslgrad: Amp2shFslgradParameters | null = null,
+    fslgrad: Amp2shFslgradParamsDict | null = null,
     shells: Array<number> | null = null,
-    strides: Amp2shVariousStringParametersTagged | Amp2shVariousFileParametersTagged | null = null,
+    strides: Amp2shVariousStringParamsDictTagged | Amp2shVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Amp2shConfigParameters> | null = null,
+    config: Array<Amp2shConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Amp2shParametersTagged {
+): Amp2shParamsDictTagged {
     const params = {
         "@type": "mrtrix/amp2sh" as const,
         "normalise": normalise,
@@ -367,7 +367,7 @@ function amp2sh_params(
  * @returns Command-line arguments.
  */
 function amp2sh_cargs(
-    params: Amp2shParameters,
+    params: Amp2shParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -456,7 +456,7 @@ function amp2sh_cargs(
  * @returns Outputs object.
  */
 function amp2sh_outputs(
-    params: Amp2shParameters,
+    params: Amp2shParamsDict,
     execution: Execution,
 ): Amp2shOutputs {
     const ret: Amp2shOutputs = {
@@ -493,7 +493,7 @@ function amp2sh_outputs(
  * @returns NamedTuple of outputs (described in `Amp2shOutputs`).
  */
 function amp2sh_execute(
-    params: Amp2shParameters,
+    params: Amp2shParamsDict,
     runner: Runner | null = null,
 ): Amp2shOutputs {
     runner = runner || getGlobalRunner();
@@ -557,15 +557,15 @@ function amp2sh(
     directions: InputPathType | null = null,
     rician: InputPathType | null = null,
     grad: InputPathType | null = null,
-    fslgrad: Amp2shFslgradParameters | null = null,
+    fslgrad: Amp2shFslgradParamsDict | null = null,
     shells: Array<number> | null = null,
-    strides: Amp2shVariousStringParametersTagged | Amp2shVariousFileParametersTagged | null = null,
+    strides: Amp2shVariousStringParamsDictTagged | Amp2shVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Amp2shConfigParameters> | null = null,
+    config: Array<Amp2shConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -577,12 +577,22 @@ function amp2sh(
 
 export {
       AMP2SH_METADATA,
+      Amp2shConfigParamsDict,
+      Amp2shConfigParamsDictTagged,
+      Amp2shFslgradParamsDict,
+      Amp2shFslgradParamsDictTagged,
       Amp2shOutputs,
+      Amp2shParamsDict,
+      Amp2shParamsDictTagged,
+      Amp2shVariousFileParamsDict,
+      Amp2shVariousFileParamsDictTagged,
+      Amp2shVariousStringParamsDict,
+      Amp2shVariousStringParamsDictTagged,
       amp2sh,
-      amp2sh_config_params,
+      amp2sh_config,
       amp2sh_execute,
-      amp2sh_fslgrad_params,
+      amp2sh_fslgrad,
       amp2sh_params,
-      amp2sh_various_file_params,
-      amp2sh_various_string_params,
+      amp2sh_various_file,
+      amp2sh_various_string,
 };

@@ -11,16 +11,16 @@ const FEAT_GM_PREPARE_METADATA: Metadata = {
 };
 
 
-interface FeatGmPrepareParameters {
+interface FeatGmPrepareParamsDict {
     "@type"?: "fsl/feat_gm_prepare";
     "gm_output": string;
     "feat_dirs_list": Array<InputPathType>;
 }
-type FeatGmPrepareParametersTagged = Required<Pick<FeatGmPrepareParameters, '@type'>> & FeatGmPrepareParameters;
+type FeatGmPrepareParamsDictTagged = Required<Pick<FeatGmPrepareParamsDict, '@type'>> & FeatGmPrepareParamsDict;
 
 
 /**
- * Output object returned when calling `FeatGmPrepareParameters(...)`.
+ * Output object returned when calling `FeatGmPrepareParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FeatGmPrepareOutputs {
 function feat_gm_prepare_params(
     gm_output: string,
     feat_dirs_list: Array<InputPathType>,
-): FeatGmPrepareParametersTagged {
+): FeatGmPrepareParamsDictTagged {
     const params = {
         "@type": "fsl/feat_gm_prepare" as const,
         "gm_output": gm_output,
@@ -62,7 +62,7 @@ function feat_gm_prepare_params(
  * @returns Command-line arguments.
  */
 function feat_gm_prepare_cargs(
-    params: FeatGmPrepareParameters,
+    params: FeatGmPrepareParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function feat_gm_prepare_cargs(
  * @returns Outputs object.
  */
 function feat_gm_prepare_outputs(
-    params: FeatGmPrepareParameters,
+    params: FeatGmPrepareParamsDict,
     execution: Execution,
 ): FeatGmPrepareOutputs {
     const ret: FeatGmPrepareOutputs = {
@@ -107,7 +107,7 @@ function feat_gm_prepare_outputs(
  * @returns NamedTuple of outputs (described in `FeatGmPrepareOutputs`).
  */
 function feat_gm_prepare_execute(
-    params: FeatGmPrepareParameters,
+    params: FeatGmPrepareParamsDict,
     runner: Runner | null = null,
 ): FeatGmPrepareOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function feat_gm_prepare(
 export {
       FEAT_GM_PREPARE_METADATA,
       FeatGmPrepareOutputs,
+      FeatGmPrepareParamsDict,
+      FeatGmPrepareParamsDictTagged,
       feat_gm_prepare,
       feat_gm_prepare_execute,
       feat_gm_prepare_params,

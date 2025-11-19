@@ -11,18 +11,18 @@ const FLOAT_SCAN_METADATA: Metadata = {
 };
 
 
-interface FloatScanParameters {
+interface FloatScanParamsDict {
     "@type"?: "afni/float_scan";
     "fix_illegal_values": boolean;
     "verbose_mode": boolean;
     "skip_count"?: number | null | undefined;
     "input_file": InputPathType;
 }
-type FloatScanParametersTagged = Required<Pick<FloatScanParameters, '@type'>> & FloatScanParameters;
+type FloatScanParamsDictTagged = Required<Pick<FloatScanParamsDict, '@type'>> & FloatScanParamsDict;
 
 
 /**
- * Output object returned when calling `FloatScanParameters(...)`.
+ * Output object returned when calling `FloatScanParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function float_scan_params(
     fix_illegal_values: boolean = false,
     verbose_mode: boolean = false,
     skip_count: number | null = null,
-): FloatScanParametersTagged {
+): FloatScanParamsDictTagged {
     const params = {
         "@type": "afni/float_scan" as const,
         "fix_illegal_values": fix_illegal_values,
@@ -76,7 +76,7 @@ function float_scan_params(
  * @returns Command-line arguments.
  */
 function float_scan_cargs(
-    params: FloatScanParameters,
+    params: FloatScanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function float_scan_cargs(
  * @returns Outputs object.
  */
 function float_scan_outputs(
-    params: FloatScanParameters,
+    params: FloatScanParamsDict,
     execution: Execution,
 ): FloatScanOutputs {
     const ret: FloatScanOutputs = {
@@ -133,7 +133,7 @@ function float_scan_outputs(
  * @returns NamedTuple of outputs (described in `FloatScanOutputs`).
  */
 function float_scan_execute(
-    params: FloatScanParameters,
+    params: FloatScanParamsDict,
     runner: Runner | null = null,
 ): FloatScanOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function float_scan(
 export {
       FLOAT_SCAN_METADATA,
       FloatScanOutputs,
+      FloatScanParamsDict,
+      FloatScanParamsDictTagged,
       float_scan,
       float_scan_execute,
       float_scan_params,

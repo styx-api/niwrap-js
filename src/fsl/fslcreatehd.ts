@@ -11,7 +11,7 @@ const FSLCREATEHD_METADATA: Metadata = {
 };
 
 
-interface FslcreatehdParameters {
+interface FslcreatehdParamsDict {
     "@type"?: "fsl/fslcreatehd";
     "xsize": number;
     "ysize": number;
@@ -28,11 +28,11 @@ interface FslcreatehdParameters {
     "headername": string;
     "nifti_xml_file"?: InputPathType | null | undefined;
 }
-type FslcreatehdParametersTagged = Required<Pick<FslcreatehdParameters, '@type'>> & FslcreatehdParameters;
+type FslcreatehdParamsDictTagged = Required<Pick<FslcreatehdParamsDict, '@type'>> & FslcreatehdParamsDict;
 
 
 /**
- * Output object returned when calling `FslcreatehdParameters(...)`.
+ * Output object returned when calling `FslcreatehdParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function fslcreatehd_params(
     datatype: number,
     headername: string,
     nifti_xml_file: InputPathType | null = null,
-): FslcreatehdParametersTagged {
+): FslcreatehdParamsDictTagged {
     const params = {
         "@type": "fsl/fslcreatehd" as const,
         "xsize": xsize,
@@ -116,7 +116,7 @@ function fslcreatehd_params(
  * @returns Command-line arguments.
  */
 function fslcreatehd_cargs(
-    params: FslcreatehdParameters,
+    params: FslcreatehdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function fslcreatehd_cargs(
  * @returns Outputs object.
  */
 function fslcreatehd_outputs(
-    params: FslcreatehdParameters,
+    params: FslcreatehdParamsDict,
     execution: Execution,
 ): FslcreatehdOutputs {
     const ret: FslcreatehdOutputs = {
@@ -176,7 +176,7 @@ function fslcreatehd_outputs(
  * @returns NamedTuple of outputs (described in `FslcreatehdOutputs`).
  */
 function fslcreatehd_execute(
-    params: FslcreatehdParameters,
+    params: FslcreatehdParamsDict,
     runner: Runner | null = null,
 ): FslcreatehdOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function fslcreatehd(
 export {
       FSLCREATEHD_METADATA,
       FslcreatehdOutputs,
+      FslcreatehdParamsDict,
+      FslcreatehdParamsDictTagged,
       fslcreatehd,
       fslcreatehd_execute,
       fslcreatehd_params,

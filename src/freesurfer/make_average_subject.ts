@@ -11,7 +11,7 @@ const MAKE_AVERAGE_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface MakeAverageSubjectParameters {
+interface MakeAverageSubjectParamsDict {
     "@type"?: "freesurfer/make_average_subject";
     "subjects": Array<string>;
     "fsgd_file"?: InputPathType | null | undefined;
@@ -36,11 +36,11 @@ interface MakeAverageSubjectParameters {
     "echo": boolean;
     "debug": boolean;
 }
-type MakeAverageSubjectParametersTagged = Required<Pick<MakeAverageSubjectParameters, '@type'>> & MakeAverageSubjectParameters;
+type MakeAverageSubjectParamsDictTagged = Required<Pick<MakeAverageSubjectParamsDict, '@type'>> & MakeAverageSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `MakeAverageSubjectParameters(...)`.
+ * Output object returned when calling `MakeAverageSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function make_average_subject_params(
     version: boolean = false,
     echo: boolean = false,
     debug: boolean = false,
-): MakeAverageSubjectParametersTagged {
+): MakeAverageSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_average_subject" as const,
         "subjects": subjects,
@@ -158,7 +158,7 @@ function make_average_subject_params(
  * @returns Command-line arguments.
  */
 function make_average_subject_cargs(
-    params: MakeAverageSubjectParameters,
+    params: MakeAverageSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function make_average_subject_cargs(
  * @returns Outputs object.
  */
 function make_average_subject_outputs(
-    params: MakeAverageSubjectParameters,
+    params: MakeAverageSubjectParamsDict,
     execution: Execution,
 ): MakeAverageSubjectOutputs {
     const ret: MakeAverageSubjectOutputs = {
@@ -293,7 +293,7 @@ function make_average_subject_outputs(
  * @returns NamedTuple of outputs (described in `MakeAverageSubjectOutputs`).
  */
 function make_average_subject_execute(
-    params: MakeAverageSubjectParameters,
+    params: MakeAverageSubjectParamsDict,
     runner: Runner | null = null,
 ): MakeAverageSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -374,6 +374,8 @@ function make_average_subject(
 export {
       MAKE_AVERAGE_SUBJECT_METADATA,
       MakeAverageSubjectOutputs,
+      MakeAverageSubjectParamsDict,
+      MakeAverageSubjectParamsDictTagged,
       make_average_subject,
       make_average_subject_execute,
       make_average_subject_params,

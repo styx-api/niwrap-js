@@ -11,7 +11,7 @@ const DUAL_REGRESSION_METADATA: Metadata = {
 };
 
 
-interface DualRegressionParameters {
+interface DualRegressionParamsDict {
     "@type"?: "fsl/dual_regression";
     "group_ic_maps": InputPathType;
     "des_norm": number;
@@ -22,11 +22,11 @@ interface DualRegressionParameters {
     "output_directory": string;
     "input_files": Array<InputPathType>;
 }
-type DualRegressionParametersTagged = Required<Pick<DualRegressionParameters, '@type'>> & DualRegressionParameters;
+type DualRegressionParamsDictTagged = Required<Pick<DualRegressionParamsDict, '@type'>> & DualRegressionParamsDict;
 
 
 /**
- * Output object returned when calling `DualRegressionParameters(...)`.
+ * Output object returned when calling `DualRegressionParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function dual_regression_params(
     output_directory: string,
     input_files: Array<InputPathType>,
     thr_flag: boolean = false,
-): DualRegressionParametersTagged {
+): DualRegressionParamsDictTagged {
     const params = {
         "@type": "fsl/dual_regression" as const,
         "group_ic_maps": group_ic_maps,
@@ -102,7 +102,7 @@ function dual_regression_params(
  * @returns Command-line arguments.
  */
 function dual_regression_cargs(
-    params: DualRegressionParameters,
+    params: DualRegressionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function dual_regression_cargs(
  * @returns Outputs object.
  */
 function dual_regression_outputs(
-    params: DualRegressionParameters,
+    params: DualRegressionParamsDict,
     execution: Execution,
 ): DualRegressionOutputs {
     const ret: DualRegressionOutputs = {
@@ -159,7 +159,7 @@ function dual_regression_outputs(
  * @returns NamedTuple of outputs (described in `DualRegressionOutputs`).
  */
 function dual_regression_execute(
-    params: DualRegressionParameters,
+    params: DualRegressionParamsDict,
     runner: Runner | null = null,
 ): DualRegressionOutputs {
     runner = runner || getGlobalRunner();
@@ -212,6 +212,8 @@ function dual_regression(
 export {
       DUAL_REGRESSION_METADATA,
       DualRegressionOutputs,
+      DualRegressionParamsDict,
+      DualRegressionParamsDictTagged,
       dual_regression,
       dual_regression_execute,
       dual_regression_params,

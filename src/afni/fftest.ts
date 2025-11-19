@@ -11,18 +11,18 @@ const FFTEST_METADATA: Metadata = {
 };
 
 
-interface FftestParameters {
+interface FftestParamsDict {
     "@type"?: "afni/fftest";
     "length": number;
     "num_tests": number;
     "vector_size": number;
     "quiet_mode": boolean;
 }
-type FftestParametersTagged = Required<Pick<FftestParameters, '@type'>> & FftestParameters;
+type FftestParamsDictTagged = Required<Pick<FftestParamsDict, '@type'>> & FftestParamsDict;
 
 
 /**
- * Output object returned when calling `FftestParameters(...)`.
+ * Output object returned when calling `FftestParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function fftest_params(
     num_tests: number,
     vector_size: number,
     quiet_mode: boolean = false,
-): FftestParametersTagged {
+): FftestParamsDictTagged {
     const params = {
         "@type": "afni/fftest" as const,
         "length": length,
@@ -70,7 +70,7 @@ function fftest_params(
  * @returns Command-line arguments.
  */
 function fftest_cargs(
-    params: FftestParameters,
+    params: FftestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function fftest_cargs(
  * @returns Outputs object.
  */
 function fftest_outputs(
-    params: FftestParameters,
+    params: FftestParamsDict,
     execution: Execution,
 ): FftestOutputs {
     const ret: FftestOutputs = {
@@ -119,7 +119,7 @@ function fftest_outputs(
  * @returns NamedTuple of outputs (described in `FftestOutputs`).
  */
 function fftest_execute(
-    params: FftestParameters,
+    params: FftestParamsDict,
     runner: Runner | null = null,
 ): FftestOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function fftest(
 export {
       FFTEST_METADATA,
       FftestOutputs,
+      FftestParamsDict,
+      FftestParamsDictTagged,
       fftest,
       fftest_execute,
       fftest_params,

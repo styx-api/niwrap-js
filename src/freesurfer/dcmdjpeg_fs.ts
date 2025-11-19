@@ -11,7 +11,7 @@ const DCMDJPEG_FS_METADATA: Metadata = {
 };
 
 
-interface DcmdjpegFsParameters {
+interface DcmdjpegFsParamsDict {
     "@type"?: "freesurfer/dcmdjpeg.fs";
     "input_file": InputPathType;
     "output_file": string;
@@ -55,11 +55,11 @@ interface DcmdjpegFsParameters {
     "padding_off": boolean;
     "padding_create"?: Array<number> | null | undefined;
 }
-type DcmdjpegFsParametersTagged = Required<Pick<DcmdjpegFsParameters, '@type'>> & DcmdjpegFsParameters;
+type DcmdjpegFsParamsDictTagged = Required<Pick<DcmdjpegFsParamsDict, '@type'>> & DcmdjpegFsParamsDict;
 
 
 /**
- * Output object returned when calling `DcmdjpegFsParameters(...)`.
+ * Output object returned when calling `DcmdjpegFsParamsDict(...)`.
  *
  * @interface
  */
@@ -164,7 +164,7 @@ function dcmdjpeg_fs_params(
     padding_retain: boolean = false,
     padding_off: boolean = false,
     padding_create: Array<number> | null = null,
-): DcmdjpegFsParametersTagged {
+): DcmdjpegFsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dcmdjpeg.fs" as const,
         "input_file": input_file,
@@ -228,7 +228,7 @@ function dcmdjpeg_fs_params(
  * @returns Command-line arguments.
  */
 function dcmdjpeg_fs_cargs(
-    params: DcmdjpegFsParameters,
+    params: DcmdjpegFsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -374,7 +374,7 @@ function dcmdjpeg_fs_cargs(
  * @returns Outputs object.
  */
 function dcmdjpeg_fs_outputs(
-    params: DcmdjpegFsParameters,
+    params: DcmdjpegFsParamsDict,
     execution: Execution,
 ): DcmdjpegFsOutputs {
     const ret: DcmdjpegFsOutputs = {
@@ -400,7 +400,7 @@ function dcmdjpeg_fs_outputs(
  * @returns NamedTuple of outputs (described in `DcmdjpegFsOutputs`).
  */
 function dcmdjpeg_fs_execute(
-    params: DcmdjpegFsParameters,
+    params: DcmdjpegFsParamsDict,
     runner: Runner | null = null,
 ): DcmdjpegFsOutputs {
     runner = runner || getGlobalRunner();
@@ -519,6 +519,8 @@ function dcmdjpeg_fs(
 export {
       DCMDJPEG_FS_METADATA,
       DcmdjpegFsOutputs,
+      DcmdjpegFsParamsDict,
+      DcmdjpegFsParamsDictTagged,
       dcmdjpeg_fs,
       dcmdjpeg_fs_execute,
       dcmdjpeg_fs_params,

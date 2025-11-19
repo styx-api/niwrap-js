@@ -11,7 +11,7 @@ const V_3D_NET_CORR_METADATA: Metadata = {
 };
 
 
-interface V3dNetCorrParameters {
+interface V3dNetCorrParamsDict {
     "@type"?: "afni/3dNetCorr";
     "prefix": string;
     "inset": InputPathType;
@@ -34,11 +34,11 @@ interface V3dNetCorrParameters {
     "automask_off": boolean;
     "ignore_LT": boolean;
 }
-type V3dNetCorrParametersTagged = Required<Pick<V3dNetCorrParameters, '@type'>> & V3dNetCorrParameters;
+type V3dNetCorrParamsDictTagged = Required<Pick<V3dNetCorrParamsDict, '@type'>> & V3dNetCorrParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNetCorrParameters(...)`.
+ * Output object returned when calling `V3dNetCorrParamsDict(...)`.
  *
  * @interface
  */
@@ -125,7 +125,7 @@ function v_3d_net_corr_params(
     allow_roi_zeros: boolean = false,
     automask_off: boolean = false,
     ignore_lt: boolean = false,
-): V3dNetCorrParametersTagged {
+): V3dNetCorrParamsDictTagged {
     const params = {
         "@type": "afni/3dNetCorr" as const,
         "prefix": prefix,
@@ -168,7 +168,7 @@ function v_3d_net_corr_params(
  * @returns Command-line arguments.
  */
 function v_3d_net_corr_cargs(
-    params: V3dNetCorrParameters,
+    params: V3dNetCorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -249,7 +249,7 @@ function v_3d_net_corr_cargs(
  * @returns Outputs object.
  */
 function v_3d_net_corr_outputs(
-    params: V3dNetCorrParameters,
+    params: V3dNetCorrParamsDict,
     execution: Execution,
 ): V3dNetCorrOutputs {
     const ret: V3dNetCorrOutputs = {
@@ -281,7 +281,7 @@ function v_3d_net_corr_outputs(
  * @returns NamedTuple of outputs (described in `V3dNetCorrOutputs`).
  */
 function v_3d_net_corr_execute(
-    params: V3dNetCorrParameters,
+    params: V3dNetCorrParamsDict,
     runner: Runner | null = null,
 ): V3dNetCorrOutputs {
     runner = runner || getGlobalRunner();
@@ -357,6 +357,8 @@ function v_3d_net_corr(
 
 export {
       V3dNetCorrOutputs,
+      V3dNetCorrParamsDict,
+      V3dNetCorrParamsDictTagged,
       V_3D_NET_CORR_METADATA,
       v_3d_net_corr,
       v_3d_net_corr_execute,

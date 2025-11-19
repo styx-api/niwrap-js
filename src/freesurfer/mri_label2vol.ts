@@ -11,7 +11,7 @@ const MRI_LABEL2VOL_METADATA: Metadata = {
 };
 
 
-interface MriLabel2volParameters {
+interface MriLabel2volParamsDict {
     "@type"?: "freesurfer/mri_label2vol";
     "labels"?: Array<string> | null | undefined;
     "annotation"?: InputPathType | null | undefined;
@@ -32,11 +32,11 @@ interface MriLabel2volParameters {
     "defects"?: string | null | undefined;
     "native_vox2ras_flag": boolean;
 }
-type MriLabel2volParametersTagged = Required<Pick<MriLabel2volParameters, '@type'>> & MriLabel2volParameters;
+type MriLabel2volParamsDictTagged = Required<Pick<MriLabel2volParamsDict, '@type'>> & MriLabel2volParamsDict;
 
 
 /**
- * Output object returned when calling `MriLabel2volParameters(...)`.
+ * Output object returned when calling `MriLabel2volParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function mri_label2vol_params(
     offset: number | null = null,
     defects: string | null = null,
     native_vox2ras_flag: boolean = false,
-): MriLabel2volParametersTagged {
+): MriLabel2volParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_label2vol" as const,
         "template": template,
@@ -166,7 +166,7 @@ function mri_label2vol_params(
  * @returns Command-line arguments.
  */
 function mri_label2vol_cargs(
-    params: MriLabel2volParameters,
+    params: MriLabel2volParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -282,7 +282,7 @@ function mri_label2vol_cargs(
  * @returns Outputs object.
  */
 function mri_label2vol_outputs(
-    params: MriLabel2volParameters,
+    params: MriLabel2volParamsDict,
     execution: Execution,
 ): MriLabel2volOutputs {
     const ret: MriLabel2volOutputs = {
@@ -310,7 +310,7 @@ function mri_label2vol_outputs(
  * @returns NamedTuple of outputs (described in `MriLabel2volOutputs`).
  */
 function mri_label2vol_execute(
-    params: MriLabel2volParameters,
+    params: MriLabel2volParamsDict,
     runner: Runner | null = null,
 ): MriLabel2volOutputs {
     runner = runner || getGlobalRunner();
@@ -383,6 +383,8 @@ function mri_label2vol(
 export {
       MRI_LABEL2VOL_METADATA,
       MriLabel2volOutputs,
+      MriLabel2volParamsDict,
+      MriLabel2volParamsDictTagged,
       mri_label2vol,
       mri_label2vol_execute,
       mri_label2vol_params,

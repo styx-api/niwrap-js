@@ -11,7 +11,7 @@ const MRIS_FLATTEN_METADATA: Metadata = {
 };
 
 
-interface MrisFlattenParameters {
+interface MrisFlattenParamsDict {
     "@type"?: "freesurfer/mris_flatten";
     "input_patch": InputPathType;
     "output_patch": string;
@@ -22,11 +22,11 @@ interface MrisFlattenParameters {
     "copy_coords"?: string | null | undefined;
     "norand": boolean;
 }
-type MrisFlattenParametersTagged = Required<Pick<MrisFlattenParameters, '@type'>> & MrisFlattenParameters;
+type MrisFlattenParamsDictTagged = Required<Pick<MrisFlattenParamsDict, '@type'>> & MrisFlattenParamsDict;
 
 
 /**
- * Output object returned when calling `MrisFlattenParameters(...)`.
+ * Output object returned when calling `MrisFlattenParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function mris_flatten_params(
     random_seed: number | null = null,
     copy_coords: string | null = null,
     norand: boolean = false,
-): MrisFlattenParametersTagged {
+): MrisFlattenParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_flatten" as const,
         "input_patch": input_patch,
@@ -100,7 +100,7 @@ function mris_flatten_params(
  * @returns Command-line arguments.
  */
 function mris_flatten_cargs(
-    params: MrisFlattenParameters,
+    params: MrisFlattenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function mris_flatten_cargs(
  * @returns Outputs object.
  */
 function mris_flatten_outputs(
-    params: MrisFlattenParameters,
+    params: MrisFlattenParamsDict,
     execution: Execution,
 ): MrisFlattenOutputs {
     const ret: MrisFlattenOutputs = {
@@ -179,7 +179,7 @@ function mris_flatten_outputs(
  * @returns NamedTuple of outputs (described in `MrisFlattenOutputs`).
  */
 function mris_flatten_execute(
-    params: MrisFlattenParameters,
+    params: MrisFlattenParamsDict,
     runner: Runner | null = null,
 ): MrisFlattenOutputs {
     runner = runner || getGlobalRunner();
@@ -232,6 +232,8 @@ function mris_flatten(
 export {
       MRIS_FLATTEN_METADATA,
       MrisFlattenOutputs,
+      MrisFlattenParamsDict,
+      MrisFlattenParamsDictTagged,
       mris_flatten,
       mris_flatten_execute,
       mris_flatten_params,

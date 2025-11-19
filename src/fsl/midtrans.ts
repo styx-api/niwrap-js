@@ -11,7 +11,7 @@ const MIDTRANS_METADATA: Metadata = {
 };
 
 
-interface MidtransParameters {
+interface MidtransParamsDict {
     "@type"?: "fsl/midtrans";
     "transforms": Array<InputPathType>;
     "output_matrix"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface MidtransParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
-type MidtransParametersTagged = Required<Pick<MidtransParameters, '@type'>> & MidtransParameters;
+type MidtransParamsDictTagged = Required<Pick<MidtransParamsDict, '@type'>> & MidtransParamsDict;
 
 
 /**
- * Output object returned when calling `MidtransParameters(...)`.
+ * Output object returned when calling `MidtransParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function midtrans_params(
     separate_basename: string | null = null,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): MidtransParametersTagged {
+): MidtransParamsDictTagged {
     const params = {
         "@type": "fsl/midtrans" as const,
         "transforms": transforms,
@@ -84,7 +84,7 @@ function midtrans_params(
  * @returns Command-line arguments.
  */
 function midtrans_cargs(
-    params: MidtransParameters,
+    params: MidtransParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function midtrans_cargs(
  * @returns Outputs object.
  */
 function midtrans_outputs(
-    params: MidtransParameters,
+    params: MidtransParamsDict,
     execution: Execution,
 ): MidtransOutputs {
     const ret: MidtransOutputs = {
@@ -152,7 +152,7 @@ function midtrans_outputs(
  * @returns NamedTuple of outputs (described in `MidtransOutputs`).
  */
 function midtrans_execute(
-    params: MidtransParameters,
+    params: MidtransParamsDict,
     runner: Runner | null = null,
 ): MidtransOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function midtrans(
 export {
       MIDTRANS_METADATA,
       MidtransOutputs,
+      MidtransParamsDict,
+      MidtransParamsDictTagged,
       midtrans,
       midtrans_execute,
       midtrans_params,

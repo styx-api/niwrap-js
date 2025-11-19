@@ -11,7 +11,7 @@ const MRI_NORMALIZE_TP2_METADATA: Metadata = {
 };
 
 
-interface MriNormalizeTp2Parameters {
+interface MriNormalizeTp2ParamsDict {
     "@type"?: "freesurfer/mri_normalize_tp2";
     "input_vol": InputPathType;
     "normalized_vol": string;
@@ -25,11 +25,11 @@ interface MriNormalizeTp2Parameters {
     "lta_src"?: InputPathType | null | undefined;
     "lta_dst"?: InputPathType | null | undefined;
 }
-type MriNormalizeTp2ParametersTagged = Required<Pick<MriNormalizeTp2Parameters, '@type'>> & MriNormalizeTp2Parameters;
+type MriNormalizeTp2ParamsDictTagged = Required<Pick<MriNormalizeTp2ParamsDict, '@type'>> & MriNormalizeTp2ParamsDict;
 
 
 /**
- * Output object returned when calling `MriNormalizeTp2Parameters(...)`.
+ * Output object returned when calling `MriNormalizeTp2ParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function mri_normalize_tp2_params(
     invert_flag: boolean = false,
     lta_src: InputPathType | null = null,
     lta_dst: InputPathType | null = null,
-): MriNormalizeTp2ParametersTagged {
+): MriNormalizeTp2ParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_normalize_tp2" as const,
         "input_vol": input_vol,
@@ -118,7 +118,7 @@ function mri_normalize_tp2_params(
  * @returns Command-line arguments.
  */
 function mri_normalize_tp2_cargs(
-    params: MriNormalizeTp2Parameters,
+    params: MriNormalizeTp2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -189,7 +189,7 @@ function mri_normalize_tp2_cargs(
  * @returns Outputs object.
  */
 function mri_normalize_tp2_outputs(
-    params: MriNormalizeTp2Parameters,
+    params: MriNormalizeTp2ParamsDict,
     execution: Execution,
 ): MriNormalizeTp2Outputs {
     const ret: MriNormalizeTp2Outputs = {
@@ -215,7 +215,7 @@ function mri_normalize_tp2_outputs(
  * @returns NamedTuple of outputs (described in `MriNormalizeTp2Outputs`).
  */
 function mri_normalize_tp2_execute(
-    params: MriNormalizeTp2Parameters,
+    params: MriNormalizeTp2ParamsDict,
     runner: Runner | null = null,
 ): MriNormalizeTp2Outputs {
     runner = runner || getGlobalRunner();
@@ -274,6 +274,8 @@ function mri_normalize_tp2(
 export {
       MRI_NORMALIZE_TP2_METADATA,
       MriNormalizeTp2Outputs,
+      MriNormalizeTp2ParamsDict,
+      MriNormalizeTp2ParamsDictTagged,
       mri_normalize_tp2,
       mri_normalize_tp2_execute,
       mri_normalize_tp2_params,

@@ -11,7 +11,7 @@ const V_3D_TCORR_MAP_METADATA: Metadata = {
 };
 
 
-interface V3dTcorrMapParameters {
+interface V3dTcorrMapParamsDict {
     "@type"?: "afni/3dTcorrMap";
     "input": InputPathType;
     "seed"?: InputPathType | null | undefined;
@@ -31,11 +31,11 @@ interface V3dTcorrMapParameters {
     "sexpr"?: string | null | undefined;
     "hist"?: string | null | undefined;
 }
-type V3dTcorrMapParametersTagged = Required<Pick<V3dTcorrMapParameters, '@type'>> & V3dTcorrMapParameters;
+type V3dTcorrMapParamsDictTagged = Required<Pick<V3dTcorrMapParamsDict, '@type'>> & V3dTcorrMapParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTcorrMapParameters(...)`.
+ * Output object returned when calling `V3dTcorrMapParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function v_3d_tcorr_map_params(
     cexpr: string | null = null,
     sexpr: string | null = null,
     hist: string | null = null,
-): V3dTcorrMapParametersTagged {
+): V3dTcorrMapParamsDictTagged {
     const params = {
         "@type": "afni/3dTcorrMap" as const,
         "input": input,
@@ -150,7 +150,7 @@ function v_3d_tcorr_map_params(
  * @returns Command-line arguments.
  */
 function v_3d_tcorr_map_cargs(
-    params: V3dTcorrMapParameters,
+    params: V3dTcorrMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -259,7 +259,7 @@ function v_3d_tcorr_map_cargs(
  * @returns Outputs object.
  */
 function v_3d_tcorr_map_outputs(
-    params: V3dTcorrMapParameters,
+    params: V3dTcorrMapParamsDict,
     execution: Execution,
 ): V3dTcorrMapOutputs {
     const ret: V3dTcorrMapOutputs = {
@@ -284,7 +284,7 @@ function v_3d_tcorr_map_outputs(
  * @returns NamedTuple of outputs (described in `V3dTcorrMapOutputs`).
  */
 function v_3d_tcorr_map_execute(
-    params: V3dTcorrMapParameters,
+    params: V3dTcorrMapParamsDict,
     runner: Runner | null = null,
 ): V3dTcorrMapOutputs {
     runner = runner || getGlobalRunner();
@@ -354,6 +354,8 @@ function v_3d_tcorr_map(
 
 export {
       V3dTcorrMapOutputs,
+      V3dTcorrMapParamsDict,
+      V3dTcorrMapParamsDictTagged,
       V_3D_TCORR_MAP_METADATA,
       v_3d_tcorr_map,
       v_3d_tcorr_map_execute,

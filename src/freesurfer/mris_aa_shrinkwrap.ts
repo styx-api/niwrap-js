@@ -11,7 +11,7 @@ const MRIS_AA_SHRINKWRAP_METADATA: Metadata = {
 };
 
 
-interface MrisAaShrinkwrapParameters {
+interface MrisAaShrinkwrapParamsDict {
     "@type"?: "freesurfer/mris_AA_shrinkwrap";
     "t1_vol": InputPathType;
     "pd_vol": InputPathType;
@@ -21,11 +21,11 @@ interface MrisAaShrinkwrapParameters {
     "average_curvature"?: number | null | undefined;
     "white_only": boolean;
 }
-type MrisAaShrinkwrapParametersTagged = Required<Pick<MrisAaShrinkwrapParameters, '@type'>> & MrisAaShrinkwrapParameters;
+type MrisAaShrinkwrapParamsDictTagged = Required<Pick<MrisAaShrinkwrapParamsDict, '@type'>> & MrisAaShrinkwrapParamsDict;
 
 
 /**
- * Output object returned when calling `MrisAaShrinkwrapParameters(...)`.
+ * Output object returned when calling `MrisAaShrinkwrapParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function mris_aa_shrinkwrap_params(
     create_curvature_area: boolean = false,
     average_curvature: number | null = null,
     white_only: boolean = false,
-): MrisAaShrinkwrapParametersTagged {
+): MrisAaShrinkwrapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_AA_shrinkwrap" as const,
         "t1_vol": t1_vol,
@@ -84,7 +84,7 @@ function mris_aa_shrinkwrap_params(
  * @returns Command-line arguments.
  */
 function mris_aa_shrinkwrap_cargs(
-    params: MrisAaShrinkwrapParameters,
+    params: MrisAaShrinkwrapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function mris_aa_shrinkwrap_cargs(
  * @returns Outputs object.
  */
 function mris_aa_shrinkwrap_outputs(
-    params: MrisAaShrinkwrapParameters,
+    params: MrisAaShrinkwrapParamsDict,
     execution: Execution,
 ): MrisAaShrinkwrapOutputs {
     const ret: MrisAaShrinkwrapOutputs = {
@@ -145,7 +145,7 @@ function mris_aa_shrinkwrap_outputs(
  * @returns NamedTuple of outputs (described in `MrisAaShrinkwrapOutputs`).
  */
 function mris_aa_shrinkwrap_execute(
-    params: MrisAaShrinkwrapParameters,
+    params: MrisAaShrinkwrapParamsDict,
     runner: Runner | null = null,
 ): MrisAaShrinkwrapOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function mris_aa_shrinkwrap(
 export {
       MRIS_AA_SHRINKWRAP_METADATA,
       MrisAaShrinkwrapOutputs,
+      MrisAaShrinkwrapParamsDict,
+      MrisAaShrinkwrapParamsDictTagged,
       mris_aa_shrinkwrap,
       mris_aa_shrinkwrap_execute,
       mris_aa_shrinkwrap_params,

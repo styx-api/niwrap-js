@@ -11,16 +11,16 @@ const OLD_BETALL_METADATA: Metadata = {
 };
 
 
-interface OldBetallParameters {
+interface OldBetallParamsDict {
     "@type"?: "fsl/old_betall";
     "t1_filerout": string;
     "t2_filerout": string;
 }
-type OldBetallParametersTagged = Required<Pick<OldBetallParameters, '@type'>> & OldBetallParameters;
+type OldBetallParamsDictTagged = Required<Pick<OldBetallParamsDict, '@type'>> & OldBetallParamsDict;
 
 
 /**
- * Output object returned when calling `OldBetallParameters(...)`.
+ * Output object returned when calling `OldBetallParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface OldBetallOutputs {
 function old_betall_params(
     t1_filerout: string,
     t2_filerout: string,
-): OldBetallParametersTagged {
+): OldBetallParamsDictTagged {
     const params = {
         "@type": "fsl/old_betall" as const,
         "t1_filerout": t1_filerout,
@@ -70,7 +70,7 @@ function old_betall_params(
  * @returns Command-line arguments.
  */
 function old_betall_cargs(
-    params: OldBetallParameters,
+    params: OldBetallParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function old_betall_cargs(
  * @returns Outputs object.
  */
 function old_betall_outputs(
-    params: OldBetallParameters,
+    params: OldBetallParamsDict,
     execution: Execution,
 ): OldBetallOutputs {
     const ret: OldBetallOutputs = {
@@ -117,7 +117,7 @@ function old_betall_outputs(
  * @returns NamedTuple of outputs (described in `OldBetallOutputs`).
  */
 function old_betall_execute(
-    params: OldBetallParameters,
+    params: OldBetallParamsDict,
     runner: Runner | null = null,
 ): OldBetallOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function old_betall(
 export {
       OLD_BETALL_METADATA,
       OldBetallOutputs,
+      OldBetallParamsDict,
+      OldBetallParamsDictTagged,
       old_betall,
       old_betall_execute,
       old_betall_params,

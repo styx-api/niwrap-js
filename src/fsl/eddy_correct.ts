@@ -11,18 +11,18 @@ const EDDY_CORRECT_METADATA: Metadata = {
 };
 
 
-interface EddyCorrectParameters {
+interface EddyCorrectParamsDict {
     "@type"?: "fsl/eddy_correct";
     "4d_input": InputPathType;
     "4d_output": string;
     "reference_no": number;
     "interp_method"?: "trilinear" | "spline" | null | undefined;
 }
-type EddyCorrectParametersTagged = Required<Pick<EddyCorrectParameters, '@type'>> & EddyCorrectParameters;
+type EddyCorrectParamsDictTagged = Required<Pick<EddyCorrectParamsDict, '@type'>> & EddyCorrectParamsDict;
 
 
 /**
- * Output object returned when calling `EddyCorrectParameters(...)`.
+ * Output object returned when calling `EddyCorrectParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function eddy_correct_params(
     v_4d_output: string,
     reference_no: number,
     interp_method: "trilinear" | "spline" | null = null,
-): EddyCorrectParametersTagged {
+): EddyCorrectParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_correct" as const,
         "4d_input": v_4d_input,
@@ -76,7 +76,7 @@ function eddy_correct_params(
  * @returns Command-line arguments.
  */
 function eddy_correct_cargs(
-    params: EddyCorrectParameters,
+    params: EddyCorrectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function eddy_correct_cargs(
  * @returns Outputs object.
  */
 function eddy_correct_outputs(
-    params: EddyCorrectParameters,
+    params: EddyCorrectParamsDict,
     execution: Execution,
 ): EddyCorrectOutputs {
     const ret: EddyCorrectOutputs = {
@@ -125,7 +125,7 @@ function eddy_correct_outputs(
  * @returns NamedTuple of outputs (described in `EddyCorrectOutputs`).
  */
 function eddy_correct_execute(
-    params: EddyCorrectParameters,
+    params: EddyCorrectParamsDict,
     runner: Runner | null = null,
 ): EddyCorrectOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function eddy_correct(
 export {
       EDDY_CORRECT_METADATA,
       EddyCorrectOutputs,
+      EddyCorrectParamsDict,
+      EddyCorrectParamsDictTagged,
       eddy_correct,
       eddy_correct_execute,
       eddy_correct_params,

@@ -11,7 +11,7 @@ const FSLVBM_3_PROC_METADATA: Metadata = {
 };
 
 
-interface Fslvbm3ProcParameters {
+interface Fslvbm3ProcParamsDict {
     "@type"?: "fsl/fslvbm_3_proc";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
@@ -46,11 +46,11 @@ interface Fslvbm3ProcParameters {
     "version": boolean;
     "config_file"?: InputPathType | null | undefined;
 }
-type Fslvbm3ProcParametersTagged = Required<Pick<Fslvbm3ProcParameters, '@type'>> & Fslvbm3ProcParameters;
+type Fslvbm3ProcParamsDictTagged = Required<Pick<Fslvbm3ProcParamsDict, '@type'>> & Fslvbm3ProcParamsDict;
 
 
 /**
- * Output object returned when calling `Fslvbm3ProcParameters(...)`.
+ * Output object returned when calling `Fslvbm3ProcParamsDict(...)`.
  *
  * @interface
  */
@@ -137,7 +137,7 @@ function fslvbm_3_proc_params(
     verbose: boolean = false,
     version: boolean = false,
     config_file: InputPathType | null = null,
-): Fslvbm3ProcParametersTagged {
+): Fslvbm3ProcParamsDictTagged {
     const params = {
         "@type": "fsl/fslvbm_3_proc" as const,
         "coprocessor_class_strict": coprocessor_class_strict,
@@ -234,7 +234,7 @@ function fslvbm_3_proc_params(
  * @returns Command-line arguments.
  */
 function fslvbm_3_proc_cargs(
-    params: Fslvbm3ProcParameters,
+    params: Fslvbm3ProcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -420,7 +420,7 @@ function fslvbm_3_proc_cargs(
  * @returns Outputs object.
  */
 function fslvbm_3_proc_outputs(
-    params: Fslvbm3ProcParameters,
+    params: Fslvbm3ProcParamsDict,
     execution: Execution,
 ): Fslvbm3ProcOutputs {
     const ret: Fslvbm3ProcOutputs = {
@@ -446,7 +446,7 @@ function fslvbm_3_proc_outputs(
  * @returns NamedTuple of outputs (described in `Fslvbm3ProcOutputs`).
  */
 function fslvbm_3_proc_execute(
-    params: Fslvbm3ProcParameters,
+    params: Fslvbm3ProcParamsDict,
     runner: Runner | null = null,
 ): Fslvbm3ProcOutputs {
     runner = runner || getGlobalRunner();
@@ -547,6 +547,8 @@ function fslvbm_3_proc(
 export {
       FSLVBM_3_PROC_METADATA,
       Fslvbm3ProcOutputs,
+      Fslvbm3ProcParamsDict,
+      Fslvbm3ProcParamsDictTagged,
       fslvbm_3_proc,
       fslvbm_3_proc_execute,
       fslvbm_3_proc_params,

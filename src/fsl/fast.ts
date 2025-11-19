@@ -11,7 +11,7 @@ const FAST_METADATA: Metadata = {
 };
 
 
-interface FastParameters {
+interface FastParamsDict {
     "@type"?: "fsl/fast";
     "number_classes"?: number | null | undefined;
     "bias_iters"?: number | null | undefined;
@@ -36,11 +36,11 @@ interface FastParameters {
     "iters_afterbias"?: number | null | undefined;
     "in_files": Array<InputPathType>;
 }
-type FastParametersTagged = Required<Pick<FastParameters, '@type'>> & FastParameters;
+type FastParamsDictTagged = Required<Pick<FastParamsDict, '@type'>> & FastParamsDict;
 
 
 /**
- * Output object returned when calling `FastParameters(...)`.
+ * Output object returned when calling `FastParamsDict(...)`.
  *
  * @interface
  */
@@ -123,7 +123,7 @@ function fast_params(
     verbose: boolean = false,
     manual_seg: InputPathType | null = null,
     iters_afterbias: number | null = null,
-): FastParametersTagged {
+): FastParamsDictTagged {
     const params = {
         "@type": "fsl/fast" as const,
         "segments": segments,
@@ -190,7 +190,7 @@ function fast_params(
  * @returns Command-line arguments.
  */
 function fast_cargs(
-    params: FastParameters,
+    params: FastParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -314,7 +314,7 @@ function fast_cargs(
  * @returns Outputs object.
  */
 function fast_outputs(
-    params: FastParameters,
+    params: FastParamsDict,
     execution: Execution,
 ): FastOutputs {
     const ret: FastOutputs = {
@@ -344,7 +344,7 @@ function fast_outputs(
  * @returns NamedTuple of outputs (described in `FastOutputs`).
  */
 function fast_execute(
-    params: FastParameters,
+    params: FastParamsDict,
     runner: Runner | null = null,
 ): FastOutputs {
     runner = runner || getGlobalRunner();
@@ -425,6 +425,8 @@ function fast(
 export {
       FAST_METADATA,
       FastOutputs,
+      FastParamsDict,
+      FastParamsDictTagged,
       fast,
       fast_execute,
       fast_params,

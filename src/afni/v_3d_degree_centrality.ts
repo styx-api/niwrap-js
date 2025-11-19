@@ -11,7 +11,7 @@ const V_3D_DEGREE_CENTRALITY_METADATA: Metadata = {
 };
 
 
-interface V3dDegreeCentralityParameters {
+interface V3dDegreeCentralityParamsDict {
     "@type"?: "afni/3dDegreeCentrality";
     "autoclip": boolean;
     "automask": boolean;
@@ -22,11 +22,11 @@ interface V3dDegreeCentralityParameters {
     "sparsity"?: number | null | undefined;
     "thresh"?: number | null | undefined;
 }
-type V3dDegreeCentralityParametersTagged = Required<Pick<V3dDegreeCentralityParameters, '@type'>> & V3dDegreeCentralityParameters;
+type V3dDegreeCentralityParamsDictTagged = Required<Pick<V3dDegreeCentralityParamsDict, '@type'>> & V3dDegreeCentralityParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDegreeCentralityParameters(...)`.
+ * Output object returned when calling `V3dDegreeCentralityParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v_3d_degree_centrality_params(
     polort: number | null = null,
     sparsity: number | null = null,
     thresh: number | null = null,
-): V3dDegreeCentralityParametersTagged {
+): V3dDegreeCentralityParamsDictTagged {
     const params = {
         "@type": "afni/3dDegreeCentrality" as const,
         "autoclip": autoclip,
@@ -104,7 +104,7 @@ function v_3d_degree_centrality_params(
  * @returns Command-line arguments.
  */
 function v_3d_degree_centrality_cargs(
-    params: V3dDegreeCentralityParameters,
+    params: V3dDegreeCentralityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function v_3d_degree_centrality_cargs(
  * @returns Outputs object.
  */
 function v_3d_degree_centrality_outputs(
-    params: V3dDegreeCentralityParameters,
+    params: V3dDegreeCentralityParamsDict,
     execution: Execution,
 ): V3dDegreeCentralityOutputs {
     const ret: V3dDegreeCentralityOutputs = {
@@ -186,7 +186,7 @@ function v_3d_degree_centrality_outputs(
  * @returns NamedTuple of outputs (described in `V3dDegreeCentralityOutputs`).
  */
 function v_3d_degree_centrality_execute(
-    params: V3dDegreeCentralityParameters,
+    params: V3dDegreeCentralityParamsDict,
     runner: Runner | null = null,
 ): V3dDegreeCentralityOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function v_3d_degree_centrality(
 
 export {
       V3dDegreeCentralityOutputs,
+      V3dDegreeCentralityParamsDict,
+      V3dDegreeCentralityParamsDictTagged,
       V_3D_DEGREE_CENTRALITY_METADATA,
       v_3d_degree_centrality,
       v_3d_degree_centrality_execute,

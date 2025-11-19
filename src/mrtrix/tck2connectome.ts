@@ -11,15 +11,15 @@ const TCK2CONNECTOME_METADATA: Metadata = {
 };
 
 
-interface Tck2connectomeConfigParameters {
+interface Tck2connectomeConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Tck2connectomeConfigParametersTagged = Required<Pick<Tck2connectomeConfigParameters, '@type'>> & Tck2connectomeConfigParameters;
+type Tck2connectomeConfigParamsDictTagged = Required<Pick<Tck2connectomeConfigParamsDict, '@type'>> & Tck2connectomeConfigParamsDict;
 
 
-interface Tck2connectomeParameters {
+interface Tck2connectomeParamsDict {
     "@type"?: "mrtrix/tck2connectome";
     "assignment_end_voxels": boolean;
     "assignment_radial_search"?: number | null | undefined;
@@ -42,14 +42,14 @@ interface Tck2connectomeParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Tck2connectomeConfigParameters> | null | undefined;
+    "config"?: Array<Tck2connectomeConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks_in": InputPathType;
     "nodes_in": InputPathType;
     "connectome_out": string;
 }
-type Tck2connectomeParametersTagged = Required<Pick<Tck2connectomeParameters, '@type'>> & Tck2connectomeParameters;
+type Tck2connectomeParamsDictTagged = Required<Pick<Tck2connectomeParamsDict, '@type'>> & Tck2connectomeParamsDict;
 
 
 /**
@@ -60,10 +60,10 @@ type Tck2connectomeParametersTagged = Required<Pick<Tck2connectomeParameters, '@
  *
  * @returns Parameter dictionary
  */
-function tck2connectome_config_params(
+function tck2connectome_config(
     key: string,
     value: string,
-): Tck2connectomeConfigParametersTagged {
+): Tck2connectomeConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -82,7 +82,7 @@ function tck2connectome_config_params(
  * @returns Command-line arguments.
  */
 function tck2connectome_config_cargs(
-    params: Tck2connectomeConfigParameters,
+    params: Tck2connectomeConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function tck2connectome_config_cargs(
 
 
 /**
- * Output object returned when calling `Tck2connectomeParameters(...)`.
+ * Output object returned when calling `Tck2connectomeParamsDict(...)`.
  *
  * @interface
  */
@@ -172,10 +172,10 @@ function tck2connectome_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tck2connectomeConfigParameters> | null = null,
+    config: Array<Tck2connectomeConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Tck2connectomeParametersTagged {
+): Tck2connectomeParamsDictTagged {
     const params = {
         "@type": "mrtrix/tck2connectome" as const,
         "assignment_end_voxels": assignment_end_voxels,
@@ -237,7 +237,7 @@ function tck2connectome_params(
  * @returns Command-line arguments.
  */
 function tck2connectome_cargs(
-    params: Tck2connectomeParameters,
+    params: Tck2connectomeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -354,7 +354,7 @@ function tck2connectome_cargs(
  * @returns Outputs object.
  */
 function tck2connectome_outputs(
-    params: Tck2connectomeParameters,
+    params: Tck2connectomeParamsDict,
     execution: Execution,
 ): Tck2connectomeOutputs {
     const ret: Tck2connectomeOutputs = {
@@ -389,7 +389,7 @@ function tck2connectome_outputs(
  * @returns NamedTuple of outputs (described in `Tck2connectomeOutputs`).
  */
 function tck2connectome_execute(
-    params: Tck2connectomeParameters,
+    params: Tck2connectomeParamsDict,
     runner: Runner | null = null,
 ): Tck2connectomeOutputs {
     runner = runner || getGlobalRunner();
@@ -475,7 +475,7 @@ function tck2connectome(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tck2connectomeConfigParameters> | null = null,
+    config: Array<Tck2connectomeConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -487,9 +487,13 @@ function tck2connectome(
 
 export {
       TCK2CONNECTOME_METADATA,
+      Tck2connectomeConfigParamsDict,
+      Tck2connectomeConfigParamsDictTagged,
       Tck2connectomeOutputs,
+      Tck2connectomeParamsDict,
+      Tck2connectomeParamsDictTagged,
       tck2connectome,
-      tck2connectome_config_params,
+      tck2connectome_config,
       tck2connectome_execute,
       tck2connectome_params,
 };

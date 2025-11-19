@@ -11,16 +11,16 @@ const TALAIRACH2_METADATA: Metadata = {
 };
 
 
-interface Talairach2Parameters {
+interface Talairach2ParamsDict {
     "@type"?: "freesurfer/talairach2";
     "subject_id": string;
     "mgz_flag"?: string | null | undefined;
 }
-type Talairach2ParametersTagged = Required<Pick<Talairach2Parameters, '@type'>> & Talairach2Parameters;
+type Talairach2ParamsDictTagged = Required<Pick<Talairach2ParamsDict, '@type'>> & Talairach2ParamsDict;
 
 
 /**
- * Output object returned when calling `Talairach2Parameters(...)`.
+ * Output object returned when calling `Talairach2ParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface Talairach2Outputs {
 function talairach2_params(
     subject_id: string,
     mgz_flag: string | null = null,
-): Talairach2ParametersTagged {
+): Talairach2ParamsDictTagged {
     const params = {
         "@type": "freesurfer/talairach2" as const,
         "subject_id": subject_id,
@@ -64,7 +64,7 @@ function talairach2_params(
  * @returns Command-line arguments.
  */
 function talairach2_cargs(
-    params: Talairach2Parameters,
+    params: Talairach2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function talairach2_cargs(
  * @returns Outputs object.
  */
 function talairach2_outputs(
-    params: Talairach2Parameters,
+    params: Talairach2ParamsDict,
     execution: Execution,
 ): Talairach2Outputs {
     const ret: Talairach2Outputs = {
@@ -111,7 +111,7 @@ function talairach2_outputs(
  * @returns NamedTuple of outputs (described in `Talairach2Outputs`).
  */
 function talairach2_execute(
-    params: Talairach2Parameters,
+    params: Talairach2ParamsDict,
     runner: Runner | null = null,
 ): Talairach2Outputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function talairach2(
 export {
       TALAIRACH2_METADATA,
       Talairach2Outputs,
+      Talairach2ParamsDict,
+      Talairach2ParamsDictTagged,
       talairach2,
       talairach2_execute,
       talairach2_params,

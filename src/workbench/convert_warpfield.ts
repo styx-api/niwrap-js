@@ -10,41 +10,41 @@ const CONVERT_WARPFIELD_METADATA: Metadata = {
 };
 
 
-interface ConvertWarpfieldFromWorldParameters {
+interface ConvertWarpfieldFromWorldParamsDict {
     "@type"?: "from-world";
     "input": string;
     "absolute": boolean;
 }
-type ConvertWarpfieldFromWorldParametersTagged = Required<Pick<ConvertWarpfieldFromWorldParameters, '@type'>> & ConvertWarpfieldFromWorldParameters;
+type ConvertWarpfieldFromWorldParamsDictTagged = Required<Pick<ConvertWarpfieldFromWorldParamsDict, '@type'>> & ConvertWarpfieldFromWorldParamsDict;
 
 
-interface ConvertWarpfieldFromFnirtParameters {
+interface ConvertWarpfieldFromFnirtParamsDict {
     "@type"?: "from-fnirt";
     "input": string;
     "source-volume": string;
     "absolute": boolean;
 }
-type ConvertWarpfieldFromFnirtParametersTagged = Required<Pick<ConvertWarpfieldFromFnirtParameters, '@type'>> & ConvertWarpfieldFromFnirtParameters;
+type ConvertWarpfieldFromFnirtParamsDictTagged = Required<Pick<ConvertWarpfieldFromFnirtParamsDict, '@type'>> & ConvertWarpfieldFromFnirtParamsDict;
 
 
-interface ConvertWarpfieldToFnirtParameters {
+interface ConvertWarpfieldToFnirtParamsDict {
     "@type"?: "to-fnirt";
     "output": string;
     "source-volume": string;
 }
-type ConvertWarpfieldToFnirtParametersTagged = Required<Pick<ConvertWarpfieldToFnirtParameters, '@type'>> & ConvertWarpfieldToFnirtParameters;
+type ConvertWarpfieldToFnirtParamsDictTagged = Required<Pick<ConvertWarpfieldToFnirtParamsDict, '@type'>> & ConvertWarpfieldToFnirtParamsDict;
 
 
-interface ConvertWarpfieldParameters {
+interface ConvertWarpfieldParamsDict {
     "@type"?: "workbench/convert-warpfield";
-    "from-world"?: ConvertWarpfieldFromWorldParameters | null | undefined;
+    "from-world"?: ConvertWarpfieldFromWorldParamsDict | null | undefined;
     "input"?: string | null | undefined;
-    "from-fnirt"?: ConvertWarpfieldFromFnirtParameters | null | undefined;
+    "from-fnirt"?: ConvertWarpfieldFromFnirtParamsDict | null | undefined;
     "output"?: string | null | undefined;
     "output"?: string | null | undefined;
-    "to-fnirt"?: Array<ConvertWarpfieldToFnirtParameters> | null | undefined;
+    "to-fnirt"?: Array<ConvertWarpfieldToFnirtParamsDict> | null | undefined;
 }
-type ConvertWarpfieldParametersTagged = Required<Pick<ConvertWarpfieldParameters, '@type'>> & ConvertWarpfieldParameters;
+type ConvertWarpfieldParamsDictTagged = Required<Pick<ConvertWarpfieldParamsDict, '@type'>> & ConvertWarpfieldParamsDict;
 
 
 /**
@@ -55,10 +55,10 @@ type ConvertWarpfieldParametersTagged = Required<Pick<ConvertWarpfieldParameters
  *
  * @returns Parameter dictionary
  */
-function convert_warpfield_from_world_params(
+function convert_warpfield_from_world(
     input: string,
     absolute: boolean = false,
-): ConvertWarpfieldFromWorldParametersTagged {
+): ConvertWarpfieldFromWorldParamsDictTagged {
     const params = {
         "@type": "from-world" as const,
         "input": input,
@@ -77,7 +77,7 @@ function convert_warpfield_from_world_params(
  * @returns Command-line arguments.
  */
 function convert_warpfield_from_world_cargs(
-    params: ConvertWarpfieldFromWorldParameters,
+    params: ConvertWarpfieldFromWorldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,11 +101,11 @@ function convert_warpfield_from_world_cargs(
  *
  * @returns Parameter dictionary
  */
-function convert_warpfield_from_fnirt_params(
+function convert_warpfield_from_fnirt(
     input: string,
     source_volume: string,
     absolute: boolean = false,
-): ConvertWarpfieldFromFnirtParametersTagged {
+): ConvertWarpfieldFromFnirtParamsDictTagged {
     const params = {
         "@type": "from-fnirt" as const,
         "input": input,
@@ -125,7 +125,7 @@ function convert_warpfield_from_fnirt_params(
  * @returns Command-line arguments.
  */
 function convert_warpfield_from_fnirt_cargs(
-    params: ConvertWarpfieldFromFnirtParameters,
+    params: ConvertWarpfieldFromFnirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,10 +149,10 @@ function convert_warpfield_from_fnirt_cargs(
  *
  * @returns Parameter dictionary
  */
-function convert_warpfield_to_fnirt_params(
+function convert_warpfield_to_fnirt(
     output: string,
     source_volume: string,
-): ConvertWarpfieldToFnirtParametersTagged {
+): ConvertWarpfieldToFnirtParamsDictTagged {
     const params = {
         "@type": "to-fnirt" as const,
         "output": output,
@@ -171,7 +171,7 @@ function convert_warpfield_to_fnirt_params(
  * @returns Command-line arguments.
  */
 function convert_warpfield_to_fnirt_cargs(
-    params: ConvertWarpfieldToFnirtParameters,
+    params: ConvertWarpfieldToFnirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function convert_warpfield_to_fnirt_cargs(
 
 
 /**
- * Output object returned when calling `ConvertWarpfieldParameters(...)`.
+ * Output object returned when calling `ConvertWarpfieldParamsDict(...)`.
  *
  * @interface
  */
@@ -219,10 +219,10 @@ function convert_warpfield_params(
     input: string | null,
     output: string | null,
     output_: string | null,
-    from_world: ConvertWarpfieldFromWorldParameters | null = null,
-    from_fnirt: ConvertWarpfieldFromFnirtParameters | null = null,
-    to_fnirt: Array<ConvertWarpfieldToFnirtParameters> | null = null,
-): ConvertWarpfieldParametersTagged {
+    from_world: ConvertWarpfieldFromWorldParamsDict | null = null,
+    from_fnirt: ConvertWarpfieldFromFnirtParamsDict | null = null,
+    to_fnirt: Array<ConvertWarpfieldToFnirtParamsDict> | null = null,
+): ConvertWarpfieldParamsDictTagged {
     const params = {
         "@type": "workbench/convert-warpfield" as const,
     };
@@ -257,7 +257,7 @@ function convert_warpfield_params(
  * @returns Command-line arguments.
  */
 function convert_warpfield_cargs(
-    params: ConvertWarpfieldParameters,
+    params: ConvertWarpfieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -289,7 +289,7 @@ function convert_warpfield_cargs(
  * @returns Outputs object.
  */
 function convert_warpfield_outputs(
-    params: ConvertWarpfieldParameters,
+    params: ConvertWarpfieldParamsDict,
     execution: Execution,
 ): ConvertWarpfieldOutputs {
     const ret: ConvertWarpfieldOutputs = {
@@ -316,7 +316,7 @@ function convert_warpfield_outputs(
  * @returns NamedTuple of outputs (described in `ConvertWarpfieldOutputs`).
  */
 function convert_warpfield_execute(
-    params: ConvertWarpfieldParameters,
+    params: ConvertWarpfieldParamsDict,
     runner: Runner | null = null,
 ): ConvertWarpfieldOutputs {
     runner = runner || getGlobalRunner();
@@ -360,9 +360,9 @@ function convert_warpfield(
     input: string | null,
     output: string | null,
     output_: string | null,
-    from_world: ConvertWarpfieldFromWorldParameters | null = null,
-    from_fnirt: ConvertWarpfieldFromFnirtParameters | null = null,
-    to_fnirt: Array<ConvertWarpfieldToFnirtParameters> | null = null,
+    from_world: ConvertWarpfieldFromWorldParamsDict | null = null,
+    from_fnirt: ConvertWarpfieldFromFnirtParamsDict | null = null,
+    to_fnirt: Array<ConvertWarpfieldToFnirtParamsDict> | null = null,
     runner: Runner | null = null,
 ): ConvertWarpfieldOutputs {
     const params = convert_warpfield_params(input, output, output_, from_world, from_fnirt, to_fnirt)
@@ -372,11 +372,19 @@ function convert_warpfield(
 
 export {
       CONVERT_WARPFIELD_METADATA,
+      ConvertWarpfieldFromFnirtParamsDict,
+      ConvertWarpfieldFromFnirtParamsDictTagged,
+      ConvertWarpfieldFromWorldParamsDict,
+      ConvertWarpfieldFromWorldParamsDictTagged,
       ConvertWarpfieldOutputs,
+      ConvertWarpfieldParamsDict,
+      ConvertWarpfieldParamsDictTagged,
+      ConvertWarpfieldToFnirtParamsDict,
+      ConvertWarpfieldToFnirtParamsDictTagged,
       convert_warpfield,
       convert_warpfield_execute,
-      convert_warpfield_from_fnirt_params,
-      convert_warpfield_from_world_params,
+      convert_warpfield_from_fnirt,
+      convert_warpfield_from_world,
       convert_warpfield_params,
-      convert_warpfield_to_fnirt_params,
+      convert_warpfield_to_fnirt,
 };

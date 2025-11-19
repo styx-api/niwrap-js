@@ -11,7 +11,7 @@ const PROBTRACKX_METADATA: Metadata = {
 };
 
 
-interface ProbtrackxParameters {
+interface ProbtrackxParamsDict {
     "@type"?: "fsl/probtrackx";
     "samples": InputPathType;
     "mask": InputPathType;
@@ -48,11 +48,11 @@ interface ProbtrackxParameters {
     "rseed"?: number | null | undefined;
     "s2tastext": boolean;
 }
-type ProbtrackxParametersTagged = Required<Pick<ProbtrackxParameters, '@type'>> & ProbtrackxParameters;
+type ProbtrackxParamsDictTagged = Required<Pick<ProbtrackxParamsDict, '@type'>> & ProbtrackxParamsDict;
 
 
 /**
- * Output object returned when calling `ProbtrackxParameters(...)`.
+ * Output object returned when calling `ProbtrackxParamsDict(...)`.
  *
  * @interface
  */
@@ -139,7 +139,7 @@ function probtrackx_params(
     modeuler: boolean = false,
     rseed: number | null = null,
     s2tastext: boolean = false,
-): ProbtrackxParametersTagged {
+): ProbtrackxParamsDictTagged {
     const params = {
         "@type": "fsl/probtrackx" as const,
         "samples": samples,
@@ -230,7 +230,7 @@ function probtrackx_params(
  * @returns Command-line arguments.
  */
 function probtrackx_cargs(
-    params: ProbtrackxParameters,
+    params: ProbtrackxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -414,7 +414,7 @@ function probtrackx_cargs(
  * @returns Outputs object.
  */
 function probtrackx_outputs(
-    params: ProbtrackxParameters,
+    params: ProbtrackxParamsDict,
     execution: Execution,
 ): ProbtrackxOutputs {
     const ret: ProbtrackxOutputs = {
@@ -439,7 +439,7 @@ function probtrackx_outputs(
  * @returns NamedTuple of outputs (described in `ProbtrackxOutputs`).
  */
 function probtrackx_execute(
-    params: ProbtrackxParameters,
+    params: ProbtrackxParamsDict,
     runner: Runner | null = null,
 ): ProbtrackxOutputs {
     runner = runner || getGlobalRunner();
@@ -544,6 +544,8 @@ function probtrackx(
 export {
       PROBTRACKX_METADATA,
       ProbtrackxOutputs,
+      ProbtrackxParamsDict,
+      ProbtrackxParamsDictTagged,
       probtrackx,
       probtrackx_execute,
       probtrackx_params,

@@ -11,7 +11,7 @@ const V_3D_ISC_METADATA: Metadata = {
 };
 
 
-interface V3dIscParameters {
+interface V3dIscParamsDict {
     "@type"?: "afni/3dISC";
     "outfile_prefix": string;
     "num_jobs"?: number | null | undefined;
@@ -23,11 +23,11 @@ interface V3dIscParameters {
     "io_functions"?: "AFNI" | "R" | null | undefined;
     "data_table": string;
 }
-type V3dIscParametersTagged = Required<Pick<V3dIscParameters, '@type'>> & V3dIscParameters;
+type V3dIscParamsDictTagged = Required<Pick<V3dIscParamsDict, '@type'>> & V3dIscParamsDict;
 
 
 /**
- * Output object returned when calling `V3dIscParameters(...)`.
+ * Output object returned when calling `V3dIscParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_isc_params(
     quantitative_vars: string | null = null,
     fisher_transform: boolean = false,
     io_functions: "AFNI" | "R" | null = null,
-): V3dIscParametersTagged {
+): V3dIscParamsDictTagged {
     const params = {
         "@type": "afni/3dISC" as const,
         "outfile_prefix": outfile_prefix,
@@ -108,7 +108,7 @@ function v_3d_isc_params(
  * @returns Command-line arguments.
  */
 function v_3d_isc_cargs(
-    params: V3dIscParameters,
+    params: V3dIscParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function v_3d_isc_cargs(
  * @returns Outputs object.
  */
 function v_3d_isc_outputs(
-    params: V3dIscParameters,
+    params: V3dIscParamsDict,
     execution: Execution,
 ): V3dIscOutputs {
     const ret: V3dIscOutputs = {
@@ -198,7 +198,7 @@ function v_3d_isc_outputs(
  * @returns NamedTuple of outputs (described in `V3dIscOutputs`).
  */
 function v_3d_isc_execute(
-    params: V3dIscParameters,
+    params: V3dIscParamsDict,
     runner: Runner | null = null,
 ): V3dIscOutputs {
     runner = runner || getGlobalRunner();
@@ -252,6 +252,8 @@ function v_3d_isc(
 
 export {
       V3dIscOutputs,
+      V3dIscParamsDict,
+      V3dIscParamsDictTagged,
       V_3D_ISC_METADATA,
       v_3d_isc,
       v_3d_isc_execute,

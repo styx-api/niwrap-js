@@ -11,7 +11,7 @@ const MRI_NU_CORRECT_MNI_METADATA: Metadata = {
 };
 
 
-interface MriNuCorrectMniParameters {
+interface MriNuCorrectMniParamsDict {
     "@type"?: "freesurfer/mri_nu_correct.mni";
     "input_volume": InputPathType;
     "output_volume": string;
@@ -27,11 +27,11 @@ interface MriNuCorrectMniParameters {
     "cm_flag": boolean;
     "debug_flag": boolean;
 }
-type MriNuCorrectMniParametersTagged = Required<Pick<MriNuCorrectMniParameters, '@type'>> & MriNuCorrectMniParameters;
+type MriNuCorrectMniParamsDictTagged = Required<Pick<MriNuCorrectMniParamsDict, '@type'>> & MriNuCorrectMniParamsDict;
 
 
 /**
- * Output object returned when calling `MriNuCorrectMniParameters(...)`.
+ * Output object returned when calling `MriNuCorrectMniParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function mri_nu_correct_mni_params(
     ants_n4_replace_zeros: boolean = false,
     cm_flag: boolean = false,
     debug_flag: boolean = false,
-): MriNuCorrectMniParametersTagged {
+): MriNuCorrectMniParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_nu_correct.mni" as const,
         "input_volume": input_volume,
@@ -118,7 +118,7 @@ function mri_nu_correct_mni_params(
  * @returns Command-line arguments.
  */
 function mri_nu_correct_mni_cargs(
-    params: MriNuCorrectMniParameters,
+    params: MriNuCorrectMniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -190,7 +190,7 @@ function mri_nu_correct_mni_cargs(
  * @returns Outputs object.
  */
 function mri_nu_correct_mni_outputs(
-    params: MriNuCorrectMniParameters,
+    params: MriNuCorrectMniParamsDict,
     execution: Execution,
 ): MriNuCorrectMniOutputs {
     const ret: MriNuCorrectMniOutputs = {
@@ -216,7 +216,7 @@ function mri_nu_correct_mni_outputs(
  * @returns NamedTuple of outputs (described in `MriNuCorrectMniOutputs`).
  */
 function mri_nu_correct_mni_execute(
-    params: MriNuCorrectMniParameters,
+    params: MriNuCorrectMniParamsDict,
     runner: Runner | null = null,
 ): MriNuCorrectMniOutputs {
     runner = runner || getGlobalRunner();
@@ -279,6 +279,8 @@ function mri_nu_correct_mni(
 export {
       MRI_NU_CORRECT_MNI_METADATA,
       MriNuCorrectMniOutputs,
+      MriNuCorrectMniParamsDict,
+      MriNuCorrectMniParamsDictTagged,
       mri_nu_correct_mni,
       mri_nu_correct_mni_execute,
       mri_nu_correct_mni_params,

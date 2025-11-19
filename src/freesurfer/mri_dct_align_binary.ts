@@ -11,17 +11,17 @@ const MRI_DCT_ALIGN_BINARY_METADATA: Metadata = {
 };
 
 
-interface MriDctAlignBinaryParameters {
+interface MriDctAlignBinaryParamsDict {
     "@type"?: "freesurfer/mri_dct_align_binary";
     "source_image": InputPathType;
     "destination_image": InputPathType;
     "output_transformation": string;
 }
-type MriDctAlignBinaryParametersTagged = Required<Pick<MriDctAlignBinaryParameters, '@type'>> & MriDctAlignBinaryParameters;
+type MriDctAlignBinaryParamsDictTagged = Required<Pick<MriDctAlignBinaryParamsDict, '@type'>> & MriDctAlignBinaryParamsDict;
 
 
 /**
- * Output object returned when calling `MriDctAlignBinaryParameters(...)`.
+ * Output object returned when calling `MriDctAlignBinaryParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_dct_align_binary_params(
     source_image: InputPathType,
     destination_image: InputPathType,
     output_transformation: string,
-): MriDctAlignBinaryParametersTagged {
+): MriDctAlignBinaryParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_dct_align_binary" as const,
         "source_image": source_image,
@@ -70,7 +70,7 @@ function mri_dct_align_binary_params(
  * @returns Command-line arguments.
  */
 function mri_dct_align_binary_cargs(
-    params: MriDctAlignBinaryParameters,
+    params: MriDctAlignBinaryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_dct_align_binary_cargs(
  * @returns Outputs object.
  */
 function mri_dct_align_binary_outputs(
-    params: MriDctAlignBinaryParameters,
+    params: MriDctAlignBinaryParamsDict,
     execution: Execution,
 ): MriDctAlignBinaryOutputs {
     const ret: MriDctAlignBinaryOutputs = {
@@ -117,7 +117,7 @@ function mri_dct_align_binary_outputs(
  * @returns NamedTuple of outputs (described in `MriDctAlignBinaryOutputs`).
  */
 function mri_dct_align_binary_execute(
-    params: MriDctAlignBinaryParameters,
+    params: MriDctAlignBinaryParamsDict,
     runner: Runner | null = null,
 ): MriDctAlignBinaryOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_dct_align_binary(
 export {
       MRI_DCT_ALIGN_BINARY_METADATA,
       MriDctAlignBinaryOutputs,
+      MriDctAlignBinaryParamsDict,
+      MriDctAlignBinaryParamsDictTagged,
       mri_dct_align_binary,
       mri_dct_align_binary_execute,
       mri_dct_align_binary_params,

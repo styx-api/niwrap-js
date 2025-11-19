@@ -10,18 +10,18 @@ const METRIC_VECTOR_TOWARD_ROI_METADATA: Metadata = {
 };
 
 
-interface MetricVectorTowardRoiParameters {
+interface MetricVectorTowardRoiParamsDict {
     "@type"?: "workbench/metric-vector-toward-roi";
     "metric-out": string;
     "roi-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "target-roi": InputPathType;
 }
-type MetricVectorTowardRoiParametersTagged = Required<Pick<MetricVectorTowardRoiParameters, '@type'>> & MetricVectorTowardRoiParameters;
+type MetricVectorTowardRoiParamsDictTagged = Required<Pick<MetricVectorTowardRoiParamsDict, '@type'>> & MetricVectorTowardRoiParamsDict;
 
 
 /**
- * Output object returned when calling `MetricVectorTowardRoiParameters(...)`.
+ * Output object returned when calling `MetricVectorTowardRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function metric_vector_toward_roi_params(
     roi_metric: InputPathType | null,
     surface: InputPathType,
     target_roi: InputPathType,
-): MetricVectorTowardRoiParametersTagged {
+): MetricVectorTowardRoiParamsDictTagged {
     const params = {
         "@type": "workbench/metric-vector-toward-roi" as const,
         "metric-out": metric_out,
@@ -77,7 +77,7 @@ function metric_vector_toward_roi_params(
  * @returns Command-line arguments.
  */
 function metric_vector_toward_roi_cargs(
-    params: MetricVectorTowardRoiParameters,
+    params: MetricVectorTowardRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function metric_vector_toward_roi_cargs(
  * @returns Outputs object.
  */
 function metric_vector_toward_roi_outputs(
-    params: MetricVectorTowardRoiParameters,
+    params: MetricVectorTowardRoiParamsDict,
     execution: Execution,
 ): MetricVectorTowardRoiOutputs {
     const ret: MetricVectorTowardRoiOutputs = {
@@ -127,7 +127,7 @@ function metric_vector_toward_roi_outputs(
  * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
  */
 function metric_vector_toward_roi_execute(
-    params: MetricVectorTowardRoiParameters,
+    params: MetricVectorTowardRoiParamsDict,
     runner: Runner | null = null,
 ): MetricVectorTowardRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function metric_vector_toward_roi(
 export {
       METRIC_VECTOR_TOWARD_ROI_METADATA,
       MetricVectorTowardRoiOutputs,
+      MetricVectorTowardRoiParamsDict,
+      MetricVectorTowardRoiParamsDictTagged,
       metric_vector_toward_roi,
       metric_vector_toward_roi_execute,
       metric_vector_toward_roi_params,

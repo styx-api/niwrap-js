@@ -10,18 +10,18 @@ const SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA: Metadata = {
 };
 
 
-interface SurfaceSphereProjectUnprojectParameters {
+interface SurfaceSphereProjectUnprojectParamsDict {
     "@type"?: "workbench/surface-sphere-project-unproject";
     "sphere-out": string;
     "sphere-in": InputPathType;
     "sphere-project-to": InputPathType;
     "sphere-unproject-from": InputPathType;
 }
-type SurfaceSphereProjectUnprojectParametersTagged = Required<Pick<SurfaceSphereProjectUnprojectParameters, '@type'>> & SurfaceSphereProjectUnprojectParameters;
+type SurfaceSphereProjectUnprojectParamsDictTagged = Required<Pick<SurfaceSphereProjectUnprojectParamsDict, '@type'>> & SurfaceSphereProjectUnprojectParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceSphereProjectUnprojectParameters(...)`.
+ * Output object returned when calling `SurfaceSphereProjectUnprojectParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function surface_sphere_project_unproject_params(
     sphere_in: InputPathType,
     sphere_project_to: InputPathType,
     sphere_unproject_from: InputPathType,
-): SurfaceSphereProjectUnprojectParametersTagged {
+): SurfaceSphereProjectUnprojectParamsDictTagged {
     const params = {
         "@type": "workbench/surface-sphere-project-unproject" as const,
         "sphere-out": sphere_out,
@@ -73,7 +73,7 @@ function surface_sphere_project_unproject_params(
  * @returns Command-line arguments.
  */
 function surface_sphere_project_unproject_cargs(
-    params: SurfaceSphereProjectUnprojectParameters,
+    params: SurfaceSphereProjectUnprojectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function surface_sphere_project_unproject_cargs(
  * @returns Outputs object.
  */
 function surface_sphere_project_unproject_outputs(
-    params: SurfaceSphereProjectUnprojectParameters,
+    params: SurfaceSphereProjectUnprojectParamsDict,
     execution: Execution,
 ): SurfaceSphereProjectUnprojectOutputs {
     const ret: SurfaceSphereProjectUnprojectOutputs = {
@@ -132,7 +132,7 @@ function surface_sphere_project_unproject_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceSphereProjectUnprojectOutputs`).
  */
 function surface_sphere_project_unproject_execute(
-    params: SurfaceSphereProjectUnprojectParameters,
+    params: SurfaceSphereProjectUnprojectParamsDict,
     runner: Runner | null = null,
 ): SurfaceSphereProjectUnprojectOutputs {
     runner = runner || getGlobalRunner();
@@ -185,6 +185,8 @@ function surface_sphere_project_unproject(
 export {
       SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA,
       SurfaceSphereProjectUnprojectOutputs,
+      SurfaceSphereProjectUnprojectParamsDict,
+      SurfaceSphereProjectUnprojectParamsDictTagged,
       surface_sphere_project_unproject,
       surface_sphere_project_unproject_execute,
       surface_sphere_project_unproject_params,

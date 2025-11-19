@@ -11,7 +11,7 @@ const CLUSTER_METADATA: Metadata = {
 };
 
 
-interface ClusterParameters {
+interface ClusterParamsDict {
     "@type"?: "fsl/cluster";
     "connectivity"?: number | null | undefined;
     "cope_file"?: InputPathType | null | undefined;
@@ -48,11 +48,11 @@ interface ClusterParameters {
     "warpfield_file"?: InputPathType | null | undefined;
     "xfm_file"?: InputPathType | null | undefined;
 }
-type ClusterParametersTagged = Required<Pick<ClusterParameters, '@type'>> & ClusterParameters;
+type ClusterParamsDictTagged = Required<Pick<ClusterParamsDict, '@type'>> & ClusterParamsDict;
 
 
 /**
- * Output object returned when calling `ClusterParameters(...)`.
+ * Output object returned when calling `ClusterParamsDict(...)`.
  *
  * @interface
  */
@@ -171,7 +171,7 @@ function cluster_params(
     volume: number | null = null,
     warpfield_file: InputPathType | null = null,
     xfm_file: InputPathType | null = null,
-): ClusterParametersTagged {
+): ClusterParamsDictTagged {
     const params = {
         "@type": "fsl/cluster" as const,
         "find_min": find_min,
@@ -260,7 +260,7 @@ function cluster_params(
  * @returns Command-line arguments.
  */
 function cluster_cargs(
-    params: ClusterParameters,
+    params: ClusterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -360,7 +360,7 @@ function cluster_cargs(
  * @returns Outputs object.
  */
 function cluster_outputs(
-    params: ClusterParameters,
+    params: ClusterParamsDict,
     execution: Execution,
 ): ClusterOutputs {
     const ret: ClusterOutputs = {
@@ -393,7 +393,7 @@ function cluster_outputs(
  * @returns NamedTuple of outputs (described in `ClusterOutputs`).
  */
 function cluster_execute(
-    params: ClusterParameters,
+    params: ClusterParamsDict,
     runner: Runner | null = null,
 ): ClusterOutputs {
     runner = runner || getGlobalRunner();
@@ -498,6 +498,8 @@ function cluster(
 export {
       CLUSTER_METADATA,
       ClusterOutputs,
+      ClusterParamsDict,
+      ClusterParamsDictTagged,
       cluster,
       cluster_execute,
       cluster_params,

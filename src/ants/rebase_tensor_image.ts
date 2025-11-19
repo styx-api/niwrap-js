@@ -11,7 +11,7 @@ const REBASE_TENSOR_IMAGE_METADATA: Metadata = {
 };
 
 
-interface RebaseTensorImageParameters {
+interface RebaseTensorImageParamsDict {
     "@type"?: "ants/RebaseTensorImage";
     "dimension": number;
     "infile": InputPathType;
@@ -19,11 +19,11 @@ interface RebaseTensorImageParameters {
     "method": "PHYSICAL" | "LOCAL";
     "reference"?: InputPathType | null | undefined;
 }
-type RebaseTensorImageParametersTagged = Required<Pick<RebaseTensorImageParameters, '@type'>> & RebaseTensorImageParameters;
+type RebaseTensorImageParamsDictTagged = Required<Pick<RebaseTensorImageParamsDict, '@type'>> & RebaseTensorImageParamsDict;
 
 
 /**
- * Output object returned when calling `RebaseTensorImageParameters(...)`.
+ * Output object returned when calling `RebaseTensorImageParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function rebase_tensor_image_params(
     outfile: InputPathType,
     method: "PHYSICAL" | "LOCAL",
     reference: InputPathType | null = null,
-): RebaseTensorImageParametersTagged {
+): RebaseTensorImageParamsDictTagged {
     const params = {
         "@type": "ants/RebaseTensorImage" as const,
         "dimension": dimension,
@@ -80,7 +80,7 @@ function rebase_tensor_image_params(
  * @returns Command-line arguments.
  */
 function rebase_tensor_image_cargs(
-    params: RebaseTensorImageParameters,
+    params: RebaseTensorImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function rebase_tensor_image_cargs(
  * @returns Outputs object.
  */
 function rebase_tensor_image_outputs(
-    params: RebaseTensorImageParameters,
+    params: RebaseTensorImageParamsDict,
     execution: Execution,
 ): RebaseTensorImageOutputs {
     const ret: RebaseTensorImageOutputs = {
@@ -131,7 +131,7 @@ function rebase_tensor_image_outputs(
  * @returns NamedTuple of outputs (described in `RebaseTensorImageOutputs`).
  */
 function rebase_tensor_image_execute(
-    params: RebaseTensorImageParameters,
+    params: RebaseTensorImageParamsDict,
     runner: Runner | null = null,
 ): RebaseTensorImageOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function rebase_tensor_image(
 export {
       REBASE_TENSOR_IMAGE_METADATA,
       RebaseTensorImageOutputs,
+      RebaseTensorImageParamsDict,
+      RebaseTensorImageParamsDictTagged,
       rebase_tensor_image,
       rebase_tensor_image_execute,
       rebase_tensor_image_params,

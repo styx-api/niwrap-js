@@ -11,24 +11,24 @@ const TCKSTATS_METADATA: Metadata = {
 };
 
 
-interface TckstatsOutputParameters {
+interface TckstatsOutputParamsDict {
     "@type"?: "output";
     "field": string;
 }
-type TckstatsOutputParametersTagged = Required<Pick<TckstatsOutputParameters, '@type'>> & TckstatsOutputParameters;
+type TckstatsOutputParamsDictTagged = Required<Pick<TckstatsOutputParamsDict, '@type'>> & TckstatsOutputParamsDict;
 
 
-interface TckstatsConfigParameters {
+interface TckstatsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckstatsConfigParametersTagged = Required<Pick<TckstatsConfigParameters, '@type'>> & TckstatsConfigParameters;
+type TckstatsConfigParamsDictTagged = Required<Pick<TckstatsConfigParamsDict, '@type'>> & TckstatsConfigParamsDict;
 
 
-interface TckstatsParameters {
+interface TckstatsParamsDict {
     "@type"?: "mrtrix/tckstats";
-    "output"?: Array<TckstatsOutputParameters> | null | undefined;
+    "output"?: Array<TckstatsOutputParamsDict> | null | undefined;
     "histogram"?: string | null | undefined;
     "dump"?: string | null | undefined;
     "ignorezero": boolean;
@@ -38,12 +38,12 @@ interface TckstatsParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckstatsConfigParameters> | null | undefined;
+    "config"?: Array<TckstatsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks_in": InputPathType;
 }
-type TckstatsParametersTagged = Required<Pick<TckstatsParameters, '@type'>> & TckstatsParameters;
+type TckstatsParamsDictTagged = Required<Pick<TckstatsParamsDict, '@type'>> & TckstatsParamsDict;
 
 
 /**
@@ -53,9 +53,9 @@ type TckstatsParametersTagged = Required<Pick<TckstatsParameters, '@type'>> & Tc
  *
  * @returns Parameter dictionary
  */
-function tckstats_output_params(
+function tckstats_output(
     field: string,
-): TckstatsOutputParametersTagged {
+): TckstatsOutputParamsDictTagged {
     const params = {
         "@type": "output" as const,
         "field": field,
@@ -73,7 +73,7 @@ function tckstats_output_params(
  * @returns Command-line arguments.
  */
 function tckstats_output_cargs(
-    params: TckstatsOutputParameters,
+    params: TckstatsOutputParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,10 +91,10 @@ function tckstats_output_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckstats_config_params(
+function tckstats_config(
     key: string,
     value: string,
-): TckstatsConfigParametersTagged {
+): TckstatsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -113,7 +113,7 @@ function tckstats_config_params(
  * @returns Command-line arguments.
  */
 function tckstats_config_cargs(
-    params: TckstatsConfigParameters,
+    params: TckstatsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function tckstats_config_cargs(
 
 
 /**
- * Output object returned when calling `TckstatsParameters(...)`.
+ * Output object returned when calling `TckstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -167,7 +167,7 @@ interface TckstatsOutputs {
  */
 function tckstats_params(
     tracks_in: InputPathType,
-    output: Array<TckstatsOutputParameters> | null = null,
+    output: Array<TckstatsOutputParamsDict> | null = null,
     histogram: string | null = null,
     dump: string | null = null,
     ignorezero: boolean = false,
@@ -177,10 +177,10 @@ function tckstats_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckstatsConfigParameters> | null = null,
+    config: Array<TckstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckstatsParametersTagged {
+): TckstatsParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckstats" as const,
         "ignorezero": ignorezero,
@@ -223,7 +223,7 @@ function tckstats_params(
  * @returns Command-line arguments.
  */
 function tckstats_cargs(
-    params: TckstatsParameters,
+    params: TckstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -293,7 +293,7 @@ function tckstats_cargs(
  * @returns Outputs object.
  */
 function tckstats_outputs(
-    params: TckstatsParameters,
+    params: TckstatsParamsDict,
     execution: Execution,
 ): TckstatsOutputs {
     const ret: TckstatsOutputs = {
@@ -326,7 +326,7 @@ function tckstats_outputs(
  * @returns NamedTuple of outputs (described in `TckstatsOutputs`).
  */
 function tckstats_execute(
-    params: TckstatsParameters,
+    params: TckstatsParamsDict,
     runner: Runner | null = null,
 ): TckstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -374,7 +374,7 @@ function tckstats_execute(
  */
 function tckstats(
     tracks_in: InputPathType,
-    output: Array<TckstatsOutputParameters> | null = null,
+    output: Array<TckstatsOutputParamsDict> | null = null,
     histogram: string | null = null,
     dump: string | null = null,
     ignorezero: boolean = false,
@@ -384,7 +384,7 @@ function tckstats(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckstatsConfigParameters> | null = null,
+    config: Array<TckstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -396,10 +396,16 @@ function tckstats(
 
 export {
       TCKSTATS_METADATA,
+      TckstatsConfigParamsDict,
+      TckstatsConfigParamsDictTagged,
+      TckstatsOutputParamsDict,
+      TckstatsOutputParamsDictTagged,
       TckstatsOutputs,
+      TckstatsParamsDict,
+      TckstatsParamsDictTagged,
       tckstats,
-      tckstats_config_params,
+      tckstats_config,
       tckstats_execute,
-      tckstats_output_params,
+      tckstats_output,
       tckstats_params,
 };

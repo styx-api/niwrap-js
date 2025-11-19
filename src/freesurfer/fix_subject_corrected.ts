@@ -11,16 +11,16 @@ const FIX_SUBJECT_CORRECTED_METADATA: Metadata = {
 };
 
 
-interface FixSubjectCorrectedParameters {
+interface FixSubjectCorrectedParamsDict {
     "@type"?: "freesurfer/fix_subject_corrected";
     "subject_directory": string;
     "output_directory": string;
 }
-type FixSubjectCorrectedParametersTagged = Required<Pick<FixSubjectCorrectedParameters, '@type'>> & FixSubjectCorrectedParameters;
+type FixSubjectCorrectedParamsDictTagged = Required<Pick<FixSubjectCorrectedParamsDict, '@type'>> & FixSubjectCorrectedParamsDict;
 
 
 /**
- * Output object returned when calling `FixSubjectCorrectedParameters(...)`.
+ * Output object returned when calling `FixSubjectCorrectedParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FixSubjectCorrectedOutputs {
 function fix_subject_corrected_params(
     subject_directory: string,
     output_directory: string,
-): FixSubjectCorrectedParametersTagged {
+): FixSubjectCorrectedParamsDictTagged {
     const params = {
         "@type": "freesurfer/fix_subject_corrected" as const,
         "subject_directory": subject_directory,
@@ -62,7 +62,7 @@ function fix_subject_corrected_params(
  * @returns Command-line arguments.
  */
 function fix_subject_corrected_cargs(
-    params: FixSubjectCorrectedParameters,
+    params: FixSubjectCorrectedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function fix_subject_corrected_cargs(
  * @returns Outputs object.
  */
 function fix_subject_corrected_outputs(
-    params: FixSubjectCorrectedParameters,
+    params: FixSubjectCorrectedParamsDict,
     execution: Execution,
 ): FixSubjectCorrectedOutputs {
     const ret: FixSubjectCorrectedOutputs = {
@@ -107,7 +107,7 @@ function fix_subject_corrected_outputs(
  * @returns NamedTuple of outputs (described in `FixSubjectCorrectedOutputs`).
  */
 function fix_subject_corrected_execute(
-    params: FixSubjectCorrectedParameters,
+    params: FixSubjectCorrectedParamsDict,
     runner: Runner | null = null,
 ): FixSubjectCorrectedOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function fix_subject_corrected(
 export {
       FIX_SUBJECT_CORRECTED_METADATA,
       FixSubjectCorrectedOutputs,
+      FixSubjectCorrectedParamsDict,
+      FixSubjectCorrectedParamsDictTagged,
       fix_subject_corrected,
       fix_subject_corrected_execute,
       fix_subject_corrected_params,

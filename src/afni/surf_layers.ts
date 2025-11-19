@@ -11,7 +11,7 @@ const SURF_LAYERS_METADATA: Metadata = {
 };
 
 
-interface SurfLayersParameters {
+interface SurfLayersParamsDict {
     "@type"?: "afni/SurfLayers";
     "spec_dset"?: InputPathType | null | undefined;
     "outdir"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface SurfLayersParameters {
     "echo": boolean;
     "no_clean": boolean;
 }
-type SurfLayersParametersTagged = Required<Pick<SurfLayersParameters, '@type'>> & SurfLayersParameters;
+type SurfLayersParamsDictTagged = Required<Pick<SurfLayersParamsDict, '@type'>> & SurfLayersParamsDict;
 
 
 /**
- * Output object returned when calling `SurfLayersParameters(...)`.
+ * Output object returned when calling `SurfLayersParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function surf_layers_params(
     surf_intermed_pref: string | null = null,
     echo: boolean = false,
     no_clean: boolean = false,
-): SurfLayersParametersTagged {
+): SurfLayersParamsDictTagged {
     const params = {
         "@type": "afni/SurfLayers" as const,
         "echo": echo,
@@ -114,7 +114,7 @@ function surf_layers_params(
  * @returns Command-line arguments.
  */
 function surf_layers_cargs(
-    params: SurfLayersParameters,
+    params: SurfLayersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -186,7 +186,7 @@ function surf_layers_cargs(
  * @returns Outputs object.
  */
 function surf_layers_outputs(
-    params: SurfLayersParameters,
+    params: SurfLayersParamsDict,
     execution: Execution,
 ): SurfLayersOutputs {
     const ret: SurfLayersOutputs = {
@@ -212,7 +212,7 @@ function surf_layers_outputs(
  * @returns NamedTuple of outputs (described in `SurfLayersOutputs`).
  */
 function surf_layers_execute(
-    params: SurfLayersParameters,
+    params: SurfLayersParamsDict,
     runner: Runner | null = null,
 ): SurfLayersOutputs {
     runner = runner || getGlobalRunner();
@@ -269,6 +269,8 @@ function surf_layers(
 export {
       SURF_LAYERS_METADATA,
       SurfLayersOutputs,
+      SurfLayersParamsDict,
+      SurfLayersParamsDictTagged,
       surf_layers,
       surf_layers_execute,
       surf_layers_params,

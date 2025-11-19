@@ -11,28 +11,28 @@ const PEAKS2AMP_METADATA: Metadata = {
 };
 
 
-interface Peaks2ampConfigParameters {
+interface Peaks2ampConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Peaks2ampConfigParametersTagged = Required<Pick<Peaks2ampConfigParameters, '@type'>> & Peaks2ampConfigParameters;
+type Peaks2ampConfigParamsDictTagged = Required<Pick<Peaks2ampConfigParamsDict, '@type'>> & Peaks2ampConfigParamsDict;
 
 
-interface Peaks2ampParameters {
+interface Peaks2ampParamsDict {
     "@type"?: "mrtrix/peaks2amp";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Peaks2ampConfigParameters> | null | undefined;
+    "config"?: Array<Peaks2ampConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "directions": InputPathType;
     "amplitudes": string;
 }
-type Peaks2ampParametersTagged = Required<Pick<Peaks2ampParameters, '@type'>> & Peaks2ampParameters;
+type Peaks2ampParamsDictTagged = Required<Pick<Peaks2ampParamsDict, '@type'>> & Peaks2ampParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type Peaks2ampParametersTagged = Required<Pick<Peaks2ampParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function peaks2amp_config_params(
+function peaks2amp_config(
     key: string,
     value: string,
-): Peaks2ampConfigParametersTagged {
+): Peaks2ampConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function peaks2amp_config_params(
  * @returns Command-line arguments.
  */
 function peaks2amp_config_cargs(
-    params: Peaks2ampConfigParameters,
+    params: Peaks2ampConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function peaks2amp_config_cargs(
 
 
 /**
- * Output object returned when calling `Peaks2ampParameters(...)`.
+ * Output object returned when calling `Peaks2ampParamsDict(...)`.
  *
  * @interface
  */
@@ -117,10 +117,10 @@ function peaks2amp_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Peaks2ampConfigParameters> | null = null,
+    config: Array<Peaks2ampConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Peaks2ampParametersTagged {
+): Peaks2ampParamsDictTagged {
     const params = {
         "@type": "mrtrix/peaks2amp" as const,
         "info": info,
@@ -151,7 +151,7 @@ function peaks2amp_params(
  * @returns Command-line arguments.
  */
 function peaks2amp_cargs(
-    params: Peaks2ampParameters,
+    params: Peaks2ampParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -198,7 +198,7 @@ function peaks2amp_cargs(
  * @returns Outputs object.
  */
 function peaks2amp_outputs(
-    params: Peaks2ampParameters,
+    params: Peaks2ampParamsDict,
     execution: Execution,
 ): Peaks2ampOutputs {
     const ret: Peaks2ampOutputs = {
@@ -230,7 +230,7 @@ function peaks2amp_outputs(
  * @returns NamedTuple of outputs (described in `Peaks2ampOutputs`).
  */
 function peaks2amp_execute(
-    params: Peaks2ampParameters,
+    params: Peaks2ampParamsDict,
     runner: Runner | null = null,
 ): Peaks2ampOutputs {
     runner = runner || getGlobalRunner();
@@ -280,7 +280,7 @@ function peaks2amp(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Peaks2ampConfigParameters> | null = null,
+    config: Array<Peaks2ampConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -292,9 +292,13 @@ function peaks2amp(
 
 export {
       PEAKS2AMP_METADATA,
+      Peaks2ampConfigParamsDict,
+      Peaks2ampConfigParamsDictTagged,
       Peaks2ampOutputs,
+      Peaks2ampParamsDict,
+      Peaks2ampParamsDictTagged,
       peaks2amp,
-      peaks2amp_config_params,
+      peaks2amp_config,
       peaks2amp_execute,
       peaks2amp_params,
 };

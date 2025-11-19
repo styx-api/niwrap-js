@@ -11,16 +11,16 @@ const SEGMENT_HA_T2_SH_METADATA: Metadata = {
 };
 
 
-interface SegmentHaT2ShParameters {
+interface SegmentHaT2ShParamsDict {
     "@type"?: "freesurfer/segmentHA_T2.sh";
     "input_image": InputPathType;
     "output_directory": string;
 }
-type SegmentHaT2ShParametersTagged = Required<Pick<SegmentHaT2ShParameters, '@type'>> & SegmentHaT2ShParameters;
+type SegmentHaT2ShParamsDictTagged = Required<Pick<SegmentHaT2ShParamsDict, '@type'>> & SegmentHaT2ShParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentHaT2ShParameters(...)`.
+ * Output object returned when calling `SegmentHaT2ShParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface SegmentHaT2ShOutputs {
 function segment_ha_t2_sh_params(
     input_image: InputPathType,
     output_directory: string,
-): SegmentHaT2ShParametersTagged {
+): SegmentHaT2ShParamsDictTagged {
     const params = {
         "@type": "freesurfer/segmentHA_T2.sh" as const,
         "input_image": input_image,
@@ -70,7 +70,7 @@ function segment_ha_t2_sh_params(
  * @returns Command-line arguments.
  */
 function segment_ha_t2_sh_cargs(
-    params: SegmentHaT2ShParameters,
+    params: SegmentHaT2ShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function segment_ha_t2_sh_cargs(
  * @returns Outputs object.
  */
 function segment_ha_t2_sh_outputs(
-    params: SegmentHaT2ShParameters,
+    params: SegmentHaT2ShParamsDict,
     execution: Execution,
 ): SegmentHaT2ShOutputs {
     const ret: SegmentHaT2ShOutputs = {
@@ -117,7 +117,7 @@ function segment_ha_t2_sh_outputs(
  * @returns NamedTuple of outputs (described in `SegmentHaT2ShOutputs`).
  */
 function segment_ha_t2_sh_execute(
-    params: SegmentHaT2ShParameters,
+    params: SegmentHaT2ShParamsDict,
     runner: Runner | null = null,
 ): SegmentHaT2ShOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function segment_ha_t2_sh(
 export {
       SEGMENT_HA_T2_SH_METADATA,
       SegmentHaT2ShOutputs,
+      SegmentHaT2ShParamsDict,
+      SegmentHaT2ShParamsDictTagged,
       segment_ha_t2_sh,
       segment_ha_t2_sh_execute,
       segment_ha_t2_sh_params,

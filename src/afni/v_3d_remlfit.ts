@@ -11,7 +11,7 @@ const V_3D_REMLFIT_METADATA: Metadata = {
 };
 
 
-interface V3dRemlfitParameters {
+interface V3dRemlfitParamsDict {
     "@type"?: "afni/3dREMLfit";
     "input_file": InputPathType;
     "regression_matrix": InputPathType;
@@ -29,11 +29,11 @@ interface V3dRemlfitParameters {
     "quiet": boolean;
     "verbose": boolean;
 }
-type V3dRemlfitParametersTagged = Required<Pick<V3dRemlfitParameters, '@type'>> & V3dRemlfitParameters;
+type V3dRemlfitParamsDictTagged = Required<Pick<V3dRemlfitParamsDict, '@type'>> & V3dRemlfitParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRemlfitParameters(...)`.
+ * Output object returned when calling `V3dRemlfitParamsDict(...)`.
  *
  * @interface
  */
@@ -106,7 +106,7 @@ function v_3d_remlfit_params(
     negative_corr: boolean = false,
     quiet: boolean = false,
     verbose: boolean = false,
-): V3dRemlfitParametersTagged {
+): V3dRemlfitParamsDictTagged {
     const params = {
         "@type": "afni/3dREMLfit" as const,
         "input_file": input_file,
@@ -150,7 +150,7 @@ function v_3d_remlfit_params(
  * @returns Command-line arguments.
  */
 function v_3d_remlfit_cargs(
-    params: V3dRemlfitParameters,
+    params: V3dRemlfitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -233,7 +233,7 @@ function v_3d_remlfit_cargs(
  * @returns Outputs object.
  */
 function v_3d_remlfit_outputs(
-    params: V3dRemlfitParameters,
+    params: V3dRemlfitParamsDict,
     execution: Execution,
 ): V3dRemlfitOutputs {
     const ret: V3dRemlfitOutputs = {
@@ -264,7 +264,7 @@ function v_3d_remlfit_outputs(
  * @returns NamedTuple of outputs (described in `V3dRemlfitOutputs`).
  */
 function v_3d_remlfit_execute(
-    params: V3dRemlfitParameters,
+    params: V3dRemlfitParamsDict,
     runner: Runner | null = null,
 ): V3dRemlfitOutputs {
     runner = runner || getGlobalRunner();
@@ -330,6 +330,8 @@ function v_3d_remlfit(
 
 export {
       V3dRemlfitOutputs,
+      V3dRemlfitParamsDict,
+      V3dRemlfitParamsDictTagged,
       V_3D_REMLFIT_METADATA,
       v_3d_remlfit,
       v_3d_remlfit_execute,

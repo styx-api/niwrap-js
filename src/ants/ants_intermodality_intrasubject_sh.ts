@@ -11,7 +11,7 @@ const ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA: Metadata = {
 };
 
 
-interface AntsIntermodalityIntrasubjectShParameters {
+interface AntsIntermodalityIntrasubjectShParamsDict {
     "@type"?: "ants/antsIntermodalityIntrasubject.sh";
     "dimension": number;
     "anatomical_t1_image": InputPathType;
@@ -26,11 +26,11 @@ interface AntsIntermodalityIntrasubjectShParameters {
     "auxiliary_scalar_images"?: InputPathType | null | undefined;
     "auxiliary_dt_image"?: InputPathType | null | undefined;
 }
-type AntsIntermodalityIntrasubjectShParametersTagged = Required<Pick<AntsIntermodalityIntrasubjectShParameters, '@type'>> & AntsIntermodalityIntrasubjectShParameters;
+type AntsIntermodalityIntrasubjectShParamsDictTagged = Required<Pick<AntsIntermodalityIntrasubjectShParamsDict, '@type'>> & AntsIntermodalityIntrasubjectShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsIntermodalityIntrasubjectShParameters(...)`.
+ * Output object returned when calling `AntsIntermodalityIntrasubjectShParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function ants_intermodality_intrasubject_sh_params(
     labels_in_template_space: InputPathType | null = null,
     auxiliary_scalar_images: InputPathType | null = null,
     auxiliary_dt_image: InputPathType | null = null,
-): AntsIntermodalityIntrasubjectShParametersTagged {
+): AntsIntermodalityIntrasubjectShParamsDictTagged {
     const params = {
         "@type": "ants/antsIntermodalityIntrasubject.sh" as const,
         "dimension": dimension,
@@ -124,7 +124,7 @@ function ants_intermodality_intrasubject_sh_params(
  * @returns Command-line arguments.
  */
 function ants_intermodality_intrasubject_sh_cargs(
-    params: AntsIntermodalityIntrasubjectShParameters,
+    params: AntsIntermodalityIntrasubjectShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function ants_intermodality_intrasubject_sh_cargs(
  * @returns Outputs object.
  */
 function ants_intermodality_intrasubject_sh_outputs(
-    params: AntsIntermodalityIntrasubjectShParameters,
+    params: AntsIntermodalityIntrasubjectShParamsDict,
     execution: Execution,
 ): AntsIntermodalityIntrasubjectShOutputs {
     const ret: AntsIntermodalityIntrasubjectShOutputs = {
@@ -228,7 +228,7 @@ function ants_intermodality_intrasubject_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsIntermodalityIntrasubjectShOutputs`).
  */
 function ants_intermodality_intrasubject_sh_execute(
-    params: AntsIntermodalityIntrasubjectShParameters,
+    params: AntsIntermodalityIntrasubjectShParamsDict,
     runner: Runner | null = null,
 ): AntsIntermodalityIntrasubjectShOutputs {
     runner = runner || getGlobalRunner();
@@ -289,6 +289,8 @@ function ants_intermodality_intrasubject_sh(
 export {
       ANTS_INTERMODALITY_INTRASUBJECT_SH_METADATA,
       AntsIntermodalityIntrasubjectShOutputs,
+      AntsIntermodalityIntrasubjectShParamsDict,
+      AntsIntermodalityIntrasubjectShParamsDictTagged,
       ants_intermodality_intrasubject_sh,
       ants_intermodality_intrasubject_sh_execute,
       ants_intermodality_intrasubject_sh_params,

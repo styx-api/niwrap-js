@@ -11,7 +11,7 @@ const AVW2FSL_METADATA: Metadata = {
 };
 
 
-interface Avw2fslParameters {
+interface Avw2fslParamsDict {
     "@type"?: "fsl/avw2fsl";
     "source": Array<string>;
     "destination": string;
@@ -50,11 +50,11 @@ interface Avw2fslParameters {
     "help": boolean;
     "version": boolean;
 }
-type Avw2fslParametersTagged = Required<Pick<Avw2fslParameters, '@type'>> & Avw2fslParameters;
+type Avw2fslParamsDictTagged = Required<Pick<Avw2fslParamsDict, '@type'>> & Avw2fslParamsDict;
 
 
 /**
- * Output object returned when calling `Avw2fslParameters(...)`.
+ * Output object returned when calling `Avw2fslParamsDict(...)`.
  *
  * @interface
  */
@@ -149,7 +149,7 @@ function avw2fsl_params(
     context: string | null = null,
     help: boolean = false,
     version: boolean = false,
-): Avw2fslParametersTagged {
+): Avw2fslParamsDictTagged {
     const params = {
         "@type": "fsl/avw2fsl" as const,
         "source": source,
@@ -218,7 +218,7 @@ function avw2fsl_params(
  * @returns Command-line arguments.
  */
 function avw2fsl_cargs(
-    params: Avw2fslParameters,
+    params: Avw2fslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -340,7 +340,7 @@ function avw2fsl_cargs(
  * @returns Outputs object.
  */
 function avw2fsl_outputs(
-    params: Avw2fslParameters,
+    params: Avw2fslParamsDict,
     execution: Execution,
 ): Avw2fslOutputs {
     const ret: Avw2fslOutputs = {
@@ -366,7 +366,7 @@ function avw2fsl_outputs(
  * @returns NamedTuple of outputs (described in `Avw2fslOutputs`).
  */
 function avw2fsl_execute(
-    params: Avw2fslParameters,
+    params: Avw2fslParamsDict,
     runner: Runner | null = null,
 ): Avw2fslOutputs {
     runner = runner || getGlobalRunner();
@@ -475,6 +475,8 @@ function avw2fsl(
 export {
       AVW2FSL_METADATA,
       Avw2fslOutputs,
+      Avw2fslParamsDict,
+      Avw2fslParamsDictTagged,
       avw2fsl,
       avw2fsl_execute,
       avw2fsl_params,

@@ -11,15 +11,15 @@ const MRHISTOGRAM_METADATA: Metadata = {
 };
 
 
-interface MrhistogramConfigParameters {
+interface MrhistogramConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrhistogramConfigParametersTagged = Required<Pick<MrhistogramConfigParameters, '@type'>> & MrhistogramConfigParameters;
+type MrhistogramConfigParamsDictTagged = Required<Pick<MrhistogramConfigParamsDict, '@type'>> & MrhistogramConfigParamsDict;
 
 
-interface MrhistogramParameters {
+interface MrhistogramParamsDict {
     "@type"?: "mrtrix/mrhistogram";
     "bins"?: number | null | undefined;
     "template"?: InputPathType | null | undefined;
@@ -31,13 +31,13 @@ interface MrhistogramParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrhistogramConfigParameters> | null | undefined;
+    "config"?: Array<MrhistogramConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image": InputPathType;
     "hist": string;
 }
-type MrhistogramParametersTagged = Required<Pick<MrhistogramParameters, '@type'>> & MrhistogramParameters;
+type MrhistogramParamsDictTagged = Required<Pick<MrhistogramParamsDict, '@type'>> & MrhistogramParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type MrhistogramParametersTagged = Required<Pick<MrhistogramParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function mrhistogram_config_params(
+function mrhistogram_config(
     key: string,
     value: string,
-): MrhistogramConfigParametersTagged {
+): MrhistogramConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -70,7 +70,7 @@ function mrhistogram_config_params(
  * @returns Command-line arguments.
  */
 function mrhistogram_config_cargs(
-    params: MrhistogramConfigParameters,
+    params: MrhistogramConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mrhistogram_config_cargs(
 
 
 /**
- * Output object returned when calling `MrhistogramParameters(...)`.
+ * Output object returned when calling `MrhistogramParamsDict(...)`.
  *
  * @interface
  */
@@ -132,10 +132,10 @@ function mrhistogram_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrhistogramConfigParameters> | null = null,
+    config: Array<MrhistogramConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrhistogramParametersTagged {
+): MrhistogramParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrhistogram" as const,
         "ignorezero": ignorezero,
@@ -177,7 +177,7 @@ function mrhistogram_params(
  * @returns Command-line arguments.
  */
 function mrhistogram_cargs(
-    params: MrhistogramParameters,
+    params: MrhistogramParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -248,7 +248,7 @@ function mrhistogram_cargs(
  * @returns Outputs object.
  */
 function mrhistogram_outputs(
-    params: MrhistogramParameters,
+    params: MrhistogramParamsDict,
     execution: Execution,
 ): MrhistogramOutputs {
     const ret: MrhistogramOutputs = {
@@ -280,7 +280,7 @@ function mrhistogram_outputs(
  * @returns NamedTuple of outputs (described in `MrhistogramOutputs`).
  */
 function mrhistogram_execute(
-    params: MrhistogramParameters,
+    params: MrhistogramParamsDict,
     runner: Runner | null = null,
 ): MrhistogramOutputs {
     runner = runner || getGlobalRunner();
@@ -340,7 +340,7 @@ function mrhistogram(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrhistogramConfigParameters> | null = null,
+    config: Array<MrhistogramConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -352,9 +352,13 @@ function mrhistogram(
 
 export {
       MRHISTOGRAM_METADATA,
+      MrhistogramConfigParamsDict,
+      MrhistogramConfigParamsDictTagged,
       MrhistogramOutputs,
+      MrhistogramParamsDict,
+      MrhistogramParamsDictTagged,
       mrhistogram,
-      mrhistogram_config_params,
+      mrhistogram_config,
       mrhistogram_execute,
       mrhistogram_params,
 };

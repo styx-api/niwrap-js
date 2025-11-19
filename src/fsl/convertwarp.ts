@@ -11,7 +11,7 @@ const CONVERTWARP_METADATA: Metadata = {
 };
 
 
-interface ConvertwarpParameters {
+interface ConvertwarpParamsDict {
     "@type"?: "fsl/convertwarp";
     "abswarp": boolean;
     "cons_jacobian": boolean;
@@ -30,11 +30,11 @@ interface ConvertwarpParameters {
     "warp1"?: InputPathType | null | undefined;
     "warp2"?: InputPathType | null | undefined;
 }
-type ConvertwarpParametersTagged = Required<Pick<ConvertwarpParameters, '@type'>> & ConvertwarpParameters;
+type ConvertwarpParamsDictTagged = Required<Pick<ConvertwarpParamsDict, '@type'>> & ConvertwarpParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertwarpParameters(...)`.
+ * Output object returned when calling `ConvertwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -93,7 +93,7 @@ function convertwarp_params(
     shift_in_file: InputPathType | null = null,
     warp1: InputPathType | null = null,
     warp2: InputPathType | null = null,
-): ConvertwarpParametersTagged {
+): ConvertwarpParamsDictTagged {
     const params = {
         "@type": "fsl/convertwarp" as const,
         "abswarp": abswarp,
@@ -146,7 +146,7 @@ function convertwarp_params(
  * @returns Command-line arguments.
  */
 function convertwarp_cargs(
-    params: ConvertwarpParameters,
+    params: ConvertwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function convertwarp_cargs(
  * @returns Outputs object.
  */
 function convertwarp_outputs(
-    params: ConvertwarpParameters,
+    params: ConvertwarpParamsDict,
     execution: Execution,
 ): ConvertwarpOutputs {
     const ret: ConvertwarpOutputs = {
@@ -237,7 +237,7 @@ function convertwarp_outputs(
  * @returns NamedTuple of outputs (described in `ConvertwarpOutputs`).
  */
 function convertwarp_execute(
-    params: ConvertwarpParameters,
+    params: ConvertwarpParamsDict,
     runner: Runner | null = null,
 ): ConvertwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -306,6 +306,8 @@ function convertwarp(
 export {
       CONVERTWARP_METADATA,
       ConvertwarpOutputs,
+      ConvertwarpParamsDict,
+      ConvertwarpParamsDictTagged,
       convertwarp,
       convertwarp_execute,
       convertwarp_params,

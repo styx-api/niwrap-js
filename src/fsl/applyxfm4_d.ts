@@ -11,7 +11,7 @@ const APPLYXFM4_D_METADATA: Metadata = {
 };
 
 
-interface Applyxfm4DParameters {
+interface Applyxfm4DParamsDict {
     "@type"?: "fsl/applyxfm4D";
     "input_volume": InputPathType;
     "ref_volume": InputPathType;
@@ -22,11 +22,11 @@ interface Applyxfm4DParameters {
     "four_digit_flag": boolean;
     "user_prefix"?: string | null | undefined;
 }
-type Applyxfm4DParametersTagged = Required<Pick<Applyxfm4DParameters, '@type'>> & Applyxfm4DParameters;
+type Applyxfm4DParamsDictTagged = Required<Pick<Applyxfm4DParamsDict, '@type'>> & Applyxfm4DParamsDict;
 
 
 /**
- * Output object returned when calling `Applyxfm4DParameters(...)`.
+ * Output object returned when calling `Applyxfm4DParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function applyxfm4_d_params(
     single_matrix_flag: boolean = false,
     four_digit_flag: boolean = false,
     user_prefix: string | null = null,
-): Applyxfm4DParametersTagged {
+): Applyxfm4DParamsDictTagged {
     const params = {
         "@type": "fsl/applyxfm4D" as const,
         "input_volume": input_volume,
@@ -94,7 +94,7 @@ function applyxfm4_d_params(
  * @returns Command-line arguments.
  */
 function applyxfm4_d_cargs(
-    params: Applyxfm4DParameters,
+    params: Applyxfm4DParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function applyxfm4_d_cargs(
  * @returns Outputs object.
  */
 function applyxfm4_d_outputs(
-    params: Applyxfm4DParameters,
+    params: Applyxfm4DParamsDict,
     execution: Execution,
 ): Applyxfm4DOutputs {
     const ret: Applyxfm4DOutputs = {
@@ -160,7 +160,7 @@ function applyxfm4_d_outputs(
  * @returns NamedTuple of outputs (described in `Applyxfm4DOutputs`).
  */
 function applyxfm4_d_execute(
-    params: Applyxfm4DParameters,
+    params: Applyxfm4DParamsDict,
     runner: Runner | null = null,
 ): Applyxfm4DOutputs {
     runner = runner || getGlobalRunner();
@@ -213,6 +213,8 @@ function applyxfm4_d(
 export {
       APPLYXFM4_D_METADATA,
       Applyxfm4DOutputs,
+      Applyxfm4DParamsDict,
+      Applyxfm4DParamsDictTagged,
       applyxfm4_d,
       applyxfm4_d_execute,
       applyxfm4_d_params,

@@ -10,51 +10,51 @@ const CIFTI_REPLACE_STRUCTURE_METADATA: Metadata = {
 };
 
 
-interface CiftiReplaceStructureVolumeAllParameters {
+interface CiftiReplaceStructureVolumeAllParamsDict {
     "@type"?: "volume-all";
     "volume": InputPathType;
     "from-cropped": boolean;
 }
-type CiftiReplaceStructureVolumeAllParametersTagged = Required<Pick<CiftiReplaceStructureVolumeAllParameters, '@type'>> & CiftiReplaceStructureVolumeAllParameters;
+type CiftiReplaceStructureVolumeAllParamsDictTagged = Required<Pick<CiftiReplaceStructureVolumeAllParamsDict, '@type'>> & CiftiReplaceStructureVolumeAllParamsDict;
 
 
-interface CiftiReplaceStructureLabelParameters {
+interface CiftiReplaceStructureLabelParamsDict {
     "@type"?: "label";
     "structure": string;
     "label": InputPathType;
 }
-type CiftiReplaceStructureLabelParametersTagged = Required<Pick<CiftiReplaceStructureLabelParameters, '@type'>> & CiftiReplaceStructureLabelParameters;
+type CiftiReplaceStructureLabelParamsDictTagged = Required<Pick<CiftiReplaceStructureLabelParamsDict, '@type'>> & CiftiReplaceStructureLabelParamsDict;
 
 
-interface CiftiReplaceStructureMetricParameters {
+interface CiftiReplaceStructureMetricParamsDict {
     "@type"?: "metric";
     "structure": string;
     "metric": InputPathType;
 }
-type CiftiReplaceStructureMetricParametersTagged = Required<Pick<CiftiReplaceStructureMetricParameters, '@type'>> & CiftiReplaceStructureMetricParameters;
+type CiftiReplaceStructureMetricParamsDictTagged = Required<Pick<CiftiReplaceStructureMetricParamsDict, '@type'>> & CiftiReplaceStructureMetricParamsDict;
 
 
-interface CiftiReplaceStructureVolumeParameters {
+interface CiftiReplaceStructureVolumeParamsDict {
     "@type"?: "volume";
     "structure": string;
     "volume": InputPathType;
     "from-cropped": boolean;
 }
-type CiftiReplaceStructureVolumeParametersTagged = Required<Pick<CiftiReplaceStructureVolumeParameters, '@type'>> & CiftiReplaceStructureVolumeParameters;
+type CiftiReplaceStructureVolumeParamsDictTagged = Required<Pick<CiftiReplaceStructureVolumeParamsDict, '@type'>> & CiftiReplaceStructureVolumeParamsDict;
 
 
-interface CiftiReplaceStructureParameters {
+interface CiftiReplaceStructureParamsDict {
     "@type"?: "workbench/cifti-replace-structure";
-    "volume-all"?: CiftiReplaceStructureVolumeAllParameters | null | undefined;
+    "volume-all"?: CiftiReplaceStructureVolumeAllParamsDict | null | undefined;
     "discard-unused-labels": boolean;
     "action"?: string | null | undefined;
-    "label"?: Array<CiftiReplaceStructureLabelParameters> | null | undefined;
-    "metric"?: Array<CiftiReplaceStructureMetricParameters> | null | undefined;
-    "volume"?: Array<CiftiReplaceStructureVolumeParameters> | null | undefined;
+    "label"?: Array<CiftiReplaceStructureLabelParamsDict> | null | undefined;
+    "metric"?: Array<CiftiReplaceStructureMetricParamsDict> | null | undefined;
+    "volume"?: Array<CiftiReplaceStructureVolumeParamsDict> | null | undefined;
     "cifti": string;
     "direction": string;
 }
-type CiftiReplaceStructureParametersTagged = Required<Pick<CiftiReplaceStructureParameters, '@type'>> & CiftiReplaceStructureParameters;
+type CiftiReplaceStructureParamsDictTagged = Required<Pick<CiftiReplaceStructureParamsDict, '@type'>> & CiftiReplaceStructureParamsDict;
 
 
 /**
@@ -65,10 +65,10 @@ type CiftiReplaceStructureParametersTagged = Required<Pick<CiftiReplaceStructure
  *
  * @returns Parameter dictionary
  */
-function cifti_replace_structure_volume_all_params(
+function cifti_replace_structure_volume_all(
     volume: InputPathType,
     from_cropped: boolean = false,
-): CiftiReplaceStructureVolumeAllParametersTagged {
+): CiftiReplaceStructureVolumeAllParamsDictTagged {
     const params = {
         "@type": "volume-all" as const,
         "volume": volume,
@@ -87,7 +87,7 @@ function cifti_replace_structure_volume_all_params(
  * @returns Command-line arguments.
  */
 function cifti_replace_structure_volume_all_cargs(
-    params: CiftiReplaceStructureVolumeAllParameters,
+    params: CiftiReplaceStructureVolumeAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,10 +110,10 @@ function cifti_replace_structure_volume_all_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_replace_structure_label_params(
+function cifti_replace_structure_label(
     structure: string,
     label: InputPathType,
-): CiftiReplaceStructureLabelParametersTagged {
+): CiftiReplaceStructureLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
         "structure": structure,
@@ -132,7 +132,7 @@ function cifti_replace_structure_label_params(
  * @returns Command-line arguments.
  */
 function cifti_replace_structure_label_cargs(
-    params: CiftiReplaceStructureLabelParameters,
+    params: CiftiReplaceStructureLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,10 +153,10 @@ function cifti_replace_structure_label_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_replace_structure_metric_params(
+function cifti_replace_structure_metric(
     structure: string,
     metric: InputPathType,
-): CiftiReplaceStructureMetricParametersTagged {
+): CiftiReplaceStructureMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
         "structure": structure,
@@ -175,7 +175,7 @@ function cifti_replace_structure_metric_params(
  * @returns Command-line arguments.
  */
 function cifti_replace_structure_metric_cargs(
-    params: CiftiReplaceStructureMetricParameters,
+    params: CiftiReplaceStructureMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -197,11 +197,11 @@ function cifti_replace_structure_metric_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_replace_structure_volume_params(
+function cifti_replace_structure_volume(
     structure: string,
     volume: InputPathType,
     from_cropped: boolean = false,
-): CiftiReplaceStructureVolumeParametersTagged {
+): CiftiReplaceStructureVolumeParamsDictTagged {
     const params = {
         "@type": "volume" as const,
         "structure": structure,
@@ -221,7 +221,7 @@ function cifti_replace_structure_volume_params(
  * @returns Command-line arguments.
  */
 function cifti_replace_structure_volume_cargs(
-    params: CiftiReplaceStructureVolumeParameters,
+    params: CiftiReplaceStructureVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -238,7 +238,7 @@ function cifti_replace_structure_volume_cargs(
 
 
 /**
- * Output object returned when calling `CiftiReplaceStructureParameters(...)`.
+ * Output object returned when calling `CiftiReplaceStructureParamsDict(...)`.
  *
  * @interface
  */
@@ -270,12 +270,12 @@ function cifti_replace_structure_params(
     action: string | null,
     cifti: string,
     direction: string,
-    volume_all: CiftiReplaceStructureVolumeAllParameters | null = null,
+    volume_all: CiftiReplaceStructureVolumeAllParamsDict | null = null,
     discard_unused_labels: boolean = false,
-    label: Array<CiftiReplaceStructureLabelParameters> | null = null,
-    metric: Array<CiftiReplaceStructureMetricParameters> | null = null,
-    volume: Array<CiftiReplaceStructureVolumeParameters> | null = null,
-): CiftiReplaceStructureParametersTagged {
+    label: Array<CiftiReplaceStructureLabelParamsDict> | null = null,
+    metric: Array<CiftiReplaceStructureMetricParamsDict> | null = null,
+    volume: Array<CiftiReplaceStructureVolumeParamsDict> | null = null,
+): CiftiReplaceStructureParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-replace-structure" as const,
         "discard-unused-labels": discard_unused_labels,
@@ -310,7 +310,7 @@ function cifti_replace_structure_params(
  * @returns Command-line arguments.
  */
 function cifti_replace_structure_cargs(
-    params: CiftiReplaceStructureParameters,
+    params: CiftiReplaceStructureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -342,7 +342,7 @@ function cifti_replace_structure_cargs(
  * @returns Outputs object.
  */
 function cifti_replace_structure_outputs(
-    params: CiftiReplaceStructureParameters,
+    params: CiftiReplaceStructureParamsDict,
     execution: Execution,
 ): CiftiReplaceStructureOutputs {
     const ret: CiftiReplaceStructureOutputs = {
@@ -401,7 +401,7 @@ function cifti_replace_structure_outputs(
  * @returns NamedTuple of outputs (described in `CiftiReplaceStructureOutputs`).
  */
 function cifti_replace_structure_execute(
-    params: CiftiReplaceStructureParameters,
+    params: CiftiReplaceStructureParamsDict,
     runner: Runner | null = null,
 ): CiftiReplaceStructureOutputs {
     runner = runner || getGlobalRunner();
@@ -475,11 +475,11 @@ function cifti_replace_structure(
     action: string | null,
     cifti: string,
     direction: string,
-    volume_all: CiftiReplaceStructureVolumeAllParameters | null = null,
+    volume_all: CiftiReplaceStructureVolumeAllParamsDict | null = null,
     discard_unused_labels: boolean = false,
-    label: Array<CiftiReplaceStructureLabelParameters> | null = null,
-    metric: Array<CiftiReplaceStructureMetricParameters> | null = null,
-    volume: Array<CiftiReplaceStructureVolumeParameters> | null = null,
+    label: Array<CiftiReplaceStructureLabelParamsDict> | null = null,
+    metric: Array<CiftiReplaceStructureMetricParamsDict> | null = null,
+    volume: Array<CiftiReplaceStructureVolumeParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiReplaceStructureOutputs {
     const params = cifti_replace_structure_params(action, cifti, direction, volume_all, discard_unused_labels, label, metric, volume)
@@ -489,12 +489,22 @@ function cifti_replace_structure(
 
 export {
       CIFTI_REPLACE_STRUCTURE_METADATA,
+      CiftiReplaceStructureLabelParamsDict,
+      CiftiReplaceStructureLabelParamsDictTagged,
+      CiftiReplaceStructureMetricParamsDict,
+      CiftiReplaceStructureMetricParamsDictTagged,
       CiftiReplaceStructureOutputs,
+      CiftiReplaceStructureParamsDict,
+      CiftiReplaceStructureParamsDictTagged,
+      CiftiReplaceStructureVolumeAllParamsDict,
+      CiftiReplaceStructureVolumeAllParamsDictTagged,
+      CiftiReplaceStructureVolumeParamsDict,
+      CiftiReplaceStructureVolumeParamsDictTagged,
       cifti_replace_structure,
       cifti_replace_structure_execute,
-      cifti_replace_structure_label_params,
-      cifti_replace_structure_metric_params,
+      cifti_replace_structure_label,
+      cifti_replace_structure_metric,
       cifti_replace_structure_params,
-      cifti_replace_structure_volume_all_params,
-      cifti_replace_structure_volume_params,
+      cifti_replace_structure_volume,
+      cifti_replace_structure_volume_all,
 };

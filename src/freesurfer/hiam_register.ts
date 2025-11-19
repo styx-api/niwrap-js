@@ -11,17 +11,17 @@ const HIAM_REGISTER_METADATA: Metadata = {
 };
 
 
-interface HiamRegisterParameters {
+interface HiamRegisterParamsDict {
     "@type"?: "freesurfer/hiam_register";
     "input_surface": InputPathType;
     "average_surface": InputPathType;
     "output_surface": string;
 }
-type HiamRegisterParametersTagged = Required<Pick<HiamRegisterParameters, '@type'>> & HiamRegisterParameters;
+type HiamRegisterParamsDictTagged = Required<Pick<HiamRegisterParamsDict, '@type'>> & HiamRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `HiamRegisterParameters(...)`.
+ * Output object returned when calling `HiamRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function hiam_register_params(
     input_surface: InputPathType,
     average_surface: InputPathType,
     output_surface: string,
-): HiamRegisterParametersTagged {
+): HiamRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/hiam_register" as const,
         "input_surface": input_surface,
@@ -70,7 +70,7 @@ function hiam_register_params(
  * @returns Command-line arguments.
  */
 function hiam_register_cargs(
-    params: HiamRegisterParameters,
+    params: HiamRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function hiam_register_cargs(
  * @returns Outputs object.
  */
 function hiam_register_outputs(
-    params: HiamRegisterParameters,
+    params: HiamRegisterParamsDict,
     execution: Execution,
 ): HiamRegisterOutputs {
     const ret: HiamRegisterOutputs = {
@@ -117,7 +117,7 @@ function hiam_register_outputs(
  * @returns NamedTuple of outputs (described in `HiamRegisterOutputs`).
  */
 function hiam_register_execute(
-    params: HiamRegisterParameters,
+    params: HiamRegisterParamsDict,
     runner: Runner | null = null,
 ): HiamRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function hiam_register(
 export {
       HIAM_REGISTER_METADATA,
       HiamRegisterOutputs,
+      HiamRegisterParamsDict,
+      HiamRegisterParamsDictTagged,
       hiam_register,
       hiam_register_execute,
       hiam_register_params,

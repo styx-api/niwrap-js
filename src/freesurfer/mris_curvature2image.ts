@@ -11,7 +11,7 @@ const MRIS_CURVATURE2IMAGE_METADATA: Metadata = {
 };
 
 
-interface MrisCurvature2imageParameters {
+interface MrisCurvature2imageParamsDict {
     "@type"?: "freesurfer/mris_curvature2image";
     "surface": InputPathType;
     "mask": InputPathType;
@@ -22,11 +22,11 @@ interface MrisCurvature2imageParameters {
     "invert_flag": boolean;
     "radius": number;
 }
-type MrisCurvature2imageParametersTagged = Required<Pick<MrisCurvature2imageParameters, '@type'>> & MrisCurvature2imageParameters;
+type MrisCurvature2imageParamsDictTagged = Required<Pick<MrisCurvature2imageParamsDict, '@type'>> & MrisCurvature2imageParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCurvature2imageParameters(...)`.
+ * Output object returned when calling `MrisCurvature2imageParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function mris_curvature2image_params(
     label: InputPathType,
     radius: number,
     invert_flag: boolean = false,
-): MrisCurvature2imageParametersTagged {
+): MrisCurvature2imageParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_curvature2image" as const,
         "surface": surface,
@@ -94,7 +94,7 @@ function mris_curvature2image_params(
  * @returns Command-line arguments.
  */
 function mris_curvature2image_cargs(
-    params: MrisCurvature2imageParameters,
+    params: MrisCurvature2imageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function mris_curvature2image_cargs(
  * @returns Outputs object.
  */
 function mris_curvature2image_outputs(
-    params: MrisCurvature2imageParameters,
+    params: MrisCurvature2imageParamsDict,
     execution: Execution,
 ): MrisCurvature2imageOutputs {
     const ret: MrisCurvature2imageOutputs = {
@@ -170,7 +170,7 @@ function mris_curvature2image_outputs(
  * @returns NamedTuple of outputs (described in `MrisCurvature2imageOutputs`).
  */
 function mris_curvature2image_execute(
-    params: MrisCurvature2imageParameters,
+    params: MrisCurvature2imageParamsDict,
     runner: Runner | null = null,
 ): MrisCurvature2imageOutputs {
     runner = runner || getGlobalRunner();
@@ -223,6 +223,8 @@ function mris_curvature2image(
 export {
       MRIS_CURVATURE2IMAGE_METADATA,
       MrisCurvature2imageOutputs,
+      MrisCurvature2imageParamsDict,
+      MrisCurvature2imageParamsDictTagged,
       mris_curvature2image,
       mris_curvature2image_execute,
       mris_curvature2image_params,

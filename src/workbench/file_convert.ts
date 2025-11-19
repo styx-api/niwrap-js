@@ -10,41 +10,41 @@ const FILE_CONVERT_METADATA: Metadata = {
 };
 
 
-interface FileConvertBorderVersionConvertParameters {
+interface FileConvertBorderVersionConvertParamsDict {
     "@type"?: "border-version-convert";
     "border-in": InputPathType;
     "out-version": number;
     "border-out": string;
     "surface"?: InputPathType | null | undefined;
 }
-type FileConvertBorderVersionConvertParametersTagged = Required<Pick<FileConvertBorderVersionConvertParameters, '@type'>> & FileConvertBorderVersionConvertParameters;
+type FileConvertBorderVersionConvertParamsDictTagged = Required<Pick<FileConvertBorderVersionConvertParamsDict, '@type'>> & FileConvertBorderVersionConvertParamsDict;
 
 
-interface FileConvertNiftiVersionConvertParameters {
+interface FileConvertNiftiVersionConvertParamsDict {
     "@type"?: "nifti-version-convert";
     "input": string;
     "version": number;
     "output": string;
 }
-type FileConvertNiftiVersionConvertParametersTagged = Required<Pick<FileConvertNiftiVersionConvertParameters, '@type'>> & FileConvertNiftiVersionConvertParameters;
+type FileConvertNiftiVersionConvertParamsDictTagged = Required<Pick<FileConvertNiftiVersionConvertParamsDict, '@type'>> & FileConvertNiftiVersionConvertParamsDict;
 
 
-interface FileConvertCiftiVersionConvertParameters {
+interface FileConvertCiftiVersionConvertParamsDict {
     "@type"?: "cifti-version-convert";
     "cifti-in": InputPathType;
     "version": string;
     "cifti-out": string;
 }
-type FileConvertCiftiVersionConvertParametersTagged = Required<Pick<FileConvertCiftiVersionConvertParameters, '@type'>> & FileConvertCiftiVersionConvertParameters;
+type FileConvertCiftiVersionConvertParamsDictTagged = Required<Pick<FileConvertCiftiVersionConvertParamsDict, '@type'>> & FileConvertCiftiVersionConvertParamsDict;
 
 
-interface FileConvertParameters {
+interface FileConvertParamsDict {
     "@type"?: "workbench/file-convert";
-    "border-version-convert"?: FileConvertBorderVersionConvertParameters | null | undefined;
-    "nifti-version-convert"?: FileConvertNiftiVersionConvertParameters | null | undefined;
-    "cifti-version-convert"?: FileConvertCiftiVersionConvertParameters | null | undefined;
+    "border-version-convert"?: FileConvertBorderVersionConvertParamsDict | null | undefined;
+    "nifti-version-convert"?: FileConvertNiftiVersionConvertParamsDict | null | undefined;
+    "cifti-version-convert"?: FileConvertCiftiVersionConvertParamsDict | null | undefined;
 }
-type FileConvertParametersTagged = Required<Pick<FileConvertParameters, '@type'>> & FileConvertParameters;
+type FileConvertParamsDictTagged = Required<Pick<FileConvertParamsDict, '@type'>> & FileConvertParamsDict;
 
 
 /**
@@ -59,12 +59,12 @@ use this surface file for structure and number of vertices, ignore borders on ot
  *
  * @returns Parameter dictionary
  */
-function file_convert_border_version_convert_params(
+function file_convert_border_version_convert(
     border_in: InputPathType,
     out_version: number,
     border_out: string,
     surface: InputPathType | null,
-): FileConvertBorderVersionConvertParametersTagged {
+): FileConvertBorderVersionConvertParamsDictTagged {
     const params = {
         "@type": "border-version-convert" as const,
         "border-in": border_in,
@@ -87,7 +87,7 @@ function file_convert_border_version_convert_params(
  * @returns Command-line arguments.
  */
 function file_convert_border_version_convert_cargs(
-    params: FileConvertBorderVersionConvertParameters,
+    params: FileConvertBorderVersionConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,11 +114,11 @@ function file_convert_border_version_convert_cargs(
  *
  * @returns Parameter dictionary
  */
-function file_convert_nifti_version_convert_params(
+function file_convert_nifti_version_convert(
     input: string,
     version: number,
     output: string,
-): FileConvertNiftiVersionConvertParametersTagged {
+): FileConvertNiftiVersionConvertParamsDictTagged {
     const params = {
         "@type": "nifti-version-convert" as const,
         "input": input,
@@ -138,7 +138,7 @@ function file_convert_nifti_version_convert_params(
  * @returns Command-line arguments.
  */
 function file_convert_nifti_version_convert_cargs(
-    params: FileConvertNiftiVersionConvertParameters,
+    params: FileConvertNiftiVersionConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,11 +161,11 @@ function file_convert_nifti_version_convert_cargs(
  *
  * @returns Parameter dictionary
  */
-function file_convert_cifti_version_convert_params(
+function file_convert_cifti_version_convert(
     cifti_in: InputPathType,
     version: string,
     cifti_out: string,
-): FileConvertCiftiVersionConvertParametersTagged {
+): FileConvertCiftiVersionConvertParamsDictTagged {
     const params = {
         "@type": "cifti-version-convert" as const,
         "cifti-in": cifti_in,
@@ -185,7 +185,7 @@ function file_convert_cifti_version_convert_params(
  * @returns Command-line arguments.
  */
 function file_convert_cifti_version_convert_cargs(
-    params: FileConvertCiftiVersionConvertParameters,
+    params: FileConvertCiftiVersionConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function file_convert_cifti_version_convert_cargs(
 
 
 /**
- * Output object returned when calling `FileConvertParameters(...)`.
+ * Output object returned when calling `FileConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -222,10 +222,10 @@ interface FileConvertOutputs {
  * @returns Parameter dictionary
  */
 function file_convert_params(
-    border_version_convert: FileConvertBorderVersionConvertParameters | null = null,
-    nifti_version_convert: FileConvertNiftiVersionConvertParameters | null = null,
-    cifti_version_convert: FileConvertCiftiVersionConvertParameters | null = null,
-): FileConvertParametersTagged {
+    border_version_convert: FileConvertBorderVersionConvertParamsDict | null = null,
+    nifti_version_convert: FileConvertNiftiVersionConvertParamsDict | null = null,
+    cifti_version_convert: FileConvertCiftiVersionConvertParamsDict | null = null,
+): FileConvertParamsDictTagged {
     const params = {
         "@type": "workbench/file-convert" as const,
     };
@@ -251,7 +251,7 @@ function file_convert_params(
  * @returns Command-line arguments.
  */
 function file_convert_cargs(
-    params: FileConvertParameters,
+    params: FileConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -277,7 +277,7 @@ function file_convert_cargs(
  * @returns Outputs object.
  */
 function file_convert_outputs(
-    params: FileConvertParameters,
+    params: FileConvertParamsDict,
     execution: Execution,
 ): FileConvertOutputs {
     const ret: FileConvertOutputs = {
@@ -298,7 +298,7 @@ function file_convert_outputs(
  * @returns NamedTuple of outputs (described in `FileConvertOutputs`).
  */
 function file_convert_execute(
-    params: FileConvertParameters,
+    params: FileConvertParamsDict,
     runner: Runner | null = null,
 ): FileConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -324,9 +324,9 @@ function file_convert_execute(
  * @returns NamedTuple of outputs (described in `FileConvertOutputs`).
  */
 function file_convert(
-    border_version_convert: FileConvertBorderVersionConvertParameters | null = null,
-    nifti_version_convert: FileConvertNiftiVersionConvertParameters | null = null,
-    cifti_version_convert: FileConvertCiftiVersionConvertParameters | null = null,
+    border_version_convert: FileConvertBorderVersionConvertParamsDict | null = null,
+    nifti_version_convert: FileConvertNiftiVersionConvertParamsDict | null = null,
+    cifti_version_convert: FileConvertCiftiVersionConvertParamsDict | null = null,
     runner: Runner | null = null,
 ): FileConvertOutputs {
     const params = file_convert_params(border_version_convert, nifti_version_convert, cifti_version_convert)
@@ -336,11 +336,19 @@ function file_convert(
 
 export {
       FILE_CONVERT_METADATA,
+      FileConvertBorderVersionConvertParamsDict,
+      FileConvertBorderVersionConvertParamsDictTagged,
+      FileConvertCiftiVersionConvertParamsDict,
+      FileConvertCiftiVersionConvertParamsDictTagged,
+      FileConvertNiftiVersionConvertParamsDict,
+      FileConvertNiftiVersionConvertParamsDictTagged,
       FileConvertOutputs,
+      FileConvertParamsDict,
+      FileConvertParamsDictTagged,
       file_convert,
-      file_convert_border_version_convert_params,
-      file_convert_cifti_version_convert_params,
+      file_convert_border_version_convert,
+      file_convert_cifti_version_convert,
       file_convert_execute,
-      file_convert_nifti_version_convert_params,
+      file_convert_nifti_version_convert,
       file_convert_params,
 };

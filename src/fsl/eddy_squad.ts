@@ -11,7 +11,7 @@ const EDDY_SQUAD_METADATA: Metadata = {
 };
 
 
-interface EddySquadParameters {
+interface EddySquadParamsDict {
     "@type"?: "fsl/eddy_squad";
     "grouping"?: string | null | undefined;
     "group_db"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface EddySquadParameters {
     "output_dir"?: string | null | undefined;
     "subject_list": string;
 }
-type EddySquadParametersTagged = Required<Pick<EddySquadParameters, '@type'>> & EddySquadParameters;
+type EddySquadParamsDictTagged = Required<Pick<EddySquadParamsDict, '@type'>> & EddySquadParamsDict;
 
 
 /**
- * Output object returned when calling `EddySquadParameters(...)`.
+ * Output object returned when calling `EddySquadParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function eddy_squad_params(
     group_db: InputPathType | null = null,
     update: boolean = false,
     output_dir: string | null = null,
-): EddySquadParametersTagged {
+): EddySquadParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_squad" as const,
         "update": update,
@@ -84,7 +84,7 @@ function eddy_squad_params(
  * @returns Command-line arguments.
  */
 function eddy_squad_cargs(
-    params: EddySquadParameters,
+    params: EddySquadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function eddy_squad_cargs(
  * @returns Outputs object.
  */
 function eddy_squad_outputs(
-    params: EddySquadParameters,
+    params: EddySquadParamsDict,
     execution: Execution,
 ): EddySquadOutputs {
     const ret: EddySquadOutputs = {
@@ -150,7 +150,7 @@ function eddy_squad_outputs(
  * @returns NamedTuple of outputs (described in `EddySquadOutputs`).
  */
 function eddy_squad_execute(
-    params: EddySquadParameters,
+    params: EddySquadParamsDict,
     runner: Runner | null = null,
 ): EddySquadOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function eddy_squad(
 export {
       EDDY_SQUAD_METADATA,
       EddySquadOutputs,
+      EddySquadParamsDict,
+      EddySquadParamsDictTagged,
       eddy_squad,
       eddy_squad_execute,
       eddy_squad_params,

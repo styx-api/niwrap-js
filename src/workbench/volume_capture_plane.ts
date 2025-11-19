@@ -10,7 +10,7 @@ const VOLUME_CAPTURE_PLANE_METADATA: Metadata = {
 };
 
 
-interface VolumeCapturePlaneParameters {
+interface VolumeCapturePlaneParamsDict {
     "@type"?: "workbench/volume-capture-plane";
     "volume": InputPathType;
     "subvolume": string;
@@ -30,11 +30,11 @@ interface VolumeCapturePlaneParameters {
     "top-left-z": number;
     "image": string;
 }
-type VolumeCapturePlaneParametersTagged = Required<Pick<VolumeCapturePlaneParameters, '@type'>> & VolumeCapturePlaneParameters;
+type VolumeCapturePlaneParamsDictTagged = Required<Pick<VolumeCapturePlaneParamsDict, '@type'>> & VolumeCapturePlaneParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeCapturePlaneParameters(...)`.
+ * Output object returned when calling `VolumeCapturePlaneParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function volume_capture_plane_params(
     top_left_y: number,
     top_left_z: number,
     image: string,
-): VolumeCapturePlaneParametersTagged {
+): VolumeCapturePlaneParamsDictTagged {
     const params = {
         "@type": "workbench/volume-capture-plane" as const,
         "volume": volume,
@@ -121,7 +121,7 @@ function volume_capture_plane_params(
  * @returns Command-line arguments.
  */
 function volume_capture_plane_cargs(
-    params: VolumeCapturePlaneParameters,
+    params: VolumeCapturePlaneParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function volume_capture_plane_cargs(
  * @returns Outputs object.
  */
 function volume_capture_plane_outputs(
-    params: VolumeCapturePlaneParameters,
+    params: VolumeCapturePlaneParamsDict,
     execution: Execution,
 ): VolumeCapturePlaneOutputs {
     const ret: VolumeCapturePlaneOutputs = {
@@ -186,7 +186,7 @@ function volume_capture_plane_outputs(
  * @returns NamedTuple of outputs (described in `VolumeCapturePlaneOutputs`).
  */
 function volume_capture_plane_execute(
-    params: VolumeCapturePlaneParameters,
+    params: VolumeCapturePlaneParamsDict,
     runner: Runner | null = null,
 ): VolumeCapturePlaneOutputs {
     runner = runner || getGlobalRunner();
@@ -259,6 +259,8 @@ function volume_capture_plane(
 export {
       VOLUME_CAPTURE_PLANE_METADATA,
       VolumeCapturePlaneOutputs,
+      VolumeCapturePlaneParamsDict,
+      VolumeCapturePlaneParamsDictTagged,
       volume_capture_plane,
       volume_capture_plane_execute,
       volume_capture_plane_params,

@@ -11,7 +11,7 @@ const V_3D_LFCD_METADATA: Metadata = {
 };
 
 
-interface V3dLfcdParameters {
+interface V3dLfcdParamsDict {
     "@type"?: "afni/3dLFCD";
     "in_file": InputPathType;
     "autoclip": boolean;
@@ -23,11 +23,11 @@ interface V3dLfcdParameters {
     "polort"?: number | null | undefined;
     "thresh"?: number | null | undefined;
 }
-type V3dLfcdParametersTagged = Required<Pick<V3dLfcdParameters, '@type'>> & V3dLfcdParameters;
+type V3dLfcdParamsDictTagged = Required<Pick<V3dLfcdParamsDict, '@type'>> & V3dLfcdParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLfcdParameters(...)`.
+ * Output object returned when calling `V3dLfcdParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_3d_lfcd_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     polort: number | null = null,
     thresh: number | null = null,
-): V3dLfcdParametersTagged {
+): V3dLfcdParamsDictTagged {
     const params = {
         "@type": "afni/3dLFCD" as const,
         "in_file": in_file,
@@ -106,7 +106,7 @@ function v_3d_lfcd_params(
  * @returns Command-line arguments.
  */
 function v_3d_lfcd_cargs(
-    params: V3dLfcdParameters,
+    params: V3dLfcdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function v_3d_lfcd_cargs(
  * @returns Outputs object.
  */
 function v_3d_lfcd_outputs(
-    params: V3dLfcdParameters,
+    params: V3dLfcdParamsDict,
     execution: Execution,
 ): V3dLfcdOutputs {
     const ret: V3dLfcdOutputs = {
@@ -187,7 +187,7 @@ function v_3d_lfcd_outputs(
  * @returns NamedTuple of outputs (described in `V3dLfcdOutputs`).
  */
 function v_3d_lfcd_execute(
-    params: V3dLfcdParameters,
+    params: V3dLfcdParamsDict,
     runner: Runner | null = null,
 ): V3dLfcdOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function v_3d_lfcd(
 
 export {
       V3dLfcdOutputs,
+      V3dLfcdParamsDict,
+      V3dLfcdParamsDictTagged,
       V_3D_LFCD_METADATA,
       v_3d_lfcd,
       v_3d_lfcd_execute,

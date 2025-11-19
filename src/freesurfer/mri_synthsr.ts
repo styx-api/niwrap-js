@@ -11,7 +11,7 @@ const MRI_SYNTHSR_METADATA: Metadata = {
 };
 
 
-interface MriSynthsrParameters {
+interface MriSynthsrParamsDict {
     "@type"?: "freesurfer/mri_synthsr";
     "input": string;
     "output": string;
@@ -24,11 +24,11 @@ interface MriSynthsrParameters {
     "cpu": boolean;
     "model"?: string | null | undefined;
 }
-type MriSynthsrParametersTagged = Required<Pick<MriSynthsrParameters, '@type'>> & MriSynthsrParameters;
+type MriSynthsrParamsDictTagged = Required<Pick<MriSynthsrParamsDict, '@type'>> & MriSynthsrParamsDict;
 
 
 /**
- * Output object returned when calling `MriSynthsrParameters(...)`.
+ * Output object returned when calling `MriSynthsrParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function mri_synthsr_params(
     threads: number | null = null,
     cpu: boolean = false,
     model: string | null = null,
-): MriSynthsrParametersTagged {
+): MriSynthsrParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_synthsr" as const,
         "input": input,
@@ -98,7 +98,7 @@ function mri_synthsr_params(
  * @returns Command-line arguments.
  */
 function mri_synthsr_cargs(
-    params: MriSynthsrParameters,
+    params: MriSynthsrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -148,7 +148,7 @@ function mri_synthsr_cargs(
  * @returns Outputs object.
  */
 function mri_synthsr_outputs(
-    params: MriSynthsrParameters,
+    params: MriSynthsrParamsDict,
     execution: Execution,
 ): MriSynthsrOutputs {
     const ret: MriSynthsrOutputs = {
@@ -173,7 +173,7 @@ function mri_synthsr_outputs(
  * @returns NamedTuple of outputs (described in `MriSynthsrOutputs`).
  */
 function mri_synthsr_execute(
-    params: MriSynthsrParameters,
+    params: MriSynthsrParamsDict,
     runner: Runner | null = null,
 ): MriSynthsrOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function mri_synthsr(
 export {
       MRI_SYNTHSR_METADATA,
       MriSynthsrOutputs,
+      MriSynthsrParamsDict,
+      MriSynthsrParamsDictTagged,
       mri_synthsr,
       mri_synthsr_execute,
       mri_synthsr_params,

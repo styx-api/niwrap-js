@@ -11,7 +11,7 @@ const PAIRREG_METADATA: Metadata = {
 };
 
 
-interface PairregParameters {
+interface PairregParamsDict {
     "@type"?: "fsl/pairreg";
     "brain1": InputPathType;
     "brain2": InputPathType;
@@ -20,11 +20,11 @@ interface PairregParameters {
     "outputmatrix": InputPathType;
     "extra_flirt_args"?: string | null | undefined;
 }
-type PairregParametersTagged = Required<Pick<PairregParameters, '@type'>> & PairregParameters;
+type PairregParamsDictTagged = Required<Pick<PairregParamsDict, '@type'>> & PairregParamsDict;
 
 
 /**
- * Output object returned when calling `PairregParameters(...)`.
+ * Output object returned when calling `PairregParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function pairreg_params(
     skull2: InputPathType,
     outputmatrix: InputPathType,
     extra_flirt_args: string | null = null,
-): PairregParametersTagged {
+): PairregParamsDictTagged {
     const params = {
         "@type": "fsl/pairreg" as const,
         "brain1": brain1,
@@ -84,7 +84,7 @@ function pairreg_params(
  * @returns Command-line arguments.
  */
 function pairreg_cargs(
-    params: PairregParameters,
+    params: PairregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function pairreg_cargs(
  * @returns Outputs object.
  */
 function pairreg_outputs(
-    params: PairregParameters,
+    params: PairregParamsDict,
     execution: Execution,
 ): PairregOutputs {
     const ret: PairregOutputs = {
@@ -136,7 +136,7 @@ function pairreg_outputs(
  * @returns NamedTuple of outputs (described in `PairregOutputs`).
  */
 function pairreg_execute(
-    params: PairregParameters,
+    params: PairregParamsDict,
     runner: Runner | null = null,
 ): PairregOutputs {
     runner = runner || getGlobalRunner();
@@ -185,6 +185,8 @@ function pairreg(
 export {
       PAIRREG_METADATA,
       PairregOutputs,
+      PairregParamsDict,
+      PairregParamsDictTagged,
       pairreg,
       pairreg_execute,
       pairreg_params,

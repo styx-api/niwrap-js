@@ -11,7 +11,7 @@ const SURF_PROJ_METADATA: Metadata = {
 };
 
 
-interface SurfProjParameters {
+interface SurfProjParamsDict {
     "@type"?: "fsl/surf_proj";
     "data": InputPathType;
     "surface": InputPathType;
@@ -24,11 +24,11 @@ interface SurfProjParameters {
     "operation"?: string | null | undefined;
     "surface_output"?: string | null | undefined;
 }
-type SurfProjParametersTagged = Required<Pick<SurfProjParameters, '@type'>> & SurfProjParameters;
+type SurfProjParamsDictTagged = Required<Pick<SurfProjParamsDict, '@type'>> & SurfProjParamsDict;
 
 
 /**
- * Output object returned when calling `SurfProjParameters(...)`.
+ * Output object returned when calling `SurfProjParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function surf_proj_params(
     direction: number | null = null,
     operation: string | null = null,
     surface_output: string | null = null,
-): SurfProjParametersTagged {
+): SurfProjParamsDictTagged {
     const params = {
         "@type": "fsl/surf_proj" as const,
         "data": data,
@@ -116,7 +116,7 @@ function surf_proj_params(
  * @returns Command-line arguments.
  */
 function surf_proj_cargs(
-    params: SurfProjParameters,
+    params: SurfProjParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,7 +188,7 @@ function surf_proj_cargs(
  * @returns Outputs object.
  */
 function surf_proj_outputs(
-    params: SurfProjParameters,
+    params: SurfProjParamsDict,
     execution: Execution,
 ): SurfProjOutputs {
     const ret: SurfProjOutputs = {
@@ -215,7 +215,7 @@ function surf_proj_outputs(
  * @returns NamedTuple of outputs (described in `SurfProjOutputs`).
  */
 function surf_proj_execute(
-    params: SurfProjParameters,
+    params: SurfProjParamsDict,
     runner: Runner | null = null,
 ): SurfProjOutputs {
     runner = runner || getGlobalRunner();
@@ -272,6 +272,8 @@ function surf_proj(
 export {
       SURF_PROJ_METADATA,
       SurfProjOutputs,
+      SurfProjParamsDict,
+      SurfProjParamsDictTagged,
       surf_proj,
       surf_proj_execute,
       surf_proj_params,

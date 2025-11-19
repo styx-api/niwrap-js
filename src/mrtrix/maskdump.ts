@@ -11,28 +11,28 @@ const MASKDUMP_METADATA: Metadata = {
 };
 
 
-interface MaskdumpConfigParameters {
+interface MaskdumpConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MaskdumpConfigParametersTagged = Required<Pick<MaskdumpConfigParameters, '@type'>> & MaskdumpConfigParameters;
+type MaskdumpConfigParamsDictTagged = Required<Pick<MaskdumpConfigParamsDict, '@type'>> & MaskdumpConfigParamsDict;
 
 
-interface MaskdumpParameters {
+interface MaskdumpParamsDict {
     "@type"?: "mrtrix/maskdump";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MaskdumpConfigParameters> | null | undefined;
+    "config"?: Array<MaskdumpConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-type MaskdumpParametersTagged = Required<Pick<MaskdumpParameters, '@type'>> & MaskdumpParameters;
+type MaskdumpParamsDictTagged = Required<Pick<MaskdumpParamsDict, '@type'>> & MaskdumpParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type MaskdumpParametersTagged = Required<Pick<MaskdumpParameters, '@type'>> & Ma
  *
  * @returns Parameter dictionary
  */
-function maskdump_config_params(
+function maskdump_config(
     key: string,
     value: string,
-): MaskdumpConfigParametersTagged {
+): MaskdumpConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function maskdump_config_params(
  * @returns Command-line arguments.
  */
 function maskdump_config_cargs(
-    params: MaskdumpConfigParameters,
+    params: MaskdumpConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function maskdump_config_cargs(
 
 
 /**
- * Output object returned when calling `MaskdumpParameters(...)`.
+ * Output object returned when calling `MaskdumpParamsDict(...)`.
  *
  * @interface
  */
@@ -116,11 +116,11 @@ function maskdump_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MaskdumpConfigParameters> | null = null,
+    config: Array<MaskdumpConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MaskdumpParametersTagged {
+): MaskdumpParamsDictTagged {
     const params = {
         "@type": "mrtrix/maskdump" as const,
         "info": info,
@@ -153,7 +153,7 @@ function maskdump_params(
  * @returns Command-line arguments.
  */
 function maskdump_cargs(
-    params: MaskdumpParameters,
+    params: MaskdumpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -202,7 +202,7 @@ function maskdump_cargs(
  * @returns Outputs object.
  */
 function maskdump_outputs(
-    params: MaskdumpParameters,
+    params: MaskdumpParamsDict,
     execution: Execution,
 ): MaskdumpOutputs {
     const ret: MaskdumpOutputs = {
@@ -234,7 +234,7 @@ function maskdump_outputs(
  * @returns NamedTuple of outputs (described in `MaskdumpOutputs`).
  */
 function maskdump_execute(
-    params: MaskdumpParameters,
+    params: MaskdumpParamsDict,
     runner: Runner | null = null,
 ): MaskdumpOutputs {
     runner = runner || getGlobalRunner();
@@ -283,7 +283,7 @@ function maskdump(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MaskdumpConfigParameters> | null = null,
+    config: Array<MaskdumpConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
@@ -296,9 +296,13 @@ function maskdump(
 
 export {
       MASKDUMP_METADATA,
+      MaskdumpConfigParamsDict,
+      MaskdumpConfigParamsDictTagged,
       MaskdumpOutputs,
+      MaskdumpParamsDict,
+      MaskdumpParamsDictTagged,
       maskdump,
-      maskdump_config_params,
+      maskdump_config,
       maskdump_execute,
       maskdump_params,
 };

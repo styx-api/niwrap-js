@@ -11,7 +11,7 @@ const V_3DFRACTIONIZE_METADATA: Metadata = {
 };
 
 
-interface V3dfractionizeParameters {
+interface V3dfractionizeParamsDict {
     "@type"?: "afni/3dfractionize";
     "template": InputPathType;
     "input": InputPathType;
@@ -21,11 +21,11 @@ interface V3dfractionizeParameters {
     "preserve": boolean;
     "vote": boolean;
 }
-type V3dfractionizeParametersTagged = Required<Pick<V3dfractionizeParameters, '@type'>> & V3dfractionizeParameters;
+type V3dfractionizeParamsDictTagged = Required<Pick<V3dfractionizeParamsDict, '@type'>> & V3dfractionizeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dfractionizeParameters(...)`.
+ * Output object returned when calling `V3dfractionizeParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v_3dfractionize_params(
     warp: InputPathType | null = null,
     preserve: boolean = false,
     vote: boolean = false,
-): V3dfractionizeParametersTagged {
+): V3dfractionizeParamsDictTagged {
     const params = {
         "@type": "afni/3dfractionize" as const,
         "template": template,
@@ -92,7 +92,7 @@ function v_3dfractionize_params(
  * @returns Command-line arguments.
  */
 function v_3dfractionize_cargs(
-    params: V3dfractionizeParameters,
+    params: V3dfractionizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,7 +142,7 @@ function v_3dfractionize_cargs(
  * @returns Outputs object.
  */
 function v_3dfractionize_outputs(
-    params: V3dfractionizeParameters,
+    params: V3dfractionizeParamsDict,
     execution: Execution,
 ): V3dfractionizeOutputs {
     const ret: V3dfractionizeOutputs = {
@@ -168,7 +168,7 @@ function v_3dfractionize_outputs(
  * @returns NamedTuple of outputs (described in `V3dfractionizeOutputs`).
  */
 function v_3dfractionize_execute(
-    params: V3dfractionizeParameters,
+    params: V3dfractionizeParamsDict,
     runner: Runner | null = null,
 ): V3dfractionizeOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function v_3dfractionize(
 
 export {
       V3dfractionizeOutputs,
+      V3dfractionizeParamsDict,
+      V3dfractionizeParamsDictTagged,
       V_3DFRACTIONIZE_METADATA,
       v_3dfractionize,
       v_3dfractionize_execute,

@@ -10,17 +10,17 @@ const SURFACE_MATCH_METADATA: Metadata = {
 };
 
 
-interface SurfaceMatchParameters {
+interface SurfaceMatchParamsDict {
     "@type"?: "workbench/surface-match";
     "Match Surface File": InputPathType;
     "Input Surface File": InputPathType;
     "Output Surface Name": string;
 }
-type SurfaceMatchParametersTagged = Required<Pick<SurfaceMatchParameters, '@type'>> & SurfaceMatchParameters;
+type SurfaceMatchParamsDictTagged = Required<Pick<SurfaceMatchParamsDict, '@type'>> & SurfaceMatchParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceMatchParameters(...)`.
+ * Output object returned when calling `SurfaceMatchParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function surface_match_params(
     match_surface_file: InputPathType,
     input_surface_file: InputPathType,
     output_surface_name: string,
-): SurfaceMatchParametersTagged {
+): SurfaceMatchParamsDictTagged {
     const params = {
         "@type": "workbench/surface-match" as const,
         "Match Surface File": match_surface_file,
@@ -65,7 +65,7 @@ function surface_match_params(
  * @returns Command-line arguments.
  */
 function surface_match_cargs(
-    params: SurfaceMatchParameters,
+    params: SurfaceMatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function surface_match_cargs(
  * @returns Outputs object.
  */
 function surface_match_outputs(
-    params: SurfaceMatchParameters,
+    params: SurfaceMatchParamsDict,
     execution: Execution,
 ): SurfaceMatchOutputs {
     const ret: SurfaceMatchOutputs = {
@@ -110,7 +110,7 @@ function surface_match_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceMatchOutputs`).
  */
 function surface_match_execute(
-    params: SurfaceMatchParameters,
+    params: SurfaceMatchParamsDict,
     runner: Runner | null = null,
 ): SurfaceMatchOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function surface_match(
 export {
       SURFACE_MATCH_METADATA,
       SurfaceMatchOutputs,
+      SurfaceMatchParamsDict,
+      SurfaceMatchParamsDictTagged,
       surface_match,
       surface_match_execute,
       surface_match_params,

@@ -11,7 +11,7 @@ const FS_CHECK_VERSION_METADATA: Metadata = {
 };
 
 
-interface FsCheckVersionParameters {
+interface FsCheckVersionParamsDict {
     "@type"?: "freesurfer/fs-check-version";
     "subjects_dir": string;
     "outfile": string;
@@ -21,11 +21,11 @@ interface FsCheckVersionParameters {
     "test": boolean;
     "test_debug": boolean;
 }
-type FsCheckVersionParametersTagged = Required<Pick<FsCheckVersionParameters, '@type'>> & FsCheckVersionParameters;
+type FsCheckVersionParamsDictTagged = Required<Pick<FsCheckVersionParamsDict, '@type'>> & FsCheckVersionParamsDict;
 
 
 /**
- * Output object returned when calling `FsCheckVersionParameters(...)`.
+ * Output object returned when calling `FsCheckVersionParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function fs_check_version_params(
     no_require_match: boolean = false,
     test: boolean = false,
     test_debug: boolean = false,
-): FsCheckVersionParametersTagged {
+): FsCheckVersionParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs-check-version" as const,
         "subjects_dir": subjects_dir,
@@ -88,7 +88,7 @@ function fs_check_version_params(
  * @returns Command-line arguments.
  */
 function fs_check_version_cargs(
-    params: FsCheckVersionParameters,
+    params: FsCheckVersionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function fs_check_version_cargs(
  * @returns Outputs object.
  */
 function fs_check_version_outputs(
-    params: FsCheckVersionParameters,
+    params: FsCheckVersionParamsDict,
     execution: Execution,
 ): FsCheckVersionOutputs {
     const ret: FsCheckVersionOutputs = {
@@ -158,7 +158,7 @@ function fs_check_version_outputs(
  * @returns NamedTuple of outputs (described in `FsCheckVersionOutputs`).
  */
 function fs_check_version_execute(
-    params: FsCheckVersionParameters,
+    params: FsCheckVersionParamsDict,
     runner: Runner | null = null,
 ): FsCheckVersionOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function fs_check_version(
 export {
       FS_CHECK_VERSION_METADATA,
       FsCheckVersionOutputs,
+      FsCheckVersionParamsDict,
+      FsCheckVersionParamsDictTagged,
       fs_check_version,
       fs_check_version_execute,
       fs_check_version_params,

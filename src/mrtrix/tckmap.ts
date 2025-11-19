@@ -11,35 +11,35 @@ const TCKMAP_METADATA: Metadata = {
 };
 
 
-interface TckmapVariousStringParameters {
+interface TckmapVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type TckmapVariousStringParametersTagged = Required<Pick<TckmapVariousStringParameters, '@type'>> & TckmapVariousStringParameters;
+type TckmapVariousStringParamsDictTagged = Required<Pick<TckmapVariousStringParamsDict, '@type'>> & TckmapVariousStringParamsDict;
 
 
-interface TckmapVariousFileParameters {
+interface TckmapVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type TckmapVariousFileParametersTagged = Required<Pick<TckmapVariousFileParameters, '@type'>> & TckmapVariousFileParameters;
+type TckmapVariousFileParamsDictTagged = Required<Pick<TckmapVariousFileParamsDict, '@type'>> & TckmapVariousFileParamsDict;
 
 
-interface TckmapConfigParameters {
+interface TckmapConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckmapConfigParametersTagged = Required<Pick<TckmapConfigParameters, '@type'>> & TckmapConfigParameters;
+type TckmapConfigParamsDictTagged = Required<Pick<TckmapConfigParamsDict, '@type'>> & TckmapConfigParamsDict;
 
 
-interface TckmapParameters {
+interface TckmapParamsDict {
     "@type"?: "mrtrix/tckmap";
     "template"?: InputPathType | null | undefined;
     "vox"?: Array<number> | null | undefined;
     "datatype"?: string | null | undefined;
     "dec": boolean;
-    "dixel"?: TckmapVariousStringParametersTagged | TckmapVariousFileParametersTagged | null | undefined;
+    "dixel"?: TckmapVariousStringParamsDictTagged | TckmapVariousFileParamsDictTagged | null | undefined;
     "tod"?: number | null | undefined;
     "contrast"?: string | null | undefined;
     "image"?: InputPathType | null | undefined;
@@ -58,13 +58,13 @@ interface TckmapParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckmapConfigParameters> | null | undefined;
+    "config"?: Array<TckmapConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks": InputPathType;
     "output": string;
 }
-type TckmapParametersTagged = Required<Pick<TckmapParameters, '@type'>> & TckmapParameters;
+type TckmapParamsDictTagged = Required<Pick<TckmapParamsDict, '@type'>> & TckmapParamsDict;
 
 
 /**
@@ -108,9 +108,9 @@ function tckmap_dixel_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function tckmap_various_string_params(
+function tckmap_various_string(
     obj: string,
-): TckmapVariousStringParametersTagged {
+): TckmapVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -128,7 +128,7 @@ function tckmap_various_string_params(
  * @returns Command-line arguments.
  */
 function tckmap_various_string_cargs(
-    params: TckmapVariousStringParameters,
+    params: TckmapVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,9 +144,9 @@ function tckmap_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckmap_various_file_params(
+function tckmap_various_file(
     obj: InputPathType,
-): TckmapVariousFileParametersTagged {
+): TckmapVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -164,7 +164,7 @@ function tckmap_various_file_params(
  * @returns Command-line arguments.
  */
 function tckmap_various_file_cargs(
-    params: TckmapVariousFileParameters,
+    params: TckmapVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -181,10 +181,10 @@ function tckmap_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckmap_config_params(
+function tckmap_config(
     key: string,
     value: string,
-): TckmapConfigParametersTagged {
+): TckmapConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -203,7 +203,7 @@ function tckmap_config_params(
  * @returns Command-line arguments.
  */
 function tckmap_config_cargs(
-    params: TckmapConfigParameters,
+    params: TckmapConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -215,7 +215,7 @@ function tckmap_config_cargs(
 
 
 /**
- * Output object returned when calling `TckmapParameters(...)`.
+ * Output object returned when calling `TckmapParamsDict(...)`.
  *
  * @interface
  */
@@ -277,7 +277,7 @@ function tckmap_params(
     vox: Array<number> | null = null,
     datatype: string | null = null,
     dec: boolean = false,
-    dixel: TckmapVariousStringParametersTagged | TckmapVariousFileParametersTagged | null = null,
+    dixel: TckmapVariousStringParamsDictTagged | TckmapVariousFileParamsDictTagged | null = null,
     tod: number | null = null,
     contrast: string | null = null,
     image: InputPathType | null = null,
@@ -296,10 +296,10 @@ function tckmap_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckmapConfigParameters> | null = null,
+    config: Array<TckmapConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckmapParametersTagged {
+): TckmapParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckmap" as const,
         "dec": dec,
@@ -374,7 +374,7 @@ function tckmap_params(
  * @returns Command-line arguments.
  */
 function tckmap_cargs(
-    params: TckmapParameters,
+    params: TckmapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -514,7 +514,7 @@ function tckmap_cargs(
  * @returns Outputs object.
  */
 function tckmap_outputs(
-    params: TckmapParameters,
+    params: TckmapParamsDict,
     execution: Execution,
 ): TckmapOutputs {
     const ret: TckmapOutputs = {
@@ -565,7 +565,7 @@ function tckmap_outputs(
  * @returns NamedTuple of outputs (described in `TckmapOutputs`).
  */
 function tckmap_execute(
-    params: TckmapParameters,
+    params: TckmapParamsDict,
     runner: Runner | null = null,
 ): TckmapOutputs {
     runner = runner || getGlobalRunner();
@@ -656,7 +656,7 @@ function tckmap(
     vox: Array<number> | null = null,
     datatype: string | null = null,
     dec: boolean = false,
-    dixel: TckmapVariousStringParametersTagged | TckmapVariousFileParametersTagged | null = null,
+    dixel: TckmapVariousStringParamsDictTagged | TckmapVariousFileParamsDictTagged | null = null,
     tod: number | null = null,
     contrast: string | null = null,
     image: InputPathType | null = null,
@@ -675,7 +675,7 @@ function tckmap(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckmapConfigParameters> | null = null,
+    config: Array<TckmapConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -687,11 +687,19 @@ function tckmap(
 
 export {
       TCKMAP_METADATA,
+      TckmapConfigParamsDict,
+      TckmapConfigParamsDictTagged,
       TckmapOutputs,
+      TckmapParamsDict,
+      TckmapParamsDictTagged,
+      TckmapVariousFileParamsDict,
+      TckmapVariousFileParamsDictTagged,
+      TckmapVariousStringParamsDict,
+      TckmapVariousStringParamsDictTagged,
       tckmap,
-      tckmap_config_params,
+      tckmap_config,
       tckmap_execute,
       tckmap_params,
-      tckmap_various_file_params,
-      tckmap_various_string_params,
+      tckmap_various_file,
+      tckmap_various_string,
 };

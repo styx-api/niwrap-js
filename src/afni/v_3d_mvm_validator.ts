@@ -11,16 +11,16 @@ const V_3D_MVM_VALIDATOR_METADATA: Metadata = {
 };
 
 
-interface V3dMvmValidatorParameters {
+interface V3dMvmValidatorParamsDict {
     "@type"?: "afni/3dMVM_validator";
     "datatable": InputPathType;
     "shinyfolder"?: string | null | undefined;
 }
-type V3dMvmValidatorParametersTagged = Required<Pick<V3dMvmValidatorParameters, '@type'>> & V3dMvmValidatorParameters;
+type V3dMvmValidatorParamsDictTagged = Required<Pick<V3dMvmValidatorParamsDict, '@type'>> & V3dMvmValidatorParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMvmValidatorParameters(...)`.
+ * Output object returned when calling `V3dMvmValidatorParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface V3dMvmValidatorOutputs {
 function v_3d_mvm_validator_params(
     datatable: InputPathType,
     shinyfolder: string | null = null,
-): V3dMvmValidatorParametersTagged {
+): V3dMvmValidatorParamsDictTagged {
     const params = {
         "@type": "afni/3dMVM_validator" as const,
         "datatable": datatable,
@@ -64,7 +64,7 @@ function v_3d_mvm_validator_params(
  * @returns Command-line arguments.
  */
 function v_3d_mvm_validator_cargs(
-    params: V3dMvmValidatorParameters,
+    params: V3dMvmValidatorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function v_3d_mvm_validator_cargs(
  * @returns Outputs object.
  */
 function v_3d_mvm_validator_outputs(
-    params: V3dMvmValidatorParameters,
+    params: V3dMvmValidatorParamsDict,
     execution: Execution,
 ): V3dMvmValidatorOutputs {
     const ret: V3dMvmValidatorOutputs = {
@@ -114,7 +114,7 @@ function v_3d_mvm_validator_outputs(
  * @returns NamedTuple of outputs (described in `V3dMvmValidatorOutputs`).
  */
 function v_3d_mvm_validator_execute(
-    params: V3dMvmValidatorParameters,
+    params: V3dMvmValidatorParamsDict,
     runner: Runner | null = null,
 ): V3dMvmValidatorOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function v_3d_mvm_validator(
 
 export {
       V3dMvmValidatorOutputs,
+      V3dMvmValidatorParamsDict,
+      V3dMvmValidatorParamsDictTagged,
       V_3D_MVM_VALIDATOR_METADATA,
       v_3d_mvm_validator,
       v_3d_mvm_validator_execute,

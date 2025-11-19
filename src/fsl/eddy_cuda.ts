@@ -11,7 +11,7 @@ const EDDY_CUDA_METADATA: Metadata = {
 };
 
 
-interface EddyCudaParameters {
+interface EddyCudaParamsDict {
     "@type"?: "fsl/eddy_cuda";
     "imain": InputPathType;
     "mask": InputPathType;
@@ -58,11 +58,11 @@ interface EddyCudaParameters {
     "data_is_shelled": boolean;
     "verbose": boolean;
 }
-type EddyCudaParametersTagged = Required<Pick<EddyCudaParameters, '@type'>> & EddyCudaParameters;
+type EddyCudaParamsDictTagged = Required<Pick<EddyCudaParamsDict, '@type'>> & EddyCudaParamsDict;
 
 
 /**
- * Output object returned when calling `EddyCudaParameters(...)`.
+ * Output object returned when calling `EddyCudaParamsDict(...)`.
  *
  * @interface
  */
@@ -245,7 +245,7 @@ function eddy_cuda_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyCudaParametersTagged {
+): EddyCudaParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_cuda" as const,
         "imain": imain,
@@ -358,7 +358,7 @@ function eddy_cuda_params(
  * @returns Command-line arguments.
  */
 function eddy_cuda_cargs(
-    params: EddyCudaParameters,
+    params: EddyCudaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -494,7 +494,7 @@ function eddy_cuda_cargs(
  * @returns Outputs object.
  */
 function eddy_cuda_outputs(
-    params: EddyCudaParameters,
+    params: EddyCudaParamsDict,
     execution: Execution,
 ): EddyCudaOutputs {
     const ret: EddyCudaOutputs = {
@@ -538,7 +538,7 @@ function eddy_cuda_outputs(
  * @returns NamedTuple of outputs (described in `EddyCudaOutputs`).
  */
 function eddy_cuda_execute(
-    params: EddyCudaParameters,
+    params: EddyCudaParamsDict,
     runner: Runner | null = null,
 ): EddyCudaOutputs {
     runner = runner || getGlobalRunner();
@@ -663,6 +663,8 @@ function eddy_cuda(
 export {
       EDDY_CUDA_METADATA,
       EddyCudaOutputs,
+      EddyCudaParamsDict,
+      EddyCudaParamsDictTagged,
       eddy_cuda,
       eddy_cuda_execute,
       eddy_cuda_params,

@@ -11,7 +11,7 @@ const EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA: Metadata = {
 };
 
 
-interface ExtractRegionFromImageByMaskParameters {
+interface ExtractRegionFromImageByMaskParamsDict {
     "@type"?: "ants/ExtractRegionFromImageByMask";
     "image_dimension": number;
     "input_image": InputPathType;
@@ -20,11 +20,11 @@ interface ExtractRegionFromImageByMaskParameters {
     "label"?: number | null | undefined;
     "pad_radius"?: number | null | undefined;
 }
-type ExtractRegionFromImageByMaskParametersTagged = Required<Pick<ExtractRegionFromImageByMaskParameters, '@type'>> & ExtractRegionFromImageByMaskParameters;
+type ExtractRegionFromImageByMaskParamsDictTagged = Required<Pick<ExtractRegionFromImageByMaskParamsDict, '@type'>> & ExtractRegionFromImageByMaskParamsDict;
 
 
 /**
- * Output object returned when calling `ExtractRegionFromImageByMaskParameters(...)`.
+ * Output object returned when calling `ExtractRegionFromImageByMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function extract_region_from_image_by_mask_params(
     label_mask_image: InputPathType,
     label: number | null = null,
     pad_radius: number | null = null,
-): ExtractRegionFromImageByMaskParametersTagged {
+): ExtractRegionFromImageByMaskParamsDictTagged {
     const params = {
         "@type": "ants/ExtractRegionFromImageByMask" as const,
         "image_dimension": image_dimension,
@@ -82,7 +82,7 @@ function extract_region_from_image_by_mask_params(
  * @returns Command-line arguments.
  */
 function extract_region_from_image_by_mask_cargs(
-    params: ExtractRegionFromImageByMaskParameters,
+    params: ExtractRegionFromImageByMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function extract_region_from_image_by_mask_cargs(
  * @returns Outputs object.
  */
 function extract_region_from_image_by_mask_outputs(
-    params: ExtractRegionFromImageByMaskParameters,
+    params: ExtractRegionFromImageByMaskParamsDict,
     execution: Execution,
 ): ExtractRegionFromImageByMaskOutputs {
     const ret: ExtractRegionFromImageByMaskOutputs = {
@@ -135,7 +135,7 @@ function extract_region_from_image_by_mask_outputs(
  * @returns NamedTuple of outputs (described in `ExtractRegionFromImageByMaskOutputs`).
  */
 function extract_region_from_image_by_mask_execute(
-    params: ExtractRegionFromImageByMaskParameters,
+    params: ExtractRegionFromImageByMaskParamsDict,
     runner: Runner | null = null,
 ): ExtractRegionFromImageByMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function extract_region_from_image_by_mask(
 export {
       EXTRACT_REGION_FROM_IMAGE_BY_MASK_METADATA,
       ExtractRegionFromImageByMaskOutputs,
+      ExtractRegionFromImageByMaskParamsDict,
+      ExtractRegionFromImageByMaskParamsDictTagged,
       extract_region_from_image_by_mask,
       extract_region_from_image_by_mask_execute,
       extract_region_from_image_by_mask_params,

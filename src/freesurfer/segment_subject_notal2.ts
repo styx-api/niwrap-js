@@ -11,15 +11,15 @@ const SEGMENT_SUBJECT_NOTAL2_METADATA: Metadata = {
 };
 
 
-interface SegmentSubjectNotal2Parameters {
+interface SegmentSubjectNotal2ParamsDict {
     "@type"?: "freesurfer/segment_subject_notal2";
     "license_file": InputPathType;
 }
-type SegmentSubjectNotal2ParametersTagged = Required<Pick<SegmentSubjectNotal2Parameters, '@type'>> & SegmentSubjectNotal2Parameters;
+type SegmentSubjectNotal2ParamsDictTagged = Required<Pick<SegmentSubjectNotal2ParamsDict, '@type'>> & SegmentSubjectNotal2ParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubjectNotal2Parameters(...)`.
+ * Output object returned when calling `SegmentSubjectNotal2ParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface SegmentSubjectNotal2Outputs {
  */
 function segment_subject_notal2_params(
     license_file: InputPathType,
-): SegmentSubjectNotal2ParametersTagged {
+): SegmentSubjectNotal2ParamsDictTagged {
     const params = {
         "@type": "freesurfer/segment_subject_notal2" as const,
         "license_file": license_file,
@@ -62,7 +62,7 @@ function segment_subject_notal2_params(
  * @returns Command-line arguments.
  */
 function segment_subject_notal2_cargs(
-    params: SegmentSubjectNotal2Parameters,
+    params: SegmentSubjectNotal2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function segment_subject_notal2_cargs(
  * @returns Outputs object.
  */
 function segment_subject_notal2_outputs(
-    params: SegmentSubjectNotal2Parameters,
+    params: SegmentSubjectNotal2ParamsDict,
     execution: Execution,
 ): SegmentSubjectNotal2Outputs {
     const ret: SegmentSubjectNotal2Outputs = {
@@ -110,7 +110,7 @@ function segment_subject_notal2_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubjectNotal2Outputs`).
  */
 function segment_subject_notal2_execute(
-    params: SegmentSubjectNotal2Parameters,
+    params: SegmentSubjectNotal2ParamsDict,
     runner: Runner | null = null,
 ): SegmentSubjectNotal2Outputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function segment_subject_notal2(
 export {
       SEGMENT_SUBJECT_NOTAL2_METADATA,
       SegmentSubjectNotal2Outputs,
+      SegmentSubjectNotal2ParamsDict,
+      SegmentSubjectNotal2ParamsDictTagged,
       segment_subject_notal2,
       segment_subject_notal2_execute,
       segment_subject_notal2_params,

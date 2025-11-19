@@ -11,15 +11,15 @@ const LABELSTATS_METADATA: Metadata = {
 };
 
 
-interface LabelstatsConfigParameters {
+interface LabelstatsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type LabelstatsConfigParametersTagged = Required<Pick<LabelstatsConfigParameters, '@type'>> & LabelstatsConfigParameters;
+type LabelstatsConfigParamsDictTagged = Required<Pick<LabelstatsConfigParamsDict, '@type'>> & LabelstatsConfigParamsDict;
 
 
-interface LabelstatsParameters {
+interface LabelstatsParamsDict {
     "@type"?: "mrtrix/labelstats";
     "output"?: string | null | undefined;
     "voxelspace": boolean;
@@ -28,12 +28,12 @@ interface LabelstatsParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<LabelstatsConfigParameters> | null | undefined;
+    "config"?: Array<LabelstatsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
 }
-type LabelstatsParametersTagged = Required<Pick<LabelstatsParameters, '@type'>> & LabelstatsParameters;
+type LabelstatsParamsDictTagged = Required<Pick<LabelstatsParamsDict, '@type'>> & LabelstatsParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type LabelstatsParametersTagged = Required<Pick<LabelstatsParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function labelstats_config_params(
+function labelstats_config(
     key: string,
     value: string,
-): LabelstatsConfigParametersTagged {
+): LabelstatsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function labelstats_config_params(
  * @returns Command-line arguments.
  */
 function labelstats_config_cargs(
-    params: LabelstatsConfigParameters,
+    params: LabelstatsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function labelstats_config_cargs(
 
 
 /**
- * Output object returned when calling `LabelstatsParameters(...)`.
+ * Output object returned when calling `LabelstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -116,10 +116,10 @@ function labelstats_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<LabelstatsConfigParameters> | null = null,
+    config: Array<LabelstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): LabelstatsParametersTagged {
+): LabelstatsParamsDictTagged {
     const params = {
         "@type": "mrtrix/labelstats" as const,
         "voxelspace": voxelspace,
@@ -153,7 +153,7 @@ function labelstats_params(
  * @returns Command-line arguments.
  */
 function labelstats_cargs(
-    params: LabelstatsParameters,
+    params: LabelstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function labelstats_cargs(
  * @returns Outputs object.
  */
 function labelstats_outputs(
-    params: LabelstatsParameters,
+    params: LabelstatsParamsDict,
     execution: Execution,
 ): LabelstatsOutputs {
     const ret: LabelstatsOutputs = {
@@ -239,7 +239,7 @@ function labelstats_outputs(
  * @returns NamedTuple of outputs (described in `LabelstatsOutputs`).
  */
 function labelstats_execute(
-    params: LabelstatsParameters,
+    params: LabelstatsParamsDict,
     runner: Runner | null = null,
 ): LabelstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -291,7 +291,7 @@ function labelstats(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<LabelstatsConfigParameters> | null = null,
+    config: Array<LabelstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -303,9 +303,13 @@ function labelstats(
 
 export {
       LABELSTATS_METADATA,
+      LabelstatsConfigParamsDict,
+      LabelstatsConfigParamsDictTagged,
       LabelstatsOutputs,
+      LabelstatsParamsDict,
+      LabelstatsParamsDictTagged,
       labelstats,
-      labelstats_config_params,
+      labelstats_config,
       labelstats_execute,
       labelstats_params,
 };

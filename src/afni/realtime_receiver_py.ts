@@ -11,7 +11,7 @@ const REALTIME_RECEIVER_PY_METADATA: Metadata = {
 };
 
 
-interface RealtimeReceiverPyParameters {
+interface RealtimeReceiverPyParamsDict {
     "@type"?: "afni/realtime_receiver.py";
     "show_data"?: boolean | null | undefined;
     "write_text_data"?: string | null | undefined;
@@ -26,11 +26,11 @@ interface RealtimeReceiverPyParameters {
     "tcp_port"?: number | null | undefined;
     "verbosity"?: number | null | undefined;
 }
-type RealtimeReceiverPyParametersTagged = Required<Pick<RealtimeReceiverPyParameters, '@type'>> & RealtimeReceiverPyParameters;
+type RealtimeReceiverPyParamsDictTagged = Required<Pick<RealtimeReceiverPyParamsDict, '@type'>> & RealtimeReceiverPyParamsDict;
 
 
 /**
- * Output object returned when calling `RealtimeReceiverPyParameters(...)`.
+ * Output object returned when calling `RealtimeReceiverPyParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function realtime_receiver_py_params(
     swap: boolean = false,
     tcp_port: number | null = null,
     verbosity: number | null = null,
-): RealtimeReceiverPyParametersTagged {
+): RealtimeReceiverPyParamsDictTagged {
     const params = {
         "@type": "afni/realtime_receiver.py" as const,
         "show_comm_times": show_comm_times,
@@ -120,7 +120,7 @@ function realtime_receiver_py_params(
  * @returns Command-line arguments.
  */
 function realtime_receiver_py_cargs(
-    params: RealtimeReceiverPyParameters,
+    params: RealtimeReceiverPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -201,7 +201,7 @@ function realtime_receiver_py_cargs(
  * @returns Outputs object.
  */
 function realtime_receiver_py_outputs(
-    params: RealtimeReceiverPyParameters,
+    params: RealtimeReceiverPyParamsDict,
     execution: Execution,
 ): RealtimeReceiverPyOutputs {
     const ret: RealtimeReceiverPyOutputs = {
@@ -226,7 +226,7 @@ function realtime_receiver_py_outputs(
  * @returns NamedTuple of outputs (described in `RealtimeReceiverPyOutputs`).
  */
 function realtime_receiver_py_execute(
-    params: RealtimeReceiverPyParameters,
+    params: RealtimeReceiverPyParamsDict,
     runner: Runner | null = null,
 ): RealtimeReceiverPyOutputs {
     runner = runner || getGlobalRunner();
@@ -287,6 +287,8 @@ function realtime_receiver_py(
 export {
       REALTIME_RECEIVER_PY_METADATA,
       RealtimeReceiverPyOutputs,
+      RealtimeReceiverPyParamsDict,
+      RealtimeReceiverPyParamsDictTagged,
       realtime_receiver_py,
       realtime_receiver_py_execute,
       realtime_receiver_py_params,

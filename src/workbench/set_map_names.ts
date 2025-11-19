@@ -10,22 +10,22 @@ const SET_MAP_NAMES_METADATA: Metadata = {
 };
 
 
-interface SetMapNamesMapParameters {
+interface SetMapNamesMapParamsDict {
     "@type"?: "map";
     "index": number;
     "new-name": string;
 }
-type SetMapNamesMapParametersTagged = Required<Pick<SetMapNamesMapParameters, '@type'>> & SetMapNamesMapParameters;
+type SetMapNamesMapParamsDictTagged = Required<Pick<SetMapNamesMapParamsDict, '@type'>> & SetMapNamesMapParamsDict;
 
 
-interface SetMapNamesParameters {
+interface SetMapNamesParamsDict {
     "@type"?: "workbench/set-map-names";
     "file"?: string | null | undefined;
     "file"?: string | null | undefined;
-    "map"?: Array<SetMapNamesMapParameters> | null | undefined;
+    "map"?: Array<SetMapNamesMapParamsDict> | null | undefined;
     "data-file": string;
 }
-type SetMapNamesParametersTagged = Required<Pick<SetMapNamesParameters, '@type'>> & SetMapNamesParameters;
+type SetMapNamesParamsDictTagged = Required<Pick<SetMapNamesParamsDict, '@type'>> & SetMapNamesParamsDict;
 
 
 /**
@@ -36,10 +36,10 @@ type SetMapNamesParametersTagged = Required<Pick<SetMapNamesParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function set_map_names_map_params(
+function set_map_names_map(
     index: number,
     new_name: string,
-): SetMapNamesMapParametersTagged {
+): SetMapNamesMapParamsDictTagged {
     const params = {
         "@type": "map" as const,
         "index": index,
@@ -58,7 +58,7 @@ function set_map_names_map_params(
  * @returns Command-line arguments.
  */
 function set_map_names_map_cargs(
-    params: SetMapNamesMapParameters,
+    params: SetMapNamesMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -72,7 +72,7 @@ function set_map_names_map_cargs(
 
 
 /**
- * Output object returned when calling `SetMapNamesParameters(...)`.
+ * Output object returned when calling `SetMapNamesParamsDict(...)`.
  *
  * @interface
  */
@@ -102,8 +102,8 @@ function set_map_names_params(
     file: string | null,
     file_: string | null,
     data_file: string,
-    map: Array<SetMapNamesMapParameters> | null = null,
-): SetMapNamesParametersTagged {
+    map: Array<SetMapNamesMapParamsDict> | null = null,
+): SetMapNamesParamsDictTagged {
     const params = {
         "@type": "workbench/set-map-names" as const,
         "data-file": data_file,
@@ -130,7 +130,7 @@ function set_map_names_params(
  * @returns Command-line arguments.
  */
 function set_map_names_cargs(
-    params: SetMapNamesParameters,
+    params: SetMapNamesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function set_map_names_cargs(
  * @returns Outputs object.
  */
 function set_map_names_outputs(
-    params: SetMapNamesParameters,
+    params: SetMapNamesParamsDict,
     execution: Execution,
 ): SetMapNamesOutputs {
     const ret: SetMapNamesOutputs = {
@@ -180,7 +180,7 @@ function set_map_names_outputs(
  * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
  */
 function set_map_names_execute(
-    params: SetMapNamesParameters,
+    params: SetMapNamesParamsDict,
     runner: Runner | null = null,
 ): SetMapNamesOutputs {
     runner = runner || getGlobalRunner();
@@ -214,7 +214,7 @@ function set_map_names(
     file: string | null,
     file_: string | null,
     data_file: string,
-    map: Array<SetMapNamesMapParameters> | null = null,
+    map: Array<SetMapNamesMapParamsDict> | null = null,
     runner: Runner | null = null,
 ): SetMapNamesOutputs {
     const params = set_map_names_params(file, file_, data_file, map)
@@ -224,9 +224,13 @@ function set_map_names(
 
 export {
       SET_MAP_NAMES_METADATA,
+      SetMapNamesMapParamsDict,
+      SetMapNamesMapParamsDictTagged,
       SetMapNamesOutputs,
+      SetMapNamesParamsDict,
+      SetMapNamesParamsDictTagged,
       set_map_names,
       set_map_names_execute,
-      set_map_names_map_params,
+      set_map_names_map,
       set_map_names_params,
 };

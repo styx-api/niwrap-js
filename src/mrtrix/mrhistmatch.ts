@@ -11,15 +11,15 @@ const MRHISTMATCH_METADATA: Metadata = {
 };
 
 
-interface MrhistmatchConfigParameters {
+interface MrhistmatchConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrhistmatchConfigParametersTagged = Required<Pick<MrhistmatchConfigParameters, '@type'>> & MrhistmatchConfigParameters;
+type MrhistmatchConfigParamsDictTagged = Required<Pick<MrhistmatchConfigParamsDict, '@type'>> & MrhistmatchConfigParamsDict;
 
 
-interface MrhistmatchParameters {
+interface MrhistmatchParamsDict {
     "@type"?: "mrtrix/mrhistmatch";
     "mask_input"?: InputPathType | null | undefined;
     "mask_target"?: InputPathType | null | undefined;
@@ -29,7 +29,7 @@ interface MrhistmatchParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrhistmatchConfigParameters> | null | undefined;
+    "config"?: Array<MrhistmatchConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "type": string;
@@ -37,7 +37,7 @@ interface MrhistmatchParameters {
     "target": InputPathType;
     "output": string;
 }
-type MrhistmatchParametersTagged = Required<Pick<MrhistmatchParameters, '@type'>> & MrhistmatchParameters;
+type MrhistmatchParamsDictTagged = Required<Pick<MrhistmatchParamsDict, '@type'>> & MrhistmatchParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type MrhistmatchParametersTagged = Required<Pick<MrhistmatchParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function mrhistmatch_config_params(
+function mrhistmatch_config(
     key: string,
     value: string,
-): MrhistmatchConfigParametersTagged {
+): MrhistmatchConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -70,7 +70,7 @@ function mrhistmatch_config_params(
  * @returns Command-line arguments.
  */
 function mrhistmatch_config_cargs(
-    params: MrhistmatchConfigParameters,
+    params: MrhistmatchConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mrhistmatch_config_cargs(
 
 
 /**
- * Output object returned when calling `MrhistmatchParameters(...)`.
+ * Output object returned when calling `MrhistmatchParamsDict(...)`.
  *
  * @interface
  */
@@ -132,10 +132,10 @@ function mrhistmatch_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrhistmatchConfigParameters> | null = null,
+    config: Array<MrhistmatchConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrhistmatchParametersTagged {
+): MrhistmatchParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrhistmatch" as const,
         "info": info,
@@ -177,7 +177,7 @@ function mrhistmatch_params(
  * @returns Command-line arguments.
  */
 function mrhistmatch_cargs(
-    params: MrhistmatchParameters,
+    params: MrhistmatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -244,7 +244,7 @@ function mrhistmatch_cargs(
  * @returns Outputs object.
  */
 function mrhistmatch_outputs(
-    params: MrhistmatchParameters,
+    params: MrhistmatchParamsDict,
     execution: Execution,
 ): MrhistmatchOutputs {
     const ret: MrhistmatchOutputs = {
@@ -277,7 +277,7 @@ function mrhistmatch_outputs(
  * @returns NamedTuple of outputs (described in `MrhistmatchOutputs`).
  */
 function mrhistmatch_execute(
-    params: MrhistmatchParameters,
+    params: MrhistmatchParamsDict,
     runner: Runner | null = null,
 ): MrhistmatchOutputs {
     runner = runner || getGlobalRunner();
@@ -338,7 +338,7 @@ function mrhistmatch(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrhistmatchConfigParameters> | null = null,
+    config: Array<MrhistmatchConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -350,9 +350,13 @@ function mrhistmatch(
 
 export {
       MRHISTMATCH_METADATA,
+      MrhistmatchConfigParamsDict,
+      MrhistmatchConfigParamsDictTagged,
       MrhistmatchOutputs,
+      MrhistmatchParamsDict,
+      MrhistmatchParamsDictTagged,
       mrhistmatch,
-      mrhistmatch_config_params,
+      mrhistmatch_config,
       mrhistmatch_execute,
       mrhistmatch_params,
 };

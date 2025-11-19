@@ -11,16 +11,16 @@ const PROJ_THRESH_METADATA: Metadata = {
 };
 
 
-interface ProjThreshParameters {
+interface ProjThreshParamsDict {
     "@type"?: "fsl/proj_thresh";
     "input_paths": Array<InputPathType>;
     "threshold": number;
 }
-type ProjThreshParametersTagged = Required<Pick<ProjThreshParameters, '@type'>> & ProjThreshParameters;
+type ProjThreshParamsDictTagged = Required<Pick<ProjThreshParamsDict, '@type'>> & ProjThreshParamsDict;
 
 
 /**
- * Output object returned when calling `ProjThreshParameters(...)`.
+ * Output object returned when calling `ProjThreshParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface ProjThreshOutputs {
 function proj_thresh_params(
     input_paths: Array<InputPathType>,
     threshold: number,
-): ProjThreshParametersTagged {
+): ProjThreshParamsDictTagged {
     const params = {
         "@type": "fsl/proj_thresh" as const,
         "input_paths": input_paths,
@@ -62,7 +62,7 @@ function proj_thresh_params(
  * @returns Command-line arguments.
  */
 function proj_thresh_cargs(
-    params: ProjThreshParameters,
+    params: ProjThreshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function proj_thresh_cargs(
  * @returns Outputs object.
  */
 function proj_thresh_outputs(
-    params: ProjThreshParameters,
+    params: ProjThreshParamsDict,
     execution: Execution,
 ): ProjThreshOutputs {
     const ret: ProjThreshOutputs = {
@@ -107,7 +107,7 @@ function proj_thresh_outputs(
  * @returns NamedTuple of outputs (described in `ProjThreshOutputs`).
  */
 function proj_thresh_execute(
-    params: ProjThreshParameters,
+    params: ProjThreshParamsDict,
     runner: Runner | null = null,
 ): ProjThreshOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function proj_thresh(
 export {
       PROJ_THRESH_METADATA,
       ProjThreshOutputs,
+      ProjThreshParamsDict,
+      ProjThreshParamsDictTagged,
       proj_thresh,
       proj_thresh_execute,
       proj_thresh_params,

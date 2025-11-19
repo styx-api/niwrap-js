@@ -11,15 +11,15 @@ const TCKSAMPLE_METADATA: Metadata = {
 };
 
 
-interface TcksampleConfigParameters {
+interface TcksampleConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TcksampleConfigParametersTagged = Required<Pick<TcksampleConfigParameters, '@type'>> & TcksampleConfigParameters;
+type TcksampleConfigParamsDictTagged = Required<Pick<TcksampleConfigParamsDict, '@type'>> & TcksampleConfigParamsDict;
 
 
-interface TcksampleParameters {
+interface TcksampleParamsDict {
     "@type"?: "mrtrix/tcksample";
     "stat_tck"?: string | null | undefined;
     "nointerp": boolean;
@@ -30,14 +30,14 @@ interface TcksampleParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TcksampleConfigParameters> | null | undefined;
+    "config"?: Array<TcksampleConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks": InputPathType;
     "image": InputPathType;
     "values": string;
 }
-type TcksampleParametersTagged = Required<Pick<TcksampleParameters, '@type'>> & TcksampleParameters;
+type TcksampleParamsDictTagged = Required<Pick<TcksampleParamsDict, '@type'>> & TcksampleParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type TcksampleParametersTagged = Required<Pick<TcksampleParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function tcksample_config_params(
+function tcksample_config(
     key: string,
     value: string,
-): TcksampleConfigParametersTagged {
+): TcksampleConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -70,7 +70,7 @@ function tcksample_config_params(
  * @returns Command-line arguments.
  */
 function tcksample_config_cargs(
-    params: TcksampleConfigParameters,
+    params: TcksampleConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function tcksample_config_cargs(
 
 
 /**
- * Output object returned when calling `TcksampleParameters(...)`.
+ * Output object returned when calling `TcksampleParamsDict(...)`.
  *
  * @interface
  */
@@ -132,10 +132,10 @@ function tcksample_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TcksampleConfigParameters> | null = null,
+    config: Array<TcksampleConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TcksampleParametersTagged {
+): TcksampleParamsDictTagged {
     const params = {
         "@type": "mrtrix/tcksample" as const,
         "nointerp": nointerp,
@@ -173,7 +173,7 @@ function tcksample_params(
  * @returns Command-line arguments.
  */
 function tcksample_cargs(
-    params: TcksampleParameters,
+    params: TcksampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -236,7 +236,7 @@ function tcksample_cargs(
  * @returns Outputs object.
  */
 function tcksample_outputs(
-    params: TcksampleParameters,
+    params: TcksampleParamsDict,
     execution: Execution,
 ): TcksampleOutputs {
     const ret: TcksampleOutputs = {
@@ -268,7 +268,7 @@ function tcksample_outputs(
  * @returns NamedTuple of outputs (described in `TcksampleOutputs`).
  */
 function tcksample_execute(
-    params: TcksampleParameters,
+    params: TcksampleParamsDict,
     runner: Runner | null = null,
 ): TcksampleOutputs {
     runner = runner || getGlobalRunner();
@@ -328,7 +328,7 @@ function tcksample(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TcksampleConfigParameters> | null = null,
+    config: Array<TcksampleConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -340,9 +340,13 @@ function tcksample(
 
 export {
       TCKSAMPLE_METADATA,
+      TcksampleConfigParamsDict,
+      TcksampleConfigParamsDictTagged,
       TcksampleOutputs,
+      TcksampleParamsDict,
+      TcksampleParamsDictTagged,
       tcksample,
-      tcksample_config_params,
+      tcksample_config,
       tcksample_execute,
       tcksample_params,
 };

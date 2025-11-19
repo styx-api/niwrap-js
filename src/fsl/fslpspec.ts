@@ -11,16 +11,16 @@ const FSLPSPEC_METADATA: Metadata = {
 };
 
 
-interface FslpspecParameters {
+interface FslpspecParamsDict {
     "@type"?: "fsl/fslpspec";
     "infile": InputPathType;
     "outfile"?: string | null | undefined;
 }
-type FslpspecParametersTagged = Required<Pick<FslpspecParameters, '@type'>> & FslpspecParameters;
+type FslpspecParamsDictTagged = Required<Pick<FslpspecParamsDict, '@type'>> & FslpspecParamsDict;
 
 
 /**
- * Output object returned when calling `FslpspecParameters(...)`.
+ * Output object returned when calling `FslpspecParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FslpspecOutputs {
 function fslpspec_params(
     infile: InputPathType,
     outfile: string | null = null,
-): FslpspecParametersTagged {
+): FslpspecParamsDictTagged {
     const params = {
         "@type": "fsl/fslpspec" as const,
         "infile": infile,
@@ -68,7 +68,7 @@ function fslpspec_params(
  * @returns Command-line arguments.
  */
 function fslpspec_cargs(
-    params: FslpspecParameters,
+    params: FslpspecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function fslpspec_cargs(
  * @returns Outputs object.
  */
 function fslpspec_outputs(
-    params: FslpspecParameters,
+    params: FslpspecParamsDict,
     execution: Execution,
 ): FslpspecOutputs {
     const ret: FslpspecOutputs = {
@@ -116,7 +116,7 @@ function fslpspec_outputs(
  * @returns NamedTuple of outputs (described in `FslpspecOutputs`).
  */
 function fslpspec_execute(
-    params: FslpspecParameters,
+    params: FslpspecParamsDict,
     runner: Runner | null = null,
 ): FslpspecOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function fslpspec(
 export {
       FSLPSPEC_METADATA,
       FslpspecOutputs,
+      FslpspecParamsDict,
+      FslpspecParamsDictTagged,
       fslpspec,
       fslpspec_execute,
       fslpspec_params,

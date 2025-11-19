@@ -11,7 +11,7 @@ const MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA: Metadata = {
 };
 
 
-interface MrisTransmantleDysplasiaPathsParameters {
+interface MrisTransmantleDysplasiaPathsParamsDict {
     "@type"?: "freesurfer/mris_transmantle_dysplasia_paths";
     "surface": InputPathType;
     "aseg_volume": InputPathType;
@@ -21,11 +21,11 @@ interface MrisTransmantleDysplasiaPathsParameters {
     "filter"?: Array<number> | null | undefined;
     "noise_sensitivity": boolean;
 }
-type MrisTransmantleDysplasiaPathsParametersTagged = Required<Pick<MrisTransmantleDysplasiaPathsParameters, '@type'>> & MrisTransmantleDysplasiaPathsParameters;
+type MrisTransmantleDysplasiaPathsParamsDictTagged = Required<Pick<MrisTransmantleDysplasiaPathsParamsDict, '@type'>> & MrisTransmantleDysplasiaPathsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisTransmantleDysplasiaPathsParameters(...)`.
+ * Output object returned when calling `MrisTransmantleDysplasiaPathsParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_transmantle_dysplasia_paths_params(
     output_volume: string,
     filter: Array<number> | null = null,
     noise_sensitivity: boolean = false,
-): MrisTransmantleDysplasiaPathsParametersTagged {
+): MrisTransmantleDysplasiaPathsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_transmantle_dysplasia_paths" as const,
         "surface": surface,
@@ -88,7 +88,7 @@ function mris_transmantle_dysplasia_paths_params(
  * @returns Command-line arguments.
  */
 function mris_transmantle_dysplasia_paths_cargs(
-    params: MrisTransmantleDysplasiaPathsParameters,
+    params: MrisTransmantleDysplasiaPathsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function mris_transmantle_dysplasia_paths_cargs(
  * @returns Outputs object.
  */
 function mris_transmantle_dysplasia_paths_outputs(
-    params: MrisTransmantleDysplasiaPathsParameters,
+    params: MrisTransmantleDysplasiaPathsParamsDict,
     execution: Execution,
 ): MrisTransmantleDysplasiaPathsOutputs {
     const ret: MrisTransmantleDysplasiaPathsOutputs = {
@@ -146,7 +146,7 @@ function mris_transmantle_dysplasia_paths_outputs(
  * @returns NamedTuple of outputs (described in `MrisTransmantleDysplasiaPathsOutputs`).
  */
 function mris_transmantle_dysplasia_paths_execute(
-    params: MrisTransmantleDysplasiaPathsParameters,
+    params: MrisTransmantleDysplasiaPathsParamsDict,
     runner: Runner | null = null,
 ): MrisTransmantleDysplasiaPathsOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function mris_transmantle_dysplasia_paths(
 export {
       MRIS_TRANSMANTLE_DYSPLASIA_PATHS_METADATA,
       MrisTransmantleDysplasiaPathsOutputs,
+      MrisTransmantleDysplasiaPathsParamsDict,
+      MrisTransmantleDysplasiaPathsParamsDictTagged,
       mris_transmantle_dysplasia_paths,
       mris_transmantle_dysplasia_paths_execute,
       mris_transmantle_dysplasia_paths_params,

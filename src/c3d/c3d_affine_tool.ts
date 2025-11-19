@@ -11,7 +11,7 @@ const C3D_AFFINE_TOOL_METADATA: Metadata = {
 };
 
 
-interface C3dAffineToolParameters {
+interface C3dAffineToolParamsDict {
     "@type"?: "c3d/c3d_affine_tool";
     "transform_file"?: InputPathType | null | undefined;
     "reference_file"?: InputPathType | null | undefined;
@@ -31,11 +31,11 @@ interface C3dAffineToolParameters {
     "info": boolean;
     "info_full": boolean;
 }
-type C3dAffineToolParametersTagged = Required<Pick<C3dAffineToolParameters, '@type'>> & C3dAffineToolParameters;
+type C3dAffineToolParamsDictTagged = Required<Pick<C3dAffineToolParamsDict, '@type'>> & C3dAffineToolParamsDict;
 
 
 /**
- * Output object returned when calling `C3dAffineToolParameters(...)`.
+ * Output object returned when calling `C3dAffineToolParamsDict(...)`.
  *
  * @interface
  */
@@ -100,7 +100,7 @@ function c3d_affine_tool_params(
     out_matfile: string | null = null,
     info: boolean = false,
     info_full: boolean = false,
-): C3dAffineToolParametersTagged {
+): C3dAffineToolParamsDictTagged {
     const params = {
         "@type": "c3d/c3d_affine_tool" as const,
         "invert": invert,
@@ -152,7 +152,7 @@ function c3d_affine_tool_params(
  * @returns Command-line arguments.
  */
 function c3d_affine_tool_cargs(
-    params: C3dAffineToolParameters,
+    params: C3dAffineToolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -245,7 +245,7 @@ function c3d_affine_tool_cargs(
  * @returns Outputs object.
  */
 function c3d_affine_tool_outputs(
-    params: C3dAffineToolParameters,
+    params: C3dAffineToolParamsDict,
     execution: Execution,
 ): C3dAffineToolOutputs {
     const ret: C3dAffineToolOutputs = {
@@ -273,7 +273,7 @@ function c3d_affine_tool_outputs(
  * @returns NamedTuple of outputs (described in `C3dAffineToolOutputs`).
  */
 function c3d_affine_tool_execute(
-    params: C3dAffineToolParameters,
+    params: C3dAffineToolParamsDict,
     runner: Runner | null = null,
 ): C3dAffineToolOutputs {
     runner = runner || getGlobalRunner();
@@ -344,6 +344,8 @@ function c3d_affine_tool(
 export {
       C3D_AFFINE_TOOL_METADATA,
       C3dAffineToolOutputs,
+      C3dAffineToolParamsDict,
+      C3dAffineToolParamsDictTagged,
       c3d_affine_tool,
       c3d_affine_tool_execute,
       c3d_affine_tool_params,

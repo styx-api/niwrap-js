@@ -11,16 +11,16 @@ const TBSS_X_METADATA: Metadata = {
 };
 
 
-interface TbssXParameters {
+interface TbssXParamsDict {
     "@type"?: "fsl/tbss_x";
     "scalar_dirs": Array<string>;
     "vector_dirs": Array<string>;
 }
-type TbssXParametersTagged = Required<Pick<TbssXParameters, '@type'>> & TbssXParameters;
+type TbssXParamsDictTagged = Required<Pick<TbssXParamsDict, '@type'>> & TbssXParamsDict;
 
 
 /**
- * Output object returned when calling `TbssXParameters(...)`.
+ * Output object returned when calling `TbssXParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface TbssXOutputs {
 function tbss_x_params(
     scalar_dirs: Array<string>,
     vector_dirs: Array<string>,
-): TbssXParametersTagged {
+): TbssXParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_x" as const,
         "scalar_dirs": scalar_dirs,
@@ -62,7 +62,7 @@ function tbss_x_params(
  * @returns Command-line arguments.
  */
 function tbss_x_cargs(
-    params: TbssXParameters,
+    params: TbssXParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function tbss_x_cargs(
  * @returns Outputs object.
  */
 function tbss_x_outputs(
-    params: TbssXParameters,
+    params: TbssXParamsDict,
     execution: Execution,
 ): TbssXOutputs {
     const ret: TbssXOutputs = {
@@ -107,7 +107,7 @@ function tbss_x_outputs(
  * @returns NamedTuple of outputs (described in `TbssXOutputs`).
  */
 function tbss_x_execute(
-    params: TbssXParameters,
+    params: TbssXParamsDict,
     runner: Runner | null = null,
 ): TbssXOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function tbss_x(
 export {
       TBSS_X_METADATA,
       TbssXOutputs,
+      TbssXParamsDict,
+      TbssXParamsDictTagged,
       tbss_x,
       tbss_x_execute,
       tbss_x_params,

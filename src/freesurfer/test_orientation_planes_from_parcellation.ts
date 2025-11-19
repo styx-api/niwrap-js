@@ -11,17 +11,17 @@ const TEST_ORIENTATION_PLANES_FROM_PARCELLATION_METADATA: Metadata = {
 };
 
 
-interface TestOrientationPlanesFromParcellationParameters {
+interface TestOrientationPlanesFromParcellationParamsDict {
     "@type"?: "freesurfer/testOrientationPlanesFromParcellation";
     "input_file": InputPathType;
     "output_file": string;
     "bb_flag": boolean;
 }
-type TestOrientationPlanesFromParcellationParametersTagged = Required<Pick<TestOrientationPlanesFromParcellationParameters, '@type'>> & TestOrientationPlanesFromParcellationParameters;
+type TestOrientationPlanesFromParcellationParamsDictTagged = Required<Pick<TestOrientationPlanesFromParcellationParamsDict, '@type'>> & TestOrientationPlanesFromParcellationParamsDict;
 
 
 /**
- * Output object returned when calling `TestOrientationPlanesFromParcellationParameters(...)`.
+ * Output object returned when calling `TestOrientationPlanesFromParcellationParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function test_orientation_planes_from_parcellation_params(
     input_file: InputPathType,
     output_file: string,
     bb_flag: boolean = false,
-): TestOrientationPlanesFromParcellationParametersTagged {
+): TestOrientationPlanesFromParcellationParamsDictTagged {
     const params = {
         "@type": "freesurfer/testOrientationPlanesFromParcellation" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function test_orientation_planes_from_parcellation_params(
  * @returns Command-line arguments.
  */
 function test_orientation_planes_from_parcellation_cargs(
-    params: TestOrientationPlanesFromParcellationParameters,
+    params: TestOrientationPlanesFromParcellationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function test_orientation_planes_from_parcellation_cargs(
  * @returns Outputs object.
  */
 function test_orientation_planes_from_parcellation_outputs(
-    params: TestOrientationPlanesFromParcellationParameters,
+    params: TestOrientationPlanesFromParcellationParamsDict,
     execution: Execution,
 ): TestOrientationPlanesFromParcellationOutputs {
     const ret: TestOrientationPlanesFromParcellationOutputs = {
@@ -120,7 +120,7 @@ function test_orientation_planes_from_parcellation_outputs(
  * @returns NamedTuple of outputs (described in `TestOrientationPlanesFromParcellationOutputs`).
  */
 function test_orientation_planes_from_parcellation_execute(
-    params: TestOrientationPlanesFromParcellationParameters,
+    params: TestOrientationPlanesFromParcellationParamsDict,
     runner: Runner | null = null,
 ): TestOrientationPlanesFromParcellationOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function test_orientation_planes_from_parcellation(
 export {
       TEST_ORIENTATION_PLANES_FROM_PARCELLATION_METADATA,
       TestOrientationPlanesFromParcellationOutputs,
+      TestOrientationPlanesFromParcellationParamsDict,
+      TestOrientationPlanesFromParcellationParamsDictTagged,
       test_orientation_planes_from_parcellation,
       test_orientation_planes_from_parcellation_execute,
       test_orientation_planes_from_parcellation_params,

@@ -11,18 +11,18 @@ const MRI_FSLMAT_TO_LTA_METADATA: Metadata = {
 };
 
 
-interface MriFslmatToLtaParameters {
+interface MriFslmatToLtaParamsDict {
     "@type"?: "freesurfer/mri_fslmat_to_lta";
     "src_vol": InputPathType;
     "target_vol": InputPathType;
     "fslmat_file": InputPathType;
     "lta_file": string;
 }
-type MriFslmatToLtaParametersTagged = Required<Pick<MriFslmatToLtaParameters, '@type'>> & MriFslmatToLtaParameters;
+type MriFslmatToLtaParamsDictTagged = Required<Pick<MriFslmatToLtaParamsDict, '@type'>> & MriFslmatToLtaParamsDict;
 
 
 /**
- * Output object returned when calling `MriFslmatToLtaParameters(...)`.
+ * Output object returned when calling `MriFslmatToLtaParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_fslmat_to_lta_params(
     target_vol: InputPathType,
     fslmat_file: InputPathType,
     lta_file: string,
-): MriFslmatToLtaParametersTagged {
+): MriFslmatToLtaParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fslmat_to_lta" as const,
         "src_vol": src_vol,
@@ -74,7 +74,7 @@ function mri_fslmat_to_lta_params(
  * @returns Command-line arguments.
  */
 function mri_fslmat_to_lta_cargs(
-    params: MriFslmatToLtaParameters,
+    params: MriFslmatToLtaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_fslmat_to_lta_cargs(
  * @returns Outputs object.
  */
 function mri_fslmat_to_lta_outputs(
-    params: MriFslmatToLtaParameters,
+    params: MriFslmatToLtaParamsDict,
     execution: Execution,
 ): MriFslmatToLtaOutputs {
     const ret: MriFslmatToLtaOutputs = {
@@ -122,7 +122,7 @@ function mri_fslmat_to_lta_outputs(
  * @returns NamedTuple of outputs (described in `MriFslmatToLtaOutputs`).
  */
 function mri_fslmat_to_lta_execute(
-    params: MriFslmatToLtaParameters,
+    params: MriFslmatToLtaParamsDict,
     runner: Runner | null = null,
 ): MriFslmatToLtaOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mri_fslmat_to_lta(
 export {
       MRI_FSLMAT_TO_LTA_METADATA,
       MriFslmatToLtaOutputs,
+      MriFslmatToLtaParamsDict,
+      MriFslmatToLtaParamsDictTagged,
       mri_fslmat_to_lta,
       mri_fslmat_to_lta_execute,
       mri_fslmat_to_lta_params,

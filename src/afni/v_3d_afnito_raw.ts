@@ -11,17 +11,17 @@ const V_3D_AFNITO_RAW_METADATA: Metadata = {
 };
 
 
-interface V3dAfnitoRawParameters {
+interface V3dAfnitoRawParamsDict {
     "@type"?: "afni/3dAFNItoRaw";
     "output_file"?: string | null | undefined;
     "force_float": boolean;
     "dataset": string;
 }
-type V3dAfnitoRawParametersTagged = Required<Pick<V3dAfnitoRawParameters, '@type'>> & V3dAfnitoRawParameters;
+type V3dAfnitoRawParamsDictTagged = Required<Pick<V3dAfnitoRawParamsDict, '@type'>> & V3dAfnitoRawParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAfnitoRawParameters(...)`.
+ * Output object returned when calling `V3dAfnitoRawParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function v_3d_afnito_raw_params(
     dataset: string,
     output_file: string | null = null,
     force_float: boolean = false,
-): V3dAfnitoRawParametersTagged {
+): V3dAfnitoRawParamsDictTagged {
     const params = {
         "@type": "afni/3dAFNItoRaw" as const,
         "force_float": force_float,
@@ -68,7 +68,7 @@ function v_3d_afnito_raw_params(
  * @returns Command-line arguments.
  */
 function v_3d_afnito_raw_cargs(
-    params: V3dAfnitoRawParameters,
+    params: V3dAfnitoRawParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function v_3d_afnito_raw_cargs(
  * @returns Outputs object.
  */
 function v_3d_afnito_raw_outputs(
-    params: V3dAfnitoRawParameters,
+    params: V3dAfnitoRawParamsDict,
     execution: Execution,
 ): V3dAfnitoRawOutputs {
     const ret: V3dAfnitoRawOutputs = {
@@ -121,7 +121,7 @@ function v_3d_afnito_raw_outputs(
  * @returns NamedTuple of outputs (described in `V3dAfnitoRawOutputs`).
  */
 function v_3d_afnito_raw_execute(
-    params: V3dAfnitoRawParameters,
+    params: V3dAfnitoRawParamsDict,
     runner: Runner | null = null,
 ): V3dAfnitoRawOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function v_3d_afnito_raw(
 
 export {
       V3dAfnitoRawOutputs,
+      V3dAfnitoRawParamsDict,
+      V3dAfnitoRawParamsDictTagged,
       V_3D_AFNITO_RAW_METADATA,
       v_3d_afnito_raw,
       v_3d_afnito_raw_execute,

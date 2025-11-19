@@ -11,7 +11,7 @@ const MRIS_WARP_METADATA: Metadata = {
 };
 
 
-interface MrisWarpParameters {
+interface MrisWarpParamsDict {
     "@type"?: "freesurfer/mris_warp";
     "deformvol"?: string | null | undefined;
     "m3z"?: string | null | undefined;
@@ -22,11 +22,11 @@ interface MrisWarpParameters {
     "help": boolean;
     "version": boolean;
 }
-type MrisWarpParametersTagged = Required<Pick<MrisWarpParameters, '@type'>> & MrisWarpParameters;
+type MrisWarpParamsDictTagged = Required<Pick<MrisWarpParamsDict, '@type'>> & MrisWarpParamsDict;
 
 
 /**
- * Output object returned when calling `MrisWarpParameters(...)`.
+ * Output object returned when calling `MrisWarpParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function mris_warp_params(
     abs: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisWarpParametersTagged {
+): MrisWarpParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_warp" as const,
         "abs": abs,
@@ -100,7 +100,7 @@ function mris_warp_params(
  * @returns Command-line arguments.
  */
 function mris_warp_cargs(
-    params: MrisWarpParameters,
+    params: MrisWarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -157,7 +157,7 @@ function mris_warp_cargs(
  * @returns Outputs object.
  */
 function mris_warp_outputs(
-    params: MrisWarpParameters,
+    params: MrisWarpParamsDict,
     execution: Execution,
 ): MrisWarpOutputs {
     const ret: MrisWarpOutputs = {
@@ -183,7 +183,7 @@ function mris_warp_outputs(
  * @returns NamedTuple of outputs (described in `MrisWarpOutputs`).
  */
 function mris_warp_execute(
-    params: MrisWarpParameters,
+    params: MrisWarpParamsDict,
     runner: Runner | null = null,
 ): MrisWarpOutputs {
     runner = runner || getGlobalRunner();
@@ -236,6 +236,8 @@ function mris_warp(
 export {
       MRIS_WARP_METADATA,
       MrisWarpOutputs,
+      MrisWarpParamsDict,
+      MrisWarpParamsDictTagged,
       mris_warp,
       mris_warp_execute,
       mris_warp_params,

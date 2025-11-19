@@ -11,7 +11,7 @@ const V_3D_NWARP_APPLY_METADATA: Metadata = {
 };
 
 
-interface V3dNwarpApplyParameters {
+interface V3dNwarpApplyParamsDict {
     "@type"?: "afni/3dNwarpApply";
     "nwarp": string;
     "iwarp": boolean;
@@ -28,11 +28,11 @@ interface V3dNwarpApplyParameters {
     "quiet": boolean;
     "verb": boolean;
 }
-type V3dNwarpApplyParametersTagged = Required<Pick<V3dNwarpApplyParameters, '@type'>> & V3dNwarpApplyParameters;
+type V3dNwarpApplyParamsDictTagged = Required<Pick<V3dNwarpApplyParamsDict, '@type'>> & V3dNwarpApplyParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNwarpApplyParameters(...)`.
+ * Output object returned when calling `V3dNwarpApplyParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function v_3d_nwarp_apply_params(
     wprefix: string | null = null,
     quiet: boolean = false,
     verb: boolean = false,
-): V3dNwarpApplyParametersTagged {
+): V3dNwarpApplyParamsDictTagged {
     const params = {
         "@type": "afni/3dNwarpApply" as const,
         "nwarp": nwarp,
@@ -130,7 +130,7 @@ function v_3d_nwarp_apply_params(
  * @returns Command-line arguments.
  */
 function v_3d_nwarp_apply_cargs(
-    params: V3dNwarpApplyParameters,
+    params: V3dNwarpApplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -216,7 +216,7 @@ function v_3d_nwarp_apply_cargs(
  * @returns Outputs object.
  */
 function v_3d_nwarp_apply_outputs(
-    params: V3dNwarpApplyParameters,
+    params: V3dNwarpApplyParamsDict,
     execution: Execution,
 ): V3dNwarpApplyOutputs {
     const ret: V3dNwarpApplyOutputs = {
@@ -242,7 +242,7 @@ function v_3d_nwarp_apply_outputs(
  * @returns NamedTuple of outputs (described in `V3dNwarpApplyOutputs`).
  */
 function v_3d_nwarp_apply_execute(
-    params: V3dNwarpApplyParameters,
+    params: V3dNwarpApplyParamsDict,
     runner: Runner | null = null,
 ): V3dNwarpApplyOutputs {
     runner = runner || getGlobalRunner();
@@ -306,6 +306,8 @@ function v_3d_nwarp_apply(
 
 export {
       V3dNwarpApplyOutputs,
+      V3dNwarpApplyParamsDict,
+      V3dNwarpApplyParamsDictTagged,
       V_3D_NWARP_APPLY_METADATA,
       v_3d_nwarp_apply,
       v_3d_nwarp_apply_execute,

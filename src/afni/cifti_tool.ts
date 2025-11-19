@@ -11,7 +11,7 @@ const CIFTI_TOOL_METADATA: Metadata = {
 };
 
 
-interface CiftiToolParameters {
+interface CiftiToolParamsDict {
     "@type"?: "afni/cifti_tool";
     "input_file": InputPathType;
     "as_cext": boolean;
@@ -23,11 +23,11 @@ interface CiftiToolParameters {
     "verbose_read_level"?: number | null | undefined;
     "both_verbose_levels"?: number | null | undefined;
 }
-type CiftiToolParametersTagged = Required<Pick<CiftiToolParameters, '@type'>> & CiftiToolParameters;
+type CiftiToolParamsDictTagged = Required<Pick<CiftiToolParamsDict, '@type'>> & CiftiToolParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiToolParameters(...)`.
+ * Output object returned when calling `CiftiToolParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function cifti_tool_params(
     verbose_level: number | null = null,
     verbose_read_level: number | null = null,
     both_verbose_levels: number | null = null,
-): CiftiToolParametersTagged {
+): CiftiToolParamsDictTagged {
     const params = {
         "@type": "afni/cifti_tool" as const,
         "input_file": input_file,
@@ -104,7 +104,7 @@ function cifti_tool_params(
  * @returns Command-line arguments.
  */
 function cifti_tool_cargs(
-    params: CiftiToolParameters,
+    params: CiftiToolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -165,7 +165,7 @@ function cifti_tool_cargs(
  * @returns Outputs object.
  */
 function cifti_tool_outputs(
-    params: CiftiToolParameters,
+    params: CiftiToolParamsDict,
     execution: Execution,
 ): CiftiToolOutputs {
     const ret: CiftiToolOutputs = {
@@ -191,7 +191,7 @@ function cifti_tool_outputs(
  * @returns NamedTuple of outputs (described in `CiftiToolOutputs`).
  */
 function cifti_tool_execute(
-    params: CiftiToolParameters,
+    params: CiftiToolParamsDict,
     runner: Runner | null = null,
 ): CiftiToolOutputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function cifti_tool(
 export {
       CIFTI_TOOL_METADATA,
       CiftiToolOutputs,
+      CiftiToolParamsDict,
+      CiftiToolParamsDictTagged,
       cifti_tool,
       cifti_tool_execute,
       cifti_tool_params,

@@ -11,7 +11,7 @@ const MRI_EXVIVO_NORM_METADATA: Metadata = {
 };
 
 
-interface MriExvivoNormParameters {
+interface MriExvivoNormParamsDict {
     "@type"?: "freesurfer/mri_exvivo_norm";
     "input_volume": InputPathType;
     "output_volume": string;
@@ -29,11 +29,11 @@ interface MriExvivoNormParameters {
     "weights_file"?: InputPathType | null | undefined;
     "gpu_number"?: number | null | undefined;
 }
-type MriExvivoNormParametersTagged = Required<Pick<MriExvivoNormParameters, '@type'>> & MriExvivoNormParameters;
+type MriExvivoNormParamsDictTagged = Required<Pick<MriExvivoNormParamsDict, '@type'>> & MriExvivoNormParamsDict;
 
 
 /**
- * Output object returned when calling `MriExvivoNormParameters(...)`.
+ * Output object returned when calling `MriExvivoNormParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function mri_exvivo_norm_params(
     model_file: InputPathType | null = null,
     weights_file: InputPathType | null = null,
     gpu_number: number | null = null,
-): MriExvivoNormParametersTagged {
+): MriExvivoNormParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_exvivo_norm" as const,
         "input_volume": input_volume,
@@ -134,7 +134,7 @@ function mri_exvivo_norm_params(
  * @returns Command-line arguments.
  */
 function mri_exvivo_norm_cargs(
-    params: MriExvivoNormParameters,
+    params: MriExvivoNormParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -224,7 +224,7 @@ function mri_exvivo_norm_cargs(
  * @returns Outputs object.
  */
 function mri_exvivo_norm_outputs(
-    params: MriExvivoNormParameters,
+    params: MriExvivoNormParamsDict,
     execution: Execution,
 ): MriExvivoNormOutputs {
     const ret: MriExvivoNormOutputs = {
@@ -250,7 +250,7 @@ function mri_exvivo_norm_outputs(
  * @returns NamedTuple of outputs (described in `MriExvivoNormOutputs`).
  */
 function mri_exvivo_norm_execute(
-    params: MriExvivoNormParameters,
+    params: MriExvivoNormParamsDict,
     runner: Runner | null = null,
 ): MriExvivoNormOutputs {
     runner = runner || getGlobalRunner();
@@ -317,6 +317,8 @@ function mri_exvivo_norm(
 export {
       MRI_EXVIVO_NORM_METADATA,
       MriExvivoNormOutputs,
+      MriExvivoNormParamsDict,
+      MriExvivoNormParamsDictTagged,
       mri_exvivo_norm,
       mri_exvivo_norm_execute,
       mri_exvivo_norm_params,

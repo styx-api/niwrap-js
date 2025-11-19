@@ -11,29 +11,29 @@ const MESH2VOXEL_METADATA: Metadata = {
 };
 
 
-interface Mesh2voxelConfigParameters {
+interface Mesh2voxelConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Mesh2voxelConfigParametersTagged = Required<Pick<Mesh2voxelConfigParameters, '@type'>> & Mesh2voxelConfigParameters;
+type Mesh2voxelConfigParamsDictTagged = Required<Pick<Mesh2voxelConfigParamsDict, '@type'>> & Mesh2voxelConfigParamsDict;
 
 
-interface Mesh2voxelParameters {
+interface Mesh2voxelParamsDict {
     "@type"?: "mrtrix/mesh2voxel";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Mesh2voxelConfigParameters> | null | undefined;
+    "config"?: Array<Mesh2voxelConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "source": InputPathType;
     "template": InputPathType;
     "output": string;
 }
-type Mesh2voxelParametersTagged = Required<Pick<Mesh2voxelParameters, '@type'>> & Mesh2voxelParameters;
+type Mesh2voxelParamsDictTagged = Required<Pick<Mesh2voxelParamsDict, '@type'>> & Mesh2voxelParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type Mesh2voxelParametersTagged = Required<Pick<Mesh2voxelParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function mesh2voxel_config_params(
+function mesh2voxel_config(
     key: string,
     value: string,
-): Mesh2voxelConfigParametersTagged {
+): Mesh2voxelConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function mesh2voxel_config_params(
  * @returns Command-line arguments.
  */
 function mesh2voxel_config_cargs(
-    params: Mesh2voxelConfigParameters,
+    params: Mesh2voxelConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function mesh2voxel_config_cargs(
 
 
 /**
- * Output object returned when calling `Mesh2voxelParameters(...)`.
+ * Output object returned when calling `Mesh2voxelParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function mesh2voxel_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Mesh2voxelConfigParameters> | null = null,
+    config: Array<Mesh2voxelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Mesh2voxelParametersTagged {
+): Mesh2voxelParamsDictTagged {
     const params = {
         "@type": "mrtrix/mesh2voxel" as const,
         "info": info,
@@ -155,7 +155,7 @@ function mesh2voxel_params(
  * @returns Command-line arguments.
  */
 function mesh2voxel_cargs(
-    params: Mesh2voxelParameters,
+    params: Mesh2voxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function mesh2voxel_cargs(
  * @returns Outputs object.
  */
 function mesh2voxel_outputs(
-    params: Mesh2voxelParameters,
+    params: Mesh2voxelParamsDict,
     execution: Execution,
 ): Mesh2voxelOutputs {
     const ret: Mesh2voxelOutputs = {
@@ -235,7 +235,7 @@ function mesh2voxel_outputs(
  * @returns NamedTuple of outputs (described in `Mesh2voxelOutputs`).
  */
 function mesh2voxel_execute(
-    params: Mesh2voxelParameters,
+    params: Mesh2voxelParamsDict,
     runner: Runner | null = null,
 ): Mesh2voxelOutputs {
     runner = runner || getGlobalRunner();
@@ -287,7 +287,7 @@ function mesh2voxel(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Mesh2voxelConfigParameters> | null = null,
+    config: Array<Mesh2voxelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -299,9 +299,13 @@ function mesh2voxel(
 
 export {
       MESH2VOXEL_METADATA,
+      Mesh2voxelConfigParamsDict,
+      Mesh2voxelConfigParamsDictTagged,
       Mesh2voxelOutputs,
+      Mesh2voxelParamsDict,
+      Mesh2voxelParamsDictTagged,
       mesh2voxel,
-      mesh2voxel_config_params,
+      mesh2voxel_config,
       mesh2voxel_execute,
       mesh2voxel_params,
 };

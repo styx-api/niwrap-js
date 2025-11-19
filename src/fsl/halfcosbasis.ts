@@ -11,7 +11,7 @@ const HALFCOSBASIS_METADATA: Metadata = {
 };
 
 
-interface HalfcosbasisParameters {
+interface HalfcosbasisParamsDict {
     "@type"?: "fsl/halfcosbasis";
     "hrf_param_file": InputPathType;
     "hrf_param_file_hf": InputPathType;
@@ -31,11 +31,11 @@ interface HalfcosbasisParameters {
     "help_flag": boolean;
     "help_flag_long": boolean;
 }
-type HalfcosbasisParametersTagged = Required<Pick<HalfcosbasisParameters, '@type'>> & HalfcosbasisParameters;
+type HalfcosbasisParamsDictTagged = Required<Pick<HalfcosbasisParamsDict, '@type'>> & HalfcosbasisParamsDict;
 
 
 /**
- * Output object returned when calling `HalfcosbasisParameters(...)`.
+ * Output object returned when calling `HalfcosbasisParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function halfcosbasis_params(
     temp_res: number | null = null,
     help_flag: boolean = false,
     help_flag_long: boolean = false,
-): HalfcosbasisParametersTagged {
+): HalfcosbasisParamsDictTagged {
     const params = {
         "@type": "fsl/halfcosbasis" as const,
         "hrf_param_file": hrf_param_file,
@@ -144,7 +144,7 @@ function halfcosbasis_params(
  * @returns Command-line arguments.
  */
 function halfcosbasis_cargs(
-    params: HalfcosbasisParameters,
+    params: HalfcosbasisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -248,7 +248,7 @@ function halfcosbasis_cargs(
  * @returns Outputs object.
  */
 function halfcosbasis_outputs(
-    params: HalfcosbasisParameters,
+    params: HalfcosbasisParamsDict,
     execution: Execution,
 ): HalfcosbasisOutputs {
     const ret: HalfcosbasisOutputs = {
@@ -273,7 +273,7 @@ function halfcosbasis_outputs(
  * @returns NamedTuple of outputs (described in `HalfcosbasisOutputs`).
  */
 function halfcosbasis_execute(
-    params: HalfcosbasisParameters,
+    params: HalfcosbasisParamsDict,
     runner: Runner | null = null,
 ): HalfcosbasisOutputs {
     runner = runner || getGlobalRunner();
@@ -344,6 +344,8 @@ function halfcosbasis(
 export {
       HALFCOSBASIS_METADATA,
       HalfcosbasisOutputs,
+      HalfcosbasisParamsDict,
+      HalfcosbasisParamsDictTagged,
       halfcosbasis,
       halfcosbasis_execute,
       halfcosbasis_params,

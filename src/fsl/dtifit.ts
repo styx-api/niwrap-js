@@ -11,7 +11,7 @@ const DTIFIT_METADATA: Metadata = {
 };
 
 
-interface DtifitParameters {
+interface DtifitParamsDict {
     "@type"?: "fsl/dtifit";
     "data_file": InputPathType;
     "output_basename": string;
@@ -34,11 +34,11 @@ interface DtifitParameters {
     "gradnonlin_file"?: InputPathType | null | undefined;
     "confound_regressors"?: InputPathType | null | undefined;
 }
-type DtifitParametersTagged = Required<Pick<DtifitParameters, '@type'>> & DtifitParameters;
+type DtifitParamsDictTagged = Required<Pick<DtifitParamsDict, '@type'>> & DtifitParamsDict;
 
 
 /**
- * Output object returned when calling `DtifitParameters(...)`.
+ * Output object returned when calling `DtifitParamsDict(...)`.
  *
  * @interface
  */
@@ -121,7 +121,7 @@ function dtifit_params(
     xmax: number | null = null,
     gradnonlin_file: InputPathType | null = null,
     confound_regressors: InputPathType | null = null,
-): DtifitParametersTagged {
+): DtifitParamsDictTagged {
     const params = {
         "@type": "fsl/dtifit" as const,
         "data_file": data_file,
@@ -174,7 +174,7 @@ function dtifit_params(
  * @returns Command-line arguments.
  */
 function dtifit_cargs(
-    params: DtifitParameters,
+    params: DtifitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -281,7 +281,7 @@ function dtifit_cargs(
  * @returns Outputs object.
  */
 function dtifit_outputs(
-    params: DtifitParameters,
+    params: DtifitParamsDict,
     execution: Execution,
 ): DtifitOutputs {
     const ret: DtifitOutputs = {
@@ -312,7 +312,7 @@ function dtifit_outputs(
  * @returns NamedTuple of outputs (described in `DtifitOutputs`).
  */
 function dtifit_execute(
-    params: DtifitParameters,
+    params: DtifitParamsDict,
     runner: Runner | null = null,
 ): DtifitOutputs {
     runner = runner || getGlobalRunner();
@@ -389,6 +389,8 @@ function dtifit(
 export {
       DTIFIT_METADATA,
       DtifitOutputs,
+      DtifitParamsDict,
+      DtifitParamsDictTagged,
       dtifit,
       dtifit_execute,
       dtifit_params,

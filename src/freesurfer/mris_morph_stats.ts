@@ -11,18 +11,18 @@ const MRIS_MORPH_STATS_METADATA: Metadata = {
 };
 
 
-interface MrisMorphStatsParameters {
+interface MrisMorphStatsParamsDict {
     "@type"?: "freesurfer/mris_morph_stats";
     "subject_name": string;
     "hemisphere": "lh" | "rh";
     "morphed_surface": InputPathType;
     "output_name": string;
 }
-type MrisMorphStatsParametersTagged = Required<Pick<MrisMorphStatsParameters, '@type'>> & MrisMorphStatsParameters;
+type MrisMorphStatsParamsDictTagged = Required<Pick<MrisMorphStatsParamsDict, '@type'>> & MrisMorphStatsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMorphStatsParameters(...)`.
+ * Output object returned when calling `MrisMorphStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_morph_stats_params(
     hemisphere: "lh" | "rh",
     morphed_surface: InputPathType,
     output_name: string,
-): MrisMorphStatsParametersTagged {
+): MrisMorphStatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_morph_stats" as const,
         "subject_name": subject_name,
@@ -74,7 +74,7 @@ function mris_morph_stats_params(
  * @returns Command-line arguments.
  */
 function mris_morph_stats_cargs(
-    params: MrisMorphStatsParameters,
+    params: MrisMorphStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_morph_stats_cargs(
  * @returns Outputs object.
  */
 function mris_morph_stats_outputs(
-    params: MrisMorphStatsParameters,
+    params: MrisMorphStatsParamsDict,
     execution: Execution,
 ): MrisMorphStatsOutputs {
     const ret: MrisMorphStatsOutputs = {
@@ -122,7 +122,7 @@ function mris_morph_stats_outputs(
  * @returns NamedTuple of outputs (described in `MrisMorphStatsOutputs`).
  */
 function mris_morph_stats_execute(
-    params: MrisMorphStatsParameters,
+    params: MrisMorphStatsParamsDict,
     runner: Runner | null = null,
 ): MrisMorphStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_morph_stats(
 export {
       MRIS_MORPH_STATS_METADATA,
       MrisMorphStatsOutputs,
+      MrisMorphStatsParamsDict,
+      MrisMorphStatsParamsDictTagged,
       mris_morph_stats,
       mris_morph_stats_execute,
       mris_morph_stats_params,

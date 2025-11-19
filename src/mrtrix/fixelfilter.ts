@@ -11,43 +11,43 @@ const FIXELFILTER_METADATA: Metadata = {
 };
 
 
-interface FixelfilterConfigParameters {
+interface FixelfilterConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type FixelfilterConfigParametersTagged = Required<Pick<FixelfilterConfigParameters, '@type'>> & FixelfilterConfigParameters;
+type FixelfilterConfigParamsDictTagged = Required<Pick<FixelfilterConfigParamsDict, '@type'>> & FixelfilterConfigParamsDict;
 
 
-interface FixelfilterVariousStringParameters {
+interface FixelfilterVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type FixelfilterVariousStringParametersTagged = Required<Pick<FixelfilterVariousStringParameters, '@type'>> & FixelfilterVariousStringParameters;
+type FixelfilterVariousStringParamsDictTagged = Required<Pick<FixelfilterVariousStringParamsDict, '@type'>> & FixelfilterVariousStringParamsDict;
 
 
-interface FixelfilterVariousFileParameters {
+interface FixelfilterVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type FixelfilterVariousFileParametersTagged = Required<Pick<FixelfilterVariousFileParameters, '@type'>> & FixelfilterVariousFileParameters;
+type FixelfilterVariousFileParamsDictTagged = Required<Pick<FixelfilterVariousFileParamsDict, '@type'>> & FixelfilterVariousFileParamsDict;
 
 
-interface FixelfilterVariousString1Parameters {
+interface FixelfilterVariousString1ParamsDict {
     "@type"?: "VariousString_1";
     "obj": string;
 }
-type FixelfilterVariousString1ParametersTagged = Required<Pick<FixelfilterVariousString1Parameters, '@type'>> & FixelfilterVariousString1Parameters;
+type FixelfilterVariousString1ParamsDictTagged = Required<Pick<FixelfilterVariousString1ParamsDict, '@type'>> & FixelfilterVariousString1ParamsDict;
 
 
-interface FixelfilterVariousFile1Parameters {
+interface FixelfilterVariousFile1ParamsDict {
     "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
-type FixelfilterVariousFile1ParametersTagged = Required<Pick<FixelfilterVariousFile1Parameters, '@type'>> & FixelfilterVariousFile1Parameters;
+type FixelfilterVariousFile1ParamsDictTagged = Required<Pick<FixelfilterVariousFile1ParamsDict, '@type'>> & FixelfilterVariousFile1ParamsDict;
 
 
-interface FixelfilterParameters {
+interface FixelfilterParamsDict {
     "@type"?: "mrtrix/fixelfilter";
     "matrix": InputPathType;
     "threshold_value"?: number | null | undefined;
@@ -60,14 +60,14 @@ interface FixelfilterParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<FixelfilterConfigParameters> | null | undefined;
+    "config"?: Array<FixelfilterConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "input": FixelfilterVariousStringParametersTagged | FixelfilterVariousFileParametersTagged;
+    "input": FixelfilterVariousStringParamsDictTagged | FixelfilterVariousFileParamsDictTagged;
     "filter": string;
-    "output": FixelfilterVariousString1ParametersTagged | FixelfilterVariousFile1ParametersTagged;
+    "output": FixelfilterVariousString1ParamsDictTagged | FixelfilterVariousFile1ParamsDictTagged;
 }
-type FixelfilterParametersTagged = Required<Pick<FixelfilterParameters, '@type'>> & FixelfilterParameters;
+type FixelfilterParamsDictTagged = Required<Pick<FixelfilterParamsDict, '@type'>> & FixelfilterParamsDict;
 
 
 /**
@@ -146,10 +146,10 @@ function fixelfilter_output_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function fixelfilter_config_params(
+function fixelfilter_config(
     key: string,
     value: string,
-): FixelfilterConfigParametersTagged {
+): FixelfilterConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -168,7 +168,7 @@ function fixelfilter_config_params(
  * @returns Command-line arguments.
  */
 function fixelfilter_config_cargs(
-    params: FixelfilterConfigParameters,
+    params: FixelfilterConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -186,9 +186,9 @@ function fixelfilter_config_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelfilter_various_string_params(
+function fixelfilter_various_string(
     obj: string,
-): FixelfilterVariousStringParametersTagged {
+): FixelfilterVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -206,7 +206,7 @@ function fixelfilter_various_string_params(
  * @returns Command-line arguments.
  */
 function fixelfilter_various_string_cargs(
-    params: FixelfilterVariousStringParameters,
+    params: FixelfilterVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,9 +222,9 @@ function fixelfilter_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelfilter_various_file_params(
+function fixelfilter_various_file(
     obj: InputPathType,
-): FixelfilterVariousFileParametersTagged {
+): FixelfilterVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -242,7 +242,7 @@ function fixelfilter_various_file_params(
  * @returns Command-line arguments.
  */
 function fixelfilter_various_file_cargs(
-    params: FixelfilterVariousFileParameters,
+    params: FixelfilterVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -258,9 +258,9 @@ function fixelfilter_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelfilter_various_string_1_params(
+function fixelfilter_various_string_1(
     obj: string,
-): FixelfilterVariousString1ParametersTagged {
+): FixelfilterVariousString1ParamsDictTagged {
     const params = {
         "@type": "VariousString_1" as const,
         "obj": obj,
@@ -278,7 +278,7 @@ function fixelfilter_various_string_1_params(
  * @returns Command-line arguments.
  */
 function fixelfilter_various_string_1_cargs(
-    params: FixelfilterVariousString1Parameters,
+    params: FixelfilterVariousString1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -294,9 +294,9 @@ function fixelfilter_various_string_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelfilter_various_file_1_params(
+function fixelfilter_various_file_1(
     obj: InputPathType,
-): FixelfilterVariousFile1ParametersTagged {
+): FixelfilterVariousFile1ParamsDictTagged {
     const params = {
         "@type": "VariousFile_1" as const,
         "obj": obj,
@@ -314,7 +314,7 @@ function fixelfilter_various_file_1_params(
  * @returns Command-line arguments.
  */
 function fixelfilter_various_file_1_cargs(
-    params: FixelfilterVariousFile1Parameters,
+    params: FixelfilterVariousFile1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -324,7 +324,7 @@ function fixelfilter_various_file_1_cargs(
 
 
 /**
- * Output object returned when calling `FixelfilterParameters(...)`.
+ * Output object returned when calling `FixelfilterParamsDict(...)`.
  *
  * @interface
  */
@@ -361,9 +361,9 @@ interface FixelfilterOutputs {
  */
 function fixelfilter_params(
     matrix: InputPathType,
-    input: FixelfilterVariousStringParametersTagged | FixelfilterVariousFileParametersTagged,
+    input: FixelfilterVariousStringParamsDictTagged | FixelfilterVariousFileParamsDictTagged,
     filter: string,
-    output: FixelfilterVariousString1ParametersTagged | FixelfilterVariousFile1ParametersTagged,
+    output: FixelfilterVariousString1ParamsDictTagged | FixelfilterVariousFile1ParamsDictTagged,
     threshold_value: number | null = null,
     threshold_connectivity: number | null = null,
     fwhm: number | null = null,
@@ -374,10 +374,10 @@ function fixelfilter_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelfilterConfigParameters> | null = null,
+    config: Array<FixelfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelfilterParametersTagged {
+): FixelfilterParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixelfilter" as const,
         "matrix": matrix,
@@ -425,7 +425,7 @@ function fixelfilter_params(
  * @returns Command-line arguments.
  */
 function fixelfilter_cargs(
-    params: FixelfilterParameters,
+    params: FixelfilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -507,7 +507,7 @@ function fixelfilter_cargs(
  * @returns Outputs object.
  */
 function fixelfilter_outputs(
-    params: FixelfilterParameters,
+    params: FixelfilterParamsDict,
     execution: Execution,
 ): FixelfilterOutputs {
     const ret: FixelfilterOutputs = {
@@ -538,7 +538,7 @@ function fixelfilter_outputs(
  * @returns NamedTuple of outputs (described in `FixelfilterOutputs`).
  */
 function fixelfilter_execute(
-    params: FixelfilterParameters,
+    params: FixelfilterParamsDict,
     runner: Runner | null = null,
 ): FixelfilterOutputs {
     runner = runner || getGlobalRunner();
@@ -589,9 +589,9 @@ function fixelfilter_execute(
  */
 function fixelfilter(
     matrix: InputPathType,
-    input: FixelfilterVariousStringParametersTagged | FixelfilterVariousFileParametersTagged,
+    input: FixelfilterVariousStringParamsDictTagged | FixelfilterVariousFileParamsDictTagged,
     filter: string,
-    output: FixelfilterVariousString1ParametersTagged | FixelfilterVariousFile1ParametersTagged,
+    output: FixelfilterVariousString1ParamsDictTagged | FixelfilterVariousFile1ParamsDictTagged,
     threshold_value: number | null = null,
     threshold_connectivity: number | null = null,
     fwhm: number | null = null,
@@ -602,7 +602,7 @@ function fixelfilter(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelfilterConfigParameters> | null = null,
+    config: Array<FixelfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -614,13 +614,25 @@ function fixelfilter(
 
 export {
       FIXELFILTER_METADATA,
+      FixelfilterConfigParamsDict,
+      FixelfilterConfigParamsDictTagged,
       FixelfilterOutputs,
+      FixelfilterParamsDict,
+      FixelfilterParamsDictTagged,
+      FixelfilterVariousFile1ParamsDict,
+      FixelfilterVariousFile1ParamsDictTagged,
+      FixelfilterVariousFileParamsDict,
+      FixelfilterVariousFileParamsDictTagged,
+      FixelfilterVariousString1ParamsDict,
+      FixelfilterVariousString1ParamsDictTagged,
+      FixelfilterVariousStringParamsDict,
+      FixelfilterVariousStringParamsDictTagged,
       fixelfilter,
-      fixelfilter_config_params,
+      fixelfilter_config,
       fixelfilter_execute,
       fixelfilter_params,
-      fixelfilter_various_file_1_params,
-      fixelfilter_various_file_params,
-      fixelfilter_various_string_1_params,
-      fixelfilter_various_string_params,
+      fixelfilter_various_file,
+      fixelfilter_various_file_1,
+      fixelfilter_various_string,
+      fixelfilter_various_string_1,
 };

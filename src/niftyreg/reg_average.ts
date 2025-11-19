@@ -11,16 +11,16 @@ const REG_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface RegAverageParameters {
+interface RegAverageParamsDict {
     "@type"?: "niftyreg/reg_average";
     "output_file": string;
     "input_files": Array<InputPathType>;
 }
-type RegAverageParametersTagged = Required<Pick<RegAverageParameters, '@type'>> & RegAverageParameters;
+type RegAverageParamsDictTagged = Required<Pick<RegAverageParamsDict, '@type'>> & RegAverageParamsDict;
 
 
 /**
- * Output object returned when calling `RegAverageParameters(...)`.
+ * Output object returned when calling `RegAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface RegAverageOutputs {
 function reg_average_params(
     output_file: string,
     input_files: Array<InputPathType>,
-): RegAverageParametersTagged {
+): RegAverageParamsDictTagged {
     const params = {
         "@type": "niftyreg/reg_average" as const,
         "output_file": output_file,
@@ -66,7 +66,7 @@ function reg_average_params(
  * @returns Command-line arguments.
  */
 function reg_average_cargs(
-    params: RegAverageParameters,
+    params: RegAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function reg_average_cargs(
  * @returns Outputs object.
  */
 function reg_average_outputs(
-    params: RegAverageParameters,
+    params: RegAverageParamsDict,
     execution: Execution,
 ): RegAverageOutputs {
     const ret: RegAverageOutputs = {
@@ -112,7 +112,7 @@ function reg_average_outputs(
  * @returns NamedTuple of outputs (described in `RegAverageOutputs`).
  */
 function reg_average_execute(
-    params: RegAverageParameters,
+    params: RegAverageParamsDict,
     runner: Runner | null = null,
 ): RegAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function reg_average(
 export {
       REG_AVERAGE_METADATA,
       RegAverageOutputs,
+      RegAverageParamsDict,
+      RegAverageParamsDictTagged,
       reg_average,
       reg_average_execute,
       reg_average_params,

@@ -11,37 +11,37 @@ const MRGRID_METADATA: Metadata = {
 };
 
 
-interface MrgridAxisParameters {
+interface MrgridAxisParamsDict {
     "@type"?: "axis";
     "index": number;
     "spec": string;
 }
-type MrgridAxisParametersTagged = Required<Pick<MrgridAxisParameters, '@type'>> & MrgridAxisParameters;
+type MrgridAxisParamsDictTagged = Required<Pick<MrgridAxisParamsDict, '@type'>> & MrgridAxisParamsDict;
 
 
-interface MrgridVariousStringParameters {
+interface MrgridVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type MrgridVariousStringParametersTagged = Required<Pick<MrgridVariousStringParameters, '@type'>> & MrgridVariousStringParameters;
+type MrgridVariousStringParamsDictTagged = Required<Pick<MrgridVariousStringParamsDict, '@type'>> & MrgridVariousStringParamsDict;
 
 
-interface MrgridVariousFileParameters {
+interface MrgridVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type MrgridVariousFileParametersTagged = Required<Pick<MrgridVariousFileParameters, '@type'>> & MrgridVariousFileParameters;
+type MrgridVariousFileParamsDictTagged = Required<Pick<MrgridVariousFileParamsDict, '@type'>> & MrgridVariousFileParamsDict;
 
 
-interface MrgridConfigParameters {
+interface MrgridConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrgridConfigParametersTagged = Required<Pick<MrgridConfigParameters, '@type'>> & MrgridConfigParameters;
+type MrgridConfigParamsDictTagged = Required<Pick<MrgridConfigParamsDict, '@type'>> & MrgridConfigParamsDict;
 
 
-interface MrgridParameters {
+interface MrgridParamsDict {
     "@type"?: "mrtrix/mrgrid";
     "template"?: InputPathType | null | undefined;
     "size"?: Array<number> | null | undefined;
@@ -53,24 +53,24 @@ interface MrgridParameters {
     "uniform"?: number | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "crop_unbound": boolean;
-    "axis"?: Array<MrgridAxisParameters> | null | undefined;
+    "axis"?: Array<MrgridAxisParamsDict> | null | undefined;
     "all_axes": boolean;
     "fill"?: number | null | undefined;
-    "strides"?: MrgridVariousStringParametersTagged | MrgridVariousFileParametersTagged | null | undefined;
+    "strides"?: MrgridVariousStringParamsDictTagged | MrgridVariousFileParamsDictTagged | null | undefined;
     "datatype"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrgridConfigParameters> | null | undefined;
+    "config"?: Array<MrgridConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "operation": string;
     "output": string;
 }
-type MrgridParametersTagged = Required<Pick<MrgridParameters, '@type'>> & MrgridParameters;
+type MrgridParamsDictTagged = Required<Pick<MrgridParamsDict, '@type'>> & MrgridParamsDict;
 
 
 /**
@@ -115,10 +115,10 @@ function mrgrid_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function mrgrid_axis_params(
+function mrgrid_axis(
     index: number,
     spec: string,
-): MrgridAxisParametersTagged {
+): MrgridAxisParamsDictTagged {
     const params = {
         "@type": "axis" as const,
         "index": index,
@@ -137,7 +137,7 @@ function mrgrid_axis_params(
  * @returns Command-line arguments.
  */
 function mrgrid_axis_cargs(
-    params: MrgridAxisParameters,
+    params: MrgridAxisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,9 +155,9 @@ function mrgrid_axis_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrgrid_various_string_params(
+function mrgrid_various_string(
     obj: string,
-): MrgridVariousStringParametersTagged {
+): MrgridVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -175,7 +175,7 @@ function mrgrid_various_string_params(
  * @returns Command-line arguments.
  */
 function mrgrid_various_string_cargs(
-    params: MrgridVariousStringParameters,
+    params: MrgridVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -191,9 +191,9 @@ function mrgrid_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrgrid_various_file_params(
+function mrgrid_various_file(
     obj: InputPathType,
-): MrgridVariousFileParametersTagged {
+): MrgridVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -211,7 +211,7 @@ function mrgrid_various_file_params(
  * @returns Command-line arguments.
  */
 function mrgrid_various_file_cargs(
-    params: MrgridVariousFileParameters,
+    params: MrgridVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -228,10 +228,10 @@ function mrgrid_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrgrid_config_params(
+function mrgrid_config(
     key: string,
     value: string,
-): MrgridConfigParametersTagged {
+): MrgridConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -250,7 +250,7 @@ function mrgrid_config_params(
  * @returns Command-line arguments.
  */
 function mrgrid_config_cargs(
-    params: MrgridConfigParameters,
+    params: MrgridConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -262,7 +262,7 @@ function mrgrid_config_cargs(
 
 
 /**
- * Output object returned when calling `MrgridParameters(...)`.
+ * Output object returned when calling `MrgridParamsDict(...)`.
  *
  * @interface
  */
@@ -324,20 +324,20 @@ function mrgrid_params(
     uniform: number | null = null,
     mask: InputPathType | null = null,
     crop_unbound: boolean = false,
-    axis: Array<MrgridAxisParameters> | null = null,
+    axis: Array<MrgridAxisParamsDict> | null = null,
     all_axes: boolean = false,
     fill: number | null = null,
-    strides: MrgridVariousStringParametersTagged | MrgridVariousFileParametersTagged | null = null,
+    strides: MrgridVariousStringParamsDictTagged | MrgridVariousFileParamsDictTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrgridConfigParameters> | null = null,
+    config: Array<MrgridConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrgridParametersTagged {
+): MrgridParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrgrid" as const,
         "crop_unbound": crop_unbound,
@@ -410,7 +410,7 @@ function mrgrid_params(
  * @returns Command-line arguments.
  */
 function mrgrid_cargs(
-    params: MrgridParameters,
+    params: MrgridParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -539,7 +539,7 @@ function mrgrid_cargs(
  * @returns Outputs object.
  */
 function mrgrid_outputs(
-    params: MrgridParameters,
+    params: MrgridParamsDict,
     execution: Execution,
 ): MrgridOutputs {
     const ret: MrgridOutputs = {
@@ -577,7 +577,7 @@ function mrgrid_outputs(
  * @returns NamedTuple of outputs (described in `MrgridOutputs`).
  */
 function mrgrid_execute(
-    params: MrgridParameters,
+    params: MrgridParamsDict,
     runner: Runner | null = null,
 ): MrgridOutputs {
     runner = runner || getGlobalRunner();
@@ -655,17 +655,17 @@ function mrgrid(
     uniform: number | null = null,
     mask: InputPathType | null = null,
     crop_unbound: boolean = false,
-    axis: Array<MrgridAxisParameters> | null = null,
+    axis: Array<MrgridAxisParamsDict> | null = null,
     all_axes: boolean = false,
     fill: number | null = null,
-    strides: MrgridVariousStringParametersTagged | MrgridVariousFileParametersTagged | null = null,
+    strides: MrgridVariousStringParamsDictTagged | MrgridVariousFileParamsDictTagged | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrgridConfigParameters> | null = null,
+    config: Array<MrgridConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -677,12 +677,22 @@ function mrgrid(
 
 export {
       MRGRID_METADATA,
+      MrgridAxisParamsDict,
+      MrgridAxisParamsDictTagged,
+      MrgridConfigParamsDict,
+      MrgridConfigParamsDictTagged,
       MrgridOutputs,
+      MrgridParamsDict,
+      MrgridParamsDictTagged,
+      MrgridVariousFileParamsDict,
+      MrgridVariousFileParamsDictTagged,
+      MrgridVariousStringParamsDict,
+      MrgridVariousStringParamsDictTagged,
       mrgrid,
-      mrgrid_axis_params,
-      mrgrid_config_params,
+      mrgrid_axis,
+      mrgrid_config,
       mrgrid_execute,
       mrgrid_params,
-      mrgrid_various_file_params,
-      mrgrid_various_string_params,
+      mrgrid_various_file,
+      mrgrid_various_string,
 };

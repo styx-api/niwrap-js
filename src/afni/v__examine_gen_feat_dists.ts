@@ -11,7 +11,7 @@ const V__EXAMINE_GEN_FEAT_DISTS_METADATA: Metadata = {
 };
 
 
-interface VExamineGenFeatDistsParameters {
+interface VExamineGenFeatDistsParamsDict {
     "@type"?: "afni/@ExamineGenFeatDists";
     "features_dir": string;
     "wildcards"?: Array<string> | null | undefined;
@@ -23,11 +23,11 @@ interface VExamineGenFeatDistsParameters {
     "echo": boolean;
     "help": boolean;
 }
-type VExamineGenFeatDistsParametersTagged = Required<Pick<VExamineGenFeatDistsParameters, '@type'>> & VExamineGenFeatDistsParameters;
+type VExamineGenFeatDistsParamsDictTagged = Required<Pick<VExamineGenFeatDistsParamsDict, '@type'>> & VExamineGenFeatDistsParamsDict;
 
 
 /**
- * Output object returned when calling `VExamineGenFeatDistsParameters(...)`.
+ * Output object returned when calling `VExamineGenFeatDistsParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function v__examine_gen_feat_dists_params(
     panels_horizontal: number | null = null,
     echo: boolean = false,
     help: boolean = false,
-): VExamineGenFeatDistsParametersTagged {
+): VExamineGenFeatDistsParamsDictTagged {
     const params = {
         "@type": "afni/@ExamineGenFeatDists" as const,
         "features_dir": features_dir,
@@ -102,7 +102,7 @@ function v__examine_gen_feat_dists_params(
  * @returns Command-line arguments.
  */
 function v__examine_gen_feat_dists_cargs(
-    params: VExamineGenFeatDistsParameters,
+    params: VExamineGenFeatDistsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -166,7 +166,7 @@ function v__examine_gen_feat_dists_cargs(
  * @returns Outputs object.
  */
 function v__examine_gen_feat_dists_outputs(
-    params: VExamineGenFeatDistsParameters,
+    params: VExamineGenFeatDistsParamsDict,
     execution: Execution,
 ): VExamineGenFeatDistsOutputs {
     const ret: VExamineGenFeatDistsOutputs = {
@@ -191,7 +191,7 @@ function v__examine_gen_feat_dists_outputs(
  * @returns NamedTuple of outputs (described in `VExamineGenFeatDistsOutputs`).
  */
 function v__examine_gen_feat_dists_execute(
-    params: VExamineGenFeatDistsParameters,
+    params: VExamineGenFeatDistsParamsDict,
     runner: Runner | null = null,
 ): VExamineGenFeatDistsOutputs {
     runner = runner || getGlobalRunner();
@@ -245,6 +245,8 @@ function v__examine_gen_feat_dists(
 
 export {
       VExamineGenFeatDistsOutputs,
+      VExamineGenFeatDistsParamsDict,
+      VExamineGenFeatDistsParamsDictTagged,
       V__EXAMINE_GEN_FEAT_DISTS_METADATA,
       v__examine_gen_feat_dists,
       v__examine_gen_feat_dists_execute,

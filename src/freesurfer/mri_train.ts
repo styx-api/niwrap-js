@@ -11,16 +11,16 @@ const MRI_TRAIN_METADATA: Metadata = {
 };
 
 
-interface MriTrainParameters {
+interface MriTrainParamsDict {
     "@type"?: "freesurfer/mri_train";
     "training_file": InputPathType;
     "output_file": string;
 }
-type MriTrainParametersTagged = Required<Pick<MriTrainParameters, '@type'>> & MriTrainParameters;
+type MriTrainParamsDictTagged = Required<Pick<MriTrainParamsDict, '@type'>> & MriTrainParamsDict;
 
 
 /**
- * Output object returned when calling `MriTrainParameters(...)`.
+ * Output object returned when calling `MriTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriTrainOutputs {
 function mri_train_params(
     training_file: InputPathType,
     output_file: string,
-): MriTrainParametersTagged {
+): MriTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_train" as const,
         "training_file": training_file,
@@ -66,7 +66,7 @@ function mri_train_params(
  * @returns Command-line arguments.
  */
 function mri_train_cargs(
-    params: MriTrainParameters,
+    params: MriTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_train_cargs(
  * @returns Outputs object.
  */
 function mri_train_outputs(
-    params: MriTrainParameters,
+    params: MriTrainParamsDict,
     execution: Execution,
 ): MriTrainOutputs {
     const ret: MriTrainOutputs = {
@@ -112,7 +112,7 @@ function mri_train_outputs(
  * @returns NamedTuple of outputs (described in `MriTrainOutputs`).
  */
 function mri_train_execute(
-    params: MriTrainParameters,
+    params: MriTrainParamsDict,
     runner: Runner | null = null,
 ): MriTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_train(
 export {
       MRI_TRAIN_METADATA,
       MriTrainOutputs,
+      MriTrainParamsDict,
+      MriTrainParamsDictTagged,
       mri_train,
       mri_train_execute,
       mri_train_params,

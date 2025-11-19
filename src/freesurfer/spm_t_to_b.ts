@@ -11,16 +11,16 @@ const SPM_T_TO_B_METADATA: Metadata = {
 };
 
 
-interface SpmTToBParameters {
+interface SpmTToBParamsDict {
     "@type"?: "freesurfer/spm_t_to_b";
     "spm_stem_format": string;
     "bshort_stem": string;
 }
-type SpmTToBParametersTagged = Required<Pick<SpmTToBParameters, '@type'>> & SpmTToBParameters;
+type SpmTToBParamsDictTagged = Required<Pick<SpmTToBParamsDict, '@type'>> & SpmTToBParamsDict;
 
 
 /**
- * Output object returned when calling `SpmTToBParameters(...)`.
+ * Output object returned when calling `SpmTToBParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface SpmTToBOutputs {
 function spm_t_to_b_params(
     spm_stem_format: string,
     bshort_stem: string,
-): SpmTToBParametersTagged {
+): SpmTToBParamsDictTagged {
     const params = {
         "@type": "freesurfer/spm_t_to_b" as const,
         "spm_stem_format": spm_stem_format,
@@ -62,7 +62,7 @@ function spm_t_to_b_params(
  * @returns Command-line arguments.
  */
 function spm_t_to_b_cargs(
-    params: SpmTToBParameters,
+    params: SpmTToBParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function spm_t_to_b_cargs(
  * @returns Outputs object.
  */
 function spm_t_to_b_outputs(
-    params: SpmTToBParameters,
+    params: SpmTToBParamsDict,
     execution: Execution,
 ): SpmTToBOutputs {
     const ret: SpmTToBOutputs = {
@@ -107,7 +107,7 @@ function spm_t_to_b_outputs(
  * @returns NamedTuple of outputs (described in `SpmTToBOutputs`).
  */
 function spm_t_to_b_execute(
-    params: SpmTToBParameters,
+    params: SpmTToBParamsDict,
     runner: Runner | null = null,
 ): SpmTToBOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function spm_t_to_b(
 export {
       SPM_T_TO_B_METADATA,
       SpmTToBOutputs,
+      SpmTToBParamsDict,
+      SpmTToBParamsDictTagged,
       spm_t_to_b,
       spm_t_to_b_execute,
       spm_t_to_b_params,

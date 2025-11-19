@@ -11,16 +11,16 @@ const FS_SPMREG_GLNXA64_METADATA: Metadata = {
 };
 
 
-interface FsSpmregGlnxa64Parameters {
+interface FsSpmregGlnxa64ParamsDict {
     "@type"?: "freesurfer/fs_spmreg.glnxa64";
     "input_volume": InputPathType;
     "output_matrix": string;
 }
-type FsSpmregGlnxa64ParametersTagged = Required<Pick<FsSpmregGlnxa64Parameters, '@type'>> & FsSpmregGlnxa64Parameters;
+type FsSpmregGlnxa64ParamsDictTagged = Required<Pick<FsSpmregGlnxa64ParamsDict, '@type'>> & FsSpmregGlnxa64ParamsDict;
 
 
 /**
- * Output object returned when calling `FsSpmregGlnxa64Parameters(...)`.
+ * Output object returned when calling `FsSpmregGlnxa64ParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FsSpmregGlnxa64Outputs {
 function fs_spmreg_glnxa64_params(
     input_volume: InputPathType,
     output_matrix: string = "output.mat",
-): FsSpmregGlnxa64ParametersTagged {
+): FsSpmregGlnxa64ParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_spmreg.glnxa64" as const,
         "input_volume": input_volume,
@@ -66,7 +66,7 @@ function fs_spmreg_glnxa64_params(
  * @returns Command-line arguments.
  */
 function fs_spmreg_glnxa64_cargs(
-    params: FsSpmregGlnxa64Parameters,
+    params: FsSpmregGlnxa64ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function fs_spmreg_glnxa64_cargs(
  * @returns Outputs object.
  */
 function fs_spmreg_glnxa64_outputs(
-    params: FsSpmregGlnxa64Parameters,
+    params: FsSpmregGlnxa64ParamsDict,
     execution: Execution,
 ): FsSpmregGlnxa64Outputs {
     const ret: FsSpmregGlnxa64Outputs = {
@@ -112,7 +112,7 @@ function fs_spmreg_glnxa64_outputs(
  * @returns NamedTuple of outputs (described in `FsSpmregGlnxa64Outputs`).
  */
 function fs_spmreg_glnxa64_execute(
-    params: FsSpmregGlnxa64Parameters,
+    params: FsSpmregGlnxa64ParamsDict,
     runner: Runner | null = null,
 ): FsSpmregGlnxa64Outputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function fs_spmreg_glnxa64(
 export {
       FS_SPMREG_GLNXA64_METADATA,
       FsSpmregGlnxa64Outputs,
+      FsSpmregGlnxa64ParamsDict,
+      FsSpmregGlnxa64ParamsDictTagged,
       fs_spmreg_glnxa64,
       fs_spmreg_glnxa64_execute,
       fs_spmreg_glnxa64_params,

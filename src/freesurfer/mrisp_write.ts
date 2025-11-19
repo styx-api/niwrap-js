@@ -11,7 +11,7 @@ const MRISP_WRITE_METADATA: Metadata = {
 };
 
 
-interface MrispWriteParameters {
+interface MrispWriteParamsDict {
     "@type"?: "freesurfer/mrisp_write";
     "input_surface": InputPathType;
     "overlay_filename": InputPathType;
@@ -25,11 +25,11 @@ interface MrispWriteParameters {
     "verbose_vertex"?: number | null | undefined;
     "write_diagnostics": boolean;
 }
-type MrispWriteParametersTagged = Required<Pick<MrispWriteParameters, '@type'>> & MrispWriteParameters;
+type MrispWriteParamsDictTagged = Required<Pick<MrispWriteParamsDict, '@type'>> & MrispWriteParamsDict;
 
 
 /**
- * Output object returned when calling `MrispWriteParameters(...)`.
+ * Output object returned when calling `MrispWriteParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function mrisp_write_params(
     normalize_curvature: boolean = false,
     verbose_vertex: number | null = null,
     write_diagnostics: boolean = false,
-): MrispWriteParametersTagged {
+): MrispWriteParamsDictTagged {
     const params = {
         "@type": "freesurfer/mrisp_write" as const,
         "input_surface": input_surface,
@@ -114,7 +114,7 @@ function mrisp_write_params(
  * @returns Command-line arguments.
  */
 function mrisp_write_cargs(
-    params: MrispWriteParameters,
+    params: MrispWriteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function mrisp_write_cargs(
  * @returns Outputs object.
  */
 function mrisp_write_outputs(
-    params: MrispWriteParameters,
+    params: MrispWriteParamsDict,
     execution: Execution,
 ): MrispWriteOutputs {
     const ret: MrispWriteOutputs = {
@@ -203,7 +203,7 @@ function mrisp_write_outputs(
  * @returns NamedTuple of outputs (described in `MrispWriteOutputs`).
  */
 function mrisp_write_execute(
-    params: MrispWriteParameters,
+    params: MrispWriteParamsDict,
     runner: Runner | null = null,
 ): MrispWriteOutputs {
     runner = runner || getGlobalRunner();
@@ -262,6 +262,8 @@ function mrisp_write(
 export {
       MRISP_WRITE_METADATA,
       MrispWriteOutputs,
+      MrispWriteParamsDict,
+      MrispWriteParamsDictTagged,
       mrisp_write,
       mrisp_write_execute,
       mrisp_write_params,

@@ -11,17 +11,17 @@ const COMPUTE_VOX2VOX_METADATA: Metadata = {
 };
 
 
-interface ComputeVox2voxParameters {
+interface ComputeVox2voxParamsDict {
     "@type"?: "freesurfer/compute_vox2vox";
     "source": InputPathType;
     "t4file": InputPathType;
     "target": InputPathType;
 }
-type ComputeVox2voxParametersTagged = Required<Pick<ComputeVox2voxParameters, '@type'>> & ComputeVox2voxParameters;
+type ComputeVox2voxParamsDictTagged = Required<Pick<ComputeVox2voxParamsDict, '@type'>> & ComputeVox2voxParamsDict;
 
 
 /**
- * Output object returned when calling `ComputeVox2voxParameters(...)`.
+ * Output object returned when calling `ComputeVox2voxParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function compute_vox2vox_params(
     source: InputPathType,
     t4file: InputPathType,
     target: InputPathType,
-): ComputeVox2voxParametersTagged {
+): ComputeVox2voxParamsDictTagged {
     const params = {
         "@type": "freesurfer/compute_vox2vox" as const,
         "source": source,
@@ -66,7 +66,7 @@ function compute_vox2vox_params(
  * @returns Command-line arguments.
  */
 function compute_vox2vox_cargs(
-    params: ComputeVox2voxParameters,
+    params: ComputeVox2voxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function compute_vox2vox_cargs(
  * @returns Outputs object.
  */
 function compute_vox2vox_outputs(
-    params: ComputeVox2voxParameters,
+    params: ComputeVox2voxParamsDict,
     execution: Execution,
 ): ComputeVox2voxOutputs {
     const ret: ComputeVox2voxOutputs = {
@@ -112,7 +112,7 @@ function compute_vox2vox_outputs(
  * @returns NamedTuple of outputs (described in `ComputeVox2voxOutputs`).
  */
 function compute_vox2vox_execute(
-    params: ComputeVox2voxParameters,
+    params: ComputeVox2voxParamsDict,
     runner: Runner | null = null,
 ): ComputeVox2voxOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function compute_vox2vox(
 export {
       COMPUTE_VOX2VOX_METADATA,
       ComputeVox2voxOutputs,
+      ComputeVox2voxParamsDict,
+      ComputeVox2voxParamsDictTagged,
       compute_vox2vox,
       compute_vox2vox_execute,
       compute_vox2vox_params,

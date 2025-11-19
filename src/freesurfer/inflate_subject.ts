@@ -11,15 +11,15 @@ const INFLATE_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface InflateSubjectParameters {
+interface InflateSubjectParamsDict {
     "@type"?: "freesurfer/inflate_subject";
     "args"?: string | null | undefined;
 }
-type InflateSubjectParametersTagged = Required<Pick<InflateSubjectParameters, '@type'>> & InflateSubjectParameters;
+type InflateSubjectParamsDictTagged = Required<Pick<InflateSubjectParamsDict, '@type'>> & InflateSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubjectParameters(...)`.
+ * Output object returned when calling `InflateSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface InflateSubjectOutputs {
  */
 function inflate_subject_params(
     args: string | null = null,
-): InflateSubjectParametersTagged {
+): InflateSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject" as const,
     };
@@ -64,7 +64,7 @@ function inflate_subject_params(
  * @returns Command-line arguments.
  */
 function inflate_subject_cargs(
-    params: InflateSubjectParameters,
+    params: InflateSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function inflate_subject_cargs(
  * @returns Outputs object.
  */
 function inflate_subject_outputs(
-    params: InflateSubjectParameters,
+    params: InflateSubjectParamsDict,
     execution: Execution,
 ): InflateSubjectOutputs {
     const ret: InflateSubjectOutputs = {
@@ -111,7 +111,7 @@ function inflate_subject_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubjectOutputs`).
  */
 function inflate_subject_execute(
-    params: InflateSubjectParameters,
+    params: InflateSubjectParamsDict,
     runner: Runner | null = null,
 ): InflateSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function inflate_subject(
 export {
       INFLATE_SUBJECT_METADATA,
       InflateSubjectOutputs,
+      InflateSubjectParamsDict,
+      InflateSubjectParamsDictTagged,
       inflate_subject,
       inflate_subject_execute,
       inflate_subject_params,

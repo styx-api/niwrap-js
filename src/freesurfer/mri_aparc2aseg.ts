@@ -11,7 +11,7 @@ const MRI_APARC2ASEG_METADATA: Metadata = {
 };
 
 
-interface MriAparc2asegParameters {
+interface MriAparc2asegParamsDict {
     "@type"?: "freesurfer/mri_aparc2aseg";
     "subject"?: string | null | undefined;
     "output_volfile"?: string | null | undefined;
@@ -35,11 +35,11 @@ interface MriAparc2asegParameters {
     "help": boolean;
     "version": boolean;
 }
-type MriAparc2asegParametersTagged = Required<Pick<MriAparc2asegParameters, '@type'>> & MriAparc2asegParameters;
+type MriAparc2asegParamsDictTagged = Required<Pick<MriAparc2asegParamsDict, '@type'>> & MriAparc2asegParamsDict;
 
 
 /**
- * Output object returned when calling `MriAparc2asegParameters(...)`.
+ * Output object returned when calling `MriAparc2asegParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function mri_aparc2aseg_params(
     threads: number | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriAparc2asegParametersTagged {
+): MriAparc2asegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_aparc2aseg" as const,
         "old_ribbon": old_ribbon,
@@ -160,7 +160,7 @@ function mri_aparc2aseg_params(
  * @returns Command-line arguments.
  */
 function mri_aparc2aseg_cargs(
-    params: MriAparc2asegParameters,
+    params: MriAparc2asegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function mri_aparc2aseg_cargs(
  * @returns Outputs object.
  */
 function mri_aparc2aseg_outputs(
-    params: MriAparc2asegParameters,
+    params: MriAparc2asegParamsDict,
     execution: Execution,
 ): MriAparc2asegOutputs {
     const ret: MriAparc2asegOutputs = {
@@ -294,7 +294,7 @@ function mri_aparc2aseg_outputs(
  * @returns NamedTuple of outputs (described in `MriAparc2asegOutputs`).
  */
 function mri_aparc2aseg_execute(
-    params: MriAparc2asegParameters,
+    params: MriAparc2asegParamsDict,
     runner: Runner | null = null,
 ): MriAparc2asegOutputs {
     runner = runner || getGlobalRunner();
@@ -373,6 +373,8 @@ function mri_aparc2aseg(
 export {
       MRI_APARC2ASEG_METADATA,
       MriAparc2asegOutputs,
+      MriAparc2asegParamsDict,
+      MriAparc2asegParamsDictTagged,
       mri_aparc2aseg,
       mri_aparc2aseg_execute,
       mri_aparc2aseg_params,

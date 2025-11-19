@@ -11,7 +11,7 @@ const EXPORT_GCAM_METADATA: Metadata = {
 };
 
 
-interface ExportGcamParameters {
+interface ExportGcamParamsDict {
     "@type"?: "freesurfer/exportGcam";
     "fixed": InputPathType;
     "moving": InputPathType;
@@ -22,11 +22,11 @@ interface ExportGcamParameters {
     "interp_method"?: "linear" | "nearest" | null | undefined;
     "test": boolean;
 }
-type ExportGcamParametersTagged = Required<Pick<ExportGcamParameters, '@type'>> & ExportGcamParameters;
+type ExportGcamParamsDictTagged = Required<Pick<ExportGcamParamsDict, '@type'>> & ExportGcamParamsDict;
 
 
 /**
- * Output object returned when calling `ExportGcamParameters(...)`.
+ * Output object returned when calling `ExportGcamParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function export_gcam_params(
     bbox_threshold: number | null = null,
     interp_method: "linear" | "nearest" | null = null,
     test: boolean = false,
-): ExportGcamParametersTagged {
+): ExportGcamParamsDictTagged {
     const params = {
         "@type": "freesurfer/exportGcam" as const,
         "fixed": fixed,
@@ -96,7 +96,7 @@ function export_gcam_params(
  * @returns Command-line arguments.
  */
 function export_gcam_cargs(
-    params: ExportGcamParameters,
+    params: ExportGcamParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -151,7 +151,7 @@ function export_gcam_cargs(
  * @returns Outputs object.
  */
 function export_gcam_outputs(
-    params: ExportGcamParameters,
+    params: ExportGcamParamsDict,
     execution: Execution,
 ): ExportGcamOutputs {
     const ret: ExportGcamOutputs = {
@@ -177,7 +177,7 @@ function export_gcam_outputs(
  * @returns NamedTuple of outputs (described in `ExportGcamOutputs`).
  */
 function export_gcam_execute(
-    params: ExportGcamParameters,
+    params: ExportGcamParamsDict,
     runner: Runner | null = null,
 ): ExportGcamOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function export_gcam(
 export {
       EXPORT_GCAM_METADATA,
       ExportGcamOutputs,
+      ExportGcamParamsDict,
+      ExportGcamParamsDictTagged,
       export_gcam,
       export_gcam_execute,
       export_gcam_params,

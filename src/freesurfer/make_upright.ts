@@ -11,17 +11,17 @@ const MAKE_UPRIGHT_METADATA: Metadata = {
 };
 
 
-interface MakeUprightParameters {
+interface MakeUprightParamsDict {
     "@type"?: "freesurfer/make_upright";
     "input_image": InputPathType;
     "output_image": string;
     "transformation_map": InputPathType;
 }
-type MakeUprightParametersTagged = Required<Pick<MakeUprightParameters, '@type'>> & MakeUprightParameters;
+type MakeUprightParamsDictTagged = Required<Pick<MakeUprightParamsDict, '@type'>> & MakeUprightParamsDict;
 
 
 /**
- * Output object returned when calling `MakeUprightParameters(...)`.
+ * Output object returned when calling `MakeUprightParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function make_upright_params(
     input_image: InputPathType,
     output_image: string,
     transformation_map: InputPathType,
-): MakeUprightParametersTagged {
+): MakeUprightParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_upright" as const,
         "input_image": input_image,
@@ -70,7 +70,7 @@ function make_upright_params(
  * @returns Command-line arguments.
  */
 function make_upright_cargs(
-    params: MakeUprightParameters,
+    params: MakeUprightParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function make_upright_cargs(
  * @returns Outputs object.
  */
 function make_upright_outputs(
-    params: MakeUprightParameters,
+    params: MakeUprightParamsDict,
     execution: Execution,
 ): MakeUprightOutputs {
     const ret: MakeUprightOutputs = {
@@ -117,7 +117,7 @@ function make_upright_outputs(
  * @returns NamedTuple of outputs (described in `MakeUprightOutputs`).
  */
 function make_upright_execute(
-    params: MakeUprightParameters,
+    params: MakeUprightParamsDict,
     runner: Runner | null = null,
 ): MakeUprightOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function make_upright(
 export {
       MAKE_UPRIGHT_METADATA,
       MakeUprightOutputs,
+      MakeUprightParamsDict,
+      MakeUprightParamsDictTagged,
       make_upright,
       make_upright_execute,
       make_upright_params,

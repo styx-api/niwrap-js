@@ -11,7 +11,7 @@ const MRIS_WATERSHED_METADATA: Metadata = {
 };
 
 
-interface MrisWatershedParameters {
+interface MrisWatershedParamsDict {
     "@type"?: "freesurfer/mris_watershed";
     "input_surface": InputPathType;
     "input_gradient_field": InputPathType;
@@ -19,11 +19,11 @@ interface MrisWatershedParameters {
     "max_clusters"?: number | null | undefined;
     "mask_label"?: string | null | undefined;
 }
-type MrisWatershedParametersTagged = Required<Pick<MrisWatershedParameters, '@type'>> & MrisWatershedParameters;
+type MrisWatershedParamsDictTagged = Required<Pick<MrisWatershedParamsDict, '@type'>> & MrisWatershedParamsDict;
 
 
 /**
- * Output object returned when calling `MrisWatershedParameters(...)`.
+ * Output object returned when calling `MrisWatershedParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mris_watershed_params(
     output_annotation: string,
     max_clusters: number | null = null,
     mask_label: string | null = null,
-): MrisWatershedParametersTagged {
+): MrisWatershedParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_watershed" as const,
         "input_surface": input_surface,
@@ -82,7 +82,7 @@ function mris_watershed_params(
  * @returns Command-line arguments.
  */
 function mris_watershed_cargs(
-    params: MrisWatershedParameters,
+    params: MrisWatershedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function mris_watershed_cargs(
  * @returns Outputs object.
  */
 function mris_watershed_outputs(
-    params: MrisWatershedParameters,
+    params: MrisWatershedParamsDict,
     execution: Execution,
 ): MrisWatershedOutputs {
     const ret: MrisWatershedOutputs = {
@@ -141,7 +141,7 @@ function mris_watershed_outputs(
  * @returns NamedTuple of outputs (described in `MrisWatershedOutputs`).
  */
 function mris_watershed_execute(
-    params: MrisWatershedParameters,
+    params: MrisWatershedParamsDict,
     runner: Runner | null = null,
 ): MrisWatershedOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function mris_watershed(
 export {
       MRIS_WATERSHED_METADATA,
       MrisWatershedOutputs,
+      MrisWatershedParamsDict,
+      MrisWatershedParamsDictTagged,
       mris_watershed,
       mris_watershed_execute,
       mris_watershed_params,

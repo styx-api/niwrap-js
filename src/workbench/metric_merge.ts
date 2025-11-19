@@ -10,36 +10,36 @@ const METRIC_MERGE_METADATA: Metadata = {
 };
 
 
-interface MetricMergeUpToParameters {
+interface MetricMergeUpToParamsDict {
     "@type"?: "up-to";
     "last-column": string;
     "reverse": boolean;
 }
-type MetricMergeUpToParametersTagged = Required<Pick<MetricMergeUpToParameters, '@type'>> & MetricMergeUpToParameters;
+type MetricMergeUpToParamsDictTagged = Required<Pick<MetricMergeUpToParamsDict, '@type'>> & MetricMergeUpToParamsDict;
 
 
-interface MetricMergeColumnParameters {
+interface MetricMergeColumnParamsDict {
     "@type"?: "column";
     "column": string;
-    "up-to"?: MetricMergeUpToParameters | null | undefined;
+    "up-to"?: MetricMergeUpToParamsDict | null | undefined;
 }
-type MetricMergeColumnParametersTagged = Required<Pick<MetricMergeColumnParameters, '@type'>> & MetricMergeColumnParameters;
+type MetricMergeColumnParamsDictTagged = Required<Pick<MetricMergeColumnParamsDict, '@type'>> & MetricMergeColumnParamsDict;
 
 
-interface MetricMergeMetricParameters {
+interface MetricMergeMetricParamsDict {
     "@type"?: "metric";
     "metric-in": InputPathType;
-    "column"?: Array<MetricMergeColumnParameters> | null | undefined;
+    "column"?: Array<MetricMergeColumnParamsDict> | null | undefined;
 }
-type MetricMergeMetricParametersTagged = Required<Pick<MetricMergeMetricParameters, '@type'>> & MetricMergeMetricParameters;
+type MetricMergeMetricParamsDictTagged = Required<Pick<MetricMergeMetricParamsDict, '@type'>> & MetricMergeMetricParamsDict;
 
 
-interface MetricMergeParameters {
+interface MetricMergeParamsDict {
     "@type"?: "workbench/metric-merge";
     "metric-out": string;
-    "metric"?: Array<MetricMergeMetricParameters> | null | undefined;
+    "metric"?: Array<MetricMergeMetricParamsDict> | null | undefined;
 }
-type MetricMergeParametersTagged = Required<Pick<MetricMergeParameters, '@type'>> & MetricMergeParameters;
+type MetricMergeParamsDictTagged = Required<Pick<MetricMergeParamsDict, '@type'>> & MetricMergeParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type MetricMergeParametersTagged = Required<Pick<MetricMergeParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function metric_merge_up_to_params(
+function metric_merge_up_to(
     last_column: string,
     reverse: boolean = false,
-): MetricMergeUpToParametersTagged {
+): MetricMergeUpToParamsDictTagged {
     const params = {
         "@type": "up-to" as const,
         "last-column": last_column,
@@ -72,7 +72,7 @@ function metric_merge_up_to_params(
  * @returns Command-line arguments.
  */
 function metric_merge_up_to_cargs(
-    params: MetricMergeUpToParameters,
+    params: MetricMergeUpToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function metric_merge_up_to_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_merge_column_params(
+function metric_merge_column(
     column: string,
-    up_to: MetricMergeUpToParameters | null = null,
-): MetricMergeColumnParametersTagged {
+    up_to: MetricMergeUpToParamsDict | null = null,
+): MetricMergeColumnParamsDictTagged {
     const params = {
         "@type": "column" as const,
         "column": column,
@@ -119,7 +119,7 @@ function metric_merge_column_params(
  * @returns Command-line arguments.
  */
 function metric_merge_column_cargs(
-    params: MetricMergeColumnParameters,
+    params: MetricMergeColumnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,10 +142,10 @@ function metric_merge_column_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_merge_metric_params(
+function metric_merge_metric(
     metric_in: InputPathType,
-    column: Array<MetricMergeColumnParameters> | null = null,
-): MetricMergeMetricParametersTagged {
+    column: Array<MetricMergeColumnParamsDict> | null = null,
+): MetricMergeMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
         "metric-in": metric_in,
@@ -166,7 +166,7 @@ function metric_merge_metric_params(
  * @returns Command-line arguments.
  */
 function metric_merge_metric_cargs(
-    params: MetricMergeMetricParameters,
+    params: MetricMergeMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function metric_merge_metric_cargs(
 
 
 /**
- * Output object returned when calling `MetricMergeParameters(...)`.
+ * Output object returned when calling `MetricMergeParamsDict(...)`.
  *
  * @interface
  */
@@ -208,8 +208,8 @@ interface MetricMergeOutputs {
  */
 function metric_merge_params(
     metric_out: string,
-    metric: Array<MetricMergeMetricParameters> | null = null,
-): MetricMergeParametersTagged {
+    metric: Array<MetricMergeMetricParamsDict> | null = null,
+): MetricMergeParamsDictTagged {
     const params = {
         "@type": "workbench/metric-merge" as const,
         "metric-out": metric_out,
@@ -230,7 +230,7 @@ function metric_merge_params(
  * @returns Command-line arguments.
  */
 function metric_merge_cargs(
-    params: MetricMergeParameters,
+    params: MetricMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,7 +255,7 @@ function metric_merge_cargs(
  * @returns Outputs object.
  */
 function metric_merge_outputs(
-    params: MetricMergeParameters,
+    params: MetricMergeParamsDict,
     execution: Execution,
 ): MetricMergeOutputs {
     const ret: MetricMergeOutputs = {
@@ -281,7 +281,7 @@ function metric_merge_outputs(
  * @returns NamedTuple of outputs (described in `MetricMergeOutputs`).
  */
 function metric_merge_execute(
-    params: MetricMergeParameters,
+    params: MetricMergeParamsDict,
     runner: Runner | null = null,
 ): MetricMergeOutputs {
     runner = runner || getGlobalRunner();
@@ -311,7 +311,7 @@ function metric_merge_execute(
  */
 function metric_merge(
     metric_out: string,
-    metric: Array<MetricMergeMetricParameters> | null = null,
+    metric: Array<MetricMergeMetricParamsDict> | null = null,
     runner: Runner | null = null,
 ): MetricMergeOutputs {
     const params = metric_merge_params(metric_out, metric)
@@ -321,11 +321,19 @@ function metric_merge(
 
 export {
       METRIC_MERGE_METADATA,
+      MetricMergeColumnParamsDict,
+      MetricMergeColumnParamsDictTagged,
+      MetricMergeMetricParamsDict,
+      MetricMergeMetricParamsDictTagged,
       MetricMergeOutputs,
+      MetricMergeParamsDict,
+      MetricMergeParamsDictTagged,
+      MetricMergeUpToParamsDict,
+      MetricMergeUpToParamsDictTagged,
       metric_merge,
-      metric_merge_column_params,
+      metric_merge_column,
       metric_merge_execute,
-      metric_merge_metric_params,
+      metric_merge_metric,
       metric_merge_params,
-      metric_merge_up_to_params,
+      metric_merge_up_to,
 };

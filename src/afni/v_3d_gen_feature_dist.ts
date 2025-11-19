@@ -11,7 +11,7 @@ const V_3D_GEN_FEATURE_DIST_METADATA: Metadata = {
 };
 
 
-interface V3dGenFeatureDistParameters {
+interface V3dGenFeatureDistParamsDict {
     "@type"?: "afni/3dGenFeatureDist";
     "features_string": string;
     "class_string": string;
@@ -26,11 +26,11 @@ interface V3dGenFeatureDistParameters {
     "labeltable"?: InputPathType | null | undefined;
     "show_histograms"?: string | null | undefined;
 }
-type V3dGenFeatureDistParametersTagged = Required<Pick<V3dGenFeatureDistParameters, '@type'>> & V3dGenFeatureDistParameters;
+type V3dGenFeatureDistParamsDictTagged = Required<Pick<V3dGenFeatureDistParamsDict, '@type'>> & V3dGenFeatureDistParamsDict;
 
 
 /**
- * Output object returned when calling `V3dGenFeatureDistParameters(...)`.
+ * Output object returned when calling `V3dGenFeatureDistParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function v_3d_gen_feature_dist_params(
     hspec: Array<string> | null = null,
     labeltable: InputPathType | null = null,
     show_histograms: string | null = null,
-): V3dGenFeatureDistParametersTagged {
+): V3dGenFeatureDistParamsDictTagged {
     const params = {
         "@type": "afni/3dGenFeatureDist" as const,
         "features_string": features_string,
@@ -120,7 +120,7 @@ function v_3d_gen_feature_dist_params(
  * @returns Command-line arguments.
  */
 function v_3d_gen_feature_dist_cargs(
-    params: V3dGenFeatureDistParameters,
+    params: V3dGenFeatureDistParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -197,7 +197,7 @@ function v_3d_gen_feature_dist_cargs(
  * @returns Outputs object.
  */
 function v_3d_gen_feature_dist_outputs(
-    params: V3dGenFeatureDistParameters,
+    params: V3dGenFeatureDistParamsDict,
     execution: Execution,
 ): V3dGenFeatureDistOutputs {
     const ret: V3dGenFeatureDistOutputs = {
@@ -223,7 +223,7 @@ function v_3d_gen_feature_dist_outputs(
  * @returns NamedTuple of outputs (described in `V3dGenFeatureDistOutputs`).
  */
 function v_3d_gen_feature_dist_execute(
-    params: V3dGenFeatureDistParameters,
+    params: V3dGenFeatureDistParamsDict,
     runner: Runner | null = null,
 ): V3dGenFeatureDistOutputs {
     runner = runner || getGlobalRunner();
@@ -283,6 +283,8 @@ function v_3d_gen_feature_dist(
 
 export {
       V3dGenFeatureDistOutputs,
+      V3dGenFeatureDistParamsDict,
+      V3dGenFeatureDistParamsDictTagged,
       V_3D_GEN_FEATURE_DIST_METADATA,
       v_3d_gen_feature_dist,
       v_3d_gen_feature_dist_execute,

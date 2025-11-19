@@ -11,17 +11,17 @@ const GLTSYMTEST_METADATA: Metadata = {
 };
 
 
-interface GltsymtestParameters {
+interface GltsymtestParamsDict {
     "@type"?: "afni/GLTsymtest";
     "badonly": boolean;
     "varlist": string;
     "expr": Array<string>;
 }
-type GltsymtestParametersTagged = Required<Pick<GltsymtestParameters, '@type'>> & GltsymtestParameters;
+type GltsymtestParamsDictTagged = Required<Pick<GltsymtestParamsDict, '@type'>> & GltsymtestParamsDict;
 
 
 /**
- * Output object returned when calling `GltsymtestParameters(...)`.
+ * Output object returned when calling `GltsymtestParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function gltsymtest_params(
     varlist: string,
     expr: Array<string>,
     badonly: boolean = false,
-): GltsymtestParametersTagged {
+): GltsymtestParamsDictTagged {
     const params = {
         "@type": "afni/GLTsymtest" as const,
         "badonly": badonly,
@@ -66,7 +66,7 @@ function gltsymtest_params(
  * @returns Command-line arguments.
  */
 function gltsymtest_cargs(
-    params: GltsymtestParameters,
+    params: GltsymtestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function gltsymtest_cargs(
  * @returns Outputs object.
  */
 function gltsymtest_outputs(
-    params: GltsymtestParameters,
+    params: GltsymtestParamsDict,
     execution: Execution,
 ): GltsymtestOutputs {
     const ret: GltsymtestOutputs = {
@@ -114,7 +114,7 @@ function gltsymtest_outputs(
  * @returns NamedTuple of outputs (described in `GltsymtestOutputs`).
  */
 function gltsymtest_execute(
-    params: GltsymtestParameters,
+    params: GltsymtestParamsDict,
     runner: Runner | null = null,
 ): GltsymtestOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function gltsymtest(
 export {
       GLTSYMTEST_METADATA,
       GltsymtestOutputs,
+      GltsymtestParamsDict,
+      GltsymtestParamsDictTagged,
       gltsymtest,
       gltsymtest_execute,
       gltsymtest_params,

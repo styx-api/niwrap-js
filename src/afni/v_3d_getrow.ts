@@ -11,7 +11,7 @@ const V_3D_GETROW_METADATA: Metadata = {
 };
 
 
-interface V3dGetrowParameters {
+interface V3dGetrowParamsDict {
     "@type"?: "afni/3dGetrow";
     "xrow"?: Array<number> | null | undefined;
     "yrow"?: Array<number> | null | undefined;
@@ -19,11 +19,11 @@ interface V3dGetrowParameters {
     "input_file"?: InputPathType | null | undefined;
     "output_file"?: string | null | undefined;
 }
-type V3dGetrowParametersTagged = Required<Pick<V3dGetrowParameters, '@type'>> & V3dGetrowParameters;
+type V3dGetrowParamsDictTagged = Required<Pick<V3dGetrowParamsDict, '@type'>> & V3dGetrowParamsDict;
 
 
 /**
- * Output object returned when calling `V3dGetrowParameters(...)`.
+ * Output object returned when calling `V3dGetrowParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v_3d_getrow_params(
     zrow: Array<number> | null = null,
     input_file: InputPathType | null = null,
     output_file: string | null = null,
-): V3dGetrowParametersTagged {
+): V3dGetrowParamsDictTagged {
     const params = {
         "@type": "afni/3dGetrow" as const,
     };
@@ -88,7 +88,7 @@ function v_3d_getrow_params(
  * @returns Command-line arguments.
  */
 function v_3d_getrow_cargs(
-    params: V3dGetrowParameters,
+    params: V3dGetrowParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function v_3d_getrow_cargs(
  * @returns Outputs object.
  */
 function v_3d_getrow_outputs(
-    params: V3dGetrowParameters,
+    params: V3dGetrowParamsDict,
     execution: Execution,
 ): V3dGetrowOutputs {
     const ret: V3dGetrowOutputs = {
@@ -162,7 +162,7 @@ function v_3d_getrow_outputs(
  * @returns NamedTuple of outputs (described in `V3dGetrowOutputs`).
  */
 function v_3d_getrow_execute(
-    params: V3dGetrowParameters,
+    params: V3dGetrowParamsDict,
     runner: Runner | null = null,
 ): V3dGetrowOutputs {
     runner = runner || getGlobalRunner();
@@ -208,6 +208,8 @@ function v_3d_getrow(
 
 export {
       V3dGetrowOutputs,
+      V3dGetrowParamsDict,
+      V3dGetrowParamsDictTagged,
       V_3D_GETROW_METADATA,
       v_3d_getrow,
       v_3d_getrow_execute,

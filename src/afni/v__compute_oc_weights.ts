@@ -11,7 +11,7 @@ const V__COMPUTE_OC_WEIGHTS_METADATA: Metadata = {
 };
 
 
-interface VComputeOcWeightsParameters {
+interface VComputeOcWeightsParamsDict {
     "@type"?: "afni/@compute_OC_weights";
     "echo_times"?: string | null | undefined;
     "echo_times_file"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface VComputeOcWeightsParameters {
     "work_dir"?: string | null | undefined;
     "verbosity": boolean;
 }
-type VComputeOcWeightsParametersTagged = Required<Pick<VComputeOcWeightsParameters, '@type'>> & VComputeOcWeightsParameters;
+type VComputeOcWeightsParamsDictTagged = Required<Pick<VComputeOcWeightsParamsDict, '@type'>> & VComputeOcWeightsParamsDict;
 
 
 /**
- * Output object returned when calling `VComputeOcWeightsParameters(...)`.
+ * Output object returned when calling `VComputeOcWeightsParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function v__compute_oc_weights_params(
     t2_star_limit: number | null = null,
     work_dir: string | null = null,
     verbosity: boolean = false,
-): VComputeOcWeightsParametersTagged {
+): VComputeOcWeightsParamsDictTagged {
     const params = {
         "@type": "afni/@compute_OC_weights" as const,
         "echo_dsets": echo_dsets,
@@ -114,7 +114,7 @@ function v__compute_oc_weights_params(
  * @returns Command-line arguments.
  */
 function v__compute_oc_weights_cargs(
-    params: VComputeOcWeightsParameters,
+    params: VComputeOcWeightsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -187,7 +187,7 @@ function v__compute_oc_weights_cargs(
  * @returns Outputs object.
  */
 function v__compute_oc_weights_outputs(
-    params: VComputeOcWeightsParameters,
+    params: VComputeOcWeightsParamsDict,
     execution: Execution,
 ): VComputeOcWeightsOutputs {
     const ret: VComputeOcWeightsOutputs = {
@@ -213,7 +213,7 @@ function v__compute_oc_weights_outputs(
  * @returns NamedTuple of outputs (described in `VComputeOcWeightsOutputs`).
  */
 function v__compute_oc_weights_execute(
-    params: VComputeOcWeightsParameters,
+    params: VComputeOcWeightsParamsDict,
     runner: Runner | null = null,
 ): VComputeOcWeightsOutputs {
     runner = runner || getGlobalRunner();
@@ -269,6 +269,8 @@ function v__compute_oc_weights(
 
 export {
       VComputeOcWeightsOutputs,
+      VComputeOcWeightsParamsDict,
+      VComputeOcWeightsParamsDictTagged,
       V__COMPUTE_OC_WEIGHTS_METADATA,
       v__compute_oc_weights,
       v__compute_oc_weights_execute,

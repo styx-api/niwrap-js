@@ -11,15 +11,15 @@ const DIFFUSION_UTILS_METADATA: Metadata = {
 };
 
 
-interface DiffusionUtilsParameters {
+interface DiffusionUtilsParamsDict {
     "@type"?: "freesurfer/diffusionUtils";
     "dummy_flag": boolean;
 }
-type DiffusionUtilsParametersTagged = Required<Pick<DiffusionUtilsParameters, '@type'>> & DiffusionUtilsParameters;
+type DiffusionUtilsParamsDictTagged = Required<Pick<DiffusionUtilsParamsDict, '@type'>> & DiffusionUtilsParamsDict;
 
 
 /**
- * Output object returned when calling `DiffusionUtilsParameters(...)`.
+ * Output object returned when calling `DiffusionUtilsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface DiffusionUtilsOutputs {
  */
 function diffusion_utils_params(
     dummy_flag: boolean = false,
-): DiffusionUtilsParametersTagged {
+): DiffusionUtilsParamsDictTagged {
     const params = {
         "@type": "freesurfer/diffusionUtils" as const,
         "dummy_flag": dummy_flag,
@@ -58,7 +58,7 @@ function diffusion_utils_params(
  * @returns Command-line arguments.
  */
 function diffusion_utils_cargs(
-    params: DiffusionUtilsParameters,
+    params: DiffusionUtilsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function diffusion_utils_cargs(
  * @returns Outputs object.
  */
 function diffusion_utils_outputs(
-    params: DiffusionUtilsParameters,
+    params: DiffusionUtilsParamsDict,
     execution: Execution,
 ): DiffusionUtilsOutputs {
     const ret: DiffusionUtilsOutputs = {
@@ -104,7 +104,7 @@ function diffusion_utils_outputs(
  * @returns NamedTuple of outputs (described in `DiffusionUtilsOutputs`).
  */
 function diffusion_utils_execute(
-    params: DiffusionUtilsParameters,
+    params: DiffusionUtilsParamsDict,
     runner: Runner | null = null,
 ): DiffusionUtilsOutputs {
     runner = runner || getGlobalRunner();
@@ -143,6 +143,8 @@ function diffusion_utils(
 export {
       DIFFUSION_UTILS_METADATA,
       DiffusionUtilsOutputs,
+      DiffusionUtilsParamsDict,
+      DiffusionUtilsParamsDictTagged,
       diffusion_utils,
       diffusion_utils_execute,
       diffusion_utils_params,

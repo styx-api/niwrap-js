@@ -11,15 +11,15 @@ const MPR2MNI305_METADATA: Metadata = {
 };
 
 
-interface Mpr2mni305Parameters {
+interface Mpr2mni305ParamsDict {
     "@type"?: "freesurfer/mpr2mni305";
     "mpr_anat": string;
 }
-type Mpr2mni305ParametersTagged = Required<Pick<Mpr2mni305Parameters, '@type'>> & Mpr2mni305Parameters;
+type Mpr2mni305ParamsDictTagged = Required<Pick<Mpr2mni305ParamsDict, '@type'>> & Mpr2mni305ParamsDict;
 
 
 /**
- * Output object returned when calling `Mpr2mni305Parameters(...)`.
+ * Output object returned when calling `Mpr2mni305ParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface Mpr2mni305Outputs {
  */
 function mpr2mni305_params(
     mpr_anat: string,
-): Mpr2mni305ParametersTagged {
+): Mpr2mni305ParamsDictTagged {
     const params = {
         "@type": "freesurfer/mpr2mni305" as const,
         "mpr_anat": mpr_anat,
@@ -58,7 +58,7 @@ function mpr2mni305_params(
  * @returns Command-line arguments.
  */
 function mpr2mni305_cargs(
-    params: Mpr2mni305Parameters,
+    params: Mpr2mni305ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function mpr2mni305_cargs(
  * @returns Outputs object.
  */
 function mpr2mni305_outputs(
-    params: Mpr2mni305Parameters,
+    params: Mpr2mni305ParamsDict,
     execution: Execution,
 ): Mpr2mni305Outputs {
     const ret: Mpr2mni305Outputs = {
@@ -102,7 +102,7 @@ function mpr2mni305_outputs(
  * @returns NamedTuple of outputs (described in `Mpr2mni305Outputs`).
  */
 function mpr2mni305_execute(
-    params: Mpr2mni305Parameters,
+    params: Mpr2mni305ParamsDict,
     runner: Runner | null = null,
 ): Mpr2mni305Outputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function mpr2mni305(
 export {
       MPR2MNI305_METADATA,
       Mpr2mni305Outputs,
+      Mpr2mni305ParamsDict,
+      Mpr2mni305ParamsDictTagged,
       mpr2mni305,
       mpr2mni305_execute,
       mpr2mni305_params,

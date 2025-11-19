@@ -11,7 +11,7 @@ const V_3D_NWARP_CAT_METADATA: Metadata = {
 };
 
 
-interface V3dNwarpCatParameters {
+interface V3dNwarpCatParamsDict {
     "@type"?: "afni/3dNwarpCat";
     "interpolation"?: string | null | undefined;
     "verbosity": boolean;
@@ -23,11 +23,11 @@ interface V3dNwarpCatParameters {
     "invert_final_warp": boolean;
     "extra_padding"?: number | null | undefined;
 }
-type V3dNwarpCatParametersTagged = Required<Pick<V3dNwarpCatParameters, '@type'>> & V3dNwarpCatParameters;
+type V3dNwarpCatParamsDictTagged = Required<Pick<V3dNwarpCatParamsDict, '@type'>> & V3dNwarpCatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNwarpCatParameters(...)`.
+ * Output object returned when calling `V3dNwarpCatParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_nwarp_cat_params(
     additional_warps: Array<InputPathType> | null = null,
     invert_final_warp: boolean = false,
     extra_padding: number | null = null,
-): V3dNwarpCatParametersTagged {
+): V3dNwarpCatParamsDictTagged {
     const params = {
         "@type": "afni/3dNwarpCat" as const,
         "verbosity": verbosity,
@@ -106,7 +106,7 @@ function v_3d_nwarp_cat_params(
  * @returns Command-line arguments.
  */
 function v_3d_nwarp_cat_cargs(
-    params: V3dNwarpCatParameters,
+    params: V3dNwarpCatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function v_3d_nwarp_cat_cargs(
  * @returns Outputs object.
  */
 function v_3d_nwarp_cat_outputs(
-    params: V3dNwarpCatParameters,
+    params: V3dNwarpCatParamsDict,
     execution: Execution,
 ): V3dNwarpCatOutputs {
     const ret: V3dNwarpCatOutputs = {
@@ -190,7 +190,7 @@ function v_3d_nwarp_cat_outputs(
  * @returns NamedTuple of outputs (described in `V3dNwarpCatOutputs`).
  */
 function v_3d_nwarp_cat_execute(
-    params: V3dNwarpCatParameters,
+    params: V3dNwarpCatParamsDict,
     runner: Runner | null = null,
 ): V3dNwarpCatOutputs {
     runner = runner || getGlobalRunner();
@@ -244,6 +244,8 @@ function v_3d_nwarp_cat(
 
 export {
       V3dNwarpCatOutputs,
+      V3dNwarpCatParamsDict,
+      V3dNwarpCatParamsDictTagged,
       V_3D_NWARP_CAT_METADATA,
       v_3d_nwarp_cat,
       v_3d_nwarp_cat_execute,

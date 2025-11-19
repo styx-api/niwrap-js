@@ -11,15 +11,15 @@ const FIXEL2TSF_METADATA: Metadata = {
 };
 
 
-interface Fixel2tsfConfigParameters {
+interface Fixel2tsfConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Fixel2tsfConfigParametersTagged = Required<Pick<Fixel2tsfConfigParameters, '@type'>> & Fixel2tsfConfigParameters;
+type Fixel2tsfConfigParamsDictTagged = Required<Pick<Fixel2tsfConfigParamsDict, '@type'>> & Fixel2tsfConfigParamsDict;
 
 
-interface Fixel2tsfParameters {
+interface Fixel2tsfParamsDict {
     "@type"?: "mrtrix/fixel2tsf";
     "angle"?: number | null | undefined;
     "info": boolean;
@@ -27,14 +27,14 @@ interface Fixel2tsfParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Fixel2tsfConfigParameters> | null | undefined;
+    "config"?: Array<Fixel2tsfConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "fixel_in": InputPathType;
     "tracks": InputPathType;
     "tsf": string;
 }
-type Fixel2tsfParametersTagged = Required<Pick<Fixel2tsfParameters, '@type'>> & Fixel2tsfParameters;
+type Fixel2tsfParamsDictTagged = Required<Pick<Fixel2tsfParamsDict, '@type'>> & Fixel2tsfParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type Fixel2tsfParametersTagged = Required<Pick<Fixel2tsfParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function fixel2tsf_config_params(
+function fixel2tsf_config(
     key: string,
     value: string,
-): Fixel2tsfConfigParametersTagged {
+): Fixel2tsfConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function fixel2tsf_config_params(
  * @returns Command-line arguments.
  */
 function fixel2tsf_config_cargs(
-    params: Fixel2tsfConfigParameters,
+    params: Fixel2tsfConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function fixel2tsf_config_cargs(
 
 
 /**
- * Output object returned when calling `Fixel2tsfParameters(...)`.
+ * Output object returned when calling `Fixel2tsfParamsDict(...)`.
  *
  * @interface
  */
@@ -123,10 +123,10 @@ function fixel2tsf_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fixel2tsfConfigParameters> | null = null,
+    config: Array<Fixel2tsfConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fixel2tsfParametersTagged {
+): Fixel2tsfParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixel2tsf" as const,
         "info": info,
@@ -161,7 +161,7 @@ function fixel2tsf_params(
  * @returns Command-line arguments.
  */
 function fixel2tsf_cargs(
-    params: Fixel2tsfParameters,
+    params: Fixel2tsfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -215,7 +215,7 @@ function fixel2tsf_cargs(
  * @returns Outputs object.
  */
 function fixel2tsf_outputs(
-    params: Fixel2tsfParameters,
+    params: Fixel2tsfParamsDict,
     execution: Execution,
 ): Fixel2tsfOutputs {
     const ret: Fixel2tsfOutputs = {
@@ -247,7 +247,7 @@ function fixel2tsf_outputs(
  * @returns NamedTuple of outputs (described in `Fixel2tsfOutputs`).
  */
 function fixel2tsf_execute(
-    params: Fixel2tsfParameters,
+    params: Fixel2tsfParamsDict,
     runner: Runner | null = null,
 ): Fixel2tsfOutputs {
     runner = runner || getGlobalRunner();
@@ -301,7 +301,7 @@ function fixel2tsf(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fixel2tsfConfigParameters> | null = null,
+    config: Array<Fixel2tsfConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -313,9 +313,13 @@ function fixel2tsf(
 
 export {
       FIXEL2TSF_METADATA,
+      Fixel2tsfConfigParamsDict,
+      Fixel2tsfConfigParamsDictTagged,
       Fixel2tsfOutputs,
+      Fixel2tsfParamsDict,
+      Fixel2tsfParamsDictTagged,
       fixel2tsf,
-      fixel2tsf_config_params,
+      fixel2tsf_config,
       fixel2tsf_execute,
       fixel2tsf_params,
 };

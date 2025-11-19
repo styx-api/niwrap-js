@@ -11,7 +11,7 @@ const MRI_CONCATENATE_LTA_METADATA: Metadata = {
 };
 
 
-interface MriConcatenateLtaParameters {
+interface MriConcatenateLtaParamsDict {
     "@type"?: "freesurfer/mri_concatenate_lta";
     "lta_1": InputPathType;
     "lta_2": InputPathType;
@@ -26,11 +26,11 @@ interface MriConcatenateLtaParameters {
     "rmsdiff_radius"?: number | null | undefined;
     "rmsdiff_outputfile"?: string | null | undefined;
 }
-type MriConcatenateLtaParametersTagged = Required<Pick<MriConcatenateLtaParameters, '@type'>> & MriConcatenateLtaParameters;
+type MriConcatenateLtaParamsDictTagged = Required<Pick<MriConcatenateLtaParamsDict, '@type'>> & MriConcatenateLtaParamsDict;
 
 
 /**
- * Output object returned when calling `MriConcatenateLtaParameters(...)`.
+ * Output object returned when calling `MriConcatenateLtaParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function mri_concatenate_lta_params(
     subject: string | null = null,
     rmsdiff_radius: number | null = null,
     rmsdiff_outputfile: string | null = null,
-): MriConcatenateLtaParametersTagged {
+): MriConcatenateLtaParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_concatenate_lta" as const,
         "lta_1": lta_1,
@@ -114,7 +114,7 @@ function mri_concatenate_lta_params(
  * @returns Command-line arguments.
  */
 function mri_concatenate_lta_cargs(
-    params: MriConcatenateLtaParameters,
+    params: MriConcatenateLtaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -174,7 +174,7 @@ function mri_concatenate_lta_cargs(
  * @returns Outputs object.
  */
 function mri_concatenate_lta_outputs(
-    params: MriConcatenateLtaParameters,
+    params: MriConcatenateLtaParamsDict,
     execution: Execution,
 ): MriConcatenateLtaOutputs {
     const ret: MriConcatenateLtaOutputs = {
@@ -199,7 +199,7 @@ function mri_concatenate_lta_outputs(
  * @returns NamedTuple of outputs (described in `MriConcatenateLtaOutputs`).
  */
 function mri_concatenate_lta_execute(
-    params: MriConcatenateLtaParameters,
+    params: MriConcatenateLtaParamsDict,
     runner: Runner | null = null,
 ): MriConcatenateLtaOutputs {
     runner = runner || getGlobalRunner();
@@ -260,6 +260,8 @@ function mri_concatenate_lta(
 export {
       MRI_CONCATENATE_LTA_METADATA,
       MriConcatenateLtaOutputs,
+      MriConcatenateLtaParamsDict,
+      MriConcatenateLtaParamsDictTagged,
       mri_concatenate_lta,
       mri_concatenate_lta_execute,
       mri_concatenate_lta_params,

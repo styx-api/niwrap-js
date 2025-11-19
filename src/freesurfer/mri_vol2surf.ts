@@ -11,7 +11,7 @@ const MRI_VOL2SURF_METADATA: Metadata = {
 };
 
 
-interface MriVol2surfParameters {
+interface MriVol2surfParamsDict {
     "@type"?: "freesurfer/mri_vol2surf";
     "input_volume": InputPathType;
     "registration_file": InputPathType;
@@ -23,11 +23,11 @@ interface MriVol2surfParameters {
     "hemisphere"?: "lh" | "rh" | null | undefined;
     "surface"?: string | null | undefined;
 }
-type MriVol2surfParametersTagged = Required<Pick<MriVol2surfParameters, '@type'>> & MriVol2surfParameters;
+type MriVol2surfParamsDictTagged = Required<Pick<MriVol2surfParamsDict, '@type'>> & MriVol2surfParamsDict;
 
 
 /**
- * Output object returned when calling `MriVol2surfParameters(...)`.
+ * Output object returned when calling `MriVol2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function mri_vol2surf_params(
     target_subject: string | null = null,
     hemisphere: "lh" | "rh" | null = null,
     surface: string | null = null,
-): MriVol2surfParametersTagged {
+): MriVol2surfParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_vol2surf" as const,
         "input_volume": input_volume,
@@ -104,7 +104,7 @@ function mri_vol2surf_params(
  * @returns Command-line arguments.
  */
 function mri_vol2surf_cargs(
-    params: MriVol2surfParameters,
+    params: MriVol2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function mri_vol2surf_cargs(
  * @returns Outputs object.
  */
 function mri_vol2surf_outputs(
-    params: MriVol2surfParameters,
+    params: MriVol2surfParamsDict,
     execution: Execution,
 ): MriVol2surfOutputs {
     const ret: MriVol2surfOutputs = {
@@ -193,7 +193,7 @@ function mri_vol2surf_outputs(
  * @returns NamedTuple of outputs (described in `MriVol2surfOutputs`).
  */
 function mri_vol2surf_execute(
-    params: MriVol2surfParameters,
+    params: MriVol2surfParamsDict,
     runner: Runner | null = null,
 ): MriVol2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function mri_vol2surf(
 export {
       MRI_VOL2SURF_METADATA,
       MriVol2surfOutputs,
+      MriVol2surfParamsDict,
+      MriVol2surfParamsDictTagged,
       mri_vol2surf,
       mri_vol2surf_execute,
       mri_vol2surf_params,

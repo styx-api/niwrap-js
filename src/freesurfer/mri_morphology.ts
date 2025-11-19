@@ -11,7 +11,7 @@ const MRI_MORPHOLOGY_METADATA: Metadata = {
 };
 
 
-interface MriMorphologyParameters {
+interface MriMorphologyParamsDict {
     "@type"?: "freesurfer/mri_morphology";
     "input_volume": InputPathType;
     "operation": "open" | "close" | "dilate" | "erode" | "mode" | "fill_holes" | "erode_bottom" | "dilate_thresh" | "erode_thresh";
@@ -19,11 +19,11 @@ interface MriMorphologyParameters {
     "output_volume": string;
     "label_option"?: number | null | undefined;
 }
-type MriMorphologyParametersTagged = Required<Pick<MriMorphologyParameters, '@type'>> & MriMorphologyParameters;
+type MriMorphologyParamsDictTagged = Required<Pick<MriMorphologyParamsDict, '@type'>> & MriMorphologyParamsDict;
 
 
 /**
- * Output object returned when calling `MriMorphologyParameters(...)`.
+ * Output object returned when calling `MriMorphologyParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_morphology_params(
     number_iter: number,
     output_volume: string,
     label_option: number | null = null,
-): MriMorphologyParametersTagged {
+): MriMorphologyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_morphology" as const,
         "input_volume": input_volume,
@@ -80,7 +80,7 @@ function mri_morphology_params(
  * @returns Command-line arguments.
  */
 function mri_morphology_cargs(
-    params: MriMorphologyParameters,
+    params: MriMorphologyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function mri_morphology_cargs(
  * @returns Outputs object.
  */
 function mri_morphology_outputs(
-    params: MriMorphologyParameters,
+    params: MriMorphologyParamsDict,
     execution: Execution,
 ): MriMorphologyOutputs {
     const ret: MriMorphologyOutputs = {
@@ -134,7 +134,7 @@ function mri_morphology_outputs(
  * @returns NamedTuple of outputs (described in `MriMorphologyOutputs`).
  */
 function mri_morphology_execute(
-    params: MriMorphologyParameters,
+    params: MriMorphologyParamsDict,
     runner: Runner | null = null,
 ): MriMorphologyOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function mri_morphology(
 export {
       MRI_MORPHOLOGY_METADATA,
       MriMorphologyOutputs,
+      MriMorphologyParamsDict,
+      MriMorphologyParamsDictTagged,
       mri_morphology,
       mri_morphology_execute,
       mri_morphology_params,

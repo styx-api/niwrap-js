@@ -11,17 +11,17 @@ const FSLVBM_1_BET_METADATA: Metadata = {
 };
 
 
-interface Fslvbm1BetParameters {
+interface Fslvbm1BetParamsDict {
     "@type"?: "fsl/fslvbm_1_bet";
     "default_bet": boolean;
     "increased_robustness": boolean;
     "bet_parameters"?: string | null | undefined;
 }
-type Fslvbm1BetParametersTagged = Required<Pick<Fslvbm1BetParameters, '@type'>> & Fslvbm1BetParameters;
+type Fslvbm1BetParamsDictTagged = Required<Pick<Fslvbm1BetParamsDict, '@type'>> & Fslvbm1BetParamsDict;
 
 
 /**
- * Output object returned when calling `Fslvbm1BetParameters(...)`.
+ * Output object returned when calling `Fslvbm1BetParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function fslvbm_1_bet_params(
     default_bet: boolean = false,
     increased_robustness: boolean = false,
     bet_parameters: string | null = null,
-): Fslvbm1BetParametersTagged {
+): Fslvbm1BetParamsDictTagged {
     const params = {
         "@type": "fsl/fslvbm_1_bet" as const,
         "default_bet": default_bet,
@@ -68,7 +68,7 @@ function fslvbm_1_bet_params(
  * @returns Command-line arguments.
  */
 function fslvbm_1_bet_cargs(
-    params: Fslvbm1BetParameters,
+    params: Fslvbm1BetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function fslvbm_1_bet_cargs(
  * @returns Outputs object.
  */
 function fslvbm_1_bet_outputs(
-    params: Fslvbm1BetParameters,
+    params: Fslvbm1BetParamsDict,
     execution: Execution,
 ): Fslvbm1BetOutputs {
     const ret: Fslvbm1BetOutputs = {
@@ -120,7 +120,7 @@ function fslvbm_1_bet_outputs(
  * @returns NamedTuple of outputs (described in `Fslvbm1BetOutputs`).
  */
 function fslvbm_1_bet_execute(
-    params: Fslvbm1BetParameters,
+    params: Fslvbm1BetParamsDict,
     runner: Runner | null = null,
 ): Fslvbm1BetOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function fslvbm_1_bet(
 export {
       FSLVBM_1_BET_METADATA,
       Fslvbm1BetOutputs,
+      Fslvbm1BetParamsDict,
+      Fslvbm1BetParamsDictTagged,
       fslvbm_1_bet,
       fslvbm_1_bet_execute,
       fslvbm_1_bet_params,

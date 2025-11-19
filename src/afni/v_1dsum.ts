@@ -11,7 +11,7 @@ const V_1DSUM_METADATA: Metadata = {
 };
 
 
-interface V1dsumParameters {
+interface V1dsumParamsDict {
     "@type"?: "afni/1dsum";
     "input_files": Array<InputPathType>;
     "ignore_rows"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface V1dsumParameters {
     "nocomment_flag": boolean;
     "okempty_flag": boolean;
 }
-type V1dsumParametersTagged = Required<Pick<V1dsumParameters, '@type'>> & V1dsumParameters;
+type V1dsumParamsDictTagged = Required<Pick<V1dsumParamsDict, '@type'>> & V1dsumParamsDict;
 
 
 /**
- * Output object returned when calling `V1dsumParameters(...)`.
+ * Output object returned when calling `V1dsumParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_1dsum_params(
     mean_flag: boolean = false,
     nocomment_flag: boolean = false,
     okempty_flag: boolean = false,
-): V1dsumParametersTagged {
+): V1dsumParamsDictTagged {
     const params = {
         "@type": "afni/1dsum" as const,
         "input_files": input_files,
@@ -86,7 +86,7 @@ function v_1dsum_params(
  * @returns Command-line arguments.
  */
 function v_1dsum_cargs(
-    params: V1dsumParameters,
+    params: V1dsumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function v_1dsum_cargs(
  * @returns Outputs object.
  */
 function v_1dsum_outputs(
-    params: V1dsumParameters,
+    params: V1dsumParamsDict,
     execution: Execution,
 ): V1dsumOutputs {
     const ret: V1dsumOutputs = {
@@ -152,7 +152,7 @@ function v_1dsum_outputs(
  * @returns NamedTuple of outputs (described in `V1dsumOutputs`).
  */
 function v_1dsum_execute(
-    params: V1dsumParameters,
+    params: V1dsumParamsDict,
     runner: Runner | null = null,
 ): V1dsumOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function v_1dsum(
 
 export {
       V1dsumOutputs,
+      V1dsumParamsDict,
+      V1dsumParamsDictTagged,
       V_1DSUM_METADATA,
       v_1dsum,
       v_1dsum_execute,

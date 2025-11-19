@@ -11,16 +11,16 @@ const IFH2HDR_METADATA: Metadata = {
 };
 
 
-interface Ifh2hdrParameters {
+interface Ifh2hdrParamsDict {
     "@type"?: "freesurfer/ifh2hdr";
     "input_file": InputPathType;
     "range"?: string | null | undefined;
 }
-type Ifh2hdrParametersTagged = Required<Pick<Ifh2hdrParameters, '@type'>> & Ifh2hdrParameters;
+type Ifh2hdrParamsDictTagged = Required<Pick<Ifh2hdrParamsDict, '@type'>> & Ifh2hdrParamsDict;
 
 
 /**
- * Output object returned when calling `Ifh2hdrParameters(...)`.
+ * Output object returned when calling `Ifh2hdrParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface Ifh2hdrOutputs {
 function ifh2hdr_params(
     input_file: InputPathType,
     range: string | null = null,
-): Ifh2hdrParametersTagged {
+): Ifh2hdrParamsDictTagged {
     const params = {
         "@type": "freesurfer/ifh2hdr" as const,
         "input_file": input_file,
@@ -64,7 +64,7 @@ function ifh2hdr_params(
  * @returns Command-line arguments.
  */
 function ifh2hdr_cargs(
-    params: Ifh2hdrParameters,
+    params: Ifh2hdrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function ifh2hdr_cargs(
  * @returns Outputs object.
  */
 function ifh2hdr_outputs(
-    params: Ifh2hdrParameters,
+    params: Ifh2hdrParamsDict,
     execution: Execution,
 ): Ifh2hdrOutputs {
     const ret: Ifh2hdrOutputs = {
@@ -114,7 +114,7 @@ function ifh2hdr_outputs(
  * @returns NamedTuple of outputs (described in `Ifh2hdrOutputs`).
  */
 function ifh2hdr_execute(
-    params: Ifh2hdrParameters,
+    params: Ifh2hdrParamsDict,
     runner: Runner | null = null,
 ): Ifh2hdrOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function ifh2hdr(
 export {
       IFH2HDR_METADATA,
       Ifh2hdrOutputs,
+      Ifh2hdrParamsDict,
+      Ifh2hdrParamsDictTagged,
       ifh2hdr,
       ifh2hdr_execute,
       ifh2hdr_params,

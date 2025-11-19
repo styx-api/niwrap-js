@@ -11,7 +11,7 @@ const MKSUBJDIRS_METADATA: Metadata = {
 };
 
 
-interface MksubjdirsParameters {
+interface MksubjdirsParamsDict {
     "@type"?: "freesurfer/mksubjdirs";
     "subj_name": string;
     "mode"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface MksubjdirsParameters {
     "help": boolean;
     "version": boolean;
 }
-type MksubjdirsParametersTagged = Required<Pick<MksubjdirsParameters, '@type'>> & MksubjdirsParameters;
+type MksubjdirsParamsDictTagged = Required<Pick<MksubjdirsParamsDict, '@type'>> & MksubjdirsParamsDict;
 
 
 /**
- * Output object returned when calling `MksubjdirsParameters(...)`.
+ * Output object returned when calling `MksubjdirsParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function mksubjdirs_params(
     selinux_context: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MksubjdirsParametersTagged {
+): MksubjdirsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mksubjdirs" as const,
         "subj_name": subj_name,
@@ -84,7 +84,7 @@ function mksubjdirs_params(
  * @returns Command-line arguments.
  */
 function mksubjdirs_cargs(
-    params: MksubjdirsParameters,
+    params: MksubjdirsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function mksubjdirs_cargs(
  * @returns Outputs object.
  */
 function mksubjdirs_outputs(
-    params: MksubjdirsParameters,
+    params: MksubjdirsParamsDict,
     execution: Execution,
 ): MksubjdirsOutputs {
     const ret: MksubjdirsOutputs = {
@@ -149,7 +149,7 @@ function mksubjdirs_outputs(
  * @returns NamedTuple of outputs (described in `MksubjdirsOutputs`).
  */
 function mksubjdirs_execute(
-    params: MksubjdirsParameters,
+    params: MksubjdirsParamsDict,
     runner: Runner | null = null,
 ): MksubjdirsOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function mksubjdirs(
 export {
       MKSUBJDIRS_METADATA,
       MksubjdirsOutputs,
+      MksubjdirsParamsDict,
+      MksubjdirsParamsDictTagged,
       mksubjdirs,
       mksubjdirs_execute,
       mksubjdirs_params,

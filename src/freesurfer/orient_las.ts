@@ -11,17 +11,17 @@ const ORIENT_LAS_METADATA: Metadata = {
 };
 
 
-interface OrientLasParameters {
+interface OrientLasParamsDict {
     "@type"?: "freesurfer/orientLAS";
     "input_image": InputPathType;
     "output_image": string;
     "check": boolean;
 }
-type OrientLasParametersTagged = Required<Pick<OrientLasParameters, '@type'>> & OrientLasParameters;
+type OrientLasParamsDictTagged = Required<Pick<OrientLasParamsDict, '@type'>> & OrientLasParamsDict;
 
 
 /**
- * Output object returned when calling `OrientLasParameters(...)`.
+ * Output object returned when calling `OrientLasParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function orient_las_params(
     input_image: InputPathType,
     output_image: string,
     check: boolean = false,
-): OrientLasParametersTagged {
+): OrientLasParamsDictTagged {
     const params = {
         "@type": "freesurfer/orientLAS" as const,
         "input_image": input_image,
@@ -70,7 +70,7 @@ function orient_las_params(
  * @returns Command-line arguments.
  */
 function orient_las_cargs(
-    params: OrientLasParameters,
+    params: OrientLasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function orient_las_cargs(
  * @returns Outputs object.
  */
 function orient_las_outputs(
-    params: OrientLasParameters,
+    params: OrientLasParamsDict,
     execution: Execution,
 ): OrientLasOutputs {
     const ret: OrientLasOutputs = {
@@ -119,7 +119,7 @@ function orient_las_outputs(
  * @returns NamedTuple of outputs (described in `OrientLasOutputs`).
  */
 function orient_las_execute(
-    params: OrientLasParameters,
+    params: OrientLasParamsDict,
     runner: Runner | null = null,
 ): OrientLasOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function orient_las(
 export {
       ORIENT_LAS_METADATA,
       OrientLasOutputs,
+      OrientLasParamsDict,
+      OrientLasParamsDictTagged,
       orient_las,
       orient_las_execute,
       orient_las_params,

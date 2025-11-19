@@ -11,16 +11,16 @@ const V__ISO_MASKS_METADATA: Metadata = {
 };
 
 
-interface VIsoMasksParameters {
+interface VIsoMasksParamsDict {
     "@type"?: "afni/@IsoMasks";
     "input_dataset": InputPathType;
     "isovals"?: Array<number> | null | undefined;
 }
-type VIsoMasksParametersTagged = Required<Pick<VIsoMasksParameters, '@type'>> & VIsoMasksParameters;
+type VIsoMasksParamsDictTagged = Required<Pick<VIsoMasksParamsDict, '@type'>> & VIsoMasksParamsDict;
 
 
 /**
- * Output object returned when calling `VIsoMasksParameters(...)`.
+ * Output object returned when calling `VIsoMasksParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VIsoMasksOutputs {
 function v__iso_masks_params(
     input_dataset: InputPathType,
     isovals: Array<number> | null = null,
-): VIsoMasksParametersTagged {
+): VIsoMasksParamsDictTagged {
     const params = {
         "@type": "afni/@IsoMasks" as const,
         "input_dataset": input_dataset,
@@ -64,7 +64,7 @@ function v__iso_masks_params(
  * @returns Command-line arguments.
  */
 function v__iso_masks_cargs(
-    params: VIsoMasksParameters,
+    params: VIsoMasksParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function v__iso_masks_cargs(
  * @returns Outputs object.
  */
 function v__iso_masks_outputs(
-    params: VIsoMasksParameters,
+    params: VIsoMasksParamsDict,
     execution: Execution,
 ): VIsoMasksOutputs {
     const ret: VIsoMasksOutputs = {
@@ -114,7 +114,7 @@ function v__iso_masks_outputs(
  * @returns NamedTuple of outputs (described in `VIsoMasksOutputs`).
  */
 function v__iso_masks_execute(
-    params: VIsoMasksParameters,
+    params: VIsoMasksParamsDict,
     runner: Runner | null = null,
 ): VIsoMasksOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function v__iso_masks(
 
 export {
       VIsoMasksOutputs,
+      VIsoMasksParamsDict,
+      VIsoMasksParamsDictTagged,
       V__ISO_MASKS_METADATA,
       v__iso_masks,
       v__iso_masks_execute,

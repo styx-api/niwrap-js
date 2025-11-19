@@ -11,16 +11,16 @@ const V_3DRENAME_METADATA: Metadata = {
 };
 
 
-interface V3drenameParameters {
+interface V3drenameParamsDict {
     "@type"?: "afni/3drename";
     "old_prefix": string;
     "new_prefix": string;
 }
-type V3drenameParametersTagged = Required<Pick<V3drenameParameters, '@type'>> & V3drenameParameters;
+type V3drenameParamsDictTagged = Required<Pick<V3drenameParamsDict, '@type'>> & V3drenameParamsDict;
 
 
 /**
- * Output object returned when calling `V3drenameParameters(...)`.
+ * Output object returned when calling `V3drenameParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface V3drenameOutputs {
 function v_3drename_params(
     old_prefix: string,
     new_prefix: string,
-): V3drenameParametersTagged {
+): V3drenameParamsDictTagged {
     const params = {
         "@type": "afni/3drename" as const,
         "old_prefix": old_prefix,
@@ -62,7 +62,7 @@ function v_3drename_params(
  * @returns Command-line arguments.
  */
 function v_3drename_cargs(
-    params: V3drenameParameters,
+    params: V3drenameParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function v_3drename_cargs(
  * @returns Outputs object.
  */
 function v_3drename_outputs(
-    params: V3drenameParameters,
+    params: V3drenameParamsDict,
     execution: Execution,
 ): V3drenameOutputs {
     const ret: V3drenameOutputs = {
@@ -107,7 +107,7 @@ function v_3drename_outputs(
  * @returns NamedTuple of outputs (described in `V3drenameOutputs`).
  */
 function v_3drename_execute(
-    params: V3drenameParameters,
+    params: V3drenameParamsDict,
     runner: Runner | null = null,
 ): V3drenameOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function v_3drename(
 
 export {
       V3drenameOutputs,
+      V3drenameParamsDict,
+      V3drenameParamsDictTagged,
       V_3DRENAME_METADATA,
       v_3drename,
       v_3drename_execute,

@@ -11,15 +11,15 @@ const MRMETRIC_METADATA: Metadata = {
 };
 
 
-interface MrmetricConfigParameters {
+interface MrmetricConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrmetricConfigParametersTagged = Required<Pick<MrmetricConfigParameters, '@type'>> & MrmetricConfigParameters;
+type MrmetricConfigParamsDictTagged = Required<Pick<MrmetricConfigParamsDict, '@type'>> & MrmetricConfigParamsDict;
 
 
-interface MrmetricParameters {
+interface MrmetricParamsDict {
     "@type"?: "mrtrix/mrmetric";
     "space"?: string | null | undefined;
     "interp"?: string | null | undefined;
@@ -33,13 +33,13 @@ interface MrmetricParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrmetricConfigParameters> | null | undefined;
+    "config"?: Array<MrmetricConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image1": InputPathType;
     "image2": InputPathType;
 }
-type MrmetricParametersTagged = Required<Pick<MrmetricParameters, '@type'>> & MrmetricParameters;
+type MrmetricParamsDictTagged = Required<Pick<MrmetricParamsDict, '@type'>> & MrmetricParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type MrmetricParametersTagged = Required<Pick<MrmetricParameters, '@type'>> & Mr
  *
  * @returns Parameter dictionary
  */
-function mrmetric_config_params(
+function mrmetric_config(
     key: string,
     value: string,
-): MrmetricConfigParametersTagged {
+): MrmetricConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -72,7 +72,7 @@ function mrmetric_config_params(
  * @returns Command-line arguments.
  */
 function mrmetric_config_cargs(
-    params: MrmetricConfigParameters,
+    params: MrmetricConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function mrmetric_config_cargs(
 
 
 /**
- * Output object returned when calling `MrmetricParameters(...)`.
+ * Output object returned when calling `MrmetricParamsDict(...)`.
  *
  * @interface
  */
@@ -134,10 +134,10 @@ function mrmetric_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrmetricConfigParameters> | null = null,
+    config: Array<MrmetricConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrmetricParametersTagged {
+): MrmetricParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrmetric" as const,
         "nonormalisation": nonormalisation,
@@ -185,7 +185,7 @@ function mrmetric_params(
  * @returns Command-line arguments.
  */
 function mrmetric_cargs(
-    params: MrmetricParameters,
+    params: MrmetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function mrmetric_cargs(
  * @returns Outputs object.
  */
 function mrmetric_outputs(
-    params: MrmetricParameters,
+    params: MrmetricParamsDict,
     execution: Execution,
 ): MrmetricOutputs {
     const ret: MrmetricOutputs = {
@@ -299,7 +299,7 @@ function mrmetric_outputs(
  * @returns NamedTuple of outputs (described in `MrmetricOutputs`).
  */
 function mrmetric_execute(
-    params: MrmetricParameters,
+    params: MrmetricParamsDict,
     runner: Runner | null = null,
 ): MrmetricOutputs {
     runner = runner || getGlobalRunner();
@@ -363,7 +363,7 @@ function mrmetric(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrmetricConfigParameters> | null = null,
+    config: Array<MrmetricConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -375,9 +375,13 @@ function mrmetric(
 
 export {
       MRMETRIC_METADATA,
+      MrmetricConfigParamsDict,
+      MrmetricConfigParamsDictTagged,
       MrmetricOutputs,
+      MrmetricParamsDict,
+      MrmetricParamsDictTagged,
       mrmetric,
-      mrmetric_config_params,
+      mrmetric_config,
       mrmetric_execute,
       mrmetric_params,
 };

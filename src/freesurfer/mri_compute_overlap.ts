@@ -11,7 +11,7 @@ const MRI_COMPUTE_OVERLAP_METADATA: Metadata = {
 };
 
 
-interface MriComputeOverlapParameters {
+interface MriComputeOverlapParamsDict {
     "@type"?: "freesurfer/mri_compute_overlap";
     "volumes": Array<InputPathType>;
     "label_numbers"?: Array<string> | null | undefined;
@@ -25,11 +25,11 @@ interface MriComputeOverlapParameters {
     "translate_label"?: Array<number> | null | undefined;
     "help": boolean;
 }
-type MriComputeOverlapParametersTagged = Required<Pick<MriComputeOverlapParameters, '@type'>> & MriComputeOverlapParameters;
+type MriComputeOverlapParamsDictTagged = Required<Pick<MriComputeOverlapParamsDict, '@type'>> & MriComputeOverlapParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeOverlapParameters(...)`.
+ * Output object returned when calling `MriComputeOverlapParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function mri_compute_overlap_params(
     quiet_mode: boolean = false,
     translate_label: Array<number> | null = null,
     help: boolean = false,
-): MriComputeOverlapParametersTagged {
+): MriComputeOverlapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_overlap" as const,
         "volumes": volumes,
@@ -106,7 +106,7 @@ function mri_compute_overlap_params(
  * @returns Command-line arguments.
  */
 function mri_compute_overlap_cargs(
-    params: MriComputeOverlapParameters,
+    params: MriComputeOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function mri_compute_overlap_cargs(
  * @returns Outputs object.
  */
 function mri_compute_overlap_outputs(
-    params: MriComputeOverlapParameters,
+    params: MriComputeOverlapParamsDict,
     execution: Execution,
 ): MriComputeOverlapOutputs {
     const ret: MriComputeOverlapOutputs = {
@@ -189,7 +189,7 @@ function mri_compute_overlap_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeOverlapOutputs`).
  */
 function mri_compute_overlap_execute(
-    params: MriComputeOverlapParameters,
+    params: MriComputeOverlapParamsDict,
     runner: Runner | null = null,
 ): MriComputeOverlapOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function mri_compute_overlap(
 export {
       MRI_COMPUTE_OVERLAP_METADATA,
       MriComputeOverlapOutputs,
+      MriComputeOverlapParamsDict,
+      MriComputeOverlapParamsDictTagged,
       mri_compute_overlap,
       mri_compute_overlap_execute,
       mri_compute_overlap_params,

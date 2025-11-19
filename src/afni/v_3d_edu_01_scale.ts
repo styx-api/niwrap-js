@@ -11,18 +11,18 @@ const V_3D_EDU_01_SCALE_METADATA: Metadata = {
 };
 
 
-interface V3dEdu01ScaleParameters {
+interface V3dEdu01ScaleParamsDict {
     "@type"?: "afni/3dEdu_01_scale";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
     "mult_factors"?: Array<number> | null | undefined;
     "option_flag": boolean;
 }
-type V3dEdu01ScaleParametersTagged = Required<Pick<V3dEdu01ScaleParameters, '@type'>> & V3dEdu01ScaleParameters;
+type V3dEdu01ScaleParamsDictTagged = Required<Pick<V3dEdu01ScaleParamsDict, '@type'>> & V3dEdu01ScaleParamsDict;
 
 
 /**
- * Output object returned when calling `V3dEdu01ScaleParameters(...)`.
+ * Output object returned when calling `V3dEdu01ScaleParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function v_3d_edu_01_scale_params(
     mask: InputPathType | null = null,
     mult_factors: Array<number> | null = null,
     option_flag: boolean = false,
-): V3dEdu01ScaleParametersTagged {
+): V3dEdu01ScaleParamsDictTagged {
     const params = {
         "@type": "afni/3dEdu_01_scale" as const,
         "input": input,
@@ -74,7 +74,7 @@ function v_3d_edu_01_scale_params(
  * @returns Command-line arguments.
  */
 function v_3d_edu_01_scale_cargs(
-    params: V3dEdu01ScaleParameters,
+    params: V3dEdu01ScaleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function v_3d_edu_01_scale_cargs(
  * @returns Outputs object.
  */
 function v_3d_edu_01_scale_outputs(
-    params: V3dEdu01ScaleParameters,
+    params: V3dEdu01ScaleParamsDict,
     execution: Execution,
 ): V3dEdu01ScaleOutputs {
     const ret: V3dEdu01ScaleOutputs = {
@@ -133,7 +133,7 @@ function v_3d_edu_01_scale_outputs(
  * @returns NamedTuple of outputs (described in `V3dEdu01ScaleOutputs`).
  */
 function v_3d_edu_01_scale_execute(
-    params: V3dEdu01ScaleParameters,
+    params: V3dEdu01ScaleParamsDict,
     runner: Runner | null = null,
 ): V3dEdu01ScaleOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function v_3d_edu_01_scale(
 
 export {
       V3dEdu01ScaleOutputs,
+      V3dEdu01ScaleParamsDict,
+      V3dEdu01ScaleParamsDictTagged,
       V_3D_EDU_01_SCALE_METADATA,
       v_3d_edu_01_scale,
       v_3d_edu_01_scale_execute,

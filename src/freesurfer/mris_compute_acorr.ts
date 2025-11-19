@@ -11,7 +11,7 @@ const MRIS_COMPUTE_ACORR_METADATA: Metadata = {
 };
 
 
-interface MrisComputeAcorrParameters {
+interface MrisComputeAcorrParamsDict {
     "@type"?: "freesurfer/mris_compute_acorr";
     "output_subject": string;
     "hemi": string;
@@ -20,11 +20,11 @@ interface MrisComputeAcorrParameters {
     "c1_subjects": Array<string>;
     "c2_subjects": Array<string>;
 }
-type MrisComputeAcorrParametersTagged = Required<Pick<MrisComputeAcorrParameters, '@type'>> & MrisComputeAcorrParameters;
+type MrisComputeAcorrParamsDictTagged = Required<Pick<MrisComputeAcorrParamsDict, '@type'>> & MrisComputeAcorrParamsDict;
 
 
 /**
- * Output object returned when calling `MrisComputeAcorrParameters(...)`.
+ * Output object returned when calling `MrisComputeAcorrParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function mris_compute_acorr_params(
     curv: InputPathType,
     c1_subjects: Array<string>,
     c2_subjects: Array<string>,
-): MrisComputeAcorrParametersTagged {
+): MrisComputeAcorrParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_compute_acorr" as const,
         "output_subject": output_subject,
@@ -78,7 +78,7 @@ function mris_compute_acorr_params(
  * @returns Command-line arguments.
  */
 function mris_compute_acorr_cargs(
-    params: MrisComputeAcorrParameters,
+    params: MrisComputeAcorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function mris_compute_acorr_cargs(
  * @returns Outputs object.
  */
 function mris_compute_acorr_outputs(
-    params: MrisComputeAcorrParameters,
+    params: MrisComputeAcorrParamsDict,
     execution: Execution,
 ): MrisComputeAcorrOutputs {
     const ret: MrisComputeAcorrOutputs = {
@@ -130,7 +130,7 @@ function mris_compute_acorr_outputs(
  * @returns NamedTuple of outputs (described in `MrisComputeAcorrOutputs`).
  */
 function mris_compute_acorr_execute(
-    params: MrisComputeAcorrParameters,
+    params: MrisComputeAcorrParamsDict,
     runner: Runner | null = null,
 ): MrisComputeAcorrOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function mris_compute_acorr(
 export {
       MRIS_COMPUTE_ACORR_METADATA,
       MrisComputeAcorrOutputs,
+      MrisComputeAcorrParamsDict,
+      MrisComputeAcorrParamsDictTagged,
       mris_compute_acorr,
       mris_compute_acorr_execute,
       mris_compute_acorr_params,

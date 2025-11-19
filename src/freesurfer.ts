@@ -43,7 +43,7 @@ export {check_mcr_sh, check_mcr_sh_execute, check_mcr_sh_params} from './freesur
 export {check_recons_sh, check_recons_sh_execute, check_recons_sh_params} from './freesurfer/check_recons_sh'
 export {check_subject, check_subject_execute, check_subject_params} from './freesurfer/check_subject'
 export {compute_interrater_variability_csh, compute_interrater_variability_csh_execute, compute_interrater_variability_csh_params} from './freesurfer/compute_interrater_variability_csh'
-export {compute_label_volumes_csh, compute_label_volumes_csh_execute, compute_label_volumes_csh_params, compute_label_volumes_csh_label_l_params} from './freesurfer/compute_label_volumes_csh'
+export {compute_label_volumes_csh, compute_label_volumes_csh_execute, compute_label_volumes_csh_params, compute_label_volumes_csh_label_l} from './freesurfer/compute_label_volumes_csh'
 export {compute_vox2vox, compute_vox2vox_execute, compute_vox2vox_params} from './freesurfer/compute_vox2vox'
 export {conf2hires, conf2hires_execute, conf2hires_params} from './freesurfer/conf2hires'
 export {connected_components, connected_components_execute, connected_components_params} from './freesurfer/connected_components'

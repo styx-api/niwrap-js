@@ -11,7 +11,7 @@ const DMRI_BSET_METADATA: Metadata = {
 };
 
 
-interface DmriBsetParameters {
+interface DmriBsetParamsDict {
     "@type"?: "freesurfer/dmri_bset";
     "input_dwi": InputPathType;
     "output_dwi": string;
@@ -24,11 +24,11 @@ interface DmriBsetParameters {
     "output_b_table"?: string | null | undefined;
     "output_g_table"?: string | null | undefined;
 }
-type DmriBsetParametersTagged = Required<Pick<DmriBsetParameters, '@type'>> & DmriBsetParameters;
+type DmriBsetParamsDictTagged = Required<Pick<DmriBsetParamsDict, '@type'>> & DmriBsetParamsDict;
 
 
 /**
- * Output object returned when calling `DmriBsetParameters(...)`.
+ * Output object returned when calling `DmriBsetParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function dmri_bset_params(
     input_g_table: InputPathType | null = null,
     output_b_table: string | null = null,
     output_g_table: string | null = null,
-): DmriBsetParametersTagged {
+): DmriBsetParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_bset" as const,
         "input_dwi": input_dwi,
@@ -120,7 +120,7 @@ function dmri_bset_params(
  * @returns Command-line arguments.
  */
 function dmri_bset_cargs(
-    params: DmriBsetParameters,
+    params: DmriBsetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function dmri_bset_cargs(
  * @returns Outputs object.
  */
 function dmri_bset_outputs(
-    params: DmriBsetParameters,
+    params: DmriBsetParamsDict,
     execution: Execution,
 ): DmriBsetOutputs {
     const ret: DmriBsetOutputs = {
@@ -213,7 +213,7 @@ function dmri_bset_outputs(
  * @returns NamedTuple of outputs (described in `DmriBsetOutputs`).
  */
 function dmri_bset_execute(
-    params: DmriBsetParameters,
+    params: DmriBsetParamsDict,
     runner: Runner | null = null,
 ): DmriBsetOutputs {
     runner = runner || getGlobalRunner();
@@ -270,6 +270,8 @@ function dmri_bset(
 export {
       DMRI_BSET_METADATA,
       DmriBsetOutputs,
+      DmriBsetParamsDict,
+      DmriBsetParamsDictTagged,
       dmri_bset,
       dmri_bset_execute,
       dmri_bset_params,

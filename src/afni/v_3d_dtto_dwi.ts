@@ -11,7 +11,7 @@ const V_3D_DTTO_DWI_METADATA: Metadata = {
 };
 
 
-interface V3dDttoDwiParameters {
+interface V3dDttoDwiParamsDict {
     "@type"?: "afni/3dDTtoDWI";
     "gradient_file": InputPathType;
     "i0_dataset": InputPathType;
@@ -22,11 +22,11 @@ interface V3dDttoDwiParameters {
     "scale_out_1000": boolean;
     "help": boolean;
 }
-type V3dDttoDwiParametersTagged = Required<Pick<V3dDttoDwiParameters, '@type'>> & V3dDttoDwiParameters;
+type V3dDttoDwiParamsDictTagged = Required<Pick<V3dDttoDwiParamsDict, '@type'>> & V3dDttoDwiParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDttoDwiParameters(...)`.
+ * Output object returned when calling `V3dDttoDwiParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_dtto_dwi_params(
     datum_type: string | null = null,
     scale_out_1000: boolean = false,
     help: boolean = false,
-): V3dDttoDwiParametersTagged {
+): V3dDttoDwiParamsDictTagged {
     const params = {
         "@type": "afni/3dDTtoDWI" as const,
         "gradient_file": gradient_file,
@@ -94,7 +94,7 @@ function v_3d_dtto_dwi_params(
  * @returns Command-line arguments.
  */
 function v_3d_dtto_dwi_cargs(
-    params: V3dDttoDwiParameters,
+    params: V3dDttoDwiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function v_3d_dtto_dwi_cargs(
  * @returns Outputs object.
  */
 function v_3d_dtto_dwi_outputs(
-    params: V3dDttoDwiParameters,
+    params: V3dDttoDwiParamsDict,
     execution: Execution,
 ): V3dDttoDwiOutputs {
     const ret: V3dDttoDwiOutputs = {
@@ -162,7 +162,7 @@ function v_3d_dtto_dwi_outputs(
  * @returns NamedTuple of outputs (described in `V3dDttoDwiOutputs`).
  */
 function v_3d_dtto_dwi_execute(
-    params: V3dDttoDwiParameters,
+    params: V3dDttoDwiParamsDict,
     runner: Runner | null = null,
 ): V3dDttoDwiOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function v_3d_dtto_dwi(
 
 export {
       V3dDttoDwiOutputs,
+      V3dDttoDwiParamsDict,
+      V3dDttoDwiParamsDictTagged,
       V_3D_DTTO_DWI_METADATA,
       v_3d_dtto_dwi,
       v_3d_dtto_dwi_execute,

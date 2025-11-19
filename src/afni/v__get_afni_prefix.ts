@@ -11,16 +11,16 @@ const V__GET_AFNI_PREFIX_METADATA: Metadata = {
 };
 
 
-interface VGetAfniPrefixParameters {
+interface VGetAfniPrefixParamsDict {
     "@type"?: "afni/@GetAfniPrefix";
     "name": InputPathType;
     "suffix"?: string | null | undefined;
 }
-type VGetAfniPrefixParametersTagged = Required<Pick<VGetAfniPrefixParameters, '@type'>> & VGetAfniPrefixParameters;
+type VGetAfniPrefixParamsDictTagged = Required<Pick<VGetAfniPrefixParamsDict, '@type'>> & VGetAfniPrefixParamsDict;
 
 
 /**
- * Output object returned when calling `VGetAfniPrefixParameters(...)`.
+ * Output object returned when calling `VGetAfniPrefixParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VGetAfniPrefixOutputs {
 function v__get_afni_prefix_params(
     name: InputPathType,
     suffix: string | null = null,
-): VGetAfniPrefixParametersTagged {
+): VGetAfniPrefixParamsDictTagged {
     const params = {
         "@type": "afni/@GetAfniPrefix" as const,
         "name": name,
@@ -64,7 +64,7 @@ function v__get_afni_prefix_params(
  * @returns Command-line arguments.
  */
 function v__get_afni_prefix_cargs(
-    params: VGetAfniPrefixParameters,
+    params: VGetAfniPrefixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function v__get_afni_prefix_cargs(
  * @returns Outputs object.
  */
 function v__get_afni_prefix_outputs(
-    params: VGetAfniPrefixParameters,
+    params: VGetAfniPrefixParamsDict,
     execution: Execution,
 ): VGetAfniPrefixOutputs {
     const ret: VGetAfniPrefixOutputs = {
@@ -111,7 +111,7 @@ function v__get_afni_prefix_outputs(
  * @returns NamedTuple of outputs (described in `VGetAfniPrefixOutputs`).
  */
 function v__get_afni_prefix_execute(
-    params: VGetAfniPrefixParameters,
+    params: VGetAfniPrefixParamsDict,
     runner: Runner | null = null,
 ): VGetAfniPrefixOutputs {
     runner = runner || getGlobalRunner();
@@ -151,6 +151,8 @@ function v__get_afni_prefix(
 
 export {
       VGetAfniPrefixOutputs,
+      VGetAfniPrefixParamsDict,
+      VGetAfniPrefixParamsDictTagged,
       V__GET_AFNI_PREFIX_METADATA,
       v__get_afni_prefix,
       v__get_afni_prefix_execute,

@@ -11,15 +11,15 @@ const TENSOR2METRIC_METADATA: Metadata = {
 };
 
 
-interface Tensor2metricConfigParameters {
+interface Tensor2metricConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Tensor2metricConfigParametersTagged = Required<Pick<Tensor2metricConfigParameters, '@type'>> & Tensor2metricConfigParameters;
+type Tensor2metricConfigParamsDictTagged = Required<Pick<Tensor2metricConfigParamsDict, '@type'>> & Tensor2metricConfigParamsDict;
 
 
-interface Tensor2metricParameters {
+interface Tensor2metricParamsDict {
     "@type"?: "mrtrix/tensor2metric";
     "adc"?: string | null | undefined;
     "fa"?: string | null | undefined;
@@ -38,12 +38,12 @@ interface Tensor2metricParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Tensor2metricConfigParameters> | null | undefined;
+    "config"?: Array<Tensor2metricConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tensor": InputPathType;
 }
-type Tensor2metricParametersTagged = Required<Pick<Tensor2metricParameters, '@type'>> & Tensor2metricParameters;
+type Tensor2metricParamsDictTagged = Required<Pick<Tensor2metricParamsDict, '@type'>> & Tensor2metricParamsDict;
 
 
 /**
@@ -54,10 +54,10 @@ type Tensor2metricParametersTagged = Required<Pick<Tensor2metricParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function tensor2metric_config_params(
+function tensor2metric_config(
     key: string,
     value: string,
-): Tensor2metricConfigParametersTagged {
+): Tensor2metricConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -76,7 +76,7 @@ function tensor2metric_config_params(
  * @returns Command-line arguments.
  */
 function tensor2metric_config_cargs(
-    params: Tensor2metricConfigParameters,
+    params: Tensor2metricConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function tensor2metric_config_cargs(
 
 
 /**
- * Output object returned when calling `Tensor2metricParameters(...)`.
+ * Output object returned when calling `Tensor2metricParamsDict(...)`.
  *
  * @interface
  */
@@ -182,10 +182,10 @@ function tensor2metric_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tensor2metricConfigParameters> | null = null,
+    config: Array<Tensor2metricConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Tensor2metricParametersTagged {
+): Tensor2metricParamsDictTagged {
     const params = {
         "@type": "mrtrix/tensor2metric" as const,
         "info": info,
@@ -251,7 +251,7 @@ function tensor2metric_params(
  * @returns Command-line arguments.
  */
 function tensor2metric_cargs(
-    params: Tensor2metricParameters,
+    params: Tensor2metricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -369,7 +369,7 @@ function tensor2metric_cargs(
  * @returns Outputs object.
  */
 function tensor2metric_outputs(
-    params: Tensor2metricParameters,
+    params: Tensor2metricParamsDict,
     execution: Execution,
 ): Tensor2metricOutputs {
     const ret: Tensor2metricOutputs = {
@@ -411,7 +411,7 @@ function tensor2metric_outputs(
  * @returns NamedTuple of outputs (described in `Tensor2metricOutputs`).
  */
 function tensor2metric_execute(
-    params: Tensor2metricParameters,
+    params: Tensor2metricParamsDict,
     runner: Runner | null = null,
 ): Tensor2metricOutputs {
     runner = runner || getGlobalRunner();
@@ -485,7 +485,7 @@ function tensor2metric(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tensor2metricConfigParameters> | null = null,
+    config: Array<Tensor2metricConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -497,9 +497,13 @@ function tensor2metric(
 
 export {
       TENSOR2METRIC_METADATA,
+      Tensor2metricConfigParamsDict,
+      Tensor2metricConfigParamsDictTagged,
       Tensor2metricOutputs,
+      Tensor2metricParamsDict,
+      Tensor2metricParamsDictTagged,
       tensor2metric,
-      tensor2metric_config_params,
+      tensor2metric_config,
       tensor2metric_execute,
       tensor2metric_params,
 };

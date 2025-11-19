@@ -11,39 +11,39 @@ const DCMINFO_METADATA: Metadata = {
 };
 
 
-interface DcminfoTagParameters {
+interface DcminfoTagParamsDict {
     "@type"?: "tag";
     "group": string;
     "element": string;
 }
-type DcminfoTagParametersTagged = Required<Pick<DcminfoTagParameters, '@type'>> & DcminfoTagParameters;
+type DcminfoTagParamsDictTagged = Required<Pick<DcminfoTagParamsDict, '@type'>> & DcminfoTagParamsDict;
 
 
-interface DcminfoConfigParameters {
+interface DcminfoConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DcminfoConfigParametersTagged = Required<Pick<DcminfoConfigParameters, '@type'>> & DcminfoConfigParameters;
+type DcminfoConfigParamsDictTagged = Required<Pick<DcminfoConfigParamsDict, '@type'>> & DcminfoConfigParamsDict;
 
 
-interface DcminfoParameters {
+interface DcminfoParamsDict {
     "@type"?: "mrtrix/dcminfo";
     "all": boolean;
     "csa": boolean;
     "phoenix": boolean;
-    "tag"?: Array<DcminfoTagParameters> | null | undefined;
+    "tag"?: Array<DcminfoTagParamsDict> | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DcminfoConfigParameters> | null | undefined;
+    "config"?: Array<DcminfoConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "file": InputPathType;
 }
-type DcminfoParametersTagged = Required<Pick<DcminfoParameters, '@type'>> & DcminfoParameters;
+type DcminfoParamsDictTagged = Required<Pick<DcminfoParamsDict, '@type'>> & DcminfoParamsDict;
 
 
 /**
@@ -54,10 +54,10 @@ type DcminfoParametersTagged = Required<Pick<DcminfoParameters, '@type'>> & Dcmi
  *
  * @returns Parameter dictionary
  */
-function dcminfo_tag_params(
+function dcminfo_tag(
     group: string,
     element: string,
-): DcminfoTagParametersTagged {
+): DcminfoTagParamsDictTagged {
     const params = {
         "@type": "tag" as const,
         "group": group,
@@ -76,7 +76,7 @@ function dcminfo_tag_params(
  * @returns Command-line arguments.
  */
 function dcminfo_tag_cargs(
-    params: DcminfoTagParameters,
+    params: DcminfoTagParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function dcminfo_tag_cargs(
  *
  * @returns Parameter dictionary
  */
-function dcminfo_config_params(
+function dcminfo_config(
     key: string,
     value: string,
-): DcminfoConfigParametersTagged {
+): DcminfoConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -117,7 +117,7 @@ function dcminfo_config_params(
  * @returns Command-line arguments.
  */
 function dcminfo_config_cargs(
-    params: DcminfoConfigParameters,
+    params: DcminfoConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function dcminfo_config_cargs(
 
 
 /**
- * Output object returned when calling `DcminfoParameters(...)`.
+ * Output object returned when calling `DcminfoParamsDict(...)`.
  *
  * @interface
  */
@@ -165,16 +165,16 @@ function dcminfo_params(
     all: boolean = false,
     csa: boolean = false,
     phoenix: boolean = false,
-    tag: Array<DcminfoTagParameters> | null = null,
+    tag: Array<DcminfoTagParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DcminfoConfigParameters> | null = null,
+    config: Array<DcminfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DcminfoParametersTagged {
+): DcminfoParamsDictTagged {
     const params = {
         "@type": "mrtrix/dcminfo" as const,
         "all": all,
@@ -210,7 +210,7 @@ function dcminfo_params(
  * @returns Command-line arguments.
  */
 function dcminfo_cargs(
-    params: DcminfoParameters,
+    params: DcminfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function dcminfo_cargs(
  * @returns Outputs object.
  */
 function dcminfo_outputs(
-    params: DcminfoParameters,
+    params: DcminfoParamsDict,
     execution: Execution,
 ): DcminfoOutputs {
     const ret: DcminfoOutputs = {
@@ -299,7 +299,7 @@ function dcminfo_outputs(
  * @returns NamedTuple of outputs (described in `DcminfoOutputs`).
  */
 function dcminfo_execute(
-    params: DcminfoParameters,
+    params: DcminfoParamsDict,
     runner: Runner | null = null,
 ): DcminfoOutputs {
     runner = runner || getGlobalRunner();
@@ -349,13 +349,13 @@ function dcminfo(
     all: boolean = false,
     csa: boolean = false,
     phoenix: boolean = false,
-    tag: Array<DcminfoTagParameters> | null = null,
+    tag: Array<DcminfoTagParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DcminfoConfigParameters> | null = null,
+    config: Array<DcminfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -367,10 +367,16 @@ function dcminfo(
 
 export {
       DCMINFO_METADATA,
+      DcminfoConfigParamsDict,
+      DcminfoConfigParamsDictTagged,
       DcminfoOutputs,
+      DcminfoParamsDict,
+      DcminfoParamsDictTagged,
+      DcminfoTagParamsDict,
+      DcminfoTagParamsDictTagged,
       dcminfo,
-      dcminfo_config_params,
+      dcminfo_config,
       dcminfo_execute,
       dcminfo_params,
-      dcminfo_tag_params,
+      dcminfo_tag,
 };

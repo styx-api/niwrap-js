@@ -11,7 +11,7 @@ const V_3D_SYNTHESIZE_METADATA: Metadata = {
 };
 
 
-interface V3dSynthesizeParameters {
+interface V3dSynthesizeParamsDict {
     "@type"?: "afni/3dSynthesize";
     "c_bucket": InputPathType;
     "matrix": InputPathType;
@@ -21,11 +21,11 @@ interface V3dSynthesizeParameters {
     "tr"?: number | null | undefined;
     "cenfill"?: "zero" | "nbhr" | "none" | null | undefined;
 }
-type V3dSynthesizeParametersTagged = Required<Pick<V3dSynthesizeParameters, '@type'>> & V3dSynthesizeParameters;
+type V3dSynthesizeParamsDictTagged = Required<Pick<V3dSynthesizeParamsDict, '@type'>> & V3dSynthesizeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSynthesizeParameters(...)`.
+ * Output object returned when calling `V3dSynthesizeParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function v_3d_synthesize_params(
     dry_flag: boolean = false,
     tr: number | null = null,
     cenfill: "zero" | "nbhr" | "none" | null = null,
-): V3dSynthesizeParametersTagged {
+): V3dSynthesizeParamsDictTagged {
     const params = {
         "@type": "afni/3dSynthesize" as const,
         "c_bucket": c_bucket,
@@ -86,7 +86,7 @@ function v_3d_synthesize_params(
  * @returns Command-line arguments.
  */
 function v_3d_synthesize_cargs(
-    params: V3dSynthesizeParameters,
+    params: V3dSynthesizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function v_3d_synthesize_cargs(
  * @returns Outputs object.
  */
 function v_3d_synthesize_outputs(
-    params: V3dSynthesizeParameters,
+    params: V3dSynthesizeParamsDict,
     execution: Execution,
 ): V3dSynthesizeOutputs {
     const ret: V3dSynthesizeOutputs = {
@@ -160,7 +160,7 @@ function v_3d_synthesize_outputs(
  * @returns NamedTuple of outputs (described in `V3dSynthesizeOutputs`).
  */
 function v_3d_synthesize_execute(
-    params: V3dSynthesizeParameters,
+    params: V3dSynthesizeParamsDict,
     runner: Runner | null = null,
 ): V3dSynthesizeOutputs {
     runner = runner || getGlobalRunner();
@@ -210,6 +210,8 @@ function v_3d_synthesize(
 
 export {
       V3dSynthesizeOutputs,
+      V3dSynthesizeParamsDict,
+      V3dSynthesizeParamsDictTagged,
       V_3D_SYNTHESIZE_METADATA,
       v_3d_synthesize,
       v_3d_synthesize_execute,

@@ -11,7 +11,7 @@ const MRI_GTMPVC_METADATA: Metadata = {
 };
 
 
-interface MriGtmpvcParameters {
+interface MriGtmpvcParamsDict {
     "@type"?: "freesurfer/mri_gtmpvc";
     "input_volume": InputPathType;
     "frame"?: number | null | undefined;
@@ -76,11 +76,11 @@ interface MriGtmpvcParameters {
     "help": boolean;
     "version": boolean;
 }
-type MriGtmpvcParametersTagged = Required<Pick<MriGtmpvcParameters, '@type'>> & MriGtmpvcParameters;
+type MriGtmpvcParamsDictTagged = Required<Pick<MriGtmpvcParamsDict, '@type'>> & MriGtmpvcParamsDict;
 
 
 /**
- * Output object returned when calling `MriGtmpvcParameters(...)`.
+ * Output object returned when calling `MriGtmpvcParamsDict(...)`.
  *
  * @interface
  */
@@ -271,7 +271,7 @@ function mri_gtmpvc_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MriGtmpvcParametersTagged {
+): MriGtmpvcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gtmpvc" as const,
         "input_volume": input_volume,
@@ -396,7 +396,7 @@ function mri_gtmpvc_params(
  * @returns Command-line arguments.
  */
 function mri_gtmpvc_cargs(
-    params: MriGtmpvcParameters,
+    params: MriGtmpvcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -673,7 +673,7 @@ function mri_gtmpvc_cargs(
  * @returns Outputs object.
  */
 function mri_gtmpvc_outputs(
-    params: MriGtmpvcParameters,
+    params: MriGtmpvcParamsDict,
     execution: Execution,
 ): MriGtmpvcOutputs {
     const ret: MriGtmpvcOutputs = {
@@ -710,7 +710,7 @@ function mri_gtmpvc_outputs(
  * @returns NamedTuple of outputs (described in `MriGtmpvcOutputs`).
  */
 function mri_gtmpvc_execute(
-    params: MriGtmpvcParameters,
+    params: MriGtmpvcParamsDict,
     runner: Runner | null = null,
 ): MriGtmpvcOutputs {
     runner = runner || getGlobalRunner();
@@ -871,6 +871,8 @@ function mri_gtmpvc(
 export {
       MRI_GTMPVC_METADATA,
       MriGtmpvcOutputs,
+      MriGtmpvcParamsDict,
+      MriGtmpvcParamsDictTagged,
       mri_gtmpvc,
       mri_gtmpvc_execute,
       mri_gtmpvc_params,

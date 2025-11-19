@@ -11,7 +11,7 @@ const FUGUE_METADATA: Metadata = {
 };
 
 
-interface FugueParameters {
+interface FugueParamsDict {
     "@type"?: "fsl/fugue";
     "asym_se_time"?: number | null | undefined;
     "despike_2dfilter": boolean;
@@ -47,11 +47,11 @@ interface FugueParameters {
     "unwarped_file"?: string | null | undefined;
     "warped_file"?: string | null | undefined;
 }
-type FugueParametersTagged = Required<Pick<FugueParameters, '@type'>> & FugueParameters;
+type FugueParamsDictTagged = Required<Pick<FugueParamsDict, '@type'>> & FugueParamsDict;
 
 
 /**
- * Output object returned when calling `FugueParameters(...)`.
+ * Output object returned when calling `FugueParamsDict(...)`.
  *
  * @interface
  */
@@ -152,7 +152,7 @@ function fugue_params(
     unwarp_direction: "x" | "y" | "z" | "x-" | "y-" | "z-" | null = null,
     unwarped_file: string | null = null,
     warped_file: string | null = null,
-): FugueParametersTagged {
+): FugueParamsDictTagged {
     const params = {
         "@type": "fsl/fugue" as const,
         "despike_2dfilter": despike_2dfilter,
@@ -240,7 +240,7 @@ function fugue_params(
  * @returns Command-line arguments.
  */
 function fugue_cargs(
-    params: FugueParameters,
+    params: FugueParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -357,7 +357,7 @@ function fugue_cargs(
  * @returns Outputs object.
  */
 function fugue_outputs(
-    params: FugueParameters,
+    params: FugueParamsDict,
     execution: Execution,
 ): FugueOutputs {
     const ret: FugueOutputs = {
@@ -386,7 +386,7 @@ function fugue_outputs(
  * @returns NamedTuple of outputs (described in `FugueOutputs`).
  */
 function fugue_execute(
-    params: FugueParameters,
+    params: FugueParamsDict,
     runner: Runner | null = null,
 ): FugueOutputs {
     runner = runner || getGlobalRunner();
@@ -489,6 +489,8 @@ function fugue(
 export {
       FUGUE_METADATA,
       FugueOutputs,
+      FugueParamsDict,
+      FugueParamsDictTagged,
       fugue,
       fugue_execute,
       fugue_params,

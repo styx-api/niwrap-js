@@ -11,7 +11,7 @@ const WMEDITS2SURF_METADATA: Metadata = {
 };
 
 
-interface Wmedits2surfParameters {
+interface Wmedits2surfParamsDict {
     "@type"?: "freesurfer/wmedits2surf";
     "subject": string;
     "self": boolean;
@@ -24,11 +24,11 @@ interface Wmedits2surfParameters {
     "rh": boolean;
     "no_surfs": boolean;
 }
-type Wmedits2surfParametersTagged = Required<Pick<Wmedits2surfParameters, '@type'>> & Wmedits2surfParameters;
+type Wmedits2surfParamsDictTagged = Required<Pick<Wmedits2surfParamsDict, '@type'>> & Wmedits2surfParamsDict;
 
 
 /**
- * Output object returned when calling `Wmedits2surfParameters(...)`.
+ * Output object returned when calling `Wmedits2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -90,7 +90,7 @@ function wmedits2surf_params(
     lh: boolean = false,
     rh: boolean = false,
     no_surfs: boolean = false,
-): Wmedits2surfParametersTagged {
+): Wmedits2surfParamsDictTagged {
     const params = {
         "@type": "freesurfer/wmedits2surf" as const,
         "subject": subject,
@@ -119,7 +119,7 @@ function wmedits2surf_params(
  * @returns Command-line arguments.
  */
 function wmedits2surf_cargs(
-    params: Wmedits2surfParameters,
+    params: Wmedits2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function wmedits2surf_cargs(
  * @returns Outputs object.
  */
 function wmedits2surf_outputs(
-    params: Wmedits2surfParameters,
+    params: Wmedits2surfParamsDict,
     execution: Execution,
 ): Wmedits2surfOutputs {
     const ret: Wmedits2surfOutputs = {
@@ -202,7 +202,7 @@ function wmedits2surf_outputs(
  * @returns NamedTuple of outputs (described in `Wmedits2surfOutputs`).
  */
 function wmedits2surf_execute(
-    params: Wmedits2surfParameters,
+    params: Wmedits2surfParamsDict,
     runner: Runner | null = null,
 ): Wmedits2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -258,6 +258,8 @@ function wmedits2surf(
 export {
       WMEDITS2SURF_METADATA,
       Wmedits2surfOutputs,
+      Wmedits2surfParamsDict,
+      Wmedits2surfParamsDictTagged,
       wmedits2surf,
       wmedits2surf_execute,
       wmedits2surf_params,

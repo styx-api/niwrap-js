@@ -11,17 +11,17 @@ const TBSS_DEPROJECT_METADATA: Metadata = {
 };
 
 
-interface TbssDeprojectParameters {
+interface TbssDeprojectParamsDict {
     "@type"?: "fsl/tbss_deproject";
     "skeleton_space_input_image": InputPathType;
     "final_space_option": number;
     "index_image_flag": boolean;
 }
-type TbssDeprojectParametersTagged = Required<Pick<TbssDeprojectParameters, '@type'>> & TbssDeprojectParameters;
+type TbssDeprojectParamsDictTagged = Required<Pick<TbssDeprojectParamsDict, '@type'>> & TbssDeprojectParamsDict;
 
 
 /**
- * Output object returned when calling `TbssDeprojectParameters(...)`.
+ * Output object returned when calling `TbssDeprojectParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function tbss_deproject_params(
     skeleton_space_input_image: InputPathType,
     final_space_option: number,
     index_image_flag: boolean = false,
-): TbssDeprojectParametersTagged {
+): TbssDeprojectParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_deproject" as const,
         "skeleton_space_input_image": skeleton_space_input_image,
@@ -74,7 +74,7 @@ function tbss_deproject_params(
  * @returns Command-line arguments.
  */
 function tbss_deproject_cargs(
-    params: TbssDeprojectParameters,
+    params: TbssDeprojectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -97,7 +97,7 @@ function tbss_deproject_cargs(
  * @returns Outputs object.
  */
 function tbss_deproject_outputs(
-    params: TbssDeprojectParameters,
+    params: TbssDeprojectParamsDict,
     execution: Execution,
 ): TbssDeprojectOutputs {
     const ret: TbssDeprojectOutputs = {
@@ -124,7 +124,7 @@ function tbss_deproject_outputs(
  * @returns NamedTuple of outputs (described in `TbssDeprojectOutputs`).
  */
 function tbss_deproject_execute(
-    params: TbssDeprojectParameters,
+    params: TbssDeprojectParamsDict,
     runner: Runner | null = null,
 ): TbssDeprojectOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function tbss_deproject(
 export {
       TBSS_DEPROJECT_METADATA,
       TbssDeprojectOutputs,
+      TbssDeprojectParamsDict,
+      TbssDeprojectParamsDictTagged,
       tbss_deproject,
       tbss_deproject_execute,
       tbss_deproject_params,

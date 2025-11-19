@@ -11,16 +11,16 @@ const MRIS_RESCALE_METADATA: Metadata = {
 };
 
 
-interface MrisRescaleParameters {
+interface MrisRescaleParamsDict {
     "@type"?: "freesurfer/mris_rescale";
     "input_surface": InputPathType;
     "output_surface": string;
 }
-type MrisRescaleParametersTagged = Required<Pick<MrisRescaleParameters, '@type'>> & MrisRescaleParameters;
+type MrisRescaleParamsDictTagged = Required<Pick<MrisRescaleParamsDict, '@type'>> & MrisRescaleParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRescaleParameters(...)`.
+ * Output object returned when calling `MrisRescaleParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MrisRescaleOutputs {
 function mris_rescale_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisRescaleParametersTagged {
+): MrisRescaleParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_rescale" as const,
         "input_surface": input_surface,
@@ -66,7 +66,7 @@ function mris_rescale_params(
  * @returns Command-line arguments.
  */
 function mris_rescale_cargs(
-    params: MrisRescaleParameters,
+    params: MrisRescaleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mris_rescale_cargs(
  * @returns Outputs object.
  */
 function mris_rescale_outputs(
-    params: MrisRescaleParameters,
+    params: MrisRescaleParamsDict,
     execution: Execution,
 ): MrisRescaleOutputs {
     const ret: MrisRescaleOutputs = {
@@ -112,7 +112,7 @@ function mris_rescale_outputs(
  * @returns NamedTuple of outputs (described in `MrisRescaleOutputs`).
  */
 function mris_rescale_execute(
-    params: MrisRescaleParameters,
+    params: MrisRescaleParamsDict,
     runner: Runner | null = null,
 ): MrisRescaleOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mris_rescale(
 export {
       MRIS_RESCALE_METADATA,
       MrisRescaleOutputs,
+      MrisRescaleParamsDict,
+      MrisRescaleParamsDictTagged,
       mris_rescale,
       mris_rescale_execute,
       mris_rescale_params,

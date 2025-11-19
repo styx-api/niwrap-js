@@ -11,16 +11,16 @@ const SEGMENT_THALAMIC_NUCLEI_METADATA: Metadata = {
 };
 
 
-interface SegmentThalamicNucleiParameters {
+interface SegmentThalamicNucleiParamsDict {
     "@type"?: "freesurfer/SegmentThalamicNuclei";
     "t1_image": InputPathType;
     "output_dir": string;
 }
-type SegmentThalamicNucleiParametersTagged = Required<Pick<SegmentThalamicNucleiParameters, '@type'>> & SegmentThalamicNucleiParameters;
+type SegmentThalamicNucleiParamsDictTagged = Required<Pick<SegmentThalamicNucleiParamsDict, '@type'>> & SegmentThalamicNucleiParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentThalamicNucleiParameters(...)`.
+ * Output object returned when calling `SegmentThalamicNucleiParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface SegmentThalamicNucleiOutputs {
 function segment_thalamic_nuclei_params(
     t1_image: InputPathType,
     output_dir: string,
-): SegmentThalamicNucleiParametersTagged {
+): SegmentThalamicNucleiParamsDictTagged {
     const params = {
         "@type": "freesurfer/SegmentThalamicNuclei" as const,
         "t1_image": t1_image,
@@ -66,7 +66,7 @@ function segment_thalamic_nuclei_params(
  * @returns Command-line arguments.
  */
 function segment_thalamic_nuclei_cargs(
-    params: SegmentThalamicNucleiParameters,
+    params: SegmentThalamicNucleiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function segment_thalamic_nuclei_cargs(
  * @returns Outputs object.
  */
 function segment_thalamic_nuclei_outputs(
-    params: SegmentThalamicNucleiParameters,
+    params: SegmentThalamicNucleiParamsDict,
     execution: Execution,
 ): SegmentThalamicNucleiOutputs {
     const ret: SegmentThalamicNucleiOutputs = {
@@ -112,7 +112,7 @@ function segment_thalamic_nuclei_outputs(
  * @returns NamedTuple of outputs (described in `SegmentThalamicNucleiOutputs`).
  */
 function segment_thalamic_nuclei_execute(
-    params: SegmentThalamicNucleiParameters,
+    params: SegmentThalamicNucleiParamsDict,
     runner: Runner | null = null,
 ): SegmentThalamicNucleiOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function segment_thalamic_nuclei(
 export {
       SEGMENT_THALAMIC_NUCLEI_METADATA,
       SegmentThalamicNucleiOutputs,
+      SegmentThalamicNucleiParamsDict,
+      SegmentThalamicNucleiParamsDictTagged,
       segment_thalamic_nuclei,
       segment_thalamic_nuclei_execute,
       segment_thalamic_nuclei_params,

@@ -11,16 +11,16 @@ const SEGMENT_HA_T1_LONG_SH_METADATA: Metadata = {
 };
 
 
-interface SegmentHaT1LongShParameters {
+interface SegmentHaT1LongShParamsDict {
     "@type"?: "freesurfer/segmentHA_T1_long.sh";
     "subject_dir": string;
     "subject_id": string;
 }
-type SegmentHaT1LongShParametersTagged = Required<Pick<SegmentHaT1LongShParameters, '@type'>> & SegmentHaT1LongShParameters;
+type SegmentHaT1LongShParamsDictTagged = Required<Pick<SegmentHaT1LongShParamsDict, '@type'>> & SegmentHaT1LongShParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentHaT1LongShParameters(...)`.
+ * Output object returned when calling `SegmentHaT1LongShParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface SegmentHaT1LongShOutputs {
 function segment_ha_t1_long_sh_params(
     subject_dir: string,
     subject_id: string,
-): SegmentHaT1LongShParametersTagged {
+): SegmentHaT1LongShParamsDictTagged {
     const params = {
         "@type": "freesurfer/segmentHA_T1_long.sh" as const,
         "subject_dir": subject_dir,
@@ -66,7 +66,7 @@ function segment_ha_t1_long_sh_params(
  * @returns Command-line arguments.
  */
 function segment_ha_t1_long_sh_cargs(
-    params: SegmentHaT1LongShParameters,
+    params: SegmentHaT1LongShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function segment_ha_t1_long_sh_cargs(
  * @returns Outputs object.
  */
 function segment_ha_t1_long_sh_outputs(
-    params: SegmentHaT1LongShParameters,
+    params: SegmentHaT1LongShParamsDict,
     execution: Execution,
 ): SegmentHaT1LongShOutputs {
     const ret: SegmentHaT1LongShOutputs = {
@@ -112,7 +112,7 @@ function segment_ha_t1_long_sh_outputs(
  * @returns NamedTuple of outputs (described in `SegmentHaT1LongShOutputs`).
  */
 function segment_ha_t1_long_sh_execute(
-    params: SegmentHaT1LongShParameters,
+    params: SegmentHaT1LongShParamsDict,
     runner: Runner | null = null,
 ): SegmentHaT1LongShOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function segment_ha_t1_long_sh(
 export {
       SEGMENT_HA_T1_LONG_SH_METADATA,
       SegmentHaT1LongShOutputs,
+      SegmentHaT1LongShParamsDict,
+      SegmentHaT1LongShParamsDictTagged,
       segment_ha_t1_long_sh,
       segment_ha_t1_long_sh_execute,
       segment_ha_t1_long_sh_params,

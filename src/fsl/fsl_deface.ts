@@ -11,7 +11,7 @@ const FSL_DEFACE_METADATA: Metadata = {
 };
 
 
-interface FslDefaceParameters {
+interface FslDefaceParamsDict {
     "@type"?: "fsl/fsl_deface";
     "infile": InputPathType;
     "outfile": string;
@@ -27,11 +27,11 @@ interface FslDefaceParameters {
     "center_of_gravity"?: Array<number> | null | undefined;
     "qc_images"?: string | null | undefined;
 }
-type FslDefaceParametersTagged = Required<Pick<FslDefaceParameters, '@type'>> & FslDefaceParameters;
+type FslDefaceParamsDictTagged = Required<Pick<FslDefaceParamsDict, '@type'>> & FslDefaceParamsDict;
 
 
 /**
- * Output object returned when calling `FslDefaceParameters(...)`.
+ * Output object returned when calling `FslDefaceParamsDict(...)`.
  *
  * @interface
  */
@@ -108,7 +108,7 @@ function fsl_deface_params(
     bias_correct_flag: boolean = false,
     center_of_gravity: Array<number> | null = null,
     qc_images: string | null = null,
-): FslDefaceParametersTagged {
+): FslDefaceParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_deface" as const,
         "infile": infile,
@@ -156,7 +156,7 @@ function fsl_deface_params(
  * @returns Command-line arguments.
  */
 function fsl_deface_cargs(
-    params: FslDefaceParameters,
+    params: FslDefaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -236,7 +236,7 @@ function fsl_deface_cargs(
  * @returns Outputs object.
  */
 function fsl_deface_outputs(
-    params: FslDefaceParameters,
+    params: FslDefaceParamsDict,
     execution: Execution,
 ): FslDefaceOutputs {
     const ret: FslDefaceOutputs = {
@@ -269,7 +269,7 @@ function fsl_deface_outputs(
  * @returns NamedTuple of outputs (described in `FslDefaceOutputs`).
  */
 function fsl_deface_execute(
-    params: FslDefaceParameters,
+    params: FslDefaceParamsDict,
     runner: Runner | null = null,
 ): FslDefaceOutputs {
     runner = runner || getGlobalRunner();
@@ -332,6 +332,8 @@ function fsl_deface(
 export {
       FSL_DEFACE_METADATA,
       FslDefaceOutputs,
+      FslDefaceParamsDict,
+      FslDefaceParamsDictTagged,
       fsl_deface,
       fsl_deface_execute,
       fsl_deface_params,

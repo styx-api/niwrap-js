@@ -11,15 +11,15 @@ const DMRI_AC_SH_METADATA: Metadata = {
 };
 
 
-interface DmriAcShParameters {
+interface DmriAcShParamsDict {
     "@type"?: "freesurfer/dmri_ac.sh";
     "additional_args"?: string | null | undefined;
 }
-type DmriAcShParametersTagged = Required<Pick<DmriAcShParameters, '@type'>> & DmriAcShParameters;
+type DmriAcShParamsDictTagged = Required<Pick<DmriAcShParamsDict, '@type'>> & DmriAcShParamsDict;
 
 
 /**
- * Output object returned when calling `DmriAcShParameters(...)`.
+ * Output object returned when calling `DmriAcShParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface DmriAcShOutputs {
  */
 function dmri_ac_sh_params(
     additional_args: string | null = null,
-): DmriAcShParametersTagged {
+): DmriAcShParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_ac.sh" as const,
     };
@@ -60,7 +60,7 @@ function dmri_ac_sh_params(
  * @returns Command-line arguments.
  */
 function dmri_ac_sh_cargs(
-    params: DmriAcShParameters,
+    params: DmriAcShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function dmri_ac_sh_cargs(
  * @returns Outputs object.
  */
 function dmri_ac_sh_outputs(
-    params: DmriAcShParameters,
+    params: DmriAcShParamsDict,
     execution: Execution,
 ): DmriAcShOutputs {
     const ret: DmriAcShOutputs = {
@@ -106,7 +106,7 @@ function dmri_ac_sh_outputs(
  * @returns NamedTuple of outputs (described in `DmriAcShOutputs`).
  */
 function dmri_ac_sh_execute(
-    params: DmriAcShParameters,
+    params: DmriAcShParamsDict,
     runner: Runner | null = null,
 ): DmriAcShOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function dmri_ac_sh(
 export {
       DMRI_AC_SH_METADATA,
       DmriAcShOutputs,
+      DmriAcShParamsDict,
+      DmriAcShParamsDictTagged,
       dmri_ac_sh,
       dmri_ac_sh_execute,
       dmri_ac_sh_params,

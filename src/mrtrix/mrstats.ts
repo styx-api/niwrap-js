@@ -11,24 +11,24 @@ const MRSTATS_METADATA: Metadata = {
 };
 
 
-interface MrstatsOutputParameters {
+interface MrstatsOutputParamsDict {
     "@type"?: "output";
     "field": string;
 }
-type MrstatsOutputParametersTagged = Required<Pick<MrstatsOutputParameters, '@type'>> & MrstatsOutputParameters;
+type MrstatsOutputParamsDictTagged = Required<Pick<MrstatsOutputParamsDict, '@type'>> & MrstatsOutputParamsDict;
 
 
-interface MrstatsConfigParameters {
+interface MrstatsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrstatsConfigParametersTagged = Required<Pick<MrstatsConfigParameters, '@type'>> & MrstatsConfigParameters;
+type MrstatsConfigParamsDictTagged = Required<Pick<MrstatsConfigParamsDict, '@type'>> & MrstatsConfigParamsDict;
 
 
-interface MrstatsParameters {
+interface MrstatsParamsDict {
     "@type"?: "mrtrix/mrstats";
-    "output"?: Array<MrstatsOutputParameters> | null | undefined;
+    "output"?: Array<MrstatsOutputParamsDict> | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "ignorezero": boolean;
     "allvolumes": boolean;
@@ -37,12 +37,12 @@ interface MrstatsParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrstatsConfigParameters> | null | undefined;
+    "config"?: Array<MrstatsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image": InputPathType;
 }
-type MrstatsParametersTagged = Required<Pick<MrstatsParameters, '@type'>> & MrstatsParameters;
+type MrstatsParamsDictTagged = Required<Pick<MrstatsParamsDict, '@type'>> & MrstatsParamsDict;
 
 
 /**
@@ -52,9 +52,9 @@ type MrstatsParametersTagged = Required<Pick<MrstatsParameters, '@type'>> & Mrst
  *
  * @returns Parameter dictionary
  */
-function mrstats_output_params(
+function mrstats_output(
     field: string,
-): MrstatsOutputParametersTagged {
+): MrstatsOutputParamsDictTagged {
     const params = {
         "@type": "output" as const,
         "field": field,
@@ -72,7 +72,7 @@ function mrstats_output_params(
  * @returns Command-line arguments.
  */
 function mrstats_output_cargs(
-    params: MrstatsOutputParameters,
+    params: MrstatsOutputParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,10 +90,10 @@ function mrstats_output_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrstats_config_params(
+function mrstats_config(
     key: string,
     value: string,
-): MrstatsConfigParametersTagged {
+): MrstatsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -112,7 +112,7 @@ function mrstats_config_params(
  * @returns Command-line arguments.
  */
 function mrstats_config_cargs(
-    params: MrstatsConfigParameters,
+    params: MrstatsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function mrstats_config_cargs(
 
 
 /**
- * Output object returned when calling `MrstatsParameters(...)`.
+ * Output object returned when calling `MrstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -157,7 +157,7 @@ interface MrstatsOutputs {
  */
 function mrstats_params(
     image: InputPathType,
-    output: Array<MrstatsOutputParameters> | null = null,
+    output: Array<MrstatsOutputParamsDict> | null = null,
     mask: InputPathType | null = null,
     ignorezero: boolean = false,
     allvolumes: boolean = false,
@@ -166,10 +166,10 @@ function mrstats_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrstatsConfigParameters> | null = null,
+    config: Array<MrstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrstatsParametersTagged {
+): MrstatsParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrstats" as const,
         "ignorezero": ignorezero,
@@ -207,7 +207,7 @@ function mrstats_params(
  * @returns Command-line arguments.
  */
 function mrstats_cargs(
-    params: MrstatsParameters,
+    params: MrstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function mrstats_cargs(
  * @returns Outputs object.
  */
 function mrstats_outputs(
-    params: MrstatsParameters,
+    params: MrstatsParamsDict,
     execution: Execution,
 ): MrstatsOutputs {
     const ret: MrstatsOutputs = {
@@ -299,7 +299,7 @@ function mrstats_outputs(
  * @returns NamedTuple of outputs (described in `MrstatsOutputs`).
  */
 function mrstats_execute(
-    params: MrstatsParameters,
+    params: MrstatsParamsDict,
     runner: Runner | null = null,
 ): MrstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -346,7 +346,7 @@ function mrstats_execute(
  */
 function mrstats(
     image: InputPathType,
-    output: Array<MrstatsOutputParameters> | null = null,
+    output: Array<MrstatsOutputParamsDict> | null = null,
     mask: InputPathType | null = null,
     ignorezero: boolean = false,
     allvolumes: boolean = false,
@@ -355,7 +355,7 @@ function mrstats(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrstatsConfigParameters> | null = null,
+    config: Array<MrstatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -367,10 +367,16 @@ function mrstats(
 
 export {
       MRSTATS_METADATA,
+      MrstatsConfigParamsDict,
+      MrstatsConfigParamsDictTagged,
+      MrstatsOutputParamsDict,
+      MrstatsOutputParamsDictTagged,
       MrstatsOutputs,
+      MrstatsParamsDict,
+      MrstatsParamsDictTagged,
       mrstats,
-      mrstats_config_params,
+      mrstats_config,
       mrstats_execute,
-      mrstats_output_params,
+      mrstats_output,
       mrstats_params,
 };

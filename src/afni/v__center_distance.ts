@@ -11,16 +11,16 @@ const V__CENTER_DISTANCE_METADATA: Metadata = {
 };
 
 
-interface VCenterDistanceParameters {
+interface VCenterDistanceParamsDict {
     "@type"?: "afni/@Center_Distance";
     "dset1": InputPathType;
     "dset2": InputPathType;
 }
-type VCenterDistanceParametersTagged = Required<Pick<VCenterDistanceParameters, '@type'>> & VCenterDistanceParameters;
+type VCenterDistanceParamsDictTagged = Required<Pick<VCenterDistanceParamsDict, '@type'>> & VCenterDistanceParamsDict;
 
 
 /**
- * Output object returned when calling `VCenterDistanceParameters(...)`.
+ * Output object returned when calling `VCenterDistanceParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface VCenterDistanceOutputs {
 function v__center_distance_params(
     dset1: InputPathType,
     dset2: InputPathType,
-): VCenterDistanceParametersTagged {
+): VCenterDistanceParamsDictTagged {
     const params = {
         "@type": "afni/@Center_Distance" as const,
         "dset1": dset1,
@@ -66,7 +66,7 @@ function v__center_distance_params(
  * @returns Command-line arguments.
  */
 function v__center_distance_cargs(
-    params: VCenterDistanceParameters,
+    params: VCenterDistanceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function v__center_distance_cargs(
  * @returns Outputs object.
  */
 function v__center_distance_outputs(
-    params: VCenterDistanceParameters,
+    params: VCenterDistanceParamsDict,
     execution: Execution,
 ): VCenterDistanceOutputs {
     const ret: VCenterDistanceOutputs = {
@@ -115,7 +115,7 @@ function v__center_distance_outputs(
  * @returns NamedTuple of outputs (described in `VCenterDistanceOutputs`).
  */
 function v__center_distance_execute(
-    params: VCenterDistanceParameters,
+    params: VCenterDistanceParamsDict,
     runner: Runner | null = null,
 ): VCenterDistanceOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function v__center_distance(
 
 export {
       VCenterDistanceOutputs,
+      VCenterDistanceParamsDict,
+      VCenterDistanceParamsDictTagged,
       V__CENTER_DISTANCE_METADATA,
       v__center_distance,
       v__center_distance_execute,

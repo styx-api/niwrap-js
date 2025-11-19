@@ -11,7 +11,7 @@ const XCEREBRALSEG_METADATA: Metadata = {
 };
 
 
-interface XcerebralsegParameters {
+interface XcerebralsegParamsDict {
     "@type"?: "freesurfer/xcerebralseg";
     "subject": string;
     "output_volume"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface XcerebralsegParameters {
     "no_vermis": boolean;
     "threads"?: number | null | undefined;
 }
-type XcerebralsegParametersTagged = Required<Pick<XcerebralsegParameters, '@type'>> & XcerebralsegParameters;
+type XcerebralsegParamsDictTagged = Required<Pick<XcerebralsegParamsDict, '@type'>> & XcerebralsegParamsDict;
 
 
 /**
- * Output object returned when calling `XcerebralsegParameters(...)`.
+ * Output object returned when calling `XcerebralsegParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function xcerebralseg_params(
     no_pons: boolean = false,
     no_vermis: boolean = false,
     threads: number | null = null,
-): XcerebralsegParametersTagged {
+): XcerebralsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/xcerebralseg" as const,
         "subject": subject,
@@ -110,7 +110,7 @@ function xcerebralseg_params(
  * @returns Command-line arguments.
  */
 function xcerebralseg_cargs(
-    params: XcerebralsegParameters,
+    params: XcerebralsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function xcerebralseg_cargs(
  * @returns Outputs object.
  */
 function xcerebralseg_outputs(
-    params: XcerebralsegParameters,
+    params: XcerebralsegParamsDict,
     execution: Execution,
 ): XcerebralsegOutputs {
     const ret: XcerebralsegOutputs = {
@@ -203,7 +203,7 @@ function xcerebralseg_outputs(
  * @returns NamedTuple of outputs (described in `XcerebralsegOutputs`).
  */
 function xcerebralseg_execute(
-    params: XcerebralsegParameters,
+    params: XcerebralsegParamsDict,
     runner: Runner | null = null,
 ): XcerebralsegOutputs {
     runner = runner || getGlobalRunner();
@@ -260,6 +260,8 @@ function xcerebralseg(
 export {
       XCEREBRALSEG_METADATA,
       XcerebralsegOutputs,
+      XcerebralsegParamsDict,
+      XcerebralsegParamsDictTagged,
       xcerebralseg,
       xcerebralseg_execute,
       xcerebralseg_params,

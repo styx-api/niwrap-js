@@ -11,7 +11,7 @@ const MAP_TO_BASE_METADATA: Metadata = {
 };
 
 
-interface MapToBaseParameters {
+interface MapToBaseParamsDict {
     "@type"?: "freesurfer/map_to_base";
     "baseid": string;
     "tpid": string;
@@ -19,11 +19,11 @@ interface MapToBaseParameters {
     "resample_type": string;
     "cross"?: string | null | undefined;
 }
-type MapToBaseParametersTagged = Required<Pick<MapToBaseParameters, '@type'>> & MapToBaseParameters;
+type MapToBaseParamsDictTagged = Required<Pick<MapToBaseParamsDict, '@type'>> & MapToBaseParamsDict;
 
 
 /**
- * Output object returned when calling `MapToBaseParameters(...)`.
+ * Output object returned when calling `MapToBaseParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function map_to_base_params(
     input_image: string,
     resample_type: string,
     cross: string | null = null,
-): MapToBaseParametersTagged {
+): MapToBaseParamsDictTagged {
     const params = {
         "@type": "freesurfer/map_to_base" as const,
         "baseid": baseid,
@@ -92,7 +92,7 @@ function map_to_base_params(
  * @returns Command-line arguments.
  */
 function map_to_base_cargs(
-    params: MapToBaseParameters,
+    params: MapToBaseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function map_to_base_cargs(
  * @returns Outputs object.
  */
 function map_to_base_outputs(
-    params: MapToBaseParameters,
+    params: MapToBaseParamsDict,
     execution: Execution,
 ): MapToBaseOutputs {
     const ret: MapToBaseOutputs = {
@@ -146,7 +146,7 @@ function map_to_base_outputs(
  * @returns NamedTuple of outputs (described in `MapToBaseOutputs`).
  */
 function map_to_base_execute(
-    params: MapToBaseParameters,
+    params: MapToBaseParamsDict,
     runner: Runner | null = null,
 ): MapToBaseOutputs {
     runner = runner || getGlobalRunner();
@@ -193,6 +193,8 @@ function map_to_base(
 export {
       MAP_TO_BASE_METADATA,
       MapToBaseOutputs,
+      MapToBaseParamsDict,
+      MapToBaseParamsDictTagged,
       map_to_base,
       map_to_base_execute,
       map_to_base_params,

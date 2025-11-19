@@ -11,17 +11,17 @@ const QUOTIZE_METADATA: Metadata = {
 };
 
 
-interface QuotizeParameters {
+interface QuotizeParamsDict {
     "@type"?: "afni/quotize";
     "name": string;
     "input_file": InputPathType;
     "output_file": string;
 }
-type QuotizeParametersTagged = Required<Pick<QuotizeParameters, '@type'>> & QuotizeParameters;
+type QuotizeParamsDictTagged = Required<Pick<QuotizeParamsDict, '@type'>> & QuotizeParamsDict;
 
 
 /**
- * Output object returned when calling `QuotizeParameters(...)`.
+ * Output object returned when calling `QuotizeParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function quotize_params(
     name: string,
     input_file: InputPathType,
     output_file: string,
-): QuotizeParametersTagged {
+): QuotizeParamsDictTagged {
     const params = {
         "@type": "afni/quotize" as const,
         "name": name,
@@ -70,7 +70,7 @@ function quotize_params(
  * @returns Command-line arguments.
  */
 function quotize_cargs(
-    params: QuotizeParameters,
+    params: QuotizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function quotize_cargs(
  * @returns Outputs object.
  */
 function quotize_outputs(
-    params: QuotizeParameters,
+    params: QuotizeParamsDict,
     execution: Execution,
 ): QuotizeOutputs {
     const ret: QuotizeOutputs = {
@@ -117,7 +117,7 @@ function quotize_outputs(
  * @returns NamedTuple of outputs (described in `QuotizeOutputs`).
  */
 function quotize_execute(
-    params: QuotizeParameters,
+    params: QuotizeParamsDict,
     runner: Runner | null = null,
 ): QuotizeOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function quotize(
 export {
       QUOTIZE_METADATA,
       QuotizeOutputs,
+      QuotizeParamsDict,
+      QuotizeParamsDictTagged,
       quotize,
       quotize_execute,
       quotize_params,

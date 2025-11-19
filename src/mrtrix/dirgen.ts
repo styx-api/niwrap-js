@@ -11,15 +11,15 @@ const DIRGEN_METADATA: Metadata = {
 };
 
 
-interface DirgenConfigParameters {
+interface DirgenConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DirgenConfigParametersTagged = Required<Pick<DirgenConfigParameters, '@type'>> & DirgenConfigParameters;
+type DirgenConfigParamsDictTagged = Required<Pick<DirgenConfigParamsDict, '@type'>> & DirgenConfigParamsDict;
 
 
-interface DirgenParameters {
+interface DirgenParamsDict {
     "@type"?: "mrtrix/dirgen";
     "power"?: number | null | undefined;
     "niter"?: number | null | undefined;
@@ -31,13 +31,13 @@ interface DirgenParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DirgenConfigParameters> | null | undefined;
+    "config"?: Array<DirgenConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "ndir": number;
     "dirs": string;
 }
-type DirgenParametersTagged = Required<Pick<DirgenParameters, '@type'>> & DirgenParameters;
+type DirgenParamsDictTagged = Required<Pick<DirgenParamsDict, '@type'>> & DirgenParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type DirgenParametersTagged = Required<Pick<DirgenParameters, '@type'>> & Dirgen
  *
  * @returns Parameter dictionary
  */
-function dirgen_config_params(
+function dirgen_config(
     key: string,
     value: string,
-): DirgenConfigParametersTagged {
+): DirgenConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -70,7 +70,7 @@ function dirgen_config_params(
  * @returns Command-line arguments.
  */
 function dirgen_config_cargs(
-    params: DirgenConfigParameters,
+    params: DirgenConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function dirgen_config_cargs(
 
 
 /**
- * Output object returned when calling `DirgenParameters(...)`.
+ * Output object returned when calling `DirgenParamsDict(...)`.
  *
  * @interface
  */
@@ -132,10 +132,10 @@ function dirgen_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirgenConfigParameters> | null = null,
+    config: Array<DirgenConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirgenParametersTagged {
+): DirgenParamsDictTagged {
     const params = {
         "@type": "mrtrix/dirgen" as const,
         "unipolar": unipolar,
@@ -177,7 +177,7 @@ function dirgen_params(
  * @returns Command-line arguments.
  */
 function dirgen_cargs(
-    params: DirgenParameters,
+    params: DirgenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -248,7 +248,7 @@ function dirgen_cargs(
  * @returns Outputs object.
  */
 function dirgen_outputs(
-    params: DirgenParameters,
+    params: DirgenParamsDict,
     execution: Execution,
 ): DirgenOutputs {
     const ret: DirgenOutputs = {
@@ -282,7 +282,7 @@ function dirgen_outputs(
  * @returns NamedTuple of outputs (described in `DirgenOutputs`).
  */
 function dirgen_execute(
-    params: DirgenParameters,
+    params: DirgenParamsDict,
     runner: Runner | null = null,
 ): DirgenOutputs {
     runner = runner || getGlobalRunner();
@@ -344,7 +344,7 @@ function dirgen(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirgenConfigParameters> | null = null,
+    config: Array<DirgenConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -356,9 +356,13 @@ function dirgen(
 
 export {
       DIRGEN_METADATA,
+      DirgenConfigParamsDict,
+      DirgenConfigParamsDictTagged,
       DirgenOutputs,
+      DirgenParamsDict,
+      DirgenParamsDictTagged,
       dirgen,
-      dirgen_config_params,
+      dirgen_config,
       dirgen_execute,
       dirgen_params,
 };

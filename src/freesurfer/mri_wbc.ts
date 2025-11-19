@@ -11,7 +11,7 @@ const MRI_WBC_METADATA: Metadata = {
 };
 
 
-interface MriWbcParameters {
+interface MriWbcParamsDict {
     "@type"?: "freesurfer/mri_wbc";
     "functional_volume": InputPathType;
     "volume_mask"?: InputPathType | null | undefined;
@@ -31,11 +31,11 @@ interface MriWbcParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
-type MriWbcParametersTagged = Required<Pick<MriWbcParameters, '@type'>> & MriWbcParameters;
+type MriWbcParamsDictTagged = Required<Pick<MriWbcParamsDict, '@type'>> & MriWbcParamsDict;
 
 
 /**
- * Output object returned when calling `MriWbcParameters(...)`.
+ * Output object returned when calling `MriWbcParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function mri_wbc_params(
     threads: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriWbcParametersTagged {
+): MriWbcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_wbc" as const,
         "functional_volume": functional_volume,
@@ -142,7 +142,7 @@ function mri_wbc_params(
  * @returns Command-line arguments.
  */
 function mri_wbc_cargs(
-    params: MriWbcParameters,
+    params: MriWbcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -246,7 +246,7 @@ function mri_wbc_cargs(
  * @returns Outputs object.
  */
 function mri_wbc_outputs(
-    params: MriWbcParameters,
+    params: MriWbcParamsDict,
     execution: Execution,
 ): MriWbcOutputs {
     const ret: MriWbcOutputs = {
@@ -271,7 +271,7 @@ function mri_wbc_outputs(
  * @returns NamedTuple of outputs (described in `MriWbcOutputs`).
  */
 function mri_wbc_execute(
-    params: MriWbcParameters,
+    params: MriWbcParamsDict,
     runner: Runner | null = null,
 ): MriWbcOutputs {
     runner = runner || getGlobalRunner();
@@ -342,6 +342,8 @@ function mri_wbc(
 export {
       MRI_WBC_METADATA,
       MriWbcOutputs,
+      MriWbcParamsDict,
+      MriWbcParamsDictTagged,
       mri_wbc,
       mri_wbc_execute,
       mri_wbc_params,

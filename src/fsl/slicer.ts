@@ -11,7 +11,7 @@ const SLICER_METADATA: Metadata = {
 };
 
 
-interface SlicerParameters {
+interface SlicerParamsDict {
     "@type"?: "fsl/slicer";
     "in_file": InputPathType;
     "overlay_file"?: InputPathType | null | undefined;
@@ -37,11 +37,11 @@ interface SlicerParameters {
     "output_sample_axial_slices_width"?: string | null | undefined;
     "output_sample_axial_slices_fname"?: string | null | undefined;
 }
-type SlicerParametersTagged = Required<Pick<SlicerParameters, '@type'>> & SlicerParameters;
+type SlicerParamsDictTagged = Required<Pick<SlicerParamsDict, '@type'>> & SlicerParamsDict;
 
 
 /**
- * Output object returned when calling `SlicerParameters(...)`.
+ * Output object returned when calling `SlicerParamsDict(...)`.
  *
  * @interface
  */
@@ -126,7 +126,7 @@ function slicer_params(
     output_sample_axial_slices: boolean = false,
     output_sample_axial_slices_width: string | null = null,
     output_sample_axial_slices_fname: string | null = null,
-): SlicerParametersTagged {
+): SlicerParamsDictTagged {
     const params = {
         "@type": "fsl/slicer" as const,
         "in_file": in_file,
@@ -190,7 +190,7 @@ function slicer_params(
  * @returns Command-line arguments.
  */
 function slicer_cargs(
-    params: SlicerParameters,
+    params: SlicerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -290,7 +290,7 @@ function slicer_cargs(
  * @returns Outputs object.
  */
 function slicer_outputs(
-    params: SlicerParameters,
+    params: SlicerParamsDict,
     execution: Execution,
 ): SlicerOutputs {
     const ret: SlicerOutputs = {
@@ -320,7 +320,7 @@ function slicer_outputs(
  * @returns NamedTuple of outputs (described in `SlicerOutputs`).
  */
 function slicer_execute(
-    params: SlicerParameters,
+    params: SlicerParamsDict,
     runner: Runner | null = null,
 ): SlicerOutputs {
     runner = runner || getGlobalRunner();
@@ -403,6 +403,8 @@ function slicer(
 export {
       SLICER_METADATA,
       SlicerOutputs,
+      SlicerParamsDict,
+      SlicerParamsDictTagged,
       slicer,
       slicer_execute,
       slicer_params,

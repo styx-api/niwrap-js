@@ -11,7 +11,7 @@ const MRI_ROBUST_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MriRobustRegisterParameters {
+interface MriRobustRegisterParamsDict {
     "@type"?: "freesurfer/mri_robust_register";
     "movable_volume": InputPathType;
     "target_volume": InputPathType;
@@ -63,11 +63,11 @@ interface MriRobustRegisterParameters {
     "debug": boolean;
     "verbose"?: number | null | undefined;
 }
-type MriRobustRegisterParametersTagged = Required<Pick<MriRobustRegisterParameters, '@type'>> & MriRobustRegisterParameters;
+type MriRobustRegisterParamsDictTagged = Required<Pick<MriRobustRegisterParamsDict, '@type'>> & MriRobustRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MriRobustRegisterParameters(...)`.
+ * Output object returned when calling `MriRobustRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -232,7 +232,7 @@ function mri_robust_register_params(
     half_dst_lta: string | null = null,
     debug: boolean = false,
     verbose: number | null = null,
-): MriRobustRegisterParametersTagged {
+): MriRobustRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_robust_register" as const,
         "movable_volume": movable_volume,
@@ -352,7 +352,7 @@ function mri_robust_register_params(
  * @returns Command-line arguments.
  */
 function mri_robust_register_cargs(
-    params: MriRobustRegisterParameters,
+    params: MriRobustRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -601,7 +601,7 @@ function mri_robust_register_cargs(
  * @returns Outputs object.
  */
 function mri_robust_register_outputs(
-    params: MriRobustRegisterParameters,
+    params: MriRobustRegisterParamsDict,
     execution: Execution,
 ): MriRobustRegisterOutputs {
     const ret: MriRobustRegisterOutputs = {
@@ -638,7 +638,7 @@ function mri_robust_register_outputs(
  * @returns NamedTuple of outputs (described in `MriRobustRegisterOutputs`).
  */
 function mri_robust_register_execute(
-    params: MriRobustRegisterParameters,
+    params: MriRobustRegisterParamsDict,
     runner: Runner | null = null,
 ): MriRobustRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -773,6 +773,8 @@ function mri_robust_register(
 export {
       MRI_ROBUST_REGISTER_METADATA,
       MriRobustRegisterOutputs,
+      MriRobustRegisterParamsDict,
+      MriRobustRegisterParamsDictTagged,
       mri_robust_register,
       mri_robust_register_execute,
       mri_robust_register_params,

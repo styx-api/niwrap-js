@@ -11,7 +11,7 @@ const MRI_MATRIX_MULTIPLY_METADATA: Metadata = {
 };
 
 
-interface MriMatrixMultiplyParameters {
+interface MriMatrixMultiplyParamsDict {
     "@type"?: "freesurfer/mri_matrix_multiply";
     "input_matrices": Array<InputPathType>;
     "inverted_input_matrices"?: Array<InputPathType> | null | undefined;
@@ -21,11 +21,11 @@ interface MriMatrixMultiplyParameters {
     "binarize": boolean;
     "subject_name"?: string | null | undefined;
 }
-type MriMatrixMultiplyParametersTagged = Required<Pick<MriMatrixMultiplyParameters, '@type'>> & MriMatrixMultiplyParameters;
+type MriMatrixMultiplyParamsDictTagged = Required<Pick<MriMatrixMultiplyParamsDict, '@type'>> & MriMatrixMultiplyParamsDict;
 
 
 /**
- * Output object returned when calling `MriMatrixMultiplyParameters(...)`.
+ * Output object returned when calling `MriMatrixMultiplyParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_matrix_multiply_params(
     fsl: boolean = false,
     binarize: boolean = false,
     subject_name: string | null = null,
-): MriMatrixMultiplyParametersTagged {
+): MriMatrixMultiplyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_matrix_multiply" as const,
         "input_matrices": input_matrices,
@@ -90,7 +90,7 @@ function mri_matrix_multiply_params(
  * @returns Command-line arguments.
  */
 function mri_matrix_multiply_cargs(
-    params: MriMatrixMultiplyParameters,
+    params: MriMatrixMultiplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -137,7 +137,7 @@ function mri_matrix_multiply_cargs(
  * @returns Outputs object.
  */
 function mri_matrix_multiply_outputs(
-    params: MriMatrixMultiplyParameters,
+    params: MriMatrixMultiplyParamsDict,
     execution: Execution,
 ): MriMatrixMultiplyOutputs {
     const ret: MriMatrixMultiplyOutputs = {
@@ -163,7 +163,7 @@ function mri_matrix_multiply_outputs(
  * @returns NamedTuple of outputs (described in `MriMatrixMultiplyOutputs`).
  */
 function mri_matrix_multiply_execute(
-    params: MriMatrixMultiplyParameters,
+    params: MriMatrixMultiplyParamsDict,
     runner: Runner | null = null,
 ): MriMatrixMultiplyOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function mri_matrix_multiply(
 export {
       MRI_MATRIX_MULTIPLY_METADATA,
       MriMatrixMultiplyOutputs,
+      MriMatrixMultiplyParamsDict,
+      MriMatrixMultiplyParamsDictTagged,
       mri_matrix_multiply,
       mri_matrix_multiply_execute,
       mri_matrix_multiply_params,

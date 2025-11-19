@@ -11,16 +11,16 @@ const CCALC_METADATA: Metadata = {
 };
 
 
-interface CcalcParameters {
+interface CcalcParamsDict {
     "@type"?: "afni/ccalc";
     "format"?: string | null | undefined;
     "expr": string;
 }
-type CcalcParametersTagged = Required<Pick<CcalcParameters, '@type'>> & CcalcParameters;
+type CcalcParamsDictTagged = Required<Pick<CcalcParamsDict, '@type'>> & CcalcParamsDict;
 
 
 /**
- * Output object returned when calling `CcalcParameters(...)`.
+ * Output object returned when calling `CcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface CcalcOutputs {
 function ccalc_params(
     expr: string,
     format: string | null = null,
-): CcalcParametersTagged {
+): CcalcParamsDictTagged {
     const params = {
         "@type": "afni/ccalc" as const,
         "expr": expr,
@@ -64,7 +64,7 @@ function ccalc_params(
  * @returns Command-line arguments.
  */
 function ccalc_cargs(
-    params: CcalcParameters,
+    params: CcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function ccalc_cargs(
  * @returns Outputs object.
  */
 function ccalc_outputs(
-    params: CcalcParameters,
+    params: CcalcParamsDict,
     execution: Execution,
 ): CcalcOutputs {
     const ret: CcalcOutputs = {
@@ -117,7 +117,7 @@ function ccalc_outputs(
  * @returns NamedTuple of outputs (described in `CcalcOutputs`).
  */
 function ccalc_execute(
-    params: CcalcParameters,
+    params: CcalcParamsDict,
     runner: Runner | null = null,
 ): CcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function ccalc(
 export {
       CCALC_METADATA,
       CcalcOutputs,
+      CcalcParamsDict,
+      CcalcParamsDictTagged,
       ccalc,
       ccalc_execute,
       ccalc_params,

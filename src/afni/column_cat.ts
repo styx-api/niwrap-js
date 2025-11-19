@@ -11,17 +11,17 @@ const COLUMN_CAT_METADATA: Metadata = {
 };
 
 
-interface ColumnCatParameters {
+interface ColumnCatParamsDict {
     "@type"?: "afni/column_cat";
     "line_number"?: number | null | undefined;
     "separator_string"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
-type ColumnCatParametersTagged = Required<Pick<ColumnCatParameters, '@type'>> & ColumnCatParameters;
+type ColumnCatParamsDictTagged = Required<Pick<ColumnCatParamsDict, '@type'>> & ColumnCatParamsDict;
 
 
 /**
- * Output object returned when calling `ColumnCatParameters(...)`.
+ * Output object returned when calling `ColumnCatParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function column_cat_params(
     input_files: Array<InputPathType>,
     line_number: number | null = null,
     separator_string: string | null = null,
-): ColumnCatParametersTagged {
+): ColumnCatParamsDictTagged {
     const params = {
         "@type": "afni/column_cat" as const,
         "input_files": input_files,
@@ -74,7 +74,7 @@ function column_cat_params(
  * @returns Command-line arguments.
  */
 function column_cat_cargs(
-    params: ColumnCatParameters,
+    params: ColumnCatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function column_cat_cargs(
  * @returns Outputs object.
  */
 function column_cat_outputs(
-    params: ColumnCatParameters,
+    params: ColumnCatParamsDict,
     execution: Execution,
 ): ColumnCatOutputs {
     const ret: ColumnCatOutputs = {
@@ -131,7 +131,7 @@ function column_cat_outputs(
  * @returns NamedTuple of outputs (described in `ColumnCatOutputs`).
  */
 function column_cat_execute(
-    params: ColumnCatParameters,
+    params: ColumnCatParamsDict,
     runner: Runner | null = null,
 ): ColumnCatOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function column_cat(
 export {
       COLUMN_CAT_METADATA,
       ColumnCatOutputs,
+      ColumnCatParamsDict,
+      ColumnCatParamsDictTagged,
       column_cat,
       column_cat_execute,
       column_cat_params,

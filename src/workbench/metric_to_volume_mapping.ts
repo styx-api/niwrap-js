@@ -10,7 +10,7 @@ const METRIC_TO_VOLUME_MAPPING_METADATA: Metadata = {
 };
 
 
-interface MetricToVolumeMappingRibbonConstrainedParameters {
+interface MetricToVolumeMappingRibbonConstrainedParamsDict {
     "@type"?: "ribbon-constrained";
     "inner-surf": InputPathType;
     "outer-surf": InputPathType;
@@ -18,19 +18,19 @@ interface MetricToVolumeMappingRibbonConstrainedParameters {
     "greedy": boolean;
     "thick-columns": boolean;
 }
-type MetricToVolumeMappingRibbonConstrainedParametersTagged = Required<Pick<MetricToVolumeMappingRibbonConstrainedParameters, '@type'>> & MetricToVolumeMappingRibbonConstrainedParameters;
+type MetricToVolumeMappingRibbonConstrainedParamsDictTagged = Required<Pick<MetricToVolumeMappingRibbonConstrainedParamsDict, '@type'>> & MetricToVolumeMappingRibbonConstrainedParamsDict;
 
 
-interface MetricToVolumeMappingParameters {
+interface MetricToVolumeMappingParamsDict {
     "@type"?: "workbench/metric-to-volume-mapping";
     "volume-out": string;
     "distance"?: number | null | undefined;
-    "ribbon-constrained"?: MetricToVolumeMappingRibbonConstrainedParameters | null | undefined;
+    "ribbon-constrained"?: MetricToVolumeMappingRibbonConstrainedParamsDict | null | undefined;
     "metric": InputPathType;
     "surface": InputPathType;
     "volume-space": InputPathType;
 }
-type MetricToVolumeMappingParametersTagged = Required<Pick<MetricToVolumeMappingParameters, '@type'>> & MetricToVolumeMappingParameters;
+type MetricToVolumeMappingParamsDictTagged = Required<Pick<MetricToVolumeMappingParamsDict, '@type'>> & MetricToVolumeMappingParamsDict;
 
 
 /**
@@ -46,13 +46,13 @@ number of subdivisions, default 3
  *
  * @returns Parameter dictionary
  */
-function metric_to_volume_mapping_ribbon_constrained_params(
+function metric_to_volume_mapping_ribbon_constrained(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
     subdiv_num: number | null,
     greedy: boolean = false,
     thick_columns: boolean = false,
-): MetricToVolumeMappingRibbonConstrainedParametersTagged {
+): MetricToVolumeMappingRibbonConstrainedParamsDictTagged {
     const params = {
         "@type": "ribbon-constrained" as const,
         "inner-surf": inner_surf,
@@ -76,7 +76,7 @@ function metric_to_volume_mapping_ribbon_constrained_params(
  * @returns Command-line arguments.
  */
 function metric_to_volume_mapping_ribbon_constrained_cargs(
-    params: MetricToVolumeMappingRibbonConstrainedParameters,
+    params: MetricToVolumeMappingRibbonConstrainedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function metric_to_volume_mapping_ribbon_constrained_cargs(
 
 
 /**
- * Output object returned when calling `MetricToVolumeMappingParameters(...)`.
+ * Output object returned when calling `MetricToVolumeMappingParamsDict(...)`.
  *
  * @interface
  */
@@ -132,8 +132,8 @@ function metric_to_volume_mapping_params(
     metric: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
-    ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParameters | null = null,
-): MetricToVolumeMappingParametersTagged {
+    ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParamsDict | null = null,
+): MetricToVolumeMappingParamsDictTagged {
     const params = {
         "@type": "workbench/metric-to-volume-mapping" as const,
         "volume-out": volume_out,
@@ -160,7 +160,7 @@ function metric_to_volume_mapping_params(
  * @returns Command-line arguments.
  */
 function metric_to_volume_mapping_cargs(
-    params: MetricToVolumeMappingParameters,
+    params: MetricToVolumeMappingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -190,7 +190,7 @@ function metric_to_volume_mapping_cargs(
  * @returns Outputs object.
  */
 function metric_to_volume_mapping_outputs(
-    params: MetricToVolumeMappingParameters,
+    params: MetricToVolumeMappingParamsDict,
     execution: Execution,
 ): MetricToVolumeMappingOutputs {
     const ret: MetricToVolumeMappingOutputs = {
@@ -212,7 +212,7 @@ function metric_to_volume_mapping_outputs(
  * @returns NamedTuple of outputs (described in `MetricToVolumeMappingOutputs`).
  */
 function metric_to_volume_mapping_execute(
-    params: MetricToVolumeMappingParameters,
+    params: MetricToVolumeMappingParamsDict,
     runner: Runner | null = null,
 ): MetricToVolumeMappingOutputs {
     runner = runner || getGlobalRunner();
@@ -248,7 +248,7 @@ function metric_to_volume_mapping(
     metric: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
-    ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParameters | null = null,
+    ribbon_constrained: MetricToVolumeMappingRibbonConstrainedParamsDict | null = null,
     runner: Runner | null = null,
 ): MetricToVolumeMappingOutputs {
     const params = metric_to_volume_mapping_params(volume_out, distance, metric, surface, volume_space, ribbon_constrained)
@@ -259,8 +259,12 @@ function metric_to_volume_mapping(
 export {
       METRIC_TO_VOLUME_MAPPING_METADATA,
       MetricToVolumeMappingOutputs,
+      MetricToVolumeMappingParamsDict,
+      MetricToVolumeMappingParamsDictTagged,
+      MetricToVolumeMappingRibbonConstrainedParamsDict,
+      MetricToVolumeMappingRibbonConstrainedParamsDictTagged,
       metric_to_volume_mapping,
       metric_to_volume_mapping_execute,
       metric_to_volume_mapping_params,
-      metric_to_volume_mapping_ribbon_constrained_params,
+      metric_to_volume_mapping_ribbon_constrained,
 };

@@ -11,7 +11,7 @@ const V__SURF_TO_VOL_SPACKLE_METADATA: Metadata = {
 };
 
 
-interface VSurfToVolSpackleParameters {
+interface VSurfToVolSpackleParamsDict {
     "@type"?: "afni/@surf_to_vol_spackle";
     "maskset": InputPathType;
     "spec": InputPathType;
@@ -28,11 +28,11 @@ interface VSurfToVolSpackleParameters {
     "datum_type"?: string | null | undefined;
     "ignore_unknown_options": boolean;
 }
-type VSurfToVolSpackleParametersTagged = Required<Pick<VSurfToVolSpackleParameters, '@type'>> & VSurfToVolSpackleParameters;
+type VSurfToVolSpackleParamsDictTagged = Required<Pick<VSurfToVolSpackleParamsDict, '@type'>> & VSurfToVolSpackleParamsDict;
 
 
 /**
- * Output object returned when calling `VSurfToVolSpackleParameters(...)`.
+ * Output object returned when calling `VSurfToVolSpackleParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function v__surf_to_vol_spackle_params(
     use_mode: boolean = false,
     datum_type: string | null = null,
     ignore_unknown_options: boolean = false,
-): VSurfToVolSpackleParametersTagged {
+): VSurfToVolSpackleParamsDictTagged {
     const params = {
         "@type": "afni/@surf_to_vol_spackle" as const,
         "maskset": maskset,
@@ -126,7 +126,7 @@ function v__surf_to_vol_spackle_params(
  * @returns Command-line arguments.
  */
 function v__surf_to_vol_spackle_cargs(
-    params: VSurfToVolSpackleParameters,
+    params: VSurfToVolSpackleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -191,7 +191,7 @@ function v__surf_to_vol_spackle_cargs(
  * @returns Outputs object.
  */
 function v__surf_to_vol_spackle_outputs(
-    params: VSurfToVolSpackleParameters,
+    params: VSurfToVolSpackleParamsDict,
     execution: Execution,
 ): VSurfToVolSpackleOutputs {
     const ret: VSurfToVolSpackleOutputs = {
@@ -217,7 +217,7 @@ function v__surf_to_vol_spackle_outputs(
  * @returns NamedTuple of outputs (described in `VSurfToVolSpackleOutputs`).
  */
 function v__surf_to_vol_spackle_execute(
-    params: VSurfToVolSpackleParameters,
+    params: VSurfToVolSpackleParamsDict,
     runner: Runner | null = null,
 ): VSurfToVolSpackleOutputs {
     runner = runner || getGlobalRunner();
@@ -281,6 +281,8 @@ function v__surf_to_vol_spackle(
 
 export {
       VSurfToVolSpackleOutputs,
+      VSurfToVolSpackleParamsDict,
+      VSurfToVolSpackleParamsDictTagged,
       V__SURF_TO_VOL_SPACKLE_METADATA,
       v__surf_to_vol_spackle,
       v__surf_to_vol_spackle_execute,

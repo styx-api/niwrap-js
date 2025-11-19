@@ -11,18 +11,18 @@ const SIENA_FLOW2STD_METADATA: Metadata = {
 };
 
 
-interface SienaFlow2stdParameters {
+interface SienaFlow2stdParamsDict {
     "@type"?: "fsl/siena_flow2std";
     "fileroot1": string;
     "fileroot2": string;
     "sigma"?: number | null | undefined;
     "debug_flag": boolean;
 }
-type SienaFlow2stdParametersTagged = Required<Pick<SienaFlow2stdParameters, '@type'>> & SienaFlow2stdParameters;
+type SienaFlow2stdParamsDictTagged = Required<Pick<SienaFlow2stdParamsDict, '@type'>> & SienaFlow2stdParamsDict;
 
 
 /**
- * Output object returned when calling `SienaFlow2stdParameters(...)`.
+ * Output object returned when calling `SienaFlow2stdParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function siena_flow2std_params(
     fileroot2: string,
     sigma: number | null = null,
     debug_flag: boolean = false,
-): SienaFlow2stdParametersTagged {
+): SienaFlow2stdParamsDictTagged {
     const params = {
         "@type": "fsl/siena_flow2std" as const,
         "fileroot1": fileroot1,
@@ -72,7 +72,7 @@ function siena_flow2std_params(
  * @returns Command-line arguments.
  */
 function siena_flow2std_cargs(
-    params: SienaFlow2stdParameters,
+    params: SienaFlow2stdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function siena_flow2std_cargs(
  * @returns Outputs object.
  */
 function siena_flow2std_outputs(
-    params: SienaFlow2stdParameters,
+    params: SienaFlow2stdParamsDict,
     execution: Execution,
 ): SienaFlow2stdOutputs {
     const ret: SienaFlow2stdOutputs = {
@@ -126,7 +126,7 @@ function siena_flow2std_outputs(
  * @returns NamedTuple of outputs (described in `SienaFlow2stdOutputs`).
  */
 function siena_flow2std_execute(
-    params: SienaFlow2stdParameters,
+    params: SienaFlow2stdParamsDict,
     runner: Runner | null = null,
 ): SienaFlow2stdOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function siena_flow2std(
 export {
       SIENA_FLOW2STD_METADATA,
       SienaFlow2stdOutputs,
+      SienaFlow2stdParamsDict,
+      SienaFlow2stdParamsDictTagged,
       siena_flow2std,
       siena_flow2std_execute,
       siena_flow2std_params,

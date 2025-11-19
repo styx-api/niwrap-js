@@ -11,16 +11,16 @@ const VENTFIX_METADATA: Metadata = {
 };
 
 
-interface VentfixParameters {
+interface VentfixParamsDict {
     "@type"?: "freesurfer/ventfix";
     "subject_dir": string;
     "option1"?: string | null | undefined;
 }
-type VentfixParametersTagged = Required<Pick<VentfixParameters, '@type'>> & VentfixParameters;
+type VentfixParamsDictTagged = Required<Pick<VentfixParamsDict, '@type'>> & VentfixParamsDict;
 
 
 /**
- * Output object returned when calling `VentfixParameters(...)`.
+ * Output object returned when calling `VentfixParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface VentfixOutputs {
 function ventfix_params(
     subject_dir: string,
     option1: string | null = null,
-): VentfixParametersTagged {
+): VentfixParamsDictTagged {
     const params = {
         "@type": "freesurfer/ventfix" as const,
         "subject_dir": subject_dir,
@@ -68,7 +68,7 @@ function ventfix_params(
  * @returns Command-line arguments.
  */
 function ventfix_cargs(
-    params: VentfixParameters,
+    params: VentfixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function ventfix_cargs(
  * @returns Outputs object.
  */
 function ventfix_outputs(
-    params: VentfixParameters,
+    params: VentfixParamsDict,
     execution: Execution,
 ): VentfixOutputs {
     const ret: VentfixOutputs = {
@@ -119,7 +119,7 @@ function ventfix_outputs(
  * @returns NamedTuple of outputs (described in `VentfixOutputs`).
  */
 function ventfix_execute(
-    params: VentfixParameters,
+    params: VentfixParamsDict,
     runner: Runner | null = null,
 ): VentfixOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function ventfix(
 export {
       VENTFIX_METADATA,
       VentfixOutputs,
+      VentfixParamsDict,
+      VentfixParamsDictTagged,
       ventfix,
       ventfix_execute,
       ventfix_params,

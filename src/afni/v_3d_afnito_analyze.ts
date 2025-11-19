@@ -11,18 +11,18 @@ const V_3D_AFNITO_ANALYZE_METADATA: Metadata = {
 };
 
 
-interface V3dAfnitoAnalyzeParameters {
+interface V3dAfnitoAnalyzeParamsDict {
     "@type"?: "afni/3dAFNItoANALYZE";
     "4d_option": boolean;
     "orient_option"?: string | null | undefined;
     "output_name": string;
     "afni_dataset": InputPathType;
 }
-type V3dAfnitoAnalyzeParametersTagged = Required<Pick<V3dAfnitoAnalyzeParameters, '@type'>> & V3dAfnitoAnalyzeParameters;
+type V3dAfnitoAnalyzeParamsDictTagged = Required<Pick<V3dAfnitoAnalyzeParamsDict, '@type'>> & V3dAfnitoAnalyzeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAfnitoAnalyzeParameters(...)`.
+ * Output object returned when calling `V3dAfnitoAnalyzeParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_afnito_analyze_params(
     afni_dataset: InputPathType,
     v_4d_option: boolean = false,
     orient_option: string | null = null,
-): V3dAfnitoAnalyzeParametersTagged {
+): V3dAfnitoAnalyzeParamsDictTagged {
     const params = {
         "@type": "afni/3dAFNItoANALYZE" as const,
         "4d_option": v_4d_option,
@@ -88,7 +88,7 @@ function v_3d_afnito_analyze_params(
  * @returns Command-line arguments.
  */
 function v_3d_afnito_analyze_cargs(
-    params: V3dAfnitoAnalyzeParameters,
+    params: V3dAfnitoAnalyzeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function v_3d_afnito_analyze_cargs(
  * @returns Outputs object.
  */
 function v_3d_afnito_analyze_outputs(
-    params: V3dAfnitoAnalyzeParameters,
+    params: V3dAfnitoAnalyzeParamsDict,
     execution: Execution,
 ): V3dAfnitoAnalyzeOutputs {
     const ret: V3dAfnitoAnalyzeOutputs = {
@@ -146,7 +146,7 @@ function v_3d_afnito_analyze_outputs(
  * @returns NamedTuple of outputs (described in `V3dAfnitoAnalyzeOutputs`).
  */
 function v_3d_afnito_analyze_execute(
-    params: V3dAfnitoAnalyzeParameters,
+    params: V3dAfnitoAnalyzeParamsDict,
     runner: Runner | null = null,
 ): V3dAfnitoAnalyzeOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function v_3d_afnito_analyze(
 
 export {
       V3dAfnitoAnalyzeOutputs,
+      V3dAfnitoAnalyzeParamsDict,
+      V3dAfnitoAnalyzeParamsDictTagged,
       V_3D_AFNITO_ANALYZE_METADATA,
       v_3d_afnito_analyze,
       v_3d_afnito_analyze_execute,

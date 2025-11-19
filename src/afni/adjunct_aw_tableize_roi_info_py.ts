@@ -11,7 +11,7 @@ const ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA: Metadata = {
 };
 
 
-interface AdjunctAwTableizeRoiInfoPyParameters {
+interface AdjunctAwTableizeRoiInfoPyParamsDict {
     "@type"?: "afni/adjunct_aw_tableize_roi_info.py";
     "output_file": string;
     "warped_atlas": InputPathType;
@@ -20,11 +20,11 @@ interface AdjunctAwTableizeRoiInfoPyParameters {
     "reference_mask": InputPathType;
     "modesmooth_value": number;
 }
-type AdjunctAwTableizeRoiInfoPyParametersTagged = Required<Pick<AdjunctAwTableizeRoiInfoPyParameters, '@type'>> & AdjunctAwTableizeRoiInfoPyParameters;
+type AdjunctAwTableizeRoiInfoPyParamsDictTagged = Required<Pick<AdjunctAwTableizeRoiInfoPyParamsDict, '@type'>> & AdjunctAwTableizeRoiInfoPyParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctAwTableizeRoiInfoPyParameters(...)`.
+ * Output object returned when calling `AdjunctAwTableizeRoiInfoPyParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function adjunct_aw_tableize_roi_info_py_params(
     reference_atlas: InputPathType,
     reference_mask: InputPathType,
     modesmooth_value: number,
-): AdjunctAwTableizeRoiInfoPyParametersTagged {
+): AdjunctAwTableizeRoiInfoPyParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_aw_tableize_roi_info.py" as const,
         "output_file": output_file,
@@ -82,7 +82,7 @@ function adjunct_aw_tableize_roi_info_py_params(
  * @returns Command-line arguments.
  */
 function adjunct_aw_tableize_roi_info_py_cargs(
-    params: AdjunctAwTableizeRoiInfoPyParameters,
+    params: AdjunctAwTableizeRoiInfoPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function adjunct_aw_tableize_roi_info_py_cargs(
  * @returns Outputs object.
  */
 function adjunct_aw_tableize_roi_info_py_outputs(
-    params: AdjunctAwTableizeRoiInfoPyParameters,
+    params: AdjunctAwTableizeRoiInfoPyParamsDict,
     execution: Execution,
 ): AdjunctAwTableizeRoiInfoPyOutputs {
     const ret: AdjunctAwTableizeRoiInfoPyOutputs = {
@@ -132,7 +132,7 @@ function adjunct_aw_tableize_roi_info_py_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctAwTableizeRoiInfoPyOutputs`).
  */
 function adjunct_aw_tableize_roi_info_py_execute(
-    params: AdjunctAwTableizeRoiInfoPyParameters,
+    params: AdjunctAwTableizeRoiInfoPyParamsDict,
     runner: Runner | null = null,
 ): AdjunctAwTableizeRoiInfoPyOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function adjunct_aw_tableize_roi_info_py(
 export {
       ADJUNCT_AW_TABLEIZE_ROI_INFO_PY_METADATA,
       AdjunctAwTableizeRoiInfoPyOutputs,
+      AdjunctAwTableizeRoiInfoPyParamsDict,
+      AdjunctAwTableizeRoiInfoPyParamsDictTagged,
       adjunct_aw_tableize_roi_info_py,
       adjunct_aw_tableize_roi_info_py_execute,
       adjunct_aw_tableize_roi_info_py_params,

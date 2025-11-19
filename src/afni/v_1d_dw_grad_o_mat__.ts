@@ -11,7 +11,7 @@ const V_1D_DW_GRAD_O_MAT___METADATA: Metadata = {
 };
 
 
-interface V1dDwGradOMatParameters {
+interface V1dDwGradOMatParamsDict {
     "@type"?: "afni/1dDW_Grad_o_Mat++";
     "in_row_vec": InputPathType;
     "in_col_vec": InputPathType;
@@ -35,11 +35,11 @@ interface V1dDwGradOMatParameters {
     "put_zeros_top": boolean;
     "bmax_ref"?: number | null | undefined;
 }
-type V1dDwGradOMatParametersTagged = Required<Pick<V1dDwGradOMatParameters, '@type'>> & V1dDwGradOMatParameters;
+type V1dDwGradOMatParamsDictTagged = Required<Pick<V1dDwGradOMatParamsDict, '@type'>> & V1dDwGradOMatParamsDict;
 
 
 /**
- * Output object returned when calling `V1dDwGradOMatParameters(...)`.
+ * Output object returned when calling `V1dDwGradOMatParamsDict(...)`.
  *
  * @interface
  */
@@ -112,7 +112,7 @@ function v_1d_dw_grad_o_mat___params(
     bref_mean_top: boolean = false,
     put_zeros_top: boolean = false,
     bmax_ref: number | null = null,
-): V1dDwGradOMatParametersTagged {
+): V1dDwGradOMatParamsDictTagged {
     const params = {
         "@type": "afni/1dDW_Grad_o_Mat++" as const,
         "in_row_vec": in_row_vec,
@@ -160,7 +160,7 @@ function v_1d_dw_grad_o_mat___params(
  * @returns Command-line arguments.
  */
 function v_1d_dw_grad_o_mat___cargs(
-    params: V1dDwGradOMatParameters,
+    params: V1dDwGradOMatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -264,7 +264,7 @@ function v_1d_dw_grad_o_mat___cargs(
  * @returns Outputs object.
  */
 function v_1d_dw_grad_o_mat___outputs(
-    params: V1dDwGradOMatParameters,
+    params: V1dDwGradOMatParamsDict,
     execution: Execution,
 ): V1dDwGradOMatOutputs {
     const ret: V1dDwGradOMatOutputs = {
@@ -292,7 +292,7 @@ function v_1d_dw_grad_o_mat___outputs(
  * @returns NamedTuple of outputs (described in `V1dDwGradOMatOutputs`).
  */
 function v_1d_dw_grad_o_mat___execute(
-    params: V1dDwGradOMatParameters,
+    params: V1dDwGradOMatParamsDict,
     runner: Runner | null = null,
 ): V1dDwGradOMatOutputs {
     runner = runner || getGlobalRunner();
@@ -370,6 +370,8 @@ function v_1d_dw_grad_o_mat__(
 
 export {
       V1dDwGradOMatOutputs,
+      V1dDwGradOMatParamsDict,
+      V1dDwGradOMatParamsDictTagged,
       V_1D_DW_GRAD_O_MAT___METADATA,
       v_1d_dw_grad_o_mat__,
       v_1d_dw_grad_o_mat___execute,

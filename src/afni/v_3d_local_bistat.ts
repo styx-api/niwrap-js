@@ -11,7 +11,7 @@ const V_3D_LOCAL_BISTAT_METADATA: Metadata = {
 };
 
 
-interface V3dLocalBistatParameters {
+interface V3dLocalBistatParamsDict {
     "@type"?: "afni/3dLocalBistat";
     "nbhd": string;
     "stats": Array<string>;
@@ -26,11 +26,11 @@ interface V3dLocalBistatParameters {
     "dataset1": InputPathType;
     "dataset2": InputPathType;
 }
-type V3dLocalBistatParametersTagged = Required<Pick<V3dLocalBistatParameters, '@type'>> & V3dLocalBistatParameters;
+type V3dLocalBistatParamsDictTagged = Required<Pick<V3dLocalBistatParamsDict, '@type'>> & V3dLocalBistatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLocalBistatParameters(...)`.
+ * Output object returned when calling `V3dLocalBistatParamsDict(...)`.
  *
  * @interface
  */
@@ -81,7 +81,7 @@ function v_3d_local_bistat_params(
     histbin: number | null = null,
     hclip1: Array<string> | null = null,
     hclip2: Array<string> | null = null,
-): V3dLocalBistatParametersTagged {
+): V3dLocalBistatParamsDictTagged {
     const params = {
         "@type": "afni/3dLocalBistat" as const,
         "nbhd": nbhd,
@@ -122,7 +122,7 @@ function v_3d_local_bistat_params(
  * @returns Command-line arguments.
  */
 function v_3d_local_bistat_cargs(
-    params: V3dLocalBistatParameters,
+    params: V3dLocalBistatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -193,7 +193,7 @@ function v_3d_local_bistat_cargs(
  * @returns Outputs object.
  */
 function v_3d_local_bistat_outputs(
-    params: V3dLocalBistatParameters,
+    params: V3dLocalBistatParamsDict,
     execution: Execution,
 ): V3dLocalBistatOutputs {
     const ret: V3dLocalBistatOutputs = {
@@ -220,7 +220,7 @@ function v_3d_local_bistat_outputs(
  * @returns NamedTuple of outputs (described in `V3dLocalBistatOutputs`).
  */
 function v_3d_local_bistat_execute(
-    params: V3dLocalBistatParameters,
+    params: V3dLocalBistatParamsDict,
     runner: Runner | null = null,
 ): V3dLocalBistatOutputs {
     runner = runner || getGlobalRunner();
@@ -280,6 +280,8 @@ function v_3d_local_bistat(
 
 export {
       V3dLocalBistatOutputs,
+      V3dLocalBistatParamsDict,
+      V3dLocalBistatParamsDictTagged,
       V_3D_LOCAL_BISTAT_METADATA,
       v_3d_local_bistat,
       v_3d_local_bistat_execute,

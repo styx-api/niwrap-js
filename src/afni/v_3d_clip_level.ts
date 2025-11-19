@@ -11,18 +11,18 @@ const V_3D_CLIP_LEVEL_METADATA: Metadata = {
 };
 
 
-interface V3dClipLevelParameters {
+interface V3dClipLevelParamsDict {
     "@type"?: "afni/3dClipLevel";
     "dataset": InputPathType;
     "mfrac"?: number | null | undefined;
     "doall": boolean;
     "grad"?: string | null | undefined;
 }
-type V3dClipLevelParametersTagged = Required<Pick<V3dClipLevelParameters, '@type'>> & V3dClipLevelParameters;
+type V3dClipLevelParamsDictTagged = Required<Pick<V3dClipLevelParamsDict, '@type'>> & V3dClipLevelParamsDict;
 
 
 /**
- * Output object returned when calling `V3dClipLevelParameters(...)`.
+ * Output object returned when calling `V3dClipLevelParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function v_3d_clip_level_params(
     mfrac: number | null = null,
     doall: boolean = false,
     grad: string | null = null,
-): V3dClipLevelParametersTagged {
+): V3dClipLevelParamsDictTagged {
     const params = {
         "@type": "afni/3dClipLevel" as const,
         "dataset": dataset,
@@ -74,7 +74,7 @@ function v_3d_clip_level_params(
  * @returns Command-line arguments.
  */
 function v_3d_clip_level_cargs(
-    params: V3dClipLevelParameters,
+    params: V3dClipLevelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function v_3d_clip_level_cargs(
  * @returns Outputs object.
  */
 function v_3d_clip_level_outputs(
-    params: V3dClipLevelParameters,
+    params: V3dClipLevelParamsDict,
     execution: Execution,
 ): V3dClipLevelOutputs {
     const ret: V3dClipLevelOutputs = {
@@ -133,7 +133,7 @@ function v_3d_clip_level_outputs(
  * @returns NamedTuple of outputs (described in `V3dClipLevelOutputs`).
  */
 function v_3d_clip_level_execute(
-    params: V3dClipLevelParameters,
+    params: V3dClipLevelParamsDict,
     runner: Runner | null = null,
 ): V3dClipLevelOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function v_3d_clip_level(
 
 export {
       V3dClipLevelOutputs,
+      V3dClipLevelParamsDict,
+      V3dClipLevelParamsDictTagged,
       V_3D_CLIP_LEVEL_METADATA,
       v_3d_clip_level,
       v_3d_clip_level_execute,

@@ -11,15 +11,15 @@ const HELP_FORMAT_METADATA: Metadata = {
 };
 
 
-interface HelpFormatParameters {
+interface HelpFormatParamsDict {
     "@type"?: "afni/help_format";
     "stdin": string;
 }
-type HelpFormatParametersTagged = Required<Pick<HelpFormatParameters, '@type'>> & HelpFormatParameters;
+type HelpFormatParamsDictTagged = Required<Pick<HelpFormatParamsDict, '@type'>> & HelpFormatParamsDict;
 
 
 /**
- * Output object returned when calling `HelpFormatParameters(...)`.
+ * Output object returned when calling `HelpFormatParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface HelpFormatOutputs {
  */
 function help_format_params(
     stdin: string,
-): HelpFormatParametersTagged {
+): HelpFormatParamsDictTagged {
     const params = {
         "@type": "afni/help_format" as const,
         "stdin": stdin,
@@ -62,7 +62,7 @@ function help_format_params(
  * @returns Command-line arguments.
  */
 function help_format_cargs(
-    params: HelpFormatParameters,
+    params: HelpFormatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function help_format_cargs(
  * @returns Outputs object.
  */
 function help_format_outputs(
-    params: HelpFormatParameters,
+    params: HelpFormatParamsDict,
     execution: Execution,
 ): HelpFormatOutputs {
     const ret: HelpFormatOutputs = {
@@ -107,7 +107,7 @@ function help_format_outputs(
  * @returns NamedTuple of outputs (described in `HelpFormatOutputs`).
  */
 function help_format_execute(
-    params: HelpFormatParameters,
+    params: HelpFormatParamsDict,
     runner: Runner | null = null,
 ): HelpFormatOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function help_format(
 export {
       HELP_FORMAT_METADATA,
       HelpFormatOutputs,
+      HelpFormatParamsDict,
+      HelpFormatParamsDictTagged,
       help_format,
       help_format_execute,
       help_format_params,

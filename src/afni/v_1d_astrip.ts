@@ -11,15 +11,15 @@ const V_1D_ASTRIP_METADATA: Metadata = {
 };
 
 
-interface V1dAstripParameters {
+interface V1dAstripParamsDict {
     "@type"?: "afni/1dAstrip";
     "infile": InputPathType;
 }
-type V1dAstripParametersTagged = Required<Pick<V1dAstripParameters, '@type'>> & V1dAstripParameters;
+type V1dAstripParamsDictTagged = Required<Pick<V1dAstripParamsDict, '@type'>> & V1dAstripParamsDict;
 
 
 /**
- * Output object returned when calling `V1dAstripParameters(...)`.
+ * Output object returned when calling `V1dAstripParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface V1dAstripOutputs {
  */
 function v_1d_astrip_params(
     infile: InputPathType,
-): V1dAstripParametersTagged {
+): V1dAstripParamsDictTagged {
     const params = {
         "@type": "afni/1dAstrip" as const,
         "infile": infile,
@@ -62,7 +62,7 @@ function v_1d_astrip_params(
  * @returns Command-line arguments.
  */
 function v_1d_astrip_cargs(
-    params: V1dAstripParameters,
+    params: V1dAstripParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v_1d_astrip_cargs(
  * @returns Outputs object.
  */
 function v_1d_astrip_outputs(
-    params: V1dAstripParameters,
+    params: V1dAstripParamsDict,
     execution: Execution,
 ): V1dAstripOutputs {
     const ret: V1dAstripOutputs = {
@@ -107,7 +107,7 @@ function v_1d_astrip_outputs(
  * @returns NamedTuple of outputs (described in `V1dAstripOutputs`).
  */
 function v_1d_astrip_execute(
-    params: V1dAstripParameters,
+    params: V1dAstripParamsDict,
     runner: Runner | null = null,
 ): V1dAstripOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v_1d_astrip(
 
 export {
       V1dAstripOutputs,
+      V1dAstripParamsDict,
+      V1dAstripParamsDictTagged,
       V_1D_ASTRIP_METADATA,
       v_1d_astrip,
       v_1d_astrip_execute,

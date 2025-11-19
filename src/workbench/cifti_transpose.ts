@@ -10,17 +10,17 @@ const CIFTI_TRANSPOSE_METADATA: Metadata = {
 };
 
 
-interface CiftiTransposeParameters {
+interface CiftiTransposeParamsDict {
     "@type"?: "workbench/cifti-transpose";
     "cifti-out": string;
     "limit-GB"?: number | null | undefined;
     "cifti-in": InputPathType;
 }
-type CiftiTransposeParametersTagged = Required<Pick<CiftiTransposeParameters, '@type'>> & CiftiTransposeParameters;
+type CiftiTransposeParamsDictTagged = Required<Pick<CiftiTransposeParamsDict, '@type'>> & CiftiTransposeParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiTransposeParameters(...)`.
+ * Output object returned when calling `CiftiTransposeParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ function cifti_transpose_params(
     cifti_out: string,
     limit_gb: number | null,
     cifti_in: InputPathType,
-): CiftiTransposeParametersTagged {
+): CiftiTransposeParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-transpose" as const,
         "cifti-out": cifti_out,
@@ -73,7 +73,7 @@ function cifti_transpose_params(
  * @returns Command-line arguments.
  */
 function cifti_transpose_cargs(
-    params: CiftiTransposeParameters,
+    params: CiftiTransposeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function cifti_transpose_cargs(
  * @returns Outputs object.
  */
 function cifti_transpose_outputs(
-    params: CiftiTransposeParameters,
+    params: CiftiTransposeParamsDict,
     execution: Execution,
 ): CiftiTransposeOutputs {
     const ret: CiftiTransposeOutputs = {
@@ -122,7 +122,7 @@ function cifti_transpose_outputs(
  * @returns NamedTuple of outputs (described in `CiftiTransposeOutputs`).
  */
 function cifti_transpose_execute(
-    params: CiftiTransposeParameters,
+    params: CiftiTransposeParamsDict,
     runner: Runner | null = null,
 ): CiftiTransposeOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function cifti_transpose(
 export {
       CIFTI_TRANSPOSE_METADATA,
       CiftiTransposeOutputs,
+      CiftiTransposeParamsDict,
+      CiftiTransposeParamsDictTagged,
       cifti_transpose,
       cifti_transpose_execute,
       cifti_transpose_params,

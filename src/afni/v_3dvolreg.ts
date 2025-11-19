@@ -11,7 +11,7 @@ const V_3DVOLREG_METADATA: Metadata = {
 };
 
 
-interface V3dvolregParameters {
+interface V3dvolregParamsDict {
     "@type"?: "afni/3dvolreg";
     "copyorigin": boolean;
     "twopass": boolean;
@@ -29,11 +29,11 @@ interface V3dvolregParameters {
     "Maxdisp1d"?: string | null | undefined;
     "in_file": InputPathType;
 }
-type V3dvolregParametersTagged = Required<Pick<V3dvolregParameters, '@type'>> & V3dvolregParameters;
+type V3dvolregParamsDictTagged = Required<Pick<V3dvolregParamsDict, '@type'>> & V3dvolregParamsDict;
 
 
 /**
- * Output object returned when calling `V3dvolregParameters(...)`.
+ * Output object returned when calling `V3dvolregParamsDict(...)`.
  *
  * @interface
  */
@@ -110,7 +110,7 @@ function v_3dvolreg_params(
     basefile: InputPathType | null = null,
     zpad: number | null = null,
     maxdisp1d: string | null = null,
-): V3dvolregParametersTagged {
+): V3dvolregParamsDictTagged {
     const params = {
         "@type": "afni/3dvolreg" as const,
         "copyorigin": copyorigin,
@@ -158,7 +158,7 @@ function v_3dvolreg_params(
  * @returns Command-line arguments.
  */
 function v_3dvolreg_cargs(
-    params: V3dvolregParameters,
+    params: V3dvolregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -238,7 +238,7 @@ function v_3dvolreg_cargs(
  * @returns Outputs object.
  */
 function v_3dvolreg_outputs(
-    params: V3dvolregParameters,
+    params: V3dvolregParamsDict,
     execution: Execution,
 ): V3dvolregOutputs {
     const ret: V3dvolregOutputs = {
@@ -270,7 +270,7 @@ function v_3dvolreg_outputs(
  * @returns NamedTuple of outputs (described in `V3dvolregOutputs`).
  */
 function v_3dvolreg_execute(
-    params: V3dvolregParameters,
+    params: V3dvolregParamsDict,
     runner: Runner | null = null,
 ): V3dvolregOutputs {
     runner = runner || getGlobalRunner();
@@ -336,6 +336,8 @@ function v_3dvolreg(
 
 export {
       V3dvolregOutputs,
+      V3dvolregParamsDict,
+      V3dvolregParamsDictTagged,
       V_3DVOLREG_METADATA,
       v_3dvolreg,
       v_3dvolreg_execute,

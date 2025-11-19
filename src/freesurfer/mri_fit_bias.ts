@@ -11,7 +11,7 @@ const MRI_FIT_BIAS_METADATA: Metadata = {
 };
 
 
-interface MriFitBiasParameters {
+interface MriFitBiasParamsDict {
     "@type"?: "freesurfer/mri_fit_bias";
     "inputvol": InputPathType;
     "lpf_cutoff"?: number | null | undefined;
@@ -26,11 +26,11 @@ interface MriFitBiasParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
-type MriFitBiasParametersTagged = Required<Pick<MriFitBiasParameters, '@type'>> & MriFitBiasParameters;
+type MriFitBiasParamsDictTagged = Required<Pick<MriFitBiasParamsDict, '@type'>> & MriFitBiasParamsDict;
 
 
 /**
- * Output object returned when calling `MriFitBiasParameters(...)`.
+ * Output object returned when calling `MriFitBiasParamsDict(...)`.
  *
  * @interface
  */
@@ -81,7 +81,7 @@ function mri_fit_bias_params(
     nthreads: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriFitBiasParametersTagged {
+): MriFitBiasParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fit_bias" as const,
         "inputvol": inputvol,
@@ -120,7 +120,7 @@ function mri_fit_bias_params(
  * @returns Command-line arguments.
  */
 function mri_fit_bias_cargs(
-    params: MriFitBiasParameters,
+    params: MriFitBiasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -194,7 +194,7 @@ function mri_fit_bias_cargs(
  * @returns Outputs object.
  */
 function mri_fit_bias_outputs(
-    params: MriFitBiasParameters,
+    params: MriFitBiasParamsDict,
     execution: Execution,
 ): MriFitBiasOutputs {
     const ret: MriFitBiasOutputs = {
@@ -221,7 +221,7 @@ function mri_fit_bias_outputs(
  * @returns NamedTuple of outputs (described in `MriFitBiasOutputs`).
  */
 function mri_fit_bias_execute(
-    params: MriFitBiasParameters,
+    params: MriFitBiasParamsDict,
     runner: Runner | null = null,
 ): MriFitBiasOutputs {
     runner = runner || getGlobalRunner();
@@ -282,6 +282,8 @@ function mri_fit_bias(
 export {
       MRI_FIT_BIAS_METADATA,
       MriFitBiasOutputs,
+      MriFitBiasParamsDict,
+      MriFitBiasParamsDictTagged,
       mri_fit_bias,
       mri_fit_bias_execute,
       mri_fit_bias_params,

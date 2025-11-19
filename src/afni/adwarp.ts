@@ -11,7 +11,7 @@ const ADWARP_METADATA: Metadata = {
 };
 
 
-interface AdwarpParameters {
+interface AdwarpParamsDict {
     "@type"?: "afni/adwarp";
     "apar": InputPathType;
     "dpar": string;
@@ -23,11 +23,11 @@ interface AdwarpParameters {
     "thr"?: string | null | undefined;
     "func"?: string | null | undefined;
 }
-type AdwarpParametersTagged = Required<Pick<AdwarpParameters, '@type'>> & AdwarpParameters;
+type AdwarpParamsDictTagged = Required<Pick<AdwarpParamsDict, '@type'>> & AdwarpParamsDict;
 
 
 /**
- * Output object returned when calling `AdwarpParameters(...)`.
+ * Output object returned when calling `AdwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function adwarp_params(
     resam: string | null = null,
     thr: string | null = null,
     func: string | null = null,
-): AdwarpParametersTagged {
+): AdwarpParamsDictTagged {
     const params = {
         "@type": "afni/adwarp" as const,
         "apar": apar,
@@ -108,7 +108,7 @@ function adwarp_params(
  * @returns Command-line arguments.
  */
 function adwarp_cargs(
-    params: AdwarpParameters,
+    params: AdwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -170,7 +170,7 @@ function adwarp_cargs(
  * @returns Outputs object.
  */
 function adwarp_outputs(
-    params: AdwarpParameters,
+    params: AdwarpParamsDict,
     execution: Execution,
 ): AdwarpOutputs {
     const ret: AdwarpOutputs = {
@@ -197,7 +197,7 @@ function adwarp_outputs(
  * @returns NamedTuple of outputs (described in `AdwarpOutputs`).
  */
 function adwarp_execute(
-    params: AdwarpParameters,
+    params: AdwarpParamsDict,
     runner: Runner | null = null,
 ): AdwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -252,6 +252,8 @@ function adwarp(
 export {
       ADWARP_METADATA,
       AdwarpOutputs,
+      AdwarpParamsDict,
+      AdwarpParamsDictTagged,
       adwarp,
       adwarp_execute,
       adwarp_params,

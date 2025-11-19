@@ -11,16 +11,16 @@ const UNPACKIMADIR_METADATA: Metadata = {
 };
 
 
-interface UnpackimadirParameters {
+interface UnpackimadirParamsDict {
     "@type"?: "freesurfer/unpackimadir";
     "source_directory": string;
     "target_directory": string;
 }
-type UnpackimadirParametersTagged = Required<Pick<UnpackimadirParameters, '@type'>> & UnpackimadirParameters;
+type UnpackimadirParamsDictTagged = Required<Pick<UnpackimadirParamsDict, '@type'>> & UnpackimadirParamsDict;
 
 
 /**
- * Output object returned when calling `UnpackimadirParameters(...)`.
+ * Output object returned when calling `UnpackimadirParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface UnpackimadirOutputs {
 function unpackimadir_params(
     source_directory: string,
     target_directory: string,
-): UnpackimadirParametersTagged {
+): UnpackimadirParamsDictTagged {
     const params = {
         "@type": "freesurfer/unpackimadir" as const,
         "source_directory": source_directory,
@@ -62,7 +62,7 @@ function unpackimadir_params(
  * @returns Command-line arguments.
  */
 function unpackimadir_cargs(
-    params: UnpackimadirParameters,
+    params: UnpackimadirParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function unpackimadir_cargs(
  * @returns Outputs object.
  */
 function unpackimadir_outputs(
-    params: UnpackimadirParameters,
+    params: UnpackimadirParamsDict,
     execution: Execution,
 ): UnpackimadirOutputs {
     const ret: UnpackimadirOutputs = {
@@ -113,7 +113,7 @@ function unpackimadir_outputs(
  * @returns NamedTuple of outputs (described in `UnpackimadirOutputs`).
  */
 function unpackimadir_execute(
-    params: UnpackimadirParameters,
+    params: UnpackimadirParamsDict,
     runner: Runner | null = null,
 ): UnpackimadirOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function unpackimadir(
 export {
       UNPACKIMADIR_METADATA,
       UnpackimadirOutputs,
+      UnpackimadirParamsDict,
+      UnpackimadirParamsDictTagged,
       unpackimadir,
       unpackimadir_execute,
       unpackimadir_params,

@@ -11,7 +11,7 @@ const V_3DMAXIMA_METADATA: Metadata = {
 };
 
 
-interface V3dmaximaParameters {
+interface V3dmaximaParamsDict {
     "@type"?: "afni/3dmaxima";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
@@ -34,11 +34,11 @@ interface V3dmaximaParameters {
     "hist_flag": boolean;
     "ver_flag": boolean;
 }
-type V3dmaximaParametersTagged = Required<Pick<V3dmaximaParameters, '@type'>> & V3dmaximaParameters;
+type V3dmaximaParamsDictTagged = Required<Pick<V3dmaximaParamsDict, '@type'>> & V3dmaximaParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmaximaParameters(...)`.
+ * Output object returned when calling `V3dmaximaParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function v_3dmaxima_params(
     help_flag: boolean = false,
     hist_flag: boolean = false,
     ver_flag: boolean = false,
-): V3dmaximaParametersTagged {
+): V3dmaximaParamsDictTagged {
     const params = {
         "@type": "afni/3dmaxima" as const,
         "input_dataset": input_dataset,
@@ -152,7 +152,7 @@ function v_3dmaxima_params(
  * @returns Command-line arguments.
  */
 function v_3dmaxima_cargs(
-    params: V3dmaximaParameters,
+    params: V3dmaximaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function v_3dmaxima_cargs(
  * @returns Outputs object.
  */
 function v_3dmaxima_outputs(
-    params: V3dmaximaParameters,
+    params: V3dmaximaParamsDict,
     execution: Execution,
 ): V3dmaximaOutputs {
     const ret: V3dmaximaOutputs = {
@@ -270,7 +270,7 @@ function v_3dmaxima_outputs(
  * @returns NamedTuple of outputs (described in `V3dmaximaOutputs`).
  */
 function v_3dmaxima_execute(
-    params: V3dmaximaParameters,
+    params: V3dmaximaParamsDict,
     runner: Runner | null = null,
 ): V3dmaximaOutputs {
     runner = runner || getGlobalRunner();
@@ -346,6 +346,8 @@ function v_3dmaxima(
 
 export {
       V3dmaximaOutputs,
+      V3dmaximaParamsDict,
+      V3dmaximaParamsDictTagged,
       V_3DMAXIMA_METADATA,
       v_3dmaxima,
       v_3dmaxima_execute,

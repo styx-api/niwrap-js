@@ -11,7 +11,7 @@ const CCOPS_METADATA: Metadata = {
 };
 
 
-interface CcopsParameters {
+interface CcopsParamsDict {
     "@type"?: "fsl/ccops";
     "basename": string;
     "infile"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface CcopsParameters {
     "nclusters"?: number | null | undefined;
     "help": boolean;
 }
-type CcopsParametersTagged = Required<Pick<CcopsParameters, '@type'>> & CcopsParameters;
+type CcopsParamsDictTagged = Required<Pick<CcopsParamsDict, '@type'>> & CcopsParamsDict;
 
 
 /**
- * Output object returned when calling `CcopsParameters(...)`.
+ * Output object returned when calling `CcopsParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function ccops_params(
     scheme: string | null = null,
     nclusters: number | null = null,
     help: boolean = false,
-): CcopsParametersTagged {
+): CcopsParamsDictTagged {
     const params = {
         "@type": "fsl/ccops" as const,
         "basename": basename,
@@ -132,7 +132,7 @@ function ccops_params(
  * @returns Command-line arguments.
  */
 function ccops_cargs(
-    params: CcopsParameters,
+    params: CcopsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -220,7 +220,7 @@ function ccops_cargs(
  * @returns Outputs object.
  */
 function ccops_outputs(
-    params: CcopsParameters,
+    params: CcopsParamsDict,
     execution: Execution,
 ): CcopsOutputs {
     const ret: CcopsOutputs = {
@@ -246,7 +246,7 @@ function ccops_outputs(
  * @returns NamedTuple of outputs (described in `CcopsOutputs`).
  */
 function ccops_execute(
-    params: CcopsParameters,
+    params: CcopsParamsDict,
     runner: Runner | null = null,
 ): CcopsOutputs {
     runner = runner || getGlobalRunner();
@@ -311,6 +311,8 @@ function ccops(
 export {
       CCOPS_METADATA,
       CcopsOutputs,
+      CcopsParamsDict,
+      CcopsParamsDictTagged,
       ccops,
       ccops_execute,
       ccops_params,

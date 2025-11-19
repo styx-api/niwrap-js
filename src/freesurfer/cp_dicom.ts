@@ -11,17 +11,17 @@ const CP_DICOM_METADATA: Metadata = {
 };
 
 
-interface CpDicomParameters {
+interface CpDicomParamsDict {
     "@type"?: "freesurfer/cp-dicom";
     "dicom_dir": string;
     "output_dir": string;
     "debug": boolean;
 }
-type CpDicomParametersTagged = Required<Pick<CpDicomParameters, '@type'>> & CpDicomParameters;
+type CpDicomParamsDictTagged = Required<Pick<CpDicomParamsDict, '@type'>> & CpDicomParamsDict;
 
 
 /**
- * Output object returned when calling `CpDicomParameters(...)`.
+ * Output object returned when calling `CpDicomParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function cp_dicom_params(
     dicom_dir: string,
     output_dir: string,
     debug: boolean = false,
-): CpDicomParametersTagged {
+): CpDicomParamsDictTagged {
     const params = {
         "@type": "freesurfer/cp-dicom" as const,
         "dicom_dir": dicom_dir,
@@ -66,7 +66,7 @@ function cp_dicom_params(
  * @returns Command-line arguments.
  */
 function cp_dicom_cargs(
-    params: CpDicomParameters,
+    params: CpDicomParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function cp_dicom_cargs(
  * @returns Outputs object.
  */
 function cp_dicom_outputs(
-    params: CpDicomParameters,
+    params: CpDicomParamsDict,
     execution: Execution,
 ): CpDicomOutputs {
     const ret: CpDicomOutputs = {
@@ -120,7 +120,7 @@ function cp_dicom_outputs(
  * @returns NamedTuple of outputs (described in `CpDicomOutputs`).
  */
 function cp_dicom_execute(
-    params: CpDicomParameters,
+    params: CpDicomParamsDict,
     runner: Runner | null = null,
 ): CpDicomOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function cp_dicom(
 export {
       CP_DICOM_METADATA,
       CpDicomOutputs,
+      CpDicomParamsDict,
+      CpDicomParamsDictTagged,
       cp_dicom,
       cp_dicom_execute,
       cp_dicom_params,

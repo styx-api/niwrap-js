@@ -11,7 +11,7 @@ const FSL_SCHURPROD_METADATA: Metadata = {
 };
 
 
-interface FslSchurprodParameters {
+interface FslSchurprodParamsDict {
     "@type"?: "fsl/fsl_schurprod";
     "input_file": InputPathType;
     "design_file": InputPathType;
@@ -22,11 +22,11 @@ interface FslSchurprodParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type FslSchurprodParametersTagged = Required<Pick<FslSchurprodParameters, '@type'>> & FslSchurprodParameters;
+type FslSchurprodParamsDictTagged = Required<Pick<FslSchurprodParamsDict, '@type'>> & FslSchurprodParamsDict;
 
 
 /**
- * Output object returned when calling `FslSchurprodParameters(...)`.
+ * Output object returned when calling `FslSchurprodParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function fsl_schurprod_params(
     mask_file: InputPathType | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FslSchurprodParametersTagged {
+): FslSchurprodParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_schurprod" as const,
         "input_file": input_file,
@@ -94,7 +94,7 @@ function fsl_schurprod_params(
  * @returns Command-line arguments.
  */
 function fsl_schurprod_cargs(
-    params: FslSchurprodParameters,
+    params: FslSchurprodParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function fsl_schurprod_cargs(
  * @returns Outputs object.
  */
 function fsl_schurprod_outputs(
-    params: FslSchurprodParameters,
+    params: FslSchurprodParamsDict,
     execution: Execution,
 ): FslSchurprodOutputs {
     const ret: FslSchurprodOutputs = {
@@ -171,7 +171,7 @@ function fsl_schurprod_outputs(
  * @returns NamedTuple of outputs (described in `FslSchurprodOutputs`).
  */
 function fsl_schurprod_execute(
-    params: FslSchurprodParameters,
+    params: FslSchurprodParamsDict,
     runner: Runner | null = null,
 ): FslSchurprodOutputs {
     runner = runner || getGlobalRunner();
@@ -224,6 +224,8 @@ function fsl_schurprod(
 export {
       FSL_SCHURPROD_METADATA,
       FslSchurprodOutputs,
+      FslSchurprodParamsDict,
+      FslSchurprodParamsDictTagged,
       fsl_schurprod,
       fsl_schurprod_execute,
       fsl_schurprod_params,

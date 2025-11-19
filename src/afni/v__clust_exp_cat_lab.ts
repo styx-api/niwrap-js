@@ -11,17 +11,17 @@ const V__CLUST_EXP_CAT_LAB_METADATA: Metadata = {
 };
 
 
-interface VClustExpCatLabParameters {
+interface VClustExpCatLabParamsDict {
     "@type"?: "afni/@ClustExp_CatLab";
     "prefix": string;
     "input_file": InputPathType;
     "help": boolean;
 }
-type VClustExpCatLabParametersTagged = Required<Pick<VClustExpCatLabParameters, '@type'>> & VClustExpCatLabParameters;
+type VClustExpCatLabParamsDictTagged = Required<Pick<VClustExpCatLabParamsDict, '@type'>> & VClustExpCatLabParamsDict;
 
 
 /**
- * Output object returned when calling `VClustExpCatLabParameters(...)`.
+ * Output object returned when calling `VClustExpCatLabParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v__clust_exp_cat_lab_params(
     prefix: string,
     input_file: InputPathType,
     help: boolean = false,
-): VClustExpCatLabParametersTagged {
+): VClustExpCatLabParamsDictTagged {
     const params = {
         "@type": "afni/@ClustExp_CatLab" as const,
         "prefix": prefix,
@@ -70,7 +70,7 @@ function v__clust_exp_cat_lab_params(
  * @returns Command-line arguments.
  */
 function v__clust_exp_cat_lab_cargs(
-    params: VClustExpCatLabParameters,
+    params: VClustExpCatLabParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function v__clust_exp_cat_lab_cargs(
  * @returns Outputs object.
  */
 function v__clust_exp_cat_lab_outputs(
-    params: VClustExpCatLabParameters,
+    params: VClustExpCatLabParamsDict,
     execution: Execution,
 ): VClustExpCatLabOutputs {
     const ret: VClustExpCatLabOutputs = {
@@ -125,7 +125,7 @@ function v__clust_exp_cat_lab_outputs(
  * @returns NamedTuple of outputs (described in `VClustExpCatLabOutputs`).
  */
 function v__clust_exp_cat_lab_execute(
-    params: VClustExpCatLabParameters,
+    params: VClustExpCatLabParamsDict,
     runner: Runner | null = null,
 ): VClustExpCatLabOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function v__clust_exp_cat_lab(
 
 export {
       VClustExpCatLabOutputs,
+      VClustExpCatLabParamsDict,
+      VClustExpCatLabParamsDictTagged,
       V__CLUST_EXP_CAT_LAB_METADATA,
       v__clust_exp_cat_lab,
       v__clust_exp_cat_lab_execute,

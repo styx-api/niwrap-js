@@ -11,7 +11,7 @@ const BEDPOSTX_GPU_METADATA: Metadata = {
 };
 
 
-interface BedpostxGpuParameters {
+interface BedpostxGpuParamsDict {
     "@type"?: "fsl/bedpostx_gpu";
     "subject_dir": string;
     "gpu_queue"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface BedpostxGpuParameters {
     "deconv_model"?: number | null | undefined;
     "grad_nonlinear": boolean;
 }
-type BedpostxGpuParametersTagged = Required<Pick<BedpostxGpuParameters, '@type'>> & BedpostxGpuParameters;
+type BedpostxGpuParamsDictTagged = Required<Pick<BedpostxGpuParamsDict, '@type'>> & BedpostxGpuParamsDict;
 
 
 /**
- * Output object returned when calling `BedpostxGpuParameters(...)`.
+ * Output object returned when calling `BedpostxGpuParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function bedpostx_gpu_params(
     sample_every: number | null = null,
     deconv_model: number | null = null,
     grad_nonlinear: boolean = false,
-): BedpostxGpuParametersTagged {
+): BedpostxGpuParamsDictTagged {
     const params = {
         "@type": "fsl/bedpostx_gpu" as const,
         "subject_dir": subject_dir,
@@ -110,7 +110,7 @@ function bedpostx_gpu_params(
  * @returns Command-line arguments.
  */
 function bedpostx_gpu_cargs(
-    params: BedpostxGpuParameters,
+    params: BedpostxGpuParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -180,7 +180,7 @@ function bedpostx_gpu_cargs(
  * @returns Outputs object.
  */
 function bedpostx_gpu_outputs(
-    params: BedpostxGpuParameters,
+    params: BedpostxGpuParamsDict,
     execution: Execution,
 ): BedpostxGpuOutputs {
     const ret: BedpostxGpuOutputs = {
@@ -205,7 +205,7 @@ function bedpostx_gpu_outputs(
  * @returns NamedTuple of outputs (described in `BedpostxGpuOutputs`).
  */
 function bedpostx_gpu_execute(
-    params: BedpostxGpuParameters,
+    params: BedpostxGpuParamsDict,
     runner: Runner | null = null,
 ): BedpostxGpuOutputs {
     runner = runner || getGlobalRunner();
@@ -262,6 +262,8 @@ function bedpostx_gpu(
 export {
       BEDPOSTX_GPU_METADATA,
       BedpostxGpuOutputs,
+      BedpostxGpuParamsDict,
+      BedpostxGpuParamsDictTagged,
       bedpostx_gpu,
       bedpostx_gpu_execute,
       bedpostx_gpu_params,

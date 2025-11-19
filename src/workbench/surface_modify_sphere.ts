@@ -10,18 +10,18 @@ const SURFACE_MODIFY_SPHERE_METADATA: Metadata = {
 };
 
 
-interface SurfaceModifySphereParameters {
+interface SurfaceModifySphereParamsDict {
     "@type"?: "workbench/surface-modify-sphere";
     "sphere-out": string;
     "recenter": boolean;
     "sphere-in": InputPathType;
     "radius": number;
 }
-type SurfaceModifySphereParametersTagged = Required<Pick<SurfaceModifySphereParameters, '@type'>> & SurfaceModifySphereParameters;
+type SurfaceModifySphereParamsDictTagged = Required<Pick<SurfaceModifySphereParamsDict, '@type'>> & SurfaceModifySphereParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceModifySphereParameters(...)`.
+ * Output object returned when calling `SurfaceModifySphereParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function surface_modify_sphere_params(
     sphere_in: InputPathType,
     radius: number,
     recenter: boolean = false,
-): SurfaceModifySphereParametersTagged {
+): SurfaceModifySphereParamsDictTagged {
     const params = {
         "@type": "workbench/surface-modify-sphere" as const,
         "sphere-out": sphere_out,
@@ -73,7 +73,7 @@ function surface_modify_sphere_params(
  * @returns Command-line arguments.
  */
 function surface_modify_sphere_cargs(
-    params: SurfaceModifySphereParameters,
+    params: SurfaceModifySphereParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function surface_modify_sphere_cargs(
  * @returns Outputs object.
  */
 function surface_modify_sphere_outputs(
-    params: SurfaceModifySphereParameters,
+    params: SurfaceModifySphereParamsDict,
     execution: Execution,
 ): SurfaceModifySphereOutputs {
     const ret: SurfaceModifySphereOutputs = {
@@ -124,7 +124,7 @@ function surface_modify_sphere_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
  */
 function surface_modify_sphere_execute(
-    params: SurfaceModifySphereParameters,
+    params: SurfaceModifySphereParamsDict,
     runner: Runner | null = null,
 ): SurfaceModifySphereOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function surface_modify_sphere(
 export {
       SURFACE_MODIFY_SPHERE_METADATA,
       SurfaceModifySphereOutputs,
+      SurfaceModifySphereParamsDict,
+      SurfaceModifySphereParamsDictTagged,
       surface_modify_sphere,
       surface_modify_sphere_execute,
       surface_modify_sphere_params,

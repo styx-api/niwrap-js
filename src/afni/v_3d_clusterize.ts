@@ -11,7 +11,7 @@ const V_3D_CLUSTERIZE_METADATA: Metadata = {
 };
 
 
-interface V3dClusterizeParameters {
+interface V3dClusterizeParamsDict {
     "@type"?: "afni/3dClusterize";
     "inset": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -38,11 +38,11 @@ interface V3dClusterizeParameters {
     "abs_table_data": boolean;
     "binary": boolean;
 }
-type V3dClusterizeParametersTagged = Required<Pick<V3dClusterizeParameters, '@type'>> & V3dClusterizeParameters;
+type V3dClusterizeParamsDictTagged = Required<Pick<V3dClusterizeParamsDict, '@type'>> & V3dClusterizeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dClusterizeParameters(...)`.
+ * Output object returned when calling `V3dClusterizeParamsDict(...)`.
  *
  * @interface
  */
@@ -121,7 +121,7 @@ function v_3d_clusterize_params(
     orient: string | null = null,
     abs_table_data: boolean = false,
     binary: boolean = false,
-): V3dClusterizeParametersTagged {
+): V3dClusterizeParamsDictTagged {
     const params = {
         "@type": "afni/3dClusterize" as const,
         "inset": inset,
@@ -186,7 +186,7 @@ function v_3d_clusterize_params(
  * @returns Command-line arguments.
  */
 function v_3d_clusterize_cargs(
-    params: V3dClusterizeParameters,
+    params: V3dClusterizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -315,7 +315,7 @@ function v_3d_clusterize_cargs(
  * @returns Outputs object.
  */
 function v_3d_clusterize_outputs(
-    params: V3dClusterizeParameters,
+    params: V3dClusterizeParamsDict,
     execution: Execution,
 ): V3dClusterizeOutputs {
     const ret: V3dClusterizeOutputs = {
@@ -343,7 +343,7 @@ function v_3d_clusterize_outputs(
  * @returns NamedTuple of outputs (described in `V3dClusterizeOutputs`).
  */
 function v_3d_clusterize_execute(
-    params: V3dClusterizeParameters,
+    params: V3dClusterizeParamsDict,
     runner: Runner | null = null,
 ): V3dClusterizeOutputs {
     runner = runner || getGlobalRunner();
@@ -427,6 +427,8 @@ function v_3d_clusterize(
 
 export {
       V3dClusterizeOutputs,
+      V3dClusterizeParamsDict,
+      V3dClusterizeParamsDictTagged,
       V_3D_CLUSTERIZE_METADATA,
       v_3d_clusterize,
       v_3d_clusterize_execute,

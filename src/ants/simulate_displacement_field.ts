@@ -11,22 +11,22 @@ const SIMULATE_DISPLACEMENT_FIELD_METADATA: Metadata = {
 };
 
 
-interface SimulateDisplacementFieldBsplineOptionsParameters {
+interface SimulateDisplacementFieldBsplineOptionsParamsDict {
     "@type"?: "bspline_options";
     "number_of_fitting_levels"?: number | null | undefined;
     "number_of_control_points"?: number | null | undefined;
 }
-type SimulateDisplacementFieldBsplineOptionsParametersTagged = Required<Pick<SimulateDisplacementFieldBsplineOptionsParameters, '@type'>> & SimulateDisplacementFieldBsplineOptionsParameters;
+type SimulateDisplacementFieldBsplineOptionsParamsDictTagged = Required<Pick<SimulateDisplacementFieldBsplineOptionsParamsDict, '@type'>> & SimulateDisplacementFieldBsplineOptionsParamsDict;
 
 
-interface SimulateDisplacementFieldExponentialOptionsParameters {
+interface SimulateDisplacementFieldExponentialOptionsParamsDict {
     "@type"?: "exponential_options";
     "smoothing_standard_deviation"?: number | null | undefined;
 }
-type SimulateDisplacementFieldExponentialOptionsParametersTagged = Required<Pick<SimulateDisplacementFieldExponentialOptionsParameters, '@type'>> & SimulateDisplacementFieldExponentialOptionsParameters;
+type SimulateDisplacementFieldExponentialOptionsParamsDictTagged = Required<Pick<SimulateDisplacementFieldExponentialOptionsParamsDict, '@type'>> & SimulateDisplacementFieldExponentialOptionsParamsDict;
 
 
-interface SimulateDisplacementFieldParameters {
+interface SimulateDisplacementFieldParamsDict {
     "@type"?: "ants/SimulateDisplacementField";
     "image_dimension": number;
     "displacement_field_type": "BSpline" | "Exponential";
@@ -35,9 +35,9 @@ interface SimulateDisplacementFieldParameters {
     "number_of_random_points"?: number | null | undefined;
     "standard_deviation_displacement_field"?: number | null | undefined;
     "enforce_stationary_boundary"?: number | null | undefined;
-    "displacement_specific_options"?: SimulateDisplacementFieldBsplineOptionsParametersTagged | SimulateDisplacementFieldExponentialOptionsParametersTagged | null | undefined;
+    "displacement_specific_options"?: SimulateDisplacementFieldBsplineOptionsParamsDictTagged | SimulateDisplacementFieldExponentialOptionsParamsDictTagged | null | undefined;
 }
-type SimulateDisplacementFieldParametersTagged = Required<Pick<SimulateDisplacementFieldParameters, '@type'>> & SimulateDisplacementFieldParameters;
+type SimulateDisplacementFieldParamsDictTagged = Required<Pick<SimulateDisplacementFieldParamsDict, '@type'>> & SimulateDisplacementFieldParamsDict;
 
 
 /**
@@ -82,10 +82,10 @@ function simulate_displacement_field_displacement_specific_options_outputs_dyn_f
  *
  * @returns Parameter dictionary
  */
-function simulate_displacement_field_bspline_options_params(
+function simulate_displacement_field_bspline_options(
     number_of_fitting_levels: number | null = null,
     number_of_control_points: number | null = null,
-): SimulateDisplacementFieldBsplineOptionsParametersTagged {
+): SimulateDisplacementFieldBsplineOptionsParamsDictTagged {
     const params = {
         "@type": "bspline_options" as const,
     };
@@ -108,7 +108,7 @@ function simulate_displacement_field_bspline_options_params(
  * @returns Command-line arguments.
  */
 function simulate_displacement_field_bspline_options_cargs(
-    params: SimulateDisplacementFieldBsplineOptionsParameters,
+    params: SimulateDisplacementFieldBsplineOptionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,9 +129,9 @@ function simulate_displacement_field_bspline_options_cargs(
  *
  * @returns Parameter dictionary
  */
-function simulate_displacement_field_exponential_options_params(
+function simulate_displacement_field_exponential_options(
     smoothing_standard_deviation: number | null = null,
-): SimulateDisplacementFieldExponentialOptionsParametersTagged {
+): SimulateDisplacementFieldExponentialOptionsParamsDictTagged {
     const params = {
         "@type": "exponential_options" as const,
     };
@@ -151,7 +151,7 @@ function simulate_displacement_field_exponential_options_params(
  * @returns Command-line arguments.
  */
 function simulate_displacement_field_exponential_options_cargs(
-    params: SimulateDisplacementFieldExponentialOptionsParameters,
+    params: SimulateDisplacementFieldExponentialOptionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function simulate_displacement_field_exponential_options_cargs(
 
 
 /**
- * Output object returned when calling `SimulateDisplacementFieldParameters(...)`.
+ * Output object returned when calling `SimulateDisplacementFieldParamsDict(...)`.
  *
  * @interface
  */
@@ -201,8 +201,8 @@ function simulate_displacement_field_params(
     number_of_random_points: number | null = null,
     standard_deviation_displacement_field: number | null = null,
     enforce_stationary_boundary: number | null = null,
-    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParametersTagged | SimulateDisplacementFieldExponentialOptionsParametersTagged | null = null,
-): SimulateDisplacementFieldParametersTagged {
+    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParamsDictTagged | SimulateDisplacementFieldExponentialOptionsParamsDictTagged | null = null,
+): SimulateDisplacementFieldParamsDictTagged {
     const params = {
         "@type": "ants/SimulateDisplacementField" as const,
         "image_dimension": image_dimension,
@@ -235,7 +235,7 @@ function simulate_displacement_field_params(
  * @returns Command-line arguments.
  */
 function simulate_displacement_field_cargs(
-    params: SimulateDisplacementFieldParameters,
+    params: SimulateDisplacementFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -269,7 +269,7 @@ function simulate_displacement_field_cargs(
  * @returns Outputs object.
  */
 function simulate_displacement_field_outputs(
-    params: SimulateDisplacementFieldParameters,
+    params: SimulateDisplacementFieldParamsDict,
     execution: Execution,
 ): SimulateDisplacementFieldOutputs {
     const ret: SimulateDisplacementFieldOutputs = {
@@ -295,7 +295,7 @@ function simulate_displacement_field_outputs(
  * @returns NamedTuple of outputs (described in `SimulateDisplacementFieldOutputs`).
  */
 function simulate_displacement_field_execute(
-    params: SimulateDisplacementFieldParameters,
+    params: SimulateDisplacementFieldParamsDict,
     runner: Runner | null = null,
 ): SimulateDisplacementFieldOutputs {
     runner = runner || getGlobalRunner();
@@ -337,7 +337,7 @@ function simulate_displacement_field(
     number_of_random_points: number | null = null,
     standard_deviation_displacement_field: number | null = null,
     enforce_stationary_boundary: number | null = null,
-    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParametersTagged | SimulateDisplacementFieldExponentialOptionsParametersTagged | null = null,
+    displacement_specific_options: SimulateDisplacementFieldBsplineOptionsParamsDictTagged | SimulateDisplacementFieldExponentialOptionsParamsDictTagged | null = null,
     runner: Runner | null = null,
 ): SimulateDisplacementFieldOutputs {
     const params = simulate_displacement_field_params(image_dimension, displacement_field_type, domain_image, output_field, number_of_random_points, standard_deviation_displacement_field, enforce_stationary_boundary, displacement_specific_options)
@@ -347,10 +347,16 @@ function simulate_displacement_field(
 
 export {
       SIMULATE_DISPLACEMENT_FIELD_METADATA,
+      SimulateDisplacementFieldBsplineOptionsParamsDict,
+      SimulateDisplacementFieldBsplineOptionsParamsDictTagged,
+      SimulateDisplacementFieldExponentialOptionsParamsDict,
+      SimulateDisplacementFieldExponentialOptionsParamsDictTagged,
       SimulateDisplacementFieldOutputs,
+      SimulateDisplacementFieldParamsDict,
+      SimulateDisplacementFieldParamsDictTagged,
       simulate_displacement_field,
-      simulate_displacement_field_bspline_options_params,
+      simulate_displacement_field_bspline_options,
       simulate_displacement_field_execute,
-      simulate_displacement_field_exponential_options_params,
+      simulate_displacement_field_exponential_options,
       simulate_displacement_field_params,
 };

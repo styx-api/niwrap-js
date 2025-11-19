@@ -11,16 +11,16 @@ const V__TO_MNI_QWARPAR_METADATA: Metadata = {
 };
 
 
-interface VToMniQwarparParameters {
+interface VToMniQwarparParamsDict {
     "@type"?: "afni/@toMNI_Qwarpar";
     "numcpu": number;
     "numjob": number;
 }
-type VToMniQwarparParametersTagged = Required<Pick<VToMniQwarparParameters, '@type'>> & VToMniQwarparParameters;
+type VToMniQwarparParamsDictTagged = Required<Pick<VToMniQwarparParamsDict, '@type'>> & VToMniQwarparParamsDict;
 
 
 /**
- * Output object returned when calling `VToMniQwarparParameters(...)`.
+ * Output object returned when calling `VToMniQwarparParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface VToMniQwarparOutputs {
 function v__to_mni_qwarpar_params(
     numcpu: number,
     numjob: number,
-): VToMniQwarparParametersTagged {
+): VToMniQwarparParamsDictTagged {
     const params = {
         "@type": "afni/@toMNI_Qwarpar" as const,
         "numcpu": numcpu,
@@ -66,7 +66,7 @@ function v__to_mni_qwarpar_params(
  * @returns Command-line arguments.
  */
 function v__to_mni_qwarpar_cargs(
-    params: VToMniQwarparParameters,
+    params: VToMniQwarparParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function v__to_mni_qwarpar_cargs(
  * @returns Outputs object.
  */
 function v__to_mni_qwarpar_outputs(
-    params: VToMniQwarparParameters,
+    params: VToMniQwarparParamsDict,
     execution: Execution,
 ): VToMniQwarparOutputs {
     const ret: VToMniQwarparOutputs = {
@@ -112,7 +112,7 @@ function v__to_mni_qwarpar_outputs(
  * @returns NamedTuple of outputs (described in `VToMniQwarparOutputs`).
  */
 function v__to_mni_qwarpar_execute(
-    params: VToMniQwarparParameters,
+    params: VToMniQwarparParamsDict,
     runner: Runner | null = null,
 ): VToMniQwarparOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function v__to_mni_qwarpar(
 
 export {
       VToMniQwarparOutputs,
+      VToMniQwarparParamsDict,
+      VToMniQwarparParamsDictTagged,
       V__TO_MNI_QWARPAR_METADATA,
       v__to_mni_qwarpar,
       v__to_mni_qwarpar_execute,

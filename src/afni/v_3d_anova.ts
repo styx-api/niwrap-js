@@ -11,7 +11,7 @@ const V_3D_ANOVA_METADATA: Metadata = {
 };
 
 
-interface V3dAnovaParameters {
+interface V3dAnovaParamsDict {
     "@type"?: "afni/3dANOVA";
     "levels": number;
     "datasets": Array<string>;
@@ -28,11 +28,11 @@ interface V3dAnovaParameters {
     "assume_sph": boolean;
     "bucket"?: string | null | undefined;
 }
-type V3dAnovaParametersTagged = Required<Pick<V3dAnovaParameters, '@type'>> & V3dAnovaParameters;
+type V3dAnovaParamsDictTagged = Required<Pick<V3dAnovaParamsDict, '@type'>> & V3dAnovaParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAnovaParameters(...)`.
+ * Output object returned when calling `V3dAnovaParamsDict(...)`.
  *
  * @interface
  */
@@ -119,7 +119,7 @@ function v_3d_anova_params(
     ok: boolean = false,
     assume_sph: boolean = false,
     bucket: string | null = null,
-): V3dAnovaParametersTagged {
+): V3dAnovaParamsDictTagged {
     const params = {
         "@type": "afni/3dANOVA" as const,
         "levels": levels,
@@ -166,7 +166,7 @@ function v_3d_anova_params(
  * @returns Command-line arguments.
  */
 function v_3d_anova_cargs(
-    params: V3dAnovaParameters,
+    params: V3dAnovaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -252,7 +252,7 @@ function v_3d_anova_cargs(
  * @returns Outputs object.
  */
 function v_3d_anova_outputs(
-    params: V3dAnovaParameters,
+    params: V3dAnovaParamsDict,
     execution: Execution,
 ): V3dAnovaOutputs {
     const ret: V3dAnovaOutputs = {
@@ -287,7 +287,7 @@ function v_3d_anova_outputs(
  * @returns NamedTuple of outputs (described in `V3dAnovaOutputs`).
  */
 function v_3d_anova_execute(
-    params: V3dAnovaParameters,
+    params: V3dAnovaParamsDict,
     runner: Runner | null = null,
 ): V3dAnovaOutputs {
     runner = runner || getGlobalRunner();
@@ -351,6 +351,8 @@ function v_3d_anova(
 
 export {
       V3dAnovaOutputs,
+      V3dAnovaParamsDict,
+      V3dAnovaParamsDictTagged,
       V_3D_ANOVA_METADATA,
       v_3d_anova,
       v_3d_anova_execute,

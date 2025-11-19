@@ -10,7 +10,7 @@ const BORDER_TO_ROIS_METADATA: Metadata = {
 };
 
 
-interface BorderToRoisParameters {
+interface BorderToRoisParamsDict {
     "@type"?: "workbench/border-to-rois";
     "metric-out": string;
     "name"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface BorderToRoisParameters {
     "surface": InputPathType;
     "border-file": InputPathType;
 }
-type BorderToRoisParametersTagged = Required<Pick<BorderToRoisParameters, '@type'>> & BorderToRoisParameters;
+type BorderToRoisParamsDictTagged = Required<Pick<BorderToRoisParamsDict, '@type'>> & BorderToRoisParamsDict;
 
 
 /**
- * Output object returned when calling `BorderToRoisParameters(...)`.
+ * Output object returned when calling `BorderToRoisParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function border_to_rois_params(
     border_file: InputPathType,
     inverse: boolean = false,
     include_border: boolean = false,
-): BorderToRoisParametersTagged {
+): BorderToRoisParamsDictTagged {
     const params = {
         "@type": "workbench/border-to-rois" as const,
         "metric-out": metric_out,
@@ -85,7 +85,7 @@ function border_to_rois_params(
  * @returns Command-line arguments.
  */
 function border_to_rois_cargs(
-    params: BorderToRoisParameters,
+    params: BorderToRoisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function border_to_rois_cargs(
  * @returns Outputs object.
  */
 function border_to_rois_outputs(
-    params: BorderToRoisParameters,
+    params: BorderToRoisParamsDict,
     execution: Execution,
 ): BorderToRoisOutputs {
     const ret: BorderToRoisOutputs = {
@@ -137,7 +137,7 @@ function border_to_rois_outputs(
  * @returns NamedTuple of outputs (described in `BorderToRoisOutputs`).
  */
 function border_to_rois_execute(
-    params: BorderToRoisParameters,
+    params: BorderToRoisParamsDict,
     runner: Runner | null = null,
 ): BorderToRoisOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function border_to_rois(
 export {
       BORDER_TO_ROIS_METADATA,
       BorderToRoisOutputs,
+      BorderToRoisParamsDict,
+      BorderToRoisParamsDictTagged,
       border_to_rois,
       border_to_rois_execute,
       border_to_rois_params,

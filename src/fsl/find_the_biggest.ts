@@ -11,16 +11,16 @@ const FIND_THE_BIGGEST_METADATA: Metadata = {
 };
 
 
-interface FindTheBiggestParameters {
+interface FindTheBiggestParamsDict {
     "@type"?: "fsl/find_the_biggest";
     "volumes_surfaces": Array<InputPathType>;
     "output_index": string;
 }
-type FindTheBiggestParametersTagged = Required<Pick<FindTheBiggestParameters, '@type'>> & FindTheBiggestParameters;
+type FindTheBiggestParamsDictTagged = Required<Pick<FindTheBiggestParamsDict, '@type'>> & FindTheBiggestParamsDict;
 
 
 /**
- * Output object returned when calling `FindTheBiggestParameters(...)`.
+ * Output object returned when calling `FindTheBiggestParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FindTheBiggestOutputs {
 function find_the_biggest_params(
     volumes_surfaces: Array<InputPathType>,
     output_index: string,
-): FindTheBiggestParametersTagged {
+): FindTheBiggestParamsDictTagged {
     const params = {
         "@type": "fsl/find_the_biggest" as const,
         "volumes_surfaces": volumes_surfaces,
@@ -66,7 +66,7 @@ function find_the_biggest_params(
  * @returns Command-line arguments.
  */
 function find_the_biggest_cargs(
-    params: FindTheBiggestParameters,
+    params: FindTheBiggestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function find_the_biggest_cargs(
  * @returns Outputs object.
  */
 function find_the_biggest_outputs(
-    params: FindTheBiggestParameters,
+    params: FindTheBiggestParamsDict,
     execution: Execution,
 ): FindTheBiggestOutputs {
     const ret: FindTheBiggestOutputs = {
@@ -112,7 +112,7 @@ function find_the_biggest_outputs(
  * @returns NamedTuple of outputs (described in `FindTheBiggestOutputs`).
  */
 function find_the_biggest_execute(
-    params: FindTheBiggestParameters,
+    params: FindTheBiggestParamsDict,
     runner: Runner | null = null,
 ): FindTheBiggestOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function find_the_biggest(
 export {
       FIND_THE_BIGGEST_METADATA,
       FindTheBiggestOutputs,
+      FindTheBiggestParamsDict,
+      FindTheBiggestParamsDictTagged,
       find_the_biggest,
       find_the_biggest_execute,
       find_the_biggest_params,

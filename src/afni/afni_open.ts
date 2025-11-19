@@ -11,7 +11,7 @@ const AFNI_OPEN_METADATA: Metadata = {
 };
 
 
-interface AfniOpenParameters {
+interface AfniOpenParamsDict {
     "@type"?: "afni/afni_open";
     "files": Array<InputPathType>;
     "method"?: string | null | undefined;
@@ -29,11 +29,11 @@ interface AfniOpenParameters {
     "h_view": boolean;
     "h_web": boolean;
 }
-type AfniOpenParametersTagged = Required<Pick<AfniOpenParameters, '@type'>> & AfniOpenParameters;
+type AfniOpenParamsDictTagged = Required<Pick<AfniOpenParamsDict, '@type'>> & AfniOpenParamsDict;
 
 
 /**
- * Output object returned when calling `AfniOpenParameters(...)`.
+ * Output object returned when calling `AfniOpenParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function afni_open_params(
     extreme_help: boolean = false,
     h_view: boolean = false,
     h_web: boolean = false,
-): AfniOpenParametersTagged {
+): AfniOpenParamsDictTagged {
     const params = {
         "@type": "afni/afni_open" as const,
         "files": files,
@@ -116,7 +116,7 @@ function afni_open_params(
  * @returns Command-line arguments.
  */
 function afni_open_cargs(
-    params: AfniOpenParameters,
+    params: AfniOpenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -180,7 +180,7 @@ function afni_open_cargs(
  * @returns Outputs object.
  */
 function afni_open_outputs(
-    params: AfniOpenParameters,
+    params: AfniOpenParamsDict,
     execution: Execution,
 ): AfniOpenOutputs {
     const ret: AfniOpenOutputs = {
@@ -205,7 +205,7 @@ function afni_open_outputs(
  * @returns NamedTuple of outputs (described in `AfniOpenOutputs`).
  */
 function afni_open_execute(
-    params: AfniOpenParameters,
+    params: AfniOpenParamsDict,
     runner: Runner | null = null,
 ): AfniOpenOutputs {
     runner = runner || getGlobalRunner();
@@ -272,6 +272,8 @@ function afni_open(
 export {
       AFNI_OPEN_METADATA,
       AfniOpenOutputs,
+      AfniOpenParamsDict,
+      AfniOpenParamsDictTagged,
       afni_open,
       afni_open_execute,
       afni_open_params,

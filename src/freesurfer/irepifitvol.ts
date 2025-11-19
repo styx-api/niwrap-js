@@ -11,16 +11,16 @@ const IREPIFITVOL_METADATA: Metadata = {
 };
 
 
-interface IrepifitvolParameters {
+interface IrepifitvolParamsDict {
     "@type"?: "freesurfer/irepifitvol";
     "input_file": InputPathType;
     "output_file": string;
 }
-type IrepifitvolParametersTagged = Required<Pick<IrepifitvolParameters, '@type'>> & IrepifitvolParameters;
+type IrepifitvolParamsDictTagged = Required<Pick<IrepifitvolParamsDict, '@type'>> & IrepifitvolParamsDict;
 
 
 /**
- * Output object returned when calling `IrepifitvolParameters(...)`.
+ * Output object returned when calling `IrepifitvolParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface IrepifitvolOutputs {
 function irepifitvol_params(
     input_file: InputPathType,
     output_file: string = "fitted_output",
-): IrepifitvolParametersTagged {
+): IrepifitvolParamsDictTagged {
     const params = {
         "@type": "freesurfer/irepifitvol" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function irepifitvol_params(
  * @returns Command-line arguments.
  */
 function irepifitvol_cargs(
-    params: IrepifitvolParameters,
+    params: IrepifitvolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function irepifitvol_cargs(
  * @returns Outputs object.
  */
 function irepifitvol_outputs(
-    params: IrepifitvolParameters,
+    params: IrepifitvolParamsDict,
     execution: Execution,
 ): IrepifitvolOutputs {
     const ret: IrepifitvolOutputs = {
@@ -112,7 +112,7 @@ function irepifitvol_outputs(
  * @returns NamedTuple of outputs (described in `IrepifitvolOutputs`).
  */
 function irepifitvol_execute(
-    params: IrepifitvolParameters,
+    params: IrepifitvolParamsDict,
     runner: Runner | null = null,
 ): IrepifitvolOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function irepifitvol(
 export {
       IREPIFITVOL_METADATA,
       IrepifitvolOutputs,
+      IrepifitvolParamsDict,
+      IrepifitvolParamsDictTagged,
       irepifitvol,
       irepifitvol_execute,
       irepifitvol_params,

@@ -11,7 +11,7 @@ const V_3D_TPROJECT_METADATA: Metadata = {
 };
 
 
-interface V3dTprojectParameters {
+interface V3dTprojectParamsDict {
     "@type"?: "afni/3dTproject";
     "TR"?: number | null | undefined;
     "automask": boolean;
@@ -31,11 +31,11 @@ interface V3dTprojectParameters {
     "stopband"?: Array<number> | null | undefined;
     "prefix": string;
 }
-type V3dTprojectParametersTagged = Required<Pick<V3dTprojectParameters, '@type'>> & V3dTprojectParameters;
+type V3dTprojectParamsDictTagged = Required<Pick<V3dTprojectParamsDict, '@type'>> & V3dTprojectParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTprojectParameters(...)`.
+ * Output object returned when calling `V3dTprojectParamsDict(...)`.
  *
  * @interface
  */
@@ -92,7 +92,7 @@ function v_3d_tproject_params(
     ort: InputPathType | null = null,
     polort: number | null = null,
     stopband: Array<number> | null = null,
-): V3dTprojectParametersTagged {
+): V3dTprojectParamsDictTagged {
     const params = {
         "@type": "afni/3dTproject" as const,
         "automask": automask,
@@ -150,7 +150,7 @@ function v_3d_tproject_params(
  * @returns Command-line arguments.
  */
 function v_3d_tproject_cargs(
-    params: V3dTprojectParameters,
+    params: V3dTprojectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -257,7 +257,7 @@ function v_3d_tproject_cargs(
  * @returns Outputs object.
  */
 function v_3d_tproject_outputs(
-    params: V3dTprojectParameters,
+    params: V3dTprojectParamsDict,
     execution: Execution,
 ): V3dTprojectOutputs {
     const ret: V3dTprojectOutputs = {
@@ -283,7 +283,7 @@ function v_3d_tproject_outputs(
  * @returns NamedTuple of outputs (described in `V3dTprojectOutputs`).
  */
 function v_3d_tproject_execute(
-    params: V3dTprojectParameters,
+    params: V3dTprojectParamsDict,
     runner: Runner | null = null,
 ): V3dTprojectOutputs {
     runner = runner || getGlobalRunner();
@@ -353,6 +353,8 @@ function v_3d_tproject(
 
 export {
       V3dTprojectOutputs,
+      V3dTprojectParamsDict,
+      V3dTprojectParamsDictTagged,
       V_3D_TPROJECT_METADATA,
       v_3d_tproject,
       v_3d_tproject_execute,

@@ -11,7 +11,7 @@ const SAMP_BIAS_METADATA: Metadata = {
 };
 
 
-interface SampBiasParameters {
+interface SampBiasParamsDict {
     "@type"?: "afni/SampBias";
     "specfile": InputPathType;
     "surfname": string;
@@ -21,11 +21,11 @@ interface SampBiasParameters {
     "prefix"?: string | null | undefined;
     "segdo"?: string | null | undefined;
 }
-type SampBiasParametersTagged = Required<Pick<SampBiasParameters, '@type'>> & SampBiasParameters;
+type SampBiasParamsDictTagged = Required<Pick<SampBiasParamsDict, '@type'>> & SampBiasParamsDict;
 
 
 /**
- * Output object returned when calling `SampBiasParameters(...)`.
+ * Output object returned when calling `SampBiasParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function samp_bias_params(
     dlimit: number | null = null,
     prefix: string | null = null,
     segdo: string | null = null,
-): SampBiasParametersTagged {
+): SampBiasParamsDictTagged {
     const params = {
         "@type": "afni/SampBias" as const,
         "specfile": specfile,
@@ -98,7 +98,7 @@ function samp_bias_params(
  * @returns Command-line arguments.
  */
 function samp_bias_cargs(
-    params: SampBiasParameters,
+    params: SampBiasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,7 +152,7 @@ function samp_bias_cargs(
  * @returns Outputs object.
  */
 function samp_bias_outputs(
-    params: SampBiasParameters,
+    params: SampBiasParamsDict,
     execution: Execution,
 ): SampBiasOutputs {
     const ret: SampBiasOutputs = {
@@ -179,7 +179,7 @@ function samp_bias_outputs(
  * @returns NamedTuple of outputs (described in `SampBiasOutputs`).
  */
 function samp_bias_execute(
-    params: SampBiasParameters,
+    params: SampBiasParamsDict,
     runner: Runner | null = null,
 ): SampBiasOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function samp_bias(
 export {
       SAMP_BIAS_METADATA,
       SampBiasOutputs,
+      SampBiasParamsDict,
+      SampBiasParamsDictTagged,
       samp_bias,
       samp_bias_execute,
       samp_bias_params,

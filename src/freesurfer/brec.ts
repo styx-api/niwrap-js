@@ -11,16 +11,16 @@ const BREC_METADATA: Metadata = {
 };
 
 
-interface BrecParameters {
+interface BrecParamsDict {
     "@type"?: "freesurfer/brec";
     "my_file": string;
     "depth_limit": boolean;
 }
-type BrecParametersTagged = Required<Pick<BrecParameters, '@type'>> & BrecParameters;
+type BrecParamsDictTagged = Required<Pick<BrecParamsDict, '@type'>> & BrecParamsDict;
 
 
 /**
- * Output object returned when calling `BrecParameters(...)`.
+ * Output object returned when calling `BrecParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface BrecOutputs {
 function brec_params(
     my_file: string,
     depth_limit: boolean = false,
-): BrecParametersTagged {
+): BrecParamsDictTagged {
     const params = {
         "@type": "freesurfer/brec" as const,
         "my_file": my_file,
@@ -62,7 +62,7 @@ function brec_params(
  * @returns Command-line arguments.
  */
 function brec_cargs(
-    params: BrecParameters,
+    params: BrecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function brec_cargs(
  * @returns Outputs object.
  */
 function brec_outputs(
-    params: BrecParameters,
+    params: BrecParamsDict,
     execution: Execution,
 ): BrecOutputs {
     const ret: BrecOutputs = {
@@ -109,7 +109,7 @@ function brec_outputs(
  * @returns NamedTuple of outputs (described in `BrecOutputs`).
  */
 function brec_execute(
-    params: BrecParameters,
+    params: BrecParamsDict,
     runner: Runner | null = null,
 ): BrecOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function brec(
 export {
       BREC_METADATA,
       BrecOutputs,
+      BrecParamsDict,
+      BrecParamsDictTagged,
       brec,
       brec_execute,
       brec_params,

@@ -11,16 +11,16 @@ const V__VOL_CENTER_METADATA: Metadata = {
 };
 
 
-interface VVolCenterParameters {
+interface VVolCenterParamsDict {
     "@type"?: "afni/@VolCenter";
     "dset": InputPathType;
     "orient"?: string | null | undefined;
 }
-type VVolCenterParametersTagged = Required<Pick<VVolCenterParameters, '@type'>> & VVolCenterParameters;
+type VVolCenterParamsDictTagged = Required<Pick<VVolCenterParamsDict, '@type'>> & VVolCenterParamsDict;
 
 
 /**
- * Output object returned when calling `VVolCenterParameters(...)`.
+ * Output object returned when calling `VVolCenterParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VVolCenterOutputs {
 function v__vol_center_params(
     dset: InputPathType,
     orient: string | null = null,
-): VVolCenterParametersTagged {
+): VVolCenterParamsDictTagged {
     const params = {
         "@type": "afni/@VolCenter" as const,
         "dset": dset,
@@ -64,7 +64,7 @@ function v__vol_center_params(
  * @returns Command-line arguments.
  */
 function v__vol_center_cargs(
-    params: VVolCenterParameters,
+    params: VVolCenterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function v__vol_center_cargs(
  * @returns Outputs object.
  */
 function v__vol_center_outputs(
-    params: VVolCenterParameters,
+    params: VVolCenterParamsDict,
     execution: Execution,
 ): VVolCenterOutputs {
     const ret: VVolCenterOutputs = {
@@ -117,7 +117,7 @@ function v__vol_center_outputs(
  * @returns NamedTuple of outputs (described in `VVolCenterOutputs`).
  */
 function v__vol_center_execute(
-    params: VVolCenterParameters,
+    params: VVolCenterParamsDict,
     runner: Runner | null = null,
 ): VVolCenterOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function v__vol_center(
 
 export {
       VVolCenterOutputs,
+      VVolCenterParamsDict,
+      VVolCenterParamsDictTagged,
       V__VOL_CENTER_METADATA,
       v__vol_center,
       v__vol_center_execute,

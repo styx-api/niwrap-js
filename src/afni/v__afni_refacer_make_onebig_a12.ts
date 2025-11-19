@@ -11,15 +11,15 @@ const V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA: Metadata = {
 };
 
 
-interface VAfniRefacerMakeOnebigA12Parameters {
+interface VAfniRefacerMakeOnebigA12ParamsDict {
     "@type"?: "afni/@afni_refacer_make_onebigA12";
     "t1w_dataset": InputPathType;
 }
-type VAfniRefacerMakeOnebigA12ParametersTagged = Required<Pick<VAfniRefacerMakeOnebigA12Parameters, '@type'>> & VAfniRefacerMakeOnebigA12Parameters;
+type VAfniRefacerMakeOnebigA12ParamsDictTagged = Required<Pick<VAfniRefacerMakeOnebigA12ParamsDict, '@type'>> & VAfniRefacerMakeOnebigA12ParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniRefacerMakeOnebigA12Parameters(...)`.
+ * Output object returned when calling `VAfniRefacerMakeOnebigA12ParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VAfniRefacerMakeOnebigA12Outputs {
  */
 function v__afni_refacer_make_onebig_a12_params(
     t1w_dataset: InputPathType,
-): VAfniRefacerMakeOnebigA12ParametersTagged {
+): VAfniRefacerMakeOnebigA12ParamsDictTagged {
     const params = {
         "@type": "afni/@afni_refacer_make_onebigA12" as const,
         "t1w_dataset": t1w_dataset,
@@ -62,7 +62,7 @@ function v__afni_refacer_make_onebig_a12_params(
  * @returns Command-line arguments.
  */
 function v__afni_refacer_make_onebig_a12_cargs(
-    params: VAfniRefacerMakeOnebigA12Parameters,
+    params: VAfniRefacerMakeOnebigA12ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__afni_refacer_make_onebig_a12_cargs(
  * @returns Outputs object.
  */
 function v__afni_refacer_make_onebig_a12_outputs(
-    params: VAfniRefacerMakeOnebigA12Parameters,
+    params: VAfniRefacerMakeOnebigA12ParamsDict,
     execution: Execution,
 ): VAfniRefacerMakeOnebigA12Outputs {
     const ret: VAfniRefacerMakeOnebigA12Outputs = {
@@ -107,7 +107,7 @@ function v__afni_refacer_make_onebig_a12_outputs(
  * @returns NamedTuple of outputs (described in `VAfniRefacerMakeOnebigA12Outputs`).
  */
 function v__afni_refacer_make_onebig_a12_execute(
-    params: VAfniRefacerMakeOnebigA12Parameters,
+    params: VAfniRefacerMakeOnebigA12ParamsDict,
     runner: Runner | null = null,
 ): VAfniRefacerMakeOnebigA12Outputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__afni_refacer_make_onebig_a12(
 
 export {
       VAfniRefacerMakeOnebigA12Outputs,
+      VAfniRefacerMakeOnebigA12ParamsDict,
+      VAfniRefacerMakeOnebigA12ParamsDictTagged,
       V__AFNI_REFACER_MAKE_ONEBIG_A12_METADATA,
       v__afni_refacer_make_onebig_a12,
       v__afni_refacer_make_onebig_a12_execute,

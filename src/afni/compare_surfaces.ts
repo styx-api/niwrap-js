@@ -11,7 +11,7 @@ const COMPARE_SURFACES_METADATA: Metadata = {
 };
 
 
-interface CompareSurfacesParameters {
+interface CompareSurfacesParamsDict {
     "@type"?: "afni/CompareSurfaces";
     "spec_file": InputPathType;
     "hemisphere": "L" | "R";
@@ -29,11 +29,11 @@ interface CompareSurfacesParameters {
     "no_memory_trace": boolean;
     "yes_memory_trace": boolean;
 }
-type CompareSurfacesParametersTagged = Required<Pick<CompareSurfacesParameters, '@type'>> & CompareSurfacesParameters;
+type CompareSurfacesParamsDictTagged = Required<Pick<CompareSurfacesParamsDict, '@type'>> & CompareSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `CompareSurfacesParameters(...)`.
+ * Output object returned when calling `CompareSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -90,7 +90,7 @@ function compare_surfaces_params(
     extreme_trace: boolean = false,
     no_memory_trace: boolean = false,
     yes_memory_trace: boolean = false,
-): CompareSurfacesParametersTagged {
+): CompareSurfacesParamsDictTagged {
     const params = {
         "@type": "afni/CompareSurfaces" as const,
         "spec_file": spec_file,
@@ -130,7 +130,7 @@ function compare_surfaces_params(
  * @returns Command-line arguments.
  */
 function compare_surfaces_cargs(
-    params: CompareSurfacesParameters,
+    params: CompareSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -209,7 +209,7 @@ function compare_surfaces_cargs(
  * @returns Outputs object.
  */
 function compare_surfaces_outputs(
-    params: CompareSurfacesParameters,
+    params: CompareSurfacesParamsDict,
     execution: Execution,
 ): CompareSurfacesOutputs {
     const ret: CompareSurfacesOutputs = {
@@ -236,7 +236,7 @@ function compare_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `CompareSurfacesOutputs`).
  */
 function compare_surfaces_execute(
-    params: CompareSurfacesParameters,
+    params: CompareSurfacesParamsDict,
     runner: Runner | null = null,
 ): CompareSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -303,6 +303,8 @@ function compare_surfaces(
 export {
       COMPARE_SURFACES_METADATA,
       CompareSurfacesOutputs,
+      CompareSurfacesParamsDict,
+      CompareSurfacesParamsDictTagged,
       compare_surfaces,
       compare_surfaces_execute,
       compare_surfaces_params,

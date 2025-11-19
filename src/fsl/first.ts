@@ -11,7 +11,7 @@ const FIRST_METADATA: Metadata = {
 };
 
 
-interface FirstParameters {
+interface FirstParamsDict {
     "@type"?: "fsl/first";
     "input_file": InputPathType;
     "output_name": string;
@@ -29,11 +29,11 @@ interface FirstParameters {
     "shcond": boolean;
     "loadbvars": boolean;
 }
-type FirstParametersTagged = Required<Pick<FirstParameters, '@type'>> & FirstParameters;
+type FirstParamsDictTagged = Required<Pick<FirstParamsDict, '@type'>> & FirstParamsDict;
 
 
 /**
- * Output object returned when calling `FirstParameters(...)`.
+ * Output object returned when calling `FirstParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function first_params(
     bvars: InputPathType | null = null,
     shcond: boolean = false,
     loadbvars: boolean = false,
-): FirstParametersTagged {
+): FirstParamsDictTagged {
     const params = {
         "@type": "fsl/first" as const,
         "input_file": input_file,
@@ -126,7 +126,7 @@ function first_params(
  * @returns Command-line arguments.
  */
 function first_cargs(
-    params: FirstParameters,
+    params: FirstParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -205,7 +205,7 @@ function first_cargs(
  * @returns Outputs object.
  */
 function first_outputs(
-    params: FirstParameters,
+    params: FirstParamsDict,
     execution: Execution,
 ): FirstOutputs {
     const ret: FirstOutputs = {
@@ -231,7 +231,7 @@ function first_outputs(
  * @returns NamedTuple of outputs (described in `FirstOutputs`).
  */
 function first_execute(
-    params: FirstParameters,
+    params: FirstParamsDict,
     runner: Runner | null = null,
 ): FirstOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function first(
 export {
       FIRST_METADATA,
       FirstOutputs,
+      FirstParamsDict,
+      FirstParamsDictTagged,
       first,
       first_execute,
       first_params,

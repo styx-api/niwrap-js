@@ -11,7 +11,7 @@ const SUSAN_METADATA: Metadata = {
 };
 
 
-interface SusanParameters {
+interface SusanParamsDict {
     "@type"?: "fsl/susan";
     "input_file": InputPathType;
     "brightness_threshold": number;
@@ -25,11 +25,11 @@ interface SusanParameters {
     "brightness_threshold2"?: number | null | undefined;
     "output_file": string;
 }
-type SusanParametersTagged = Required<Pick<SusanParameters, '@type'>> & SusanParameters;
+type SusanParamsDictTagged = Required<Pick<SusanParamsDict, '@type'>> & SusanParamsDict;
 
 
 /**
- * Output object returned when calling `SusanParameters(...)`.
+ * Output object returned when calling `SusanParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function susan_params(
     brightness_threshold1: number | null = null,
     usan2: InputPathType | null = null,
     brightness_threshold2: number | null = null,
-): SusanParametersTagged {
+): SusanParamsDictTagged {
     const params = {
         "@type": "fsl/susan" as const,
         "input_file": input_file,
@@ -110,7 +110,7 @@ function susan_params(
  * @returns Command-line arguments.
  */
 function susan_cargs(
-    params: SusanParameters,
+    params: SusanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function susan_cargs(
  * @returns Outputs object.
  */
 function susan_outputs(
-    params: SusanParameters,
+    params: SusanParamsDict,
     execution: Execution,
 ): SusanOutputs {
     const ret: SusanOutputs = {
@@ -173,7 +173,7 @@ function susan_outputs(
  * @returns NamedTuple of outputs (described in `SusanOutputs`).
  */
 function susan_execute(
-    params: SusanParameters,
+    params: SusanParamsDict,
     runner: Runner | null = null,
 ): SusanOutputs {
     runner = runner || getGlobalRunner();
@@ -232,6 +232,8 @@ function susan(
 export {
       SUSAN_METADATA,
       SusanOutputs,
+      SusanParamsDict,
+      SusanParamsDictTagged,
       susan,
       susan_execute,
       susan_params,

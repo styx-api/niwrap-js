@@ -11,18 +11,18 @@ const DEFACE_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface DefaceSubjectParameters {
+interface DefaceSubjectParamsDict {
     "@type"?: "freesurfer/deface_subject";
     "subjects_dir": string;
     "subject_id": string;
     "volume_input": InputPathType;
     "volume_output": string;
 }
-type DefaceSubjectParametersTagged = Required<Pick<DefaceSubjectParameters, '@type'>> & DefaceSubjectParameters;
+type DefaceSubjectParamsDictTagged = Required<Pick<DefaceSubjectParamsDict, '@type'>> & DefaceSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `DefaceSubjectParameters(...)`.
+ * Output object returned when calling `DefaceSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function deface_subject_params(
     subject_id: string,
     volume_input: InputPathType,
     volume_output: string,
-): DefaceSubjectParametersTagged {
+): DefaceSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/deface_subject" as const,
         "subjects_dir": subjects_dir,
@@ -74,7 +74,7 @@ function deface_subject_params(
  * @returns Command-line arguments.
  */
 function deface_subject_cargs(
-    params: DefaceSubjectParameters,
+    params: DefaceSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function deface_subject_cargs(
  * @returns Outputs object.
  */
 function deface_subject_outputs(
-    params: DefaceSubjectParameters,
+    params: DefaceSubjectParamsDict,
     execution: Execution,
 ): DefaceSubjectOutputs {
     const ret: DefaceSubjectOutputs = {
@@ -134,7 +134,7 @@ function deface_subject_outputs(
  * @returns NamedTuple of outputs (described in `DefaceSubjectOutputs`).
  */
 function deface_subject_execute(
-    params: DefaceSubjectParameters,
+    params: DefaceSubjectParamsDict,
     runner: Runner | null = null,
 ): DefaceSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function deface_subject(
 export {
       DEFACE_SUBJECT_METADATA,
       DefaceSubjectOutputs,
+      DefaceSubjectParamsDict,
+      DefaceSubjectParamsDictTagged,
       deface_subject,
       deface_subject_execute,
       deface_subject_params,

@@ -11,7 +11,7 @@ const VERTEXVOL_METADATA: Metadata = {
 };
 
 
-interface VertexvolParameters {
+interface VertexvolParamsDict {
     "@type"?: "freesurfer/vertexvol";
     "subject": string;
     "left_hemisphere": boolean;
@@ -20,11 +20,11 @@ interface VertexvolParameters {
     "use_th3": boolean;
     "no_th3": boolean;
 }
-type VertexvolParametersTagged = Required<Pick<VertexvolParameters, '@type'>> & VertexvolParameters;
+type VertexvolParamsDictTagged = Required<Pick<VertexvolParamsDict, '@type'>> & VertexvolParamsDict;
 
 
 /**
- * Output object returned when calling `VertexvolParameters(...)`.
+ * Output object returned when calling `VertexvolParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function vertexvol_params(
     output_file: string | null = null,
     use_th3: boolean = false,
     no_th3: boolean = false,
-): VertexvolParametersTagged {
+): VertexvolParamsDictTagged {
     const params = {
         "@type": "freesurfer/vertexvol" as const,
         "subject": subject,
@@ -84,7 +84,7 @@ function vertexvol_params(
  * @returns Command-line arguments.
  */
 function vertexvol_cargs(
-    params: VertexvolParameters,
+    params: VertexvolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function vertexvol_cargs(
  * @returns Outputs object.
  */
 function vertexvol_outputs(
-    params: VertexvolParameters,
+    params: VertexvolParamsDict,
     execution: Execution,
 ): VertexvolOutputs {
     const ret: VertexvolOutputs = {
@@ -150,7 +150,7 @@ function vertexvol_outputs(
  * @returns NamedTuple of outputs (described in `VertexvolOutputs`).
  */
 function vertexvol_execute(
-    params: VertexvolParameters,
+    params: VertexvolParamsDict,
     runner: Runner | null = null,
 ): VertexvolOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function vertexvol(
 export {
       VERTEXVOL_METADATA,
       VertexvolOutputs,
+      VertexvolParamsDict,
+      VertexvolParamsDictTagged,
       vertexvol,
       vertexvol_execute,
       vertexvol_params,

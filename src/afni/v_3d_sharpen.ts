@@ -11,17 +11,17 @@ const V_3D_SHARPEN_METADATA: Metadata = {
 };
 
 
-interface V3dSharpenParameters {
+interface V3dSharpenParamsDict {
     "@type"?: "afni/3dSharpen";
     "sharpening_factor"?: number | null | undefined;
     "input_dataset": InputPathType;
     "output_prefix": string;
 }
-type V3dSharpenParametersTagged = Required<Pick<V3dSharpenParameters, '@type'>> & V3dSharpenParameters;
+type V3dSharpenParamsDictTagged = Required<Pick<V3dSharpenParamsDict, '@type'>> & V3dSharpenParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSharpenParameters(...)`.
+ * Output object returned when calling `V3dSharpenParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3d_sharpen_params(
     input_dataset: InputPathType,
     output_prefix: string,
     sharpening_factor: number | null = null,
-): V3dSharpenParametersTagged {
+): V3dSharpenParamsDictTagged {
     const params = {
         "@type": "afni/3dSharpen" as const,
         "input_dataset": input_dataset,
@@ -72,7 +72,7 @@ function v_3d_sharpen_params(
  * @returns Command-line arguments.
  */
 function v_3d_sharpen_cargs(
-    params: V3dSharpenParameters,
+    params: V3dSharpenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function v_3d_sharpen_cargs(
  * @returns Outputs object.
  */
 function v_3d_sharpen_outputs(
-    params: V3dSharpenParameters,
+    params: V3dSharpenParamsDict,
     execution: Execution,
 ): V3dSharpenOutputs {
     const ret: V3dSharpenOutputs = {
@@ -127,7 +127,7 @@ function v_3d_sharpen_outputs(
  * @returns NamedTuple of outputs (described in `V3dSharpenOutputs`).
  */
 function v_3d_sharpen_execute(
-    params: V3dSharpenParameters,
+    params: V3dSharpenParamsDict,
     runner: Runner | null = null,
 ): V3dSharpenOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function v_3d_sharpen(
 
 export {
       V3dSharpenOutputs,
+      V3dSharpenParamsDict,
+      V3dSharpenParamsDictTagged,
       V_3D_SHARPEN_METADATA,
       v_3d_sharpen,
       v_3d_sharpen_execute,

@@ -11,18 +11,18 @@ const AVI2TALXFM_METADATA: Metadata = {
 };
 
 
-interface Avi2talxfmParameters {
+interface Avi2talxfmParamsDict {
     "@type"?: "freesurfer/avi2talxfm";
     "input_volume": InputPathType;
     "target_volume": InputPathType;
     "vox2vox_transform": InputPathType;
     "output_xfm": string;
 }
-type Avi2talxfmParametersTagged = Required<Pick<Avi2talxfmParameters, '@type'>> & Avi2talxfmParameters;
+type Avi2talxfmParamsDictTagged = Required<Pick<Avi2talxfmParamsDict, '@type'>> & Avi2talxfmParamsDict;
 
 
 /**
- * Output object returned when calling `Avi2talxfmParameters(...)`.
+ * Output object returned when calling `Avi2talxfmParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function avi2talxfm_params(
     target_volume: InputPathType,
     vox2vox_transform: InputPathType,
     output_xfm: string,
-): Avi2talxfmParametersTagged {
+): Avi2talxfmParamsDictTagged {
     const params = {
         "@type": "freesurfer/avi2talxfm" as const,
         "input_volume": input_volume,
@@ -74,7 +74,7 @@ function avi2talxfm_params(
  * @returns Command-line arguments.
  */
 function avi2talxfm_cargs(
-    params: Avi2talxfmParameters,
+    params: Avi2talxfmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function avi2talxfm_cargs(
  * @returns Outputs object.
  */
 function avi2talxfm_outputs(
-    params: Avi2talxfmParameters,
+    params: Avi2talxfmParamsDict,
     execution: Execution,
 ): Avi2talxfmOutputs {
     const ret: Avi2talxfmOutputs = {
@@ -122,7 +122,7 @@ function avi2talxfm_outputs(
  * @returns NamedTuple of outputs (described in `Avi2talxfmOutputs`).
  */
 function avi2talxfm_execute(
-    params: Avi2talxfmParameters,
+    params: Avi2talxfmParamsDict,
     runner: Runner | null = null,
 ): Avi2talxfmOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function avi2talxfm(
 export {
       AVI2TALXFM_METADATA,
       Avi2talxfmOutputs,
+      Avi2talxfmParamsDict,
+      Avi2talxfmParamsDictTagged,
       avi2talxfm,
       avi2talxfm_execute,
       avi2talxfm_params,

@@ -11,7 +11,7 @@ const MRIS_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface MrisTransformParameters {
+interface MrisTransformParamsDict {
     "@type"?: "freesurfer/mris_transform";
     "input_surface": InputPathType;
     "transform": InputPathType;
@@ -20,11 +20,11 @@ interface MrisTransformParameters {
     "trx_dst"?: InputPathType | null | undefined;
     "is_inverse": boolean;
 }
-type MrisTransformParametersTagged = Required<Pick<MrisTransformParameters, '@type'>> & MrisTransformParameters;
+type MrisTransformParamsDictTagged = Required<Pick<MrisTransformParamsDict, '@type'>> & MrisTransformParamsDict;
 
 
 /**
- * Output object returned when calling `MrisTransformParameters(...)`.
+ * Output object returned when calling `MrisTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_transform_params(
     trx_src: InputPathType | null = null,
     trx_dst: InputPathType | null = null,
     is_inverse: boolean = false,
-): MrisTransformParametersTagged {
+): MrisTransformParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_transform" as const,
         "input_surface": input_surface,
@@ -86,7 +86,7 @@ function mris_transform_params(
  * @returns Command-line arguments.
  */
 function mris_transform_cargs(
-    params: MrisTransformParameters,
+    params: MrisTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function mris_transform_cargs(
  * @returns Outputs object.
  */
 function mris_transform_outputs(
-    params: MrisTransformParameters,
+    params: MrisTransformParamsDict,
     execution: Execution,
 ): MrisTransformOutputs {
     const ret: MrisTransformOutputs = {
@@ -148,7 +148,7 @@ function mris_transform_outputs(
  * @returns NamedTuple of outputs (described in `MrisTransformOutputs`).
  */
 function mris_transform_execute(
-    params: MrisTransformParameters,
+    params: MrisTransformParamsDict,
     runner: Runner | null = null,
 ): MrisTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function mris_transform(
 export {
       MRIS_TRANSFORM_METADATA,
       MrisTransformOutputs,
+      MrisTransformParamsDict,
+      MrisTransformParamsDictTagged,
       mris_transform,
       mris_transform_execute,
       mris_transform_params,

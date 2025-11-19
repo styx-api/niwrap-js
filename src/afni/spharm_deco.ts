@@ -11,7 +11,7 @@ const SPHARM_DECO_METADATA: Metadata = {
 };
 
 
-interface SpharmDecoParameters {
+interface SpharmDecoParamsDict {
     "@type"?: "afni/SpharmDeco";
     "i_type_s": InputPathType;
     "unit_sph_label": string;
@@ -24,11 +24,11 @@ interface SpharmDecoParameters {
     "debug"?: number | null | undefined;
     "sigma"?: number | null | undefined;
 }
-type SpharmDecoParametersTagged = Required<Pick<SpharmDecoParameters, '@type'>> & SpharmDecoParameters;
+type SpharmDecoParamsDictTagged = Required<Pick<SpharmDecoParamsDict, '@type'>> & SpharmDecoParamsDict;
 
 
 /**
- * Output object returned when calling `SpharmDecoParameters(...)`.
+ * Output object returned when calling `SpharmDecoParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function spharm_deco_params(
     o_type_sdr: Array<InputPathType> | null = null,
     debug: number | null = null,
     sigma: number | null = null,
-): SpharmDecoParametersTagged {
+): SpharmDecoParamsDictTagged {
     const params = {
         "@type": "afni/SpharmDeco" as const,
         "i_type_s": i_type_s,
@@ -112,7 +112,7 @@ function spharm_deco_params(
  * @returns Command-line arguments.
  */
 function spharm_deco_cargs(
-    params: SpharmDecoParameters,
+    params: SpharmDecoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,7 +160,7 @@ function spharm_deco_cargs(
  * @returns Outputs object.
  */
 function spharm_deco_outputs(
-    params: SpharmDecoParameters,
+    params: SpharmDecoParamsDict,
     execution: Execution,
 ): SpharmDecoOutputs {
     const ret: SpharmDecoOutputs = {
@@ -186,7 +186,7 @@ function spharm_deco_outputs(
  * @returns NamedTuple of outputs (described in `SpharmDecoOutputs`).
  */
 function spharm_deco_execute(
-    params: SpharmDecoParameters,
+    params: SpharmDecoParamsDict,
     runner: Runner | null = null,
 ): SpharmDecoOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function spharm_deco(
 export {
       SPHARM_DECO_METADATA,
       SpharmDecoOutputs,
+      SpharmDecoParamsDict,
+      SpharmDecoParamsDictTagged,
       spharm_deco,
       spharm_deco_execute,
       spharm_deco_params,

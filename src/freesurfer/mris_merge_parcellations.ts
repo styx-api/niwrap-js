@@ -11,18 +11,18 @@ const MRIS_MERGE_PARCELLATIONS_METADATA: Metadata = {
 };
 
 
-interface MrisMergeParcellationsParameters {
+interface MrisMergeParcellationsParamsDict {
     "@type"?: "freesurfer/mris_merge_parcellations";
     "surface": InputPathType;
     "label1": InputPathType;
     "label2": InputPathType;
     "annot_name"?: string | null | undefined;
 }
-type MrisMergeParcellationsParametersTagged = Required<Pick<MrisMergeParcellationsParameters, '@type'>> & MrisMergeParcellationsParameters;
+type MrisMergeParcellationsParamsDictTagged = Required<Pick<MrisMergeParcellationsParamsDict, '@type'>> & MrisMergeParcellationsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMergeParcellationsParameters(...)`.
+ * Output object returned when calling `MrisMergeParcellationsParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function mris_merge_parcellations_params(
     label1: InputPathType,
     label2: InputPathType,
     annot_name: string | null = null,
-): MrisMergeParcellationsParametersTagged {
+): MrisMergeParcellationsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_merge_parcellations" as const,
         "surface": surface,
@@ -72,7 +72,7 @@ function mris_merge_parcellations_params(
  * @returns Command-line arguments.
  */
 function mris_merge_parcellations_cargs(
-    params: MrisMergeParcellationsParameters,
+    params: MrisMergeParcellationsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function mris_merge_parcellations_cargs(
  * @returns Outputs object.
  */
 function mris_merge_parcellations_outputs(
-    params: MrisMergeParcellationsParameters,
+    params: MrisMergeParcellationsParamsDict,
     execution: Execution,
 ): MrisMergeParcellationsOutputs {
     const ret: MrisMergeParcellationsOutputs = {
@@ -124,7 +124,7 @@ function mris_merge_parcellations_outputs(
  * @returns NamedTuple of outputs (described in `MrisMergeParcellationsOutputs`).
  */
 function mris_merge_parcellations_execute(
-    params: MrisMergeParcellationsParameters,
+    params: MrisMergeParcellationsParamsDict,
     runner: Runner | null = null,
 ): MrisMergeParcellationsOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function mris_merge_parcellations(
 export {
       MRIS_MERGE_PARCELLATIONS_METADATA,
       MrisMergeParcellationsOutputs,
+      MrisMergeParcellationsParamsDict,
+      MrisMergeParcellationsParamsDictTagged,
       mris_merge_parcellations,
       mris_merge_parcellations_execute,
       mris_merge_parcellations_params,

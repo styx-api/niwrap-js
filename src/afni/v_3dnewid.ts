@@ -11,7 +11,7 @@ const V_3DNEWID_METADATA: Metadata = {
 };
 
 
-interface V3dnewidParameters {
+interface V3dnewidParamsDict {
     "@type"?: "afni/3dnewid";
     "datasets": Array<InputPathType>;
     "fun"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface V3dnewidParameters {
     "hash"?: string | null | undefined;
     "MD5"?: string | null | undefined;
 }
-type V3dnewidParametersTagged = Required<Pick<V3dnewidParameters, '@type'>> & V3dnewidParameters;
+type V3dnewidParamsDictTagged = Required<Pick<V3dnewidParamsDict, '@type'>> & V3dnewidParamsDict;
 
 
 /**
- * Output object returned when calling `V3dnewidParameters(...)`.
+ * Output object returned when calling `V3dnewidParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function v_3dnewid_params(
     int: boolean = false,
     hash: string | null = null,
     md5: string | null = null,
-): V3dnewidParametersTagged {
+): V3dnewidParamsDictTagged {
     const params = {
         "@type": "afni/3dnewid" as const,
         "datasets": datasets,
@@ -84,7 +84,7 @@ function v_3dnewid_params(
  * @returns Command-line arguments.
  */
 function v_3dnewid_cargs(
-    params: V3dnewidParameters,
+    params: V3dnewidParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function v_3dnewid_cargs(
  * @returns Outputs object.
  */
 function v_3dnewid_outputs(
-    params: V3dnewidParameters,
+    params: V3dnewidParamsDict,
     execution: Execution,
 ): V3dnewidOutputs {
     const ret: V3dnewidOutputs = {
@@ -152,7 +152,7 @@ function v_3dnewid_outputs(
  * @returns NamedTuple of outputs (described in `V3dnewidOutputs`).
  */
 function v_3dnewid_execute(
-    params: V3dnewidParameters,
+    params: V3dnewidParamsDict,
     runner: Runner | null = null,
 ): V3dnewidOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function v_3dnewid(
 
 export {
       V3dnewidOutputs,
+      V3dnewidParamsDict,
+      V3dnewidParamsDictTagged,
       V_3DNEWID_METADATA,
       v_3dnewid,
       v_3dnewid_execute,

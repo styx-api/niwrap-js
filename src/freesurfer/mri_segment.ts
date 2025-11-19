@@ -11,7 +11,7 @@ const MRI_SEGMENT_METADATA: Metadata = {
 };
 
 
-interface MriSegmentParameters {
+interface MriSegmentParamsDict {
     "@type"?: "freesurfer/mri_segment";
     "in_vol": InputPathType;
     "out_vol": string;
@@ -48,11 +48,11 @@ interface MriSegmentParameters {
     "diag_write": boolean;
     "diag_verbose": boolean;
 }
-type MriSegmentParametersTagged = Required<Pick<MriSegmentParameters, '@type'>> & MriSegmentParameters;
+type MriSegmentParamsDictTagged = Required<Pick<MriSegmentParamsDict, '@type'>> & MriSegmentParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegmentParameters(...)`.
+ * Output object returned when calling `MriSegmentParamsDict(...)`.
  *
  * @interface
  */
@@ -147,7 +147,7 @@ function mri_segment_params(
     diagno: number | null = null,
     diag_write: boolean = false,
     diag_verbose: boolean = false,
-): MriSegmentParametersTagged {
+): MriSegmentParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_segment" as const,
         "in_vol": in_vol,
@@ -242,7 +242,7 @@ function mri_segment_params(
  * @returns Command-line arguments.
  */
 function mri_segment_cargs(
-    params: MriSegmentParameters,
+    params: MriSegmentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -424,7 +424,7 @@ function mri_segment_cargs(
  * @returns Outputs object.
  */
 function mri_segment_outputs(
-    params: MriSegmentParameters,
+    params: MriSegmentParamsDict,
     execution: Execution,
 ): MriSegmentOutputs {
     const ret: MriSegmentOutputs = {
@@ -451,7 +451,7 @@ function mri_segment_outputs(
  * @returns NamedTuple of outputs (described in `MriSegmentOutputs`).
  */
 function mri_segment_execute(
-    params: MriSegmentParameters,
+    params: MriSegmentParamsDict,
     runner: Runner | null = null,
 ): MriSegmentOutputs {
     runner = runner || getGlobalRunner();
@@ -556,6 +556,8 @@ function mri_segment(
 export {
       MRI_SEGMENT_METADATA,
       MriSegmentOutputs,
+      MriSegmentParamsDict,
+      MriSegmentParamsDictTagged,
       mri_segment,
       mri_segment_execute,
       mri_segment_params,

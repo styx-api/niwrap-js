@@ -10,18 +10,18 @@ const SURFACE_GENERATE_INFLATED_METADATA: Metadata = {
 };
 
 
-interface SurfaceGenerateInflatedParameters {
+interface SurfaceGenerateInflatedParamsDict {
     "@type"?: "workbench/surface-generate-inflated";
     "inflated-surface-out": string;
     "very-inflated-surface-out": string;
     "iterations-scale-value"?: number | null | undefined;
     "anatomical-surface-in": InputPathType;
 }
-type SurfaceGenerateInflatedParametersTagged = Required<Pick<SurfaceGenerateInflatedParameters, '@type'>> & SurfaceGenerateInflatedParameters;
+type SurfaceGenerateInflatedParamsDictTagged = Required<Pick<SurfaceGenerateInflatedParamsDict, '@type'>> & SurfaceGenerateInflatedParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceGenerateInflatedParameters(...)`.
+ * Output object returned when calling `SurfaceGenerateInflatedParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function surface_generate_inflated_params(
     very_inflated_surface_out: string,
     iterations_scale_value: number | null,
     anatomical_surface_in: InputPathType,
-): SurfaceGenerateInflatedParametersTagged {
+): SurfaceGenerateInflatedParamsDictTagged {
     const params = {
         "@type": "workbench/surface-generate-inflated" as const,
         "inflated-surface-out": inflated_surface_out,
@@ -81,7 +81,7 @@ function surface_generate_inflated_params(
  * @returns Command-line arguments.
  */
 function surface_generate_inflated_cargs(
-    params: SurfaceGenerateInflatedParameters,
+    params: SurfaceGenerateInflatedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function surface_generate_inflated_cargs(
  * @returns Outputs object.
  */
 function surface_generate_inflated_outputs(
-    params: SurfaceGenerateInflatedParameters,
+    params: SurfaceGenerateInflatedParamsDict,
     execution: Execution,
 ): SurfaceGenerateInflatedOutputs {
     const ret: SurfaceGenerateInflatedOutputs = {
@@ -132,7 +132,7 @@ function surface_generate_inflated_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceGenerateInflatedOutputs`).
  */
 function surface_generate_inflated_execute(
-    params: SurfaceGenerateInflatedParameters,
+    params: SurfaceGenerateInflatedParamsDict,
     runner: Runner | null = null,
 ): SurfaceGenerateInflatedOutputs {
     runner = runner || getGlobalRunner();
@@ -175,6 +175,8 @@ function surface_generate_inflated(
 export {
       SURFACE_GENERATE_INFLATED_METADATA,
       SurfaceGenerateInflatedOutputs,
+      SurfaceGenerateInflatedParamsDict,
+      SurfaceGenerateInflatedParamsDictTagged,
       surface_generate_inflated,
       surface_generate_inflated_execute,
       surface_generate_inflated_params,

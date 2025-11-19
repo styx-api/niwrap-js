@@ -11,7 +11,7 @@ const LABEL_SUBJECT_MIXED_METADATA: Metadata = {
 };
 
 
-interface LabelSubjectMixedParameters {
+interface LabelSubjectMixedParamsDict {
     "@type"?: "freesurfer/label_subject_mixed";
     "brain_mask": InputPathType;
     "norm_volume": InputPathType;
@@ -19,11 +19,11 @@ interface LabelSubjectMixedParameters {
     "gca_file": InputPathType;
     "aseg_output": string;
 }
-type LabelSubjectMixedParametersTagged = Required<Pick<LabelSubjectMixedParameters, '@type'>> & LabelSubjectMixedParameters;
+type LabelSubjectMixedParamsDictTagged = Required<Pick<LabelSubjectMixedParamsDict, '@type'>> & LabelSubjectMixedParamsDict;
 
 
 /**
- * Output object returned when calling `LabelSubjectMixedParameters(...)`.
+ * Output object returned when calling `LabelSubjectMixedParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function label_subject_mixed_params(
     transform: InputPathType,
     gca_file: InputPathType,
     aseg_output: string,
-): LabelSubjectMixedParametersTagged {
+): LabelSubjectMixedParamsDictTagged {
     const params = {
         "@type": "freesurfer/label_subject_mixed" as const,
         "brain_mask": brain_mask,
@@ -78,7 +78,7 @@ function label_subject_mixed_params(
  * @returns Command-line arguments.
  */
 function label_subject_mixed_cargs(
-    params: LabelSubjectMixedParameters,
+    params: LabelSubjectMixedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function label_subject_mixed_cargs(
  * @returns Outputs object.
  */
 function label_subject_mixed_outputs(
-    params: LabelSubjectMixedParameters,
+    params: LabelSubjectMixedParamsDict,
     execution: Execution,
 ): LabelSubjectMixedOutputs {
     const ret: LabelSubjectMixedOutputs = {
@@ -130,7 +130,7 @@ function label_subject_mixed_outputs(
  * @returns NamedTuple of outputs (described in `LabelSubjectMixedOutputs`).
  */
 function label_subject_mixed_execute(
-    params: LabelSubjectMixedParameters,
+    params: LabelSubjectMixedParamsDict,
     runner: Runner | null = null,
 ): LabelSubjectMixedOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function label_subject_mixed(
 export {
       LABEL_SUBJECT_MIXED_METADATA,
       LabelSubjectMixedOutputs,
+      LabelSubjectMixedParamsDict,
+      LabelSubjectMixedParamsDictTagged,
       label_subject_mixed,
       label_subject_mixed_execute,
       label_subject_mixed_params,

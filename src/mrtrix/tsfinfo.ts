@@ -11,15 +11,15 @@ const TSFINFO_METADATA: Metadata = {
 };
 
 
-interface TsfinfoConfigParameters {
+interface TsfinfoConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TsfinfoConfigParametersTagged = Required<Pick<TsfinfoConfigParameters, '@type'>> & TsfinfoConfigParameters;
+type TsfinfoConfigParamsDictTagged = Required<Pick<TsfinfoConfigParamsDict, '@type'>> & TsfinfoConfigParamsDict;
 
 
-interface TsfinfoParameters {
+interface TsfinfoParamsDict {
     "@type"?: "mrtrix/tsfinfo";
     "count": boolean;
     "ascii"?: string | null | undefined;
@@ -28,12 +28,12 @@ interface TsfinfoParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TsfinfoConfigParameters> | null | undefined;
+    "config"?: Array<TsfinfoConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks": Array<InputPathType>;
 }
-type TsfinfoParametersTagged = Required<Pick<TsfinfoParameters, '@type'>> & TsfinfoParameters;
+type TsfinfoParamsDictTagged = Required<Pick<TsfinfoParamsDict, '@type'>> & TsfinfoParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type TsfinfoParametersTagged = Required<Pick<TsfinfoParameters, '@type'>> & Tsfi
  *
  * @returns Parameter dictionary
  */
-function tsfinfo_config_params(
+function tsfinfo_config(
     key: string,
     value: string,
-): TsfinfoConfigParametersTagged {
+): TsfinfoConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function tsfinfo_config_params(
  * @returns Command-line arguments.
  */
 function tsfinfo_config_cargs(
-    params: TsfinfoConfigParameters,
+    params: TsfinfoConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function tsfinfo_config_cargs(
 
 
 /**
- * Output object returned when calling `TsfinfoParameters(...)`.
+ * Output object returned when calling `TsfinfoParamsDict(...)`.
  *
  * @interface
  */
@@ -116,10 +116,10 @@ function tsfinfo_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfinfoConfigParameters> | null = null,
+    config: Array<TsfinfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfinfoParametersTagged {
+): TsfinfoParamsDictTagged {
     const params = {
         "@type": "mrtrix/tsfinfo" as const,
         "count": count,
@@ -153,7 +153,7 @@ function tsfinfo_params(
  * @returns Command-line arguments.
  */
 function tsfinfo_cargs(
-    params: TsfinfoParameters,
+    params: TsfinfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function tsfinfo_cargs(
  * @returns Outputs object.
  */
 function tsfinfo_outputs(
-    params: TsfinfoParameters,
+    params: TsfinfoParamsDict,
     execution: Execution,
 ): TsfinfoOutputs {
     const ret: TsfinfoOutputs = {
@@ -239,7 +239,7 @@ function tsfinfo_outputs(
  * @returns NamedTuple of outputs (described in `TsfinfoOutputs`).
  */
 function tsfinfo_execute(
-    params: TsfinfoParameters,
+    params: TsfinfoParamsDict,
     runner: Runner | null = null,
 ): TsfinfoOutputs {
     runner = runner || getGlobalRunner();
@@ -291,7 +291,7 @@ function tsfinfo(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfinfoConfigParameters> | null = null,
+    config: Array<TsfinfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -303,9 +303,13 @@ function tsfinfo(
 
 export {
       TSFINFO_METADATA,
+      TsfinfoConfigParamsDict,
+      TsfinfoConfigParamsDictTagged,
       TsfinfoOutputs,
+      TsfinfoParamsDict,
+      TsfinfoParamsDictTagged,
       tsfinfo,
-      tsfinfo_config_params,
+      tsfinfo_config,
       tsfinfo_execute,
       tsfinfo_params,
 };

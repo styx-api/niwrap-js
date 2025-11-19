@@ -11,29 +11,29 @@ const MRFILTER_METADATA: Metadata = {
 };
 
 
-interface MrfilterVariousStringParameters {
+interface MrfilterVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type MrfilterVariousStringParametersTagged = Required<Pick<MrfilterVariousStringParameters, '@type'>> & MrfilterVariousStringParameters;
+type MrfilterVariousStringParamsDictTagged = Required<Pick<MrfilterVariousStringParamsDict, '@type'>> & MrfilterVariousStringParamsDict;
 
 
-interface MrfilterVariousFileParameters {
+interface MrfilterVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type MrfilterVariousFileParametersTagged = Required<Pick<MrfilterVariousFileParameters, '@type'>> & MrfilterVariousFileParameters;
+type MrfilterVariousFileParamsDictTagged = Required<Pick<MrfilterVariousFileParamsDict, '@type'>> & MrfilterVariousFileParamsDict;
 
 
-interface MrfilterConfigParameters {
+interface MrfilterConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrfilterConfigParametersTagged = Required<Pick<MrfilterConfigParameters, '@type'>> & MrfilterConfigParameters;
+type MrfilterConfigParamsDictTagged = Required<Pick<MrfilterConfigParamsDict, '@type'>> & MrfilterConfigParamsDict;
 
 
-interface MrfilterParameters {
+interface MrfilterParamsDict {
     "@type"?: "mrtrix/mrfilter";
     "axes"?: Array<number> | null | undefined;
     "inverse": boolean;
@@ -52,20 +52,20 @@ interface MrfilterParameters {
     "bridge"?: number | null | undefined;
     "maskin"?: InputPathType | null | undefined;
     "maskout"?: string | null | undefined;
-    "strides"?: MrfilterVariousStringParametersTagged | MrfilterVariousFileParametersTagged | null | undefined;
+    "strides"?: MrfilterVariousStringParamsDictTagged | MrfilterVariousFileParamsDictTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrfilterConfigParameters> | null | undefined;
+    "config"?: Array<MrfilterConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "filter": string;
     "output": string;
 }
-type MrfilterParametersTagged = Required<Pick<MrfilterParameters, '@type'>> & MrfilterParameters;
+type MrfilterParamsDictTagged = Required<Pick<MrfilterParamsDict, '@type'>> & MrfilterParamsDict;
 
 
 /**
@@ -109,9 +109,9 @@ function mrfilter_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function mrfilter_various_string_params(
+function mrfilter_various_string(
     obj: string,
-): MrfilterVariousStringParametersTagged {
+): MrfilterVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -129,7 +129,7 @@ function mrfilter_various_string_params(
  * @returns Command-line arguments.
  */
 function mrfilter_various_string_cargs(
-    params: MrfilterVariousStringParameters,
+    params: MrfilterVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,9 +145,9 @@ function mrfilter_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrfilter_various_file_params(
+function mrfilter_various_file(
     obj: InputPathType,
-): MrfilterVariousFileParametersTagged {
+): MrfilterVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -165,7 +165,7 @@ function mrfilter_various_file_params(
  * @returns Command-line arguments.
  */
 function mrfilter_various_file_cargs(
-    params: MrfilterVariousFileParameters,
+    params: MrfilterVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,10 +182,10 @@ function mrfilter_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrfilter_config_params(
+function mrfilter_config(
     key: string,
     value: string,
-): MrfilterConfigParametersTagged {
+): MrfilterConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -204,7 +204,7 @@ function mrfilter_config_params(
  * @returns Command-line arguments.
  */
 function mrfilter_config_cargs(
-    params: MrfilterConfigParameters,
+    params: MrfilterConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -216,7 +216,7 @@ function mrfilter_config_cargs(
 
 
 /**
- * Output object returned when calling `MrfilterParameters(...)`.
+ * Output object returned when calling `MrfilterParamsDict(...)`.
  *
  * @interface
  */
@@ -292,16 +292,16 @@ function mrfilter_params(
     bridge: number | null = null,
     maskin: InputPathType | null = null,
     maskout: string | null = null,
-    strides: MrfilterVariousStringParametersTagged | MrfilterVariousFileParametersTagged | null = null,
+    strides: MrfilterVariousStringParamsDictTagged | MrfilterVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrfilterConfigParameters> | null = null,
+    config: Array<MrfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrfilterParametersTagged {
+): MrfilterParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrfilter" as const,
         "inverse": inverse,
@@ -377,7 +377,7 @@ function mrfilter_params(
  * @returns Command-line arguments.
  */
 function mrfilter_cargs(
-    params: MrfilterParameters,
+    params: MrfilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -518,7 +518,7 @@ function mrfilter_cargs(
  * @returns Outputs object.
  */
 function mrfilter_outputs(
-    params: MrfilterParameters,
+    params: MrfilterParamsDict,
     execution: Execution,
 ): MrfilterOutputs {
     const ret: MrfilterOutputs = {
@@ -555,7 +555,7 @@ function mrfilter_outputs(
  * @returns NamedTuple of outputs (described in `MrfilterOutputs`).
  */
 function mrfilter_execute(
-    params: MrfilterParameters,
+    params: MrfilterParamsDict,
     runner: Runner | null = null,
 ): MrfilterOutputs {
     runner = runner || getGlobalRunner();
@@ -641,13 +641,13 @@ function mrfilter(
     bridge: number | null = null,
     maskin: InputPathType | null = null,
     maskout: string | null = null,
-    strides: MrfilterVariousStringParametersTagged | MrfilterVariousFileParametersTagged | null = null,
+    strides: MrfilterVariousStringParamsDictTagged | MrfilterVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrfilterConfigParameters> | null = null,
+    config: Array<MrfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -659,11 +659,19 @@ function mrfilter(
 
 export {
       MRFILTER_METADATA,
+      MrfilterConfigParamsDict,
+      MrfilterConfigParamsDictTagged,
       MrfilterOutputs,
+      MrfilterParamsDict,
+      MrfilterParamsDictTagged,
+      MrfilterVariousFileParamsDict,
+      MrfilterVariousFileParamsDictTagged,
+      MrfilterVariousStringParamsDict,
+      MrfilterVariousStringParamsDictTagged,
       mrfilter,
-      mrfilter_config_params,
+      mrfilter_config,
       mrfilter_execute,
       mrfilter_params,
-      mrfilter_various_file_params,
-      mrfilter_various_string_params,
+      mrfilter_various_file,
+      mrfilter_various_string,
 };

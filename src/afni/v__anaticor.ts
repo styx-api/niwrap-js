@@ -11,7 +11,7 @@ const V__ANATICOR_METADATA: Metadata = {
 };
 
 
-interface VAnaticorParameters {
+interface VAnaticorParamsDict {
     "@type"?: "afni/@ANATICOR";
     "ts": InputPathType;
     "polort": string;
@@ -28,11 +28,11 @@ interface VAnaticorParameters {
     "dirty": boolean;
     "echo": boolean;
 }
-type VAnaticorParametersTagged = Required<Pick<VAnaticorParameters, '@type'>> & VAnaticorParameters;
+type VAnaticorParamsDictTagged = Required<Pick<VAnaticorParamsDict, '@type'>> & VAnaticorParamsDict;
 
 
 /**
- * Output object returned when calling `VAnaticorParameters(...)`.
+ * Output object returned when calling `VAnaticorParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function v__anaticor_params(
     verb: boolean = false,
     dirty: boolean = false,
     echo: boolean = false,
-): VAnaticorParametersTagged {
+): VAnaticorParamsDictTagged {
     const params = {
         "@type": "afni/@ANATICOR" as const,
         "ts": ts,
@@ -120,7 +120,7 @@ function v__anaticor_params(
  * @returns Command-line arguments.
  */
 function v__anaticor_cargs(
-    params: VAnaticorParameters,
+    params: VAnaticorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,7 +188,7 @@ function v__anaticor_cargs(
  * @returns Outputs object.
  */
 function v__anaticor_outputs(
-    params: VAnaticorParameters,
+    params: VAnaticorParamsDict,
     execution: Execution,
 ): VAnaticorOutputs {
     const ret: VAnaticorOutputs = {
@@ -214,7 +214,7 @@ function v__anaticor_outputs(
  * @returns NamedTuple of outputs (described in `VAnaticorOutputs`).
  */
 function v__anaticor_execute(
-    params: VAnaticorParameters,
+    params: VAnaticorParamsDict,
     runner: Runner | null = null,
 ): VAnaticorOutputs {
     runner = runner || getGlobalRunner();
@@ -278,6 +278,8 @@ function v__anaticor(
 
 export {
       VAnaticorOutputs,
+      VAnaticorParamsDict,
+      VAnaticorParamsDictTagged,
       V__ANATICOR_METADATA,
       v__anaticor,
       v__anaticor_execute,

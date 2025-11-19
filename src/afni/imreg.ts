@@ -11,7 +11,7 @@ const IMREG_METADATA: Metadata = {
 };
 
 
-interface ImregParameters {
+interface ImregParamsDict {
     "@type"?: "afni/imreg";
     "base_image": string;
     "image_sequence": Array<InputPathType>;
@@ -34,11 +34,11 @@ interface ImregParameters {
     "fine"?: Array<number> | null | undefined;
     "nofine": boolean;
 }
-type ImregParametersTagged = Required<Pick<ImregParameters, '@type'>> & ImregParameters;
+type ImregParamsDictTagged = Required<Pick<ImregParamsDict, '@type'>> & ImregParamsDict;
 
 
 /**
- * Output object returned when calling `ImregParameters(...)`.
+ * Output object returned when calling `ImregParamsDict(...)`.
  *
  * @interface
  */
@@ -113,7 +113,7 @@ function imreg_params(
     cmass: boolean = false,
     fine: Array<number> | null = null,
     nofine: boolean = false,
-): ImregParametersTagged {
+): ImregParamsDictTagged {
     const params = {
         "@type": "afni/imreg" as const,
         "base_image": base_image,
@@ -166,7 +166,7 @@ function imreg_params(
  * @returns Command-line arguments.
  */
 function imreg_cargs(
-    params: ImregParameters,
+    params: ImregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -264,7 +264,7 @@ function imreg_cargs(
  * @returns Outputs object.
  */
 function imreg_outputs(
-    params: ImregParameters,
+    params: ImregParamsDict,
     execution: Execution,
 ): ImregOutputs {
     const ret: ImregOutputs = {
@@ -293,7 +293,7 @@ function imreg_outputs(
  * @returns NamedTuple of outputs (described in `ImregOutputs`).
  */
 function imreg_execute(
-    params: ImregParameters,
+    params: ImregParamsDict,
     runner: Runner | null = null,
 ): ImregOutputs {
     runner = runner || getGlobalRunner();
@@ -370,6 +370,8 @@ function imreg(
 export {
       IMREG_METADATA,
       ImregOutputs,
+      ImregParamsDict,
+      ImregParamsDictTagged,
       imreg,
       imreg_execute,
       imreg_params,

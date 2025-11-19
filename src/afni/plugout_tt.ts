@@ -11,7 +11,7 @@ const PLUGOUT_TT_METADATA: Metadata = {
 };
 
 
-interface PlugoutTtParameters {
+interface PlugoutTtParamsDict {
     "@type"?: "afni/plugout_tt";
     "host"?: string | null | undefined;
     "ijk_option": boolean;
@@ -26,11 +26,11 @@ interface PlugoutTtParameters {
     "num_assigned_ports": boolean;
     "num_assigned_ports_quiet": boolean;
 }
-type PlugoutTtParametersTagged = Required<Pick<PlugoutTtParameters, '@type'>> & PlugoutTtParameters;
+type PlugoutTtParamsDictTagged = Required<Pick<PlugoutTtParamsDict, '@type'>> & PlugoutTtParamsDict;
 
 
 /**
- * Output object returned when calling `PlugoutTtParameters(...)`.
+ * Output object returned when calling `PlugoutTtParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function plugout_tt_params(
     max_port_bloc_quiet: boolean = false,
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
-): PlugoutTtParametersTagged {
+): PlugoutTtParamsDictTagged {
     const params = {
         "@type": "afni/plugout_tt" as const,
         "ijk_option": ijk_option,
@@ -114,7 +114,7 @@ function plugout_tt_params(
  * @returns Command-line arguments.
  */
 function plugout_tt_cargs(
-    params: PlugoutTtParameters,
+    params: PlugoutTtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -186,7 +186,7 @@ function plugout_tt_cargs(
  * @returns Outputs object.
  */
 function plugout_tt_outputs(
-    params: PlugoutTtParameters,
+    params: PlugoutTtParamsDict,
     execution: Execution,
 ): PlugoutTtOutputs {
     const ret: PlugoutTtOutputs = {
@@ -211,7 +211,7 @@ function plugout_tt_outputs(
  * @returns NamedTuple of outputs (described in `PlugoutTtOutputs`).
  */
 function plugout_tt_execute(
-    params: PlugoutTtParameters,
+    params: PlugoutTtParamsDict,
     runner: Runner | null = null,
 ): PlugoutTtOutputs {
     runner = runner || getGlobalRunner();
@@ -272,6 +272,8 @@ function plugout_tt(
 export {
       PLUGOUT_TT_METADATA,
       PlugoutTtOutputs,
+      PlugoutTtParamsDict,
+      PlugoutTtParamsDictTagged,
       plugout_tt,
       plugout_tt_execute,
       plugout_tt_params,

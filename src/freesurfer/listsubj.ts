@@ -11,7 +11,7 @@ const LISTSUBJ_METADATA: Metadata = {
 };
 
 
-interface ListsubjParameters {
+interface ListsubjParamsDict {
     "@type"?: "freesurfer/listsubj";
     "subject_dir": string;
     "cross": boolean;
@@ -24,11 +24,11 @@ interface ListsubjParameters {
     "count": boolean;
     "help": boolean;
 }
-type ListsubjParametersTagged = Required<Pick<ListsubjParameters, '@type'>> & ListsubjParameters;
+type ListsubjParamsDictTagged = Required<Pick<ListsubjParamsDict, '@type'>> & ListsubjParamsDict;
 
 
 /**
- * Output object returned when calling `ListsubjParameters(...)`.
+ * Output object returned when calling `ListsubjParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function listsubj_params(
     full_path: boolean = false,
     count: boolean = false,
     help: boolean = false,
-): ListsubjParametersTagged {
+): ListsubjParamsDictTagged {
     const params = {
         "@type": "freesurfer/listsubj" as const,
         "subject_dir": subject_dir,
@@ -94,7 +94,7 @@ function listsubj_params(
  * @returns Command-line arguments.
  */
 function listsubj_cargs(
-    params: ListsubjParameters,
+    params: ListsubjParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function listsubj_cargs(
  * @returns Outputs object.
  */
 function listsubj_outputs(
-    params: ListsubjParameters,
+    params: ListsubjParamsDict,
     execution: Execution,
 ): ListsubjOutputs {
     const ret: ListsubjOutputs = {
@@ -165,7 +165,7 @@ function listsubj_outputs(
  * @returns NamedTuple of outputs (described in `ListsubjOutputs`).
  */
 function listsubj_execute(
-    params: ListsubjParameters,
+    params: ListsubjParamsDict,
     runner: Runner | null = null,
 ): ListsubjOutputs {
     runner = runner || getGlobalRunner();
@@ -222,6 +222,8 @@ function listsubj(
 export {
       LISTSUBJ_METADATA,
       ListsubjOutputs,
+      ListsubjParamsDict,
+      ListsubjParamsDictTagged,
       listsubj,
       listsubj_execute,
       listsubj_params,

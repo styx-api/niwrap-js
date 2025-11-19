@@ -11,15 +11,15 @@ const ISANALYZE_METADATA: Metadata = {
 };
 
 
-interface IsanalyzeParameters {
+interface IsanalyzeParamsDict {
     "@type"?: "freesurfer/isanalyze";
     "input_file": InputPathType;
 }
-type IsanalyzeParametersTagged = Required<Pick<IsanalyzeParameters, '@type'>> & IsanalyzeParameters;
+type IsanalyzeParamsDictTagged = Required<Pick<IsanalyzeParamsDict, '@type'>> & IsanalyzeParamsDict;
 
 
 /**
- * Output object returned when calling `IsanalyzeParameters(...)`.
+ * Output object returned when calling `IsanalyzeParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface IsanalyzeOutputs {
  */
 function isanalyze_params(
     input_file: InputPathType,
-): IsanalyzeParametersTagged {
+): IsanalyzeParamsDictTagged {
     const params = {
         "@type": "freesurfer/isanalyze" as const,
         "input_file": input_file,
@@ -58,7 +58,7 @@ function isanalyze_params(
  * @returns Command-line arguments.
  */
 function isanalyze_cargs(
-    params: IsanalyzeParameters,
+    params: IsanalyzeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function isanalyze_cargs(
  * @returns Outputs object.
  */
 function isanalyze_outputs(
-    params: IsanalyzeParameters,
+    params: IsanalyzeParamsDict,
     execution: Execution,
 ): IsanalyzeOutputs {
     const ret: IsanalyzeOutputs = {
@@ -102,7 +102,7 @@ function isanalyze_outputs(
  * @returns NamedTuple of outputs (described in `IsanalyzeOutputs`).
  */
 function isanalyze_execute(
-    params: IsanalyzeParameters,
+    params: IsanalyzeParamsDict,
     runner: Runner | null = null,
 ): IsanalyzeOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function isanalyze(
 export {
       ISANALYZE_METADATA,
       IsanalyzeOutputs,
+      IsanalyzeParamsDict,
+      IsanalyzeParamsDictTagged,
       isanalyze,
       isanalyze_execute,
       isanalyze_params,

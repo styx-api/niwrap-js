@@ -11,7 +11,7 @@ const MRI_REORIENT_LR_CSH_METADATA: Metadata = {
 };
 
 
-interface MriReorientLrCshParameters {
+interface MriReorientLrCshParamsDict {
     "@type"?: "freesurfer/mri_reorient_LR.csh";
     "input_vol": InputPathType;
     "output_vol": string;
@@ -21,11 +21,11 @@ interface MriReorientLrCshParameters {
     "version": boolean;
     "help": boolean;
 }
-type MriReorientLrCshParametersTagged = Required<Pick<MriReorientLrCshParameters, '@type'>> & MriReorientLrCshParameters;
+type MriReorientLrCshParamsDictTagged = Required<Pick<MriReorientLrCshParamsDict, '@type'>> & MriReorientLrCshParamsDict;
 
 
 /**
- * Output object returned when calling `MriReorientLrCshParameters(...)`.
+ * Output object returned when calling `MriReorientLrCshParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_reorient_lr_csh_params(
     output_registration: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): MriReorientLrCshParametersTagged {
+): MriReorientLrCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_reorient_LR.csh" as const,
         "input_vol": input_vol,
@@ -86,7 +86,7 @@ function mri_reorient_lr_csh_params(
  * @returns Command-line arguments.
  */
 function mri_reorient_lr_csh_cargs(
-    params: MriReorientLrCshParameters,
+    params: MriReorientLrCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function mri_reorient_lr_csh_cargs(
  * @returns Outputs object.
  */
 function mri_reorient_lr_csh_outputs(
-    params: MriReorientLrCshParameters,
+    params: MriReorientLrCshParamsDict,
     execution: Execution,
 ): MriReorientLrCshOutputs {
     const ret: MriReorientLrCshOutputs = {
@@ -153,7 +153,7 @@ function mri_reorient_lr_csh_outputs(
  * @returns NamedTuple of outputs (described in `MriReorientLrCshOutputs`).
  */
 function mri_reorient_lr_csh_execute(
-    params: MriReorientLrCshParameters,
+    params: MriReorientLrCshParamsDict,
     runner: Runner | null = null,
 ): MriReorientLrCshOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function mri_reorient_lr_csh(
 export {
       MRI_REORIENT_LR_CSH_METADATA,
       MriReorientLrCshOutputs,
+      MriReorientLrCshParamsDict,
+      MriReorientLrCshParamsDictTagged,
       mri_reorient_lr_csh,
       mri_reorient_lr_csh_execute,
       mri_reorient_lr_csh_params,

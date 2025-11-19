@@ -11,7 +11,7 @@ const V_1DGRAYPLOT_METADATA: Metadata = {
 };
 
 
-interface V1dgrayplotParameters {
+interface V1dgrayplotParamsDict {
     "@type"?: "afni/1dgrayplot";
     "tsfile": InputPathType;
     "install": boolean;
@@ -21,11 +21,11 @@ interface V1dgrayplotParameters {
     "use"?: number | null | undefined;
     "ps": boolean;
 }
-type V1dgrayplotParametersTagged = Required<Pick<V1dgrayplotParameters, '@type'>> & V1dgrayplotParameters;
+type V1dgrayplotParamsDictTagged = Required<Pick<V1dgrayplotParamsDict, '@type'>> & V1dgrayplotParamsDict;
 
 
 /**
- * Output object returned when calling `V1dgrayplotParameters(...)`.
+ * Output object returned when calling `V1dgrayplotParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function v_1dgrayplot_params(
     sep: boolean = false,
     use: number | null = null,
     ps: boolean = false,
-): V1dgrayplotParametersTagged {
+): V1dgrayplotParamsDictTagged {
     const params = {
         "@type": "afni/1dgrayplot" as const,
         "tsfile": tsfile,
@@ -86,7 +86,7 @@ function v_1dgrayplot_params(
  * @returns Command-line arguments.
  */
 function v_1dgrayplot_cargs(
-    params: V1dgrayplotParameters,
+    params: V1dgrayplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function v_1dgrayplot_cargs(
  * @returns Outputs object.
  */
 function v_1dgrayplot_outputs(
-    params: V1dgrayplotParameters,
+    params: V1dgrayplotParamsDict,
     execution: Execution,
 ): V1dgrayplotOutputs {
     const ret: V1dgrayplotOutputs = {
@@ -154,7 +154,7 @@ function v_1dgrayplot_outputs(
  * @returns NamedTuple of outputs (described in `V1dgrayplotOutputs`).
  */
 function v_1dgrayplot_execute(
-    params: V1dgrayplotParameters,
+    params: V1dgrayplotParamsDict,
     runner: Runner | null = null,
 ): V1dgrayplotOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function v_1dgrayplot(
 
 export {
       V1dgrayplotOutputs,
+      V1dgrayplotParamsDict,
+      V1dgrayplotParamsDictTagged,
       V_1DGRAYPLOT_METADATA,
       v_1dgrayplot,
       v_1dgrayplot_execute,

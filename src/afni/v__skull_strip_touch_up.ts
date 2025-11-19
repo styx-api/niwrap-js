@@ -11,7 +11,7 @@ const V__SKULL_STRIP_TOUCH_UP_METADATA: Metadata = {
 };
 
 
-interface VSkullStripTouchUpParameters {
+interface VSkullStripTouchUpParamsDict {
     "@type"?: "afni/@SkullStrip_TouchUp";
     "prefix": string;
     "brain_dataset": InputPathType;
@@ -20,11 +20,11 @@ interface VSkullStripTouchUpParameters {
     "orig_dim": boolean;
     "help": boolean;
 }
-type VSkullStripTouchUpParametersTagged = Required<Pick<VSkullStripTouchUpParameters, '@type'>> & VSkullStripTouchUpParameters;
+type VSkullStripTouchUpParamsDictTagged = Required<Pick<VSkullStripTouchUpParamsDict, '@type'>> & VSkullStripTouchUpParamsDict;
 
 
 /**
- * Output object returned when calling `VSkullStripTouchUpParameters(...)`.
+ * Output object returned when calling `VSkullStripTouchUpParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function v__skull_strip_touch_up_params(
     mask_out: boolean = false,
     orig_dim: boolean = false,
     help: boolean = false,
-): VSkullStripTouchUpParametersTagged {
+): VSkullStripTouchUpParamsDictTagged {
     const params = {
         "@type": "afni/@SkullStrip_TouchUp" as const,
         "prefix": prefix,
@@ -86,7 +86,7 @@ function v__skull_strip_touch_up_params(
  * @returns Command-line arguments.
  */
 function v__skull_strip_touch_up_cargs(
-    params: VSkullStripTouchUpParameters,
+    params: VSkullStripTouchUpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function v__skull_strip_touch_up_cargs(
  * @returns Outputs object.
  */
 function v__skull_strip_touch_up_outputs(
-    params: VSkullStripTouchUpParameters,
+    params: VSkullStripTouchUpParamsDict,
     execution: Execution,
 ): VSkullStripTouchUpOutputs {
     const ret: VSkullStripTouchUpOutputs = {
@@ -152,7 +152,7 @@ function v__skull_strip_touch_up_outputs(
  * @returns NamedTuple of outputs (described in `VSkullStripTouchUpOutputs`).
  */
 function v__skull_strip_touch_up_execute(
-    params: VSkullStripTouchUpParameters,
+    params: VSkullStripTouchUpParamsDict,
     runner: Runner | null = null,
 ): VSkullStripTouchUpOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function v__skull_strip_touch_up(
 
 export {
       VSkullStripTouchUpOutputs,
+      VSkullStripTouchUpParamsDict,
+      VSkullStripTouchUpParamsDictTagged,
       V__SKULL_STRIP_TOUCH_UP_METADATA,
       v__skull_strip_touch_up,
       v__skull_strip_touch_up_execute,

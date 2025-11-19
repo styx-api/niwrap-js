@@ -11,7 +11,7 @@ const LONG_SUBMIT_POSTPROC_METADATA: Metadata = {
 };
 
 
-interface LongSubmitPostprocParameters {
+interface LongSubmitPostprocParamsDict {
     "@type"?: "freesurfer/long_submit_postproc";
     "qdec": InputPathType;
     "prog": string;
@@ -22,11 +22,11 @@ interface LongSubmitPostprocParameters {
     "max"?: number | null | undefined;
     "queue"?: string | null | undefined;
 }
-type LongSubmitPostprocParametersTagged = Required<Pick<LongSubmitPostprocParameters, '@type'>> & LongSubmitPostprocParameters;
+type LongSubmitPostprocParamsDictTagged = Required<Pick<LongSubmitPostprocParamsDict, '@type'>> & LongSubmitPostprocParamsDict;
 
 
 /**
- * Output object returned when calling `LongSubmitPostprocParameters(...)`.
+ * Output object returned when calling `LongSubmitPostprocParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function long_submit_postproc_params(
     pause: number | null = null,
     max: number | null = null,
     queue: string | null = null,
-): LongSubmitPostprocParametersTagged {
+): LongSubmitPostprocParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_submit_postproc" as const,
         "qdec": qdec,
@@ -96,7 +96,7 @@ function long_submit_postproc_params(
  * @returns Command-line arguments.
  */
 function long_submit_postproc_cargs(
-    params: LongSubmitPostprocParameters,
+    params: LongSubmitPostprocParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,7 +155,7 @@ function long_submit_postproc_cargs(
  * @returns Outputs object.
  */
 function long_submit_postproc_outputs(
-    params: LongSubmitPostprocParameters,
+    params: LongSubmitPostprocParamsDict,
     execution: Execution,
 ): LongSubmitPostprocOutputs {
     const ret: LongSubmitPostprocOutputs = {
@@ -180,7 +180,7 @@ function long_submit_postproc_outputs(
  * @returns NamedTuple of outputs (described in `LongSubmitPostprocOutputs`).
  */
 function long_submit_postproc_execute(
-    params: LongSubmitPostprocParameters,
+    params: LongSubmitPostprocParamsDict,
     runner: Runner | null = null,
 ): LongSubmitPostprocOutputs {
     runner = runner || getGlobalRunner();
@@ -233,6 +233,8 @@ function long_submit_postproc(
 export {
       LONG_SUBMIT_POSTPROC_METADATA,
       LongSubmitPostprocOutputs,
+      LongSubmitPostprocParamsDict,
+      LongSubmitPostprocParamsDictTagged,
       long_submit_postproc,
       long_submit_postproc_execute,
       long_submit_postproc_params,

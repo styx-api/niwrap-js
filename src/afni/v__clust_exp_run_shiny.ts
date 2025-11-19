@@ -11,16 +11,16 @@ const V__CLUST_EXP_RUN_SHINY_METADATA: Metadata = {
 };
 
 
-interface VClustExpRunShinyParameters {
+interface VClustExpRunShinyParamsDict {
     "@type"?: "afni/@ClustExp_run_shiny";
     "directory": string;
     "help": boolean;
 }
-type VClustExpRunShinyParametersTagged = Required<Pick<VClustExpRunShinyParameters, '@type'>> & VClustExpRunShinyParameters;
+type VClustExpRunShinyParamsDictTagged = Required<Pick<VClustExpRunShinyParamsDict, '@type'>> & VClustExpRunShinyParamsDict;
 
 
 /**
- * Output object returned when calling `VClustExpRunShinyParameters(...)`.
+ * Output object returned when calling `VClustExpRunShinyParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VClustExpRunShinyOutputs {
 function v__clust_exp_run_shiny_params(
     directory: string,
     help: boolean = false,
-): VClustExpRunShinyParametersTagged {
+): VClustExpRunShinyParamsDictTagged {
     const params = {
         "@type": "afni/@ClustExp_run_shiny" as const,
         "directory": directory,
@@ -62,7 +62,7 @@ function v__clust_exp_run_shiny_params(
  * @returns Command-line arguments.
  */
 function v__clust_exp_run_shiny_cargs(
-    params: VClustExpRunShinyParameters,
+    params: VClustExpRunShinyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function v__clust_exp_run_shiny_cargs(
  * @returns Outputs object.
  */
 function v__clust_exp_run_shiny_outputs(
-    params: VClustExpRunShinyParameters,
+    params: VClustExpRunShinyParamsDict,
     execution: Execution,
 ): VClustExpRunShinyOutputs {
     const ret: VClustExpRunShinyOutputs = {
@@ -109,7 +109,7 @@ function v__clust_exp_run_shiny_outputs(
  * @returns NamedTuple of outputs (described in `VClustExpRunShinyOutputs`).
  */
 function v__clust_exp_run_shiny_execute(
-    params: VClustExpRunShinyParameters,
+    params: VClustExpRunShinyParamsDict,
     runner: Runner | null = null,
 ): VClustExpRunShinyOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function v__clust_exp_run_shiny(
 
 export {
       VClustExpRunShinyOutputs,
+      VClustExpRunShinyParamsDict,
+      VClustExpRunShinyParamsDictTagged,
       V__CLUST_EXP_RUN_SHINY_METADATA,
       v__clust_exp_run_shiny,
       v__clust_exp_run_shiny_execute,

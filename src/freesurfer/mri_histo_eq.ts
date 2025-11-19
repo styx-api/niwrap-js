@@ -11,16 +11,16 @@ const MRI_HISTO_EQ_METADATA: Metadata = {
 };
 
 
-interface MriHistoEqParameters {
+interface MriHistoEqParamsDict {
     "@type"?: "freesurfer/mri_histo_eq";
     "input_volume_1": InputPathType;
     "input_volume_2": InputPathType;
 }
-type MriHistoEqParametersTagged = Required<Pick<MriHistoEqParameters, '@type'>> & MriHistoEqParameters;
+type MriHistoEqParamsDictTagged = Required<Pick<MriHistoEqParamsDict, '@type'>> & MriHistoEqParamsDict;
 
 
 /**
- * Output object returned when calling `MriHistoEqParameters(...)`.
+ * Output object returned when calling `MriHistoEqParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MriHistoEqOutputs {
 function mri_histo_eq_params(
     input_volume_1: InputPathType,
     input_volume_2: InputPathType,
-): MriHistoEqParametersTagged {
+): MriHistoEqParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_histo_eq" as const,
         "input_volume_1": input_volume_1,
@@ -62,7 +62,7 @@ function mri_histo_eq_params(
  * @returns Command-line arguments.
  */
 function mri_histo_eq_cargs(
-    params: MriHistoEqParameters,
+    params: MriHistoEqParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mri_histo_eq_cargs(
  * @returns Outputs object.
  */
 function mri_histo_eq_outputs(
-    params: MriHistoEqParameters,
+    params: MriHistoEqParamsDict,
     execution: Execution,
 ): MriHistoEqOutputs {
     const ret: MriHistoEqOutputs = {
@@ -107,7 +107,7 @@ function mri_histo_eq_outputs(
  * @returns NamedTuple of outputs (described in `MriHistoEqOutputs`).
  */
 function mri_histo_eq_execute(
-    params: MriHistoEqParameters,
+    params: MriHistoEqParamsDict,
     runner: Runner | null = null,
 ): MriHistoEqOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function mri_histo_eq(
 export {
       MRI_HISTO_EQ_METADATA,
       MriHistoEqOutputs,
+      MriHistoEqParamsDict,
+      MriHistoEqParamsDictTagged,
       mri_histo_eq,
       mri_histo_eq_execute,
       mri_histo_eq_params,

@@ -11,15 +11,15 @@ const MORPH_SUBJECT_RH_METADATA: Metadata = {
 };
 
 
-interface MorphSubjectRhParameters {
+interface MorphSubjectRhParamsDict {
     "@type"?: "freesurfer/morph_subject-rh";
     "subject_id": string;
 }
-type MorphSubjectRhParametersTagged = Required<Pick<MorphSubjectRhParameters, '@type'>> & MorphSubjectRhParameters;
+type MorphSubjectRhParamsDictTagged = Required<Pick<MorphSubjectRhParamsDict, '@type'>> & MorphSubjectRhParamsDict;
 
 
 /**
- * Output object returned when calling `MorphSubjectRhParameters(...)`.
+ * Output object returned when calling `MorphSubjectRhParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MorphSubjectRhOutputs {
  */
 function morph_subject_rh_params(
     subject_id: string,
-): MorphSubjectRhParametersTagged {
+): MorphSubjectRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_subject-rh" as const,
         "subject_id": subject_id,
@@ -58,7 +58,7 @@ function morph_subject_rh_params(
  * @returns Command-line arguments.
  */
 function morph_subject_rh_cargs(
-    params: MorphSubjectRhParameters,
+    params: MorphSubjectRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function morph_subject_rh_cargs(
  * @returns Outputs object.
  */
 function morph_subject_rh_outputs(
-    params: MorphSubjectRhParameters,
+    params: MorphSubjectRhParamsDict,
     execution: Execution,
 ): MorphSubjectRhOutputs {
     const ret: MorphSubjectRhOutputs = {
@@ -105,7 +105,7 @@ function morph_subject_rh_outputs(
  * @returns NamedTuple of outputs (described in `MorphSubjectRhOutputs`).
  */
 function morph_subject_rh_execute(
-    params: MorphSubjectRhParameters,
+    params: MorphSubjectRhParamsDict,
     runner: Runner | null = null,
 ): MorphSubjectRhOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function morph_subject_rh(
 export {
       MORPH_SUBJECT_RH_METADATA,
       MorphSubjectRhOutputs,
+      MorphSubjectRhParamsDict,
+      MorphSubjectRhParamsDictTagged,
       morph_subject_rh,
       morph_subject_rh_execute,
       morph_subject_rh_params,

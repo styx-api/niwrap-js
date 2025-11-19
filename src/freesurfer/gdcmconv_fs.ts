@@ -11,7 +11,7 @@ const GDCMCONV_FS_METADATA: Metadata = {
 };
 
 
-interface GdcmconvFsParameters {
+interface GdcmconvFsParamsDict {
     "@type"?: "freesurfer/gdcmconv.fs";
     "input_file": InputPathType;
     "output_file": string;
@@ -54,11 +54,11 @@ interface GdcmconvFsParameters {
     "irreversible_flag": boolean;
     "ignore_errors_flag": boolean;
 }
-type GdcmconvFsParametersTagged = Required<Pick<GdcmconvFsParameters, '@type'>> & GdcmconvFsParameters;
+type GdcmconvFsParamsDictTagged = Required<Pick<GdcmconvFsParamsDict, '@type'>> & GdcmconvFsParamsDict;
 
 
 /**
- * Output object returned when calling `GdcmconvFsParameters(...)`.
+ * Output object returned when calling `GdcmconvFsParamsDict(...)`.
  *
  * @interface
  */
@@ -157,7 +157,7 @@ function gdcmconv_fs_params(
     number_resolution: number | null = null,
     irreversible_flag: boolean = false,
     ignore_errors_flag: boolean = false,
-): GdcmconvFsParametersTagged {
+): GdcmconvFsParamsDictTagged {
     const params = {
         "@type": "freesurfer/gdcmconv.fs" as const,
         "input_file": input_file,
@@ -236,7 +236,7 @@ function gdcmconv_fs_params(
  * @returns Command-line arguments.
  */
 function gdcmconv_fs_cargs(
-    params: GdcmconvFsParameters,
+    params: GdcmconvFsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -403,7 +403,7 @@ function gdcmconv_fs_cargs(
  * @returns Outputs object.
  */
 function gdcmconv_fs_outputs(
-    params: GdcmconvFsParameters,
+    params: GdcmconvFsParamsDict,
     execution: Execution,
 ): GdcmconvFsOutputs {
     const ret: GdcmconvFsOutputs = {
@@ -428,7 +428,7 @@ function gdcmconv_fs_outputs(
  * @returns NamedTuple of outputs (described in `GdcmconvFsOutputs`).
  */
 function gdcmconv_fs_execute(
-    params: GdcmconvFsParameters,
+    params: GdcmconvFsParamsDict,
     runner: Runner | null = null,
 ): GdcmconvFsOutputs {
     runner = runner || getGlobalRunner();
@@ -545,6 +545,8 @@ function gdcmconv_fs(
 export {
       GDCMCONV_FS_METADATA,
       GdcmconvFsOutputs,
+      GdcmconvFsParamsDict,
+      GdcmconvFsParamsDictTagged,
       gdcmconv_fs,
       gdcmconv_fs_execute,
       gdcmconv_fs_params,

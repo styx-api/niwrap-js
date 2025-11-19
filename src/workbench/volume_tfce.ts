@@ -10,32 +10,32 @@ const VOLUME_TFCE_METADATA: Metadata = {
 };
 
 
-interface VolumeTfcePresmoothParameters {
+interface VolumeTfcePresmoothParamsDict {
     "@type"?: "presmooth";
     "kernel": number;
     "fwhm": boolean;
 }
-type VolumeTfcePresmoothParametersTagged = Required<Pick<VolumeTfcePresmoothParameters, '@type'>> & VolumeTfcePresmoothParameters;
+type VolumeTfcePresmoothParamsDictTagged = Required<Pick<VolumeTfcePresmoothParamsDict, '@type'>> & VolumeTfcePresmoothParamsDict;
 
 
-interface VolumeTfceParametersParameters {
+interface VolumeTfceParametersParamsDict {
     "@type"?: "parameters";
     "E": number;
     "H": number;
 }
-type VolumeTfceParametersParametersTagged = Required<Pick<VolumeTfceParametersParameters, '@type'>> & VolumeTfceParametersParameters;
+type VolumeTfceParametersParamsDictTagged = Required<Pick<VolumeTfceParametersParamsDict, '@type'>> & VolumeTfceParametersParamsDict;
 
 
-interface VolumeTfceParameters {
+interface VolumeTfceParamsDict {
     "@type"?: "workbench/volume-tfce";
     "volume-out": string;
-    "presmooth"?: VolumeTfcePresmoothParameters | null | undefined;
+    "presmooth"?: VolumeTfcePresmoothParamsDict | null | undefined;
     "roi-volume"?: InputPathType | null | undefined;
-    "parameters"?: VolumeTfceParametersParameters | null | undefined;
+    "parameters"?: VolumeTfceParametersParamsDict | null | undefined;
     "subvolume"?: string | null | undefined;
     "volume-in": InputPathType;
 }
-type VolumeTfceParametersTagged = Required<Pick<VolumeTfceParameters, '@type'>> & VolumeTfceParameters;
+type VolumeTfceParamsDictTagged = Required<Pick<VolumeTfceParamsDict, '@type'>> & VolumeTfceParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type VolumeTfceParametersTagged = Required<Pick<VolumeTfceParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function volume_tfce_presmooth_params(
+function volume_tfce_presmooth(
     kernel: number,
     fwhm: boolean = false,
-): VolumeTfcePresmoothParametersTagged {
+): VolumeTfcePresmoothParamsDictTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
@@ -68,7 +68,7 @@ function volume_tfce_presmooth_params(
  * @returns Command-line arguments.
  */
 function volume_tfce_presmooth_cargs(
-    params: VolumeTfcePresmoothParameters,
+    params: VolumeTfcePresmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,10 +91,10 @@ function volume_tfce_presmooth_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_tfce_parameters_params(
+function volume_tfce_parameters(
     e: number,
     h: number,
-): VolumeTfceParametersParametersTagged {
+): VolumeTfceParametersParamsDictTagged {
     const params = {
         "@type": "parameters" as const,
         "E": e,
@@ -113,7 +113,7 @@ function volume_tfce_parameters_params(
  * @returns Command-line arguments.
  */
 function volume_tfce_parameters_cargs(
-    params: VolumeTfceParametersParameters,
+    params: VolumeTfceParametersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function volume_tfce_parameters_cargs(
 
 
 /**
- * Output object returned when calling `VolumeTfceParameters(...)`.
+ * Output object returned when calling `VolumeTfceParamsDict(...)`.
  *
  * @interface
  */
@@ -164,9 +164,9 @@ function volume_tfce_params(
     roi_volume: InputPathType | null,
     subvolume: string | null,
     volume_in: InputPathType,
-    presmooth: VolumeTfcePresmoothParameters | null = null,
-    parameters: VolumeTfceParametersParameters | null = null,
-): VolumeTfceParametersTagged {
+    presmooth: VolumeTfcePresmoothParamsDict | null = null,
+    parameters: VolumeTfceParametersParamsDict | null = null,
+): VolumeTfceParamsDictTagged {
     const params = {
         "@type": "workbench/volume-tfce" as const,
         "volume-out": volume_out,
@@ -197,7 +197,7 @@ function volume_tfce_params(
  * @returns Command-line arguments.
  */
 function volume_tfce_cargs(
-    params: VolumeTfceParameters,
+    params: VolumeTfceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -228,7 +228,7 @@ function volume_tfce_cargs(
  * @returns Outputs object.
  */
 function volume_tfce_outputs(
-    params: VolumeTfceParameters,
+    params: VolumeTfceParamsDict,
     execution: Execution,
 ): VolumeTfceOutputs {
     const ret: VolumeTfceOutputs = {
@@ -258,7 +258,7 @@ function volume_tfce_outputs(
  * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
  */
 function volume_tfce_execute(
-    params: VolumeTfceParameters,
+    params: VolumeTfceParamsDict,
     runner: Runner | null = null,
 ): VolumeTfceOutputs {
     runner = runner || getGlobalRunner();
@@ -303,8 +303,8 @@ function volume_tfce(
     roi_volume: InputPathType | null,
     subvolume: string | null,
     volume_in: InputPathType,
-    presmooth: VolumeTfcePresmoothParameters | null = null,
-    parameters: VolumeTfceParametersParameters | null = null,
+    presmooth: VolumeTfcePresmoothParamsDict | null = null,
+    parameters: VolumeTfceParametersParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeTfceOutputs {
     const params = volume_tfce_params(volume_out, roi_volume, subvolume, volume_in, presmooth, parameters)
@@ -315,9 +315,15 @@ function volume_tfce(
 export {
       VOLUME_TFCE_METADATA,
       VolumeTfceOutputs,
+      VolumeTfceParametersParamsDict,
+      VolumeTfceParametersParamsDictTagged,
+      VolumeTfceParamsDict,
+      VolumeTfceParamsDictTagged,
+      VolumeTfcePresmoothParamsDict,
+      VolumeTfcePresmoothParamsDictTagged,
       volume_tfce,
       volume_tfce_execute,
-      volume_tfce_parameters_params,
+      volume_tfce_parameters,
       volume_tfce_params,
-      volume_tfce_presmooth_params,
+      volume_tfce_presmooth,
 };

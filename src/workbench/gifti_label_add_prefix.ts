@@ -10,17 +10,17 @@ const GIFTI_LABEL_ADD_PREFIX_METADATA: Metadata = {
 };
 
 
-interface GiftiLabelAddPrefixParameters {
+interface GiftiLabelAddPrefixParamsDict {
     "@type"?: "workbench/gifti-label-add-prefix";
     "label-out": string;
     "label-in": InputPathType;
     "prefix": string;
 }
-type GiftiLabelAddPrefixParametersTagged = Required<Pick<GiftiLabelAddPrefixParameters, '@type'>> & GiftiLabelAddPrefixParameters;
+type GiftiLabelAddPrefixParamsDictTagged = Required<Pick<GiftiLabelAddPrefixParamsDict, '@type'>> & GiftiLabelAddPrefixParamsDict;
 
 
 /**
- * Output object returned when calling `GiftiLabelAddPrefixParameters(...)`.
+ * Output object returned when calling `GiftiLabelAddPrefixParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function gifti_label_add_prefix_params(
     label_out: string,
     label_in: InputPathType,
     prefix: string,
-): GiftiLabelAddPrefixParametersTagged {
+): GiftiLabelAddPrefixParamsDictTagged {
     const params = {
         "@type": "workbench/gifti-label-add-prefix" as const,
         "label-out": label_out,
@@ -69,7 +69,7 @@ function gifti_label_add_prefix_params(
  * @returns Command-line arguments.
  */
 function gifti_label_add_prefix_cargs(
-    params: GiftiLabelAddPrefixParameters,
+    params: GiftiLabelAddPrefixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function gifti_label_add_prefix_cargs(
  * @returns Outputs object.
  */
 function gifti_label_add_prefix_outputs(
-    params: GiftiLabelAddPrefixParameters,
+    params: GiftiLabelAddPrefixParamsDict,
     execution: Execution,
 ): GiftiLabelAddPrefixOutputs {
     const ret: GiftiLabelAddPrefixOutputs = {
@@ -115,7 +115,7 @@ function gifti_label_add_prefix_outputs(
  * @returns NamedTuple of outputs (described in `GiftiLabelAddPrefixOutputs`).
  */
 function gifti_label_add_prefix_execute(
-    params: GiftiLabelAddPrefixParameters,
+    params: GiftiLabelAddPrefixParamsDict,
     runner: Runner | null = null,
 ): GiftiLabelAddPrefixOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function gifti_label_add_prefix(
 export {
       GIFTI_LABEL_ADD_PREFIX_METADATA,
       GiftiLabelAddPrefixOutputs,
+      GiftiLabelAddPrefixParamsDict,
+      GiftiLabelAddPrefixParamsDictTagged,
       gifti_label_add_prefix,
       gifti_label_add_prefix_execute,
       gifti_label_add_prefix_params,

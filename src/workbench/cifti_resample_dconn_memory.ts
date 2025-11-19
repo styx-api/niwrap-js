@@ -10,161 +10,161 @@ const CIFTI_RESAMPLE_DCONN_MEMORY_METADATA: Metadata = {
 };
 
 
-interface CiftiResampleDconnMemoryWeightedParameters {
+interface CiftiResampleDconnMemoryWeightedParamsDict {
     "@type"?: "weighted";
     "exponent"?: number | null | undefined;
     "legacy-cutoff": boolean;
 }
-type CiftiResampleDconnMemoryWeightedParametersTagged = Required<Pick<CiftiResampleDconnMemoryWeightedParameters, '@type'>> & CiftiResampleDconnMemoryWeightedParameters;
+type CiftiResampleDconnMemoryWeightedParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryWeightedParamsDict, '@type'>> & CiftiResampleDconnMemoryWeightedParamsDict;
 
 
-interface CiftiResampleDconnMemoryVolumePredilateParameters {
+interface CiftiResampleDconnMemoryVolumePredilateParamsDict {
     "@type"?: "volume-predilate";
     "dilate-mm": number;
     "nearest": boolean;
-    "weighted"?: CiftiResampleDconnMemoryWeightedParameters | null | undefined;
+    "weighted"?: CiftiResampleDconnMemoryWeightedParamsDict | null | undefined;
 }
-type CiftiResampleDconnMemoryVolumePredilateParametersTagged = Required<Pick<CiftiResampleDconnMemoryVolumePredilateParameters, '@type'>> & CiftiResampleDconnMemoryVolumePredilateParameters;
+type CiftiResampleDconnMemoryVolumePredilateParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryVolumePredilateParamsDict, '@type'>> & CiftiResampleDconnMemoryVolumePredilateParamsDict;
 
 
-interface CiftiResampleDconnMemoryWeightedParameters_ {
+interface CiftiResampleDconnMemoryWeightedParamsDict_ {
     "@type"?: "weighted";
     "exponent"?: number | null | undefined;
     "legacy-cutoff": boolean;
 }
-type CiftiResampleDconnMemoryWeightedParametersTagged_ = Required<Pick<CiftiResampleDconnMemoryWeightedParameters_, '@type'>> & CiftiResampleDconnMemoryWeightedParameters_;
+type CiftiResampleDconnMemoryWeightedParamsDictTagged_ = Required<Pick<CiftiResampleDconnMemoryWeightedParamsDict_, '@type'>> & CiftiResampleDconnMemoryWeightedParamsDict_;
 
 
-interface CiftiResampleDconnMemorySurfacePostdilateParameters {
+interface CiftiResampleDconnMemorySurfacePostdilateParamsDict {
     "@type"?: "surface-postdilate";
     "dilate-mm": number;
     "nearest": boolean;
     "linear": boolean;
-    "weighted"?: CiftiResampleDconnMemoryWeightedParameters_ | null | undefined;
+    "weighted"?: CiftiResampleDconnMemoryWeightedParamsDict_ | null | undefined;
 }
-type CiftiResampleDconnMemorySurfacePostdilateParametersTagged = Required<Pick<CiftiResampleDconnMemorySurfacePostdilateParameters, '@type'>> & CiftiResampleDconnMemorySurfacePostdilateParameters;
+type CiftiResampleDconnMemorySurfacePostdilateParamsDictTagged = Required<Pick<CiftiResampleDconnMemorySurfacePostdilateParamsDict, '@type'>> & CiftiResampleDconnMemorySurfacePostdilateParamsDict;
 
 
-interface CiftiResampleDconnMemoryFlirtParameters {
+interface CiftiResampleDconnMemoryFlirtParamsDict {
     "@type"?: "flirt";
     "source-volume": string;
     "target-volume": string;
 }
-type CiftiResampleDconnMemoryFlirtParametersTagged = Required<Pick<CiftiResampleDconnMemoryFlirtParameters, '@type'>> & CiftiResampleDconnMemoryFlirtParameters;
+type CiftiResampleDconnMemoryFlirtParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryFlirtParamsDict, '@type'>> & CiftiResampleDconnMemoryFlirtParamsDict;
 
 
-interface CiftiResampleDconnMemoryAffineParameters {
+interface CiftiResampleDconnMemoryAffineParamsDict {
     "@type"?: "affine";
     "affine-file": string;
-    "flirt"?: CiftiResampleDconnMemoryFlirtParameters | null | undefined;
+    "flirt"?: CiftiResampleDconnMemoryFlirtParamsDict | null | undefined;
 }
-type CiftiResampleDconnMemoryAffineParametersTagged = Required<Pick<CiftiResampleDconnMemoryAffineParameters, '@type'>> & CiftiResampleDconnMemoryAffineParameters;
+type CiftiResampleDconnMemoryAffineParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryAffineParamsDict, '@type'>> & CiftiResampleDconnMemoryAffineParamsDict;
 
 
-interface CiftiResampleDconnMemoryWarpfieldParameters {
+interface CiftiResampleDconnMemoryWarpfieldParamsDict {
     "@type"?: "warpfield";
     "warpfield": string;
     "source-volume"?: string | null | undefined;
 }
-type CiftiResampleDconnMemoryWarpfieldParametersTagged = Required<Pick<CiftiResampleDconnMemoryWarpfieldParameters, '@type'>> & CiftiResampleDconnMemoryWarpfieldParameters;
+type CiftiResampleDconnMemoryWarpfieldParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryWarpfieldParamsDict, '@type'>> & CiftiResampleDconnMemoryWarpfieldParamsDict;
 
 
-interface CiftiResampleDconnMemoryLeftAreaSurfsParameters {
+interface CiftiResampleDconnMemoryLeftAreaSurfsParamsDict {
     "@type"?: "left-area-surfs";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type CiftiResampleDconnMemoryLeftAreaSurfsParametersTagged = Required<Pick<CiftiResampleDconnMemoryLeftAreaSurfsParameters, '@type'>> & CiftiResampleDconnMemoryLeftAreaSurfsParameters;
+type CiftiResampleDconnMemoryLeftAreaSurfsParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryLeftAreaSurfsParamsDict, '@type'>> & CiftiResampleDconnMemoryLeftAreaSurfsParamsDict;
 
 
-interface CiftiResampleDconnMemoryLeftAreaMetricsParameters {
+interface CiftiResampleDconnMemoryLeftAreaMetricsParamsDict {
     "@type"?: "left-area-metrics";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type CiftiResampleDconnMemoryLeftAreaMetricsParametersTagged = Required<Pick<CiftiResampleDconnMemoryLeftAreaMetricsParameters, '@type'>> & CiftiResampleDconnMemoryLeftAreaMetricsParameters;
+type CiftiResampleDconnMemoryLeftAreaMetricsParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryLeftAreaMetricsParamsDict, '@type'>> & CiftiResampleDconnMemoryLeftAreaMetricsParamsDict;
 
 
-interface CiftiResampleDconnMemoryLeftSpheresParameters {
+interface CiftiResampleDconnMemoryLeftSpheresParamsDict {
     "@type"?: "left-spheres";
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
-    "left-area-surfs"?: CiftiResampleDconnMemoryLeftAreaSurfsParameters | null | undefined;
-    "left-area-metrics"?: CiftiResampleDconnMemoryLeftAreaMetricsParameters | null | undefined;
+    "left-area-surfs"?: CiftiResampleDconnMemoryLeftAreaSurfsParamsDict | null | undefined;
+    "left-area-metrics"?: CiftiResampleDconnMemoryLeftAreaMetricsParamsDict | null | undefined;
 }
-type CiftiResampleDconnMemoryLeftSpheresParametersTagged = Required<Pick<CiftiResampleDconnMemoryLeftSpheresParameters, '@type'>> & CiftiResampleDconnMemoryLeftSpheresParameters;
+type CiftiResampleDconnMemoryLeftSpheresParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryLeftSpheresParamsDict, '@type'>> & CiftiResampleDconnMemoryLeftSpheresParamsDict;
 
 
-interface CiftiResampleDconnMemoryRightAreaSurfsParameters {
+interface CiftiResampleDconnMemoryRightAreaSurfsParamsDict {
     "@type"?: "right-area-surfs";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type CiftiResampleDconnMemoryRightAreaSurfsParametersTagged = Required<Pick<CiftiResampleDconnMemoryRightAreaSurfsParameters, '@type'>> & CiftiResampleDconnMemoryRightAreaSurfsParameters;
+type CiftiResampleDconnMemoryRightAreaSurfsParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryRightAreaSurfsParamsDict, '@type'>> & CiftiResampleDconnMemoryRightAreaSurfsParamsDict;
 
 
-interface CiftiResampleDconnMemoryRightAreaMetricsParameters {
+interface CiftiResampleDconnMemoryRightAreaMetricsParamsDict {
     "@type"?: "right-area-metrics";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type CiftiResampleDconnMemoryRightAreaMetricsParametersTagged = Required<Pick<CiftiResampleDconnMemoryRightAreaMetricsParameters, '@type'>> & CiftiResampleDconnMemoryRightAreaMetricsParameters;
+type CiftiResampleDconnMemoryRightAreaMetricsParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryRightAreaMetricsParamsDict, '@type'>> & CiftiResampleDconnMemoryRightAreaMetricsParamsDict;
 
 
-interface CiftiResampleDconnMemoryRightSpheresParameters {
+interface CiftiResampleDconnMemoryRightSpheresParamsDict {
     "@type"?: "right-spheres";
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
-    "right-area-surfs"?: CiftiResampleDconnMemoryRightAreaSurfsParameters | null | undefined;
-    "right-area-metrics"?: CiftiResampleDconnMemoryRightAreaMetricsParameters | null | undefined;
+    "right-area-surfs"?: CiftiResampleDconnMemoryRightAreaSurfsParamsDict | null | undefined;
+    "right-area-metrics"?: CiftiResampleDconnMemoryRightAreaMetricsParamsDict | null | undefined;
 }
-type CiftiResampleDconnMemoryRightSpheresParametersTagged = Required<Pick<CiftiResampleDconnMemoryRightSpheresParameters, '@type'>> & CiftiResampleDconnMemoryRightSpheresParameters;
+type CiftiResampleDconnMemoryRightSpheresParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryRightSpheresParamsDict, '@type'>> & CiftiResampleDconnMemoryRightSpheresParamsDict;
 
 
-interface CiftiResampleDconnMemoryCerebellumAreaSurfsParameters {
+interface CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDict {
     "@type"?: "cerebellum-area-surfs";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type CiftiResampleDconnMemoryCerebellumAreaSurfsParametersTagged = Required<Pick<CiftiResampleDconnMemoryCerebellumAreaSurfsParameters, '@type'>> & CiftiResampleDconnMemoryCerebellumAreaSurfsParameters;
+type CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDict, '@type'>> & CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDict;
 
 
-interface CiftiResampleDconnMemoryCerebellumAreaMetricsParameters {
+interface CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDict {
     "@type"?: "cerebellum-area-metrics";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type CiftiResampleDconnMemoryCerebellumAreaMetricsParametersTagged = Required<Pick<CiftiResampleDconnMemoryCerebellumAreaMetricsParameters, '@type'>> & CiftiResampleDconnMemoryCerebellumAreaMetricsParameters;
+type CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDict, '@type'>> & CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDict;
 
 
-interface CiftiResampleDconnMemoryCerebellumSpheresParameters {
+interface CiftiResampleDconnMemoryCerebellumSpheresParamsDict {
     "@type"?: "cerebellum-spheres";
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
-    "cerebellum-area-surfs"?: CiftiResampleDconnMemoryCerebellumAreaSurfsParameters | null | undefined;
-    "cerebellum-area-metrics"?: CiftiResampleDconnMemoryCerebellumAreaMetricsParameters | null | undefined;
+    "cerebellum-area-surfs"?: CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDict | null | undefined;
+    "cerebellum-area-metrics"?: CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDict | null | undefined;
 }
-type CiftiResampleDconnMemoryCerebellumSpheresParametersTagged = Required<Pick<CiftiResampleDconnMemoryCerebellumSpheresParameters, '@type'>> & CiftiResampleDconnMemoryCerebellumSpheresParameters;
+type CiftiResampleDconnMemoryCerebellumSpheresParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryCerebellumSpheresParamsDict, '@type'>> & CiftiResampleDconnMemoryCerebellumSpheresParamsDict;
 
 
-interface CiftiResampleDconnMemoryParameters {
+interface CiftiResampleDconnMemoryParamsDict {
     "@type"?: "workbench/cifti-resample-dconn-memory";
     "cifti-out": string;
     "surface-largest": boolean;
-    "volume-predilate"?: CiftiResampleDconnMemoryVolumePredilateParameters | null | undefined;
-    "surface-postdilate"?: CiftiResampleDconnMemorySurfacePostdilateParameters | null | undefined;
-    "affine"?: CiftiResampleDconnMemoryAffineParameters | null | undefined;
-    "warpfield"?: CiftiResampleDconnMemoryWarpfieldParameters | null | undefined;
-    "left-spheres"?: CiftiResampleDconnMemoryLeftSpheresParameters | null | undefined;
-    "right-spheres"?: CiftiResampleDconnMemoryRightSpheresParameters | null | undefined;
-    "cerebellum-spheres"?: CiftiResampleDconnMemoryCerebellumSpheresParameters | null | undefined;
+    "volume-predilate"?: CiftiResampleDconnMemoryVolumePredilateParamsDict | null | undefined;
+    "surface-postdilate"?: CiftiResampleDconnMemorySurfacePostdilateParamsDict | null | undefined;
+    "affine"?: CiftiResampleDconnMemoryAffineParamsDict | null | undefined;
+    "warpfield"?: CiftiResampleDconnMemoryWarpfieldParamsDict | null | undefined;
+    "left-spheres"?: CiftiResampleDconnMemoryLeftSpheresParamsDict | null | undefined;
+    "right-spheres"?: CiftiResampleDconnMemoryRightSpheresParamsDict | null | undefined;
+    "cerebellum-spheres"?: CiftiResampleDconnMemoryCerebellumSpheresParamsDict | null | undefined;
     "cifti-in": InputPathType;
     "cifti-template": InputPathType;
     "template-direction": string;
     "surface-method": string;
     "volume-method": string;
 }
-type CiftiResampleDconnMemoryParametersTagged = Required<Pick<CiftiResampleDconnMemoryParameters, '@type'>> & CiftiResampleDconnMemoryParameters;
+type CiftiResampleDconnMemoryParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryParamsDict, '@type'>> & CiftiResampleDconnMemoryParamsDict;
 
 
 /**
@@ -177,10 +177,10 @@ exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_weighted_params(
+function cifti_resample_dconn_memory_weighted(
     exponent: number | null,
     legacy_cutoff: boolean = false,
-): CiftiResampleDconnMemoryWeightedParametersTagged {
+): CiftiResampleDconnMemoryWeightedParamsDictTagged {
     const params = {
         "@type": "weighted" as const,
         "legacy-cutoff": legacy_cutoff,
@@ -201,7 +201,7 @@ function cifti_resample_dconn_memory_weighted_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_weighted_cargs(
-    params: CiftiResampleDconnMemoryWeightedParameters,
+    params: CiftiResampleDconnMemoryWeightedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -226,11 +226,11 @@ function cifti_resample_dconn_memory_weighted_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_volume_predilate_params(
+function cifti_resample_dconn_memory_volume_predilate(
     dilate_mm: number,
     nearest: boolean = false,
-    weighted: CiftiResampleDconnMemoryWeightedParameters | null = null,
-): CiftiResampleDconnMemoryVolumePredilateParametersTagged {
+    weighted: CiftiResampleDconnMemoryWeightedParamsDict | null = null,
+): CiftiResampleDconnMemoryVolumePredilateParamsDictTagged {
     const params = {
         "@type": "volume-predilate" as const,
         "dilate-mm": dilate_mm,
@@ -252,7 +252,7 @@ function cifti_resample_dconn_memory_volume_predilate_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_volume_predilate_cargs(
-    params: CiftiResampleDconnMemoryVolumePredilateParameters,
+    params: CiftiResampleDconnMemoryVolumePredilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -278,10 +278,10 @@ exponent 'n' to use in (area / (distance ^ n)) as the weighting function (defaul
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_weighted_params_(
+function cifti_resample_dconn_memory_weighted_(
     exponent: number | null,
     legacy_cutoff: boolean = false,
-): CiftiResampleDconnMemoryWeightedParametersTagged_ {
+): CiftiResampleDconnMemoryWeightedParamsDictTagged_ {
     const params = {
         "@type": "weighted" as const,
         "legacy-cutoff": legacy_cutoff,
@@ -302,7 +302,7 @@ function cifti_resample_dconn_memory_weighted_params_(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_weighted_cargs_(
-    params: CiftiResampleDconnMemoryWeightedParameters_,
+    params: CiftiResampleDconnMemoryWeightedParamsDict_,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -328,12 +328,12 @@ function cifti_resample_dconn_memory_weighted_cargs_(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_surface_postdilate_params(
+function cifti_resample_dconn_memory_surface_postdilate(
     dilate_mm: number,
     nearest: boolean = false,
     linear: boolean = false,
-    weighted: CiftiResampleDconnMemoryWeightedParameters_ | null = null,
-): CiftiResampleDconnMemorySurfacePostdilateParametersTagged {
+    weighted: CiftiResampleDconnMemoryWeightedParamsDict_ | null = null,
+): CiftiResampleDconnMemorySurfacePostdilateParamsDictTagged {
     const params = {
         "@type": "surface-postdilate" as const,
         "dilate-mm": dilate_mm,
@@ -356,7 +356,7 @@ function cifti_resample_dconn_memory_surface_postdilate_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_surface_postdilate_cargs(
-    params: CiftiResampleDconnMemorySurfacePostdilateParameters,
+    params: CiftiResampleDconnMemorySurfacePostdilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -381,10 +381,10 @@ function cifti_resample_dconn_memory_surface_postdilate_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_flirt_params(
+function cifti_resample_dconn_memory_flirt(
     source_volume: string,
     target_volume: string,
-): CiftiResampleDconnMemoryFlirtParametersTagged {
+): CiftiResampleDconnMemoryFlirtParamsDictTagged {
     const params = {
         "@type": "flirt" as const,
         "source-volume": source_volume,
@@ -403,7 +403,7 @@ function cifti_resample_dconn_memory_flirt_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_flirt_cargs(
-    params: CiftiResampleDconnMemoryFlirtParameters,
+    params: CiftiResampleDconnMemoryFlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -424,10 +424,10 @@ function cifti_resample_dconn_memory_flirt_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_affine_params(
+function cifti_resample_dconn_memory_affine(
     affine_file: string,
-    flirt: CiftiResampleDconnMemoryFlirtParameters | null = null,
-): CiftiResampleDconnMemoryAffineParametersTagged {
+    flirt: CiftiResampleDconnMemoryFlirtParamsDict | null = null,
+): CiftiResampleDconnMemoryAffineParamsDictTagged {
     const params = {
         "@type": "affine" as const,
         "affine-file": affine_file,
@@ -448,7 +448,7 @@ function cifti_resample_dconn_memory_affine_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_affine_cargs(
-    params: CiftiResampleDconnMemoryAffineParameters,
+    params: CiftiResampleDconnMemoryAffineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -473,10 +473,10 @@ the source volume used when generating the warpfield
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_warpfield_params(
+function cifti_resample_dconn_memory_warpfield(
     warpfield: string,
     source_volume: string | null,
-): CiftiResampleDconnMemoryWarpfieldParametersTagged {
+): CiftiResampleDconnMemoryWarpfieldParamsDictTagged {
     const params = {
         "@type": "warpfield" as const,
         "warpfield": warpfield,
@@ -497,7 +497,7 @@ function cifti_resample_dconn_memory_warpfield_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_warpfield_cargs(
-    params: CiftiResampleDconnMemoryWarpfieldParameters,
+    params: CiftiResampleDconnMemoryWarpfieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -521,10 +521,10 @@ function cifti_resample_dconn_memory_warpfield_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_left_area_surfs_params(
+function cifti_resample_dconn_memory_left_area_surfs(
     current_area: InputPathType,
     new_area: InputPathType,
-): CiftiResampleDconnMemoryLeftAreaSurfsParametersTagged {
+): CiftiResampleDconnMemoryLeftAreaSurfsParamsDictTagged {
     const params = {
         "@type": "left-area-surfs" as const,
         "current-area": current_area,
@@ -543,7 +543,7 @@ function cifti_resample_dconn_memory_left_area_surfs_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_left_area_surfs_cargs(
-    params: CiftiResampleDconnMemoryLeftAreaSurfsParameters,
+    params: CiftiResampleDconnMemoryLeftAreaSurfsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -564,10 +564,10 @@ function cifti_resample_dconn_memory_left_area_surfs_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_left_area_metrics_params(
+function cifti_resample_dconn_memory_left_area_metrics(
     current_area: InputPathType,
     new_area: InputPathType,
-): CiftiResampleDconnMemoryLeftAreaMetricsParametersTagged {
+): CiftiResampleDconnMemoryLeftAreaMetricsParamsDictTagged {
     const params = {
         "@type": "left-area-metrics" as const,
         "current-area": current_area,
@@ -586,7 +586,7 @@ function cifti_resample_dconn_memory_left_area_metrics_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_left_area_metrics_cargs(
-    params: CiftiResampleDconnMemoryLeftAreaMetricsParameters,
+    params: CiftiResampleDconnMemoryLeftAreaMetricsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -609,12 +609,12 @@ function cifti_resample_dconn_memory_left_area_metrics_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_left_spheres_params(
+function cifti_resample_dconn_memory_left_spheres(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
-    left_area_surfs: CiftiResampleDconnMemoryLeftAreaSurfsParameters | null = null,
-    left_area_metrics: CiftiResampleDconnMemoryLeftAreaMetricsParameters | null = null,
-): CiftiResampleDconnMemoryLeftSpheresParametersTagged {
+    left_area_surfs: CiftiResampleDconnMemoryLeftAreaSurfsParamsDict | null = null,
+    left_area_metrics: CiftiResampleDconnMemoryLeftAreaMetricsParamsDict | null = null,
+): CiftiResampleDconnMemoryLeftSpheresParamsDictTagged {
     const params = {
         "@type": "left-spheres" as const,
         "current-sphere": current_sphere,
@@ -639,7 +639,7 @@ function cifti_resample_dconn_memory_left_spheres_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_left_spheres_cargs(
-    params: CiftiResampleDconnMemoryLeftSpheresParameters,
+    params: CiftiResampleDconnMemoryLeftSpheresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -664,10 +664,10 @@ function cifti_resample_dconn_memory_left_spheres_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_right_area_surfs_params(
+function cifti_resample_dconn_memory_right_area_surfs(
     current_area: InputPathType,
     new_area: InputPathType,
-): CiftiResampleDconnMemoryRightAreaSurfsParametersTagged {
+): CiftiResampleDconnMemoryRightAreaSurfsParamsDictTagged {
     const params = {
         "@type": "right-area-surfs" as const,
         "current-area": current_area,
@@ -686,7 +686,7 @@ function cifti_resample_dconn_memory_right_area_surfs_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_right_area_surfs_cargs(
-    params: CiftiResampleDconnMemoryRightAreaSurfsParameters,
+    params: CiftiResampleDconnMemoryRightAreaSurfsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -707,10 +707,10 @@ function cifti_resample_dconn_memory_right_area_surfs_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_right_area_metrics_params(
+function cifti_resample_dconn_memory_right_area_metrics(
     current_area: InputPathType,
     new_area: InputPathType,
-): CiftiResampleDconnMemoryRightAreaMetricsParametersTagged {
+): CiftiResampleDconnMemoryRightAreaMetricsParamsDictTagged {
     const params = {
         "@type": "right-area-metrics" as const,
         "current-area": current_area,
@@ -729,7 +729,7 @@ function cifti_resample_dconn_memory_right_area_metrics_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_right_area_metrics_cargs(
-    params: CiftiResampleDconnMemoryRightAreaMetricsParameters,
+    params: CiftiResampleDconnMemoryRightAreaMetricsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -752,12 +752,12 @@ function cifti_resample_dconn_memory_right_area_metrics_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_right_spheres_params(
+function cifti_resample_dconn_memory_right_spheres(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
-    right_area_surfs: CiftiResampleDconnMemoryRightAreaSurfsParameters | null = null,
-    right_area_metrics: CiftiResampleDconnMemoryRightAreaMetricsParameters | null = null,
-): CiftiResampleDconnMemoryRightSpheresParametersTagged {
+    right_area_surfs: CiftiResampleDconnMemoryRightAreaSurfsParamsDict | null = null,
+    right_area_metrics: CiftiResampleDconnMemoryRightAreaMetricsParamsDict | null = null,
+): CiftiResampleDconnMemoryRightSpheresParamsDictTagged {
     const params = {
         "@type": "right-spheres" as const,
         "current-sphere": current_sphere,
@@ -782,7 +782,7 @@ function cifti_resample_dconn_memory_right_spheres_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_right_spheres_cargs(
-    params: CiftiResampleDconnMemoryRightSpheresParameters,
+    params: CiftiResampleDconnMemoryRightSpheresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -807,10 +807,10 @@ function cifti_resample_dconn_memory_right_spheres_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_cerebellum_area_surfs_params(
+function cifti_resample_dconn_memory_cerebellum_area_surfs(
     current_area: InputPathType,
     new_area: InputPathType,
-): CiftiResampleDconnMemoryCerebellumAreaSurfsParametersTagged {
+): CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDictTagged {
     const params = {
         "@type": "cerebellum-area-surfs" as const,
         "current-area": current_area,
@@ -829,7 +829,7 @@ function cifti_resample_dconn_memory_cerebellum_area_surfs_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_cerebellum_area_surfs_cargs(
-    params: CiftiResampleDconnMemoryCerebellumAreaSurfsParameters,
+    params: CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -850,10 +850,10 @@ function cifti_resample_dconn_memory_cerebellum_area_surfs_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_cerebellum_area_metrics_params(
+function cifti_resample_dconn_memory_cerebellum_area_metrics(
     current_area: InputPathType,
     new_area: InputPathType,
-): CiftiResampleDconnMemoryCerebellumAreaMetricsParametersTagged {
+): CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDictTagged {
     const params = {
         "@type": "cerebellum-area-metrics" as const,
         "current-area": current_area,
@@ -872,7 +872,7 @@ function cifti_resample_dconn_memory_cerebellum_area_metrics_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_cerebellum_area_metrics_cargs(
-    params: CiftiResampleDconnMemoryCerebellumAreaMetricsParameters,
+    params: CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -895,12 +895,12 @@ function cifti_resample_dconn_memory_cerebellum_area_metrics_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_resample_dconn_memory_cerebellum_spheres_params(
+function cifti_resample_dconn_memory_cerebellum_spheres(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
-    cerebellum_area_surfs: CiftiResampleDconnMemoryCerebellumAreaSurfsParameters | null = null,
-    cerebellum_area_metrics: CiftiResampleDconnMemoryCerebellumAreaMetricsParameters | null = null,
-): CiftiResampleDconnMemoryCerebellumSpheresParametersTagged {
+    cerebellum_area_surfs: CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDict | null = null,
+    cerebellum_area_metrics: CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDict | null = null,
+): CiftiResampleDconnMemoryCerebellumSpheresParamsDictTagged {
     const params = {
         "@type": "cerebellum-spheres" as const,
         "current-sphere": current_sphere,
@@ -925,7 +925,7 @@ function cifti_resample_dconn_memory_cerebellum_spheres_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_cerebellum_spheres_cargs(
-    params: CiftiResampleDconnMemoryCerebellumSpheresParameters,
+    params: CiftiResampleDconnMemoryCerebellumSpheresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -943,7 +943,7 @@ function cifti_resample_dconn_memory_cerebellum_spheres_cargs(
 
 
 /**
- * Output object returned when calling `CiftiResampleDconnMemoryParameters(...)`.
+ * Output object returned when calling `CiftiResampleDconnMemoryParamsDict(...)`.
  *
  * @interface
  */
@@ -987,14 +987,14 @@ function cifti_resample_dconn_memory_params(
     surface_method: string,
     volume_method: string,
     surface_largest: boolean = false,
-    volume_predilate: CiftiResampleDconnMemoryVolumePredilateParameters | null = null,
-    surface_postdilate: CiftiResampleDconnMemorySurfacePostdilateParameters | null = null,
-    affine: CiftiResampleDconnMemoryAffineParameters | null = null,
-    warpfield: CiftiResampleDconnMemoryWarpfieldParameters | null = null,
-    left_spheres: CiftiResampleDconnMemoryLeftSpheresParameters | null = null,
-    right_spheres: CiftiResampleDconnMemoryRightSpheresParameters | null = null,
-    cerebellum_spheres: CiftiResampleDconnMemoryCerebellumSpheresParameters | null = null,
-): CiftiResampleDconnMemoryParametersTagged {
+    volume_predilate: CiftiResampleDconnMemoryVolumePredilateParamsDict | null = null,
+    surface_postdilate: CiftiResampleDconnMemorySurfacePostdilateParamsDict | null = null,
+    affine: CiftiResampleDconnMemoryAffineParamsDict | null = null,
+    warpfield: CiftiResampleDconnMemoryWarpfieldParamsDict | null = null,
+    left_spheres: CiftiResampleDconnMemoryLeftSpheresParamsDict | null = null,
+    right_spheres: CiftiResampleDconnMemoryRightSpheresParamsDict | null = null,
+    cerebellum_spheres: CiftiResampleDconnMemoryCerebellumSpheresParamsDict | null = null,
+): CiftiResampleDconnMemoryParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-resample-dconn-memory" as const,
         "cifti-out": cifti_out,
@@ -1039,7 +1039,7 @@ function cifti_resample_dconn_memory_params(
  * @returns Command-line arguments.
  */
 function cifti_resample_dconn_memory_cargs(
-    params: CiftiResampleDconnMemoryParameters,
+    params: CiftiResampleDconnMemoryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1076,7 +1076,7 @@ function cifti_resample_dconn_memory_cargs(
  * @returns Outputs object.
  */
 function cifti_resample_dconn_memory_outputs(
-    params: CiftiResampleDconnMemoryParameters,
+    params: CiftiResampleDconnMemoryParamsDict,
     execution: Execution,
 ): CiftiResampleDconnMemoryOutputs {
     const ret: CiftiResampleDconnMemoryOutputs = {
@@ -1112,7 +1112,7 @@ function cifti_resample_dconn_memory_outputs(
  * @returns NamedTuple of outputs (described in `CiftiResampleDconnMemoryOutputs`).
  */
 function cifti_resample_dconn_memory_execute(
-    params: CiftiResampleDconnMemoryParameters,
+    params: CiftiResampleDconnMemoryParamsDict,
     runner: Runner | null = null,
 ): CiftiResampleDconnMemoryOutputs {
     runner = runner || getGlobalRunner();
@@ -1170,13 +1170,13 @@ function cifti_resample_dconn_memory(
     surface_method: string,
     volume_method: string,
     surface_largest: boolean = false,
-    volume_predilate: CiftiResampleDconnMemoryVolumePredilateParameters | null = null,
-    surface_postdilate: CiftiResampleDconnMemorySurfacePostdilateParameters | null = null,
-    affine: CiftiResampleDconnMemoryAffineParameters | null = null,
-    warpfield: CiftiResampleDconnMemoryWarpfieldParameters | null = null,
-    left_spheres: CiftiResampleDconnMemoryLeftSpheresParameters | null = null,
-    right_spheres: CiftiResampleDconnMemoryRightSpheresParameters | null = null,
-    cerebellum_spheres: CiftiResampleDconnMemoryCerebellumSpheresParameters | null = null,
+    volume_predilate: CiftiResampleDconnMemoryVolumePredilateParamsDict | null = null,
+    surface_postdilate: CiftiResampleDconnMemorySurfacePostdilateParamsDict | null = null,
+    affine: CiftiResampleDconnMemoryAffineParamsDict | null = null,
+    warpfield: CiftiResampleDconnMemoryWarpfieldParamsDict | null = null,
+    left_spheres: CiftiResampleDconnMemoryLeftSpheresParamsDict | null = null,
+    right_spheres: CiftiResampleDconnMemoryRightSpheresParamsDict | null = null,
+    cerebellum_spheres: CiftiResampleDconnMemoryCerebellumSpheresParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiResampleDconnMemoryOutputs {
     const params = cifti_resample_dconn_memory_params(cifti_out, cifti_in, cifti_template, template_direction, surface_method, volume_method, surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
@@ -1186,24 +1186,58 @@ function cifti_resample_dconn_memory(
 
 export {
       CIFTI_RESAMPLE_DCONN_MEMORY_METADATA,
+      CiftiResampleDconnMemoryAffineParamsDict,
+      CiftiResampleDconnMemoryAffineParamsDictTagged,
+      CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDict,
+      CiftiResampleDconnMemoryCerebellumAreaMetricsParamsDictTagged,
+      CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDict,
+      CiftiResampleDconnMemoryCerebellumAreaSurfsParamsDictTagged,
+      CiftiResampleDconnMemoryCerebellumSpheresParamsDict,
+      CiftiResampleDconnMemoryCerebellumSpheresParamsDictTagged,
+      CiftiResampleDconnMemoryFlirtParamsDict,
+      CiftiResampleDconnMemoryFlirtParamsDictTagged,
+      CiftiResampleDconnMemoryLeftAreaMetricsParamsDict,
+      CiftiResampleDconnMemoryLeftAreaMetricsParamsDictTagged,
+      CiftiResampleDconnMemoryLeftAreaSurfsParamsDict,
+      CiftiResampleDconnMemoryLeftAreaSurfsParamsDictTagged,
+      CiftiResampleDconnMemoryLeftSpheresParamsDict,
+      CiftiResampleDconnMemoryLeftSpheresParamsDictTagged,
       CiftiResampleDconnMemoryOutputs,
+      CiftiResampleDconnMemoryParamsDict,
+      CiftiResampleDconnMemoryParamsDictTagged,
+      CiftiResampleDconnMemoryRightAreaMetricsParamsDict,
+      CiftiResampleDconnMemoryRightAreaMetricsParamsDictTagged,
+      CiftiResampleDconnMemoryRightAreaSurfsParamsDict,
+      CiftiResampleDconnMemoryRightAreaSurfsParamsDictTagged,
+      CiftiResampleDconnMemoryRightSpheresParamsDict,
+      CiftiResampleDconnMemoryRightSpheresParamsDictTagged,
+      CiftiResampleDconnMemorySurfacePostdilateParamsDict,
+      CiftiResampleDconnMemorySurfacePostdilateParamsDictTagged,
+      CiftiResampleDconnMemoryVolumePredilateParamsDict,
+      CiftiResampleDconnMemoryVolumePredilateParamsDictTagged,
+      CiftiResampleDconnMemoryWarpfieldParamsDict,
+      CiftiResampleDconnMemoryWarpfieldParamsDictTagged,
+      CiftiResampleDconnMemoryWeightedParamsDict,
+      CiftiResampleDconnMemoryWeightedParamsDictTagged,
+      CiftiResampleDconnMemoryWeightedParamsDictTagged_,
+      CiftiResampleDconnMemoryWeightedParamsDict_,
       cifti_resample_dconn_memory,
-      cifti_resample_dconn_memory_affine_params,
-      cifti_resample_dconn_memory_cerebellum_area_metrics_params,
-      cifti_resample_dconn_memory_cerebellum_area_surfs_params,
-      cifti_resample_dconn_memory_cerebellum_spheres_params,
+      cifti_resample_dconn_memory_affine,
+      cifti_resample_dconn_memory_cerebellum_area_metrics,
+      cifti_resample_dconn_memory_cerebellum_area_surfs,
+      cifti_resample_dconn_memory_cerebellum_spheres,
       cifti_resample_dconn_memory_execute,
-      cifti_resample_dconn_memory_flirt_params,
-      cifti_resample_dconn_memory_left_area_metrics_params,
-      cifti_resample_dconn_memory_left_area_surfs_params,
-      cifti_resample_dconn_memory_left_spheres_params,
+      cifti_resample_dconn_memory_flirt,
+      cifti_resample_dconn_memory_left_area_metrics,
+      cifti_resample_dconn_memory_left_area_surfs,
+      cifti_resample_dconn_memory_left_spheres,
       cifti_resample_dconn_memory_params,
-      cifti_resample_dconn_memory_right_area_metrics_params,
-      cifti_resample_dconn_memory_right_area_surfs_params,
-      cifti_resample_dconn_memory_right_spheres_params,
-      cifti_resample_dconn_memory_surface_postdilate_params,
-      cifti_resample_dconn_memory_volume_predilate_params,
-      cifti_resample_dconn_memory_warpfield_params,
-      cifti_resample_dconn_memory_weighted_params,
-      cifti_resample_dconn_memory_weighted_params_,
+      cifti_resample_dconn_memory_right_area_metrics,
+      cifti_resample_dconn_memory_right_area_surfs,
+      cifti_resample_dconn_memory_right_spheres,
+      cifti_resample_dconn_memory_surface_postdilate,
+      cifti_resample_dconn_memory_volume_predilate,
+      cifti_resample_dconn_memory_warpfield,
+      cifti_resample_dconn_memory_weighted,
+      cifti_resample_dconn_memory_weighted_,
 };

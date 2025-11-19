@@ -11,17 +11,17 @@ const INFLATE_SUBJECT_SC_METADATA: Metadata = {
 };
 
 
-interface InflateSubjectScParameters {
+interface InflateSubjectScParamsDict {
     "@type"?: "freesurfer/inflate_subject_sc";
     "subject_dir": string;
     "verbose": boolean;
     "debug": boolean;
 }
-type InflateSubjectScParametersTagged = Required<Pick<InflateSubjectScParameters, '@type'>> & InflateSubjectScParameters;
+type InflateSubjectScParamsDictTagged = Required<Pick<InflateSubjectScParamsDict, '@type'>> & InflateSubjectScParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubjectScParameters(...)`.
+ * Output object returned when calling `InflateSubjectScParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function inflate_subject_sc_params(
     subject_dir: string,
     verbose: boolean = false,
     debug: boolean = false,
-): InflateSubjectScParametersTagged {
+): InflateSubjectScParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject_sc" as const,
         "subject_dir": subject_dir,
@@ -70,7 +70,7 @@ function inflate_subject_sc_params(
  * @returns Command-line arguments.
  */
 function inflate_subject_sc_cargs(
-    params: InflateSubjectScParameters,
+    params: InflateSubjectScParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function inflate_subject_sc_cargs(
  * @returns Outputs object.
  */
 function inflate_subject_sc_outputs(
-    params: InflateSubjectScParameters,
+    params: InflateSubjectScParamsDict,
     execution: Execution,
 ): InflateSubjectScOutputs {
     const ret: InflateSubjectScOutputs = {
@@ -121,7 +121,7 @@ function inflate_subject_sc_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubjectScOutputs`).
  */
 function inflate_subject_sc_execute(
-    params: InflateSubjectScParameters,
+    params: InflateSubjectScParamsDict,
     runner: Runner | null = null,
 ): InflateSubjectScOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function inflate_subject_sc(
 export {
       INFLATE_SUBJECT_SC_METADATA,
       InflateSubjectScOutputs,
+      InflateSubjectScParamsDict,
+      InflateSubjectScParamsDictTagged,
       inflate_subject_sc,
       inflate_subject_sc_execute,
       inflate_subject_sc_params,

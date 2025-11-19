@@ -11,7 +11,7 @@ const V_3D_SIGNATURES_METADATA: Metadata = {
 };
 
 
-interface V3dSignaturesParameters {
+interface V3dSignaturesParamsDict {
     "@type"?: "afni/3dSignatures";
     "infile": InputPathType;
     "outfile": string;
@@ -20,11 +20,11 @@ interface V3dSignaturesParameters {
     "threshold"?: number | null | undefined;
     "smoothing"?: number | null | undefined;
 }
-type V3dSignaturesParametersTagged = Required<Pick<V3dSignaturesParameters, '@type'>> & V3dSignaturesParameters;
+type V3dSignaturesParamsDictTagged = Required<Pick<V3dSignaturesParamsDict, '@type'>> & V3dSignaturesParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSignaturesParameters(...)`.
+ * Output object returned when calling `V3dSignaturesParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_signatures_params(
     filter: boolean = false,
     threshold: number | null = null,
     smoothing: number | null = null,
-): V3dSignaturesParametersTagged {
+): V3dSignaturesParamsDictTagged {
     const params = {
         "@type": "afni/3dSignatures" as const,
         "infile": infile,
@@ -86,7 +86,7 @@ function v_3d_signatures_params(
  * @returns Command-line arguments.
  */
 function v_3d_signatures_cargs(
-    params: V3dSignaturesParameters,
+    params: V3dSignaturesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function v_3d_signatures_cargs(
  * @returns Outputs object.
  */
 function v_3d_signatures_outputs(
-    params: V3dSignaturesParameters,
+    params: V3dSignaturesParamsDict,
     execution: Execution,
 ): V3dSignaturesOutputs {
     const ret: V3dSignaturesOutputs = {
@@ -150,7 +150,7 @@ function v_3d_signatures_outputs(
  * @returns NamedTuple of outputs (described in `V3dSignaturesOutputs`).
  */
 function v_3d_signatures_execute(
-    params: V3dSignaturesParameters,
+    params: V3dSignaturesParamsDict,
     runner: Runner | null = null,
 ): V3dSignaturesOutputs {
     runner = runner || getGlobalRunner();
@@ -198,6 +198,8 @@ function v_3d_signatures(
 
 export {
       V3dSignaturesOutputs,
+      V3dSignaturesParamsDict,
+      V3dSignaturesParamsDictTagged,
       V_3D_SIGNATURES_METADATA,
       v_3d_signatures,
       v_3d_signatures_execute,

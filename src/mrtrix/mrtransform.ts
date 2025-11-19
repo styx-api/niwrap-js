@@ -11,45 +11,45 @@ const MRTRANSFORM_METADATA: Metadata = {
 };
 
 
-interface MrtransformFslgradParameters {
+interface MrtransformFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type MrtransformFslgradParametersTagged = Required<Pick<MrtransformFslgradParameters, '@type'>> & MrtransformFslgradParameters;
+type MrtransformFslgradParamsDictTagged = Required<Pick<MrtransformFslgradParamsDict, '@type'>> & MrtransformFslgradParamsDict;
 
 
-interface MrtransformExportGradFslParameters {
+interface MrtransformExportGradFslParamsDict {
     "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
-type MrtransformExportGradFslParametersTagged = Required<Pick<MrtransformExportGradFslParameters, '@type'>> & MrtransformExportGradFslParameters;
+type MrtransformExportGradFslParamsDictTagged = Required<Pick<MrtransformExportGradFslParamsDict, '@type'>> & MrtransformExportGradFslParamsDict;
 
 
-interface MrtransformVariousStringParameters {
+interface MrtransformVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type MrtransformVariousStringParametersTagged = Required<Pick<MrtransformVariousStringParameters, '@type'>> & MrtransformVariousStringParameters;
+type MrtransformVariousStringParamsDictTagged = Required<Pick<MrtransformVariousStringParamsDict, '@type'>> & MrtransformVariousStringParamsDict;
 
 
-interface MrtransformVariousFileParameters {
+interface MrtransformVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type MrtransformVariousFileParametersTagged = Required<Pick<MrtransformVariousFileParameters, '@type'>> & MrtransformVariousFileParameters;
+type MrtransformVariousFileParamsDictTagged = Required<Pick<MrtransformVariousFileParamsDict, '@type'>> & MrtransformVariousFileParamsDict;
 
 
-interface MrtransformConfigParameters {
+interface MrtransformConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrtransformConfigParametersTagged = Required<Pick<MrtransformConfigParameters, '@type'>> & MrtransformConfigParameters;
+type MrtransformConfigParamsDictTagged = Required<Pick<MrtransformConfigParamsDict, '@type'>> & MrtransformConfigParamsDict;
 
 
-interface MrtransformParameters {
+interface MrtransformParamsDict {
     "@type"?: "mrtrix/mrtransform";
     "linear"?: InputPathType | null | undefined;
     "flip"?: Array<number> | null | undefined;
@@ -68,11 +68,11 @@ interface MrtransformParameters {
     "directions"?: InputPathType | null | undefined;
     "reorient_fod"?: string | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: MrtransformFslgradParameters | null | undefined;
+    "fslgrad"?: MrtransformFslgradParamsDict | null | undefined;
     "export_grad_mrtrix"?: string | null | undefined;
-    "export_grad_fsl"?: MrtransformExportGradFslParameters | null | undefined;
+    "export_grad_fsl"?: MrtransformExportGradFslParamsDict | null | undefined;
     "datatype"?: string | null | undefined;
-    "strides"?: MrtransformVariousStringParametersTagged | MrtransformVariousFileParametersTagged | null | undefined;
+    "strides"?: MrtransformVariousStringParamsDictTagged | MrtransformVariousFileParamsDictTagged | null | undefined;
     "nan": boolean;
     "no_reorientation": boolean;
     "info": boolean;
@@ -80,13 +80,13 @@ interface MrtransformParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrtransformConfigParameters> | null | undefined;
+    "config"?: Array<MrtransformConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type MrtransformParametersTagged = Required<Pick<MrtransformParameters, '@type'>> & MrtransformParameters;
+type MrtransformParamsDictTagged = Required<Pick<MrtransformParamsDict, '@type'>> & MrtransformParamsDict;
 
 
 /**
@@ -131,10 +131,10 @@ function mrtransform_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function mrtransform_fslgrad_params(
+function mrtransform_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): MrtransformFslgradParametersTagged {
+): MrtransformFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -153,7 +153,7 @@ function mrtransform_fslgrad_params(
  * @returns Command-line arguments.
  */
 function mrtransform_fslgrad_cargs(
-    params: MrtransformFslgradParameters,
+    params: MrtransformFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -165,7 +165,7 @@ function mrtransform_fslgrad_cargs(
 
 
 /**
- * Output object returned when calling `MrtransformExportGradFslParameters | null(...)`.
+ * Output object returned when calling `MrtransformExportGradFslParamsDict | null(...)`.
  *
  * @interface
  */
@@ -193,10 +193,10 @@ interface MrtransformExportGradFslOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrtransform_export_grad_fsl_params(
+function mrtransform_export_grad_fsl(
     bvecs_path: string,
     bvals_path: string,
-): MrtransformExportGradFslParametersTagged {
+): MrtransformExportGradFslParamsDictTagged {
     const params = {
         "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
@@ -215,7 +215,7 @@ function mrtransform_export_grad_fsl_params(
  * @returns Command-line arguments.
  */
 function mrtransform_export_grad_fsl_cargs(
-    params: MrtransformExportGradFslParameters,
+    params: MrtransformExportGradFslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -235,7 +235,7 @@ function mrtransform_export_grad_fsl_cargs(
  * @returns Outputs object.
  */
 function mrtransform_export_grad_fsl_outputs(
-    params: MrtransformExportGradFslParameters,
+    params: MrtransformExportGradFslParamsDict,
     execution: Execution,
 ): MrtransformExportGradFslOutputs {
     const ret: MrtransformExportGradFslOutputs = {
@@ -254,9 +254,9 @@ function mrtransform_export_grad_fsl_outputs(
  *
  * @returns Parameter dictionary
  */
-function mrtransform_various_string_params(
+function mrtransform_various_string(
     obj: string,
-): MrtransformVariousStringParametersTagged {
+): MrtransformVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -274,7 +274,7 @@ function mrtransform_various_string_params(
  * @returns Command-line arguments.
  */
 function mrtransform_various_string_cargs(
-    params: MrtransformVariousStringParameters,
+    params: MrtransformVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -290,9 +290,9 @@ function mrtransform_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrtransform_various_file_params(
+function mrtransform_various_file(
     obj: InputPathType,
-): MrtransformVariousFileParametersTagged {
+): MrtransformVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -310,7 +310,7 @@ function mrtransform_various_file_params(
  * @returns Command-line arguments.
  */
 function mrtransform_various_file_cargs(
-    params: MrtransformVariousFileParameters,
+    params: MrtransformVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -327,10 +327,10 @@ function mrtransform_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrtransform_config_params(
+function mrtransform_config(
     key: string,
     value: string,
-): MrtransformConfigParametersTagged {
+): MrtransformConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -349,7 +349,7 @@ function mrtransform_config_params(
  * @returns Command-line arguments.
  */
 function mrtransform_config_cargs(
-    params: MrtransformConfigParameters,
+    params: MrtransformConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -361,7 +361,7 @@ function mrtransform_config_cargs(
 
 
 /**
- * Output object returned when calling `MrtransformParameters(...)`.
+ * Output object returned when calling `MrtransformParamsDict(...)`.
  *
  * @interface
  */
@@ -447,11 +447,11 @@ function mrtransform_params(
     directions: InputPathType | null = null,
     reorient_fod: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: MrtransformFslgradParameters | null = null,
+    fslgrad: MrtransformFslgradParamsDict | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: MrtransformExportGradFslParameters | null = null,
+    export_grad_fsl: MrtransformExportGradFslParamsDict | null = null,
     datatype: string | null = null,
-    strides: MrtransformVariousStringParametersTagged | MrtransformVariousFileParametersTagged | null = null,
+    strides: MrtransformVariousStringParamsDictTagged | MrtransformVariousFileParamsDictTagged | null = null,
     nan: boolean = false,
     no_reorientation: boolean = false,
     info: boolean = false,
@@ -459,10 +459,10 @@ function mrtransform_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrtransformConfigParameters> | null = null,
+    config: Array<MrtransformConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrtransformParametersTagged {
+): MrtransformParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrtransform" as const,
         "inverse": inverse,
@@ -553,7 +553,7 @@ function mrtransform_params(
  * @returns Command-line arguments.
  */
 function mrtransform_cargs(
-    params: MrtransformParameters,
+    params: MrtransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -720,7 +720,7 @@ function mrtransform_cargs(
  * @returns Outputs object.
  */
 function mrtransform_outputs(
-    params: MrtransformParameters,
+    params: MrtransformParamsDict,
     execution: Execution,
 ): MrtransformOutputs {
     const ret: MrtransformOutputs = {
@@ -766,7 +766,7 @@ function mrtransform_outputs(
  * @returns NamedTuple of outputs (described in `MrtransformOutputs`).
  */
 function mrtransform_execute(
-    params: MrtransformParameters,
+    params: MrtransformParamsDict,
     runner: Runner | null = null,
 ): MrtransformOutputs {
     runner = runner || getGlobalRunner();
@@ -866,11 +866,11 @@ function mrtransform(
     directions: InputPathType | null = null,
     reorient_fod: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: MrtransformFslgradParameters | null = null,
+    fslgrad: MrtransformFslgradParamsDict | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: MrtransformExportGradFslParameters | null = null,
+    export_grad_fsl: MrtransformExportGradFslParamsDict | null = null,
     datatype: string | null = null,
-    strides: MrtransformVariousStringParametersTagged | MrtransformVariousFileParametersTagged | null = null,
+    strides: MrtransformVariousStringParamsDictTagged | MrtransformVariousFileParamsDictTagged | null = null,
     nan: boolean = false,
     no_reorientation: boolean = false,
     info: boolean = false,
@@ -878,7 +878,7 @@ function mrtransform(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrtransformConfigParameters> | null = null,
+    config: Array<MrtransformConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -890,14 +890,26 @@ function mrtransform(
 
 export {
       MRTRANSFORM_METADATA,
+      MrtransformConfigParamsDict,
+      MrtransformConfigParamsDictTagged,
       MrtransformExportGradFslOutputs,
+      MrtransformExportGradFslParamsDict,
+      MrtransformExportGradFslParamsDictTagged,
+      MrtransformFslgradParamsDict,
+      MrtransformFslgradParamsDictTagged,
       MrtransformOutputs,
+      MrtransformParamsDict,
+      MrtransformParamsDictTagged,
+      MrtransformVariousFileParamsDict,
+      MrtransformVariousFileParamsDictTagged,
+      MrtransformVariousStringParamsDict,
+      MrtransformVariousStringParamsDictTagged,
       mrtransform,
-      mrtransform_config_params,
+      mrtransform_config,
       mrtransform_execute,
-      mrtransform_export_grad_fsl_params,
-      mrtransform_fslgrad_params,
+      mrtransform_export_grad_fsl,
+      mrtransform_fslgrad,
       mrtransform_params,
-      mrtransform_various_file_params,
-      mrtransform_various_string_params,
+      mrtransform_various_file,
+      mrtransform_various_string,
 };

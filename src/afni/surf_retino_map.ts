@@ -11,7 +11,7 @@ const SURF_RETINO_MAP_METADATA: Metadata = {
 };
 
 
-interface SurfRetinoMapParameters {
+interface SurfRetinoMapParamsDict {
     "@type"?: "afni/SurfRetinoMap";
     "surface": string;
     "polar": string;
@@ -19,11 +19,11 @@ interface SurfRetinoMapParameters {
     "prefix"?: string | null | undefined;
     "node_debug"?: number | null | undefined;
 }
-type SurfRetinoMapParametersTagged = Required<Pick<SurfRetinoMapParameters, '@type'>> & SurfRetinoMapParameters;
+type SurfRetinoMapParamsDictTagged = Required<Pick<SurfRetinoMapParamsDict, '@type'>> & SurfRetinoMapParamsDict;
 
 
 /**
- * Output object returned when calling `SurfRetinoMapParameters(...)`.
+ * Output object returned when calling `SurfRetinoMapParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function surf_retino_map_params(
     eccentricity: string,
     prefix: string | null = null,
     node_debug: number | null = null,
-): SurfRetinoMapParametersTagged {
+): SurfRetinoMapParamsDictTagged {
     const params = {
         "@type": "afni/SurfRetinoMap" as const,
         "surface": surface,
@@ -86,7 +86,7 @@ function surf_retino_map_params(
  * @returns Command-line arguments.
  */
 function surf_retino_map_cargs(
-    params: SurfRetinoMapParameters,
+    params: SurfRetinoMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function surf_retino_map_cargs(
  * @returns Outputs object.
  */
 function surf_retino_map_outputs(
-    params: SurfRetinoMapParameters,
+    params: SurfRetinoMapParamsDict,
     execution: Execution,
 ): SurfRetinoMapOutputs {
     const ret: SurfRetinoMapOutputs = {
@@ -146,7 +146,7 @@ function surf_retino_map_outputs(
  * @returns NamedTuple of outputs (described in `SurfRetinoMapOutputs`).
  */
 function surf_retino_map_execute(
-    params: SurfRetinoMapParameters,
+    params: SurfRetinoMapParamsDict,
     runner: Runner | null = null,
 ): SurfRetinoMapOutputs {
     runner = runner || getGlobalRunner();
@@ -193,6 +193,8 @@ function surf_retino_map(
 export {
       SURF_RETINO_MAP_METADATA,
       SurfRetinoMapOutputs,
+      SurfRetinoMapParamsDict,
+      SurfRetinoMapParamsDictTagged,
       surf_retino_map,
       surf_retino_map_execute,
       surf_retino_map_params,

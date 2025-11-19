@@ -11,7 +11,7 @@ const EDDY_QUAD_METADATA: Metadata = {
 };
 
 
-interface EddyQuadParameters {
+interface EddyQuadParamsDict {
     "@type"?: "fsl/eddy_quad";
     "eddyBase": string;
     "eddyIndex": InputPathType;
@@ -24,11 +24,11 @@ interface EddyQuadParameters {
     "slspec"?: InputPathType | null | undefined;
     "verbose": boolean;
 }
-type EddyQuadParametersTagged = Required<Pick<EddyQuadParameters, '@type'>> & EddyQuadParameters;
+type EddyQuadParamsDictTagged = Required<Pick<EddyQuadParamsDict, '@type'>> & EddyQuadParamsDict;
 
 
 /**
- * Output object returned when calling `EddyQuadParameters(...)`.
+ * Output object returned when calling `EddyQuadParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function eddy_quad_params(
     field: InputPathType | null = null,
     slspec: InputPathType | null = null,
     verbose: boolean = false,
-): EddyQuadParametersTagged {
+): EddyQuadParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_quad" as const,
         "eddyBase": eddy_base,
@@ -106,7 +106,7 @@ function eddy_quad_params(
  * @returns Command-line arguments.
  */
 function eddy_quad_cargs(
-    params: EddyQuadParameters,
+    params: EddyQuadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,7 +168,7 @@ function eddy_quad_cargs(
  * @returns Outputs object.
  */
 function eddy_quad_outputs(
-    params: EddyQuadParameters,
+    params: EddyQuadParamsDict,
     execution: Execution,
 ): EddyQuadOutputs {
     const ret: EddyQuadOutputs = {
@@ -194,7 +194,7 @@ function eddy_quad_outputs(
  * @returns NamedTuple of outputs (described in `EddyQuadOutputs`).
  */
 function eddy_quad_execute(
-    params: EddyQuadParameters,
+    params: EddyQuadParamsDict,
     runner: Runner | null = null,
 ): EddyQuadOutputs {
     runner = runner || getGlobalRunner();
@@ -251,6 +251,8 @@ function eddy_quad(
 export {
       EDDY_QUAD_METADATA,
       EddyQuadOutputs,
+      EddyQuadParamsDict,
+      EddyQuadParamsDictTagged,
       eddy_quad,
       eddy_quad_execute,
       eddy_quad_params,

@@ -11,7 +11,7 @@ const LABEL2PATCH_METADATA: Metadata = {
 };
 
 
-interface Label2patchParameters {
+interface Label2patchParamsDict {
     "@type"?: "freesurfer/label2patch";
     "subject_name": string;
     "hemisphere": string;
@@ -24,11 +24,11 @@ interface Label2patchParameters {
     "surface_name"?: string | null | undefined;
     "write_surface": boolean;
 }
-type Label2patchParametersTagged = Required<Pick<Label2patchParameters, '@type'>> & Label2patchParameters;
+type Label2patchParamsDictTagged = Required<Pick<Label2patchParamsDict, '@type'>> & Label2patchParamsDict;
 
 
 /**
- * Output object returned when calling `Label2patchParameters(...)`.
+ * Output object returned when calling `Label2patchParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function label2patch_params(
     subjects_dir: string | null = null,
     surface_name: string | null = null,
     write_surface: boolean = false,
-): Label2patchParametersTagged {
+): Label2patchParamsDictTagged {
     const params = {
         "@type": "freesurfer/label2patch" as const,
         "subject_name": subject_name,
@@ -104,7 +104,7 @@ function label2patch_params(
  * @returns Command-line arguments.
  */
 function label2patch_cargs(
-    params: Label2patchParameters,
+    params: Label2patchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function label2patch_cargs(
  * @returns Outputs object.
  */
 function label2patch_outputs(
-    params: Label2patchParameters,
+    params: Label2patchParamsDict,
     execution: Execution,
 ): Label2patchOutputs {
     const ret: Label2patchOutputs = {
@@ -184,7 +184,7 @@ function label2patch_outputs(
  * @returns NamedTuple of outputs (described in `Label2patchOutputs`).
  */
 function label2patch_execute(
-    params: Label2patchParameters,
+    params: Label2patchParamsDict,
     runner: Runner | null = null,
 ): Label2patchOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function label2patch(
 export {
       LABEL2PATCH_METADATA,
       Label2patchOutputs,
+      Label2patchParamsDict,
+      Label2patchParamsDictTagged,
       label2patch,
       label2patch_execute,
       label2patch_params,

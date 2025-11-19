@@ -11,16 +11,16 @@ const FSL2ASCII_METADATA: Metadata = {
 };
 
 
-interface Fsl2asciiParameters {
+interface Fsl2asciiParamsDict {
     "@type"?: "fsl/fsl2ascii";
     "input_file": InputPathType;
     "output_file": string;
 }
-type Fsl2asciiParametersTagged = Required<Pick<Fsl2asciiParameters, '@type'>> & Fsl2asciiParameters;
+type Fsl2asciiParamsDictTagged = Required<Pick<Fsl2asciiParamsDict, '@type'>> & Fsl2asciiParamsDict;
 
 
 /**
- * Output object returned when calling `Fsl2asciiParameters(...)`.
+ * Output object returned when calling `Fsl2asciiParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface Fsl2asciiOutputs {
 function fsl2ascii_params(
     input_file: InputPathType,
     output_file: string,
-): Fsl2asciiParametersTagged {
+): Fsl2asciiParamsDictTagged {
     const params = {
         "@type": "fsl/fsl2ascii" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function fsl2ascii_params(
  * @returns Command-line arguments.
  */
 function fsl2ascii_cargs(
-    params: Fsl2asciiParameters,
+    params: Fsl2asciiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function fsl2ascii_cargs(
  * @returns Outputs object.
  */
 function fsl2ascii_outputs(
-    params: Fsl2asciiParameters,
+    params: Fsl2asciiParamsDict,
     execution: Execution,
 ): Fsl2asciiOutputs {
     const ret: Fsl2asciiOutputs = {
@@ -112,7 +112,7 @@ function fsl2ascii_outputs(
  * @returns NamedTuple of outputs (described in `Fsl2asciiOutputs`).
  */
 function fsl2ascii_execute(
-    params: Fsl2asciiParameters,
+    params: Fsl2asciiParamsDict,
     runner: Runner | null = null,
 ): Fsl2asciiOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function fsl2ascii(
 export {
       FSL2ASCII_METADATA,
       Fsl2asciiOutputs,
+      Fsl2asciiParamsDict,
+      Fsl2asciiParamsDictTagged,
       fsl2ascii,
       fsl2ascii_execute,
       fsl2ascii_params,

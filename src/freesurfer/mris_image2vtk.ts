@@ -11,7 +11,7 @@ const MRIS_IMAGE2VTK_METADATA: Metadata = {
 };
 
 
-interface MrisImage2vtkParameters {
+interface MrisImage2vtkParamsDict {
     "@type"?: "freesurfer/mris_image2vtk";
     "input_filename": InputPathType;
     "output_filename": string;
@@ -21,11 +21,11 @@ interface MrisImage2vtkParameters {
     "image_smoothing_size": number;
     "reduction_percent": number;
 }
-type MrisImage2vtkParametersTagged = Required<Pick<MrisImage2vtkParameters, '@type'>> & MrisImage2vtkParameters;
+type MrisImage2vtkParamsDictTagged = Required<Pick<MrisImage2vtkParamsDict, '@type'>> & MrisImage2vtkParamsDict;
 
 
 /**
- * Output object returned when calling `MrisImage2vtkParameters(...)`.
+ * Output object returned when calling `MrisImage2vtkParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_image2vtk_params(
     vtk_smoothing_iters: number,
     image_smoothing_size: number,
     reduction_percent: number,
-): MrisImage2vtkParametersTagged {
+): MrisImage2vtkParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_image2vtk" as const,
         "input_filename": input_filename,
@@ -86,7 +86,7 @@ function mris_image2vtk_params(
  * @returns Command-line arguments.
  */
 function mris_image2vtk_cargs(
-    params: MrisImage2vtkParameters,
+    params: MrisImage2vtkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function mris_image2vtk_cargs(
  * @returns Outputs object.
  */
 function mris_image2vtk_outputs(
-    params: MrisImage2vtkParameters,
+    params: MrisImage2vtkParamsDict,
     execution: Execution,
 ): MrisImage2vtkOutputs {
     const ret: MrisImage2vtkOutputs = {
@@ -137,7 +137,7 @@ function mris_image2vtk_outputs(
  * @returns NamedTuple of outputs (described in `MrisImage2vtkOutputs`).
  */
 function mris_image2vtk_execute(
-    params: MrisImage2vtkParameters,
+    params: MrisImage2vtkParamsDict,
     runner: Runner | null = null,
 ): MrisImage2vtkOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function mris_image2vtk(
 export {
       MRIS_IMAGE2VTK_METADATA,
       MrisImage2vtkOutputs,
+      MrisImage2vtkParamsDict,
+      MrisImage2vtkParamsDictTagged,
       mris_image2vtk,
       mris_image2vtk_execute,
       mris_image2vtk_params,

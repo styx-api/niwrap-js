@@ -11,7 +11,7 @@ const MRI_RF_TRAIN_METADATA: Metadata = {
 };
 
 
-interface MriRfTrainParameters {
+interface MriRfTrainParamsDict {
     "@type"?: "freesurfer/mri_rf_train";
     "seg_volume": string;
     "atlas_transform": string;
@@ -23,11 +23,11 @@ interface MriRfTrainParameters {
     "subjects": Array<string>;
     "output_rfa": string;
 }
-type MriRfTrainParametersTagged = Required<Pick<MriRfTrainParameters, '@type'>> & MriRfTrainParameters;
+type MriRfTrainParamsDictTagged = Required<Pick<MriRfTrainParamsDict, '@type'>> & MriRfTrainParamsDict;
 
 
 /**
- * Output object returned when calling `MriRfTrainParameters(...)`.
+ * Output object returned when calling `MriRfTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function mri_rf_train_params(
     prior_spacing: number | null = null,
     input_training_data: Array<string> | null = null,
     sanity_check: boolean = false,
-): MriRfTrainParametersTagged {
+): MriRfTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_rf_train" as const,
         "seg_volume": seg_volume,
@@ -98,7 +98,7 @@ function mri_rf_train_params(
  * @returns Command-line arguments.
  */
 function mri_rf_train_cargs(
-    params: MriRfTrainParameters,
+    params: MriRfTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function mri_rf_train_cargs(
  * @returns Outputs object.
  */
 function mri_rf_train_outputs(
-    params: MriRfTrainParameters,
+    params: MriRfTrainParamsDict,
     execution: Execution,
 ): MriRfTrainOutputs {
     const ret: MriRfTrainOutputs = {
@@ -178,7 +178,7 @@ function mri_rf_train_outputs(
  * @returns NamedTuple of outputs (described in `MriRfTrainOutputs`).
  */
 function mri_rf_train_execute(
-    params: MriRfTrainParameters,
+    params: MriRfTrainParamsDict,
     runner: Runner | null = null,
 ): MriRfTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -233,6 +233,8 @@ function mri_rf_train(
 export {
       MRI_RF_TRAIN_METADATA,
       MriRfTrainOutputs,
+      MriRfTrainParamsDict,
+      MriRfTrainParamsDictTagged,
       mri_rf_train,
       mri_rf_train_execute,
       mri_rf_train_params,

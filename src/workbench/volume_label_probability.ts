@@ -10,17 +10,17 @@ const VOLUME_LABEL_PROBABILITY_METADATA: Metadata = {
 };
 
 
-interface VolumeLabelProbabilityParameters {
+interface VolumeLabelProbabilityParamsDict {
     "@type"?: "workbench/volume-label-probability";
     "probability-out": string;
     "exclude-unlabeled": boolean;
     "label-maps": InputPathType;
 }
-type VolumeLabelProbabilityParametersTagged = Required<Pick<VolumeLabelProbabilityParameters, '@type'>> & VolumeLabelProbabilityParameters;
+type VolumeLabelProbabilityParamsDictTagged = Required<Pick<VolumeLabelProbabilityParamsDict, '@type'>> & VolumeLabelProbabilityParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeLabelProbabilityParameters(...)`.
+ * Output object returned when calling `VolumeLabelProbabilityParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function volume_label_probability_params(
     probability_out: string,
     label_maps: InputPathType,
     exclude_unlabeled: boolean = false,
-): VolumeLabelProbabilityParametersTagged {
+): VolumeLabelProbabilityParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-probability" as const,
         "probability-out": probability_out,
@@ -69,7 +69,7 @@ function volume_label_probability_params(
  * @returns Command-line arguments.
  */
 function volume_label_probability_cargs(
-    params: VolumeLabelProbabilityParameters,
+    params: VolumeLabelProbabilityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function volume_label_probability_cargs(
  * @returns Outputs object.
  */
 function volume_label_probability_outputs(
-    params: VolumeLabelProbabilityParameters,
+    params: VolumeLabelProbabilityParamsDict,
     execution: Execution,
 ): VolumeLabelProbabilityOutputs {
     const ret: VolumeLabelProbabilityOutputs = {
@@ -117,7 +117,7 @@ function volume_label_probability_outputs(
  * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
  */
 function volume_label_probability_execute(
-    params: VolumeLabelProbabilityParameters,
+    params: VolumeLabelProbabilityParamsDict,
     runner: Runner | null = null,
 ): VolumeLabelProbabilityOutputs {
     runner = runner || getGlobalRunner();
@@ -156,6 +156,8 @@ function volume_label_probability(
 export {
       VOLUME_LABEL_PROBABILITY_METADATA,
       VolumeLabelProbabilityOutputs,
+      VolumeLabelProbabilityParamsDict,
+      VolumeLabelProbabilityParamsDictTagged,
       volume_label_probability,
       volume_label_probability_execute,
       volume_label_probability_params,

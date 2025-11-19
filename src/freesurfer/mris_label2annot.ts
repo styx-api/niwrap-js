@@ -11,7 +11,7 @@ const MRIS_LABEL2ANNOT_METADATA: Metadata = {
 };
 
 
-interface MrisLabel2annotParameters {
+interface MrisLabel2annotParamsDict {
     "@type"?: "freesurfer/mris_label2annot";
     "subject": string;
     "hemi": string;
@@ -28,11 +28,11 @@ interface MrisLabel2annotParameters {
     "surf"?: string | null | undefined;
     "subjects_dir"?: string | null | undefined;
 }
-type MrisLabel2annotParametersTagged = Required<Pick<MrisLabel2annotParameters, '@type'>> & MrisLabel2annotParameters;
+type MrisLabel2annotParamsDictTagged = Required<Pick<MrisLabel2annotParamsDict, '@type'>> & MrisLabel2annotParamsDict;
 
 
 /**
- * Output object returned when calling `MrisLabel2annotParameters(...)`.
+ * Output object returned when calling `MrisLabel2annotParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function mris_label2annot_params(
     maxstatwinner: boolean = false,
     surf: string | null = null,
     subjects_dir: string | null = null,
-): MrisLabel2annotParametersTagged {
+): MrisLabel2annotParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_label2annot" as const,
         "subject": subject,
@@ -128,7 +128,7 @@ function mris_label2annot_params(
  * @returns Command-line arguments.
  */
 function mris_label2annot_cargs(
-    params: MrisLabel2annotParameters,
+    params: MrisLabel2annotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -213,7 +213,7 @@ function mris_label2annot_cargs(
  * @returns Outputs object.
  */
 function mris_label2annot_outputs(
-    params: MrisLabel2annotParameters,
+    params: MrisLabel2annotParamsDict,
     execution: Execution,
 ): MrisLabel2annotOutputs {
     const ret: MrisLabel2annotOutputs = {
@@ -239,7 +239,7 @@ function mris_label2annot_outputs(
  * @returns NamedTuple of outputs (described in `MrisLabel2annotOutputs`).
  */
 function mris_label2annot_execute(
-    params: MrisLabel2annotParameters,
+    params: MrisLabel2annotParamsDict,
     runner: Runner | null = null,
 ): MrisLabel2annotOutputs {
     runner = runner || getGlobalRunner();
@@ -304,6 +304,8 @@ function mris_label2annot(
 export {
       MRIS_LABEL2ANNOT_METADATA,
       MrisLabel2annotOutputs,
+      MrisLabel2annotParamsDict,
+      MrisLabel2annotParamsDictTagged,
       mris_label2annot,
       mris_label2annot_execute,
       mris_label2annot_params,

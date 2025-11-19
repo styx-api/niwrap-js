@@ -11,29 +11,29 @@ const TRANSFORMCOMPOSE_METADATA: Metadata = {
 };
 
 
-interface TransformcomposeConfigParameters {
+interface TransformcomposeConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TransformcomposeConfigParametersTagged = Required<Pick<TransformcomposeConfigParameters, '@type'>> & TransformcomposeConfigParameters;
+type TransformcomposeConfigParamsDictTagged = Required<Pick<TransformcomposeConfigParamsDict, '@type'>> & TransformcomposeConfigParamsDict;
 
 
-interface TransformcomposeVariousStringParameters {
+interface TransformcomposeVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type TransformcomposeVariousStringParametersTagged = Required<Pick<TransformcomposeVariousStringParameters, '@type'>> & TransformcomposeVariousStringParameters;
+type TransformcomposeVariousStringParamsDictTagged = Required<Pick<TransformcomposeVariousStringParamsDict, '@type'>> & TransformcomposeVariousStringParamsDict;
 
 
-interface TransformcomposeVariousFileParameters {
+interface TransformcomposeVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type TransformcomposeVariousFileParametersTagged = Required<Pick<TransformcomposeVariousFileParameters, '@type'>> & TransformcomposeVariousFileParameters;
+type TransformcomposeVariousFileParamsDictTagged = Required<Pick<TransformcomposeVariousFileParamsDict, '@type'>> & TransformcomposeVariousFileParamsDict;
 
 
-interface TransformcomposeParameters {
+interface TransformcomposeParamsDict {
     "@type"?: "mrtrix/transformcompose";
     "template"?: InputPathType | null | undefined;
     "info": boolean;
@@ -41,13 +41,13 @@ interface TransformcomposeParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TransformcomposeConfigParameters> | null | undefined;
+    "config"?: Array<TransformcomposeConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": Array<InputPathType>;
-    "output": TransformcomposeVariousStringParametersTagged | TransformcomposeVariousFileParametersTagged;
+    "output": TransformcomposeVariousStringParamsDictTagged | TransformcomposeVariousFileParamsDictTagged;
 }
-type TransformcomposeParametersTagged = Required<Pick<TransformcomposeParameters, '@type'>> & TransformcomposeParameters;
+type TransformcomposeParamsDictTagged = Required<Pick<TransformcomposeParamsDict, '@type'>> & TransformcomposeParamsDict;
 
 
 /**
@@ -92,10 +92,10 @@ function transformcompose_output_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function transformcompose_config_params(
+function transformcompose_config(
     key: string,
     value: string,
-): TransformcomposeConfigParametersTagged {
+): TransformcomposeConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -114,7 +114,7 @@ function transformcompose_config_params(
  * @returns Command-line arguments.
  */
 function transformcompose_config_cargs(
-    params: TransformcomposeConfigParameters,
+    params: TransformcomposeConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,9 +132,9 @@ function transformcompose_config_cargs(
  *
  * @returns Parameter dictionary
  */
-function transformcompose_various_string_params(
+function transformcompose_various_string(
     obj: string,
-): TransformcomposeVariousStringParametersTagged {
+): TransformcomposeVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -152,7 +152,7 @@ function transformcompose_various_string_params(
  * @returns Command-line arguments.
  */
 function transformcompose_various_string_cargs(
-    params: TransformcomposeVariousStringParameters,
+    params: TransformcomposeVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,9 +168,9 @@ function transformcompose_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function transformcompose_various_file_params(
+function transformcompose_various_file(
     obj: InputPathType,
-): TransformcomposeVariousFileParametersTagged {
+): TransformcomposeVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -188,7 +188,7 @@ function transformcompose_various_file_params(
  * @returns Command-line arguments.
  */
 function transformcompose_various_file_cargs(
-    params: TransformcomposeVariousFileParameters,
+    params: TransformcomposeVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -198,7 +198,7 @@ function transformcompose_various_file_cargs(
 
 
 /**
- * Output object returned when calling `TransformcomposeParameters(...)`.
+ * Output object returned when calling `TransformcomposeParamsDict(...)`.
  *
  * @interface
  */
@@ -229,17 +229,17 @@ interface TransformcomposeOutputs {
  */
 function transformcompose_params(
     input: Array<InputPathType>,
-    output: TransformcomposeVariousStringParametersTagged | TransformcomposeVariousFileParametersTagged,
+    output: TransformcomposeVariousStringParamsDictTagged | TransformcomposeVariousFileParamsDictTagged,
     template: InputPathType | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TransformcomposeConfigParameters> | null = null,
+    config: Array<TransformcomposeConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TransformcomposeParametersTagged {
+): TransformcomposeParamsDictTagged {
     const params = {
         "@type": "mrtrix/transformcompose" as const,
         "info": info,
@@ -273,7 +273,7 @@ function transformcompose_params(
  * @returns Command-line arguments.
  */
 function transformcompose_cargs(
-    params: TransformcomposeParameters,
+    params: TransformcomposeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -326,7 +326,7 @@ function transformcompose_cargs(
  * @returns Outputs object.
  */
 function transformcompose_outputs(
-    params: TransformcomposeParameters,
+    params: TransformcomposeParamsDict,
     execution: Execution,
 ): TransformcomposeOutputs {
     const ret: TransformcomposeOutputs = {
@@ -361,7 +361,7 @@ function transformcompose_outputs(
  * @returns NamedTuple of outputs (described in `TransformcomposeOutputs`).
  */
 function transformcompose_execute(
-    params: TransformcomposeParameters,
+    params: TransformcomposeParamsDict,
     runner: Runner | null = null,
 ): TransformcomposeOutputs {
     runner = runner || getGlobalRunner();
@@ -410,14 +410,14 @@ function transformcompose_execute(
  */
 function transformcompose(
     input: Array<InputPathType>,
-    output: TransformcomposeVariousStringParametersTagged | TransformcomposeVariousFileParametersTagged,
+    output: TransformcomposeVariousStringParamsDictTagged | TransformcomposeVariousFileParamsDictTagged,
     template: InputPathType | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TransformcomposeConfigParameters> | null = null,
+    config: Array<TransformcomposeConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -429,11 +429,19 @@ function transformcompose(
 
 export {
       TRANSFORMCOMPOSE_METADATA,
+      TransformcomposeConfigParamsDict,
+      TransformcomposeConfigParamsDictTagged,
       TransformcomposeOutputs,
+      TransformcomposeParamsDict,
+      TransformcomposeParamsDictTagged,
+      TransformcomposeVariousFileParamsDict,
+      TransformcomposeVariousFileParamsDictTagged,
+      TransformcomposeVariousStringParamsDict,
+      TransformcomposeVariousStringParamsDictTagged,
       transformcompose,
-      transformcompose_config_params,
+      transformcompose_config,
       transformcompose_execute,
       transformcompose_params,
-      transformcompose_various_file_params,
-      transformcompose_various_string_params,
+      transformcompose_various_file,
+      transformcompose_various_string,
 };

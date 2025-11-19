@@ -11,18 +11,18 @@ const ANTSINTEGRATE_VECTOR_FIELD_METADATA: Metadata = {
 };
 
 
-interface AntsintegrateVectorFieldParameters {
+interface AntsintegrateVectorFieldParamsDict {
     "@type"?: "ants/ANTSIntegrateVectorField";
     "vector_field_input": InputPathType;
     "roi_mask_input": InputPathType;
     "fibers_output": string;
     "length_image_output": string;
 }
-type AntsintegrateVectorFieldParametersTagged = Required<Pick<AntsintegrateVectorFieldParameters, '@type'>> & AntsintegrateVectorFieldParameters;
+type AntsintegrateVectorFieldParamsDictTagged = Required<Pick<AntsintegrateVectorFieldParamsDict, '@type'>> & AntsintegrateVectorFieldParamsDict;
 
 
 /**
- * Output object returned when calling `AntsintegrateVectorFieldParameters(...)`.
+ * Output object returned when calling `AntsintegrateVectorFieldParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function antsintegrate_vector_field_params(
     roi_mask_input: InputPathType,
     fibers_output: string,
     length_image_output: string,
-): AntsintegrateVectorFieldParametersTagged {
+): AntsintegrateVectorFieldParamsDictTagged {
     const params = {
         "@type": "ants/ANTSIntegrateVectorField" as const,
         "vector_field_input": vector_field_input,
@@ -78,7 +78,7 @@ function antsintegrate_vector_field_params(
  * @returns Command-line arguments.
  */
 function antsintegrate_vector_field_cargs(
-    params: AntsintegrateVectorFieldParameters,
+    params: AntsintegrateVectorFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function antsintegrate_vector_field_cargs(
  * @returns Outputs object.
  */
 function antsintegrate_vector_field_outputs(
-    params: AntsintegrateVectorFieldParameters,
+    params: AntsintegrateVectorFieldParamsDict,
     execution: Execution,
 ): AntsintegrateVectorFieldOutputs {
     const ret: AntsintegrateVectorFieldOutputs = {
@@ -127,7 +127,7 @@ function antsintegrate_vector_field_outputs(
  * @returns NamedTuple of outputs (described in `AntsintegrateVectorFieldOutputs`).
  */
 function antsintegrate_vector_field_execute(
-    params: AntsintegrateVectorFieldParameters,
+    params: AntsintegrateVectorFieldParamsDict,
     runner: Runner | null = null,
 ): AntsintegrateVectorFieldOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function antsintegrate_vector_field(
 export {
       ANTSINTEGRATE_VECTOR_FIELD_METADATA,
       AntsintegrateVectorFieldOutputs,
+      AntsintegrateVectorFieldParamsDict,
+      AntsintegrateVectorFieldParamsDictTagged,
       antsintegrate_vector_field,
       antsintegrate_vector_field_execute,
       antsintegrate_vector_field_params,

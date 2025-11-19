@@ -11,7 +11,7 @@ const MRI_CREATE_TESTS_METADATA: Metadata = {
 };
 
 
-interface MriCreateTestsParameters {
+interface MriCreateTestsParamsDict {
     "@type"?: "freesurfer/mri_create_tests";
     "input_file": InputPathType;
     "out_src": string;
@@ -33,11 +33,11 @@ interface MriCreateTestsParameters {
     "lta_outt"?: string | null | undefined;
     "iscale_out"?: string | null | undefined;
 }
-type MriCreateTestsParametersTagged = Required<Pick<MriCreateTestsParameters, '@type'>> & MriCreateTestsParameters;
+type MriCreateTestsParamsDictTagged = Required<Pick<MriCreateTestsParamsDict, '@type'>> & MriCreateTestsParamsDict;
 
 
 /**
- * Output object returned when calling `MriCreateTestsParameters(...)`.
+ * Output object returned when calling `MriCreateTestsParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function mri_create_tests_params(
     lta_outs: string | null = null,
     lta_outt: string | null = null,
     iscale_out: string | null = null,
-): MriCreateTestsParametersTagged {
+): MriCreateTestsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_create_tests" as const,
         "input_file": input_file,
@@ -156,7 +156,7 @@ function mri_create_tests_params(
  * @returns Command-line arguments.
  */
 function mri_create_tests_cargs(
-    params: MriCreateTestsParameters,
+    params: MriCreateTestsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -273,7 +273,7 @@ function mri_create_tests_cargs(
  * @returns Outputs object.
  */
 function mri_create_tests_outputs(
-    params: MriCreateTestsParameters,
+    params: MriCreateTestsParamsDict,
     execution: Execution,
 ): MriCreateTestsOutputs {
     const ret: MriCreateTestsOutputs = {
@@ -298,7 +298,7 @@ function mri_create_tests_outputs(
  * @returns NamedTuple of outputs (described in `MriCreateTestsOutputs`).
  */
 function mri_create_tests_execute(
-    params: MriCreateTestsParameters,
+    params: MriCreateTestsParamsDict,
     runner: Runner | null = null,
 ): MriCreateTestsOutputs {
     runner = runner || getGlobalRunner();
@@ -373,6 +373,8 @@ function mri_create_tests(
 export {
       MRI_CREATE_TESTS_METADATA,
       MriCreateTestsOutputs,
+      MriCreateTestsParamsDict,
+      MriCreateTestsParamsDictTagged,
       mri_create_tests,
       mri_create_tests_execute,
       mri_create_tests_params,

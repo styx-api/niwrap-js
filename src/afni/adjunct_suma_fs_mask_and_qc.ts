@@ -11,7 +11,7 @@ const ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA: Metadata = {
 };
 
 
-interface AdjunctSumaFsMaskAndQcParameters {
+interface AdjunctSumaFsMaskAndQcParamsDict {
     "@type"?: "afni/adjunct_suma_fs_mask_and_qc";
     "subj_id": string;
     "suma_dir": string;
@@ -20,11 +20,11 @@ interface AdjunctSumaFsMaskAndQcParameters {
     "hview": boolean;
     "version": boolean;
 }
-type AdjunctSumaFsMaskAndQcParametersTagged = Required<Pick<AdjunctSumaFsMaskAndQcParameters, '@type'>> & AdjunctSumaFsMaskAndQcParameters;
+type AdjunctSumaFsMaskAndQcParamsDictTagged = Required<Pick<AdjunctSumaFsMaskAndQcParamsDict, '@type'>> & AdjunctSumaFsMaskAndQcParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctSumaFsMaskAndQcParameters(...)`.
+ * Output object returned when calling `AdjunctSumaFsMaskAndQcParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function adjunct_suma_fs_mask_and_qc_params(
     help: boolean = false,
     hview: boolean = false,
     version: boolean = false,
-): AdjunctSumaFsMaskAndQcParametersTagged {
+): AdjunctSumaFsMaskAndQcParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_suma_fs_mask_and_qc" as const,
         "subj_id": subj_id,
@@ -106,7 +106,7 @@ function adjunct_suma_fs_mask_and_qc_params(
  * @returns Command-line arguments.
  */
 function adjunct_suma_fs_mask_and_qc_cargs(
-    params: AdjunctSumaFsMaskAndQcParameters,
+    params: AdjunctSumaFsMaskAndQcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function adjunct_suma_fs_mask_and_qc_cargs(
  * @returns Outputs object.
  */
 function adjunct_suma_fs_mask_and_qc_outputs(
-    params: AdjunctSumaFsMaskAndQcParameters,
+    params: AdjunctSumaFsMaskAndQcParamsDict,
     execution: Execution,
 ): AdjunctSumaFsMaskAndQcOutputs {
     const ret: AdjunctSumaFsMaskAndQcOutputs = {
@@ -176,7 +176,7 @@ function adjunct_suma_fs_mask_and_qc_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctSumaFsMaskAndQcOutputs`).
  */
 function adjunct_suma_fs_mask_and_qc_execute(
-    params: AdjunctSumaFsMaskAndQcParameters,
+    params: AdjunctSumaFsMaskAndQcParamsDict,
     runner: Runner | null = null,
 ): AdjunctSumaFsMaskAndQcOutputs {
     runner = runner || getGlobalRunner();
@@ -225,6 +225,8 @@ function adjunct_suma_fs_mask_and_qc(
 export {
       ADJUNCT_SUMA_FS_MASK_AND_QC_METADATA,
       AdjunctSumaFsMaskAndQcOutputs,
+      AdjunctSumaFsMaskAndQcParamsDict,
+      AdjunctSumaFsMaskAndQcParamsDictTagged,
       adjunct_suma_fs_mask_and_qc,
       adjunct_suma_fs_mask_and_qc_execute,
       adjunct_suma_fs_mask_and_qc_params,

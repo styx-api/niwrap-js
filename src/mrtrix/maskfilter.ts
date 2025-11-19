@@ -11,29 +11,29 @@ const MASKFILTER_METADATA: Metadata = {
 };
 
 
-interface MaskfilterVariousStringParameters {
+interface MaskfilterVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type MaskfilterVariousStringParametersTagged = Required<Pick<MaskfilterVariousStringParameters, '@type'>> & MaskfilterVariousStringParameters;
+type MaskfilterVariousStringParamsDictTagged = Required<Pick<MaskfilterVariousStringParamsDict, '@type'>> & MaskfilterVariousStringParamsDict;
 
 
-interface MaskfilterVariousFileParameters {
+interface MaskfilterVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type MaskfilterVariousFileParametersTagged = Required<Pick<MaskfilterVariousFileParameters, '@type'>> & MaskfilterVariousFileParameters;
+type MaskfilterVariousFileParamsDictTagged = Required<Pick<MaskfilterVariousFileParamsDict, '@type'>> & MaskfilterVariousFileParamsDict;
 
 
-interface MaskfilterConfigParameters {
+interface MaskfilterConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MaskfilterConfigParametersTagged = Required<Pick<MaskfilterConfigParameters, '@type'>> & MaskfilterConfigParameters;
+type MaskfilterConfigParamsDictTagged = Required<Pick<MaskfilterConfigParamsDict, '@type'>> & MaskfilterConfigParamsDict;
 
 
-interface MaskfilterParameters {
+interface MaskfilterParamsDict {
     "@type"?: "mrtrix/maskfilter";
     "scale"?: number | null | undefined;
     "axes"?: Array<number> | null | undefined;
@@ -41,20 +41,20 @@ interface MaskfilterParameters {
     "connectivity": boolean;
     "npass"?: number | null | undefined;
     "extent"?: Array<number> | null | undefined;
-    "strides"?: MaskfilterVariousStringParametersTagged | MaskfilterVariousFileParametersTagged | null | undefined;
+    "strides"?: MaskfilterVariousStringParamsDictTagged | MaskfilterVariousFileParamsDictTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MaskfilterConfigParameters> | null | undefined;
+    "config"?: Array<MaskfilterConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "filter": string;
     "output": string;
 }
-type MaskfilterParametersTagged = Required<Pick<MaskfilterParameters, '@type'>> & MaskfilterParameters;
+type MaskfilterParamsDictTagged = Required<Pick<MaskfilterParamsDict, '@type'>> & MaskfilterParamsDict;
 
 
 /**
@@ -98,9 +98,9 @@ function maskfilter_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function maskfilter_various_string_params(
+function maskfilter_various_string(
     obj: string,
-): MaskfilterVariousStringParametersTagged {
+): MaskfilterVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -118,7 +118,7 @@ function maskfilter_various_string_params(
  * @returns Command-line arguments.
  */
 function maskfilter_various_string_cargs(
-    params: MaskfilterVariousStringParameters,
+    params: MaskfilterVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,9 +134,9 @@ function maskfilter_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function maskfilter_various_file_params(
+function maskfilter_various_file(
     obj: InputPathType,
-): MaskfilterVariousFileParametersTagged {
+): MaskfilterVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -154,7 +154,7 @@ function maskfilter_various_file_params(
  * @returns Command-line arguments.
  */
 function maskfilter_various_file_cargs(
-    params: MaskfilterVariousFileParameters,
+    params: MaskfilterVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,10 +171,10 @@ function maskfilter_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function maskfilter_config_params(
+function maskfilter_config(
     key: string,
     value: string,
-): MaskfilterConfigParametersTagged {
+): MaskfilterConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -193,7 +193,7 @@ function maskfilter_config_params(
  * @returns Command-line arguments.
  */
 function maskfilter_config_cargs(
-    params: MaskfilterConfigParameters,
+    params: MaskfilterConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -205,7 +205,7 @@ function maskfilter_config_cargs(
 
 
 /**
- * Output object returned when calling `MaskfilterParameters(...)`.
+ * Output object returned when calling `MaskfilterParamsDict(...)`.
  *
  * @interface
  */
@@ -255,16 +255,16 @@ function maskfilter_params(
     connectivity: boolean = false,
     npass: number | null = null,
     extent: Array<number> | null = null,
-    strides: MaskfilterVariousStringParametersTagged | MaskfilterVariousFileParametersTagged | null = null,
+    strides: MaskfilterVariousStringParamsDictTagged | MaskfilterVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MaskfilterConfigParameters> | null = null,
+    config: Array<MaskfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MaskfilterParametersTagged {
+): MaskfilterParamsDictTagged {
     const params = {
         "@type": "mrtrix/maskfilter" as const,
         "largest": largest,
@@ -313,7 +313,7 @@ function maskfilter_params(
  * @returns Command-line arguments.
  */
 function maskfilter_cargs(
-    params: MaskfilterParameters,
+    params: MaskfilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -397,7 +397,7 @@ function maskfilter_cargs(
  * @returns Outputs object.
  */
 function maskfilter_outputs(
-    params: MaskfilterParameters,
+    params: MaskfilterParamsDict,
     execution: Execution,
 ): MaskfilterOutputs {
     const ret: MaskfilterOutputs = {
@@ -431,7 +431,7 @@ function maskfilter_outputs(
  * @returns NamedTuple of outputs (described in `MaskfilterOutputs`).
  */
 function maskfilter_execute(
-    params: MaskfilterParameters,
+    params: MaskfilterParamsDict,
     runner: Runner | null = null,
 ): MaskfilterOutputs {
     runner = runner || getGlobalRunner();
@@ -493,13 +493,13 @@ function maskfilter(
     connectivity: boolean = false,
     npass: number | null = null,
     extent: Array<number> | null = null,
-    strides: MaskfilterVariousStringParametersTagged | MaskfilterVariousFileParametersTagged | null = null,
+    strides: MaskfilterVariousStringParamsDictTagged | MaskfilterVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MaskfilterConfigParameters> | null = null,
+    config: Array<MaskfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -511,11 +511,19 @@ function maskfilter(
 
 export {
       MASKFILTER_METADATA,
+      MaskfilterConfigParamsDict,
+      MaskfilterConfigParamsDictTagged,
       MaskfilterOutputs,
+      MaskfilterParamsDict,
+      MaskfilterParamsDictTagged,
+      MaskfilterVariousFileParamsDict,
+      MaskfilterVariousFileParamsDictTagged,
+      MaskfilterVariousStringParamsDict,
+      MaskfilterVariousStringParamsDictTagged,
       maskfilter,
-      maskfilter_config_params,
+      maskfilter_config,
       maskfilter_execute,
       maskfilter_params,
-      maskfilter_various_file_params,
-      maskfilter_various_string_params,
+      maskfilter_various_file,
+      maskfilter_various_string,
 };

@@ -11,18 +11,18 @@ const MRI_BRAIN_VOLUME_METADATA: Metadata = {
 };
 
 
-interface MriBrainVolumeParameters {
+interface MriBrainVolumeParamsDict {
     "@type"?: "freesurfer/mri_brain_volume";
     "input_file": InputPathType;
     "output_file"?: string | null | undefined;
     "force_param"?: number | null | undefined;
     "version": boolean;
 }
-type MriBrainVolumeParametersTagged = Required<Pick<MriBrainVolumeParameters, '@type'>> & MriBrainVolumeParameters;
+type MriBrainVolumeParamsDictTagged = Required<Pick<MriBrainVolumeParamsDict, '@type'>> & MriBrainVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `MriBrainVolumeParameters(...)`.
+ * Output object returned when calling `MriBrainVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_brain_volume_params(
     output_file: string | null = null,
     force_param: number | null = null,
     version: boolean = false,
-): MriBrainVolumeParametersTagged {
+): MriBrainVolumeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_brain_volume" as const,
         "input_file": input_file,
@@ -78,7 +78,7 @@ function mri_brain_volume_params(
  * @returns Command-line arguments.
  */
 function mri_brain_volume_cargs(
-    params: MriBrainVolumeParameters,
+    params: MriBrainVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function mri_brain_volume_cargs(
  * @returns Outputs object.
  */
 function mri_brain_volume_outputs(
-    params: MriBrainVolumeParameters,
+    params: MriBrainVolumeParamsDict,
     execution: Execution,
 ): MriBrainVolumeOutputs {
     const ret: MriBrainVolumeOutputs = {
@@ -135,7 +135,7 @@ function mri_brain_volume_outputs(
  * @returns NamedTuple of outputs (described in `MriBrainVolumeOutputs`).
  */
 function mri_brain_volume_execute(
-    params: MriBrainVolumeParameters,
+    params: MriBrainVolumeParamsDict,
     runner: Runner | null = null,
 ): MriBrainVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -180,6 +180,8 @@ function mri_brain_volume(
 export {
       MRI_BRAIN_VOLUME_METADATA,
       MriBrainVolumeOutputs,
+      MriBrainVolumeParamsDict,
+      MriBrainVolumeParamsDictTagged,
       mri_brain_volume,
       mri_brain_volume_execute,
       mri_brain_volume_params,

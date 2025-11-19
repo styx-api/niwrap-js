@@ -11,18 +11,18 @@ const RCA_CONFIG_METADATA: Metadata = {
 };
 
 
-interface RcaConfigParameters {
+interface RcaConfigParamsDict {
     "@type"?: "freesurfer/rca-config";
     "source_config": InputPathType;
     "updated_config": InputPathType;
     "unknown_args_file": InputPathType;
     "args"?: Array<string> | null | undefined;
 }
-type RcaConfigParametersTagged = Required<Pick<RcaConfigParameters, '@type'>> & RcaConfigParameters;
+type RcaConfigParamsDictTagged = Required<Pick<RcaConfigParamsDict, '@type'>> & RcaConfigParamsDict;
 
 
 /**
- * Output object returned when calling `RcaConfigParameters(...)`.
+ * Output object returned when calling `RcaConfigParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function rca_config_params(
     updated_config: InputPathType,
     unknown_args_file: InputPathType,
     args: Array<string> | null = null,
-): RcaConfigParametersTagged {
+): RcaConfigParamsDictTagged {
     const params = {
         "@type": "freesurfer/rca-config" as const,
         "source_config": source_config,
@@ -72,7 +72,7 @@ function rca_config_params(
  * @returns Command-line arguments.
  */
 function rca_config_cargs(
-    params: RcaConfigParameters,
+    params: RcaConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function rca_config_cargs(
  * @returns Outputs object.
  */
 function rca_config_outputs(
-    params: RcaConfigParameters,
+    params: RcaConfigParamsDict,
     execution: Execution,
 ): RcaConfigOutputs {
     const ret: RcaConfigOutputs = {
@@ -124,7 +124,7 @@ function rca_config_outputs(
  * @returns NamedTuple of outputs (described in `RcaConfigOutputs`).
  */
 function rca_config_execute(
-    params: RcaConfigParameters,
+    params: RcaConfigParamsDict,
     runner: Runner | null = null,
 ): RcaConfigOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function rca_config(
 export {
       RCA_CONFIG_METADATA,
       RcaConfigOutputs,
+      RcaConfigParamsDict,
+      RcaConfigParamsDictTagged,
       rca_config,
       rca_config_execute,
       rca_config_params,

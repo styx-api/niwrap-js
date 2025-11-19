@@ -11,7 +11,7 @@ const MRI_THRESHOLD_METADATA: Metadata = {
 };
 
 
-interface MriThresholdParameters {
+interface MriThresholdParamsDict {
     "@type"?: "freesurfer/mri_threshold";
     "input_vol": InputPathType;
     "threshold": number;
@@ -20,11 +20,11 @@ interface MriThresholdParameters {
     "upper_threshold": boolean;
     "frame_number"?: number | null | undefined;
 }
-type MriThresholdParametersTagged = Required<Pick<MriThresholdParameters, '@type'>> & MriThresholdParameters;
+type MriThresholdParamsDictTagged = Required<Pick<MriThresholdParamsDict, '@type'>> & MriThresholdParamsDict;
 
 
 /**
- * Output object returned when calling `MriThresholdParameters(...)`.
+ * Output object returned when calling `MriThresholdParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mri_threshold_params(
     binarize: number | null = null,
     upper_threshold: boolean = false,
     frame_number: number | null = null,
-): MriThresholdParametersTagged {
+): MriThresholdParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_threshold" as const,
         "input_vol": input_vol,
@@ -86,7 +86,7 @@ function mri_threshold_params(
  * @returns Command-line arguments.
  */
 function mri_threshold_cargs(
-    params: MriThresholdParameters,
+    params: MriThresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function mri_threshold_cargs(
  * @returns Outputs object.
  */
 function mri_threshold_outputs(
-    params: MriThresholdParameters,
+    params: MriThresholdParamsDict,
     execution: Execution,
 ): MriThresholdOutputs {
     const ret: MriThresholdOutputs = {
@@ -148,7 +148,7 @@ function mri_threshold_outputs(
  * @returns NamedTuple of outputs (described in `MriThresholdOutputs`).
  */
 function mri_threshold_execute(
-    params: MriThresholdParameters,
+    params: MriThresholdParamsDict,
     runner: Runner | null = null,
 ): MriThresholdOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function mri_threshold(
 export {
       MRI_THRESHOLD_METADATA,
       MriThresholdOutputs,
+      MriThresholdParamsDict,
+      MriThresholdParamsDictTagged,
       mri_threshold,
       mri_threshold_execute,
       mri_threshold_params,

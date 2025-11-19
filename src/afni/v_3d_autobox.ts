@@ -11,7 +11,7 @@ const V_3D_AUTOBOX_METADATA: Metadata = {
 };
 
 
-interface V3dAutoboxParameters {
+interface V3dAutoboxParamsDict {
     "@type"?: "afni/3dAutobox";
     "input": InputPathType;
     "prefix"?: string | null | undefined;
@@ -28,11 +28,11 @@ interface V3dAutoboxParameters {
     "npad"?: number | null | undefined;
     "npad_safety_on": boolean;
 }
-type V3dAutoboxParametersTagged = Required<Pick<V3dAutoboxParameters, '@type'>> & V3dAutoboxParameters;
+type V3dAutoboxParamsDictTagged = Required<Pick<V3dAutoboxParamsDict, '@type'>> & V3dAutoboxParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAutoboxParameters(...)`.
+ * Output object returned when calling `V3dAutoboxParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function v_3d_autobox_params(
     extent_xyz_midslice: boolean = false,
     npad: number | null = null,
     npad_safety_on: boolean = false,
-): V3dAutoboxParametersTagged {
+): V3dAutoboxParamsDictTagged {
     const params = {
         "@type": "afni/3dAutobox" as const,
         "input": input,
@@ -122,7 +122,7 @@ function v_3d_autobox_params(
  * @returns Command-line arguments.
  */
 function v_3d_autobox_cargs(
-    params: V3dAutoboxParameters,
+    params: V3dAutoboxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -198,7 +198,7 @@ function v_3d_autobox_cargs(
  * @returns Outputs object.
  */
 function v_3d_autobox_outputs(
-    params: V3dAutoboxParameters,
+    params: V3dAutoboxParamsDict,
     execution: Execution,
 ): V3dAutoboxOutputs {
     const ret: V3dAutoboxOutputs = {
@@ -223,7 +223,7 @@ function v_3d_autobox_outputs(
  * @returns NamedTuple of outputs (described in `V3dAutoboxOutputs`).
  */
 function v_3d_autobox_execute(
-    params: V3dAutoboxParameters,
+    params: V3dAutoboxParamsDict,
     runner: Runner | null = null,
 ): V3dAutoboxOutputs {
     runner = runner || getGlobalRunner();
@@ -287,6 +287,8 @@ function v_3d_autobox(
 
 export {
       V3dAutoboxOutputs,
+      V3dAutoboxParamsDict,
+      V3dAutoboxParamsDictTagged,
       V_3D_AUTOBOX_METADATA,
       v_3d_autobox,
       v_3d_autobox_execute,

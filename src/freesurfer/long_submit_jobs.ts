@@ -11,7 +11,7 @@ const LONG_SUBMIT_JOBS_METADATA: Metadata = {
 };
 
 
-interface LongSubmitJobsParameters {
+interface LongSubmitJobsParamsDict {
     "@type"?: "freesurfer/long_submit_jobs";
     "qdec": InputPathType;
     "cdir": string;
@@ -39,11 +39,11 @@ interface LongSubmitJobsParameters {
     "bnodes"?: number | null | undefined;
     "lnodes"?: number | null | undefined;
 }
-type LongSubmitJobsParametersTagged = Required<Pick<LongSubmitJobsParameters, '@type'>> & LongSubmitJobsParameters;
+type LongSubmitJobsParamsDictTagged = Required<Pick<LongSubmitJobsParamsDict, '@type'>> & LongSubmitJobsParamsDict;
 
 
 /**
- * Output object returned when calling `LongSubmitJobsParameters(...)`.
+ * Output object returned when calling `LongSubmitJobsParamsDict(...)`.
  *
  * @interface
  */
@@ -112,7 +112,7 @@ function long_submit_jobs_params(
     cnodes: number | null = null,
     bnodes: number | null = null,
     lnodes: number | null = null,
-): LongSubmitJobsParametersTagged {
+): LongSubmitJobsParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_submit_jobs" as const,
         "qdec": qdec,
@@ -184,7 +184,7 @@ function long_submit_jobs_params(
  * @returns Command-line arguments.
  */
 function long_submit_jobs_cargs(
-    params: LongSubmitJobsParameters,
+    params: LongSubmitJobsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -324,7 +324,7 @@ function long_submit_jobs_cargs(
  * @returns Outputs object.
  */
 function long_submit_jobs_outputs(
-    params: LongSubmitJobsParameters,
+    params: LongSubmitJobsParamsDict,
     execution: Execution,
 ): LongSubmitJobsOutputs {
     const ret: LongSubmitJobsOutputs = {
@@ -349,7 +349,7 @@ function long_submit_jobs_outputs(
  * @returns NamedTuple of outputs (described in `LongSubmitJobsOutputs`).
  */
 function long_submit_jobs_execute(
-    params: LongSubmitJobsParameters,
+    params: LongSubmitJobsParamsDict,
     runner: Runner | null = null,
 ): LongSubmitJobsOutputs {
     runner = runner || getGlobalRunner();
@@ -436,6 +436,8 @@ function long_submit_jobs(
 export {
       LONG_SUBMIT_JOBS_METADATA,
       LongSubmitJobsOutputs,
+      LongSubmitJobsParamsDict,
+      LongSubmitJobsParamsDictTagged,
       long_submit_jobs,
       long_submit_jobs_execute,
       long_submit_jobs_params,

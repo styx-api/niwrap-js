@@ -11,15 +11,15 @@ const SUMA_GLXDINO_METADATA: Metadata = {
 };
 
 
-interface SumaGlxdinoParameters {
+interface SumaGlxdinoParamsDict {
     "@type"?: "afni/SUMA_glxdino";
     "verbose": boolean;
 }
-type SumaGlxdinoParametersTagged = Required<Pick<SumaGlxdinoParameters, '@type'>> & SumaGlxdinoParameters;
+type SumaGlxdinoParamsDictTagged = Required<Pick<SumaGlxdinoParamsDict, '@type'>> & SumaGlxdinoParamsDict;
 
 
 /**
- * Output object returned when calling `SumaGlxdinoParameters(...)`.
+ * Output object returned when calling `SumaGlxdinoParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface SumaGlxdinoOutputs {
  */
 function suma_glxdino_params(
     verbose: boolean = false,
-): SumaGlxdinoParametersTagged {
+): SumaGlxdinoParamsDictTagged {
     const params = {
         "@type": "afni/SUMA_glxdino" as const,
         "verbose": verbose,
@@ -58,7 +58,7 @@ function suma_glxdino_params(
  * @returns Command-line arguments.
  */
 function suma_glxdino_cargs(
-    params: SumaGlxdinoParameters,
+    params: SumaGlxdinoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function suma_glxdino_cargs(
  * @returns Outputs object.
  */
 function suma_glxdino_outputs(
-    params: SumaGlxdinoParameters,
+    params: SumaGlxdinoParamsDict,
     execution: Execution,
 ): SumaGlxdinoOutputs {
     const ret: SumaGlxdinoOutputs = {
@@ -104,7 +104,7 @@ function suma_glxdino_outputs(
  * @returns NamedTuple of outputs (described in `SumaGlxdinoOutputs`).
  */
 function suma_glxdino_execute(
-    params: SumaGlxdinoParameters,
+    params: SumaGlxdinoParamsDict,
     runner: Runner | null = null,
 ): SumaGlxdinoOutputs {
     runner = runner || getGlobalRunner();
@@ -143,6 +143,8 @@ function suma_glxdino(
 export {
       SUMA_GLXDINO_METADATA,
       SumaGlxdinoOutputs,
+      SumaGlxdinoParamsDict,
+      SumaGlxdinoParamsDictTagged,
       suma_glxdino,
       suma_glxdino_execute,
       suma_glxdino_params,

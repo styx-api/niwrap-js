@@ -11,16 +11,16 @@ const MRI_OR_METADATA: Metadata = {
 };
 
 
-interface MriOrParameters {
+interface MriOrParamsDict {
     "@type"?: "freesurfer/mri_or";
     "original_labels": boolean;
     "input_files": Array<InputPathType>;
 }
-type MriOrParametersTagged = Required<Pick<MriOrParameters, '@type'>> & MriOrParameters;
+type MriOrParamsDictTagged = Required<Pick<MriOrParamsDict, '@type'>> & MriOrParamsDict;
 
 
 /**
- * Output object returned when calling `MriOrParameters(...)`.
+ * Output object returned when calling `MriOrParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MriOrOutputs {
 function mri_or_params(
     input_files: Array<InputPathType>,
     original_labels: boolean = false,
-): MriOrParametersTagged {
+): MriOrParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_or" as const,
         "original_labels": original_labels,
@@ -62,7 +62,7 @@ function mri_or_params(
  * @returns Command-line arguments.
  */
 function mri_or_cargs(
-    params: MriOrParameters,
+    params: MriOrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function mri_or_cargs(
  * @returns Outputs object.
  */
 function mri_or_outputs(
-    params: MriOrParameters,
+    params: MriOrParamsDict,
     execution: Execution,
 ): MriOrOutputs {
     const ret: MriOrOutputs = {
@@ -109,7 +109,7 @@ function mri_or_outputs(
  * @returns NamedTuple of outputs (described in `MriOrOutputs`).
  */
 function mri_or_execute(
-    params: MriOrParameters,
+    params: MriOrParamsDict,
     runner: Runner | null = null,
 ): MriOrOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function mri_or(
 export {
       MRI_OR_METADATA,
       MriOrOutputs,
+      MriOrParamsDict,
+      MriOrParamsDictTagged,
       mri_or,
       mri_or_execute,
       mri_or_params,

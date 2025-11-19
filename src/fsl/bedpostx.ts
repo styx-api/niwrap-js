@@ -11,7 +11,7 @@ const BEDPOSTX_METADATA: Metadata = {
 };
 
 
-interface BedpostxParameters {
+interface BedpostxParamsDict {
     "@type"?: "fsl/bedpostx";
     "subject_dir": string;
     "num_fibres"?: number | null | undefined;
@@ -22,11 +22,11 @@ interface BedpostxParameters {
     "model_type"?: number | null | undefined;
     "grad_nonlinear": boolean;
 }
-type BedpostxParametersTagged = Required<Pick<BedpostxParameters, '@type'>> & BedpostxParameters;
+type BedpostxParamsDictTagged = Required<Pick<BedpostxParamsDict, '@type'>> & BedpostxParamsDict;
 
 
 /**
- * Output object returned when calling `BedpostxParameters(...)`.
+ * Output object returned when calling `BedpostxParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function bedpostx_params(
     sample_every: number | null = null,
     model_type: number | null = null,
     grad_nonlinear: boolean = false,
-): BedpostxParametersTagged {
+): BedpostxParamsDictTagged {
     const params = {
         "@type": "fsl/bedpostx" as const,
         "subject_dir": subject_dir,
@@ -106,7 +106,7 @@ function bedpostx_params(
  * @returns Command-line arguments.
  */
 function bedpostx_cargs(
-    params: BedpostxParameters,
+    params: BedpostxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function bedpostx_cargs(
  * @returns Outputs object.
  */
 function bedpostx_outputs(
-    params: BedpostxParameters,
+    params: BedpostxParamsDict,
     execution: Execution,
 ): BedpostxOutputs {
     const ret: BedpostxOutputs = {
@@ -191,7 +191,7 @@ function bedpostx_outputs(
  * @returns NamedTuple of outputs (described in `BedpostxOutputs`).
  */
 function bedpostx_execute(
-    params: BedpostxParameters,
+    params: BedpostxParamsDict,
     runner: Runner | null = null,
 ): BedpostxOutputs {
     runner = runner || getGlobalRunner();
@@ -244,6 +244,8 @@ function bedpostx(
 export {
       BEDPOSTX_METADATA,
       BedpostxOutputs,
+      BedpostxParamsDict,
+      BedpostxParamsDictTagged,
       bedpostx,
       bedpostx_execute,
       bedpostx_params,

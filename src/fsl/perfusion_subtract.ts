@@ -11,17 +11,17 @@ const PERFUSION_SUBTRACT_METADATA: Metadata = {
 };
 
 
-interface PerfusionSubtractParameters {
+interface PerfusionSubtractParamsDict {
     "@type"?: "fsl/perfusion_subtract";
     "four_d_input": InputPathType;
     "four_d_output": string;
     "control_first_flag": boolean;
 }
-type PerfusionSubtractParametersTagged = Required<Pick<PerfusionSubtractParameters, '@type'>> & PerfusionSubtractParameters;
+type PerfusionSubtractParamsDictTagged = Required<Pick<PerfusionSubtractParamsDict, '@type'>> & PerfusionSubtractParamsDict;
 
 
 /**
- * Output object returned when calling `PerfusionSubtractParameters(...)`.
+ * Output object returned when calling `PerfusionSubtractParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function perfusion_subtract_params(
     four_d_input: InputPathType,
     four_d_output: string,
     control_first_flag: boolean = false,
-): PerfusionSubtractParametersTagged {
+): PerfusionSubtractParamsDictTagged {
     const params = {
         "@type": "fsl/perfusion_subtract" as const,
         "four_d_input": four_d_input,
@@ -70,7 +70,7 @@ function perfusion_subtract_params(
  * @returns Command-line arguments.
  */
 function perfusion_subtract_cargs(
-    params: PerfusionSubtractParameters,
+    params: PerfusionSubtractParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function perfusion_subtract_cargs(
  * @returns Outputs object.
  */
 function perfusion_subtract_outputs(
-    params: PerfusionSubtractParameters,
+    params: PerfusionSubtractParamsDict,
     execution: Execution,
 ): PerfusionSubtractOutputs {
     const ret: PerfusionSubtractOutputs = {
@@ -119,7 +119,7 @@ function perfusion_subtract_outputs(
  * @returns NamedTuple of outputs (described in `PerfusionSubtractOutputs`).
  */
 function perfusion_subtract_execute(
-    params: PerfusionSubtractParameters,
+    params: PerfusionSubtractParamsDict,
     runner: Runner | null = null,
 ): PerfusionSubtractOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function perfusion_subtract(
 export {
       PERFUSION_SUBTRACT_METADATA,
       PerfusionSubtractOutputs,
+      PerfusionSubtractParamsDict,
+      PerfusionSubtractParamsDictTagged,
       perfusion_subtract,
       perfusion_subtract_execute,
       perfusion_subtract_params,

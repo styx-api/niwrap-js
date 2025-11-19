@@ -11,7 +11,7 @@ const FDRVAL_METADATA: Metadata = {
 };
 
 
-interface FdrvalParameters {
+interface FdrvalParamsDict {
     "@type"?: "afni/fdrval";
     "dset": InputPathType;
     "sub": number;
@@ -22,11 +22,11 @@ interface FdrvalParameters {
     "qinput": boolean;
     "inverse": boolean;
 }
-type FdrvalParametersTagged = Required<Pick<FdrvalParameters, '@type'>> & FdrvalParameters;
+type FdrvalParamsDictTagged = Required<Pick<FdrvalParamsDict, '@type'>> & FdrvalParamsDict;
 
 
 /**
- * Output object returned when calling `FdrvalParameters(...)`.
+ * Output object returned when calling `FdrvalParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function fdrval_params(
     qonly: boolean = false,
     qinput: boolean = false,
     inverse: boolean = false,
-): FdrvalParametersTagged {
+): FdrvalParamsDictTagged {
     const params = {
         "@type": "afni/fdrval" as const,
         "dset": dset,
@@ -90,7 +90,7 @@ function fdrval_params(
  * @returns Command-line arguments.
  */
 function fdrval_cargs(
-    params: FdrvalParameters,
+    params: FdrvalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function fdrval_cargs(
  * @returns Outputs object.
  */
 function fdrval_outputs(
-    params: FdrvalParameters,
+    params: FdrvalParamsDict,
     execution: Execution,
 ): FdrvalOutputs {
     const ret: FdrvalOutputs = {
@@ -152,7 +152,7 @@ function fdrval_outputs(
  * @returns NamedTuple of outputs (described in `FdrvalOutputs`).
  */
 function fdrval_execute(
-    params: FdrvalParameters,
+    params: FdrvalParamsDict,
     runner: Runner | null = null,
 ): FdrvalOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function fdrval(
 export {
       FDRVAL_METADATA,
       FdrvalOutputs,
+      FdrvalParamsDict,
+      FdrvalParamsDictTagged,
       fdrval,
       fdrval_execute,
       fdrval_params,

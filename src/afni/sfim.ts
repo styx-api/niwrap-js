@@ -11,7 +11,7 @@ const SFIM_METADATA: Metadata = {
 };
 
 
-interface SfimParameters {
+interface SfimParamsDict {
     "@type"?: "afni/sfim";
     "input_images": Array<InputPathType>;
     "sfint_file"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface SfimParameters {
     "local_base_option": boolean;
     "output_prefix"?: string | null | undefined;
 }
-type SfimParametersTagged = Required<Pick<SfimParameters, '@type'>> & SfimParameters;
+type SfimParamsDictTagged = Required<Pick<SfimParamsDict, '@type'>> & SfimParamsDict;
 
 
 /**
- * Output object returned when calling `SfimParameters(...)`.
+ * Output object returned when calling `SfimParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function sfim_params(
     baseline_state: string | null = null,
     local_base_option: boolean = false,
     output_prefix: string | null = null,
-): SfimParametersTagged {
+): SfimParamsDictTagged {
     const params = {
         "@type": "afni/sfim" as const,
         "input_images": input_images,
@@ -80,7 +80,7 @@ function sfim_params(
  * @returns Command-line arguments.
  */
 function sfim_cargs(
-    params: SfimParameters,
+    params: SfimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function sfim_cargs(
  * @returns Outputs object.
  */
 function sfim_outputs(
-    params: SfimParameters,
+    params: SfimParamsDict,
     execution: Execution,
 ): SfimOutputs {
     const ret: SfimOutputs = {
@@ -145,7 +145,7 @@ function sfim_outputs(
  * @returns NamedTuple of outputs (described in `SfimOutputs`).
  */
 function sfim_execute(
-    params: SfimParameters,
+    params: SfimParamsDict,
     runner: Runner | null = null,
 ): SfimOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function sfim(
 export {
       SFIM_METADATA,
       SfimOutputs,
+      SfimParamsDict,
+      SfimParamsDictTagged,
       sfim,
       sfim_execute,
       sfim_params,

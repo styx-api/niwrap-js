@@ -11,7 +11,7 @@ const MRI_GRADUNWARP_METADATA: Metadata = {
 };
 
 
-interface MriGradunwarpParameters {
+interface MriGradunwarpParamsDict {
     "@type"?: "freesurfer/mri_gradunwarp";
     "gradient_coeff"?: InputPathType | null | undefined;
     "load_transtbl"?: InputPathType | null | undefined;
@@ -25,11 +25,11 @@ interface MriGradunwarpParameters {
     "version": boolean;
     "help": boolean;
 }
-type MriGradunwarpParametersTagged = Required<Pick<MriGradunwarpParameters, '@type'>> & MriGradunwarpParameters;
+type MriGradunwarpParamsDictTagged = Required<Pick<MriGradunwarpParamsDict, '@type'>> & MriGradunwarpParamsDict;
 
 
 /**
- * Output object returned when calling `MriGradunwarpParameters(...)`.
+ * Output object returned when calling `MriGradunwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function mri_gradunwarp_params(
     checkopts: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): MriGradunwarpParametersTagged {
+): MriGradunwarpParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gradunwarp" as const,
         "input_file": input_file,
@@ -118,7 +118,7 @@ function mri_gradunwarp_params(
  * @returns Command-line arguments.
  */
 function mri_gradunwarp_cargs(
-    params: MriGradunwarpParameters,
+    params: MriGradunwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,7 +188,7 @@ function mri_gradunwarp_cargs(
  * @returns Outputs object.
  */
 function mri_gradunwarp_outputs(
-    params: MriGradunwarpParameters,
+    params: MriGradunwarpParamsDict,
     execution: Execution,
 ): MriGradunwarpOutputs {
     const ret: MriGradunwarpOutputs = {
@@ -215,7 +215,7 @@ function mri_gradunwarp_outputs(
  * @returns NamedTuple of outputs (described in `MriGradunwarpOutputs`).
  */
 function mri_gradunwarp_execute(
-    params: MriGradunwarpParameters,
+    params: MriGradunwarpParamsDict,
     runner: Runner | null = null,
 ): MriGradunwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -274,6 +274,8 @@ function mri_gradunwarp(
 export {
       MRI_GRADUNWARP_METADATA,
       MriGradunwarpOutputs,
+      MriGradunwarpParamsDict,
+      MriGradunwarpParamsDictTagged,
       mri_gradunwarp,
       mri_gradunwarp_execute,
       mri_gradunwarp_params,

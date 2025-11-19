@@ -11,7 +11,7 @@ const MRIS_ESTIMATE_WM_METADATA: Metadata = {
 };
 
 
-interface MrisEstimateWmParameters {
+interface MrisEstimateWmParamsDict {
     "@type"?: "freesurfer/mris_estimate_wm";
     "subjs": Array<string>;
     "hemi": string;
@@ -23,11 +23,11 @@ interface MrisEstimateWmParameters {
     "single_iter": boolean;
     "vol"?: string | null | undefined;
 }
-type MrisEstimateWmParametersTagged = Required<Pick<MrisEstimateWmParameters, '@type'>> & MrisEstimateWmParameters;
+type MrisEstimateWmParamsDictTagged = Required<Pick<MrisEstimateWmParamsDict, '@type'>> & MrisEstimateWmParamsDict;
 
 
 /**
- * Output object returned when calling `MrisEstimateWmParameters(...)`.
+ * Output object returned when calling `MrisEstimateWmParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function mris_estimate_wm_params(
     rsi: boolean = false,
     single_iter: boolean = false,
     vol: string | null = null,
-): MrisEstimateWmParametersTagged {
+): MrisEstimateWmParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_estimate_wm" as const,
         "subjs": subjs,
@@ -98,7 +98,7 @@ function mris_estimate_wm_params(
  * @returns Command-line arguments.
  */
 function mris_estimate_wm_cargs(
-    params: MrisEstimateWmParameters,
+    params: MrisEstimateWmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -157,7 +157,7 @@ function mris_estimate_wm_cargs(
  * @returns Outputs object.
  */
 function mris_estimate_wm_outputs(
-    params: MrisEstimateWmParameters,
+    params: MrisEstimateWmParamsDict,
     execution: Execution,
 ): MrisEstimateWmOutputs {
     const ret: MrisEstimateWmOutputs = {
@@ -182,7 +182,7 @@ function mris_estimate_wm_outputs(
  * @returns NamedTuple of outputs (described in `MrisEstimateWmOutputs`).
  */
 function mris_estimate_wm_execute(
-    params: MrisEstimateWmParameters,
+    params: MrisEstimateWmParamsDict,
     runner: Runner | null = null,
 ): MrisEstimateWmOutputs {
     runner = runner || getGlobalRunner();
@@ -237,6 +237,8 @@ function mris_estimate_wm(
 export {
       MRIS_ESTIMATE_WM_METADATA,
       MrisEstimateWmOutputs,
+      MrisEstimateWmParamsDict,
+      MrisEstimateWmParamsDictTagged,
       mris_estimate_wm,
       mris_estimate_wm_execute,
       mris_estimate_wm_params,

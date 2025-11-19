@@ -10,57 +10,57 @@ const CIFTI_FIND_CLUSTERS_METADATA: Metadata = {
 };
 
 
-interface CiftiFindClustersLeftSurfaceParameters {
+interface CiftiFindClustersLeftSurfaceParamsDict {
     "@type"?: "left-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiFindClustersLeftSurfaceParametersTagged = Required<Pick<CiftiFindClustersLeftSurfaceParameters, '@type'>> & CiftiFindClustersLeftSurfaceParameters;
+type CiftiFindClustersLeftSurfaceParamsDictTagged = Required<Pick<CiftiFindClustersLeftSurfaceParamsDict, '@type'>> & CiftiFindClustersLeftSurfaceParamsDict;
 
 
-interface CiftiFindClustersRightSurfaceParameters {
+interface CiftiFindClustersRightSurfaceParamsDict {
     "@type"?: "right-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiFindClustersRightSurfaceParametersTagged = Required<Pick<CiftiFindClustersRightSurfaceParameters, '@type'>> & CiftiFindClustersRightSurfaceParameters;
+type CiftiFindClustersRightSurfaceParamsDictTagged = Required<Pick<CiftiFindClustersRightSurfaceParamsDict, '@type'>> & CiftiFindClustersRightSurfaceParamsDict;
 
 
-interface CiftiFindClustersCerebellumSurfaceParameters {
+interface CiftiFindClustersCerebellumSurfaceParamsDict {
     "@type"?: "cerebellum-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiFindClustersCerebellumSurfaceParametersTagged = Required<Pick<CiftiFindClustersCerebellumSurfaceParameters, '@type'>> & CiftiFindClustersCerebellumSurfaceParameters;
+type CiftiFindClustersCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiFindClustersCerebellumSurfaceParamsDict, '@type'>> & CiftiFindClustersCerebellumSurfaceParamsDict;
 
 
-interface CiftiFindClustersSizeRatioParameters {
+interface CiftiFindClustersSizeRatioParamsDict {
     "@type"?: "size-ratio";
     "surface-ratio": number;
     "volume-ratio": number;
 }
-type CiftiFindClustersSizeRatioParametersTagged = Required<Pick<CiftiFindClustersSizeRatioParameters, '@type'>> & CiftiFindClustersSizeRatioParameters;
+type CiftiFindClustersSizeRatioParamsDictTagged = Required<Pick<CiftiFindClustersSizeRatioParamsDict, '@type'>> & CiftiFindClustersSizeRatioParamsDict;
 
 
-interface CiftiFindClustersDistanceParameters {
+interface CiftiFindClustersDistanceParamsDict {
     "@type"?: "distance";
     "surface-distance": number;
     "volume-distance": number;
 }
-type CiftiFindClustersDistanceParametersTagged = Required<Pick<CiftiFindClustersDistanceParameters, '@type'>> & CiftiFindClustersDistanceParameters;
+type CiftiFindClustersDistanceParamsDictTagged = Required<Pick<CiftiFindClustersDistanceParamsDict, '@type'>> & CiftiFindClustersDistanceParamsDict;
 
 
-interface CiftiFindClustersParameters {
+interface CiftiFindClustersParamsDict {
     "@type"?: "workbench/cifti-find-clusters";
     "cifti-out": string;
     "less-than": boolean;
-    "left-surface"?: CiftiFindClustersLeftSurfaceParameters | null | undefined;
-    "right-surface"?: CiftiFindClustersRightSurfaceParameters | null | undefined;
-    "cerebellum-surface"?: CiftiFindClustersCerebellumSurfaceParameters | null | undefined;
+    "left-surface"?: CiftiFindClustersLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiFindClustersRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiFindClustersCerebellumSurfaceParamsDict | null | undefined;
     "roi-cifti"?: InputPathType | null | undefined;
     "merged-volume": boolean;
-    "size-ratio"?: CiftiFindClustersSizeRatioParameters | null | undefined;
-    "distance"?: CiftiFindClustersDistanceParameters | null | undefined;
+    "size-ratio"?: CiftiFindClustersSizeRatioParamsDict | null | undefined;
+    "distance"?: CiftiFindClustersDistanceParamsDict | null | undefined;
     "startval"?: number | null | undefined;
     "cifti": InputPathType;
     "surface-value-threshold": number;
@@ -69,7 +69,7 @@ interface CiftiFindClustersParameters {
     "volume-minimum-size": number;
     "direction": string;
 }
-type CiftiFindClustersParametersTagged = Required<Pick<CiftiFindClustersParameters, '@type'>> & CiftiFindClustersParameters;
+type CiftiFindClustersParamsDictTagged = Required<Pick<CiftiFindClustersParamsDict, '@type'>> & CiftiFindClustersParamsDict;
 
 
 /**
@@ -82,10 +82,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_find_clusters_left_surface_params(
+function cifti_find_clusters_left_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiFindClustersLeftSurfaceParametersTagged {
+): CiftiFindClustersLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
         "surface": surface,
@@ -106,7 +106,7 @@ function cifti_find_clusters_left_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_find_clusters_left_surface_cargs(
-    params: CiftiFindClustersLeftSurfaceParameters,
+    params: CiftiFindClustersLeftSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,10 +132,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_find_clusters_right_surface_params(
+function cifti_find_clusters_right_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiFindClustersRightSurfaceParametersTagged {
+): CiftiFindClustersRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
         "surface": surface,
@@ -156,7 +156,7 @@ function cifti_find_clusters_right_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_find_clusters_right_surface_cargs(
-    params: CiftiFindClustersRightSurfaceParameters,
+    params: CiftiFindClustersRightSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,10 +182,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_find_clusters_cerebellum_surface_params(
+function cifti_find_clusters_cerebellum_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiFindClustersCerebellumSurfaceParametersTagged {
+): CiftiFindClustersCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
         "surface": surface,
@@ -206,7 +206,7 @@ function cifti_find_clusters_cerebellum_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_find_clusters_cerebellum_surface_cargs(
-    params: CiftiFindClustersCerebellumSurfaceParameters,
+    params: CiftiFindClustersCerebellumSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -230,10 +230,10 @@ function cifti_find_clusters_cerebellum_surface_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_find_clusters_size_ratio_params(
+function cifti_find_clusters_size_ratio(
     surface_ratio: number,
     volume_ratio: number,
-): CiftiFindClustersSizeRatioParametersTagged {
+): CiftiFindClustersSizeRatioParamsDictTagged {
     const params = {
         "@type": "size-ratio" as const,
         "surface-ratio": surface_ratio,
@@ -252,7 +252,7 @@ function cifti_find_clusters_size_ratio_params(
  * @returns Command-line arguments.
  */
 function cifti_find_clusters_size_ratio_cargs(
-    params: CiftiFindClustersSizeRatioParameters,
+    params: CiftiFindClustersSizeRatioParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -273,10 +273,10 @@ function cifti_find_clusters_size_ratio_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_find_clusters_distance_params(
+function cifti_find_clusters_distance(
     surface_distance: number,
     volume_distance: number,
-): CiftiFindClustersDistanceParametersTagged {
+): CiftiFindClustersDistanceParamsDictTagged {
     const params = {
         "@type": "distance" as const,
         "surface-distance": surface_distance,
@@ -295,7 +295,7 @@ function cifti_find_clusters_distance_params(
  * @returns Command-line arguments.
  */
 function cifti_find_clusters_distance_cargs(
-    params: CiftiFindClustersDistanceParameters,
+    params: CiftiFindClustersDistanceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -309,7 +309,7 @@ function cifti_find_clusters_distance_cargs(
 
 
 /**
- * Output object returned when calling `CiftiFindClustersParameters(...)`.
+ * Output object returned when calling `CiftiFindClustersParamsDict(...)`.
  *
  * @interface
  */
@@ -362,13 +362,13 @@ function cifti_find_clusters_params(
     volume_minimum_size: number,
     direction: string,
     less_than: boolean = false,
-    left_surface: CiftiFindClustersLeftSurfaceParameters | null = null,
-    right_surface: CiftiFindClustersRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiFindClustersCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiFindClustersLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiFindClustersRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiFindClustersCerebellumSurfaceParamsDict | null = null,
     merged_volume: boolean = false,
-    size_ratio: CiftiFindClustersSizeRatioParameters | null = null,
-    distance: CiftiFindClustersDistanceParameters | null = null,
-): CiftiFindClustersParametersTagged {
+    size_ratio: CiftiFindClustersSizeRatioParamsDict | null = null,
+    distance: CiftiFindClustersDistanceParamsDict | null = null,
+): CiftiFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-find-clusters" as const,
         "cifti-out": cifti_out,
@@ -415,7 +415,7 @@ function cifti_find_clusters_params(
  * @returns Command-line arguments.
  */
 function cifti_find_clusters_cargs(
-    params: CiftiFindClustersParameters,
+    params: CiftiFindClustersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -456,7 +456,7 @@ function cifti_find_clusters_cargs(
  * @returns Outputs object.
  */
 function cifti_find_clusters_outputs(
-    params: CiftiFindClustersParameters,
+    params: CiftiFindClustersParamsDict,
     execution: Execution,
 ): CiftiFindClustersOutputs {
     const ret: CiftiFindClustersOutputs = {
@@ -478,7 +478,7 @@ function cifti_find_clusters_outputs(
  * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
  */
 function cifti_find_clusters_execute(
-    params: CiftiFindClustersParameters,
+    params: CiftiFindClustersParamsDict,
     runner: Runner | null = null,
 ): CiftiFindClustersOutputs {
     runner = runner || getGlobalRunner();
@@ -531,12 +531,12 @@ function cifti_find_clusters(
     volume_minimum_size: number,
     direction: string,
     less_than: boolean = false,
-    left_surface: CiftiFindClustersLeftSurfaceParameters | null = null,
-    right_surface: CiftiFindClustersRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiFindClustersCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiFindClustersLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiFindClustersRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiFindClustersCerebellumSurfaceParamsDict | null = null,
     merged_volume: boolean = false,
-    size_ratio: CiftiFindClustersSizeRatioParameters | null = null,
-    distance: CiftiFindClustersDistanceParameters | null = null,
+    size_ratio: CiftiFindClustersSizeRatioParamsDict | null = null,
+    distance: CiftiFindClustersDistanceParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiFindClustersOutputs {
     const params = cifti_find_clusters_params(cifti_out, roi_cifti, startval, cifti, surface_value_threshold, surface_minimum_area, volume_value_threshold, volume_minimum_size, direction, less_than, left_surface, right_surface, cerebellum_surface, merged_volume, size_ratio, distance)
@@ -546,13 +546,25 @@ function cifti_find_clusters(
 
 export {
       CIFTI_FIND_CLUSTERS_METADATA,
+      CiftiFindClustersCerebellumSurfaceParamsDict,
+      CiftiFindClustersCerebellumSurfaceParamsDictTagged,
+      CiftiFindClustersDistanceParamsDict,
+      CiftiFindClustersDistanceParamsDictTagged,
+      CiftiFindClustersLeftSurfaceParamsDict,
+      CiftiFindClustersLeftSurfaceParamsDictTagged,
       CiftiFindClustersOutputs,
+      CiftiFindClustersParamsDict,
+      CiftiFindClustersParamsDictTagged,
+      CiftiFindClustersRightSurfaceParamsDict,
+      CiftiFindClustersRightSurfaceParamsDictTagged,
+      CiftiFindClustersSizeRatioParamsDict,
+      CiftiFindClustersSizeRatioParamsDictTagged,
       cifti_find_clusters,
-      cifti_find_clusters_cerebellum_surface_params,
-      cifti_find_clusters_distance_params,
+      cifti_find_clusters_cerebellum_surface,
+      cifti_find_clusters_distance,
       cifti_find_clusters_execute,
-      cifti_find_clusters_left_surface_params,
+      cifti_find_clusters_left_surface,
       cifti_find_clusters_params,
-      cifti_find_clusters_right_surface_params,
-      cifti_find_clusters_size_ratio_params,
+      cifti_find_clusters_right_surface,
+      cifti_find_clusters_size_ratio,
 };

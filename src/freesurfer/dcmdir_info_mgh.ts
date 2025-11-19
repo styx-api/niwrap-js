@@ -11,7 +11,7 @@ const DCMDIR_INFO_MGH_METADATA: Metadata = {
 };
 
 
-interface DcmdirInfoMghParameters {
+interface DcmdirInfoMghParamsDict {
     "@type"?: "freesurfer/dcmdir-info-mgh";
     "dicomdir": string;
     "unpackdir"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface DcmdirInfoMghParameters {
     "help": boolean;
     "nopre": boolean;
 }
-type DcmdirInfoMghParametersTagged = Required<Pick<DcmdirInfoMghParameters, '@type'>> & DcmdirInfoMghParameters;
+type DcmdirInfoMghParamsDictTagged = Required<Pick<DcmdirInfoMghParamsDict, '@type'>> & DcmdirInfoMghParamsDict;
 
 
 /**
- * Output object returned when calling `DcmdirInfoMghParameters(...)`.
+ * Output object returned when calling `DcmdirInfoMghParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function dcmdir_info_mgh_params(
     version: boolean = false,
     help: boolean = false,
     nopre: boolean = false,
-): DcmdirInfoMghParametersTagged {
+): DcmdirInfoMghParamsDictTagged {
     const params = {
         "@type": "freesurfer/dcmdir-info-mgh" as const,
         "dicomdir": dicomdir,
@@ -76,7 +76,7 @@ function dcmdir_info_mgh_params(
  * @returns Command-line arguments.
  */
 function dcmdir_info_mgh_cargs(
-    params: DcmdirInfoMghParameters,
+    params: DcmdirInfoMghParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function dcmdir_info_mgh_cargs(
  * @returns Outputs object.
  */
 function dcmdir_info_mgh_outputs(
-    params: DcmdirInfoMghParameters,
+    params: DcmdirInfoMghParamsDict,
     execution: Execution,
 ): DcmdirInfoMghOutputs {
     const ret: DcmdirInfoMghOutputs = {
@@ -135,7 +135,7 @@ function dcmdir_info_mgh_outputs(
  * @returns NamedTuple of outputs (described in `DcmdirInfoMghOutputs`).
  */
 function dcmdir_info_mgh_execute(
-    params: DcmdirInfoMghParameters,
+    params: DcmdirInfoMghParamsDict,
     runner: Runner | null = null,
 ): DcmdirInfoMghOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function dcmdir_info_mgh(
 export {
       DCMDIR_INFO_MGH_METADATA,
       DcmdirInfoMghOutputs,
+      DcmdirInfoMghParamsDict,
+      DcmdirInfoMghParamsDictTagged,
       dcmdir_info_mgh,
       dcmdir_info_mgh_execute,
       dcmdir_info_mgh_params,

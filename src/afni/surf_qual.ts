@@ -11,7 +11,7 @@ const SURF_QUAL_METADATA: Metadata = {
 };
 
 
-interface SurfQualParameters {
+interface SurfQualParamsDict {
     "@type"?: "afni/SurfQual";
     "spec_file": InputPathType;
     "surface_a": Array<InputPathType>;
@@ -20,11 +20,11 @@ interface SurfQualParameters {
     "self_intersect_flag": boolean;
     "output_prefix"?: string | null | undefined;
 }
-type SurfQualParametersTagged = Required<Pick<SurfQualParameters, '@type'>> & SurfQualParameters;
+type SurfQualParamsDictTagged = Required<Pick<SurfQualParamsDict, '@type'>> & SurfQualParamsDict;
 
 
 /**
- * Output object returned when calling `SurfQualParameters(...)`.
+ * Output object returned when calling `SurfQualParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function surf_qual_params(
     summary_flag: boolean = false,
     self_intersect_flag: boolean = false,
     output_prefix: string | null = null,
-): SurfQualParametersTagged {
+): SurfQualParamsDictTagged {
     const params = {
         "@type": "afni/SurfQual" as const,
         "spec_file": spec_file,
@@ -108,7 +108,7 @@ function surf_qual_params(
  * @returns Command-line arguments.
  */
 function surf_qual_cargs(
-    params: SurfQualParameters,
+    params: SurfQualParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function surf_qual_cargs(
  * @returns Outputs object.
  */
 function surf_qual_outputs(
-    params: SurfQualParameters,
+    params: SurfQualParamsDict,
     execution: Execution,
 ): SurfQualOutputs {
     const ret: SurfQualOutputs = {
@@ -181,7 +181,7 @@ function surf_qual_outputs(
  * @returns NamedTuple of outputs (described in `SurfQualOutputs`).
  */
 function surf_qual_execute(
-    params: SurfQualParameters,
+    params: SurfQualParamsDict,
     runner: Runner | null = null,
 ): SurfQualOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function surf_qual(
 export {
       SURF_QUAL_METADATA,
       SurfQualOutputs,
+      SurfQualParamsDict,
+      SurfQualParamsDictTagged,
       surf_qual,
       surf_qual_execute,
       surf_qual_params,

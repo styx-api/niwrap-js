@@ -11,7 +11,7 @@ const REG_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface RegResampleParameters {
+interface RegResampleParamsDict {
     "@type"?: "niftyreg/reg_resample";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
@@ -24,11 +24,11 @@ interface RegResampleParameters {
     "nearest_neighbor": boolean;
     "linear_interpolation": boolean;
 }
-type RegResampleParametersTagged = Required<Pick<RegResampleParameters, '@type'>> & RegResampleParameters;
+type RegResampleParamsDictTagged = Required<Pick<RegResampleParamsDict, '@type'>> & RegResampleParamsDict;
 
 
 /**
- * Output object returned when calling `RegResampleParameters(...)`.
+ * Output object returned when calling `RegResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function reg_resample_params(
     resampled_blank: string | null = null,
     nearest_neighbor: boolean = false,
     linear_interpolation: boolean = false,
-): RegResampleParametersTagged {
+): RegResampleParamsDictTagged {
     const params = {
         "@type": "niftyreg/reg_resample" as const,
         "reference_image": reference_image,
@@ -114,7 +114,7 @@ function reg_resample_params(
  * @returns Command-line arguments.
  */
 function reg_resample_cargs(
-    params: RegResampleParameters,
+    params: RegResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function reg_resample_cargs(
  * @returns Outputs object.
  */
 function reg_resample_outputs(
-    params: RegResampleParameters,
+    params: RegResampleParamsDict,
     execution: Execution,
 ): RegResampleOutputs {
     const ret: RegResampleOutputs = {
@@ -209,7 +209,7 @@ function reg_resample_outputs(
  * @returns NamedTuple of outputs (described in `RegResampleOutputs`).
  */
 function reg_resample_execute(
-    params: RegResampleParameters,
+    params: RegResampleParamsDict,
     runner: Runner | null = null,
 ): RegResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -266,6 +266,8 @@ function reg_resample(
 export {
       REG_RESAMPLE_METADATA,
       RegResampleOutputs,
+      RegResampleParamsDict,
+      RegResampleParamsDictTagged,
       reg_resample,
       reg_resample_execute,
       reg_resample_params,

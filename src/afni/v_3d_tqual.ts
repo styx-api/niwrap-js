@@ -11,7 +11,7 @@ const V_3D_TQUAL_METADATA: Metadata = {
 };
 
 
-interface V3dTqualParameters {
+interface V3dTqualParamsDict {
     "@type"?: "afni/3dTqual";
     "dataset": InputPathType;
     "spearman": boolean;
@@ -22,11 +22,11 @@ interface V3dTqualParameters {
     "mask"?: InputPathType | null | undefined;
     "range": boolean;
 }
-type V3dTqualParametersTagged = Required<Pick<V3dTqualParameters, '@type'>> & V3dTqualParameters;
+type V3dTqualParamsDictTagged = Required<Pick<V3dTqualParamsDict, '@type'>> & V3dTqualParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTqualParameters(...)`.
+ * Output object returned when calling `V3dTqualParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_tqual_params(
     clip: number | null = null,
     mask: InputPathType | null = null,
     range: boolean = false,
-): V3dTqualParametersTagged {
+): V3dTqualParamsDictTagged {
     const params = {
         "@type": "afni/3dTqual" as const,
         "dataset": dataset,
@@ -94,7 +94,7 @@ function v_3d_tqual_params(
  * @returns Command-line arguments.
  */
 function v_3d_tqual_cargs(
-    params: V3dTqualParameters,
+    params: V3dTqualParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function v_3d_tqual_cargs(
  * @returns Outputs object.
  */
 function v_3d_tqual_outputs(
-    params: V3dTqualParameters,
+    params: V3dTqualParamsDict,
     execution: Execution,
 ): V3dTqualOutputs {
     const ret: V3dTqualOutputs = {
@@ -166,7 +166,7 @@ function v_3d_tqual_outputs(
  * @returns NamedTuple of outputs (described in `V3dTqualOutputs`).
  */
 function v_3d_tqual_execute(
-    params: V3dTqualParameters,
+    params: V3dTqualParamsDict,
     runner: Runner | null = null,
 ): V3dTqualOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function v_3d_tqual(
 
 export {
       V3dTqualOutputs,
+      V3dTqualParamsDict,
+      V3dTqualParamsDictTagged,
       V_3D_TQUAL_METADATA,
       v_3d_tqual,
       v_3d_tqual_execute,

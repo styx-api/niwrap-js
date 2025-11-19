@@ -11,7 +11,7 @@ const FAT_PROC_CONNEC_VIS_METADATA: Metadata = {
 };
 
 
-interface FatProcConnecVisParameters {
+interface FatProcConnecVisParamsDict {
     "@type"?: "afni/fat_proc_connec_vis";
     "in_rois": string;
     "prefix": string;
@@ -25,11 +25,11 @@ interface FatProcConnecVisParameters {
     "wdir"?: string | null | undefined;
     "no_clean": boolean;
 }
-type FatProcConnecVisParametersTagged = Required<Pick<FatProcConnecVisParameters, '@type'>> & FatProcConnecVisParameters;
+type FatProcConnecVisParamsDictTagged = Required<Pick<FatProcConnecVisParamsDict, '@type'>> & FatProcConnecVisParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcConnecVisParameters(...)`.
+ * Output object returned when calling `FatProcConnecVisParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function fat_proc_connec_vis_params(
     output_tstat: boolean = false,
     wdir: string | null = null,
     no_clean: boolean = false,
-): FatProcConnecVisParametersTagged {
+): FatProcConnecVisParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_connec_vis" as const,
         "in_rois": in_rois,
@@ -120,7 +120,7 @@ function fat_proc_connec_vis_params(
  * @returns Command-line arguments.
  */
 function fat_proc_connec_vis_cargs(
-    params: FatProcConnecVisParameters,
+    params: FatProcConnecVisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function fat_proc_connec_vis_cargs(
  * @returns Outputs object.
  */
 function fat_proc_connec_vis_outputs(
-    params: FatProcConnecVisParameters,
+    params: FatProcConnecVisParamsDict,
     execution: Execution,
 ): FatProcConnecVisOutputs {
     const ret: FatProcConnecVisOutputs = {
@@ -210,7 +210,7 @@ function fat_proc_connec_vis_outputs(
  * @returns NamedTuple of outputs (described in `FatProcConnecVisOutputs`).
  */
 function fat_proc_connec_vis_execute(
-    params: FatProcConnecVisParameters,
+    params: FatProcConnecVisParamsDict,
     runner: Runner | null = null,
 ): FatProcConnecVisOutputs {
     runner = runner || getGlobalRunner();
@@ -269,6 +269,8 @@ function fat_proc_connec_vis(
 export {
       FAT_PROC_CONNEC_VIS_METADATA,
       FatProcConnecVisOutputs,
+      FatProcConnecVisParamsDict,
+      FatProcConnecVisParamsDictTagged,
       fat_proc_connec_vis,
       fat_proc_connec_vis_execute,
       fat_proc_connec_vis_params,

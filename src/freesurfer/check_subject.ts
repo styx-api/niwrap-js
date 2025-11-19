@@ -11,15 +11,15 @@ const CHECK_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface CheckSubjectParameters {
+interface CheckSubjectParamsDict {
     "@type"?: "freesurfer/check_subject";
     "subject_dir": string;
 }
-type CheckSubjectParametersTagged = Required<Pick<CheckSubjectParameters, '@type'>> & CheckSubjectParameters;
+type CheckSubjectParamsDictTagged = Required<Pick<CheckSubjectParamsDict, '@type'>> & CheckSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `CheckSubjectParameters(...)`.
+ * Output object returned when calling `CheckSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface CheckSubjectOutputs {
  */
 function check_subject_params(
     subject_dir: string,
-): CheckSubjectParametersTagged {
+): CheckSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/check_subject" as const,
         "subject_dir": subject_dir,
@@ -58,7 +58,7 @@ function check_subject_params(
  * @returns Command-line arguments.
  */
 function check_subject_cargs(
-    params: CheckSubjectParameters,
+    params: CheckSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function check_subject_cargs(
  * @returns Outputs object.
  */
 function check_subject_outputs(
-    params: CheckSubjectParameters,
+    params: CheckSubjectParamsDict,
     execution: Execution,
 ): CheckSubjectOutputs {
     const ret: CheckSubjectOutputs = {
@@ -102,7 +102,7 @@ function check_subject_outputs(
  * @returns NamedTuple of outputs (described in `CheckSubjectOutputs`).
  */
 function check_subject_execute(
-    params: CheckSubjectParameters,
+    params: CheckSubjectParamsDict,
     runner: Runner | null = null,
 ): CheckSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function check_subject(
 export {
       CHECK_SUBJECT_METADATA,
       CheckSubjectOutputs,
+      CheckSubjectParamsDict,
+      CheckSubjectParamsDictTagged,
       check_subject,
       check_subject_execute,
       check_subject_params,

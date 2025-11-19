@@ -11,7 +11,7 @@ const MRI_GCUT_METADATA: Metadata = {
 };
 
 
-interface MriGcutParameters {
+interface MriGcutParamsDict {
     "@type"?: "freesurfer/mri_gcut";
     "wmmask_110": boolean;
     "mult_file"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface MriGcutParameters {
     "infile": InputPathType;
     "outfile": string;
 }
-type MriGcutParametersTagged = Required<Pick<MriGcutParameters, '@type'>> & MriGcutParameters;
+type MriGcutParamsDictTagged = Required<Pick<MriGcutParamsDict, '@type'>> & MriGcutParamsDict;
 
 
 /**
- * Output object returned when calling `MriGcutParameters(...)`.
+ * Output object returned when calling `MriGcutParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_gcut_params(
     wmmask_110: boolean = false,
     mult_file: InputPathType | null = null,
     threshold_value: number | null = null,
-): MriGcutParametersTagged {
+): MriGcutParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gcut" as const,
         "wmmask_110": wmmask_110,
@@ -82,7 +82,7 @@ function mri_gcut_params(
  * @returns Command-line arguments.
  */
 function mri_gcut_cargs(
-    params: MriGcutParameters,
+    params: MriGcutParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function mri_gcut_cargs(
  * @returns Outputs object.
  */
 function mri_gcut_outputs(
-    params: MriGcutParameters,
+    params: MriGcutParamsDict,
     execution: Execution,
 ): MriGcutOutputs {
     const ret: MriGcutOutputs = {
@@ -143,7 +143,7 @@ function mri_gcut_outputs(
  * @returns NamedTuple of outputs (described in `MriGcutOutputs`).
  */
 function mri_gcut_execute(
-    params: MriGcutParameters,
+    params: MriGcutParamsDict,
     runner: Runner | null = null,
 ): MriGcutOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function mri_gcut(
 export {
       MRI_GCUT_METADATA,
       MriGcutOutputs,
+      MriGcutParamsDict,
+      MriGcutParamsDictTagged,
       mri_gcut,
       mri_gcut_execute,
       mri_gcut_params,

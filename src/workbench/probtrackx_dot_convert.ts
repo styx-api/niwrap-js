@@ -10,52 +10,52 @@ const PROBTRACKX_DOT_CONVERT_METADATA: Metadata = {
 };
 
 
-interface ProbtrackxDotConvertRowVoxelsParameters {
+interface ProbtrackxDotConvertRowVoxelsParamsDict {
     "@type"?: "row-voxels";
     "voxel-list-file": string;
     "label-vol": InputPathType;
 }
-type ProbtrackxDotConvertRowVoxelsParametersTagged = Required<Pick<ProbtrackxDotConvertRowVoxelsParameters, '@type'>> & ProbtrackxDotConvertRowVoxelsParameters;
+type ProbtrackxDotConvertRowVoxelsParamsDictTagged = Required<Pick<ProbtrackxDotConvertRowVoxelsParamsDict, '@type'>> & ProbtrackxDotConvertRowVoxelsParamsDict;
 
 
-interface ProbtrackxDotConvertRowCiftiParameters {
+interface ProbtrackxDotConvertRowCiftiParamsDict {
     "@type"?: "row-cifti";
     "cifti": InputPathType;
     "direction": string;
 }
-type ProbtrackxDotConvertRowCiftiParametersTagged = Required<Pick<ProbtrackxDotConvertRowCiftiParameters, '@type'>> & ProbtrackxDotConvertRowCiftiParameters;
+type ProbtrackxDotConvertRowCiftiParamsDictTagged = Required<Pick<ProbtrackxDotConvertRowCiftiParamsDict, '@type'>> & ProbtrackxDotConvertRowCiftiParamsDict;
 
 
-interface ProbtrackxDotConvertColVoxelsParameters {
+interface ProbtrackxDotConvertColVoxelsParamsDict {
     "@type"?: "col-voxels";
     "voxel-list-file": string;
     "label-vol": InputPathType;
 }
-type ProbtrackxDotConvertColVoxelsParametersTagged = Required<Pick<ProbtrackxDotConvertColVoxelsParameters, '@type'>> & ProbtrackxDotConvertColVoxelsParameters;
+type ProbtrackxDotConvertColVoxelsParamsDictTagged = Required<Pick<ProbtrackxDotConvertColVoxelsParamsDict, '@type'>> & ProbtrackxDotConvertColVoxelsParamsDict;
 
 
-interface ProbtrackxDotConvertColCiftiParameters {
+interface ProbtrackxDotConvertColCiftiParamsDict {
     "@type"?: "col-cifti";
     "cifti": InputPathType;
     "direction": string;
 }
-type ProbtrackxDotConvertColCiftiParametersTagged = Required<Pick<ProbtrackxDotConvertColCiftiParameters, '@type'>> & ProbtrackxDotConvertColCiftiParameters;
+type ProbtrackxDotConvertColCiftiParamsDictTagged = Required<Pick<ProbtrackxDotConvertColCiftiParamsDict, '@type'>> & ProbtrackxDotConvertColCiftiParamsDict;
 
 
-interface ProbtrackxDotConvertParameters {
+interface ProbtrackxDotConvertParamsDict {
     "@type"?: "workbench/probtrackx-dot-convert";
     "cifti-out": string;
-    "row-voxels"?: ProbtrackxDotConvertRowVoxelsParameters | null | undefined;
+    "row-voxels"?: ProbtrackxDotConvertRowVoxelsParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "row-cifti"?: ProbtrackxDotConvertRowCiftiParameters | null | undefined;
-    "col-voxels"?: ProbtrackxDotConvertColVoxelsParameters | null | undefined;
+    "row-cifti"?: ProbtrackxDotConvertRowCiftiParamsDict | null | undefined;
+    "col-voxels"?: ProbtrackxDotConvertColVoxelsParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "col-cifti"?: ProbtrackxDotConvertColCiftiParameters | null | undefined;
+    "col-cifti"?: ProbtrackxDotConvertColCiftiParamsDict | null | undefined;
     "transpose": boolean;
     "make-symmetric": boolean;
     "dot-file": string;
 }
-type ProbtrackxDotConvertParametersTagged = Required<Pick<ProbtrackxDotConvertParameters, '@type'>> & ProbtrackxDotConvertParameters;
+type ProbtrackxDotConvertParamsDictTagged = Required<Pick<ProbtrackxDotConvertParamsDict, '@type'>> & ProbtrackxDotConvertParamsDict;
 
 
 /**
@@ -66,10 +66,10 @@ type ProbtrackxDotConvertParametersTagged = Required<Pick<ProbtrackxDotConvertPa
  *
  * @returns Parameter dictionary
  */
-function probtrackx_dot_convert_row_voxels_params(
+function probtrackx_dot_convert_row_voxels(
     voxel_list_file: string,
     label_vol: InputPathType,
-): ProbtrackxDotConvertRowVoxelsParametersTagged {
+): ProbtrackxDotConvertRowVoxelsParamsDictTagged {
     const params = {
         "@type": "row-voxels" as const,
         "voxel-list-file": voxel_list_file,
@@ -88,7 +88,7 @@ function probtrackx_dot_convert_row_voxels_params(
  * @returns Command-line arguments.
  */
 function probtrackx_dot_convert_row_voxels_cargs(
-    params: ProbtrackxDotConvertRowVoxelsParameters,
+    params: ProbtrackxDotConvertRowVoxelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,10 +109,10 @@ function probtrackx_dot_convert_row_voxels_cargs(
  *
  * @returns Parameter dictionary
  */
-function probtrackx_dot_convert_row_cifti_params(
+function probtrackx_dot_convert_row_cifti(
     cifti: InputPathType,
     direction: string,
-): ProbtrackxDotConvertRowCiftiParametersTagged {
+): ProbtrackxDotConvertRowCiftiParamsDictTagged {
     const params = {
         "@type": "row-cifti" as const,
         "cifti": cifti,
@@ -131,7 +131,7 @@ function probtrackx_dot_convert_row_cifti_params(
  * @returns Command-line arguments.
  */
 function probtrackx_dot_convert_row_cifti_cargs(
-    params: ProbtrackxDotConvertRowCiftiParameters,
+    params: ProbtrackxDotConvertRowCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,10 +152,10 @@ function probtrackx_dot_convert_row_cifti_cargs(
  *
  * @returns Parameter dictionary
  */
-function probtrackx_dot_convert_col_voxels_params(
+function probtrackx_dot_convert_col_voxels(
     voxel_list_file: string,
     label_vol: InputPathType,
-): ProbtrackxDotConvertColVoxelsParametersTagged {
+): ProbtrackxDotConvertColVoxelsParamsDictTagged {
     const params = {
         "@type": "col-voxels" as const,
         "voxel-list-file": voxel_list_file,
@@ -174,7 +174,7 @@ function probtrackx_dot_convert_col_voxels_params(
  * @returns Command-line arguments.
  */
 function probtrackx_dot_convert_col_voxels_cargs(
-    params: ProbtrackxDotConvertColVoxelsParameters,
+    params: ProbtrackxDotConvertColVoxelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -195,10 +195,10 @@ function probtrackx_dot_convert_col_voxels_cargs(
  *
  * @returns Parameter dictionary
  */
-function probtrackx_dot_convert_col_cifti_params(
+function probtrackx_dot_convert_col_cifti(
     cifti: InputPathType,
     direction: string,
-): ProbtrackxDotConvertColCiftiParametersTagged {
+): ProbtrackxDotConvertColCiftiParamsDictTagged {
     const params = {
         "@type": "col-cifti" as const,
         "cifti": cifti,
@@ -217,7 +217,7 @@ function probtrackx_dot_convert_col_cifti_params(
  * @returns Command-line arguments.
  */
 function probtrackx_dot_convert_col_cifti_cargs(
-    params: ProbtrackxDotConvertColCiftiParameters,
+    params: ProbtrackxDotConvertColCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -231,7 +231,7 @@ function probtrackx_dot_convert_col_cifti_cargs(
 
 
 /**
- * Output object returned when calling `ProbtrackxDotConvertParameters(...)`.
+ * Output object returned when calling `ProbtrackxDotConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -272,13 +272,13 @@ function probtrackx_dot_convert_params(
     roi_metric: InputPathType | null,
     roi_metric_: InputPathType | null,
     dot_file: string,
-    row_voxels: ProbtrackxDotConvertRowVoxelsParameters | null = null,
-    row_cifti: ProbtrackxDotConvertRowCiftiParameters | null = null,
-    col_voxels: ProbtrackxDotConvertColVoxelsParameters | null = null,
-    col_cifti: ProbtrackxDotConvertColCiftiParameters | null = null,
+    row_voxels: ProbtrackxDotConvertRowVoxelsParamsDict | null = null,
+    row_cifti: ProbtrackxDotConvertRowCiftiParamsDict | null = null,
+    col_voxels: ProbtrackxDotConvertColVoxelsParamsDict | null = null,
+    col_cifti: ProbtrackxDotConvertColCiftiParamsDict | null = null,
     transpose: boolean = false,
     make_symmetric: boolean = false,
-): ProbtrackxDotConvertParametersTagged {
+): ProbtrackxDotConvertParamsDictTagged {
     const params = {
         "@type": "workbench/probtrackx-dot-convert" as const,
         "cifti-out": cifti_out,
@@ -317,7 +317,7 @@ function probtrackx_dot_convert_params(
  * @returns Command-line arguments.
  */
 function probtrackx_dot_convert_cargs(
-    params: ProbtrackxDotConvertParameters,
+    params: ProbtrackxDotConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -352,7 +352,7 @@ function probtrackx_dot_convert_cargs(
  * @returns Outputs object.
  */
 function probtrackx_dot_convert_outputs(
-    params: ProbtrackxDotConvertParameters,
+    params: ProbtrackxDotConvertParamsDict,
     execution: Execution,
 ): ProbtrackxDotConvertOutputs {
     const ret: ProbtrackxDotConvertOutputs = {
@@ -413,7 +413,7 @@ function probtrackx_dot_convert_outputs(
  * @returns NamedTuple of outputs (described in `ProbtrackxDotConvertOutputs`).
  */
 function probtrackx_dot_convert_execute(
-    params: ProbtrackxDotConvertParameters,
+    params: ProbtrackxDotConvertParamsDict,
     runner: Runner | null = null,
 ): ProbtrackxDotConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -493,10 +493,10 @@ function probtrackx_dot_convert(
     roi_metric: InputPathType | null,
     roi_metric_: InputPathType | null,
     dot_file: string,
-    row_voxels: ProbtrackxDotConvertRowVoxelsParameters | null = null,
-    row_cifti: ProbtrackxDotConvertRowCiftiParameters | null = null,
-    col_voxels: ProbtrackxDotConvertColVoxelsParameters | null = null,
-    col_cifti: ProbtrackxDotConvertColCiftiParameters | null = null,
+    row_voxels: ProbtrackxDotConvertRowVoxelsParamsDict | null = null,
+    row_cifti: ProbtrackxDotConvertRowCiftiParamsDict | null = null,
+    col_voxels: ProbtrackxDotConvertColVoxelsParamsDict | null = null,
+    col_cifti: ProbtrackxDotConvertColCiftiParamsDict | null = null,
     transpose: boolean = false,
     make_symmetric: boolean = false,
     runner: Runner | null = null,
@@ -508,12 +508,22 @@ function probtrackx_dot_convert(
 
 export {
       PROBTRACKX_DOT_CONVERT_METADATA,
+      ProbtrackxDotConvertColCiftiParamsDict,
+      ProbtrackxDotConvertColCiftiParamsDictTagged,
+      ProbtrackxDotConvertColVoxelsParamsDict,
+      ProbtrackxDotConvertColVoxelsParamsDictTagged,
       ProbtrackxDotConvertOutputs,
+      ProbtrackxDotConvertParamsDict,
+      ProbtrackxDotConvertParamsDictTagged,
+      ProbtrackxDotConvertRowCiftiParamsDict,
+      ProbtrackxDotConvertRowCiftiParamsDictTagged,
+      ProbtrackxDotConvertRowVoxelsParamsDict,
+      ProbtrackxDotConvertRowVoxelsParamsDictTagged,
       probtrackx_dot_convert,
-      probtrackx_dot_convert_col_cifti_params,
-      probtrackx_dot_convert_col_voxels_params,
+      probtrackx_dot_convert_col_cifti,
+      probtrackx_dot_convert_col_voxels,
       probtrackx_dot_convert_execute,
       probtrackx_dot_convert_params,
-      probtrackx_dot_convert_row_cifti_params,
-      probtrackx_dot_convert_row_voxels_params,
+      probtrackx_dot_convert_row_cifti,
+      probtrackx_dot_convert_row_voxels,
 };

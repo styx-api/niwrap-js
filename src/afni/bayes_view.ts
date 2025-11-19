@@ -11,17 +11,17 @@ const BAYES_VIEW_METADATA: Metadata = {
 };
 
 
-interface BayesViewParameters {
+interface BayesViewParamsDict {
     "@type"?: "afni/bayes_view";
     "input_folder": string;
     "help": boolean;
     "shiny_folder"?: string | null | undefined;
 }
-type BayesViewParametersTagged = Required<Pick<BayesViewParameters, '@type'>> & BayesViewParameters;
+type BayesViewParamsDictTagged = Required<Pick<BayesViewParamsDict, '@type'>> & BayesViewParamsDict;
 
 
 /**
- * Output object returned when calling `BayesViewParameters(...)`.
+ * Output object returned when calling `BayesViewParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function bayes_view_params(
     input_folder: string,
     help: boolean = false,
     shiny_folder: string | null = null,
-): BayesViewParametersTagged {
+): BayesViewParamsDictTagged {
     const params = {
         "@type": "afni/bayes_view" as const,
         "input_folder": input_folder,
@@ -68,7 +68,7 @@ function bayes_view_params(
  * @returns Command-line arguments.
  */
 function bayes_view_cargs(
-    params: BayesViewParameters,
+    params: BayesViewParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function bayes_view_cargs(
  * @returns Outputs object.
  */
 function bayes_view_outputs(
-    params: BayesViewParameters,
+    params: BayesViewParamsDict,
     execution: Execution,
 ): BayesViewOutputs {
     const ret: BayesViewOutputs = {
@@ -121,7 +121,7 @@ function bayes_view_outputs(
  * @returns NamedTuple of outputs (described in `BayesViewOutputs`).
  */
 function bayes_view_execute(
-    params: BayesViewParameters,
+    params: BayesViewParamsDict,
     runner: Runner | null = null,
 ): BayesViewOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function bayes_view(
 export {
       BAYES_VIEW_METADATA,
       BayesViewOutputs,
+      BayesViewParamsDict,
+      BayesViewParamsDictTagged,
       bayes_view,
       bayes_view_execute,
       bayes_view_params,

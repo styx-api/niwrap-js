@@ -11,17 +11,17 @@ const DEFECT_SEG_METADATA: Metadata = {
 };
 
 
-interface DefectSegParameters {
+interface DefectSegParamsDict {
     "@type"?: "freesurfer/defect-seg";
     "subject": string;
     "lh_only": boolean;
     "rh_only": boolean;
 }
-type DefectSegParametersTagged = Required<Pick<DefectSegParameters, '@type'>> & DefectSegParameters;
+type DefectSegParamsDictTagged = Required<Pick<DefectSegParamsDict, '@type'>> & DefectSegParamsDict;
 
 
 /**
- * Output object returned when calling `DefectSegParameters(...)`.
+ * Output object returned when calling `DefectSegParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function defect_seg_params(
     subject: string,
     lh_only: boolean = false,
     rh_only: boolean = false,
-): DefectSegParametersTagged {
+): DefectSegParamsDictTagged {
     const params = {
         "@type": "freesurfer/defect-seg" as const,
         "subject": subject,
@@ -118,7 +118,7 @@ function defect_seg_params(
  * @returns Command-line arguments.
  */
 function defect_seg_cargs(
-    params: DefectSegParameters,
+    params: DefectSegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -146,7 +146,7 @@ function defect_seg_cargs(
  * @returns Outputs object.
  */
 function defect_seg_outputs(
-    params: DefectSegParameters,
+    params: DefectSegParamsDict,
     execution: Execution,
 ): DefectSegOutputs {
     const ret: DefectSegOutputs = {
@@ -184,7 +184,7 @@ function defect_seg_outputs(
  * @returns NamedTuple of outputs (described in `DefectSegOutputs`).
  */
 function defect_seg_execute(
-    params: DefectSegParameters,
+    params: DefectSegParamsDict,
     runner: Runner | null = null,
 ): DefectSegOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function defect_seg(
 export {
       DEFECT_SEG_METADATA,
       DefectSegOutputs,
+      DefectSegParamsDict,
+      DefectSegParamsDictTagged,
       defect_seg,
       defect_seg_execute,
       defect_seg_params,

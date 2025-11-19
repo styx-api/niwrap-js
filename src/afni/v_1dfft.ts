@@ -11,7 +11,7 @@ const V_1DFFT_METADATA: Metadata = {
 };
 
 
-interface V1dfftParameters {
+interface V1dfftParamsDict {
     "@type"?: "afni/1dfft";
     "infile": InputPathType;
     "outfile": string;
@@ -23,11 +23,11 @@ interface V1dfftParameters {
     "hilbert": boolean;
     "nodetrend": boolean;
 }
-type V1dfftParametersTagged = Required<Pick<V1dfftParameters, '@type'>> & V1dfftParameters;
+type V1dfftParamsDictTagged = Required<Pick<V1dfftParamsDict, '@type'>> & V1dfftParamsDict;
 
 
 /**
- * Output object returned when calling `V1dfftParameters(...)`.
+ * Output object returned when calling `V1dfftParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_1dfft_params(
     fromcx: boolean = false,
     hilbert: boolean = false,
     nodetrend: boolean = false,
-): V1dfftParametersTagged {
+): V1dfftParamsDictTagged {
     const params = {
         "@type": "afni/1dfft" as const,
         "infile": infile,
@@ -100,7 +100,7 @@ function v_1dfft_params(
  * @returns Command-line arguments.
  */
 function v_1dfft_cargs(
-    params: V1dfftParameters,
+    params: V1dfftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function v_1dfft_cargs(
  * @returns Outputs object.
  */
 function v_1dfft_outputs(
-    params: V1dfftParameters,
+    params: V1dfftParamsDict,
     execution: Execution,
 ): V1dfftOutputs {
     const ret: V1dfftOutputs = {
@@ -176,7 +176,7 @@ function v_1dfft_outputs(
  * @returns NamedTuple of outputs (described in `V1dfftOutputs`).
  */
 function v_1dfft_execute(
-    params: V1dfftParameters,
+    params: V1dfftParamsDict,
     runner: Runner | null = null,
 ): V1dfftOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function v_1dfft(
 
 export {
       V1dfftOutputs,
+      V1dfftParamsDict,
+      V1dfftParamsDictTagged,
       V_1DFFT_METADATA,
       v_1dfft,
       v_1dfft_execute,

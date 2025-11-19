@@ -11,18 +11,18 @@ const SET_SPACING_METADATA: Metadata = {
 };
 
 
-interface SetSpacingParameters {
+interface SetSpacingParamsDict {
     "@type"?: "ants/SetSpacing";
     "dimension": number;
     "input_file": InputPathType;
     "output_file": string;
     "spacing": Array<number>;
 }
-type SetSpacingParametersTagged = Required<Pick<SetSpacingParameters, '@type'>> & SetSpacingParameters;
+type SetSpacingParamsDictTagged = Required<Pick<SetSpacingParamsDict, '@type'>> & SetSpacingParamsDict;
 
 
 /**
- * Output object returned when calling `SetSpacingParameters(...)`.
+ * Output object returned when calling `SetSpacingParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function set_spacing_params(
     input_file: InputPathType,
     output_file: string,
     spacing: Array<number>,
-): SetSpacingParametersTagged {
+): SetSpacingParamsDictTagged {
     const params = {
         "@type": "ants/SetSpacing" as const,
         "dimension": dimension,
@@ -74,7 +74,7 @@ function set_spacing_params(
  * @returns Command-line arguments.
  */
 function set_spacing_cargs(
-    params: SetSpacingParameters,
+    params: SetSpacingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function set_spacing_cargs(
  * @returns Outputs object.
  */
 function set_spacing_outputs(
-    params: SetSpacingParameters,
+    params: SetSpacingParamsDict,
     execution: Execution,
 ): SetSpacingOutputs {
     const ret: SetSpacingOutputs = {
@@ -122,7 +122,7 @@ function set_spacing_outputs(
  * @returns NamedTuple of outputs (described in `SetSpacingOutputs`).
  */
 function set_spacing_execute(
-    params: SetSpacingParameters,
+    params: SetSpacingParamsDict,
     runner: Runner | null = null,
 ): SetSpacingOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function set_spacing(
 export {
       SET_SPACING_METADATA,
       SetSpacingOutputs,
+      SetSpacingParamsDict,
+      SetSpacingParamsDictTagged,
       set_spacing,
       set_spacing_execute,
       set_spacing_params,

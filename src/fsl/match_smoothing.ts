@@ -11,18 +11,18 @@ const MATCH_SMOOTHING_METADATA: Metadata = {
 };
 
 
-interface MatchSmoothingParameters {
+interface MatchSmoothingParamsDict {
     "@type"?: "fsl/match_smoothing";
     "example_func": InputPathType;
     "func_smoothing_FWHM": number;
     "example_structural": InputPathType;
     "standard_space_resolution": number;
 }
-type MatchSmoothingParametersTagged = Required<Pick<MatchSmoothingParameters, '@type'>> & MatchSmoothingParameters;
+type MatchSmoothingParamsDictTagged = Required<Pick<MatchSmoothingParamsDict, '@type'>> & MatchSmoothingParamsDict;
 
 
 /**
- * Output object returned when calling `MatchSmoothingParameters(...)`.
+ * Output object returned when calling `MatchSmoothingParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function match_smoothing_params(
     func_smoothing_fwhm: number,
     example_structural: InputPathType,
     standard_space_resolution: number,
-): MatchSmoothingParametersTagged {
+): MatchSmoothingParamsDictTagged {
     const params = {
         "@type": "fsl/match_smoothing" as const,
         "example_func": example_func,
@@ -70,7 +70,7 @@ function match_smoothing_params(
  * @returns Command-line arguments.
  */
 function match_smoothing_cargs(
-    params: MatchSmoothingParameters,
+    params: MatchSmoothingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function match_smoothing_cargs(
  * @returns Outputs object.
  */
 function match_smoothing_outputs(
-    params: MatchSmoothingParameters,
+    params: MatchSmoothingParamsDict,
     execution: Execution,
 ): MatchSmoothingOutputs {
     const ret: MatchSmoothingOutputs = {
@@ -117,7 +117,7 @@ function match_smoothing_outputs(
  * @returns NamedTuple of outputs (described in `MatchSmoothingOutputs`).
  */
 function match_smoothing_execute(
-    params: MatchSmoothingParameters,
+    params: MatchSmoothingParamsDict,
     runner: Runner | null = null,
 ): MatchSmoothingOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function match_smoothing(
 export {
       MATCH_SMOOTHING_METADATA,
       MatchSmoothingOutputs,
+      MatchSmoothingParamsDict,
+      MatchSmoothingParamsDictTagged,
       match_smoothing,
       match_smoothing_execute,
       match_smoothing_params,

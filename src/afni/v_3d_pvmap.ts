@@ -11,18 +11,18 @@ const V_3D_PVMAP_METADATA: Metadata = {
 };
 
 
-interface V3dPvmapParameters {
+interface V3dPvmapParamsDict {
     "@type"?: "afni/3dPVmap";
     "prefix"?: string | null | undefined;
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
     "inputdataset": InputPathType;
 }
-type V3dPvmapParametersTagged = Required<Pick<V3dPvmapParameters, '@type'>> & V3dPvmapParameters;
+type V3dPvmapParamsDictTagged = Required<Pick<V3dPvmapParamsDict, '@type'>> & V3dPvmapParamsDict;
 
 
 /**
- * Output object returned when calling `V3dPvmapParameters(...)`.
+ * Output object returned when calling `V3dPvmapParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function v_3d_pvmap_params(
     prefix: string | null = null,
     mask: InputPathType | null = null,
     automask: boolean = false,
-): V3dPvmapParametersTagged {
+): V3dPvmapParamsDictTagged {
     const params = {
         "@type": "afni/3dPVmap" as const,
         "automask": automask,
@@ -86,7 +86,7 @@ function v_3d_pvmap_params(
  * @returns Command-line arguments.
  */
 function v_3d_pvmap_cargs(
-    params: V3dPvmapParameters,
+    params: V3dPvmapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function v_3d_pvmap_cargs(
  * @returns Outputs object.
  */
 function v_3d_pvmap_outputs(
-    params: V3dPvmapParameters,
+    params: V3dPvmapParamsDict,
     execution: Execution,
 ): V3dPvmapOutputs {
     const ret: V3dPvmapOutputs = {
@@ -148,7 +148,7 @@ function v_3d_pvmap_outputs(
  * @returns NamedTuple of outputs (described in `V3dPvmapOutputs`).
  */
 function v_3d_pvmap_execute(
-    params: V3dPvmapParameters,
+    params: V3dPvmapParamsDict,
     runner: Runner | null = null,
 ): V3dPvmapOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function v_3d_pvmap(
 
 export {
       V3dPvmapOutputs,
+      V3dPvmapParamsDict,
+      V3dPvmapParamsDictTagged,
       V_3D_PVMAP_METADATA,
       v_3d_pvmap,
       v_3d_pvmap_execute,

@@ -11,7 +11,7 @@ const TTOLOGP_METADATA: Metadata = {
 };
 
 
-interface TtologpParameters {
+interface TtologpParamsDict {
     "@type"?: "fsl/ttologp";
     "varsfile": InputPathType;
     "cbsfile": InputPathType;
@@ -19,11 +19,11 @@ interface TtologpParameters {
     "outputvol"?: string | null | undefined;
     "help_flag": boolean;
 }
-type TtologpParametersTagged = Required<Pick<TtologpParameters, '@type'>> & TtologpParameters;
+type TtologpParamsDictTagged = Required<Pick<TtologpParamsDict, '@type'>> & TtologpParamsDict;
 
 
 /**
- * Output object returned when calling `TtologpParameters(...)`.
+ * Output object returned when calling `TtologpParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function ttologp_params(
     dof: string,
     outputvol: string | null = null,
     help_flag: boolean = false,
-): TtologpParametersTagged {
+): TtologpParamsDictTagged {
     const params = {
         "@type": "fsl/ttologp" as const,
         "varsfile": varsfile,
@@ -80,7 +80,7 @@ function ttologp_params(
  * @returns Command-line arguments.
  */
 function ttologp_cargs(
-    params: TtologpParameters,
+    params: TtologpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function ttologp_cargs(
  * @returns Outputs object.
  */
 function ttologp_outputs(
-    params: TtologpParameters,
+    params: TtologpParamsDict,
     execution: Execution,
 ): TtologpOutputs {
     const ret: TtologpOutputs = {
@@ -136,7 +136,7 @@ function ttologp_outputs(
  * @returns NamedTuple of outputs (described in `TtologpOutputs`).
  */
 function ttologp_execute(
-    params: TtologpParameters,
+    params: TtologpParamsDict,
     runner: Runner | null = null,
 ): TtologpOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function ttologp(
 export {
       TTOLOGP_METADATA,
       TtologpOutputs,
+      TtologpParamsDict,
+      TtologpParamsDictTagged,
       ttologp,
       ttologp_execute,
       ttologp_params,

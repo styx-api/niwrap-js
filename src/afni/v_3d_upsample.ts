@@ -11,7 +11,7 @@ const V_3D_UPSAMPLE_METADATA: Metadata = {
 };
 
 
-interface V3dUpsampleParameters {
+interface V3dUpsampleParamsDict {
     "@type"?: "afni/3dUpsample";
     "upsample_factor": number;
     "input_dataset": string;
@@ -20,11 +20,11 @@ interface V3dUpsampleParameters {
     "verbose_flag": boolean;
     "datatype"?: string | null | undefined;
 }
-type V3dUpsampleParametersTagged = Required<Pick<V3dUpsampleParameters, '@type'>> & V3dUpsampleParameters;
+type V3dUpsampleParamsDictTagged = Required<Pick<V3dUpsampleParamsDict, '@type'>> & V3dUpsampleParamsDict;
 
 
 /**
- * Output object returned when calling `V3dUpsampleParameters(...)`.
+ * Output object returned when calling `V3dUpsampleParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function v_3d_upsample_params(
     output_prefix: string | null = null,
     verbose_flag: boolean = false,
     datatype: string | null = null,
-): V3dUpsampleParametersTagged {
+): V3dUpsampleParamsDictTagged {
     const params = {
         "@type": "afni/3dUpsample" as const,
         "upsample_factor": upsample_factor,
@@ -90,7 +90,7 @@ function v_3d_upsample_params(
  * @returns Command-line arguments.
  */
 function v_3d_upsample_cargs(
-    params: V3dUpsampleParameters,
+    params: V3dUpsampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function v_3d_upsample_cargs(
  * @returns Outputs object.
  */
 function v_3d_upsample_outputs(
-    params: V3dUpsampleParameters,
+    params: V3dUpsampleParamsDict,
     execution: Execution,
 ): V3dUpsampleOutputs {
     const ret: V3dUpsampleOutputs = {
@@ -161,7 +161,7 @@ function v_3d_upsample_outputs(
  * @returns NamedTuple of outputs (described in `V3dUpsampleOutputs`).
  */
 function v_3d_upsample_execute(
-    params: V3dUpsampleParameters,
+    params: V3dUpsampleParamsDict,
     runner: Runner | null = null,
 ): V3dUpsampleOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function v_3d_upsample(
 
 export {
       V3dUpsampleOutputs,
+      V3dUpsampleParamsDict,
+      V3dUpsampleParamsDictTagged,
       V_3D_UPSAMPLE_METADATA,
       v_3d_upsample,
       v_3d_upsample_execute,

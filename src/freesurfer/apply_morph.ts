@@ -11,7 +11,7 @@ const APPLY_MORPH_METADATA: Metadata = {
 };
 
 
-interface ApplyMorphParameters {
+interface ApplyMorphParamsDict {
     "@type"?: "freesurfer/applyMorph";
     "inputs": Array<InputPathType>;
     "template": InputPathType;
@@ -19,11 +19,11 @@ interface ApplyMorphParameters {
     "zlib_buffer"?: number | null | undefined;
     "dbg_coords"?: Array<number> | null | undefined;
 }
-type ApplyMorphParametersTagged = Required<Pick<ApplyMorphParameters, '@type'>> & ApplyMorphParameters;
+type ApplyMorphParamsDictTagged = Required<Pick<ApplyMorphParamsDict, '@type'>> & ApplyMorphParamsDict;
 
 
 /**
- * Output object returned when calling `ApplyMorphParameters(...)`.
+ * Output object returned when calling `ApplyMorphParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function apply_morph_params(
     transform: InputPathType,
     zlib_buffer: number | null = null,
     dbg_coords: Array<number> | null = null,
-): ApplyMorphParametersTagged {
+): ApplyMorphParamsDictTagged {
     const params = {
         "@type": "freesurfer/applyMorph" as const,
         "inputs": inputs,
@@ -78,7 +78,7 @@ function apply_morph_params(
  * @returns Command-line arguments.
  */
 function apply_morph_cargs(
-    params: ApplyMorphParameters,
+    params: ApplyMorphParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function apply_morph_cargs(
  * @returns Outputs object.
  */
 function apply_morph_outputs(
-    params: ApplyMorphParameters,
+    params: ApplyMorphParamsDict,
     execution: Execution,
 ): ApplyMorphOutputs {
     const ret: ApplyMorphOutputs = {
@@ -142,7 +142,7 @@ function apply_morph_outputs(
  * @returns NamedTuple of outputs (described in `ApplyMorphOutputs`).
  */
 function apply_morph_execute(
-    params: ApplyMorphParameters,
+    params: ApplyMorphParamsDict,
     runner: Runner | null = null,
 ): ApplyMorphOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function apply_morph(
 export {
       APPLY_MORPH_METADATA,
       ApplyMorphOutputs,
+      ApplyMorphParamsDict,
+      ApplyMorphParamsDictTagged,
       apply_morph,
       apply_morph_execute,
       apply_morph_params,

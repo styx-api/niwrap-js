@@ -11,7 +11,7 @@ const MRIS_THICKNESS_DIFF_METADATA: Metadata = {
 };
 
 
-interface MrisThicknessDiffParameters {
+interface MrisThicknessDiffParamsDict {
     "@type"?: "freesurfer/mris_thickness_diff";
     "src_type"?: string | null | undefined;
     "trg_type"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface MrisThicknessDiffParameters {
     "log_file"?: InputPathType | null | undefined;
     "subject_name"?: string | null | undefined;
 }
-type MrisThicknessDiffParametersTagged = Required<Pick<MrisThicknessDiffParameters, '@type'>> & MrisThicknessDiffParameters;
+type MrisThicknessDiffParamsDictTagged = Required<Pick<MrisThicknessDiffParamsDict, '@type'>> & MrisThicknessDiffParamsDict;
 
 
 /**
- * Output object returned when calling `MrisThicknessDiffParameters(...)`.
+ * Output object returned when calling `MrisThicknessDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function mris_thickness_diff_params(
     abs: boolean = false,
     log_file: InputPathType | null = null,
     subject_name: string | null = null,
-): MrisThicknessDiffParametersTagged {
+): MrisThicknessDiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_thickness_diff" as const,
         "out_file": out_file,
@@ -132,7 +132,7 @@ function mris_thickness_diff_params(
  * @returns Command-line arguments.
  */
 function mris_thickness_diff_cargs(
-    params: MrisThicknessDiffParameters,
+    params: MrisThicknessDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -217,7 +217,7 @@ function mris_thickness_diff_cargs(
  * @returns Outputs object.
  */
 function mris_thickness_diff_outputs(
-    params: MrisThicknessDiffParameters,
+    params: MrisThicknessDiffParamsDict,
     execution: Execution,
 ): MrisThicknessDiffOutputs {
     const ret: MrisThicknessDiffOutputs = {
@@ -244,7 +244,7 @@ function mris_thickness_diff_outputs(
  * @returns NamedTuple of outputs (described in `MrisThicknessDiffOutputs`).
  */
 function mris_thickness_diff_execute(
-    params: MrisThicknessDiffParameters,
+    params: MrisThicknessDiffParamsDict,
     runner: Runner | null = null,
 ): MrisThicknessDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -307,6 +307,8 @@ function mris_thickness_diff(
 export {
       MRIS_THICKNESS_DIFF_METADATA,
       MrisThicknessDiffOutputs,
+      MrisThicknessDiffParamsDict,
+      MrisThicknessDiffParamsDictTagged,
       mris_thickness_diff,
       mris_thickness_diff_execute,
       mris_thickness_diff_params,

@@ -11,7 +11,7 @@ const V__SUMA_ACKNOWLEDGE_METADATA: Metadata = {
 };
 
 
-interface VSumaAcknowledgeParameters {
+interface VSumaAcknowledgeParamsDict {
     "@type"?: "afni/@suma_acknowledge";
     "input_file": InputPathType;
     "surface_file": InputPathType;
@@ -21,11 +21,11 @@ interface VSumaAcknowledgeParameters {
     "scale_factor"?: number | null | undefined;
     "reduce_factor"?: number | null | undefined;
 }
-type VSumaAcknowledgeParametersTagged = Required<Pick<VSumaAcknowledgeParameters, '@type'>> & VSumaAcknowledgeParameters;
+type VSumaAcknowledgeParamsDictTagged = Required<Pick<VSumaAcknowledgeParamsDict, '@type'>> & VSumaAcknowledgeParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaAcknowledgeParameters(...)`.
+ * Output object returned when calling `VSumaAcknowledgeParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v__suma_acknowledge_params(
     subsurface_file: string | null = null,
     scale_factor: number | null = null,
     reduce_factor: number | null = null,
-): VSumaAcknowledgeParametersTagged {
+): VSumaAcknowledgeParamsDictTagged {
     const params = {
         "@type": "afni/@suma_acknowledge" as const,
         "input_file": input_file,
@@ -92,7 +92,7 @@ function v__suma_acknowledge_params(
  * @returns Command-line arguments.
  */
 function v__suma_acknowledge_cargs(
-    params: VSumaAcknowledgeParameters,
+    params: VSumaAcknowledgeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function v__suma_acknowledge_cargs(
  * @returns Outputs object.
  */
 function v__suma_acknowledge_outputs(
-    params: VSumaAcknowledgeParameters,
+    params: VSumaAcknowledgeParamsDict,
     execution: Execution,
 ): VSumaAcknowledgeOutputs {
     const ret: VSumaAcknowledgeOutputs = {
@@ -169,7 +169,7 @@ function v__suma_acknowledge_outputs(
  * @returns NamedTuple of outputs (described in `VSumaAcknowledgeOutputs`).
  */
 function v__suma_acknowledge_execute(
-    params: VSumaAcknowledgeParameters,
+    params: VSumaAcknowledgeParamsDict,
     runner: Runner | null = null,
 ): VSumaAcknowledgeOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function v__suma_acknowledge(
 
 export {
       VSumaAcknowledgeOutputs,
+      VSumaAcknowledgeParamsDict,
+      VSumaAcknowledgeParamsDictTagged,
       V__SUMA_ACKNOWLEDGE_METADATA,
       v__suma_acknowledge,
       v__suma_acknowledge_execute,

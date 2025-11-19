@@ -11,7 +11,7 @@ const ATROPOS_METADATA: Metadata = {
 };
 
 
-interface AtroposParameters {
+interface AtroposParamsDict {
     "@type"?: "ants/Atropos";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "intensity_image": string;
@@ -33,11 +33,11 @@ interface AtroposParameters {
     "label_propagation"?: string | null | undefined;
     "verbose"?: boolean | null | undefined;
 }
-type AtroposParametersTagged = Required<Pick<AtroposParameters, '@type'>> & AtroposParameters;
+type AtroposParamsDictTagged = Required<Pick<AtroposParamsDict, '@type'>> & AtroposParamsDict;
 
 
 /**
- * Output object returned when calling `AtroposParameters(...)`.
+ * Output object returned when calling `AtroposParamsDict(...)`.
  *
  * @interface
  */
@@ -102,7 +102,7 @@ function atropos_params(
     use_euclidean_distance: boolean | null = null,
     label_propagation: string | null = null,
     verbose: boolean | null = null,
-): AtroposParametersTagged {
+): AtroposParamsDictTagged {
     const params = {
         "@type": "ants/Atropos" as const,
         "intensity_image": intensity_image,
@@ -164,7 +164,7 @@ function atropos_params(
  * @returns Command-line arguments.
  */
 function atropos_cargs(
-    params: AtroposParameters,
+    params: AtroposParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -284,7 +284,7 @@ function atropos_cargs(
  * @returns Outputs object.
  */
 function atropos_outputs(
-    params: AtroposParameters,
+    params: AtroposParamsDict,
     execution: Execution,
 ): AtroposOutputs {
     const ret: AtroposOutputs = {
@@ -311,7 +311,7 @@ function atropos_outputs(
  * @returns NamedTuple of outputs (described in `AtroposOutputs`).
  */
 function atropos_execute(
-    params: AtroposParameters,
+    params: AtroposParamsDict,
     runner: Runner | null = null,
 ): AtroposOutputs {
     runner = runner || getGlobalRunner();
@@ -386,6 +386,8 @@ function atropos(
 export {
       ATROPOS_METADATA,
       AtroposOutputs,
+      AtroposParamsDict,
+      AtroposParamsDictTagged,
       atropos,
       atropos_execute,
       atropos_params,

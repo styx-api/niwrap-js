@@ -11,7 +11,7 @@ const N3_BIAS_FIELD_CORRECTION_METADATA: Metadata = {
 };
 
 
-interface N3BiasFieldCorrectionParameters {
+interface N3BiasFieldCorrectionParamsDict {
     "@type"?: "ants/N3BiasFieldCorrection";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
@@ -25,11 +25,11 @@ interface N3BiasFieldCorrectionParameters {
     "output": string;
     "verbose"?: boolean | null | undefined;
 }
-type N3BiasFieldCorrectionParametersTagged = Required<Pick<N3BiasFieldCorrectionParameters, '@type'>> & N3BiasFieldCorrectionParameters;
+type N3BiasFieldCorrectionParamsDictTagged = Required<Pick<N3BiasFieldCorrectionParamsDict, '@type'>> & N3BiasFieldCorrectionParamsDict;
 
 
 /**
- * Output object returned when calling `N3BiasFieldCorrectionParameters(...)`.
+ * Output object returned when calling `N3BiasFieldCorrectionParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function n3_bias_field_correction_params(
     bspline_fitting: string | null = null,
     histogram_sharpening: string | null = null,
     verbose: boolean | null = null,
-): N3BiasFieldCorrectionParametersTagged {
+): N3BiasFieldCorrectionParamsDictTagged {
     const params = {
         "@type": "ants/N3BiasFieldCorrection" as const,
         "input_image": input_image,
@@ -124,7 +124,7 @@ function n3_bias_field_correction_params(
  * @returns Command-line arguments.
  */
 function n3_bias_field_correction_cargs(
-    params: N3BiasFieldCorrectionParameters,
+    params: N3BiasFieldCorrectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function n3_bias_field_correction_cargs(
  * @returns Outputs object.
  */
 function n3_bias_field_correction_outputs(
-    params: N3BiasFieldCorrectionParameters,
+    params: N3BiasFieldCorrectionParamsDict,
     execution: Execution,
 ): N3BiasFieldCorrectionOutputs {
     const ret: N3BiasFieldCorrectionOutputs = {
@@ -231,7 +231,7 @@ function n3_bias_field_correction_outputs(
  * @returns NamedTuple of outputs (described in `N3BiasFieldCorrectionOutputs`).
  */
 function n3_bias_field_correction_execute(
-    params: N3BiasFieldCorrectionParameters,
+    params: N3BiasFieldCorrectionParamsDict,
     runner: Runner | null = null,
 ): N3BiasFieldCorrectionOutputs {
     runner = runner || getGlobalRunner();
@@ -289,6 +289,8 @@ function n3_bias_field_correction(
 
 export {
       N3BiasFieldCorrectionOutputs,
+      N3BiasFieldCorrectionParamsDict,
+      N3BiasFieldCorrectionParamsDictTagged,
       N3_BIAS_FIELD_CORRECTION_METADATA,
       n3_bias_field_correction,
       n3_bias_field_correction_execute,

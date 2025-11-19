@@ -11,7 +11,7 @@ const V_3D_LSS_METADATA: Metadata = {
 };
 
 
-interface V3dLssParameters {
+interface V3dLssParamsDict {
     "@type"?: "afni/3dLSS";
     "matrix": InputPathType;
     "input"?: InputPathType | null | undefined;
@@ -22,11 +22,11 @@ interface V3dLssParameters {
     "save1D"?: string | null | undefined;
     "verbose": boolean;
 }
-type V3dLssParametersTagged = Required<Pick<V3dLssParameters, '@type'>> & V3dLssParameters;
+type V3dLssParamsDictTagged = Required<Pick<V3dLssParamsDict, '@type'>> & V3dLssParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLssParameters(...)`.
+ * Output object returned when calling `V3dLssParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v_3d_lss_params(
     prefix: string | null = null,
     save1_d: string | null = null,
     verbose: boolean = false,
-): V3dLssParametersTagged {
+): V3dLssParamsDictTagged {
     const params = {
         "@type": "afni/3dLSS" as const,
         "matrix": matrix,
@@ -102,7 +102,7 @@ function v_3d_lss_params(
  * @returns Command-line arguments.
  */
 function v_3d_lss_cargs(
-    params: V3dLssParameters,
+    params: V3dLssParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -157,7 +157,7 @@ function v_3d_lss_cargs(
  * @returns Outputs object.
  */
 function v_3d_lss_outputs(
-    params: V3dLssParameters,
+    params: V3dLssParamsDict,
     execution: Execution,
 ): V3dLssOutputs {
     const ret: V3dLssOutputs = {
@@ -184,7 +184,7 @@ function v_3d_lss_outputs(
  * @returns NamedTuple of outputs (described in `V3dLssOutputs`).
  */
 function v_3d_lss_execute(
-    params: V3dLssParameters,
+    params: V3dLssParamsDict,
     runner: Runner | null = null,
 ): V3dLssOutputs {
     runner = runner || getGlobalRunner();
@@ -236,6 +236,8 @@ function v_3d_lss(
 
 export {
       V3dLssOutputs,
+      V3dLssParamsDict,
+      V3dLssParamsDictTagged,
       V_3D_LSS_METADATA,
       v_3d_lss,
       v_3d_lss_execute,

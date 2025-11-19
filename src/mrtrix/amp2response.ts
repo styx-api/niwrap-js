@@ -11,15 +11,15 @@ const AMP2RESPONSE_METADATA: Metadata = {
 };
 
 
-interface Amp2responseConfigParameters {
+interface Amp2responseConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Amp2responseConfigParametersTagged = Required<Pick<Amp2responseConfigParameters, '@type'>> & Amp2responseConfigParameters;
+type Amp2responseConfigParamsDictTagged = Required<Pick<Amp2responseConfigParamsDict, '@type'>> & Amp2responseConfigParamsDict;
 
 
-interface Amp2responseParameters {
+interface Amp2responseParamsDict {
     "@type"?: "mrtrix/amp2response";
     "isotropic": boolean;
     "noconstraint": boolean;
@@ -31,7 +31,7 @@ interface Amp2responseParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Amp2responseConfigParameters> | null | undefined;
+    "config"?: Array<Amp2responseConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "amps": InputPathType;
@@ -39,7 +39,7 @@ interface Amp2responseParameters {
     "directions_1": InputPathType;
     "response": string;
 }
-type Amp2responseParametersTagged = Required<Pick<Amp2responseParameters, '@type'>> & Amp2responseParameters;
+type Amp2responseParamsDictTagged = Required<Pick<Amp2responseParamsDict, '@type'>> & Amp2responseParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type Amp2responseParametersTagged = Required<Pick<Amp2responseParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function amp2response_config_params(
+function amp2response_config(
     key: string,
     value: string,
-): Amp2responseConfigParametersTagged {
+): Amp2responseConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -72,7 +72,7 @@ function amp2response_config_params(
  * @returns Command-line arguments.
  */
 function amp2response_config_cargs(
-    params: Amp2responseConfigParameters,
+    params: Amp2responseConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function amp2response_config_cargs(
 
 
 /**
- * Output object returned when calling `Amp2responseParameters(...)`.
+ * Output object returned when calling `Amp2responseParamsDict(...)`.
  *
  * @interface
  */
@@ -139,10 +139,10 @@ function amp2response_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Amp2responseConfigParameters> | null = null,
+    config: Array<Amp2responseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Amp2responseParametersTagged {
+): Amp2responseParamsDictTagged {
     const params = {
         "@type": "mrtrix/amp2response" as const,
         "isotropic": isotropic,
@@ -186,7 +186,7 @@ function amp2response_params(
  * @returns Command-line arguments.
  */
 function amp2response_cargs(
-    params: Amp2responseParameters,
+    params: Amp2responseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -259,7 +259,7 @@ function amp2response_cargs(
  * @returns Outputs object.
  */
 function amp2response_outputs(
-    params: Amp2responseParameters,
+    params: Amp2responseParamsDict,
     execution: Execution,
 ): Amp2responseOutputs {
     const ret: Amp2responseOutputs = {
@@ -293,7 +293,7 @@ function amp2response_outputs(
  * @returns NamedTuple of outputs (described in `Amp2responseOutputs`).
  */
 function amp2response_execute(
-    params: Amp2responseParameters,
+    params: Amp2responseParamsDict,
     runner: Runner | null = null,
 ): Amp2responseOutputs {
     runner = runner || getGlobalRunner();
@@ -360,7 +360,7 @@ function amp2response(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Amp2responseConfigParameters> | null = null,
+    config: Array<Amp2responseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -372,9 +372,13 @@ function amp2response(
 
 export {
       AMP2RESPONSE_METADATA,
+      Amp2responseConfigParamsDict,
+      Amp2responseConfigParamsDictTagged,
       Amp2responseOutputs,
+      Amp2responseParamsDict,
+      Amp2responseParamsDictTagged,
       amp2response,
-      amp2response_config_params,
+      amp2response_config,
       amp2response_execute,
       amp2response_params,
 };

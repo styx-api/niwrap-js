@@ -11,18 +11,18 @@ const MRIS_RF_TRAIN_METADATA: Metadata = {
 };
 
 
-interface MrisRfTrainParameters {
+interface MrisRfTrainParamsDict {
     "@type"?: "freesurfer/mris_rf_train";
     "subjects": Array<string>;
     "output_name": string;
     "hemi"?: string | null | undefined;
     "surf"?: string | null | undefined;
 }
-type MrisRfTrainParametersTagged = Required<Pick<MrisRfTrainParameters, '@type'>> & MrisRfTrainParameters;
+type MrisRfTrainParamsDictTagged = Required<Pick<MrisRfTrainParamsDict, '@type'>> & MrisRfTrainParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRfTrainParameters(...)`.
+ * Output object returned when calling `MrisRfTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function mris_rf_train_params(
     output_name: string,
     hemi: string | null = null,
     surf: string | null = null,
-): MrisRfTrainParametersTagged {
+): MrisRfTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_rf_train" as const,
         "subjects": subjects,
@@ -74,7 +74,7 @@ function mris_rf_train_params(
  * @returns Command-line arguments.
  */
 function mris_rf_train_cargs(
-    params: MrisRfTrainParameters,
+    params: MrisRfTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function mris_rf_train_cargs(
  * @returns Outputs object.
  */
 function mris_rf_train_outputs(
-    params: MrisRfTrainParameters,
+    params: MrisRfTrainParamsDict,
     execution: Execution,
 ): MrisRfTrainOutputs {
     const ret: MrisRfTrainOutputs = {
@@ -131,7 +131,7 @@ function mris_rf_train_outputs(
  * @returns NamedTuple of outputs (described in `MrisRfTrainOutputs`).
  */
 function mris_rf_train_execute(
-    params: MrisRfTrainParameters,
+    params: MrisRfTrainParamsDict,
     runner: Runner | null = null,
 ): MrisRfTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function mris_rf_train(
 export {
       MRIS_RF_TRAIN_METADATA,
       MrisRfTrainOutputs,
+      MrisRfTrainParamsDict,
+      MrisRfTrainParamsDictTagged,
       mris_rf_train,
       mris_rf_train_execute,
       mris_rf_train_params,

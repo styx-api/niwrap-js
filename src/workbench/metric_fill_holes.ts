@@ -10,18 +10,18 @@ const METRIC_FILL_HOLES_METADATA: Metadata = {
 };
 
 
-interface MetricFillHolesParameters {
+interface MetricFillHolesParamsDict {
     "@type"?: "workbench/metric-fill-holes";
     "metric-out": string;
     "area-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "metric-in": InputPathType;
 }
-type MetricFillHolesParametersTagged = Required<Pick<MetricFillHolesParameters, '@type'>> & MetricFillHolesParameters;
+type MetricFillHolesParamsDictTagged = Required<Pick<MetricFillHolesParamsDict, '@type'>> & MetricFillHolesParamsDict;
 
 
 /**
- * Output object returned when calling `MetricFillHolesParameters(...)`.
+ * Output object returned when calling `MetricFillHolesParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function metric_fill_holes_params(
     area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-): MetricFillHolesParametersTagged {
+): MetricFillHolesParamsDictTagged {
     const params = {
         "@type": "workbench/metric-fill-holes" as const,
         "metric-out": metric_out,
@@ -77,7 +77,7 @@ function metric_fill_holes_params(
  * @returns Command-line arguments.
  */
 function metric_fill_holes_cargs(
-    params: MetricFillHolesParameters,
+    params: MetricFillHolesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function metric_fill_holes_cargs(
  * @returns Outputs object.
  */
 function metric_fill_holes_outputs(
-    params: MetricFillHolesParameters,
+    params: MetricFillHolesParamsDict,
     execution: Execution,
 ): MetricFillHolesOutputs {
     const ret: MetricFillHolesOutputs = {
@@ -127,7 +127,7 @@ function metric_fill_holes_outputs(
  * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
  */
 function metric_fill_holes_execute(
-    params: MetricFillHolesParameters,
+    params: MetricFillHolesParamsDict,
     runner: Runner | null = null,
 ): MetricFillHolesOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function metric_fill_holes(
 export {
       METRIC_FILL_HOLES_METADATA,
       MetricFillHolesOutputs,
+      MetricFillHolesParamsDict,
+      MetricFillHolesParamsDictTagged,
       metric_fill_holes,
       metric_fill_holes_execute,
       metric_fill_holes_params,

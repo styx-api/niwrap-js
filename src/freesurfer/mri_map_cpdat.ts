@@ -11,7 +11,7 @@ const MRI_MAP_CPDAT_METADATA: Metadata = {
 };
 
 
-interface MriMapCpdatParameters {
+interface MriMapCpdatParamsDict {
     "@type"?: "freesurfer/mri_map_cpdat";
     "input_file": InputPathType;
     "output_file": string;
@@ -20,11 +20,11 @@ interface MriMapCpdatParameters {
     "from_mni305"?: string | null | undefined;
     "subject_list_file"?: InputPathType | null | undefined;
 }
-type MriMapCpdatParametersTagged = Required<Pick<MriMapCpdatParameters, '@type'>> & MriMapCpdatParameters;
+type MriMapCpdatParamsDictTagged = Required<Pick<MriMapCpdatParamsDict, '@type'>> & MriMapCpdatParamsDict;
 
 
 /**
- * Output object returned when calling `MriMapCpdatParameters(...)`.
+ * Output object returned when calling `MriMapCpdatParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mri_map_cpdat_params(
     to_mni305: string | null = null,
     from_mni305: string | null = null,
     subject_list_file: InputPathType | null = null,
-): MriMapCpdatParametersTagged {
+): MriMapCpdatParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_map_cpdat" as const,
         "input_file": input_file,
@@ -90,7 +90,7 @@ function mri_map_cpdat_params(
  * @returns Command-line arguments.
  */
 function mri_map_cpdat_cargs(
-    params: MriMapCpdatParameters,
+    params: MriMapCpdatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function mri_map_cpdat_cargs(
  * @returns Outputs object.
  */
 function mri_map_cpdat_outputs(
-    params: MriMapCpdatParameters,
+    params: MriMapCpdatParamsDict,
     execution: Execution,
 ): MriMapCpdatOutputs {
     const ret: MriMapCpdatOutputs = {
@@ -166,7 +166,7 @@ function mri_map_cpdat_outputs(
  * @returns NamedTuple of outputs (described in `MriMapCpdatOutputs`).
  */
 function mri_map_cpdat_execute(
-    params: MriMapCpdatParameters,
+    params: MriMapCpdatParamsDict,
     runner: Runner | null = null,
 ): MriMapCpdatOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function mri_map_cpdat(
 export {
       MRI_MAP_CPDAT_METADATA,
       MriMapCpdatOutputs,
+      MriMapCpdatParamsDict,
+      MriMapCpdatParamsDictTagged,
       mri_map_cpdat,
       mri_map_cpdat_execute,
       mri_map_cpdat_params,

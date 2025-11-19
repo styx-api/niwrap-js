@@ -11,7 +11,7 @@ const V_3D_VOL2_SURF_METADATA: Metadata = {
 };
 
 
-interface V3dVol2SurfParameters {
+interface V3dVol2SurfParamsDict {
     "@type"?: "afni/3dVol2Surf";
     "spec_file": InputPathType;
     "sv": InputPathType;
@@ -56,11 +56,11 @@ interface V3dVol2SurfParameters {
     "keep_norm_dir": boolean;
     "reverse_norm_dir": boolean;
 }
-type V3dVol2SurfParametersTagged = Required<Pick<V3dVol2SurfParameters, '@type'>> & V3dVol2SurfParameters;
+type V3dVol2SurfParamsDictTagged = Required<Pick<V3dVol2SurfParamsDict, '@type'>> & V3dVol2SurfParamsDict;
 
 
 /**
- * Output object returned when calling `V3dVol2SurfParameters(...)`.
+ * Output object returned when calling `V3dVol2SurfParamsDict(...)`.
  *
  * @interface
  */
@@ -175,7 +175,7 @@ function v_3d_vol2_surf_params(
     version: boolean = false,
     keep_norm_dir: boolean = false,
     reverse_norm_dir: boolean = false,
-): V3dVol2SurfParametersTagged {
+): V3dVol2SurfParamsDictTagged {
     const params = {
         "@type": "afni/3dVol2Surf" as const,
         "spec_file": spec_file,
@@ -274,7 +274,7 @@ function v_3d_vol2_surf_params(
  * @returns Command-line arguments.
  */
 function v_3d_vol2_surf_cargs(
-    params: V3dVol2SurfParameters,
+    params: V3dVol2SurfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -480,7 +480,7 @@ function v_3d_vol2_surf_cargs(
  * @returns Outputs object.
  */
 function v_3d_vol2_surf_outputs(
-    params: V3dVol2SurfParameters,
+    params: V3dVol2SurfParamsDict,
     execution: Execution,
 ): V3dVol2SurfOutputs {
     const ret: V3dVol2SurfOutputs = {
@@ -508,7 +508,7 @@ function v_3d_vol2_surf_outputs(
  * @returns NamedTuple of outputs (described in `V3dVol2SurfOutputs`).
  */
 function v_3d_vol2_surf_execute(
-    params: V3dVol2SurfParameters,
+    params: V3dVol2SurfParamsDict,
     runner: Runner | null = null,
 ): V3dVol2SurfOutputs {
     runner = runner || getGlobalRunner();
@@ -628,6 +628,8 @@ function v_3d_vol2_surf(
 
 export {
       V3dVol2SurfOutputs,
+      V3dVol2SurfParamsDict,
+      V3dVol2SurfParamsDictTagged,
       V_3D_VOL2_SURF_METADATA,
       v_3d_vol2_surf,
       v_3d_vol2_surf_execute,

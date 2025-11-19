@@ -10,22 +10,22 @@ const SURFACE_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface SurfaceAverageSurfParameters {
+interface SurfaceAverageSurfParamsDict {
     "@type"?: "surf";
     "surface": InputPathType;
     "weight"?: number | null | undefined;
 }
-type SurfaceAverageSurfParametersTagged = Required<Pick<SurfaceAverageSurfParameters, '@type'>> & SurfaceAverageSurfParameters;
+type SurfaceAverageSurfParamsDictTagged = Required<Pick<SurfaceAverageSurfParamsDict, '@type'>> & SurfaceAverageSurfParamsDict;
 
 
-interface SurfaceAverageParameters {
+interface SurfaceAverageParamsDict {
     "@type"?: "workbench/surface-average";
     "surface-out": string;
     "stddev-metric-out"?: string | null | undefined;
     "uncert-metric-out"?: string | null | undefined;
-    "surf"?: Array<SurfaceAverageSurfParameters> | null | undefined;
+    "surf"?: Array<SurfaceAverageSurfParamsDict> | null | undefined;
 }
-type SurfaceAverageParametersTagged = Required<Pick<SurfaceAverageParameters, '@type'>> & SurfaceAverageParameters;
+type SurfaceAverageParamsDictTagged = Required<Pick<SurfaceAverageParamsDict, '@type'>> & SurfaceAverageParamsDict;
 
 
 /**
@@ -38,10 +38,10 @@ the weight to use (default 1)
  *
  * @returns Parameter dictionary
  */
-function surface_average_surf_params(
+function surface_average_surf(
     surface: InputPathType,
     weight: number | null,
-): SurfaceAverageSurfParametersTagged {
+): SurfaceAverageSurfParamsDictTagged {
     const params = {
         "@type": "surf" as const,
         "surface": surface,
@@ -62,7 +62,7 @@ function surface_average_surf_params(
  * @returns Command-line arguments.
  */
 function surface_average_surf_cargs(
-    params: SurfaceAverageSurfParameters,
+    params: SurfaceAverageSurfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function surface_average_surf_cargs(
 
 
 /**
- * Output object returned when calling `SurfaceAverageParameters(...)`.
+ * Output object returned when calling `SurfaceAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -113,8 +113,8 @@ function surface_average_params(
     surface_out: string,
     stddev_metric_out: string | null,
     uncert_metric_out: string | null,
-    surf: Array<SurfaceAverageSurfParameters> | null = null,
-): SurfaceAverageParametersTagged {
+    surf: Array<SurfaceAverageSurfParamsDict> | null = null,
+): SurfaceAverageParamsDictTagged {
     const params = {
         "@type": "workbench/surface-average" as const,
         "surface-out": surface_out,
@@ -141,7 +141,7 @@ function surface_average_params(
  * @returns Command-line arguments.
  */
 function surface_average_cargs(
-    params: SurfaceAverageParameters,
+    params: SurfaceAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -170,7 +170,7 @@ function surface_average_cargs(
  * @returns Outputs object.
  */
 function surface_average_outputs(
-    params: SurfaceAverageParameters,
+    params: SurfaceAverageParamsDict,
     execution: Execution,
 ): SurfaceAverageOutputs {
     const ret: SurfaceAverageOutputs = {
@@ -196,7 +196,7 @@ function surface_average_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceAverageOutputs`).
  */
 function surface_average_execute(
-    params: SurfaceAverageParameters,
+    params: SurfaceAverageParamsDict,
     runner: Runner | null = null,
 ): SurfaceAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -234,7 +234,7 @@ function surface_average(
     surface_out: string,
     stddev_metric_out: string | null,
     uncert_metric_out: string | null,
-    surf: Array<SurfaceAverageSurfParameters> | null = null,
+    surf: Array<SurfaceAverageSurfParamsDict> | null = null,
     runner: Runner | null = null,
 ): SurfaceAverageOutputs {
     const params = surface_average_params(surface_out, stddev_metric_out, uncert_metric_out, surf)
@@ -245,8 +245,12 @@ function surface_average(
 export {
       SURFACE_AVERAGE_METADATA,
       SurfaceAverageOutputs,
+      SurfaceAverageParamsDict,
+      SurfaceAverageParamsDictTagged,
+      SurfaceAverageSurfParamsDict,
+      SurfaceAverageSurfParamsDictTagged,
       surface_average,
       surface_average_execute,
       surface_average_params,
-      surface_average_surf_params,
+      surface_average_surf,
 };

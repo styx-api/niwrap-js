@@ -11,7 +11,7 @@ const CLUST_EXP_STAT_PARSE_PY_METADATA: Metadata = {
 };
 
 
-interface ClustExpStatParsePyParameters {
+interface ClustExpStatParsePyParamsDict {
     "@type"?: "afni/ClustExp_StatParse.py";
     "statdset": InputPathType;
     "meanbrik": number;
@@ -27,11 +27,11 @@ interface ClustExpStatParsePyParameters {
     "noshiny": boolean;
     "overwrite": boolean;
 }
-type ClustExpStatParsePyParametersTagged = Required<Pick<ClustExpStatParsePyParameters, '@type'>> & ClustExpStatParsePyParameters;
+type ClustExpStatParsePyParamsDictTagged = Required<Pick<ClustExpStatParsePyParamsDict, '@type'>> & ClustExpStatParsePyParamsDict;
 
 
 /**
- * Output object returned when calling `ClustExpStatParsePyParameters(...)`.
+ * Output object returned when calling `ClustExpStatParsePyParamsDict(...)`.
  *
  * @interface
  */
@@ -108,7 +108,7 @@ function clust_exp_stat_parse_py_params(
     session: string | null = null,
     noshiny: boolean = false,
     overwrite: boolean = false,
-): ClustExpStatParsePyParametersTagged {
+): ClustExpStatParsePyParamsDictTagged {
     const params = {
         "@type": "afni/ClustExp_StatParse.py" as const,
         "statdset": statdset,
@@ -148,7 +148,7 @@ function clust_exp_stat_parse_py_params(
  * @returns Command-line arguments.
  */
 function clust_exp_stat_parse_py_cargs(
-    params: ClustExpStatParsePyParameters,
+    params: ClustExpStatParsePyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -226,7 +226,7 @@ function clust_exp_stat_parse_py_cargs(
  * @returns Outputs object.
  */
 function clust_exp_stat_parse_py_outputs(
-    params: ClustExpStatParsePyParameters,
+    params: ClustExpStatParsePyParamsDict,
     execution: Execution,
 ): ClustExpStatParsePyOutputs {
     const ret: ClustExpStatParsePyOutputs = {
@@ -259,7 +259,7 @@ function clust_exp_stat_parse_py_outputs(
  * @returns NamedTuple of outputs (described in `ClustExpStatParsePyOutputs`).
  */
 function clust_exp_stat_parse_py_execute(
-    params: ClustExpStatParsePyParameters,
+    params: ClustExpStatParsePyParamsDict,
     runner: Runner | null = null,
 ): ClustExpStatParsePyOutputs {
     runner = runner || getGlobalRunner();
@@ -322,6 +322,8 @@ function clust_exp_stat_parse_py(
 export {
       CLUST_EXP_STAT_PARSE_PY_METADATA,
       ClustExpStatParsePyOutputs,
+      ClustExpStatParsePyParamsDict,
+      ClustExpStatParsePyParamsDictTagged,
       clust_exp_stat_parse_py,
       clust_exp_stat_parse_py_execute,
       clust_exp_stat_parse_py_params,

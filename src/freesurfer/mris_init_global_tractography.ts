@@ -11,17 +11,17 @@ const MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA: Metadata = {
 };
 
 
-interface MrisInitGlobalTractographyParameters {
+interface MrisInitGlobalTractographyParamsDict {
     "@type"?: "freesurfer/mris_init_global_tractography";
     "subject": string;
     "parcellation": string;
     "output_volume": string;
 }
-type MrisInitGlobalTractographyParametersTagged = Required<Pick<MrisInitGlobalTractographyParameters, '@type'>> & MrisInitGlobalTractographyParameters;
+type MrisInitGlobalTractographyParamsDictTagged = Required<Pick<MrisInitGlobalTractographyParamsDict, '@type'>> & MrisInitGlobalTractographyParamsDict;
 
 
 /**
- * Output object returned when calling `MrisInitGlobalTractographyParameters(...)`.
+ * Output object returned when calling `MrisInitGlobalTractographyParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function mris_init_global_tractography_params(
     subject: string,
     parcellation: string,
     output_volume: string,
-): MrisInitGlobalTractographyParametersTagged {
+): MrisInitGlobalTractographyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_init_global_tractography" as const,
         "subject": subject,
@@ -66,7 +66,7 @@ function mris_init_global_tractography_params(
  * @returns Command-line arguments.
  */
 function mris_init_global_tractography_cargs(
-    params: MrisInitGlobalTractographyParameters,
+    params: MrisInitGlobalTractographyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function mris_init_global_tractography_cargs(
  * @returns Outputs object.
  */
 function mris_init_global_tractography_outputs(
-    params: MrisInitGlobalTractographyParameters,
+    params: MrisInitGlobalTractographyParamsDict,
     execution: Execution,
 ): MrisInitGlobalTractographyOutputs {
     const ret: MrisInitGlobalTractographyOutputs = {
@@ -112,7 +112,7 @@ function mris_init_global_tractography_outputs(
  * @returns NamedTuple of outputs (described in `MrisInitGlobalTractographyOutputs`).
  */
 function mris_init_global_tractography_execute(
-    params: MrisInitGlobalTractographyParameters,
+    params: MrisInitGlobalTractographyParamsDict,
     runner: Runner | null = null,
 ): MrisInitGlobalTractographyOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function mris_init_global_tractography(
 export {
       MRIS_INIT_GLOBAL_TRACTOGRAPHY_METADATA,
       MrisInitGlobalTractographyOutputs,
+      MrisInitGlobalTractographyParamsDict,
+      MrisInitGlobalTractographyParamsDictTagged,
       mris_init_global_tractography,
       mris_init_global_tractography_execute,
       mris_init_global_tractography_params,

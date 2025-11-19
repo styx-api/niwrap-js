@@ -11,7 +11,7 @@ const MRIS_THICKNESS_METADATA: Metadata = {
 };
 
 
-interface MrisThicknessParameters {
+interface MrisThicknessParamsDict {
     "@type"?: "freesurfer/mris_thickness";
     "subject_name": string;
     "hemi": string;
@@ -21,11 +21,11 @@ interface MrisThicknessParameters {
     "thickness_from_seg"?: Array<string> | null | undefined;
     "vector": boolean;
 }
-type MrisThicknessParametersTagged = Required<Pick<MrisThicknessParameters, '@type'>> & MrisThicknessParameters;
+type MrisThicknessParamsDictTagged = Required<Pick<MrisThicknessParamsDict, '@type'>> & MrisThicknessParamsDict;
 
 
 /**
- * Output object returned when calling `MrisThicknessParameters(...)`.
+ * Output object returned when calling `MrisThicknessParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_thickness_params(
     fill_holes: Array<string> | null = null,
     thickness_from_seg: Array<string> | null = null,
     vector: boolean = false,
-): MrisThicknessParametersTagged {
+): MrisThicknessParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_thickness" as const,
         "subject_name": subject_name,
@@ -92,7 +92,7 @@ function mris_thickness_params(
  * @returns Command-line arguments.
  */
 function mris_thickness_cargs(
-    params: MrisThicknessParameters,
+    params: MrisThicknessParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function mris_thickness_cargs(
  * @returns Outputs object.
  */
 function mris_thickness_outputs(
-    params: MrisThicknessParameters,
+    params: MrisThicknessParamsDict,
     execution: Execution,
 ): MrisThicknessOutputs {
     const ret: MrisThicknessOutputs = {
@@ -160,7 +160,7 @@ function mris_thickness_outputs(
  * @returns NamedTuple of outputs (described in `MrisThicknessOutputs`).
  */
 function mris_thickness_execute(
-    params: MrisThicknessParameters,
+    params: MrisThicknessParamsDict,
     runner: Runner | null = null,
 ): MrisThicknessOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function mris_thickness(
 export {
       MRIS_THICKNESS_METADATA,
       MrisThicknessOutputs,
+      MrisThicknessParamsDict,
+      MrisThicknessParamsDictTagged,
       mris_thickness,
       mris_thickness_execute,
       mris_thickness_params,

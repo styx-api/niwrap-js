@@ -11,7 +11,7 @@ const MAKE_RANDOM_TIMING_PY_METADATA: Metadata = {
 };
 
 
-interface MakeRandomTimingPyParameters {
+interface MakeRandomTimingPyParamsDict {
     "@type"?: "afni/make_random_timing.py";
     "num_runs": number;
     "run_time": Array<number>;
@@ -39,11 +39,11 @@ interface MakeRandomTimingPyParameters {
     "verb"?: number | null | undefined;
     "show_timing_stats": boolean;
 }
-type MakeRandomTimingPyParametersTagged = Required<Pick<MakeRandomTimingPyParameters, '@type'>> & MakeRandomTimingPyParameters;
+type MakeRandomTimingPyParamsDictTagged = Required<Pick<MakeRandomTimingPyParamsDict, '@type'>> & MakeRandomTimingPyParamsDict;
 
 
 /**
- * Output object returned when calling `MakeRandomTimingPyParameters(...)`.
+ * Output object returned when calling `MakeRandomTimingPyParamsDict(...)`.
  *
  * @interface
  */
@@ -112,7 +112,7 @@ function make_random_timing_py_params(
     tr_locked: boolean = false,
     verb: number | null = null,
     show_timing_stats: boolean = false,
-): MakeRandomTimingPyParametersTagged {
+): MakeRandomTimingPyParamsDictTagged {
     const params = {
         "@type": "afni/make_random_timing.py" as const,
         "num_runs": num_runs,
@@ -188,7 +188,7 @@ function make_random_timing_py_params(
  * @returns Command-line arguments.
  */
 function make_random_timing_py_cargs(
-    params: MakeRandomTimingPyParameters,
+    params: MakeRandomTimingPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -337,7 +337,7 @@ function make_random_timing_py_cargs(
  * @returns Outputs object.
  */
 function make_random_timing_py_outputs(
-    params: MakeRandomTimingPyParameters,
+    params: MakeRandomTimingPyParamsDict,
     execution: Execution,
 ): MakeRandomTimingPyOutputs {
     const ret: MakeRandomTimingPyOutputs = {
@@ -362,7 +362,7 @@ function make_random_timing_py_outputs(
  * @returns NamedTuple of outputs (described in `MakeRandomTimingPyOutputs`).
  */
 function make_random_timing_py_execute(
-    params: MakeRandomTimingPyParameters,
+    params: MakeRandomTimingPyParamsDict,
     runner: Runner | null = null,
 ): MakeRandomTimingPyOutputs {
     runner = runner || getGlobalRunner();
@@ -449,6 +449,8 @@ function make_random_timing_py(
 export {
       MAKE_RANDOM_TIMING_PY_METADATA,
       MakeRandomTimingPyOutputs,
+      MakeRandomTimingPyParamsDict,
+      MakeRandomTimingPyParamsDictTagged,
       make_random_timing_py,
       make_random_timing_py_execute,
       make_random_timing_py_params,

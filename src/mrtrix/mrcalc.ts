@@ -11,392 +11,392 @@ const MRCALC_METADATA: Metadata = {
 };
 
 
-interface MrcalcAbsParameters {
+interface MrcalcAbsParamsDict {
     "@type"?: "abs";
 }
-type MrcalcAbsParametersTagged = Required<Pick<MrcalcAbsParameters, '@type'>> & MrcalcAbsParameters;
+type MrcalcAbsParamsDictTagged = Required<Pick<MrcalcAbsParamsDict, '@type'>> & MrcalcAbsParamsDict;
 
 
-interface MrcalcNegParameters {
+interface MrcalcNegParamsDict {
     "@type"?: "neg";
 }
-type MrcalcNegParametersTagged = Required<Pick<MrcalcNegParameters, '@type'>> & MrcalcNegParameters;
+type MrcalcNegParamsDictTagged = Required<Pick<MrcalcNegParamsDict, '@type'>> & MrcalcNegParamsDict;
 
 
-interface MrcalcAddParameters {
+interface MrcalcAddParamsDict {
     "@type"?: "add";
 }
-type MrcalcAddParametersTagged = Required<Pick<MrcalcAddParameters, '@type'>> & MrcalcAddParameters;
+type MrcalcAddParamsDictTagged = Required<Pick<MrcalcAddParamsDict, '@type'>> & MrcalcAddParamsDict;
 
 
-interface MrcalcSubtractParameters {
+interface MrcalcSubtractParamsDict {
     "@type"?: "subtract";
 }
-type MrcalcSubtractParametersTagged = Required<Pick<MrcalcSubtractParameters, '@type'>> & MrcalcSubtractParameters;
+type MrcalcSubtractParamsDictTagged = Required<Pick<MrcalcSubtractParamsDict, '@type'>> & MrcalcSubtractParamsDict;
 
 
-interface MrcalcMultiplyParameters {
+interface MrcalcMultiplyParamsDict {
     "@type"?: "multiply";
 }
-type MrcalcMultiplyParametersTagged = Required<Pick<MrcalcMultiplyParameters, '@type'>> & MrcalcMultiplyParameters;
+type MrcalcMultiplyParamsDictTagged = Required<Pick<MrcalcMultiplyParamsDict, '@type'>> & MrcalcMultiplyParamsDict;
 
 
-interface MrcalcDivideParameters {
+interface MrcalcDivideParamsDict {
     "@type"?: "divide";
 }
-type MrcalcDivideParametersTagged = Required<Pick<MrcalcDivideParameters, '@type'>> & MrcalcDivideParameters;
+type MrcalcDivideParamsDictTagged = Required<Pick<MrcalcDivideParamsDict, '@type'>> & MrcalcDivideParamsDict;
 
 
-interface MrcalcMinParameters {
+interface MrcalcMinParamsDict {
     "@type"?: "min";
 }
-type MrcalcMinParametersTagged = Required<Pick<MrcalcMinParameters, '@type'>> & MrcalcMinParameters;
+type MrcalcMinParamsDictTagged = Required<Pick<MrcalcMinParamsDict, '@type'>> & MrcalcMinParamsDict;
 
 
-interface MrcalcMaxParameters {
+interface MrcalcMaxParamsDict {
     "@type"?: "max";
 }
-type MrcalcMaxParametersTagged = Required<Pick<MrcalcMaxParameters, '@type'>> & MrcalcMaxParameters;
+type MrcalcMaxParamsDictTagged = Required<Pick<MrcalcMaxParamsDict, '@type'>> & MrcalcMaxParamsDict;
 
 
-interface MrcalcLtParameters {
+interface MrcalcLtParamsDict {
     "@type"?: "lt";
 }
-type MrcalcLtParametersTagged = Required<Pick<MrcalcLtParameters, '@type'>> & MrcalcLtParameters;
+type MrcalcLtParamsDictTagged = Required<Pick<MrcalcLtParamsDict, '@type'>> & MrcalcLtParamsDict;
 
 
-interface MrcalcGtParameters {
+interface MrcalcGtParamsDict {
     "@type"?: "gt";
 }
-type MrcalcGtParametersTagged = Required<Pick<MrcalcGtParameters, '@type'>> & MrcalcGtParameters;
+type MrcalcGtParamsDictTagged = Required<Pick<MrcalcGtParamsDict, '@type'>> & MrcalcGtParamsDict;
 
 
-interface MrcalcLeParameters {
+interface MrcalcLeParamsDict {
     "@type"?: "le";
 }
-type MrcalcLeParametersTagged = Required<Pick<MrcalcLeParameters, '@type'>> & MrcalcLeParameters;
+type MrcalcLeParamsDictTagged = Required<Pick<MrcalcLeParamsDict, '@type'>> & MrcalcLeParamsDict;
 
 
-interface MrcalcGeParameters {
+interface MrcalcGeParamsDict {
     "@type"?: "ge";
 }
-type MrcalcGeParametersTagged = Required<Pick<MrcalcGeParameters, '@type'>> & MrcalcGeParameters;
+type MrcalcGeParamsDictTagged = Required<Pick<MrcalcGeParamsDict, '@type'>> & MrcalcGeParamsDict;
 
 
-interface MrcalcEqParameters {
+interface MrcalcEqParamsDict {
     "@type"?: "eq";
 }
-type MrcalcEqParametersTagged = Required<Pick<MrcalcEqParameters, '@type'>> & MrcalcEqParameters;
+type MrcalcEqParamsDictTagged = Required<Pick<MrcalcEqParamsDict, '@type'>> & MrcalcEqParamsDict;
 
 
-interface MrcalcNeqParameters {
+interface MrcalcNeqParamsDict {
     "@type"?: "neq";
 }
-type MrcalcNeqParametersTagged = Required<Pick<MrcalcNeqParameters, '@type'>> & MrcalcNeqParameters;
+type MrcalcNeqParamsDictTagged = Required<Pick<MrcalcNeqParamsDict, '@type'>> & MrcalcNeqParamsDict;
 
 
-interface MrcalcIfParameters {
+interface MrcalcIfParamsDict {
     "@type"?: "if";
 }
-type MrcalcIfParametersTagged = Required<Pick<MrcalcIfParameters, '@type'>> & MrcalcIfParameters;
+type MrcalcIfParamsDictTagged = Required<Pick<MrcalcIfParamsDict, '@type'>> & MrcalcIfParamsDict;
 
 
-interface MrcalcReplaceParameters {
+interface MrcalcReplaceParamsDict {
     "@type"?: "replace";
 }
-type MrcalcReplaceParametersTagged = Required<Pick<MrcalcReplaceParameters, '@type'>> & MrcalcReplaceParameters;
+type MrcalcReplaceParamsDictTagged = Required<Pick<MrcalcReplaceParamsDict, '@type'>> & MrcalcReplaceParamsDict;
 
 
-interface MrcalcSqrtParameters {
+interface MrcalcSqrtParamsDict {
     "@type"?: "sqrt";
 }
-type MrcalcSqrtParametersTagged = Required<Pick<MrcalcSqrtParameters, '@type'>> & MrcalcSqrtParameters;
+type MrcalcSqrtParamsDictTagged = Required<Pick<MrcalcSqrtParamsDict, '@type'>> & MrcalcSqrtParamsDict;
 
 
-interface MrcalcPowParameters {
+interface MrcalcPowParamsDict {
     "@type"?: "pow";
 }
-type MrcalcPowParametersTagged = Required<Pick<MrcalcPowParameters, '@type'>> & MrcalcPowParameters;
+type MrcalcPowParamsDictTagged = Required<Pick<MrcalcPowParamsDict, '@type'>> & MrcalcPowParamsDict;
 
 
-interface MrcalcRoundParameters {
+interface MrcalcRoundParamsDict {
     "@type"?: "round";
 }
-type MrcalcRoundParametersTagged = Required<Pick<MrcalcRoundParameters, '@type'>> & MrcalcRoundParameters;
+type MrcalcRoundParamsDictTagged = Required<Pick<MrcalcRoundParamsDict, '@type'>> & MrcalcRoundParamsDict;
 
 
-interface MrcalcCeilParameters {
+interface MrcalcCeilParamsDict {
     "@type"?: "ceil";
 }
-type MrcalcCeilParametersTagged = Required<Pick<MrcalcCeilParameters, '@type'>> & MrcalcCeilParameters;
+type MrcalcCeilParamsDictTagged = Required<Pick<MrcalcCeilParamsDict, '@type'>> & MrcalcCeilParamsDict;
 
 
-interface MrcalcFloorParameters {
+interface MrcalcFloorParamsDict {
     "@type"?: "floor";
 }
-type MrcalcFloorParametersTagged = Required<Pick<MrcalcFloorParameters, '@type'>> & MrcalcFloorParameters;
+type MrcalcFloorParamsDictTagged = Required<Pick<MrcalcFloorParamsDict, '@type'>> & MrcalcFloorParamsDict;
 
 
-interface MrcalcNotParameters {
+interface MrcalcNotParamsDict {
     "@type"?: "not";
 }
-type MrcalcNotParametersTagged = Required<Pick<MrcalcNotParameters, '@type'>> & MrcalcNotParameters;
+type MrcalcNotParamsDictTagged = Required<Pick<MrcalcNotParamsDict, '@type'>> & MrcalcNotParamsDict;
 
 
-interface MrcalcAndParameters {
+interface MrcalcAndParamsDict {
     "@type"?: "and";
 }
-type MrcalcAndParametersTagged = Required<Pick<MrcalcAndParameters, '@type'>> & MrcalcAndParameters;
+type MrcalcAndParamsDictTagged = Required<Pick<MrcalcAndParamsDict, '@type'>> & MrcalcAndParamsDict;
 
 
-interface MrcalcOrParameters {
+interface MrcalcOrParamsDict {
     "@type"?: "or";
 }
-type MrcalcOrParametersTagged = Required<Pick<MrcalcOrParameters, '@type'>> & MrcalcOrParameters;
+type MrcalcOrParamsDictTagged = Required<Pick<MrcalcOrParamsDict, '@type'>> & MrcalcOrParamsDict;
 
 
-interface MrcalcXorParameters {
+interface MrcalcXorParamsDict {
     "@type"?: "xor";
 }
-type MrcalcXorParametersTagged = Required<Pick<MrcalcXorParameters, '@type'>> & MrcalcXorParameters;
+type MrcalcXorParamsDictTagged = Required<Pick<MrcalcXorParamsDict, '@type'>> & MrcalcXorParamsDict;
 
 
-interface MrcalcIsnanParameters {
+interface MrcalcIsnanParamsDict {
     "@type"?: "isnan";
 }
-type MrcalcIsnanParametersTagged = Required<Pick<MrcalcIsnanParameters, '@type'>> & MrcalcIsnanParameters;
+type MrcalcIsnanParamsDictTagged = Required<Pick<MrcalcIsnanParamsDict, '@type'>> & MrcalcIsnanParamsDict;
 
 
-interface MrcalcIsinfParameters {
+interface MrcalcIsinfParamsDict {
     "@type"?: "isinf";
 }
-type MrcalcIsinfParametersTagged = Required<Pick<MrcalcIsinfParameters, '@type'>> & MrcalcIsinfParameters;
+type MrcalcIsinfParamsDictTagged = Required<Pick<MrcalcIsinfParamsDict, '@type'>> & MrcalcIsinfParamsDict;
 
 
-interface MrcalcFiniteParameters {
+interface MrcalcFiniteParamsDict {
     "@type"?: "finite";
 }
-type MrcalcFiniteParametersTagged = Required<Pick<MrcalcFiniteParameters, '@type'>> & MrcalcFiniteParameters;
+type MrcalcFiniteParamsDictTagged = Required<Pick<MrcalcFiniteParamsDict, '@type'>> & MrcalcFiniteParamsDict;
 
 
-interface MrcalcComplexParameters {
+interface MrcalcComplexParamsDict {
     "@type"?: "complex";
 }
-type MrcalcComplexParametersTagged = Required<Pick<MrcalcComplexParameters, '@type'>> & MrcalcComplexParameters;
+type MrcalcComplexParamsDictTagged = Required<Pick<MrcalcComplexParamsDict, '@type'>> & MrcalcComplexParamsDict;
 
 
-interface MrcalcPolarParameters {
+interface MrcalcPolarParamsDict {
     "@type"?: "polar";
 }
-type MrcalcPolarParametersTagged = Required<Pick<MrcalcPolarParameters, '@type'>> & MrcalcPolarParameters;
+type MrcalcPolarParamsDictTagged = Required<Pick<MrcalcPolarParamsDict, '@type'>> & MrcalcPolarParamsDict;
 
 
-interface MrcalcRealParameters {
+interface MrcalcRealParamsDict {
     "@type"?: "real";
 }
-type MrcalcRealParametersTagged = Required<Pick<MrcalcRealParameters, '@type'>> & MrcalcRealParameters;
+type MrcalcRealParamsDictTagged = Required<Pick<MrcalcRealParamsDict, '@type'>> & MrcalcRealParamsDict;
 
 
-interface MrcalcImagParameters {
+interface MrcalcImagParamsDict {
     "@type"?: "imag";
 }
-type MrcalcImagParametersTagged = Required<Pick<MrcalcImagParameters, '@type'>> & MrcalcImagParameters;
+type MrcalcImagParamsDictTagged = Required<Pick<MrcalcImagParamsDict, '@type'>> & MrcalcImagParamsDict;
 
 
-interface MrcalcPhaseParameters {
+interface MrcalcPhaseParamsDict {
     "@type"?: "phase";
 }
-type MrcalcPhaseParametersTagged = Required<Pick<MrcalcPhaseParameters, '@type'>> & MrcalcPhaseParameters;
+type MrcalcPhaseParamsDictTagged = Required<Pick<MrcalcPhaseParamsDict, '@type'>> & MrcalcPhaseParamsDict;
 
 
-interface MrcalcConjParameters {
+interface MrcalcConjParamsDict {
     "@type"?: "conj";
 }
-type MrcalcConjParametersTagged = Required<Pick<MrcalcConjParameters, '@type'>> & MrcalcConjParameters;
+type MrcalcConjParamsDictTagged = Required<Pick<MrcalcConjParamsDict, '@type'>> & MrcalcConjParamsDict;
 
 
-interface MrcalcProjParameters {
+interface MrcalcProjParamsDict {
     "@type"?: "proj";
 }
-type MrcalcProjParametersTagged = Required<Pick<MrcalcProjParameters, '@type'>> & MrcalcProjParameters;
+type MrcalcProjParamsDictTagged = Required<Pick<MrcalcProjParamsDict, '@type'>> & MrcalcProjParamsDict;
 
 
-interface MrcalcExpParameters {
+interface MrcalcExpParamsDict {
     "@type"?: "exp";
 }
-type MrcalcExpParametersTagged = Required<Pick<MrcalcExpParameters, '@type'>> & MrcalcExpParameters;
+type MrcalcExpParamsDictTagged = Required<Pick<MrcalcExpParamsDict, '@type'>> & MrcalcExpParamsDict;
 
 
-interface MrcalcLogParameters {
+interface MrcalcLogParamsDict {
     "@type"?: "log";
 }
-type MrcalcLogParametersTagged = Required<Pick<MrcalcLogParameters, '@type'>> & MrcalcLogParameters;
+type MrcalcLogParamsDictTagged = Required<Pick<MrcalcLogParamsDict, '@type'>> & MrcalcLogParamsDict;
 
 
-interface MrcalcLog10Parameters {
+interface MrcalcLog10ParamsDict {
     "@type"?: "log10";
 }
-type MrcalcLog10ParametersTagged = Required<Pick<MrcalcLog10Parameters, '@type'>> & MrcalcLog10Parameters;
+type MrcalcLog10ParamsDictTagged = Required<Pick<MrcalcLog10ParamsDict, '@type'>> & MrcalcLog10ParamsDict;
 
 
-interface MrcalcCosParameters {
+interface MrcalcCosParamsDict {
     "@type"?: "cos";
 }
-type MrcalcCosParametersTagged = Required<Pick<MrcalcCosParameters, '@type'>> & MrcalcCosParameters;
+type MrcalcCosParamsDictTagged = Required<Pick<MrcalcCosParamsDict, '@type'>> & MrcalcCosParamsDict;
 
 
-interface MrcalcSinParameters {
+interface MrcalcSinParamsDict {
     "@type"?: "sin";
 }
-type MrcalcSinParametersTagged = Required<Pick<MrcalcSinParameters, '@type'>> & MrcalcSinParameters;
+type MrcalcSinParamsDictTagged = Required<Pick<MrcalcSinParamsDict, '@type'>> & MrcalcSinParamsDict;
 
 
-interface MrcalcTanParameters {
+interface MrcalcTanParamsDict {
     "@type"?: "tan";
 }
-type MrcalcTanParametersTagged = Required<Pick<MrcalcTanParameters, '@type'>> & MrcalcTanParameters;
+type MrcalcTanParamsDictTagged = Required<Pick<MrcalcTanParamsDict, '@type'>> & MrcalcTanParamsDict;
 
 
-interface MrcalcAcosParameters {
+interface MrcalcAcosParamsDict {
     "@type"?: "acos";
 }
-type MrcalcAcosParametersTagged = Required<Pick<MrcalcAcosParameters, '@type'>> & MrcalcAcosParameters;
+type MrcalcAcosParamsDictTagged = Required<Pick<MrcalcAcosParamsDict, '@type'>> & MrcalcAcosParamsDict;
 
 
-interface MrcalcAsinParameters {
+interface MrcalcAsinParamsDict {
     "@type"?: "asin";
 }
-type MrcalcAsinParametersTagged = Required<Pick<MrcalcAsinParameters, '@type'>> & MrcalcAsinParameters;
+type MrcalcAsinParamsDictTagged = Required<Pick<MrcalcAsinParamsDict, '@type'>> & MrcalcAsinParamsDict;
 
 
-interface MrcalcAtanParameters {
+interface MrcalcAtanParamsDict {
     "@type"?: "atan";
 }
-type MrcalcAtanParametersTagged = Required<Pick<MrcalcAtanParameters, '@type'>> & MrcalcAtanParameters;
+type MrcalcAtanParamsDictTagged = Required<Pick<MrcalcAtanParamsDict, '@type'>> & MrcalcAtanParamsDict;
 
 
-interface MrcalcCoshParameters {
+interface MrcalcCoshParamsDict {
     "@type"?: "cosh";
 }
-type MrcalcCoshParametersTagged = Required<Pick<MrcalcCoshParameters, '@type'>> & MrcalcCoshParameters;
+type MrcalcCoshParamsDictTagged = Required<Pick<MrcalcCoshParamsDict, '@type'>> & MrcalcCoshParamsDict;
 
 
-interface MrcalcSinhParameters {
+interface MrcalcSinhParamsDict {
     "@type"?: "sinh";
 }
-type MrcalcSinhParametersTagged = Required<Pick<MrcalcSinhParameters, '@type'>> & MrcalcSinhParameters;
+type MrcalcSinhParamsDictTagged = Required<Pick<MrcalcSinhParamsDict, '@type'>> & MrcalcSinhParamsDict;
 
 
-interface MrcalcTanhParameters {
+interface MrcalcTanhParamsDict {
     "@type"?: "tanh";
 }
-type MrcalcTanhParametersTagged = Required<Pick<MrcalcTanhParameters, '@type'>> & MrcalcTanhParameters;
+type MrcalcTanhParamsDictTagged = Required<Pick<MrcalcTanhParamsDict, '@type'>> & MrcalcTanhParamsDict;
 
 
-interface MrcalcAcoshParameters {
+interface MrcalcAcoshParamsDict {
     "@type"?: "acosh";
 }
-type MrcalcAcoshParametersTagged = Required<Pick<MrcalcAcoshParameters, '@type'>> & MrcalcAcoshParameters;
+type MrcalcAcoshParamsDictTagged = Required<Pick<MrcalcAcoshParamsDict, '@type'>> & MrcalcAcoshParamsDict;
 
 
-interface MrcalcAsinhParameters {
+interface MrcalcAsinhParamsDict {
     "@type"?: "asinh";
 }
-type MrcalcAsinhParametersTagged = Required<Pick<MrcalcAsinhParameters, '@type'>> & MrcalcAsinhParameters;
+type MrcalcAsinhParamsDictTagged = Required<Pick<MrcalcAsinhParamsDict, '@type'>> & MrcalcAsinhParamsDict;
 
 
-interface MrcalcAtanhParameters {
+interface MrcalcAtanhParamsDict {
     "@type"?: "atanh";
 }
-type MrcalcAtanhParametersTagged = Required<Pick<MrcalcAtanhParameters, '@type'>> & MrcalcAtanhParameters;
+type MrcalcAtanhParamsDictTagged = Required<Pick<MrcalcAtanhParamsDict, '@type'>> & MrcalcAtanhParamsDict;
 
 
-interface MrcalcConfigParameters {
+interface MrcalcConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrcalcConfigParametersTagged = Required<Pick<MrcalcConfigParameters, '@type'>> & MrcalcConfigParameters;
+type MrcalcConfigParamsDictTagged = Required<Pick<MrcalcConfigParamsDict, '@type'>> & MrcalcConfigParamsDict;
 
 
-interface MrcalcVariousStringParameters {
+interface MrcalcVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type MrcalcVariousStringParametersTagged = Required<Pick<MrcalcVariousStringParameters, '@type'>> & MrcalcVariousStringParameters;
+type MrcalcVariousStringParamsDictTagged = Required<Pick<MrcalcVariousStringParamsDict, '@type'>> & MrcalcVariousStringParamsDict;
 
 
-interface MrcalcVariousFileParameters {
+interface MrcalcVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type MrcalcVariousFileParametersTagged = Required<Pick<MrcalcVariousFileParameters, '@type'>> & MrcalcVariousFileParameters;
+type MrcalcVariousFileParamsDictTagged = Required<Pick<MrcalcVariousFileParamsDict, '@type'>> & MrcalcVariousFileParamsDict;
 
 
-interface MrcalcParameters {
+interface MrcalcParamsDict {
     "@type"?: "mrtrix/mrcalc";
-    "abs"?: Array<MrcalcAbsParameters> | null | undefined;
-    "neg"?: Array<MrcalcNegParameters> | null | undefined;
-    "add"?: Array<MrcalcAddParameters> | null | undefined;
-    "subtract"?: Array<MrcalcSubtractParameters> | null | undefined;
-    "multiply"?: Array<MrcalcMultiplyParameters> | null | undefined;
-    "divide"?: Array<MrcalcDivideParameters> | null | undefined;
-    "min"?: Array<MrcalcMinParameters> | null | undefined;
-    "max"?: Array<MrcalcMaxParameters> | null | undefined;
-    "lt"?: Array<MrcalcLtParameters> | null | undefined;
-    "gt"?: Array<MrcalcGtParameters> | null | undefined;
-    "le"?: Array<MrcalcLeParameters> | null | undefined;
-    "ge"?: Array<MrcalcGeParameters> | null | undefined;
-    "eq"?: Array<MrcalcEqParameters> | null | undefined;
-    "neq"?: Array<MrcalcNeqParameters> | null | undefined;
-    "if"?: Array<MrcalcIfParameters> | null | undefined;
-    "replace"?: Array<MrcalcReplaceParameters> | null | undefined;
-    "sqrt"?: Array<MrcalcSqrtParameters> | null | undefined;
-    "pow"?: Array<MrcalcPowParameters> | null | undefined;
-    "round"?: Array<MrcalcRoundParameters> | null | undefined;
-    "ceil"?: Array<MrcalcCeilParameters> | null | undefined;
-    "floor"?: Array<MrcalcFloorParameters> | null | undefined;
-    "not"?: Array<MrcalcNotParameters> | null | undefined;
-    "and"?: Array<MrcalcAndParameters> | null | undefined;
-    "or"?: Array<MrcalcOrParameters> | null | undefined;
-    "xor"?: Array<MrcalcXorParameters> | null | undefined;
-    "isnan"?: Array<MrcalcIsnanParameters> | null | undefined;
-    "isinf"?: Array<MrcalcIsinfParameters> | null | undefined;
-    "finite"?: Array<MrcalcFiniteParameters> | null | undefined;
-    "complex"?: Array<MrcalcComplexParameters> | null | undefined;
-    "polar"?: Array<MrcalcPolarParameters> | null | undefined;
-    "real"?: Array<MrcalcRealParameters> | null | undefined;
-    "imag"?: Array<MrcalcImagParameters> | null | undefined;
-    "phase"?: Array<MrcalcPhaseParameters> | null | undefined;
-    "conj"?: Array<MrcalcConjParameters> | null | undefined;
-    "proj"?: Array<MrcalcProjParameters> | null | undefined;
-    "exp"?: Array<MrcalcExpParameters> | null | undefined;
-    "log"?: Array<MrcalcLogParameters> | null | undefined;
-    "log10"?: Array<MrcalcLog10Parameters> | null | undefined;
-    "cos"?: Array<MrcalcCosParameters> | null | undefined;
-    "sin"?: Array<MrcalcSinParameters> | null | undefined;
-    "tan"?: Array<MrcalcTanParameters> | null | undefined;
-    "acos"?: Array<MrcalcAcosParameters> | null | undefined;
-    "asin"?: Array<MrcalcAsinParameters> | null | undefined;
-    "atan"?: Array<MrcalcAtanParameters> | null | undefined;
-    "cosh"?: Array<MrcalcCoshParameters> | null | undefined;
-    "sinh"?: Array<MrcalcSinhParameters> | null | undefined;
-    "tanh"?: Array<MrcalcTanhParameters> | null | undefined;
-    "acosh"?: Array<MrcalcAcoshParameters> | null | undefined;
-    "asinh"?: Array<MrcalcAsinhParameters> | null | undefined;
-    "atanh"?: Array<MrcalcAtanhParameters> | null | undefined;
+    "abs"?: Array<MrcalcAbsParamsDict> | null | undefined;
+    "neg"?: Array<MrcalcNegParamsDict> | null | undefined;
+    "add"?: Array<MrcalcAddParamsDict> | null | undefined;
+    "subtract"?: Array<MrcalcSubtractParamsDict> | null | undefined;
+    "multiply"?: Array<MrcalcMultiplyParamsDict> | null | undefined;
+    "divide"?: Array<MrcalcDivideParamsDict> | null | undefined;
+    "min"?: Array<MrcalcMinParamsDict> | null | undefined;
+    "max"?: Array<MrcalcMaxParamsDict> | null | undefined;
+    "lt"?: Array<MrcalcLtParamsDict> | null | undefined;
+    "gt"?: Array<MrcalcGtParamsDict> | null | undefined;
+    "le"?: Array<MrcalcLeParamsDict> | null | undefined;
+    "ge"?: Array<MrcalcGeParamsDict> | null | undefined;
+    "eq"?: Array<MrcalcEqParamsDict> | null | undefined;
+    "neq"?: Array<MrcalcNeqParamsDict> | null | undefined;
+    "if"?: Array<MrcalcIfParamsDict> | null | undefined;
+    "replace"?: Array<MrcalcReplaceParamsDict> | null | undefined;
+    "sqrt"?: Array<MrcalcSqrtParamsDict> | null | undefined;
+    "pow"?: Array<MrcalcPowParamsDict> | null | undefined;
+    "round"?: Array<MrcalcRoundParamsDict> | null | undefined;
+    "ceil"?: Array<MrcalcCeilParamsDict> | null | undefined;
+    "floor"?: Array<MrcalcFloorParamsDict> | null | undefined;
+    "not"?: Array<MrcalcNotParamsDict> | null | undefined;
+    "and"?: Array<MrcalcAndParamsDict> | null | undefined;
+    "or"?: Array<MrcalcOrParamsDict> | null | undefined;
+    "xor"?: Array<MrcalcXorParamsDict> | null | undefined;
+    "isnan"?: Array<MrcalcIsnanParamsDict> | null | undefined;
+    "isinf"?: Array<MrcalcIsinfParamsDict> | null | undefined;
+    "finite"?: Array<MrcalcFiniteParamsDict> | null | undefined;
+    "complex"?: Array<MrcalcComplexParamsDict> | null | undefined;
+    "polar"?: Array<MrcalcPolarParamsDict> | null | undefined;
+    "real"?: Array<MrcalcRealParamsDict> | null | undefined;
+    "imag"?: Array<MrcalcImagParamsDict> | null | undefined;
+    "phase"?: Array<MrcalcPhaseParamsDict> | null | undefined;
+    "conj"?: Array<MrcalcConjParamsDict> | null | undefined;
+    "proj"?: Array<MrcalcProjParamsDict> | null | undefined;
+    "exp"?: Array<MrcalcExpParamsDict> | null | undefined;
+    "log"?: Array<MrcalcLogParamsDict> | null | undefined;
+    "log10"?: Array<MrcalcLog10ParamsDict> | null | undefined;
+    "cos"?: Array<MrcalcCosParamsDict> | null | undefined;
+    "sin"?: Array<MrcalcSinParamsDict> | null | undefined;
+    "tan"?: Array<MrcalcTanParamsDict> | null | undefined;
+    "acos"?: Array<MrcalcAcosParamsDict> | null | undefined;
+    "asin"?: Array<MrcalcAsinParamsDict> | null | undefined;
+    "atan"?: Array<MrcalcAtanParamsDict> | null | undefined;
+    "cosh"?: Array<MrcalcCoshParamsDict> | null | undefined;
+    "sinh"?: Array<MrcalcSinhParamsDict> | null | undefined;
+    "tanh"?: Array<MrcalcTanhParamsDict> | null | undefined;
+    "acosh"?: Array<MrcalcAcoshParamsDict> | null | undefined;
+    "asinh"?: Array<MrcalcAsinhParamsDict> | null | undefined;
+    "atanh"?: Array<MrcalcAtanhParamsDict> | null | undefined;
     "datatype"?: string | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrcalcConfigParameters> | null | undefined;
+    "config"?: Array<MrcalcConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "operand": Array<MrcalcVariousStringParametersTagged | MrcalcVariousFileParametersTagged>;
+    "operand": Array<MrcalcVariousStringParamsDictTagged | MrcalcVariousFileParamsDictTagged>;
 }
-type MrcalcParametersTagged = Required<Pick<MrcalcParameters, '@type'>> & MrcalcParameters;
+type MrcalcParamsDictTagged = Required<Pick<MrcalcParamsDict, '@type'>> & MrcalcParamsDict;
 
 
 /**
@@ -438,8 +438,8 @@ function mrcalc_operand_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_abs_params(
-): MrcalcAbsParametersTagged {
+function mrcalc_abs(
+): MrcalcAbsParamsDictTagged {
     const params = {
         "@type": "abs" as const,
     };
@@ -456,7 +456,7 @@ function mrcalc_abs_params(
  * @returns Command-line arguments.
  */
 function mrcalc_abs_cargs(
-    params: MrcalcAbsParameters,
+    params: MrcalcAbsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -470,8 +470,8 @@ function mrcalc_abs_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_neg_params(
-): MrcalcNegParametersTagged {
+function mrcalc_neg(
+): MrcalcNegParamsDictTagged {
     const params = {
         "@type": "neg" as const,
     };
@@ -488,7 +488,7 @@ function mrcalc_neg_params(
  * @returns Command-line arguments.
  */
 function mrcalc_neg_cargs(
-    params: MrcalcNegParameters,
+    params: MrcalcNegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -502,8 +502,8 @@ function mrcalc_neg_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_add_params(
-): MrcalcAddParametersTagged {
+function mrcalc_add(
+): MrcalcAddParamsDictTagged {
     const params = {
         "@type": "add" as const,
     };
@@ -520,7 +520,7 @@ function mrcalc_add_params(
  * @returns Command-line arguments.
  */
 function mrcalc_add_cargs(
-    params: MrcalcAddParameters,
+    params: MrcalcAddParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -534,8 +534,8 @@ function mrcalc_add_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_subtract_params(
-): MrcalcSubtractParametersTagged {
+function mrcalc_subtract(
+): MrcalcSubtractParamsDictTagged {
     const params = {
         "@type": "subtract" as const,
     };
@@ -552,7 +552,7 @@ function mrcalc_subtract_params(
  * @returns Command-line arguments.
  */
 function mrcalc_subtract_cargs(
-    params: MrcalcSubtractParameters,
+    params: MrcalcSubtractParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -566,8 +566,8 @@ function mrcalc_subtract_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_multiply_params(
-): MrcalcMultiplyParametersTagged {
+function mrcalc_multiply(
+): MrcalcMultiplyParamsDictTagged {
     const params = {
         "@type": "multiply" as const,
     };
@@ -584,7 +584,7 @@ function mrcalc_multiply_params(
  * @returns Command-line arguments.
  */
 function mrcalc_multiply_cargs(
-    params: MrcalcMultiplyParameters,
+    params: MrcalcMultiplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -598,8 +598,8 @@ function mrcalc_multiply_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_divide_params(
-): MrcalcDivideParametersTagged {
+function mrcalc_divide(
+): MrcalcDivideParamsDictTagged {
     const params = {
         "@type": "divide" as const,
     };
@@ -616,7 +616,7 @@ function mrcalc_divide_params(
  * @returns Command-line arguments.
  */
 function mrcalc_divide_cargs(
-    params: MrcalcDivideParameters,
+    params: MrcalcDivideParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -630,8 +630,8 @@ function mrcalc_divide_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_min_params(
-): MrcalcMinParametersTagged {
+function mrcalc_min(
+): MrcalcMinParamsDictTagged {
     const params = {
         "@type": "min" as const,
     };
@@ -648,7 +648,7 @@ function mrcalc_min_params(
  * @returns Command-line arguments.
  */
 function mrcalc_min_cargs(
-    params: MrcalcMinParameters,
+    params: MrcalcMinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -662,8 +662,8 @@ function mrcalc_min_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_max_params(
-): MrcalcMaxParametersTagged {
+function mrcalc_max(
+): MrcalcMaxParamsDictTagged {
     const params = {
         "@type": "max" as const,
     };
@@ -680,7 +680,7 @@ function mrcalc_max_params(
  * @returns Command-line arguments.
  */
 function mrcalc_max_cargs(
-    params: MrcalcMaxParameters,
+    params: MrcalcMaxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -694,8 +694,8 @@ function mrcalc_max_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_lt_params(
-): MrcalcLtParametersTagged {
+function mrcalc_lt(
+): MrcalcLtParamsDictTagged {
     const params = {
         "@type": "lt" as const,
     };
@@ -712,7 +712,7 @@ function mrcalc_lt_params(
  * @returns Command-line arguments.
  */
 function mrcalc_lt_cargs(
-    params: MrcalcLtParameters,
+    params: MrcalcLtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -726,8 +726,8 @@ function mrcalc_lt_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_gt_params(
-): MrcalcGtParametersTagged {
+function mrcalc_gt(
+): MrcalcGtParamsDictTagged {
     const params = {
         "@type": "gt" as const,
     };
@@ -744,7 +744,7 @@ function mrcalc_gt_params(
  * @returns Command-line arguments.
  */
 function mrcalc_gt_cargs(
-    params: MrcalcGtParameters,
+    params: MrcalcGtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -758,8 +758,8 @@ function mrcalc_gt_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_le_params(
-): MrcalcLeParametersTagged {
+function mrcalc_le(
+): MrcalcLeParamsDictTagged {
     const params = {
         "@type": "le" as const,
     };
@@ -776,7 +776,7 @@ function mrcalc_le_params(
  * @returns Command-line arguments.
  */
 function mrcalc_le_cargs(
-    params: MrcalcLeParameters,
+    params: MrcalcLeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -790,8 +790,8 @@ function mrcalc_le_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_ge_params(
-): MrcalcGeParametersTagged {
+function mrcalc_ge(
+): MrcalcGeParamsDictTagged {
     const params = {
         "@type": "ge" as const,
     };
@@ -808,7 +808,7 @@ function mrcalc_ge_params(
  * @returns Command-line arguments.
  */
 function mrcalc_ge_cargs(
-    params: MrcalcGeParameters,
+    params: MrcalcGeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -822,8 +822,8 @@ function mrcalc_ge_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_eq_params(
-): MrcalcEqParametersTagged {
+function mrcalc_eq(
+): MrcalcEqParamsDictTagged {
     const params = {
         "@type": "eq" as const,
     };
@@ -840,7 +840,7 @@ function mrcalc_eq_params(
  * @returns Command-line arguments.
  */
 function mrcalc_eq_cargs(
-    params: MrcalcEqParameters,
+    params: MrcalcEqParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -854,8 +854,8 @@ function mrcalc_eq_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_neq_params(
-): MrcalcNeqParametersTagged {
+function mrcalc_neq(
+): MrcalcNeqParamsDictTagged {
     const params = {
         "@type": "neq" as const,
     };
@@ -872,7 +872,7 @@ function mrcalc_neq_params(
  * @returns Command-line arguments.
  */
 function mrcalc_neq_cargs(
-    params: MrcalcNeqParameters,
+    params: MrcalcNeqParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -886,8 +886,8 @@ function mrcalc_neq_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_if_params(
-): MrcalcIfParametersTagged {
+function mrcalc_if(
+): MrcalcIfParamsDictTagged {
     const params = {
         "@type": "if" as const,
     };
@@ -904,7 +904,7 @@ function mrcalc_if_params(
  * @returns Command-line arguments.
  */
 function mrcalc_if_cargs(
-    params: MrcalcIfParameters,
+    params: MrcalcIfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -918,8 +918,8 @@ function mrcalc_if_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_replace_params(
-): MrcalcReplaceParametersTagged {
+function mrcalc_replace(
+): MrcalcReplaceParamsDictTagged {
     const params = {
         "@type": "replace" as const,
     };
@@ -936,7 +936,7 @@ function mrcalc_replace_params(
  * @returns Command-line arguments.
  */
 function mrcalc_replace_cargs(
-    params: MrcalcReplaceParameters,
+    params: MrcalcReplaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -950,8 +950,8 @@ function mrcalc_replace_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_sqrt_params(
-): MrcalcSqrtParametersTagged {
+function mrcalc_sqrt(
+): MrcalcSqrtParamsDictTagged {
     const params = {
         "@type": "sqrt" as const,
     };
@@ -968,7 +968,7 @@ function mrcalc_sqrt_params(
  * @returns Command-line arguments.
  */
 function mrcalc_sqrt_cargs(
-    params: MrcalcSqrtParameters,
+    params: MrcalcSqrtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -982,8 +982,8 @@ function mrcalc_sqrt_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_pow_params(
-): MrcalcPowParametersTagged {
+function mrcalc_pow(
+): MrcalcPowParamsDictTagged {
     const params = {
         "@type": "pow" as const,
     };
@@ -1000,7 +1000,7 @@ function mrcalc_pow_params(
  * @returns Command-line arguments.
  */
 function mrcalc_pow_cargs(
-    params: MrcalcPowParameters,
+    params: MrcalcPowParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1014,8 +1014,8 @@ function mrcalc_pow_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_round_params(
-): MrcalcRoundParametersTagged {
+function mrcalc_round(
+): MrcalcRoundParamsDictTagged {
     const params = {
         "@type": "round" as const,
     };
@@ -1032,7 +1032,7 @@ function mrcalc_round_params(
  * @returns Command-line arguments.
  */
 function mrcalc_round_cargs(
-    params: MrcalcRoundParameters,
+    params: MrcalcRoundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1046,8 +1046,8 @@ function mrcalc_round_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_ceil_params(
-): MrcalcCeilParametersTagged {
+function mrcalc_ceil(
+): MrcalcCeilParamsDictTagged {
     const params = {
         "@type": "ceil" as const,
     };
@@ -1064,7 +1064,7 @@ function mrcalc_ceil_params(
  * @returns Command-line arguments.
  */
 function mrcalc_ceil_cargs(
-    params: MrcalcCeilParameters,
+    params: MrcalcCeilParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1078,8 +1078,8 @@ function mrcalc_ceil_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_floor_params(
-): MrcalcFloorParametersTagged {
+function mrcalc_floor(
+): MrcalcFloorParamsDictTagged {
     const params = {
         "@type": "floor" as const,
     };
@@ -1096,7 +1096,7 @@ function mrcalc_floor_params(
  * @returns Command-line arguments.
  */
 function mrcalc_floor_cargs(
-    params: MrcalcFloorParameters,
+    params: MrcalcFloorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1110,8 +1110,8 @@ function mrcalc_floor_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_not_params(
-): MrcalcNotParametersTagged {
+function mrcalc_not(
+): MrcalcNotParamsDictTagged {
     const params = {
         "@type": "not" as const,
     };
@@ -1128,7 +1128,7 @@ function mrcalc_not_params(
  * @returns Command-line arguments.
  */
 function mrcalc_not_cargs(
-    params: MrcalcNotParameters,
+    params: MrcalcNotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1142,8 +1142,8 @@ function mrcalc_not_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_and_params(
-): MrcalcAndParametersTagged {
+function mrcalc_and(
+): MrcalcAndParamsDictTagged {
     const params = {
         "@type": "and" as const,
     };
@@ -1160,7 +1160,7 @@ function mrcalc_and_params(
  * @returns Command-line arguments.
  */
 function mrcalc_and_cargs(
-    params: MrcalcAndParameters,
+    params: MrcalcAndParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1174,8 +1174,8 @@ function mrcalc_and_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_or_params(
-): MrcalcOrParametersTagged {
+function mrcalc_or(
+): MrcalcOrParamsDictTagged {
     const params = {
         "@type": "or" as const,
     };
@@ -1192,7 +1192,7 @@ function mrcalc_or_params(
  * @returns Command-line arguments.
  */
 function mrcalc_or_cargs(
-    params: MrcalcOrParameters,
+    params: MrcalcOrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1206,8 +1206,8 @@ function mrcalc_or_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_xor_params(
-): MrcalcXorParametersTagged {
+function mrcalc_xor(
+): MrcalcXorParamsDictTagged {
     const params = {
         "@type": "xor" as const,
     };
@@ -1224,7 +1224,7 @@ function mrcalc_xor_params(
  * @returns Command-line arguments.
  */
 function mrcalc_xor_cargs(
-    params: MrcalcXorParameters,
+    params: MrcalcXorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1238,8 +1238,8 @@ function mrcalc_xor_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_isnan_params(
-): MrcalcIsnanParametersTagged {
+function mrcalc_isnan(
+): MrcalcIsnanParamsDictTagged {
     const params = {
         "@type": "isnan" as const,
     };
@@ -1256,7 +1256,7 @@ function mrcalc_isnan_params(
  * @returns Command-line arguments.
  */
 function mrcalc_isnan_cargs(
-    params: MrcalcIsnanParameters,
+    params: MrcalcIsnanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1270,8 +1270,8 @@ function mrcalc_isnan_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_isinf_params(
-): MrcalcIsinfParametersTagged {
+function mrcalc_isinf(
+): MrcalcIsinfParamsDictTagged {
     const params = {
         "@type": "isinf" as const,
     };
@@ -1288,7 +1288,7 @@ function mrcalc_isinf_params(
  * @returns Command-line arguments.
  */
 function mrcalc_isinf_cargs(
-    params: MrcalcIsinfParameters,
+    params: MrcalcIsinfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1302,8 +1302,8 @@ function mrcalc_isinf_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_finite_params(
-): MrcalcFiniteParametersTagged {
+function mrcalc_finite(
+): MrcalcFiniteParamsDictTagged {
     const params = {
         "@type": "finite" as const,
     };
@@ -1320,7 +1320,7 @@ function mrcalc_finite_params(
  * @returns Command-line arguments.
  */
 function mrcalc_finite_cargs(
-    params: MrcalcFiniteParameters,
+    params: MrcalcFiniteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1334,8 +1334,8 @@ function mrcalc_finite_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_complex_params(
-): MrcalcComplexParametersTagged {
+function mrcalc_complex(
+): MrcalcComplexParamsDictTagged {
     const params = {
         "@type": "complex" as const,
     };
@@ -1352,7 +1352,7 @@ function mrcalc_complex_params(
  * @returns Command-line arguments.
  */
 function mrcalc_complex_cargs(
-    params: MrcalcComplexParameters,
+    params: MrcalcComplexParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1366,8 +1366,8 @@ function mrcalc_complex_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_polar_params(
-): MrcalcPolarParametersTagged {
+function mrcalc_polar(
+): MrcalcPolarParamsDictTagged {
     const params = {
         "@type": "polar" as const,
     };
@@ -1384,7 +1384,7 @@ function mrcalc_polar_params(
  * @returns Command-line arguments.
  */
 function mrcalc_polar_cargs(
-    params: MrcalcPolarParameters,
+    params: MrcalcPolarParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1398,8 +1398,8 @@ function mrcalc_polar_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_real_params(
-): MrcalcRealParametersTagged {
+function mrcalc_real(
+): MrcalcRealParamsDictTagged {
     const params = {
         "@type": "real" as const,
     };
@@ -1416,7 +1416,7 @@ function mrcalc_real_params(
  * @returns Command-line arguments.
  */
 function mrcalc_real_cargs(
-    params: MrcalcRealParameters,
+    params: MrcalcRealParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1430,8 +1430,8 @@ function mrcalc_real_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_imag_params(
-): MrcalcImagParametersTagged {
+function mrcalc_imag(
+): MrcalcImagParamsDictTagged {
     const params = {
         "@type": "imag" as const,
     };
@@ -1448,7 +1448,7 @@ function mrcalc_imag_params(
  * @returns Command-line arguments.
  */
 function mrcalc_imag_cargs(
-    params: MrcalcImagParameters,
+    params: MrcalcImagParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1462,8 +1462,8 @@ function mrcalc_imag_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_phase_params(
-): MrcalcPhaseParametersTagged {
+function mrcalc_phase(
+): MrcalcPhaseParamsDictTagged {
     const params = {
         "@type": "phase" as const,
     };
@@ -1480,7 +1480,7 @@ function mrcalc_phase_params(
  * @returns Command-line arguments.
  */
 function mrcalc_phase_cargs(
-    params: MrcalcPhaseParameters,
+    params: MrcalcPhaseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1494,8 +1494,8 @@ function mrcalc_phase_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_conj_params(
-): MrcalcConjParametersTagged {
+function mrcalc_conj(
+): MrcalcConjParamsDictTagged {
     const params = {
         "@type": "conj" as const,
     };
@@ -1512,7 +1512,7 @@ function mrcalc_conj_params(
  * @returns Command-line arguments.
  */
 function mrcalc_conj_cargs(
-    params: MrcalcConjParameters,
+    params: MrcalcConjParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1526,8 +1526,8 @@ function mrcalc_conj_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_proj_params(
-): MrcalcProjParametersTagged {
+function mrcalc_proj(
+): MrcalcProjParamsDictTagged {
     const params = {
         "@type": "proj" as const,
     };
@@ -1544,7 +1544,7 @@ function mrcalc_proj_params(
  * @returns Command-line arguments.
  */
 function mrcalc_proj_cargs(
-    params: MrcalcProjParameters,
+    params: MrcalcProjParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1558,8 +1558,8 @@ function mrcalc_proj_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_exp_params(
-): MrcalcExpParametersTagged {
+function mrcalc_exp(
+): MrcalcExpParamsDictTagged {
     const params = {
         "@type": "exp" as const,
     };
@@ -1576,7 +1576,7 @@ function mrcalc_exp_params(
  * @returns Command-line arguments.
  */
 function mrcalc_exp_cargs(
-    params: MrcalcExpParameters,
+    params: MrcalcExpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1590,8 +1590,8 @@ function mrcalc_exp_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_log_params(
-): MrcalcLogParametersTagged {
+function mrcalc_log(
+): MrcalcLogParamsDictTagged {
     const params = {
         "@type": "log" as const,
     };
@@ -1608,7 +1608,7 @@ function mrcalc_log_params(
  * @returns Command-line arguments.
  */
 function mrcalc_log_cargs(
-    params: MrcalcLogParameters,
+    params: MrcalcLogParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1622,8 +1622,8 @@ function mrcalc_log_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_log10_params(
-): MrcalcLog10ParametersTagged {
+function mrcalc_log10(
+): MrcalcLog10ParamsDictTagged {
     const params = {
         "@type": "log10" as const,
     };
@@ -1640,7 +1640,7 @@ function mrcalc_log10_params(
  * @returns Command-line arguments.
  */
 function mrcalc_log10_cargs(
-    params: MrcalcLog10Parameters,
+    params: MrcalcLog10ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1654,8 +1654,8 @@ function mrcalc_log10_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_cos_params(
-): MrcalcCosParametersTagged {
+function mrcalc_cos(
+): MrcalcCosParamsDictTagged {
     const params = {
         "@type": "cos" as const,
     };
@@ -1672,7 +1672,7 @@ function mrcalc_cos_params(
  * @returns Command-line arguments.
  */
 function mrcalc_cos_cargs(
-    params: MrcalcCosParameters,
+    params: MrcalcCosParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1686,8 +1686,8 @@ function mrcalc_cos_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_sin_params(
-): MrcalcSinParametersTagged {
+function mrcalc_sin(
+): MrcalcSinParamsDictTagged {
     const params = {
         "@type": "sin" as const,
     };
@@ -1704,7 +1704,7 @@ function mrcalc_sin_params(
  * @returns Command-line arguments.
  */
 function mrcalc_sin_cargs(
-    params: MrcalcSinParameters,
+    params: MrcalcSinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1718,8 +1718,8 @@ function mrcalc_sin_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_tan_params(
-): MrcalcTanParametersTagged {
+function mrcalc_tan(
+): MrcalcTanParamsDictTagged {
     const params = {
         "@type": "tan" as const,
     };
@@ -1736,7 +1736,7 @@ function mrcalc_tan_params(
  * @returns Command-line arguments.
  */
 function mrcalc_tan_cargs(
-    params: MrcalcTanParameters,
+    params: MrcalcTanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1750,8 +1750,8 @@ function mrcalc_tan_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_acos_params(
-): MrcalcAcosParametersTagged {
+function mrcalc_acos(
+): MrcalcAcosParamsDictTagged {
     const params = {
         "@type": "acos" as const,
     };
@@ -1768,7 +1768,7 @@ function mrcalc_acos_params(
  * @returns Command-line arguments.
  */
 function mrcalc_acos_cargs(
-    params: MrcalcAcosParameters,
+    params: MrcalcAcosParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1782,8 +1782,8 @@ function mrcalc_acos_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_asin_params(
-): MrcalcAsinParametersTagged {
+function mrcalc_asin(
+): MrcalcAsinParamsDictTagged {
     const params = {
         "@type": "asin" as const,
     };
@@ -1800,7 +1800,7 @@ function mrcalc_asin_params(
  * @returns Command-line arguments.
  */
 function mrcalc_asin_cargs(
-    params: MrcalcAsinParameters,
+    params: MrcalcAsinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1814,8 +1814,8 @@ function mrcalc_asin_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_atan_params(
-): MrcalcAtanParametersTagged {
+function mrcalc_atan(
+): MrcalcAtanParamsDictTagged {
     const params = {
         "@type": "atan" as const,
     };
@@ -1832,7 +1832,7 @@ function mrcalc_atan_params(
  * @returns Command-line arguments.
  */
 function mrcalc_atan_cargs(
-    params: MrcalcAtanParameters,
+    params: MrcalcAtanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1846,8 +1846,8 @@ function mrcalc_atan_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_cosh_params(
-): MrcalcCoshParametersTagged {
+function mrcalc_cosh(
+): MrcalcCoshParamsDictTagged {
     const params = {
         "@type": "cosh" as const,
     };
@@ -1864,7 +1864,7 @@ function mrcalc_cosh_params(
  * @returns Command-line arguments.
  */
 function mrcalc_cosh_cargs(
-    params: MrcalcCoshParameters,
+    params: MrcalcCoshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1878,8 +1878,8 @@ function mrcalc_cosh_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_sinh_params(
-): MrcalcSinhParametersTagged {
+function mrcalc_sinh(
+): MrcalcSinhParamsDictTagged {
     const params = {
         "@type": "sinh" as const,
     };
@@ -1896,7 +1896,7 @@ function mrcalc_sinh_params(
  * @returns Command-line arguments.
  */
 function mrcalc_sinh_cargs(
-    params: MrcalcSinhParameters,
+    params: MrcalcSinhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1910,8 +1910,8 @@ function mrcalc_sinh_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_tanh_params(
-): MrcalcTanhParametersTagged {
+function mrcalc_tanh(
+): MrcalcTanhParamsDictTagged {
     const params = {
         "@type": "tanh" as const,
     };
@@ -1928,7 +1928,7 @@ function mrcalc_tanh_params(
  * @returns Command-line arguments.
  */
 function mrcalc_tanh_cargs(
-    params: MrcalcTanhParameters,
+    params: MrcalcTanhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1942,8 +1942,8 @@ function mrcalc_tanh_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_acosh_params(
-): MrcalcAcoshParametersTagged {
+function mrcalc_acosh(
+): MrcalcAcoshParamsDictTagged {
     const params = {
         "@type": "acosh" as const,
     };
@@ -1960,7 +1960,7 @@ function mrcalc_acosh_params(
  * @returns Command-line arguments.
  */
 function mrcalc_acosh_cargs(
-    params: MrcalcAcoshParameters,
+    params: MrcalcAcoshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1974,8 +1974,8 @@ function mrcalc_acosh_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_asinh_params(
-): MrcalcAsinhParametersTagged {
+function mrcalc_asinh(
+): MrcalcAsinhParamsDictTagged {
     const params = {
         "@type": "asinh" as const,
     };
@@ -1992,7 +1992,7 @@ function mrcalc_asinh_params(
  * @returns Command-line arguments.
  */
 function mrcalc_asinh_cargs(
-    params: MrcalcAsinhParameters,
+    params: MrcalcAsinhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2006,8 +2006,8 @@ function mrcalc_asinh_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_atanh_params(
-): MrcalcAtanhParametersTagged {
+function mrcalc_atanh(
+): MrcalcAtanhParamsDictTagged {
     const params = {
         "@type": "atanh" as const,
     };
@@ -2024,7 +2024,7 @@ function mrcalc_atanh_params(
  * @returns Command-line arguments.
  */
 function mrcalc_atanh_cargs(
-    params: MrcalcAtanhParameters,
+    params: MrcalcAtanhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2041,10 +2041,10 @@ function mrcalc_atanh_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_config_params(
+function mrcalc_config(
     key: string,
     value: string,
-): MrcalcConfigParametersTagged {
+): MrcalcConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -2063,7 +2063,7 @@ function mrcalc_config_params(
  * @returns Command-line arguments.
  */
 function mrcalc_config_cargs(
-    params: MrcalcConfigParameters,
+    params: MrcalcConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2081,9 +2081,9 @@ function mrcalc_config_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_various_string_params(
+function mrcalc_various_string(
     obj: string,
-): MrcalcVariousStringParametersTagged {
+): MrcalcVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -2101,7 +2101,7 @@ function mrcalc_various_string_params(
  * @returns Command-line arguments.
  */
 function mrcalc_various_string_cargs(
-    params: MrcalcVariousStringParameters,
+    params: MrcalcVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2117,9 +2117,9 @@ function mrcalc_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrcalc_various_file_params(
+function mrcalc_various_file(
     obj: InputPathType,
-): MrcalcVariousFileParametersTagged {
+): MrcalcVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -2137,7 +2137,7 @@ function mrcalc_various_file_params(
  * @returns Command-line arguments.
  */
 function mrcalc_various_file_cargs(
-    params: MrcalcVariousFileParameters,
+    params: MrcalcVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2147,7 +2147,7 @@ function mrcalc_various_file_cargs(
 
 
 /**
- * Output object returned when calling `MrcalcParameters(...)`.
+ * Output object returned when calling `MrcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -2226,67 +2226,67 @@ interface MrcalcOutputs {
  * @returns Parameter dictionary
  */
 function mrcalc_params(
-    operand: Array<MrcalcVariousStringParametersTagged | MrcalcVariousFileParametersTagged>,
-    abs: Array<MrcalcAbsParameters> | null = null,
-    neg: Array<MrcalcNegParameters> | null = null,
-    add: Array<MrcalcAddParameters> | null = null,
-    subtract: Array<MrcalcSubtractParameters> | null = null,
-    multiply: Array<MrcalcMultiplyParameters> | null = null,
-    divide: Array<MrcalcDivideParameters> | null = null,
-    min: Array<MrcalcMinParameters> | null = null,
-    max: Array<MrcalcMaxParameters> | null = null,
-    lt: Array<MrcalcLtParameters> | null = null,
-    gt: Array<MrcalcGtParameters> | null = null,
-    le: Array<MrcalcLeParameters> | null = null,
-    ge: Array<MrcalcGeParameters> | null = null,
-    eq: Array<MrcalcEqParameters> | null = null,
-    neq: Array<MrcalcNeqParameters> | null = null,
-    if_: Array<MrcalcIfParameters> | null = null,
-    replace: Array<MrcalcReplaceParameters> | null = null,
-    sqrt: Array<MrcalcSqrtParameters> | null = null,
-    pow: Array<MrcalcPowParameters> | null = null,
-    round: Array<MrcalcRoundParameters> | null = null,
-    ceil: Array<MrcalcCeilParameters> | null = null,
-    floor: Array<MrcalcFloorParameters> | null = null,
-    not: Array<MrcalcNotParameters> | null = null,
-    and: Array<MrcalcAndParameters> | null = null,
-    or: Array<MrcalcOrParameters> | null = null,
-    xor: Array<MrcalcXorParameters> | null = null,
-    isnan: Array<MrcalcIsnanParameters> | null = null,
-    isinf: Array<MrcalcIsinfParameters> | null = null,
-    finite: Array<MrcalcFiniteParameters> | null = null,
-    complex: Array<MrcalcComplexParameters> | null = null,
-    polar: Array<MrcalcPolarParameters> | null = null,
-    real: Array<MrcalcRealParameters> | null = null,
-    imag: Array<MrcalcImagParameters> | null = null,
-    phase: Array<MrcalcPhaseParameters> | null = null,
-    conj: Array<MrcalcConjParameters> | null = null,
-    proj: Array<MrcalcProjParameters> | null = null,
-    exp: Array<MrcalcExpParameters> | null = null,
-    log: Array<MrcalcLogParameters> | null = null,
-    log10: Array<MrcalcLog10Parameters> | null = null,
-    cos: Array<MrcalcCosParameters> | null = null,
-    sin: Array<MrcalcSinParameters> | null = null,
-    tan: Array<MrcalcTanParameters> | null = null,
-    acos: Array<MrcalcAcosParameters> | null = null,
-    asin: Array<MrcalcAsinParameters> | null = null,
-    atan: Array<MrcalcAtanParameters> | null = null,
-    cosh: Array<MrcalcCoshParameters> | null = null,
-    sinh: Array<MrcalcSinhParameters> | null = null,
-    tanh: Array<MrcalcTanhParameters> | null = null,
-    acosh: Array<MrcalcAcoshParameters> | null = null,
-    asinh: Array<MrcalcAsinhParameters> | null = null,
-    atanh: Array<MrcalcAtanhParameters> | null = null,
+    operand: Array<MrcalcVariousStringParamsDictTagged | MrcalcVariousFileParamsDictTagged>,
+    abs: Array<MrcalcAbsParamsDict> | null = null,
+    neg: Array<MrcalcNegParamsDict> | null = null,
+    add: Array<MrcalcAddParamsDict> | null = null,
+    subtract: Array<MrcalcSubtractParamsDict> | null = null,
+    multiply: Array<MrcalcMultiplyParamsDict> | null = null,
+    divide: Array<MrcalcDivideParamsDict> | null = null,
+    min: Array<MrcalcMinParamsDict> | null = null,
+    max: Array<MrcalcMaxParamsDict> | null = null,
+    lt: Array<MrcalcLtParamsDict> | null = null,
+    gt: Array<MrcalcGtParamsDict> | null = null,
+    le: Array<MrcalcLeParamsDict> | null = null,
+    ge: Array<MrcalcGeParamsDict> | null = null,
+    eq: Array<MrcalcEqParamsDict> | null = null,
+    neq: Array<MrcalcNeqParamsDict> | null = null,
+    if_: Array<MrcalcIfParamsDict> | null = null,
+    replace: Array<MrcalcReplaceParamsDict> | null = null,
+    sqrt: Array<MrcalcSqrtParamsDict> | null = null,
+    pow: Array<MrcalcPowParamsDict> | null = null,
+    round: Array<MrcalcRoundParamsDict> | null = null,
+    ceil: Array<MrcalcCeilParamsDict> | null = null,
+    floor: Array<MrcalcFloorParamsDict> | null = null,
+    not: Array<MrcalcNotParamsDict> | null = null,
+    and: Array<MrcalcAndParamsDict> | null = null,
+    or: Array<MrcalcOrParamsDict> | null = null,
+    xor: Array<MrcalcXorParamsDict> | null = null,
+    isnan: Array<MrcalcIsnanParamsDict> | null = null,
+    isinf: Array<MrcalcIsinfParamsDict> | null = null,
+    finite: Array<MrcalcFiniteParamsDict> | null = null,
+    complex: Array<MrcalcComplexParamsDict> | null = null,
+    polar: Array<MrcalcPolarParamsDict> | null = null,
+    real: Array<MrcalcRealParamsDict> | null = null,
+    imag: Array<MrcalcImagParamsDict> | null = null,
+    phase: Array<MrcalcPhaseParamsDict> | null = null,
+    conj: Array<MrcalcConjParamsDict> | null = null,
+    proj: Array<MrcalcProjParamsDict> | null = null,
+    exp: Array<MrcalcExpParamsDict> | null = null,
+    log: Array<MrcalcLogParamsDict> | null = null,
+    log10: Array<MrcalcLog10ParamsDict> | null = null,
+    cos: Array<MrcalcCosParamsDict> | null = null,
+    sin: Array<MrcalcSinParamsDict> | null = null,
+    tan: Array<MrcalcTanParamsDict> | null = null,
+    acos: Array<MrcalcAcosParamsDict> | null = null,
+    asin: Array<MrcalcAsinParamsDict> | null = null,
+    atan: Array<MrcalcAtanParamsDict> | null = null,
+    cosh: Array<MrcalcCoshParamsDict> | null = null,
+    sinh: Array<MrcalcSinhParamsDict> | null = null,
+    tanh: Array<MrcalcTanhParamsDict> | null = null,
+    acosh: Array<MrcalcAcoshParamsDict> | null = null,
+    asinh: Array<MrcalcAsinhParamsDict> | null = null,
+    atanh: Array<MrcalcAtanhParamsDict> | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcalcConfigParameters> | null = null,
+    config: Array<MrcalcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcalcParametersTagged {
+): MrcalcParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrcalc" as const,
         "info": info,
@@ -2469,7 +2469,7 @@ function mrcalc_params(
  * @returns Command-line arguments.
  */
 function mrcalc_cargs(
-    params: MrcalcParameters,
+    params: MrcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2671,7 +2671,7 @@ function mrcalc_cargs(
  * @returns Outputs object.
  */
 function mrcalc_outputs(
-    params: MrcalcParameters,
+    params: MrcalcParamsDict,
     execution: Execution,
 ): MrcalcOutputs {
     const ret: MrcalcOutputs = {
@@ -2706,7 +2706,7 @@ function mrcalc_outputs(
  * @returns NamedTuple of outputs (described in `MrcalcOutputs`).
  */
 function mrcalc_execute(
-    params: MrcalcParameters,
+    params: MrcalcParamsDict,
     runner: Runner | null = null,
 ): MrcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -2803,64 +2803,64 @@ function mrcalc_execute(
  * @returns NamedTuple of outputs (described in `MrcalcOutputs`).
  */
 function mrcalc(
-    operand: Array<MrcalcVariousStringParametersTagged | MrcalcVariousFileParametersTagged>,
-    abs: Array<MrcalcAbsParameters> | null = null,
-    neg: Array<MrcalcNegParameters> | null = null,
-    add: Array<MrcalcAddParameters> | null = null,
-    subtract: Array<MrcalcSubtractParameters> | null = null,
-    multiply: Array<MrcalcMultiplyParameters> | null = null,
-    divide: Array<MrcalcDivideParameters> | null = null,
-    min: Array<MrcalcMinParameters> | null = null,
-    max: Array<MrcalcMaxParameters> | null = null,
-    lt: Array<MrcalcLtParameters> | null = null,
-    gt: Array<MrcalcGtParameters> | null = null,
-    le: Array<MrcalcLeParameters> | null = null,
-    ge: Array<MrcalcGeParameters> | null = null,
-    eq: Array<MrcalcEqParameters> | null = null,
-    neq: Array<MrcalcNeqParameters> | null = null,
-    if_: Array<MrcalcIfParameters> | null = null,
-    replace: Array<MrcalcReplaceParameters> | null = null,
-    sqrt: Array<MrcalcSqrtParameters> | null = null,
-    pow: Array<MrcalcPowParameters> | null = null,
-    round: Array<MrcalcRoundParameters> | null = null,
-    ceil: Array<MrcalcCeilParameters> | null = null,
-    floor: Array<MrcalcFloorParameters> | null = null,
-    not: Array<MrcalcNotParameters> | null = null,
-    and: Array<MrcalcAndParameters> | null = null,
-    or: Array<MrcalcOrParameters> | null = null,
-    xor: Array<MrcalcXorParameters> | null = null,
-    isnan: Array<MrcalcIsnanParameters> | null = null,
-    isinf: Array<MrcalcIsinfParameters> | null = null,
-    finite: Array<MrcalcFiniteParameters> | null = null,
-    complex: Array<MrcalcComplexParameters> | null = null,
-    polar: Array<MrcalcPolarParameters> | null = null,
-    real: Array<MrcalcRealParameters> | null = null,
-    imag: Array<MrcalcImagParameters> | null = null,
-    phase: Array<MrcalcPhaseParameters> | null = null,
-    conj: Array<MrcalcConjParameters> | null = null,
-    proj: Array<MrcalcProjParameters> | null = null,
-    exp: Array<MrcalcExpParameters> | null = null,
-    log: Array<MrcalcLogParameters> | null = null,
-    log10: Array<MrcalcLog10Parameters> | null = null,
-    cos: Array<MrcalcCosParameters> | null = null,
-    sin: Array<MrcalcSinParameters> | null = null,
-    tan: Array<MrcalcTanParameters> | null = null,
-    acos: Array<MrcalcAcosParameters> | null = null,
-    asin: Array<MrcalcAsinParameters> | null = null,
-    atan: Array<MrcalcAtanParameters> | null = null,
-    cosh: Array<MrcalcCoshParameters> | null = null,
-    sinh: Array<MrcalcSinhParameters> | null = null,
-    tanh: Array<MrcalcTanhParameters> | null = null,
-    acosh: Array<MrcalcAcoshParameters> | null = null,
-    asinh: Array<MrcalcAsinhParameters> | null = null,
-    atanh: Array<MrcalcAtanhParameters> | null = null,
+    operand: Array<MrcalcVariousStringParamsDictTagged | MrcalcVariousFileParamsDictTagged>,
+    abs: Array<MrcalcAbsParamsDict> | null = null,
+    neg: Array<MrcalcNegParamsDict> | null = null,
+    add: Array<MrcalcAddParamsDict> | null = null,
+    subtract: Array<MrcalcSubtractParamsDict> | null = null,
+    multiply: Array<MrcalcMultiplyParamsDict> | null = null,
+    divide: Array<MrcalcDivideParamsDict> | null = null,
+    min: Array<MrcalcMinParamsDict> | null = null,
+    max: Array<MrcalcMaxParamsDict> | null = null,
+    lt: Array<MrcalcLtParamsDict> | null = null,
+    gt: Array<MrcalcGtParamsDict> | null = null,
+    le: Array<MrcalcLeParamsDict> | null = null,
+    ge: Array<MrcalcGeParamsDict> | null = null,
+    eq: Array<MrcalcEqParamsDict> | null = null,
+    neq: Array<MrcalcNeqParamsDict> | null = null,
+    if_: Array<MrcalcIfParamsDict> | null = null,
+    replace: Array<MrcalcReplaceParamsDict> | null = null,
+    sqrt: Array<MrcalcSqrtParamsDict> | null = null,
+    pow: Array<MrcalcPowParamsDict> | null = null,
+    round: Array<MrcalcRoundParamsDict> | null = null,
+    ceil: Array<MrcalcCeilParamsDict> | null = null,
+    floor: Array<MrcalcFloorParamsDict> | null = null,
+    not: Array<MrcalcNotParamsDict> | null = null,
+    and: Array<MrcalcAndParamsDict> | null = null,
+    or: Array<MrcalcOrParamsDict> | null = null,
+    xor: Array<MrcalcXorParamsDict> | null = null,
+    isnan: Array<MrcalcIsnanParamsDict> | null = null,
+    isinf: Array<MrcalcIsinfParamsDict> | null = null,
+    finite: Array<MrcalcFiniteParamsDict> | null = null,
+    complex: Array<MrcalcComplexParamsDict> | null = null,
+    polar: Array<MrcalcPolarParamsDict> | null = null,
+    real: Array<MrcalcRealParamsDict> | null = null,
+    imag: Array<MrcalcImagParamsDict> | null = null,
+    phase: Array<MrcalcPhaseParamsDict> | null = null,
+    conj: Array<MrcalcConjParamsDict> | null = null,
+    proj: Array<MrcalcProjParamsDict> | null = null,
+    exp: Array<MrcalcExpParamsDict> | null = null,
+    log: Array<MrcalcLogParamsDict> | null = null,
+    log10: Array<MrcalcLog10ParamsDict> | null = null,
+    cos: Array<MrcalcCosParamsDict> | null = null,
+    sin: Array<MrcalcSinParamsDict> | null = null,
+    tan: Array<MrcalcTanParamsDict> | null = null,
+    acos: Array<MrcalcAcosParamsDict> | null = null,
+    asin: Array<MrcalcAsinParamsDict> | null = null,
+    atan: Array<MrcalcAtanParamsDict> | null = null,
+    cosh: Array<MrcalcCoshParamsDict> | null = null,
+    sinh: Array<MrcalcSinhParamsDict> | null = null,
+    tanh: Array<MrcalcTanhParamsDict> | null = null,
+    acosh: Array<MrcalcAcoshParamsDict> | null = null,
+    asinh: Array<MrcalcAsinhParamsDict> | null = null,
+    atanh: Array<MrcalcAtanhParamsDict> | null = null,
     datatype: string | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcalcConfigParameters> | null = null,
+    config: Array<MrcalcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -2872,61 +2872,169 @@ function mrcalc(
 
 export {
       MRCALC_METADATA,
+      MrcalcAbsParamsDict,
+      MrcalcAbsParamsDictTagged,
+      MrcalcAcosParamsDict,
+      MrcalcAcosParamsDictTagged,
+      MrcalcAcoshParamsDict,
+      MrcalcAcoshParamsDictTagged,
+      MrcalcAddParamsDict,
+      MrcalcAddParamsDictTagged,
+      MrcalcAndParamsDict,
+      MrcalcAndParamsDictTagged,
+      MrcalcAsinParamsDict,
+      MrcalcAsinParamsDictTagged,
+      MrcalcAsinhParamsDict,
+      MrcalcAsinhParamsDictTagged,
+      MrcalcAtanParamsDict,
+      MrcalcAtanParamsDictTagged,
+      MrcalcAtanhParamsDict,
+      MrcalcAtanhParamsDictTagged,
+      MrcalcCeilParamsDict,
+      MrcalcCeilParamsDictTagged,
+      MrcalcComplexParamsDict,
+      MrcalcComplexParamsDictTagged,
+      MrcalcConfigParamsDict,
+      MrcalcConfigParamsDictTagged,
+      MrcalcConjParamsDict,
+      MrcalcConjParamsDictTagged,
+      MrcalcCosParamsDict,
+      MrcalcCosParamsDictTagged,
+      MrcalcCoshParamsDict,
+      MrcalcCoshParamsDictTagged,
+      MrcalcDivideParamsDict,
+      MrcalcDivideParamsDictTagged,
+      MrcalcEqParamsDict,
+      MrcalcEqParamsDictTagged,
+      MrcalcExpParamsDict,
+      MrcalcExpParamsDictTagged,
+      MrcalcFiniteParamsDict,
+      MrcalcFiniteParamsDictTagged,
+      MrcalcFloorParamsDict,
+      MrcalcFloorParamsDictTagged,
+      MrcalcGeParamsDict,
+      MrcalcGeParamsDictTagged,
+      MrcalcGtParamsDict,
+      MrcalcGtParamsDictTagged,
+      MrcalcIfParamsDict,
+      MrcalcIfParamsDictTagged,
+      MrcalcImagParamsDict,
+      MrcalcImagParamsDictTagged,
+      MrcalcIsinfParamsDict,
+      MrcalcIsinfParamsDictTagged,
+      MrcalcIsnanParamsDict,
+      MrcalcIsnanParamsDictTagged,
+      MrcalcLeParamsDict,
+      MrcalcLeParamsDictTagged,
+      MrcalcLog10ParamsDict,
+      MrcalcLog10ParamsDictTagged,
+      MrcalcLogParamsDict,
+      MrcalcLogParamsDictTagged,
+      MrcalcLtParamsDict,
+      MrcalcLtParamsDictTagged,
+      MrcalcMaxParamsDict,
+      MrcalcMaxParamsDictTagged,
+      MrcalcMinParamsDict,
+      MrcalcMinParamsDictTagged,
+      MrcalcMultiplyParamsDict,
+      MrcalcMultiplyParamsDictTagged,
+      MrcalcNegParamsDict,
+      MrcalcNegParamsDictTagged,
+      MrcalcNeqParamsDict,
+      MrcalcNeqParamsDictTagged,
+      MrcalcNotParamsDict,
+      MrcalcNotParamsDictTagged,
+      MrcalcOrParamsDict,
+      MrcalcOrParamsDictTagged,
       MrcalcOutputs,
+      MrcalcParamsDict,
+      MrcalcParamsDictTagged,
+      MrcalcPhaseParamsDict,
+      MrcalcPhaseParamsDictTagged,
+      MrcalcPolarParamsDict,
+      MrcalcPolarParamsDictTagged,
+      MrcalcPowParamsDict,
+      MrcalcPowParamsDictTagged,
+      MrcalcProjParamsDict,
+      MrcalcProjParamsDictTagged,
+      MrcalcRealParamsDict,
+      MrcalcRealParamsDictTagged,
+      MrcalcReplaceParamsDict,
+      MrcalcReplaceParamsDictTagged,
+      MrcalcRoundParamsDict,
+      MrcalcRoundParamsDictTagged,
+      MrcalcSinParamsDict,
+      MrcalcSinParamsDictTagged,
+      MrcalcSinhParamsDict,
+      MrcalcSinhParamsDictTagged,
+      MrcalcSqrtParamsDict,
+      MrcalcSqrtParamsDictTagged,
+      MrcalcSubtractParamsDict,
+      MrcalcSubtractParamsDictTagged,
+      MrcalcTanParamsDict,
+      MrcalcTanParamsDictTagged,
+      MrcalcTanhParamsDict,
+      MrcalcTanhParamsDictTagged,
+      MrcalcVariousFileParamsDict,
+      MrcalcVariousFileParamsDictTagged,
+      MrcalcVariousStringParamsDict,
+      MrcalcVariousStringParamsDictTagged,
+      MrcalcXorParamsDict,
+      MrcalcXorParamsDictTagged,
       mrcalc,
-      mrcalc_abs_params,
-      mrcalc_acos_params,
-      mrcalc_acosh_params,
-      mrcalc_add_params,
-      mrcalc_and_params,
-      mrcalc_asin_params,
-      mrcalc_asinh_params,
-      mrcalc_atan_params,
-      mrcalc_atanh_params,
-      mrcalc_ceil_params,
-      mrcalc_complex_params,
-      mrcalc_config_params,
-      mrcalc_conj_params,
-      mrcalc_cos_params,
-      mrcalc_cosh_params,
-      mrcalc_divide_params,
-      mrcalc_eq_params,
+      mrcalc_abs,
+      mrcalc_acos,
+      mrcalc_acosh,
+      mrcalc_add,
+      mrcalc_and,
+      mrcalc_asin,
+      mrcalc_asinh,
+      mrcalc_atan,
+      mrcalc_atanh,
+      mrcalc_ceil,
+      mrcalc_complex,
+      mrcalc_config,
+      mrcalc_conj,
+      mrcalc_cos,
+      mrcalc_cosh,
+      mrcalc_divide,
+      mrcalc_eq,
       mrcalc_execute,
-      mrcalc_exp_params,
-      mrcalc_finite_params,
-      mrcalc_floor_params,
-      mrcalc_ge_params,
-      mrcalc_gt_params,
-      mrcalc_if_params,
-      mrcalc_imag_params,
-      mrcalc_isinf_params,
-      mrcalc_isnan_params,
-      mrcalc_le_params,
-      mrcalc_log10_params,
-      mrcalc_log_params,
-      mrcalc_lt_params,
-      mrcalc_max_params,
-      mrcalc_min_params,
-      mrcalc_multiply_params,
-      mrcalc_neg_params,
-      mrcalc_neq_params,
-      mrcalc_not_params,
-      mrcalc_or_params,
+      mrcalc_exp,
+      mrcalc_finite,
+      mrcalc_floor,
+      mrcalc_ge,
+      mrcalc_gt,
+      mrcalc_if,
+      mrcalc_imag,
+      mrcalc_isinf,
+      mrcalc_isnan,
+      mrcalc_le,
+      mrcalc_log,
+      mrcalc_log10,
+      mrcalc_lt,
+      mrcalc_max,
+      mrcalc_min,
+      mrcalc_multiply,
+      mrcalc_neg,
+      mrcalc_neq,
+      mrcalc_not,
+      mrcalc_or,
       mrcalc_params,
-      mrcalc_phase_params,
-      mrcalc_polar_params,
-      mrcalc_pow_params,
-      mrcalc_proj_params,
-      mrcalc_real_params,
-      mrcalc_replace_params,
-      mrcalc_round_params,
-      mrcalc_sin_params,
-      mrcalc_sinh_params,
-      mrcalc_sqrt_params,
-      mrcalc_subtract_params,
-      mrcalc_tan_params,
-      mrcalc_tanh_params,
-      mrcalc_various_file_params,
-      mrcalc_various_string_params,
-      mrcalc_xor_params,
+      mrcalc_phase,
+      mrcalc_polar,
+      mrcalc_pow,
+      mrcalc_proj,
+      mrcalc_real,
+      mrcalc_replace,
+      mrcalc_round,
+      mrcalc_sin,
+      mrcalc_sinh,
+      mrcalc_sqrt,
+      mrcalc_subtract,
+      mrcalc_tan,
+      mrcalc_tanh,
+      mrcalc_various_file,
+      mrcalc_various_string,
+      mrcalc_xor,
 };

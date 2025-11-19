@@ -11,18 +11,18 @@ const FSLINTERLEAVE_METADATA: Metadata = {
 };
 
 
-interface FslinterleaveParameters {
+interface FslinterleaveParamsDict {
     "@type"?: "fsl/fslinterleave";
     "infile1": InputPathType;
     "infile2": InputPathType;
     "outfile": string;
     "reverse_slice_order_flag": boolean;
 }
-type FslinterleaveParametersTagged = Required<Pick<FslinterleaveParameters, '@type'>> & FslinterleaveParameters;
+type FslinterleaveParamsDictTagged = Required<Pick<FslinterleaveParamsDict, '@type'>> & FslinterleaveParamsDict;
 
 
 /**
- * Output object returned when calling `FslinterleaveParameters(...)`.
+ * Output object returned when calling `FslinterleaveParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function fslinterleave_params(
     infile2: InputPathType,
     outfile: string,
     reverse_slice_order_flag: boolean = false,
-): FslinterleaveParametersTagged {
+): FslinterleaveParamsDictTagged {
     const params = {
         "@type": "fsl/fslinterleave" as const,
         "infile1": infile1,
@@ -74,7 +74,7 @@ function fslinterleave_params(
  * @returns Command-line arguments.
  */
 function fslinterleave_cargs(
-    params: FslinterleaveParameters,
+    params: FslinterleaveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function fslinterleave_cargs(
  * @returns Outputs object.
  */
 function fslinterleave_outputs(
-    params: FslinterleaveParameters,
+    params: FslinterleaveParamsDict,
     execution: Execution,
 ): FslinterleaveOutputs {
     const ret: FslinterleaveOutputs = {
@@ -124,7 +124,7 @@ function fslinterleave_outputs(
  * @returns NamedTuple of outputs (described in `FslinterleaveOutputs`).
  */
 function fslinterleave_execute(
-    params: FslinterleaveParameters,
+    params: FslinterleaveParamsDict,
     runner: Runner | null = null,
 ): FslinterleaveOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function fslinterleave(
 export {
       FSLINTERLEAVE_METADATA,
       FslinterleaveOutputs,
+      FslinterleaveParamsDict,
+      FslinterleaveParamsDictTagged,
       fslinterleave,
       fslinterleave_execute,
       fslinterleave_params,

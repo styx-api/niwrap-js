@@ -11,16 +11,16 @@ const TKMEDIT_METADATA: Metadata = {
 };
 
 
-interface TkmeditParameters {
+interface TkmeditParamsDict {
     "@type"?: "freesurfer/tkmedit";
     "input_volume": InputPathType;
     "options"?: string | null | undefined;
 }
-type TkmeditParametersTagged = Required<Pick<TkmeditParameters, '@type'>> & TkmeditParameters;
+type TkmeditParamsDictTagged = Required<Pick<TkmeditParamsDict, '@type'>> & TkmeditParamsDict;
 
 
 /**
- * Output object returned when calling `TkmeditParameters(...)`.
+ * Output object returned when calling `TkmeditParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface TkmeditOutputs {
 function tkmedit_params(
     input_volume: InputPathType,
     options: string | null = null,
-): TkmeditParametersTagged {
+): TkmeditParamsDictTagged {
     const params = {
         "@type": "freesurfer/tkmedit" as const,
         "input_volume": input_volume,
@@ -64,7 +64,7 @@ function tkmedit_params(
  * @returns Command-line arguments.
  */
 function tkmedit_cargs(
-    params: TkmeditParameters,
+    params: TkmeditParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function tkmedit_cargs(
  * @returns Outputs object.
  */
 function tkmedit_outputs(
-    params: TkmeditParameters,
+    params: TkmeditParamsDict,
     execution: Execution,
 ): TkmeditOutputs {
     const ret: TkmeditOutputs = {
@@ -111,7 +111,7 @@ function tkmedit_outputs(
  * @returns NamedTuple of outputs (described in `TkmeditOutputs`).
  */
 function tkmedit_execute(
-    params: TkmeditParameters,
+    params: TkmeditParamsDict,
     runner: Runner | null = null,
 ): TkmeditOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function tkmedit(
 export {
       TKMEDIT_METADATA,
       TkmeditOutputs,
+      TkmeditParamsDict,
+      TkmeditParamsDictTagged,
       tkmedit,
       tkmedit_execute,
       tkmedit_params,

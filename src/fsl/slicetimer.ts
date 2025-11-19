@@ -11,7 +11,7 @@ const SLICETIMER_METADATA: Metadata = {
 };
 
 
-interface SlicetimerParameters {
+interface SlicetimerParamsDict {
     "@type"?: "fsl/slicetimer";
     "infile": InputPathType;
     "outfile"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface SlicetimerParameters {
     "tglobal_value"?: number | null | undefined;
     "ocustom_file"?: InputPathType | null | undefined;
 }
-type SlicetimerParametersTagged = Required<Pick<SlicetimerParameters, '@type'>> & SlicetimerParameters;
+type SlicetimerParamsDictTagged = Required<Pick<SlicetimerParamsDict, '@type'>> & SlicetimerParamsDict;
 
 
 /**
- * Output object returned when calling `SlicetimerParameters(...)`.
+ * Output object returned when calling `SlicetimerParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function slicetimer_params(
     tcustom_file: InputPathType | null = null,
     tglobal_value: number | null = null,
     ocustom_file: InputPathType | null = null,
-): SlicetimerParametersTagged {
+): SlicetimerParamsDictTagged {
     const params = {
         "@type": "fsl/slicetimer" as const,
         "infile": infile,
@@ -110,7 +110,7 @@ function slicetimer_params(
  * @returns Command-line arguments.
  */
 function slicetimer_cargs(
-    params: SlicetimerParameters,
+    params: SlicetimerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function slicetimer_cargs(
  * @returns Outputs object.
  */
 function slicetimer_outputs(
-    params: SlicetimerParameters,
+    params: SlicetimerParamsDict,
     execution: Execution,
 ): SlicetimerOutputs {
     const ret: SlicetimerOutputs = {
@@ -203,7 +203,7 @@ function slicetimer_outputs(
  * @returns NamedTuple of outputs (described in `SlicetimerOutputs`).
  */
 function slicetimer_execute(
-    params: SlicetimerParameters,
+    params: SlicetimerParamsDict,
     runner: Runner | null = null,
 ): SlicetimerOutputs {
     runner = runner || getGlobalRunner();
@@ -260,6 +260,8 @@ function slicetimer(
 export {
       SLICETIMER_METADATA,
       SlicetimerOutputs,
+      SlicetimerParamsDict,
+      SlicetimerParamsDictTagged,
       slicetimer,
       slicetimer_execute,
       slicetimer_params,

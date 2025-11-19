@@ -11,7 +11,7 @@ const SURF_DSET_INFO_METADATA: Metadata = {
 };
 
 
-interface SurfDsetInfoParameters {
+interface SurfDsetInfoParamsDict {
     "@type"?: "afni/SurfDsetInfo";
     "input_dsets": Array<InputPathType>;
     "debug_level"?: number | null | undefined;
@@ -33,11 +33,11 @@ interface SurfDsetInfoParameters {
     "help_aspx": boolean;
     "all_opts": boolean;
 }
-type SurfDsetInfoParametersTagged = Required<Pick<SurfDsetInfoParameters, '@type'>> & SurfDsetInfoParameters;
+type SurfDsetInfoParamsDictTagged = Required<Pick<SurfDsetInfoParamsDict, '@type'>> & SurfDsetInfoParamsDict;
 
 
 /**
- * Output object returned when calling `SurfDsetInfoParameters(...)`.
+ * Output object returned when calling `SurfDsetInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function surf_dset_info_params(
     help_spx: boolean = false,
     help_aspx: boolean = false,
     all_opts: boolean = false,
-): SurfDsetInfoParametersTagged {
+): SurfDsetInfoParamsDictTagged {
     const params = {
         "@type": "afni/SurfDsetInfo" as const,
         "input_dsets": input_dsets,
@@ -136,7 +136,7 @@ function surf_dset_info_params(
  * @returns Command-line arguments.
  */
 function surf_dset_info_cargs(
-    params: SurfDsetInfoParameters,
+    params: SurfDsetInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -221,7 +221,7 @@ function surf_dset_info_cargs(
  * @returns Outputs object.
  */
 function surf_dset_info_outputs(
-    params: SurfDsetInfoParameters,
+    params: SurfDsetInfoParamsDict,
     execution: Execution,
 ): SurfDsetInfoOutputs {
     const ret: SurfDsetInfoOutputs = {
@@ -246,7 +246,7 @@ function surf_dset_info_outputs(
  * @returns NamedTuple of outputs (described in `SurfDsetInfoOutputs`).
  */
 function surf_dset_info_execute(
-    params: SurfDsetInfoParameters,
+    params: SurfDsetInfoParamsDict,
     runner: Runner | null = null,
 ): SurfDsetInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -321,6 +321,8 @@ function surf_dset_info(
 export {
       SURF_DSET_INFO_METADATA,
       SurfDsetInfoOutputs,
+      SurfDsetInfoParamsDict,
+      SurfDsetInfoParamsDictTagged,
       surf_dset_info,
       surf_dset_info_execute,
       surf_dset_info_params,

@@ -11,15 +11,15 @@ const V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA: Metadata = {
 };
 
 
-interface VDjunct4dSlicesTo3dVolParameters {
+interface VDjunct4dSlicesTo3dVolParamsDict {
     "@type"?: "afni/@djunct_4d_slices_to_3d_vol";
     "do_something": boolean;
 }
-type VDjunct4dSlicesTo3dVolParametersTagged = Required<Pick<VDjunct4dSlicesTo3dVolParameters, '@type'>> & VDjunct4dSlicesTo3dVolParameters;
+type VDjunct4dSlicesTo3dVolParamsDictTagged = Required<Pick<VDjunct4dSlicesTo3dVolParamsDict, '@type'>> & VDjunct4dSlicesTo3dVolParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunct4dSlicesTo3dVolParameters(...)`.
+ * Output object returned when calling `VDjunct4dSlicesTo3dVolParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VDjunct4dSlicesTo3dVolOutputs {
  */
 function v__djunct_4d_slices_to_3d_vol_params(
     do_something: boolean = false,
-): VDjunct4dSlicesTo3dVolParametersTagged {
+): VDjunct4dSlicesTo3dVolParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_4d_slices_to_3d_vol" as const,
         "do_something": do_something,
@@ -62,7 +62,7 @@ function v__djunct_4d_slices_to_3d_vol_params(
  * @returns Command-line arguments.
  */
 function v__djunct_4d_slices_to_3d_vol_cargs(
-    params: VDjunct4dSlicesTo3dVolParameters,
+    params: VDjunct4dSlicesTo3dVolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -83,7 +83,7 @@ function v__djunct_4d_slices_to_3d_vol_cargs(
  * @returns Outputs object.
  */
 function v__djunct_4d_slices_to_3d_vol_outputs(
-    params: VDjunct4dSlicesTo3dVolParameters,
+    params: VDjunct4dSlicesTo3dVolParamsDict,
     execution: Execution,
 ): VDjunct4dSlicesTo3dVolOutputs {
     const ret: VDjunct4dSlicesTo3dVolOutputs = {
@@ -109,7 +109,7 @@ function v__djunct_4d_slices_to_3d_vol_outputs(
  * @returns NamedTuple of outputs (described in `VDjunct4dSlicesTo3dVolOutputs`).
  */
 function v__djunct_4d_slices_to_3d_vol_execute(
-    params: VDjunct4dSlicesTo3dVolParameters,
+    params: VDjunct4dSlicesTo3dVolParamsDict,
     runner: Runner | null = null,
 ): VDjunct4dSlicesTo3dVolOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function v__djunct_4d_slices_to_3d_vol(
 
 export {
       VDjunct4dSlicesTo3dVolOutputs,
+      VDjunct4dSlicesTo3dVolParamsDict,
+      VDjunct4dSlicesTo3dVolParamsDictTagged,
       V__DJUNCT_4D_SLICES_TO_3D_VOL_METADATA,
       v__djunct_4d_slices_to_3d_vol,
       v__djunct_4d_slices_to_3d_vol_execute,

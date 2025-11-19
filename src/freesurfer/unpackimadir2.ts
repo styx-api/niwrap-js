@@ -11,15 +11,15 @@ const UNPACKIMADIR2_METADATA: Metadata = {
 };
 
 
-interface Unpackimadir2Parameters {
+interface Unpackimadir2ParamsDict {
     "@type"?: "freesurfer/unpackimadir2";
     "directory": InputPathType;
 }
-type Unpackimadir2ParametersTagged = Required<Pick<Unpackimadir2Parameters, '@type'>> & Unpackimadir2Parameters;
+type Unpackimadir2ParamsDictTagged = Required<Pick<Unpackimadir2ParamsDict, '@type'>> & Unpackimadir2ParamsDict;
 
 
 /**
- * Output object returned when calling `Unpackimadir2Parameters(...)`.
+ * Output object returned when calling `Unpackimadir2ParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface Unpackimadir2Outputs {
  */
 function unpackimadir2_params(
     directory: InputPathType,
-): Unpackimadir2ParametersTagged {
+): Unpackimadir2ParamsDictTagged {
     const params = {
         "@type": "freesurfer/unpackimadir2" as const,
         "directory": directory,
@@ -58,7 +58,7 @@ function unpackimadir2_params(
  * @returns Command-line arguments.
  */
 function unpackimadir2_cargs(
-    params: Unpackimadir2Parameters,
+    params: Unpackimadir2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function unpackimadir2_cargs(
  * @returns Outputs object.
  */
 function unpackimadir2_outputs(
-    params: Unpackimadir2Parameters,
+    params: Unpackimadir2ParamsDict,
     execution: Execution,
 ): Unpackimadir2Outputs {
     const ret: Unpackimadir2Outputs = {
@@ -102,7 +102,7 @@ function unpackimadir2_outputs(
  * @returns NamedTuple of outputs (described in `Unpackimadir2Outputs`).
  */
 function unpackimadir2_execute(
-    params: Unpackimadir2Parameters,
+    params: Unpackimadir2ParamsDict,
     runner: Runner | null = null,
 ): Unpackimadir2Outputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function unpackimadir2(
 export {
       UNPACKIMADIR2_METADATA,
       Unpackimadir2Outputs,
+      Unpackimadir2ParamsDict,
+      Unpackimadir2ParamsDictTagged,
       unpackimadir2,
       unpackimadir2_execute,
       unpackimadir2_params,

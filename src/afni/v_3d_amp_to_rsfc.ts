@@ -11,7 +11,7 @@ const V_3D_AMP_TO_RSFC_METADATA: Metadata = {
 };
 
 
-interface V3dAmpToRsfcParameters {
+interface V3dAmpToRsfcParamsDict {
     "@type"?: "afni/3dAmpToRSFC";
     "in_amp"?: InputPathType | null | undefined;
     "in_pow"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface V3dAmpToRsfcParameters {
     "mask"?: InputPathType | null | undefined;
     "nifti": boolean;
 }
-type V3dAmpToRsfcParametersTagged = Required<Pick<V3dAmpToRsfcParameters, '@type'>> & V3dAmpToRsfcParameters;
+type V3dAmpToRsfcParamsDictTagged = Required<Pick<V3dAmpToRsfcParamsDict, '@type'>> & V3dAmpToRsfcParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAmpToRsfcParameters(...)`.
+ * Output object returned when calling `V3dAmpToRsfcParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function v_3d_amp_to_rsfc_params(
     in_pow: InputPathType | null = null,
     mask: InputPathType | null = null,
     nifti: boolean = false,
-): V3dAmpToRsfcParametersTagged {
+): V3dAmpToRsfcParamsDictTagged {
     const params = {
         "@type": "afni/3dAmpToRSFC" as const,
         "prefix": prefix,
@@ -108,7 +108,7 @@ function v_3d_amp_to_rsfc_params(
  * @returns Command-line arguments.
  */
 function v_3d_amp_to_rsfc_cargs(
-    params: V3dAmpToRsfcParameters,
+    params: V3dAmpToRsfcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,7 +155,7 @@ function v_3d_amp_to_rsfc_cargs(
  * @returns Outputs object.
  */
 function v_3d_amp_to_rsfc_outputs(
-    params: V3dAmpToRsfcParameters,
+    params: V3dAmpToRsfcParamsDict,
     execution: Execution,
 ): V3dAmpToRsfcOutputs {
     const ret: V3dAmpToRsfcOutputs = {
@@ -186,7 +186,7 @@ function v_3d_amp_to_rsfc_outputs(
  * @returns NamedTuple of outputs (described in `V3dAmpToRsfcOutputs`).
  */
 function v_3d_amp_to_rsfc_execute(
-    params: V3dAmpToRsfcParameters,
+    params: V3dAmpToRsfcParamsDict,
     runner: Runner | null = null,
 ): V3dAmpToRsfcOutputs {
     runner = runner || getGlobalRunner();
@@ -234,6 +234,8 @@ function v_3d_amp_to_rsfc(
 
 export {
       V3dAmpToRsfcOutputs,
+      V3dAmpToRsfcParamsDict,
+      V3dAmpToRsfcParamsDictTagged,
       V_3D_AMP_TO_RSFC_METADATA,
       v_3d_amp_to_rsfc,
       v_3d_amp_to_rsfc_execute,

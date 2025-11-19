@@ -11,7 +11,7 @@ const MRIS_AVERAGE_CURVATURE_METADATA: Metadata = {
 };
 
 
-interface MrisAverageCurvatureParameters {
+interface MrisAverageCurvatureParamsDict {
     "@type"?: "freesurfer/mris_average_curvature";
     "input_curvature_file": InputPathType;
     "hemi": string;
@@ -21,11 +21,11 @@ interface MrisAverageCurvatureParameters {
     "summary_stats_flag": boolean;
     "output_surface_flag": boolean;
 }
-type MrisAverageCurvatureParametersTagged = Required<Pick<MrisAverageCurvatureParameters, '@type'>> & MrisAverageCurvatureParameters;
+type MrisAverageCurvatureParamsDictTagged = Required<Pick<MrisAverageCurvatureParamsDict, '@type'>> & MrisAverageCurvatureParamsDict;
 
 
 /**
- * Output object returned when calling `MrisAverageCurvatureParameters(...)`.
+ * Output object returned when calling `MrisAverageCurvatureParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function mris_average_curvature_params(
     output_curvature_file: string,
     summary_stats_flag: boolean = false,
     output_surface_flag: boolean = false,
-): MrisAverageCurvatureParametersTagged {
+): MrisAverageCurvatureParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_average_curvature" as const,
         "input_curvature_file": input_curvature_file,
@@ -82,7 +82,7 @@ function mris_average_curvature_params(
  * @returns Command-line arguments.
  */
 function mris_average_curvature_cargs(
-    params: MrisAverageCurvatureParameters,
+    params: MrisAverageCurvatureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function mris_average_curvature_cargs(
  * @returns Outputs object.
  */
 function mris_average_curvature_outputs(
-    params: MrisAverageCurvatureParameters,
+    params: MrisAverageCurvatureParamsDict,
     execution: Execution,
 ): MrisAverageCurvatureOutputs {
     const ret: MrisAverageCurvatureOutputs = {
@@ -136,7 +136,7 @@ function mris_average_curvature_outputs(
  * @returns NamedTuple of outputs (described in `MrisAverageCurvatureOutputs`).
  */
 function mris_average_curvature_execute(
-    params: MrisAverageCurvatureParameters,
+    params: MrisAverageCurvatureParamsDict,
     runner: Runner | null = null,
 ): MrisAverageCurvatureOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function mris_average_curvature(
 export {
       MRIS_AVERAGE_CURVATURE_METADATA,
       MrisAverageCurvatureOutputs,
+      MrisAverageCurvatureParamsDict,
+      MrisAverageCurvatureParamsDictTagged,
       mris_average_curvature,
       mris_average_curvature_execute,
       mris_average_curvature_params,

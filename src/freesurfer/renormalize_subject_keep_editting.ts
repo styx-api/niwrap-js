@@ -11,15 +11,15 @@ const RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA: Metadata = {
 };
 
 
-interface RenormalizeSubjectKeepEdittingParameters {
+interface RenormalizeSubjectKeepEdittingParamsDict {
     "@type"?: "freesurfer/renormalize_subject_keep_editting";
     "placeholder_input"?: string | null | undefined;
 }
-type RenormalizeSubjectKeepEdittingParametersTagged = Required<Pick<RenormalizeSubjectKeepEdittingParameters, '@type'>> & RenormalizeSubjectKeepEdittingParameters;
+type RenormalizeSubjectKeepEdittingParamsDictTagged = Required<Pick<RenormalizeSubjectKeepEdittingParamsDict, '@type'>> & RenormalizeSubjectKeepEdittingParamsDict;
 
 
 /**
- * Output object returned when calling `RenormalizeSubjectKeepEdittingParameters(...)`.
+ * Output object returned when calling `RenormalizeSubjectKeepEdittingParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface RenormalizeSubjectKeepEdittingOutputs {
  */
 function renormalize_subject_keep_editting_params(
     placeholder_input: string | null = null,
-): RenormalizeSubjectKeepEdittingParametersTagged {
+): RenormalizeSubjectKeepEdittingParamsDictTagged {
     const params = {
         "@type": "freesurfer/renormalize_subject_keep_editting" as const,
     };
@@ -64,7 +64,7 @@ function renormalize_subject_keep_editting_params(
  * @returns Command-line arguments.
  */
 function renormalize_subject_keep_editting_cargs(
-    params: RenormalizeSubjectKeepEdittingParameters,
+    params: RenormalizeSubjectKeepEdittingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function renormalize_subject_keep_editting_cargs(
  * @returns Outputs object.
  */
 function renormalize_subject_keep_editting_outputs(
-    params: RenormalizeSubjectKeepEdittingParameters,
+    params: RenormalizeSubjectKeepEdittingParamsDict,
     execution: Execution,
 ): RenormalizeSubjectKeepEdittingOutputs {
     const ret: RenormalizeSubjectKeepEdittingOutputs = {
@@ -111,7 +111,7 @@ function renormalize_subject_keep_editting_outputs(
  * @returns NamedTuple of outputs (described in `RenormalizeSubjectKeepEdittingOutputs`).
  */
 function renormalize_subject_keep_editting_execute(
-    params: RenormalizeSubjectKeepEdittingParameters,
+    params: RenormalizeSubjectKeepEdittingParamsDict,
     runner: Runner | null = null,
 ): RenormalizeSubjectKeepEdittingOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function renormalize_subject_keep_editting(
 export {
       RENORMALIZE_SUBJECT_KEEP_EDITTING_METADATA,
       RenormalizeSubjectKeepEdittingOutputs,
+      RenormalizeSubjectKeepEdittingParamsDict,
+      RenormalizeSubjectKeepEdittingParamsDictTagged,
       renormalize_subject_keep_editting,
       renormalize_subject_keep_editting_execute,
       renormalize_subject_keep_editting_params,

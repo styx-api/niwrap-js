@@ -11,7 +11,7 @@ const DCM2NIIX_AFNI_METADATA: Metadata = {
 };
 
 
-interface Dcm2niixAfniParameters {
+interface Dcm2niixAfniParamsDict {
     "@type"?: "afni/dcm2niix_afni";
     "input_folder": string;
     "compression_level"?: number | null | undefined;
@@ -43,11 +43,11 @@ interface Dcm2niixAfniParameters {
     "version": boolean;
     "xml": boolean;
 }
-type Dcm2niixAfniParametersTagged = Required<Pick<Dcm2niixAfniParameters, '@type'>> & Dcm2niixAfniParameters;
+type Dcm2niixAfniParamsDictTagged = Required<Pick<Dcm2niixAfniParamsDict, '@type'>> & Dcm2niixAfniParamsDict;
 
 
 /**
- * Output object returned when calling `Dcm2niixAfniParameters(...)`.
+ * Output object returned when calling `Dcm2niixAfniParamsDict(...)`.
  *
  * @interface
  */
@@ -128,7 +128,7 @@ function dcm2niix_afni_params(
     terse: boolean = false,
     version: boolean = false,
     xml: boolean = false,
-): Dcm2niixAfniParametersTagged {
+): Dcm2niixAfniParamsDictTagged {
     const params = {
         "@type": "afni/dcm2niix_afni" as const,
         "input_folder": input_folder,
@@ -220,7 +220,7 @@ function dcm2niix_afni_params(
  * @returns Command-line arguments.
  */
 function dcm2niix_afni_cargs(
-    params: Dcm2niixAfniParameters,
+    params: Dcm2niixAfniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -392,7 +392,7 @@ function dcm2niix_afni_cargs(
  * @returns Outputs object.
  */
 function dcm2niix_afni_outputs(
-    params: Dcm2niixAfniParameters,
+    params: Dcm2niixAfniParamsDict,
     execution: Execution,
 ): Dcm2niixAfniOutputs {
     const ret: Dcm2niixAfniOutputs = {
@@ -418,7 +418,7 @@ function dcm2niix_afni_outputs(
  * @returns NamedTuple of outputs (described in `Dcm2niixAfniOutputs`).
  */
 function dcm2niix_afni_execute(
-    params: Dcm2niixAfniParameters,
+    params: Dcm2niixAfniParamsDict,
     runner: Runner | null = null,
 ): Dcm2niixAfniOutputs {
     runner = runner || getGlobalRunner();
@@ -513,6 +513,8 @@ function dcm2niix_afni(
 export {
       DCM2NIIX_AFNI_METADATA,
       Dcm2niixAfniOutputs,
+      Dcm2niixAfniParamsDict,
+      Dcm2niixAfniParamsDictTagged,
       dcm2niix_afni,
       dcm2niix_afni_execute,
       dcm2niix_afni_params,

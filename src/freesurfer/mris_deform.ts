@@ -11,18 +11,18 @@ const MRIS_DEFORM_METADATA: Metadata = {
 };
 
 
-interface MrisDeformParameters {
+interface MrisDeformParamsDict {
     "@type"?: "freesurfer/mris_deform";
     "input_surface": InputPathType;
     "input_volume": InputPathType;
     "xform": InputPathType;
     "output_surface": string;
 }
-type MrisDeformParametersTagged = Required<Pick<MrisDeformParameters, '@type'>> & MrisDeformParameters;
+type MrisDeformParamsDictTagged = Required<Pick<MrisDeformParamsDict, '@type'>> & MrisDeformParamsDict;
 
 
 /**
- * Output object returned when calling `MrisDeformParameters(...)`.
+ * Output object returned when calling `MrisDeformParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_deform_params(
     input_volume: InputPathType,
     xform: InputPathType,
     output_surface: string,
-): MrisDeformParametersTagged {
+): MrisDeformParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_deform" as const,
         "input_surface": input_surface,
@@ -74,7 +74,7 @@ function mris_deform_params(
  * @returns Command-line arguments.
  */
 function mris_deform_cargs(
-    params: MrisDeformParameters,
+    params: MrisDeformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_deform_cargs(
  * @returns Outputs object.
  */
 function mris_deform_outputs(
-    params: MrisDeformParameters,
+    params: MrisDeformParamsDict,
     execution: Execution,
 ): MrisDeformOutputs {
     const ret: MrisDeformOutputs = {
@@ -122,7 +122,7 @@ function mris_deform_outputs(
  * @returns NamedTuple of outputs (described in `MrisDeformOutputs`).
  */
 function mris_deform_execute(
-    params: MrisDeformParameters,
+    params: MrisDeformParamsDict,
     runner: Runner | null = null,
 ): MrisDeformOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_deform(
 export {
       MRIS_DEFORM_METADATA,
       MrisDeformOutputs,
+      MrisDeformParamsDict,
+      MrisDeformParamsDictTagged,
       mris_deform,
       mris_deform_execute,
       mris_deform_params,

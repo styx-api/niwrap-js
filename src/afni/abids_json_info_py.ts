@@ -11,7 +11,7 @@ const ABIDS_JSON_INFO_PY_METADATA: Metadata = {
 };
 
 
-interface AbidsJsonInfoPyParameters {
+interface AbidsJsonInfoPyParamsDict {
     "@type"?: "afni/abids_json_info.py";
     "json_files": Array<InputPathType>;
     "tr_flag": boolean;
@@ -22,11 +22,11 @@ interface AbidsJsonInfoPyParameters {
     "list_fields_flag": boolean;
     "help_flag": boolean;
 }
-type AbidsJsonInfoPyParametersTagged = Required<Pick<AbidsJsonInfoPyParameters, '@type'>> & AbidsJsonInfoPyParameters;
+type AbidsJsonInfoPyParamsDictTagged = Required<Pick<AbidsJsonInfoPyParamsDict, '@type'>> & AbidsJsonInfoPyParamsDict;
 
 
 /**
- * Output object returned when calling `AbidsJsonInfoPyParameters(...)`.
+ * Output object returned when calling `AbidsJsonInfoPyParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function abids_json_info_py_params(
     field_list: Array<string> | null = null,
     list_fields_flag: boolean = false,
     help_flag: boolean = false,
-): AbidsJsonInfoPyParametersTagged {
+): AbidsJsonInfoPyParamsDictTagged {
     const params = {
         "@type": "afni/abids_json_info.py" as const,
         "json_files": json_files,
@@ -88,7 +88,7 @@ function abids_json_info_py_params(
  * @returns Command-line arguments.
  */
 function abids_json_info_py_cargs(
-    params: AbidsJsonInfoPyParameters,
+    params: AbidsJsonInfoPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -131,7 +131,7 @@ function abids_json_info_py_cargs(
  * @returns Outputs object.
  */
 function abids_json_info_py_outputs(
-    params: AbidsJsonInfoPyParameters,
+    params: AbidsJsonInfoPyParamsDict,
     execution: Execution,
 ): AbidsJsonInfoPyOutputs {
     const ret: AbidsJsonInfoPyOutputs = {
@@ -156,7 +156,7 @@ function abids_json_info_py_outputs(
  * @returns NamedTuple of outputs (described in `AbidsJsonInfoPyOutputs`).
  */
 function abids_json_info_py_execute(
-    params: AbidsJsonInfoPyParameters,
+    params: AbidsJsonInfoPyParamsDict,
     runner: Runner | null = null,
 ): AbidsJsonInfoPyOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function abids_json_info_py(
 export {
       ABIDS_JSON_INFO_PY_METADATA,
       AbidsJsonInfoPyOutputs,
+      AbidsJsonInfoPyParamsDict,
+      AbidsJsonInfoPyParamsDictTagged,
       abids_json_info_py,
       abids_json_info_py_execute,
       abids_json_info_py_params,

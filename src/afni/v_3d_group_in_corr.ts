@@ -11,7 +11,7 @@ const V_3D_GROUP_IN_CORR_METADATA: Metadata = {
 };
 
 
-interface V3dGroupInCorrParameters {
+interface V3dGroupInCorrParamsDict {
     "@type"?: "afni/3dGroupInCorr";
     "set_a": InputPathType;
     "set_b"?: InputPathType | null | undefined;
@@ -42,11 +42,11 @@ interface V3dGroupInCorrParameters {
     "debug": boolean;
     "batch"?: string | null | undefined;
 }
-type V3dGroupInCorrParametersTagged = Required<Pick<V3dGroupInCorrParameters, '@type'>> & V3dGroupInCorrParameters;
+type V3dGroupInCorrParamsDictTagged = Required<Pick<V3dGroupInCorrParamsDict, '@type'>> & V3dGroupInCorrParamsDict;
 
 
 /**
- * Output object returned when calling `V3dGroupInCorrParameters(...)`.
+ * Output object returned when calling `V3dGroupInCorrParamsDict(...)`.
  *
  * @interface
  */
@@ -125,7 +125,7 @@ function v_3d_group_in_corr_params(
     very_verbose: boolean = false,
     debug: boolean = false,
     batch: string | null = null,
-): V3dGroupInCorrParametersTagged {
+): V3dGroupInCorrParamsDictTagged {
     const params = {
         "@type": "afni/3dGroupInCorr" as const,
         "set_a": set_a,
@@ -194,7 +194,7 @@ function v_3d_group_in_corr_params(
  * @returns Command-line arguments.
  */
 function v_3d_group_in_corr_cargs(
-    params: V3dGroupInCorrParameters,
+    params: V3dGroupInCorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -333,7 +333,7 @@ function v_3d_group_in_corr_cargs(
  * @returns Outputs object.
  */
 function v_3d_group_in_corr_outputs(
-    params: V3dGroupInCorrParameters,
+    params: V3dGroupInCorrParamsDict,
     execution: Execution,
 ): V3dGroupInCorrOutputs {
     const ret: V3dGroupInCorrOutputs = {
@@ -359,7 +359,7 @@ function v_3d_group_in_corr_outputs(
  * @returns NamedTuple of outputs (described in `V3dGroupInCorrOutputs`).
  */
 function v_3d_group_in_corr_execute(
-    params: V3dGroupInCorrParameters,
+    params: V3dGroupInCorrParamsDict,
     runner: Runner | null = null,
 ): V3dGroupInCorrOutputs {
     runner = runner || getGlobalRunner();
@@ -451,6 +451,8 @@ function v_3d_group_in_corr(
 
 export {
       V3dGroupInCorrOutputs,
+      V3dGroupInCorrParamsDict,
+      V3dGroupInCorrParamsDictTagged,
       V_3D_GROUP_IN_CORR_METADATA,
       v_3d_group_in_corr,
       v_3d_group_in_corr_execute,

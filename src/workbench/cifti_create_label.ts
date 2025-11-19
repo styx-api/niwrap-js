@@ -10,57 +10,57 @@ const CIFTI_CREATE_LABEL_METADATA: Metadata = {
 };
 
 
-interface CiftiCreateLabelVolumeParameters {
+interface CiftiCreateLabelVolumeParamsDict {
     "@type"?: "volume";
     "label-volume": InputPathType;
     "structure-label-volume": InputPathType;
 }
-type CiftiCreateLabelVolumeParametersTagged = Required<Pick<CiftiCreateLabelVolumeParameters, '@type'>> & CiftiCreateLabelVolumeParameters;
+type CiftiCreateLabelVolumeParamsDictTagged = Required<Pick<CiftiCreateLabelVolumeParamsDict, '@type'>> & CiftiCreateLabelVolumeParamsDict;
 
 
-interface CiftiCreateLabelLeftLabelParameters {
+interface CiftiCreateLabelLeftLabelParamsDict {
     "@type"?: "left-label";
     "label": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateLabelLeftLabelParametersTagged = Required<Pick<CiftiCreateLabelLeftLabelParameters, '@type'>> & CiftiCreateLabelLeftLabelParameters;
+type CiftiCreateLabelLeftLabelParamsDictTagged = Required<Pick<CiftiCreateLabelLeftLabelParamsDict, '@type'>> & CiftiCreateLabelLeftLabelParamsDict;
 
 
-interface CiftiCreateLabelRightLabelParameters {
+interface CiftiCreateLabelRightLabelParamsDict {
     "@type"?: "right-label";
     "label": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateLabelRightLabelParametersTagged = Required<Pick<CiftiCreateLabelRightLabelParameters, '@type'>> & CiftiCreateLabelRightLabelParameters;
+type CiftiCreateLabelRightLabelParamsDictTagged = Required<Pick<CiftiCreateLabelRightLabelParamsDict, '@type'>> & CiftiCreateLabelRightLabelParamsDict;
 
 
-interface CiftiCreateLabelCerebellumLabelParameters {
+interface CiftiCreateLabelCerebellumLabelParamsDict {
     "@type"?: "cerebellum-label";
     "label": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateLabelCerebellumLabelParametersTagged = Required<Pick<CiftiCreateLabelCerebellumLabelParameters, '@type'>> & CiftiCreateLabelCerebellumLabelParameters;
+type CiftiCreateLabelCerebellumLabelParamsDictTagged = Required<Pick<CiftiCreateLabelCerebellumLabelParamsDict, '@type'>> & CiftiCreateLabelCerebellumLabelParamsDict;
 
 
-interface CiftiCreateLabelLabelParameters {
+interface CiftiCreateLabelLabelParamsDict {
     "@type"?: "label";
     "structure": string;
     "label": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateLabelLabelParametersTagged = Required<Pick<CiftiCreateLabelLabelParameters, '@type'>> & CiftiCreateLabelLabelParameters;
+type CiftiCreateLabelLabelParamsDictTagged = Required<Pick<CiftiCreateLabelLabelParamsDict, '@type'>> & CiftiCreateLabelLabelParamsDict;
 
 
-interface CiftiCreateLabelParameters {
+interface CiftiCreateLabelParamsDict {
     "@type"?: "workbench/cifti-create-label";
     "cifti-out": string;
-    "volume"?: CiftiCreateLabelVolumeParameters | null | undefined;
-    "left-label"?: CiftiCreateLabelLeftLabelParameters | null | undefined;
-    "right-label"?: CiftiCreateLabelRightLabelParameters | null | undefined;
-    "cerebellum-label"?: CiftiCreateLabelCerebellumLabelParameters | null | undefined;
-    "label"?: Array<CiftiCreateLabelLabelParameters> | null | undefined;
+    "volume"?: CiftiCreateLabelVolumeParamsDict | null | undefined;
+    "left-label"?: CiftiCreateLabelLeftLabelParamsDict | null | undefined;
+    "right-label"?: CiftiCreateLabelRightLabelParamsDict | null | undefined;
+    "cerebellum-label"?: CiftiCreateLabelCerebellumLabelParamsDict | null | undefined;
+    "label"?: Array<CiftiCreateLabelLabelParamsDict> | null | undefined;
 }
-type CiftiCreateLabelParametersTagged = Required<Pick<CiftiCreateLabelParameters, '@type'>> & CiftiCreateLabelParameters;
+type CiftiCreateLabelParamsDictTagged = Required<Pick<CiftiCreateLabelParamsDict, '@type'>> & CiftiCreateLabelParamsDict;
 
 
 /**
@@ -71,10 +71,10 @@ type CiftiCreateLabelParametersTagged = Required<Pick<CiftiCreateLabelParameters
  *
  * @returns Parameter dictionary
  */
-function cifti_create_label_volume_params(
+function cifti_create_label_volume(
     label_volume: InputPathType,
     structure_label_volume: InputPathType,
-): CiftiCreateLabelVolumeParametersTagged {
+): CiftiCreateLabelVolumeParamsDictTagged {
     const params = {
         "@type": "volume" as const,
         "label-volume": label_volume,
@@ -93,7 +93,7 @@ function cifti_create_label_volume_params(
  * @returns Command-line arguments.
  */
 function cifti_create_label_volume_cargs(
-    params: CiftiCreateLabelVolumeParameters,
+    params: CiftiCreateLabelVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,10 +116,10 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_label_left_label_params(
+function cifti_create_label_left_label(
     label: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateLabelLeftLabelParametersTagged {
+): CiftiCreateLabelLeftLabelParamsDictTagged {
     const params = {
         "@type": "left-label" as const,
         "label": label,
@@ -140,7 +140,7 @@ function cifti_create_label_left_label_params(
  * @returns Command-line arguments.
  */
 function cifti_create_label_left_label_cargs(
-    params: CiftiCreateLabelLeftLabelParameters,
+    params: CiftiCreateLabelLeftLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -166,10 +166,10 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_label_right_label_params(
+function cifti_create_label_right_label(
     label: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateLabelRightLabelParametersTagged {
+): CiftiCreateLabelRightLabelParamsDictTagged {
     const params = {
         "@type": "right-label" as const,
         "label": label,
@@ -190,7 +190,7 @@ function cifti_create_label_right_label_params(
  * @returns Command-line arguments.
  */
 function cifti_create_label_right_label_cargs(
-    params: CiftiCreateLabelRightLabelParameters,
+    params: CiftiCreateLabelRightLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -216,10 +216,10 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_label_cerebellum_label_params(
+function cifti_create_label_cerebellum_label(
     label: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateLabelCerebellumLabelParametersTagged {
+): CiftiCreateLabelCerebellumLabelParamsDictTagged {
     const params = {
         "@type": "cerebellum-label" as const,
         "label": label,
@@ -240,7 +240,7 @@ function cifti_create_label_cerebellum_label_params(
  * @returns Command-line arguments.
  */
 function cifti_create_label_cerebellum_label_cargs(
-    params: CiftiCreateLabelCerebellumLabelParameters,
+    params: CiftiCreateLabelCerebellumLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -267,11 +267,11 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_label_label_params(
+function cifti_create_label_label(
     structure: string,
     label: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateLabelLabelParametersTagged {
+): CiftiCreateLabelLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
         "structure": structure,
@@ -293,7 +293,7 @@ function cifti_create_label_label_params(
  * @returns Command-line arguments.
  */
 function cifti_create_label_label_cargs(
-    params: CiftiCreateLabelLabelParameters,
+    params: CiftiCreateLabelLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -311,7 +311,7 @@ function cifti_create_label_label_cargs(
 
 
 /**
- * Output object returned when calling `CiftiCreateLabelParameters(...)`.
+ * Output object returned when calling `CiftiCreateLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -341,12 +341,12 @@ interface CiftiCreateLabelOutputs {
  */
 function cifti_create_label_params(
     cifti_out: string,
-    volume: CiftiCreateLabelVolumeParameters | null = null,
-    left_label: CiftiCreateLabelLeftLabelParameters | null = null,
-    right_label: CiftiCreateLabelRightLabelParameters | null = null,
-    cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
-    label: Array<CiftiCreateLabelLabelParameters> | null = null,
-): CiftiCreateLabelParametersTagged {
+    volume: CiftiCreateLabelVolumeParamsDict | null = null,
+    left_label: CiftiCreateLabelLeftLabelParamsDict | null = null,
+    right_label: CiftiCreateLabelRightLabelParamsDict | null = null,
+    cerebellum_label: CiftiCreateLabelCerebellumLabelParamsDict | null = null,
+    label: Array<CiftiCreateLabelLabelParamsDict> | null = null,
+): CiftiCreateLabelParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-label" as const,
         "cifti-out": cifti_out,
@@ -379,7 +379,7 @@ function cifti_create_label_params(
  * @returns Command-line arguments.
  */
 function cifti_create_label_cargs(
-    params: CiftiCreateLabelParameters,
+    params: CiftiCreateLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -408,7 +408,7 @@ function cifti_create_label_cargs(
  * @returns Outputs object.
  */
 function cifti_create_label_outputs(
-    params: CiftiCreateLabelParameters,
+    params: CiftiCreateLabelParamsDict,
     execution: Execution,
 ): CiftiCreateLabelOutputs {
     const ret: CiftiCreateLabelOutputs = {
@@ -468,7 +468,7 @@ function cifti_create_label_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCreateLabelOutputs`).
  */
 function cifti_create_label_execute(
-    params: CiftiCreateLabelParameters,
+    params: CiftiCreateLabelParamsDict,
     runner: Runner | null = null,
 ): CiftiCreateLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -536,11 +536,11 @@ function cifti_create_label_execute(
  */
 function cifti_create_label(
     cifti_out: string,
-    volume: CiftiCreateLabelVolumeParameters | null = null,
-    left_label: CiftiCreateLabelLeftLabelParameters | null = null,
-    right_label: CiftiCreateLabelRightLabelParameters | null = null,
-    cerebellum_label: CiftiCreateLabelCerebellumLabelParameters | null = null,
-    label: Array<CiftiCreateLabelLabelParameters> | null = null,
+    volume: CiftiCreateLabelVolumeParamsDict | null = null,
+    left_label: CiftiCreateLabelLeftLabelParamsDict | null = null,
+    right_label: CiftiCreateLabelRightLabelParamsDict | null = null,
+    cerebellum_label: CiftiCreateLabelCerebellumLabelParamsDict | null = null,
+    label: Array<CiftiCreateLabelLabelParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateLabelOutputs {
     const params = cifti_create_label_params(cifti_out, volume, left_label, right_label, cerebellum_label, label)
@@ -550,13 +550,25 @@ function cifti_create_label(
 
 export {
       CIFTI_CREATE_LABEL_METADATA,
+      CiftiCreateLabelCerebellumLabelParamsDict,
+      CiftiCreateLabelCerebellumLabelParamsDictTagged,
+      CiftiCreateLabelLabelParamsDict,
+      CiftiCreateLabelLabelParamsDictTagged,
+      CiftiCreateLabelLeftLabelParamsDict,
+      CiftiCreateLabelLeftLabelParamsDictTagged,
       CiftiCreateLabelOutputs,
+      CiftiCreateLabelParamsDict,
+      CiftiCreateLabelParamsDictTagged,
+      CiftiCreateLabelRightLabelParamsDict,
+      CiftiCreateLabelRightLabelParamsDictTagged,
+      CiftiCreateLabelVolumeParamsDict,
+      CiftiCreateLabelVolumeParamsDictTagged,
       cifti_create_label,
-      cifti_create_label_cerebellum_label_params,
+      cifti_create_label_cerebellum_label,
       cifti_create_label_execute,
-      cifti_create_label_label_params,
-      cifti_create_label_left_label_params,
+      cifti_create_label_label,
+      cifti_create_label_left_label,
       cifti_create_label_params,
-      cifti_create_label_right_label_params,
-      cifti_create_label_volume_params,
+      cifti_create_label_right_label,
+      cifti_create_label_volume,
 };

@@ -11,7 +11,7 @@ const V__MOVE_TO_SERIES_DIRS_METADATA: Metadata = {
 };
 
 
-interface VMoveToSeriesDirsParameters {
+interface VMoveToSeriesDirsParamsDict {
     "@type"?: "afni/@move.to.series.dirs";
     "action"?: "copy" | "move" | null | undefined;
     "dprefix"?: string | null | undefined;
@@ -22,11 +22,11 @@ interface VMoveToSeriesDirsParameters {
     "ver": boolean;
     "dicom_files": Array<InputPathType>;
 }
-type VMoveToSeriesDirsParametersTagged = Required<Pick<VMoveToSeriesDirsParameters, '@type'>> & VMoveToSeriesDirsParameters;
+type VMoveToSeriesDirsParamsDictTagged = Required<Pick<VMoveToSeriesDirsParamsDict, '@type'>> & VMoveToSeriesDirsParamsDict;
 
 
 /**
- * Output object returned when calling `VMoveToSeriesDirsParameters(...)`.
+ * Output object returned when calling `VMoveToSeriesDirsParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function v__move_to_series_dirs_params(
     help: boolean = false,
     hist: boolean = false,
     ver: boolean = false,
-): VMoveToSeriesDirsParametersTagged {
+): VMoveToSeriesDirsParamsDictTagged {
     const params = {
         "@type": "afni/@move.to.series.dirs" as const,
         "test": test,
@@ -92,7 +92,7 @@ function v__move_to_series_dirs_params(
  * @returns Command-line arguments.
  */
 function v__move_to_series_dirs_cargs(
-    params: VMoveToSeriesDirsParameters,
+    params: VMoveToSeriesDirsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function v__move_to_series_dirs_cargs(
  * @returns Outputs object.
  */
 function v__move_to_series_dirs_outputs(
-    params: VMoveToSeriesDirsParameters,
+    params: VMoveToSeriesDirsParamsDict,
     execution: Execution,
 ): VMoveToSeriesDirsOutputs {
     const ret: VMoveToSeriesDirsOutputs = {
@@ -166,7 +166,7 @@ function v__move_to_series_dirs_outputs(
  * @returns NamedTuple of outputs (described in `VMoveToSeriesDirsOutputs`).
  */
 function v__move_to_series_dirs_execute(
-    params: VMoveToSeriesDirsParameters,
+    params: VMoveToSeriesDirsParamsDict,
     runner: Runner | null = null,
 ): VMoveToSeriesDirsOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function v__move_to_series_dirs(
 
 export {
       VMoveToSeriesDirsOutputs,
+      VMoveToSeriesDirsParamsDict,
+      VMoveToSeriesDirsParamsDictTagged,
       V__MOVE_TO_SERIES_DIRS_METADATA,
       v__move_to_series_dirs,
       v__move_to_series_dirs_execute,

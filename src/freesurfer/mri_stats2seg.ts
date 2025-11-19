@@ -11,7 +11,7 @@ const MRI_STATS2SEG_METADATA: Metadata = {
 };
 
 
-interface MriStats2segParameters {
+interface MriStats2segParamsDict {
     "@type"?: "freesurfer/mri_stats2seg";
     "stat_file": InputPathType;
     "segmentation_volume": InputPathType;
@@ -19,11 +19,11 @@ interface MriStats2segParameters {
     "debug": boolean;
     "check_opts": boolean;
 }
-type MriStats2segParametersTagged = Required<Pick<MriStats2segParameters, '@type'>> & MriStats2segParameters;
+type MriStats2segParamsDictTagged = Required<Pick<MriStats2segParamsDict, '@type'>> & MriStats2segParamsDict;
 
 
 /**
- * Output object returned when calling `MriStats2segParameters(...)`.
+ * Output object returned when calling `MriStats2segParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_stats2seg_params(
     output_file: string,
     debug: boolean = false,
     check_opts: boolean = false,
-): MriStats2segParametersTagged {
+): MriStats2segParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_stats2seg" as const,
         "stat_file": stat_file,
@@ -78,7 +78,7 @@ function mri_stats2seg_params(
  * @returns Command-line arguments.
  */
 function mri_stats2seg_cargs(
-    params: MriStats2segParameters,
+    params: MriStats2segParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function mri_stats2seg_cargs(
  * @returns Outputs object.
  */
 function mri_stats2seg_outputs(
-    params: MriStats2segParameters,
+    params: MriStats2segParamsDict,
     execution: Execution,
 ): MriStats2segOutputs {
     const ret: MriStats2segOutputs = {
@@ -140,7 +140,7 @@ function mri_stats2seg_outputs(
  * @returns NamedTuple of outputs (described in `MriStats2segOutputs`).
  */
 function mri_stats2seg_execute(
-    params: MriStats2segParameters,
+    params: MriStats2segParamsDict,
     runner: Runner | null = null,
 ): MriStats2segOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function mri_stats2seg(
 export {
       MRI_STATS2SEG_METADATA,
       MriStats2segOutputs,
+      MriStats2segParamsDict,
+      MriStats2segParamsDictTagged,
       mri_stats2seg,
       mri_stats2seg_execute,
       mri_stats2seg_params,

@@ -11,18 +11,18 @@ const MRI_LINEAR_ALIGN_BINARY_METADATA: Metadata = {
 };
 
 
-interface MriLinearAlignBinaryParameters {
+interface MriLinearAlignBinaryParamsDict {
     "@type"?: "freesurfer/mri_linear_align_binary";
     "source": InputPathType;
     "target": InputPathType;
     "output_xform": string;
     "target_label"?: string | null | undefined;
 }
-type MriLinearAlignBinaryParametersTagged = Required<Pick<MriLinearAlignBinaryParameters, '@type'>> & MriLinearAlignBinaryParameters;
+type MriLinearAlignBinaryParamsDictTagged = Required<Pick<MriLinearAlignBinaryParamsDict, '@type'>> & MriLinearAlignBinaryParamsDict;
 
 
 /**
- * Output object returned when calling `MriLinearAlignBinaryParameters(...)`.
+ * Output object returned when calling `MriLinearAlignBinaryParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_linear_align_binary_params(
     target: InputPathType,
     output_xform: string,
     target_label: string | null = null,
-): MriLinearAlignBinaryParametersTagged {
+): MriLinearAlignBinaryParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_linear_align_binary" as const,
         "source": source,
@@ -76,7 +76,7 @@ function mri_linear_align_binary_params(
  * @returns Command-line arguments.
  */
 function mri_linear_align_binary_cargs(
-    params: MriLinearAlignBinaryParameters,
+    params: MriLinearAlignBinaryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function mri_linear_align_binary_cargs(
  * @returns Outputs object.
  */
 function mri_linear_align_binary_outputs(
-    params: MriLinearAlignBinaryParameters,
+    params: MriLinearAlignBinaryParamsDict,
     execution: Execution,
 ): MriLinearAlignBinaryOutputs {
     const ret: MriLinearAlignBinaryOutputs = {
@@ -129,7 +129,7 @@ function mri_linear_align_binary_outputs(
  * @returns NamedTuple of outputs (described in `MriLinearAlignBinaryOutputs`).
  */
 function mri_linear_align_binary_execute(
-    params: MriLinearAlignBinaryParameters,
+    params: MriLinearAlignBinaryParamsDict,
     runner: Runner | null = null,
 ): MriLinearAlignBinaryOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mri_linear_align_binary(
 export {
       MRI_LINEAR_ALIGN_BINARY_METADATA,
       MriLinearAlignBinaryOutputs,
+      MriLinearAlignBinaryParamsDict,
+      MriLinearAlignBinaryParamsDictTagged,
       mri_linear_align_binary,
       mri_linear_align_binary_execute,
       mri_linear_align_binary_params,

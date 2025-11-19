@@ -11,7 +11,7 @@ const V__DIFF_FILES_METADATA: Metadata = {
 };
 
 
-interface VDiffFilesParameters {
+interface VDiffFilesParamsDict {
     "@type"?: "afni/@diff.files";
     "files": Array<string>;
     "old_dir": string;
@@ -25,11 +25,11 @@ interface VDiffFilesParameters {
     "X_flag": boolean;
     "verbosity"?: number | null | undefined;
 }
-type VDiffFilesParametersTagged = Required<Pick<VDiffFilesParameters, '@type'>> & VDiffFilesParameters;
+type VDiffFilesParamsDictTagged = Required<Pick<VDiffFilesParamsDict, '@type'>> & VDiffFilesParamsDict;
 
 
 /**
- * Output object returned when calling `VDiffFilesParameters(...)`.
+ * Output object returned when calling `VDiffFilesParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function v__diff_files_params(
     xxdiff: boolean = false,
     x_flag: boolean = false,
     verbosity: number | null = null,
-): VDiffFilesParametersTagged {
+): VDiffFilesParamsDictTagged {
     const params = {
         "@type": "afni/@diff.files" as const,
         "files": files,
@@ -104,7 +104,7 @@ function v__diff_files_params(
  * @returns Command-line arguments.
  */
 function v__diff_files_cargs(
-    params: VDiffFilesParameters,
+    params: VDiffFilesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,7 +160,7 @@ function v__diff_files_cargs(
  * @returns Outputs object.
  */
 function v__diff_files_outputs(
-    params: VDiffFilesParameters,
+    params: VDiffFilesParamsDict,
     execution: Execution,
 ): VDiffFilesOutputs {
     const ret: VDiffFilesOutputs = {
@@ -185,7 +185,7 @@ function v__diff_files_outputs(
  * @returns NamedTuple of outputs (described in `VDiffFilesOutputs`).
  */
 function v__diff_files_execute(
-    params: VDiffFilesParameters,
+    params: VDiffFilesParamsDict,
     runner: Runner | null = null,
 ): VDiffFilesOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function v__diff_files(
 
 export {
       VDiffFilesOutputs,
+      VDiffFilesParamsDict,
+      VDiffFilesParamsDictTagged,
       V__DIFF_FILES_METADATA,
       v__diff_files,
       v__diff_files_execute,

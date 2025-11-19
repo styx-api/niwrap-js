@@ -10,67 +10,67 @@ const VOLUME_PALETTE_METADATA: Metadata = {
 };
 
 
-interface VolumePalettePosPercentParameters {
+interface VolumePalettePosPercentParamsDict {
     "@type"?: "pos-percent";
     "pos-min-%": number;
     "pos-max-%": number;
 }
-type VolumePalettePosPercentParametersTagged = Required<Pick<VolumePalettePosPercentParameters, '@type'>> & VolumePalettePosPercentParameters;
+type VolumePalettePosPercentParamsDictTagged = Required<Pick<VolumePalettePosPercentParamsDict, '@type'>> & VolumePalettePosPercentParamsDict;
 
 
-interface VolumePaletteNegPercentParameters {
+interface VolumePaletteNegPercentParamsDict {
     "@type"?: "neg-percent";
     "neg-min-%": number;
     "neg-max-%": number;
 }
-type VolumePaletteNegPercentParametersTagged = Required<Pick<VolumePaletteNegPercentParameters, '@type'>> & VolumePaletteNegPercentParameters;
+type VolumePaletteNegPercentParamsDictTagged = Required<Pick<VolumePaletteNegPercentParamsDict, '@type'>> & VolumePaletteNegPercentParamsDict;
 
 
-interface VolumePalettePosUserParameters {
+interface VolumePalettePosUserParamsDict {
     "@type"?: "pos-user";
     "pos-min-user": number;
     "pos-max-user": number;
 }
-type VolumePalettePosUserParametersTagged = Required<Pick<VolumePalettePosUserParameters, '@type'>> & VolumePalettePosUserParameters;
+type VolumePalettePosUserParamsDictTagged = Required<Pick<VolumePalettePosUserParamsDict, '@type'>> & VolumePalettePosUserParamsDict;
 
 
-interface VolumePaletteNegUserParameters {
+interface VolumePaletteNegUserParamsDict {
     "@type"?: "neg-user";
     "neg-min-user": number;
     "neg-max-user": number;
 }
-type VolumePaletteNegUserParametersTagged = Required<Pick<VolumePaletteNegUserParameters, '@type'>> & VolumePaletteNegUserParameters;
+type VolumePaletteNegUserParamsDictTagged = Required<Pick<VolumePaletteNegUserParamsDict, '@type'>> & VolumePaletteNegUserParamsDict;
 
 
-interface VolumePaletteThresholdingParameters {
+interface VolumePaletteThresholdingParamsDict {
     "@type"?: "thresholding";
     "type": string;
     "test": string;
     "min": number;
     "max": number;
 }
-type VolumePaletteThresholdingParametersTagged = Required<Pick<VolumePaletteThresholdingParameters, '@type'>> & VolumePaletteThresholdingParameters;
+type VolumePaletteThresholdingParamsDictTagged = Required<Pick<VolumePaletteThresholdingParamsDict, '@type'>> & VolumePaletteThresholdingParamsDict;
 
 
-interface VolumePaletteParameters {
+interface VolumePaletteParamsDict {
     "@type"?: "workbench/volume-palette";
     "subvolume"?: string | null | undefined;
-    "pos-percent"?: VolumePalettePosPercentParameters | null | undefined;
-    "neg-percent"?: VolumePaletteNegPercentParameters | null | undefined;
-    "pos-user"?: VolumePalettePosUserParameters | null | undefined;
-    "neg-user"?: VolumePaletteNegUserParameters | null | undefined;
+    "pos-percent"?: VolumePalettePosPercentParamsDict | null | undefined;
+    "neg-percent"?: VolumePaletteNegPercentParamsDict | null | undefined;
+    "pos-user"?: VolumePalettePosUserParamsDict | null | undefined;
+    "neg-user"?: VolumePaletteNegUserParamsDict | null | undefined;
     "interpolate"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "name"?: string | null | undefined;
-    "thresholding"?: VolumePaletteThresholdingParameters | null | undefined;
+    "thresholding"?: VolumePaletteThresholdingParamsDict | null | undefined;
     "type"?: string | null | undefined;
     "type"?: string | null | undefined;
     "volume": string;
     "mode": string;
 }
-type VolumePaletteParametersTagged = Required<Pick<VolumePaletteParameters, '@type'>> & VolumePaletteParameters;
+type VolumePaletteParamsDictTagged = Required<Pick<VolumePaletteParamsDict, '@type'>> & VolumePaletteParamsDict;
 
 
 /**
@@ -81,10 +81,10 @@ type VolumePaletteParametersTagged = Required<Pick<VolumePaletteParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function volume_palette_pos_percent_params(
+function volume_palette_pos_percent(
     pos_min__: number,
     pos_max__: number,
-): VolumePalettePosPercentParametersTagged {
+): VolumePalettePosPercentParamsDictTagged {
     const params = {
         "@type": "pos-percent" as const,
         "pos-min-%": pos_min__,
@@ -103,7 +103,7 @@ function volume_palette_pos_percent_params(
  * @returns Command-line arguments.
  */
 function volume_palette_pos_percent_cargs(
-    params: VolumePalettePosPercentParameters,
+    params: VolumePalettePosPercentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,10 +124,10 @@ function volume_palette_pos_percent_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_palette_neg_percent_params(
+function volume_palette_neg_percent(
     neg_min__: number,
     neg_max__: number,
-): VolumePaletteNegPercentParametersTagged {
+): VolumePaletteNegPercentParamsDictTagged {
     const params = {
         "@type": "neg-percent" as const,
         "neg-min-%": neg_min__,
@@ -146,7 +146,7 @@ function volume_palette_neg_percent_params(
  * @returns Command-line arguments.
  */
 function volume_palette_neg_percent_cargs(
-    params: VolumePaletteNegPercentParameters,
+    params: VolumePaletteNegPercentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,10 +167,10 @@ function volume_palette_neg_percent_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_palette_pos_user_params(
+function volume_palette_pos_user(
     pos_min_user: number,
     pos_max_user: number,
-): VolumePalettePosUserParametersTagged {
+): VolumePalettePosUserParamsDictTagged {
     const params = {
         "@type": "pos-user" as const,
         "pos-min-user": pos_min_user,
@@ -189,7 +189,7 @@ function volume_palette_pos_user_params(
  * @returns Command-line arguments.
  */
 function volume_palette_pos_user_cargs(
-    params: VolumePalettePosUserParameters,
+    params: VolumePalettePosUserParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,10 +210,10 @@ function volume_palette_pos_user_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_palette_neg_user_params(
+function volume_palette_neg_user(
     neg_min_user: number,
     neg_max_user: number,
-): VolumePaletteNegUserParametersTagged {
+): VolumePaletteNegUserParamsDictTagged {
     const params = {
         "@type": "neg-user" as const,
         "neg-min-user": neg_min_user,
@@ -232,7 +232,7 @@ function volume_palette_neg_user_params(
  * @returns Command-line arguments.
  */
 function volume_palette_neg_user_cargs(
-    params: VolumePaletteNegUserParameters,
+    params: VolumePaletteNegUserParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,12 +255,12 @@ function volume_palette_neg_user_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_palette_thresholding_params(
+function volume_palette_thresholding(
     type_: string,
     test: string,
     min: number,
     max: number,
-): VolumePaletteThresholdingParametersTagged {
+): VolumePaletteThresholdingParamsDictTagged {
     const params = {
         "@type": "thresholding" as const,
         "type": type_,
@@ -281,7 +281,7 @@ function volume_palette_thresholding_params(
  * @returns Command-line arguments.
  */
 function volume_palette_thresholding_cargs(
-    params: VolumePaletteThresholdingParameters,
+    params: VolumePaletteThresholdingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -297,7 +297,7 @@ function volume_palette_thresholding_cargs(
 
 
 /**
- * Output object returned when calling `VolumePaletteParameters(...)`.
+ * Output object returned when calling `VolumePaletteParamsDict(...)`.
  *
  * @interface
  */
@@ -357,12 +357,12 @@ function volume_palette_params(
     type_2: string | null,
     volume: string,
     mode: string,
-    pos_percent: VolumePalettePosPercentParameters | null = null,
-    neg_percent: VolumePaletteNegPercentParameters | null = null,
-    pos_user: VolumePalettePosUserParameters | null = null,
-    neg_user: VolumePaletteNegUserParameters | null = null,
-    thresholding: VolumePaletteThresholdingParameters | null = null,
-): VolumePaletteParametersTagged {
+    pos_percent: VolumePalettePosPercentParamsDict | null = null,
+    neg_percent: VolumePaletteNegPercentParamsDict | null = null,
+    pos_user: VolumePalettePosUserParamsDict | null = null,
+    neg_user: VolumePaletteNegUserParamsDict | null = null,
+    thresholding: VolumePaletteThresholdingParamsDict | null = null,
+): VolumePaletteParamsDictTagged {
     const params = {
         "@type": "workbench/volume-palette" as const,
         "volume": volume,
@@ -420,7 +420,7 @@ function volume_palette_params(
  * @returns Command-line arguments.
  */
 function volume_palette_cargs(
-    params: VolumePaletteParameters,
+    params: VolumePaletteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -466,7 +466,7 @@ function volume_palette_cargs(
  * @returns Outputs object.
  */
 function volume_palette_outputs(
-    params: VolumePaletteParameters,
+    params: VolumePaletteParamsDict,
     execution: Execution,
 ): VolumePaletteOutputs {
     const ret: VolumePaletteOutputs = {
@@ -562,7 +562,7 @@ function volume_palette_outputs(
  * @returns NamedTuple of outputs (described in `VolumePaletteOutputs`).
  */
 function volume_palette_execute(
-    params: VolumePaletteParameters,
+    params: VolumePaletteParamsDict,
     runner: Runner | null = null,
 ): VolumePaletteOutputs {
     runner = runner || getGlobalRunner();
@@ -701,11 +701,11 @@ function volume_palette(
     type_2: string | null,
     volume: string,
     mode: string,
-    pos_percent: VolumePalettePosPercentParameters | null = null,
-    neg_percent: VolumePaletteNegPercentParameters | null = null,
-    pos_user: VolumePalettePosUserParameters | null = null,
-    neg_user: VolumePaletteNegUserParameters | null = null,
-    thresholding: VolumePaletteThresholdingParameters | null = null,
+    pos_percent: VolumePalettePosPercentParamsDict | null = null,
+    neg_percent: VolumePaletteNegPercentParamsDict | null = null,
+    pos_user: VolumePalettePosUserParamsDict | null = null,
+    neg_user: VolumePaletteNegUserParamsDict | null = null,
+    thresholding: VolumePaletteThresholdingParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumePaletteOutputs {
     const params = volume_palette_params(subvolume, interpolate, display, display_, display_2, name, type_, type_2, volume, mode, pos_percent, neg_percent, pos_user, neg_user, thresholding)
@@ -715,13 +715,25 @@ function volume_palette(
 
 export {
       VOLUME_PALETTE_METADATA,
+      VolumePaletteNegPercentParamsDict,
+      VolumePaletteNegPercentParamsDictTagged,
+      VolumePaletteNegUserParamsDict,
+      VolumePaletteNegUserParamsDictTagged,
       VolumePaletteOutputs,
+      VolumePaletteParamsDict,
+      VolumePaletteParamsDictTagged,
+      VolumePalettePosPercentParamsDict,
+      VolumePalettePosPercentParamsDictTagged,
+      VolumePalettePosUserParamsDict,
+      VolumePalettePosUserParamsDictTagged,
+      VolumePaletteThresholdingParamsDict,
+      VolumePaletteThresholdingParamsDictTagged,
       volume_palette,
       volume_palette_execute,
-      volume_palette_neg_percent_params,
-      volume_palette_neg_user_params,
+      volume_palette_neg_percent,
+      volume_palette_neg_user,
       volume_palette_params,
-      volume_palette_pos_percent_params,
-      volume_palette_pos_user_params,
-      volume_palette_thresholding_params,
+      volume_palette_pos_percent,
+      volume_palette_pos_user,
+      volume_palette_thresholding,
 };

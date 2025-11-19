@@ -11,7 +11,7 @@ const CONVERT_DSET_METADATA: Metadata = {
 };
 
 
-interface ConvertDsetParameters {
+interface ConvertDsetParamsDict {
     "@type"?: "afni/ConvertDset";
     "output_type": Array<"niml_asc" | "niml_bi" | "1D" | "1Dp" | "1Dpt" | "gii" | "gii_asc" | "gii_b64" | "gii_b64gz" | "1D_stderr" | "1D_stdout" | "niml_stderr" | "niml_stdout" | "1Dp_stdout" | "1Dp_stderr" | "1Dpt_stdout" | "1Dpt_stderr">;
     "input_dataset": InputPathType;
@@ -35,11 +35,11 @@ interface ConvertDsetParameters {
     "split"?: number | null | undefined;
     "no_history": boolean;
 }
-type ConvertDsetParametersTagged = Required<Pick<ConvertDsetParameters, '@type'>> & ConvertDsetParameters;
+type ConvertDsetParamsDictTagged = Required<Pick<ConvertDsetParamsDict, '@type'>> & ConvertDsetParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertDsetParameters(...)`.
+ * Output object returned when calling `ConvertDsetParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function convert_dset_params(
     multigraph: boolean = false,
     split: number | null = null,
     no_history: boolean = false,
-): ConvertDsetParametersTagged {
+): ConvertDsetParamsDictTagged {
     const params = {
         "@type": "afni/ConvertDset" as const,
         "output_type": output_type,
@@ -166,7 +166,7 @@ function convert_dset_params(
  * @returns Command-line arguments.
  */
 function convert_dset_cargs(
-    params: ConvertDsetParameters,
+    params: ConvertDsetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -285,7 +285,7 @@ function convert_dset_cargs(
  * @returns Outputs object.
  */
 function convert_dset_outputs(
-    params: ConvertDsetParameters,
+    params: ConvertDsetParamsDict,
     execution: Execution,
 ): ConvertDsetOutputs {
     const ret: ConvertDsetOutputs = {
@@ -311,7 +311,7 @@ function convert_dset_outputs(
  * @returns NamedTuple of outputs (described in `ConvertDsetOutputs`).
  */
 function convert_dset_execute(
-    params: ConvertDsetParameters,
+    params: ConvertDsetParamsDict,
     runner: Runner | null = null,
 ): ConvertDsetOutputs {
     runner = runner || getGlobalRunner();
@@ -390,6 +390,8 @@ function convert_dset(
 export {
       CONVERT_DSET_METADATA,
       ConvertDsetOutputs,
+      ConvertDsetParamsDict,
+      ConvertDsetParamsDictTagged,
       convert_dset,
       convert_dset_execute,
       convert_dset_params,

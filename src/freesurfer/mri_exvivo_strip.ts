@@ -11,7 +11,7 @@ const MRI_EXVIVO_STRIP_METADATA: Metadata = {
 };
 
 
-interface MriExvivoStripParameters {
+interface MriExvivoStripParamsDict {
     "@type"?: "freesurfer/mri_exvivo_strip";
     "invol": InputPathType;
     "outvol": string;
@@ -26,11 +26,11 @@ interface MriExvivoStripParameters {
     "wts"?: InputPathType | null | undefined;
     "gpu"?: number | null | undefined;
 }
-type MriExvivoStripParametersTagged = Required<Pick<MriExvivoStripParameters, '@type'>> & MriExvivoStripParameters;
+type MriExvivoStripParamsDictTagged = Required<Pick<MriExvivoStripParamsDict, '@type'>> & MriExvivoStripParamsDict;
 
 
 /**
- * Output object returned when calling `MriExvivoStripParameters(...)`.
+ * Output object returned when calling `MriExvivoStripParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function mri_exvivo_strip_params(
     model: InputPathType | null = null,
     wts: InputPathType | null = null,
     gpu: number | null = null,
-): MriExvivoStripParametersTagged {
+): MriExvivoStripParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_exvivo_strip" as const,
         "invol": invol,
@@ -128,7 +128,7 @@ function mri_exvivo_strip_params(
  * @returns Command-line arguments.
  */
 function mri_exvivo_strip_cargs(
-    params: MriExvivoStripParameters,
+    params: MriExvivoStripParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -206,7 +206,7 @@ function mri_exvivo_strip_cargs(
  * @returns Outputs object.
  */
 function mri_exvivo_strip_outputs(
-    params: MriExvivoStripParameters,
+    params: MriExvivoStripParamsDict,
     execution: Execution,
 ): MriExvivoStripOutputs {
     const ret: MriExvivoStripOutputs = {
@@ -234,7 +234,7 @@ function mri_exvivo_strip_outputs(
  * @returns NamedTuple of outputs (described in `MriExvivoStripOutputs`).
  */
 function mri_exvivo_strip_execute(
-    params: MriExvivoStripParameters,
+    params: MriExvivoStripParamsDict,
     runner: Runner | null = null,
 ): MriExvivoStripOutputs {
     runner = runner || getGlobalRunner();
@@ -295,6 +295,8 @@ function mri_exvivo_strip(
 export {
       MRI_EXVIVO_STRIP_METADATA,
       MriExvivoStripOutputs,
+      MriExvivoStripParamsDict,
+      MriExvivoStripParamsDictTagged,
       mri_exvivo_strip,
       mri_exvivo_strip_execute,
       mri_exvivo_strip_params,

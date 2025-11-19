@@ -11,15 +11,15 @@ const MRI_GDFGLM_METADATA: Metadata = {
 };
 
 
-interface MriGdfglmParameters {
+interface MriGdfglmParamsDict {
     "@type"?: "freesurfer/mri_gdfglm";
     "inputs"?: string | null | undefined;
 }
-type MriGdfglmParametersTagged = Required<Pick<MriGdfglmParameters, '@type'>> & MriGdfglmParameters;
+type MriGdfglmParamsDictTagged = Required<Pick<MriGdfglmParamsDict, '@type'>> & MriGdfglmParamsDict;
 
 
 /**
- * Output object returned when calling `MriGdfglmParameters(...)`.
+ * Output object returned when calling `MriGdfglmParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface MriGdfglmOutputs {
  */
 function mri_gdfglm_params(
     inputs: string | null = null,
-): MriGdfglmParametersTagged {
+): MriGdfglmParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gdfglm" as const,
     };
@@ -64,7 +64,7 @@ function mri_gdfglm_params(
  * @returns Command-line arguments.
  */
 function mri_gdfglm_cargs(
-    params: MriGdfglmParameters,
+    params: MriGdfglmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function mri_gdfglm_cargs(
  * @returns Outputs object.
  */
 function mri_gdfglm_outputs(
-    params: MriGdfglmParameters,
+    params: MriGdfglmParamsDict,
     execution: Execution,
 ): MriGdfglmOutputs {
     const ret: MriGdfglmOutputs = {
@@ -111,7 +111,7 @@ function mri_gdfglm_outputs(
  * @returns NamedTuple of outputs (described in `MriGdfglmOutputs`).
  */
 function mri_gdfglm_execute(
-    params: MriGdfglmParameters,
+    params: MriGdfglmParamsDict,
     runner: Runner | null = null,
 ): MriGdfglmOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function mri_gdfglm(
 export {
       MRI_GDFGLM_METADATA,
       MriGdfglmOutputs,
+      MriGdfglmParamsDict,
+      MriGdfglmParamsDictTagged,
       mri_gdfglm,
       mri_gdfglm_execute,
       mri_gdfglm_params,

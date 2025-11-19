@@ -11,18 +11,18 @@ const V_3D_CLUST_COUNT_METADATA: Metadata = {
 };
 
 
-interface V3dClustCountParameters {
+interface V3dClustCountParamsDict {
     "@type"?: "afni/3dClustCount";
     "datasets": Array<InputPathType>;
     "prefix"?: string | null | undefined;
     "final": boolean;
     "quiet": boolean;
 }
-type V3dClustCountParametersTagged = Required<Pick<V3dClustCountParameters, '@type'>> & V3dClustCountParameters;
+type V3dClustCountParamsDictTagged = Required<Pick<V3dClustCountParamsDict, '@type'>> & V3dClustCountParamsDict;
 
 
 /**
- * Output object returned when calling `V3dClustCountParameters(...)`.
+ * Output object returned when calling `V3dClustCountParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function v_3d_clust_count_params(
     prefix: string | null = null,
     final: boolean = false,
     quiet: boolean = false,
-): V3dClustCountParametersTagged {
+): V3dClustCountParamsDictTagged {
     const params = {
         "@type": "afni/3dClustCount" as const,
         "datasets": datasets,
@@ -84,7 +84,7 @@ function v_3d_clust_count_params(
  * @returns Command-line arguments.
  */
 function v_3d_clust_count_cargs(
-    params: V3dClustCountParameters,
+    params: V3dClustCountParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function v_3d_clust_count_cargs(
  * @returns Outputs object.
  */
 function v_3d_clust_count_outputs(
-    params: V3dClustCountParameters,
+    params: V3dClustCountParamsDict,
     execution: Execution,
 ): V3dClustCountOutputs {
     const ret: V3dClustCountOutputs = {
@@ -143,7 +143,7 @@ function v_3d_clust_count_outputs(
  * @returns NamedTuple of outputs (described in `V3dClustCountOutputs`).
  */
 function v_3d_clust_count_execute(
-    params: V3dClustCountParameters,
+    params: V3dClustCountParamsDict,
     runner: Runner | null = null,
 ): V3dClustCountOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function v_3d_clust_count(
 
 export {
       V3dClustCountOutputs,
+      V3dClustCountParamsDict,
+      V3dClustCountParamsDictTagged,
       V_3D_CLUST_COUNT_METADATA,
       v_3d_clust_count,
       v_3d_clust_count_execute,

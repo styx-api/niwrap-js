@@ -11,18 +11,18 @@ const MRI_LABEL_VALS_METADATA: Metadata = {
 };
 
 
-interface MriLabelValsParameters {
+interface MriLabelValsParamsDict {
     "@type"?: "freesurfer/mri_label_vals";
     "volume": InputPathType;
     "label_file": InputPathType;
     "cras_flag": boolean;
     "help_flag": boolean;
 }
-type MriLabelValsParametersTagged = Required<Pick<MriLabelValsParameters, '@type'>> & MriLabelValsParameters;
+type MriLabelValsParamsDictTagged = Required<Pick<MriLabelValsParamsDict, '@type'>> & MriLabelValsParamsDict;
 
 
 /**
- * Output object returned when calling `MriLabelValsParameters(...)`.
+ * Output object returned when calling `MriLabelValsParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function mri_label_vals_params(
     label_file: InputPathType,
     cras_flag: boolean = false,
     help_flag: boolean = false,
-): MriLabelValsParametersTagged {
+): MriLabelValsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_label_vals" as const,
         "volume": volume,
@@ -70,7 +70,7 @@ function mri_label_vals_params(
  * @returns Command-line arguments.
  */
 function mri_label_vals_cargs(
-    params: MriLabelValsParameters,
+    params: MriLabelValsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_label_vals_cargs(
  * @returns Outputs object.
  */
 function mri_label_vals_outputs(
-    params: MriLabelValsParameters,
+    params: MriLabelValsParamsDict,
     execution: Execution,
 ): MriLabelValsOutputs {
     const ret: MriLabelValsOutputs = {
@@ -121,7 +121,7 @@ function mri_label_vals_outputs(
  * @returns NamedTuple of outputs (described in `MriLabelValsOutputs`).
  */
 function mri_label_vals_execute(
-    params: MriLabelValsParameters,
+    params: MriLabelValsParamsDict,
     runner: Runner | null = null,
 ): MriLabelValsOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function mri_label_vals(
 export {
       MRI_LABEL_VALS_METADATA,
       MriLabelValsOutputs,
+      MriLabelValsParamsDict,
+      MriLabelValsParamsDictTagged,
       mri_label_vals,
       mri_label_vals_execute,
       mri_label_vals_params,

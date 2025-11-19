@@ -11,7 +11,7 @@ const POSSUM_INTERPMOT_PY_METADATA: Metadata = {
 };
 
 
-interface PossumInterpmotPyParameters {
+interface PossumInterpmotPyParamsDict {
     "@type"?: "fsl/possum_interpmot.py";
     "motion_type": number;
     "tr": number;
@@ -21,11 +21,11 @@ interface PossumInterpmotPyParameters {
     "custom_motion_file": InputPathType;
     "output_file": string;
 }
-type PossumInterpmotPyParametersTagged = Required<Pick<PossumInterpmotPyParameters, '@type'>> & PossumInterpmotPyParameters;
+type PossumInterpmotPyParamsDictTagged = Required<Pick<PossumInterpmotPyParamsDict, '@type'>> & PossumInterpmotPyParamsDict;
 
 
 /**
- * Output object returned when calling `PossumInterpmotPyParameters(...)`.
+ * Output object returned when calling `PossumInterpmotPyParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function possum_interpmot_py_params(
     nvols: number,
     custom_motion_file: InputPathType,
     output_file: string,
-): PossumInterpmotPyParametersTagged {
+): PossumInterpmotPyParamsDictTagged {
     const params = {
         "@type": "fsl/possum_interpmot.py" as const,
         "motion_type": motion_type,
@@ -86,7 +86,7 @@ function possum_interpmot_py_params(
  * @returns Command-line arguments.
  */
 function possum_interpmot_py_cargs(
-    params: PossumInterpmotPyParameters,
+    params: PossumInterpmotPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function possum_interpmot_py_cargs(
  * @returns Outputs object.
  */
 function possum_interpmot_py_outputs(
-    params: PossumInterpmotPyParameters,
+    params: PossumInterpmotPyParamsDict,
     execution: Execution,
 ): PossumInterpmotPyOutputs {
     const ret: PossumInterpmotPyOutputs = {
@@ -137,7 +137,7 @@ function possum_interpmot_py_outputs(
  * @returns NamedTuple of outputs (described in `PossumInterpmotPyOutputs`).
  */
 function possum_interpmot_py_execute(
-    params: PossumInterpmotPyParameters,
+    params: PossumInterpmotPyParamsDict,
     runner: Runner | null = null,
 ): PossumInterpmotPyOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function possum_interpmot_py(
 export {
       POSSUM_INTERPMOT_PY_METADATA,
       PossumInterpmotPyOutputs,
+      PossumInterpmotPyParamsDict,
+      PossumInterpmotPyParamsDictTagged,
       possum_interpmot_py,
       possum_interpmot_py_execute,
       possum_interpmot_py_params,

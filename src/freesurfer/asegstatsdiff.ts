@@ -11,17 +11,17 @@ const ASEGSTATSDIFF_METADATA: Metadata = {
 };
 
 
-interface AsegstatsdiffParameters {
+interface AsegstatsdiffParamsDict {
     "@type"?: "freesurfer/asegstatsdiff";
     "subject1": string;
     "subject2": string;
     "outdir"?: string | null | undefined;
 }
-type AsegstatsdiffParametersTagged = Required<Pick<AsegstatsdiffParameters, '@type'>> & AsegstatsdiffParameters;
+type AsegstatsdiffParamsDictTagged = Required<Pick<AsegstatsdiffParamsDict, '@type'>> & AsegstatsdiffParamsDict;
 
 
 /**
- * Output object returned when calling `AsegstatsdiffParameters(...)`.
+ * Output object returned when calling `AsegstatsdiffParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function asegstatsdiff_params(
     subject1: string,
     subject2: string,
     outdir: string | null = null,
-): AsegstatsdiffParametersTagged {
+): AsegstatsdiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/asegstatsdiff" as const,
         "subject1": subject1,
@@ -72,7 +72,7 @@ function asegstatsdiff_params(
  * @returns Command-line arguments.
  */
 function asegstatsdiff_cargs(
-    params: AsegstatsdiffParameters,
+    params: AsegstatsdiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function asegstatsdiff_cargs(
  * @returns Outputs object.
  */
 function asegstatsdiff_outputs(
-    params: AsegstatsdiffParameters,
+    params: AsegstatsdiffParamsDict,
     execution: Execution,
 ): AsegstatsdiffOutputs {
     const ret: AsegstatsdiffOutputs = {
@@ -120,7 +120,7 @@ function asegstatsdiff_outputs(
  * @returns NamedTuple of outputs (described in `AsegstatsdiffOutputs`).
  */
 function asegstatsdiff_execute(
-    params: AsegstatsdiffParameters,
+    params: AsegstatsdiffParamsDict,
     runner: Runner | null = null,
 ): AsegstatsdiffOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function asegstatsdiff(
 export {
       ASEGSTATSDIFF_METADATA,
       AsegstatsdiffOutputs,
+      AsegstatsdiffParamsDict,
+      AsegstatsdiffParamsDictTagged,
       asegstatsdiff,
       asegstatsdiff_execute,
       asegstatsdiff_params,

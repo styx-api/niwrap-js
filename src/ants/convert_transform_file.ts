@@ -11,7 +11,7 @@ const CONVERT_TRANSFORM_FILE_METADATA: Metadata = {
 };
 
 
-interface ConvertTransformFileParameters {
+interface ConvertTransformFileParamsDict {
     "@type"?: "ants/ConvertTransformFile";
     "dimensions": number;
     "input_transform_file": InputPathType;
@@ -21,11 +21,11 @@ interface ConvertTransformFileParameters {
     "RAS": boolean;
     "convert_to_affine_type": boolean;
 }
-type ConvertTransformFileParametersTagged = Required<Pick<ConvertTransformFileParameters, '@type'>> & ConvertTransformFileParameters;
+type ConvertTransformFileParamsDictTagged = Required<Pick<ConvertTransformFileParamsDict, '@type'>> & ConvertTransformFileParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertTransformFileParameters(...)`.
+ * Output object returned when calling `ConvertTransformFileParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function convert_transform_file_params(
     homogeneous_matrix: boolean = false,
     ras: boolean = false,
     convert_to_affine_type: boolean = false,
-): ConvertTransformFileParametersTagged {
+): ConvertTransformFileParamsDictTagged {
     const params = {
         "@type": "ants/ConvertTransformFile" as const,
         "dimensions": dimensions,
@@ -82,7 +82,7 @@ function convert_transform_file_params(
  * @returns Command-line arguments.
  */
 function convert_transform_file_cargs(
-    params: ConvertTransformFileParameters,
+    params: ConvertTransformFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function convert_transform_file_cargs(
  * @returns Outputs object.
  */
 function convert_transform_file_outputs(
-    params: ConvertTransformFileParameters,
+    params: ConvertTransformFileParamsDict,
     execution: Execution,
 ): ConvertTransformFileOutputs {
     const ret: ConvertTransformFileOutputs = {
@@ -140,7 +140,7 @@ function convert_transform_file_outputs(
  * @returns NamedTuple of outputs (described in `ConvertTransformFileOutputs`).
  */
 function convert_transform_file_execute(
-    params: ConvertTransformFileParameters,
+    params: ConvertTransformFileParamsDict,
     runner: Runner | null = null,
 ): ConvertTransformFileOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function convert_transform_file(
 export {
       CONVERT_TRANSFORM_FILE_METADATA,
       ConvertTransformFileOutputs,
+      ConvertTransformFileParamsDict,
+      ConvertTransformFileParamsDictTagged,
       convert_transform_file,
       convert_transform_file_execute,
       convert_transform_file_params,

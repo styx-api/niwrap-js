@@ -10,32 +10,32 @@ const METRIC_REGRESSION_METADATA: Metadata = {
 };
 
 
-interface MetricRegressionRemoveParameters {
+interface MetricRegressionRemoveParamsDict {
     "@type"?: "remove";
     "metric": InputPathType;
     "column"?: string | null | undefined;
 }
-type MetricRegressionRemoveParametersTagged = Required<Pick<MetricRegressionRemoveParameters, '@type'>> & MetricRegressionRemoveParameters;
+type MetricRegressionRemoveParamsDictTagged = Required<Pick<MetricRegressionRemoveParamsDict, '@type'>> & MetricRegressionRemoveParamsDict;
 
 
-interface MetricRegressionKeepParameters {
+interface MetricRegressionKeepParamsDict {
     "@type"?: "keep";
     "metric": InputPathType;
     "column"?: string | null | undefined;
 }
-type MetricRegressionKeepParametersTagged = Required<Pick<MetricRegressionKeepParameters, '@type'>> & MetricRegressionKeepParameters;
+type MetricRegressionKeepParamsDictTagged = Required<Pick<MetricRegressionKeepParamsDict, '@type'>> & MetricRegressionKeepParamsDict;
 
 
-interface MetricRegressionParameters {
+interface MetricRegressionParamsDict {
     "@type"?: "workbench/metric-regression";
     "metric-out": string;
     "roi-metric"?: InputPathType | null | undefined;
     "column"?: string | null | undefined;
-    "remove"?: Array<MetricRegressionRemoveParameters> | null | undefined;
-    "keep"?: Array<MetricRegressionKeepParameters> | null | undefined;
+    "remove"?: Array<MetricRegressionRemoveParamsDict> | null | undefined;
+    "keep"?: Array<MetricRegressionKeepParamsDict> | null | undefined;
     "metric-in": InputPathType;
 }
-type MetricRegressionParametersTagged = Required<Pick<MetricRegressionParameters, '@type'>> & MetricRegressionParameters;
+type MetricRegressionParamsDictTagged = Required<Pick<MetricRegressionParamsDict, '@type'>> & MetricRegressionParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ the column number or name
  *
  * @returns Parameter dictionary
  */
-function metric_regression_remove_params(
+function metric_regression_remove(
     metric: InputPathType,
     column: string | null,
-): MetricRegressionRemoveParametersTagged {
+): MetricRegressionRemoveParamsDictTagged {
     const params = {
         "@type": "remove" as const,
         "metric": metric,
@@ -72,7 +72,7 @@ function metric_regression_remove_params(
  * @returns Command-line arguments.
  */
 function metric_regression_remove_cargs(
-    params: MetricRegressionRemoveParameters,
+    params: MetricRegressionRemoveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,10 +98,10 @@ the column number or name
  *
  * @returns Parameter dictionary
  */
-function metric_regression_keep_params(
+function metric_regression_keep(
     metric: InputPathType,
     column: string | null,
-): MetricRegressionKeepParametersTagged {
+): MetricRegressionKeepParamsDictTagged {
     const params = {
         "@type": "keep" as const,
         "metric": metric,
@@ -122,7 +122,7 @@ function metric_regression_keep_params(
  * @returns Command-line arguments.
  */
 function metric_regression_keep_cargs(
-    params: MetricRegressionKeepParameters,
+    params: MetricRegressionKeepParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function metric_regression_keep_cargs(
 
 
 /**
- * Output object returned when calling `MetricRegressionParameters(...)`.
+ * Output object returned when calling `MetricRegressionParamsDict(...)`.
  *
  * @interface
  */
@@ -176,9 +176,9 @@ function metric_regression_params(
     roi_metric: InputPathType | null,
     column: string | null,
     metric_in: InputPathType,
-    remove: Array<MetricRegressionRemoveParameters> | null = null,
-    keep: Array<MetricRegressionKeepParameters> | null = null,
-): MetricRegressionParametersTagged {
+    remove: Array<MetricRegressionRemoveParamsDict> | null = null,
+    keep: Array<MetricRegressionKeepParamsDict> | null = null,
+): MetricRegressionParamsDictTagged {
     const params = {
         "@type": "workbench/metric-regression" as const,
         "metric-out": metric_out,
@@ -209,7 +209,7 @@ function metric_regression_params(
  * @returns Command-line arguments.
  */
 function metric_regression_cargs(
-    params: MetricRegressionParameters,
+    params: MetricRegressionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -240,7 +240,7 @@ function metric_regression_cargs(
  * @returns Outputs object.
  */
 function metric_regression_outputs(
-    params: MetricRegressionParameters,
+    params: MetricRegressionParamsDict,
     execution: Execution,
 ): MetricRegressionOutputs {
     const ret: MetricRegressionOutputs = {
@@ -262,7 +262,7 @@ function metric_regression_outputs(
  * @returns NamedTuple of outputs (described in `MetricRegressionOutputs`).
  */
 function metric_regression_execute(
-    params: MetricRegressionParameters,
+    params: MetricRegressionParamsDict,
     runner: Runner | null = null,
 ): MetricRegressionOutputs {
     runner = runner || getGlobalRunner();
@@ -299,8 +299,8 @@ function metric_regression(
     roi_metric: InputPathType | null,
     column: string | null,
     metric_in: InputPathType,
-    remove: Array<MetricRegressionRemoveParameters> | null = null,
-    keep: Array<MetricRegressionKeepParameters> | null = null,
+    remove: Array<MetricRegressionRemoveParamsDict> | null = null,
+    keep: Array<MetricRegressionKeepParamsDict> | null = null,
     runner: Runner | null = null,
 ): MetricRegressionOutputs {
     const params = metric_regression_params(metric_out, roi_metric, column, metric_in, remove, keep)
@@ -310,10 +310,16 @@ function metric_regression(
 
 export {
       METRIC_REGRESSION_METADATA,
+      MetricRegressionKeepParamsDict,
+      MetricRegressionKeepParamsDictTagged,
       MetricRegressionOutputs,
+      MetricRegressionParamsDict,
+      MetricRegressionParamsDictTagged,
+      MetricRegressionRemoveParamsDict,
+      MetricRegressionRemoveParamsDictTagged,
       metric_regression,
       metric_regression_execute,
-      metric_regression_keep_params,
+      metric_regression_keep,
       metric_regression_params,
-      metric_regression_remove_params,
+      metric_regression_remove,
 };

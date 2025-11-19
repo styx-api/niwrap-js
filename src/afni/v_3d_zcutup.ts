@@ -11,17 +11,17 @@ const V_3D_ZCUTUP_METADATA: Metadata = {
 };
 
 
-interface V3dZcutupParameters {
+interface V3dZcutupParamsDict {
     "@type"?: "afni/3dZcutup";
     "keep_slices": string;
     "prefix"?: string | null | undefined;
     "dataset": InputPathType;
 }
-type V3dZcutupParametersTagged = Required<Pick<V3dZcutupParameters, '@type'>> & V3dZcutupParameters;
+type V3dZcutupParamsDictTagged = Required<Pick<V3dZcutupParamsDict, '@type'>> & V3dZcutupParamsDict;
 
 
 /**
- * Output object returned when calling `V3dZcutupParameters(...)`.
+ * Output object returned when calling `V3dZcutupParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function v_3d_zcutup_params(
     keep_slices: string,
     dataset: InputPathType,
     prefix: string | null = null,
-): V3dZcutupParametersTagged {
+): V3dZcutupParamsDictTagged {
     const params = {
         "@type": "afni/3dZcutup" as const,
         "keep_slices": keep_slices,
@@ -76,7 +76,7 @@ function v_3d_zcutup_params(
  * @returns Command-line arguments.
  */
 function v_3d_zcutup_cargs(
-    params: V3dZcutupParameters,
+    params: V3dZcutupParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function v_3d_zcutup_cargs(
  * @returns Outputs object.
  */
 function v_3d_zcutup_outputs(
-    params: V3dZcutupParameters,
+    params: V3dZcutupParamsDict,
     execution: Execution,
 ): V3dZcutupOutputs {
     const ret: V3dZcutupOutputs = {
@@ -132,7 +132,7 @@ function v_3d_zcutup_outputs(
  * @returns NamedTuple of outputs (described in `V3dZcutupOutputs`).
  */
 function v_3d_zcutup_execute(
-    params: V3dZcutupParameters,
+    params: V3dZcutupParamsDict,
     runner: Runner | null = null,
 ): V3dZcutupOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function v_3d_zcutup(
 
 export {
       V3dZcutupOutputs,
+      V3dZcutupParamsDict,
+      V3dZcutupParamsDictTagged,
       V_3D_ZCUTUP_METADATA,
       v_3d_zcutup,
       v_3d_zcutup_execute,

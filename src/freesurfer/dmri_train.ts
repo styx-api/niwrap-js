@@ -11,7 +11,7 @@ const DMRI_TRAIN_METADATA: Metadata = {
 };
 
 
-interface DmriTrainParameters {
+interface DmriTrainParamsDict {
     "@type"?: "freesurfer/dmri_train";
     "slist": InputPathType;
     "trk_files": Array<InputPathType>;
@@ -42,11 +42,11 @@ interface DmriTrainParameters {
     "help": boolean;
     "version": boolean;
 }
-type DmriTrainParametersTagged = Required<Pick<DmriTrainParameters, '@type'>> & DmriTrainParameters;
+type DmriTrainParamsDictTagged = Required<Pick<DmriTrainParamsDict, '@type'>> & DmriTrainParamsDict;
 
 
 /**
- * Output object returned when calling `DmriTrainParameters(...)`.
+ * Output object returned when calling `DmriTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -121,7 +121,7 @@ function dmri_train_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriTrainParametersTagged {
+): DmriTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_train" as const,
         "slist": slist,
@@ -184,7 +184,7 @@ function dmri_train_params(
  * @returns Command-line arguments.
  */
 function dmri_train_cargs(
-    params: DmriTrainParameters,
+    params: DmriTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -324,7 +324,7 @@ function dmri_train_cargs(
  * @returns Outputs object.
  */
 function dmri_train_outputs(
-    params: DmriTrainParameters,
+    params: DmriTrainParamsDict,
     execution: Execution,
 ): DmriTrainOutputs {
     const ret: DmriTrainOutputs = {
@@ -349,7 +349,7 @@ function dmri_train_outputs(
  * @returns NamedTuple of outputs (described in `DmriTrainOutputs`).
  */
 function dmri_train_execute(
-    params: DmriTrainParameters,
+    params: DmriTrainParamsDict,
     runner: Runner | null = null,
 ): DmriTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -442,6 +442,8 @@ function dmri_train(
 export {
       DMRI_TRAIN_METADATA,
       DmriTrainOutputs,
+      DmriTrainParamsDict,
+      DmriTrainParamsDictTagged,
       dmri_train,
       dmri_train_execute,
       dmri_train_params,

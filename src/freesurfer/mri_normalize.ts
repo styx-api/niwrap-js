@@ -11,7 +11,7 @@ const MRI_NORMALIZE_METADATA: Metadata = {
 };
 
 
-interface MriNormalizeParameters {
+interface MriNormalizeParamsDict {
     "@type"?: "freesurfer/mri_normalize";
     "input_vol": InputPathType;
     "output_vol": string;
@@ -48,11 +48,11 @@ interface MriNormalizeParameters {
     "seed_value"?: number | null | undefined;
     "print_help": boolean;
 }
-type MriNormalizeParametersTagged = Required<Pick<MriNormalizeParameters, '@type'>> & MriNormalizeParameters;
+type MriNormalizeParamsDictTagged = Required<Pick<MriNormalizeParamsDict, '@type'>> & MriNormalizeParamsDict;
 
 
 /**
- * Output object returned when calling `MriNormalizeParameters(...)`.
+ * Output object returned when calling `MriNormalizeParamsDict(...)`.
  *
  * @interface
  */
@@ -147,7 +147,7 @@ function mri_normalize_params(
     surface_transform: string | null = null,
     seed_value: number | null = null,
     print_help: boolean = false,
-): MriNormalizeParametersTagged {
+): MriNormalizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_normalize" as const,
         "input_vol": input_vol,
@@ -242,7 +242,7 @@ function mri_normalize_params(
  * @returns Command-line arguments.
  */
 function mri_normalize_cargs(
-    params: MriNormalizeParameters,
+    params: MriNormalizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -424,7 +424,7 @@ function mri_normalize_cargs(
  * @returns Outputs object.
  */
 function mri_normalize_outputs(
-    params: MriNormalizeParameters,
+    params: MriNormalizeParamsDict,
     execution: Execution,
 ): MriNormalizeOutputs {
     const ret: MriNormalizeOutputs = {
@@ -451,7 +451,7 @@ function mri_normalize_outputs(
  * @returns NamedTuple of outputs (described in `MriNormalizeOutputs`).
  */
 function mri_normalize_execute(
-    params: MriNormalizeParameters,
+    params: MriNormalizeParamsDict,
     runner: Runner | null = null,
 ): MriNormalizeOutputs {
     runner = runner || getGlobalRunner();
@@ -556,6 +556,8 @@ function mri_normalize(
 export {
       MRI_NORMALIZE_METADATA,
       MriNormalizeOutputs,
+      MriNormalizeParamsDict,
+      MriNormalizeParamsDictTagged,
       mri_normalize,
       mri_normalize_execute,
       mri_normalize_params,

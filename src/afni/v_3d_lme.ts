@@ -11,7 +11,7 @@ const V_3D_LME_METADATA: Metadata = {
 };
 
 
-interface V3dLmeParameters {
+interface V3dLmeParamsDict {
     "@type"?: "afni/3dLME";
     "PREFIX": string;
     "MODEL": string;
@@ -44,11 +44,11 @@ interface V3dLmeParameters {
     "SHOW_OPTIONS_FLAG": boolean;
     "SS_TYPE"?: number | null | undefined;
 }
-type V3dLmeParametersTagged = Required<Pick<V3dLmeParameters, '@type'>> & V3dLmeParameters;
+type V3dLmeParamsDictTagged = Required<Pick<V3dLmeParamsDict, '@type'>> & V3dLmeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLmeParameters(...)`.
+ * Output object returned when calling `V3dLmeParamsDict(...)`.
  *
  * @interface
  */
@@ -131,7 +131,7 @@ function v_3d_lme_params(
     rio_flag: boolean = false,
     show_options_flag: boolean = false,
     ss_type: number | null = null,
-): V3dLmeParametersTagged {
+): V3dLmeParamsDictTagged {
     const params = {
         "@type": "afni/3dLME" as const,
         "PREFIX": prefix,
@@ -214,7 +214,7 @@ function v_3d_lme_params(
  * @returns Command-line arguments.
  */
 function v_3d_lme_cargs(
-    params: V3dLmeParameters,
+    params: V3dLmeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -379,7 +379,7 @@ function v_3d_lme_cargs(
  * @returns Outputs object.
  */
 function v_3d_lme_outputs(
-    params: V3dLmeParameters,
+    params: V3dLmeParamsDict,
     execution: Execution,
 ): V3dLmeOutputs {
     const ret: V3dLmeOutputs = {
@@ -405,7 +405,7 @@ function v_3d_lme_outputs(
  * @returns NamedTuple of outputs (described in `V3dLmeOutputs`).
  */
 function v_3d_lme_execute(
-    params: V3dLmeParameters,
+    params: V3dLmeParamsDict,
     runner: Runner | null = null,
 ): V3dLmeOutputs {
     runner = runner || getGlobalRunner();
@@ -501,6 +501,8 @@ function v_3d_lme(
 
 export {
       V3dLmeOutputs,
+      V3dLmeParamsDict,
+      V3dLmeParamsDictTagged,
       V_3D_LME_METADATA,
       v_3d_lme,
       v_3d_lme_execute,

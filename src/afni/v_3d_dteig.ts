@@ -11,7 +11,7 @@ const V_3D_DTEIG_METADATA: Metadata = {
 };
 
 
-interface V3dDteigParameters {
+interface V3dDteigParamsDict {
     "@type"?: "afni/3dDTeig";
     "input_dataset": string;
     "prefix"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface V3dDteigParameters {
     "sep_dsets": boolean;
     "uddata": boolean;
 }
-type V3dDteigParametersTagged = Required<Pick<V3dDteigParameters, '@type'>> & V3dDteigParameters;
+type V3dDteigParamsDictTagged = Required<Pick<V3dDteigParamsDict, '@type'>> & V3dDteigParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDteigParameters(...)`.
+ * Output object returned when calling `V3dDteigParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_dteig_params(
     datum: "byte" | "short" | "float" | null = null,
     sep_dsets: boolean = false,
     uddata: boolean = false,
-): V3dDteigParametersTagged {
+): V3dDteigParamsDictTagged {
     const params = {
         "@type": "afni/3dDTeig" as const,
         "input_dataset": input_dataset,
@@ -98,7 +98,7 @@ function v_3d_dteig_params(
  * @returns Command-line arguments.
  */
 function v_3d_dteig_cargs(
-    params: V3dDteigParameters,
+    params: V3dDteigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function v_3d_dteig_cargs(
  * @returns Outputs object.
  */
 function v_3d_dteig_outputs(
-    params: V3dDteigParameters,
+    params: V3dDteigParamsDict,
     execution: Execution,
 ): V3dDteigOutputs {
     const ret: V3dDteigOutputs = {
@@ -165,7 +165,7 @@ function v_3d_dteig_outputs(
  * @returns NamedTuple of outputs (described in `V3dDteigOutputs`).
  */
 function v_3d_dteig_execute(
-    params: V3dDteigParameters,
+    params: V3dDteigParamsDict,
     runner: Runner | null = null,
 ): V3dDteigOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function v_3d_dteig(
 
 export {
       V3dDteigOutputs,
+      V3dDteigParamsDict,
+      V3dDteigParamsDictTagged,
       V_3D_DTEIG_METADATA,
       v_3d_dteig,
       v_3d_dteig_execute,

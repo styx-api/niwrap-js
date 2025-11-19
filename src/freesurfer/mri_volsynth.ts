@@ -11,7 +11,7 @@ const MRI_VOLSYNTH_METADATA: Metadata = {
 };
 
 
-interface MriVolsynthParameters {
+interface MriVolsynthParamsDict {
     "@type"?: "freesurfer/mri_volsynth";
     "output_volid": string;
     "template"?: string | null | undefined;
@@ -57,11 +57,11 @@ interface MriVolsynthParameters {
     "dim_surf_flag": boolean;
     "ctab"?: InputPathType | null | undefined;
 }
-type MriVolsynthParametersTagged = Required<Pick<MriVolsynthParameters, '@type'>> & MriVolsynthParameters;
+type MriVolsynthParamsDictTagged = Required<Pick<MriVolsynthParamsDict, '@type'>> & MriVolsynthParamsDict;
 
 
 /**
- * Output object returned when calling `MriVolsynthParameters(...)`.
+ * Output object returned when calling `MriVolsynthParamsDict(...)`.
  *
  * @interface
  */
@@ -166,7 +166,7 @@ function mri_volsynth_params(
     sum2: InputPathType | null = null,
     dim_surf_flag: boolean = false,
     ctab: InputPathType | null = null,
-): MriVolsynthParametersTagged {
+): MriVolsynthParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_volsynth" as const,
         "output_volid": output_volid,
@@ -300,7 +300,7 @@ function mri_volsynth_params(
  * @returns Command-line arguments.
  */
 function mri_volsynth_cargs(
-    params: MriVolsynthParameters,
+    params: MriVolsynthParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -559,7 +559,7 @@ function mri_volsynth_cargs(
  * @returns Outputs object.
  */
 function mri_volsynth_outputs(
-    params: MriVolsynthParameters,
+    params: MriVolsynthParamsDict,
     execution: Execution,
 ): MriVolsynthOutputs {
     const ret: MriVolsynthOutputs = {
@@ -584,7 +584,7 @@ function mri_volsynth_outputs(
  * @returns NamedTuple of outputs (described in `MriVolsynthOutputs`).
  */
 function mri_volsynth_execute(
-    params: MriVolsynthParameters,
+    params: MriVolsynthParamsDict,
     runner: Runner | null = null,
 ): MriVolsynthOutputs {
     runner = runner || getGlobalRunner();
@@ -707,6 +707,8 @@ function mri_volsynth(
 export {
       MRI_VOLSYNTH_METADATA,
       MriVolsynthOutputs,
+      MriVolsynthParamsDict,
+      MriVolsynthParamsDictTagged,
       mri_volsynth,
       mri_volsynth_execute,
       mri_volsynth_params,

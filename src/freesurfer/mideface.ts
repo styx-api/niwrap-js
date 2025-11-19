@@ -11,7 +11,7 @@ const MIDEFACE_METADATA: Metadata = {
 };
 
 
-interface MidefaceParameters {
+interface MidefaceParamsDict {
     "@type"?: "freesurfer/mideface";
     "input_volume": InputPathType;
     "output_volume": string;
@@ -44,11 +44,11 @@ interface MidefaceParameters {
     "check_volume"?: InputPathType | null | undefined;
     "check_output_file"?: InputPathType | null | undefined;
 }
-type MidefaceParametersTagged = Required<Pick<MidefaceParameters, '@type'>> & MidefaceParameters;
+type MidefaceParamsDictTagged = Required<Pick<MidefaceParamsDict, '@type'>> & MidefaceParamsDict;
 
 
 /**
- * Output object returned when calling `MidefaceParameters(...)`.
+ * Output object returned when calling `MidefaceParamsDict(...)`.
  *
  * @interface
  */
@@ -135,7 +135,7 @@ function mideface_params(
     apply_volume: string | null = null,
     check_volume: InputPathType | null = null,
     check_output_file: InputPathType | null = null,
-): MidefaceParametersTagged {
+): MidefaceParamsDictTagged {
     const params = {
         "@type": "freesurfer/mideface" as const,
         "input_volume": input_volume,
@@ -220,7 +220,7 @@ function mideface_params(
  * @returns Command-line arguments.
  */
 function mideface_cargs(
-    params: MidefaceParameters,
+    params: MidefaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -387,7 +387,7 @@ function mideface_cargs(
  * @returns Outputs object.
  */
 function mideface_outputs(
-    params: MidefaceParameters,
+    params: MidefaceParamsDict,
     execution: Execution,
 ): MidefaceOutputs {
     const ret: MidefaceOutputs = {
@@ -414,7 +414,7 @@ function mideface_outputs(
  * @returns NamedTuple of outputs (described in `MidefaceOutputs`).
  */
 function mideface_execute(
-    params: MidefaceParameters,
+    params: MidefaceParamsDict,
     runner: Runner | null = null,
 ): MidefaceOutputs {
     runner = runner || getGlobalRunner();
@@ -511,6 +511,8 @@ function mideface(
 export {
       MIDEFACE_METADATA,
       MidefaceOutputs,
+      MidefaceParamsDict,
+      MidefaceParamsDictTagged,
       mideface,
       mideface_execute,
       mideface_params,

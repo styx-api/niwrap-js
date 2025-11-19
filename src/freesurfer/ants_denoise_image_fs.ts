@@ -11,17 +11,17 @@ const ANTS_DENOISE_IMAGE_FS_METADATA: Metadata = {
 };
 
 
-interface AntsDenoiseImageFsParameters {
+interface AntsDenoiseImageFsParamsDict {
     "@type"?: "freesurfer/AntsDenoiseImageFs";
     "input_image": InputPathType;
     "output_image": string;
     "rician_flag": boolean;
 }
-type AntsDenoiseImageFsParametersTagged = Required<Pick<AntsDenoiseImageFsParameters, '@type'>> & AntsDenoiseImageFsParameters;
+type AntsDenoiseImageFsParamsDictTagged = Required<Pick<AntsDenoiseImageFsParamsDict, '@type'>> & AntsDenoiseImageFsParamsDict;
 
 
 /**
- * Output object returned when calling `AntsDenoiseImageFsParameters(...)`.
+ * Output object returned when calling `AntsDenoiseImageFsParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function ants_denoise_image_fs_params(
     input_image: InputPathType,
     output_image: string = "output.nii",
     rician_flag: boolean = false,
-): AntsDenoiseImageFsParametersTagged {
+): AntsDenoiseImageFsParamsDictTagged {
     const params = {
         "@type": "freesurfer/AntsDenoiseImageFs" as const,
         "input_image": input_image,
@@ -70,7 +70,7 @@ function ants_denoise_image_fs_params(
  * @returns Command-line arguments.
  */
 function ants_denoise_image_fs_cargs(
-    params: AntsDenoiseImageFsParameters,
+    params: AntsDenoiseImageFsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function ants_denoise_image_fs_cargs(
  * @returns Outputs object.
  */
 function ants_denoise_image_fs_outputs(
-    params: AntsDenoiseImageFsParameters,
+    params: AntsDenoiseImageFsParamsDict,
     execution: Execution,
 ): AntsDenoiseImageFsOutputs {
     const ret: AntsDenoiseImageFsOutputs = {
@@ -125,7 +125,7 @@ function ants_denoise_image_fs_outputs(
  * @returns NamedTuple of outputs (described in `AntsDenoiseImageFsOutputs`).
  */
 function ants_denoise_image_fs_execute(
-    params: AntsDenoiseImageFsParameters,
+    params: AntsDenoiseImageFsParamsDict,
     runner: Runner | null = null,
 ): AntsDenoiseImageFsOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function ants_denoise_image_fs(
 export {
       ANTS_DENOISE_IMAGE_FS_METADATA,
       AntsDenoiseImageFsOutputs,
+      AntsDenoiseImageFsParamsDict,
+      AntsDenoiseImageFsParamsDictTagged,
       ants_denoise_image_fs,
       ants_denoise_image_fs_execute,
       ants_denoise_image_fs_params,

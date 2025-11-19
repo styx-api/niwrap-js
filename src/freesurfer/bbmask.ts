@@ -11,7 +11,7 @@ const BBMASK_METADATA: Metadata = {
 };
 
 
-interface BbmaskParameters {
+interface BbmaskParamsDict {
     "@type"?: "freesurfer/bbmask";
     "mask": Array<InputPathType>;
     "src_volumes"?: Array<InputPathType> | null | undefined;
@@ -20,11 +20,11 @@ interface BbmaskParameters {
     "regheader"?: InputPathType | null | undefined;
     "sub2src"?: InputPathType | null | undefined;
 }
-type BbmaskParametersTagged = Required<Pick<BbmaskParameters, '@type'>> & BbmaskParameters;
+type BbmaskParamsDictTagged = Required<Pick<BbmaskParamsDict, '@type'>> & BbmaskParamsDict;
 
 
 /**
- * Output object returned when calling `BbmaskParameters(...)`.
+ * Output object returned when calling `BbmaskParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function bbmask_params(
     registration: Array<InputPathType> | null = null,
     regheader: InputPathType | null = null,
     sub2src: InputPathType | null = null,
-): BbmaskParametersTagged {
+): BbmaskParamsDictTagged {
     const params = {
         "@type": "freesurfer/bbmask" as const,
         "mask": mask,
@@ -108,7 +108,7 @@ function bbmask_params(
  * @returns Command-line arguments.
  */
 function bbmask_cargs(
-    params: BbmaskParameters,
+    params: BbmaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,7 +160,7 @@ function bbmask_cargs(
  * @returns Outputs object.
  */
 function bbmask_outputs(
-    params: BbmaskParameters,
+    params: BbmaskParamsDict,
     execution: Execution,
 ): BbmaskOutputs {
     const ret: BbmaskOutputs = {
@@ -190,7 +190,7 @@ function bbmask_outputs(
  * @returns NamedTuple of outputs (described in `BbmaskOutputs`).
  */
 function bbmask_execute(
-    params: BbmaskParameters,
+    params: BbmaskParamsDict,
     runner: Runner | null = null,
 ): BbmaskOutputs {
     runner = runner || getGlobalRunner();
@@ -239,6 +239,8 @@ function bbmask(
 export {
       BBMASK_METADATA,
       BbmaskOutputs,
+      BbmaskParamsDict,
+      BbmaskParamsDictTagged,
       bbmask,
       bbmask_execute,
       bbmask_params,

@@ -11,16 +11,16 @@ const MRI_TOPOLOGYCORRECTION_METADATA: Metadata = {
 };
 
 
-interface MriTopologycorrectionParameters {
+interface MriTopologycorrectionParamsDict {
     "@type"?: "freesurfer/mri_topologycorrection";
     "input_orig_file": InputPathType;
     "input_segmented_file": InputPathType;
 }
-type MriTopologycorrectionParametersTagged = Required<Pick<MriTopologycorrectionParameters, '@type'>> & MriTopologycorrectionParameters;
+type MriTopologycorrectionParamsDictTagged = Required<Pick<MriTopologycorrectionParamsDict, '@type'>> & MriTopologycorrectionParamsDict;
 
 
 /**
- * Output object returned when calling `MriTopologycorrectionParameters(...)`.
+ * Output object returned when calling `MriTopologycorrectionParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriTopologycorrectionOutputs {
 function mri_topologycorrection_params(
     input_orig_file: InputPathType,
     input_segmented_file: InputPathType,
-): MriTopologycorrectionParametersTagged {
+): MriTopologycorrectionParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_topologycorrection" as const,
         "input_orig_file": input_orig_file,
@@ -66,7 +66,7 @@ function mri_topologycorrection_params(
  * @returns Command-line arguments.
  */
 function mri_topologycorrection_cargs(
-    params: MriTopologycorrectionParameters,
+    params: MriTopologycorrectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_topologycorrection_cargs(
  * @returns Outputs object.
  */
 function mri_topologycorrection_outputs(
-    params: MriTopologycorrectionParameters,
+    params: MriTopologycorrectionParamsDict,
     execution: Execution,
 ): MriTopologycorrectionOutputs {
     const ret: MriTopologycorrectionOutputs = {
@@ -112,7 +112,7 @@ function mri_topologycorrection_outputs(
  * @returns NamedTuple of outputs (described in `MriTopologycorrectionOutputs`).
  */
 function mri_topologycorrection_execute(
-    params: MriTopologycorrectionParameters,
+    params: MriTopologycorrectionParamsDict,
     runner: Runner | null = null,
 ): MriTopologycorrectionOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_topologycorrection(
 export {
       MRI_TOPOLOGYCORRECTION_METADATA,
       MriTopologycorrectionOutputs,
+      MriTopologycorrectionParamsDict,
+      MriTopologycorrectionParamsDictTagged,
       mri_topologycorrection,
       mri_topologycorrection_execute,
       mri_topologycorrection_params,

@@ -11,7 +11,7 @@ const CREATE_WARPED_GRID_IMAGE_METADATA: Metadata = {
 };
 
 
-interface CreateWarpedGridImageParameters {
+interface CreateWarpedGridImageParamsDict {
     "@type"?: "ants/CreateWarpedGridImage";
     "image_dimension": number;
     "deformation_field": InputPathType;
@@ -20,11 +20,11 @@ interface CreateWarpedGridImageParameters {
     "grid_spacing"?: string | null | undefined;
     "grid_sigma"?: string | null | undefined;
 }
-type CreateWarpedGridImageParametersTagged = Required<Pick<CreateWarpedGridImageParameters, '@type'>> & CreateWarpedGridImageParameters;
+type CreateWarpedGridImageParamsDictTagged = Required<Pick<CreateWarpedGridImageParamsDict, '@type'>> & CreateWarpedGridImageParamsDict;
 
 
 /**
- * Output object returned when calling `CreateWarpedGridImageParameters(...)`.
+ * Output object returned when calling `CreateWarpedGridImageParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function create_warped_grid_image_params(
     directions: string | null = null,
     grid_spacing: string | null = null,
     grid_sigma: string | null = null,
-): CreateWarpedGridImageParametersTagged {
+): CreateWarpedGridImageParamsDictTagged {
     const params = {
         "@type": "ants/CreateWarpedGridImage" as const,
         "image_dimension": image_dimension,
@@ -88,7 +88,7 @@ function create_warped_grid_image_params(
  * @returns Command-line arguments.
  */
 function create_warped_grid_image_cargs(
-    params: CreateWarpedGridImageParameters,
+    params: CreateWarpedGridImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function create_warped_grid_image_cargs(
  * @returns Outputs object.
  */
 function create_warped_grid_image_outputs(
-    params: CreateWarpedGridImageParameters,
+    params: CreateWarpedGridImageParamsDict,
     execution: Execution,
 ): CreateWarpedGridImageOutputs {
     const ret: CreateWarpedGridImageOutputs = {
@@ -144,7 +144,7 @@ function create_warped_grid_image_outputs(
  * @returns NamedTuple of outputs (described in `CreateWarpedGridImageOutputs`).
  */
 function create_warped_grid_image_execute(
-    params: CreateWarpedGridImageParameters,
+    params: CreateWarpedGridImageParamsDict,
     runner: Runner | null = null,
 ): CreateWarpedGridImageOutputs {
     runner = runner || getGlobalRunner();
@@ -193,6 +193,8 @@ function create_warped_grid_image(
 export {
       CREATE_WARPED_GRID_IMAGE_METADATA,
       CreateWarpedGridImageOutputs,
+      CreateWarpedGridImageParamsDict,
+      CreateWarpedGridImageParamsDictTagged,
       create_warped_grid_image,
       create_warped_grid_image_execute,
       create_warped_grid_image_params,

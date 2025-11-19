@@ -11,7 +11,7 @@ const EASYTHRESH_METADATA: Metadata = {
 };
 
 
-interface EasythreshParameters {
+interface EasythreshParamsDict {
     "@type"?: "fsl/easythresh";
     "raw_zstat_input": InputPathType;
     "brain_mask_input": InputPathType;
@@ -21,11 +21,11 @@ interface EasythreshParameters {
     "output_root": string;
     "mm_flag": boolean;
 }
-type EasythreshParametersTagged = Required<Pick<EasythreshParameters, '@type'>> & EasythreshParameters;
+type EasythreshParamsDictTagged = Required<Pick<EasythreshParamsDict, '@type'>> & EasythreshParamsDict;
 
 
 /**
- * Output object returned when calling `EasythreshParameters(...)`.
+ * Output object returned when calling `EasythreshParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function easythresh_params(
     background_image_input: InputPathType,
     output_root: string,
     mm_flag: boolean = false,
-): EasythreshParametersTagged {
+): EasythreshParamsDictTagged {
     const params = {
         "@type": "fsl/easythresh" as const,
         "raw_zstat_input": raw_zstat_input,
@@ -86,7 +86,7 @@ function easythresh_params(
  * @returns Command-line arguments.
  */
 function easythresh_cargs(
-    params: EasythreshParameters,
+    params: EasythreshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function easythresh_cargs(
  * @returns Outputs object.
  */
 function easythresh_outputs(
-    params: EasythreshParameters,
+    params: EasythreshParamsDict,
     execution: Execution,
 ): EasythreshOutputs {
     const ret: EasythreshOutputs = {
@@ -139,7 +139,7 @@ function easythresh_outputs(
  * @returns NamedTuple of outputs (described in `EasythreshOutputs`).
  */
 function easythresh_execute(
-    params: EasythreshParameters,
+    params: EasythreshParamsDict,
     runner: Runner | null = null,
 ): EasythreshOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function easythresh(
 export {
       EASYTHRESH_METADATA,
       EasythreshOutputs,
+      EasythreshParamsDict,
+      EasythreshParamsDictTagged,
       easythresh,
       easythresh_execute,
       easythresh_params,

@@ -10,17 +10,17 @@ const SURFACE_WEDGE_VOLUME_METADATA: Metadata = {
 };
 
 
-interface SurfaceWedgeVolumeParameters {
+interface SurfaceWedgeVolumeParamsDict {
     "@type"?: "workbench/surface-wedge-volume";
     "metric": string;
     "inner-surface": InputPathType;
     "outer-surface": InputPathType;
 }
-type SurfaceWedgeVolumeParametersTagged = Required<Pick<SurfaceWedgeVolumeParameters, '@type'>> & SurfaceWedgeVolumeParameters;
+type SurfaceWedgeVolumeParamsDictTagged = Required<Pick<SurfaceWedgeVolumeParamsDict, '@type'>> & SurfaceWedgeVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceWedgeVolumeParameters(...)`.
+ * Output object returned when calling `SurfaceWedgeVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function surface_wedge_volume_params(
     metric: string,
     inner_surface: InputPathType,
     outer_surface: InputPathType,
-): SurfaceWedgeVolumeParametersTagged {
+): SurfaceWedgeVolumeParamsDictTagged {
     const params = {
         "@type": "workbench/surface-wedge-volume" as const,
         "metric": metric,
@@ -69,7 +69,7 @@ function surface_wedge_volume_params(
  * @returns Command-line arguments.
  */
 function surface_wedge_volume_cargs(
-    params: SurfaceWedgeVolumeParameters,
+    params: SurfaceWedgeVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function surface_wedge_volume_cargs(
  * @returns Outputs object.
  */
 function surface_wedge_volume_outputs(
-    params: SurfaceWedgeVolumeParameters,
+    params: SurfaceWedgeVolumeParamsDict,
     execution: Execution,
 ): SurfaceWedgeVolumeOutputs {
     const ret: SurfaceWedgeVolumeOutputs = {
@@ -115,7 +115,7 @@ function surface_wedge_volume_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceWedgeVolumeOutputs`).
  */
 function surface_wedge_volume_execute(
-    params: SurfaceWedgeVolumeParameters,
+    params: SurfaceWedgeVolumeParamsDict,
     runner: Runner | null = null,
 ): SurfaceWedgeVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function surface_wedge_volume(
 export {
       SURFACE_WEDGE_VOLUME_METADATA,
       SurfaceWedgeVolumeOutputs,
+      SurfaceWedgeVolumeParamsDict,
+      SurfaceWedgeVolumeParamsDictTagged,
       surface_wedge_volume,
       surface_wedge_volume_execute,
       surface_wedge_volume_params,

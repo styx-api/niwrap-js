@@ -10,43 +10,43 @@ const CIFTI_ERODE_METADATA: Metadata = {
 };
 
 
-interface CiftiErodeLeftSurfaceParameters {
+interface CiftiErodeLeftSurfaceParamsDict {
     "@type"?: "left-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiErodeLeftSurfaceParametersTagged = Required<Pick<CiftiErodeLeftSurfaceParameters, '@type'>> & CiftiErodeLeftSurfaceParameters;
+type CiftiErodeLeftSurfaceParamsDictTagged = Required<Pick<CiftiErodeLeftSurfaceParamsDict, '@type'>> & CiftiErodeLeftSurfaceParamsDict;
 
 
-interface CiftiErodeRightSurfaceParameters {
+interface CiftiErodeRightSurfaceParamsDict {
     "@type"?: "right-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiErodeRightSurfaceParametersTagged = Required<Pick<CiftiErodeRightSurfaceParameters, '@type'>> & CiftiErodeRightSurfaceParameters;
+type CiftiErodeRightSurfaceParamsDictTagged = Required<Pick<CiftiErodeRightSurfaceParamsDict, '@type'>> & CiftiErodeRightSurfaceParamsDict;
 
 
-interface CiftiErodeCerebellumSurfaceParameters {
+interface CiftiErodeCerebellumSurfaceParamsDict {
     "@type"?: "cerebellum-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiErodeCerebellumSurfaceParametersTagged = Required<Pick<CiftiErodeCerebellumSurfaceParameters, '@type'>> & CiftiErodeCerebellumSurfaceParameters;
+type CiftiErodeCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiErodeCerebellumSurfaceParamsDict, '@type'>> & CiftiErodeCerebellumSurfaceParamsDict;
 
 
-interface CiftiErodeParameters {
+interface CiftiErodeParamsDict {
     "@type"?: "workbench/cifti-erode";
     "cifti-out": string;
-    "left-surface"?: CiftiErodeLeftSurfaceParameters | null | undefined;
-    "right-surface"?: CiftiErodeRightSurfaceParameters | null | undefined;
-    "cerebellum-surface"?: CiftiErodeCerebellumSurfaceParameters | null | undefined;
+    "left-surface"?: CiftiErodeLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiErodeRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiErodeCerebellumSurfaceParamsDict | null | undefined;
     "merged-volume": boolean;
     "cifti-in": InputPathType;
     "direction": string;
     "surface-distance": number;
     "volume-distance": number;
 }
-type CiftiErodeParametersTagged = Required<Pick<CiftiErodeParameters, '@type'>> & CiftiErodeParameters;
+type CiftiErodeParamsDictTagged = Required<Pick<CiftiErodeParamsDict, '@type'>> & CiftiErodeParamsDict;
 
 
 /**
@@ -59,10 +59,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_erode_left_surface_params(
+function cifti_erode_left_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiErodeLeftSurfaceParametersTagged {
+): CiftiErodeLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
         "surface": surface,
@@ -83,7 +83,7 @@ function cifti_erode_left_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_erode_left_surface_cargs(
-    params: CiftiErodeLeftSurfaceParameters,
+    params: CiftiErodeLeftSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,10 +109,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_erode_right_surface_params(
+function cifti_erode_right_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiErodeRightSurfaceParametersTagged {
+): CiftiErodeRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
         "surface": surface,
@@ -133,7 +133,7 @@ function cifti_erode_right_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_erode_right_surface_cargs(
-    params: CiftiErodeRightSurfaceParameters,
+    params: CiftiErodeRightSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,10 +159,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_erode_cerebellum_surface_params(
+function cifti_erode_cerebellum_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiErodeCerebellumSurfaceParametersTagged {
+): CiftiErodeCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
         "surface": surface,
@@ -183,7 +183,7 @@ function cifti_erode_cerebellum_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_erode_cerebellum_surface_cargs(
-    params: CiftiErodeCerebellumSurfaceParameters,
+    params: CiftiErodeCerebellumSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function cifti_erode_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `CiftiErodeParameters(...)`.
+ * Output object returned when calling `CiftiErodeParamsDict(...)`.
  *
  * @interface
  */
@@ -237,11 +237,11 @@ function cifti_erode_params(
     direction: string,
     surface_distance: number,
     volume_distance: number,
-    left_surface: CiftiErodeLeftSurfaceParameters | null = null,
-    right_surface: CiftiErodeRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiErodeCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiErodeLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiErodeRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiErodeCerebellumSurfaceParamsDict | null = null,
     merged_volume: boolean = false,
-): CiftiErodeParametersTagged {
+): CiftiErodeParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-erode" as const,
         "cifti-out": cifti_out,
@@ -273,7 +273,7 @@ function cifti_erode_params(
  * @returns Command-line arguments.
  */
 function cifti_erode_cargs(
-    params: CiftiErodeParameters,
+    params: CiftiErodeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -305,7 +305,7 @@ function cifti_erode_cargs(
  * @returns Outputs object.
  */
 function cifti_erode_outputs(
-    params: CiftiErodeParameters,
+    params: CiftiErodeParamsDict,
     execution: Execution,
 ): CiftiErodeOutputs {
     const ret: CiftiErodeOutputs = {
@@ -329,7 +329,7 @@ function cifti_erode_outputs(
  * @returns NamedTuple of outputs (described in `CiftiErodeOutputs`).
  */
 function cifti_erode_execute(
-    params: CiftiErodeParameters,
+    params: CiftiErodeParamsDict,
     runner: Runner | null = null,
 ): CiftiErodeOutputs {
     runner = runner || getGlobalRunner();
@@ -368,9 +368,9 @@ function cifti_erode(
     direction: string,
     surface_distance: number,
     volume_distance: number,
-    left_surface: CiftiErodeLeftSurfaceParameters | null = null,
-    right_surface: CiftiErodeRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiErodeCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiErodeLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiErodeRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiErodeCerebellumSurfaceParamsDict | null = null,
     merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiErodeOutputs {
@@ -381,11 +381,19 @@ function cifti_erode(
 
 export {
       CIFTI_ERODE_METADATA,
+      CiftiErodeCerebellumSurfaceParamsDict,
+      CiftiErodeCerebellumSurfaceParamsDictTagged,
+      CiftiErodeLeftSurfaceParamsDict,
+      CiftiErodeLeftSurfaceParamsDictTagged,
       CiftiErodeOutputs,
+      CiftiErodeParamsDict,
+      CiftiErodeParamsDictTagged,
+      CiftiErodeRightSurfaceParamsDict,
+      CiftiErodeRightSurfaceParamsDictTagged,
       cifti_erode,
-      cifti_erode_cerebellum_surface_params,
+      cifti_erode_cerebellum_surface,
       cifti_erode_execute,
-      cifti_erode_left_surface_params,
+      cifti_erode_left_surface,
       cifti_erode_params,
-      cifti_erode_right_surface_params,
+      cifti_erode_right_surface,
 };

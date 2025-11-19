@@ -11,7 +11,7 @@ const MRIS_VOLMASK_METADATA: Metadata = {
 };
 
 
-interface MrisVolmaskParameters {
+interface MrisVolmaskParamsDict {
     "@type"?: "freesurfer/mris_volmask";
     "cap_distance"?: number | null | undefined;
     "label_background"?: number | null | undefined;
@@ -32,11 +32,11 @@ interface MrisVolmaskParameters {
     "save_ribbon": boolean;
     "io": string;
 }
-type MrisVolmaskParametersTagged = Required<Pick<MrisVolmaskParameters, '@type'>> & MrisVolmaskParameters;
+type MrisVolmaskParamsDictTagged = Required<Pick<MrisVolmaskParamsDict, '@type'>> & MrisVolmaskParamsDict;
 
 
 /**
- * Output object returned when calling `MrisVolmaskParameters(...)`.
+ * Output object returned when calling `MrisVolmaskParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function mris_volmask_params(
     parallel: boolean = false,
     edit_aseg: boolean = false,
     save_ribbon: boolean = false,
-): MrisVolmaskParametersTagged {
+): MrisVolmaskParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_volmask" as const,
         "save_distance": save_distance,
@@ -148,7 +148,7 @@ function mris_volmask_params(
  * @returns Command-line arguments.
  */
 function mris_volmask_cargs(
-    params: MrisVolmaskParameters,
+    params: MrisVolmaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -251,7 +251,7 @@ function mris_volmask_cargs(
  * @returns Outputs object.
  */
 function mris_volmask_outputs(
-    params: MrisVolmaskParameters,
+    params: MrisVolmaskParamsDict,
     execution: Execution,
 ): MrisVolmaskOutputs {
     const ret: MrisVolmaskOutputs = {
@@ -276,7 +276,7 @@ function mris_volmask_outputs(
  * @returns NamedTuple of outputs (described in `MrisVolmaskOutputs`).
  */
 function mris_volmask_execute(
-    params: MrisVolmaskParameters,
+    params: MrisVolmaskParamsDict,
     runner: Runner | null = null,
 ): MrisVolmaskOutputs {
     runner = runner || getGlobalRunner();
@@ -349,6 +349,8 @@ function mris_volmask(
 export {
       MRIS_VOLMASK_METADATA,
       MrisVolmaskOutputs,
+      MrisVolmaskParamsDict,
+      MrisVolmaskParamsDictTagged,
       mris_volmask,
       mris_volmask_execute,
       mris_volmask_params,

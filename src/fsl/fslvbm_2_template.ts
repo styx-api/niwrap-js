@@ -11,7 +11,7 @@ const FSLVBM_2_TEMPLATE_METADATA: Metadata = {
 };
 
 
-interface Fslvbm2TemplateParameters {
+interface Fslvbm2TemplateParamsDict {
     "@type"?: "fsl/fslvbm_2_template";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
@@ -38,11 +38,11 @@ interface Fslvbm2TemplateParameters {
     "runtime_limit"?: number | null | undefined;
     "job_file"?: InputPathType | null | undefined;
 }
-type Fslvbm2TemplateParametersTagged = Required<Pick<Fslvbm2TemplateParameters, '@type'>> & Fslvbm2TemplateParameters;
+type Fslvbm2TemplateParamsDictTagged = Required<Pick<Fslvbm2TemplateParamsDict, '@type'>> & Fslvbm2TemplateParamsDict;
 
 
 /**
- * Output object returned when calling `Fslvbm2TemplateParameters(...)`.
+ * Output object returned when calling `Fslvbm2TemplateParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function fslvbm_2_template_params(
     project: string | null = null,
     runtime_limit: number | null = null,
     job_file: InputPathType | null = null,
-): Fslvbm2TemplateParametersTagged {
+): Fslvbm2TemplateParamsDictTagged {
     const params = {
         "@type": "fsl/fslvbm_2_template" as const,
     };
@@ -198,7 +198,7 @@ function fslvbm_2_template_params(
  * @returns Command-line arguments.
  */
 function fslvbm_2_template_cargs(
-    params: Fslvbm2TemplateParameters,
+    params: Fslvbm2TemplateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -360,7 +360,7 @@ function fslvbm_2_template_cargs(
  * @returns Outputs object.
  */
 function fslvbm_2_template_outputs(
-    params: Fslvbm2TemplateParameters,
+    params: Fslvbm2TemplateParamsDict,
     execution: Execution,
 ): Fslvbm2TemplateOutputs {
     const ret: Fslvbm2TemplateOutputs = {
@@ -385,7 +385,7 @@ function fslvbm_2_template_outputs(
  * @returns NamedTuple of outputs (described in `Fslvbm2TemplateOutputs`).
  */
 function fslvbm_2_template_execute(
-    params: Fslvbm2TemplateParameters,
+    params: Fslvbm2TemplateParamsDict,
     runner: Runner | null = null,
 ): Fslvbm2TemplateOutputs {
     runner = runner || getGlobalRunner();
@@ -470,6 +470,8 @@ function fslvbm_2_template(
 export {
       FSLVBM_2_TEMPLATE_METADATA,
       Fslvbm2TemplateOutputs,
+      Fslvbm2TemplateParamsDict,
+      Fslvbm2TemplateParamsDictTagged,
       fslvbm_2_template,
       fslvbm_2_template_execute,
       fslvbm_2_template_params,

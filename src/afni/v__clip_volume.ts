@@ -11,7 +11,7 @@ const V__CLIP_VOLUME_METADATA: Metadata = {
 };
 
 
-interface VClipVolumeParameters {
+interface VClipVolumeParamsDict {
     "@type"?: "afni/@clip_volume";
     "input_volume": InputPathType;
     "below_zmm"?: number | null | undefined;
@@ -32,11 +32,11 @@ interface VClipVolumeParameters {
     "output_prefix"?: string | null | undefined;
     "followers"?: Array<InputPathType> | null | undefined;
 }
-type VClipVolumeParametersTagged = Required<Pick<VClipVolumeParameters, '@type'>> & VClipVolumeParameters;
+type VClipVolumeParamsDictTagged = Required<Pick<VClipVolumeParamsDict, '@type'>> & VClipVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `VClipVolumeParameters(...)`.
+ * Output object returned when calling `VClipVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -99,7 +99,7 @@ function v__clip_volume_params(
     crop_npad: number | null = null,
     output_prefix: string | null = null,
     followers: Array<InputPathType> | null = null,
-): VClipVolumeParametersTagged {
+): VClipVolumeParamsDictTagged {
     const params = {
         "@type": "afni/@clip_volume" as const,
         "input_volume": input_volume,
@@ -156,7 +156,7 @@ function v__clip_volume_params(
  * @returns Command-line arguments.
  */
 function v__clip_volume_cargs(
-    params: VClipVolumeParameters,
+    params: VClipVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -259,7 +259,7 @@ function v__clip_volume_cargs(
  * @returns Outputs object.
  */
 function v__clip_volume_outputs(
-    params: VClipVolumeParameters,
+    params: VClipVolumeParamsDict,
     execution: Execution,
 ): VClipVolumeOutputs {
     const ret: VClipVolumeOutputs = {
@@ -286,7 +286,7 @@ function v__clip_volume_outputs(
  * @returns NamedTuple of outputs (described in `VClipVolumeOutputs`).
  */
 function v__clip_volume_execute(
-    params: VClipVolumeParameters,
+    params: VClipVolumeParamsDict,
     runner: Runner | null = null,
 ): VClipVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -358,6 +358,8 @@ function v__clip_volume(
 
 export {
       VClipVolumeOutputs,
+      VClipVolumeParamsDict,
+      VClipVolumeParamsDictTagged,
       V__CLIP_VOLUME_METADATA,
       v__clip_volume,
       v__clip_volume_execute,

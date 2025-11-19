@@ -11,7 +11,7 @@ const LONGMC_METADATA: Metadata = {
 };
 
 
-interface LongmcParameters {
+interface LongmcParamsDict {
     "@type"?: "freesurfer/longmc";
     "cross_tp_name": string;
     "base_name": string;
@@ -21,11 +21,11 @@ interface LongmcParameters {
     "subject_name"?: string | null | undefined;
     "no_force_update": boolean;
 }
-type LongmcParametersTagged = Required<Pick<LongmcParameters, '@type'>> & LongmcParameters;
+type LongmcParamsDictTagged = Required<Pick<LongmcParamsDict, '@type'>> & LongmcParamsDict;
 
 
 /**
- * Output object returned when calling `LongmcParameters(...)`.
+ * Output object returned when calling `LongmcParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function longmc_params(
     no_conform_to_hires: boolean = false,
     subject_name: string | null = null,
     no_force_update: boolean = false,
-): LongmcParametersTagged {
+): LongmcParamsDictTagged {
     const params = {
         "@type": "freesurfer/longmc" as const,
         "cross_tp_name": cross_tp_name,
@@ -84,7 +84,7 @@ function longmc_params(
  * @returns Command-line arguments.
  */
 function longmc_cargs(
-    params: LongmcParameters,
+    params: LongmcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function longmc_cargs(
  * @returns Outputs object.
  */
 function longmc_outputs(
-    params: LongmcParameters,
+    params: LongmcParamsDict,
     execution: Execution,
 ): LongmcOutputs {
     const ret: LongmcOutputs = {
@@ -151,7 +151,7 @@ function longmc_outputs(
  * @returns NamedTuple of outputs (described in `LongmcOutputs`).
  */
 function longmc_execute(
-    params: LongmcParameters,
+    params: LongmcParamsDict,
     runner: Runner | null = null,
 ): LongmcOutputs {
     runner = runner || getGlobalRunner();
@@ -202,6 +202,8 @@ function longmc(
 export {
       LONGMC_METADATA,
       LongmcOutputs,
+      LongmcParamsDict,
+      LongmcParamsDictTagged,
       longmc,
       longmc_execute,
       longmc_params,

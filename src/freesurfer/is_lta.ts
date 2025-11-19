@@ -11,16 +11,16 @@ const IS_LTA_METADATA: Metadata = {
 };
 
 
-interface IsLtaParameters {
+interface IsLtaParamsDict {
     "@type"?: "freesurfer/IsLTA";
     "candidate_file": InputPathType;
     "outfile": string;
 }
-type IsLtaParametersTagged = Required<Pick<IsLtaParameters, '@type'>> & IsLtaParameters;
+type IsLtaParamsDictTagged = Required<Pick<IsLtaParamsDict, '@type'>> & IsLtaParamsDict;
 
 
 /**
- * Output object returned when calling `IsLtaParameters(...)`.
+ * Output object returned when calling `IsLtaParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface IsLtaOutputs {
 function is_lta_params(
     candidate_file: InputPathType,
     outfile: string,
-): IsLtaParametersTagged {
+): IsLtaParamsDictTagged {
     const params = {
         "@type": "freesurfer/IsLTA" as const,
         "candidate_file": candidate_file,
@@ -66,7 +66,7 @@ function is_lta_params(
  * @returns Command-line arguments.
  */
 function is_lta_cargs(
-    params: IsLtaParameters,
+    params: IsLtaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function is_lta_cargs(
  * @returns Outputs object.
  */
 function is_lta_outputs(
-    params: IsLtaParameters,
+    params: IsLtaParamsDict,
     execution: Execution,
 ): IsLtaOutputs {
     const ret: IsLtaOutputs = {
@@ -118,7 +118,7 @@ function is_lta_outputs(
  * @returns NamedTuple of outputs (described in `IsLtaOutputs`).
  */
 function is_lta_execute(
-    params: IsLtaParameters,
+    params: IsLtaParamsDict,
     runner: Runner | null = null,
 ): IsLtaOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function is_lta(
 export {
       IS_LTA_METADATA,
       IsLtaOutputs,
+      IsLtaParamsDict,
+      IsLtaParamsDictTagged,
       is_lta,
       is_lta_execute,
       is_lta_params,

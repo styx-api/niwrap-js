@@ -11,7 +11,7 @@ const DCMDRLE_FS_METADATA: Metadata = {
 };
 
 
-interface DcmdrleFsParameters {
+interface DcmdrleFsParamsDict {
     "@type"?: "freesurfer/dcmdrle.fs";
     "input_file": InputPathType;
     "output_file": string;
@@ -46,11 +46,11 @@ interface DcmdrleFsParameters {
     "padding_off": boolean;
     "padding_create"?: string | null | undefined;
 }
-type DcmdrleFsParametersTagged = Required<Pick<DcmdrleFsParameters, '@type'>> & DcmdrleFsParameters;
+type DcmdrleFsParamsDictTagged = Required<Pick<DcmdrleFsParamsDict, '@type'>> & DcmdrleFsParamsDict;
 
 
 /**
- * Output object returned when calling `DcmdrleFsParameters(...)`.
+ * Output object returned when calling `DcmdrleFsParamsDict(...)`.
  *
  * @interface
  */
@@ -137,7 +137,7 @@ function dcmdrle_fs_params(
     padding_retain: boolean = false,
     padding_off: boolean = false,
     padding_create: string | null = null,
-): DcmdrleFsParametersTagged {
+): DcmdrleFsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dcmdrle.fs" as const,
         "input_file": input_file,
@@ -192,7 +192,7 @@ function dcmdrle_fs_params(
  * @returns Command-line arguments.
  */
 function dcmdrle_fs_cargs(
-    params: DcmdrleFsParameters,
+    params: DcmdrleFsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -311,7 +311,7 @@ function dcmdrle_fs_cargs(
  * @returns Outputs object.
  */
 function dcmdrle_fs_outputs(
-    params: DcmdrleFsParameters,
+    params: DcmdrleFsParamsDict,
     execution: Execution,
 ): DcmdrleFsOutputs {
     const ret: DcmdrleFsOutputs = {
@@ -337,7 +337,7 @@ function dcmdrle_fs_outputs(
  * @returns NamedTuple of outputs (described in `DcmdrleFsOutputs`).
  */
 function dcmdrle_fs_execute(
-    params: DcmdrleFsParameters,
+    params: DcmdrleFsParamsDict,
     runner: Runner | null = null,
 ): DcmdrleFsOutputs {
     runner = runner || getGlobalRunner();
@@ -438,6 +438,8 @@ function dcmdrle_fs(
 export {
       DCMDRLE_FS_METADATA,
       DcmdrleFsOutputs,
+      DcmdrleFsParamsDict,
+      DcmdrleFsParamsDictTagged,
       dcmdrle_fs,
       dcmdrle_fs_execute,
       dcmdrle_fs_params,

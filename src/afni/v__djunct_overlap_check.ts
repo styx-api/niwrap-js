@@ -11,7 +11,7 @@ const V__DJUNCT_OVERLAP_CHECK_METADATA: Metadata = {
 };
 
 
-interface VDjunctOverlapCheckParameters {
+interface VDjunctOverlapCheckParamsDict {
     "@type"?: "afni/@djunct_overlap_check";
     "ulay": InputPathType;
     "olay": InputPathType;
@@ -38,11 +38,11 @@ interface VDjunctOverlapCheckParameters {
     "no_sag": boolean;
     "no_clean": boolean;
 }
-type VDjunctOverlapCheckParametersTagged = Required<Pick<VDjunctOverlapCheckParameters, '@type'>> & VDjunctOverlapCheckParameters;
+type VDjunctOverlapCheckParamsDictTagged = Required<Pick<VDjunctOverlapCheckParamsDict, '@type'>> & VDjunctOverlapCheckParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunctOverlapCheckParameters(...)`.
+ * Output object returned when calling `VDjunctOverlapCheckParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function v__djunct_overlap_check_params(
     no_axi: boolean = false,
     no_sag: boolean = false,
     no_clean: boolean = false,
-): VDjunctOverlapCheckParametersTagged {
+): VDjunctOverlapCheckParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_overlap_check" as const,
         "ulay": ulay,
@@ -178,7 +178,7 @@ function v__djunct_overlap_check_params(
  * @returns Command-line arguments.
  */
 function v__djunct_overlap_check_cargs(
-    params: VDjunctOverlapCheckParameters,
+    params: VDjunctOverlapCheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -301,7 +301,7 @@ function v__djunct_overlap_check_cargs(
  * @returns Outputs object.
  */
 function v__djunct_overlap_check_outputs(
-    params: VDjunctOverlapCheckParameters,
+    params: VDjunctOverlapCheckParamsDict,
     execution: Execution,
 ): VDjunctOverlapCheckOutputs {
     const ret: VDjunctOverlapCheckOutputs = {
@@ -326,7 +326,7 @@ function v__djunct_overlap_check_outputs(
  * @returns NamedTuple of outputs (described in `VDjunctOverlapCheckOutputs`).
  */
 function v__djunct_overlap_check_execute(
-    params: VDjunctOverlapCheckParameters,
+    params: VDjunctOverlapCheckParamsDict,
     runner: Runner | null = null,
 ): VDjunctOverlapCheckOutputs {
     runner = runner || getGlobalRunner();
@@ -410,6 +410,8 @@ function v__djunct_overlap_check(
 
 export {
       VDjunctOverlapCheckOutputs,
+      VDjunctOverlapCheckParamsDict,
+      VDjunctOverlapCheckParamsDictTagged,
       V__DJUNCT_OVERLAP_CHECK_METADATA,
       v__djunct_overlap_check,
       v__djunct_overlap_check_execute,

@@ -11,7 +11,7 @@ const MRI_WATERSHED_METADATA: Metadata = {
 };
 
 
-interface MriWatershedParameters {
+interface MriWatershedParamsDict {
     "@type"?: "freesurfer/mri_watershed";
     "input_volume": InputPathType;
     "output_volume": string;
@@ -45,11 +45,11 @@ interface MriWatershedParameters {
     "xthresh"?: number | null | undefined;
     "mask_flag": boolean;
 }
-type MriWatershedParametersTagged = Required<Pick<MriWatershedParameters, '@type'>> & MriWatershedParameters;
+type MriWatershedParamsDictTagged = Required<Pick<MriWatershedParamsDict, '@type'>> & MriWatershedParamsDict;
 
 
 /**
- * Output object returned when calling `MriWatershedParameters(...)`.
+ * Output object returned when calling `MriWatershedParamsDict(...)`.
  *
  * @interface
  */
@@ -138,7 +138,7 @@ function mri_watershed_params(
     manual_params: Array<number> | null = null,
     xthresh: number | null = null,
     mask_flag: boolean = false,
-): MriWatershedParametersTagged {
+): MriWatershedParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_watershed" as const,
         "input_volume": input_volume,
@@ -212,7 +212,7 @@ function mri_watershed_params(
  * @returns Command-line arguments.
  */
 function mri_watershed_cargs(
-    params: MriWatershedParameters,
+    params: MriWatershedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -358,7 +358,7 @@ function mri_watershed_cargs(
  * @returns Outputs object.
  */
 function mri_watershed_outputs(
-    params: MriWatershedParameters,
+    params: MriWatershedParamsDict,
     execution: Execution,
 ): MriWatershedOutputs {
     const ret: MriWatershedOutputs = {
@@ -385,7 +385,7 @@ function mri_watershed_outputs(
  * @returns NamedTuple of outputs (described in `MriWatershedOutputs`).
  */
 function mri_watershed_execute(
-    params: MriWatershedParameters,
+    params: MriWatershedParamsDict,
     runner: Runner | null = null,
 ): MriWatershedOutputs {
     runner = runner || getGlobalRunner();
@@ -484,6 +484,8 @@ function mri_watershed(
 export {
       MRI_WATERSHED_METADATA,
       MriWatershedOutputs,
+      MriWatershedParamsDict,
+      MriWatershedParamsDictTagged,
       mri_watershed,
       mri_watershed_execute,
       mri_watershed_params,

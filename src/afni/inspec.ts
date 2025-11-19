@@ -11,7 +11,7 @@ const INSPEC_METADATA: Metadata = {
 };
 
 
-interface InspecParameters {
+interface InspecParamsDict {
     "@type"?: "afni/inspec";
     "specfile": InputPathType;
     "newspecname"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface InspecParameters {
     "state_rm"?: string | null | undefined;
     "help": boolean;
 }
-type InspecParametersTagged = Required<Pick<InspecParameters, '@type'>> & InspecParameters;
+type InspecParamsDictTagged = Required<Pick<InspecParamsDict, '@type'>> & InspecParamsDict;
 
 
 /**
- * Output object returned when calling `InspecParameters(...)`.
+ * Output object returned when calling `InspecParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function inspec_params(
     rightspec: InputPathType | null = null,
     state_rm: string | null = null,
     help: boolean = false,
-): InspecParametersTagged {
+): InspecParamsDictTagged {
     const params = {
         "@type": "afni/inspec" as const,
         "specfile": specfile,
@@ -92,7 +92,7 @@ function inspec_params(
  * @returns Command-line arguments.
  */
 function inspec_cargs(
-    params: InspecParameters,
+    params: InspecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function inspec_cargs(
  * @returns Outputs object.
  */
 function inspec_outputs(
-    params: InspecParameters,
+    params: InspecParamsDict,
     execution: Execution,
 ): InspecOutputs {
     const ret: InspecOutputs = {
@@ -172,7 +172,7 @@ function inspec_outputs(
  * @returns NamedTuple of outputs (described in `InspecOutputs`).
  */
 function inspec_execute(
-    params: InspecParameters,
+    params: InspecParamsDict,
     runner: Runner | null = null,
 ): InspecOutputs {
     runner = runner || getGlobalRunner();
@@ -223,6 +223,8 @@ function inspec(
 export {
       INSPEC_METADATA,
       InspecOutputs,
+      InspecParamsDict,
+      InspecParamsDictTagged,
       inspec,
       inspec_execute,
       inspec_params,

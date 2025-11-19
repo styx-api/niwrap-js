@@ -11,17 +11,17 @@ const MASKDYADS_METADATA: Metadata = {
 };
 
 
-interface MaskdyadsParameters {
+interface MaskdyadsParamsDict {
     "@type"?: "fsl/maskdyads";
     "dyads": InputPathType;
     "fsamples": InputPathType;
     "threshold"?: number | null | undefined;
 }
-type MaskdyadsParametersTagged = Required<Pick<MaskdyadsParameters, '@type'>> & MaskdyadsParameters;
+type MaskdyadsParamsDictTagged = Required<Pick<MaskdyadsParamsDict, '@type'>> & MaskdyadsParamsDict;
 
 
 /**
- * Output object returned when calling `MaskdyadsParameters(...)`.
+ * Output object returned when calling `MaskdyadsParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function maskdyads_params(
     dyads: InputPathType,
     fsamples: InputPathType,
     threshold: number | null = null,
-): MaskdyadsParametersTagged {
+): MaskdyadsParamsDictTagged {
     const params = {
         "@type": "fsl/maskdyads" as const,
         "dyads": dyads,
@@ -68,7 +68,7 @@ function maskdyads_params(
  * @returns Command-line arguments.
  */
 function maskdyads_cargs(
-    params: MaskdyadsParameters,
+    params: MaskdyadsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function maskdyads_cargs(
  * @returns Outputs object.
  */
 function maskdyads_outputs(
-    params: MaskdyadsParameters,
+    params: MaskdyadsParamsDict,
     execution: Execution,
 ): MaskdyadsOutputs {
     const ret: MaskdyadsOutputs = {
@@ -119,7 +119,7 @@ function maskdyads_outputs(
  * @returns NamedTuple of outputs (described in `MaskdyadsOutputs`).
  */
 function maskdyads_execute(
-    params: MaskdyadsParameters,
+    params: MaskdyadsParamsDict,
     runner: Runner | null = null,
 ): MaskdyadsOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function maskdyads(
 export {
       MASKDYADS_METADATA,
       MaskdyadsOutputs,
+      MaskdyadsParamsDict,
+      MaskdyadsParamsDictTagged,
       maskdyads,
       maskdyads_execute,
       maskdyads_params,

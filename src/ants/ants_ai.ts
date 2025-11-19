@@ -11,7 +11,7 @@ const ANTS_AI_METADATA: Metadata = {
 };
 
 
-interface AntsAiParameters {
+interface AntsAiParamsDict {
     "@type"?: "ants/antsAI";
     "dimensionality"?: 2 | 3 | null | undefined;
     "metric": "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]";
@@ -26,11 +26,11 @@ interface AntsAiParameters {
     "random_seed"?: number | null | undefined;
     "verbose"?: boolean | null | undefined;
 }
-type AntsAiParametersTagged = Required<Pick<AntsAiParameters, '@type'>> & AntsAiParameters;
+type AntsAiParamsDictTagged = Required<Pick<AntsAiParamsDict, '@type'>> & AntsAiParamsDict;
 
 
 /**
- * Output object returned when calling `AntsAiParameters(...)`.
+ * Output object returned when calling `AntsAiParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function ants_ai_params(
     masks: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null = null,
     random_seed: number | null = null,
     verbose: boolean | null = null,
-): AntsAiParametersTagged {
+): AntsAiParamsDictTagged {
     const params = {
         "@type": "ants/antsAI" as const,
         "metric": metric,
@@ -124,7 +124,7 @@ function ants_ai_params(
  * @returns Command-line arguments.
  */
 function ants_ai_cargs(
-    params: AntsAiParameters,
+    params: AntsAiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function ants_ai_cargs(
  * @returns Outputs object.
  */
 function ants_ai_outputs(
-    params: AntsAiParameters,
+    params: AntsAiParamsDict,
     execution: Execution,
 ): AntsAiOutputs {
     const ret: AntsAiOutputs = {
@@ -234,7 +234,7 @@ function ants_ai_outputs(
  * @returns NamedTuple of outputs (described in `AntsAiOutputs`).
  */
 function ants_ai_execute(
-    params: AntsAiParameters,
+    params: AntsAiParamsDict,
     runner: Runner | null = null,
 ): AntsAiOutputs {
     runner = runner || getGlobalRunner();
@@ -295,6 +295,8 @@ function ants_ai(
 export {
       ANTS_AI_METADATA,
       AntsAiOutputs,
+      AntsAiParamsDict,
+      AntsAiParamsDictTagged,
       ants_ai,
       ants_ai_execute,
       ants_ai_params,

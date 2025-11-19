@@ -11,18 +11,18 @@ const QUANTIFY_HASUBREGIONS_SH_METADATA: Metadata = {
 };
 
 
-interface QuantifyHasubregionsShParameters {
+interface QuantifyHasubregionsShParamsDict {
     "@type"?: "freesurfer/quantifyHAsubregions.sh";
     "prefix": string;
     "suffix": string;
     "output_file": string;
     "subjects_directory"?: string | null | undefined;
 }
-type QuantifyHasubregionsShParametersTagged = Required<Pick<QuantifyHasubregionsShParameters, '@type'>> & QuantifyHasubregionsShParameters;
+type QuantifyHasubregionsShParamsDictTagged = Required<Pick<QuantifyHasubregionsShParamsDict, '@type'>> & QuantifyHasubregionsShParamsDict;
 
 
 /**
- * Output object returned when calling `QuantifyHasubregionsShParameters(...)`.
+ * Output object returned when calling `QuantifyHasubregionsShParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function quantify_hasubregions_sh_params(
     suffix: string,
     output_file: string,
     subjects_directory: string | null = null,
-): QuantifyHasubregionsShParametersTagged {
+): QuantifyHasubregionsShParamsDictTagged {
     const params = {
         "@type": "freesurfer/quantifyHAsubregions.sh" as const,
         "prefix": prefix,
@@ -76,7 +76,7 @@ function quantify_hasubregions_sh_params(
  * @returns Command-line arguments.
  */
 function quantify_hasubregions_sh_cargs(
-    params: QuantifyHasubregionsShParameters,
+    params: QuantifyHasubregionsShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function quantify_hasubregions_sh_cargs(
  * @returns Outputs object.
  */
 function quantify_hasubregions_sh_outputs(
-    params: QuantifyHasubregionsShParameters,
+    params: QuantifyHasubregionsShParamsDict,
     execution: Execution,
 ): QuantifyHasubregionsShOutputs {
     const ret: QuantifyHasubregionsShOutputs = {
@@ -126,7 +126,7 @@ function quantify_hasubregions_sh_outputs(
  * @returns NamedTuple of outputs (described in `QuantifyHasubregionsShOutputs`).
  */
 function quantify_hasubregions_sh_execute(
-    params: QuantifyHasubregionsShParameters,
+    params: QuantifyHasubregionsShParamsDict,
     runner: Runner | null = null,
 ): QuantifyHasubregionsShOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function quantify_hasubregions_sh(
 export {
       QUANTIFY_HASUBREGIONS_SH_METADATA,
       QuantifyHasubregionsShOutputs,
+      QuantifyHasubregionsShParamsDict,
+      QuantifyHasubregionsShParamsDictTagged,
       quantify_hasubregions_sh,
       quantify_hasubregions_sh_execute,
       quantify_hasubregions_sh_params,

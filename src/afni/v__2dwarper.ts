@@ -11,15 +11,15 @@ const V__2DWARPER_METADATA: Metadata = {
 };
 
 
-interface V2dwarperParameters {
+interface V2dwarperParamsDict {
     "@type"?: "afni/@2dwarper";
     "input_dataset": InputPathType;
 }
-type V2dwarperParametersTagged = Required<Pick<V2dwarperParameters, '@type'>> & V2dwarperParameters;
+type V2dwarperParamsDictTagged = Required<Pick<V2dwarperParamsDict, '@type'>> & V2dwarperParamsDict;
 
 
 /**
- * Output object returned when calling `V2dwarperParameters(...)`.
+ * Output object returned when calling `V2dwarperParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface V2dwarperOutputs {
  */
 function v__2dwarper_params(
     input_dataset: InputPathType,
-): V2dwarperParametersTagged {
+): V2dwarperParamsDictTagged {
     const params = {
         "@type": "afni/@2dwarper" as const,
         "input_dataset": input_dataset,
@@ -62,7 +62,7 @@ function v__2dwarper_params(
  * @returns Command-line arguments.
  */
 function v__2dwarper_cargs(
-    params: V2dwarperParameters,
+    params: V2dwarperParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__2dwarper_cargs(
  * @returns Outputs object.
  */
 function v__2dwarper_outputs(
-    params: V2dwarperParameters,
+    params: V2dwarperParamsDict,
     execution: Execution,
 ): V2dwarperOutputs {
     const ret: V2dwarperOutputs = {
@@ -107,7 +107,7 @@ function v__2dwarper_outputs(
  * @returns NamedTuple of outputs (described in `V2dwarperOutputs`).
  */
 function v__2dwarper_execute(
-    params: V2dwarperParameters,
+    params: V2dwarperParamsDict,
     runner: Runner | null = null,
 ): V2dwarperOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__2dwarper(
 
 export {
       V2dwarperOutputs,
+      V2dwarperParamsDict,
+      V2dwarperParamsDictTagged,
       V__2DWARPER_METADATA,
       v__2dwarper,
       v__2dwarper_execute,

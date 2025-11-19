@@ -11,7 +11,7 @@ const MRIS_TRANSLATE_ANNOTATION_METADATA: Metadata = {
 };
 
 
-interface MrisTranslateAnnotationParameters {
+interface MrisTranslateAnnotationParamsDict {
     "@type"?: "freesurfer/mris_translate_annotation";
     "subject": string;
     "hemi": string;
@@ -19,11 +19,11 @@ interface MrisTranslateAnnotationParameters {
     "translation_file": InputPathType;
     "out_annot": string;
 }
-type MrisTranslateAnnotationParametersTagged = Required<Pick<MrisTranslateAnnotationParameters, '@type'>> & MrisTranslateAnnotationParameters;
+type MrisTranslateAnnotationParamsDictTagged = Required<Pick<MrisTranslateAnnotationParamsDict, '@type'>> & MrisTranslateAnnotationParamsDict;
 
 
 /**
- * Output object returned when calling `MrisTranslateAnnotationParameters(...)`.
+ * Output object returned when calling `MrisTranslateAnnotationParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mris_translate_annotation_params(
     in_annot: InputPathType,
     translation_file: InputPathType,
     out_annot: string,
-): MrisTranslateAnnotationParametersTagged {
+): MrisTranslateAnnotationParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_translate_annotation" as const,
         "subject": subject,
@@ -78,7 +78,7 @@ function mris_translate_annotation_params(
  * @returns Command-line arguments.
  */
 function mris_translate_annotation_cargs(
-    params: MrisTranslateAnnotationParameters,
+    params: MrisTranslateAnnotationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function mris_translate_annotation_cargs(
  * @returns Outputs object.
  */
 function mris_translate_annotation_outputs(
-    params: MrisTranslateAnnotationParameters,
+    params: MrisTranslateAnnotationParamsDict,
     execution: Execution,
 ): MrisTranslateAnnotationOutputs {
     const ret: MrisTranslateAnnotationOutputs = {
@@ -127,7 +127,7 @@ function mris_translate_annotation_outputs(
  * @returns NamedTuple of outputs (described in `MrisTranslateAnnotationOutputs`).
  */
 function mris_translate_annotation_execute(
-    params: MrisTranslateAnnotationParameters,
+    params: MrisTranslateAnnotationParamsDict,
     runner: Runner | null = null,
 ): MrisTranslateAnnotationOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mris_translate_annotation(
 export {
       MRIS_TRANSLATE_ANNOTATION_METADATA,
       MrisTranslateAnnotationOutputs,
+      MrisTranslateAnnotationParamsDict,
+      MrisTranslateAnnotationParamsDictTagged,
       mris_translate_annotation,
       mris_translate_annotation_execute,
       mris_translate_annotation_params,

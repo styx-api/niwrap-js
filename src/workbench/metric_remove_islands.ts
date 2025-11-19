@@ -10,18 +10,18 @@ const METRIC_REMOVE_ISLANDS_METADATA: Metadata = {
 };
 
 
-interface MetricRemoveIslandsParameters {
+interface MetricRemoveIslandsParamsDict {
     "@type"?: "workbench/metric-remove-islands";
     "metric-out": string;
     "area-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "metric-in": InputPathType;
 }
-type MetricRemoveIslandsParametersTagged = Required<Pick<MetricRemoveIslandsParameters, '@type'>> & MetricRemoveIslandsParameters;
+type MetricRemoveIslandsParamsDictTagged = Required<Pick<MetricRemoveIslandsParamsDict, '@type'>> & MetricRemoveIslandsParamsDict;
 
 
 /**
- * Output object returned when calling `MetricRemoveIslandsParameters(...)`.
+ * Output object returned when calling `MetricRemoveIslandsParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function metric_remove_islands_params(
     area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-): MetricRemoveIslandsParametersTagged {
+): MetricRemoveIslandsParamsDictTagged {
     const params = {
         "@type": "workbench/metric-remove-islands" as const,
         "metric-out": metric_out,
@@ -77,7 +77,7 @@ function metric_remove_islands_params(
  * @returns Command-line arguments.
  */
 function metric_remove_islands_cargs(
-    params: MetricRemoveIslandsParameters,
+    params: MetricRemoveIslandsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function metric_remove_islands_cargs(
  * @returns Outputs object.
  */
 function metric_remove_islands_outputs(
-    params: MetricRemoveIslandsParameters,
+    params: MetricRemoveIslandsParamsDict,
     execution: Execution,
 ): MetricRemoveIslandsOutputs {
     const ret: MetricRemoveIslandsOutputs = {
@@ -127,7 +127,7 @@ function metric_remove_islands_outputs(
  * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
  */
 function metric_remove_islands_execute(
-    params: MetricRemoveIslandsParameters,
+    params: MetricRemoveIslandsParamsDict,
     runner: Runner | null = null,
 ): MetricRemoveIslandsOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function metric_remove_islands(
 export {
       METRIC_REMOVE_ISLANDS_METADATA,
       MetricRemoveIslandsOutputs,
+      MetricRemoveIslandsParamsDict,
+      MetricRemoveIslandsParamsDictTagged,
       metric_remove_islands,
       metric_remove_islands_execute,
       metric_remove_islands_params,

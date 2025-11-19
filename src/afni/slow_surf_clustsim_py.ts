@@ -11,7 +11,7 @@ const SLOW_SURF_CLUSTSIM_PY_METADATA: Metadata = {
 };
 
 
-interface SlowSurfClustsimPyParameters {
+interface SlowSurfClustsimPyParamsDict {
     "@type"?: "afni/slow_surf_clustsim.py";
     "on_surface"?: string | null | undefined;
     "save_script"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface SlowSurfClustsimPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
-type SlowSurfClustsimPyParametersTagged = Required<Pick<SlowSurfClustsimPyParameters, '@type'>> & SlowSurfClustsimPyParameters;
+type SlowSurfClustsimPyParamsDictTagged = Required<Pick<SlowSurfClustsimPyParamsDict, '@type'>> & SlowSurfClustsimPyParamsDict;
 
 
 /**
- * Output object returned when calling `SlowSurfClustsimPyParameters(...)`.
+ * Output object returned when calling `SlowSurfClustsimPyParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function slow_surf_clustsim_py_params(
     show_default_uvars: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): SlowSurfClustsimPyParametersTagged {
+): SlowSurfClustsimPyParamsDictTagged {
     const params = {
         "@type": "afni/slow_surf_clustsim.py" as const,
         "print_script": print_script,
@@ -106,7 +106,7 @@ function slow_surf_clustsim_py_params(
  * @returns Command-line arguments.
  */
 function slow_surf_clustsim_py_cargs(
-    params: SlowSurfClustsimPyParameters,
+    params: SlowSurfClustsimPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -169,7 +169,7 @@ function slow_surf_clustsim_py_cargs(
  * @returns Outputs object.
  */
 function slow_surf_clustsim_py_outputs(
-    params: SlowSurfClustsimPyParameters,
+    params: SlowSurfClustsimPyParamsDict,
     execution: Execution,
 ): SlowSurfClustsimPyOutputs {
     const ret: SlowSurfClustsimPyOutputs = {
@@ -194,7 +194,7 @@ function slow_surf_clustsim_py_outputs(
  * @returns NamedTuple of outputs (described in `SlowSurfClustsimPyOutputs`).
  */
 function slow_surf_clustsim_py_execute(
-    params: SlowSurfClustsimPyParameters,
+    params: SlowSurfClustsimPyParamsDict,
     runner: Runner | null = null,
 ): SlowSurfClustsimPyOutputs {
     runner = runner || getGlobalRunner();
@@ -253,6 +253,8 @@ function slow_surf_clustsim_py(
 export {
       SLOW_SURF_CLUSTSIM_PY_METADATA,
       SlowSurfClustsimPyOutputs,
+      SlowSurfClustsimPyParamsDict,
+      SlowSurfClustsimPyParamsDictTagged,
       slow_surf_clustsim_py,
       slow_surf_clustsim_py_execute,
       slow_surf_clustsim_py_params,

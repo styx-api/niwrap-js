@@ -11,17 +11,17 @@ const MRI_RIGID_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MriRigidRegisterParameters {
+interface MriRigidRegisterParamsDict {
     "@type"?: "freesurfer/mri_rigid_register";
     "source_volume": InputPathType;
     "target_volume": InputPathType;
     "transform_output": string;
 }
-type MriRigidRegisterParametersTagged = Required<Pick<MriRigidRegisterParameters, '@type'>> & MriRigidRegisterParameters;
+type MriRigidRegisterParamsDictTagged = Required<Pick<MriRigidRegisterParamsDict, '@type'>> & MriRigidRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MriRigidRegisterParameters(...)`.
+ * Output object returned when calling `MriRigidRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_rigid_register_params(
     source_volume: InputPathType,
     target_volume: InputPathType,
     transform_output: string,
-): MriRigidRegisterParametersTagged {
+): MriRigidRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_rigid_register" as const,
         "source_volume": source_volume,
@@ -70,7 +70,7 @@ function mri_rigid_register_params(
  * @returns Command-line arguments.
  */
 function mri_rigid_register_cargs(
-    params: MriRigidRegisterParameters,
+    params: MriRigidRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_rigid_register_cargs(
  * @returns Outputs object.
  */
 function mri_rigid_register_outputs(
-    params: MriRigidRegisterParameters,
+    params: MriRigidRegisterParamsDict,
     execution: Execution,
 ): MriRigidRegisterOutputs {
     const ret: MriRigidRegisterOutputs = {
@@ -117,7 +117,7 @@ function mri_rigid_register_outputs(
  * @returns NamedTuple of outputs (described in `MriRigidRegisterOutputs`).
  */
 function mri_rigid_register_execute(
-    params: MriRigidRegisterParameters,
+    params: MriRigidRegisterParamsDict,
     runner: Runner | null = null,
 ): MriRigidRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_rigid_register(
 export {
       MRI_RIGID_REGISTER_METADATA,
       MriRigidRegisterOutputs,
+      MriRigidRegisterParamsDict,
+      MriRigidRegisterParamsDictTagged,
       mri_rigid_register,
       mri_rigid_register_execute,
       mri_rigid_register_params,

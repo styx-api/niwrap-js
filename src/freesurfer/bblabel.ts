@@ -11,7 +11,7 @@ const BBLABEL_METADATA: Metadata = {
 };
 
 
-interface BblabelParameters {
+interface BblabelParamsDict {
     "@type"?: "freesurfer/bblabel";
     "labelfile": InputPathType;
     "xmin"?: number | null | undefined;
@@ -24,11 +24,11 @@ interface BblabelParameters {
     "debug": boolean;
     "umask"?: string | null | undefined;
 }
-type BblabelParametersTagged = Required<Pick<BblabelParameters, '@type'>> & BblabelParameters;
+type BblabelParamsDictTagged = Required<Pick<BblabelParamsDict, '@type'>> & BblabelParamsDict;
 
 
 /**
- * Output object returned when calling `BblabelParameters(...)`.
+ * Output object returned when calling `BblabelParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function bblabel_params(
     zmax: number | null = null,
     debug: boolean = false,
     umask: string | null = null,
-): BblabelParametersTagged {
+): BblabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/bblabel" as const,
         "labelfile": labelfile,
@@ -112,7 +112,7 @@ function bblabel_params(
  * @returns Command-line arguments.
  */
 function bblabel_cargs(
-    params: BblabelParameters,
+    params: BblabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,7 +183,7 @@ function bblabel_cargs(
  * @returns Outputs object.
  */
 function bblabel_outputs(
-    params: BblabelParameters,
+    params: BblabelParamsDict,
     execution: Execution,
 ): BblabelOutputs {
     const ret: BblabelOutputs = {
@@ -209,7 +209,7 @@ function bblabel_outputs(
  * @returns NamedTuple of outputs (described in `BblabelOutputs`).
  */
 function bblabel_execute(
-    params: BblabelParameters,
+    params: BblabelParamsDict,
     runner: Runner | null = null,
 ): BblabelOutputs {
     runner = runner || getGlobalRunner();
@@ -266,6 +266,8 @@ function bblabel(
 export {
       BBLABEL_METADATA,
       BblabelOutputs,
+      BblabelParamsDict,
+      BblabelParamsDictTagged,
       bblabel,
       bblabel_execute,
       bblabel_params,

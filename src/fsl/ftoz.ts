@@ -11,7 +11,7 @@ const FTOZ_METADATA: Metadata = {
 };
 
 
-interface FtozParameters {
+interface FtozParamsDict {
     "@type"?: "fsl/ftoz";
     "input_file": InputPathType;
     "dof1": number;
@@ -19,11 +19,11 @@ interface FtozParameters {
     "output_file"?: string | null | undefined;
     "help_flag": boolean;
 }
-type FtozParametersTagged = Required<Pick<FtozParameters, '@type'>> & FtozParameters;
+type FtozParamsDictTagged = Required<Pick<FtozParamsDict, '@type'>> & FtozParamsDict;
 
 
 /**
- * Output object returned when calling `FtozParameters(...)`.
+ * Output object returned when calling `FtozParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function ftoz_params(
     dof2: number,
     output_file: string | null = null,
     help_flag: boolean = false,
-): FtozParametersTagged {
+): FtozParamsDictTagged {
     const params = {
         "@type": "fsl/ftoz" as const,
         "input_file": input_file,
@@ -80,7 +80,7 @@ function ftoz_params(
  * @returns Command-line arguments.
  */
 function ftoz_cargs(
-    params: FtozParameters,
+    params: FtozParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function ftoz_cargs(
  * @returns Outputs object.
  */
 function ftoz_outputs(
-    params: FtozParameters,
+    params: FtozParamsDict,
     execution: Execution,
 ): FtozOutputs {
     const ret: FtozOutputs = {
@@ -136,7 +136,7 @@ function ftoz_outputs(
  * @returns NamedTuple of outputs (described in `FtozOutputs`).
  */
 function ftoz_execute(
-    params: FtozParameters,
+    params: FtozParamsDict,
     runner: Runner | null = null,
 ): FtozOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function ftoz(
 export {
       FTOZ_METADATA,
       FtozOutputs,
+      FtozParamsDict,
+      FtozParamsDictTagged,
       ftoz,
       ftoz_execute,
       ftoz_params,

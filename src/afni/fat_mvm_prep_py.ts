@@ -11,7 +11,7 @@ const FAT_MVM_PREP_PY_METADATA: Metadata = {
 };
 
 
-interface FatMvmPrepPyParameters {
+interface FatMvmPrepPyParamsDict {
     "@type"?: "afni/fat_mvm_prep.py";
     "prefix": string;
     "csv_file": InputPathType;
@@ -21,11 +21,11 @@ interface FatMvmPrepPyParameters {
     "na_warn_off": boolean;
     "extern_labels_no": boolean;
 }
-type FatMvmPrepPyParametersTagged = Required<Pick<FatMvmPrepPyParameters, '@type'>> & FatMvmPrepPyParameters;
+type FatMvmPrepPyParamsDictTagged = Required<Pick<FatMvmPrepPyParamsDict, '@type'>> & FatMvmPrepPyParamsDict;
 
 
 /**
- * Output object returned when calling `FatMvmPrepPyParameters(...)`.
+ * Output object returned when calling `FatMvmPrepPyParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function fat_mvm_prep_py_params(
     unionize_rois: boolean = false,
     na_warn_off: boolean = false,
     extern_labels_no: boolean = false,
-): FatMvmPrepPyParametersTagged {
+): FatMvmPrepPyParamsDictTagged {
     const params = {
         "@type": "afni/fat_mvm_prep.py" as const,
         "prefix": prefix,
@@ -94,7 +94,7 @@ function fat_mvm_prep_py_params(
  * @returns Command-line arguments.
  */
 function fat_mvm_prep_py_cargs(
-    params: FatMvmPrepPyParameters,
+    params: FatMvmPrepPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function fat_mvm_prep_py_cargs(
  * @returns Outputs object.
  */
 function fat_mvm_prep_py_outputs(
-    params: FatMvmPrepPyParameters,
+    params: FatMvmPrepPyParamsDict,
     execution: Execution,
 ): FatMvmPrepPyOutputs {
     const ret: FatMvmPrepPyOutputs = {
@@ -168,7 +168,7 @@ function fat_mvm_prep_py_outputs(
  * @returns NamedTuple of outputs (described in `FatMvmPrepPyOutputs`).
  */
 function fat_mvm_prep_py_execute(
-    params: FatMvmPrepPyParameters,
+    params: FatMvmPrepPyParamsDict,
     runner: Runner | null = null,
 ): FatMvmPrepPyOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function fat_mvm_prep_py(
 export {
       FAT_MVM_PREP_PY_METADATA,
       FatMvmPrepPyOutputs,
+      FatMvmPrepPyParamsDict,
+      FatMvmPrepPyParamsDictTagged,
       fat_mvm_prep_py,
       fat_mvm_prep_py_execute,
       fat_mvm_prep_py_params,

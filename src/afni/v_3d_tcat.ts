@@ -11,7 +11,7 @@ const V_3D_TCAT_METADATA: Metadata = {
 };
 
 
-interface V3dTcatParameters {
+interface V3dTcatParamsDict {
     "@type"?: "afni/3dTcat";
     "rlt"?: "" | "+" | "++" | null | undefined;
     "in_files": InputPathType;
@@ -20,11 +20,11 @@ interface V3dTcatParameters {
     "num_threads"?: number | null | undefined;
     "verbose": boolean;
 }
-type V3dTcatParametersTagged = Required<Pick<V3dTcatParameters, '@type'>> & V3dTcatParameters;
+type V3dTcatParamsDictTagged = Required<Pick<V3dTcatParamsDict, '@type'>> & V3dTcatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTcatParameters(...)`.
+ * Output object returned when calling `V3dTcatParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_tcat_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     num_threads: number | null = null,
     verbose: boolean = false,
-): V3dTcatParametersTagged {
+): V3dTcatParamsDictTagged {
     const params = {
         "@type": "afni/3dTcat" as const,
         "in_files": in_files,
@@ -90,7 +90,7 @@ function v_3d_tcat_params(
  * @returns Command-line arguments.
  */
 function v_3d_tcat_cargs(
-    params: V3dTcatParameters,
+    params: V3dTcatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function v_3d_tcat_cargs(
  * @returns Outputs object.
  */
 function v_3d_tcat_outputs(
-    params: V3dTcatParameters,
+    params: V3dTcatParamsDict,
     execution: Execution,
 ): V3dTcatOutputs {
     const ret: V3dTcatOutputs = {
@@ -156,7 +156,7 @@ function v_3d_tcat_outputs(
  * @returns NamedTuple of outputs (described in `V3dTcatOutputs`).
  */
 function v_3d_tcat_execute(
-    params: V3dTcatParameters,
+    params: V3dTcatParamsDict,
     runner: Runner | null = null,
 ): V3dTcatOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function v_3d_tcat(
 
 export {
       V3dTcatOutputs,
+      V3dTcatParamsDict,
+      V3dTcatParamsDictTagged,
       V_3D_TCAT_METADATA,
       v_3d_tcat,
       v_3d_tcat_execute,

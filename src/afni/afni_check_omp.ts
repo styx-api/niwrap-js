@@ -11,15 +11,15 @@ const AFNI_CHECK_OMP_METADATA: Metadata = {
 };
 
 
-interface AfniCheckOmpParameters {
+interface AfniCheckOmpParamsDict {
     "@type"?: "afni/afni_check_omp";
     "iterations"?: number | null | undefined;
 }
-type AfniCheckOmpParametersTagged = Required<Pick<AfniCheckOmpParameters, '@type'>> & AfniCheckOmpParameters;
+type AfniCheckOmpParamsDictTagged = Required<Pick<AfniCheckOmpParamsDict, '@type'>> & AfniCheckOmpParamsDict;
 
 
 /**
- * Output object returned when calling `AfniCheckOmpParameters(...)`.
+ * Output object returned when calling `AfniCheckOmpParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface AfniCheckOmpOutputs {
  */
 function afni_check_omp_params(
     iterations: number | null = null,
-): AfniCheckOmpParametersTagged {
+): AfniCheckOmpParamsDictTagged {
     const params = {
         "@type": "afni/afni_check_omp" as const,
     };
@@ -60,7 +60,7 @@ function afni_check_omp_params(
  * @returns Command-line arguments.
  */
 function afni_check_omp_cargs(
-    params: AfniCheckOmpParameters,
+    params: AfniCheckOmpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function afni_check_omp_cargs(
  * @returns Outputs object.
  */
 function afni_check_omp_outputs(
-    params: AfniCheckOmpParameters,
+    params: AfniCheckOmpParamsDict,
     execution: Execution,
 ): AfniCheckOmpOutputs {
     const ret: AfniCheckOmpOutputs = {
@@ -106,7 +106,7 @@ function afni_check_omp_outputs(
  * @returns NamedTuple of outputs (described in `AfniCheckOmpOutputs`).
  */
 function afni_check_omp_execute(
-    params: AfniCheckOmpParameters,
+    params: AfniCheckOmpParamsDict,
     runner: Runner | null = null,
 ): AfniCheckOmpOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function afni_check_omp(
 export {
       AFNI_CHECK_OMP_METADATA,
       AfniCheckOmpOutputs,
+      AfniCheckOmpParamsDict,
+      AfniCheckOmpParamsDictTagged,
       afni_check_omp,
       afni_check_omp_execute,
       afni_check_omp_params,

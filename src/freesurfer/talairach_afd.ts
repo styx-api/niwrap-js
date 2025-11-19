@@ -11,7 +11,7 @@ const TALAIRACH_AFD_METADATA: Metadata = {
 };
 
 
-interface TalairachAfdParameters {
+interface TalairachAfdParamsDict {
     "@type"?: "freesurfer/talairach_afd";
     "subject_name"?: string | null | undefined;
     "xfm_file"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface TalairachAfdParameters {
     "afd_directory"?: string | null | undefined;
     "verbose": boolean;
 }
-type TalairachAfdParametersTagged = Required<Pick<TalairachAfdParameters, '@type'>> & TalairachAfdParameters;
+type TalairachAfdParamsDictTagged = Required<Pick<TalairachAfdParamsDict, '@type'>> & TalairachAfdParamsDict;
 
 
 /**
- * Output object returned when calling `TalairachAfdParameters(...)`.
+ * Output object returned when calling `TalairachAfdParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function talairach_afd_params(
     p_value_threshold: number | null = null,
     afd_directory: string | null = null,
     verbose: boolean = false,
-): TalairachAfdParametersTagged {
+): TalairachAfdParamsDictTagged {
     const params = {
         "@type": "freesurfer/talairach_afd" as const,
         "verbose": verbose,
@@ -82,7 +82,7 @@ function talairach_afd_params(
  * @returns Command-line arguments.
  */
 function talairach_afd_cargs(
-    params: TalairachAfdParameters,
+    params: TalairachAfdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function talairach_afd_cargs(
  * @returns Outputs object.
  */
 function talairach_afd_outputs(
-    params: TalairachAfdParameters,
+    params: TalairachAfdParamsDict,
     execution: Execution,
 ): TalairachAfdOutputs {
     const ret: TalairachAfdOutputs = {
@@ -152,7 +152,7 @@ function talairach_afd_outputs(
  * @returns NamedTuple of outputs (described in `TalairachAfdOutputs`).
  */
 function talairach_afd_execute(
-    params: TalairachAfdParameters,
+    params: TalairachAfdParamsDict,
     runner: Runner | null = null,
 ): TalairachAfdOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function talairach_afd(
 export {
       TALAIRACH_AFD_METADATA,
       TalairachAfdOutputs,
+      TalairachAfdParamsDict,
+      TalairachAfdParamsDictTagged,
       talairach_afd,
       talairach_afd_execute,
       talairach_afd_params,

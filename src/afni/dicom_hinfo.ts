@@ -11,7 +11,7 @@ const DICOM_HINFO_METADATA: Metadata = {
 };
 
 
-interface DicomHinfoParameters {
+interface DicomHinfoParamsDict {
     "@type"?: "afni/dicom_hinfo";
     "tag": Array<string>;
     "sepstr"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface DicomHinfoParameters {
     "namelast": boolean;
     "files": Array<InputPathType>;
 }
-type DicomHinfoParametersTagged = Required<Pick<DicomHinfoParameters, '@type'>> & DicomHinfoParameters;
+type DicomHinfoParamsDictTagged = Required<Pick<DicomHinfoParamsDict, '@type'>> & DicomHinfoParamsDict;
 
 
 /**
- * Output object returned when calling `DicomHinfoParameters(...)`.
+ * Output object returned when calling `DicomHinfoParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function dicom_hinfo_params(
     full_entry: boolean = false,
     no_name: boolean = false,
     namelast: boolean = false,
-): DicomHinfoParametersTagged {
+): DicomHinfoParamsDictTagged {
     const params = {
         "@type": "afni/dicom_hinfo" as const,
         "tag": tag,
@@ -80,7 +80,7 @@ function dicom_hinfo_params(
  * @returns Command-line arguments.
  */
 function dicom_hinfo_cargs(
-    params: DicomHinfoParameters,
+    params: DicomHinfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function dicom_hinfo_cargs(
  * @returns Outputs object.
  */
 function dicom_hinfo_outputs(
-    params: DicomHinfoParameters,
+    params: DicomHinfoParamsDict,
     execution: Execution,
 ): DicomHinfoOutputs {
     const ret: DicomHinfoOutputs = {
@@ -143,7 +143,7 @@ function dicom_hinfo_outputs(
  * @returns NamedTuple of outputs (described in `DicomHinfoOutputs`).
  */
 function dicom_hinfo_execute(
-    params: DicomHinfoParameters,
+    params: DicomHinfoParamsDict,
     runner: Runner | null = null,
 ): DicomHinfoOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function dicom_hinfo(
 export {
       DICOM_HINFO_METADATA,
       DicomHinfoOutputs,
+      DicomHinfoParamsDict,
+      DicomHinfoParamsDictTagged,
       dicom_hinfo,
       dicom_hinfo_execute,
       dicom_hinfo_params,

@@ -11,17 +11,17 @@ const MRI_LINEAR_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MriLinearRegisterParameters {
+interface MriLinearRegisterParamsDict {
     "@type"?: "freesurfer/mri_linear_register";
     "input_brain": InputPathType;
     "template": InputPathType;
     "output_file": string;
 }
-type MriLinearRegisterParametersTagged = Required<Pick<MriLinearRegisterParameters, '@type'>> & MriLinearRegisterParameters;
+type MriLinearRegisterParamsDictTagged = Required<Pick<MriLinearRegisterParamsDict, '@type'>> & MriLinearRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MriLinearRegisterParameters(...)`.
+ * Output object returned when calling `MriLinearRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_linear_register_params(
     input_brain: InputPathType,
     template: InputPathType,
     output_file: string,
-): MriLinearRegisterParametersTagged {
+): MriLinearRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_linear_register" as const,
         "input_brain": input_brain,
@@ -70,7 +70,7 @@ function mri_linear_register_params(
  * @returns Command-line arguments.
  */
 function mri_linear_register_cargs(
-    params: MriLinearRegisterParameters,
+    params: MriLinearRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_linear_register_cargs(
  * @returns Outputs object.
  */
 function mri_linear_register_outputs(
-    params: MriLinearRegisterParameters,
+    params: MriLinearRegisterParamsDict,
     execution: Execution,
 ): MriLinearRegisterOutputs {
     const ret: MriLinearRegisterOutputs = {
@@ -117,7 +117,7 @@ function mri_linear_register_outputs(
  * @returns NamedTuple of outputs (described in `MriLinearRegisterOutputs`).
  */
 function mri_linear_register_execute(
-    params: MriLinearRegisterParameters,
+    params: MriLinearRegisterParamsDict,
     runner: Runner | null = null,
 ): MriLinearRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_linear_register(
 export {
       MRI_LINEAR_REGISTER_METADATA,
       MriLinearRegisterOutputs,
+      MriLinearRegisterParamsDict,
+      MriLinearRegisterParamsDictTagged,
       mri_linear_register,
       mri_linear_register_execute,
       mri_linear_register_params,

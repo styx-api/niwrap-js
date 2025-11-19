@@ -11,15 +11,15 @@ const V__GET_AFNI_VERSION_METADATA: Metadata = {
 };
 
 
-interface VGetAfniVersionParameters {
+interface VGetAfniVersionParamsDict {
     "@type"?: "afni/@get.afni.version";
     "version": string;
 }
-type VGetAfniVersionParametersTagged = Required<Pick<VGetAfniVersionParameters, '@type'>> & VGetAfniVersionParameters;
+type VGetAfniVersionParamsDictTagged = Required<Pick<VGetAfniVersionParamsDict, '@type'>> & VGetAfniVersionParamsDict;
 
 
 /**
- * Output object returned when calling `VGetAfniVersionParameters(...)`.
+ * Output object returned when calling `VGetAfniVersionParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VGetAfniVersionOutputs {
  */
 function v__get_afni_version_params(
     version: string,
-): VGetAfniVersionParametersTagged {
+): VGetAfniVersionParamsDictTagged {
     const params = {
         "@type": "afni/@get.afni.version" as const,
         "version": version,
@@ -62,7 +62,7 @@ function v__get_afni_version_params(
  * @returns Command-line arguments.
  */
 function v__get_afni_version_cargs(
-    params: VGetAfniVersionParameters,
+    params: VGetAfniVersionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__get_afni_version_cargs(
  * @returns Outputs object.
  */
 function v__get_afni_version_outputs(
-    params: VGetAfniVersionParameters,
+    params: VGetAfniVersionParamsDict,
     execution: Execution,
 ): VGetAfniVersionOutputs {
     const ret: VGetAfniVersionOutputs = {
@@ -107,7 +107,7 @@ function v__get_afni_version_outputs(
  * @returns NamedTuple of outputs (described in `VGetAfniVersionOutputs`).
  */
 function v__get_afni_version_execute(
-    params: VGetAfniVersionParameters,
+    params: VGetAfniVersionParamsDict,
     runner: Runner | null = null,
 ): VGetAfniVersionOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__get_afni_version(
 
 export {
       VGetAfniVersionOutputs,
+      VGetAfniVersionParamsDict,
+      VGetAfniVersionParamsDictTagged,
       V__GET_AFNI_VERSION_METADATA,
       v__get_afni_version,
       v__get_afni_version_execute,

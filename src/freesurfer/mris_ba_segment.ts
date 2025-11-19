@@ -11,18 +11,18 @@ const MRIS_BA_SEGMENT_METADATA: Metadata = {
 };
 
 
-interface MrisBaSegmentParameters {
+interface MrisBaSegmentParamsDict {
     "@type"?: "freesurfer/mris_BA_segment";
     "surface": InputPathType;
     "profiles": InputPathType;
     "prior_label": InputPathType;
     "output_label": string;
 }
-type MrisBaSegmentParametersTagged = Required<Pick<MrisBaSegmentParameters, '@type'>> & MrisBaSegmentParameters;
+type MrisBaSegmentParamsDictTagged = Required<Pick<MrisBaSegmentParamsDict, '@type'>> & MrisBaSegmentParamsDict;
 
 
 /**
- * Output object returned when calling `MrisBaSegmentParameters(...)`.
+ * Output object returned when calling `MrisBaSegmentParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_ba_segment_params(
     profiles: InputPathType,
     prior_label: InputPathType,
     output_label: string,
-): MrisBaSegmentParametersTagged {
+): MrisBaSegmentParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_BA_segment" as const,
         "surface": surface,
@@ -74,7 +74,7 @@ function mris_ba_segment_params(
  * @returns Command-line arguments.
  */
 function mris_ba_segment_cargs(
-    params: MrisBaSegmentParameters,
+    params: MrisBaSegmentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_ba_segment_cargs(
  * @returns Outputs object.
  */
 function mris_ba_segment_outputs(
-    params: MrisBaSegmentParameters,
+    params: MrisBaSegmentParamsDict,
     execution: Execution,
 ): MrisBaSegmentOutputs {
     const ret: MrisBaSegmentOutputs = {
@@ -122,7 +122,7 @@ function mris_ba_segment_outputs(
  * @returns NamedTuple of outputs (described in `MrisBaSegmentOutputs`).
  */
 function mris_ba_segment_execute(
-    params: MrisBaSegmentParameters,
+    params: MrisBaSegmentParamsDict,
     runner: Runner | null = null,
 ): MrisBaSegmentOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_ba_segment(
 export {
       MRIS_BA_SEGMENT_METADATA,
       MrisBaSegmentOutputs,
+      MrisBaSegmentParamsDict,
+      MrisBaSegmentParamsDictTagged,
       mris_ba_segment,
       mris_ba_segment_execute,
       mris_ba_segment_params,

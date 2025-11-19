@@ -11,15 +11,15 @@ const INFLATE_SUBJECT_NEW_METADATA: Metadata = {
 };
 
 
-interface InflateSubjectNewParameters {
+interface InflateSubjectNewParamsDict {
     "@type"?: "freesurfer/inflate_subject_new";
     "subject_dir": string;
 }
-type InflateSubjectNewParametersTagged = Required<Pick<InflateSubjectNewParameters, '@type'>> & InflateSubjectNewParameters;
+type InflateSubjectNewParamsDictTagged = Required<Pick<InflateSubjectNewParamsDict, '@type'>> & InflateSubjectNewParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubjectNewParameters(...)`.
+ * Output object returned when calling `InflateSubjectNewParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface InflateSubjectNewOutputs {
  */
 function inflate_subject_new_params(
     subject_dir: string,
-): InflateSubjectNewParametersTagged {
+): InflateSubjectNewParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject_new" as const,
         "subject_dir": subject_dir,
@@ -58,7 +58,7 @@ function inflate_subject_new_params(
  * @returns Command-line arguments.
  */
 function inflate_subject_new_cargs(
-    params: InflateSubjectNewParameters,
+    params: InflateSubjectNewParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function inflate_subject_new_cargs(
  * @returns Outputs object.
  */
 function inflate_subject_new_outputs(
-    params: InflateSubjectNewParameters,
+    params: InflateSubjectNewParamsDict,
     execution: Execution,
 ): InflateSubjectNewOutputs {
     const ret: InflateSubjectNewOutputs = {
@@ -102,7 +102,7 @@ function inflate_subject_new_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubjectNewOutputs`).
  */
 function inflate_subject_new_execute(
-    params: InflateSubjectNewParameters,
+    params: InflateSubjectNewParamsDict,
     runner: Runner | null = null,
 ): InflateSubjectNewOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function inflate_subject_new(
 export {
       INFLATE_SUBJECT_NEW_METADATA,
       InflateSubjectNewOutputs,
+      InflateSubjectNewParamsDict,
+      InflateSubjectNewParamsDictTagged,
       inflate_subject_new,
       inflate_subject_new_execute,
       inflate_subject_new_params,

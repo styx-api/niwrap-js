@@ -11,17 +11,17 @@ const MRIS_FIND_FLAT_REGIONS_METADATA: Metadata = {
 };
 
 
-interface MrisFindFlatRegionsParameters {
+interface MrisFindFlatRegionsParamsDict {
     "@type"?: "freesurfer/mris_find_flat_regions";
     "surface": InputPathType;
     "wfile": string;
     "threshold"?: number | null | undefined;
 }
-type MrisFindFlatRegionsParametersTagged = Required<Pick<MrisFindFlatRegionsParameters, '@type'>> & MrisFindFlatRegionsParameters;
+type MrisFindFlatRegionsParamsDictTagged = Required<Pick<MrisFindFlatRegionsParamsDict, '@type'>> & MrisFindFlatRegionsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisFindFlatRegionsParameters(...)`.
+ * Output object returned when calling `MrisFindFlatRegionsParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_find_flat_regions_params(
     surface: InputPathType,
     wfile: string,
     threshold: number | null = null,
-): MrisFindFlatRegionsParametersTagged {
+): MrisFindFlatRegionsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_find_flat_regions" as const,
         "surface": surface,
@@ -72,7 +72,7 @@ function mris_find_flat_regions_params(
  * @returns Command-line arguments.
  */
 function mris_find_flat_regions_cargs(
-    params: MrisFindFlatRegionsParameters,
+    params: MrisFindFlatRegionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function mris_find_flat_regions_cargs(
  * @returns Outputs object.
  */
 function mris_find_flat_regions_outputs(
-    params: MrisFindFlatRegionsParameters,
+    params: MrisFindFlatRegionsParamsDict,
     execution: Execution,
 ): MrisFindFlatRegionsOutputs {
     const ret: MrisFindFlatRegionsOutputs = {
@@ -124,7 +124,7 @@ function mris_find_flat_regions_outputs(
  * @returns NamedTuple of outputs (described in `MrisFindFlatRegionsOutputs`).
  */
 function mris_find_flat_regions_execute(
-    params: MrisFindFlatRegionsParameters,
+    params: MrisFindFlatRegionsParamsDict,
     runner: Runner | null = null,
 ): MrisFindFlatRegionsOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_find_flat_regions(
 export {
       MRIS_FIND_FLAT_REGIONS_METADATA,
       MrisFindFlatRegionsOutputs,
+      MrisFindFlatRegionsParamsDict,
+      MrisFindFlatRegionsParamsDictTagged,
       mris_find_flat_regions,
       mris_find_flat_regions_execute,
       mris_find_flat_regions_params,

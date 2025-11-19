@@ -11,7 +11,7 @@ const SUPER_RESOLUTION_METADATA: Metadata = {
 };
 
 
-interface SuperResolutionParameters {
+interface SuperResolutionParamsDict {
     "@type"?: "ants/SuperResolution";
     "image_dimension": number;
     "output_image": string;
@@ -21,11 +21,11 @@ interface SuperResolutionParameters {
     "number_of_levels": number;
     "input_image_files": Array<InputPathType>;
 }
-type SuperResolutionParametersTagged = Required<Pick<SuperResolutionParameters, '@type'>> & SuperResolutionParameters;
+type SuperResolutionParamsDictTagged = Required<Pick<SuperResolutionParamsDict, '@type'>> & SuperResolutionParamsDict;
 
 
 /**
- * Output object returned when calling `SuperResolutionParameters(...)`.
+ * Output object returned when calling `SuperResolutionParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function super_resolution_params(
     mesh_size: number,
     number_of_levels: number,
     input_image_files: Array<InputPathType>,
-): SuperResolutionParametersTagged {
+): SuperResolutionParamsDictTagged {
     const params = {
         "@type": "ants/SuperResolution" as const,
         "image_dimension": image_dimension,
@@ -86,7 +86,7 @@ function super_resolution_params(
  * @returns Command-line arguments.
  */
 function super_resolution_cargs(
-    params: SuperResolutionParameters,
+    params: SuperResolutionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function super_resolution_cargs(
  * @returns Outputs object.
  */
 function super_resolution_outputs(
-    params: SuperResolutionParameters,
+    params: SuperResolutionParamsDict,
     execution: Execution,
 ): SuperResolutionOutputs {
     const ret: SuperResolutionOutputs = {
@@ -137,7 +137,7 @@ function super_resolution_outputs(
  * @returns NamedTuple of outputs (described in `SuperResolutionOutputs`).
  */
 function super_resolution_execute(
-    params: SuperResolutionParameters,
+    params: SuperResolutionParamsDict,
     runner: Runner | null = null,
 ): SuperResolutionOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function super_resolution(
 export {
       SUPER_RESOLUTION_METADATA,
       SuperResolutionOutputs,
+      SuperResolutionParamsDict,
+      SuperResolutionParamsDictTagged,
       super_resolution,
       super_resolution_execute,
       super_resolution_params,

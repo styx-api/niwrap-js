@@ -11,7 +11,7 @@ const FAT_PROC_DWI_TO_DT_METADATA: Metadata = {
 };
 
 
-interface FatProcDwiToDtParameters {
+interface FatProcDwiToDtParamsDict {
     "@type"?: "afni/fat_proc_dwi_to_dt";
     "in_dwi": InputPathType;
     "in_gradmat": InputPathType;
@@ -43,11 +43,11 @@ interface FatProcDwiToDtParameters {
     "uncert_extra_cmds"?: string | null | undefined;
     "check_abs_min"?: number | null | undefined;
 }
-type FatProcDwiToDtParametersTagged = Required<Pick<FatProcDwiToDtParameters, '@type'>> & FatProcDwiToDtParameters;
+type FatProcDwiToDtParamsDictTagged = Required<Pick<FatProcDwiToDtParamsDict, '@type'>> & FatProcDwiToDtParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcDwiToDtParameters(...)`.
+ * Output object returned when calling `FatProcDwiToDtParamsDict(...)`.
  *
  * @interface
  */
@@ -124,7 +124,7 @@ function fat_proc_dwi_to_dt_params(
     uncert_iters: number | null = null,
     uncert_extra_cmds: string | null = null,
     check_abs_min: number | null = null,
-): FatProcDwiToDtParametersTagged {
+): FatProcDwiToDtParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_dwi_to_dt" as const,
         "in_dwi": in_dwi,
@@ -198,7 +198,7 @@ function fat_proc_dwi_to_dt_params(
  * @returns Command-line arguments.
  */
 function fat_proc_dwi_to_dt_cargs(
-    params: FatProcDwiToDtParameters,
+    params: FatProcDwiToDtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -345,7 +345,7 @@ function fat_proc_dwi_to_dt_cargs(
  * @returns Outputs object.
  */
 function fat_proc_dwi_to_dt_outputs(
-    params: FatProcDwiToDtParameters,
+    params: FatProcDwiToDtParamsDict,
     execution: Execution,
 ): FatProcDwiToDtOutputs {
     const ret: FatProcDwiToDtOutputs = {
@@ -370,7 +370,7 @@ function fat_proc_dwi_to_dt_outputs(
  * @returns NamedTuple of outputs (described in `FatProcDwiToDtOutputs`).
  */
 function fat_proc_dwi_to_dt_execute(
-    params: FatProcDwiToDtParameters,
+    params: FatProcDwiToDtParamsDict,
     runner: Runner | null = null,
 ): FatProcDwiToDtOutputs {
     runner = runner || getGlobalRunner();
@@ -465,6 +465,8 @@ function fat_proc_dwi_to_dt(
 export {
       FAT_PROC_DWI_TO_DT_METADATA,
       FatProcDwiToDtOutputs,
+      FatProcDwiToDtParamsDict,
+      FatProcDwiToDtParamsDictTagged,
       fat_proc_dwi_to_dt,
       fat_proc_dwi_to_dt_execute,
       fat_proc_dwi_to_dt_params,

@@ -11,7 +11,7 @@ const MRI_COMPUTE_LAYER_FRACTIONS_METADATA: Metadata = {
 };
 
 
-interface MriComputeLayerFractionsParameters {
+interface MriComputeLayerFractionsParamsDict {
     "@type"?: "freesurfer/mri_compute_layer_fractions";
     "reg_file": InputPathType;
     "input_volume": InputPathType;
@@ -28,11 +28,11 @@ interface MriComputeLayerFractionsParameters {
     "random_file"?: InputPathType | null | undefined;
     "identity_file"?: string | null | undefined;
 }
-type MriComputeLayerFractionsParametersTagged = Required<Pick<MriComputeLayerFractionsParameters, '@type'>> & MriComputeLayerFractionsParameters;
+type MriComputeLayerFractionsParamsDictTagged = Required<Pick<MriComputeLayerFractionsParamsDict, '@type'>> & MriComputeLayerFractionsParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeLayerFractionsParameters(...)`.
+ * Output object returned when calling `MriComputeLayerFractionsParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function mri_compute_layer_fractions_params(
     thickness: number | null = null,
     random_file: InputPathType | null = null,
     identity_file: string | null = null,
-): MriComputeLayerFractionsParametersTagged {
+): MriComputeLayerFractionsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_layer_fractions" as const,
         "reg_file": reg_file,
@@ -134,7 +134,7 @@ function mri_compute_layer_fractions_params(
  * @returns Command-line arguments.
  */
 function mri_compute_layer_fractions_cargs(
-    params: MriComputeLayerFractionsParameters,
+    params: MriComputeLayerFractionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -206,7 +206,7 @@ function mri_compute_layer_fractions_cargs(
  * @returns Outputs object.
  */
 function mri_compute_layer_fractions_outputs(
-    params: MriComputeLayerFractionsParameters,
+    params: MriComputeLayerFractionsParamsDict,
     execution: Execution,
 ): MriComputeLayerFractionsOutputs {
     const ret: MriComputeLayerFractionsOutputs = {
@@ -233,7 +233,7 @@ function mri_compute_layer_fractions_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeLayerFractionsOutputs`).
  */
 function mri_compute_layer_fractions_execute(
-    params: MriComputeLayerFractionsParameters,
+    params: MriComputeLayerFractionsParamsDict,
     runner: Runner | null = null,
 ): MriComputeLayerFractionsOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function mri_compute_layer_fractions(
 export {
       MRI_COMPUTE_LAYER_FRACTIONS_METADATA,
       MriComputeLayerFractionsOutputs,
+      MriComputeLayerFractionsParamsDict,
+      MriComputeLayerFractionsParamsDictTagged,
       mri_compute_layer_fractions,
       mri_compute_layer_fractions_execute,
       mri_compute_layer_fractions_params,

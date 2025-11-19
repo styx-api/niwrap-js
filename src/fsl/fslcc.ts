@@ -11,7 +11,7 @@ const FSLCC_METADATA: Metadata = {
 };
 
 
-interface FslccParameters {
+interface FslccParamsDict {
     "@type"?: "fsl/fslcc";
     "first_input": InputPathType;
     "second_input": InputPathType;
@@ -21,11 +21,11 @@ interface FslccParameters {
     "threshold"?: number | null | undefined;
     "decimal_places"?: number | null | undefined;
 }
-type FslccParametersTagged = Required<Pick<FslccParameters, '@type'>> & FslccParameters;
+type FslccParamsDictTagged = Required<Pick<FslccParamsDict, '@type'>> & FslccParamsDict;
 
 
 /**
- * Output object returned when calling `FslccParameters(...)`.
+ * Output object returned when calling `FslccParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function fslcc_params(
     nodemean_flag: boolean = false,
     threshold: number | null = null,
     decimal_places: number | null = null,
-): FslccParametersTagged {
+): FslccParamsDictTagged {
     const params = {
         "@type": "fsl/fslcc" as const,
         "first_input": first_input,
@@ -88,7 +88,7 @@ function fslcc_params(
  * @returns Command-line arguments.
  */
 function fslcc_cargs(
-    params: FslccParameters,
+    params: FslccParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function fslcc_cargs(
  * @returns Outputs object.
  */
 function fslcc_outputs(
-    params: FslccParameters,
+    params: FslccParamsDict,
     execution: Execution,
 ): FslccOutputs {
     const ret: FslccOutputs = {
@@ -157,7 +157,7 @@ function fslcc_outputs(
  * @returns NamedTuple of outputs (described in `FslccOutputs`).
  */
 function fslcc_execute(
-    params: FslccParameters,
+    params: FslccParamsDict,
     runner: Runner | null = null,
 ): FslccOutputs {
     runner = runner || getGlobalRunner();
@@ -208,6 +208,8 @@ function fslcc(
 export {
       FSLCC_METADATA,
       FslccOutputs,
+      FslccParamsDict,
+      FslccParamsDictTagged,
       fslcc,
       fslcc_execute,
       fslcc_params,

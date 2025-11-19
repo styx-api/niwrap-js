@@ -11,15 +11,15 @@ const SPHERE_SUBJECT_LH_METADATA: Metadata = {
 };
 
 
-interface SphereSubjectLhParameters {
+interface SphereSubjectLhParamsDict {
     "@type"?: "freesurfer/sphere_subject-lh";
     "license_file": InputPathType;
 }
-type SphereSubjectLhParametersTagged = Required<Pick<SphereSubjectLhParameters, '@type'>> & SphereSubjectLhParameters;
+type SphereSubjectLhParamsDictTagged = Required<Pick<SphereSubjectLhParamsDict, '@type'>> & SphereSubjectLhParamsDict;
 
 
 /**
- * Output object returned when calling `SphereSubjectLhParameters(...)`.
+ * Output object returned when calling `SphereSubjectLhParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface SphereSubjectLhOutputs {
  */
 function sphere_subject_lh_params(
     license_file: InputPathType,
-): SphereSubjectLhParametersTagged {
+): SphereSubjectLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/sphere_subject-lh" as const,
         "license_file": license_file,
@@ -58,7 +58,7 @@ function sphere_subject_lh_params(
  * @returns Command-line arguments.
  */
 function sphere_subject_lh_cargs(
-    params: SphereSubjectLhParameters,
+    params: SphereSubjectLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function sphere_subject_lh_cargs(
  * @returns Outputs object.
  */
 function sphere_subject_lh_outputs(
-    params: SphereSubjectLhParameters,
+    params: SphereSubjectLhParamsDict,
     execution: Execution,
 ): SphereSubjectLhOutputs {
     const ret: SphereSubjectLhOutputs = {
@@ -105,7 +105,7 @@ function sphere_subject_lh_outputs(
  * @returns NamedTuple of outputs (described in `SphereSubjectLhOutputs`).
  */
 function sphere_subject_lh_execute(
-    params: SphereSubjectLhParameters,
+    params: SphereSubjectLhParamsDict,
     runner: Runner | null = null,
 ): SphereSubjectLhOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function sphere_subject_lh(
 export {
       SPHERE_SUBJECT_LH_METADATA,
       SphereSubjectLhOutputs,
+      SphereSubjectLhParamsDict,
+      SphereSubjectLhParamsDictTagged,
       sphere_subject_lh,
       sphere_subject_lh_execute,
       sphere_subject_lh_params,

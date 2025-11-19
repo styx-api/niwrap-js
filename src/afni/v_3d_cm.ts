@@ -11,7 +11,7 @@ const V_3D_CM_METADATA: Metadata = {
 };
 
 
-interface V3dCmParameters {
+interface V3dCmParamsDict {
     "@type"?: "afni/3dCM";
     "dset": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -23,11 +23,11 @@ interface V3dCmParameters {
     "icent": boolean;
     "dcent": boolean;
 }
-type V3dCmParametersTagged = Required<Pick<V3dCmParameters, '@type'>> & V3dCmParameters;
+type V3dCmParamsDictTagged = Required<Pick<V3dCmParamsDict, '@type'>> & V3dCmParamsDict;
 
 
 /**
- * Output object returned when calling `V3dCmParameters(...)`.
+ * Output object returned when calling `V3dCmParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_3d_cm_params(
     all_rois: boolean = false,
     icent: boolean = false,
     dcent: boolean = false,
-): V3dCmParametersTagged {
+): V3dCmParamsDictTagged {
     const params = {
         "@type": "afni/3dCM" as const,
         "dset": dset,
@@ -100,7 +100,7 @@ function v_3d_cm_params(
  * @returns Command-line arguments.
  */
 function v_3d_cm_cargs(
-    params: V3dCmParameters,
+    params: V3dCmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,7 +152,7 @@ function v_3d_cm_cargs(
  * @returns Outputs object.
  */
 function v_3d_cm_outputs(
-    params: V3dCmParameters,
+    params: V3dCmParamsDict,
     execution: Execution,
 ): V3dCmOutputs {
     const ret: V3dCmOutputs = {
@@ -178,7 +178,7 @@ function v_3d_cm_outputs(
  * @returns NamedTuple of outputs (described in `V3dCmOutputs`).
  */
 function v_3d_cm_execute(
-    params: V3dCmParameters,
+    params: V3dCmParamsDict,
     runner: Runner | null = null,
 ): V3dCmOutputs {
     runner = runner || getGlobalRunner();
@@ -232,6 +232,8 @@ function v_3d_cm(
 
 export {
       V3dCmOutputs,
+      V3dCmParamsDict,
+      V3dCmParamsDictTagged,
       V_3D_CM_METADATA,
       v_3d_cm,
       v_3d_cm_execute,

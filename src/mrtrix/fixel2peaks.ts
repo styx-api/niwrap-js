@@ -11,29 +11,29 @@ const FIXEL2PEAKS_METADATA: Metadata = {
 };
 
 
-interface Fixel2peaksConfigParameters {
+interface Fixel2peaksConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Fixel2peaksConfigParametersTagged = Required<Pick<Fixel2peaksConfigParameters, '@type'>> & Fixel2peaksConfigParameters;
+type Fixel2peaksConfigParamsDictTagged = Required<Pick<Fixel2peaksConfigParamsDict, '@type'>> & Fixel2peaksConfigParamsDict;
 
 
-interface Fixel2peaksVariousStringParameters {
+interface Fixel2peaksVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type Fixel2peaksVariousStringParametersTagged = Required<Pick<Fixel2peaksVariousStringParameters, '@type'>> & Fixel2peaksVariousStringParameters;
+type Fixel2peaksVariousStringParamsDictTagged = Required<Pick<Fixel2peaksVariousStringParamsDict, '@type'>> & Fixel2peaksVariousStringParamsDict;
 
 
-interface Fixel2peaksVariousFileParameters {
+interface Fixel2peaksVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type Fixel2peaksVariousFileParametersTagged = Required<Pick<Fixel2peaksVariousFileParameters, '@type'>> & Fixel2peaksVariousFileParameters;
+type Fixel2peaksVariousFileParamsDictTagged = Required<Pick<Fixel2peaksVariousFileParamsDict, '@type'>> & Fixel2peaksVariousFileParamsDict;
 
 
-interface Fixel2peaksParameters {
+interface Fixel2peaksParamsDict {
     "@type"?: "mrtrix/fixel2peaks";
     "number"?: number | null | undefined;
     "nan": boolean;
@@ -42,13 +42,13 @@ interface Fixel2peaksParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Fixel2peaksConfigParameters> | null | undefined;
+    "config"?: Array<Fixel2peaksConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "in": Fixel2peaksVariousStringParametersTagged | Fixel2peaksVariousFileParametersTagged;
+    "in": Fixel2peaksVariousStringParamsDictTagged | Fixel2peaksVariousFileParamsDictTagged;
     "out": string;
 }
-type Fixel2peaksParametersTagged = Required<Pick<Fixel2peaksParameters, '@type'>> & Fixel2peaksParameters;
+type Fixel2peaksParamsDictTagged = Required<Pick<Fixel2peaksParamsDict, '@type'>> & Fixel2peaksParamsDict;
 
 
 /**
@@ -93,10 +93,10 @@ function fixel2peaks_in_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function fixel2peaks_config_params(
+function fixel2peaks_config(
     key: string,
     value: string,
-): Fixel2peaksConfigParametersTagged {
+): Fixel2peaksConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -115,7 +115,7 @@ function fixel2peaks_config_params(
  * @returns Command-line arguments.
  */
 function fixel2peaks_config_cargs(
-    params: Fixel2peaksConfigParameters,
+    params: Fixel2peaksConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,9 +133,9 @@ function fixel2peaks_config_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixel2peaks_various_string_params(
+function fixel2peaks_various_string(
     obj: string,
-): Fixel2peaksVariousStringParametersTagged {
+): Fixel2peaksVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -153,7 +153,7 @@ function fixel2peaks_various_string_params(
  * @returns Command-line arguments.
  */
 function fixel2peaks_various_string_cargs(
-    params: Fixel2peaksVariousStringParameters,
+    params: Fixel2peaksVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -169,9 +169,9 @@ function fixel2peaks_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixel2peaks_various_file_params(
+function fixel2peaks_various_file(
     obj: InputPathType,
-): Fixel2peaksVariousFileParametersTagged {
+): Fixel2peaksVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -189,7 +189,7 @@ function fixel2peaks_various_file_params(
  * @returns Command-line arguments.
  */
 function fixel2peaks_various_file_cargs(
-    params: Fixel2peaksVariousFileParameters,
+    params: Fixel2peaksVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,7 +199,7 @@ function fixel2peaks_various_file_cargs(
 
 
 /**
- * Output object returned when calling `Fixel2peaksParameters(...)`.
+ * Output object returned when calling `Fixel2peaksParamsDict(...)`.
  *
  * @interface
  */
@@ -234,7 +234,7 @@ interface Fixel2peaksOutputs {
  * @returns Parameter dictionary
  */
 function fixel2peaks_params(
-    in_: Fixel2peaksVariousStringParametersTagged | Fixel2peaksVariousFileParametersTagged,
+    in_: Fixel2peaksVariousStringParamsDictTagged | Fixel2peaksVariousFileParamsDictTagged,
     out: string,
     number_: number | null = null,
     nan: boolean = false,
@@ -243,10 +243,10 @@ function fixel2peaks_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fixel2peaksConfigParameters> | null = null,
+    config: Array<Fixel2peaksConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fixel2peaksParametersTagged {
+): Fixel2peaksParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixel2peaks" as const,
         "nan": nan,
@@ -281,7 +281,7 @@ function fixel2peaks_params(
  * @returns Command-line arguments.
  */
 function fixel2peaks_cargs(
-    params: Fixel2peaksParameters,
+    params: Fixel2peaksParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -337,7 +337,7 @@ function fixel2peaks_cargs(
  * @returns Outputs object.
  */
 function fixel2peaks_outputs(
-    params: Fixel2peaksParameters,
+    params: Fixel2peaksParamsDict,
     execution: Execution,
 ): Fixel2peaksOutputs {
     const ret: Fixel2peaksOutputs = {
@@ -369,7 +369,7 @@ function fixel2peaks_outputs(
  * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
  */
 function fixel2peaks_execute(
-    params: Fixel2peaksParameters,
+    params: Fixel2peaksParamsDict,
     runner: Runner | null = null,
 ): Fixel2peaksOutputs {
     runner = runner || getGlobalRunner();
@@ -414,7 +414,7 @@ function fixel2peaks_execute(
  * @returns NamedTuple of outputs (described in `Fixel2peaksOutputs`).
  */
 function fixel2peaks(
-    in_: Fixel2peaksVariousStringParametersTagged | Fixel2peaksVariousFileParametersTagged,
+    in_: Fixel2peaksVariousStringParamsDictTagged | Fixel2peaksVariousFileParamsDictTagged,
     out: string,
     number_: number | null = null,
     nan: boolean = false,
@@ -423,7 +423,7 @@ function fixel2peaks(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fixel2peaksConfigParameters> | null = null,
+    config: Array<Fixel2peaksConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -435,11 +435,19 @@ function fixel2peaks(
 
 export {
       FIXEL2PEAKS_METADATA,
+      Fixel2peaksConfigParamsDict,
+      Fixel2peaksConfigParamsDictTagged,
       Fixel2peaksOutputs,
+      Fixel2peaksParamsDict,
+      Fixel2peaksParamsDictTagged,
+      Fixel2peaksVariousFileParamsDict,
+      Fixel2peaksVariousFileParamsDictTagged,
+      Fixel2peaksVariousStringParamsDict,
+      Fixel2peaksVariousStringParamsDictTagged,
       fixel2peaks,
-      fixel2peaks_config_params,
+      fixel2peaks_config,
       fixel2peaks_execute,
       fixel2peaks_params,
-      fixel2peaks_various_file_params,
-      fixel2peaks_various_string_params,
+      fixel2peaks_various_file,
+      fixel2peaks_various_string,
 };

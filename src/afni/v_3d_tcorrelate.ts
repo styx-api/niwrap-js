@@ -11,7 +11,7 @@ const V_3D_TCORRELATE_METADATA: Metadata = {
 };
 
 
-interface V3dTcorrelateParameters {
+interface V3dTcorrelateParamsDict {
     "@type"?: "afni/3dTcorrelate";
     "xset": InputPathType;
     "yset": InputPathType;
@@ -30,11 +30,11 @@ interface V3dTcorrelateParameters {
     "zcensor": boolean;
     "prefix"?: string | null | undefined;
 }
-type V3dTcorrelateParametersTagged = Required<Pick<V3dTcorrelateParameters, '@type'>> & V3dTcorrelateParameters;
+type V3dTcorrelateParamsDictTagged = Required<Pick<V3dTcorrelateParamsDict, '@type'>> & V3dTcorrelateParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTcorrelateParameters(...)`.
+ * Output object returned when calling `V3dTcorrelateParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function v_3d_tcorrelate_params(
     automask: boolean = false,
     zcensor: boolean = false,
     prefix: string | null = null,
-): V3dTcorrelateParametersTagged {
+): V3dTcorrelateParamsDictTagged {
     const params = {
         "@type": "afni/3dTcorrelate" as const,
         "xset": xset,
@@ -130,7 +130,7 @@ function v_3d_tcorrelate_params(
  * @returns Command-line arguments.
  */
 function v_3d_tcorrelate_cargs(
-    params: V3dTcorrelateParameters,
+    params: V3dTcorrelateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function v_3d_tcorrelate_cargs(
  * @returns Outputs object.
  */
 function v_3d_tcorrelate_outputs(
-    params: V3dTcorrelateParameters,
+    params: V3dTcorrelateParamsDict,
     execution: Execution,
 ): V3dTcorrelateOutputs {
     const ret: V3dTcorrelateOutputs = {
@@ -230,7 +230,7 @@ function v_3d_tcorrelate_outputs(
  * @returns NamedTuple of outputs (described in `V3dTcorrelateOutputs`).
  */
 function v_3d_tcorrelate_execute(
-    params: V3dTcorrelateParameters,
+    params: V3dTcorrelateParamsDict,
     runner: Runner | null = null,
 ): V3dTcorrelateOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function v_3d_tcorrelate(
 
 export {
       V3dTcorrelateOutputs,
+      V3dTcorrelateParamsDict,
+      V3dTcorrelateParamsDictTagged,
       V_3D_TCORRELATE_METADATA,
       v_3d_tcorrelate,
       v_3d_tcorrelate_execute,

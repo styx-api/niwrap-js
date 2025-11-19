@@ -11,16 +11,16 @@ const FAT_MVM_GRIDCONV_PY_METADATA: Metadata = {
 };
 
 
-interface FatMvmGridconvPyParameters {
+interface FatMvmGridconvPyParamsDict {
     "@type"?: "afni/fat_mvm_gridconv.py";
     "matrix_files"?: string | null | undefined;
     "list_file"?: InputPathType | null | undefined;
 }
-type FatMvmGridconvPyParametersTagged = Required<Pick<FatMvmGridconvPyParameters, '@type'>> & FatMvmGridconvPyParameters;
+type FatMvmGridconvPyParamsDictTagged = Required<Pick<FatMvmGridconvPyParamsDict, '@type'>> & FatMvmGridconvPyParamsDict;
 
 
 /**
- * Output object returned when calling `FatMvmGridconvPyParameters(...)`.
+ * Output object returned when calling `FatMvmGridconvPyParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FatMvmGridconvPyOutputs {
 function fat_mvm_gridconv_py_params(
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
-): FatMvmGridconvPyParametersTagged {
+): FatMvmGridconvPyParamsDictTagged {
     const params = {
         "@type": "afni/fat_mvm_gridconv.py" as const,
     };
@@ -66,7 +66,7 @@ function fat_mvm_gridconv_py_params(
  * @returns Command-line arguments.
  */
 function fat_mvm_gridconv_py_cargs(
-    params: FatMvmGridconvPyParameters,
+    params: FatMvmGridconvPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function fat_mvm_gridconv_py_cargs(
  * @returns Outputs object.
  */
 function fat_mvm_gridconv_py_outputs(
-    params: FatMvmGridconvPyParameters,
+    params: FatMvmGridconvPyParamsDict,
     execution: Execution,
 ): FatMvmGridconvPyOutputs {
     const ret: FatMvmGridconvPyOutputs = {
@@ -121,7 +121,7 @@ function fat_mvm_gridconv_py_outputs(
  * @returns NamedTuple of outputs (described in `FatMvmGridconvPyOutputs`).
  */
 function fat_mvm_gridconv_py_execute(
-    params: FatMvmGridconvPyParameters,
+    params: FatMvmGridconvPyParamsDict,
     runner: Runner | null = null,
 ): FatMvmGridconvPyOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function fat_mvm_gridconv_py(
 export {
       FAT_MVM_GRIDCONV_PY_METADATA,
       FatMvmGridconvPyOutputs,
+      FatMvmGridconvPyParamsDict,
+      FatMvmGridconvPyParamsDictTagged,
       fat_mvm_gridconv_py,
       fat_mvm_gridconv_py_execute,
       fat_mvm_gridconv_py_params,

@@ -11,7 +11,7 @@ const ANTS_INTRODUCTION_SH_METADATA: Metadata = {
 };
 
 
-interface AntsIntroductionShParameters {
+interface AntsIntroductionShParamsDict {
     "@type"?: "ants/antsIntroduction.sh";
     "image_dimension": 2 | 3;
     "reference_image": InputPathType;
@@ -25,11 +25,11 @@ interface AntsIntroductionShParameters {
     "similarity_metric"?: string | null | undefined;
     "transformation_model"?: string | null | undefined;
 }
-type AntsIntroductionShParametersTagged = Required<Pick<AntsIntroductionShParameters, '@type'>> & AntsIntroductionShParameters;
+type AntsIntroductionShParamsDictTagged = Required<Pick<AntsIntroductionShParamsDict, '@type'>> & AntsIntroductionShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsIntroductionShParameters(...)`.
+ * Output object returned when calling `AntsIntroductionShParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function ants_introduction_sh_params(
     quality_check: boolean | null = null,
     similarity_metric: string | null = null,
     transformation_model: string | null = null,
-): AntsIntroductionShParametersTagged {
+): AntsIntroductionShParamsDictTagged {
     const params = {
         "@type": "ants/antsIntroduction.sh" as const,
         "image_dimension": image_dimension,
@@ -114,7 +114,7 @@ function ants_introduction_sh_params(
  * @returns Command-line arguments.
  */
 function ants_introduction_sh_cargs(
-    params: AntsIntroductionShParameters,
+    params: AntsIntroductionShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -192,7 +192,7 @@ function ants_introduction_sh_cargs(
  * @returns Outputs object.
  */
 function ants_introduction_sh_outputs(
-    params: AntsIntroductionShParameters,
+    params: AntsIntroductionShParamsDict,
     execution: Execution,
 ): AntsIntroductionShOutputs {
     const ret: AntsIntroductionShOutputs = {
@@ -217,7 +217,7 @@ function ants_introduction_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsIntroductionShOutputs`).
  */
 function ants_introduction_sh_execute(
-    params: AntsIntroductionShParameters,
+    params: AntsIntroductionShParamsDict,
     runner: Runner | null = null,
 ): AntsIntroductionShOutputs {
     runner = runner || getGlobalRunner();
@@ -276,6 +276,8 @@ function ants_introduction_sh(
 export {
       ANTS_INTRODUCTION_SH_METADATA,
       AntsIntroductionShOutputs,
+      AntsIntroductionShParamsDict,
+      AntsIntroductionShParamsDictTagged,
       ants_introduction_sh,
       ants_introduction_sh_execute,
       ants_introduction_sh_params,

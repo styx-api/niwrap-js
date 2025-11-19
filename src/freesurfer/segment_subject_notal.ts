@@ -11,15 +11,15 @@ const SEGMENT_SUBJECT_NOTAL_METADATA: Metadata = {
 };
 
 
-interface SegmentSubjectNotalParameters {
+interface SegmentSubjectNotalParamsDict {
     "@type"?: "freesurfer/segment_subject_notal";
     "subject_path": string;
 }
-type SegmentSubjectNotalParametersTagged = Required<Pick<SegmentSubjectNotalParameters, '@type'>> & SegmentSubjectNotalParameters;
+type SegmentSubjectNotalParamsDictTagged = Required<Pick<SegmentSubjectNotalParamsDict, '@type'>> & SegmentSubjectNotalParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubjectNotalParameters(...)`.
+ * Output object returned when calling `SegmentSubjectNotalParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface SegmentSubjectNotalOutputs {
  */
 function segment_subject_notal_params(
     subject_path: string,
-): SegmentSubjectNotalParametersTagged {
+): SegmentSubjectNotalParamsDictTagged {
     const params = {
         "@type": "freesurfer/segment_subject_notal" as const,
         "subject_path": subject_path,
@@ -58,7 +58,7 @@ function segment_subject_notal_params(
  * @returns Command-line arguments.
  */
 function segment_subject_notal_cargs(
-    params: SegmentSubjectNotalParameters,
+    params: SegmentSubjectNotalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function segment_subject_notal_cargs(
  * @returns Outputs object.
  */
 function segment_subject_notal_outputs(
-    params: SegmentSubjectNotalParameters,
+    params: SegmentSubjectNotalParamsDict,
     execution: Execution,
 ): SegmentSubjectNotalOutputs {
     const ret: SegmentSubjectNotalOutputs = {
@@ -102,7 +102,7 @@ function segment_subject_notal_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubjectNotalOutputs`).
  */
 function segment_subject_notal_execute(
-    params: SegmentSubjectNotalParameters,
+    params: SegmentSubjectNotalParamsDict,
     runner: Runner | null = null,
 ): SegmentSubjectNotalOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function segment_subject_notal(
 export {
       SEGMENT_SUBJECT_NOTAL_METADATA,
       SegmentSubjectNotalOutputs,
+      SegmentSubjectNotalParamsDict,
+      SegmentSubjectNotalParamsDictTagged,
       segment_subject_notal,
       segment_subject_notal_execute,
       segment_subject_notal_params,

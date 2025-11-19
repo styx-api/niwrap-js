@@ -11,7 +11,7 @@ const V__MEASURE_BB_THICK_METADATA: Metadata = {
 };
 
 
-interface VMeasureBbThickParameters {
+interface VMeasureBbThickParamsDict {
     "@type"?: "afni/@measure_bb_thick";
     "maskset": InputPathType;
     "surfset": InputPathType;
@@ -26,11 +26,11 @@ interface VMeasureBbThickParameters {
     "balls_only": boolean;
     "surfsmooth_method"?: string | null | undefined;
 }
-type VMeasureBbThickParametersTagged = Required<Pick<VMeasureBbThickParameters, '@type'>> & VMeasureBbThickParameters;
+type VMeasureBbThickParamsDictTagged = Required<Pick<VMeasureBbThickParamsDict, '@type'>> & VMeasureBbThickParamsDict;
 
 
 /**
- * Output object returned when calling `VMeasureBbThickParameters(...)`.
+ * Output object returned when calling `VMeasureBbThickParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function v__measure_bb_thick_params(
     keep_temp_files: boolean = false,
     balls_only: boolean = false,
     surfsmooth_method: string | null = null,
-): VMeasureBbThickParametersTagged {
+): VMeasureBbThickParamsDictTagged {
     const params = {
         "@type": "afni/@measure_bb_thick" as const,
         "maskset": maskset,
@@ -154,7 +154,7 @@ function v__measure_bb_thick_params(
  * @returns Command-line arguments.
  */
 function v__measure_bb_thick_cargs(
-    params: VMeasureBbThickParameters,
+    params: VMeasureBbThickParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -234,7 +234,7 @@ function v__measure_bb_thick_cargs(
  * @returns Outputs object.
  */
 function v__measure_bb_thick_outputs(
-    params: VMeasureBbThickParameters,
+    params: VMeasureBbThickParamsDict,
     execution: Execution,
 ): VMeasureBbThickOutputs {
     const ret: VMeasureBbThickOutputs = {
@@ -268,7 +268,7 @@ function v__measure_bb_thick_outputs(
  * @returns NamedTuple of outputs (described in `VMeasureBbThickOutputs`).
  */
 function v__measure_bb_thick_execute(
-    params: VMeasureBbThickParameters,
+    params: VMeasureBbThickParamsDict,
     runner: Runner | null = null,
 ): VMeasureBbThickOutputs {
     runner = runner || getGlobalRunner();
@@ -328,6 +328,8 @@ function v__measure_bb_thick(
 
 export {
       VMeasureBbThickOutputs,
+      VMeasureBbThickParamsDict,
+      VMeasureBbThickParamsDictTagged,
       V__MEASURE_BB_THICK_METADATA,
       v__measure_bb_thick,
       v__measure_bb_thick_execute,

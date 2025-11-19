@@ -11,7 +11,7 @@ const STIMBAND_METADATA: Metadata = {
 };
 
 
-interface StimbandParameters {
+interface StimbandParamsDict {
     "@type"?: "afni/stimband";
     "verbose_flag": boolean;
     "matrixfiles": Array<InputPathType>;
@@ -20,11 +20,11 @@ interface StimbandParameters {
     "min_bwidth"?: number | null | undefined;
     "min_pow"?: number | null | undefined;
 }
-type StimbandParametersTagged = Required<Pick<StimbandParameters, '@type'>> & StimbandParameters;
+type StimbandParamsDictTagged = Required<Pick<StimbandParamsDict, '@type'>> & StimbandParamsDict;
 
 
 /**
- * Output object returned when calling `StimbandParameters(...)`.
+ * Output object returned when calling `StimbandParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function stimband_params(
     min_freq: number | null = null,
     min_bwidth: number | null = null,
     min_pow: number | null = null,
-): StimbandParametersTagged {
+): StimbandParamsDictTagged {
     const params = {
         "@type": "afni/stimband" as const,
         "verbose_flag": verbose_flag,
@@ -90,7 +90,7 @@ function stimband_params(
  * @returns Command-line arguments.
  */
 function stimband_cargs(
-    params: StimbandParameters,
+    params: StimbandParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function stimband_cargs(
  * @returns Outputs object.
  */
 function stimband_outputs(
-    params: StimbandParameters,
+    params: StimbandParamsDict,
     execution: Execution,
 ): StimbandOutputs {
     const ret: StimbandOutputs = {
@@ -162,7 +162,7 @@ function stimband_outputs(
  * @returns NamedTuple of outputs (described in `StimbandOutputs`).
  */
 function stimband_execute(
-    params: StimbandParameters,
+    params: StimbandParamsDict,
     runner: Runner | null = null,
 ): StimbandOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function stimband(
 export {
       STIMBAND_METADATA,
       StimbandOutputs,
+      StimbandParamsDict,
+      StimbandParamsDictTagged,
       stimband,
       stimband_execute,
       stimband_params,

@@ -11,7 +11,7 @@ const FEAT2SURF_METADATA: Metadata = {
 };
 
 
-interface Feat2surfParameters {
+interface Feat2surfParamsDict {
     "@type"?: "freesurfer/feat2surf";
     "feat_dirs": Array<string>;
     "feat_dirfile"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface Feat2surfParameters {
     "nolog_flag": boolean;
     "out_dir"?: string | null | undefined;
 }
-type Feat2surfParametersTagged = Required<Pick<Feat2surfParameters, '@type'>> & Feat2surfParameters;
+type Feat2surfParamsDictTagged = Required<Pick<Feat2surfParamsDict, '@type'>> & Feat2surfParamsDict;
 
 
 /**
- * Output object returned when calling `Feat2surfParameters(...)`.
+ * Output object returned when calling `Feat2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function feat2surf_params(
     debug_flag: boolean = false,
     nolog_flag: boolean = false,
     out_dir: string | null = null,
-): Feat2surfParametersTagged {
+): Feat2surfParamsDictTagged {
     const params = {
         "@type": "freesurfer/feat2surf" as const,
         "feat_dirs": feat_dirs,
@@ -122,7 +122,7 @@ function feat2surf_params(
  * @returns Command-line arguments.
  */
 function feat2surf_cargs(
-    params: Feat2surfParameters,
+    params: Feat2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -189,7 +189,7 @@ function feat2surf_cargs(
  * @returns Outputs object.
  */
 function feat2surf_outputs(
-    params: Feat2surfParameters,
+    params: Feat2surfParamsDict,
     execution: Execution,
 ): Feat2surfOutputs {
     const ret: Feat2surfOutputs = {
@@ -218,7 +218,7 @@ function feat2surf_outputs(
  * @returns NamedTuple of outputs (described in `Feat2surfOutputs`).
  */
 function feat2surf_execute(
-    params: Feat2surfParameters,
+    params: Feat2surfParamsDict,
     runner: Runner | null = null,
 ): Feat2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -275,6 +275,8 @@ function feat2surf(
 export {
       FEAT2SURF_METADATA,
       Feat2surfOutputs,
+      Feat2surfParamsDict,
+      Feat2surfParamsDictTagged,
       feat2surf,
       feat2surf_execute,
       feat2surf_params,

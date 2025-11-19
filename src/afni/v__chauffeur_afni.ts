@@ -11,7 +11,7 @@ const V__CHAUFFEUR_AFNI_METADATA: Metadata = {
 };
 
 
-interface VChauffeurAfniParameters {
+interface VChauffeurAfniParamsDict {
     "@type"?: "afni/@chauffeur_afni";
     "ulay": InputPathType;
     "olay"?: InputPathType | null | undefined;
@@ -32,11 +32,11 @@ interface VChauffeurAfniParameters {
     "help": boolean;
     "version": boolean;
 }
-type VChauffeurAfniParametersTagged = Required<Pick<VChauffeurAfniParameters, '@type'>> & VChauffeurAfniParameters;
+type VChauffeurAfniParamsDictTagged = Required<Pick<VChauffeurAfniParamsDict, '@type'>> & VChauffeurAfniParamsDict;
 
 
 /**
- * Output object returned when calling `VChauffeurAfniParameters(...)`.
+ * Output object returned when calling `VChauffeurAfniParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function v__chauffeur_afni_params(
     do_clean: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): VChauffeurAfniParametersTagged {
+): VChauffeurAfniParamsDictTagged {
     const params = {
         "@type": "afni/@chauffeur_afni" as const,
         "ulay": ulay,
@@ -160,7 +160,7 @@ function v__chauffeur_afni_params(
  * @returns Command-line arguments.
  */
 function v__chauffeur_afni_cargs(
-    params: VChauffeurAfniParameters,
+    params: VChauffeurAfniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -261,7 +261,7 @@ function v__chauffeur_afni_cargs(
  * @returns Outputs object.
  */
 function v__chauffeur_afni_outputs(
-    params: VChauffeurAfniParameters,
+    params: VChauffeurAfniParamsDict,
     execution: Execution,
 ): VChauffeurAfniOutputs {
     const ret: VChauffeurAfniOutputs = {
@@ -289,7 +289,7 @@ function v__chauffeur_afni_outputs(
  * @returns NamedTuple of outputs (described in `VChauffeurAfniOutputs`).
  */
 function v__chauffeur_afni_execute(
-    params: VChauffeurAfniParameters,
+    params: VChauffeurAfniParamsDict,
     runner: Runner | null = null,
 ): VChauffeurAfniOutputs {
     runner = runner || getGlobalRunner();
@@ -361,6 +361,8 @@ function v__chauffeur_afni(
 
 export {
       VChauffeurAfniOutputs,
+      VChauffeurAfniParamsDict,
+      VChauffeurAfniParamsDictTagged,
       V__CHAUFFEUR_AFNI_METADATA,
       v__chauffeur_afni,
       v__chauffeur_afni_execute,

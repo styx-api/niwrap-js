@@ -11,18 +11,18 @@ const MRIS_MAKE_FACE_PARCELLATION_METADATA: Metadata = {
 };
 
 
-interface MrisMakeFaceParcellationParameters {
+interface MrisMakeFaceParcellationParamsDict {
     "@type"?: "freesurfer/mris_make_face_parcellation";
     "input_surface": InputPathType;
     "ico_file": InputPathType;
     "output_annot": string;
     "colortable"?: InputPathType | null | undefined;
 }
-type MrisMakeFaceParcellationParametersTagged = Required<Pick<MrisMakeFaceParcellationParameters, '@type'>> & MrisMakeFaceParcellationParameters;
+type MrisMakeFaceParcellationParamsDictTagged = Required<Pick<MrisMakeFaceParcellationParamsDict, '@type'>> & MrisMakeFaceParcellationParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMakeFaceParcellationParameters(...)`.
+ * Output object returned when calling `MrisMakeFaceParcellationParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_make_face_parcellation_params(
     ico_file: InputPathType,
     output_annot: string,
     colortable: InputPathType | null = null,
-): MrisMakeFaceParcellationParametersTagged {
+): MrisMakeFaceParcellationParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_make_face_parcellation" as const,
         "input_surface": input_surface,
@@ -76,7 +76,7 @@ function mris_make_face_parcellation_params(
  * @returns Command-line arguments.
  */
 function mris_make_face_parcellation_cargs(
-    params: MrisMakeFaceParcellationParameters,
+    params: MrisMakeFaceParcellationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function mris_make_face_parcellation_cargs(
  * @returns Outputs object.
  */
 function mris_make_face_parcellation_outputs(
-    params: MrisMakeFaceParcellationParameters,
+    params: MrisMakeFaceParcellationParamsDict,
     execution: Execution,
 ): MrisMakeFaceParcellationOutputs {
     const ret: MrisMakeFaceParcellationOutputs = {
@@ -129,7 +129,7 @@ function mris_make_face_parcellation_outputs(
  * @returns NamedTuple of outputs (described in `MrisMakeFaceParcellationOutputs`).
  */
 function mris_make_face_parcellation_execute(
-    params: MrisMakeFaceParcellationParameters,
+    params: MrisMakeFaceParcellationParamsDict,
     runner: Runner | null = null,
 ): MrisMakeFaceParcellationOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mris_make_face_parcellation(
 export {
       MRIS_MAKE_FACE_PARCELLATION_METADATA,
       MrisMakeFaceParcellationOutputs,
+      MrisMakeFaceParcellationParamsDict,
+      MrisMakeFaceParcellationParamsDictTagged,
       mris_make_face_parcellation,
       mris_make_face_parcellation_execute,
       mris_make_face_parcellation_params,

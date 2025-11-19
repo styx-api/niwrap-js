@@ -10,22 +10,22 @@ const SURFACE_APPLY_AFFINE_METADATA: Metadata = {
 };
 
 
-interface SurfaceApplyAffineFlirtParameters {
+interface SurfaceApplyAffineFlirtParamsDict {
     "@type"?: "flirt";
     "source-volume": string;
     "target-volume": string;
 }
-type SurfaceApplyAffineFlirtParametersTagged = Required<Pick<SurfaceApplyAffineFlirtParameters, '@type'>> & SurfaceApplyAffineFlirtParameters;
+type SurfaceApplyAffineFlirtParamsDictTagged = Required<Pick<SurfaceApplyAffineFlirtParamsDict, '@type'>> & SurfaceApplyAffineFlirtParamsDict;
 
 
-interface SurfaceApplyAffineParameters {
+interface SurfaceApplyAffineParamsDict {
     "@type"?: "workbench/surface-apply-affine";
     "out-surf": string;
-    "flirt"?: SurfaceApplyAffineFlirtParameters | null | undefined;
+    "flirt"?: SurfaceApplyAffineFlirtParamsDict | null | undefined;
     "in-surf": InputPathType;
     "affine": string;
 }
-type SurfaceApplyAffineParametersTagged = Required<Pick<SurfaceApplyAffineParameters, '@type'>> & SurfaceApplyAffineParameters;
+type SurfaceApplyAffineParamsDictTagged = Required<Pick<SurfaceApplyAffineParamsDict, '@type'>> & SurfaceApplyAffineParamsDict;
 
 
 /**
@@ -36,10 +36,10 @@ type SurfaceApplyAffineParametersTagged = Required<Pick<SurfaceApplyAffineParame
  *
  * @returns Parameter dictionary
  */
-function surface_apply_affine_flirt_params(
+function surface_apply_affine_flirt(
     source_volume: string,
     target_volume: string,
-): SurfaceApplyAffineFlirtParametersTagged {
+): SurfaceApplyAffineFlirtParamsDictTagged {
     const params = {
         "@type": "flirt" as const,
         "source-volume": source_volume,
@@ -58,7 +58,7 @@ function surface_apply_affine_flirt_params(
  * @returns Command-line arguments.
  */
 function surface_apply_affine_flirt_cargs(
-    params: SurfaceApplyAffineFlirtParameters,
+    params: SurfaceApplyAffineFlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -72,7 +72,7 @@ function surface_apply_affine_flirt_cargs(
 
 
 /**
- * Output object returned when calling `SurfaceApplyAffineParameters(...)`.
+ * Output object returned when calling `SurfaceApplyAffineParamsDict(...)`.
  *
  * @interface
  */
@@ -102,8 +102,8 @@ function surface_apply_affine_params(
     out_surf: string,
     in_surf: InputPathType,
     affine: string,
-    flirt: SurfaceApplyAffineFlirtParameters | null = null,
-): SurfaceApplyAffineParametersTagged {
+    flirt: SurfaceApplyAffineFlirtParamsDict | null = null,
+): SurfaceApplyAffineParamsDictTagged {
     const params = {
         "@type": "workbench/surface-apply-affine" as const,
         "out-surf": out_surf,
@@ -126,7 +126,7 @@ function surface_apply_affine_params(
  * @returns Command-line arguments.
  */
 function surface_apply_affine_cargs(
-    params: SurfaceApplyAffineParameters,
+    params: SurfaceApplyAffineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function surface_apply_affine_cargs(
  * @returns Outputs object.
  */
 function surface_apply_affine_outputs(
-    params: SurfaceApplyAffineParameters,
+    params: SurfaceApplyAffineParamsDict,
     execution: Execution,
 ): SurfaceApplyAffineOutputs {
     const ret: SurfaceApplyAffineOutputs = {
@@ -175,7 +175,7 @@ function surface_apply_affine_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceApplyAffineOutputs`).
  */
 function surface_apply_affine_execute(
-    params: SurfaceApplyAffineParameters,
+    params: SurfaceApplyAffineParamsDict,
     runner: Runner | null = null,
 ): SurfaceApplyAffineOutputs {
     runner = runner || getGlobalRunner();
@@ -205,7 +205,7 @@ function surface_apply_affine(
     out_surf: string,
     in_surf: InputPathType,
     affine: string,
-    flirt: SurfaceApplyAffineFlirtParameters | null = null,
+    flirt: SurfaceApplyAffineFlirtParamsDict | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyAffineOutputs {
     const params = surface_apply_affine_params(out_surf, in_surf, affine, flirt)
@@ -215,9 +215,13 @@ function surface_apply_affine(
 
 export {
       SURFACE_APPLY_AFFINE_METADATA,
+      SurfaceApplyAffineFlirtParamsDict,
+      SurfaceApplyAffineFlirtParamsDictTagged,
       SurfaceApplyAffineOutputs,
+      SurfaceApplyAffineParamsDict,
+      SurfaceApplyAffineParamsDictTagged,
       surface_apply_affine,
       surface_apply_affine_execute,
-      surface_apply_affine_flirt_params,
+      surface_apply_affine_flirt,
       surface_apply_affine_params,
 };

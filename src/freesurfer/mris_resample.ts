@@ -11,7 +11,7 @@ const MRIS_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface MrisResampleParameters {
+interface MrisResampleParamsDict {
     "@type"?: "freesurfer/mris_resample";
     "atlas_reg": InputPathType;
     "subject_reg": InputPathType;
@@ -20,11 +20,11 @@ interface MrisResampleParameters {
     "annot_in"?: InputPathType | null | undefined;
     "annot_out"?: string | null | undefined;
 }
-type MrisResampleParametersTagged = Required<Pick<MrisResampleParameters, '@type'>> & MrisResampleParameters;
+type MrisResampleParamsDictTagged = Required<Pick<MrisResampleParamsDict, '@type'>> & MrisResampleParamsDict;
 
 
 /**
- * Output object returned when calling `MrisResampleParameters(...)`.
+ * Output object returned when calling `MrisResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function mris_resample_params(
     output: string,
     annot_in: InputPathType | null = null,
     annot_out: string | null = null,
-): MrisResampleParametersTagged {
+): MrisResampleParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_resample" as const,
         "atlas_reg": atlas_reg,
@@ -90,7 +90,7 @@ function mris_resample_params(
  * @returns Command-line arguments.
  */
 function mris_resample_cargs(
-    params: MrisResampleParameters,
+    params: MrisResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function mris_resample_cargs(
  * @returns Outputs object.
  */
 function mris_resample_outputs(
-    params: MrisResampleParameters,
+    params: MrisResampleParamsDict,
     execution: Execution,
 ): MrisResampleOutputs {
     const ret: MrisResampleOutputs = {
@@ -163,7 +163,7 @@ function mris_resample_outputs(
  * @returns NamedTuple of outputs (described in `MrisResampleOutputs`).
  */
 function mris_resample_execute(
-    params: MrisResampleParameters,
+    params: MrisResampleParamsDict,
     runner: Runner | null = null,
 ): MrisResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -212,6 +212,8 @@ function mris_resample(
 export {
       MRIS_RESAMPLE_METADATA,
       MrisResampleOutputs,
+      MrisResampleParamsDict,
+      MrisResampleParamsDictTagged,
       mris_resample,
       mris_resample_execute,
       mris_resample_params,

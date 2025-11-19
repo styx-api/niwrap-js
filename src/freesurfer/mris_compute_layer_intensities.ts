@@ -11,18 +11,18 @@ const MRIS_COMPUTE_LAYER_INTENSITIES_METADATA: Metadata = {
 };
 
 
-interface MrisComputeLayerIntensitiesParameters {
+interface MrisComputeLayerIntensitiesParamsDict {
     "@type"?: "freesurfer/mris_compute_layer_intensities";
     "input_intensity_volume": InputPathType;
     "layer_volume_fractions_file": InputPathType;
     "input_surface": InputPathType;
     "output_overlay": string;
 }
-type MrisComputeLayerIntensitiesParametersTagged = Required<Pick<MrisComputeLayerIntensitiesParameters, '@type'>> & MrisComputeLayerIntensitiesParameters;
+type MrisComputeLayerIntensitiesParamsDictTagged = Required<Pick<MrisComputeLayerIntensitiesParamsDict, '@type'>> & MrisComputeLayerIntensitiesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisComputeLayerIntensitiesParameters(...)`.
+ * Output object returned when calling `MrisComputeLayerIntensitiesParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_compute_layer_intensities_params(
     layer_volume_fractions_file: InputPathType,
     input_surface: InputPathType,
     output_overlay: string,
-): MrisComputeLayerIntensitiesParametersTagged {
+): MrisComputeLayerIntensitiesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_compute_layer_intensities" as const,
         "input_intensity_volume": input_intensity_volume,
@@ -74,7 +74,7 @@ function mris_compute_layer_intensities_params(
  * @returns Command-line arguments.
  */
 function mris_compute_layer_intensities_cargs(
-    params: MrisComputeLayerIntensitiesParameters,
+    params: MrisComputeLayerIntensitiesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_compute_layer_intensities_cargs(
  * @returns Outputs object.
  */
 function mris_compute_layer_intensities_outputs(
-    params: MrisComputeLayerIntensitiesParameters,
+    params: MrisComputeLayerIntensitiesParamsDict,
     execution: Execution,
 ): MrisComputeLayerIntensitiesOutputs {
     const ret: MrisComputeLayerIntensitiesOutputs = {
@@ -122,7 +122,7 @@ function mris_compute_layer_intensities_outputs(
  * @returns NamedTuple of outputs (described in `MrisComputeLayerIntensitiesOutputs`).
  */
 function mris_compute_layer_intensities_execute(
-    params: MrisComputeLayerIntensitiesParameters,
+    params: MrisComputeLayerIntensitiesParamsDict,
     runner: Runner | null = null,
 ): MrisComputeLayerIntensitiesOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_compute_layer_intensities(
 export {
       MRIS_COMPUTE_LAYER_INTENSITIES_METADATA,
       MrisComputeLayerIntensitiesOutputs,
+      MrisComputeLayerIntensitiesParamsDict,
+      MrisComputeLayerIntensitiesParamsDictTagged,
       mris_compute_layer_intensities,
       mris_compute_layer_intensities_execute,
       mris_compute_layer_intensities_params,

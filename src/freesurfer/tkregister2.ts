@@ -11,7 +11,7 @@ const TKREGISTER2_METADATA: Metadata = {
 };
 
 
-interface Tkregister2Parameters {
+interface Tkregister2ParamsDict {
     "@type"?: "freesurfer/tkregister2";
     "fixed_volume": InputPathType;
     "moving_volume": InputPathType;
@@ -22,11 +22,11 @@ interface Tkregister2Parameters {
     "reg_only": boolean;
     "help": boolean;
 }
-type Tkregister2ParametersTagged = Required<Pick<Tkregister2Parameters, '@type'>> & Tkregister2Parameters;
+type Tkregister2ParamsDictTagged = Required<Pick<Tkregister2ParamsDict, '@type'>> & Tkregister2ParamsDict;
 
 
 /**
- * Output object returned when calling `Tkregister2Parameters(...)`.
+ * Output object returned when calling `Tkregister2ParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function tkregister2_params(
     surf_reg: boolean = false,
     reg_only: boolean = false,
     help: boolean = false,
-): Tkregister2ParametersTagged {
+): Tkregister2ParamsDictTagged {
     const params = {
         "@type": "freesurfer/tkregister2" as const,
         "fixed_volume": fixed_volume,
@@ -90,7 +90,7 @@ function tkregister2_params(
  * @returns Command-line arguments.
  */
 function tkregister2_cargs(
-    params: Tkregister2Parameters,
+    params: Tkregister2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function tkregister2_cargs(
  * @returns Outputs object.
  */
 function tkregister2_outputs(
-    params: Tkregister2Parameters,
+    params: Tkregister2ParamsDict,
     execution: Execution,
 ): Tkregister2Outputs {
     const ret: Tkregister2Outputs = {
@@ -152,7 +152,7 @@ function tkregister2_outputs(
  * @returns NamedTuple of outputs (described in `Tkregister2Outputs`).
  */
 function tkregister2_execute(
-    params: Tkregister2Parameters,
+    params: Tkregister2ParamsDict,
     runner: Runner | null = null,
 ): Tkregister2Outputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function tkregister2(
 export {
       TKREGISTER2_METADATA,
       Tkregister2Outputs,
+      Tkregister2ParamsDict,
+      Tkregister2ParamsDictTagged,
       tkregister2,
       tkregister2_execute,
       tkregister2_params,

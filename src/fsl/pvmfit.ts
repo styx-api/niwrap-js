@@ -11,7 +11,7 @@ const PVMFIT_METADATA: Metadata = {
 };
 
 
-interface PvmfitParameters {
+interface PvmfitParamsDict {
     "@type"?: "fsl/pvmfit";
     "data_file": InputPathType;
     "mask_file": InputPathType;
@@ -29,11 +29,11 @@ interface PvmfitParameters {
     "verbose": boolean;
     "help": boolean;
 }
-type PvmfitParametersTagged = Required<Pick<PvmfitParameters, '@type'>> & PvmfitParameters;
+type PvmfitParamsDictTagged = Required<Pick<PvmfitParamsDict, '@type'>> & PvmfitParamsDict;
 
 
 /**
- * Output object returned when calling `PvmfitParameters(...)`.
+ * Output object returned when calling `PvmfitParamsDict(...)`.
  *
  * @interface
  */
@@ -90,7 +90,7 @@ function pvmfit_params(
     save_bic: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): PvmfitParametersTagged {
+): PvmfitParamsDictTagged {
     const params = {
         "@type": "fsl/pvmfit" as const,
         "data_file": data_file,
@@ -128,7 +128,7 @@ function pvmfit_params(
  * @returns Command-line arguments.
  */
 function pvmfit_cargs(
-    params: PvmfitParameters,
+    params: PvmfitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function pvmfit_cargs(
  * @returns Outputs object.
  */
 function pvmfit_outputs(
-    params: PvmfitParameters,
+    params: PvmfitParamsDict,
     execution: Execution,
 ): PvmfitOutputs {
     const ret: PvmfitOutputs = {
@@ -231,7 +231,7 @@ function pvmfit_outputs(
  * @returns NamedTuple of outputs (described in `PvmfitOutputs`).
  */
 function pvmfit_execute(
-    params: PvmfitParameters,
+    params: PvmfitParamsDict,
     runner: Runner | null = null,
 ): PvmfitOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function pvmfit(
 export {
       PVMFIT_METADATA,
       PvmfitOutputs,
+      PvmfitParamsDict,
+      PvmfitParamsDictTagged,
       pvmfit,
       pvmfit_execute,
       pvmfit_params,

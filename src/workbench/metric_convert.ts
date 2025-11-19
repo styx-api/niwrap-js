@@ -10,33 +10,33 @@ const METRIC_CONVERT_METADATA: Metadata = {
 };
 
 
-interface MetricConvertToNiftiParameters {
+interface MetricConvertToNiftiParamsDict {
     "@type"?: "to-nifti";
     "metric-in": InputPathType;
     "nifti-out": string;
 }
-type MetricConvertToNiftiParametersTagged = Required<Pick<MetricConvertToNiftiParameters, '@type'>> & MetricConvertToNiftiParameters;
+type MetricConvertToNiftiParamsDictTagged = Required<Pick<MetricConvertToNiftiParamsDict, '@type'>> & MetricConvertToNiftiParamsDict;
 
 
-interface MetricConvertFromNiftiParameters {
+interface MetricConvertFromNiftiParamsDict {
     "@type"?: "from-nifti";
     "nifti-in": InputPathType;
     "surface-in": InputPathType;
     "metric-out": string;
 }
-type MetricConvertFromNiftiParametersTagged = Required<Pick<MetricConvertFromNiftiParameters, '@type'>> & MetricConvertFromNiftiParameters;
+type MetricConvertFromNiftiParamsDictTagged = Required<Pick<MetricConvertFromNiftiParamsDict, '@type'>> & MetricConvertFromNiftiParamsDict;
 
 
-interface MetricConvertParameters {
+interface MetricConvertParamsDict {
     "@type"?: "workbench/metric-convert";
-    "to-nifti"?: MetricConvertToNiftiParameters | null | undefined;
-    "from-nifti"?: MetricConvertFromNiftiParameters | null | undefined;
+    "to-nifti"?: MetricConvertToNiftiParamsDict | null | undefined;
+    "from-nifti"?: MetricConvertFromNiftiParamsDict | null | undefined;
 }
-type MetricConvertParametersTagged = Required<Pick<MetricConvertParameters, '@type'>> & MetricConvertParameters;
+type MetricConvertParamsDictTagged = Required<Pick<MetricConvertParamsDict, '@type'>> & MetricConvertParamsDict;
 
 
 /**
- * Output object returned when calling `MetricConvertToNiftiParameters | null(...)`.
+ * Output object returned when calling `MetricConvertToNiftiParamsDict | null(...)`.
  *
  * @interface
  */
@@ -60,10 +60,10 @@ interface MetricConvertToNiftiOutputs {
  *
  * @returns Parameter dictionary
  */
-function metric_convert_to_nifti_params(
+function metric_convert_to_nifti(
     metric_in: InputPathType,
     nifti_out: string,
-): MetricConvertToNiftiParametersTagged {
+): MetricConvertToNiftiParamsDictTagged {
     const params = {
         "@type": "to-nifti" as const,
         "metric-in": metric_in,
@@ -82,7 +82,7 @@ function metric_convert_to_nifti_params(
  * @returns Command-line arguments.
  */
 function metric_convert_to_nifti_cargs(
-    params: MetricConvertToNiftiParameters,
+    params: MetricConvertToNiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function metric_convert_to_nifti_cargs(
  * @returns Outputs object.
  */
 function metric_convert_to_nifti_outputs(
-    params: MetricConvertToNiftiParameters,
+    params: MetricConvertToNiftiParamsDict,
     execution: Execution,
 ): MetricConvertToNiftiOutputs {
     const ret: MetricConvertToNiftiOutputs = {
@@ -116,7 +116,7 @@ function metric_convert_to_nifti_outputs(
 
 
 /**
- * Output object returned when calling `MetricConvertFromNiftiParameters | null(...)`.
+ * Output object returned when calling `MetricConvertFromNiftiParamsDict | null(...)`.
  *
  * @interface
  */
@@ -141,11 +141,11 @@ interface MetricConvertFromNiftiOutputs {
  *
  * @returns Parameter dictionary
  */
-function metric_convert_from_nifti_params(
+function metric_convert_from_nifti(
     nifti_in: InputPathType,
     surface_in: InputPathType,
     metric_out: string,
-): MetricConvertFromNiftiParametersTagged {
+): MetricConvertFromNiftiParamsDictTagged {
     const params = {
         "@type": "from-nifti" as const,
         "nifti-in": nifti_in,
@@ -165,7 +165,7 @@ function metric_convert_from_nifti_params(
  * @returns Command-line arguments.
  */
 function metric_convert_from_nifti_cargs(
-    params: MetricConvertFromNiftiParameters,
+    params: MetricConvertFromNiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,7 +188,7 @@ function metric_convert_from_nifti_cargs(
  * @returns Outputs object.
  */
 function metric_convert_from_nifti_outputs(
-    params: MetricConvertFromNiftiParameters,
+    params: MetricConvertFromNiftiParamsDict,
     execution: Execution,
 ): MetricConvertFromNiftiOutputs {
     const ret: MetricConvertFromNiftiOutputs = {
@@ -200,7 +200,7 @@ function metric_convert_from_nifti_outputs(
 
 
 /**
- * Output object returned when calling `MetricConvertParameters(...)`.
+ * Output object returned when calling `MetricConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -229,9 +229,9 @@ interface MetricConvertOutputs {
  * @returns Parameter dictionary
  */
 function metric_convert_params(
-    to_nifti: MetricConvertToNiftiParameters | null = null,
-    from_nifti: MetricConvertFromNiftiParameters | null = null,
-): MetricConvertParametersTagged {
+    to_nifti: MetricConvertToNiftiParamsDict | null = null,
+    from_nifti: MetricConvertFromNiftiParamsDict | null = null,
+): MetricConvertParamsDictTagged {
     const params = {
         "@type": "workbench/metric-convert" as const,
     };
@@ -254,7 +254,7 @@ function metric_convert_params(
  * @returns Command-line arguments.
  */
 function metric_convert_cargs(
-    params: MetricConvertParameters,
+    params: MetricConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -279,7 +279,7 @@ function metric_convert_cargs(
  * @returns Outputs object.
  */
 function metric_convert_outputs(
-    params: MetricConvertParameters,
+    params: MetricConvertParamsDict,
     execution: Execution,
 ): MetricConvertOutputs {
     const ret: MetricConvertOutputs = {
@@ -302,7 +302,7 @@ function metric_convert_outputs(
  * @returns NamedTuple of outputs (described in `MetricConvertOutputs`).
  */
 function metric_convert_execute(
-    params: MetricConvertParameters,
+    params: MetricConvertParamsDict,
     runner: Runner | null = null,
 ): MetricConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -327,8 +327,8 @@ function metric_convert_execute(
  * @returns NamedTuple of outputs (described in `MetricConvertOutputs`).
  */
 function metric_convert(
-    to_nifti: MetricConvertToNiftiParameters | null = null,
-    from_nifti: MetricConvertFromNiftiParameters | null = null,
+    to_nifti: MetricConvertToNiftiParamsDict | null = null,
+    from_nifti: MetricConvertFromNiftiParamsDict | null = null,
     runner: Runner | null = null,
 ): MetricConvertOutputs {
     const params = metric_convert_params(to_nifti, from_nifti)
@@ -339,11 +339,17 @@ function metric_convert(
 export {
       METRIC_CONVERT_METADATA,
       MetricConvertFromNiftiOutputs,
+      MetricConvertFromNiftiParamsDict,
+      MetricConvertFromNiftiParamsDictTagged,
       MetricConvertOutputs,
+      MetricConvertParamsDict,
+      MetricConvertParamsDictTagged,
       MetricConvertToNiftiOutputs,
+      MetricConvertToNiftiParamsDict,
+      MetricConvertToNiftiParamsDictTagged,
       metric_convert,
       metric_convert_execute,
-      metric_convert_from_nifti_params,
+      metric_convert_from_nifti,
       metric_convert_params,
-      metric_convert_to_nifti_params,
+      metric_convert_to_nifti,
 };

@@ -11,7 +11,7 @@ const STANDARD_SPACE_ROI_METADATA: Metadata = {
 };
 
 
-interface StandardSpaceRoiParameters {
+interface StandardSpaceRoiParamsDict {
     "@type"?: "fsl/standard_space_roi";
     "infile": InputPathType;
     "outfile": string;
@@ -26,11 +26,11 @@ interface StandardSpaceRoiParameters {
     "debug_flag": boolean;
     "bet_premask_flag": boolean;
 }
-type StandardSpaceRoiParametersTagged = Required<Pick<StandardSpaceRoiParameters, '@type'>> & StandardSpaceRoiParameters;
+type StandardSpaceRoiParamsDictTagged = Required<Pick<StandardSpaceRoiParamsDict, '@type'>> & StandardSpaceRoiParamsDict;
 
 
 /**
- * Output object returned when calling `StandardSpaceRoiParameters(...)`.
+ * Output object returned when calling `StandardSpaceRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function standard_space_roi_params(
     alt_input: InputPathType | null = null,
     debug_flag: boolean = false,
     bet_premask_flag: boolean = false,
-): StandardSpaceRoiParametersTagged {
+): StandardSpaceRoiParamsDictTagged {
     const params = {
         "@type": "fsl/standard_space_roi" as const,
         "infile": infile,
@@ -114,7 +114,7 @@ function standard_space_roi_params(
  * @returns Command-line arguments.
  */
 function standard_space_roi_cargs(
-    params: StandardSpaceRoiParameters,
+    params: StandardSpaceRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -176,7 +176,7 @@ function standard_space_roi_cargs(
  * @returns Outputs object.
  */
 function standard_space_roi_outputs(
-    params: StandardSpaceRoiParameters,
+    params: StandardSpaceRoiParamsDict,
     execution: Execution,
 ): StandardSpaceRoiOutputs {
     const ret: StandardSpaceRoiOutputs = {
@@ -202,7 +202,7 @@ function standard_space_roi_outputs(
  * @returns NamedTuple of outputs (described in `StandardSpaceRoiOutputs`).
  */
 function standard_space_roi_execute(
-    params: StandardSpaceRoiParameters,
+    params: StandardSpaceRoiParamsDict,
     runner: Runner | null = null,
 ): StandardSpaceRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -263,6 +263,8 @@ function standard_space_roi(
 export {
       STANDARD_SPACE_ROI_METADATA,
       StandardSpaceRoiOutputs,
+      StandardSpaceRoiParamsDict,
+      StandardSpaceRoiParamsDictTagged,
       standard_space_roi,
       standard_space_roi_execute,
       standard_space_roi_params,

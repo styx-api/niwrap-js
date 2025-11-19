@@ -11,15 +11,15 @@ const V_3D_CONFORMIST_METADATA: Metadata = {
 };
 
 
-interface V3dConformistParameters {
+interface V3dConformistParamsDict {
     "@type"?: "afni/3dConformist";
     "input_files": Array<InputPathType>;
 }
-type V3dConformistParametersTagged = Required<Pick<V3dConformistParameters, '@type'>> & V3dConformistParameters;
+type V3dConformistParamsDictTagged = Required<Pick<V3dConformistParamsDict, '@type'>> & V3dConformistParamsDict;
 
 
 /**
- * Output object returned when calling `V3dConformistParameters(...)`.
+ * Output object returned when calling `V3dConformistParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface V3dConformistOutputs {
  */
 function v_3d_conformist_params(
     input_files: Array<InputPathType>,
-): V3dConformistParametersTagged {
+): V3dConformistParamsDictTagged {
     const params = {
         "@type": "afni/3dConformist" as const,
         "input_files": input_files,
@@ -62,7 +62,7 @@ function v_3d_conformist_params(
  * @returns Command-line arguments.
  */
 function v_3d_conformist_cargs(
-    params: V3dConformistParameters,
+    params: V3dConformistParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v_3d_conformist_cargs(
  * @returns Outputs object.
  */
 function v_3d_conformist_outputs(
-    params: V3dConformistParameters,
+    params: V3dConformistParamsDict,
     execution: Execution,
 ): V3dConformistOutputs {
     const ret: V3dConformistOutputs = {
@@ -107,7 +107,7 @@ function v_3d_conformist_outputs(
  * @returns NamedTuple of outputs (described in `V3dConformistOutputs`).
  */
 function v_3d_conformist_execute(
-    params: V3dConformistParameters,
+    params: V3dConformistParamsDict,
     runner: Runner | null = null,
 ): V3dConformistOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v_3d_conformist(
 
 export {
       V3dConformistOutputs,
+      V3dConformistParamsDict,
+      V3dConformistParamsDictTagged,
       V_3D_CONFORMIST_METADATA,
       v_3d_conformist,
       v_3d_conformist_execute,

@@ -11,7 +11,7 @@ const MRI_DISTANCE_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface MriDistanceTransformParameters {
+interface MriDistanceTransformParamsDict {
     "@type"?: "freesurfer/mri_distance_transform";
     "input_volume": InputPathType;
     "label": number;
@@ -19,11 +19,11 @@ interface MriDistanceTransformParameters {
     "mode"?: number | null | undefined;
     "output_volume": string;
 }
-type MriDistanceTransformParametersTagged = Required<Pick<MriDistanceTransformParameters, '@type'>> & MriDistanceTransformParameters;
+type MriDistanceTransformParamsDictTagged = Required<Pick<MriDistanceTransformParamsDict, '@type'>> & MriDistanceTransformParamsDict;
 
 
 /**
- * Output object returned when calling `MriDistanceTransformParameters(...)`.
+ * Output object returned when calling `MriDistanceTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_distance_transform_params(
     max_distance: number,
     output_volume: string,
     mode: number | null = null,
-): MriDistanceTransformParametersTagged {
+): MriDistanceTransformParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_distance_transform" as const,
         "input_volume": input_volume,
@@ -80,7 +80,7 @@ function mri_distance_transform_params(
  * @returns Command-line arguments.
  */
 function mri_distance_transform_cargs(
-    params: MriDistanceTransformParameters,
+    params: MriDistanceTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function mri_distance_transform_cargs(
  * @returns Outputs object.
  */
 function mri_distance_transform_outputs(
-    params: MriDistanceTransformParameters,
+    params: MriDistanceTransformParamsDict,
     execution: Execution,
 ): MriDistanceTransformOutputs {
     const ret: MriDistanceTransformOutputs = {
@@ -131,7 +131,7 @@ function mri_distance_transform_outputs(
  * @returns NamedTuple of outputs (described in `MriDistanceTransformOutputs`).
  */
 function mri_distance_transform_execute(
-    params: MriDistanceTransformParameters,
+    params: MriDistanceTransformParamsDict,
     runner: Runner | null = null,
 ): MriDistanceTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function mri_distance_transform(
 export {
       MRI_DISTANCE_TRANSFORM_METADATA,
       MriDistanceTransformOutputs,
+      MriDistanceTransformParamsDict,
+      MriDistanceTransformParamsDictTagged,
       mri_distance_transform,
       mri_distance_transform_execute,
       mri_distance_transform_params,

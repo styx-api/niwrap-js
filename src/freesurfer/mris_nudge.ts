@@ -11,7 +11,7 @@ const MRIS_NUDGE_METADATA: Metadata = {
 };
 
 
-interface MrisNudgeParameters {
+interface MrisNudgeParamsDict {
     "@type"?: "freesurfer/mris_nudge";
     "input_surface": InputPathType;
     "input_volume": InputPathType;
@@ -19,11 +19,11 @@ interface MrisNudgeParameters {
     "target_val": number;
     "nbhd": number;
 }
-type MrisNudgeParametersTagged = Required<Pick<MrisNudgeParameters, '@type'>> & MrisNudgeParameters;
+type MrisNudgeParamsDictTagged = Required<Pick<MrisNudgeParamsDict, '@type'>> & MrisNudgeParamsDict;
 
 
 /**
- * Output object returned when calling `MrisNudgeParameters(...)`.
+ * Output object returned when calling `MrisNudgeParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mris_nudge_params(
     vertex: number,
     target_val: number,
     nbhd: number,
-): MrisNudgeParametersTagged {
+): MrisNudgeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_nudge" as const,
         "input_surface": input_surface,
@@ -78,7 +78,7 @@ function mris_nudge_params(
  * @returns Command-line arguments.
  */
 function mris_nudge_cargs(
-    params: MrisNudgeParameters,
+    params: MrisNudgeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function mris_nudge_cargs(
  * @returns Outputs object.
  */
 function mris_nudge_outputs(
-    params: MrisNudgeParameters,
+    params: MrisNudgeParamsDict,
     execution: Execution,
 ): MrisNudgeOutputs {
     const ret: MrisNudgeOutputs = {
@@ -127,7 +127,7 @@ function mris_nudge_outputs(
  * @returns NamedTuple of outputs (described in `MrisNudgeOutputs`).
  */
 function mris_nudge_execute(
-    params: MrisNudgeParameters,
+    params: MrisNudgeParamsDict,
     runner: Runner | null = null,
 ): MrisNudgeOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mris_nudge(
 export {
       MRIS_NUDGE_METADATA,
       MrisNudgeOutputs,
+      MrisNudgeParamsDict,
+      MrisNudgeParamsDictTagged,
       mris_nudge,
       mris_nudge_execute,
       mris_nudge_params,

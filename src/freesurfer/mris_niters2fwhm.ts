@@ -11,7 +11,7 @@ const MRIS_NITERS2FWHM_METADATA: Metadata = {
 };
 
 
-interface MrisNiters2fwhmParameters {
+interface MrisNiters2fwhmParamsDict {
     "@type"?: "freesurfer/mris_niters2fwhm";
     "subject": string;
     "hemi": string;
@@ -23,11 +23,11 @@ interface MrisNiters2fwhmParameters {
     "help": boolean;
     "version": boolean;
 }
-type MrisNiters2fwhmParametersTagged = Required<Pick<MrisNiters2fwhmParameters, '@type'>> & MrisNiters2fwhmParameters;
+type MrisNiters2fwhmParamsDictTagged = Required<Pick<MrisNiters2fwhmParamsDict, '@type'>> & MrisNiters2fwhmParamsDict;
 
 
 /**
- * Output object returned when calling `MrisNiters2fwhmParameters(...)`.
+ * Output object returned when calling `MrisNiters2fwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function mris_niters2fwhm_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): MrisNiters2fwhmParametersTagged {
+): MrisNiters2fwhmParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_niters2fwhm" as const,
         "subject": subject,
@@ -90,7 +90,7 @@ function mris_niters2fwhm_params(
  * @returns Command-line arguments.
  */
 function mris_niters2fwhm_cargs(
-    params: MrisNiters2fwhmParameters,
+    params: MrisNiters2fwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function mris_niters2fwhm_cargs(
  * @returns Outputs object.
  */
 function mris_niters2fwhm_outputs(
-    params: MrisNiters2fwhmParameters,
+    params: MrisNiters2fwhmParamsDict,
     execution: Execution,
 ): MrisNiters2fwhmOutputs {
     const ret: MrisNiters2fwhmOutputs = {
@@ -165,7 +165,7 @@ function mris_niters2fwhm_outputs(
  * @returns NamedTuple of outputs (described in `MrisNiters2fwhmOutputs`).
  */
 function mris_niters2fwhm_execute(
-    params: MrisNiters2fwhmParameters,
+    params: MrisNiters2fwhmParamsDict,
     runner: Runner | null = null,
 ): MrisNiters2fwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -220,6 +220,8 @@ function mris_niters2fwhm(
 export {
       MRIS_NITERS2FWHM_METADATA,
       MrisNiters2fwhmOutputs,
+      MrisNiters2fwhmParamsDict,
+      MrisNiters2fwhmParamsDictTagged,
       mris_niters2fwhm,
       mris_niters2fwhm_execute,
       mris_niters2fwhm_params,

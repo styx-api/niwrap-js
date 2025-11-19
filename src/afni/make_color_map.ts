@@ -11,7 +11,7 @@ const MAKE_COLOR_MAP_METADATA: Metadata = {
 };
 
 
-interface MakeColorMapParameters {
+interface MakeColorMapParamsDict {
     "@type"?: "afni/MakeColorMap";
     "fiducials_ncol"?: InputPathType | null | undefined;
     "fiducials"?: InputPathType | null | undefined;
@@ -34,11 +34,11 @@ interface MakeColorMapParameters {
     "help_full_flag": boolean;
     "flip_map_updside_down": boolean;
 }
-type MakeColorMapParametersTagged = Required<Pick<MakeColorMapParameters, '@type'>> & MakeColorMapParameters;
+type MakeColorMapParamsDictTagged = Required<Pick<MakeColorMapParamsDict, '@type'>> & MakeColorMapParamsDict;
 
 
 /**
- * Output object returned when calling `MakeColorMapParameters(...)`.
+ * Output object returned when calling `MakeColorMapParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function make_color_map_params(
     help_flag: boolean = false,
     help_full_flag: boolean = false,
     flip_map_updside_down: boolean = false,
-): MakeColorMapParametersTagged {
+): MakeColorMapParamsDictTagged {
     const params = {
         "@type": "afni/MakeColorMap" as const,
         "flipupdown": flipupdown,
@@ -170,7 +170,7 @@ function make_color_map_params(
  * @returns Command-line arguments.
  */
 function make_color_map_cargs(
-    params: MakeColorMapParameters,
+    params: MakeColorMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -290,7 +290,7 @@ function make_color_map_cargs(
  * @returns Outputs object.
  */
 function make_color_map_outputs(
-    params: MakeColorMapParameters,
+    params: MakeColorMapParamsDict,
     execution: Execution,
 ): MakeColorMapOutputs {
     const ret: MakeColorMapOutputs = {
@@ -317,7 +317,7 @@ function make_color_map_outputs(
  * @returns NamedTuple of outputs (described in `MakeColorMapOutputs`).
  */
 function make_color_map_execute(
-    params: MakeColorMapParameters,
+    params: MakeColorMapParamsDict,
     runner: Runner | null = null,
 ): MakeColorMapOutputs {
     runner = runner || getGlobalRunner();
@@ -394,6 +394,8 @@ function make_color_map(
 export {
       MAKE_COLOR_MAP_METADATA,
       MakeColorMapOutputs,
+      MakeColorMapParamsDict,
+      MakeColorMapParamsDictTagged,
       make_color_map,
       make_color_map_execute,
       make_color_map_params,

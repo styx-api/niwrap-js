@@ -11,16 +11,16 @@ const TOKENS_METADATA: Metadata = {
 };
 
 
-interface TokensParameters {
+interface TokensParamsDict {
     "@type"?: "afni/tokens";
     "infile"?: InputPathType | null | undefined;
     "extra_char"?: Array<string> | null | undefined;
 }
-type TokensParametersTagged = Required<Pick<TokensParameters, '@type'>> & TokensParameters;
+type TokensParamsDictTagged = Required<Pick<TokensParamsDict, '@type'>> & TokensParamsDict;
 
 
 /**
- * Output object returned when calling `TokensParameters(...)`.
+ * Output object returned when calling `TokensParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface TokensOutputs {
 function tokens_params(
     infile: InputPathType | null = null,
     extra_char: Array<string> | null = null,
-): TokensParametersTagged {
+): TokensParamsDictTagged {
     const params = {
         "@type": "afni/tokens" as const,
     };
@@ -66,7 +66,7 @@ function tokens_params(
  * @returns Command-line arguments.
  */
 function tokens_cargs(
-    params: TokensParameters,
+    params: TokensParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function tokens_cargs(
  * @returns Outputs object.
  */
 function tokens_outputs(
-    params: TokensParameters,
+    params: TokensParamsDict,
     execution: Execution,
 ): TokensOutputs {
     const ret: TokensOutputs = {
@@ -121,7 +121,7 @@ function tokens_outputs(
  * @returns NamedTuple of outputs (described in `TokensOutputs`).
  */
 function tokens_execute(
-    params: TokensParameters,
+    params: TokensParamsDict,
     runner: Runner | null = null,
 ): TokensOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function tokens(
 export {
       TOKENS_METADATA,
       TokensOutputs,
+      TokensParamsDict,
+      TokensParamsDictTagged,
       tokens,
       tokens_execute,
       tokens_params,

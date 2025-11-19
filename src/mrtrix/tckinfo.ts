@@ -11,15 +11,15 @@ const TCKINFO_METADATA: Metadata = {
 };
 
 
-interface TckinfoConfigParameters {
+interface TckinfoConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckinfoConfigParametersTagged = Required<Pick<TckinfoConfigParameters, '@type'>> & TckinfoConfigParameters;
+type TckinfoConfigParamsDictTagged = Required<Pick<TckinfoConfigParamsDict, '@type'>> & TckinfoConfigParamsDict;
 
 
-interface TckinfoParameters {
+interface TckinfoParamsDict {
     "@type"?: "mrtrix/tckinfo";
     "count": boolean;
     "info": boolean;
@@ -27,12 +27,12 @@ interface TckinfoParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckinfoConfigParameters> | null | undefined;
+    "config"?: Array<TckinfoConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks": Array<InputPathType>;
 }
-type TckinfoParametersTagged = Required<Pick<TckinfoParameters, '@type'>> & TckinfoParameters;
+type TckinfoParamsDictTagged = Required<Pick<TckinfoParamsDict, '@type'>> & TckinfoParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type TckinfoParametersTagged = Required<Pick<TckinfoParameters, '@type'>> & Tcki
  *
  * @returns Parameter dictionary
  */
-function tckinfo_config_params(
+function tckinfo_config(
     key: string,
     value: string,
-): TckinfoConfigParametersTagged {
+): TckinfoConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function tckinfo_config_params(
  * @returns Command-line arguments.
  */
 function tckinfo_config_cargs(
-    params: TckinfoConfigParameters,
+    params: TckinfoConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function tckinfo_config_cargs(
 
 
 /**
- * Output object returned when calling `TckinfoParameters(...)`.
+ * Output object returned when calling `TckinfoParamsDict(...)`.
  *
  * @interface
  */
@@ -113,10 +113,10 @@ function tckinfo_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckinfoConfigParameters> | null = null,
+    config: Array<TckinfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckinfoParametersTagged {
+): TckinfoParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckinfo" as const,
         "count": count,
@@ -147,7 +147,7 @@ function tckinfo_params(
  * @returns Command-line arguments.
  */
 function tckinfo_cargs(
-    params: TckinfoParameters,
+    params: TckinfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -196,7 +196,7 @@ function tckinfo_cargs(
  * @returns Outputs object.
  */
 function tckinfo_outputs(
-    params: TckinfoParameters,
+    params: TckinfoParamsDict,
     execution: Execution,
 ): TckinfoOutputs {
     const ret: TckinfoOutputs = {
@@ -227,7 +227,7 @@ function tckinfo_outputs(
  * @returns NamedTuple of outputs (described in `TckinfoOutputs`).
  */
 function tckinfo_execute(
-    params: TckinfoParameters,
+    params: TckinfoParamsDict,
     runner: Runner | null = null,
 ): TckinfoOutputs {
     runner = runner || getGlobalRunner();
@@ -277,7 +277,7 @@ function tckinfo(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckinfoConfigParameters> | null = null,
+    config: Array<TckinfoConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -289,9 +289,13 @@ function tckinfo(
 
 export {
       TCKINFO_METADATA,
+      TckinfoConfigParamsDict,
+      TckinfoConfigParamsDictTagged,
       TckinfoOutputs,
+      TckinfoParamsDict,
+      TckinfoParamsDictTagged,
       tckinfo,
-      tckinfo_config_params,
+      tckinfo_config,
       tckinfo_execute,
       tckinfo_params,
 };

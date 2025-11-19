@@ -10,7 +10,7 @@ const LABEL_ERODE_METADATA: Metadata = {
 };
 
 
-interface LabelErodeParameters {
+interface LabelErodeParamsDict {
     "@type"?: "workbench/label-erode";
     "label-out": string;
     "roi-metric"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface LabelErodeParameters {
     "surface": InputPathType;
     "erode-dist": number;
 }
-type LabelErodeParametersTagged = Required<Pick<LabelErodeParameters, '@type'>> & LabelErodeParameters;
+type LabelErodeParamsDictTagged = Required<Pick<LabelErodeParamsDict, '@type'>> & LabelErodeParamsDict;
 
 
 /**
- * Output object returned when calling `LabelErodeParameters(...)`.
+ * Output object returned when calling `LabelErodeParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function label_erode_params(
     label: InputPathType,
     surface: InputPathType,
     erode_dist: number,
-): LabelErodeParametersTagged {
+): LabelErodeParamsDictTagged {
     const params = {
         "@type": "workbench/label-erode" as const,
         "label-out": label_out,
@@ -97,7 +97,7 @@ function label_erode_params(
  * @returns Command-line arguments.
  */
 function label_erode_cargs(
-    params: LabelErodeParameters,
+    params: LabelErodeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function label_erode_cargs(
  * @returns Outputs object.
  */
 function label_erode_outputs(
-    params: LabelErodeParameters,
+    params: LabelErodeParamsDict,
     execution: Execution,
 ): LabelErodeOutputs {
     const ret: LabelErodeOutputs = {
@@ -154,7 +154,7 @@ function label_erode_outputs(
  * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
  */
 function label_erode_execute(
-    params: LabelErodeParameters,
+    params: LabelErodeParamsDict,
     runner: Runner | null = null,
 ): LabelErodeOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function label_erode(
 export {
       LABEL_ERODE_METADATA,
       LabelErodeOutputs,
+      LabelErodeParamsDict,
+      LabelErodeParamsDictTagged,
       label_erode,
       label_erode_execute,
       label_erode_params,

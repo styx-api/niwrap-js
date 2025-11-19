@@ -11,7 +11,7 @@ const FAT_MVM_SCRIPTER_PY_METADATA: Metadata = {
 };
 
 
-interface FatMvmScripterPyParameters {
+interface FatMvmScripterPyParamsDict {
     "@type"?: "afni/fat_mvm_scripter.py";
     "prefix": string;
     "table": InputPathType;
@@ -27,11 +27,11 @@ interface FatMvmScripterPyParameters {
     "subnet_pref"?: string | null | undefined;
     "cat_pair_off": boolean;
 }
-type FatMvmScripterPyParametersTagged = Required<Pick<FatMvmScripterPyParameters, '@type'>> & FatMvmScripterPyParameters;
+type FatMvmScripterPyParamsDictTagged = Required<Pick<FatMvmScripterPyParamsDict, '@type'>> & FatMvmScripterPyParamsDict;
 
 
 /**
- * Output object returned when calling `FatMvmScripterPyParameters(...)`.
+ * Output object returned when calling `FatMvmScripterPyParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function fat_mvm_scripter_py_params(
     na_warn_off: boolean = false,
     subnet_pref: string | null = null,
     cat_pair_off: boolean = false,
-): FatMvmScripterPyParametersTagged {
+): FatMvmScripterPyParamsDictTagged {
     const params = {
         "@type": "afni/fat_mvm_scripter.py" as const,
         "prefix": prefix,
@@ -128,7 +128,7 @@ function fat_mvm_scripter_py_params(
  * @returns Command-line arguments.
  */
 function fat_mvm_scripter_py_cargs(
-    params: FatMvmScripterPyParameters,
+    params: FatMvmScripterPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -209,7 +209,7 @@ function fat_mvm_scripter_py_cargs(
  * @returns Outputs object.
  */
 function fat_mvm_scripter_py_outputs(
-    params: FatMvmScripterPyParameters,
+    params: FatMvmScripterPyParamsDict,
     execution: Execution,
 ): FatMvmScripterPyOutputs {
     const ret: FatMvmScripterPyOutputs = {
@@ -236,7 +236,7 @@ function fat_mvm_scripter_py_outputs(
  * @returns NamedTuple of outputs (described in `FatMvmScripterPyOutputs`).
  */
 function fat_mvm_scripter_py_execute(
-    params: FatMvmScripterPyParameters,
+    params: FatMvmScripterPyParamsDict,
     runner: Runner | null = null,
 ): FatMvmScripterPyOutputs {
     runner = runner || getGlobalRunner();
@@ -299,6 +299,8 @@ function fat_mvm_scripter_py(
 export {
       FAT_MVM_SCRIPTER_PY_METADATA,
       FatMvmScripterPyOutputs,
+      FatMvmScripterPyParamsDict,
+      FatMvmScripterPyParamsDictTagged,
       fat_mvm_scripter_py,
       fat_mvm_scripter_py_execute,
       fat_mvm_scripter_py_params,

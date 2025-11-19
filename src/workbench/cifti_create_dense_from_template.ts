@@ -10,68 +10,68 @@ const CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA: Metadata = {
 };
 
 
-interface CiftiCreateDenseFromTemplateSeriesParameters {
+interface CiftiCreateDenseFromTemplateSeriesParamsDict {
     "@type"?: "series";
     "step": number;
     "start": number;
     "unit"?: string | null | undefined;
 }
-type CiftiCreateDenseFromTemplateSeriesParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateSeriesParameters, '@type'>> & CiftiCreateDenseFromTemplateSeriesParameters;
+type CiftiCreateDenseFromTemplateSeriesParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateSeriesParamsDict, '@type'>> & CiftiCreateDenseFromTemplateSeriesParamsDict;
 
 
-interface CiftiCreateDenseFromTemplateVolumeAllParameters {
+interface CiftiCreateDenseFromTemplateVolumeAllParamsDict {
     "@type"?: "volume-all";
     "volume-in": InputPathType;
     "from-cropped": boolean;
 }
-type CiftiCreateDenseFromTemplateVolumeAllParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateVolumeAllParameters, '@type'>> & CiftiCreateDenseFromTemplateVolumeAllParameters;
+type CiftiCreateDenseFromTemplateVolumeAllParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateVolumeAllParamsDict, '@type'>> & CiftiCreateDenseFromTemplateVolumeAllParamsDict;
 
 
-interface CiftiCreateDenseFromTemplateCiftiParameters {
+interface CiftiCreateDenseFromTemplateCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
 }
-type CiftiCreateDenseFromTemplateCiftiParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateCiftiParameters, '@type'>> & CiftiCreateDenseFromTemplateCiftiParameters;
+type CiftiCreateDenseFromTemplateCiftiParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateCiftiParamsDict, '@type'>> & CiftiCreateDenseFromTemplateCiftiParamsDict;
 
 
-interface CiftiCreateDenseFromTemplateMetricParameters {
+interface CiftiCreateDenseFromTemplateMetricParamsDict {
     "@type"?: "metric";
     "structure": string;
     "metric-in": InputPathType;
 }
-type CiftiCreateDenseFromTemplateMetricParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateMetricParameters, '@type'>> & CiftiCreateDenseFromTemplateMetricParameters;
+type CiftiCreateDenseFromTemplateMetricParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateMetricParamsDict, '@type'>> & CiftiCreateDenseFromTemplateMetricParamsDict;
 
 
-interface CiftiCreateDenseFromTemplateLabelParameters {
+interface CiftiCreateDenseFromTemplateLabelParamsDict {
     "@type"?: "label";
     "structure": string;
     "label-in": InputPathType;
 }
-type CiftiCreateDenseFromTemplateLabelParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateLabelParameters, '@type'>> & CiftiCreateDenseFromTemplateLabelParameters;
+type CiftiCreateDenseFromTemplateLabelParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateLabelParamsDict, '@type'>> & CiftiCreateDenseFromTemplateLabelParamsDict;
 
 
-interface CiftiCreateDenseFromTemplateVolumeParameters {
+interface CiftiCreateDenseFromTemplateVolumeParamsDict {
     "@type"?: "volume";
     "structure": string;
     "volume-in": InputPathType;
     "from-cropped": boolean;
 }
-type CiftiCreateDenseFromTemplateVolumeParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateVolumeParameters, '@type'>> & CiftiCreateDenseFromTemplateVolumeParameters;
+type CiftiCreateDenseFromTemplateVolumeParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateVolumeParamsDict, '@type'>> & CiftiCreateDenseFromTemplateVolumeParamsDict;
 
 
-interface CiftiCreateDenseFromTemplateParameters {
+interface CiftiCreateDenseFromTemplateParamsDict {
     "@type"?: "workbench/cifti-create-dense-from-template";
     "cifti-out": string;
-    "series"?: CiftiCreateDenseFromTemplateSeriesParameters | null | undefined;
-    "volume-all"?: CiftiCreateDenseFromTemplateVolumeAllParameters | null | undefined;
+    "series"?: CiftiCreateDenseFromTemplateSeriesParamsDict | null | undefined;
+    "volume-all"?: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null | undefined;
     "action"?: string | null | undefined;
-    "cifti"?: Array<CiftiCreateDenseFromTemplateCiftiParameters> | null | undefined;
-    "metric"?: Array<CiftiCreateDenseFromTemplateMetricParameters> | null | undefined;
-    "label"?: Array<CiftiCreateDenseFromTemplateLabelParameters> | null | undefined;
-    "volume"?: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null | undefined;
+    "cifti"?: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null | undefined;
+    "metric"?: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null | undefined;
+    "label"?: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null | undefined;
+    "volume"?: Array<CiftiCreateDenseFromTemplateVolumeParamsDict> | null | undefined;
     "template-cifti": InputPathType;
 }
-type CiftiCreateDenseFromTemplateParametersTagged = Required<Pick<CiftiCreateDenseFromTemplateParameters, '@type'>> & CiftiCreateDenseFromTemplateParameters;
+type CiftiCreateDenseFromTemplateParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateParamsDict, '@type'>> & CiftiCreateDenseFromTemplateParamsDict;
 
 
 /**
@@ -85,11 +85,11 @@ unit identifier
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_from_template_series_params(
+function cifti_create_dense_from_template_series(
     step: number,
     start: number,
     unit: string | null,
-): CiftiCreateDenseFromTemplateSeriesParametersTagged {
+): CiftiCreateDenseFromTemplateSeriesParamsDictTagged {
     const params = {
         "@type": "series" as const,
         "step": step,
@@ -111,7 +111,7 @@ function cifti_create_dense_from_template_series_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_from_template_series_cargs(
-    params: CiftiCreateDenseFromTemplateSeriesParameters,
+    params: CiftiCreateDenseFromTemplateSeriesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,10 +136,10 @@ function cifti_create_dense_from_template_series_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_from_template_volume_all_params(
+function cifti_create_dense_from_template_volume_all(
     volume_in: InputPathType,
     from_cropped: boolean = false,
-): CiftiCreateDenseFromTemplateVolumeAllParametersTagged {
+): CiftiCreateDenseFromTemplateVolumeAllParamsDictTagged {
     const params = {
         "@type": "volume-all" as const,
         "volume-in": volume_in,
@@ -158,7 +158,7 @@ function cifti_create_dense_from_template_volume_all_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_from_template_volume_all_cargs(
-    params: CiftiCreateDenseFromTemplateVolumeAllParameters,
+    params: CiftiCreateDenseFromTemplateVolumeAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -180,9 +180,9 @@ function cifti_create_dense_from_template_volume_all_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_from_template_cifti_params(
+function cifti_create_dense_from_template_cifti(
     cifti_in: InputPathType,
-): CiftiCreateDenseFromTemplateCiftiParametersTagged {
+): CiftiCreateDenseFromTemplateCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -200,7 +200,7 @@ function cifti_create_dense_from_template_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_from_template_cifti_cargs(
-    params: CiftiCreateDenseFromTemplateCiftiParameters,
+    params: CiftiCreateDenseFromTemplateCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -220,10 +220,10 @@ function cifti_create_dense_from_template_cifti_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_from_template_metric_params(
+function cifti_create_dense_from_template_metric(
     structure: string,
     metric_in: InputPathType,
-): CiftiCreateDenseFromTemplateMetricParametersTagged {
+): CiftiCreateDenseFromTemplateMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
         "structure": structure,
@@ -242,7 +242,7 @@ function cifti_create_dense_from_template_metric_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_from_template_metric_cargs(
-    params: CiftiCreateDenseFromTemplateMetricParameters,
+    params: CiftiCreateDenseFromTemplateMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -263,10 +263,10 @@ function cifti_create_dense_from_template_metric_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_from_template_label_params(
+function cifti_create_dense_from_template_label(
     structure: string,
     label_in: InputPathType,
-): CiftiCreateDenseFromTemplateLabelParametersTagged {
+): CiftiCreateDenseFromTemplateLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
         "structure": structure,
@@ -285,7 +285,7 @@ function cifti_create_dense_from_template_label_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_from_template_label_cargs(
-    params: CiftiCreateDenseFromTemplateLabelParameters,
+    params: CiftiCreateDenseFromTemplateLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -307,11 +307,11 @@ function cifti_create_dense_from_template_label_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_from_template_volume_params(
+function cifti_create_dense_from_template_volume(
     structure: string,
     volume_in: InputPathType,
     from_cropped: boolean = false,
-): CiftiCreateDenseFromTemplateVolumeParametersTagged {
+): CiftiCreateDenseFromTemplateVolumeParamsDictTagged {
     const params = {
         "@type": "volume" as const,
         "structure": structure,
@@ -331,7 +331,7 @@ function cifti_create_dense_from_template_volume_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_from_template_volume_cargs(
-    params: CiftiCreateDenseFromTemplateVolumeParameters,
+    params: CiftiCreateDenseFromTemplateVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -348,7 +348,7 @@ function cifti_create_dense_from_template_volume_cargs(
 
 
 /**
- * Output object returned when calling `CiftiCreateDenseFromTemplateParameters(...)`.
+ * Output object returned when calling `CiftiCreateDenseFromTemplateParamsDict(...)`.
  *
  * @interface
  */
@@ -385,13 +385,13 @@ function cifti_create_dense_from_template_params(
     cifti_out: string,
     action: string | null,
     template_cifti: InputPathType,
-    series: CiftiCreateDenseFromTemplateSeriesParameters | null = null,
-    volume_all: CiftiCreateDenseFromTemplateVolumeAllParameters | null = null,
-    cifti: Array<CiftiCreateDenseFromTemplateCiftiParameters> | null = null,
-    metric: Array<CiftiCreateDenseFromTemplateMetricParameters> | null = null,
-    label: Array<CiftiCreateDenseFromTemplateLabelParameters> | null = null,
-    volume: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null = null,
-): CiftiCreateDenseFromTemplateParametersTagged {
+    series: CiftiCreateDenseFromTemplateSeriesParamsDict | null = null,
+    volume_all: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null = null,
+    cifti: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null = null,
+    metric: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null = null,
+    label: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null = null,
+    volume: Array<CiftiCreateDenseFromTemplateVolumeParamsDict> | null = null,
+): CiftiCreateDenseFromTemplateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-dense-from-template" as const,
         "cifti-out": cifti_out,
@@ -431,7 +431,7 @@ function cifti_create_dense_from_template_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_from_template_cargs(
-    params: CiftiCreateDenseFromTemplateParameters,
+    params: CiftiCreateDenseFromTemplateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -464,7 +464,7 @@ function cifti_create_dense_from_template_cargs(
  * @returns Outputs object.
  */
 function cifti_create_dense_from_template_outputs(
-    params: CiftiCreateDenseFromTemplateParameters,
+    params: CiftiCreateDenseFromTemplateParamsDict,
     execution: Execution,
 ): CiftiCreateDenseFromTemplateOutputs {
     const ret: CiftiCreateDenseFromTemplateOutputs = {
@@ -533,7 +533,7 @@ function cifti_create_dense_from_template_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCreateDenseFromTemplateOutputs`).
  */
 function cifti_create_dense_from_template_execute(
-    params: CiftiCreateDenseFromTemplateParameters,
+    params: CiftiCreateDenseFromTemplateParamsDict,
     runner: Runner | null = null,
 ): CiftiCreateDenseFromTemplateOutputs {
     runner = runner || getGlobalRunner();
@@ -617,12 +617,12 @@ function cifti_create_dense_from_template(
     cifti_out: string,
     action: string | null,
     template_cifti: InputPathType,
-    series: CiftiCreateDenseFromTemplateSeriesParameters | null = null,
-    volume_all: CiftiCreateDenseFromTemplateVolumeAllParameters | null = null,
-    cifti: Array<CiftiCreateDenseFromTemplateCiftiParameters> | null = null,
-    metric: Array<CiftiCreateDenseFromTemplateMetricParameters> | null = null,
-    label: Array<CiftiCreateDenseFromTemplateLabelParameters> | null = null,
-    volume: Array<CiftiCreateDenseFromTemplateVolumeParameters> | null = null,
+    series: CiftiCreateDenseFromTemplateSeriesParamsDict | null = null,
+    volume_all: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null = null,
+    cifti: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null = null,
+    metric: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null = null,
+    label: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null = null,
+    volume: Array<CiftiCreateDenseFromTemplateVolumeParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseFromTemplateOutputs {
     const params = cifti_create_dense_from_template_params(cifti_out, action, template_cifti, series, volume_all, cifti, metric, label, volume)
@@ -632,14 +632,28 @@ function cifti_create_dense_from_template(
 
 export {
       CIFTI_CREATE_DENSE_FROM_TEMPLATE_METADATA,
+      CiftiCreateDenseFromTemplateCiftiParamsDict,
+      CiftiCreateDenseFromTemplateCiftiParamsDictTagged,
+      CiftiCreateDenseFromTemplateLabelParamsDict,
+      CiftiCreateDenseFromTemplateLabelParamsDictTagged,
+      CiftiCreateDenseFromTemplateMetricParamsDict,
+      CiftiCreateDenseFromTemplateMetricParamsDictTagged,
       CiftiCreateDenseFromTemplateOutputs,
+      CiftiCreateDenseFromTemplateParamsDict,
+      CiftiCreateDenseFromTemplateParamsDictTagged,
+      CiftiCreateDenseFromTemplateSeriesParamsDict,
+      CiftiCreateDenseFromTemplateSeriesParamsDictTagged,
+      CiftiCreateDenseFromTemplateVolumeAllParamsDict,
+      CiftiCreateDenseFromTemplateVolumeAllParamsDictTagged,
+      CiftiCreateDenseFromTemplateVolumeParamsDict,
+      CiftiCreateDenseFromTemplateVolumeParamsDictTagged,
       cifti_create_dense_from_template,
-      cifti_create_dense_from_template_cifti_params,
+      cifti_create_dense_from_template_cifti,
       cifti_create_dense_from_template_execute,
-      cifti_create_dense_from_template_label_params,
-      cifti_create_dense_from_template_metric_params,
+      cifti_create_dense_from_template_label,
+      cifti_create_dense_from_template_metric,
       cifti_create_dense_from_template_params,
-      cifti_create_dense_from_template_series_params,
-      cifti_create_dense_from_template_volume_all_params,
-      cifti_create_dense_from_template_volume_params,
+      cifti_create_dense_from_template_series,
+      cifti_create_dense_from_template_volume,
+      cifti_create_dense_from_template_volume_all,
 };

@@ -11,7 +11,7 @@ const ROIGROW_METADATA: Metadata = {
 };
 
 
-interface RoigrowParameters {
+interface RoigrowParamsDict {
     "@type"?: "afni/ROIgrow";
     "input_surface": string;
     "roi_labels": string;
@@ -22,11 +22,11 @@ interface RoigrowParameters {
     "insphere_diameter"?: number | null | undefined;
     "inbox_edges"?: Array<number> | null | undefined;
 }
-type RoigrowParametersTagged = Required<Pick<RoigrowParameters, '@type'>> & RoigrowParameters;
+type RoigrowParamsDictTagged = Required<Pick<RoigrowParamsDict, '@type'>> & RoigrowParamsDict;
 
 
 /**
- * Output object returned when calling `RoigrowParameters(...)`.
+ * Output object returned when calling `RoigrowParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function roigrow_params(
     grow_from_edge: boolean = false,
     insphere_diameter: number | null = null,
     inbox_edges: Array<number> | null = null,
-): RoigrowParametersTagged {
+): RoigrowParamsDictTagged {
     const params = {
         "@type": "afni/ROIgrow" as const,
         "input_surface": input_surface,
@@ -96,7 +96,7 @@ function roigrow_params(
  * @returns Command-line arguments.
  */
 function roigrow_cargs(
-    params: RoigrowParameters,
+    params: RoigrowParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function roigrow_cargs(
  * @returns Outputs object.
  */
 function roigrow_outputs(
-    params: RoigrowParameters,
+    params: RoigrowParamsDict,
     execution: Execution,
 ): RoigrowOutputs {
     const ret: RoigrowOutputs = {
@@ -176,7 +176,7 @@ function roigrow_outputs(
  * @returns NamedTuple of outputs (described in `RoigrowOutputs`).
  */
 function roigrow_execute(
-    params: RoigrowParameters,
+    params: RoigrowParamsDict,
     runner: Runner | null = null,
 ): RoigrowOutputs {
     runner = runner || getGlobalRunner();
@@ -229,6 +229,8 @@ function roigrow(
 export {
       ROIGROW_METADATA,
       RoigrowOutputs,
+      RoigrowParamsDict,
+      RoigrowParamsDictTagged,
       roigrow,
       roigrow_execute,
       roigrow_params,

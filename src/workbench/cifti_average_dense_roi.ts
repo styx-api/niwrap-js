@@ -10,25 +10,25 @@ const CIFTI_AVERAGE_DENSE_ROI_METADATA: Metadata = {
 };
 
 
-interface CiftiAverageDenseRoiCiftiRoiParameters {
+interface CiftiAverageDenseRoiCiftiRoiParamsDict {
     "@type"?: "cifti-roi";
     "roi-cifti": InputPathType;
     "in-memory": boolean;
 }
-type CiftiAverageDenseRoiCiftiRoiParametersTagged = Required<Pick<CiftiAverageDenseRoiCiftiRoiParameters, '@type'>> & CiftiAverageDenseRoiCiftiRoiParameters;
+type CiftiAverageDenseRoiCiftiRoiParamsDictTagged = Required<Pick<CiftiAverageDenseRoiCiftiRoiParamsDict, '@type'>> & CiftiAverageDenseRoiCiftiRoiParamsDict;
 
 
-interface CiftiAverageDenseRoiCiftiParameters {
+interface CiftiAverageDenseRoiCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
 }
-type CiftiAverageDenseRoiCiftiParametersTagged = Required<Pick<CiftiAverageDenseRoiCiftiParameters, '@type'>> & CiftiAverageDenseRoiCiftiParameters;
+type CiftiAverageDenseRoiCiftiParamsDictTagged = Required<Pick<CiftiAverageDenseRoiCiftiParamsDict, '@type'>> & CiftiAverageDenseRoiCiftiParamsDict;
 
 
-interface CiftiAverageDenseRoiParameters {
+interface CiftiAverageDenseRoiParamsDict {
     "@type"?: "workbench/cifti-average-dense-roi";
     "cifti-out": string;
-    "cifti-roi"?: CiftiAverageDenseRoiCiftiRoiParameters | null | undefined;
+    "cifti-roi"?: CiftiAverageDenseRoiCiftiRoiParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
@@ -36,9 +36,9 @@ interface CiftiAverageDenseRoiParameters {
     "left-surf"?: InputPathType | null | undefined;
     "right-surf"?: InputPathType | null | undefined;
     "cerebellum-surf"?: InputPathType | null | undefined;
-    "cifti"?: Array<CiftiAverageDenseRoiCiftiParameters> | null | undefined;
+    "cifti"?: Array<CiftiAverageDenseRoiCiftiParamsDict> | null | undefined;
 }
-type CiftiAverageDenseRoiParametersTagged = Required<Pick<CiftiAverageDenseRoiParameters, '@type'>> & CiftiAverageDenseRoiParameters;
+type CiftiAverageDenseRoiParamsDictTagged = Required<Pick<CiftiAverageDenseRoiParamsDict, '@type'>> & CiftiAverageDenseRoiParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type CiftiAverageDenseRoiParametersTagged = Required<Pick<CiftiAverageDenseRoiPa
  *
  * @returns Parameter dictionary
  */
-function cifti_average_dense_roi_cifti_roi_params(
+function cifti_average_dense_roi_cifti_roi(
     roi_cifti: InputPathType,
     in_memory: boolean = false,
-): CiftiAverageDenseRoiCiftiRoiParametersTagged {
+): CiftiAverageDenseRoiCiftiRoiParamsDictTagged {
     const params = {
         "@type": "cifti-roi" as const,
         "roi-cifti": roi_cifti,
@@ -71,7 +71,7 @@ function cifti_average_dense_roi_cifti_roi_params(
  * @returns Command-line arguments.
  */
 function cifti_average_dense_roi_cifti_roi_cargs(
-    params: CiftiAverageDenseRoiCiftiRoiParameters,
+    params: CiftiAverageDenseRoiCiftiRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,9 +93,9 @@ function cifti_average_dense_roi_cifti_roi_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_average_dense_roi_cifti_params(
+function cifti_average_dense_roi_cifti(
     cifti_in: InputPathType,
-): CiftiAverageDenseRoiCiftiParametersTagged {
+): CiftiAverageDenseRoiCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -113,7 +113,7 @@ function cifti_average_dense_roi_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_average_dense_roi_cifti_cargs(
-    params: CiftiAverageDenseRoiCiftiParameters,
+    params: CiftiAverageDenseRoiCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function cifti_average_dense_roi_cifti_cargs(
 
 
 /**
- * Output object returned when calling `CiftiAverageDenseRoiParameters(...)`.
+ * Output object returned when calling `CiftiAverageDenseRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -181,9 +181,9 @@ function cifti_average_dense_roi_params(
     left_surf: InputPathType | null,
     right_surf: InputPathType | null,
     cerebellum_surf: InputPathType | null,
-    cifti_roi: CiftiAverageDenseRoiCiftiRoiParameters | null = null,
-    cifti: Array<CiftiAverageDenseRoiCiftiParameters> | null = null,
-): CiftiAverageDenseRoiParametersTagged {
+    cifti_roi: CiftiAverageDenseRoiCiftiRoiParamsDict | null = null,
+    cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
+): CiftiAverageDenseRoiParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-average-dense-roi" as const,
         "cifti-out": cifti_out,
@@ -228,7 +228,7 @@ function cifti_average_dense_roi_params(
  * @returns Command-line arguments.
  */
 function cifti_average_dense_roi_cargs(
-    params: CiftiAverageDenseRoiParameters,
+    params: CiftiAverageDenseRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function cifti_average_dense_roi_cargs(
  * @returns Outputs object.
  */
 function cifti_average_dense_roi_outputs(
-    params: CiftiAverageDenseRoiParameters,
+    params: CiftiAverageDenseRoiParamsDict,
     execution: Execution,
 ): CiftiAverageDenseRoiOutputs {
     const ret: CiftiAverageDenseRoiOutputs = {
@@ -290,7 +290,7 @@ function cifti_average_dense_roi_outputs(
  * @returns NamedTuple of outputs (described in `CiftiAverageDenseRoiOutputs`).
  */
 function cifti_average_dense_roi_execute(
-    params: CiftiAverageDenseRoiParameters,
+    params: CiftiAverageDenseRoiParamsDict,
     runner: Runner | null = null,
 ): CiftiAverageDenseRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -345,8 +345,8 @@ function cifti_average_dense_roi(
     left_surf: InputPathType | null,
     right_surf: InputPathType | null,
     cerebellum_surf: InputPathType | null,
-    cifti_roi: CiftiAverageDenseRoiCiftiRoiParameters | null = null,
-    cifti: Array<CiftiAverageDenseRoiCiftiParameters> | null = null,
+    cifti_roi: CiftiAverageDenseRoiCiftiRoiParamsDict | null = null,
+    cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageDenseRoiOutputs {
     const params = cifti_average_dense_roi_params(cifti_out, roi_metric, roi_metric_, roi_metric_2, roi_vol, left_surf, right_surf, cerebellum_surf, cifti_roi, cifti)
@@ -356,10 +356,16 @@ function cifti_average_dense_roi(
 
 export {
       CIFTI_AVERAGE_DENSE_ROI_METADATA,
+      CiftiAverageDenseRoiCiftiParamsDict,
+      CiftiAverageDenseRoiCiftiParamsDictTagged,
+      CiftiAverageDenseRoiCiftiRoiParamsDict,
+      CiftiAverageDenseRoiCiftiRoiParamsDictTagged,
       CiftiAverageDenseRoiOutputs,
+      CiftiAverageDenseRoiParamsDict,
+      CiftiAverageDenseRoiParamsDictTagged,
       cifti_average_dense_roi,
-      cifti_average_dense_roi_cifti_params,
-      cifti_average_dense_roi_cifti_roi_params,
+      cifti_average_dense_roi_cifti,
+      cifti_average_dense_roi_cifti_roi,
       cifti_average_dense_roi_execute,
       cifti_average_dense_roi_params,
 };

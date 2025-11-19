@@ -11,29 +11,29 @@ const CONNECTOMEEDIT_METADATA: Metadata = {
 };
 
 
-interface ConnectomeeditConfigParameters {
+interface ConnectomeeditConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type ConnectomeeditConfigParametersTagged = Required<Pick<ConnectomeeditConfigParameters, '@type'>> & ConnectomeeditConfigParameters;
+type ConnectomeeditConfigParamsDictTagged = Required<Pick<ConnectomeeditConfigParamsDict, '@type'>> & ConnectomeeditConfigParamsDict;
 
 
-interface ConnectomeeditParameters {
+interface ConnectomeeditParamsDict {
     "@type"?: "mrtrix/connectomeedit";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<ConnectomeeditConfigParameters> | null | undefined;
+    "config"?: Array<ConnectomeeditConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": string;
     "operation": string;
     "output": string;
 }
-type ConnectomeeditParametersTagged = Required<Pick<ConnectomeeditParameters, '@type'>> & ConnectomeeditParameters;
+type ConnectomeeditParamsDictTagged = Required<Pick<ConnectomeeditParamsDict, '@type'>> & ConnectomeeditParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type ConnectomeeditParametersTagged = Required<Pick<ConnectomeeditParameters, '@
  *
  * @returns Parameter dictionary
  */
-function connectomeedit_config_params(
+function connectomeedit_config(
     key: string,
     value: string,
-): ConnectomeeditConfigParametersTagged {
+): ConnectomeeditConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function connectomeedit_config_params(
  * @returns Command-line arguments.
  */
 function connectomeedit_config_cargs(
-    params: ConnectomeeditConfigParameters,
+    params: ConnectomeeditConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function connectomeedit_config_cargs(
 
 
 /**
- * Output object returned when calling `ConnectomeeditParameters(...)`.
+ * Output object returned when calling `ConnectomeeditParamsDict(...)`.
  *
  * @interface
  */
@@ -116,10 +116,10 @@ function connectomeedit_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<ConnectomeeditConfigParameters> | null = null,
+    config: Array<ConnectomeeditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ConnectomeeditParametersTagged {
+): ConnectomeeditParamsDictTagged {
     const params = {
         "@type": "mrtrix/connectomeedit" as const,
         "info": info,
@@ -151,7 +151,7 @@ function connectomeedit_params(
  * @returns Command-line arguments.
  */
 function connectomeedit_cargs(
-    params: ConnectomeeditParameters,
+    params: ConnectomeeditParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,7 +199,7 @@ function connectomeedit_cargs(
  * @returns Outputs object.
  */
 function connectomeedit_outputs(
-    params: ConnectomeeditParameters,
+    params: ConnectomeeditParamsDict,
     execution: Execution,
 ): ConnectomeeditOutputs {
     const ret: ConnectomeeditOutputs = {
@@ -230,7 +230,7 @@ function connectomeedit_outputs(
  * @returns NamedTuple of outputs (described in `ConnectomeeditOutputs`).
  */
 function connectomeedit_execute(
-    params: ConnectomeeditParameters,
+    params: ConnectomeeditParamsDict,
     runner: Runner | null = null,
 ): ConnectomeeditOutputs {
     runner = runner || getGlobalRunner();
@@ -282,7 +282,7 @@ function connectomeedit(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<ConnectomeeditConfigParameters> | null = null,
+    config: Array<ConnectomeeditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -294,9 +294,13 @@ function connectomeedit(
 
 export {
       CONNECTOMEEDIT_METADATA,
+      ConnectomeeditConfigParamsDict,
+      ConnectomeeditConfigParamsDictTagged,
       ConnectomeeditOutputs,
+      ConnectomeeditParamsDict,
+      ConnectomeeditParamsDictTagged,
       connectomeedit,
-      connectomeedit_config_params,
+      connectomeedit_config,
       connectomeedit_execute,
       connectomeedit_params,
 };

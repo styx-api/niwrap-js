@@ -11,7 +11,7 @@ const MAP_ALL_LABELS_LH_METADATA: Metadata = {
 };
 
 
-interface MapAllLabelsLhParameters {
+interface MapAllLabelsLhParamsDict {
     "@type"?: "freesurfer/map_all_labels-lh";
     "which": string;
     "fname": string;
@@ -20,11 +20,11 @@ interface MapAllLabelsLhParameters {
     "subjects": Array<string>;
     "output": string;
 }
-type MapAllLabelsLhParametersTagged = Required<Pick<MapAllLabelsLhParameters, '@type'>> & MapAllLabelsLhParameters;
+type MapAllLabelsLhParamsDictTagged = Required<Pick<MapAllLabelsLhParamsDict, '@type'>> & MapAllLabelsLhParamsDict;
 
 
 /**
- * Output object returned when calling `MapAllLabelsLhParameters(...)`.
+ * Output object returned when calling `MapAllLabelsLhParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function map_all_labels_lh_params(
     spherical_surf: InputPathType,
     subjects: Array<string>,
     output: string,
-): MapAllLabelsLhParametersTagged {
+): MapAllLabelsLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/map_all_labels-lh" as const,
         "which": which,
@@ -82,7 +82,7 @@ function map_all_labels_lh_params(
  * @returns Command-line arguments.
  */
 function map_all_labels_lh_cargs(
-    params: MapAllLabelsLhParameters,
+    params: MapAllLabelsLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function map_all_labels_lh_cargs(
  * @returns Outputs object.
  */
 function map_all_labels_lh_outputs(
-    params: MapAllLabelsLhParameters,
+    params: MapAllLabelsLhParamsDict,
     execution: Execution,
 ): MapAllLabelsLhOutputs {
     const ret: MapAllLabelsLhOutputs = {
@@ -135,7 +135,7 @@ function map_all_labels_lh_outputs(
  * @returns NamedTuple of outputs (described in `MapAllLabelsLhOutputs`).
  */
 function map_all_labels_lh_execute(
-    params: MapAllLabelsLhParameters,
+    params: MapAllLabelsLhParamsDict,
     runner: Runner | null = null,
 ): MapAllLabelsLhOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function map_all_labels_lh(
 export {
       MAP_ALL_LABELS_LH_METADATA,
       MapAllLabelsLhOutputs,
+      MapAllLabelsLhParamsDict,
+      MapAllLabelsLhParamsDictTagged,
       map_all_labels_lh,
       map_all_labels_lh_execute,
       map_all_labels_lh_params,

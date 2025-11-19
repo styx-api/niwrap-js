@@ -11,7 +11,7 @@ const ANTS_JOINT_TENSOR_FUSION_METADATA: Metadata = {
 };
 
 
-interface AntsJointTensorFusionParameters {
+interface AntsJointTensorFusionParamsDict {
     "@type"?: "ants/antsJointTensorFusion";
     "dimensionality"?: 2 | 3 | 4 | null | undefined;
     "target_image": Array<string>;
@@ -31,11 +31,11 @@ interface AntsJointTensorFusionParameters {
     "output": string;
     "verbose"?: boolean | null | undefined;
 }
-type AntsJointTensorFusionParametersTagged = Required<Pick<AntsJointTensorFusionParameters, '@type'>> & AntsJointTensorFusionParameters;
+type AntsJointTensorFusionParamsDictTagged = Required<Pick<AntsJointTensorFusionParamsDict, '@type'>> & AntsJointTensorFusionParamsDict;
 
 
 /**
- * Output object returned when calling `AntsJointTensorFusionParameters(...)`.
+ * Output object returned when calling `AntsJointTensorFusionParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function ants_joint_tensor_fusion_params(
     exclusion_image: string | null = null,
     mask_image: InputPathType | null = null,
     verbose: boolean | null = null,
-): AntsJointTensorFusionParametersTagged {
+): AntsJointTensorFusionParamsDictTagged {
     const params = {
         "@type": "ants/antsJointTensorFusion" as const,
         "target_image": target_image,
@@ -164,7 +164,7 @@ function ants_joint_tensor_fusion_params(
  * @returns Command-line arguments.
  */
 function ants_joint_tensor_fusion_cargs(
-    params: AntsJointTensorFusionParameters,
+    params: AntsJointTensorFusionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -276,7 +276,7 @@ function ants_joint_tensor_fusion_cargs(
  * @returns Outputs object.
  */
 function ants_joint_tensor_fusion_outputs(
-    params: AntsJointTensorFusionParameters,
+    params: AntsJointTensorFusionParamsDict,
     execution: Execution,
 ): AntsJointTensorFusionOutputs {
     const ret: AntsJointTensorFusionOutputs = {
@@ -305,7 +305,7 @@ function ants_joint_tensor_fusion_outputs(
  * @returns NamedTuple of outputs (described in `AntsJointTensorFusionOutputs`).
  */
 function ants_joint_tensor_fusion_execute(
-    params: AntsJointTensorFusionParameters,
+    params: AntsJointTensorFusionParamsDict,
     runner: Runner | null = null,
 ): AntsJointTensorFusionOutputs {
     runner = runner || getGlobalRunner();
@@ -376,6 +376,8 @@ function ants_joint_tensor_fusion(
 export {
       ANTS_JOINT_TENSOR_FUSION_METADATA,
       AntsJointTensorFusionOutputs,
+      AntsJointTensorFusionParamsDict,
+      AntsJointTensorFusionParamsDictTagged,
       ants_joint_tensor_fusion,
       ants_joint_tensor_fusion_execute,
       ants_joint_tensor_fusion_params,

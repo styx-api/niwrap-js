@@ -11,7 +11,7 @@ const DRIVE_SUMA_METADATA: Metadata = {
 };
 
 
-interface DriveSumaParameters {
+interface DriveSumaParamsDict {
     "@type"?: "afni/DriveSuma";
     "command": string;
     "surf_label"?: string | null | undefined;
@@ -45,11 +45,11 @@ interface DriveSumaParameters {
     "c_demo": boolean;
     "viewer_cont": boolean;
 }
-type DriveSumaParametersTagged = Required<Pick<DriveSumaParameters, '@type'>> & DriveSumaParameters;
+type DriveSumaParamsDictTagged = Required<Pick<DriveSumaParamsDict, '@type'>> & DriveSumaParamsDict;
 
 
 /**
- * Output object returned when calling `DriveSumaParameters(...)`.
+ * Output object returned when calling `DriveSumaParamsDict(...)`.
  *
  * @interface
  */
@@ -130,7 +130,7 @@ function drive_suma_params(
     help_nido: boolean = false,
     c_demo: boolean = false,
     viewer_cont: boolean = false,
-): DriveSumaParametersTagged {
+): DriveSumaParamsDictTagged {
     const params = {
         "@type": "afni/DriveSuma" as const,
         "command": command,
@@ -216,7 +216,7 @@ function drive_suma_params(
  * @returns Command-line arguments.
  */
 function drive_suma_cargs(
-    params: DriveSumaParameters,
+    params: DriveSumaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -382,7 +382,7 @@ function drive_suma_cargs(
  * @returns Outputs object.
  */
 function drive_suma_outputs(
-    params: DriveSumaParameters,
+    params: DriveSumaParamsDict,
     execution: Execution,
 ): DriveSumaOutputs {
     const ret: DriveSumaOutputs = {
@@ -407,7 +407,7 @@ function drive_suma_outputs(
  * @returns NamedTuple of outputs (described in `DriveSumaOutputs`).
  */
 function drive_suma_execute(
-    params: DriveSumaParameters,
+    params: DriveSumaParamsDict,
     runner: Runner | null = null,
 ): DriveSumaOutputs {
     runner = runner || getGlobalRunner();
@@ -506,6 +506,8 @@ function drive_suma(
 export {
       DRIVE_SUMA_METADATA,
       DriveSumaOutputs,
+      DriveSumaParamsDict,
+      DriveSumaParamsDictTagged,
       drive_suma,
       drive_suma_execute,
       drive_suma_params,

@@ -11,7 +11,7 @@ const SURF_INFO_METADATA: Metadata = {
 };
 
 
-interface SurfInfoParameters {
+interface SurfInfoParamsDict {
     "@type"?: "afni/SurfInfo";
     "surface": InputPathType;
     "com": boolean;
@@ -34,11 +34,11 @@ interface SurfInfoParameters {
     "nomall": boolean;
     "yesmall": boolean;
 }
-type SurfInfoParametersTagged = Required<Pick<SurfInfoParameters, '@type'>> & SurfInfoParameters;
+type SurfInfoParamsDictTagged = Required<Pick<SurfInfoParamsDict, '@type'>> & SurfInfoParamsDict;
 
 
 /**
- * Output object returned when calling `SurfInfoParameters(...)`.
+ * Output object returned when calling `SurfInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -101,7 +101,7 @@ function surf_info_params(
     extreme_trace: boolean = false,
     nomall: boolean = false,
     yesmall: boolean = false,
-): SurfInfoParametersTagged {
+): SurfInfoParamsDictTagged {
     const params = {
         "@type": "afni/SurfInfo" as const,
         "surface": surface,
@@ -154,7 +154,7 @@ function surf_info_params(
  * @returns Command-line arguments.
  */
 function surf_info_cargs(
-    params: SurfInfoParameters,
+    params: SurfInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -254,7 +254,7 @@ function surf_info_cargs(
  * @returns Outputs object.
  */
 function surf_info_outputs(
-    params: SurfInfoParameters,
+    params: SurfInfoParamsDict,
     execution: Execution,
 ): SurfInfoOutputs {
     const ret: SurfInfoOutputs = {
@@ -280,7 +280,7 @@ function surf_info_outputs(
  * @returns NamedTuple of outputs (described in `SurfInfoOutputs`).
  */
 function surf_info_execute(
-    params: SurfInfoParameters,
+    params: SurfInfoParamsDict,
     runner: Runner | null = null,
 ): SurfInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -357,6 +357,8 @@ function surf_info(
 export {
       SURF_INFO_METADATA,
       SurfInfoOutputs,
+      SurfInfoParamsDict,
+      SurfInfoParamsDictTagged,
       surf_info,
       surf_info_execute,
       surf_info_params,

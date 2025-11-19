@@ -11,15 +11,15 @@ const SHBASIS_METADATA: Metadata = {
 };
 
 
-interface ShbasisConfigParameters {
+interface ShbasisConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type ShbasisConfigParametersTagged = Required<Pick<ShbasisConfigParameters, '@type'>> & ShbasisConfigParameters;
+type ShbasisConfigParamsDictTagged = Required<Pick<ShbasisConfigParamsDict, '@type'>> & ShbasisConfigParamsDict;
 
 
-interface ShbasisParameters {
+interface ShbasisParamsDict {
     "@type"?: "mrtrix/shbasis";
     "convert"?: string | null | undefined;
     "info": boolean;
@@ -27,12 +27,12 @@ interface ShbasisParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<ShbasisConfigParameters> | null | undefined;
+    "config"?: Array<ShbasisConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "SH": Array<InputPathType>;
 }
-type ShbasisParametersTagged = Required<Pick<ShbasisParameters, '@type'>> & ShbasisParameters;
+type ShbasisParamsDictTagged = Required<Pick<ShbasisParamsDict, '@type'>> & ShbasisParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type ShbasisParametersTagged = Required<Pick<ShbasisParameters, '@type'>> & Shba
  *
  * @returns Parameter dictionary
  */
-function shbasis_config_params(
+function shbasis_config(
     key: string,
     value: string,
-): ShbasisConfigParametersTagged {
+): ShbasisConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function shbasis_config_params(
  * @returns Command-line arguments.
  */
 function shbasis_config_cargs(
-    params: ShbasisConfigParameters,
+    params: ShbasisConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function shbasis_config_cargs(
 
 
 /**
- * Output object returned when calling `ShbasisParameters(...)`.
+ * Output object returned when calling `ShbasisParamsDict(...)`.
  *
  * @interface
  */
@@ -113,10 +113,10 @@ function shbasis_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<ShbasisConfigParameters> | null = null,
+    config: Array<ShbasisConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ShbasisParametersTagged {
+): ShbasisParamsDictTagged {
     const params = {
         "@type": "mrtrix/shbasis" as const,
         "info": info,
@@ -149,7 +149,7 @@ function shbasis_params(
  * @returns Command-line arguments.
  */
 function shbasis_cargs(
-    params: ShbasisParameters,
+    params: ShbasisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -201,7 +201,7 @@ function shbasis_cargs(
  * @returns Outputs object.
  */
 function shbasis_outputs(
-    params: ShbasisParameters,
+    params: ShbasisParamsDict,
     execution: Execution,
 ): ShbasisOutputs {
     const ret: ShbasisOutputs = {
@@ -239,7 +239,7 @@ function shbasis_outputs(
  * @returns NamedTuple of outputs (described in `ShbasisOutputs`).
  */
 function shbasis_execute(
-    params: ShbasisParameters,
+    params: ShbasisParamsDict,
     runner: Runner | null = null,
 ): ShbasisOutputs {
     runner = runner || getGlobalRunner();
@@ -296,7 +296,7 @@ function shbasis(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<ShbasisConfigParameters> | null = null,
+    config: Array<ShbasisConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -308,9 +308,13 @@ function shbasis(
 
 export {
       SHBASIS_METADATA,
+      ShbasisConfigParamsDict,
+      ShbasisConfigParamsDictTagged,
       ShbasisOutputs,
+      ShbasisParamsDict,
+      ShbasisParamsDictTagged,
       shbasis,
-      shbasis_config_params,
+      shbasis_config,
       shbasis_execute,
       shbasis_params,
 };

@@ -10,20 +10,20 @@ const METRIC_WEIGHTED_STATS_METADATA: Metadata = {
 };
 
 
-interface MetricWeightedStatsRoiParameters {
+interface MetricWeightedStatsRoiParamsDict {
     "@type"?: "roi";
     "roi-metric": InputPathType;
     "match-maps": boolean;
 }
-type MetricWeightedStatsRoiParametersTagged = Required<Pick<MetricWeightedStatsRoiParameters, '@type'>> & MetricWeightedStatsRoiParameters;
+type MetricWeightedStatsRoiParamsDictTagged = Required<Pick<MetricWeightedStatsRoiParamsDict, '@type'>> & MetricWeightedStatsRoiParamsDict;
 
 
-interface MetricWeightedStatsParameters {
+interface MetricWeightedStatsParamsDict {
     "@type"?: "workbench/metric-weighted-stats";
     "area-surface"?: InputPathType | null | undefined;
     "weight-metric"?: InputPathType | null | undefined;
     "column"?: string | null | undefined;
-    "roi"?: MetricWeightedStatsRoiParameters | null | undefined;
+    "roi"?: MetricWeightedStatsRoiParamsDict | null | undefined;
     "mean": boolean;
     "sample"?: boolean | null | undefined;
     "percent"?: number | null | undefined;
@@ -31,7 +31,7 @@ interface MetricWeightedStatsParameters {
     "show-map-name": boolean;
     "metric-in": InputPathType;
 }
-type MetricWeightedStatsParametersTagged = Required<Pick<MetricWeightedStatsParameters, '@type'>> & MetricWeightedStatsParameters;
+type MetricWeightedStatsParamsDictTagged = Required<Pick<MetricWeightedStatsParamsDict, '@type'>> & MetricWeightedStatsParamsDict;
 
 
 /**
@@ -42,10 +42,10 @@ type MetricWeightedStatsParametersTagged = Required<Pick<MetricWeightedStatsPara
  *
  * @returns Parameter dictionary
  */
-function metric_weighted_stats_roi_params(
+function metric_weighted_stats_roi(
     roi_metric: InputPathType,
     match_maps: boolean = false,
-): MetricWeightedStatsRoiParametersTagged {
+): MetricWeightedStatsRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-metric": roi_metric,
@@ -64,7 +64,7 @@ function metric_weighted_stats_roi_params(
  * @returns Command-line arguments.
  */
 function metric_weighted_stats_roi_cargs(
-    params: MetricWeightedStatsRoiParameters,
+    params: MetricWeightedStatsRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function metric_weighted_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `MetricWeightedStatsParameters(...)`.
+ * Output object returned when calling `MetricWeightedStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -124,12 +124,12 @@ function metric_weighted_stats_params(
     column: string | null,
     percent: number | null,
     metric_in: InputPathType,
-    roi: MetricWeightedStatsRoiParameters | null = null,
+    roi: MetricWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
     sample: boolean | null = false,
     sum: boolean = false,
     show_map_name: boolean = false,
-): MetricWeightedStatsParametersTagged {
+): MetricWeightedStatsParamsDictTagged {
     const params = {
         "@type": "workbench/metric-weighted-stats" as const,
         "mean": mean,
@@ -168,7 +168,7 @@ function metric_weighted_stats_params(
  * @returns Command-line arguments.
  */
 function metric_weighted_stats_cargs(
-    params: MetricWeightedStatsParameters,
+    params: MetricWeightedStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -206,7 +206,7 @@ function metric_weighted_stats_cargs(
  * @returns Outputs object.
  */
 function metric_weighted_stats_outputs(
-    params: MetricWeightedStatsParameters,
+    params: MetricWeightedStatsParamsDict,
     execution: Execution,
 ): MetricWeightedStatsOutputs {
     const ret: MetricWeightedStatsOutputs = {
@@ -231,7 +231,7 @@ function metric_weighted_stats_outputs(
  * @returns NamedTuple of outputs (described in `MetricWeightedStatsOutputs`).
  */
 function metric_weighted_stats_execute(
-    params: MetricWeightedStatsParameters,
+    params: MetricWeightedStatsParamsDict,
     runner: Runner | null = null,
 ): MetricWeightedStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -283,7 +283,7 @@ function metric_weighted_stats(
     column: string | null,
     percent: number | null,
     metric_in: InputPathType,
-    roi: MetricWeightedStatsRoiParameters | null = null,
+    roi: MetricWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
     sample: boolean | null = false,
     sum: boolean = false,
@@ -298,8 +298,12 @@ function metric_weighted_stats(
 export {
       METRIC_WEIGHTED_STATS_METADATA,
       MetricWeightedStatsOutputs,
+      MetricWeightedStatsParamsDict,
+      MetricWeightedStatsParamsDictTagged,
+      MetricWeightedStatsRoiParamsDict,
+      MetricWeightedStatsRoiParamsDictTagged,
       metric_weighted_stats,
       metric_weighted_stats_execute,
       metric_weighted_stats_params,
-      metric_weighted_stats_roi_params,
+      metric_weighted_stats_roi,
 };

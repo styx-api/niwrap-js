@@ -11,7 +11,7 @@ const MRI_PROBE_IMA_METADATA: Metadata = {
 };
 
 
-interface MriProbeImaParameters {
+interface MriProbeImaParamsDict {
     "@type"?: "freesurfer/mri_probe_ima";
     "ima_file": InputPathType;
     "key_string"?: string | null | undefined;
@@ -23,11 +23,11 @@ interface MriProbeImaParameters {
     "help": boolean;
     "version": boolean;
 }
-type MriProbeImaParametersTagged = Required<Pick<MriProbeImaParameters, '@type'>> & MriProbeImaParameters;
+type MriProbeImaParamsDictTagged = Required<Pick<MriProbeImaParamsDict, '@type'>> & MriProbeImaParamsDict;
 
 
 /**
- * Output object returned when calling `MriProbeImaParameters(...)`.
+ * Output object returned when calling `MriProbeImaParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function mri_probe_ima_params(
     ob_stem: string | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriProbeImaParametersTagged {
+): MriProbeImaParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_probe_ima" as const,
         "ima_file": ima_file,
@@ -98,7 +98,7 @@ function mri_probe_ima_params(
  * @returns Command-line arguments.
  */
 function mri_probe_ima_cargs(
-    params: MriProbeImaParameters,
+    params: MriProbeImaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,7 +156,7 @@ function mri_probe_ima_cargs(
  * @returns Outputs object.
  */
 function mri_probe_ima_outputs(
-    params: MriProbeImaParameters,
+    params: MriProbeImaParamsDict,
     execution: Execution,
 ): MriProbeImaOutputs {
     const ret: MriProbeImaOutputs = {
@@ -181,7 +181,7 @@ function mri_probe_ima_outputs(
  * @returns NamedTuple of outputs (described in `MriProbeImaOutputs`).
  */
 function mri_probe_ima_execute(
-    params: MriProbeImaParameters,
+    params: MriProbeImaParamsDict,
     runner: Runner | null = null,
 ): MriProbeImaOutputs {
     runner = runner || getGlobalRunner();
@@ -236,6 +236,8 @@ function mri_probe_ima(
 export {
       MRI_PROBE_IMA_METADATA,
       MriProbeImaOutputs,
+      MriProbeImaParamsDict,
+      MriProbeImaParamsDictTagged,
       mri_probe_ima,
       mri_probe_ima_execute,
       mri_probe_ima_params,

@@ -11,7 +11,7 @@ const MAKE_STIM_TIMES_PY_METADATA: Metadata = {
 };
 
 
-interface MakeStimTimesPyParameters {
+interface MakeStimTimesPyParamsDict {
     "@type"?: "afni/make_stim_times.py";
     "files": Array<InputPathType>;
     "prefix": string;
@@ -26,11 +26,11 @@ interface MakeStimTimesPyParameters {
     "show_valid_opts": boolean;
     "verbose"?: number | null | undefined;
 }
-type MakeStimTimesPyParametersTagged = Required<Pick<MakeStimTimesPyParameters, '@type'>> & MakeStimTimesPyParameters;
+type MakeStimTimesPyParamsDictTagged = Required<Pick<MakeStimTimesPyParamsDict, '@type'>> & MakeStimTimesPyParamsDict;
 
 
 /**
- * Output object returned when calling `MakeStimTimesPyParameters(...)`.
+ * Output object returned when calling `MakeStimTimesPyParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function make_stim_times_py_params(
     amplitudes: boolean = false,
     show_valid_opts: boolean = false,
     verbose: number | null = null,
-): MakeStimTimesPyParametersTagged {
+): MakeStimTimesPyParamsDictTagged {
     const params = {
         "@type": "afni/make_stim_times.py" as const,
         "files": files,
@@ -122,7 +122,7 @@ function make_stim_times_py_params(
  * @returns Command-line arguments.
  */
 function make_stim_times_py_cargs(
-    params: MakeStimTimesPyParameters,
+    params: MakeStimTimesPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -187,7 +187,7 @@ function make_stim_times_py_cargs(
  * @returns Outputs object.
  */
 function make_stim_times_py_outputs(
-    params: MakeStimTimesPyParameters,
+    params: MakeStimTimesPyParamsDict,
     execution: Execution,
 ): MakeStimTimesPyOutputs {
     const ret: MakeStimTimesPyOutputs = {
@@ -215,7 +215,7 @@ function make_stim_times_py_outputs(
  * @returns NamedTuple of outputs (described in `MakeStimTimesPyOutputs`).
  */
 function make_stim_times_py_execute(
-    params: MakeStimTimesPyParameters,
+    params: MakeStimTimesPyParamsDict,
     runner: Runner | null = null,
 ): MakeStimTimesPyOutputs {
     runner = runner || getGlobalRunner();
@@ -276,6 +276,8 @@ function make_stim_times_py(
 export {
       MAKE_STIM_TIMES_PY_METADATA,
       MakeStimTimesPyOutputs,
+      MakeStimTimesPyParamsDict,
+      MakeStimTimesPyParamsDictTagged,
       make_stim_times_py,
       make_stim_times_py_execute,
       make_stim_times_py_params,

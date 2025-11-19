@@ -11,7 +11,7 @@ const RBBR_METADATA: Metadata = {
 };
 
 
-interface RbbrParameters {
+interface RbbrParamsDict {
     "@type"?: "freesurfer/rbbr";
     "subject"?: string | null | undefined;
     "moving_image": string;
@@ -36,11 +36,11 @@ interface RbbrParameters {
     "output_template"?: string | null | undefined;
     "no_merge": boolean;
 }
-type RbbrParametersTagged = Required<Pick<RbbrParameters, '@type'>> & RbbrParameters;
+type RbbrParamsDictTagged = Required<Pick<RbbrParamsDict, '@type'>> & RbbrParamsDict;
 
 
 /**
- * Output object returned when calling `RbbrParameters(...)`.
+ * Output object returned when calling `RbbrParamsDict(...)`.
  *
  * @interface
  */
@@ -115,7 +115,7 @@ function rbbr_params(
     frame_no: number | null = null,
     output_template: string | null = null,
     no_merge: boolean = false,
-): RbbrParametersTagged {
+): RbbrParamsDictTagged {
     const params = {
         "@type": "freesurfer/rbbr" as const,
         "moving_image": moving_image,
@@ -176,7 +176,7 @@ function rbbr_params(
  * @returns Command-line arguments.
  */
 function rbbr_cargs(
-    params: RbbrParameters,
+    params: RbbrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -294,7 +294,7 @@ function rbbr_cargs(
  * @returns Outputs object.
  */
 function rbbr_outputs(
-    params: RbbrParameters,
+    params: RbbrParamsDict,
     execution: Execution,
 ): RbbrOutputs {
     const ret: RbbrOutputs = {
@@ -322,7 +322,7 @@ function rbbr_outputs(
  * @returns NamedTuple of outputs (described in `RbbrOutputs`).
  */
 function rbbr_execute(
-    params: RbbrParameters,
+    params: RbbrParamsDict,
     runner: Runner | null = null,
 ): RbbrOutputs {
     runner = runner || getGlobalRunner();
@@ -403,6 +403,8 @@ function rbbr(
 export {
       RBBR_METADATA,
       RbbrOutputs,
+      RbbrParamsDict,
+      RbbrParamsDictTagged,
       rbbr,
       rbbr_execute,
       rbbr_params,

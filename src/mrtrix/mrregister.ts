@@ -11,42 +11,42 @@ const MRREGISTER_METADATA: Metadata = {
 };
 
 
-interface MrregisterTransformedParameters {
+interface MrregisterTransformedParamsDict {
     "@type"?: "transformed";
     "image": string;
 }
-type MrregisterTransformedParametersTagged = Required<Pick<MrregisterTransformedParameters, '@type'>> & MrregisterTransformedParameters;
+type MrregisterTransformedParamsDictTagged = Required<Pick<MrregisterTransformedParamsDict, '@type'>> & MrregisterTransformedParamsDict;
 
 
-interface MrregisterTransformedMidwayParameters {
+interface MrregisterTransformedMidwayParamsDict {
     "@type"?: "transformed_midway";
     "image1_transformed": string;
     "image2_transformed": string;
 }
-type MrregisterTransformedMidwayParametersTagged = Required<Pick<MrregisterTransformedMidwayParameters, '@type'>> & MrregisterTransformedMidwayParameters;
+type MrregisterTransformedMidwayParamsDictTagged = Required<Pick<MrregisterTransformedMidwayParamsDict, '@type'>> & MrregisterTransformedMidwayParamsDict;
 
 
-interface MrregisterNlWarpParameters {
+interface MrregisterNlWarpParamsDict {
     "@type"?: "nl_warp";
     "warp1": string;
     "warp2": string;
 }
-type MrregisterNlWarpParametersTagged = Required<Pick<MrregisterNlWarpParameters, '@type'>> & MrregisterNlWarpParameters;
+type MrregisterNlWarpParamsDictTagged = Required<Pick<MrregisterNlWarpParamsDict, '@type'>> & MrregisterNlWarpParamsDict;
 
 
-interface MrregisterConfigParameters {
+interface MrregisterConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrregisterConfigParametersTagged = Required<Pick<MrregisterConfigParameters, '@type'>> & MrregisterConfigParameters;
+type MrregisterConfigParamsDictTagged = Required<Pick<MrregisterConfigParamsDict, '@type'>> & MrregisterConfigParamsDict;
 
 
-interface MrregisterParameters {
+interface MrregisterParamsDict {
     "@type"?: "mrtrix/mrregister";
     "type"?: string | null | undefined;
-    "transformed"?: Array<MrregisterTransformedParameters> | null | undefined;
-    "transformed_midway"?: Array<MrregisterTransformedMidwayParameters> | null | undefined;
+    "transformed"?: Array<MrregisterTransformedParamsDict> | null | undefined;
+    "transformed_midway"?: Array<MrregisterTransformedMidwayParamsDict> | null | undefined;
     "mask1"?: InputPathType | null | undefined;
     "mask2"?: InputPathType | null | undefined;
     "nan": boolean;
@@ -88,7 +88,7 @@ interface MrregisterParameters {
     "linstage_optimiser_last"?: string | null | undefined;
     "linstage_optimiser_default"?: string | null | undefined;
     "linstage_diagnostics_prefix"?: string | null | undefined;
-    "nl_warp"?: MrregisterNlWarpParameters | null | undefined;
+    "nl_warp"?: MrregisterNlWarpParamsDict | null | undefined;
     "nl_warp_full"?: string | null | undefined;
     "nl_init"?: InputPathType | null | undefined;
     "nl_scale"?: Array<number> | null | undefined;
@@ -107,17 +107,17 @@ interface MrregisterParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrregisterConfigParameters> | null | undefined;
+    "config"?: Array<MrregisterConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image1_image2": InputPathType;
     "contrast1_contrast2"?: Array<InputPathType> | null | undefined;
 }
-type MrregisterParametersTagged = Required<Pick<MrregisterParameters, '@type'>> & MrregisterParameters;
+type MrregisterParamsDictTagged = Required<Pick<MrregisterParamsDict, '@type'>> & MrregisterParamsDict;
 
 
 /**
- * Output object returned when calling `Array<MrregisterTransformedParameters> | null(...)`.
+ * Output object returned when calling `Array<MrregisterTransformedParamsDict> | null(...)`.
  *
  * @interface
  */
@@ -140,9 +140,9 @@ interface MrregisterTransformedOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrregister_transformed_params(
+function mrregister_transformed(
     image: string,
-): MrregisterTransformedParametersTagged {
+): MrregisterTransformedParamsDictTagged {
     const params = {
         "@type": "transformed" as const,
         "image": image,
@@ -160,7 +160,7 @@ function mrregister_transformed_params(
  * @returns Command-line arguments.
  */
 function mrregister_transformed_cargs(
-    params: MrregisterTransformedParameters,
+    params: MrregisterTransformedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -179,7 +179,7 @@ function mrregister_transformed_cargs(
  * @returns Outputs object.
  */
 function mrregister_transformed_outputs(
-    params: MrregisterTransformedParameters,
+    params: MrregisterTransformedParamsDict,
     execution: Execution,
 ): MrregisterTransformedOutputs {
     const ret: MrregisterTransformedOutputs = {
@@ -191,7 +191,7 @@ function mrregister_transformed_outputs(
 
 
 /**
- * Output object returned when calling `Array<MrregisterTransformedMidwayParameters> | null(...)`.
+ * Output object returned when calling `Array<MrregisterTransformedMidwayParamsDict> | null(...)`.
  *
  * @interface
  */
@@ -219,10 +219,10 @@ interface MrregisterTransformedMidwayOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrregister_transformed_midway_params(
+function mrregister_transformed_midway(
     image1_transformed: string,
     image2_transformed: string,
-): MrregisterTransformedMidwayParametersTagged {
+): MrregisterTransformedMidwayParamsDictTagged {
     const params = {
         "@type": "transformed_midway" as const,
         "image1_transformed": image1_transformed,
@@ -241,7 +241,7 @@ function mrregister_transformed_midway_params(
  * @returns Command-line arguments.
  */
 function mrregister_transformed_midway_cargs(
-    params: MrregisterTransformedMidwayParameters,
+    params: MrregisterTransformedMidwayParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -261,7 +261,7 @@ function mrregister_transformed_midway_cargs(
  * @returns Outputs object.
  */
 function mrregister_transformed_midway_outputs(
-    params: MrregisterTransformedMidwayParameters,
+    params: MrregisterTransformedMidwayParamsDict,
     execution: Execution,
 ): MrregisterTransformedMidwayOutputs {
     const ret: MrregisterTransformedMidwayOutputs = {
@@ -274,7 +274,7 @@ function mrregister_transformed_midway_outputs(
 
 
 /**
- * Output object returned when calling `MrregisterNlWarpParameters | null(...)`.
+ * Output object returned when calling `MrregisterNlWarpParamsDict | null(...)`.
  *
  * @interface
  */
@@ -302,10 +302,10 @@ interface MrregisterNlWarpOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrregister_nl_warp_params(
+function mrregister_nl_warp(
     warp1: string,
     warp2: string,
-): MrregisterNlWarpParametersTagged {
+): MrregisterNlWarpParamsDictTagged {
     const params = {
         "@type": "nl_warp" as const,
         "warp1": warp1,
@@ -324,7 +324,7 @@ function mrregister_nl_warp_params(
  * @returns Command-line arguments.
  */
 function mrregister_nl_warp_cargs(
-    params: MrregisterNlWarpParameters,
+    params: MrregisterNlWarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -344,7 +344,7 @@ function mrregister_nl_warp_cargs(
  * @returns Outputs object.
  */
 function mrregister_nl_warp_outputs(
-    params: MrregisterNlWarpParameters,
+    params: MrregisterNlWarpParamsDict,
     execution: Execution,
 ): MrregisterNlWarpOutputs {
     const ret: MrregisterNlWarpOutputs = {
@@ -364,10 +364,10 @@ function mrregister_nl_warp_outputs(
  *
  * @returns Parameter dictionary
  */
-function mrregister_config_params(
+function mrregister_config(
     key: string,
     value: string,
-): MrregisterConfigParametersTagged {
+): MrregisterConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -386,7 +386,7 @@ function mrregister_config_params(
  * @returns Command-line arguments.
  */
 function mrregister_config_cargs(
-    params: MrregisterConfigParameters,
+    params: MrregisterConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -398,7 +398,7 @@ function mrregister_config_cargs(
 
 
 /**
- * Output object returned when calling `MrregisterParameters(...)`.
+ * Output object returned when calling `MrregisterParamsDict(...)`.
  *
  * @interface
  */
@@ -547,8 +547,8 @@ none (Default: none).
 function mrregister_params(
     image1_image2: InputPathType,
     type_: string | null = null,
-    transformed: Array<MrregisterTransformedParameters> | null = null,
-    transformed_midway: Array<MrregisterTransformedMidwayParameters> | null = null,
+    transformed: Array<MrregisterTransformedParamsDict> | null = null,
+    transformed_midway: Array<MrregisterTransformedMidwayParamsDict> | null = null,
     mask1: InputPathType | null = null,
     mask2: InputPathType | null = null,
     nan: boolean = false,
@@ -590,7 +590,7 @@ function mrregister_params(
     linstage_optimiser_last: string | null = null,
     linstage_optimiser_default: string | null = null,
     linstage_diagnostics_prefix: string | null = null,
-    nl_warp: MrregisterNlWarpParameters | null = null,
+    nl_warp: MrregisterNlWarpParamsDict | null = null,
     nl_warp_full: string | null = null,
     nl_init: InputPathType | null = null,
     nl_scale: Array<number> | null = null,
@@ -609,11 +609,11 @@ function mrregister_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrregisterConfigParameters> | null = null,
+    config: Array<MrregisterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     contrast1_contrast2: Array<InputPathType> | null = null,
-): MrregisterParametersTagged {
+): MrregisterParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrregister" as const,
         "nan": nan,
@@ -806,7 +806,7 @@ function mrregister_params(
  * @returns Command-line arguments.
  */
 function mrregister_cargs(
-    params: MrregisterParameters,
+    params: MrregisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1173,7 +1173,7 @@ function mrregister_cargs(
  * @returns Outputs object.
  */
 function mrregister_outputs(
-    params: MrregisterParameters,
+    params: MrregisterParamsDict,
     execution: Execution,
 ): MrregisterOutputs {
     const ret: MrregisterOutputs = {
@@ -1223,7 +1223,7 @@ function mrregister_outputs(
  * @returns NamedTuple of outputs (described in `MrregisterOutputs`).
  */
 function mrregister_execute(
-    params: MrregisterParameters,
+    params: MrregisterParamsDict,
     runner: Runner | null = null,
 ): MrregisterOutputs {
     runner = runner || getGlobalRunner();
@@ -1345,8 +1345,8 @@ none (Default: none).
 function mrregister(
     image1_image2: InputPathType,
     type_: string | null = null,
-    transformed: Array<MrregisterTransformedParameters> | null = null,
-    transformed_midway: Array<MrregisterTransformedMidwayParameters> | null = null,
+    transformed: Array<MrregisterTransformedParamsDict> | null = null,
+    transformed_midway: Array<MrregisterTransformedMidwayParamsDict> | null = null,
     mask1: InputPathType | null = null,
     mask2: InputPathType | null = null,
     nan: boolean = false,
@@ -1388,7 +1388,7 @@ function mrregister(
     linstage_optimiser_last: string | null = null,
     linstage_optimiser_default: string | null = null,
     linstage_diagnostics_prefix: string | null = null,
-    nl_warp: MrregisterNlWarpParameters | null = null,
+    nl_warp: MrregisterNlWarpParamsDict | null = null,
     nl_warp_full: string | null = null,
     nl_init: InputPathType | null = null,
     nl_scale: Array<number> | null = null,
@@ -1407,7 +1407,7 @@ function mrregister(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrregisterConfigParameters> | null = null,
+    config: Array<MrregisterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     contrast1_contrast2: Array<InputPathType> | null = null,
@@ -1420,15 +1420,25 @@ function mrregister(
 
 export {
       MRREGISTER_METADATA,
+      MrregisterConfigParamsDict,
+      MrregisterConfigParamsDictTagged,
       MrregisterNlWarpOutputs,
+      MrregisterNlWarpParamsDict,
+      MrregisterNlWarpParamsDictTagged,
       MrregisterOutputs,
+      MrregisterParamsDict,
+      MrregisterParamsDictTagged,
       MrregisterTransformedMidwayOutputs,
+      MrregisterTransformedMidwayParamsDict,
+      MrregisterTransformedMidwayParamsDictTagged,
       MrregisterTransformedOutputs,
+      MrregisterTransformedParamsDict,
+      MrregisterTransformedParamsDictTagged,
       mrregister,
-      mrregister_config_params,
+      mrregister_config,
       mrregister_execute,
-      mrregister_nl_warp_params,
+      mrregister_nl_warp,
       mrregister_params,
-      mrregister_transformed_midway_params,
-      mrregister_transformed_params,
+      mrregister_transformed,
+      mrregister_transformed_midway,
 };

@@ -11,54 +11,54 @@ const TCKRESAMPLE_METADATA: Metadata = {
 };
 
 
-interface TckresampleLineParameters {
+interface TckresampleLineParamsDict {
     "@type"?: "line";
     "num": number;
     "start": Array<number>;
     "end": Array<number>;
 }
-type TckresampleLineParametersTagged = Required<Pick<TckresampleLineParameters, '@type'>> & TckresampleLineParameters;
+type TckresampleLineParamsDictTagged = Required<Pick<TckresampleLineParamsDict, '@type'>> & TckresampleLineParamsDict;
 
 
-interface TckresampleArcParameters {
+interface TckresampleArcParamsDict {
     "@type"?: "arc";
     "num": number;
     "start": Array<number>;
     "mid": Array<number>;
     "end": Array<number>;
 }
-type TckresampleArcParametersTagged = Required<Pick<TckresampleArcParameters, '@type'>> & TckresampleArcParameters;
+type TckresampleArcParamsDictTagged = Required<Pick<TckresampleArcParamsDict, '@type'>> & TckresampleArcParamsDict;
 
 
-interface TckresampleConfigParameters {
+interface TckresampleConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckresampleConfigParametersTagged = Required<Pick<TckresampleConfigParameters, '@type'>> & TckresampleConfigParameters;
+type TckresampleConfigParamsDictTagged = Required<Pick<TckresampleConfigParamsDict, '@type'>> & TckresampleConfigParamsDict;
 
 
-interface TckresampleParameters {
+interface TckresampleParamsDict {
     "@type"?: "mrtrix/tckresample";
     "upsample"?: number | null | undefined;
     "downsample"?: number | null | undefined;
     "step_size"?: number | null | undefined;
     "num_points"?: number | null | undefined;
     "endpoints": boolean;
-    "line"?: TckresampleLineParameters | null | undefined;
-    "arc"?: TckresampleArcParameters | null | undefined;
+    "line"?: TckresampleLineParamsDict | null | undefined;
+    "arc"?: TckresampleArcParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckresampleConfigParameters> | null | undefined;
+    "config"?: Array<TckresampleConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in_tracks": InputPathType;
     "out_tracks": string;
 }
-type TckresampleParametersTagged = Required<Pick<TckresampleParameters, '@type'>> & TckresampleParameters;
+type TckresampleParamsDictTagged = Required<Pick<TckresampleParamsDict, '@type'>> & TckresampleParamsDict;
 
 
 /**
@@ -70,11 +70,11 @@ type TckresampleParametersTagged = Required<Pick<TckresampleParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function tckresample_line_params(
+function tckresample_line(
     num: number,
     start: Array<number>,
     end: Array<number>,
-): TckresampleLineParametersTagged {
+): TckresampleLineParamsDictTagged {
     const params = {
         "@type": "line" as const,
         "num": num,
@@ -94,7 +94,7 @@ function tckresample_line_params(
  * @returns Command-line arguments.
  */
 function tckresample_line_cargs(
-    params: TckresampleLineParameters,
+    params: TckresampleLineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,12 +116,12 @@ function tckresample_line_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckresample_arc_params(
+function tckresample_arc(
     num: number,
     start: Array<number>,
     mid: Array<number>,
     end: Array<number>,
-): TckresampleArcParametersTagged {
+): TckresampleArcParamsDictTagged {
     const params = {
         "@type": "arc" as const,
         "num": num,
@@ -142,7 +142,7 @@ function tckresample_arc_params(
  * @returns Command-line arguments.
  */
 function tckresample_arc_cargs(
-    params: TckresampleArcParameters,
+    params: TckresampleArcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,10 +163,10 @@ function tckresample_arc_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckresample_config_params(
+function tckresample_config(
     key: string,
     value: string,
-): TckresampleConfigParametersTagged {
+): TckresampleConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -185,7 +185,7 @@ function tckresample_config_params(
  * @returns Command-line arguments.
  */
 function tckresample_config_cargs(
-    params: TckresampleConfigParameters,
+    params: TckresampleConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -197,7 +197,7 @@ function tckresample_config_cargs(
 
 
 /**
- * Output object returned when calling `TckresampleParameters(...)`.
+ * Output object returned when calling `TckresampleParamsDict(...)`.
  *
  * @interface
  */
@@ -244,17 +244,17 @@ function tckresample_params(
     step_size: number | null = null,
     num_points: number | null = null,
     endpoints: boolean = false,
-    line: TckresampleLineParameters | null = null,
-    arc: TckresampleArcParameters | null = null,
+    line: TckresampleLineParamsDict | null = null,
+    arc: TckresampleArcParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckresampleConfigParameters> | null = null,
+    config: Array<TckresampleConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckresampleParametersTagged {
+): TckresampleParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckresample" as const,
         "endpoints": endpoints,
@@ -304,7 +304,7 @@ function tckresample_params(
  * @returns Command-line arguments.
  */
 function tckresample_cargs(
-    params: TckresampleParameters,
+    params: TckresampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -384,7 +384,7 @@ function tckresample_cargs(
  * @returns Outputs object.
  */
 function tckresample_outputs(
-    params: TckresampleParameters,
+    params: TckresampleParamsDict,
     execution: Execution,
 ): TckresampleOutputs {
     const ret: TckresampleOutputs = {
@@ -418,7 +418,7 @@ function tckresample_outputs(
  * @returns NamedTuple of outputs (described in `TckresampleOutputs`).
  */
 function tckresample_execute(
-    params: TckresampleParameters,
+    params: TckresampleParamsDict,
     runner: Runner | null = null,
 ): TckresampleOutputs {
     runner = runner || getGlobalRunner();
@@ -477,14 +477,14 @@ function tckresample(
     step_size: number | null = null,
     num_points: number | null = null,
     endpoints: boolean = false,
-    line: TckresampleLineParameters | null = null,
-    arc: TckresampleArcParameters | null = null,
+    line: TckresampleLineParamsDict | null = null,
+    arc: TckresampleArcParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckresampleConfigParameters> | null = null,
+    config: Array<TckresampleConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -496,11 +496,19 @@ function tckresample(
 
 export {
       TCKRESAMPLE_METADATA,
+      TckresampleArcParamsDict,
+      TckresampleArcParamsDictTagged,
+      TckresampleConfigParamsDict,
+      TckresampleConfigParamsDictTagged,
+      TckresampleLineParamsDict,
+      TckresampleLineParamsDictTagged,
       TckresampleOutputs,
+      TckresampleParamsDict,
+      TckresampleParamsDictTagged,
       tckresample,
-      tckresample_arc_params,
-      tckresample_config_params,
+      tckresample_arc,
+      tckresample_config,
       tckresample_execute,
-      tckresample_line_params,
+      tckresample_line,
       tckresample_params,
 };

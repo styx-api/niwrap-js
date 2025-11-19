@@ -11,7 +11,7 @@ const EXAMINE_XMAT_METADATA: Metadata = {
 };
 
 
-interface ExamineXmatParameters {
+interface ExamineXmatParamsDict {
     "@type"?: "afni/ExamineXmat";
     "input_file"?: InputPathType | null | undefined;
     "interactive": boolean;
@@ -22,11 +22,11 @@ interface ExamineXmatParameters {
     "msg_trace": boolean;
     "verbosity"?: number | null | undefined;
 }
-type ExamineXmatParametersTagged = Required<Pick<ExamineXmatParameters, '@type'>> & ExamineXmatParameters;
+type ExamineXmatParamsDictTagged = Required<Pick<ExamineXmatParamsDict, '@type'>> & ExamineXmatParamsDict;
 
 
 /**
- * Output object returned when calling `ExamineXmatParameters(...)`.
+ * Output object returned when calling `ExamineXmatParamsDict(...)`.
  *
  * @interface
  */
@@ -81,7 +81,7 @@ function examine_xmat_params(
     select: string | null = null,
     msg_trace: boolean = false,
     verbosity: number | null = null,
-): ExamineXmatParametersTagged {
+): ExamineXmatParamsDictTagged {
     const params = {
         "@type": "afni/ExamineXmat" as const,
         "interactive": interactive,
@@ -118,7 +118,7 @@ function examine_xmat_params(
  * @returns Command-line arguments.
  */
 function examine_xmat_cargs(
-    params: ExamineXmatParameters,
+    params: ExamineXmatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -178,7 +178,7 @@ function examine_xmat_cargs(
  * @returns Outputs object.
  */
 function examine_xmat_outputs(
-    params: ExamineXmatParameters,
+    params: ExamineXmatParamsDict,
     execution: Execution,
 ): ExamineXmatOutputs {
     const ret: ExamineXmatOutputs = {
@@ -208,7 +208,7 @@ function examine_xmat_outputs(
  * @returns NamedTuple of outputs (described in `ExamineXmatOutputs`).
  */
 function examine_xmat_execute(
-    params: ExamineXmatParameters,
+    params: ExamineXmatParamsDict,
     runner: Runner | null = null,
 ): ExamineXmatOutputs {
     runner = runner || getGlobalRunner();
@@ -261,6 +261,8 @@ function examine_xmat(
 export {
       EXAMINE_XMAT_METADATA,
       ExamineXmatOutputs,
+      ExamineXmatParamsDict,
+      ExamineXmatParamsDictTagged,
       examine_xmat,
       examine_xmat_execute,
       examine_xmat_params,

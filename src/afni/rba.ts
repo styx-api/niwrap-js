@@ -11,7 +11,7 @@ const RBA_METADATA: Metadata = {
 };
 
 
-interface RbaParameters {
+interface RbaParamsDict {
     "@type"?: "afni/RBA";
     "prefix": string;
     "dataTable": InputPathType;
@@ -40,11 +40,11 @@ interface RbaParameters {
     "md": boolean;
     "r2z": boolean;
 }
-type RbaParametersTagged = Required<Pick<RbaParameters, '@type'>> & RbaParameters;
+type RbaParamsDictTagged = Required<Pick<RbaParamsDict, '@type'>> & RbaParamsDict;
 
 
 /**
- * Output object returned when calling `RbaParameters(...)`.
+ * Output object returned when calling `RbaParamsDict(...)`.
  *
  * @interface
  */
@@ -123,7 +123,7 @@ function rba_params(
     verbose: number | null = null,
     md: boolean = false,
     r2z: boolean = false,
-): RbaParametersTagged {
+): RbaParamsDictTagged {
     const params = {
         "@type": "afni/RBA" as const,
         "prefix": prefix,
@@ -208,7 +208,7 @@ function rba_params(
  * @returns Command-line arguments.
  */
 function rba_cargs(
-    params: RbaParameters,
+    params: RbaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -369,7 +369,7 @@ function rba_cargs(
  * @returns Outputs object.
  */
 function rba_outputs(
-    params: RbaParameters,
+    params: RbaParamsDict,
     execution: Execution,
 ): RbaOutputs {
     const ret: RbaOutputs = {
@@ -396,7 +396,7 @@ function rba_outputs(
  * @returns NamedTuple of outputs (described in `RbaOutputs`).
  */
 function rba_execute(
-    params: RbaParameters,
+    params: RbaParamsDict,
     runner: Runner | null = null,
 ): RbaOutputs {
     runner = runner || getGlobalRunner();
@@ -485,6 +485,8 @@ function rba(
 export {
       RBA_METADATA,
       RbaOutputs,
+      RbaParamsDict,
+      RbaParamsDictTagged,
       rba,
       rba_execute,
       rba_params,

@@ -11,15 +11,15 @@ const UNPACK_IMA_TCL_METADATA: Metadata = {
 };
 
 
-interface UnpackImaTclParameters {
+interface UnpackImaTclParamsDict {
     "@type"?: "freesurfer/unpack_ima.tcl";
     "target_dir": string;
 }
-type UnpackImaTclParametersTagged = Required<Pick<UnpackImaTclParameters, '@type'>> & UnpackImaTclParameters;
+type UnpackImaTclParamsDictTagged = Required<Pick<UnpackImaTclParamsDict, '@type'>> & UnpackImaTclParamsDict;
 
 
 /**
- * Output object returned when calling `UnpackImaTclParameters(...)`.
+ * Output object returned when calling `UnpackImaTclParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface UnpackImaTclOutputs {
  */
 function unpack_ima_tcl_params(
     target_dir: string = "~",
-): UnpackImaTclParametersTagged {
+): UnpackImaTclParamsDictTagged {
     const params = {
         "@type": "freesurfer/unpack_ima.tcl" as const,
         "target_dir": target_dir,
@@ -58,7 +58,7 @@ function unpack_ima_tcl_params(
  * @returns Command-line arguments.
  */
 function unpack_ima_tcl_cargs(
-    params: UnpackImaTclParameters,
+    params: UnpackImaTclParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function unpack_ima_tcl_cargs(
  * @returns Outputs object.
  */
 function unpack_ima_tcl_outputs(
-    params: UnpackImaTclParameters,
+    params: UnpackImaTclParamsDict,
     execution: Execution,
 ): UnpackImaTclOutputs {
     const ret: UnpackImaTclOutputs = {
@@ -102,7 +102,7 @@ function unpack_ima_tcl_outputs(
  * @returns NamedTuple of outputs (described in `UnpackImaTclOutputs`).
  */
 function unpack_ima_tcl_execute(
-    params: UnpackImaTclParameters,
+    params: UnpackImaTclParamsDict,
     runner: Runner | null = null,
 ): UnpackImaTclOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function unpack_ima_tcl(
 export {
       UNPACK_IMA_TCL_METADATA,
       UnpackImaTclOutputs,
+      UnpackImaTclParamsDict,
+      UnpackImaTclParamsDictTagged,
       unpack_ima_tcl,
       unpack_ima_tcl_execute,
       unpack_ima_tcl_params,

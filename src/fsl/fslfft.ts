@@ -11,17 +11,17 @@ const FSLFFT_METADATA: Metadata = {
 };
 
 
-interface FslfftParameters {
+interface FslfftParamsDict {
     "@type"?: "fsl/fslfft";
     "input_volume": InputPathType;
     "output_volume": string;
     "inverse_flag": boolean;
 }
-type FslfftParametersTagged = Required<Pick<FslfftParameters, '@type'>> & FslfftParameters;
+type FslfftParamsDictTagged = Required<Pick<FslfftParamsDict, '@type'>> & FslfftParamsDict;
 
 
 /**
- * Output object returned when calling `FslfftParameters(...)`.
+ * Output object returned when calling `FslfftParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function fslfft_params(
     input_volume: InputPathType,
     output_volume: string,
     inverse_flag: boolean = false,
-): FslfftParametersTagged {
+): FslfftParamsDictTagged {
     const params = {
         "@type": "fsl/fslfft" as const,
         "input_volume": input_volume,
@@ -70,7 +70,7 @@ function fslfft_params(
  * @returns Command-line arguments.
  */
 function fslfft_cargs(
-    params: FslfftParameters,
+    params: FslfftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function fslfft_cargs(
  * @returns Outputs object.
  */
 function fslfft_outputs(
-    params: FslfftParameters,
+    params: FslfftParamsDict,
     execution: Execution,
 ): FslfftOutputs {
     const ret: FslfftOutputs = {
@@ -119,7 +119,7 @@ function fslfft_outputs(
  * @returns NamedTuple of outputs (described in `FslfftOutputs`).
  */
 function fslfft_execute(
-    params: FslfftParameters,
+    params: FslfftParamsDict,
     runner: Runner | null = null,
 ): FslfftOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function fslfft(
 export {
       FSLFFT_METADATA,
       FslfftOutputs,
+      FslfftParamsDict,
+      FslfftParamsDictTagged,
       fslfft,
       fslfft_execute,
       fslfft_params,

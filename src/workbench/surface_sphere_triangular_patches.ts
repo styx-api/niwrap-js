@@ -10,17 +10,17 @@ const SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA: Metadata = {
 };
 
 
-interface SurfaceSphereTriangularPatchesParameters {
+interface SurfaceSphereTriangularPatchesParamsDict {
     "@type"?: "workbench/surface-sphere-triangular-patches";
     "sphere": InputPathType;
     "divisions": number;
     "text-out": string;
 }
-type SurfaceSphereTriangularPatchesParametersTagged = Required<Pick<SurfaceSphereTriangularPatchesParameters, '@type'>> & SurfaceSphereTriangularPatchesParameters;
+type SurfaceSphereTriangularPatchesParamsDictTagged = Required<Pick<SurfaceSphereTriangularPatchesParamsDict, '@type'>> & SurfaceSphereTriangularPatchesParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceSphereTriangularPatchesParameters(...)`.
+ * Output object returned when calling `SurfaceSphereTriangularPatchesParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function surface_sphere_triangular_patches_params(
     sphere: InputPathType,
     divisions: number,
     text_out: string,
-): SurfaceSphereTriangularPatchesParametersTagged {
+): SurfaceSphereTriangularPatchesParamsDictTagged {
     const params = {
         "@type": "workbench/surface-sphere-triangular-patches" as const,
         "sphere": sphere,
@@ -65,7 +65,7 @@ function surface_sphere_triangular_patches_params(
  * @returns Command-line arguments.
  */
 function surface_sphere_triangular_patches_cargs(
-    params: SurfaceSphereTriangularPatchesParameters,
+    params: SurfaceSphereTriangularPatchesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function surface_sphere_triangular_patches_cargs(
  * @returns Outputs object.
  */
 function surface_sphere_triangular_patches_outputs(
-    params: SurfaceSphereTriangularPatchesParameters,
+    params: SurfaceSphereTriangularPatchesParamsDict,
     execution: Execution,
 ): SurfaceSphereTriangularPatchesOutputs {
     const ret: SurfaceSphereTriangularPatchesOutputs = {
@@ -110,7 +110,7 @@ function surface_sphere_triangular_patches_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceSphereTriangularPatchesOutputs`).
  */
 function surface_sphere_triangular_patches_execute(
-    params: SurfaceSphereTriangularPatchesParameters,
+    params: SurfaceSphereTriangularPatchesParamsDict,
     runner: Runner | null = null,
 ): SurfaceSphereTriangularPatchesOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function surface_sphere_triangular_patches(
 export {
       SURFACE_SPHERE_TRIANGULAR_PATCHES_METADATA,
       SurfaceSphereTriangularPatchesOutputs,
+      SurfaceSphereTriangularPatchesParamsDict,
+      SurfaceSphereTriangularPatchesParamsDictTagged,
       surface_sphere_triangular_patches,
       surface_sphere_triangular_patches_execute,
       surface_sphere_triangular_patches_params,

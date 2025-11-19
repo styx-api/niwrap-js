@@ -11,7 +11,7 @@ const V_3D_MEMA_METADATA: Metadata = {
 };
 
 
-interface V3dMemaParameters {
+interface V3dMemaParamsDict {
     "@type"?: "afni/3dMEMA";
     "prefix": string;
     "jobs"?: number | null | undefined;
@@ -41,11 +41,11 @@ interface V3dMemaParameters {
     "conditions"?: Array<string> | null | undefined;
     "no_tstat": boolean;
 }
-type V3dMemaParametersTagged = Required<Pick<V3dMemaParameters, '@type'>> & V3dMemaParameters;
+type V3dMemaParamsDictTagged = Required<Pick<V3dMemaParamsDict, '@type'>> & V3dMemaParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMemaParameters(...)`.
+ * Output object returned when calling `V3dMemaParamsDict(...)`.
  *
  * @interface
  */
@@ -122,7 +122,7 @@ function v_3d_mema_params(
     help: boolean = false,
     conditions: Array<string> | null = null,
     no_tstat: boolean = false,
-): V3dMemaParametersTagged {
+): V3dMemaParamsDictTagged {
     const params = {
         "@type": "afni/3dMEMA" as const,
         "prefix": prefix,
@@ -190,7 +190,7 @@ function v_3d_mema_params(
  * @returns Command-line arguments.
  */
 function v_3d_mema_cargs(
-    params: V3dMemaParameters,
+    params: V3dMemaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -327,7 +327,7 @@ function v_3d_mema_cargs(
  * @returns Outputs object.
  */
 function v_3d_mema_outputs(
-    params: V3dMemaParameters,
+    params: V3dMemaParamsDict,
     execution: Execution,
 ): V3dMemaOutputs {
     const ret: V3dMemaOutputs = {
@@ -353,7 +353,7 @@ function v_3d_mema_outputs(
  * @returns NamedTuple of outputs (described in `V3dMemaOutputs`).
  */
 function v_3d_mema_execute(
-    params: V3dMemaParameters,
+    params: V3dMemaParamsDict,
     runner: Runner | null = null,
 ): V3dMemaOutputs {
     runner = runner || getGlobalRunner();
@@ -443,6 +443,8 @@ function v_3d_mema(
 
 export {
       V3dMemaOutputs,
+      V3dMemaParamsDict,
+      V3dMemaParamsDictTagged,
       V_3D_MEMA_METADATA,
       v_3d_mema,
       v_3d_mema_execute,

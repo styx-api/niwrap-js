@@ -11,7 +11,7 @@ const V__T1SCALE_METADATA: Metadata = {
 };
 
 
-interface VT1scaleParameters {
+interface VT1scaleParamsDict {
     "@type"?: "afni/@T1scale";
     "t1_volume": InputPathType;
     "pd_volume"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface VT1scaleParameters {
     "all_opts": boolean;
     "h_find_word"?: string | null | undefined;
 }
-type VT1scaleParametersTagged = Required<Pick<VT1scaleParameters, '@type'>> & VT1scaleParameters;
+type VT1scaleParamsDictTagged = Required<Pick<VT1scaleParamsDict, '@type'>> & VT1scaleParamsDict;
 
 
 /**
- * Output object returned when calling `VT1scaleParameters(...)`.
+ * Output object returned when calling `VT1scaleParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function v__t1scale_params(
     h_view: boolean = false,
     all_opts: boolean = false,
     h_find_word: string | null = null,
-): VT1scaleParametersTagged {
+): VT1scaleParamsDictTagged {
     const params = {
         "@type": "afni/@T1scale" as const,
         "t1_volume": t1_volume,
@@ -130,7 +130,7 @@ function v__t1scale_params(
  * @returns Command-line arguments.
  */
 function v__t1scale_cargs(
-    params: VT1scaleParameters,
+    params: VT1scaleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function v__t1scale_cargs(
  * @returns Outputs object.
  */
 function v__t1scale_outputs(
-    params: VT1scaleParameters,
+    params: VT1scaleParamsDict,
     execution: Execution,
 ): VT1scaleOutputs {
     const ret: VT1scaleOutputs = {
@@ -231,7 +231,7 @@ function v__t1scale_outputs(
  * @returns NamedTuple of outputs (described in `VT1scaleOutputs`).
  */
 function v__t1scale_execute(
-    params: VT1scaleParameters,
+    params: VT1scaleParamsDict,
     runner: Runner | null = null,
 ): VT1scaleOutputs {
     runner = runner || getGlobalRunner();
@@ -295,6 +295,8 @@ function v__t1scale(
 
 export {
       VT1scaleOutputs,
+      VT1scaleParamsDict,
+      VT1scaleParamsDictTagged,
       V__T1SCALE_METADATA,
       v__t1scale,
       v__t1scale_execute,

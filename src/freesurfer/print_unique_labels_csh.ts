@@ -11,7 +11,7 @@ const PRINT_UNIQUE_LABELS_CSH_METADATA: Metadata = {
 };
 
 
-interface PrintUniqueLabelsCshParameters {
+interface PrintUniqueLabelsCshParamsDict {
     "@type"?: "freesurfer/print_unique_labels.csh";
     "label_volume": InputPathType;
     "output_file"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface PrintUniqueLabelsCshParameters {
     "version": boolean;
     "help": boolean;
 }
-type PrintUniqueLabelsCshParametersTagged = Required<Pick<PrintUniqueLabelsCshParameters, '@type'>> & PrintUniqueLabelsCshParameters;
+type PrintUniqueLabelsCshParamsDictTagged = Required<Pick<PrintUniqueLabelsCshParamsDict, '@type'>> & PrintUniqueLabelsCshParamsDict;
 
 
 /**
- * Output object returned when calling `PrintUniqueLabelsCshParameters(...)`.
+ * Output object returned when calling `PrintUniqueLabelsCshParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function print_unique_labels_csh_params(
     list_only: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): PrintUniqueLabelsCshParametersTagged {
+): PrintUniqueLabelsCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/print_unique_labels.csh" as const,
         "label_volume": label_volume,
@@ -80,7 +80,7 @@ function print_unique_labels_csh_params(
  * @returns Command-line arguments.
  */
 function print_unique_labels_csh_cargs(
-    params: PrintUniqueLabelsCshParameters,
+    params: PrintUniqueLabelsCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function print_unique_labels_csh_cargs(
  * @returns Outputs object.
  */
 function print_unique_labels_csh_outputs(
-    params: PrintUniqueLabelsCshParameters,
+    params: PrintUniqueLabelsCshParamsDict,
     execution: Execution,
 ): PrintUniqueLabelsCshOutputs {
     const ret: PrintUniqueLabelsCshOutputs = {
@@ -143,7 +143,7 @@ function print_unique_labels_csh_outputs(
  * @returns NamedTuple of outputs (described in `PrintUniqueLabelsCshOutputs`).
  */
 function print_unique_labels_csh_execute(
-    params: PrintUniqueLabelsCshParameters,
+    params: PrintUniqueLabelsCshParamsDict,
     runner: Runner | null = null,
 ): PrintUniqueLabelsCshOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function print_unique_labels_csh(
 export {
       PRINT_UNIQUE_LABELS_CSH_METADATA,
       PrintUniqueLabelsCshOutputs,
+      PrintUniqueLabelsCshParamsDict,
+      PrintUniqueLabelsCshParamsDictTagged,
       print_unique_labels_csh,
       print_unique_labels_csh_execute,
       print_unique_labels_csh_params,

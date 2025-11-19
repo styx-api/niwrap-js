@@ -11,7 +11,7 @@ const V__XYZ_TO_IJK_METADATA: Metadata = {
 };
 
 
-interface VXyzToIjkParameters {
+interface VXyzToIjkParamsDict {
     "@type"?: "afni/@xyz_to_ijk";
     "inset": InputPathType;
     "x_coord": number;
@@ -19,11 +19,11 @@ interface VXyzToIjkParameters {
     "z_coord": number;
     "prefix"?: string | null | undefined;
 }
-type VXyzToIjkParametersTagged = Required<Pick<VXyzToIjkParameters, '@type'>> & VXyzToIjkParameters;
+type VXyzToIjkParamsDictTagged = Required<Pick<VXyzToIjkParamsDict, '@type'>> & VXyzToIjkParamsDict;
 
 
 /**
- * Output object returned when calling `VXyzToIjkParameters(...)`.
+ * Output object returned when calling `VXyzToIjkParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v__xyz_to_ijk_params(
     y_coord: number,
     z_coord: number,
     prefix: string | null = null,
-): VXyzToIjkParametersTagged {
+): VXyzToIjkParamsDictTagged {
     const params = {
         "@type": "afni/@xyz_to_ijk" as const,
         "inset": inset,
@@ -80,7 +80,7 @@ function v__xyz_to_ijk_params(
  * @returns Command-line arguments.
  */
 function v__xyz_to_ijk_cargs(
-    params: VXyzToIjkParameters,
+    params: VXyzToIjkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function v__xyz_to_ijk_cargs(
  * @returns Outputs object.
  */
 function v__xyz_to_ijk_outputs(
-    params: VXyzToIjkParameters,
+    params: VXyzToIjkParamsDict,
     execution: Execution,
 ): VXyzToIjkOutputs {
     const ret: VXyzToIjkOutputs = {
@@ -140,7 +140,7 @@ function v__xyz_to_ijk_outputs(
  * @returns NamedTuple of outputs (described in `VXyzToIjkOutputs`).
  */
 function v__xyz_to_ijk_execute(
-    params: VXyzToIjkParameters,
+    params: VXyzToIjkParamsDict,
     runner: Runner | null = null,
 ): VXyzToIjkOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function v__xyz_to_ijk(
 
 export {
       VXyzToIjkOutputs,
+      VXyzToIjkParamsDict,
+      VXyzToIjkParamsDictTagged,
       V__XYZ_TO_IJK_METADATA,
       v__xyz_to_ijk,
       v__xyz_to_ijk_execute,

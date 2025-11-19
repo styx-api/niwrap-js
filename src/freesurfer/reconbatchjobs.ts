@@ -11,16 +11,16 @@ const RECONBATCHJOBS_METADATA: Metadata = {
 };
 
 
-interface ReconbatchjobsParameters {
+interface ReconbatchjobsParamsDict {
     "@type"?: "freesurfer/reconbatchjobs";
     "logfile": string;
     "cmdfiles": Array<string>;
 }
-type ReconbatchjobsParametersTagged = Required<Pick<ReconbatchjobsParameters, '@type'>> & ReconbatchjobsParameters;
+type ReconbatchjobsParamsDictTagged = Required<Pick<ReconbatchjobsParamsDict, '@type'>> & ReconbatchjobsParamsDict;
 
 
 /**
- * Output object returned when calling `ReconbatchjobsParameters(...)`.
+ * Output object returned when calling `ReconbatchjobsParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface ReconbatchjobsOutputs {
 function reconbatchjobs_params(
     logfile: string,
     cmdfiles: Array<string>,
-): ReconbatchjobsParametersTagged {
+): ReconbatchjobsParamsDictTagged {
     const params = {
         "@type": "freesurfer/reconbatchjobs" as const,
         "logfile": logfile,
@@ -62,7 +62,7 @@ function reconbatchjobs_params(
  * @returns Command-line arguments.
  */
 function reconbatchjobs_cargs(
-    params: ReconbatchjobsParameters,
+    params: ReconbatchjobsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function reconbatchjobs_cargs(
  * @returns Outputs object.
  */
 function reconbatchjobs_outputs(
-    params: ReconbatchjobsParameters,
+    params: ReconbatchjobsParamsDict,
     execution: Execution,
 ): ReconbatchjobsOutputs {
     const ret: ReconbatchjobsOutputs = {
@@ -107,7 +107,7 @@ function reconbatchjobs_outputs(
  * @returns NamedTuple of outputs (described in `ReconbatchjobsOutputs`).
  */
 function reconbatchjobs_execute(
-    params: ReconbatchjobsParameters,
+    params: ReconbatchjobsParamsDict,
     runner: Runner | null = null,
 ): ReconbatchjobsOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function reconbatchjobs(
 export {
       RECONBATCHJOBS_METADATA,
       ReconbatchjobsOutputs,
+      ReconbatchjobsParamsDict,
+      ReconbatchjobsParamsDictTagged,
       reconbatchjobs,
       reconbatchjobs_execute,
       reconbatchjobs_params,

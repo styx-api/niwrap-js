@@ -11,7 +11,7 @@ const APARC2FEAT_METADATA: Metadata = {
 };
 
 
-interface Aparc2featParameters {
+interface Aparc2featParamsDict {
     "@type"?: "freesurfer/aparc2feat";
     "feat_directories": string;
     "featdirfile"?: InputPathType | null | undefined;
@@ -23,11 +23,11 @@ interface Aparc2featParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
-type Aparc2featParametersTagged = Required<Pick<Aparc2featParameters, '@type'>> & Aparc2featParameters;
+type Aparc2featParamsDictTagged = Required<Pick<Aparc2featParamsDict, '@type'>> & Aparc2featParamsDict;
 
 
 /**
- * Output object returned when calling `Aparc2featParameters(...)`.
+ * Output object returned when calling `Aparc2featParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function aparc2feat_params(
     debug_flag: boolean = false,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): Aparc2featParametersTagged {
+): Aparc2featParamsDictTagged {
     const params = {
         "@type": "freesurfer/aparc2feat" as const,
         "feat_directories": feat_directories,
@@ -104,7 +104,7 @@ function aparc2feat_params(
  * @returns Command-line arguments.
  */
 function aparc2feat_cargs(
-    params: Aparc2featParameters,
+    params: Aparc2featParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function aparc2feat_cargs(
  * @returns Outputs object.
  */
 function aparc2feat_outputs(
-    params: Aparc2featParameters,
+    params: Aparc2featParamsDict,
     execution: Execution,
 ): Aparc2featOutputs {
     const ret: Aparc2featOutputs = {
@@ -186,7 +186,7 @@ function aparc2feat_outputs(
  * @returns NamedTuple of outputs (described in `Aparc2featOutputs`).
  */
 function aparc2feat_execute(
-    params: Aparc2featParameters,
+    params: Aparc2featParamsDict,
     runner: Runner | null = null,
 ): Aparc2featOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function aparc2feat(
 export {
       APARC2FEAT_METADATA,
       Aparc2featOutputs,
+      Aparc2featParamsDict,
+      Aparc2featParamsDictTagged,
       aparc2feat,
       aparc2feat_execute,
       aparc2feat_params,

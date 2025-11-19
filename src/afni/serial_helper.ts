@@ -11,7 +11,7 @@ const SERIAL_HELPER_METADATA: Metadata = {
 };
 
 
-interface SerialHelperParameters {
+interface SerialHelperParamsDict {
     "@type"?: "afni/serial_helper";
     "serial_port": string;
     "sock_num"?: number | null | undefined;
@@ -26,11 +26,11 @@ interface SerialHelperParameters {
     "no_serial": boolean;
     "version": boolean;
 }
-type SerialHelperParametersTagged = Required<Pick<SerialHelperParameters, '@type'>> & SerialHelperParameters;
+type SerialHelperParamsDictTagged = Required<Pick<SerialHelperParamsDict, '@type'>> & SerialHelperParamsDict;
 
 
 /**
- * Output object returned when calling `SerialHelperParameters(...)`.
+ * Output object returned when calling `SerialHelperParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function serial_helper_params(
     hist: boolean = false,
     no_serial: boolean = false,
     version: boolean = false,
-): SerialHelperParametersTagged {
+): SerialHelperParamsDictTagged {
     const params = {
         "@type": "afni/serial_helper" as const,
         "serial_port": serial_port,
@@ -114,7 +114,7 @@ function serial_helper_params(
  * @returns Command-line arguments.
  */
 function serial_helper_cargs(
-    params: SerialHelperParameters,
+    params: SerialHelperParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -187,7 +187,7 @@ function serial_helper_cargs(
  * @returns Outputs object.
  */
 function serial_helper_outputs(
-    params: SerialHelperParameters,
+    params: SerialHelperParamsDict,
     execution: Execution,
 ): SerialHelperOutputs {
     const ret: SerialHelperOutputs = {
@@ -212,7 +212,7 @@ function serial_helper_outputs(
  * @returns NamedTuple of outputs (described in `SerialHelperOutputs`).
  */
 function serial_helper_execute(
-    params: SerialHelperParameters,
+    params: SerialHelperParamsDict,
     runner: Runner | null = null,
 ): SerialHelperOutputs {
     runner = runner || getGlobalRunner();
@@ -273,6 +273,8 @@ function serial_helper(
 export {
       SERIAL_HELPER_METADATA,
       SerialHelperOutputs,
+      SerialHelperParamsDict,
+      SerialHelperParamsDictTagged,
       serial_helper,
       serial_helper_execute,
       serial_helper_params,

@@ -11,7 +11,7 @@ const ASEG2FEAT_METADATA: Metadata = {
 };
 
 
-interface Aseg2featParameters {
+interface Aseg2featParamsDict {
     "@type"?: "freesurfer/aseg2feat";
     "feat": string;
     "featdirfile"?: InputPathType | null | undefined;
@@ -23,11 +23,11 @@ interface Aseg2featParameters {
     "help": boolean;
     "version": boolean;
 }
-type Aseg2featParametersTagged = Required<Pick<Aseg2featParameters, '@type'>> & Aseg2featParameters;
+type Aseg2featParamsDictTagged = Required<Pick<Aseg2featParamsDict, '@type'>> & Aseg2featParamsDict;
 
 
 /**
- * Output object returned when calling `Aseg2featParameters(...)`.
+ * Output object returned when calling `Aseg2featParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function aseg2feat_params(
     debug: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): Aseg2featParametersTagged {
+): Aseg2featParamsDictTagged {
     const params = {
         "@type": "freesurfer/aseg2feat" as const,
         "feat": feat,
@@ -102,7 +102,7 @@ function aseg2feat_params(
  * @returns Command-line arguments.
  */
 function aseg2feat_cargs(
-    params: Aseg2featParameters,
+    params: Aseg2featParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -154,7 +154,7 @@ function aseg2feat_cargs(
  * @returns Outputs object.
  */
 function aseg2feat_outputs(
-    params: Aseg2featParameters,
+    params: Aseg2featParamsDict,
     execution: Execution,
 ): Aseg2featOutputs {
     const ret: Aseg2featOutputs = {
@@ -181,7 +181,7 @@ function aseg2feat_outputs(
  * @returns NamedTuple of outputs (described in `Aseg2featOutputs`).
  */
 function aseg2feat_execute(
-    params: Aseg2featParameters,
+    params: Aseg2featParamsDict,
     runner: Runner | null = null,
 ): Aseg2featOutputs {
     runner = runner || getGlobalRunner();
@@ -236,6 +236,8 @@ function aseg2feat(
 export {
       ASEG2FEAT_METADATA,
       Aseg2featOutputs,
+      Aseg2featParamsDict,
+      Aseg2featParamsDictTagged,
       aseg2feat,
       aseg2feat_execute,
       aseg2feat_params,

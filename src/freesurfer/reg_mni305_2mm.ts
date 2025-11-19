@@ -11,16 +11,16 @@ const REG_MNI305_2MM_METADATA: Metadata = {
 };
 
 
-interface RegMni3052mmParameters {
+interface RegMni3052mmParamsDict {
     "@type"?: "freesurfer/reg-mni305.2mm";
     "subject_id": string;
     "regfile": InputPathType;
 }
-type RegMni3052mmParametersTagged = Required<Pick<RegMni3052mmParameters, '@type'>> & RegMni3052mmParameters;
+type RegMni3052mmParamsDictTagged = Required<Pick<RegMni3052mmParamsDict, '@type'>> & RegMni3052mmParamsDict;
 
 
 /**
- * Output object returned when calling `RegMni3052mmParameters(...)`.
+ * Output object returned when calling `RegMni3052mmParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface RegMni3052mmOutputs {
 function reg_mni305_2mm_params(
     subject_id: string,
     regfile: InputPathType,
-): RegMni3052mmParametersTagged {
+): RegMni3052mmParamsDictTagged {
     const params = {
         "@type": "freesurfer/reg-mni305.2mm" as const,
         "subject_id": subject_id,
@@ -66,7 +66,7 @@ function reg_mni305_2mm_params(
  * @returns Command-line arguments.
  */
 function reg_mni305_2mm_cargs(
-    params: RegMni3052mmParameters,
+    params: RegMni3052mmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function reg_mni305_2mm_cargs(
  * @returns Outputs object.
  */
 function reg_mni305_2mm_outputs(
-    params: RegMni3052mmParameters,
+    params: RegMni3052mmParamsDict,
     execution: Execution,
 ): RegMni3052mmOutputs {
     const ret: RegMni3052mmOutputs = {
@@ -118,7 +118,7 @@ function reg_mni305_2mm_outputs(
  * @returns NamedTuple of outputs (described in `RegMni3052mmOutputs`).
  */
 function reg_mni305_2mm_execute(
-    params: RegMni3052mmParameters,
+    params: RegMni3052mmParamsDict,
     runner: Runner | null = null,
 ): RegMni3052mmOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function reg_mni305_2mm(
 export {
       REG_MNI305_2MM_METADATA,
       RegMni3052mmOutputs,
+      RegMni3052mmParamsDict,
+      RegMni3052mmParamsDictTagged,
       reg_mni305_2mm,
       reg_mni305_2mm_execute,
       reg_mni305_2mm_params,

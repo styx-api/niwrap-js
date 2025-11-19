@@ -11,7 +11,7 @@ const UBER_SUBJECT_PY_METADATA: Metadata = {
 };
 
 
-interface UberSubjectPyParameters {
+interface UberSubjectPyParamsDict {
     "@type"?: "afni/uber_subject.py";
     "qt_opts"?: string | null | undefined;
     "svar"?: string | null | undefined;
@@ -57,11 +57,11 @@ interface UberSubjectPyParameters {
     "volreg_base"?: string | null | undefined;
     "verb"?: string | null | undefined;
 }
-type UberSubjectPyParametersTagged = Required<Pick<UberSubjectPyParameters, '@type'>> & UberSubjectPyParameters;
+type UberSubjectPyParamsDictTagged = Required<Pick<UberSubjectPyParamsDict, '@type'>> & UberSubjectPyParamsDict;
 
 
 /**
- * Output object returned when calling `UberSubjectPyParameters(...)`.
+ * Output object returned when calling `UberSubjectPyParamsDict(...)`.
  *
  * @interface
  */
@@ -166,7 +166,7 @@ function uber_subject_py_params(
     tlrc_opts_at: string | null = null,
     volreg_base: string | null = null,
     verb: string | null = null,
-): UberSubjectPyParametersTagged {
+): UberSubjectPyParamsDictTagged {
     const params = {
         "@type": "afni/uber_subject.py" as const,
         "no_gui": no_gui,
@@ -304,7 +304,7 @@ function uber_subject_py_params(
  * @returns Command-line arguments.
  */
 function uber_subject_py_cargs(
-    params: UberSubjectPyParameters,
+    params: UberSubjectPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -568,7 +568,7 @@ function uber_subject_py_cargs(
  * @returns Outputs object.
  */
 function uber_subject_py_outputs(
-    params: UberSubjectPyParameters,
+    params: UberSubjectPyParamsDict,
     execution: Execution,
 ): UberSubjectPyOutputs {
     const ret: UberSubjectPyOutputs = {
@@ -593,7 +593,7 @@ function uber_subject_py_outputs(
  * @returns NamedTuple of outputs (described in `UberSubjectPyOutputs`).
  */
 function uber_subject_py_execute(
-    params: UberSubjectPyParameters,
+    params: UberSubjectPyParamsDict,
     runner: Runner | null = null,
 ): UberSubjectPyOutputs {
     runner = runner || getGlobalRunner();
@@ -716,6 +716,8 @@ function uber_subject_py(
 export {
       UBER_SUBJECT_PY_METADATA,
       UberSubjectPyOutputs,
+      UberSubjectPyParamsDict,
+      UberSubjectPyParamsDictTagged,
       uber_subject_py,
       uber_subject_py_execute,
       uber_subject_py_params,

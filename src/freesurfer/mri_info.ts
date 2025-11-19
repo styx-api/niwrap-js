@@ -11,7 +11,7 @@ const MRI_INFO_METADATA: Metadata = {
 };
 
 
-interface MriInfoParameters {
+interface MriInfoParamsDict {
     "@type"?: "freesurfer/mri_info";
     "input1": InputPathType;
     "input2"?: InputPathType | null | undefined;
@@ -66,11 +66,11 @@ interface MriInfoParameters {
     "orig_ras2vox": boolean;
     "in_type"?: string | null | undefined;
 }
-type MriInfoParametersTagged = Required<Pick<MriInfoParameters, '@type'>> & MriInfoParameters;
+type MriInfoParamsDictTagged = Required<Pick<MriInfoParamsDict, '@type'>> & MriInfoParamsDict;
 
 
 /**
- * Output object returned when calling `MriInfoParameters(...)`.
+ * Output object returned when calling `MriInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -193,7 +193,7 @@ function mri_info_params(
     output_file: InputPathType | null = null,
     orig_ras2vox: boolean = false,
     in_type: string | null = null,
-): MriInfoParametersTagged {
+): MriInfoParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_info" as const,
         "input1": input1,
@@ -270,7 +270,7 @@ function mri_info_params(
  * @returns Command-line arguments.
  */
 function mri_info_cargs(
-    params: MriInfoParameters,
+    params: MriInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -451,7 +451,7 @@ function mri_info_cargs(
  * @returns Outputs object.
  */
 function mri_info_outputs(
-    params: MriInfoParameters,
+    params: MriInfoParamsDict,
     execution: Execution,
 ): MriInfoOutputs {
     const ret: MriInfoOutputs = {
@@ -476,7 +476,7 @@ function mri_info_outputs(
  * @returns NamedTuple of outputs (described in `MriInfoOutputs`).
  */
 function mri_info_execute(
-    params: MriInfoParameters,
+    params: MriInfoParamsDict,
     runner: Runner | null = null,
 ): MriInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -617,6 +617,8 @@ function mri_info(
 export {
       MRI_INFO_METADATA,
       MriInfoOutputs,
+      MriInfoParamsDict,
+      MriInfoParamsDictTagged,
       mri_info,
       mri_info_execute,
       mri_info_params,

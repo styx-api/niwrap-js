@@ -10,7 +10,7 @@ const METADATA_STRING_REPLACE_METADATA: Metadata = {
 };
 
 
-interface MetadataStringReplaceParameters {
+interface MetadataStringReplaceParamsDict {
     "@type"?: "workbench/metadata-string-replace";
     "case-insensitive": boolean;
     "input-file": string;
@@ -18,11 +18,11 @@ interface MetadataStringReplaceParameters {
     "replace-string": string;
     "output-file": string;
 }
-type MetadataStringReplaceParametersTagged = Required<Pick<MetadataStringReplaceParameters, '@type'>> & MetadataStringReplaceParameters;
+type MetadataStringReplaceParamsDictTagged = Required<Pick<MetadataStringReplaceParamsDict, '@type'>> & MetadataStringReplaceParamsDict;
 
 
 /**
- * Output object returned when calling `MetadataStringReplaceParameters(...)`.
+ * Output object returned when calling `MetadataStringReplaceParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ function metadata_string_replace_params(
     replace_string: string,
     output_file: string,
     case_insensitive: boolean = false,
-): MetadataStringReplaceParametersTagged {
+): MetadataStringReplaceParamsDictTagged {
     const params = {
         "@type": "workbench/metadata-string-replace" as const,
         "case-insensitive": case_insensitive,
@@ -73,7 +73,7 @@ function metadata_string_replace_params(
  * @returns Command-line arguments.
  */
 function metadata_string_replace_cargs(
-    params: MetadataStringReplaceParameters,
+    params: MetadataStringReplaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function metadata_string_replace_cargs(
  * @returns Outputs object.
  */
 function metadata_string_replace_outputs(
-    params: MetadataStringReplaceParameters,
+    params: MetadataStringReplaceParamsDict,
     execution: Execution,
 ): MetadataStringReplaceOutputs {
     const ret: MetadataStringReplaceOutputs = {
@@ -122,7 +122,7 @@ function metadata_string_replace_outputs(
  * @returns NamedTuple of outputs (described in `MetadataStringReplaceOutputs`).
  */
 function metadata_string_replace_execute(
-    params: MetadataStringReplaceParameters,
+    params: MetadataStringReplaceParamsDict,
     runner: Runner | null = null,
 ): MetadataStringReplaceOutputs {
     runner = runner || getGlobalRunner();
@@ -165,6 +165,8 @@ function metadata_string_replace(
 export {
       METADATA_STRING_REPLACE_METADATA,
       MetadataStringReplaceOutputs,
+      MetadataStringReplaceParamsDict,
+      MetadataStringReplaceParamsDictTagged,
       metadata_string_replace,
       metadata_string_replace_execute,
       metadata_string_replace_params,

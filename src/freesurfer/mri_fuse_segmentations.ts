@@ -11,7 +11,7 @@ const MRI_FUSE_SEGMENTATIONS_METADATA: Metadata = {
 };
 
 
-interface MriFuseSegmentationsParameters {
+interface MriFuseSegmentationsParamsDict {
     "@type"?: "freesurfer/mri_fuse_segmentations";
     "asegs": Array<InputPathType>;
     "nocc_asegs": Array<InputPathType>;
@@ -21,11 +21,11 @@ interface MriFuseSegmentationsParameters {
     "input_file": InputPathType;
     "output_file": string;
 }
-type MriFuseSegmentationsParametersTagged = Required<Pick<MriFuseSegmentationsParameters, '@type'>> & MriFuseSegmentationsParameters;
+type MriFuseSegmentationsParamsDictTagged = Required<Pick<MriFuseSegmentationsParamsDict, '@type'>> & MriFuseSegmentationsParamsDict;
 
 
 /**
- * Output object returned when calling `MriFuseSegmentationsParameters(...)`.
+ * Output object returned when calling `MriFuseSegmentationsParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_fuse_segmentations_params(
     output_file: string,
     transforms: Array<InputPathType> | null = null,
     sigma: number | null = null,
-): MriFuseSegmentationsParametersTagged {
+): MriFuseSegmentationsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fuse_segmentations" as const,
         "asegs": asegs,
@@ -90,7 +90,7 @@ function mri_fuse_segmentations_params(
  * @returns Command-line arguments.
  */
 function mri_fuse_segmentations_cargs(
-    params: MriFuseSegmentationsParameters,
+    params: MriFuseSegmentationsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function mri_fuse_segmentations_cargs(
  * @returns Outputs object.
  */
 function mri_fuse_segmentations_outputs(
-    params: MriFuseSegmentationsParameters,
+    params: MriFuseSegmentationsParamsDict,
     execution: Execution,
 ): MriFuseSegmentationsOutputs {
     const ret: MriFuseSegmentationsOutputs = {
@@ -160,7 +160,7 @@ function mri_fuse_segmentations_outputs(
  * @returns NamedTuple of outputs (described in `MriFuseSegmentationsOutputs`).
  */
 function mri_fuse_segmentations_execute(
-    params: MriFuseSegmentationsParameters,
+    params: MriFuseSegmentationsParamsDict,
     runner: Runner | null = null,
 ): MriFuseSegmentationsOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function mri_fuse_segmentations(
 export {
       MRI_FUSE_SEGMENTATIONS_METADATA,
       MriFuseSegmentationsOutputs,
+      MriFuseSegmentationsParamsDict,
+      MriFuseSegmentationsParamsDictTagged,
       mri_fuse_segmentations,
       mri_fuse_segmentations_execute,
       mri_fuse_segmentations_params,

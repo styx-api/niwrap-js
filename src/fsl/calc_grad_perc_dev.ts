@@ -11,18 +11,18 @@ const CALC_GRAD_PERC_DEV_METADATA: Metadata = {
 };
 
 
-interface CalcGradPercDevParameters {
+interface CalcGradPercDevParamsDict {
     "@type"?: "fsl/calc_grad_perc_dev";
     "fullwarp_image": InputPathType;
     "out_basename": string;
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type CalcGradPercDevParametersTagged = Required<Pick<CalcGradPercDevParameters, '@type'>> & CalcGradPercDevParameters;
+type CalcGradPercDevParamsDictTagged = Required<Pick<CalcGradPercDevParamsDict, '@type'>> & CalcGradPercDevParamsDict;
 
 
 /**
- * Output object returned when calling `CalcGradPercDevParameters(...)`.
+ * Output object returned when calling `CalcGradPercDevParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function calc_grad_perc_dev_params(
     out_basename: string,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): CalcGradPercDevParametersTagged {
+): CalcGradPercDevParamsDictTagged {
     const params = {
         "@type": "fsl/calc_grad_perc_dev" as const,
         "fullwarp_image": fullwarp_image,
@@ -70,7 +70,7 @@ function calc_grad_perc_dev_params(
  * @returns Command-line arguments.
  */
 function calc_grad_perc_dev_cargs(
-    params: CalcGradPercDevParameters,
+    params: CalcGradPercDevParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -102,7 +102,7 @@ function calc_grad_perc_dev_cargs(
  * @returns Outputs object.
  */
 function calc_grad_perc_dev_outputs(
-    params: CalcGradPercDevParameters,
+    params: CalcGradPercDevParamsDict,
     execution: Execution,
 ): CalcGradPercDevOutputs {
     const ret: CalcGradPercDevOutputs = {
@@ -127,7 +127,7 @@ function calc_grad_perc_dev_outputs(
  * @returns NamedTuple of outputs (described in `CalcGradPercDevOutputs`).
  */
 function calc_grad_perc_dev_execute(
-    params: CalcGradPercDevParameters,
+    params: CalcGradPercDevParamsDict,
     runner: Runner | null = null,
 ): CalcGradPercDevOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function calc_grad_perc_dev(
 export {
       CALC_GRAD_PERC_DEV_METADATA,
       CalcGradPercDevOutputs,
+      CalcGradPercDevParamsDict,
+      CalcGradPercDevParamsDictTagged,
       calc_grad_perc_dev,
       calc_grad_perc_dev_execute,
       calc_grad_perc_dev_params,

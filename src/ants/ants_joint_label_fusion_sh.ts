@@ -11,7 +11,7 @@ const ANTS_JOINT_LABEL_FUSION_SH_METADATA: Metadata = {
 };
 
 
-interface AntsJointLabelFusionShParameters {
+interface AntsJointLabelFusionShParamsDict {
     "@type"?: "ants/antsJointLabelFusion.sh";
     "dimensionality"?: 2 | 3 | null | undefined;
     "output"?: string | null | undefined;
@@ -26,11 +26,11 @@ interface AntsJointLabelFusionShParameters {
     "rigid_transform_additional_options"?: string | null | undefined;
     "similarity_metric_additional_options"?: string | null | undefined;
 }
-type AntsJointLabelFusionShParametersTagged = Required<Pick<AntsJointLabelFusionShParameters, '@type'>> & AntsJointLabelFusionShParameters;
+type AntsJointLabelFusionShParamsDictTagged = Required<Pick<AntsJointLabelFusionShParamsDict, '@type'>> & AntsJointLabelFusionShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsJointLabelFusionShParameters(...)`.
+ * Output object returned when calling `AntsJointLabelFusionShParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function ants_joint_label_fusion_sh_params(
     verbose: boolean | null = null,
     rigid_transform_additional_options: string | null = null,
     similarity_metric_additional_options: string | null = null,
-): AntsJointLabelFusionShParametersTagged {
+): AntsJointLabelFusionShParamsDictTagged {
     const params = {
         "@type": "ants/antsJointLabelFusion.sh" as const,
         "target_image": target_image,
@@ -126,7 +126,7 @@ function ants_joint_label_fusion_sh_params(
  * @returns Command-line arguments.
  */
 function ants_joint_label_fusion_sh_cargs(
-    params: AntsJointLabelFusionShParameters,
+    params: AntsJointLabelFusionShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function ants_joint_label_fusion_sh_cargs(
  * @returns Outputs object.
  */
 function ants_joint_label_fusion_sh_outputs(
-    params: AntsJointLabelFusionShParameters,
+    params: AntsJointLabelFusionShParamsDict,
     execution: Execution,
 ): AntsJointLabelFusionShOutputs {
     const ret: AntsJointLabelFusionShOutputs = {
@@ -238,7 +238,7 @@ function ants_joint_label_fusion_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsJointLabelFusionShOutputs`).
  */
 function ants_joint_label_fusion_sh_execute(
-    params: AntsJointLabelFusionShParameters,
+    params: AntsJointLabelFusionShParamsDict,
     runner: Runner | null = null,
 ): AntsJointLabelFusionShOutputs {
     runner = runner || getGlobalRunner();
@@ -299,6 +299,8 @@ function ants_joint_label_fusion_sh(
 export {
       ANTS_JOINT_LABEL_FUSION_SH_METADATA,
       AntsJointLabelFusionShOutputs,
+      AntsJointLabelFusionShParamsDict,
+      AntsJointLabelFusionShParamsDictTagged,
       ants_joint_label_fusion_sh,
       ants_joint_label_fusion_sh_execute,
       ants_joint_label_fusion_sh_params,

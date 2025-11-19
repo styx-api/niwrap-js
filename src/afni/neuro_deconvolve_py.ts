@@ -11,7 +11,7 @@ const NEURO_DECONVOLVE_PY_METADATA: Metadata = {
 };
 
 
-interface NeuroDeconvolvePyParameters {
+interface NeuroDeconvolvePyParamsDict {
     "@type"?: "afni/neuro_deconvolve.py";
     "input_file": InputPathType;
     "prefix": string;
@@ -24,11 +24,11 @@ interface NeuroDeconvolvePyParameters {
     "tr_nup"?: number | null | undefined;
     "verbosity"?: number | null | undefined;
 }
-type NeuroDeconvolvePyParametersTagged = Required<Pick<NeuroDeconvolvePyParameters, '@type'>> & NeuroDeconvolvePyParameters;
+type NeuroDeconvolvePyParamsDictTagged = Required<Pick<NeuroDeconvolvePyParamsDict, '@type'>> & NeuroDeconvolvePyParamsDict;
 
 
 /**
- * Output object returned when calling `NeuroDeconvolvePyParameters(...)`.
+ * Output object returned when calling `NeuroDeconvolvePyParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function neuro_deconvolve_py_params(
     tr: number | null = null,
     tr_nup: number | null = null,
     verbosity: number | null = null,
-): NeuroDeconvolvePyParametersTagged {
+): NeuroDeconvolvePyParamsDictTagged {
     const params = {
         "@type": "afni/neuro_deconvolve.py" as const,
         "input_file": input_file,
@@ -118,7 +118,7 @@ function neuro_deconvolve_py_params(
  * @returns Command-line arguments.
  */
 function neuro_deconvolve_py_cargs(
-    params: NeuroDeconvolvePyParameters,
+    params: NeuroDeconvolvePyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -178,7 +178,7 @@ function neuro_deconvolve_py_cargs(
  * @returns Outputs object.
  */
 function neuro_deconvolve_py_outputs(
-    params: NeuroDeconvolvePyParameters,
+    params: NeuroDeconvolvePyParamsDict,
     execution: Execution,
 ): NeuroDeconvolvePyOutputs {
     const ret: NeuroDeconvolvePyOutputs = {
@@ -206,7 +206,7 @@ function neuro_deconvolve_py_outputs(
  * @returns NamedTuple of outputs (described in `NeuroDeconvolvePyOutputs`).
  */
 function neuro_deconvolve_py_execute(
-    params: NeuroDeconvolvePyParameters,
+    params: NeuroDeconvolvePyParamsDict,
     runner: Runner | null = null,
 ): NeuroDeconvolvePyOutputs {
     runner = runner || getGlobalRunner();
@@ -263,6 +263,8 @@ function neuro_deconvolve_py(
 export {
       NEURO_DECONVOLVE_PY_METADATA,
       NeuroDeconvolvePyOutputs,
+      NeuroDeconvolvePyParamsDict,
+      NeuroDeconvolvePyParamsDictTagged,
       neuro_deconvolve_py,
       neuro_deconvolve_py_execute,
       neuro_deconvolve_py_params,

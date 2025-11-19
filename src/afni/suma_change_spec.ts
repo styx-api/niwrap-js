@@ -11,7 +11,7 @@ const SUMA_CHANGE_SPEC_METADATA: Metadata = {
 };
 
 
-interface SumaChangeSpecParameters {
+interface SumaChangeSpecParamsDict {
     "@type"?: "afni/suma_change_spec";
     "input": InputPathType;
     "state": string;
@@ -20,11 +20,11 @@ interface SumaChangeSpecParameters {
     "remove": boolean;
     "anatomical": boolean;
 }
-type SumaChangeSpecParametersTagged = Required<Pick<SumaChangeSpecParameters, '@type'>> & SumaChangeSpecParameters;
+type SumaChangeSpecParamsDictTagged = Required<Pick<SumaChangeSpecParamsDict, '@type'>> & SumaChangeSpecParamsDict;
 
 
 /**
- * Output object returned when calling `SumaChangeSpecParameters(...)`.
+ * Output object returned when calling `SumaChangeSpecParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function suma_change_spec_params(
     output: string | null = null,
     remove: boolean = false,
     anatomical: boolean = false,
-): SumaChangeSpecParametersTagged {
+): SumaChangeSpecParamsDictTagged {
     const params = {
         "@type": "afni/suma_change_spec" as const,
         "input": input,
@@ -90,7 +90,7 @@ function suma_change_spec_params(
  * @returns Command-line arguments.
  */
 function suma_change_spec_cargs(
-    params: SumaChangeSpecParameters,
+    params: SumaChangeSpecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function suma_change_spec_cargs(
  * @returns Outputs object.
  */
 function suma_change_spec_outputs(
-    params: SumaChangeSpecParameters,
+    params: SumaChangeSpecParamsDict,
     execution: Execution,
 ): SumaChangeSpecOutputs {
     const ret: SumaChangeSpecOutputs = {
@@ -149,7 +149,7 @@ function suma_change_spec_outputs(
  * @returns NamedTuple of outputs (described in `SumaChangeSpecOutputs`).
  */
 function suma_change_spec_execute(
-    params: SumaChangeSpecParameters,
+    params: SumaChangeSpecParamsDict,
     runner: Runner | null = null,
 ): SumaChangeSpecOutputs {
     runner = runner || getGlobalRunner();
@@ -198,6 +198,8 @@ function suma_change_spec(
 export {
       SUMA_CHANGE_SPEC_METADATA,
       SumaChangeSpecOutputs,
+      SumaChangeSpecParamsDict,
+      SumaChangeSpecParamsDictTagged,
       suma_change_spec,
       suma_change_spec_execute,
       suma_change_spec_params,

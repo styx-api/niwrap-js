@@ -11,7 +11,7 @@ const V__HELP_AFNI_METADATA: Metadata = {
 };
 
 
-interface VHelpAfniParameters {
+interface VHelpAfniParamsDict {
     "@type"?: "afni/@help.AFNI";
     "match"?: string | null | undefined;
     "lynx": boolean;
@@ -20,11 +20,11 @@ interface VHelpAfniParameters {
     "nedit": boolean;
     "noview": boolean;
 }
-type VHelpAfniParametersTagged = Required<Pick<VHelpAfniParameters, '@type'>> & VHelpAfniParameters;
+type VHelpAfniParamsDictTagged = Required<Pick<VHelpAfniParamsDict, '@type'>> & VHelpAfniParamsDict;
 
 
 /**
- * Output object returned when calling `VHelpAfniParameters(...)`.
+ * Output object returned when calling `VHelpAfniParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function v__help_afni_params(
     less: boolean = false,
     nedit: boolean = false,
     noview: boolean = false,
-): VHelpAfniParametersTagged {
+): VHelpAfniParamsDictTagged {
     const params = {
         "@type": "afni/@help.AFNI" as const,
         "lynx": lynx,
@@ -80,7 +80,7 @@ function v__help_afni_params(
  * @returns Command-line arguments.
  */
 function v__help_afni_cargs(
-    params: VHelpAfniParameters,
+    params: VHelpAfniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function v__help_afni_cargs(
  * @returns Outputs object.
  */
 function v__help_afni_outputs(
-    params: VHelpAfniParameters,
+    params: VHelpAfniParamsDict,
     execution: Execution,
 ): VHelpAfniOutputs {
     const ret: VHelpAfniOutputs = {
@@ -144,7 +144,7 @@ function v__help_afni_outputs(
  * @returns NamedTuple of outputs (described in `VHelpAfniOutputs`).
  */
 function v__help_afni_execute(
-    params: VHelpAfniParameters,
+    params: VHelpAfniParamsDict,
     runner: Runner | null = null,
 ): VHelpAfniOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function v__help_afni(
 
 export {
       VHelpAfniOutputs,
+      VHelpAfniParamsDict,
+      VHelpAfniParamsDictTagged,
       V__HELP_AFNI_METADATA,
       v__help_afni,
       v__help_afni_execute,

@@ -10,7 +10,7 @@ const METRIC_ESTIMATE_FWHM_METADATA: Metadata = {
 };
 
 
-interface MetricEstimateFwhmParameters {
+interface MetricEstimateFwhmParamsDict {
     "@type"?: "workbench/metric-estimate-fwhm";
     "roi-metric"?: InputPathType | null | undefined;
     "column"?: string | null | undefined;
@@ -18,11 +18,11 @@ interface MetricEstimateFwhmParameters {
     "surface": InputPathType;
     "metric-in": InputPathType;
 }
-type MetricEstimateFwhmParametersTagged = Required<Pick<MetricEstimateFwhmParameters, '@type'>> & MetricEstimateFwhmParameters;
+type MetricEstimateFwhmParamsDictTagged = Required<Pick<MetricEstimateFwhmParamsDict, '@type'>> & MetricEstimateFwhmParamsDict;
 
 
 /**
- * Output object returned when calling `MetricEstimateFwhmParameters(...)`.
+ * Output object returned when calling `MetricEstimateFwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function metric_estimate_fwhm_params(
     surface: InputPathType,
     metric_in: InputPathType,
     demean: boolean | null = false,
-): MetricEstimateFwhmParametersTagged {
+): MetricEstimateFwhmParamsDictTagged {
     const params = {
         "@type": "workbench/metric-estimate-fwhm" as const,
         "surface": surface,
@@ -85,7 +85,7 @@ function metric_estimate_fwhm_params(
  * @returns Command-line arguments.
  */
 function metric_estimate_fwhm_cargs(
-    params: MetricEstimateFwhmParameters,
+    params: MetricEstimateFwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function metric_estimate_fwhm_cargs(
  * @returns Outputs object.
  */
 function metric_estimate_fwhm_outputs(
-    params: MetricEstimateFwhmParameters,
+    params: MetricEstimateFwhmParamsDict,
     execution: Execution,
 ): MetricEstimateFwhmOutputs {
     const ret: MetricEstimateFwhmOutputs = {
@@ -137,7 +137,7 @@ function metric_estimate_fwhm_outputs(
  * @returns NamedTuple of outputs (described in `MetricEstimateFwhmOutputs`).
  */
 function metric_estimate_fwhm_execute(
-    params: MetricEstimateFwhmParameters,
+    params: MetricEstimateFwhmParamsDict,
     runner: Runner | null = null,
 ): MetricEstimateFwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function metric_estimate_fwhm(
 export {
       METRIC_ESTIMATE_FWHM_METADATA,
       MetricEstimateFwhmOutputs,
+      MetricEstimateFwhmParamsDict,
+      MetricEstimateFwhmParamsDictTagged,
       metric_estimate_fwhm,
       metric_estimate_fwhm_execute,
       metric_estimate_fwhm_params,

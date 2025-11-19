@@ -11,7 +11,7 @@ const MRIS_ANATOMICAL_STATS_METADATA: Metadata = {
 };
 
 
-interface MrisAnatomicalStatsParameters {
+interface MrisAnatomicalStatsParamsDict {
     "@type"?: "freesurfer/mris_anatomical_stats";
     "subjectname": string;
     "hemisphere": string;
@@ -28,11 +28,11 @@ interface MrisAnatomicalStatsParameters {
     "noglobal": boolean;
     "th3_computation": boolean;
 }
-type MrisAnatomicalStatsParametersTagged = Required<Pick<MrisAnatomicalStatsParameters, '@type'>> & MrisAnatomicalStatsParameters;
+type MrisAnatomicalStatsParamsDictTagged = Required<Pick<MrisAnatomicalStatsParamsDict, '@type'>> & MrisAnatomicalStatsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisAnatomicalStatsParameters(...)`.
+ * Output object returned when calling `MrisAnatomicalStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function mris_anatomical_stats_params(
     color_table: string | null = null,
     noglobal: boolean = false,
     th3_computation: boolean = false,
-): MrisAnatomicalStatsParametersTagged {
+): MrisAnatomicalStatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_anatomical_stats" as const,
         "subjectname": subjectname,
@@ -140,7 +140,7 @@ function mris_anatomical_stats_params(
  * @returns Command-line arguments.
  */
 function mris_anatomical_stats_cargs(
-    params: MrisAnatomicalStatsParameters,
+    params: MrisAnatomicalStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -220,7 +220,7 @@ function mris_anatomical_stats_cargs(
  * @returns Outputs object.
  */
 function mris_anatomical_stats_outputs(
-    params: MrisAnatomicalStatsParameters,
+    params: MrisAnatomicalStatsParamsDict,
     execution: Execution,
 ): MrisAnatomicalStatsOutputs {
     const ret: MrisAnatomicalStatsOutputs = {
@@ -248,7 +248,7 @@ function mris_anatomical_stats_outputs(
  * @returns NamedTuple of outputs (described in `MrisAnatomicalStatsOutputs`).
  */
 function mris_anatomical_stats_execute(
-    params: MrisAnatomicalStatsParameters,
+    params: MrisAnatomicalStatsParamsDict,
     runner: Runner | null = null,
 ): MrisAnatomicalStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -313,6 +313,8 @@ function mris_anatomical_stats(
 export {
       MRIS_ANATOMICAL_STATS_METADATA,
       MrisAnatomicalStatsOutputs,
+      MrisAnatomicalStatsParamsDict,
+      MrisAnatomicalStatsParamsDictTagged,
       mris_anatomical_stats,
       mris_anatomical_stats_execute,
       mris_anatomical_stats_params,

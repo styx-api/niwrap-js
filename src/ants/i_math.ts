@@ -11,7 +11,7 @@ const I_MATH_METADATA: Metadata = {
 };
 
 
-interface IMathParameters {
+interface IMathParamsDict {
     "@type"?: "ants/iMath";
     "image_dimension": 2 | 3 | 4;
     "output_image": string;
@@ -19,11 +19,11 @@ interface IMathParameters {
     "image1": InputPathType;
     "image2"?: InputPathType | null | undefined;
 }
-type IMathParametersTagged = Required<Pick<IMathParameters, '@type'>> & IMathParameters;
+type IMathParamsDictTagged = Required<Pick<IMathParamsDict, '@type'>> & IMathParamsDict;
 
 
 /**
- * Output object returned when calling `IMathParameters(...)`.
+ * Output object returned when calling `IMathParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function i_math_params(
     operations: string,
     image1: InputPathType,
     image2: InputPathType | null = null,
-): IMathParametersTagged {
+): IMathParamsDictTagged {
     const params = {
         "@type": "ants/iMath" as const,
         "image_dimension": image_dimension,
@@ -80,7 +80,7 @@ function i_math_params(
  * @returns Command-line arguments.
  */
 function i_math_cargs(
-    params: IMathParameters,
+    params: IMathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function i_math_cargs(
  * @returns Outputs object.
  */
 function i_math_outputs(
-    params: IMathParameters,
+    params: IMathParamsDict,
     execution: Execution,
 ): IMathOutputs {
     const ret: IMathOutputs = {
@@ -131,7 +131,7 @@ function i_math_outputs(
  * @returns NamedTuple of outputs (described in `IMathOutputs`).
  */
 function i_math_execute(
-    params: IMathParameters,
+    params: IMathParamsDict,
     runner: Runner | null = null,
 ): IMathOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function i_math(
 
 export {
       IMathOutputs,
+      IMathParamsDict,
+      IMathParamsDictTagged,
       I_MATH_METADATA,
       i_math,
       i_math_execute,

@@ -11,7 +11,7 @@ const V_3D_TRACK_ID_METADATA: Metadata = {
 };
 
 
-interface V3dTrackIdParameters {
+interface V3dTrackIdParamsDict {
     "@type"?: "afni/3dTrackID";
     "mode": "DET" | "MINIP" | "PROB";
     "netrois": InputPathType;
@@ -58,11 +58,11 @@ interface V3dTrackIdParameters {
     "pair_out_power": boolean;
     "verb"?: number | null | undefined;
 }
-type V3dTrackIdParametersTagged = Required<Pick<V3dTrackIdParameters, '@type'>> & V3dTrackIdParameters;
+type V3dTrackIdParamsDictTagged = Required<Pick<V3dTrackIdParamsDict, '@type'>> & V3dTrackIdParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTrackIdParameters(...)`.
+ * Output object returned when calling `V3dTrackIdParamsDict(...)`.
  *
  * @interface
  */
@@ -205,7 +205,7 @@ function v_3d_track_id_params(
     write_opts: boolean = false,
     pair_out_power: boolean = false,
     verb: number | null = null,
-): V3dTrackIdParametersTagged {
+): V3dTrackIdParamsDictTagged {
     const params = {
         "@type": "afni/3dTrackID" as const,
         "mode": mode,
@@ -314,7 +314,7 @@ function v_3d_track_id_params(
  * @returns Command-line arguments.
  */
 function v_3d_track_id_cargs(
-    params: V3dTrackIdParameters,
+    params: V3dTrackIdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -456,7 +456,7 @@ function v_3d_track_id_cargs(
  * @returns Outputs object.
  */
 function v_3d_track_id_outputs(
-    params: V3dTrackIdParameters,
+    params: V3dTrackIdParamsDict,
     execution: Execution,
 ): V3dTrackIdOutputs {
     const ret: V3dTrackIdOutputs = {
@@ -490,7 +490,7 @@ function v_3d_track_id_outputs(
  * @returns NamedTuple of outputs (described in `V3dTrackIdOutputs`).
  */
 function v_3d_track_id_execute(
-    params: V3dTrackIdParameters,
+    params: V3dTrackIdParamsDict,
     runner: Runner | null = null,
 ): V3dTrackIdOutputs {
     runner = runner || getGlobalRunner();
@@ -614,6 +614,8 @@ function v_3d_track_id(
 
 export {
       V3dTrackIdOutputs,
+      V3dTrackIdParamsDict,
+      V3dTrackIdParamsDictTagged,
       V_3D_TRACK_ID_METADATA,
       v_3d_track_id,
       v_3d_track_id_execute,

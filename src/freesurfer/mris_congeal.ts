@@ -11,7 +11,7 @@ const MRIS_CONGEAL_METADATA: Metadata = {
 };
 
 
-interface MrisCongealParameters {
+interface MrisCongealParamsDict {
     "@type"?: "freesurfer/mris_congeal";
     "input_surface_name": string;
     "hemi": string;
@@ -29,11 +29,11 @@ interface MrisCongealParameters {
     "overlay_dir"?: string | null | undefined;
     "target_subject": boolean;
 }
-type MrisCongealParametersTagged = Required<Pick<MrisCongealParameters, '@type'>> & MrisCongealParameters;
+type MrisCongealParamsDictTagged = Required<Pick<MrisCongealParamsDict, '@type'>> & MrisCongealParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCongealParameters(...)`.
+ * Output object returned when calling `MrisCongealParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function mris_congeal_params(
     overlay: Array<string> | null = null,
     overlay_dir: string | null = null,
     target_subject: boolean = false,
-): MrisCongealParametersTagged {
+): MrisCongealParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_congeal" as const,
         "input_surface_name": input_surface_name,
@@ -132,7 +132,7 @@ function mris_congeal_params(
  * @returns Command-line arguments.
  */
 function mris_congeal_cargs(
-    params: MrisCongealParameters,
+    params: MrisCongealParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function mris_congeal_cargs(
  * @returns Outputs object.
  */
 function mris_congeal_outputs(
-    params: MrisCongealParameters,
+    params: MrisCongealParamsDict,
     execution: Execution,
 ): MrisCongealOutputs {
     const ret: MrisCongealOutputs = {
@@ -234,7 +234,7 @@ function mris_congeal_outputs(
  * @returns NamedTuple of outputs (described in `MrisCongealOutputs`).
  */
 function mris_congeal_execute(
-    params: MrisCongealParameters,
+    params: MrisCongealParamsDict,
     runner: Runner | null = null,
 ): MrisCongealOutputs {
     runner = runner || getGlobalRunner();
@@ -301,6 +301,8 @@ function mris_congeal(
 export {
       MRIS_CONGEAL_METADATA,
       MrisCongealOutputs,
+      MrisCongealParamsDict,
+      MrisCongealParamsDictTagged,
       mris_congeal,
       mris_congeal_execute,
       mris_congeal_params,

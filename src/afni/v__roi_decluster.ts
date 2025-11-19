@@ -11,7 +11,7 @@ const V__ROI_DECLUSTER_METADATA: Metadata = {
 };
 
 
-interface VRoiDeclusterParameters {
+interface VRoiDeclusterParamsDict {
     "@type"?: "afni/@ROI_decluster";
     "input_dset": InputPathType;
     "output_dir"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface VRoiDeclusterParameters {
     "prefix"?: string | null | undefined;
     "neighborhood_type"?: number | null | undefined;
 }
-type VRoiDeclusterParametersTagged = Required<Pick<VRoiDeclusterParameters, '@type'>> & VRoiDeclusterParameters;
+type VRoiDeclusterParamsDictTagged = Required<Pick<VRoiDeclusterParamsDict, '@type'>> & VRoiDeclusterParamsDict;
 
 
 /**
- * Output object returned when calling `VRoiDeclusterParameters(...)`.
+ * Output object returned when calling `VRoiDeclusterParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v__roi_decluster_params(
     frac_thresh: number | null = null,
     prefix: string | null = null,
     neighborhood_type: number | null = null,
-): VRoiDeclusterParametersTagged {
+): VRoiDeclusterParamsDictTagged {
     const params = {
         "@type": "afni/@ROI_decluster" as const,
         "input_dset": input_dset,
@@ -92,7 +92,7 @@ function v__roi_decluster_params(
  * @returns Command-line arguments.
  */
 function v__roi_decluster_cargs(
-    params: VRoiDeclusterParameters,
+    params: VRoiDeclusterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function v__roi_decluster_cargs(
  * @returns Outputs object.
  */
 function v__roi_decluster_outputs(
-    params: VRoiDeclusterParameters,
+    params: VRoiDeclusterParamsDict,
     execution: Execution,
 ): VRoiDeclusterOutputs {
     const ret: VRoiDeclusterOutputs = {
@@ -170,7 +170,7 @@ function v__roi_decluster_outputs(
  * @returns NamedTuple of outputs (described in `VRoiDeclusterOutputs`).
  */
 function v__roi_decluster_execute(
-    params: VRoiDeclusterParameters,
+    params: VRoiDeclusterParamsDict,
     runner: Runner | null = null,
 ): VRoiDeclusterOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function v__roi_decluster(
 
 export {
       VRoiDeclusterOutputs,
+      VRoiDeclusterParamsDict,
+      VRoiDeclusterParamsDictTagged,
       V__ROI_DECLUSTER_METADATA,
       v__roi_decluster,
       v__roi_decluster_execute,

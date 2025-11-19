@@ -11,7 +11,7 @@ const ANTS_BRAIN_EXTRACTION_SH_METADATA: Metadata = {
 };
 
 
-interface AntsBrainExtractionShParameters {
+interface AntsBrainExtractionShParamsDict {
     "@type"?: "ants/antsBrainExtraction.sh";
     "image_dimension": number;
     "anatomical_image": InputPathType;
@@ -29,11 +29,11 @@ interface AntsBrainExtractionShParameters {
     "debug_mode": boolean;
     "output_prefix"?: string | null | undefined;
 }
-type AntsBrainExtractionShParametersTagged = Required<Pick<AntsBrainExtractionShParameters, '@type'>> & AntsBrainExtractionShParameters;
+type AntsBrainExtractionShParamsDictTagged = Required<Pick<AntsBrainExtractionShParamsDict, '@type'>> & AntsBrainExtractionShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsBrainExtractionShParameters(...)`.
+ * Output object returned when calling `AntsBrainExtractionShParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function ants_brain_extraction_sh_params(
     random_seeding: boolean = false,
     debug_mode: boolean = false,
     output_prefix: string | null = null,
-): AntsBrainExtractionShParametersTagged {
+): AntsBrainExtractionShParamsDictTagged {
     const params = {
         "@type": "ants/antsBrainExtraction.sh" as const,
         "image_dimension": image_dimension,
@@ -140,7 +140,7 @@ function ants_brain_extraction_sh_params(
  * @returns Command-line arguments.
  */
 function ants_brain_extraction_sh_cargs(
-    params: AntsBrainExtractionShParameters,
+    params: AntsBrainExtractionShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -228,7 +228,7 @@ function ants_brain_extraction_sh_cargs(
  * @returns Outputs object.
  */
 function ants_brain_extraction_sh_outputs(
-    params: AntsBrainExtractionShParameters,
+    params: AntsBrainExtractionShParamsDict,
     execution: Execution,
 ): AntsBrainExtractionShOutputs {
     const ret: AntsBrainExtractionShOutputs = {
@@ -256,7 +256,7 @@ function ants_brain_extraction_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsBrainExtractionShOutputs`).
  */
 function ants_brain_extraction_sh_execute(
-    params: AntsBrainExtractionShParameters,
+    params: AntsBrainExtractionShParamsDict,
     runner: Runner | null = null,
 ): AntsBrainExtractionShOutputs {
     runner = runner || getGlobalRunner();
@@ -323,6 +323,8 @@ function ants_brain_extraction_sh(
 export {
       ANTS_BRAIN_EXTRACTION_SH_METADATA,
       AntsBrainExtractionShOutputs,
+      AntsBrainExtractionShParamsDict,
+      AntsBrainExtractionShParamsDictTagged,
       ants_brain_extraction_sh,
       ants_brain_extraction_sh_execute,
       ants_brain_extraction_sh_params,

@@ -11,7 +11,7 @@ const SAMSEG2RECON_METADATA: Metadata = {
 };
 
 
-interface Samseg2reconParameters {
+interface Samseg2reconParamsDict {
     "@type"?: "freesurfer/samseg2recon";
     "subject": string;
     "samseg_dir"?: string | null | undefined;
@@ -26,11 +26,11 @@ interface Samseg2reconParameters {
     "from_recon_all": boolean;
     "force_update": boolean;
 }
-type Samseg2reconParametersTagged = Required<Pick<Samseg2reconParameters, '@type'>> & Samseg2reconParameters;
+type Samseg2reconParamsDictTagged = Required<Pick<Samseg2reconParamsDict, '@type'>> & Samseg2reconParamsDict;
 
 
 /**
- * Output object returned when calling `Samseg2reconParameters(...)`.
+ * Output object returned when calling `Samseg2reconParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function samseg2recon_params(
     mask_file: InputPathType | null = null,
     from_recon_all: boolean = false,
     force_update: boolean = false,
-): Samseg2reconParametersTagged {
+): Samseg2reconParamsDictTagged {
     const params = {
         "@type": "freesurfer/samseg2recon" as const,
         "subject": subject,
@@ -120,7 +120,7 @@ function samseg2recon_params(
  * @returns Command-line arguments.
  */
 function samseg2recon_cargs(
-    params: Samseg2reconParameters,
+    params: Samseg2reconParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -184,7 +184,7 @@ function samseg2recon_cargs(
  * @returns Outputs object.
  */
 function samseg2recon_outputs(
-    params: Samseg2reconParameters,
+    params: Samseg2reconParamsDict,
     execution: Execution,
 ): Samseg2reconOutputs {
     const ret: Samseg2reconOutputs = {
@@ -212,7 +212,7 @@ function samseg2recon_outputs(
  * @returns NamedTuple of outputs (described in `Samseg2reconOutputs`).
  */
 function samseg2recon_execute(
-    params: Samseg2reconParameters,
+    params: Samseg2reconParamsDict,
     runner: Runner | null = null,
 ): Samseg2reconOutputs {
     runner = runner || getGlobalRunner();
@@ -273,6 +273,8 @@ function samseg2recon(
 export {
       SAMSEG2RECON_METADATA,
       Samseg2reconOutputs,
+      Samseg2reconParamsDict,
+      Samseg2reconParamsDictTagged,
       samseg2recon,
       samseg2recon_execute,
       samseg2recon_params,

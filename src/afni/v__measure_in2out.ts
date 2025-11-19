@@ -11,7 +11,7 @@ const V__MEASURE_IN2OUT_METADATA: Metadata = {
 };
 
 
-interface VMeasureIn2outParameters {
+interface VMeasureIn2outParamsDict {
     "@type"?: "afni/@measure_in2out";
     "maskset": InputPathType;
     "surfset": InputPathType;
@@ -26,11 +26,11 @@ interface VMeasureIn2outParameters {
     "surfsmooth_method"?: string | null | undefined;
     "fs_cort_dir"?: string | null | undefined;
 }
-type VMeasureIn2outParametersTagged = Required<Pick<VMeasureIn2outParameters, '@type'>> & VMeasureIn2outParameters;
+type VMeasureIn2outParamsDictTagged = Required<Pick<VMeasureIn2outParamsDict, '@type'>> & VMeasureIn2outParamsDict;
 
 
 /**
- * Output object returned when calling `VMeasureIn2outParameters(...)`.
+ * Output object returned when calling `VMeasureIn2outParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function v__measure_in2out_params(
     keep_temp_files: boolean = false,
     surfsmooth_method: string | null = null,
     fs_cort_dir: string | null = null,
-): VMeasureIn2outParametersTagged {
+): VMeasureIn2outParamsDictTagged {
     const params = {
         "@type": "afni/@measure_in2out" as const,
         "maskset": maskset,
@@ -150,7 +150,7 @@ function v__measure_in2out_params(
  * @returns Command-line arguments.
  */
 function v__measure_in2out_cargs(
-    params: VMeasureIn2outParameters,
+    params: VMeasureIn2outParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -231,7 +231,7 @@ function v__measure_in2out_cargs(
  * @returns Outputs object.
  */
 function v__measure_in2out_outputs(
-    params: VMeasureIn2outParameters,
+    params: VMeasureIn2outParamsDict,
     execution: Execution,
 ): VMeasureIn2outOutputs {
     const ret: VMeasureIn2outOutputs = {
@@ -264,7 +264,7 @@ function v__measure_in2out_outputs(
  * @returns NamedTuple of outputs (described in `VMeasureIn2outOutputs`).
  */
 function v__measure_in2out_execute(
-    params: VMeasureIn2outParameters,
+    params: VMeasureIn2outParamsDict,
     runner: Runner | null = null,
 ): VMeasureIn2outOutputs {
     runner = runner || getGlobalRunner();
@@ -324,6 +324,8 @@ function v__measure_in2out(
 
 export {
       VMeasureIn2outOutputs,
+      VMeasureIn2outParamsDict,
+      VMeasureIn2outParamsDictTagged,
       V__MEASURE_IN2OUT_METADATA,
       v__measure_in2out,
       v__measure_in2out_execute,

@@ -11,7 +11,7 @@ const BET2_METADATA: Metadata = {
 };
 
 
-interface Bet2Parameters {
+interface Bet2ParamsDict {
     "@type"?: "fsl/bet2";
     "input_fileroot": string;
     "output_fileroot": string;
@@ -29,11 +29,11 @@ interface Bet2Parameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type Bet2ParametersTagged = Required<Pick<Bet2Parameters, '@type'>> & Bet2Parameters;
+type Bet2ParamsDictTagged = Required<Pick<Bet2ParamsDict, '@type'>> & Bet2ParamsDict;
 
 
 /**
- * Output object returned when calling `Bet2Parameters(...)`.
+ * Output object returned when calling `Bet2ParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function bet2_params(
     threshold_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): Bet2ParametersTagged {
+): Bet2ParamsDictTagged {
     const params = {
         "@type": "fsl/bet2" as const,
         "input_fileroot": input_fileroot,
@@ -140,7 +140,7 @@ function bet2_params(
  * @returns Command-line arguments.
  */
 function bet2_cargs(
-    params: Bet2Parameters,
+    params: Bet2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -214,7 +214,7 @@ function bet2_cargs(
  * @returns Outputs object.
  */
 function bet2_outputs(
-    params: Bet2Parameters,
+    params: Bet2ParamsDict,
     execution: Execution,
 ): Bet2Outputs {
     const ret: Bet2Outputs = {
@@ -243,7 +243,7 @@ function bet2_outputs(
  * @returns NamedTuple of outputs (described in `Bet2Outputs`).
  */
 function bet2_execute(
-    params: Bet2Parameters,
+    params: Bet2ParamsDict,
     runner: Runner | null = null,
 ): Bet2Outputs {
     runner = runner || getGlobalRunner();
@@ -310,6 +310,8 @@ function bet2(
 export {
       BET2_METADATA,
       Bet2Outputs,
+      Bet2ParamsDict,
+      Bet2ParamsDictTagged,
       bet2,
       bet2_execute,
       bet2_params,

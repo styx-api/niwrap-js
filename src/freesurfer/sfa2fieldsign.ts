@@ -11,7 +11,7 @@ const SFA2FIELDSIGN_METADATA: Metadata = {
 };
 
 
-interface Sfa2fieldsignParameters {
+interface Sfa2fieldsignParamsDict {
     "@type"?: "freesurfer/sfa2fieldsign";
     "sfadir": string;
     "register_dat": string;
@@ -24,11 +24,11 @@ interface Sfa2fieldsignParameters {
     "lh": boolean;
     "rh": boolean;
 }
-type Sfa2fieldsignParametersTagged = Required<Pick<Sfa2fieldsignParameters, '@type'>> & Sfa2fieldsignParameters;
+type Sfa2fieldsignParamsDictTagged = Required<Pick<Sfa2fieldsignParamsDict, '@type'>> & Sfa2fieldsignParamsDict;
 
 
 /**
- * Output object returned when calling `Sfa2fieldsignParameters(...)`.
+ * Output object returned when calling `Sfa2fieldsignParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function sfa2fieldsign_params(
     osd: string | null = null,
     lh: boolean = false,
     rh: boolean = false,
-): Sfa2fieldsignParametersTagged {
+): Sfa2fieldsignParamsDictTagged {
     const params = {
         "@type": "freesurfer/sfa2fieldsign" as const,
         "sfadir": sfadir,
@@ -140,7 +140,7 @@ function sfa2fieldsign_params(
  * @returns Command-line arguments.
  */
 function sfa2fieldsign_cargs(
-    params: Sfa2fieldsignParameters,
+    params: Sfa2fieldsignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -205,7 +205,7 @@ function sfa2fieldsign_cargs(
  * @returns Outputs object.
  */
 function sfa2fieldsign_outputs(
-    params: Sfa2fieldsignParameters,
+    params: Sfa2fieldsignParamsDict,
     execution: Execution,
 ): Sfa2fieldsignOutputs {
     const ret: Sfa2fieldsignOutputs = {
@@ -239,7 +239,7 @@ function sfa2fieldsign_outputs(
  * @returns NamedTuple of outputs (described in `Sfa2fieldsignOutputs`).
  */
 function sfa2fieldsign_execute(
-    params: Sfa2fieldsignParameters,
+    params: Sfa2fieldsignParamsDict,
     runner: Runner | null = null,
 ): Sfa2fieldsignOutputs {
     runner = runner || getGlobalRunner();
@@ -296,6 +296,8 @@ function sfa2fieldsign(
 export {
       SFA2FIELDSIGN_METADATA,
       Sfa2fieldsignOutputs,
+      Sfa2fieldsignParamsDict,
+      Sfa2fieldsignParamsDictTagged,
       sfa2fieldsign,
       sfa2fieldsign_execute,
       sfa2fieldsign_params,

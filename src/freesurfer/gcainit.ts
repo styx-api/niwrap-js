@@ -11,15 +11,15 @@ const GCAINIT_METADATA: Metadata = {
 };
 
 
-interface GcainitParameters {
+interface GcainitParamsDict {
     "@type"?: "freesurfer/gcainit";
     "gcadir": string;
 }
-type GcainitParametersTagged = Required<Pick<GcainitParameters, '@type'>> & GcainitParameters;
+type GcainitParamsDictTagged = Required<Pick<GcainitParamsDict, '@type'>> & GcainitParamsDict;
 
 
 /**
- * Output object returned when calling `GcainitParameters(...)`.
+ * Output object returned when calling `GcainitParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface GcainitOutputs {
  */
 function gcainit_params(
     gcadir: string,
-): GcainitParametersTagged {
+): GcainitParamsDictTagged {
     const params = {
         "@type": "freesurfer/gcainit" as const,
         "gcadir": gcadir,
@@ -58,7 +58,7 @@ function gcainit_params(
  * @returns Command-line arguments.
  */
 function gcainit_cargs(
-    params: GcainitParameters,
+    params: GcainitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function gcainit_cargs(
  * @returns Outputs object.
  */
 function gcainit_outputs(
-    params: GcainitParameters,
+    params: GcainitParamsDict,
     execution: Execution,
 ): GcainitOutputs {
     const ret: GcainitOutputs = {
@@ -105,7 +105,7 @@ function gcainit_outputs(
  * @returns NamedTuple of outputs (described in `GcainitOutputs`).
  */
 function gcainit_execute(
-    params: GcainitParameters,
+    params: GcainitParamsDict,
     runner: Runner | null = null,
 ): GcainitOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function gcainit(
 export {
       GCAINIT_METADATA,
       GcainitOutputs,
+      GcainitParamsDict,
+      GcainitParamsDictTagged,
       gcainit,
       gcainit_execute,
       gcainit_params,

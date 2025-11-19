@@ -11,7 +11,7 @@ const MAP_ICOSAHEDRON_METADATA: Metadata = {
 };
 
 
-interface MapIcosahedronParameters {
+interface MapIcosahedronParamsDict {
     "@type"?: "afni/MapIcosahedron";
     "spec_file": InputPathType;
     "rec_depth"?: number | null | undefined;
@@ -25,11 +25,11 @@ interface MapIcosahedronParameters {
     "verbosity": boolean;
     "help": boolean;
 }
-type MapIcosahedronParametersTagged = Required<Pick<MapIcosahedronParameters, '@type'>> & MapIcosahedronParameters;
+type MapIcosahedronParamsDictTagged = Required<Pick<MapIcosahedronParamsDict, '@type'>> & MapIcosahedronParamsDict;
 
 
 /**
- * Output object returned when calling `MapIcosahedronParameters(...)`.
+ * Output object returned when calling `MapIcosahedronParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function map_icosahedron_params(
     fix_cut_surfaces: boolean = false,
     verbosity: boolean = false,
     help: boolean = false,
-): MapIcosahedronParametersTagged {
+): MapIcosahedronParamsDictTagged {
     const params = {
         "@type": "afni/MapIcosahedron" as const,
         "spec_file": spec_file,
@@ -112,7 +112,7 @@ function map_icosahedron_params(
  * @returns Command-line arguments.
  */
 function map_icosahedron_cargs(
-    params: MapIcosahedronParameters,
+    params: MapIcosahedronParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function map_icosahedron_cargs(
  * @returns Outputs object.
  */
 function map_icosahedron_outputs(
-    params: MapIcosahedronParameters,
+    params: MapIcosahedronParamsDict,
     execution: Execution,
 ): MapIcosahedronOutputs {
     const ret: MapIcosahedronOutputs = {
@@ -207,7 +207,7 @@ function map_icosahedron_outputs(
  * @returns NamedTuple of outputs (described in `MapIcosahedronOutputs`).
  */
 function map_icosahedron_execute(
-    params: MapIcosahedronParameters,
+    params: MapIcosahedronParamsDict,
     runner: Runner | null = null,
 ): MapIcosahedronOutputs {
     runner = runner || getGlobalRunner();
@@ -266,6 +266,8 @@ function map_icosahedron(
 export {
       MAP_ICOSAHEDRON_METADATA,
       MapIcosahedronOutputs,
+      MapIcosahedronParamsDict,
+      MapIcosahedronParamsDictTagged,
       map_icosahedron,
       map_icosahedron_execute,
       map_icosahedron_params,

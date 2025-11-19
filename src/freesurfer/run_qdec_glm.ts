@@ -11,15 +11,15 @@ const RUN_QDEC_GLM_METADATA: Metadata = {
 };
 
 
-interface RunQdecGlmParameters {
+interface RunQdecGlmParamsDict {
     "@type"?: "freesurfer/run-qdec-glm";
     "qdec_directory": string;
 }
-type RunQdecGlmParametersTagged = Required<Pick<RunQdecGlmParameters, '@type'>> & RunQdecGlmParameters;
+type RunQdecGlmParamsDictTagged = Required<Pick<RunQdecGlmParamsDict, '@type'>> & RunQdecGlmParamsDict;
 
 
 /**
- * Output object returned when calling `RunQdecGlmParameters(...)`.
+ * Output object returned when calling `RunQdecGlmParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface RunQdecGlmOutputs {
  */
 function run_qdec_glm_params(
     qdec_directory: string,
-): RunQdecGlmParametersTagged {
+): RunQdecGlmParamsDictTagged {
     const params = {
         "@type": "freesurfer/run-qdec-glm" as const,
         "qdec_directory": qdec_directory,
@@ -58,7 +58,7 @@ function run_qdec_glm_params(
  * @returns Command-line arguments.
  */
 function run_qdec_glm_cargs(
-    params: RunQdecGlmParameters,
+    params: RunQdecGlmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function run_qdec_glm_cargs(
  * @returns Outputs object.
  */
 function run_qdec_glm_outputs(
-    params: RunQdecGlmParameters,
+    params: RunQdecGlmParamsDict,
     execution: Execution,
 ): RunQdecGlmOutputs {
     const ret: RunQdecGlmOutputs = {
@@ -105,7 +105,7 @@ function run_qdec_glm_outputs(
  * @returns NamedTuple of outputs (described in `RunQdecGlmOutputs`).
  */
 function run_qdec_glm_execute(
-    params: RunQdecGlmParameters,
+    params: RunQdecGlmParamsDict,
     runner: Runner | null = null,
 ): RunQdecGlmOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function run_qdec_glm(
 export {
       RUN_QDEC_GLM_METADATA,
       RunQdecGlmOutputs,
+      RunQdecGlmParamsDict,
+      RunQdecGlmParamsDictTagged,
       run_qdec_glm,
       run_qdec_glm_execute,
       run_qdec_glm_params,

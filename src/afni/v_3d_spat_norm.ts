@@ -11,7 +11,7 @@ const V_3D_SPAT_NORM_METADATA: Metadata = {
 };
 
 
-interface V3dSpatNormParameters {
+interface V3dSpatNormParamsDict {
     "@type"?: "afni/3dSpatNorm";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
@@ -23,11 +23,11 @@ interface V3dSpatNormParameters {
     "human": boolean;
     "bottom_cuts"?: string | null | undefined;
 }
-type V3dSpatNormParametersTagged = Required<Pick<V3dSpatNormParameters, '@type'>> & V3dSpatNormParameters;
+type V3dSpatNormParamsDictTagged = Required<Pick<V3dSpatNormParamsDict, '@type'>> & V3dSpatNormParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSpatNormParameters(...)`.
+ * Output object returned when calling `V3dSpatNormParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_spat_norm_params(
     rat: boolean = false,
     human: boolean = false,
     bottom_cuts: string | null = null,
-): V3dSpatNormParametersTagged {
+): V3dSpatNormParamsDictTagged {
     const params = {
         "@type": "afni/3dSpatNorm" as const,
         "dataset": dataset,
@@ -102,7 +102,7 @@ function v_3d_spat_norm_params(
  * @returns Command-line arguments.
  */
 function v_3d_spat_norm_cargs(
-    params: V3dSpatNormParameters,
+    params: V3dSpatNormParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -151,7 +151,7 @@ function v_3d_spat_norm_cargs(
  * @returns Outputs object.
  */
 function v_3d_spat_norm_outputs(
-    params: V3dSpatNormParameters,
+    params: V3dSpatNormParamsDict,
     execution: Execution,
 ): V3dSpatNormOutputs {
     const ret: V3dSpatNormOutputs = {
@@ -178,7 +178,7 @@ function v_3d_spat_norm_outputs(
  * @returns NamedTuple of outputs (described in `V3dSpatNormOutputs`).
  */
 function v_3d_spat_norm_execute(
-    params: V3dSpatNormParameters,
+    params: V3dSpatNormParamsDict,
     runner: Runner | null = null,
 ): V3dSpatNormOutputs {
     runner = runner || getGlobalRunner();
@@ -232,6 +232,8 @@ function v_3d_spat_norm(
 
 export {
       V3dSpatNormOutputs,
+      V3dSpatNormParamsDict,
+      V3dSpatNormParamsDictTagged,
       V_3D_SPAT_NORM_METADATA,
       v_3d_spat_norm,
       v_3d_spat_norm_execute,

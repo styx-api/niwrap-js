@@ -11,17 +11,17 @@ const FLIRT_NEWDEFAULT_20080811_SCH_METADATA: Metadata = {
 };
 
 
-interface FlirtNewdefault20080811SchParameters {
+interface FlirtNewdefault20080811SchParamsDict {
     "@type"?: "freesurfer/flirt.newdefault.20080811.sch";
     "term_option"?: string | null | undefined;
     "curses_flag": boolean;
     "scrollback_flag": boolean;
 }
-type FlirtNewdefault20080811SchParametersTagged = Required<Pick<FlirtNewdefault20080811SchParameters, '@type'>> & FlirtNewdefault20080811SchParameters;
+type FlirtNewdefault20080811SchParamsDictTagged = Required<Pick<FlirtNewdefault20080811SchParamsDict, '@type'>> & FlirtNewdefault20080811SchParamsDict;
 
 
 /**
- * Output object returned when calling `FlirtNewdefault20080811SchParameters(...)`.
+ * Output object returned when calling `FlirtNewdefault20080811SchParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function flirt_newdefault_20080811_sch_params(
     term_option: string | null = null,
     curses_flag: boolean = false,
     scrollback_flag: boolean = false,
-): FlirtNewdefault20080811SchParametersTagged {
+): FlirtNewdefault20080811SchParamsDictTagged {
     const params = {
         "@type": "freesurfer/flirt.newdefault.20080811.sch" as const,
         "curses_flag": curses_flag,
@@ -68,7 +68,7 @@ function flirt_newdefault_20080811_sch_params(
  * @returns Command-line arguments.
  */
 function flirt_newdefault_20080811_sch_cargs(
-    params: FlirtNewdefault20080811SchParameters,
+    params: FlirtNewdefault20080811SchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function flirt_newdefault_20080811_sch_cargs(
  * @returns Outputs object.
  */
 function flirt_newdefault_20080811_sch_outputs(
-    params: FlirtNewdefault20080811SchParameters,
+    params: FlirtNewdefault20080811SchParamsDict,
     execution: Execution,
 ): FlirtNewdefault20080811SchOutputs {
     const ret: FlirtNewdefault20080811SchOutputs = {
@@ -123,7 +123,7 @@ function flirt_newdefault_20080811_sch_outputs(
  * @returns NamedTuple of outputs (described in `FlirtNewdefault20080811SchOutputs`).
  */
 function flirt_newdefault_20080811_sch_execute(
-    params: FlirtNewdefault20080811SchParameters,
+    params: FlirtNewdefault20080811SchParamsDict,
     runner: Runner | null = null,
 ): FlirtNewdefault20080811SchOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function flirt_newdefault_20080811_sch(
 export {
       FLIRT_NEWDEFAULT_20080811_SCH_METADATA,
       FlirtNewdefault20080811SchOutputs,
+      FlirtNewdefault20080811SchParamsDict,
+      FlirtNewdefault20080811SchParamsDictTagged,
       flirt_newdefault_20080811_sch,
       flirt_newdefault_20080811_sch_execute,
       flirt_newdefault_20080811_sch_params,

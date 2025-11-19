@@ -11,7 +11,7 @@ const MRIS_DIVIDE_PARCELLATION_METADATA: Metadata = {
 };
 
 
-interface MrisDivideParcellationParameters {
+interface MrisDivideParcellationParamsDict {
     "@type"?: "freesurfer/mris_divide_parcellation";
     "subject": string;
     "hemi": string;
@@ -21,11 +21,11 @@ interface MrisDivideParcellationParameters {
     "scale"?: number | null | undefined;
     "label_name"?: string | null | undefined;
 }
-type MrisDivideParcellationParametersTagged = Required<Pick<MrisDivideParcellationParameters, '@type'>> & MrisDivideParcellationParameters;
+type MrisDivideParcellationParamsDictTagged = Required<Pick<MrisDivideParcellationParamsDict, '@type'>> & MrisDivideParcellationParamsDict;
 
 
 /**
- * Output object returned when calling `MrisDivideParcellationParameters(...)`.
+ * Output object returned when calling `MrisDivideParcellationParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_divide_parcellation_params(
     outannot: string,
     scale: number | null = null,
     label_name: string | null = null,
-): MrisDivideParcellationParametersTagged {
+): MrisDivideParcellationParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_divide_parcellation" as const,
         "subject": subject,
@@ -90,7 +90,7 @@ function mris_divide_parcellation_params(
  * @returns Command-line arguments.
  */
 function mris_divide_parcellation_cargs(
-    params: MrisDivideParcellationParameters,
+    params: MrisDivideParcellationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function mris_divide_parcellation_cargs(
  * @returns Outputs object.
  */
 function mris_divide_parcellation_outputs(
-    params: MrisDivideParcellationParameters,
+    params: MrisDivideParcellationParamsDict,
     execution: Execution,
 ): MrisDivideParcellationOutputs {
     const ret: MrisDivideParcellationOutputs = {
@@ -151,7 +151,7 @@ function mris_divide_parcellation_outputs(
  * @returns NamedTuple of outputs (described in `MrisDivideParcellationOutputs`).
  */
 function mris_divide_parcellation_execute(
-    params: MrisDivideParcellationParameters,
+    params: MrisDivideParcellationParamsDict,
     runner: Runner | null = null,
 ): MrisDivideParcellationOutputs {
     runner = runner || getGlobalRunner();
@@ -202,6 +202,8 @@ function mris_divide_parcellation(
 export {
       MRIS_DIVIDE_PARCELLATION_METADATA,
       MrisDivideParcellationOutputs,
+      MrisDivideParcellationParamsDict,
+      MrisDivideParcellationParamsDictTagged,
       mris_divide_parcellation,
       mris_divide_parcellation_execute,
       mris_divide_parcellation_params,

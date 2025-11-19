@@ -10,18 +10,18 @@ const VOLUME_LABEL_MODIFY_KEYS_METADATA: Metadata = {
 };
 
 
-interface VolumeLabelModifyKeysParameters {
+interface VolumeLabelModifyKeysParamsDict {
     "@type"?: "workbench/volume-label-modify-keys";
     "volume-out": string;
     "subvolume"?: string | null | undefined;
     "volume-in": InputPathType;
     "remap-file": string;
 }
-type VolumeLabelModifyKeysParametersTagged = Required<Pick<VolumeLabelModifyKeysParameters, '@type'>> & VolumeLabelModifyKeysParameters;
+type VolumeLabelModifyKeysParamsDictTagged = Required<Pick<VolumeLabelModifyKeysParamsDict, '@type'>> & VolumeLabelModifyKeysParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeLabelModifyKeysParameters(...)`.
+ * Output object returned when calling `VolumeLabelModifyKeysParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function volume_label_modify_keys_params(
     subvolume: string | null,
     volume_in: InputPathType,
     remap_file: string,
-): VolumeLabelModifyKeysParametersTagged {
+): VolumeLabelModifyKeysParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-modify-keys" as const,
         "volume-out": volume_out,
@@ -77,7 +77,7 @@ function volume_label_modify_keys_params(
  * @returns Command-line arguments.
  */
 function volume_label_modify_keys_cargs(
-    params: VolumeLabelModifyKeysParameters,
+    params: VolumeLabelModifyKeysParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function volume_label_modify_keys_cargs(
  * @returns Outputs object.
  */
 function volume_label_modify_keys_outputs(
-    params: VolumeLabelModifyKeysParameters,
+    params: VolumeLabelModifyKeysParamsDict,
     execution: Execution,
 ): VolumeLabelModifyKeysOutputs {
     const ret: VolumeLabelModifyKeysOutputs = {
@@ -133,7 +133,7 @@ function volume_label_modify_keys_outputs(
  * @returns NamedTuple of outputs (described in `VolumeLabelModifyKeysOutputs`).
  */
 function volume_label_modify_keys_execute(
-    params: VolumeLabelModifyKeysParameters,
+    params: VolumeLabelModifyKeysParamsDict,
     runner: Runner | null = null,
 ): VolumeLabelModifyKeysOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function volume_label_modify_keys(
 export {
       VOLUME_LABEL_MODIFY_KEYS_METADATA,
       VolumeLabelModifyKeysOutputs,
+      VolumeLabelModifyKeysParamsDict,
+      VolumeLabelModifyKeysParamsDictTagged,
       volume_label_modify_keys,
       volume_label_modify_keys_execute,
       volume_label_modify_keys_params,

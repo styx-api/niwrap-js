@@ -11,7 +11,7 @@ const SMOOTHEST_METADATA: Metadata = {
 };
 
 
-interface SmoothestParameters {
+interface SmoothestParamsDict {
     "@type"?: "fsl/smoothest";
     "dof"?: number | null | undefined;
     "residual_fit_image"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface SmoothestParameters {
     "mask": InputPathType;
     "verbose_flag": boolean;
 }
-type SmoothestParametersTagged = Required<Pick<SmoothestParameters, '@type'>> & SmoothestParameters;
+type SmoothestParamsDictTagged = Required<Pick<SmoothestParamsDict, '@type'>> & SmoothestParamsDict;
 
 
 /**
- * Output object returned when calling `SmoothestParameters(...)`.
+ * Output object returned when calling `SmoothestParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function smoothest_params(
     residual_fit_image: InputPathType | null = null,
     zstat_image: InputPathType | null = null,
     verbose_flag: boolean = false,
-): SmoothestParametersTagged {
+): SmoothestParamsDictTagged {
     const params = {
         "@type": "fsl/smoothest" as const,
         "mask": mask,
@@ -80,7 +80,7 @@ function smoothest_params(
  * @returns Command-line arguments.
  */
 function smoothest_cargs(
-    params: SmoothestParameters,
+    params: SmoothestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function smoothest_cargs(
  * @returns Outputs object.
  */
 function smoothest_outputs(
-    params: SmoothestParameters,
+    params: SmoothestParamsDict,
     execution: Execution,
 ): SmoothestOutputs {
     const ret: SmoothestOutputs = {
@@ -148,7 +148,7 @@ function smoothest_outputs(
  * @returns NamedTuple of outputs (described in `SmoothestOutputs`).
  */
 function smoothest_execute(
-    params: SmoothestParameters,
+    params: SmoothestParamsDict,
     runner: Runner | null = null,
 ): SmoothestOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function smoothest(
 export {
       SMOOTHEST_METADATA,
       SmoothestOutputs,
+      SmoothestParamsDict,
+      SmoothestParamsDictTagged,
       smoothest,
       smoothest_execute,
       smoothest_params,

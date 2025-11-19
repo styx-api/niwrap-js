@@ -11,16 +11,16 @@ const NSIZE_METADATA: Metadata = {
 };
 
 
-interface NsizeParameters {
+interface NsizeParamsDict {
     "@type"?: "afni/nsize";
     "image_in": InputPathType;
     "image_out": string;
 }
-type NsizeParametersTagged = Required<Pick<NsizeParameters, '@type'>> & NsizeParameters;
+type NsizeParamsDictTagged = Required<Pick<NsizeParamsDict, '@type'>> & NsizeParamsDict;
 
 
 /**
- * Output object returned when calling `NsizeParameters(...)`.
+ * Output object returned when calling `NsizeParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface NsizeOutputs {
 function nsize_params(
     image_in: InputPathType,
     image_out: string,
-): NsizeParametersTagged {
+): NsizeParamsDictTagged {
     const params = {
         "@type": "afni/nsize" as const,
         "image_in": image_in,
@@ -66,7 +66,7 @@ function nsize_params(
  * @returns Command-line arguments.
  */
 function nsize_cargs(
-    params: NsizeParameters,
+    params: NsizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function nsize_cargs(
  * @returns Outputs object.
  */
 function nsize_outputs(
-    params: NsizeParameters,
+    params: NsizeParamsDict,
     execution: Execution,
 ): NsizeOutputs {
     const ret: NsizeOutputs = {
@@ -112,7 +112,7 @@ function nsize_outputs(
  * @returns NamedTuple of outputs (described in `NsizeOutputs`).
  */
 function nsize_execute(
-    params: NsizeParameters,
+    params: NsizeParamsDict,
     runner: Runner | null = null,
 ): NsizeOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function nsize(
 export {
       NSIZE_METADATA,
       NsizeOutputs,
+      NsizeParamsDict,
+      NsizeParamsDictTagged,
       nsize,
       nsize_execute,
       nsize_params,

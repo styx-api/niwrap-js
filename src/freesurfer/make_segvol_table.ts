@@ -11,7 +11,7 @@ const MAKE_SEGVOL_TABLE_METADATA: Metadata = {
 };
 
 
-interface MakeSegvolTableParameters {
+interface MakeSegvolTableParamsDict {
     "@type"?: "freesurfer/make-segvol-table";
     "subjects": Array<string>;
     "subject_file": InputPathType;
@@ -24,11 +24,11 @@ interface MakeSegvolTableParameters {
     "version": boolean;
     "help": boolean;
 }
-type MakeSegvolTableParametersTagged = Required<Pick<MakeSegvolTableParameters, '@type'>> & MakeSegvolTableParameters;
+type MakeSegvolTableParamsDictTagged = Required<Pick<MakeSegvolTableParamsDict, '@type'>> & MakeSegvolTableParamsDict;
 
 
 /**
- * Output object returned when calling `MakeSegvolTableParameters(...)`.
+ * Output object returned when calling `MakeSegvolTableParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function make_segvol_table_params(
     umask: string | null = null,
     version: boolean = false,
     help: boolean = false,
-): MakeSegvolTableParametersTagged {
+): MakeSegvolTableParamsDictTagged {
     const params = {
         "@type": "freesurfer/make-segvol-table" as const,
         "subjects": subjects,
@@ -108,7 +108,7 @@ function make_segvol_table_params(
  * @returns Command-line arguments.
  */
 function make_segvol_table_cargs(
-    params: MakeSegvolTableParameters,
+    params: MakeSegvolTableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -174,7 +174,7 @@ function make_segvol_table_cargs(
  * @returns Outputs object.
  */
 function make_segvol_table_outputs(
-    params: MakeSegvolTableParameters,
+    params: MakeSegvolTableParamsDict,
     execution: Execution,
 ): MakeSegvolTableOutputs {
     const ret: MakeSegvolTableOutputs = {
@@ -200,7 +200,7 @@ function make_segvol_table_outputs(
  * @returns NamedTuple of outputs (described in `MakeSegvolTableOutputs`).
  */
 function make_segvol_table_execute(
-    params: MakeSegvolTableParameters,
+    params: MakeSegvolTableParamsDict,
     runner: Runner | null = null,
 ): MakeSegvolTableOutputs {
     runner = runner || getGlobalRunner();
@@ -257,6 +257,8 @@ function make_segvol_table(
 export {
       MAKE_SEGVOL_TABLE_METADATA,
       MakeSegvolTableOutputs,
+      MakeSegvolTableParamsDict,
+      MakeSegvolTableParamsDictTagged,
       make_segvol_table,
       make_segvol_table_execute,
       make_segvol_table_params,

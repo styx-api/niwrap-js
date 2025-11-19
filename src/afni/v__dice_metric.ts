@@ -11,7 +11,7 @@ const V__DICE_METRIC_METADATA: Metadata = {
 };
 
 
-interface VDiceMetricParameters {
+interface VDiceMetricParamsDict {
     "@type"?: "afni/@DiceMetric";
     "base": InputPathType;
     "dsets": Array<InputPathType>;
@@ -27,11 +27,11 @@ interface VDiceMetricParameters {
     "ignore_bad": boolean;
     "keep_tmp": boolean;
 }
-type VDiceMetricParametersTagged = Required<Pick<VDiceMetricParameters, '@type'>> & VDiceMetricParameters;
+type VDiceMetricParamsDictTagged = Required<Pick<VDiceMetricParamsDict, '@type'>> & VDiceMetricParamsDict;
 
 
 /**
- * Output object returned when calling `VDiceMetricParameters(...)`.
+ * Output object returned when calling `VDiceMetricParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function v__dice_metric_params(
     prefix: string | null = null,
     ignore_bad: boolean = false,
     keep_tmp: boolean = false,
-): VDiceMetricParametersTagged {
+): VDiceMetricParamsDictTagged {
     const params = {
         "@type": "afni/@DiceMetric" as const,
         "base": base,
@@ -114,7 +114,7 @@ function v__dice_metric_params(
  * @returns Command-line arguments.
  */
 function v__dice_metric_cargs(
-    params: VDiceMetricParameters,
+    params: VDiceMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function v__dice_metric_cargs(
  * @returns Outputs object.
  */
 function v__dice_metric_outputs(
-    params: VDiceMetricParameters,
+    params: VDiceMetricParamsDict,
     execution: Execution,
 ): VDiceMetricOutputs {
     const ret: VDiceMetricOutputs = {
@@ -210,7 +210,7 @@ function v__dice_metric_outputs(
  * @returns NamedTuple of outputs (described in `VDiceMetricOutputs`).
  */
 function v__dice_metric_execute(
-    params: VDiceMetricParameters,
+    params: VDiceMetricParamsDict,
     runner: Runner | null = null,
 ): VDiceMetricOutputs {
     runner = runner || getGlobalRunner();
@@ -272,6 +272,8 @@ function v__dice_metric(
 
 export {
       VDiceMetricOutputs,
+      VDiceMetricParamsDict,
+      VDiceMetricParamsDictTagged,
       V__DICE_METRIC_METADATA,
       v__dice_metric,
       v__dice_metric_execute,

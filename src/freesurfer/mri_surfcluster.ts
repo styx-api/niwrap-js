@@ -11,7 +11,7 @@ const MRI_SURFCLUSTER_METADATA: Metadata = {
 };
 
 
-interface MriSurfclusterParameters {
+interface MriSurfclusterParamsDict {
     "@type"?: "freesurfer/mri_surfcluster";
     "infile": InputPathType;
     "thmin"?: number | null | undefined;
@@ -55,11 +55,11 @@ interface MriSurfclusterParameters {
     "sd"?: string | null | undefined;
     "thmax"?: number | null | undefined;
 }
-type MriSurfclusterParametersTagged = Required<Pick<MriSurfclusterParameters, '@type'>> & MriSurfclusterParameters;
+type MriSurfclusterParamsDictTagged = Required<Pick<MriSurfclusterParamsDict, '@type'>> & MriSurfclusterParamsDict;
 
 
 /**
- * Output object returned when calling `MriSurfclusterParameters(...)`.
+ * Output object returned when calling `MriSurfclusterParamsDict(...)`.
  *
  * @interface
  */
@@ -184,7 +184,7 @@ function mri_surfcluster_params(
     no_fixmni_flag: boolean = false,
     sd: string | null = null,
     thmax: number | null = null,
-): MriSurfclusterParametersTagged {
+): MriSurfclusterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_surfcluster" as const,
         "infile": infile,
@@ -308,7 +308,7 @@ function mri_surfcluster_params(
  * @returns Command-line arguments.
  */
 function mri_surfcluster_cargs(
-    params: MriSurfclusterParameters,
+    params: MriSurfclusterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -549,7 +549,7 @@ function mri_surfcluster_cargs(
  * @returns Outputs object.
  */
 function mri_surfcluster_outputs(
-    params: MriSurfclusterParameters,
+    params: MriSurfclusterParamsDict,
     execution: Execution,
 ): MriSurfclusterOutputs {
     const ret: MriSurfclusterOutputs = {
@@ -580,7 +580,7 @@ function mri_surfcluster_outputs(
  * @returns NamedTuple of outputs (described in `MriSurfclusterOutputs`).
  */
 function mri_surfcluster_execute(
-    params: MriSurfclusterParameters,
+    params: MriSurfclusterParamsDict,
     runner: Runner | null = null,
 ): MriSurfclusterOutputs {
     runner = runner || getGlobalRunner();
@@ -699,6 +699,8 @@ function mri_surfcluster(
 export {
       MRI_SURFCLUSTER_METADATA,
       MriSurfclusterOutputs,
+      MriSurfclusterParamsDict,
+      MriSurfclusterParamsDictTagged,
       mri_surfcluster,
       mri_surfcluster_execute,
       mri_surfcluster_params,

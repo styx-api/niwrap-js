@@ -10,21 +10,21 @@ const CIFTI_MERGE_DENSE_METADATA: Metadata = {
 };
 
 
-interface CiftiMergeDenseCiftiParameters {
+interface CiftiMergeDenseCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
 }
-type CiftiMergeDenseCiftiParametersTagged = Required<Pick<CiftiMergeDenseCiftiParameters, '@type'>> & CiftiMergeDenseCiftiParameters;
+type CiftiMergeDenseCiftiParamsDictTagged = Required<Pick<CiftiMergeDenseCiftiParamsDict, '@type'>> & CiftiMergeDenseCiftiParamsDict;
 
 
-interface CiftiMergeDenseParameters {
+interface CiftiMergeDenseParamsDict {
     "@type"?: "workbench/cifti-merge-dense";
     "cifti-out": string;
     "action"?: string | null | undefined;
-    "cifti"?: Array<CiftiMergeDenseCiftiParameters> | null | undefined;
+    "cifti"?: Array<CiftiMergeDenseCiftiParamsDict> | null | undefined;
     "direction": string;
 }
-type CiftiMergeDenseParametersTagged = Required<Pick<CiftiMergeDenseParameters, '@type'>> & CiftiMergeDenseParameters;
+type CiftiMergeDenseParamsDictTagged = Required<Pick<CiftiMergeDenseParamsDict, '@type'>> & CiftiMergeDenseParamsDict;
 
 
 /**
@@ -34,9 +34,9 @@ type CiftiMergeDenseParametersTagged = Required<Pick<CiftiMergeDenseParameters, 
  *
  * @returns Parameter dictionary
  */
-function cifti_merge_dense_cifti_params(
+function cifti_merge_dense_cifti(
     cifti_in: InputPathType,
-): CiftiMergeDenseCiftiParametersTagged {
+): CiftiMergeDenseCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -54,7 +54,7 @@ function cifti_merge_dense_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_dense_cifti_cargs(
-    params: CiftiMergeDenseCiftiParameters,
+    params: CiftiMergeDenseCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -67,7 +67,7 @@ function cifti_merge_dense_cifti_cargs(
 
 
 /**
- * Output object returned when calling `CiftiMergeDenseParameters(...)`.
+ * Output object returned when calling `CiftiMergeDenseParamsDict(...)`.
  *
  * @interface
  */
@@ -99,8 +99,8 @@ function cifti_merge_dense_params(
     cifti_out: string,
     action: string | null,
     direction: string,
-    cifti: Array<CiftiMergeDenseCiftiParameters> | null = null,
-): CiftiMergeDenseParametersTagged {
+    cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
+): CiftiMergeDenseParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-merge-dense" as const,
         "cifti-out": cifti_out,
@@ -125,7 +125,7 @@ function cifti_merge_dense_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_dense_cargs(
-    params: CiftiMergeDenseParameters,
+    params: CiftiMergeDenseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function cifti_merge_dense_cargs(
  * @returns Outputs object.
  */
 function cifti_merge_dense_outputs(
-    params: CiftiMergeDenseParameters,
+    params: CiftiMergeDenseParamsDict,
     execution: Execution,
 ): CiftiMergeDenseOutputs {
     const ret: CiftiMergeDenseOutputs = {
@@ -175,7 +175,7 @@ function cifti_merge_dense_outputs(
  * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
  */
 function cifti_merge_dense_execute(
-    params: CiftiMergeDenseParameters,
+    params: CiftiMergeDenseParamsDict,
     runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
     runner = runner || getGlobalRunner();
@@ -207,7 +207,7 @@ function cifti_merge_dense(
     cifti_out: string,
     action: string | null,
     direction: string,
-    cifti: Array<CiftiMergeDenseCiftiParameters> | null = null,
+    cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
     const params = cifti_merge_dense_params(cifti_out, action, direction, cifti)
@@ -217,9 +217,13 @@ function cifti_merge_dense(
 
 export {
       CIFTI_MERGE_DENSE_METADATA,
+      CiftiMergeDenseCiftiParamsDict,
+      CiftiMergeDenseCiftiParamsDictTagged,
       CiftiMergeDenseOutputs,
+      CiftiMergeDenseParamsDict,
+      CiftiMergeDenseParamsDictTagged,
       cifti_merge_dense,
-      cifti_merge_dense_cifti_params,
+      cifti_merge_dense_cifti,
       cifti_merge_dense_execute,
       cifti_merge_dense_params,
 };

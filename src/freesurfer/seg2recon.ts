@@ -11,7 +11,7 @@ const SEG2RECON_METADATA: Metadata = {
 };
 
 
-interface Seg2reconParameters {
+interface Seg2reconParamsDict {
     "@type"?: "freesurfer/seg2recon";
     "subject": string;
     "segvol": InputPathType;
@@ -28,11 +28,11 @@ interface Seg2reconParameters {
     "rca": boolean;
     "no_bias_field_cor": boolean;
 }
-type Seg2reconParametersTagged = Required<Pick<Seg2reconParameters, '@type'>> & Seg2reconParameters;
+type Seg2reconParamsDictTagged = Required<Pick<Seg2reconParamsDict, '@type'>> & Seg2reconParamsDict;
 
 
 /**
- * Output object returned when calling `Seg2reconParameters(...)`.
+ * Output object returned when calling `Seg2reconParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function seg2recon_params(
     expert: InputPathType | null = null,
     rca: boolean = false,
     no_bias_field_cor: boolean = false,
-): Seg2reconParametersTagged {
+): Seg2reconParamsDictTagged {
     const params = {
         "@type": "freesurfer/seg2recon" as const,
         "subject": subject,
@@ -136,7 +136,7 @@ function seg2recon_params(
  * @returns Command-line arguments.
  */
 function seg2recon_cargs(
-    params: Seg2reconParameters,
+    params: Seg2reconParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -220,7 +220,7 @@ function seg2recon_cargs(
  * @returns Outputs object.
  */
 function seg2recon_outputs(
-    params: Seg2reconParameters,
+    params: Seg2reconParamsDict,
     execution: Execution,
 ): Seg2reconOutputs {
     const ret: Seg2reconOutputs = {
@@ -248,7 +248,7 @@ function seg2recon_outputs(
  * @returns NamedTuple of outputs (described in `Seg2reconOutputs`).
  */
 function seg2recon_execute(
-    params: Seg2reconParameters,
+    params: Seg2reconParamsDict,
     runner: Runner | null = null,
 ): Seg2reconOutputs {
     runner = runner || getGlobalRunner();
@@ -313,6 +313,8 @@ function seg2recon(
 export {
       SEG2RECON_METADATA,
       Seg2reconOutputs,
+      Seg2reconParamsDict,
+      Seg2reconParamsDictTagged,
       seg2recon,
       seg2recon_execute,
       seg2recon_params,

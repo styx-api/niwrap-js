@@ -11,7 +11,7 @@ const DSETSTAT2P_METADATA: Metadata = {
 };
 
 
-interface Dsetstat2pParameters {
+interface Dsetstat2pParamsDict {
     "@type"?: "afni/dsetstat2p";
     "dataset": string;
     "statval": number;
@@ -20,11 +20,11 @@ interface Dsetstat2pParameters {
     "one_sided": boolean;
     "quiet": boolean;
 }
-type Dsetstat2pParametersTagged = Required<Pick<Dsetstat2pParameters, '@type'>> & Dsetstat2pParameters;
+type Dsetstat2pParamsDictTagged = Required<Pick<Dsetstat2pParamsDict, '@type'>> & Dsetstat2pParamsDict;
 
 
 /**
- * Output object returned when calling `Dsetstat2pParameters(...)`.
+ * Output object returned when calling `Dsetstat2pParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function dsetstat2p_params(
     two_sided: boolean = false,
     one_sided: boolean = false,
     quiet: boolean = false,
-): Dsetstat2pParametersTagged {
+): Dsetstat2pParamsDictTagged {
     const params = {
         "@type": "afni/dsetstat2p" as const,
         "dataset": dataset,
@@ -82,7 +82,7 @@ function dsetstat2p_params(
  * @returns Command-line arguments.
  */
 function dsetstat2p_cargs(
-    params: Dsetstat2pParameters,
+    params: Dsetstat2pParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function dsetstat2p_cargs(
  * @returns Outputs object.
  */
 function dsetstat2p_outputs(
-    params: Dsetstat2pParameters,
+    params: Dsetstat2pParamsDict,
     execution: Execution,
 ): Dsetstat2pOutputs {
     const ret: Dsetstat2pOutputs = {
@@ -140,7 +140,7 @@ function dsetstat2p_outputs(
  * @returns NamedTuple of outputs (described in `Dsetstat2pOutputs`).
  */
 function dsetstat2p_execute(
-    params: Dsetstat2pParameters,
+    params: Dsetstat2pParamsDict,
     runner: Runner | null = null,
 ): Dsetstat2pOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function dsetstat2p(
 export {
       DSETSTAT2P_METADATA,
       Dsetstat2pOutputs,
+      Dsetstat2pParamsDict,
+      Dsetstat2pParamsDictTagged,
       dsetstat2p,
       dsetstat2p_execute,
       dsetstat2p_params,

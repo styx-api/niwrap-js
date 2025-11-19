@@ -11,7 +11,7 @@ const DMRI_FORREST_METADATA: Metadata = {
 };
 
 
-interface DmriForrestParameters {
+interface DmriForrestParamsDict {
     "@type"?: "freesurfer/dmri_forrest";
     "test_dir": string;
     "train_file": InputPathType;
@@ -23,11 +23,11 @@ interface DmriForrestParameters {
     "checkopts": boolean;
     "help": boolean;
 }
-type DmriForrestParametersTagged = Required<Pick<DmriForrestParameters, '@type'>> & DmriForrestParameters;
+type DmriForrestParamsDictTagged = Required<Pick<DmriForrestParamsDict, '@type'>> & DmriForrestParamsDict;
 
 
 /**
- * Output object returned when calling `DmriForrestParameters(...)`.
+ * Output object returned when calling `DmriForrestParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function dmri_forrest_params(
     debug: boolean = false,
     checkopts: boolean = false,
     help: boolean = false,
-): DmriForrestParametersTagged {
+): DmriForrestParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_forrest" as const,
         "test_dir": test_dir,
@@ -94,7 +94,7 @@ function dmri_forrest_params(
  * @returns Command-line arguments.
  */
 function dmri_forrest_cargs(
-    params: DmriForrestParameters,
+    params: DmriForrestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function dmri_forrest_cargs(
  * @returns Outputs object.
  */
 function dmri_forrest_outputs(
-    params: DmriForrestParameters,
+    params: DmriForrestParamsDict,
     execution: Execution,
 ): DmriForrestOutputs {
     const ret: DmriForrestOutputs = {
@@ -174,7 +174,7 @@ function dmri_forrest_outputs(
  * @returns NamedTuple of outputs (described in `DmriForrestOutputs`).
  */
 function dmri_forrest_execute(
-    params: DmriForrestParameters,
+    params: DmriForrestParamsDict,
     runner: Runner | null = null,
 ): DmriForrestOutputs {
     runner = runner || getGlobalRunner();
@@ -229,6 +229,8 @@ function dmri_forrest(
 export {
       DMRI_FORREST_METADATA,
       DmriForrestOutputs,
+      DmriForrestParamsDict,
+      DmriForrestParamsDictTagged,
       dmri_forrest,
       dmri_forrest_execute,
       dmri_forrest_params,

@@ -11,16 +11,16 @@ const RUN_SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA: Metadata = {
 };
 
 
-interface RunSegmentSubjectT2AutoEstimateAlveusMlShParameters {
+interface RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict {
     "@type"?: "freesurfer/run_segmentSubjectT2_autoEstimateAlveusML.sh";
     "deployed_mcr_root": string;
     "arguments"?: Array<string> | null | undefined;
 }
-type RunSegmentSubjectT2AutoEstimateAlveusMlShParametersTagged = Required<Pick<RunSegmentSubjectT2AutoEstimateAlveusMlShParameters, '@type'>> & RunSegmentSubjectT2AutoEstimateAlveusMlShParameters;
+type RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDictTagged = Required<Pick<RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict, '@type'>> & RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict;
 
 
 /**
- * Output object returned when calling `RunSegmentSubjectT2AutoEstimateAlveusMlShParameters(...)`.
+ * Output object returned when calling `RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs {
 function run_segment_subject_t2_auto_estimate_alveus_ml_sh_params(
     deployed_mcr_root: string,
     arguments_: Array<string> | null = null,
-): RunSegmentSubjectT2AutoEstimateAlveusMlShParametersTagged {
+): RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDictTagged {
     const params = {
         "@type": "freesurfer/run_segmentSubjectT2_autoEstimateAlveusML.sh" as const,
         "deployed_mcr_root": deployed_mcr_root,
@@ -64,7 +64,7 @@ function run_segment_subject_t2_auto_estimate_alveus_ml_sh_params(
  * @returns Command-line arguments.
  */
 function run_segment_subject_t2_auto_estimate_alveus_ml_sh_cargs(
-    params: RunSegmentSubjectT2AutoEstimateAlveusMlShParameters,
+    params: RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function run_segment_subject_t2_auto_estimate_alveus_ml_sh_cargs(
  * @returns Outputs object.
  */
 function run_segment_subject_t2_auto_estimate_alveus_ml_sh_outputs(
-    params: RunSegmentSubjectT2AutoEstimateAlveusMlShParameters,
+    params: RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict,
     execution: Execution,
 ): RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs {
     const ret: RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs = {
@@ -111,7 +111,7 @@ function run_segment_subject_t2_auto_estimate_alveus_ml_sh_outputs(
  * @returns NamedTuple of outputs (described in `RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs`).
  */
 function run_segment_subject_t2_auto_estimate_alveus_ml_sh_execute(
-    params: RunSegmentSubjectT2AutoEstimateAlveusMlShParameters,
+    params: RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict,
     runner: Runner | null = null,
 ): RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function run_segment_subject_t2_auto_estimate_alveus_ml_sh(
 export {
       RUN_SEGMENT_SUBJECT_T2_AUTO_ESTIMATE_ALVEUS_ML_SH_METADATA,
       RunSegmentSubjectT2AutoEstimateAlveusMlShOutputs,
+      RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDict,
+      RunSegmentSubjectT2AutoEstimateAlveusMlShParamsDictTagged,
       run_segment_subject_t2_auto_estimate_alveus_ml_sh,
       run_segment_subject_t2_auto_estimate_alveus_ml_sh_execute,
       run_segment_subject_t2_auto_estimate_alveus_ml_sh_params,

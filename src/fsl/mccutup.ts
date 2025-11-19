@@ -11,18 +11,18 @@ const MCCUTUP_METADATA: Metadata = {
 };
 
 
-interface MccutupParameters {
+interface MccutupParamsDict {
     "@type"?: "fsl/mccutup";
     "input": InputPathType;
     "output_file"?: string | null | undefined;
     "param1"?: string | null | undefined;
     "param2"?: string | null | undefined;
 }
-type MccutupParametersTagged = Required<Pick<MccutupParameters, '@type'>> & MccutupParameters;
+type MccutupParamsDictTagged = Required<Pick<MccutupParamsDict, '@type'>> & MccutupParamsDict;
 
 
 /**
- * Output object returned when calling `MccutupParameters(...)`.
+ * Output object returned when calling `MccutupParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mccutup_params(
     output_file: string | null = null,
     param1: string | null = null,
     param2: string | null = null,
-): MccutupParametersTagged {
+): MccutupParamsDictTagged {
     const params = {
         "@type": "fsl/mccutup" as const,
         "input": input,
@@ -80,7 +80,7 @@ function mccutup_params(
  * @returns Command-line arguments.
  */
 function mccutup_cargs(
-    params: MccutupParameters,
+    params: MccutupParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function mccutup_cargs(
  * @returns Outputs object.
  */
 function mccutup_outputs(
-    params: MccutupParameters,
+    params: MccutupParamsDict,
     execution: Execution,
 ): MccutupOutputs {
     const ret: MccutupOutputs = {
@@ -143,7 +143,7 @@ function mccutup_outputs(
  * @returns NamedTuple of outputs (described in `MccutupOutputs`).
  */
 function mccutup_execute(
-    params: MccutupParameters,
+    params: MccutupParamsDict,
     runner: Runner | null = null,
 ): MccutupOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function mccutup(
 export {
       MCCUTUP_METADATA,
       MccutupOutputs,
+      MccutupParamsDict,
+      MccutupParamsDictTagged,
       mccutup,
       mccutup_execute,
       mccutup_params,

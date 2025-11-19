@@ -11,18 +11,18 @@ const MRI_DEFACE_METADATA: Metadata = {
 };
 
 
-interface MriDefaceParameters {
+interface MriDefaceParamsDict {
     "@type"?: "freesurfer/mri_deface";
     "input_volume": InputPathType;
     "brain_template": InputPathType;
     "face_template": InputPathType;
     "output_volume": string;
 }
-type MriDefaceParametersTagged = Required<Pick<MriDefaceParameters, '@type'>> & MriDefaceParameters;
+type MriDefaceParamsDictTagged = Required<Pick<MriDefaceParamsDict, '@type'>> & MriDefaceParamsDict;
 
 
 /**
- * Output object returned when calling `MriDefaceParameters(...)`.
+ * Output object returned when calling `MriDefaceParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_deface_params(
     brain_template: InputPathType,
     face_template: InputPathType,
     output_volume: string,
-): MriDefaceParametersTagged {
+): MriDefaceParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_deface" as const,
         "input_volume": input_volume,
@@ -74,7 +74,7 @@ function mri_deface_params(
  * @returns Command-line arguments.
  */
 function mri_deface_cargs(
-    params: MriDefaceParameters,
+    params: MriDefaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_deface_cargs(
  * @returns Outputs object.
  */
 function mri_deface_outputs(
-    params: MriDefaceParameters,
+    params: MriDefaceParamsDict,
     execution: Execution,
 ): MriDefaceOutputs {
     const ret: MriDefaceOutputs = {
@@ -122,7 +122,7 @@ function mri_deface_outputs(
  * @returns NamedTuple of outputs (described in `MriDefaceOutputs`).
  */
 function mri_deface_execute(
-    params: MriDefaceParameters,
+    params: MriDefaceParamsDict,
     runner: Runner | null = null,
 ): MriDefaceOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mri_deface(
 export {
       MRI_DEFACE_METADATA,
       MriDefaceOutputs,
+      MriDefaceParamsDict,
+      MriDefaceParamsDictTagged,
       mri_deface,
       mri_deface_execute,
       mri_deface_params,

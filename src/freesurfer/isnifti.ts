@@ -11,15 +11,15 @@ const ISNIFTI_METADATA: Metadata = {
 };
 
 
-interface IsniftiParameters {
+interface IsniftiParamsDict {
     "@type"?: "freesurfer/isnifti";
     "infile": InputPathType;
 }
-type IsniftiParametersTagged = Required<Pick<IsniftiParameters, '@type'>> & IsniftiParameters;
+type IsniftiParamsDictTagged = Required<Pick<IsniftiParamsDict, '@type'>> & IsniftiParamsDict;
 
 
 /**
- * Output object returned when calling `IsniftiParameters(...)`.
+ * Output object returned when calling `IsniftiParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface IsniftiOutputs {
  */
 function isnifti_params(
     infile: InputPathType,
-): IsniftiParametersTagged {
+): IsniftiParamsDictTagged {
     const params = {
         "@type": "freesurfer/isnifti" as const,
         "infile": infile,
@@ -58,7 +58,7 @@ function isnifti_params(
  * @returns Command-line arguments.
  */
 function isnifti_cargs(
-    params: IsniftiParameters,
+    params: IsniftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function isnifti_cargs(
  * @returns Outputs object.
  */
 function isnifti_outputs(
-    params: IsniftiParameters,
+    params: IsniftiParamsDict,
     execution: Execution,
 ): IsniftiOutputs {
     const ret: IsniftiOutputs = {
@@ -102,7 +102,7 @@ function isnifti_outputs(
  * @returns NamedTuple of outputs (described in `IsniftiOutputs`).
  */
 function isnifti_execute(
-    params: IsniftiParameters,
+    params: IsniftiParamsDict,
     runner: Runner | null = null,
 ): IsniftiOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function isnifti(
 export {
       ISNIFTI_METADATA,
       IsniftiOutputs,
+      IsniftiParamsDict,
+      IsniftiParamsDictTagged,
       isnifti,
       isnifti_execute,
       isnifti_params,

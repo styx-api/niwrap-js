@@ -10,7 +10,7 @@ const VOLUME_PARCEL_RESAMPLING_METADATA: Metadata = {
 };
 
 
-interface VolumeParcelResamplingParameters {
+interface VolumeParcelResamplingParamsDict {
     "@type"?: "workbench/volume-parcel-resampling";
     "volume-out": string;
     "fix-zeros": boolean;
@@ -21,11 +21,11 @@ interface VolumeParcelResamplingParameters {
     "new-parcels": InputPathType;
     "kernel": number;
 }
-type VolumeParcelResamplingParametersTagged = Required<Pick<VolumeParcelResamplingParameters, '@type'>> & VolumeParcelResamplingParameters;
+type VolumeParcelResamplingParamsDictTagged = Required<Pick<VolumeParcelResamplingParamsDict, '@type'>> & VolumeParcelResamplingParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeParcelResamplingParameters(...)`.
+ * Output object returned when calling `VolumeParcelResamplingParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function volume_parcel_resampling_params(
     kernel: number,
     fix_zeros: boolean = false,
     fwhm: boolean = false,
-): VolumeParcelResamplingParametersTagged {
+): VolumeParcelResamplingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-parcel-resampling" as const,
         "volume-out": volume_out,
@@ -93,7 +93,7 @@ function volume_parcel_resampling_params(
  * @returns Command-line arguments.
  */
 function volume_parcel_resampling_cargs(
-    params: VolumeParcelResamplingParameters,
+    params: VolumeParcelResamplingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function volume_parcel_resampling_cargs(
  * @returns Outputs object.
  */
 function volume_parcel_resampling_outputs(
-    params: VolumeParcelResamplingParameters,
+    params: VolumeParcelResamplingParamsDict,
     execution: Execution,
 ): VolumeParcelResamplingOutputs {
     const ret: VolumeParcelResamplingOutputs = {
@@ -149,7 +149,7 @@ function volume_parcel_resampling_outputs(
  * @returns NamedTuple of outputs (described in `VolumeParcelResamplingOutputs`).
  */
 function volume_parcel_resampling_execute(
-    params: VolumeParcelResamplingParameters,
+    params: VolumeParcelResamplingParamsDict,
     runner: Runner | null = null,
 ): VolumeParcelResamplingOutputs {
     runner = runner || getGlobalRunner();
@@ -202,6 +202,8 @@ function volume_parcel_resampling(
 export {
       VOLUME_PARCEL_RESAMPLING_METADATA,
       VolumeParcelResamplingOutputs,
+      VolumeParcelResamplingParamsDict,
+      VolumeParcelResamplingParamsDictTagged,
       volume_parcel_resampling,
       volume_parcel_resampling_execute,
       volume_parcel_resampling_params,

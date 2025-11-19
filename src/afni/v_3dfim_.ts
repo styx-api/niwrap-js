@@ -11,7 +11,7 @@ const V_3DFIM__METADATA: Metadata = {
 };
 
 
-interface V3dfimParameters {
+interface V3dfimParamsDict {
     "@type"?: "afni/3dfim+";
     "infile": InputPathType;
     "input1dfile"?: InputPathType | null | undefined;
@@ -26,11 +26,11 @@ interface V3dfimParameters {
     "output_params"?: Array<string> | null | undefined;
     "output_bucket"?: string | null | undefined;
 }
-type V3dfimParametersTagged = Required<Pick<V3dfimParameters, '@type'>> & V3dfimParameters;
+type V3dfimParamsDictTagged = Required<Pick<V3dfimParamsDict, '@type'>> & V3dfimParamsDict;
 
 
 /**
- * Output object returned when calling `V3dfimParameters(...)`.
+ * Output object returned when calling `V3dfimParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function v_3dfim__params(
     ort_file: InputPathType | null = null,
     output_params: Array<string> | null = null,
     output_bucket: string | null = null,
-): V3dfimParametersTagged {
+): V3dfimParamsDictTagged {
     const params = {
         "@type": "afni/3dfim+" as const,
         "infile": infile,
@@ -138,7 +138,7 @@ function v_3dfim__params(
  * @returns Command-line arguments.
  */
 function v_3dfim__cargs(
-    params: V3dfimParameters,
+    params: V3dfimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -221,7 +221,7 @@ function v_3dfim__cargs(
  * @returns Outputs object.
  */
 function v_3dfim__outputs(
-    params: V3dfimParameters,
+    params: V3dfimParamsDict,
     execution: Execution,
 ): V3dfimOutputs {
     const ret: V3dfimOutputs = {
@@ -250,7 +250,7 @@ function v_3dfim__outputs(
  * @returns NamedTuple of outputs (described in `V3dfimOutputs`).
  */
 function v_3dfim__execute(
-    params: V3dfimParameters,
+    params: V3dfimParamsDict,
     runner: Runner | null = null,
 ): V3dfimOutputs {
     runner = runner || getGlobalRunner();
@@ -310,6 +310,8 @@ function v_3dfim_(
 
 export {
       V3dfimOutputs,
+      V3dfimParamsDict,
+      V3dfimParamsDictTagged,
       V_3DFIM__METADATA,
       v_3dfim_,
       v_3dfim__execute,

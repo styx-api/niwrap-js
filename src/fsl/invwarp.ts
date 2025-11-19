@@ -11,7 +11,7 @@ const INVWARP_METADATA: Metadata = {
 };
 
 
-interface InvwarpParameters {
+interface InvwarpParamsDict {
     "@type"?: "fsl/invwarp";
     "warp": InputPathType;
     "out_img": string;
@@ -23,11 +23,11 @@ interface InvwarpParameters {
     "jacobian_max"?: number | null | undefined;
     "debug": boolean;
 }
-type InvwarpParametersTagged = Required<Pick<InvwarpParameters, '@type'>> & InvwarpParameters;
+type InvwarpParamsDictTagged = Required<Pick<InvwarpParamsDict, '@type'>> & InvwarpParamsDict;
 
 
 /**
- * Output object returned when calling `InvwarpParameters(...)`.
+ * Output object returned when calling `InvwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function invwarp_params(
     jacobian_min: number | null = null,
     jacobian_max: number | null = null,
     debug: boolean = false,
-): InvwarpParametersTagged {
+): InvwarpParamsDictTagged {
     const params = {
         "@type": "fsl/invwarp" as const,
         "warp": warp,
@@ -98,7 +98,7 @@ function invwarp_params(
  * @returns Command-line arguments.
  */
 function invwarp_cargs(
-    params: InvwarpParameters,
+    params: InvwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -137,7 +137,7 @@ function invwarp_cargs(
  * @returns Outputs object.
  */
 function invwarp_outputs(
-    params: InvwarpParameters,
+    params: InvwarpParamsDict,
     execution: Execution,
 ): InvwarpOutputs {
     const ret: InvwarpOutputs = {
@@ -164,7 +164,7 @@ function invwarp_outputs(
  * @returns NamedTuple of outputs (described in `InvwarpOutputs`).
  */
 function invwarp_execute(
-    params: InvwarpParameters,
+    params: InvwarpParamsDict,
     runner: Runner | null = null,
 ): InvwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -220,6 +220,8 @@ function invwarp(
 export {
       INVWARP_METADATA,
       InvwarpOutputs,
+      InvwarpParamsDict,
+      InvwarpParamsDictTagged,
       invwarp,
       invwarp_execute,
       invwarp_params,

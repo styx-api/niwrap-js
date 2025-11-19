@@ -11,18 +11,18 @@ const SEGMENT_SUBJECT_SC_METADATA: Metadata = {
 };
 
 
-interface SegmentSubjectScParameters {
+interface SegmentSubjectScParamsDict {
     "@type"?: "freesurfer/segment_subject_sc";
     "invol": InputPathType;
     "outxfm": InputPathType;
     "log"?: string | null | undefined;
     "debug": boolean;
 }
-type SegmentSubjectScParametersTagged = Required<Pick<SegmentSubjectScParameters, '@type'>> & SegmentSubjectScParameters;
+type SegmentSubjectScParamsDictTagged = Required<Pick<SegmentSubjectScParamsDict, '@type'>> & SegmentSubjectScParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubjectScParameters(...)`.
+ * Output object returned when calling `SegmentSubjectScParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function segment_subject_sc_params(
     outxfm: InputPathType,
     log: string | null = null,
     debug: boolean = false,
-): SegmentSubjectScParametersTagged {
+): SegmentSubjectScParamsDictTagged {
     const params = {
         "@type": "freesurfer/segment_subject_sc" as const,
         "invol": invol,
@@ -76,7 +76,7 @@ function segment_subject_sc_params(
  * @returns Command-line arguments.
  */
 function segment_subject_sc_cargs(
-    params: SegmentSubjectScParameters,
+    params: SegmentSubjectScParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function segment_subject_sc_cargs(
  * @returns Outputs object.
  */
 function segment_subject_sc_outputs(
-    params: SegmentSubjectScParameters,
+    params: SegmentSubjectScParamsDict,
     execution: Execution,
 ): SegmentSubjectScOutputs {
     const ret: SegmentSubjectScOutputs = {
@@ -137,7 +137,7 @@ function segment_subject_sc_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubjectScOutputs`).
  */
 function segment_subject_sc_execute(
-    params: SegmentSubjectScParameters,
+    params: SegmentSubjectScParamsDict,
     runner: Runner | null = null,
 ): SegmentSubjectScOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function segment_subject_sc(
 export {
       SEGMENT_SUBJECT_SC_METADATA,
       SegmentSubjectScOutputs,
+      SegmentSubjectScParamsDict,
+      SegmentSubjectScParamsDictTagged,
       segment_subject_sc,
       segment_subject_sc_execute,
       segment_subject_sc_params,

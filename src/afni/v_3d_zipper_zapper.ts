@@ -11,7 +11,7 @@ const V_3D_ZIPPER_ZAPPER_METADATA: Metadata = {
 };
 
 
-interface V3dZipperZapperParameters {
+interface V3dZipperZapperParamsDict {
     "@type"?: "afni/3dZipperZapper";
     "input_file": InputPathType;
     "output_prefix": string;
@@ -30,11 +30,11 @@ interface V3dZipperZapperParameters {
     "min_corr_len"?: number | null | undefined;
     "min_corr_corr"?: number | null | undefined;
 }
-type V3dZipperZapperParametersTagged = Required<Pick<V3dZipperZapperParameters, '@type'>> & V3dZipperZapperParameters;
+type V3dZipperZapperParamsDictTagged = Required<Pick<V3dZipperZapperParamsDict, '@type'>> & V3dZipperZapperParamsDict;
 
 
 /**
- * Output object returned when calling `V3dZipperZapperParameters(...)`.
+ * Output object returned when calling `V3dZipperZapperParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function v_3d_zipper_zapper_params(
     min_drop_diff: number | null = null,
     min_corr_len: number | null = null,
     min_corr_corr: number | null = null,
-): V3dZipperZapperParametersTagged {
+): V3dZipperZapperParamsDictTagged {
     const params = {
         "@type": "afni/3dZipperZapper" as const,
         "input_file": input_file,
@@ -154,7 +154,7 @@ function v_3d_zipper_zapper_params(
  * @returns Command-line arguments.
  */
 function v_3d_zipper_zapper_cargs(
-    params: V3dZipperZapperParameters,
+    params: V3dZipperZapperParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -246,7 +246,7 @@ function v_3d_zipper_zapper_cargs(
  * @returns Outputs object.
  */
 function v_3d_zipper_zapper_outputs(
-    params: V3dZipperZapperParameters,
+    params: V3dZipperZapperParamsDict,
     execution: Execution,
 ): V3dZipperZapperOutputs {
     const ret: V3dZipperZapperOutputs = {
@@ -276,7 +276,7 @@ function v_3d_zipper_zapper_outputs(
  * @returns NamedTuple of outputs (described in `V3dZipperZapperOutputs`).
  */
 function v_3d_zipper_zapper_execute(
-    params: V3dZipperZapperParameters,
+    params: V3dZipperZapperParamsDict,
     runner: Runner | null = null,
 ): V3dZipperZapperOutputs {
     runner = runner || getGlobalRunner();
@@ -344,6 +344,8 @@ function v_3d_zipper_zapper(
 
 export {
       V3dZipperZapperOutputs,
+      V3dZipperZapperParamsDict,
+      V3dZipperZapperParamsDictTagged,
       V_3D_ZIPPER_ZAPPER_METADATA,
       v_3d_zipper_zapper,
       v_3d_zipper_zapper_execute,

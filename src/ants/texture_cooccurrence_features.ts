@@ -11,7 +11,7 @@ const TEXTURE_COOCCURRENCE_FEATURES_METADATA: Metadata = {
 };
 
 
-interface TextureCooccurrenceFeaturesParameters {
+interface TextureCooccurrenceFeaturesParamsDict {
     "@type"?: "ants/TextureCooccurrenceFeatures";
     "image_dimension": number;
     "input_image": InputPathType;
@@ -19,11 +19,11 @@ interface TextureCooccurrenceFeaturesParameters {
     "mask_image"?: InputPathType | null | undefined;
     "mask_label"?: number | null | undefined;
 }
-type TextureCooccurrenceFeaturesParametersTagged = Required<Pick<TextureCooccurrenceFeaturesParameters, '@type'>> & TextureCooccurrenceFeaturesParameters;
+type TextureCooccurrenceFeaturesParamsDictTagged = Required<Pick<TextureCooccurrenceFeaturesParamsDict, '@type'>> & TextureCooccurrenceFeaturesParamsDict;
 
 
 /**
- * Output object returned when calling `TextureCooccurrenceFeaturesParameters(...)`.
+ * Output object returned when calling `TextureCooccurrenceFeaturesParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function texture_cooccurrence_features_params(
     number_of_bins_per_axis: number | null = null,
     mask_image: InputPathType | null = null,
     mask_label: number | null = null,
-): TextureCooccurrenceFeaturesParametersTagged {
+): TextureCooccurrenceFeaturesParamsDictTagged {
     const params = {
         "@type": "ants/TextureCooccurrenceFeatures" as const,
         "image_dimension": image_dimension,
@@ -84,7 +84,7 @@ function texture_cooccurrence_features_params(
  * @returns Command-line arguments.
  */
 function texture_cooccurrence_features_cargs(
-    params: TextureCooccurrenceFeaturesParameters,
+    params: TextureCooccurrenceFeaturesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function texture_cooccurrence_features_cargs(
  * @returns Outputs object.
  */
 function texture_cooccurrence_features_outputs(
-    params: TextureCooccurrenceFeaturesParameters,
+    params: TextureCooccurrenceFeaturesParamsDict,
     execution: Execution,
 ): TextureCooccurrenceFeaturesOutputs {
     const ret: TextureCooccurrenceFeaturesOutputs = {
@@ -139,7 +139,7 @@ function texture_cooccurrence_features_outputs(
  * @returns NamedTuple of outputs (described in `TextureCooccurrenceFeaturesOutputs`).
  */
 function texture_cooccurrence_features_execute(
-    params: TextureCooccurrenceFeaturesParameters,
+    params: TextureCooccurrenceFeaturesParamsDict,
     runner: Runner | null = null,
 ): TextureCooccurrenceFeaturesOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function texture_cooccurrence_features(
 export {
       TEXTURE_COOCCURRENCE_FEATURES_METADATA,
       TextureCooccurrenceFeaturesOutputs,
+      TextureCooccurrenceFeaturesParamsDict,
+      TextureCooccurrenceFeaturesParamsDictTagged,
       texture_cooccurrence_features,
       texture_cooccurrence_features_execute,
       texture_cooccurrence_features_params,

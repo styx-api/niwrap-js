@@ -11,7 +11,7 @@ const T4IMGS_4DFP_METADATA: Metadata = {
 };
 
 
-interface T4imgs4dfpParameters {
+interface T4imgs4dfpParamsDict {
     "@type"?: "freesurfer/t4imgs_4dfp";
     "sqrt_normalize": boolean;
     "cubic_spline": boolean;
@@ -27,11 +27,11 @@ interface T4imgs4dfpParameters {
     "input_images": Array<InputPathType>;
     "output_image": string;
 }
-type T4imgs4dfpParametersTagged = Required<Pick<T4imgs4dfpParameters, '@type'>> & T4imgs4dfpParameters;
+type T4imgs4dfpParamsDictTagged = Required<Pick<T4imgs4dfpParamsDict, '@type'>> & T4imgs4dfpParamsDict;
 
 
 /**
- * Output object returned when calling `T4imgs4dfpParameters(...)`.
+ * Output object returned when calling `T4imgs4dfpParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function t4imgs_4dfp_params(
     duplicate_dimensions: string | null = null,
     big_endian: boolean = false,
     little_endian: boolean = false,
-): T4imgs4dfpParametersTagged {
+): T4imgs4dfpParamsDictTagged {
     const params = {
         "@type": "freesurfer/t4imgs_4dfp" as const,
         "sqrt_normalize": sqrt_normalize,
@@ -114,7 +114,7 @@ function t4imgs_4dfp_params(
  * @returns Command-line arguments.
  */
 function t4imgs_4dfp_cargs(
-    params: T4imgs4dfpParameters,
+    params: T4imgs4dfpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -173,7 +173,7 @@ function t4imgs_4dfp_cargs(
  * @returns Outputs object.
  */
 function t4imgs_4dfp_outputs(
-    params: T4imgs4dfpParameters,
+    params: T4imgs4dfpParamsDict,
     execution: Execution,
 ): T4imgs4dfpOutputs {
     const ret: T4imgs4dfpOutputs = {
@@ -199,7 +199,7 @@ function t4imgs_4dfp_outputs(
  * @returns NamedTuple of outputs (described in `T4imgs4dfpOutputs`).
  */
 function t4imgs_4dfp_execute(
-    params: T4imgs4dfpParameters,
+    params: T4imgs4dfpParamsDict,
     runner: Runner | null = null,
 ): T4imgs4dfpOutputs {
     runner = runner || getGlobalRunner();
@@ -262,6 +262,8 @@ function t4imgs_4dfp(
 export {
       T4IMGS_4DFP_METADATA,
       T4imgs4dfpOutputs,
+      T4imgs4dfpParamsDict,
+      T4imgs4dfpParamsDictTagged,
       t4imgs_4dfp,
       t4imgs_4dfp_execute,
       t4imgs_4dfp_params,

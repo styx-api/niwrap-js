@@ -11,7 +11,7 @@ const MRI_BRAINVOL_STATS_METADATA: Metadata = {
 };
 
 
-interface MriBrainvolStatsParameters {
+interface MriBrainvolStatsParamsDict {
     "@type"?: "freesurfer/mri_brainvol_stats";
     "subject_id": string;
     "xml_string"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface MriBrainvolStatsParameters {
     "include_segmentation": boolean;
     "output_file"?: string | null | undefined;
 }
-type MriBrainvolStatsParametersTagged = Required<Pick<MriBrainvolStatsParameters, '@type'>> & MriBrainvolStatsParameters;
+type MriBrainvolStatsParamsDictTagged = Required<Pick<MriBrainvolStatsParamsDict, '@type'>> & MriBrainvolStatsParamsDict;
 
 
 /**
- * Output object returned when calling `MriBrainvolStatsParameters(...)`.
+ * Output object returned when calling `MriBrainvolStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_brainvol_stats_params(
     no_surface: boolean = false,
     include_segmentation: boolean = false,
     output_file: string | null = null,
-): MriBrainvolStatsParametersTagged {
+): MriBrainvolStatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_brainvol_stats" as const,
         "subject_id": subject_id,
@@ -82,7 +82,7 @@ function mri_brainvol_stats_params(
  * @returns Command-line arguments.
  */
 function mri_brainvol_stats_cargs(
-    params: MriBrainvolStatsParameters,
+    params: MriBrainvolStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function mri_brainvol_stats_cargs(
  * @returns Outputs object.
  */
 function mri_brainvol_stats_outputs(
-    params: MriBrainvolStatsParameters,
+    params: MriBrainvolStatsParamsDict,
     execution: Execution,
 ): MriBrainvolStatsOutputs {
     const ret: MriBrainvolStatsOutputs = {
@@ -148,7 +148,7 @@ function mri_brainvol_stats_outputs(
  * @returns NamedTuple of outputs (described in `MriBrainvolStatsOutputs`).
  */
 function mri_brainvol_stats_execute(
-    params: MriBrainvolStatsParameters,
+    params: MriBrainvolStatsParamsDict,
     runner: Runner | null = null,
 ): MriBrainvolStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function mri_brainvol_stats(
 export {
       MRI_BRAINVOL_STATS_METADATA,
       MriBrainvolStatsOutputs,
+      MriBrainvolStatsParamsDict,
+      MriBrainvolStatsParamsDictTagged,
       mri_brainvol_stats,
       mri_brainvol_stats_execute,
       mri_brainvol_stats_params,

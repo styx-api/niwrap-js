@@ -11,7 +11,7 @@ const MRI_SEGCENTROIDS_METADATA: Metadata = {
 };
 
 
-interface MriSegcentroidsParameters {
+interface MriSegcentroidsParamsDict {
     "@type"?: "freesurfer/mri_segcentroids";
     "input_segmentation": InputPathType;
     "output_file": string;
@@ -21,11 +21,11 @@ interface MriSegcentroidsParameters {
     "lut_file"?: InputPathType | null | undefined;
     "default_lut_flag": boolean;
 }
-type MriSegcentroidsParametersTagged = Required<Pick<MriSegcentroidsParameters, '@type'>> & MriSegcentroidsParameters;
+type MriSegcentroidsParamsDictTagged = Required<Pick<MriSegcentroidsParamsDict, '@type'>> & MriSegcentroidsParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegcentroidsParameters(...)`.
+ * Output object returned when calling `MriSegcentroidsParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_segcentroids_params(
     weights_file: InputPathType | null = null,
     lut_file: InputPathType | null = null,
     default_lut_flag: boolean = false,
-): MriSegcentroidsParametersTagged {
+): MriSegcentroidsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_segcentroids" as const,
         "input_segmentation": input_segmentation,
@@ -92,7 +92,7 @@ function mri_segcentroids_params(
  * @returns Command-line arguments.
  */
 function mri_segcentroids_cargs(
-    params: MriSegcentroidsParameters,
+    params: MriSegcentroidsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,7 +142,7 @@ function mri_segcentroids_cargs(
  * @returns Outputs object.
  */
 function mri_segcentroids_outputs(
-    params: MriSegcentroidsParameters,
+    params: MriSegcentroidsParamsDict,
     execution: Execution,
 ): MriSegcentroidsOutputs {
     const ret: MriSegcentroidsOutputs = {
@@ -168,7 +168,7 @@ function mri_segcentroids_outputs(
  * @returns NamedTuple of outputs (described in `MriSegcentroidsOutputs`).
  */
 function mri_segcentroids_execute(
-    params: MriSegcentroidsParameters,
+    params: MriSegcentroidsParamsDict,
     runner: Runner | null = null,
 ): MriSegcentroidsOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function mri_segcentroids(
 export {
       MRI_SEGCENTROIDS_METADATA,
       MriSegcentroidsOutputs,
+      MriSegcentroidsParamsDict,
+      MriSegcentroidsParamsDictTagged,
       mri_segcentroids,
       mri_segcentroids_execute,
       mri_segcentroids_params,

@@ -11,23 +11,23 @@ const V_3D_ANOVA3_METADATA: Metadata = {
 };
 
 
-interface V3dAnova3OutfileAbcontrParameters {
+interface V3dAnova3OutfileAbcontrParamsDict {
     "@type"?: "outfile_abcontr";
     "outfile_abcontr"?: string | null | undefined;
     "outfile_Abcontr"?: string | null | undefined;
 }
-type V3dAnova3OutfileAbcontrParametersTagged = Required<Pick<V3dAnova3OutfileAbcontrParameters, '@type'>> & V3dAnova3OutfileAbcontrParameters;
+type V3dAnova3OutfileAbcontrParamsDictTagged = Required<Pick<V3dAnova3OutfileAbcontrParamsDict, '@type'>> & V3dAnova3OutfileAbcontrParamsDict;
 
 
-interface V3dAnova3OutfileAbcontr1Parameters {
+interface V3dAnova3OutfileAbcontr1ParamsDict {
     "@type"?: "outfile_abcontr_1";
     "outfile_abdiff"?: string | null | undefined;
     "outfile_Abdiff"?: string | null | undefined;
 }
-type V3dAnova3OutfileAbcontr1ParametersTagged = Required<Pick<V3dAnova3OutfileAbcontr1Parameters, '@type'>> & V3dAnova3OutfileAbcontr1Parameters;
+type V3dAnova3OutfileAbcontr1ParamsDictTagged = Required<Pick<V3dAnova3OutfileAbcontr1ParamsDict, '@type'>> & V3dAnova3OutfileAbcontr1ParamsDict;
 
 
-interface V3dAnova3Parameters {
+interface V3dAnova3ParamsDict {
     "@type"?: "afni/3dANOVA3";
     "type": number;
     "alevels": number;
@@ -55,13 +55,13 @@ interface V3dAnova3Parameters {
     "outfile_acontr"?: string | null | undefined;
     "outfile_bcontr"?: string | null | undefined;
     "outfile_ccontr"?: string | null | undefined;
-    "outfile_abcontr"?: V3dAnova3OutfileAbcontrParameters | null | undefined;
-    "outfile_abdiff"?: V3dAnova3OutfileAbcontr1Parameters | null | undefined;
+    "outfile_abcontr"?: V3dAnova3OutfileAbcontrParamsDict | null | undefined;
+    "outfile_abdiff"?: V3dAnova3OutfileAbcontr1ParamsDict | null | undefined;
     "outfile_abmean"?: string | null | undefined;
     "outfile_bucket"?: string | null | undefined;
     "anova_options"?: Array<string> | null | undefined;
 }
-type V3dAnova3ParametersTagged = Required<Pick<V3dAnova3Parameters, '@type'>> & V3dAnova3Parameters;
+type V3dAnova3ParamsDictTagged = Required<Pick<V3dAnova3ParamsDict, '@type'>> & V3dAnova3ParamsDict;
 
 
 /**
@@ -72,10 +72,10 @@ type V3dAnova3ParametersTagged = Required<Pick<V3dAnova3Parameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function v_3d_anova3_outfile_abcontr_params(
+function v_3d_anova3_outfile_abcontr(
     outfile_abcontr: string | null = null,
     outfile_abcontr_: string | null = null,
-): V3dAnova3OutfileAbcontrParametersTagged {
+): V3dAnova3OutfileAbcontrParamsDictTagged {
     const params = {
         "@type": "outfile_abcontr" as const,
     };
@@ -98,7 +98,7 @@ function v_3d_anova3_outfile_abcontr_params(
  * @returns Command-line arguments.
  */
 function v_3d_anova3_outfile_abcontr_cargs(
-    params: V3dAnova3OutfileAbcontrParameters,
+    params: V3dAnova3OutfileAbcontrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,10 +126,10 @@ function v_3d_anova3_outfile_abcontr_cargs(
  *
  * @returns Parameter dictionary
  */
-function v_3d_anova3_outfile_abcontr_1_params(
+function v_3d_anova3_outfile_abcontr_1(
     outfile_abdiff: string | null = null,
     outfile_abdiff_: string | null = null,
-): V3dAnova3OutfileAbcontr1ParametersTagged {
+): V3dAnova3OutfileAbcontr1ParamsDictTagged {
     const params = {
         "@type": "outfile_abcontr_1" as const,
     };
@@ -152,7 +152,7 @@ function v_3d_anova3_outfile_abcontr_1_params(
  * @returns Command-line arguments.
  */
 function v_3d_anova3_outfile_abcontr_1_cargs(
-    params: V3dAnova3OutfileAbcontr1Parameters,
+    params: V3dAnova3OutfileAbcontr1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -173,7 +173,7 @@ function v_3d_anova3_outfile_abcontr_1_cargs(
 
 
 /**
- * Output object returned when calling `V3dAnova3Parameters(...)`.
+ * Output object returned when calling `V3dAnova3ParamsDict(...)`.
  *
  * @interface
  */
@@ -285,12 +285,12 @@ function v_3d_anova3_params(
     outfile_acontr: string | null = null,
     outfile_bcontr: string | null = null,
     outfile_ccontr: string | null = null,
-    outfile_abcontr: V3dAnova3OutfileAbcontrParameters | null = null,
-    outfile_abdiff: V3dAnova3OutfileAbcontr1Parameters | null = null,
+    outfile_abcontr: V3dAnova3OutfileAbcontrParamsDict | null = null,
+    outfile_abdiff: V3dAnova3OutfileAbcontr1ParamsDict | null = null,
     outfile_abmean: string | null = null,
     outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
-): V3dAnova3ParametersTagged {
+): V3dAnova3ParamsDictTagged {
     const params = {
         "@type": "afni/3dANOVA3" as const,
         "type": type_,
@@ -388,7 +388,7 @@ function v_3d_anova3_params(
  * @returns Command-line arguments.
  */
 function v_3d_anova3_cargs(
-    params: V3dAnova3Parameters,
+    params: V3dAnova3ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -573,7 +573,7 @@ function v_3d_anova3_cargs(
  * @returns Outputs object.
  */
 function v_3d_anova3_outputs(
-    params: V3dAnova3Parameters,
+    params: V3dAnova3ParamsDict,
     execution: Execution,
 ): V3dAnova3Outputs {
     const ret: V3dAnova3Outputs = {
@@ -607,7 +607,7 @@ function v_3d_anova3_outputs(
  * @returns NamedTuple of outputs (described in `V3dAnova3Outputs`).
  */
 function v_3d_anova3_execute(
-    params: V3dAnova3Parameters,
+    params: V3dAnova3ParamsDict,
     runner: Runner | null = null,
 ): V3dAnova3Outputs {
     runner = runner || getGlobalRunner();
@@ -691,8 +691,8 @@ function v_3d_anova3(
     outfile_acontr: string | null = null,
     outfile_bcontr: string | null = null,
     outfile_ccontr: string | null = null,
-    outfile_abcontr: V3dAnova3OutfileAbcontrParameters | null = null,
-    outfile_abdiff: V3dAnova3OutfileAbcontr1Parameters | null = null,
+    outfile_abcontr: V3dAnova3OutfileAbcontrParamsDict | null = null,
+    outfile_abdiff: V3dAnova3OutfileAbcontr1ParamsDict | null = null,
     outfile_abmean: string | null = null,
     outfile_bucket: string | null = null,
     anova_options: Array<string> | null = null,
@@ -704,11 +704,17 @@ function v_3d_anova3(
 
 
 export {
+      V3dAnova3OutfileAbcontr1ParamsDict,
+      V3dAnova3OutfileAbcontr1ParamsDictTagged,
+      V3dAnova3OutfileAbcontrParamsDict,
+      V3dAnova3OutfileAbcontrParamsDictTagged,
       V3dAnova3Outputs,
+      V3dAnova3ParamsDict,
+      V3dAnova3ParamsDictTagged,
       V_3D_ANOVA3_METADATA,
       v_3d_anova3,
       v_3d_anova3_execute,
-      v_3d_anova3_outfile_abcontr_1_params,
-      v_3d_anova3_outfile_abcontr_params,
+      v_3d_anova3_outfile_abcontr,
+      v_3d_anova3_outfile_abcontr_1,
       v_3d_anova3_params,
 };

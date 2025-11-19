@@ -11,7 +11,7 @@ const TKSURFERFV_METADATA: Metadata = {
 };
 
 
-interface TksurferfvParameters {
+interface TksurferfvParamsDict {
     "@type"?: "freesurfer/tksurferfv";
     "subject": string;
     "hemi": string;
@@ -25,11 +25,11 @@ interface TksurferfvParameters {
     "rotate_around_cursor": boolean;
     "heat_scale"?: string | null | undefined;
 }
-type TksurferfvParametersTagged = Required<Pick<TksurferfvParameters, '@type'>> & TksurferfvParameters;
+type TksurferfvParamsDictTagged = Required<Pick<TksurferfvParamsDict, '@type'>> & TksurferfvParamsDict;
 
 
 /**
- * Output object returned when calling `TksurferfvParameters(...)`.
+ * Output object returned when calling `TksurferfvParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function tksurferfv_params(
     neuro_orientation: boolean = false,
     rotate_around_cursor: boolean = false,
     heat_scale: string | null = null,
-): TksurferfvParametersTagged {
+): TksurferfvParamsDictTagged {
     const params = {
         "@type": "freesurfer/tksurferfv" as const,
         "subject": subject,
@@ -100,7 +100,7 @@ function tksurferfv_params(
  * @returns Command-line arguments.
  */
 function tksurferfv_cargs(
-    params: TksurferfvParameters,
+    params: TksurferfvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function tksurferfv_cargs(
  * @returns Outputs object.
  */
 function tksurferfv_outputs(
-    params: TksurferfvParameters,
+    params: TksurferfvParamsDict,
     execution: Execution,
 ): TksurferfvOutputs {
     const ret: TksurferfvOutputs = {
@@ -170,7 +170,7 @@ function tksurferfv_outputs(
  * @returns NamedTuple of outputs (described in `TksurferfvOutputs`).
  */
 function tksurferfv_execute(
-    params: TksurferfvParameters,
+    params: TksurferfvParamsDict,
     runner: Runner | null = null,
 ): TksurferfvOutputs {
     runner = runner || getGlobalRunner();
@@ -229,6 +229,8 @@ function tksurferfv(
 export {
       TKSURFERFV_METADATA,
       TksurferfvOutputs,
+      TksurferfvParamsDict,
+      TksurferfvParamsDictTagged,
       tksurferfv,
       tksurferfv_execute,
       tksurferfv_params,

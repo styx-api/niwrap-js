@@ -11,7 +11,7 @@ const V__ALIGN_PARTIAL_OBLIQUE_METADATA: Metadata = {
 };
 
 
-interface VAlignPartialObliqueParameters {
+interface VAlignPartialObliqueParamsDict {
     "@type"?: "afni/@align_partial_oblique";
     "base": InputPathType;
     "input": InputPathType;
@@ -23,11 +23,11 @@ interface VAlignPartialObliqueParameters {
     "dy"?: number | null | undefined;
     "dz"?: number | null | undefined;
 }
-type VAlignPartialObliqueParametersTagged = Required<Pick<VAlignPartialObliqueParameters, '@type'>> & VAlignPartialObliqueParameters;
+type VAlignPartialObliqueParamsDictTagged = Required<Pick<VAlignPartialObliqueParamsDict, '@type'>> & VAlignPartialObliqueParamsDict;
 
 
 /**
- * Output object returned when calling `VAlignPartialObliqueParameters(...)`.
+ * Output object returned when calling `VAlignPartialObliqueParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v__align_partial_oblique_params(
     dx: number | null = null,
     dy: number | null = null,
     dz: number | null = null,
-): VAlignPartialObliqueParametersTagged {
+): VAlignPartialObliqueParamsDictTagged {
     const params = {
         "@type": "afni/@align_partial_oblique" as const,
         "base": base,
@@ -104,7 +104,7 @@ function v__align_partial_oblique_params(
  * @returns Command-line arguments.
  */
 function v__align_partial_oblique_cargs(
-    params: VAlignPartialObliqueParameters,
+    params: VAlignPartialObliqueParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -166,7 +166,7 @@ function v__align_partial_oblique_cargs(
  * @returns Outputs object.
  */
 function v__align_partial_oblique_outputs(
-    params: VAlignPartialObliqueParameters,
+    params: VAlignPartialObliqueParamsDict,
     execution: Execution,
 ): VAlignPartialObliqueOutputs {
     const ret: VAlignPartialObliqueOutputs = {
@@ -192,7 +192,7 @@ function v__align_partial_oblique_outputs(
  * @returns NamedTuple of outputs (described in `VAlignPartialObliqueOutputs`).
  */
 function v__align_partial_oblique_execute(
-    params: VAlignPartialObliqueParameters,
+    params: VAlignPartialObliqueParamsDict,
     runner: Runner | null = null,
 ): VAlignPartialObliqueOutputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function v__align_partial_oblique(
 
 export {
       VAlignPartialObliqueOutputs,
+      VAlignPartialObliqueParamsDict,
+      VAlignPartialObliqueParamsDictTagged,
       V__ALIGN_PARTIAL_OBLIQUE_METADATA,
       v__align_partial_oblique,
       v__align_partial_oblique_execute,

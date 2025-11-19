@@ -11,18 +11,18 @@ const SIENA_CAL_METADATA: Metadata = {
 };
 
 
-interface SienaCalParameters {
+interface SienaCalParamsDict {
     "@type"?: "fsl/siena_cal";
     "input1_file": InputPathType;
     "input2_file": InputPathType;
     "scale": number;
     "siena_diff_options"?: string | null | undefined;
 }
-type SienaCalParametersTagged = Required<Pick<SienaCalParameters, '@type'>> & SienaCalParameters;
+type SienaCalParamsDictTagged = Required<Pick<SienaCalParamsDict, '@type'>> & SienaCalParamsDict;
 
 
 /**
- * Output object returned when calling `SienaCalParameters(...)`.
+ * Output object returned when calling `SienaCalParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function siena_cal_params(
     input2_file: InputPathType,
     scale: number,
     siena_diff_options: string | null = null,
-): SienaCalParametersTagged {
+): SienaCalParamsDictTagged {
     const params = {
         "@type": "fsl/siena_cal" as const,
         "input1_file": input1_file,
@@ -76,7 +76,7 @@ function siena_cal_params(
  * @returns Command-line arguments.
  */
 function siena_cal_cargs(
-    params: SienaCalParameters,
+    params: SienaCalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function siena_cal_cargs(
  * @returns Outputs object.
  */
 function siena_cal_outputs(
-    params: SienaCalParameters,
+    params: SienaCalParamsDict,
     execution: Execution,
 ): SienaCalOutputs {
     const ret: SienaCalOutputs = {
@@ -126,7 +126,7 @@ function siena_cal_outputs(
  * @returns NamedTuple of outputs (described in `SienaCalOutputs`).
  */
 function siena_cal_execute(
-    params: SienaCalParameters,
+    params: SienaCalParamsDict,
     runner: Runner | null = null,
 ): SienaCalOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function siena_cal(
 export {
       SIENA_CAL_METADATA,
       SienaCalOutputs,
+      SienaCalParamsDict,
+      SienaCalParamsDictTagged,
       siena_cal,
       siena_cal_execute,
       siena_cal_params,

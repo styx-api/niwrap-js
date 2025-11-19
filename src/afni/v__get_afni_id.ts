@@ -11,15 +11,15 @@ const V__GET_AFNI_ID_METADATA: Metadata = {
 };
 
 
-interface VGetAfniIdParameters {
+interface VGetAfniIdParamsDict {
     "@type"?: "afni/@GetAfniID";
     "dset": InputPathType;
 }
-type VGetAfniIdParametersTagged = Required<Pick<VGetAfniIdParameters, '@type'>> & VGetAfniIdParameters;
+type VGetAfniIdParamsDictTagged = Required<Pick<VGetAfniIdParamsDict, '@type'>> & VGetAfniIdParamsDict;
 
 
 /**
- * Output object returned when calling `VGetAfniIdParameters(...)`.
+ * Output object returned when calling `VGetAfniIdParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VGetAfniIdOutputs {
  */
 function v__get_afni_id_params(
     dset: InputPathType,
-): VGetAfniIdParametersTagged {
+): VGetAfniIdParamsDictTagged {
     const params = {
         "@type": "afni/@GetAfniID" as const,
         "dset": dset,
@@ -62,7 +62,7 @@ function v__get_afni_id_params(
  * @returns Command-line arguments.
  */
 function v__get_afni_id_cargs(
-    params: VGetAfniIdParameters,
+    params: VGetAfniIdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__get_afni_id_cargs(
  * @returns Outputs object.
  */
 function v__get_afni_id_outputs(
-    params: VGetAfniIdParameters,
+    params: VGetAfniIdParamsDict,
     execution: Execution,
 ): VGetAfniIdOutputs {
     const ret: VGetAfniIdOutputs = {
@@ -107,7 +107,7 @@ function v__get_afni_id_outputs(
  * @returns NamedTuple of outputs (described in `VGetAfniIdOutputs`).
  */
 function v__get_afni_id_execute(
-    params: VGetAfniIdParameters,
+    params: VGetAfniIdParamsDict,
     runner: Runner | null = null,
 ): VGetAfniIdOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__get_afni_id(
 
 export {
       VGetAfniIdOutputs,
+      VGetAfniIdParamsDict,
+      VGetAfniIdParamsDictTagged,
       V__GET_AFNI_ID_METADATA,
       v__get_afni_id,
       v__get_afni_id_execute,

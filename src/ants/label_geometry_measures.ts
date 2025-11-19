@@ -11,18 +11,18 @@ const LABEL_GEOMETRY_MEASURES_METADATA: Metadata = {
 };
 
 
-interface LabelGeometryMeasuresParameters {
+interface LabelGeometryMeasuresParamsDict {
     "@type"?: "ants/LabelGeometryMeasures";
     "image_dimension": number;
     "label_image": InputPathType;
     "intensity_image"?: string | null | undefined;
     "csv_file"?: InputPathType | null | undefined;
 }
-type LabelGeometryMeasuresParametersTagged = Required<Pick<LabelGeometryMeasuresParameters, '@type'>> & LabelGeometryMeasuresParameters;
+type LabelGeometryMeasuresParamsDictTagged = Required<Pick<LabelGeometryMeasuresParamsDict, '@type'>> & LabelGeometryMeasuresParamsDict;
 
 
 /**
- * Output object returned when calling `LabelGeometryMeasuresParameters(...)`.
+ * Output object returned when calling `LabelGeometryMeasuresParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function label_geometry_measures_params(
     label_image: InputPathType,
     intensity_image: string | null = null,
     csv_file: InputPathType | null = null,
-): LabelGeometryMeasuresParametersTagged {
+): LabelGeometryMeasuresParamsDictTagged {
     const params = {
         "@type": "ants/LabelGeometryMeasures" as const,
         "image_dimension": image_dimension,
@@ -78,7 +78,7 @@ function label_geometry_measures_params(
  * @returns Command-line arguments.
  */
 function label_geometry_measures_cargs(
-    params: LabelGeometryMeasuresParameters,
+    params: LabelGeometryMeasuresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function label_geometry_measures_cargs(
  * @returns Outputs object.
  */
 function label_geometry_measures_outputs(
-    params: LabelGeometryMeasuresParameters,
+    params: LabelGeometryMeasuresParamsDict,
     execution: Execution,
 ): LabelGeometryMeasuresOutputs {
     const ret: LabelGeometryMeasuresOutputs = {
@@ -130,7 +130,7 @@ function label_geometry_measures_outputs(
  * @returns NamedTuple of outputs (described in `LabelGeometryMeasuresOutputs`).
  */
 function label_geometry_measures_execute(
-    params: LabelGeometryMeasuresParameters,
+    params: LabelGeometryMeasuresParamsDict,
     runner: Runner | null = null,
 ): LabelGeometryMeasuresOutputs {
     runner = runner || getGlobalRunner();
@@ -175,6 +175,8 @@ function label_geometry_measures(
 export {
       LABEL_GEOMETRY_MEASURES_METADATA,
       LabelGeometryMeasuresOutputs,
+      LabelGeometryMeasuresParamsDict,
+      LabelGeometryMeasuresParamsDictTagged,
       label_geometry_measures,
       label_geometry_measures_execute,
       label_geometry_measures_params,

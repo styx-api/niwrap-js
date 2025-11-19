@@ -11,7 +11,7 @@ const FAT_PROC_CONVERT_DCM_DWIS_METADATA: Metadata = {
 };
 
 
-interface FatProcConvertDcmDwisParameters {
+interface FatProcConvertDcmDwisParamsDict {
     "@type"?: "afni/fat_proc_convert_dcm_dwis";
     "dicom_dir": string;
     "output_prefix": string;
@@ -32,11 +32,11 @@ interface FatProcConvertDcmDwisParameters {
     "no_qc_view": boolean;
     "do_movie"?: string | null | undefined;
 }
-type FatProcConvertDcmDwisParametersTagged = Required<Pick<FatProcConvertDcmDwisParameters, '@type'>> & FatProcConvertDcmDwisParameters;
+type FatProcConvertDcmDwisParamsDictTagged = Required<Pick<FatProcConvertDcmDwisParamsDict, '@type'>> & FatProcConvertDcmDwisParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcConvertDcmDwisParameters(...)`.
+ * Output object returned when calling `FatProcConvertDcmDwisParamsDict(...)`.
  *
  * @interface
  */
@@ -115,7 +115,7 @@ function fat_proc_convert_dcm_dwis_params(
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
     do_movie: string | null = null,
-): FatProcConvertDcmDwisParametersTagged {
+): FatProcConvertDcmDwisParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_convert_dcm_dwis" as const,
         "dicom_dir": dicom_dir,
@@ -166,7 +166,7 @@ function fat_proc_convert_dcm_dwis_params(
  * @returns Command-line arguments.
  */
 function fat_proc_convert_dcm_dwis_cargs(
-    params: FatProcConvertDcmDwisParameters,
+    params: FatProcConvertDcmDwisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -237,7 +237,7 @@ function fat_proc_convert_dcm_dwis_cargs(
  * @returns Outputs object.
  */
 function fat_proc_convert_dcm_dwis_outputs(
-    params: FatProcConvertDcmDwisParameters,
+    params: FatProcConvertDcmDwisParamsDict,
     execution: Execution,
 ): FatProcConvertDcmDwisOutputs {
     const ret: FatProcConvertDcmDwisOutputs = {
@@ -268,7 +268,7 @@ function fat_proc_convert_dcm_dwis_outputs(
  * @returns NamedTuple of outputs (described in `FatProcConvertDcmDwisOutputs`).
  */
 function fat_proc_convert_dcm_dwis_execute(
-    params: FatProcConvertDcmDwisParameters,
+    params: FatProcConvertDcmDwisParamsDict,
     runner: Runner | null = null,
 ): FatProcConvertDcmDwisOutputs {
     runner = runner || getGlobalRunner();
@@ -341,6 +341,8 @@ function fat_proc_convert_dcm_dwis(
 export {
       FAT_PROC_CONVERT_DCM_DWIS_METADATA,
       FatProcConvertDcmDwisOutputs,
+      FatProcConvertDcmDwisParamsDict,
+      FatProcConvertDcmDwisParamsDictTagged,
       fat_proc_convert_dcm_dwis,
       fat_proc_convert_dcm_dwis_execute,
       fat_proc_convert_dcm_dwis_params,

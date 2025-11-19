@@ -11,18 +11,18 @@ const MIST_FA_REG_METADATA: Metadata = {
 };
 
 
-interface MistFaRegParameters {
+interface MistFaRegParamsDict {
     "@type"?: "fsl/mist_FA_reg";
     "fa_volume": InputPathType;
     "s0_volume": InputPathType;
     "reference_t1_volume": InputPathType;
     "output_filename": string;
 }
-type MistFaRegParametersTagged = Required<Pick<MistFaRegParameters, '@type'>> & MistFaRegParameters;
+type MistFaRegParamsDictTagged = Required<Pick<MistFaRegParamsDict, '@type'>> & MistFaRegParamsDict;
 
 
 /**
- * Output object returned when calling `MistFaRegParameters(...)`.
+ * Output object returned when calling `MistFaRegParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mist_fa_reg_params(
     s0_volume: InputPathType,
     reference_t1_volume: InputPathType,
     output_filename: string,
-): MistFaRegParametersTagged {
+): MistFaRegParamsDictTagged {
     const params = {
         "@type": "fsl/mist_FA_reg" as const,
         "fa_volume": fa_volume,
@@ -74,7 +74,7 @@ function mist_fa_reg_params(
  * @returns Command-line arguments.
  */
 function mist_fa_reg_cargs(
-    params: MistFaRegParameters,
+    params: MistFaRegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mist_fa_reg_cargs(
  * @returns Outputs object.
  */
 function mist_fa_reg_outputs(
-    params: MistFaRegParameters,
+    params: MistFaRegParamsDict,
     execution: Execution,
 ): MistFaRegOutputs {
     const ret: MistFaRegOutputs = {
@@ -122,7 +122,7 @@ function mist_fa_reg_outputs(
  * @returns NamedTuple of outputs (described in `MistFaRegOutputs`).
  */
 function mist_fa_reg_execute(
-    params: MistFaRegParameters,
+    params: MistFaRegParamsDict,
     runner: Runner | null = null,
 ): MistFaRegOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mist_fa_reg(
 export {
       MIST_FA_REG_METADATA,
       MistFaRegOutputs,
+      MistFaRegParamsDict,
+      MistFaRegParamsDictTagged,
       mist_fa_reg,
       mist_fa_reg_execute,
       mist_fa_reg_params,

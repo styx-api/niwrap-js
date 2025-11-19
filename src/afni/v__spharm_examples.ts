@@ -11,7 +11,7 @@ const V__SPHARM_EXAMPLES_METADATA: Metadata = {
 };
 
 
-interface VSpharmExamplesParameters {
+interface VSpharmExamplesParamsDict {
     "@type"?: "afni/@Spharm.examples";
     "help_web": boolean;
     "help_web_alias": boolean;
@@ -20,11 +20,11 @@ interface VSpharmExamplesParameters {
     "all_opts": boolean;
     "help_find"?: string | null | undefined;
 }
-type VSpharmExamplesParametersTagged = Required<Pick<VSpharmExamplesParameters, '@type'>> & VSpharmExamplesParameters;
+type VSpharmExamplesParamsDictTagged = Required<Pick<VSpharmExamplesParamsDict, '@type'>> & VSpharmExamplesParamsDict;
 
 
 /**
- * Output object returned when calling `VSpharmExamplesParameters(...)`.
+ * Output object returned when calling `VSpharmExamplesParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function v__spharm_examples_params(
     help_view_alias: boolean = false,
     all_opts: boolean = false,
     help_find: string | null = null,
-): VSpharmExamplesParametersTagged {
+): VSpharmExamplesParamsDictTagged {
     const params = {
         "@type": "afni/@Spharm.examples" as const,
         "help_web": help_web,
@@ -80,7 +80,7 @@ function v__spharm_examples_params(
  * @returns Command-line arguments.
  */
 function v__spharm_examples_cargs(
-    params: VSpharmExamplesParameters,
+    params: VSpharmExamplesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function v__spharm_examples_cargs(
  * @returns Outputs object.
  */
 function v__spharm_examples_outputs(
-    params: VSpharmExamplesParameters,
+    params: VSpharmExamplesParamsDict,
     execution: Execution,
 ): VSpharmExamplesOutputs {
     const ret: VSpharmExamplesOutputs = {
@@ -144,7 +144,7 @@ function v__spharm_examples_outputs(
  * @returns NamedTuple of outputs (described in `VSpharmExamplesOutputs`).
  */
 function v__spharm_examples_execute(
-    params: VSpharmExamplesParameters,
+    params: VSpharmExamplesParamsDict,
     runner: Runner | null = null,
 ): VSpharmExamplesOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function v__spharm_examples(
 
 export {
       VSpharmExamplesOutputs,
+      VSpharmExamplesParamsDict,
+      VSpharmExamplesParamsDictTagged,
       V__SPHARM_EXAMPLES_METADATA,
       v__spharm_examples,
       v__spharm_examples_execute,

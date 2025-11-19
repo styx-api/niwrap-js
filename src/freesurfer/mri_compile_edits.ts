@@ -11,16 +11,16 @@ const MRI_COMPILE_EDITS_METADATA: Metadata = {
 };
 
 
-interface MriCompileEditsParameters {
+interface MriCompileEditsParamsDict {
     "@type"?: "freesurfer/mri_compile_edits";
     "subject_name": string;
     "output_volume": string;
 }
-type MriCompileEditsParametersTagged = Required<Pick<MriCompileEditsParameters, '@type'>> & MriCompileEditsParameters;
+type MriCompileEditsParamsDictTagged = Required<Pick<MriCompileEditsParamsDict, '@type'>> & MriCompileEditsParamsDict;
 
 
 /**
- * Output object returned when calling `MriCompileEditsParameters(...)`.
+ * Output object returned when calling `MriCompileEditsParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriCompileEditsOutputs {
 function mri_compile_edits_params(
     subject_name: string,
     output_volume: string,
-): MriCompileEditsParametersTagged {
+): MriCompileEditsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compile_edits" as const,
         "subject_name": subject_name,
@@ -66,7 +66,7 @@ function mri_compile_edits_params(
  * @returns Command-line arguments.
  */
 function mri_compile_edits_cargs(
-    params: MriCompileEditsParameters,
+    params: MriCompileEditsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_compile_edits_cargs(
  * @returns Outputs object.
  */
 function mri_compile_edits_outputs(
-    params: MriCompileEditsParameters,
+    params: MriCompileEditsParamsDict,
     execution: Execution,
 ): MriCompileEditsOutputs {
     const ret: MriCompileEditsOutputs = {
@@ -112,7 +112,7 @@ function mri_compile_edits_outputs(
  * @returns NamedTuple of outputs (described in `MriCompileEditsOutputs`).
  */
 function mri_compile_edits_execute(
-    params: MriCompileEditsParameters,
+    params: MriCompileEditsParamsDict,
     runner: Runner | null = null,
 ): MriCompileEditsOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_compile_edits(
 export {
       MRI_COMPILE_EDITS_METADATA,
       MriCompileEditsOutputs,
+      MriCompileEditsParamsDict,
+      MriCompileEditsParamsDictTagged,
       mri_compile_edits,
       mri_compile_edits_execute,
       mri_compile_edits_params,

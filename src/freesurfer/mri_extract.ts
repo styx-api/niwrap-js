@@ -11,18 +11,18 @@ const MRI_EXTRACT_METADATA: Metadata = {
 };
 
 
-interface MriExtractParameters {
+interface MriExtractParamsDict {
     "@type"?: "freesurfer/mri_extract";
     "like_template"?: InputPathType | null | undefined;
     "src_volume": InputPathType;
     "dst_volume": InputPathType;
     "coordinates"?: Array<number> | null | undefined;
 }
-type MriExtractParametersTagged = Required<Pick<MriExtractParameters, '@type'>> & MriExtractParameters;
+type MriExtractParamsDictTagged = Required<Pick<MriExtractParamsDict, '@type'>> & MriExtractParamsDict;
 
 
 /**
- * Output object returned when calling `MriExtractParameters(...)`.
+ * Output object returned when calling `MriExtractParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_extract_params(
     dst_volume: InputPathType,
     like_template: InputPathType | null = null,
     coordinates: Array<number> | null = null,
-): MriExtractParametersTagged {
+): MriExtractParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_extract" as const,
         "src_volume": src_volume,
@@ -78,7 +78,7 @@ function mri_extract_params(
  * @returns Command-line arguments.
  */
 function mri_extract_cargs(
-    params: MriExtractParameters,
+    params: MriExtractParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function mri_extract_cargs(
  * @returns Outputs object.
  */
 function mri_extract_outputs(
-    params: MriExtractParameters,
+    params: MriExtractParamsDict,
     execution: Execution,
 ): MriExtractOutputs {
     const ret: MriExtractOutputs = {
@@ -133,7 +133,7 @@ function mri_extract_outputs(
  * @returns NamedTuple of outputs (described in `MriExtractOutputs`).
  */
 function mri_extract_execute(
-    params: MriExtractParameters,
+    params: MriExtractParamsDict,
     runner: Runner | null = null,
 ): MriExtractOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function mri_extract(
 export {
       MRI_EXTRACT_METADATA,
       MriExtractOutputs,
+      MriExtractParamsDict,
+      MriExtractParamsDictTagged,
       mri_extract,
       mri_extract_execute,
       mri_extract_params,

@@ -11,16 +11,16 @@ const MINC2SEQINFO_METADATA: Metadata = {
 };
 
 
-interface Minc2seqinfoParameters {
+interface Minc2seqinfoParamsDict {
     "@type"?: "freesurfer/minc2seqinfo";
     "mincfile": InputPathType;
     "seqinfofile": string;
 }
-type Minc2seqinfoParametersTagged = Required<Pick<Minc2seqinfoParameters, '@type'>> & Minc2seqinfoParameters;
+type Minc2seqinfoParamsDictTagged = Required<Pick<Minc2seqinfoParamsDict, '@type'>> & Minc2seqinfoParamsDict;
 
 
 /**
- * Output object returned when calling `Minc2seqinfoParameters(...)`.
+ * Output object returned when calling `Minc2seqinfoParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface Minc2seqinfoOutputs {
 function minc2seqinfo_params(
     mincfile: InputPathType,
     seqinfofile: string,
-): Minc2seqinfoParametersTagged {
+): Minc2seqinfoParamsDictTagged {
     const params = {
         "@type": "freesurfer/minc2seqinfo" as const,
         "mincfile": mincfile,
@@ -66,7 +66,7 @@ function minc2seqinfo_params(
  * @returns Command-line arguments.
  */
 function minc2seqinfo_cargs(
-    params: Minc2seqinfoParameters,
+    params: Minc2seqinfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function minc2seqinfo_cargs(
  * @returns Outputs object.
  */
 function minc2seqinfo_outputs(
-    params: Minc2seqinfoParameters,
+    params: Minc2seqinfoParamsDict,
     execution: Execution,
 ): Minc2seqinfoOutputs {
     const ret: Minc2seqinfoOutputs = {
@@ -112,7 +112,7 @@ function minc2seqinfo_outputs(
  * @returns NamedTuple of outputs (described in `Minc2seqinfoOutputs`).
  */
 function minc2seqinfo_execute(
-    params: Minc2seqinfoParameters,
+    params: Minc2seqinfoParamsDict,
     runner: Runner | null = null,
 ): Minc2seqinfoOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function minc2seqinfo(
 export {
       MINC2SEQINFO_METADATA,
       Minc2seqinfoOutputs,
+      Minc2seqinfoParamsDict,
+      Minc2seqinfoParamsDictTagged,
       minc2seqinfo,
       minc2seqinfo_execute,
       minc2seqinfo_params,

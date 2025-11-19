@@ -11,17 +11,17 @@ const MRI_REFINE_SEG_METADATA: Metadata = {
 };
 
 
-interface MriRefineSegParameters {
+interface MriRefineSegParamsDict {
     "@type"?: "freesurfer/mri_refine_seg";
     "input_segmentation": InputPathType;
     "output_segmentation": string;
     "debug": boolean;
 }
-type MriRefineSegParametersTagged = Required<Pick<MriRefineSegParameters, '@type'>> & MriRefineSegParameters;
+type MriRefineSegParamsDictTagged = Required<Pick<MriRefineSegParamsDict, '@type'>> & MriRefineSegParamsDict;
 
 
 /**
- * Output object returned when calling `MriRefineSegParameters(...)`.
+ * Output object returned when calling `MriRefineSegParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_refine_seg_params(
     input_segmentation: InputPathType,
     output_segmentation: string,
     debug: boolean = false,
-): MriRefineSegParametersTagged {
+): MriRefineSegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_refine_seg" as const,
         "input_segmentation": input_segmentation,
@@ -70,7 +70,7 @@ function mri_refine_seg_params(
  * @returns Command-line arguments.
  */
 function mri_refine_seg_cargs(
-    params: MriRefineSegParameters,
+    params: MriRefineSegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function mri_refine_seg_cargs(
  * @returns Outputs object.
  */
 function mri_refine_seg_outputs(
-    params: MriRefineSegParameters,
+    params: MriRefineSegParamsDict,
     execution: Execution,
 ): MriRefineSegOutputs {
     const ret: MriRefineSegOutputs = {
@@ -125,7 +125,7 @@ function mri_refine_seg_outputs(
  * @returns NamedTuple of outputs (described in `MriRefineSegOutputs`).
  */
 function mri_refine_seg_execute(
-    params: MriRefineSegParameters,
+    params: MriRefineSegParamsDict,
     runner: Runner | null = null,
 ): MriRefineSegOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function mri_refine_seg(
 export {
       MRI_REFINE_SEG_METADATA,
       MriRefineSegOutputs,
+      MriRefineSegParamsDict,
+      MriRefineSegParamsDictTagged,
       mri_refine_seg,
       mri_refine_seg_execute,
       mri_refine_seg_params,

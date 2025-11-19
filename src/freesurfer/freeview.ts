@@ -11,15 +11,15 @@ const FREEVIEW_METADATA: Metadata = {
 };
 
 
-interface FreeviewParameters {
+interface FreeviewParamsDict {
     "@type"?: "freesurfer/freeview";
     "args"?: string | null | undefined;
 }
-type FreeviewParametersTagged = Required<Pick<FreeviewParameters, '@type'>> & FreeviewParameters;
+type FreeviewParamsDictTagged = Required<Pick<FreeviewParamsDict, '@type'>> & FreeviewParamsDict;
 
 
 /**
- * Output object returned when calling `FreeviewParameters(...)`.
+ * Output object returned when calling `FreeviewParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FreeviewOutputs {
  */
 function freeview_params(
     args: string | null = null,
-): FreeviewParametersTagged {
+): FreeviewParamsDictTagged {
     const params = {
         "@type": "freesurfer/freeview" as const,
     };
@@ -60,7 +60,7 @@ function freeview_params(
  * @returns Command-line arguments.
  */
 function freeview_cargs(
-    params: FreeviewParameters,
+    params: FreeviewParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function freeview_cargs(
  * @returns Outputs object.
  */
 function freeview_outputs(
-    params: FreeviewParameters,
+    params: FreeviewParamsDict,
     execution: Execution,
 ): FreeviewOutputs {
     const ret: FreeviewOutputs = {
@@ -106,7 +106,7 @@ function freeview_outputs(
  * @returns NamedTuple of outputs (described in `FreeviewOutputs`).
  */
 function freeview_execute(
-    params: FreeviewParameters,
+    params: FreeviewParamsDict,
     runner: Runner | null = null,
 ): FreeviewOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function freeview(
 export {
       FREEVIEW_METADATA,
       FreeviewOutputs,
+      FreeviewParamsDict,
+      FreeviewParamsDictTagged,
       freeview,
       freeview_execute,
       freeview_params,

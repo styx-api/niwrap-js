@@ -11,15 +11,15 @@ const INFLATE_SUBJECT_NEW_RH_METADATA: Metadata = {
 };
 
 
-interface InflateSubjectNewRhParameters {
+interface InflateSubjectNewRhParamsDict {
     "@type"?: "freesurfer/inflate_subject_new-rh";
     "args"?: string | null | undefined;
 }
-type InflateSubjectNewRhParametersTagged = Required<Pick<InflateSubjectNewRhParameters, '@type'>> & InflateSubjectNewRhParameters;
+type InflateSubjectNewRhParamsDictTagged = Required<Pick<InflateSubjectNewRhParamsDict, '@type'>> & InflateSubjectNewRhParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubjectNewRhParameters(...)`.
+ * Output object returned when calling `InflateSubjectNewRhParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface InflateSubjectNewRhOutputs {
  */
 function inflate_subject_new_rh_params(
     args: string | null = null,
-): InflateSubjectNewRhParametersTagged {
+): InflateSubjectNewRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject_new-rh" as const,
     };
@@ -60,7 +60,7 @@ function inflate_subject_new_rh_params(
  * @returns Command-line arguments.
  */
 function inflate_subject_new_rh_cargs(
-    params: InflateSubjectNewRhParameters,
+    params: InflateSubjectNewRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function inflate_subject_new_rh_cargs(
  * @returns Outputs object.
  */
 function inflate_subject_new_rh_outputs(
-    params: InflateSubjectNewRhParameters,
+    params: InflateSubjectNewRhParamsDict,
     execution: Execution,
 ): InflateSubjectNewRhOutputs {
     const ret: InflateSubjectNewRhOutputs = {
@@ -109,7 +109,7 @@ function inflate_subject_new_rh_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubjectNewRhOutputs`).
  */
 function inflate_subject_new_rh_execute(
-    params: InflateSubjectNewRhParameters,
+    params: InflateSubjectNewRhParamsDict,
     runner: Runner | null = null,
 ): InflateSubjectNewRhOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function inflate_subject_new_rh(
 export {
       INFLATE_SUBJECT_NEW_RH_METADATA,
       InflateSubjectNewRhOutputs,
+      InflateSubjectNewRhParamsDict,
+      InflateSubjectNewRhParamsDictTagged,
       inflate_subject_new_rh,
       inflate_subject_new_rh_execute,
       inflate_subject_new_rh_params,

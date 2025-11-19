@@ -10,18 +10,18 @@ const CIFTI_LABEL_MODIFY_KEYS_METADATA: Metadata = {
 };
 
 
-interface CiftiLabelModifyKeysParameters {
+interface CiftiLabelModifyKeysParamsDict {
     "@type"?: "workbench/cifti-label-modify-keys";
     "cifti-out": string;
     "column"?: string | null | undefined;
     "cifti-in": InputPathType;
     "remap-file": string;
 }
-type CiftiLabelModifyKeysParametersTagged = Required<Pick<CiftiLabelModifyKeysParameters, '@type'>> & CiftiLabelModifyKeysParameters;
+type CiftiLabelModifyKeysParamsDictTagged = Required<Pick<CiftiLabelModifyKeysParamsDict, '@type'>> & CiftiLabelModifyKeysParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiLabelModifyKeysParameters(...)`.
+ * Output object returned when calling `CiftiLabelModifyKeysParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function cifti_label_modify_keys_params(
     column: string | null,
     cifti_in: InputPathType,
     remap_file: string,
-): CiftiLabelModifyKeysParametersTagged {
+): CiftiLabelModifyKeysParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-modify-keys" as const,
         "cifti-out": cifti_out,
@@ -77,7 +77,7 @@ function cifti_label_modify_keys_params(
  * @returns Command-line arguments.
  */
 function cifti_label_modify_keys_cargs(
-    params: CiftiLabelModifyKeysParameters,
+    params: CiftiLabelModifyKeysParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function cifti_label_modify_keys_cargs(
  * @returns Outputs object.
  */
 function cifti_label_modify_keys_outputs(
-    params: CiftiLabelModifyKeysParameters,
+    params: CiftiLabelModifyKeysParamsDict,
     execution: Execution,
 ): CiftiLabelModifyKeysOutputs {
     const ret: CiftiLabelModifyKeysOutputs = {
@@ -133,7 +133,7 @@ function cifti_label_modify_keys_outputs(
  * @returns NamedTuple of outputs (described in `CiftiLabelModifyKeysOutputs`).
  */
 function cifti_label_modify_keys_execute(
-    params: CiftiLabelModifyKeysParameters,
+    params: CiftiLabelModifyKeysParamsDict,
     runner: Runner | null = null,
 ): CiftiLabelModifyKeysOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function cifti_label_modify_keys(
 export {
       CIFTI_LABEL_MODIFY_KEYS_METADATA,
       CiftiLabelModifyKeysOutputs,
+      CiftiLabelModifyKeysParamsDict,
+      CiftiLabelModifyKeysParamsDictTagged,
       cifti_label_modify_keys,
       cifti_label_modify_keys_execute,
       cifti_label_modify_keys_params,

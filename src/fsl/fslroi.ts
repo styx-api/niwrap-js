@@ -11,7 +11,7 @@ const FSLROI_METADATA: Metadata = {
 };
 
 
-interface FslroiParameters {
+interface FslroiParamsDict {
     "@type"?: "fsl/fslroi";
     "infile": InputPathType;
     "outfile": string;
@@ -24,11 +24,11 @@ interface FslroiParameters {
     "tmin"?: number | null | undefined;
     "tsize"?: number | null | undefined;
 }
-type FslroiParametersTagged = Required<Pick<FslroiParameters, '@type'>> & FslroiParameters;
+type FslroiParamsDictTagged = Required<Pick<FslroiParamsDict, '@type'>> & FslroiParamsDict;
 
 
 /**
- * Output object returned when calling `FslroiParameters(...)`.
+ * Output object returned when calling `FslroiParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function fslroi_params(
     zsize: number | null = null,
     tmin: number | null = null,
     tsize: number | null = null,
-): FslroiParametersTagged {
+): FslroiParamsDictTagged {
     const params = {
         "@type": "fsl/fslroi" as const,
         "infile": infile,
@@ -114,7 +114,7 @@ function fslroi_params(
  * @returns Command-line arguments.
  */
 function fslroi_cargs(
-    params: FslroiParameters,
+    params: FslroiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function fslroi_cargs(
  * @returns Outputs object.
  */
 function fslroi_outputs(
-    params: FslroiParameters,
+    params: FslroiParamsDict,
     execution: Execution,
 ): FslroiOutputs {
     const ret: FslroiOutputs = {
@@ -184,7 +184,7 @@ function fslroi_outputs(
  * @returns NamedTuple of outputs (described in `FslroiOutputs`).
  */
 function fslroi_execute(
-    params: FslroiParameters,
+    params: FslroiParamsDict,
     runner: Runner | null = null,
 ): FslroiOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function fslroi(
 export {
       FSLROI_METADATA,
       FslroiOutputs,
+      FslroiParamsDict,
+      FslroiParamsDictTagged,
       fslroi,
       fslroi_execute,
       fslroi_params,

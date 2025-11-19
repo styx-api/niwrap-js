@@ -11,15 +11,15 @@ const STEM2FNAME_METADATA: Metadata = {
 };
 
 
-interface Stem2fnameParameters {
+interface Stem2fnameParamsDict {
     "@type"?: "freesurfer/stem2fname";
     "stem": string;
 }
-type Stem2fnameParametersTagged = Required<Pick<Stem2fnameParameters, '@type'>> & Stem2fnameParameters;
+type Stem2fnameParamsDictTagged = Required<Pick<Stem2fnameParamsDict, '@type'>> & Stem2fnameParamsDict;
 
 
 /**
- * Output object returned when calling `Stem2fnameParameters(...)`.
+ * Output object returned when calling `Stem2fnameParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface Stem2fnameOutputs {
  */
 function stem2fname_params(
     stem: string,
-): Stem2fnameParametersTagged {
+): Stem2fnameParamsDictTagged {
     const params = {
         "@type": "freesurfer/stem2fname" as const,
         "stem": stem,
@@ -62,7 +62,7 @@ function stem2fname_params(
  * @returns Command-line arguments.
  */
 function stem2fname_cargs(
-    params: Stem2fnameParameters,
+    params: Stem2fnameParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function stem2fname_cargs(
  * @returns Outputs object.
  */
 function stem2fname_outputs(
-    params: Stem2fnameParameters,
+    params: Stem2fnameParamsDict,
     execution: Execution,
 ): Stem2fnameOutputs {
     const ret: Stem2fnameOutputs = {
@@ -107,7 +107,7 @@ function stem2fname_outputs(
  * @returns NamedTuple of outputs (described in `Stem2fnameOutputs`).
  */
 function stem2fname_execute(
-    params: Stem2fnameParameters,
+    params: Stem2fnameParamsDict,
     runner: Runner | null = null,
 ): Stem2fnameOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function stem2fname(
 export {
       STEM2FNAME_METADATA,
       Stem2fnameOutputs,
+      Stem2fnameParamsDict,
+      Stem2fnameParamsDictTagged,
       stem2fname,
       stem2fname_execute,
       stem2fname_params,

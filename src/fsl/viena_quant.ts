@@ -11,17 +11,17 @@ const VIENA_QUANT_METADATA: Metadata = {
 };
 
 
-interface VienaQuantParameters {
+interface VienaQuantParamsDict {
     "@type"?: "fsl/viena_quant";
     "input1": InputPathType;
     "input2": InputPathType;
     "ventricle_mask": InputPathType;
 }
-type VienaQuantParametersTagged = Required<Pick<VienaQuantParameters, '@type'>> & VienaQuantParameters;
+type VienaQuantParamsDictTagged = Required<Pick<VienaQuantParamsDict, '@type'>> & VienaQuantParamsDict;
 
 
 /**
- * Output object returned when calling `VienaQuantParameters(...)`.
+ * Output object returned when calling `VienaQuantParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function viena_quant_params(
     input1: InputPathType,
     input2: InputPathType,
     ventricle_mask: InputPathType,
-): VienaQuantParametersTagged {
+): VienaQuantParamsDictTagged {
     const params = {
         "@type": "fsl/viena_quant" as const,
         "input1": input1,
@@ -70,7 +70,7 @@ function viena_quant_params(
  * @returns Command-line arguments.
  */
 function viena_quant_cargs(
-    params: VienaQuantParameters,
+    params: VienaQuantParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function viena_quant_cargs(
  * @returns Outputs object.
  */
 function viena_quant_outputs(
-    params: VienaQuantParameters,
+    params: VienaQuantParamsDict,
     execution: Execution,
 ): VienaQuantOutputs {
     const ret: VienaQuantOutputs = {
@@ -117,7 +117,7 @@ function viena_quant_outputs(
  * @returns NamedTuple of outputs (described in `VienaQuantOutputs`).
  */
 function viena_quant_execute(
-    params: VienaQuantParameters,
+    params: VienaQuantParamsDict,
     runner: Runner | null = null,
 ): VienaQuantOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function viena_quant(
 export {
       VIENA_QUANT_METADATA,
       VienaQuantOutputs,
+      VienaQuantParamsDict,
+      VienaQuantParamsDictTagged,
       viena_quant,
       viena_quant_execute,
       viena_quant_params,

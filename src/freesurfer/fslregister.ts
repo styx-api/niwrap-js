@@ -11,7 +11,7 @@ const FSLREGISTER_METADATA: Metadata = {
 };
 
 
-interface FslregisterParameters {
+interface FslregisterParamsDict {
     "@type"?: "freesurfer/fslregister";
     "subjid": string;
     "mov_vol": string;
@@ -44,11 +44,11 @@ interface FslregisterParameters {
     "help": boolean;
     "lta_format"?: string | null | undefined;
 }
-type FslregisterParametersTagged = Required<Pick<FslregisterParameters, '@type'>> & FslregisterParameters;
+type FslregisterParamsDictTagged = Required<Pick<FslregisterParamsDict, '@type'>> & FslregisterParamsDict;
 
 
 /**
- * Output object returned when calling `FslregisterParameters(...)`.
+ * Output object returned when calling `FslregisterParamsDict(...)`.
  *
  * @interface
  */
@@ -147,7 +147,7 @@ function fslregister_params(
     version: boolean = false,
     help: boolean = false,
     lta_format: string | null = null,
-): FslregisterParametersTagged {
+): FslregisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/fslregister" as const,
         "subjid": subjid,
@@ -224,7 +224,7 @@ function fslregister_params(
  * @returns Command-line arguments.
  */
 function fslregister_cargs(
-    params: FslregisterParameters,
+    params: FslregisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -380,7 +380,7 @@ function fslregister_cargs(
  * @returns Outputs object.
  */
 function fslregister_outputs(
-    params: FslregisterParameters,
+    params: FslregisterParamsDict,
     execution: Execution,
 ): FslregisterOutputs {
     const ret: FslregisterOutputs = {
@@ -410,7 +410,7 @@ function fslregister_outputs(
  * @returns NamedTuple of outputs (described in `FslregisterOutputs`).
  */
 function fslregister_execute(
-    params: FslregisterParameters,
+    params: FslregisterParamsDict,
     runner: Runner | null = null,
 ): FslregisterOutputs {
     runner = runner || getGlobalRunner();
@@ -507,6 +507,8 @@ function fslregister(
 export {
       FSLREGISTER_METADATA,
       FslregisterOutputs,
+      FslregisterParamsDict,
+      FslregisterParamsDictTagged,
       fslregister,
       fslregister_execute,
       fslregister_params,

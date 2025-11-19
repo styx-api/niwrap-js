@@ -11,7 +11,7 @@ const MRIS_SKELETONIZE_METADATA: Metadata = {
 };
 
 
-interface MrisSkeletonizeParameters {
+interface MrisSkeletonizeParamsDict {
     "@type"?: "freesurfer/mris_skeletonize";
     "surface": string;
     "surfvals": string;
@@ -29,11 +29,11 @@ interface MrisSkeletonizeParameters {
     "cluster"?: number | null | undefined;
     "fwhm"?: number | null | undefined;
 }
-type MrisSkeletonizeParametersTagged = Required<Pick<MrisSkeletonizeParameters, '@type'>> & MrisSkeletonizeParameters;
+type MrisSkeletonizeParamsDictTagged = Required<Pick<MrisSkeletonizeParamsDict, '@type'>> & MrisSkeletonizeParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSkeletonizeParameters(...)`.
+ * Output object returned when calling `MrisSkeletonizeParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function mris_skeletonize_params(
     threshold: number | null = null,
     cluster: number | null = null,
     fwhm: number | null = null,
-): MrisSkeletonizeParametersTagged {
+): MrisSkeletonizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_skeletonize" as const,
         "surface": surface,
@@ -142,7 +142,7 @@ function mris_skeletonize_params(
  * @returns Command-line arguments.
  */
 function mris_skeletonize_cargs(
-    params: MrisSkeletonizeParameters,
+    params: MrisSkeletonizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -232,7 +232,7 @@ function mris_skeletonize_cargs(
  * @returns Outputs object.
  */
 function mris_skeletonize_outputs(
-    params: MrisSkeletonizeParameters,
+    params: MrisSkeletonizeParamsDict,
     execution: Execution,
 ): MrisSkeletonizeOutputs {
     const ret: MrisSkeletonizeOutputs = {
@@ -260,7 +260,7 @@ function mris_skeletonize_outputs(
  * @returns NamedTuple of outputs (described in `MrisSkeletonizeOutputs`).
  */
 function mris_skeletonize_execute(
-    params: MrisSkeletonizeParameters,
+    params: MrisSkeletonizeParamsDict,
     runner: Runner | null = null,
 ): MrisSkeletonizeOutputs {
     runner = runner || getGlobalRunner();
@@ -327,6 +327,8 @@ function mris_skeletonize(
 export {
       MRIS_SKELETONIZE_METADATA,
       MrisSkeletonizeOutputs,
+      MrisSkeletonizeParamsDict,
+      MrisSkeletonizeParamsDictTagged,
       mris_skeletonize,
       mris_skeletonize_execute,
       mris_skeletonize_params,

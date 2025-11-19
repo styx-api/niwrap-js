@@ -11,15 +11,15 @@ const MRDEGIBBS_METADATA: Metadata = {
 };
 
 
-interface MrdegibbsConfigParameters {
+interface MrdegibbsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrdegibbsConfigParametersTagged = Required<Pick<MrdegibbsConfigParameters, '@type'>> & MrdegibbsConfigParameters;
+type MrdegibbsConfigParamsDictTagged = Required<Pick<MrdegibbsConfigParamsDict, '@type'>> & MrdegibbsConfigParamsDict;
 
 
-interface MrdegibbsParameters {
+interface MrdegibbsParamsDict {
     "@type"?: "mrtrix/mrdegibbs";
     "axes"?: Array<number> | null | undefined;
     "nshifts"?: number | null | undefined;
@@ -31,13 +31,13 @@ interface MrdegibbsParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrdegibbsConfigParameters> | null | undefined;
+    "config"?: Array<MrdegibbsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in": InputPathType;
     "out": string;
 }
-type MrdegibbsParametersTagged = Required<Pick<MrdegibbsParameters, '@type'>> & MrdegibbsParameters;
+type MrdegibbsParamsDictTagged = Required<Pick<MrdegibbsParamsDict, '@type'>> & MrdegibbsParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type MrdegibbsParametersTagged = Required<Pick<MrdegibbsParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function mrdegibbs_config_params(
+function mrdegibbs_config(
     key: string,
     value: string,
-): MrdegibbsConfigParametersTagged {
+): MrdegibbsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -70,7 +70,7 @@ function mrdegibbs_config_params(
  * @returns Command-line arguments.
  */
 function mrdegibbs_config_cargs(
-    params: MrdegibbsConfigParameters,
+    params: MrdegibbsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mrdegibbs_config_cargs(
 
 
 /**
- * Output object returned when calling `MrdegibbsParameters(...)`.
+ * Output object returned when calling `MrdegibbsParamsDict(...)`.
  *
  * @interface
  */
@@ -132,10 +132,10 @@ function mrdegibbs_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrdegibbsConfigParameters> | null = null,
+    config: Array<MrdegibbsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrdegibbsParametersTagged {
+): MrdegibbsParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrdegibbs" as const,
         "info": info,
@@ -181,7 +181,7 @@ function mrdegibbs_params(
  * @returns Command-line arguments.
  */
 function mrdegibbs_cargs(
-    params: MrdegibbsParameters,
+    params: MrdegibbsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -258,7 +258,7 @@ function mrdegibbs_cargs(
  * @returns Outputs object.
  */
 function mrdegibbs_outputs(
-    params: MrdegibbsParameters,
+    params: MrdegibbsParamsDict,
     execution: Execution,
 ): MrdegibbsOutputs {
     const ret: MrdegibbsOutputs = {
@@ -294,7 +294,7 @@ function mrdegibbs_outputs(
  * @returns NamedTuple of outputs (described in `MrdegibbsOutputs`).
  */
 function mrdegibbs_execute(
-    params: MrdegibbsParameters,
+    params: MrdegibbsParamsDict,
     runner: Runner | null = null,
 ): MrdegibbsOutputs {
     runner = runner || getGlobalRunner();
@@ -358,7 +358,7 @@ function mrdegibbs(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrdegibbsConfigParameters> | null = null,
+    config: Array<MrdegibbsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -370,9 +370,13 @@ function mrdegibbs(
 
 export {
       MRDEGIBBS_METADATA,
+      MrdegibbsConfigParamsDict,
+      MrdegibbsConfigParamsDictTagged,
       MrdegibbsOutputs,
+      MrdegibbsParamsDict,
+      MrdegibbsParamsDictTagged,
       mrdegibbs,
-      mrdegibbs_config_params,
+      mrdegibbs_config,
       mrdegibbs_execute,
       mrdegibbs_params,
 };

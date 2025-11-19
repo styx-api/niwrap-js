@@ -11,7 +11,7 @@ const FAT_PROC_ALIGN_ANAT_PAIR_METADATA: Metadata = {
 };
 
 
-interface FatProcAlignAnatPairParameters {
+interface FatProcAlignAnatPairParamsDict {
     "@type"?: "afni/fat_proc_align_anat_pair";
     "input_t1w": InputPathType;
     "input_t2w": InputPathType;
@@ -26,11 +26,11 @@ interface FatProcAlignAnatPairParameters {
     "no_cmd_out": boolean;
     "no_clean": boolean;
 }
-type FatProcAlignAnatPairParametersTagged = Required<Pick<FatProcAlignAnatPairParameters, '@type'>> & FatProcAlignAnatPairParameters;
+type FatProcAlignAnatPairParamsDictTagged = Required<Pick<FatProcAlignAnatPairParamsDict, '@type'>> & FatProcAlignAnatPairParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcAlignAnatPairParameters(...)`.
+ * Output object returned when calling `FatProcAlignAnatPairParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function fat_proc_align_anat_pair_params(
     workdir: string | null = null,
     no_cmd_out: boolean = false,
     no_clean: boolean = false,
-): FatProcAlignAnatPairParametersTagged {
+): FatProcAlignAnatPairParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_align_anat_pair" as const,
         "input_t1w": input_t1w,
@@ -124,7 +124,7 @@ function fat_proc_align_anat_pair_params(
  * @returns Command-line arguments.
  */
 function fat_proc_align_anat_pair_cargs(
-    params: FatProcAlignAnatPairParameters,
+    params: FatProcAlignAnatPairParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -196,7 +196,7 @@ function fat_proc_align_anat_pair_cargs(
  * @returns Outputs object.
  */
 function fat_proc_align_anat_pair_outputs(
-    params: FatProcAlignAnatPairParameters,
+    params: FatProcAlignAnatPairParamsDict,
     execution: Execution,
 ): FatProcAlignAnatPairOutputs {
     const ret: FatProcAlignAnatPairOutputs = {
@@ -224,7 +224,7 @@ function fat_proc_align_anat_pair_outputs(
  * @returns NamedTuple of outputs (described in `FatProcAlignAnatPairOutputs`).
  */
 function fat_proc_align_anat_pair_execute(
-    params: FatProcAlignAnatPairParameters,
+    params: FatProcAlignAnatPairParamsDict,
     runner: Runner | null = null,
 ): FatProcAlignAnatPairOutputs {
     runner = runner || getGlobalRunner();
@@ -285,6 +285,8 @@ function fat_proc_align_anat_pair(
 export {
       FAT_PROC_ALIGN_ANAT_PAIR_METADATA,
       FatProcAlignAnatPairOutputs,
+      FatProcAlignAnatPairParamsDict,
+      FatProcAlignAnatPairParamsDictTagged,
       fat_proc_align_anat_pair,
       fat_proc_align_anat_pair_execute,
       fat_proc_align_anat_pair_params,

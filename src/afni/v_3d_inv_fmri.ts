@@ -11,7 +11,7 @@ const V_3D_INV_FMRI_METADATA: Metadata = {
 };
 
 
-interface V3dInvFmriParameters {
+interface V3dInvFmriParamsDict {
     "@type"?: "afni/3dInvFMRI";
     "input_file": InputPathType;
     "activation_map": InputPathType;
@@ -25,11 +25,11 @@ interface V3dInvFmriParameters {
     "smooth_fir": boolean;
     "smooth_median": boolean;
 }
-type V3dInvFmriParametersTagged = Required<Pick<V3dInvFmriParameters, '@type'>> & V3dInvFmriParameters;
+type V3dInvFmriParamsDictTagged = Required<Pick<V3dInvFmriParamsDict, '@type'>> & V3dInvFmriParamsDict;
 
 
 /**
- * Output object returned when calling `V3dInvFmriParameters(...)`.
+ * Output object returned when calling `V3dInvFmriParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function v_3d_inv_fmri_params(
     alpha: number | null = null,
     smooth_fir: boolean = false,
     smooth_median: boolean = false,
-): V3dInvFmriParametersTagged {
+): V3dInvFmriParamsDictTagged {
     const params = {
         "@type": "afni/3dInvFMRI" as const,
         "input_file": input_file,
@@ -116,7 +116,7 @@ function v_3d_inv_fmri_params(
  * @returns Command-line arguments.
  */
 function v_3d_inv_fmri_cargs(
-    params: V3dInvFmriParameters,
+    params: V3dInvFmriParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -190,7 +190,7 @@ function v_3d_inv_fmri_cargs(
  * @returns Outputs object.
  */
 function v_3d_inv_fmri_outputs(
-    params: V3dInvFmriParameters,
+    params: V3dInvFmriParamsDict,
     execution: Execution,
 ): V3dInvFmriOutputs {
     const ret: V3dInvFmriOutputs = {
@@ -216,7 +216,7 @@ function v_3d_inv_fmri_outputs(
  * @returns NamedTuple of outputs (described in `V3dInvFmriOutputs`).
  */
 function v_3d_inv_fmri_execute(
-    params: V3dInvFmriParameters,
+    params: V3dInvFmriParamsDict,
     runner: Runner | null = null,
 ): V3dInvFmriOutputs {
     runner = runner || getGlobalRunner();
@@ -274,6 +274,8 @@ function v_3d_inv_fmri(
 
 export {
       V3dInvFmriOutputs,
+      V3dInvFmriParamsDict,
+      V3dInvFmriParamsDictTagged,
       V_3D_INV_FMRI_METADATA,
       v_3d_inv_fmri,
       v_3d_inv_fmri_execute,

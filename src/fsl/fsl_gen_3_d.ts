@@ -11,16 +11,16 @@ const FSL_GEN_3_D_METADATA: Metadata = {
 };
 
 
-interface FslGen3DParameters {
+interface FslGen3DParamsDict {
     "@type"?: "fsl/fsl_gen_3D";
     "infile": InputPathType;
     "outfile": InputPathType;
 }
-type FslGen3DParametersTagged = Required<Pick<FslGen3DParameters, '@type'>> & FslGen3DParameters;
+type FslGen3DParamsDictTagged = Required<Pick<FslGen3DParamsDict, '@type'>> & FslGen3DParamsDict;
 
 
 /**
- * Output object returned when calling `FslGen3DParameters(...)`.
+ * Output object returned when calling `FslGen3DParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FslGen3DOutputs {
 function fsl_gen_3_d_params(
     infile: InputPathType,
     outfile: InputPathType,
-): FslGen3DParametersTagged {
+): FslGen3DParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_gen_3D" as const,
         "infile": infile,
@@ -66,7 +66,7 @@ function fsl_gen_3_d_params(
  * @returns Command-line arguments.
  */
 function fsl_gen_3_d_cargs(
-    params: FslGen3DParameters,
+    params: FslGen3DParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function fsl_gen_3_d_cargs(
  * @returns Outputs object.
  */
 function fsl_gen_3_d_outputs(
-    params: FslGen3DParameters,
+    params: FslGen3DParamsDict,
     execution: Execution,
 ): FslGen3DOutputs {
     const ret: FslGen3DOutputs = {
@@ -112,7 +112,7 @@ function fsl_gen_3_d_outputs(
  * @returns NamedTuple of outputs (described in `FslGen3DOutputs`).
  */
 function fsl_gen_3_d_execute(
-    params: FslGen3DParameters,
+    params: FslGen3DParamsDict,
     runner: Runner | null = null,
 ): FslGen3DOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function fsl_gen_3_d(
 export {
       FSL_GEN_3_D_METADATA,
       FslGen3DOutputs,
+      FslGen3DParamsDict,
+      FslGen3DParamsDictTagged,
       fsl_gen_3_d,
       fsl_gen_3_d_execute,
       fsl_gen_3_d_params,

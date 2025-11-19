@@ -11,7 +11,7 @@ const MRIS_PREPROC_METADATA: Metadata = {
 };
 
 
-interface MrisPreprocParameters {
+interface MrisPreprocParamsDict {
     "@type"?: "freesurfer/mris_preproc";
     "outfile": string;
     "target_subject": string;
@@ -63,11 +63,11 @@ interface MrisPreprocParameters {
     "nolog_flag": boolean;
     "debug_flag": boolean;
 }
-type MrisPreprocParametersTagged = Required<Pick<MrisPreprocParameters, '@type'>> & MrisPreprocParameters;
+type MrisPreprocParamsDictTagged = Required<Pick<MrisPreprocParamsDict, '@type'>> & MrisPreprocParamsDict;
 
 
 /**
- * Output object returned when calling `MrisPreprocParameters(...)`.
+ * Output object returned when calling `MrisPreprocParamsDict(...)`.
  *
  * @interface
  */
@@ -184,7 +184,7 @@ function mris_preproc_params(
     log: string | null = null,
     nolog_flag: boolean = false,
     debug_flag: boolean = false,
-): MrisPreprocParametersTagged {
+): MrisPreprocParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_preproc" as const,
         "outfile": outfile,
@@ -308,7 +308,7 @@ function mris_preproc_params(
  * @returns Command-line arguments.
  */
 function mris_preproc_cargs(
-    params: MrisPreprocParameters,
+    params: MrisPreprocParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -563,7 +563,7 @@ function mris_preproc_cargs(
  * @returns Outputs object.
  */
 function mris_preproc_outputs(
-    params: MrisPreprocParameters,
+    params: MrisPreprocParamsDict,
     execution: Execution,
 ): MrisPreprocOutputs {
     const ret: MrisPreprocOutputs = {
@@ -588,7 +588,7 @@ function mris_preproc_outputs(
  * @returns NamedTuple of outputs (described in `MrisPreprocOutputs`).
  */
 function mris_preproc_execute(
-    params: MrisPreprocParameters,
+    params: MrisPreprocParamsDict,
     runner: Runner | null = null,
 ): MrisPreprocOutputs {
     runner = runner || getGlobalRunner();
@@ -723,6 +723,8 @@ function mris_preproc(
 export {
       MRIS_PREPROC_METADATA,
       MrisPreprocOutputs,
+      MrisPreprocParamsDict,
+      MrisPreprocParamsDictTagged,
       mris_preproc,
       mris_preproc_execute,
       mris_preproc_params,

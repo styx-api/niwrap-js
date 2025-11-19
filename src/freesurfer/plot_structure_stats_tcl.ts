@@ -11,16 +11,16 @@ const PLOT_STRUCTURE_STATS_TCL_METADATA: Metadata = {
 };
 
 
-interface PlotStructureStatsTclParameters {
+interface PlotStructureStatsTclParamsDict {
     "@type"?: "freesurfer/plot_structure_stats.tcl";
     "input_file": InputPathType;
     "output_file": string;
 }
-type PlotStructureStatsTclParametersTagged = Required<Pick<PlotStructureStatsTclParameters, '@type'>> & PlotStructureStatsTclParameters;
+type PlotStructureStatsTclParamsDictTagged = Required<Pick<PlotStructureStatsTclParamsDict, '@type'>> & PlotStructureStatsTclParamsDict;
 
 
 /**
- * Output object returned when calling `PlotStructureStatsTclParameters(...)`.
+ * Output object returned when calling `PlotStructureStatsTclParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface PlotStructureStatsTclOutputs {
 function plot_structure_stats_tcl_params(
     input_file: InputPathType,
     output_file: string,
-): PlotStructureStatsTclParametersTagged {
+): PlotStructureStatsTclParamsDictTagged {
     const params = {
         "@type": "freesurfer/plot_structure_stats.tcl" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function plot_structure_stats_tcl_params(
  * @returns Command-line arguments.
  */
 function plot_structure_stats_tcl_cargs(
-    params: PlotStructureStatsTclParameters,
+    params: PlotStructureStatsTclParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function plot_structure_stats_tcl_cargs(
  * @returns Outputs object.
  */
 function plot_structure_stats_tcl_outputs(
-    params: PlotStructureStatsTclParameters,
+    params: PlotStructureStatsTclParamsDict,
     execution: Execution,
 ): PlotStructureStatsTclOutputs {
     const ret: PlotStructureStatsTclOutputs = {
@@ -112,7 +112,7 @@ function plot_structure_stats_tcl_outputs(
  * @returns NamedTuple of outputs (described in `PlotStructureStatsTclOutputs`).
  */
 function plot_structure_stats_tcl_execute(
-    params: PlotStructureStatsTclParameters,
+    params: PlotStructureStatsTclParamsDict,
     runner: Runner | null = null,
 ): PlotStructureStatsTclOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function plot_structure_stats_tcl(
 export {
       PLOT_STRUCTURE_STATS_TCL_METADATA,
       PlotStructureStatsTclOutputs,
+      PlotStructureStatsTclParamsDict,
+      PlotStructureStatsTclParamsDictTagged,
       plot_structure_stats_tcl,
       plot_structure_stats_tcl_execute,
       plot_structure_stats_tcl_params,

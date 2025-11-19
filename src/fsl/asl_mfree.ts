@@ -11,7 +11,7 @@ const ASL_MFREE_METADATA: Metadata = {
 };
 
 
-interface AslMfreeParameters {
+interface AslMfreeParamsDict {
     "@type"?: "fsl/asl_mfree";
     "datafile": InputPathType;
     "mask": InputPathType;
@@ -33,11 +33,11 @@ interface AslMfreeParameters {
     "shift_factor"?: number | null | undefined;
     "verbose": boolean;
 }
-type AslMfreeParametersTagged = Required<Pick<AslMfreeParameters, '@type'>> & AslMfreeParameters;
+type AslMfreeParamsDictTagged = Required<Pick<AslMfreeParamsDict, '@type'>> & AslMfreeParamsDict;
 
 
 /**
- * Output object returned when calling `AslMfreeParameters(...)`.
+ * Output object returned when calling `AslMfreeParamsDict(...)`.
  *
  * @interface
  */
@@ -102,7 +102,7 @@ function asl_mfree_params(
     turbo_quasar: boolean = false,
     shift_factor: number | null = null,
     verbose: boolean = false,
-): AslMfreeParametersTagged {
+): AslMfreeParamsDictTagged {
     const params = {
         "@type": "fsl/asl_mfree" as const,
         "datafile": datafile,
@@ -156,7 +156,7 @@ function asl_mfree_params(
  * @returns Command-line arguments.
  */
 function asl_mfree_cargs(
-    params: AslMfreeParameters,
+    params: AslMfreeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -263,7 +263,7 @@ function asl_mfree_cargs(
  * @returns Outputs object.
  */
 function asl_mfree_outputs(
-    params: AslMfreeParameters,
+    params: AslMfreeParamsDict,
     execution: Execution,
 ): AslMfreeOutputs {
     const ret: AslMfreeOutputs = {
@@ -290,7 +290,7 @@ function asl_mfree_outputs(
  * @returns NamedTuple of outputs (described in `AslMfreeOutputs`).
  */
 function asl_mfree_execute(
-    params: AslMfreeParameters,
+    params: AslMfreeParamsDict,
     runner: Runner | null = null,
 ): AslMfreeOutputs {
     runner = runner || getGlobalRunner();
@@ -365,6 +365,8 @@ function asl_mfree(
 export {
       ASL_MFREE_METADATA,
       AslMfreeOutputs,
+      AslMfreeParamsDict,
+      AslMfreeParamsDictTagged,
       asl_mfree,
       asl_mfree_execute,
       asl_mfree_params,

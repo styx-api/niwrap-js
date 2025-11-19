@@ -11,18 +11,18 @@ const RMZ_METADATA: Metadata = {
 };
 
 
-interface RmzParameters {
+interface RmzParamsDict {
     "@type"?: "afni/rmz";
     "quiet": boolean;
     "hash_flag"?: number | null | undefined;
     "keep_flag": boolean;
     "filenames": Array<InputPathType>;
 }
-type RmzParametersTagged = Required<Pick<RmzParameters, '@type'>> & RmzParameters;
+type RmzParamsDictTagged = Required<Pick<RmzParamsDict, '@type'>> & RmzParamsDict;
 
 
 /**
- * Output object returned when calling `RmzParameters(...)`.
+ * Output object returned when calling `RmzParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function rmz_params(
     quiet: boolean = false,
     hash_flag: number | null = null,
     keep_flag: boolean = false,
-): RmzParametersTagged {
+): RmzParamsDictTagged {
     const params = {
         "@type": "afni/rmz" as const,
         "quiet": quiet,
@@ -72,7 +72,7 @@ function rmz_params(
  * @returns Command-line arguments.
  */
 function rmz_cargs(
-    params: RmzParameters,
+    params: RmzParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function rmz_cargs(
  * @returns Outputs object.
  */
 function rmz_outputs(
-    params: RmzParameters,
+    params: RmzParamsDict,
     execution: Execution,
 ): RmzOutputs {
     const ret: RmzOutputs = {
@@ -128,7 +128,7 @@ function rmz_outputs(
  * @returns NamedTuple of outputs (described in `RmzOutputs`).
  */
 function rmz_execute(
-    params: RmzParameters,
+    params: RmzParamsDict,
     runner: Runner | null = null,
 ): RmzOutputs {
     runner = runner || getGlobalRunner();
@@ -173,6 +173,8 @@ function rmz(
 export {
       RMZ_METADATA,
       RmzOutputs,
+      RmzParamsDict,
+      RmzParamsDictTagged,
       rmz,
       rmz_execute,
       rmz_params,

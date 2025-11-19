@@ -11,7 +11,7 @@ const MRIS_LABEL_AREA_METADATA: Metadata = {
 };
 
 
-interface MrisLabelAreaParameters {
+interface MrisLabelAreaParamsDict {
     "@type"?: "freesurfer/mris_label_area";
     "pct_flag": boolean;
     "log_file"?: string | null | undefined;
@@ -22,11 +22,11 @@ interface MrisLabelAreaParameters {
     "annot_name": string;
     "labels": Array<string>;
 }
-type MrisLabelAreaParametersTagged = Required<Pick<MrisLabelAreaParameters, '@type'>> & MrisLabelAreaParameters;
+type MrisLabelAreaParamsDictTagged = Required<Pick<MrisLabelAreaParamsDict, '@type'>> & MrisLabelAreaParamsDict;
 
 
 /**
- * Output object returned when calling `MrisLabelAreaParameters(...)`.
+ * Output object returned when calling `MrisLabelAreaParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function mris_label_area_params(
     pct_flag: boolean = false,
     log_file: string | null = null,
     brain_vol: string | null = null,
-): MrisLabelAreaParametersTagged {
+): MrisLabelAreaParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_label_area" as const,
         "pct_flag": pct_flag,
@@ -90,7 +90,7 @@ function mris_label_area_params(
  * @returns Command-line arguments.
  */
 function mris_label_area_cargs(
-    params: MrisLabelAreaParameters,
+    params: MrisLabelAreaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function mris_label_area_cargs(
  * @returns Outputs object.
  */
 function mris_label_area_outputs(
-    params: MrisLabelAreaParameters,
+    params: MrisLabelAreaParamsDict,
     execution: Execution,
 ): MrisLabelAreaOutputs {
     const ret: MrisLabelAreaOutputs = {
@@ -153,7 +153,7 @@ function mris_label_area_outputs(
  * @returns NamedTuple of outputs (described in `MrisLabelAreaOutputs`).
  */
 function mris_label_area_execute(
-    params: MrisLabelAreaParameters,
+    params: MrisLabelAreaParamsDict,
     runner: Runner | null = null,
 ): MrisLabelAreaOutputs {
     runner = runner || getGlobalRunner();
@@ -206,6 +206,8 @@ function mris_label_area(
 export {
       MRIS_LABEL_AREA_METADATA,
       MrisLabelAreaOutputs,
+      MrisLabelAreaParamsDict,
+      MrisLabelAreaParamsDictTagged,
       mris_label_area,
       mris_label_area_execute,
       mris_label_area_params,

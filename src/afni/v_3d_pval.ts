@@ -11,7 +11,7 @@ const V_3D_PVAL_METADATA: Metadata = {
 };
 
 
-interface V3dPvalParameters {
+interface V3dPvalParamsDict {
     "@type"?: "afni/3dPval";
     "input_dataset": InputPathType;
     "zscore": boolean;
@@ -20,11 +20,11 @@ interface V3dPvalParameters {
     "qval": boolean;
     "prefix"?: string | null | undefined;
 }
-type V3dPvalParametersTagged = Required<Pick<V3dPvalParameters, '@type'>> & V3dPvalParameters;
+type V3dPvalParamsDictTagged = Required<Pick<V3dPvalParamsDict, '@type'>> & V3dPvalParamsDict;
 
 
 /**
- * Output object returned when calling `V3dPvalParameters(...)`.
+ * Output object returned when calling `V3dPvalParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_pval_params(
     log10: boolean = false,
     qval: boolean = false,
     prefix: string | null = null,
-): V3dPvalParametersTagged {
+): V3dPvalParamsDictTagged {
     const params = {
         "@type": "afni/3dPval" as const,
         "input_dataset": input_dataset,
@@ -84,7 +84,7 @@ function v_3d_pval_params(
  * @returns Command-line arguments.
  */
 function v_3d_pval_cargs(
-    params: V3dPvalParameters,
+    params: V3dPvalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function v_3d_pval_cargs(
  * @returns Outputs object.
  */
 function v_3d_pval_outputs(
-    params: V3dPvalParameters,
+    params: V3dPvalParamsDict,
     execution: Execution,
 ): V3dPvalOutputs {
     const ret: V3dPvalOutputs = {
@@ -147,7 +147,7 @@ function v_3d_pval_outputs(
  * @returns NamedTuple of outputs (described in `V3dPvalOutputs`).
  */
 function v_3d_pval_execute(
-    params: V3dPvalParameters,
+    params: V3dPvalParamsDict,
     runner: Runner | null = null,
 ): V3dPvalOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function v_3d_pval(
 
 export {
       V3dPvalOutputs,
+      V3dPvalParamsDict,
+      V3dPvalParamsDictTagged,
       V_3D_PVAL_METADATA,
       v_3d_pval,
       v_3d_pval_execute,

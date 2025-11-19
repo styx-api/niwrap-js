@@ -11,7 +11,7 @@ const TEST_TUTORIALS_SH_METADATA: Metadata = {
 };
 
 
-interface TestTutorialsShParameters {
+interface TestTutorialsShParamsDict {
     "@type"?: "freesurfer/test_tutorials.sh";
     "all_tutorials": boolean;
     "quick_test": boolean;
@@ -30,11 +30,11 @@ interface TestTutorialsShParameters {
     "fsfast": boolean;
     "multimodal": boolean;
 }
-type TestTutorialsShParametersTagged = Required<Pick<TestTutorialsShParameters, '@type'>> & TestTutorialsShParameters;
+type TestTutorialsShParamsDictTagged = Required<Pick<TestTutorialsShParamsDict, '@type'>> & TestTutorialsShParamsDict;
 
 
 /**
- * Output object returned when calling `TestTutorialsShParameters(...)`.
+ * Output object returned when calling `TestTutorialsShParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function test_tutorials_sh_params(
     tracula: boolean = false,
     fsfast: boolean = false,
     multimodal: boolean = false,
-): TestTutorialsShParametersTagged {
+): TestTutorialsShParamsDictTagged {
     const params = {
         "@type": "freesurfer/test_tutorials.sh" as const,
         "all_tutorials": all_tutorials,
@@ -118,7 +118,7 @@ function test_tutorials_sh_params(
  * @returns Command-line arguments.
  */
 function test_tutorials_sh_cargs(
-    params: TestTutorialsShParameters,
+    params: TestTutorialsShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -184,7 +184,7 @@ function test_tutorials_sh_cargs(
  * @returns Outputs object.
  */
 function test_tutorials_sh_outputs(
-    params: TestTutorialsShParameters,
+    params: TestTutorialsShParamsDict,
     execution: Execution,
 ): TestTutorialsShOutputs {
     const ret: TestTutorialsShOutputs = {
@@ -209,7 +209,7 @@ function test_tutorials_sh_outputs(
  * @returns NamedTuple of outputs (described in `TestTutorialsShOutputs`).
  */
 function test_tutorials_sh_execute(
-    params: TestTutorialsShParameters,
+    params: TestTutorialsShParamsDict,
     runner: Runner | null = null,
 ): TestTutorialsShOutputs {
     runner = runner || getGlobalRunner();
@@ -278,6 +278,8 @@ function test_tutorials_sh(
 export {
       TEST_TUTORIALS_SH_METADATA,
       TestTutorialsShOutputs,
+      TestTutorialsShParamsDict,
+      TestTutorialsShParamsDictTagged,
       test_tutorials_sh,
       test_tutorials_sh_execute,
       test_tutorials_sh_params,

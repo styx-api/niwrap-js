@@ -11,17 +11,17 @@ const APSEARCH_METADATA: Metadata = {
 };
 
 
-interface ApsearchParameters {
+interface ApsearchParamsDict {
     "@type"?: "afni/apsearch";
     "search_term": string;
     "file_output"?: string | null | undefined;
     "verbose": boolean;
 }
-type ApsearchParametersTagged = Required<Pick<ApsearchParameters, '@type'>> & ApsearchParameters;
+type ApsearchParamsDictTagged = Required<Pick<ApsearchParamsDict, '@type'>> & ApsearchParamsDict;
 
 
 /**
- * Output object returned when calling `ApsearchParameters(...)`.
+ * Output object returned when calling `ApsearchParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function apsearch_params(
     search_term: string,
     file_output: string | null = null,
     verbose: boolean = false,
-): ApsearchParametersTagged {
+): ApsearchParamsDictTagged {
     const params = {
         "@type": "afni/apsearch" as const,
         "search_term": search_term,
@@ -72,7 +72,7 @@ function apsearch_params(
  * @returns Command-line arguments.
  */
 function apsearch_cargs(
-    params: ApsearchParameters,
+    params: ApsearchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -97,7 +97,7 @@ function apsearch_cargs(
  * @returns Outputs object.
  */
 function apsearch_outputs(
-    params: ApsearchParameters,
+    params: ApsearchParamsDict,
     execution: Execution,
 ): ApsearchOutputs {
     const ret: ApsearchOutputs = {
@@ -123,7 +123,7 @@ function apsearch_outputs(
  * @returns NamedTuple of outputs (described in `ApsearchOutputs`).
  */
 function apsearch_execute(
-    params: ApsearchParameters,
+    params: ApsearchParamsDict,
     runner: Runner | null = null,
 ): ApsearchOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function apsearch(
 export {
       APSEARCH_METADATA,
       ApsearchOutputs,
+      ApsearchParamsDict,
+      ApsearchParamsDictTagged,
       apsearch,
       apsearch_execute,
       apsearch_params,

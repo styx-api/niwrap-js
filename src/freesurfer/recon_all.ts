@@ -11,7 +11,7 @@ const RECON_ALL_METADATA: Metadata = {
 };
 
 
-interface ReconAllParameters {
+interface ReconAllParamsDict {
     "@type"?: "freesurfer/recon-all";
     "subjid": string;
     "all_flag": boolean;
@@ -83,11 +83,11 @@ interface ReconAllParameters {
     "version": boolean;
     "help": boolean;
 }
-type ReconAllParametersTagged = Required<Pick<ReconAllParameters, '@type'>> & ReconAllParameters;
+type ReconAllParamsDictTagged = Required<Pick<ReconAllParamsDict, '@type'>> & ReconAllParamsDict;
 
 
 /**
- * Output object returned when calling `ReconAllParameters(...)`.
+ * Output object returned when calling `ReconAllParamsDict(...)`.
  *
  * @interface
  */
@@ -252,7 +252,7 @@ function recon_all_params(
     dontrun: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): ReconAllParametersTagged {
+): ReconAllParamsDictTagged {
     const params = {
         "@type": "freesurfer/recon-all" as const,
         "subjid": subjid,
@@ -398,7 +398,7 @@ function recon_all_params(
  * @returns Command-line arguments.
  */
 function recon_all_cargs(
-    params: ReconAllParameters,
+    params: ReconAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -714,7 +714,7 @@ function recon_all_cargs(
  * @returns Outputs object.
  */
 function recon_all_outputs(
-    params: ReconAllParameters,
+    params: ReconAllParamsDict,
     execution: Execution,
 ): ReconAllOutputs {
     const ret: ReconAllOutputs = {
@@ -741,7 +741,7 @@ function recon_all_outputs(
  * @returns NamedTuple of outputs (described in `ReconAllOutputs`).
  */
 function recon_all_execute(
-    params: ReconAllParameters,
+    params: ReconAllParamsDict,
     runner: Runner | null = null,
 ): ReconAllOutputs {
     runner = runner || getGlobalRunner();
@@ -916,6 +916,8 @@ function recon_all(
 export {
       RECON_ALL_METADATA,
       ReconAllOutputs,
+      ReconAllParamsDict,
+      ReconAllParamsDictTagged,
       recon_all,
       recon_all_execute,
       recon_all_params,

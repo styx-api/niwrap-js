@@ -11,15 +11,15 @@ const FS_INSTALL_MCR_METADATA: Metadata = {
 };
 
 
-interface FsInstallMcrParameters {
+interface FsInstallMcrParamsDict {
     "@type"?: "freesurfer/fs_install_mcr";
     "mcr_version": string;
 }
-type FsInstallMcrParametersTagged = Required<Pick<FsInstallMcrParameters, '@type'>> & FsInstallMcrParameters;
+type FsInstallMcrParamsDictTagged = Required<Pick<FsInstallMcrParamsDict, '@type'>> & FsInstallMcrParamsDict;
 
 
 /**
- * Output object returned when calling `FsInstallMcrParameters(...)`.
+ * Output object returned when calling `FsInstallMcrParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FsInstallMcrOutputs {
  */
 function fs_install_mcr_params(
     mcr_version: string,
-): FsInstallMcrParametersTagged {
+): FsInstallMcrParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_install_mcr" as const,
         "mcr_version": mcr_version,
@@ -58,7 +58,7 @@ function fs_install_mcr_params(
  * @returns Command-line arguments.
  */
 function fs_install_mcr_cargs(
-    params: FsInstallMcrParameters,
+    params: FsInstallMcrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function fs_install_mcr_cargs(
  * @returns Outputs object.
  */
 function fs_install_mcr_outputs(
-    params: FsInstallMcrParameters,
+    params: FsInstallMcrParamsDict,
     execution: Execution,
 ): FsInstallMcrOutputs {
     const ret: FsInstallMcrOutputs = {
@@ -102,7 +102,7 @@ function fs_install_mcr_outputs(
  * @returns NamedTuple of outputs (described in `FsInstallMcrOutputs`).
  */
 function fs_install_mcr_execute(
-    params: FsInstallMcrParameters,
+    params: FsInstallMcrParamsDict,
     runner: Runner | null = null,
 ): FsInstallMcrOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function fs_install_mcr(
 export {
       FS_INSTALL_MCR_METADATA,
       FsInstallMcrOutputs,
+      FsInstallMcrParamsDict,
+      FsInstallMcrParamsDictTagged,
       fs_install_mcr,
       fs_install_mcr_execute,
       fs_install_mcr_params,

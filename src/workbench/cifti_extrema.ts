@@ -10,15 +10,15 @@ const CIFTI_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface CiftiExtremaThresholdParameters {
+interface CiftiExtremaThresholdParamsDict {
     "@type"?: "threshold";
     "low": number;
     "high": number;
 }
-type CiftiExtremaThresholdParametersTagged = Required<Pick<CiftiExtremaThresholdParameters, '@type'>> & CiftiExtremaThresholdParameters;
+type CiftiExtremaThresholdParamsDictTagged = Required<Pick<CiftiExtremaThresholdParamsDict, '@type'>> & CiftiExtremaThresholdParamsDict;
 
 
-interface CiftiExtremaParameters {
+interface CiftiExtremaParamsDict {
     "@type"?: "workbench/cifti-extrema";
     "cifti-out": string;
     "surface"?: InputPathType | null | undefined;
@@ -27,7 +27,7 @@ interface CiftiExtremaParameters {
     "surface-kernel"?: number | null | undefined;
     "volume-kernel"?: number | null | undefined;
     "presmooth-fwhm": boolean;
-    "threshold"?: CiftiExtremaThresholdParameters | null | undefined;
+    "threshold"?: CiftiExtremaThresholdParamsDict | null | undefined;
     "merged-volume": boolean;
     "sum-maps": boolean;
     "consolidate-mode": boolean;
@@ -38,7 +38,7 @@ interface CiftiExtremaParameters {
     "volume-distance": number;
     "direction": string;
 }
-type CiftiExtremaParametersTagged = Required<Pick<CiftiExtremaParameters, '@type'>> & CiftiExtremaParameters;
+type CiftiExtremaParamsDictTagged = Required<Pick<CiftiExtremaParamsDict, '@type'>> & CiftiExtremaParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type CiftiExtremaParametersTagged = Required<Pick<CiftiExtremaParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function cifti_extrema_threshold_params(
+function cifti_extrema_threshold(
     low: number,
     high: number,
-): CiftiExtremaThresholdParametersTagged {
+): CiftiExtremaThresholdParamsDictTagged {
     const params = {
         "@type": "threshold" as const,
         "low": low,
@@ -71,7 +71,7 @@ function cifti_extrema_threshold_params(
  * @returns Command-line arguments.
  */
 function cifti_extrema_threshold_cargs(
-    params: CiftiExtremaThresholdParameters,
+    params: CiftiExtremaThresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function cifti_extrema_threshold_cargs(
 
 
 /**
- * Output object returned when calling `CiftiExtremaParameters(...)`.
+ * Output object returned when calling `CiftiExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -146,13 +146,13 @@ function cifti_extrema_params(
     volume_distance: number,
     direction: string,
     presmooth_fwhm: boolean = false,
-    threshold: CiftiExtremaThresholdParameters | null = null,
+    threshold: CiftiExtremaThresholdParamsDict | null = null,
     merged_volume: boolean = false,
     sum_maps: boolean = false,
     consolidate_mode: boolean = false,
     only_maxima: boolean = false,
     only_minima: boolean = false,
-): CiftiExtremaParametersTagged {
+): CiftiExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-extrema" as const,
         "cifti-out": cifti_out,
@@ -198,7 +198,7 @@ function cifti_extrema_params(
  * @returns Command-line arguments.
  */
 function cifti_extrema_cargs(
-    params: CiftiExtremaParameters,
+    params: CiftiExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function cifti_extrema_cargs(
  * @returns Outputs object.
  */
 function cifti_extrema_outputs(
-    params: CiftiExtremaParameters,
+    params: CiftiExtremaParamsDict,
     execution: Execution,
 ): CiftiExtremaOutputs {
     const ret: CiftiExtremaOutputs = {
@@ -265,7 +265,7 @@ function cifti_extrema_outputs(
  * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
  */
 function cifti_extrema_execute(
-    params: CiftiExtremaParameters,
+    params: CiftiExtremaParamsDict,
     runner: Runner | null = null,
 ): CiftiExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -326,7 +326,7 @@ function cifti_extrema(
     volume_distance: number,
     direction: string,
     presmooth_fwhm: boolean = false,
-    threshold: CiftiExtremaThresholdParameters | null = null,
+    threshold: CiftiExtremaThresholdParamsDict | null = null,
     merged_volume: boolean = false,
     sum_maps: boolean = false,
     consolidate_mode: boolean = false,
@@ -342,8 +342,12 @@ function cifti_extrema(
 export {
       CIFTI_EXTREMA_METADATA,
       CiftiExtremaOutputs,
+      CiftiExtremaParamsDict,
+      CiftiExtremaParamsDictTagged,
+      CiftiExtremaThresholdParamsDict,
+      CiftiExtremaThresholdParamsDictTagged,
       cifti_extrema,
       cifti_extrema_execute,
       cifti_extrema_params,
-      cifti_extrema_threshold_params,
+      cifti_extrema_threshold,
 };

@@ -10,7 +10,7 @@ const CIFTI_CROSS_CORRELATION_METADATA: Metadata = {
 };
 
 
-interface CiftiCrossCorrelationParameters {
+interface CiftiCrossCorrelationParamsDict {
     "@type"?: "workbench/cifti-cross-correlation";
     "cifti-out": string;
     "weight-file"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface CiftiCrossCorrelationParameters {
     "cifti-a": InputPathType;
     "cifti-b": InputPathType;
 }
-type CiftiCrossCorrelationParametersTagged = Required<Pick<CiftiCrossCorrelationParameters, '@type'>> & CiftiCrossCorrelationParameters;
+type CiftiCrossCorrelationParamsDictTagged = Required<Pick<CiftiCrossCorrelationParamsDict, '@type'>> & CiftiCrossCorrelationParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiCrossCorrelationParameters(...)`.
+ * Output object returned when calling `CiftiCrossCorrelationParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function cifti_cross_correlation_params(
     cifti_a: InputPathType,
     cifti_b: InputPathType,
     fisher_z: boolean = false,
-): CiftiCrossCorrelationParametersTagged {
+): CiftiCrossCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-cross-correlation" as const,
         "cifti-out": cifti_out,
@@ -89,7 +89,7 @@ function cifti_cross_correlation_params(
  * @returns Command-line arguments.
  */
 function cifti_cross_correlation_cargs(
-    params: CiftiCrossCorrelationParameters,
+    params: CiftiCrossCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function cifti_cross_correlation_cargs(
  * @returns Outputs object.
  */
 function cifti_cross_correlation_outputs(
-    params: CiftiCrossCorrelationParameters,
+    params: CiftiCrossCorrelationParamsDict,
     execution: Execution,
 ): CiftiCrossCorrelationOutputs {
     const ret: CiftiCrossCorrelationOutputs = {
@@ -146,7 +146,7 @@ function cifti_cross_correlation_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
  */
 function cifti_cross_correlation_execute(
-    params: CiftiCrossCorrelationParameters,
+    params: CiftiCrossCorrelationParamsDict,
     runner: Runner | null = null,
 ): CiftiCrossCorrelationOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function cifti_cross_correlation(
 export {
       CIFTI_CROSS_CORRELATION_METADATA,
       CiftiCrossCorrelationOutputs,
+      CiftiCrossCorrelationParamsDict,
+      CiftiCrossCorrelationParamsDictTagged,
       cifti_cross_correlation,
       cifti_cross_correlation_execute,
       cifti_cross_correlation_params,

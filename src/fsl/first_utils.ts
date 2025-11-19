@@ -11,7 +11,7 @@ const FIRST_UTILS_METADATA: Metadata = {
 };
 
 
-interface FirstUtilsParameters {
+interface FirstUtilsParamsDict {
     "@type"?: "fsl/first_utils";
     "input_file": InputPathType;
     "output_name": string;
@@ -46,11 +46,11 @@ interface FirstUtilsParameters {
     "debug_mode": boolean;
     "help": boolean;
 }
-type FirstUtilsParametersTagged = Required<Pick<FirstUtilsParameters, '@type'>> & FirstUtilsParameters;
+type FirstUtilsParamsDictTagged = Required<Pick<FirstUtilsParamsDict, '@type'>> & FirstUtilsParamsDict;
 
 
 /**
- * Output object returned when calling `FirstUtilsParameters(...)`.
+ * Output object returned when calling `FirstUtilsParamsDict(...)`.
  *
  * @interface
  */
@@ -133,7 +133,7 @@ function first_utils_params(
     concat_bvars: boolean = false,
     debug_mode: boolean = false,
     help: boolean = false,
-): FirstUtilsParametersTagged {
+): FirstUtilsParamsDictTagged {
     const params = {
         "@type": "fsl/first_utils" as const,
         "input_file": input_file,
@@ -202,7 +202,7 @@ function first_utils_params(
  * @returns Command-line arguments.
  */
 function first_utils_cargs(
-    params: FirstUtilsParameters,
+    params: FirstUtilsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -348,7 +348,7 @@ function first_utils_cargs(
  * @returns Outputs object.
  */
 function first_utils_outputs(
-    params: FirstUtilsParameters,
+    params: FirstUtilsParamsDict,
     execution: Execution,
 ): FirstUtilsOutputs {
     const ret: FirstUtilsOutputs = {
@@ -373,7 +373,7 @@ function first_utils_outputs(
  * @returns NamedTuple of outputs (described in `FirstUtilsOutputs`).
  */
 function first_utils_execute(
-    params: FirstUtilsParameters,
+    params: FirstUtilsParamsDict,
     runner: Runner | null = null,
 ): FirstUtilsOutputs {
     runner = runner || getGlobalRunner();
@@ -474,6 +474,8 @@ function first_utils(
 export {
       FIRST_UTILS_METADATA,
       FirstUtilsOutputs,
+      FirstUtilsParamsDict,
+      FirstUtilsParamsDictTagged,
       first_utils,
       first_utils_execute,
       first_utils_params,

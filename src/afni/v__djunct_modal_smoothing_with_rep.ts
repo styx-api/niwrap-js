@@ -11,7 +11,7 @@ const V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA: Metadata = {
 };
 
 
-interface VDjunctModalSmoothingWithRepParameters {
+interface VDjunctModalSmoothingWithRepParamsDict {
     "@type"?: "afni/@djunct_modal_smoothing_with_rep";
     "input_file": InputPathType;
     "output_prefix": string;
@@ -22,11 +22,11 @@ interface VDjunctModalSmoothingWithRepParameters {
     "overwrite": boolean;
     "no_clean": boolean;
 }
-type VDjunctModalSmoothingWithRepParametersTagged = Required<Pick<VDjunctModalSmoothingWithRepParameters, '@type'>> & VDjunctModalSmoothingWithRepParameters;
+type VDjunctModalSmoothingWithRepParamsDictTagged = Required<Pick<VDjunctModalSmoothingWithRepParamsDict, '@type'>> & VDjunctModalSmoothingWithRepParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunctModalSmoothingWithRepParameters(...)`.
+ * Output object returned when calling `VDjunctModalSmoothingWithRepParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v__djunct_modal_smoothing_with_rep_params(
     version: boolean = false,
     overwrite: boolean = false,
     no_clean: boolean = false,
-): VDjunctModalSmoothingWithRepParametersTagged {
+): VDjunctModalSmoothingWithRepParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_modal_smoothing_with_rep" as const,
         "input_file": input_file,
@@ -96,7 +96,7 @@ function v__djunct_modal_smoothing_with_rep_params(
  * @returns Command-line arguments.
  */
 function v__djunct_modal_smoothing_with_rep_cargs(
-    params: VDjunctModalSmoothingWithRepParameters,
+    params: VDjunctModalSmoothingWithRepParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -137,7 +137,7 @@ function v__djunct_modal_smoothing_with_rep_cargs(
  * @returns Outputs object.
  */
 function v__djunct_modal_smoothing_with_rep_outputs(
-    params: VDjunctModalSmoothingWithRepParameters,
+    params: VDjunctModalSmoothingWithRepParamsDict,
     execution: Execution,
 ): VDjunctModalSmoothingWithRepOutputs {
     const ret: VDjunctModalSmoothingWithRepOutputs = {
@@ -164,7 +164,7 @@ function v__djunct_modal_smoothing_with_rep_outputs(
  * @returns NamedTuple of outputs (described in `VDjunctModalSmoothingWithRepOutputs`).
  */
 function v__djunct_modal_smoothing_with_rep_execute(
-    params: VDjunctModalSmoothingWithRepParameters,
+    params: VDjunctModalSmoothingWithRepParamsDict,
     runner: Runner | null = null,
 ): VDjunctModalSmoothingWithRepOutputs {
     runner = runner || getGlobalRunner();
@@ -216,6 +216,8 @@ function v__djunct_modal_smoothing_with_rep(
 
 export {
       VDjunctModalSmoothingWithRepOutputs,
+      VDjunctModalSmoothingWithRepParamsDict,
+      VDjunctModalSmoothingWithRepParamsDictTagged,
       V__DJUNCT_MODAL_SMOOTHING_WITH_REP_METADATA,
       v__djunct_modal_smoothing_with_rep,
       v__djunct_modal_smoothing_with_rep_execute,

@@ -11,7 +11,7 @@ const SIENAX_METADATA: Metadata = {
 };
 
 
-interface SienaxParameters {
+interface SienaxParamsDict {
     "@type"?: "fsl/sienax";
     "infile": InputPathType;
     "output_dir"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface SienaxParameters {
     "lesion_mask"?: InputPathType | null | undefined;
     "fast_options"?: string | null | undefined;
 }
-type SienaxParametersTagged = Required<Pick<SienaxParameters, '@type'>> & SienaxParameters;
+type SienaxParamsDictTagged = Required<Pick<SienaxParamsDict, '@type'>> & SienaxParamsDict;
 
 
 /**
- * Output object returned when calling `SienaxParameters(...)`.
+ * Output object returned when calling `SienaxParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function sienax_params(
     regional_flag: boolean = false,
     lesion_mask: InputPathType | null = null,
     fast_options: string | null = null,
-): SienaxParametersTagged {
+): SienaxParamsDictTagged {
     const params = {
         "@type": "fsl/sienax" as const,
         "infile": infile,
@@ -118,7 +118,7 @@ function sienax_params(
  * @returns Command-line arguments.
  */
 function sienax_cargs(
-    params: SienaxParameters,
+    params: SienaxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function sienax_cargs(
  * @returns Outputs object.
  */
 function sienax_outputs(
-    params: SienaxParameters,
+    params: SienaxParamsDict,
     execution: Execution,
 ): SienaxOutputs {
     const ret: SienaxOutputs = {
@@ -212,7 +212,7 @@ function sienax_outputs(
  * @returns NamedTuple of outputs (described in `SienaxOutputs`).
  */
 function sienax_execute(
-    params: SienaxParameters,
+    params: SienaxParamsDict,
     runner: Runner | null = null,
 ): SienaxOutputs {
     runner = runner || getGlobalRunner();
@@ -271,6 +271,8 @@ function sienax(
 export {
       SIENAX_METADATA,
       SienaxOutputs,
+      SienaxParamsDict,
+      SienaxParamsDictTagged,
       sienax,
       sienax_execute,
       sienax_params,

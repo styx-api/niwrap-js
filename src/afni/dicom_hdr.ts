@@ -11,7 +11,7 @@ const DICOM_HDR_METADATA: Metadata = {
 };
 
 
-interface DicomHdrParameters {
+interface DicomHdrParamsDict {
     "@type"?: "afni/dicom_hdr";
     "files": Array<InputPathType>;
     "hex": boolean;
@@ -24,11 +24,11 @@ interface DicomHdrParameters {
     "slice_times_verb": boolean;
     "siemens_csa_data": boolean;
 }
-type DicomHdrParametersTagged = Required<Pick<DicomHdrParameters, '@type'>> & DicomHdrParameters;
+type DicomHdrParamsDictTagged = Required<Pick<DicomHdrParamsDict, '@type'>> & DicomHdrParamsDict;
 
 
 /**
- * Output object returned when calling `DicomHdrParameters(...)`.
+ * Output object returned when calling `DicomHdrParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function dicom_hdr_params(
     slice_times: boolean = false,
     slice_times_verb: boolean = false,
     siemens_csa_data: boolean = false,
-): DicomHdrParametersTagged {
+): DicomHdrParamsDictTagged {
     const params = {
         "@type": "afni/dicom_hdr" as const,
         "files": files,
@@ -96,7 +96,7 @@ function dicom_hdr_params(
  * @returns Command-line arguments.
  */
 function dicom_hdr_cargs(
-    params: DicomHdrParameters,
+    params: DicomHdrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function dicom_hdr_cargs(
  * @returns Outputs object.
  */
 function dicom_hdr_outputs(
-    params: DicomHdrParameters,
+    params: DicomHdrParamsDict,
     execution: Execution,
 ): DicomHdrOutputs {
     const ret: DicomHdrOutputs = {
@@ -170,7 +170,7 @@ function dicom_hdr_outputs(
  * @returns NamedTuple of outputs (described in `DicomHdrOutputs`).
  */
 function dicom_hdr_execute(
-    params: DicomHdrParameters,
+    params: DicomHdrParamsDict,
     runner: Runner | null = null,
 ): DicomHdrOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function dicom_hdr(
 export {
       DICOM_HDR_METADATA,
       DicomHdrOutputs,
+      DicomHdrParamsDict,
+      DicomHdrParamsDictTagged,
       dicom_hdr,
       dicom_hdr_execute,
       dicom_hdr_params,

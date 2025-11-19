@@ -11,7 +11,7 @@ const V_3D_DIFF_METADATA: Metadata = {
 };
 
 
-interface V3dDiffParameters {
+interface V3dDiffParamsDict {
     "@type"?: "afni/3dDiff";
     "dataset_a": InputPathType;
     "dataset_b": InputPathType;
@@ -22,11 +22,11 @@ interface V3dDiffParameters {
     "brutalist_mode": boolean;
     "long_report_mode": boolean;
 }
-type V3dDiffParametersTagged = Required<Pick<V3dDiffParameters, '@type'>> & V3dDiffParameters;
+type V3dDiffParamsDictTagged = Required<Pick<V3dDiffParamsDict, '@type'>> & V3dDiffParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDiffParameters(...)`.
+ * Output object returned when calling `V3dDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_diff_params(
     tabular_mode: boolean = false,
     brutalist_mode: boolean = false,
     long_report_mode: boolean = false,
-): V3dDiffParametersTagged {
+): V3dDiffParamsDictTagged {
     const params = {
         "@type": "afni/3dDiff" as const,
         "dataset_a": dataset_a,
@@ -94,7 +94,7 @@ function v_3d_diff_params(
  * @returns Command-line arguments.
  */
 function v_3d_diff_cargs(
-    params: V3dDiffParameters,
+    params: V3dDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function v_3d_diff_cargs(
  * @returns Outputs object.
  */
 function v_3d_diff_outputs(
-    params: V3dDiffParameters,
+    params: V3dDiffParamsDict,
     execution: Execution,
 ): V3dDiffOutputs {
     const ret: V3dDiffOutputs = {
@@ -170,7 +170,7 @@ function v_3d_diff_outputs(
  * @returns NamedTuple of outputs (described in `V3dDiffOutputs`).
  */
 function v_3d_diff_execute(
-    params: V3dDiffParameters,
+    params: V3dDiffParamsDict,
     runner: Runner | null = null,
 ): V3dDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -222,6 +222,8 @@ function v_3d_diff(
 
 export {
       V3dDiffOutputs,
+      V3dDiffParamsDict,
+      V3dDiffParamsDictTagged,
       V_3D_DIFF_METADATA,
       v_3d_diff,
       v_3d_diff_execute,

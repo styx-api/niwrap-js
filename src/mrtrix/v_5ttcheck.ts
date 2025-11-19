@@ -11,15 +11,15 @@ const V_5TTCHECK_METADATA: Metadata = {
 };
 
 
-interface V5ttcheckConfigParameters {
+interface V5ttcheckConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type V5ttcheckConfigParametersTagged = Required<Pick<V5ttcheckConfigParameters, '@type'>> & V5ttcheckConfigParameters;
+type V5ttcheckConfigParamsDictTagged = Required<Pick<V5ttcheckConfigParamsDict, '@type'>> & V5ttcheckConfigParamsDict;
 
 
-interface V5ttcheckParameters {
+interface V5ttcheckParamsDict {
     "@type"?: "mrtrix/5ttcheck";
     "voxels"?: string | null | undefined;
     "info": boolean;
@@ -27,12 +27,12 @@ interface V5ttcheckParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<V5ttcheckConfigParameters> | null | undefined;
+    "config"?: Array<V5ttcheckConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": Array<InputPathType>;
 }
-type V5ttcheckParametersTagged = Required<Pick<V5ttcheckParameters, '@type'>> & V5ttcheckParameters;
+type V5ttcheckParamsDictTagged = Required<Pick<V5ttcheckParamsDict, '@type'>> & V5ttcheckParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type V5ttcheckParametersTagged = Required<Pick<V5ttcheckParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function v_5ttcheck_config_params(
+function v_5ttcheck_config(
     key: string,
     value: string,
-): V5ttcheckConfigParametersTagged {
+): V5ttcheckConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function v_5ttcheck_config_params(
  * @returns Command-line arguments.
  */
 function v_5ttcheck_config_cargs(
-    params: V5ttcheckConfigParameters,
+    params: V5ttcheckConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function v_5ttcheck_config_cargs(
 
 
 /**
- * Output object returned when calling `V5ttcheckParameters(...)`.
+ * Output object returned when calling `V5ttcheckParamsDict(...)`.
  *
  * @interface
  */
@@ -113,10 +113,10 @@ function v_5ttcheck_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5ttcheckConfigParameters> | null = null,
+    config: Array<V5ttcheckConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5ttcheckParametersTagged {
+): V5ttcheckParamsDictTagged {
     const params = {
         "@type": "mrtrix/5ttcheck" as const,
         "info": info,
@@ -149,7 +149,7 @@ function v_5ttcheck_params(
  * @returns Command-line arguments.
  */
 function v_5ttcheck_cargs(
-    params: V5ttcheckParameters,
+    params: V5ttcheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -201,7 +201,7 @@ function v_5ttcheck_cargs(
  * @returns Outputs object.
  */
 function v_5ttcheck_outputs(
-    params: V5ttcheckParameters,
+    params: V5ttcheckParamsDict,
     execution: Execution,
 ): V5ttcheckOutputs {
     const ret: V5ttcheckOutputs = {
@@ -232,7 +232,7 @@ function v_5ttcheck_outputs(
  * @returns NamedTuple of outputs (described in `V5ttcheckOutputs`).
  */
 function v_5ttcheck_execute(
-    params: V5ttcheckParameters,
+    params: V5ttcheckParamsDict,
     runner: Runner | null = null,
 ): V5ttcheckOutputs {
     runner = runner || getGlobalRunner();
@@ -282,7 +282,7 @@ function v_5ttcheck(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5ttcheckConfigParameters> | null = null,
+    config: Array<V5ttcheckConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -293,10 +293,14 @@ function v_5ttcheck(
 
 
 export {
+      V5ttcheckConfigParamsDict,
+      V5ttcheckConfigParamsDictTagged,
       V5ttcheckOutputs,
+      V5ttcheckParamsDict,
+      V5ttcheckParamsDictTagged,
       V_5TTCHECK_METADATA,
       v_5ttcheck,
-      v_5ttcheck_config_params,
+      v_5ttcheck_config,
       v_5ttcheck_execute,
       v_5ttcheck_params,
 };

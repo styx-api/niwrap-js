@@ -11,7 +11,7 @@ const RUN_MESH_UTILS_METADATA: Metadata = {
 };
 
 
-interface RunMeshUtilsParameters {
+interface RunMeshUtilsParamsDict {
     "@type"?: "fsl/run_mesh_utils";
     "base_mesh": InputPathType;
     "output_image": string;
@@ -31,11 +31,11 @@ interface RunMeshUtilsParameters {
     "verbose": boolean;
     "help": boolean;
 }
-type RunMeshUtilsParametersTagged = Required<Pick<RunMeshUtilsParameters, '@type'>> & RunMeshUtilsParameters;
+type RunMeshUtilsParamsDictTagged = Required<Pick<RunMeshUtilsParamsDict, '@type'>> & RunMeshUtilsParamsDict;
 
 
 /**
- * Output object returned when calling `RunMeshUtilsParameters(...)`.
+ * Output object returned when calling `RunMeshUtilsParamsDict(...)`.
  *
  * @interface
  */
@@ -92,7 +92,7 @@ function run_mesh_utils_params(
     inverse: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): RunMeshUtilsParametersTagged {
+): RunMeshUtilsParamsDictTagged {
     const params = {
         "@type": "fsl/run_mesh_utils" as const,
         "base_mesh": base_mesh,
@@ -140,7 +140,7 @@ function run_mesh_utils_params(
  * @returns Command-line arguments.
  */
 function run_mesh_utils_cargs(
-    params: RunMeshUtilsParameters,
+    params: RunMeshUtilsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -229,7 +229,7 @@ function run_mesh_utils_cargs(
  * @returns Outputs object.
  */
 function run_mesh_utils_outputs(
-    params: RunMeshUtilsParameters,
+    params: RunMeshUtilsParamsDict,
     execution: Execution,
 ): RunMeshUtilsOutputs {
     const ret: RunMeshUtilsOutputs = {
@@ -255,7 +255,7 @@ function run_mesh_utils_outputs(
  * @returns NamedTuple of outputs (described in `RunMeshUtilsOutputs`).
  */
 function run_mesh_utils_execute(
-    params: RunMeshUtilsParameters,
+    params: RunMeshUtilsParamsDict,
     runner: Runner | null = null,
 ): RunMeshUtilsOutputs {
     runner = runner || getGlobalRunner();
@@ -326,6 +326,8 @@ function run_mesh_utils(
 export {
       RUN_MESH_UTILS_METADATA,
       RunMeshUtilsOutputs,
+      RunMeshUtilsParamsDict,
+      RunMeshUtilsParamsDictTagged,
       run_mesh_utils,
       run_mesh_utils_execute,
       run_mesh_utils_params,

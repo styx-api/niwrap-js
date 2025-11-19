@@ -11,7 +11,7 @@ const V_1DDOT_METADATA: Metadata = {
 };
 
 
-interface V1ddotParameters {
+interface V1ddotParamsDict {
     "@type"?: "afni/1ddot";
     "one_flag": boolean;
     "dem_flag": boolean;
@@ -22,11 +22,11 @@ interface V1ddotParameters {
     "okzero_flag": boolean;
     "input_files": Array<InputPathType>;
 }
-type V1ddotParametersTagged = Required<Pick<V1ddotParameters, '@type'>> & V1ddotParameters;
+type V1ddotParamsDictTagged = Required<Pick<V1ddotParamsDict, '@type'>> & V1ddotParamsDict;
 
 
 /**
- * Output object returned when calling `V1ddotParameters(...)`.
+ * Output object returned when calling `V1ddotParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v_1ddot_params(
     rank_flag: boolean = false,
     terse_flag: boolean = false,
     okzero_flag: boolean = false,
-): V1ddotParametersTagged {
+): V1ddotParamsDictTagged {
     const params = {
         "@type": "afni/1ddot" as const,
         "one_flag": one_flag,
@@ -94,7 +94,7 @@ function v_1ddot_params(
  * @returns Command-line arguments.
  */
 function v_1ddot_cargs(
-    params: V1ddotParameters,
+    params: V1ddotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function v_1ddot_cargs(
  * @returns Outputs object.
  */
 function v_1ddot_outputs(
-    params: V1ddotParameters,
+    params: V1ddotParamsDict,
     execution: Execution,
 ): V1ddotOutputs {
     const ret: V1ddotOutputs = {
@@ -161,7 +161,7 @@ function v_1ddot_outputs(
  * @returns NamedTuple of outputs (described in `V1ddotOutputs`).
  */
 function v_1ddot_execute(
-    params: V1ddotParameters,
+    params: V1ddotParamsDict,
     runner: Runner | null = null,
 ): V1ddotOutputs {
     runner = runner || getGlobalRunner();
@@ -213,6 +213,8 @@ function v_1ddot(
 
 export {
       V1ddotOutputs,
+      V1ddotParamsDict,
+      V1ddotParamsDictTagged,
       V_1DDOT_METADATA,
       v_1ddot,
       v_1ddot_execute,

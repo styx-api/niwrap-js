@@ -11,16 +11,16 @@ const ROTCOM_METADATA: Metadata = {
 };
 
 
-interface RotcomParameters {
+interface RotcomParamsDict {
     "@type"?: "afni/rotcom";
     "rotate_ashift": string;
     "dataset"?: InputPathType | null | undefined;
 }
-type RotcomParametersTagged = Required<Pick<RotcomParameters, '@type'>> & RotcomParameters;
+type RotcomParamsDictTagged = Required<Pick<RotcomParamsDict, '@type'>> & RotcomParamsDict;
 
 
 /**
- * Output object returned when calling `RotcomParameters(...)`.
+ * Output object returned when calling `RotcomParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface RotcomOutputs {
 function rotcom_params(
     rotate_ashift: string,
     dataset: InputPathType | null = null,
-): RotcomParametersTagged {
+): RotcomParamsDictTagged {
     const params = {
         "@type": "afni/rotcom" as const,
         "rotate_ashift": rotate_ashift,
@@ -68,7 +68,7 @@ function rotcom_params(
  * @returns Command-line arguments.
  */
 function rotcom_cargs(
-    params: RotcomParameters,
+    params: RotcomParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function rotcom_cargs(
  * @returns Outputs object.
  */
 function rotcom_outputs(
-    params: RotcomParameters,
+    params: RotcomParamsDict,
     execution: Execution,
 ): RotcomOutputs {
     const ret: RotcomOutputs = {
@@ -116,7 +116,7 @@ function rotcom_outputs(
  * @returns NamedTuple of outputs (described in `RotcomOutputs`).
  */
 function rotcom_execute(
-    params: RotcomParameters,
+    params: RotcomParamsDict,
     runner: Runner | null = null,
 ): RotcomOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function rotcom(
 export {
       ROTCOM_METADATA,
       RotcomOutputs,
+      RotcomParamsDict,
+      RotcomParamsDictTagged,
       rotcom,
       rotcom_execute,
       rotcom_params,

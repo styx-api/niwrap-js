@@ -11,16 +11,16 @@ const RUN_MRIS_PREPROC_METADATA: Metadata = {
 };
 
 
-interface RunMrisPreprocParameters {
+interface RunMrisPreprocParamsDict {
     "@type"?: "freesurfer/run_mris_preproc";
     "qdec_table": InputPathType;
     "target_average"?: string | null | undefined;
 }
-type RunMrisPreprocParametersTagged = Required<Pick<RunMrisPreprocParameters, '@type'>> & RunMrisPreprocParameters;
+type RunMrisPreprocParamsDictTagged = Required<Pick<RunMrisPreprocParamsDict, '@type'>> & RunMrisPreprocParamsDict;
 
 
 /**
- * Output object returned when calling `RunMrisPreprocParameters(...)`.
+ * Output object returned when calling `RunMrisPreprocParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface RunMrisPreprocOutputs {
 function run_mris_preproc_params(
     qdec_table: InputPathType,
     target_average: string | null = null,
-): RunMrisPreprocParametersTagged {
+): RunMrisPreprocParamsDictTagged {
     const params = {
         "@type": "freesurfer/run_mris_preproc" as const,
         "qdec_table": qdec_table,
@@ -64,7 +64,7 @@ function run_mris_preproc_params(
  * @returns Command-line arguments.
  */
 function run_mris_preproc_cargs(
-    params: RunMrisPreprocParameters,
+    params: RunMrisPreprocParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function run_mris_preproc_cargs(
  * @returns Outputs object.
  */
 function run_mris_preproc_outputs(
-    params: RunMrisPreprocParameters,
+    params: RunMrisPreprocParamsDict,
     execution: Execution,
 ): RunMrisPreprocOutputs {
     const ret: RunMrisPreprocOutputs = {
@@ -111,7 +111,7 @@ function run_mris_preproc_outputs(
  * @returns NamedTuple of outputs (described in `RunMrisPreprocOutputs`).
  */
 function run_mris_preproc_execute(
-    params: RunMrisPreprocParameters,
+    params: RunMrisPreprocParamsDict,
     runner: Runner | null = null,
 ): RunMrisPreprocOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function run_mris_preproc(
 export {
       RUN_MRIS_PREPROC_METADATA,
       RunMrisPreprocOutputs,
+      RunMrisPreprocParamsDict,
+      RunMrisPreprocParamsDictTagged,
       run_mris_preproc,
       run_mris_preproc_execute,
       run_mris_preproc_params,

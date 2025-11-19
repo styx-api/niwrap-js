@@ -11,7 +11,7 @@ const V_3D_RE_HO_METADATA: Metadata = {
 };
 
 
-interface V3dReHoParameters {
+interface V3dReHoParamsDict {
     "@type"?: "afni/3dReHo";
     "prefix": string;
     "inset": InputPathType;
@@ -28,11 +28,11 @@ interface V3dReHoParameters {
     "box_z"?: number | null | undefined;
     "in_rois"?: InputPathType | null | undefined;
 }
-type V3dReHoParametersTagged = Required<Pick<V3dReHoParameters, '@type'>> & V3dReHoParameters;
+type V3dReHoParamsDictTagged = Required<Pick<V3dReHoParamsDict, '@type'>> & V3dReHoParamsDict;
 
 
 /**
- * Output object returned when calling `V3dReHoParameters(...)`.
+ * Output object returned when calling `V3dReHoParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function v_3d_re_ho_params(
     box_y: number | null = null,
     box_z: number | null = null,
     in_rois: InputPathType | null = null,
-): V3dReHoParametersTagged {
+): V3dReHoParamsDictTagged {
     const params = {
         "@type": "afni/3dReHo" as const,
         "prefix": prefix,
@@ -148,7 +148,7 @@ function v_3d_re_ho_params(
  * @returns Command-line arguments.
  */
 function v_3d_re_ho_cargs(
-    params: V3dReHoParameters,
+    params: V3dReHoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function v_3d_re_ho_cargs(
  * @returns Outputs object.
  */
 function v_3d_re_ho_outputs(
-    params: V3dReHoParameters,
+    params: V3dReHoParamsDict,
     execution: Execution,
 ): V3dReHoOutputs {
     const ret: V3dReHoOutputs = {
@@ -272,7 +272,7 @@ function v_3d_re_ho_outputs(
  * @returns NamedTuple of outputs (described in `V3dReHoOutputs`).
  */
 function v_3d_re_ho_execute(
-    params: V3dReHoParameters,
+    params: V3dReHoParamsDict,
     runner: Runner | null = null,
 ): V3dReHoOutputs {
     runner = runner || getGlobalRunner();
@@ -336,6 +336,8 @@ function v_3d_re_ho(
 
 export {
       V3dReHoOutputs,
+      V3dReHoParamsDict,
+      V3dReHoParamsDictTagged,
       V_3D_RE_HO_METADATA,
       v_3d_re_ho,
       v_3d_re_ho_execute,

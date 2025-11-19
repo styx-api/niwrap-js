@@ -10,7 +10,7 @@ const METRIC_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface MetricRoisFromExtremaParameters {
+interface MetricRoisFromExtremaParamsDict {
     "@type"?: "workbench/metric-rois-from-extrema";
     "metric-out": string;
     "sigma"?: number | null | undefined;
@@ -21,11 +21,11 @@ interface MetricRoisFromExtremaParameters {
     "metric": InputPathType;
     "limit": number;
 }
-type MetricRoisFromExtremaParametersTagged = Required<Pick<MetricRoisFromExtremaParameters, '@type'>> & MetricRoisFromExtremaParameters;
+type MetricRoisFromExtremaParamsDictTagged = Required<Pick<MetricRoisFromExtremaParamsDict, '@type'>> & MetricRoisFromExtremaParamsDict;
 
 
 /**
- * Output object returned when calling `MetricRoisFromExtremaParameters(...)`.
+ * Output object returned when calling `MetricRoisFromExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function metric_rois_from_extrema_params(
     surface: InputPathType,
     metric: InputPathType,
     limit: number,
-): MetricRoisFromExtremaParametersTagged {
+): MetricRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/metric-rois-from-extrema" as const,
         "metric-out": metric_out,
@@ -105,7 +105,7 @@ function metric_rois_from_extrema_params(
  * @returns Command-line arguments.
  */
 function metric_rois_from_extrema_cargs(
-    params: MetricRoisFromExtremaParameters,
+    params: MetricRoisFromExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function metric_rois_from_extrema_cargs(
  * @returns Outputs object.
  */
 function metric_rois_from_extrema_outputs(
-    params: MetricRoisFromExtremaParameters,
+    params: MetricRoisFromExtremaParamsDict,
     execution: Execution,
 ): MetricRoisFromExtremaOutputs {
     const ret: MetricRoisFromExtremaOutputs = {
@@ -162,7 +162,7 @@ function metric_rois_from_extrema_outputs(
  * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
  */
 function metric_rois_from_extrema_execute(
-    params: MetricRoisFromExtremaParameters,
+    params: MetricRoisFromExtremaParamsDict,
     runner: Runner | null = null,
 ): MetricRoisFromExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function metric_rois_from_extrema(
 export {
       METRIC_ROIS_FROM_EXTREMA_METADATA,
       MetricRoisFromExtremaOutputs,
+      MetricRoisFromExtremaParamsDict,
+      MetricRoisFromExtremaParamsDictTagged,
       metric_rois_from_extrema,
       metric_rois_from_extrema_execute,
       metric_rois_from_extrema_params,

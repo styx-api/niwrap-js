@@ -11,7 +11,7 @@ const PLUGOUT_IJK_METADATA: Metadata = {
 };
 
 
-interface PlugoutIjkParameters {
+interface PlugoutIjkParamsDict {
     "@type"?: "afni/plugout_ijk";
     "host"?: string | null | undefined;
     "verbose": boolean;
@@ -25,11 +25,11 @@ interface PlugoutIjkParameters {
     "num_assigned_ports": boolean;
     "num_assigned_ports_quiet": boolean;
 }
-type PlugoutIjkParametersTagged = Required<Pick<PlugoutIjkParameters, '@type'>> & PlugoutIjkParameters;
+type PlugoutIjkParamsDictTagged = Required<Pick<PlugoutIjkParamsDict, '@type'>> & PlugoutIjkParamsDict;
 
 
 /**
- * Output object returned when calling `PlugoutIjkParameters(...)`.
+ * Output object returned when calling `PlugoutIjkParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function plugout_ijk_params(
     max_bloc_quiet: boolean = false,
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
-): PlugoutIjkParametersTagged {
+): PlugoutIjkParamsDictTagged {
     const params = {
         "@type": "afni/plugout_ijk" as const,
         "verbose": verbose,
@@ -110,7 +110,7 @@ function plugout_ijk_params(
  * @returns Command-line arguments.
  */
 function plugout_ijk_cargs(
-    params: PlugoutIjkParameters,
+    params: PlugoutIjkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -179,7 +179,7 @@ function plugout_ijk_cargs(
  * @returns Outputs object.
  */
 function plugout_ijk_outputs(
-    params: PlugoutIjkParameters,
+    params: PlugoutIjkParamsDict,
     execution: Execution,
 ): PlugoutIjkOutputs {
     const ret: PlugoutIjkOutputs = {
@@ -204,7 +204,7 @@ function plugout_ijk_outputs(
  * @returns NamedTuple of outputs (described in `PlugoutIjkOutputs`).
  */
 function plugout_ijk_execute(
-    params: PlugoutIjkParameters,
+    params: PlugoutIjkParamsDict,
     runner: Runner | null = null,
 ): PlugoutIjkOutputs {
     runner = runner || getGlobalRunner();
@@ -263,6 +263,8 @@ function plugout_ijk(
 export {
       PLUGOUT_IJK_METADATA,
       PlugoutIjkOutputs,
+      PlugoutIjkParamsDict,
+      PlugoutIjkParamsDictTagged,
       plugout_ijk,
       plugout_ijk_execute,
       plugout_ijk_params,

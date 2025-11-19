@@ -11,17 +11,17 @@ const V_3DSVM_LINPREDICT_METADATA: Metadata = {
 };
 
 
-interface V3dsvmLinpredictParameters {
+interface V3dsvmLinpredictParamsDict {
     "@type"?: "afni/3dsvm_linpredict";
     "mask_dataset"?: InputPathType | null | undefined;
     "weight_vector": InputPathType;
     "input_dataset": string;
 }
-type V3dsvmLinpredictParametersTagged = Required<Pick<V3dsvmLinpredictParameters, '@type'>> & V3dsvmLinpredictParameters;
+type V3dsvmLinpredictParamsDictTagged = Required<Pick<V3dsvmLinpredictParamsDict, '@type'>> & V3dsvmLinpredictParamsDict;
 
 
 /**
- * Output object returned when calling `V3dsvmLinpredictParameters(...)`.
+ * Output object returned when calling `V3dsvmLinpredictParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3dsvm_linpredict_params(
     weight_vector: InputPathType,
     input_dataset: string,
     mask_dataset: InputPathType | null = null,
-): V3dsvmLinpredictParametersTagged {
+): V3dsvmLinpredictParamsDictTagged {
     const params = {
         "@type": "afni/3dsvm_linpredict" as const,
         "weight_vector": weight_vector,
@@ -72,7 +72,7 @@ function v_3dsvm_linpredict_params(
  * @returns Command-line arguments.
  */
 function v_3dsvm_linpredict_cargs(
-    params: V3dsvmLinpredictParameters,
+    params: V3dsvmLinpredictParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function v_3dsvm_linpredict_cargs(
  * @returns Outputs object.
  */
 function v_3dsvm_linpredict_outputs(
-    params: V3dsvmLinpredictParameters,
+    params: V3dsvmLinpredictParamsDict,
     execution: Execution,
 ): V3dsvmLinpredictOutputs {
     const ret: V3dsvmLinpredictOutputs = {
@@ -124,7 +124,7 @@ function v_3dsvm_linpredict_outputs(
  * @returns NamedTuple of outputs (described in `V3dsvmLinpredictOutputs`).
  */
 function v_3dsvm_linpredict_execute(
-    params: V3dsvmLinpredictParameters,
+    params: V3dsvmLinpredictParamsDict,
     runner: Runner | null = null,
 ): V3dsvmLinpredictOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function v_3dsvm_linpredict(
 
 export {
       V3dsvmLinpredictOutputs,
+      V3dsvmLinpredictParamsDict,
+      V3dsvmLinpredictParamsDictTagged,
       V_3DSVM_LINPREDICT_METADATA,
       v_3dsvm_linpredict,
       v_3dsvm_linpredict_execute,

@@ -10,7 +10,7 @@ const ZIP_SCENE_FILE_METADATA: Metadata = {
 };
 
 
-interface ZipSceneFileParameters {
+interface ZipSceneFileParamsDict {
     "@type"?: "workbench/zip-scene-file";
     "directory"?: string | null | undefined;
     "skip-missing": boolean;
@@ -19,11 +19,11 @@ interface ZipSceneFileParameters {
     "extract-folder": string;
     "zip-file": string;
 }
-type ZipSceneFileParametersTagged = Required<Pick<ZipSceneFileParameters, '@type'>> & ZipSceneFileParameters;
+type ZipSceneFileParamsDictTagged = Required<Pick<ZipSceneFileParamsDict, '@type'>> & ZipSceneFileParamsDict;
 
 
 /**
- * Output object returned when calling `ZipSceneFileParameters(...)`.
+ * Output object returned when calling `ZipSceneFileParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function zip_scene_file_params(
     zip_file: string,
     skip_missing: boolean = false,
     write_scene_file: boolean = false,
-): ZipSceneFileParametersTagged {
+): ZipSceneFileParamsDictTagged {
     const params = {
         "@type": "workbench/zip-scene-file" as const,
         "skip-missing": skip_missing,
@@ -81,7 +81,7 @@ function zip_scene_file_params(
  * @returns Command-line arguments.
  */
 function zip_scene_file_cargs(
-    params: ZipSceneFileParameters,
+    params: ZipSceneFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function zip_scene_file_cargs(
  * @returns Outputs object.
  */
 function zip_scene_file_outputs(
-    params: ZipSceneFileParameters,
+    params: ZipSceneFileParamsDict,
     execution: Execution,
 ): ZipSceneFileOutputs {
     const ret: ZipSceneFileOutputs = {
@@ -132,7 +132,7 @@ function zip_scene_file_outputs(
  * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
  */
 function zip_scene_file_execute(
-    params: ZipSceneFileParameters,
+    params: ZipSceneFileParamsDict,
     runner: Runner | null = null,
 ): ZipSceneFileOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function zip_scene_file(
 export {
       ZIP_SCENE_FILE_METADATA,
       ZipSceneFileOutputs,
+      ZipSceneFileParamsDict,
+      ZipSceneFileParamsDictTagged,
       zip_scene_file,
       zip_scene_file_execute,
       zip_scene_file_params,

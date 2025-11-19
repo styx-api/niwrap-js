@@ -11,7 +11,7 @@ const V__DJUNCT_EDGY_ALIGN_CHECK_METADATA: Metadata = {
 };
 
 
-interface VDjunctEdgyAlignCheckParameters {
+interface VDjunctEdgyAlignCheckParamsDict {
     "@type"?: "afni/@djunct_edgy_align_check";
     "ULAY": string;
     "OLAY": string;
@@ -40,11 +40,11 @@ interface VDjunctEdgyAlignCheckParameters {
     "ulay_range_nz"?: Array<number> | null | undefined;
     "ulay_range_am"?: Array<number> | null | undefined;
 }
-type VDjunctEdgyAlignCheckParametersTagged = Required<Pick<VDjunctEdgyAlignCheckParameters, '@type'>> & VDjunctEdgyAlignCheckParameters;
+type VDjunctEdgyAlignCheckParamsDictTagged = Required<Pick<VDjunctEdgyAlignCheckParamsDict, '@type'>> & VDjunctEdgyAlignCheckParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunctEdgyAlignCheckParameters(...)`.
+ * Output object returned when calling `VDjunctEdgyAlignCheckParamsDict(...)`.
  *
  * @interface
  */
@@ -115,7 +115,7 @@ function v__djunct_edgy_align_check_params(
     ulay_range: Array<number> | null = null,
     ulay_range_nz: Array<number> | null = null,
     ulay_range_am: Array<number> | null = null,
-): VDjunctEdgyAlignCheckParametersTagged {
+): VDjunctEdgyAlignCheckParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_edgy_align_check" as const,
         "ULAY": ulay,
@@ -186,7 +186,7 @@ function v__djunct_edgy_align_check_params(
  * @returns Command-line arguments.
  */
 function v__djunct_edgy_align_check_cargs(
-    params: VDjunctEdgyAlignCheckParameters,
+    params: VDjunctEdgyAlignCheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -276,7 +276,7 @@ function v__djunct_edgy_align_check_cargs(
  * @returns Outputs object.
  */
 function v__djunct_edgy_align_check_outputs(
-    params: VDjunctEdgyAlignCheckParameters,
+    params: VDjunctEdgyAlignCheckParamsDict,
     execution: Execution,
 ): VDjunctEdgyAlignCheckOutputs {
     const ret: VDjunctEdgyAlignCheckOutputs = {
@@ -301,7 +301,7 @@ function v__djunct_edgy_align_check_outputs(
  * @returns NamedTuple of outputs (described in `VDjunctEdgyAlignCheckOutputs`).
  */
 function v__djunct_edgy_align_check_execute(
-    params: VDjunctEdgyAlignCheckParameters,
+    params: VDjunctEdgyAlignCheckParamsDict,
     runner: Runner | null = null,
 ): VDjunctEdgyAlignCheckOutputs {
     runner = runner || getGlobalRunner();
@@ -389,6 +389,8 @@ function v__djunct_edgy_align_check(
 
 export {
       VDjunctEdgyAlignCheckOutputs,
+      VDjunctEdgyAlignCheckParamsDict,
+      VDjunctEdgyAlignCheckParamsDictTagged,
       V__DJUNCT_EDGY_ALIGN_CHECK_METADATA,
       v__djunct_edgy_align_check,
       v__djunct_edgy_align_check_execute,

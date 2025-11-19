@@ -11,16 +11,16 @@ const RUN_SEGMENT_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
 };
 
 
-interface RunSegmentThalamicNucleiShParameters {
+interface RunSegmentThalamicNucleiShParamsDict {
     "@type"?: "freesurfer/run_SegmentThalamicNuclei.sh";
     "mcr_root": string;
     "args"?: Array<string> | null | undefined;
 }
-type RunSegmentThalamicNucleiShParametersTagged = Required<Pick<RunSegmentThalamicNucleiShParameters, '@type'>> & RunSegmentThalamicNucleiShParameters;
+type RunSegmentThalamicNucleiShParamsDictTagged = Required<Pick<RunSegmentThalamicNucleiShParamsDict, '@type'>> & RunSegmentThalamicNucleiShParamsDict;
 
 
 /**
- * Output object returned when calling `RunSegmentThalamicNucleiShParameters(...)`.
+ * Output object returned when calling `RunSegmentThalamicNucleiShParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface RunSegmentThalamicNucleiShOutputs {
 function run_segment_thalamic_nuclei_sh_params(
     mcr_root: string,
     args: Array<string> | null = null,
-): RunSegmentThalamicNucleiShParametersTagged {
+): RunSegmentThalamicNucleiShParamsDictTagged {
     const params = {
         "@type": "freesurfer/run_SegmentThalamicNuclei.sh" as const,
         "mcr_root": mcr_root,
@@ -64,7 +64,7 @@ function run_segment_thalamic_nuclei_sh_params(
  * @returns Command-line arguments.
  */
 function run_segment_thalamic_nuclei_sh_cargs(
-    params: RunSegmentThalamicNucleiShParameters,
+    params: RunSegmentThalamicNucleiShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function run_segment_thalamic_nuclei_sh_cargs(
  * @returns Outputs object.
  */
 function run_segment_thalamic_nuclei_sh_outputs(
-    params: RunSegmentThalamicNucleiShParameters,
+    params: RunSegmentThalamicNucleiShParamsDict,
     execution: Execution,
 ): RunSegmentThalamicNucleiShOutputs {
     const ret: RunSegmentThalamicNucleiShOutputs = {
@@ -111,7 +111,7 @@ function run_segment_thalamic_nuclei_sh_outputs(
  * @returns NamedTuple of outputs (described in `RunSegmentThalamicNucleiShOutputs`).
  */
 function run_segment_thalamic_nuclei_sh_execute(
-    params: RunSegmentThalamicNucleiShParameters,
+    params: RunSegmentThalamicNucleiShParamsDict,
     runner: Runner | null = null,
 ): RunSegmentThalamicNucleiShOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function run_segment_thalamic_nuclei_sh(
 export {
       RUN_SEGMENT_THALAMIC_NUCLEI_SH_METADATA,
       RunSegmentThalamicNucleiShOutputs,
+      RunSegmentThalamicNucleiShParamsDict,
+      RunSegmentThalamicNucleiShParamsDictTagged,
       run_segment_thalamic_nuclei_sh,
       run_segment_thalamic_nuclei_sh_execute,
       run_segment_thalamic_nuclei_sh_params,

@@ -11,7 +11,7 @@ const V__ATLASIZE_METADATA: Metadata = {
 };
 
 
-interface VAtlasizeParameters {
+interface VAtlasizeParamsDict {
     "@type"?: "afni/@Atlasize";
     "dset"?: InputPathType | null | undefined;
     "space"?: string | null | undefined;
@@ -32,11 +32,11 @@ interface VAtlasizeParameters {
     "all_opts": boolean;
     "h_find"?: string | null | undefined;
 }
-type VAtlasizeParametersTagged = Required<Pick<VAtlasizeParameters, '@type'>> & VAtlasizeParameters;
+type VAtlasizeParamsDictTagged = Required<Pick<VAtlasizeParamsDict, '@type'>> & VAtlasizeParamsDict;
 
 
 /**
- * Output object returned when calling `VAtlasizeParameters(...)`.
+ * Output object returned when calling `VAtlasizeParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function v__atlasize_params(
     h_view: boolean = false,
     all_opts: boolean = false,
     h_find: string | null = null,
-): VAtlasizeParametersTagged {
+): VAtlasizeParamsDictTagged {
     const params = {
         "@type": "afni/@Atlasize" as const,
         "auto_backup": auto_backup,
@@ -154,7 +154,7 @@ function v__atlasize_params(
  * @returns Command-line arguments.
  */
 function v__atlasize_cargs(
-    params: VAtlasizeParameters,
+    params: VAtlasizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -262,7 +262,7 @@ function v__atlasize_cargs(
  * @returns Outputs object.
  */
 function v__atlasize_outputs(
-    params: VAtlasizeParameters,
+    params: VAtlasizeParamsDict,
     execution: Execution,
 ): VAtlasizeOutputs {
     const ret: VAtlasizeOutputs = {
@@ -288,7 +288,7 @@ function v__atlasize_outputs(
  * @returns NamedTuple of outputs (described in `VAtlasizeOutputs`).
  */
 function v__atlasize_execute(
-    params: VAtlasizeParameters,
+    params: VAtlasizeParamsDict,
     runner: Runner | null = null,
 ): VAtlasizeOutputs {
     runner = runner || getGlobalRunner();
@@ -360,6 +360,8 @@ function v__atlasize(
 
 export {
       VAtlasizeOutputs,
+      VAtlasizeParamsDict,
+      VAtlasizeParamsDictTagged,
       V__ATLASIZE_METADATA,
       v__atlasize,
       v__atlasize_execute,

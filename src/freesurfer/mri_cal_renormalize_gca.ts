@@ -11,7 +11,7 @@ const MRI_CAL_RENORMALIZE_GCA_METADATA: Metadata = {
 };
 
 
-interface MriCalRenormalizeGcaParameters {
+interface MriCalRenormalizeGcaParamsDict {
     "@type"?: "freesurfer/mri_cal_renormalize_gca";
     "timepoint_file": InputPathType;
     "in_vol": InputPathType;
@@ -19,11 +19,11 @@ interface MriCalRenormalizeGcaParameters {
     "transform_file": InputPathType;
     "output_atlas": string;
 }
-type MriCalRenormalizeGcaParametersTagged = Required<Pick<MriCalRenormalizeGcaParameters, '@type'>> & MriCalRenormalizeGcaParameters;
+type MriCalRenormalizeGcaParamsDictTagged = Required<Pick<MriCalRenormalizeGcaParamsDict, '@type'>> & MriCalRenormalizeGcaParamsDict;
 
 
 /**
- * Output object returned when calling `MriCalRenormalizeGcaParameters(...)`.
+ * Output object returned when calling `MriCalRenormalizeGcaParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_cal_renormalize_gca_params(
     input_atlas: InputPathType,
     transform_file: InputPathType,
     output_atlas: string,
-): MriCalRenormalizeGcaParametersTagged {
+): MriCalRenormalizeGcaParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_cal_renormalize_gca" as const,
         "timepoint_file": timepoint_file,
@@ -78,7 +78,7 @@ function mri_cal_renormalize_gca_params(
  * @returns Command-line arguments.
  */
 function mri_cal_renormalize_gca_cargs(
-    params: MriCalRenormalizeGcaParameters,
+    params: MriCalRenormalizeGcaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function mri_cal_renormalize_gca_cargs(
  * @returns Outputs object.
  */
 function mri_cal_renormalize_gca_outputs(
-    params: MriCalRenormalizeGcaParameters,
+    params: MriCalRenormalizeGcaParamsDict,
     execution: Execution,
 ): MriCalRenormalizeGcaOutputs {
     const ret: MriCalRenormalizeGcaOutputs = {
@@ -127,7 +127,7 @@ function mri_cal_renormalize_gca_outputs(
  * @returns NamedTuple of outputs (described in `MriCalRenormalizeGcaOutputs`).
  */
 function mri_cal_renormalize_gca_execute(
-    params: MriCalRenormalizeGcaParameters,
+    params: MriCalRenormalizeGcaParamsDict,
     runner: Runner | null = null,
 ): MriCalRenormalizeGcaOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mri_cal_renormalize_gca(
 export {
       MRI_CAL_RENORMALIZE_GCA_METADATA,
       MriCalRenormalizeGcaOutputs,
+      MriCalRenormalizeGcaParamsDict,
+      MriCalRenormalizeGcaParamsDictTagged,
       mri_cal_renormalize_gca,
       mri_cal_renormalize_gca_execute,
       mri_cal_renormalize_gca_params,

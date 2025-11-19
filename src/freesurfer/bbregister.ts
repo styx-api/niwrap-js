@@ -11,7 +11,7 @@ const BBREGISTER_METADATA: Metadata = {
 };
 
 
-interface BbregisterParameters {
+interface BbregisterParamsDict {
     "@type"?: "freesurfer/bbregister";
     "subject": string;
     "moveable_volume": InputPathType;
@@ -30,11 +30,11 @@ interface BbregisterParameters {
     "o_outvol"?: string | null | undefined;
     "s_from_reg": boolean;
 }
-type BbregisterParametersTagged = Required<Pick<BbregisterParameters, '@type'>> & BbregisterParameters;
+type BbregisterParamsDictTagged = Required<Pick<BbregisterParamsDict, '@type'>> & BbregisterParamsDict;
 
 
 /**
- * Output object returned when calling `BbregisterParameters(...)`.
+ * Output object returned when calling `BbregisterParamsDict(...)`.
  *
  * @interface
  */
@@ -93,7 +93,7 @@ function bbregister_params(
     template_out: string | null = null,
     o_outvol: string | null = null,
     s_from_reg: boolean = false,
-): BbregisterParametersTagged {
+): BbregisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/bbregister" as const,
         "subject": subject,
@@ -138,7 +138,7 @@ function bbregister_params(
  * @returns Command-line arguments.
  */
 function bbregister_cargs(
-    params: BbregisterParameters,
+    params: BbregisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -225,7 +225,7 @@ function bbregister_cargs(
  * @returns Outputs object.
  */
 function bbregister_outputs(
-    params: BbregisterParameters,
+    params: BbregisterParamsDict,
     execution: Execution,
 ): BbregisterOutputs {
     const ret: BbregisterOutputs = {
@@ -252,7 +252,7 @@ function bbregister_outputs(
  * @returns NamedTuple of outputs (described in `BbregisterOutputs`).
  */
 function bbregister_execute(
-    params: BbregisterParameters,
+    params: BbregisterParamsDict,
     runner: Runner | null = null,
 ): BbregisterOutputs {
     runner = runner || getGlobalRunner();
@@ -321,6 +321,8 @@ function bbregister(
 export {
       BBREGISTER_METADATA,
       BbregisterOutputs,
+      BbregisterParamsDict,
+      BbregisterParamsDictTagged,
       bbregister,
       bbregister_execute,
       bbregister_params,

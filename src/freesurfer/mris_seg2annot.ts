@@ -11,7 +11,7 @@ const MRIS_SEG2ANNOT_METADATA: Metadata = {
 };
 
 
-interface MrisSeg2annotParameters {
+interface MrisSeg2annotParamsDict {
     "@type"?: "freesurfer/mris_seg2annot";
     "surfseg": InputPathType;
     "colortable"?: InputPathType | null | undefined;
@@ -25,11 +25,11 @@ interface MrisSeg2annotParameters {
     "checkopts": boolean;
     "version": boolean;
 }
-type MrisSeg2annotParametersTagged = Required<Pick<MrisSeg2annotParameters, '@type'>> & MrisSeg2annotParameters;
+type MrisSeg2annotParamsDictTagged = Required<Pick<MrisSeg2annotParamsDict, '@type'>> & MrisSeg2annotParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSeg2annotParameters(...)`.
+ * Output object returned when calling `MrisSeg2annotParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function mris_seg2annot_params(
     debug_vertex: number | null = null,
     checkopts: boolean = false,
     version: boolean = false,
-): MrisSeg2annotParametersTagged {
+): MrisSeg2annotParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_seg2annot" as const,
         "surfseg": surfseg,
@@ -110,7 +110,7 @@ function mris_seg2annot_params(
  * @returns Command-line arguments.
  */
 function mris_seg2annot_cargs(
-    params: MrisSeg2annotParameters,
+    params: MrisSeg2annotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function mris_seg2annot_cargs(
  * @returns Outputs object.
  */
 function mris_seg2annot_outputs(
-    params: MrisSeg2annotParameters,
+    params: MrisSeg2annotParamsDict,
     execution: Execution,
 ): MrisSeg2annotOutputs {
     const ret: MrisSeg2annotOutputs = {
@@ -203,7 +203,7 @@ function mris_seg2annot_outputs(
  * @returns NamedTuple of outputs (described in `MrisSeg2annotOutputs`).
  */
 function mris_seg2annot_execute(
-    params: MrisSeg2annotParameters,
+    params: MrisSeg2annotParamsDict,
     runner: Runner | null = null,
 ): MrisSeg2annotOutputs {
     runner = runner || getGlobalRunner();
@@ -262,6 +262,8 @@ function mris_seg2annot(
 export {
       MRIS_SEG2ANNOT_METADATA,
       MrisSeg2annotOutputs,
+      MrisSeg2annotParamsDict,
+      MrisSeg2annotParamsDictTagged,
       mris_seg2annot,
       mris_seg2annot_execute,
       mris_seg2annot_params,

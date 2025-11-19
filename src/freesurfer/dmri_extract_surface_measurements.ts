@@ -11,7 +11,7 @@ const DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA: Metadata = {
 };
 
 
-interface DmriExtractSurfaceMeasurementsParameters {
+interface DmriExtractSurfaceMeasurementsParamsDict {
     "@type"?: "freesurfer/dmri_extractSurfaceMeasurements";
     "streamline_file": InputPathType;
     "lh_surface_file": InputPathType;
@@ -27,11 +27,11 @@ interface DmriExtractSurfaceMeasurementsParameters {
     "annotation_file"?: InputPathType | null | undefined;
     "fa_options"?: Array<string> | null | undefined;
 }
-type DmriExtractSurfaceMeasurementsParametersTagged = Required<Pick<DmriExtractSurfaceMeasurementsParameters, '@type'>> & DmriExtractSurfaceMeasurementsParameters;
+type DmriExtractSurfaceMeasurementsParamsDictTagged = Required<Pick<DmriExtractSurfaceMeasurementsParamsDict, '@type'>> & DmriExtractSurfaceMeasurementsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriExtractSurfaceMeasurementsParameters(...)`.
+ * Output object returned when calling `DmriExtractSurfaceMeasurementsParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function dmri_extract_surface_measurements_params(
     transformation: InputPathType | null = null,
     annotation_file: InputPathType | null = null,
     fa_options: Array<string> | null = null,
-): DmriExtractSurfaceMeasurementsParametersTagged {
+): DmriExtractSurfaceMeasurementsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_extractSurfaceMeasurements" as const,
         "streamline_file": streamline_file,
@@ -116,7 +116,7 @@ function dmri_extract_surface_measurements_params(
  * @returns Command-line arguments.
  */
 function dmri_extract_surface_measurements_cargs(
-    params: DmriExtractSurfaceMeasurementsParameters,
+    params: DmriExtractSurfaceMeasurementsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -196,7 +196,7 @@ function dmri_extract_surface_measurements_cargs(
  * @returns Outputs object.
  */
 function dmri_extract_surface_measurements_outputs(
-    params: DmriExtractSurfaceMeasurementsParameters,
+    params: DmriExtractSurfaceMeasurementsParamsDict,
     execution: Execution,
 ): DmriExtractSurfaceMeasurementsOutputs {
     const ret: DmriExtractSurfaceMeasurementsOutputs = {
@@ -221,7 +221,7 @@ function dmri_extract_surface_measurements_outputs(
  * @returns NamedTuple of outputs (described in `DmriExtractSurfaceMeasurementsOutputs`).
  */
 function dmri_extract_surface_measurements_execute(
-    params: DmriExtractSurfaceMeasurementsParameters,
+    params: DmriExtractSurfaceMeasurementsParamsDict,
     runner: Runner | null = null,
 ): DmriExtractSurfaceMeasurementsOutputs {
     runner = runner || getGlobalRunner();
@@ -284,6 +284,8 @@ function dmri_extract_surface_measurements(
 export {
       DMRI_EXTRACT_SURFACE_MEASUREMENTS_METADATA,
       DmriExtractSurfaceMeasurementsOutputs,
+      DmriExtractSurfaceMeasurementsParamsDict,
+      DmriExtractSurfaceMeasurementsParamsDictTagged,
       dmri_extract_surface_measurements,
       dmri_extract_surface_measurements_execute,
       dmri_extract_surface_measurements_params,

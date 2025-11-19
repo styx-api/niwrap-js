@@ -11,16 +11,16 @@ const V_3D_ENTROPY_METADATA: Metadata = {
 };
 
 
-interface V3dEntropyParameters {
+interface V3dEntropyParamsDict {
     "@type"?: "afni/3dEntropy";
     "zskip": boolean;
     "input_dataset": InputPathType;
 }
-type V3dEntropyParametersTagged = Required<Pick<V3dEntropyParameters, '@type'>> & V3dEntropyParameters;
+type V3dEntropyParamsDictTagged = Required<Pick<V3dEntropyParamsDict, '@type'>> & V3dEntropyParamsDict;
 
 
 /**
- * Output object returned when calling `V3dEntropyParameters(...)`.
+ * Output object returned when calling `V3dEntropyParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface V3dEntropyOutputs {
 function v_3d_entropy_params(
     input_dataset: InputPathType,
     zskip: boolean = false,
-): V3dEntropyParametersTagged {
+): V3dEntropyParamsDictTagged {
     const params = {
         "@type": "afni/3dEntropy" as const,
         "zskip": zskip,
@@ -62,7 +62,7 @@ function v_3d_entropy_params(
  * @returns Command-line arguments.
  */
 function v_3d_entropy_cargs(
-    params: V3dEntropyParameters,
+    params: V3dEntropyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function v_3d_entropy_cargs(
  * @returns Outputs object.
  */
 function v_3d_entropy_outputs(
-    params: V3dEntropyParameters,
+    params: V3dEntropyParamsDict,
     execution: Execution,
 ): V3dEntropyOutputs {
     const ret: V3dEntropyOutputs = {
@@ -109,7 +109,7 @@ function v_3d_entropy_outputs(
  * @returns NamedTuple of outputs (described in `V3dEntropyOutputs`).
  */
 function v_3d_entropy_execute(
-    params: V3dEntropyParameters,
+    params: V3dEntropyParamsDict,
     runner: Runner | null = null,
 ): V3dEntropyOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function v_3d_entropy(
 
 export {
       V3dEntropyOutputs,
+      V3dEntropyParamsDict,
+      V3dEntropyParamsDictTagged,
       V_3D_ENTROPY_METADATA,
       v_3d_entropy,
       v_3d_entropy_execute,

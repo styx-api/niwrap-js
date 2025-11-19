@@ -11,7 +11,7 @@ const SAMSEGMESH2SURF_METADATA: Metadata = {
 };
 
 
-interface Samsegmesh2surfParameters {
+interface Samsegmesh2surfParamsDict {
     "@type"?: "freesurfer/samsegmesh2surf";
     "atlas_mesh": InputPathType;
     "template"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface Samsegmesh2surfParameters {
     "output_priors"?: string | null | undefined;
     "invert_flag": boolean;
 }
-type Samsegmesh2surfParametersTagged = Required<Pick<Samsegmesh2surfParameters, '@type'>> & Samsegmesh2surfParameters;
+type Samsegmesh2surfParamsDictTagged = Required<Pick<Samsegmesh2surfParamsDict, '@type'>> & Samsegmesh2surfParamsDict;
 
 
 /**
- * Output object returned when calling `Samsegmesh2surfParameters(...)`.
+ * Output object returned when calling `Samsegmesh2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function samsegmesh2surf_params(
     output_surface: string | null = null,
     output_priors: string | null = null,
     invert_flag: boolean = false,
-): Samsegmesh2surfParametersTagged {
+): Samsegmesh2surfParamsDictTagged {
     const params = {
         "@type": "freesurfer/samsegmesh2surf" as const,
         "atlas_mesh": atlas_mesh,
@@ -94,7 +94,7 @@ function samsegmesh2surf_params(
  * @returns Command-line arguments.
  */
 function samsegmesh2surf_cargs(
-    params: Samsegmesh2surfParameters,
+    params: Samsegmesh2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function samsegmesh2surf_cargs(
  * @returns Outputs object.
  */
 function samsegmesh2surf_outputs(
-    params: Samsegmesh2surfParameters,
+    params: Samsegmesh2surfParamsDict,
     execution: Execution,
 ): Samsegmesh2surfOutputs {
     const ret: Samsegmesh2surfOutputs = {
@@ -170,7 +170,7 @@ function samsegmesh2surf_outputs(
  * @returns NamedTuple of outputs (described in `Samsegmesh2surfOutputs`).
  */
 function samsegmesh2surf_execute(
-    params: Samsegmesh2surfParameters,
+    params: Samsegmesh2surfParamsDict,
     runner: Runner | null = null,
 ): Samsegmesh2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function samsegmesh2surf(
 export {
       SAMSEGMESH2SURF_METADATA,
       Samsegmesh2surfOutputs,
+      Samsegmesh2surfParamsDict,
+      Samsegmesh2surfParamsDictTagged,
       samsegmesh2surf,
       samsegmesh2surf_execute,
       samsegmesh2surf_params,

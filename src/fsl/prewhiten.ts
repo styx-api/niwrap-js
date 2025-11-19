@@ -11,16 +11,16 @@ const PREWHITEN_METADATA: Metadata = {
 };
 
 
-interface PrewhitenParameters {
+interface PrewhitenParamsDict {
     "@type"?: "fsl/prewhiten";
     "feat_directory": string;
     "output_directory"?: string | null | undefined;
 }
-type PrewhitenParametersTagged = Required<Pick<PrewhitenParameters, '@type'>> & PrewhitenParameters;
+type PrewhitenParamsDictTagged = Required<Pick<PrewhitenParamsDict, '@type'>> & PrewhitenParamsDict;
 
 
 /**
- * Output object returned when calling `PrewhitenParameters(...)`.
+ * Output object returned when calling `PrewhitenParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface PrewhitenOutputs {
 function prewhiten_params(
     feat_directory: string,
     output_directory: string | null = null,
-): PrewhitenParametersTagged {
+): PrewhitenParamsDictTagged {
     const params = {
         "@type": "fsl/prewhiten" as const,
         "feat_directory": feat_directory,
@@ -68,7 +68,7 @@ function prewhiten_params(
  * @returns Command-line arguments.
  */
 function prewhiten_cargs(
-    params: PrewhitenParameters,
+    params: PrewhitenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function prewhiten_cargs(
  * @returns Outputs object.
  */
 function prewhiten_outputs(
-    params: PrewhitenParameters,
+    params: PrewhitenParamsDict,
     execution: Execution,
 ): PrewhitenOutputs {
     const ret: PrewhitenOutputs = {
@@ -119,7 +119,7 @@ function prewhiten_outputs(
  * @returns NamedTuple of outputs (described in `PrewhitenOutputs`).
  */
 function prewhiten_execute(
-    params: PrewhitenParameters,
+    params: PrewhitenParamsDict,
     runner: Runner | null = null,
 ): PrewhitenOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function prewhiten(
 export {
       PREWHITEN_METADATA,
       PrewhitenOutputs,
+      PrewhitenParamsDict,
+      PrewhitenParamsDictTagged,
       prewhiten,
       prewhiten_execute,
       prewhiten_params,

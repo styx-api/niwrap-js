@@ -11,7 +11,7 @@ const V__AFNI_R_PACKAGE_INSTALL_METADATA: Metadata = {
 };
 
 
-interface VAfniRPackageInstallParameters {
+interface VAfniRPackageInstallParamsDict {
     "@type"?: "afni/@afni_R_package_install";
     "afni": boolean;
     "shiny": boolean;
@@ -21,11 +21,11 @@ interface VAfniRPackageInstallParameters {
     "mirror"?: string | null | undefined;
     "help": boolean;
 }
-type VAfniRPackageInstallParametersTagged = Required<Pick<VAfniRPackageInstallParameters, '@type'>> & VAfniRPackageInstallParameters;
+type VAfniRPackageInstallParamsDictTagged = Required<Pick<VAfniRPackageInstallParamsDict, '@type'>> & VAfniRPackageInstallParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniRPackageInstallParameters(...)`.
+ * Output object returned when calling `VAfniRPackageInstallParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v__afni_r_package_install_params(
     custom_packages: string | null = null,
     mirror: string | null = null,
     help: boolean = false,
-): VAfniRPackageInstallParametersTagged {
+): VAfniRPackageInstallParamsDictTagged {
     const params = {
         "@type": "afni/@afni_R_package_install" as const,
         "afni": afni,
@@ -90,7 +90,7 @@ function v__afni_r_package_install_params(
  * @returns Command-line arguments.
  */
 function v__afni_r_package_install_cargs(
-    params: VAfniRPackageInstallParameters,
+    params: VAfniRPackageInstallParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function v__afni_r_package_install_cargs(
  * @returns Outputs object.
  */
 function v__afni_r_package_install_outputs(
-    params: VAfniRPackageInstallParameters,
+    params: VAfniRPackageInstallParamsDict,
     execution: Execution,
 ): VAfniRPackageInstallOutputs {
     const ret: VAfniRPackageInstallOutputs = {
@@ -161,7 +161,7 @@ function v__afni_r_package_install_outputs(
  * @returns NamedTuple of outputs (described in `VAfniRPackageInstallOutputs`).
  */
 function v__afni_r_package_install_execute(
-    params: VAfniRPackageInstallParameters,
+    params: VAfniRPackageInstallParamsDict,
     runner: Runner | null = null,
 ): VAfniRPackageInstallOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function v__afni_r_package_install(
 
 export {
       VAfniRPackageInstallOutputs,
+      VAfniRPackageInstallParamsDict,
+      VAfniRPackageInstallParamsDictTagged,
       V__AFNI_R_PACKAGE_INSTALL_METADATA,
       v__afni_r_package_install,
       v__afni_r_package_install_execute,

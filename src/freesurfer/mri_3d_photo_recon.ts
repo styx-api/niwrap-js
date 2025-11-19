@@ -11,7 +11,7 @@ const MRI_3D_PHOTO_RECON_METADATA: Metadata = {
 };
 
 
-interface Mri3dPhotoReconParameters {
+interface Mri3dPhotoReconParamsDict {
     "@type"?: "freesurfer/mri_3d_photo_recon";
     "input_photo_dir": Array<InputPathType>;
     "input_segmentation_dir": Array<InputPathType>;
@@ -28,11 +28,11 @@ interface Mri3dPhotoReconParameters {
     "rigid_only_for_photos": boolean;
     "gpu_index"?: number | null | undefined;
 }
-type Mri3dPhotoReconParametersTagged = Required<Pick<Mri3dPhotoReconParameters, '@type'>> & Mri3dPhotoReconParameters;
+type Mri3dPhotoReconParamsDictTagged = Required<Pick<Mri3dPhotoReconParamsDict, '@type'>> & Mri3dPhotoReconParamsDict;
 
 
 /**
- * Output object returned when calling `Mri3dPhotoReconParameters(...)`.
+ * Output object returned when calling `Mri3dPhotoReconParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function mri_3d_photo_recon_params(
     allow_z_stretch: boolean = false,
     rigid_only_for_photos: boolean = false,
     gpu_index: number | null = null,
-): Mri3dPhotoReconParametersTagged {
+): Mri3dPhotoReconParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_3d_photo_recon" as const,
         "input_photo_dir": input_photo_dir,
@@ -128,7 +128,7 @@ function mri_3d_photo_recon_params(
  * @returns Command-line arguments.
  */
 function mri_3d_photo_recon_cargs(
-    params: Mri3dPhotoReconParameters,
+    params: Mri3dPhotoReconParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function mri_3d_photo_recon_cargs(
  * @returns Outputs object.
  */
 function mri_3d_photo_recon_outputs(
-    params: Mri3dPhotoReconParameters,
+    params: Mri3dPhotoReconParamsDict,
     execution: Execution,
 ): Mri3dPhotoReconOutputs {
     const ret: Mri3dPhotoReconOutputs = {
@@ -235,7 +235,7 @@ function mri_3d_photo_recon_outputs(
  * @returns NamedTuple of outputs (described in `Mri3dPhotoReconOutputs`).
  */
 function mri_3d_photo_recon_execute(
-    params: Mri3dPhotoReconParameters,
+    params: Mri3dPhotoReconParamsDict,
     runner: Runner | null = null,
 ): Mri3dPhotoReconOutputs {
     runner = runner || getGlobalRunner();
@@ -300,6 +300,8 @@ function mri_3d_photo_recon(
 export {
       MRI_3D_PHOTO_RECON_METADATA,
       Mri3dPhotoReconOutputs,
+      Mri3dPhotoReconParamsDict,
+      Mri3dPhotoReconParamsDictTagged,
       mri_3d_photo_recon,
       mri_3d_photo_recon_execute,
       mri_3d_photo_recon_params,

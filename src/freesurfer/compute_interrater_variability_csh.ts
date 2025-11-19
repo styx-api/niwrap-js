@@ -11,7 +11,7 @@ const COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA: Metadata = {
 };
 
 
-interface ComputeInterraterVariabilityCshParameters {
+interface ComputeInterraterVariabilityCshParamsDict {
     "@type"?: "freesurfer/compute_interrater_variability.csh";
     "label_vol1": InputPathType;
     "label_vol2": InputPathType;
@@ -19,11 +19,11 @@ interface ComputeInterraterVariabilityCshParameters {
     "version": boolean;
     "help": boolean;
 }
-type ComputeInterraterVariabilityCshParametersTagged = Required<Pick<ComputeInterraterVariabilityCshParameters, '@type'>> & ComputeInterraterVariabilityCshParameters;
+type ComputeInterraterVariabilityCshParamsDictTagged = Required<Pick<ComputeInterraterVariabilityCshParamsDict, '@type'>> & ComputeInterraterVariabilityCshParamsDict;
 
 
 /**
- * Output object returned when calling `ComputeInterraterVariabilityCshParameters(...)`.
+ * Output object returned when calling `ComputeInterraterVariabilityCshParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function compute_interrater_variability_csh_params(
     output_prefix: string,
     version: boolean = false,
     help: boolean = false,
-): ComputeInterraterVariabilityCshParametersTagged {
+): ComputeInterraterVariabilityCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/compute_interrater_variability.csh" as const,
         "label_vol1": label_vol1,
@@ -86,7 +86,7 @@ function compute_interrater_variability_csh_params(
  * @returns Command-line arguments.
  */
 function compute_interrater_variability_csh_cargs(
-    params: ComputeInterraterVariabilityCshParameters,
+    params: ComputeInterraterVariabilityCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function compute_interrater_variability_csh_cargs(
  * @returns Outputs object.
  */
 function compute_interrater_variability_csh_outputs(
-    params: ComputeInterraterVariabilityCshParameters,
+    params: ComputeInterraterVariabilityCshParamsDict,
     execution: Execution,
 ): ComputeInterraterVariabilityCshOutputs {
     const ret: ComputeInterraterVariabilityCshOutputs = {
@@ -150,7 +150,7 @@ function compute_interrater_variability_csh_outputs(
  * @returns NamedTuple of outputs (described in `ComputeInterraterVariabilityCshOutputs`).
  */
 function compute_interrater_variability_csh_execute(
-    params: ComputeInterraterVariabilityCshParameters,
+    params: ComputeInterraterVariabilityCshParamsDict,
     runner: Runner | null = null,
 ): ComputeInterraterVariabilityCshOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function compute_interrater_variability_csh(
 export {
       COMPUTE_INTERRATER_VARIABILITY_CSH_METADATA,
       ComputeInterraterVariabilityCshOutputs,
+      ComputeInterraterVariabilityCshParamsDict,
+      ComputeInterraterVariabilityCshParamsDictTagged,
       compute_interrater_variability_csh,
       compute_interrater_variability_csh_execute,
       compute_interrater_variability_csh_params,

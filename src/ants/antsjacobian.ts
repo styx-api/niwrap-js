@@ -11,7 +11,7 @@ const ANTSJACOBIAN_METADATA: Metadata = {
 };
 
 
-interface AntsjacobianParameters {
+interface AntsjacobianParamsDict {
     "@type"?: "ants/ANTSJacobian";
     "imagedim": number;
     "gwarp": InputPathType;
@@ -21,11 +21,11 @@ interface AntsjacobianParameters {
     "normbytotalbool": number;
     "projectionvector"?: string | null | undefined;
 }
-type AntsjacobianParametersTagged = Required<Pick<AntsjacobianParameters, '@type'>> & AntsjacobianParameters;
+type AntsjacobianParamsDictTagged = Required<Pick<AntsjacobianParamsDict, '@type'>> & AntsjacobianParamsDict;
 
 
 /**
- * Output object returned when calling `AntsjacobianParameters(...)`.
+ * Output object returned when calling `AntsjacobianParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function antsjacobian_params(
     maskfn: InputPathType,
     normbytotalbool: number,
     projectionvector: string | null = null,
-): AntsjacobianParametersTagged {
+): AntsjacobianParamsDictTagged {
     const params = {
         "@type": "ants/ANTSJacobian" as const,
         "imagedim": imagedim,
@@ -88,7 +88,7 @@ function antsjacobian_params(
  * @returns Command-line arguments.
  */
 function antsjacobian_cargs(
-    params: AntsjacobianParameters,
+    params: AntsjacobianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function antsjacobian_cargs(
  * @returns Outputs object.
  */
 function antsjacobian_outputs(
-    params: AntsjacobianParameters,
+    params: AntsjacobianParamsDict,
     execution: Execution,
 ): AntsjacobianOutputs {
     const ret: AntsjacobianOutputs = {
@@ -141,7 +141,7 @@ function antsjacobian_outputs(
  * @returns NamedTuple of outputs (described in `AntsjacobianOutputs`).
  */
 function antsjacobian_execute(
-    params: AntsjacobianParameters,
+    params: AntsjacobianParamsDict,
     runner: Runner | null = null,
 ): AntsjacobianOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function antsjacobian(
 export {
       ANTSJACOBIAN_METADATA,
       AntsjacobianOutputs,
+      AntsjacobianParamsDict,
+      AntsjacobianParamsDictTagged,
       antsjacobian,
       antsjacobian_execute,
       antsjacobian_params,

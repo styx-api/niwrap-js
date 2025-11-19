@@ -11,18 +11,18 @@ const MRI_COPY_PARAMS_METADATA: Metadata = {
 };
 
 
-interface MriCopyParamsParameters {
+interface MriCopyParamsParamsDict {
     "@type"?: "freesurfer/mri_copy_params";
     "in_vol": InputPathType;
     "template_vol": InputPathType;
     "out_vol": string;
     "size_flag": boolean;
 }
-type MriCopyParamsParametersTagged = Required<Pick<MriCopyParamsParameters, '@type'>> & MriCopyParamsParameters;
+type MriCopyParamsParamsDictTagged = Required<Pick<MriCopyParamsParamsDict, '@type'>> & MriCopyParamsParamsDict;
 
 
 /**
- * Output object returned when calling `MriCopyParamsParameters(...)`.
+ * Output object returned when calling `MriCopyParamsParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_copy_params_params(
     template_vol: InputPathType,
     out_vol: string,
     size_flag: boolean = false,
-): MriCopyParamsParametersTagged {
+): MriCopyParamsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_copy_params" as const,
         "in_vol": in_vol,
@@ -74,7 +74,7 @@ function mri_copy_params_params(
  * @returns Command-line arguments.
  */
 function mri_copy_params_cargs(
-    params: MriCopyParamsParameters,
+    params: MriCopyParamsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function mri_copy_params_cargs(
  * @returns Outputs object.
  */
 function mri_copy_params_outputs(
-    params: MriCopyParamsParameters,
+    params: MriCopyParamsParamsDict,
     execution: Execution,
 ): MriCopyParamsOutputs {
     const ret: MriCopyParamsOutputs = {
@@ -124,7 +124,7 @@ function mri_copy_params_outputs(
  * @returns NamedTuple of outputs (described in `MriCopyParamsOutputs`).
  */
 function mri_copy_params_execute(
-    params: MriCopyParamsParameters,
+    params: MriCopyParamsParamsDict,
     runner: Runner | null = null,
 ): MriCopyParamsOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function mri_copy_params(
 export {
       MRI_COPY_PARAMS_METADATA,
       MriCopyParamsOutputs,
+      MriCopyParamsParamsDict,
+      MriCopyParamsParamsDictTagged,
       mri_copy_params,
       mri_copy_params_execute,
       mri_copy_params_params,

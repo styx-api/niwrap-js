@@ -11,7 +11,7 @@ const V_3D_TTO1_D_METADATA: Metadata = {
 };
 
 
-interface V3dTto1DParameters {
+interface V3dTto1DParamsDict {
     "@type"?: "afni/3dTto1D";
     "input_dataset": InputPathType;
     "method": string;
@@ -20,11 +20,11 @@ interface V3dTto1DParameters {
     "prefix"?: string | null | undefined;
     "verbose"?: number | null | undefined;
 }
-type V3dTto1DParametersTagged = Required<Pick<V3dTto1DParameters, '@type'>> & V3dTto1DParameters;
+type V3dTto1DParamsDictTagged = Required<Pick<V3dTto1DParamsDict, '@type'>> & V3dTto1DParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTto1DParameters(...)`.
+ * Output object returned when calling `V3dTto1DParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_tto1_d_params(
     mask: InputPathType | null = null,
     prefix: string | null = null,
     verbose: number | null = null,
-): V3dTto1DParametersTagged {
+): V3dTto1DParamsDictTagged {
     const params = {
         "@type": "afni/3dTto1D" as const,
         "input_dataset": input_dataset,
@@ -88,7 +88,7 @@ function v_3d_tto1_d_params(
  * @returns Command-line arguments.
  */
 function v_3d_tto1_d_cargs(
-    params: V3dTto1DParameters,
+    params: V3dTto1DParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function v_3d_tto1_d_cargs(
  * @returns Outputs object.
  */
 function v_3d_tto1_d_outputs(
-    params: V3dTto1DParameters,
+    params: V3dTto1DParamsDict,
     execution: Execution,
 ): V3dTto1DOutputs {
     const ret: V3dTto1DOutputs = {
@@ -161,7 +161,7 @@ function v_3d_tto1_d_outputs(
  * @returns NamedTuple of outputs (described in `V3dTto1DOutputs`).
  */
 function v_3d_tto1_d_execute(
-    params: V3dTto1DParameters,
+    params: V3dTto1DParamsDict,
     runner: Runner | null = null,
 ): V3dTto1DOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function v_3d_tto1_d(
 
 export {
       V3dTto1DOutputs,
+      V3dTto1DParamsDict,
+      V3dTto1DParamsDictTagged,
       V_3D_TTO1_D_METADATA,
       v_3d_tto1_d,
       v_3d_tto1_d_execute,

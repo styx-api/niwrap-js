@@ -11,7 +11,7 @@ const ROBUSTFOV_METADATA: Metadata = {
 };
 
 
-interface RobustfovParameters {
+interface RobustfovParamsDict {
     "@type"?: "fsl/robustfov";
     "input_file": InputPathType;
     "output_image"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface RobustfovParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
-type RobustfovParametersTagged = Required<Pick<RobustfovParameters, '@type'>> & RobustfovParameters;
+type RobustfovParamsDictTagged = Required<Pick<RobustfovParamsDict, '@type'>> & RobustfovParamsDict;
 
 
 /**
- * Output object returned when calling `RobustfovParameters(...)`.
+ * Output object returned when calling `RobustfovParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function robustfov_params(
     matrix_output: string | null = null,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): RobustfovParametersTagged {
+): RobustfovParamsDictTagged {
     const params = {
         "@type": "fsl/robustfov" as const,
         "input_file": input_file,
@@ -92,7 +92,7 @@ function robustfov_params(
  * @returns Command-line arguments.
  */
 function robustfov_cargs(
-    params: RobustfovParameters,
+    params: RobustfovParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function robustfov_cargs(
  * @returns Outputs object.
  */
 function robustfov_outputs(
-    params: RobustfovParameters,
+    params: RobustfovParamsDict,
     execution: Execution,
 ): RobustfovOutputs {
     const ret: RobustfovOutputs = {
@@ -165,7 +165,7 @@ function robustfov_outputs(
  * @returns NamedTuple of outputs (described in `RobustfovOutputs`).
  */
 function robustfov_execute(
-    params: RobustfovParameters,
+    params: RobustfovParamsDict,
     runner: Runner | null = null,
 ): RobustfovOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function robustfov(
 export {
       ROBUSTFOV_METADATA,
       RobustfovOutputs,
+      RobustfovParamsDict,
+      RobustfovParamsDictTagged,
       robustfov,
       robustfov_execute,
       robustfov_params,

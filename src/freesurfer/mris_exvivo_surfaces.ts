@@ -11,7 +11,7 @@ const MRIS_EXVIVO_SURFACES_METADATA: Metadata = {
 };
 
 
-interface MrisExvivoSurfacesParameters {
+interface MrisExvivoSurfacesParamsDict {
     "@type"?: "freesurfer/mris_exvivo_surfaces";
     "subject_name": string;
     "hemisphere": string;
@@ -21,11 +21,11 @@ interface MrisExvivoSurfacesParameters {
     "white_only": boolean;
     "formalin"?: number | null | undefined;
 }
-type MrisExvivoSurfacesParametersTagged = Required<Pick<MrisExvivoSurfacesParameters, '@type'>> & MrisExvivoSurfacesParameters;
+type MrisExvivoSurfacesParamsDictTagged = Required<Pick<MrisExvivoSurfacesParamsDict, '@type'>> & MrisExvivoSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisExvivoSurfacesParameters(...)`.
+ * Output object returned when calling `MrisExvivoSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function mris_exvivo_surfaces_params(
     average_curvature: number | null = null,
     white_only: boolean = false,
     formalin: number | null = null,
-): MrisExvivoSurfacesParametersTagged {
+): MrisExvivoSurfacesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_exvivo_surfaces" as const,
         "subject_name": subject_name,
@@ -102,7 +102,7 @@ function mris_exvivo_surfaces_params(
  * @returns Command-line arguments.
  */
 function mris_exvivo_surfaces_cargs(
-    params: MrisExvivoSurfacesParameters,
+    params: MrisExvivoSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function mris_exvivo_surfaces_cargs(
  * @returns Outputs object.
  */
 function mris_exvivo_surfaces_outputs(
-    params: MrisExvivoSurfacesParameters,
+    params: MrisExvivoSurfacesParamsDict,
     execution: Execution,
 ): MrisExvivoSurfacesOutputs {
     const ret: MrisExvivoSurfacesOutputs = {
@@ -172,7 +172,7 @@ function mris_exvivo_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `MrisExvivoSurfacesOutputs`).
  */
 function mris_exvivo_surfaces_execute(
-    params: MrisExvivoSurfacesParameters,
+    params: MrisExvivoSurfacesParamsDict,
     runner: Runner | null = null,
 ): MrisExvivoSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -223,6 +223,8 @@ function mris_exvivo_surfaces(
 export {
       MRIS_EXVIVO_SURFACES_METADATA,
       MrisExvivoSurfacesOutputs,
+      MrisExvivoSurfacesParamsDict,
+      MrisExvivoSurfacesParamsDictTagged,
       mris_exvivo_surfaces,
       mris_exvivo_surfaces_execute,
       mris_exvivo_surfaces_params,

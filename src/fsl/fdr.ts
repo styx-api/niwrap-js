@@ -11,7 +11,7 @@ const FDR_METADATA: Metadata = {
 };
 
 
-interface FdrParameters {
+interface FdrParamsDict {
     "@type"?: "fsl/fdr";
     "infile": InputPathType;
     "maskfile"?: InputPathType | null | undefined;
@@ -26,11 +26,11 @@ interface FdrParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
-type FdrParametersTagged = Required<Pick<FdrParameters, '@type'>> & FdrParameters;
+type FdrParamsDictTagged = Required<Pick<FdrParamsDict, '@type'>> & FdrParamsDict;
 
 
 /**
- * Output object returned when calling `FdrParameters(...)`.
+ * Output object returned when calling `FdrParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function fdr_params(
     conservative_flag: boolean = false,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): FdrParametersTagged {
+): FdrParamsDictTagged {
     const params = {
         "@type": "fsl/fdr" as const,
         "infile": infile,
@@ -120,7 +120,7 @@ function fdr_params(
  * @returns Command-line arguments.
  */
 function fdr_cargs(
-    params: FdrParameters,
+    params: FdrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -184,7 +184,7 @@ function fdr_cargs(
  * @returns Outputs object.
  */
 function fdr_outputs(
-    params: FdrParameters,
+    params: FdrParamsDict,
     execution: Execution,
 ): FdrOutputs {
     const ret: FdrOutputs = {
@@ -212,7 +212,7 @@ function fdr_outputs(
  * @returns NamedTuple of outputs (described in `FdrOutputs`).
  */
 function fdr_execute(
-    params: FdrParameters,
+    params: FdrParamsDict,
     runner: Runner | null = null,
 ): FdrOutputs {
     runner = runner || getGlobalRunner();
@@ -273,6 +273,8 @@ function fdr(
 export {
       FDR_METADATA,
       FdrOutputs,
+      FdrParamsDict,
+      FdrParamsDictTagged,
       fdr,
       fdr_execute,
       fdr_params,

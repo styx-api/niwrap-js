@@ -11,7 +11,7 @@ const MRIS_RF_LABEL_METADATA: Metadata = {
 };
 
 
-interface MrisRfLabelParameters {
+interface MrisRfLabelParamsDict {
     "@type"?: "freesurfer/mris_rf_label";
     "subject": string;
     "rf_classifier": string;
@@ -19,11 +19,11 @@ interface MrisRfLabelParameters {
     "hemi"?: string | null | undefined;
     "surf"?: string | null | undefined;
 }
-type MrisRfLabelParametersTagged = Required<Pick<MrisRfLabelParameters, '@type'>> & MrisRfLabelParameters;
+type MrisRfLabelParamsDictTagged = Required<Pick<MrisRfLabelParamsDict, '@type'>> & MrisRfLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRfLabelParameters(...)`.
+ * Output object returned when calling `MrisRfLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function mris_rf_label_params(
     output_name: string,
     hemi: string | null = null,
     surf: string | null = null,
-): MrisRfLabelParametersTagged {
+): MrisRfLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_rf_label" as const,
         "subject": subject,
@@ -78,7 +78,7 @@ function mris_rf_label_params(
  * @returns Command-line arguments.
  */
 function mris_rf_label_cargs(
-    params: MrisRfLabelParameters,
+    params: MrisRfLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function mris_rf_label_cargs(
  * @returns Outputs object.
  */
 function mris_rf_label_outputs(
-    params: MrisRfLabelParameters,
+    params: MrisRfLabelParamsDict,
     execution: Execution,
 ): MrisRfLabelOutputs {
     const ret: MrisRfLabelOutputs = {
@@ -136,7 +136,7 @@ function mris_rf_label_outputs(
  * @returns NamedTuple of outputs (described in `MrisRfLabelOutputs`).
  */
 function mris_rf_label_execute(
-    params: MrisRfLabelParameters,
+    params: MrisRfLabelParamsDict,
     runner: Runner | null = null,
 ): MrisRfLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function mris_rf_label(
 export {
       MRIS_RF_LABEL_METADATA,
       MrisRfLabelOutputs,
+      MrisRfLabelParamsDict,
+      MrisRfLabelParamsDictTagged,
       mris_rf_label,
       mris_rf_label_execute,
       mris_rf_label_params,

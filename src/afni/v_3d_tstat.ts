@@ -11,7 +11,7 @@ const V_3D_TSTAT_METADATA: Metadata = {
 };
 
 
-interface V3dTstatParameters {
+interface V3dTstatParamsDict {
     "@type"?: "afni/3dTstat";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -75,11 +75,11 @@ interface V3dTstatParameters {
     "mrange"?: string | null | undefined;
     "cmask"?: string | null | undefined;
 }
-type V3dTstatParametersTagged = Required<Pick<V3dTstatParameters, '@type'>> & V3dTstatParameters;
+type V3dTstatParamsDictTagged = Required<Pick<V3dTstatParamsDict, '@type'>> & V3dTstatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTstatParameters(...)`.
+ * Output object returned when calling `V3dTstatParamsDict(...)`.
  *
  * @interface
  */
@@ -224,7 +224,7 @@ function v_3d_tstat_params(
     mask_mset: InputPathType | null = null,
     mrange: string | null = null,
     cmask: string | null = null,
-): V3dTstatParametersTagged {
+): V3dTstatParamsDictTagged {
     const params = {
         "@type": "afni/3dTstat" as const,
         "in_file": in_file,
@@ -322,7 +322,7 @@ function v_3d_tstat_params(
  * @returns Command-line arguments.
  */
 function v_3d_tstat_cargs(
-    params: V3dTstatParameters,
+    params: V3dTstatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -542,7 +542,7 @@ function v_3d_tstat_cargs(
  * @returns Outputs object.
  */
 function v_3d_tstat_outputs(
-    params: V3dTstatParameters,
+    params: V3dTstatParamsDict,
     execution: Execution,
 ): V3dTstatOutputs {
     const ret: V3dTstatOutputs = {
@@ -568,7 +568,7 @@ function v_3d_tstat_outputs(
  * @returns NamedTuple of outputs (described in `V3dTstatOutputs`).
  */
 function v_3d_tstat_execute(
-    params: V3dTstatParameters,
+    params: V3dTstatParamsDict,
     runner: Runner | null = null,
 ): V3dTstatOutputs {
     runner = runner || getGlobalRunner();
@@ -726,6 +726,8 @@ function v_3d_tstat(
 
 export {
       V3dTstatOutputs,
+      V3dTstatParamsDict,
+      V3dTstatParamsDictTagged,
       V_3D_TSTAT_METADATA,
       v_3d_tstat,
       v_3d_tstat_execute,

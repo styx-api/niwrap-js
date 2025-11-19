@@ -11,26 +11,26 @@ const TCKDFC_METADATA: Metadata = {
 };
 
 
-interface TckdfcDynamicParameters {
+interface TckdfcDynamicParamsDict {
     "@type"?: "dynamic";
     "shape": string;
     "width": number;
 }
-type TckdfcDynamicParametersTagged = Required<Pick<TckdfcDynamicParameters, '@type'>> & TckdfcDynamicParameters;
+type TckdfcDynamicParamsDictTagged = Required<Pick<TckdfcDynamicParamsDict, '@type'>> & TckdfcDynamicParamsDict;
 
 
-interface TckdfcConfigParameters {
+interface TckdfcConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckdfcConfigParametersTagged = Required<Pick<TckdfcConfigParameters, '@type'>> & TckdfcConfigParameters;
+type TckdfcConfigParamsDictTagged = Required<Pick<TckdfcConfigParamsDict, '@type'>> & TckdfcConfigParamsDict;
 
 
-interface TckdfcParameters {
+interface TckdfcParamsDict {
     "@type"?: "mrtrix/tckdfc";
     "static": boolean;
-    "dynamic"?: TckdfcDynamicParameters | null | undefined;
+    "dynamic"?: TckdfcDynamicParamsDict | null | undefined;
     "template"?: InputPathType | null | undefined;
     "vox"?: Array<number> | null | undefined;
     "stat_vox"?: string | null | undefined;
@@ -41,14 +41,14 @@ interface TckdfcParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckdfcConfigParameters> | null | undefined;
+    "config"?: Array<TckdfcConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks": InputPathType;
     "fmri": InputPathType;
     "output": string;
 }
-type TckdfcParametersTagged = Required<Pick<TckdfcParameters, '@type'>> & TckdfcParameters;
+type TckdfcParamsDictTagged = Required<Pick<TckdfcParamsDict, '@type'>> & TckdfcParamsDict;
 
 
 /**
@@ -59,10 +59,10 @@ type TckdfcParametersTagged = Required<Pick<TckdfcParameters, '@type'>> & Tckdfc
  *
  * @returns Parameter dictionary
  */
-function tckdfc_dynamic_params(
+function tckdfc_dynamic(
     shape: string,
     width: number,
-): TckdfcDynamicParametersTagged {
+): TckdfcDynamicParamsDictTagged {
     const params = {
         "@type": "dynamic" as const,
         "shape": shape,
@@ -81,7 +81,7 @@ function tckdfc_dynamic_params(
  * @returns Command-line arguments.
  */
 function tckdfc_dynamic_cargs(
-    params: TckdfcDynamicParameters,
+    params: TckdfcDynamicParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,10 +100,10 @@ function tckdfc_dynamic_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckdfc_config_params(
+function tckdfc_config(
     key: string,
     value: string,
-): TckdfcConfigParametersTagged {
+): TckdfcConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -122,7 +122,7 @@ function tckdfc_config_params(
  * @returns Command-line arguments.
  */
 function tckdfc_config_cargs(
-    params: TckdfcConfigParameters,
+    params: TckdfcConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function tckdfc_config_cargs(
 
 
 /**
- * Output object returned when calling `TckdfcParameters(...)`.
+ * Output object returned when calling `TckdfcParamsDict(...)`.
  *
  * @interface
  */
@@ -180,7 +180,7 @@ function tckdfc_params(
     fmri: InputPathType,
     output: string,
     static_: boolean = false,
-    dynamic: TckdfcDynamicParameters | null = null,
+    dynamic: TckdfcDynamicParamsDict | null = null,
     template: InputPathType | null = null,
     vox: Array<number> | null = null,
     stat_vox: string | null = null,
@@ -191,10 +191,10 @@ function tckdfc_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckdfcConfigParameters> | null = null,
+    config: Array<TckdfcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckdfcParametersTagged {
+): TckdfcParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckdfc" as const,
         "static": static_,
@@ -243,7 +243,7 @@ function tckdfc_params(
  * @returns Command-line arguments.
  */
 function tckdfc_cargs(
-    params: TckdfcParameters,
+    params: TckdfcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -324,7 +324,7 @@ function tckdfc_cargs(
  * @returns Outputs object.
  */
 function tckdfc_outputs(
-    params: TckdfcParameters,
+    params: TckdfcParamsDict,
     execution: Execution,
 ): TckdfcOutputs {
     const ret: TckdfcOutputs = {
@@ -364,7 +364,7 @@ function tckdfc_outputs(
  * @returns NamedTuple of outputs (described in `TckdfcOutputs`).
  */
 function tckdfc_execute(
-    params: TckdfcParameters,
+    params: TckdfcParamsDict,
     runner: Runner | null = null,
 ): TckdfcOutputs {
     runner = runner || getGlobalRunner();
@@ -428,7 +428,7 @@ function tckdfc(
     fmri: InputPathType,
     output: string,
     static_: boolean = false,
-    dynamic: TckdfcDynamicParameters | null = null,
+    dynamic: TckdfcDynamicParamsDict | null = null,
     template: InputPathType | null = null,
     vox: Array<number> | null = null,
     stat_vox: string | null = null,
@@ -439,7 +439,7 @@ function tckdfc(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckdfcConfigParameters> | null = null,
+    config: Array<TckdfcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -451,10 +451,16 @@ function tckdfc(
 
 export {
       TCKDFC_METADATA,
+      TckdfcConfigParamsDict,
+      TckdfcConfigParamsDictTagged,
+      TckdfcDynamicParamsDict,
+      TckdfcDynamicParamsDictTagged,
       TckdfcOutputs,
+      TckdfcParamsDict,
+      TckdfcParamsDictTagged,
       tckdfc,
-      tckdfc_config_params,
-      tckdfc_dynamic_params,
+      tckdfc_config,
+      tckdfc_dynamic,
       tckdfc_execute,
       tckdfc_params,
 };

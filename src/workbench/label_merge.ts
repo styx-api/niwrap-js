@@ -10,36 +10,36 @@ const LABEL_MERGE_METADATA: Metadata = {
 };
 
 
-interface LabelMergeUpToParameters {
+interface LabelMergeUpToParamsDict {
     "@type"?: "up-to";
     "last-column": string;
     "reverse": boolean;
 }
-type LabelMergeUpToParametersTagged = Required<Pick<LabelMergeUpToParameters, '@type'>> & LabelMergeUpToParameters;
+type LabelMergeUpToParamsDictTagged = Required<Pick<LabelMergeUpToParamsDict, '@type'>> & LabelMergeUpToParamsDict;
 
 
-interface LabelMergeColumnParameters {
+interface LabelMergeColumnParamsDict {
     "@type"?: "column";
     "column": string;
-    "up-to"?: LabelMergeUpToParameters | null | undefined;
+    "up-to"?: LabelMergeUpToParamsDict | null | undefined;
 }
-type LabelMergeColumnParametersTagged = Required<Pick<LabelMergeColumnParameters, '@type'>> & LabelMergeColumnParameters;
+type LabelMergeColumnParamsDictTagged = Required<Pick<LabelMergeColumnParamsDict, '@type'>> & LabelMergeColumnParamsDict;
 
 
-interface LabelMergeLabelParameters {
+interface LabelMergeLabelParamsDict {
     "@type"?: "label";
     "label-in": InputPathType;
-    "column"?: Array<LabelMergeColumnParameters> | null | undefined;
+    "column"?: Array<LabelMergeColumnParamsDict> | null | undefined;
 }
-type LabelMergeLabelParametersTagged = Required<Pick<LabelMergeLabelParameters, '@type'>> & LabelMergeLabelParameters;
+type LabelMergeLabelParamsDictTagged = Required<Pick<LabelMergeLabelParamsDict, '@type'>> & LabelMergeLabelParamsDict;
 
 
-interface LabelMergeParameters {
+interface LabelMergeParamsDict {
     "@type"?: "workbench/label-merge";
     "label-out": string;
-    "label"?: Array<LabelMergeLabelParameters> | null | undefined;
+    "label"?: Array<LabelMergeLabelParamsDict> | null | undefined;
 }
-type LabelMergeParametersTagged = Required<Pick<LabelMergeParameters, '@type'>> & LabelMergeParameters;
+type LabelMergeParamsDictTagged = Required<Pick<LabelMergeParamsDict, '@type'>> & LabelMergeParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type LabelMergeParametersTagged = Required<Pick<LabelMergeParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function label_merge_up_to_params(
+function label_merge_up_to(
     last_column: string,
     reverse: boolean = false,
-): LabelMergeUpToParametersTagged {
+): LabelMergeUpToParamsDictTagged {
     const params = {
         "@type": "up-to" as const,
         "last-column": last_column,
@@ -72,7 +72,7 @@ function label_merge_up_to_params(
  * @returns Command-line arguments.
  */
 function label_merge_up_to_cargs(
-    params: LabelMergeUpToParameters,
+    params: LabelMergeUpToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function label_merge_up_to_cargs(
  *
  * @returns Parameter dictionary
  */
-function label_merge_column_params(
+function label_merge_column(
     column: string,
-    up_to: LabelMergeUpToParameters | null = null,
-): LabelMergeColumnParametersTagged {
+    up_to: LabelMergeUpToParamsDict | null = null,
+): LabelMergeColumnParamsDictTagged {
     const params = {
         "@type": "column" as const,
         "column": column,
@@ -119,7 +119,7 @@ function label_merge_column_params(
  * @returns Command-line arguments.
  */
 function label_merge_column_cargs(
-    params: LabelMergeColumnParameters,
+    params: LabelMergeColumnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,10 +142,10 @@ function label_merge_column_cargs(
  *
  * @returns Parameter dictionary
  */
-function label_merge_label_params(
+function label_merge_label(
     label_in: InputPathType,
-    column: Array<LabelMergeColumnParameters> | null = null,
-): LabelMergeLabelParametersTagged {
+    column: Array<LabelMergeColumnParamsDict> | null = null,
+): LabelMergeLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
         "label-in": label_in,
@@ -166,7 +166,7 @@ function label_merge_label_params(
  * @returns Command-line arguments.
  */
 function label_merge_label_cargs(
-    params: LabelMergeLabelParameters,
+    params: LabelMergeLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function label_merge_label_cargs(
 
 
 /**
- * Output object returned when calling `LabelMergeParameters(...)`.
+ * Output object returned when calling `LabelMergeParamsDict(...)`.
  *
  * @interface
  */
@@ -208,8 +208,8 @@ interface LabelMergeOutputs {
  */
 function label_merge_params(
     label_out: string,
-    label: Array<LabelMergeLabelParameters> | null = null,
-): LabelMergeParametersTagged {
+    label: Array<LabelMergeLabelParamsDict> | null = null,
+): LabelMergeParamsDictTagged {
     const params = {
         "@type": "workbench/label-merge" as const,
         "label-out": label_out,
@@ -230,7 +230,7 @@ function label_merge_params(
  * @returns Command-line arguments.
  */
 function label_merge_cargs(
-    params: LabelMergeParameters,
+    params: LabelMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,7 +255,7 @@ function label_merge_cargs(
  * @returns Outputs object.
  */
 function label_merge_outputs(
-    params: LabelMergeParameters,
+    params: LabelMergeParamsDict,
     execution: Execution,
 ): LabelMergeOutputs {
     const ret: LabelMergeOutputs = {
@@ -281,7 +281,7 @@ function label_merge_outputs(
  * @returns NamedTuple of outputs (described in `LabelMergeOutputs`).
  */
 function label_merge_execute(
-    params: LabelMergeParameters,
+    params: LabelMergeParamsDict,
     runner: Runner | null = null,
 ): LabelMergeOutputs {
     runner = runner || getGlobalRunner();
@@ -311,7 +311,7 @@ function label_merge_execute(
  */
 function label_merge(
     label_out: string,
-    label: Array<LabelMergeLabelParameters> | null = null,
+    label: Array<LabelMergeLabelParamsDict> | null = null,
     runner: Runner | null = null,
 ): LabelMergeOutputs {
     const params = label_merge_params(label_out, label)
@@ -321,11 +321,19 @@ function label_merge(
 
 export {
       LABEL_MERGE_METADATA,
+      LabelMergeColumnParamsDict,
+      LabelMergeColumnParamsDictTagged,
+      LabelMergeLabelParamsDict,
+      LabelMergeLabelParamsDictTagged,
       LabelMergeOutputs,
+      LabelMergeParamsDict,
+      LabelMergeParamsDictTagged,
+      LabelMergeUpToParamsDict,
+      LabelMergeUpToParamsDictTagged,
       label_merge,
-      label_merge_column_params,
+      label_merge_column,
       label_merge_execute,
-      label_merge_label_params,
+      label_merge_label,
       label_merge_params,
-      label_merge_up_to_params,
+      label_merge_up_to,
 };

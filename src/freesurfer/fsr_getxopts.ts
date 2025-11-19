@@ -11,15 +11,15 @@ const FSR_GETXOPTS_METADATA: Metadata = {
 };
 
 
-interface FsrGetxoptsParameters {
+interface FsrGetxoptsParamsDict {
     "@type"?: "freesurfer/fsr-getxopts";
     "help": boolean;
 }
-type FsrGetxoptsParametersTagged = Required<Pick<FsrGetxoptsParameters, '@type'>> & FsrGetxoptsParameters;
+type FsrGetxoptsParamsDictTagged = Required<Pick<FsrGetxoptsParamsDict, '@type'>> & FsrGetxoptsParamsDict;
 
 
 /**
- * Output object returned when calling `FsrGetxoptsParameters(...)`.
+ * Output object returned when calling `FsrGetxoptsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FsrGetxoptsOutputs {
  */
 function fsr_getxopts_params(
     help: boolean = false,
-): FsrGetxoptsParametersTagged {
+): FsrGetxoptsParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsr-getxopts" as const,
         "help": help,
@@ -58,7 +58,7 @@ function fsr_getxopts_params(
  * @returns Command-line arguments.
  */
 function fsr_getxopts_cargs(
-    params: FsrGetxoptsParameters,
+    params: FsrGetxoptsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function fsr_getxopts_cargs(
  * @returns Outputs object.
  */
 function fsr_getxopts_outputs(
-    params: FsrGetxoptsParameters,
+    params: FsrGetxoptsParamsDict,
     execution: Execution,
 ): FsrGetxoptsOutputs {
     const ret: FsrGetxoptsOutputs = {
@@ -104,7 +104,7 @@ function fsr_getxopts_outputs(
  * @returns NamedTuple of outputs (described in `FsrGetxoptsOutputs`).
  */
 function fsr_getxopts_execute(
-    params: FsrGetxoptsParameters,
+    params: FsrGetxoptsParamsDict,
     runner: Runner | null = null,
 ): FsrGetxoptsOutputs {
     runner = runner || getGlobalRunner();
@@ -143,6 +143,8 @@ function fsr_getxopts(
 export {
       FSR_GETXOPTS_METADATA,
       FsrGetxoptsOutputs,
+      FsrGetxoptsParamsDict,
+      FsrGetxoptsParamsDictTagged,
       fsr_getxopts,
       fsr_getxopts_execute,
       fsr_getxopts_params,

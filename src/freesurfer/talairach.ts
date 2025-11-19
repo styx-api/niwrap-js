@@ -11,18 +11,18 @@ const TALAIRACH_METADATA: Metadata = {
 };
 
 
-interface TalairachParameters {
+interface TalairachParamsDict {
     "@type"?: "freesurfer/talairach";
     "input_volume": InputPathType;
     "output_transform": string;
     "log_flag": boolean;
     "debug_flag": boolean;
 }
-type TalairachParametersTagged = Required<Pick<TalairachParameters, '@type'>> & TalairachParameters;
+type TalairachParamsDictTagged = Required<Pick<TalairachParamsDict, '@type'>> & TalairachParamsDict;
 
 
 /**
- * Output object returned when calling `TalairachParameters(...)`.
+ * Output object returned when calling `TalairachParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function talairach_params(
     output_transform: string,
     log_flag: boolean = false,
     debug_flag: boolean = false,
-): TalairachParametersTagged {
+): TalairachParamsDictTagged {
     const params = {
         "@type": "freesurfer/talairach" as const,
         "input_volume": input_volume,
@@ -74,7 +74,7 @@ function talairach_params(
  * @returns Command-line arguments.
  */
 function talairach_cargs(
-    params: TalairachParameters,
+    params: TalairachParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function talairach_cargs(
  * @returns Outputs object.
  */
 function talairach_outputs(
-    params: TalairachParameters,
+    params: TalairachParamsDict,
     execution: Execution,
 ): TalairachOutputs {
     const ret: TalairachOutputs = {
@@ -132,7 +132,7 @@ function talairach_outputs(
  * @returns NamedTuple of outputs (described in `TalairachOutputs`).
  */
 function talairach_execute(
-    params: TalairachParameters,
+    params: TalairachParamsDict,
     runner: Runner | null = null,
 ): TalairachOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function talairach(
 export {
       TALAIRACH_METADATA,
       TalairachOutputs,
+      TalairachParamsDict,
+      TalairachParamsDictTagged,
       talairach,
       talairach_execute,
       talairach_params,

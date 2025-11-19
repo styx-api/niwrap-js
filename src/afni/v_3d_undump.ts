@@ -11,7 +11,7 @@ const V_3D_UNDUMP_METADATA: Metadata = {
 };
 
 
-interface V3dUndumpParameters {
+interface V3dUndumpParamsDict {
     "@type"?: "afni/3dUndump";
     "input_files": Array<InputPathType>;
     "prefix"?: string | null | undefined;
@@ -30,11 +30,11 @@ interface V3dUndumpParameters {
     "roimask"?: InputPathType | null | undefined;
     "allow_nan": boolean;
 }
-type V3dUndumpParametersTagged = Required<Pick<V3dUndumpParameters, '@type'>> & V3dUndumpParameters;
+type V3dUndumpParamsDictTagged = Required<Pick<V3dUndumpParamsDict, '@type'>> & V3dUndumpParamsDict;
 
 
 /**
- * Output object returned when calling `V3dUndumpParameters(...)`.
+ * Output object returned when calling `V3dUndumpParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function v_3d_undump_params(
     head_only: boolean = false,
     roimask: InputPathType | null = null,
     allow_nan: boolean = false,
-): V3dUndumpParametersTagged {
+): V3dUndumpParamsDictTagged {
     const params = {
         "@type": "afni/3dUndump" as const,
         "input_files": input_files,
@@ -142,7 +142,7 @@ function v_3d_undump_params(
  * @returns Command-line arguments.
  */
 function v_3d_undump_cargs(
-    params: V3dUndumpParameters,
+    params: V3dUndumpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -236,7 +236,7 @@ function v_3d_undump_cargs(
  * @returns Outputs object.
  */
 function v_3d_undump_outputs(
-    params: V3dUndumpParameters,
+    params: V3dUndumpParamsDict,
     execution: Execution,
 ): V3dUndumpOutputs {
     const ret: V3dUndumpOutputs = {
@@ -262,7 +262,7 @@ function v_3d_undump_outputs(
  * @returns NamedTuple of outputs (described in `V3dUndumpOutputs`).
  */
 function v_3d_undump_execute(
-    params: V3dUndumpParameters,
+    params: V3dUndumpParamsDict,
     runner: Runner | null = null,
 ): V3dUndumpOutputs {
     runner = runner || getGlobalRunner();
@@ -330,6 +330,8 @@ function v_3d_undump(
 
 export {
       V3dUndumpOutputs,
+      V3dUndumpParamsDict,
+      V3dUndumpParamsDictTagged,
       V_3D_UNDUMP_METADATA,
       v_3d_undump,
       v_3d_undump_execute,

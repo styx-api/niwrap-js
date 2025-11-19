@@ -11,31 +11,31 @@ const TIME_SCCAN_METADATA: Metadata = {
 };
 
 
-interface TimeSccanTimeseriesimageToMatrixParameters {
+interface TimeSccanTimeseriesimageToMatrixParamsDict {
     "@type"?: "timeseriesimage_to_matrix";
     "timeseries_image": InputPathType;
     "mask_image": InputPathType;
 }
-type TimeSccanTimeseriesimageToMatrixParametersTagged = Required<Pick<TimeSccanTimeseriesimageToMatrixParameters, '@type'>> & TimeSccanTimeseriesimageToMatrixParameters;
+type TimeSccanTimeseriesimageToMatrixParamsDictTagged = Required<Pick<TimeSccanTimeseriesimageToMatrixParamsDict, '@type'>> & TimeSccanTimeseriesimageToMatrixParamsDict;
 
 
-interface TimeSccanNetworkSccaParameters {
+interface TimeSccanNetworkSccaParamsDict {
     "@type"?: "network_scca";
     "time_matrix": InputPathType;
     "label_matrix": InputPathType;
 }
-type TimeSccanNetworkSccaParametersTagged = Required<Pick<TimeSccanNetworkSccaParameters, '@type'>> & TimeSccanNetworkSccaParameters;
+type TimeSccanNetworkSccaParamsDictTagged = Required<Pick<TimeSccanNetworkSccaParamsDict, '@type'>> & TimeSccanNetworkSccaParamsDict;
 
 
-interface TimeSccanNetworkRegionAveragingParameters {
+interface TimeSccanNetworkRegionAveragingParamsDict {
     "@type"?: "network_region_averaging";
     "time_matrix": InputPathType;
     "label_matrix": InputPathType;
 }
-type TimeSccanNetworkRegionAveragingParametersTagged = Required<Pick<TimeSccanNetworkRegionAveragingParameters, '@type'>> & TimeSccanNetworkRegionAveragingParameters;
+type TimeSccanNetworkRegionAveragingParamsDictTagged = Required<Pick<TimeSccanNetworkRegionAveragingParamsDict, '@type'>> & TimeSccanNetworkRegionAveragingParamsDict;
 
 
-interface TimeSccanParameters {
+interface TimeSccanParamsDict {
     "@type"?: "ants/TimeSCCAN";
     "output": string;
     "number_consecutive_labels"?: number | null | undefined;
@@ -48,11 +48,11 @@ interface TimeSccanParameters {
     "cluster_thresh"?: number | null | undefined;
     "ridge_cca"?: number | null | undefined;
     "partial_scca_option"?: "PQ" | "PminusRQ" | "PQminusR" | "PminusRQminusR" | null | undefined;
-    "timeseriesimage_to_matrix"?: TimeSccanTimeseriesimageToMatrixParameters | null | undefined;
+    "timeseriesimage_to_matrix"?: TimeSccanTimeseriesimageToMatrixParamsDict | null | undefined;
     "labelsimage_to_matrix"?: InputPathType | null | undefined;
-    "network"?: TimeSccanNetworkSccaParametersTagged | TimeSccanNetworkRegionAveragingParametersTagged | null | undefined;
+    "network"?: TimeSccanNetworkSccaParamsDictTagged | TimeSccanNetworkRegionAveragingParamsDictTagged | null | undefined;
 }
-type TimeSccanParametersTagged = Required<Pick<TimeSccanParameters, '@type'>> & TimeSccanParameters;
+type TimeSccanParamsDictTagged = Required<Pick<TimeSccanParamsDict, '@type'>> & TimeSccanParamsDict;
 
 
 /**
@@ -95,10 +95,10 @@ function time_sccan_network_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function time_sccan_timeseriesimage_to_matrix_params(
+function time_sccan_timeseriesimage_to_matrix(
     timeseries_image: InputPathType,
     mask_image: InputPathType,
-): TimeSccanTimeseriesimageToMatrixParametersTagged {
+): TimeSccanTimeseriesimageToMatrixParamsDictTagged {
     const params = {
         "@type": "timeseriesimage_to_matrix" as const,
         "timeseries_image": timeseries_image,
@@ -117,7 +117,7 @@ function time_sccan_timeseriesimage_to_matrix_params(
  * @returns Command-line arguments.
  */
 function time_sccan_timeseriesimage_to_matrix_cargs(
-    params: TimeSccanTimeseriesimageToMatrixParameters,
+    params: TimeSccanTimeseriesimageToMatrixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,10 +132,10 @@ function time_sccan_timeseriesimage_to_matrix_cargs(
  *
  * @returns Parameter dictionary
  */
-function time_sccan_network_scca_params(
+function time_sccan_network_scca(
     time_matrix: InputPathType,
     label_matrix: InputPathType,
-): TimeSccanNetworkSccaParametersTagged {
+): TimeSccanNetworkSccaParamsDictTagged {
     const params = {
         "@type": "network_scca" as const,
         "time_matrix": time_matrix,
@@ -154,7 +154,7 @@ function time_sccan_network_scca_params(
  * @returns Command-line arguments.
  */
 function time_sccan_network_scca_cargs(
-    params: TimeSccanNetworkSccaParameters,
+    params: TimeSccanNetworkSccaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -169,10 +169,10 @@ function time_sccan_network_scca_cargs(
  *
  * @returns Parameter dictionary
  */
-function time_sccan_network_region_averaging_params(
+function time_sccan_network_region_averaging(
     time_matrix: InputPathType,
     label_matrix: InputPathType,
-): TimeSccanNetworkRegionAveragingParametersTagged {
+): TimeSccanNetworkRegionAveragingParamsDictTagged {
     const params = {
         "@type": "network_region_averaging" as const,
         "time_matrix": time_matrix,
@@ -191,7 +191,7 @@ function time_sccan_network_region_averaging_params(
  * @returns Command-line arguments.
  */
 function time_sccan_network_region_averaging_cargs(
-    params: TimeSccanNetworkRegionAveragingParameters,
+    params: TimeSccanNetworkRegionAveragingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -201,7 +201,7 @@ function time_sccan_network_region_averaging_cargs(
 
 
 /**
- * Output object returned when calling `TimeSccanParameters(...)`.
+ * Output object returned when calling `TimeSccanParamsDict(...)`.
  *
  * @interface
  */
@@ -249,10 +249,10 @@ function time_sccan_params(
     cluster_thresh: number | null = null,
     ridge_cca: number | null = null,
     partial_scca_option: "PQ" | "PminusRQ" | "PQminusR" | "PminusRQminusR" | null = null,
-    timeseriesimage_to_matrix: TimeSccanTimeseriesimageToMatrixParameters | null = null,
+    timeseriesimage_to_matrix: TimeSccanTimeseriesimageToMatrixParamsDict | null = null,
     labelsimage_to_matrix: InputPathType | null = null,
-    network: TimeSccanNetworkSccaParametersTagged | TimeSccanNetworkRegionAveragingParametersTagged | null = null,
-): TimeSccanParametersTagged {
+    network: TimeSccanNetworkSccaParamsDictTagged | TimeSccanNetworkRegionAveragingParamsDictTagged | null = null,
+): TimeSccanParamsDictTagged {
     const params = {
         "@type": "ants/TimeSCCAN" as const,
         "output": output,
@@ -309,7 +309,7 @@ function time_sccan_params(
  * @returns Command-line arguments.
  */
 function time_sccan_cargs(
-    params: TimeSccanParameters,
+    params: TimeSccanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -409,7 +409,7 @@ function time_sccan_cargs(
  * @returns Outputs object.
  */
 function time_sccan_outputs(
-    params: TimeSccanParameters,
+    params: TimeSccanParamsDict,
     execution: Execution,
 ): TimeSccanOutputs {
     const ret: TimeSccanOutputs = {
@@ -435,7 +435,7 @@ function time_sccan_outputs(
  * @returns NamedTuple of outputs (described in `TimeSccanOutputs`).
  */
 function time_sccan_execute(
-    params: TimeSccanParameters,
+    params: TimeSccanParamsDict,
     runner: Runner | null = null,
 ): TimeSccanOutputs {
     runner = runner || getGlobalRunner();
@@ -487,9 +487,9 @@ function time_sccan(
     cluster_thresh: number | null = null,
     ridge_cca: number | null = null,
     partial_scca_option: "PQ" | "PminusRQ" | "PQminusR" | "PminusRQminusR" | null = null,
-    timeseriesimage_to_matrix: TimeSccanTimeseriesimageToMatrixParameters | null = null,
+    timeseriesimage_to_matrix: TimeSccanTimeseriesimageToMatrixParamsDict | null = null,
     labelsimage_to_matrix: InputPathType | null = null,
-    network: TimeSccanNetworkSccaParametersTagged | TimeSccanNetworkRegionAveragingParametersTagged | null = null,
+    network: TimeSccanNetworkSccaParamsDictTagged | TimeSccanNetworkRegionAveragingParamsDictTagged | null = null,
     runner: Runner | null = null,
 ): TimeSccanOutputs {
     const params = time_sccan_params(output, number_consecutive_labels, minimum_region_size, iterations, sparsity, n_eigenvectors, robustify, l1, cluster_thresh, ridge_cca, partial_scca_option, timeseriesimage_to_matrix, labelsimage_to_matrix, network)
@@ -499,11 +499,19 @@ function time_sccan(
 
 export {
       TIME_SCCAN_METADATA,
+      TimeSccanNetworkRegionAveragingParamsDict,
+      TimeSccanNetworkRegionAveragingParamsDictTagged,
+      TimeSccanNetworkSccaParamsDict,
+      TimeSccanNetworkSccaParamsDictTagged,
       TimeSccanOutputs,
+      TimeSccanParamsDict,
+      TimeSccanParamsDictTagged,
+      TimeSccanTimeseriesimageToMatrixParamsDict,
+      TimeSccanTimeseriesimageToMatrixParamsDictTagged,
       time_sccan,
       time_sccan_execute,
-      time_sccan_network_region_averaging_params,
-      time_sccan_network_scca_params,
+      time_sccan_network_region_averaging,
+      time_sccan_network_scca,
       time_sccan_params,
-      time_sccan_timeseriesimage_to_matrix_params,
+      time_sccan_timeseriesimage_to_matrix,
 };

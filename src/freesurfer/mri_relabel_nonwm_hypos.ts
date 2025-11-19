@@ -11,7 +11,7 @@ const MRI_RELABEL_NONWM_HYPOS_METADATA: Metadata = {
 };
 
 
-interface MriRelabelNonwmHyposParameters {
+interface MriRelabelNonwmHyposParamsDict {
     "@type"?: "freesurfer/mri_relabel_nonwm_hypos";
     "inputseg": InputPathType;
     "outputseg": string;
@@ -20,11 +20,11 @@ interface MriRelabelNonwmHyposParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
-type MriRelabelNonwmHyposParametersTagged = Required<Pick<MriRelabelNonwmHyposParameters, '@type'>> & MriRelabelNonwmHyposParameters;
+type MriRelabelNonwmHyposParamsDictTagged = Required<Pick<MriRelabelNonwmHyposParamsDict, '@type'>> & MriRelabelNonwmHyposParamsDict;
 
 
 /**
- * Output object returned when calling `MriRelabelNonwmHyposParameters(...)`.
+ * Output object returned when calling `MriRelabelNonwmHyposParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mri_relabel_nonwm_hypos_params(
     seg_default: boolean = false,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriRelabelNonwmHyposParametersTagged {
+): MriRelabelNonwmHyposParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_relabel_nonwm_hypos" as const,
         "inputseg": inputseg,
@@ -84,7 +84,7 @@ function mri_relabel_nonwm_hypos_params(
  * @returns Command-line arguments.
  */
 function mri_relabel_nonwm_hypos_cargs(
-    params: MriRelabelNonwmHyposParameters,
+    params: MriRelabelNonwmHyposParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function mri_relabel_nonwm_hypos_cargs(
  * @returns Outputs object.
  */
 function mri_relabel_nonwm_hypos_outputs(
-    params: MriRelabelNonwmHyposParameters,
+    params: MriRelabelNonwmHyposParamsDict,
     execution: Execution,
 ): MriRelabelNonwmHyposOutputs {
     const ret: MriRelabelNonwmHyposOutputs = {
@@ -151,7 +151,7 @@ function mri_relabel_nonwm_hypos_outputs(
  * @returns NamedTuple of outputs (described in `MriRelabelNonwmHyposOutputs`).
  */
 function mri_relabel_nonwm_hypos_execute(
-    params: MriRelabelNonwmHyposParameters,
+    params: MriRelabelNonwmHyposParamsDict,
     runner: Runner | null = null,
 ): MriRelabelNonwmHyposOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function mri_relabel_nonwm_hypos(
 export {
       MRI_RELABEL_NONWM_HYPOS_METADATA,
       MriRelabelNonwmHyposOutputs,
+      MriRelabelNonwmHyposParamsDict,
+      MriRelabelNonwmHyposParamsDictTagged,
       mri_relabel_nonwm_hypos,
       mri_relabel_nonwm_hypos_execute,
       mri_relabel_nonwm_hypos_params,

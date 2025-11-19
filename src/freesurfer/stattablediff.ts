@@ -11,7 +11,7 @@ const STATTABLEDIFF_METADATA: Metadata = {
 };
 
 
-interface StattablediffParameters {
+interface StattablediffParamsDict {
     "@type"?: "freesurfer/stattablediff";
     "t1": InputPathType;
     "t2": InputPathType;
@@ -26,11 +26,11 @@ interface StattablediffParameters {
     "diff_subjects": boolean;
     "noreplace53": boolean;
 }
-type StattablediffParametersTagged = Required<Pick<StattablediffParameters, '@type'>> & StattablediffParameters;
+type StattablediffParamsDictTagged = Required<Pick<StattablediffParamsDict, '@type'>> & StattablediffParamsDict;
 
 
 /**
- * Output object returned when calling `StattablediffParameters(...)`.
+ * Output object returned when calling `StattablediffParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function stattablediff_params(
     remove_exvivo: boolean = false,
     diff_subjects: boolean = false,
     noreplace53: boolean = false,
-): StattablediffParametersTagged {
+): StattablediffParamsDictTagged {
     const params = {
         "@type": "freesurfer/stattablediff" as const,
         "t1": t1,
@@ -110,7 +110,7 @@ function stattablediff_params(
  * @returns Command-line arguments.
  */
 function stattablediff_cargs(
-    params: StattablediffParameters,
+    params: StattablediffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function stattablediff_cargs(
  * @returns Outputs object.
  */
 function stattablediff_outputs(
-    params: StattablediffParameters,
+    params: StattablediffParamsDict,
     execution: Execution,
 ): StattablediffOutputs {
     const ret: StattablediffOutputs = {
@@ -190,7 +190,7 @@ function stattablediff_outputs(
  * @returns NamedTuple of outputs (described in `StattablediffOutputs`).
  */
 function stattablediff_execute(
-    params: StattablediffParameters,
+    params: StattablediffParamsDict,
     runner: Runner | null = null,
 ): StattablediffOutputs {
     runner = runner || getGlobalRunner();
@@ -251,6 +251,8 @@ function stattablediff(
 export {
       STATTABLEDIFF_METADATA,
       StattablediffOutputs,
+      StattablediffParamsDict,
+      StattablediffParamsDictTagged,
       stattablediff,
       stattablediff_execute,
       stattablediff_params,

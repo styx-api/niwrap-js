@@ -11,7 +11,7 @@ const APQC_MAKE_TCSH_PY_METADATA: Metadata = {
 };
 
 
-interface ApqcMakeTcshPyParameters {
+interface ApqcMakeTcshPyParamsDict {
     "@type"?: "afni/apqc_make_tcsh.py";
     "uvar_json": InputPathType;
     "subj_dir": string;
@@ -19,11 +19,11 @@ interface ApqcMakeTcshPyParameters {
     "mot_grayplot_off": boolean;
     "vstat_list"?: Array<string> | null | undefined;
 }
-type ApqcMakeTcshPyParametersTagged = Required<Pick<ApqcMakeTcshPyParameters, '@type'>> & ApqcMakeTcshPyParameters;
+type ApqcMakeTcshPyParamsDictTagged = Required<Pick<ApqcMakeTcshPyParamsDict, '@type'>> & ApqcMakeTcshPyParamsDict;
 
 
 /**
- * Output object returned when calling `ApqcMakeTcshPyParameters(...)`.
+ * Output object returned when calling `ApqcMakeTcshPyParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function apqc_make_tcsh_py_params(
     review_style: string | null = null,
     mot_grayplot_off: boolean = false,
     vstat_list: Array<string> | null = null,
-): ApqcMakeTcshPyParametersTagged {
+): ApqcMakeTcshPyParamsDictTagged {
     const params = {
         "@type": "afni/apqc_make_tcsh.py" as const,
         "uvar_json": uvar_json,
@@ -78,7 +78,7 @@ function apqc_make_tcsh_py_params(
  * @returns Command-line arguments.
  */
 function apqc_make_tcsh_py_cargs(
-    params: ApqcMakeTcshPyParameters,
+    params: ApqcMakeTcshPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function apqc_make_tcsh_py_cargs(
  * @returns Outputs object.
  */
 function apqc_make_tcsh_py_outputs(
-    params: ApqcMakeTcshPyParameters,
+    params: ApqcMakeTcshPyParamsDict,
     execution: Execution,
 ): ApqcMakeTcshPyOutputs {
     const ret: ApqcMakeTcshPyOutputs = {
@@ -144,7 +144,7 @@ function apqc_make_tcsh_py_outputs(
  * @returns NamedTuple of outputs (described in `ApqcMakeTcshPyOutputs`).
  */
 function apqc_make_tcsh_py_execute(
-    params: ApqcMakeTcshPyParameters,
+    params: ApqcMakeTcshPyParamsDict,
     runner: Runner | null = null,
 ): ApqcMakeTcshPyOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function apqc_make_tcsh_py(
 export {
       APQC_MAKE_TCSH_PY_METADATA,
       ApqcMakeTcshPyOutputs,
+      ApqcMakeTcshPyParamsDict,
+      ApqcMakeTcshPyParamsDictTagged,
       apqc_make_tcsh_py,
       apqc_make_tcsh_py_execute,
       apqc_make_tcsh_py_params,

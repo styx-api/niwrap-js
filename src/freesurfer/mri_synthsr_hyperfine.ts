@@ -11,7 +11,7 @@ const MRI_SYNTHSR_HYPERFINE_METADATA: Metadata = {
 };
 
 
-interface MriSynthsrHyperfineParameters {
+interface MriSynthsrHyperfineParamsDict {
     "@type"?: "freesurfer/mri_synthsr_hyperfine";
     "t1_image": InputPathType;
     "t2_image": InputPathType;
@@ -19,11 +19,11 @@ interface MriSynthsrHyperfineParameters {
     "threads"?: number | null | undefined;
     "cpu": boolean;
 }
-type MriSynthsrHyperfineParametersTagged = Required<Pick<MriSynthsrHyperfineParameters, '@type'>> & MriSynthsrHyperfineParameters;
+type MriSynthsrHyperfineParamsDictTagged = Required<Pick<MriSynthsrHyperfineParamsDict, '@type'>> & MriSynthsrHyperfineParamsDict;
 
 
 /**
- * Output object returned when calling `MriSynthsrHyperfineParameters(...)`.
+ * Output object returned when calling `MriSynthsrHyperfineParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_synthsr_hyperfine_params(
     output: string,
     threads: number | null = null,
     cpu: boolean = false,
-): MriSynthsrHyperfineParametersTagged {
+): MriSynthsrHyperfineParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_synthsr_hyperfine" as const,
         "t1_image": t1_image,
@@ -80,7 +80,7 @@ function mri_synthsr_hyperfine_params(
  * @returns Command-line arguments.
  */
 function mri_synthsr_hyperfine_cargs(
-    params: MriSynthsrHyperfineParameters,
+    params: MriSynthsrHyperfineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function mri_synthsr_hyperfine_cargs(
  * @returns Outputs object.
  */
 function mri_synthsr_hyperfine_outputs(
-    params: MriSynthsrHyperfineParameters,
+    params: MriSynthsrHyperfineParamsDict,
     execution: Execution,
 ): MriSynthsrHyperfineOutputs {
     const ret: MriSynthsrHyperfineOutputs = {
@@ -145,7 +145,7 @@ function mri_synthsr_hyperfine_outputs(
  * @returns NamedTuple of outputs (described in `MriSynthsrHyperfineOutputs`).
  */
 function mri_synthsr_hyperfine_execute(
-    params: MriSynthsrHyperfineParameters,
+    params: MriSynthsrHyperfineParamsDict,
     runner: Runner | null = null,
 ): MriSynthsrHyperfineOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function mri_synthsr_hyperfine(
 export {
       MRI_SYNTHSR_HYPERFINE_METADATA,
       MriSynthsrHyperfineOutputs,
+      MriSynthsrHyperfineParamsDict,
+      MriSynthsrHyperfineParamsDictTagged,
       mri_synthsr_hyperfine,
       mri_synthsr_hyperfine_execute,
       mri_synthsr_hyperfine_params,

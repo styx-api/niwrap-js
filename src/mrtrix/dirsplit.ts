@@ -11,15 +11,15 @@ const DIRSPLIT_METADATA: Metadata = {
 };
 
 
-interface DirsplitConfigParameters {
+interface DirsplitConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DirsplitConfigParametersTagged = Required<Pick<DirsplitConfigParameters, '@type'>> & DirsplitConfigParameters;
+type DirsplitConfigParamsDictTagged = Required<Pick<DirsplitConfigParamsDict, '@type'>> & DirsplitConfigParamsDict;
 
 
-interface DirsplitParameters {
+interface DirsplitParamsDict {
     "@type"?: "mrtrix/dirsplit";
     "permutations"?: number | null | undefined;
     "cartesian": boolean;
@@ -28,13 +28,13 @@ interface DirsplitParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DirsplitConfigParameters> | null | undefined;
+    "config"?: Array<DirsplitConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "dirs": InputPathType;
     "out": string;
 }
-type DirsplitParametersTagged = Required<Pick<DirsplitParameters, '@type'>> & DirsplitParameters;
+type DirsplitParamsDictTagged = Required<Pick<DirsplitParamsDict, '@type'>> & DirsplitParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type DirsplitParametersTagged = Required<Pick<DirsplitParameters, '@type'>> & Di
  *
  * @returns Parameter dictionary
  */
-function dirsplit_config_params(
+function dirsplit_config(
     key: string,
     value: string,
-): DirsplitConfigParametersTagged {
+): DirsplitConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function dirsplit_config_params(
  * @returns Command-line arguments.
  */
 function dirsplit_config_cargs(
-    params: DirsplitConfigParameters,
+    params: DirsplitConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function dirsplit_config_cargs(
 
 
 /**
- * Output object returned when calling `DirsplitParameters(...)`.
+ * Output object returned when calling `DirsplitParamsDict(...)`.
  *
  * @interface
  */
@@ -123,10 +123,10 @@ function dirsplit_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirsplitConfigParameters> | null = null,
+    config: Array<DirsplitConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirsplitParametersTagged {
+): DirsplitParamsDictTagged {
     const params = {
         "@type": "mrtrix/dirsplit" as const,
         "cartesian": cartesian,
@@ -161,7 +161,7 @@ function dirsplit_params(
  * @returns Command-line arguments.
  */
 function dirsplit_cargs(
-    params: DirsplitParameters,
+    params: DirsplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -217,7 +217,7 @@ function dirsplit_cargs(
  * @returns Outputs object.
  */
 function dirsplit_outputs(
-    params: DirsplitParameters,
+    params: DirsplitParamsDict,
     execution: Execution,
 ): DirsplitOutputs {
     const ret: DirsplitOutputs = {
@@ -249,7 +249,7 @@ function dirsplit_outputs(
  * @returns NamedTuple of outputs (described in `DirsplitOutputs`).
  */
 function dirsplit_execute(
-    params: DirsplitParameters,
+    params: DirsplitParamsDict,
     runner: Runner | null = null,
 ): DirsplitOutputs {
     runner = runner || getGlobalRunner();
@@ -303,7 +303,7 @@ function dirsplit(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirsplitConfigParameters> | null = null,
+    config: Array<DirsplitConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -315,9 +315,13 @@ function dirsplit(
 
 export {
       DIRSPLIT_METADATA,
+      DirsplitConfigParamsDict,
+      DirsplitConfigParamsDictTagged,
       DirsplitOutputs,
+      DirsplitParamsDict,
+      DirsplitParamsDictTagged,
       dirsplit,
-      dirsplit_config_params,
+      dirsplit_config,
       dirsplit_execute,
       dirsplit_params,
 };

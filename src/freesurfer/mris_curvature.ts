@@ -11,7 +11,7 @@ const MRIS_CURVATURE_METADATA: Metadata = {
 };
 
 
-interface MrisCurvatureParameters {
+interface MrisCurvatureParamsDict {
     "@type"?: "freesurfer/mris_curvature";
     "save_curvature_files": boolean;
     "max_principal_curvature": boolean;
@@ -28,11 +28,11 @@ interface MrisCurvatureParameters {
     "k1k2_curvature"?: string | null | undefined;
     "input_surface": InputPathType;
 }
-type MrisCurvatureParametersTagged = Required<Pick<MrisCurvatureParameters, '@type'>> & MrisCurvatureParameters;
+type MrisCurvatureParamsDictTagged = Required<Pick<MrisCurvatureParamsDict, '@type'>> & MrisCurvatureParamsDict;
 
 
 /**
- * Output object returned when calling `MrisCurvatureParameters(...)`.
+ * Output object returned when calling `MrisCurvatureParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function mris_curvature_params(
     k1_curvature: string | null = null,
     k2_curvature: string | null = null,
     k1k2_curvature: string | null = null,
-): MrisCurvatureParametersTagged {
+): MrisCurvatureParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_curvature" as const,
         "save_curvature_files": save_curvature_files,
@@ -128,7 +128,7 @@ function mris_curvature_params(
  * @returns Command-line arguments.
  */
 function mris_curvature_cargs(
-    params: MrisCurvatureParameters,
+    params: MrisCurvatureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -213,7 +213,7 @@ function mris_curvature_cargs(
  * @returns Outputs object.
  */
 function mris_curvature_outputs(
-    params: MrisCurvatureParameters,
+    params: MrisCurvatureParamsDict,
     execution: Execution,
 ): MrisCurvatureOutputs {
     const ret: MrisCurvatureOutputs = {
@@ -238,7 +238,7 @@ function mris_curvature_outputs(
  * @returns NamedTuple of outputs (described in `MrisCurvatureOutputs`).
  */
 function mris_curvature_execute(
-    params: MrisCurvatureParameters,
+    params: MrisCurvatureParamsDict,
     runner: Runner | null = null,
 ): MrisCurvatureOutputs {
     runner = runner || getGlobalRunner();
@@ -303,6 +303,8 @@ function mris_curvature(
 export {
       MRIS_CURVATURE_METADATA,
       MrisCurvatureOutputs,
+      MrisCurvatureParamsDict,
+      MrisCurvatureParamsDictTagged,
       mris_curvature,
       mris_curvature_execute,
       mris_curvature_params,

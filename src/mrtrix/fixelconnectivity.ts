@@ -11,15 +11,15 @@ const FIXELCONNECTIVITY_METADATA: Metadata = {
 };
 
 
-interface FixelconnectivityConfigParameters {
+interface FixelconnectivityConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type FixelconnectivityConfigParametersTagged = Required<Pick<FixelconnectivityConfigParameters, '@type'>> & FixelconnectivityConfigParameters;
+type FixelconnectivityConfigParamsDictTagged = Required<Pick<FixelconnectivityConfigParamsDict, '@type'>> & FixelconnectivityConfigParamsDict;
 
 
-interface FixelconnectivityParameters {
+interface FixelconnectivityParamsDict {
     "@type"?: "mrtrix/fixelconnectivity";
     "threshold"?: number | null | undefined;
     "angle"?: number | null | undefined;
@@ -29,14 +29,14 @@ interface FixelconnectivityParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<FixelconnectivityConfigParameters> | null | undefined;
+    "config"?: Array<FixelconnectivityConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "fixel_directory": InputPathType;
     "tracks": InputPathType;
     "matrix": string;
 }
-type FixelconnectivityParametersTagged = Required<Pick<FixelconnectivityParameters, '@type'>> & FixelconnectivityParameters;
+type FixelconnectivityParamsDictTagged = Required<Pick<FixelconnectivityParamsDict, '@type'>> & FixelconnectivityParamsDict;
 
 
 /**
@@ -47,10 +47,10 @@ type FixelconnectivityParametersTagged = Required<Pick<FixelconnectivityParamete
  *
  * @returns Parameter dictionary
  */
-function fixelconnectivity_config_params(
+function fixelconnectivity_config(
     key: string,
     value: string,
-): FixelconnectivityConfigParametersTagged {
+): FixelconnectivityConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -69,7 +69,7 @@ function fixelconnectivity_config_params(
  * @returns Command-line arguments.
  */
 function fixelconnectivity_config_cargs(
-    params: FixelconnectivityConfigParameters,
+    params: FixelconnectivityConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function fixelconnectivity_config_cargs(
 
 
 /**
- * Output object returned when calling `FixelconnectivityParameters(...)`.
+ * Output object returned when calling `FixelconnectivityParamsDict(...)`.
  *
  * @interface
  */
@@ -129,10 +129,10 @@ function fixelconnectivity_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelconnectivityConfigParameters> | null = null,
+    config: Array<FixelconnectivityConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelconnectivityParametersTagged {
+): FixelconnectivityParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixelconnectivity" as const,
         "info": info,
@@ -173,7 +173,7 @@ function fixelconnectivity_params(
  * @returns Command-line arguments.
  */
 function fixelconnectivity_cargs(
-    params: FixelconnectivityParameters,
+    params: FixelconnectivityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -239,7 +239,7 @@ function fixelconnectivity_cargs(
  * @returns Outputs object.
  */
 function fixelconnectivity_outputs(
-    params: FixelconnectivityParameters,
+    params: FixelconnectivityParamsDict,
     execution: Execution,
 ): FixelconnectivityOutputs {
     const ret: FixelconnectivityOutputs = {
@@ -271,7 +271,7 @@ function fixelconnectivity_outputs(
  * @returns NamedTuple of outputs (described in `FixelconnectivityOutputs`).
  */
 function fixelconnectivity_execute(
-    params: FixelconnectivityParameters,
+    params: FixelconnectivityParamsDict,
     runner: Runner | null = null,
 ): FixelconnectivityOutputs {
     runner = runner || getGlobalRunner();
@@ -329,7 +329,7 @@ function fixelconnectivity(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelconnectivityConfigParameters> | null = null,
+    config: Array<FixelconnectivityConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -341,9 +341,13 @@ function fixelconnectivity(
 
 export {
       FIXELCONNECTIVITY_METADATA,
+      FixelconnectivityConfigParamsDict,
+      FixelconnectivityConfigParamsDictTagged,
       FixelconnectivityOutputs,
+      FixelconnectivityParamsDict,
+      FixelconnectivityParamsDictTagged,
       fixelconnectivity,
-      fixelconnectivity_config_params,
+      fixelconnectivity_config,
       fixelconnectivity_execute,
       fixelconnectivity_params,
 };

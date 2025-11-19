@@ -11,7 +11,7 @@ const ANTS_REGISTRATION_SY_N_SH_METADATA: Metadata = {
 };
 
 
-interface AntsRegistrationSyNShParameters {
+interface AntsRegistrationSyNShParamsDict {
     "@type"?: "ants/antsRegistrationSyN.sh";
     "image_dimension": 2 | 3;
     "fixed_image": InputPathType;
@@ -30,11 +30,11 @@ interface AntsRegistrationSyNShParameters {
     "collapse_output_transforms"?: boolean | null | undefined;
     "random_seed"?: number | null | undefined;
 }
-type AntsRegistrationSyNShParametersTagged = Required<Pick<AntsRegistrationSyNShParameters, '@type'>> & AntsRegistrationSyNShParameters;
+type AntsRegistrationSyNShParamsDictTagged = Required<Pick<AntsRegistrationSyNShParamsDict, '@type'>> & AntsRegistrationSyNShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsRegistrationSyNShParameters(...)`.
+ * Output object returned when calling `AntsRegistrationSyNShParamsDict(...)`.
  *
  * @interface
  */
@@ -114,7 +114,7 @@ function ants_registration_sy_n_sh_params(
     use_repro_mode: boolean | null = null,
     collapse_output_transforms: boolean | null = null,
     random_seed: number | null = null,
-): AntsRegistrationSyNShParametersTagged {
+): AntsRegistrationSyNShParamsDictTagged {
     const params = {
         "@type": "ants/antsRegistrationSyN.sh" as const,
         "image_dimension": image_dimension,
@@ -171,7 +171,7 @@ function ants_registration_sy_n_sh_params(
  * @returns Command-line arguments.
  */
 function ants_registration_sy_n_sh_cargs(
-    params: AntsRegistrationSyNShParameters,
+    params: AntsRegistrationSyNShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -277,7 +277,7 @@ function ants_registration_sy_n_sh_cargs(
  * @returns Outputs object.
  */
 function ants_registration_sy_n_sh_outputs(
-    params: AntsRegistrationSyNShParameters,
+    params: AntsRegistrationSyNShParamsDict,
     execution: Execution,
 ): AntsRegistrationSyNShOutputs {
     const ret: AntsRegistrationSyNShOutputs = {
@@ -305,7 +305,7 @@ function ants_registration_sy_n_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsRegistrationSyNShOutputs`).
  */
 function ants_registration_sy_n_sh_execute(
-    params: AntsRegistrationSyNShParameters,
+    params: AntsRegistrationSyNShParamsDict,
     runner: Runner | null = null,
 ): AntsRegistrationSyNShOutputs {
     runner = runner || getGlobalRunner();
@@ -391,6 +391,8 @@ function ants_registration_sy_n_sh(
 export {
       ANTS_REGISTRATION_SY_N_SH_METADATA,
       AntsRegistrationSyNShOutputs,
+      AntsRegistrationSyNShParamsDict,
+      AntsRegistrationSyNShParamsDictTagged,
       ants_registration_sy_n_sh,
       ants_registration_sy_n_sh_execute,
       ants_registration_sy_n_sh_params,

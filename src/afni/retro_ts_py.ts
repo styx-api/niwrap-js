@@ -11,7 +11,7 @@ const RETRO_TS_PY_METADATA: Metadata = {
 };
 
 
-interface RetroTsPyParameters {
+interface RetroTsPyParamsDict {
     "@type"?: "afni/RetroTS.py";
     "resp_file"?: InputPathType | null | undefined;
     "card_file"?: InputPathType | null | undefined;
@@ -39,11 +39,11 @@ interface RetroTsPyParameters {
     "zero_phase_offset": boolean;
     "legacy_transform"?: number | null | undefined;
 }
-type RetroTsPyParametersTagged = Required<Pick<RetroTsPyParameters, '@type'>> & RetroTsPyParameters;
+type RetroTsPyParamsDictTagged = Required<Pick<RetroTsPyParamsDict, '@type'>> & RetroTsPyParamsDict;
 
 
 /**
- * Output object returned when calling `RetroTsPyParameters(...)`.
+ * Output object returned when calling `RetroTsPyParamsDict(...)`.
  *
  * @interface
  */
@@ -116,7 +116,7 @@ function retro_ts_py_params(
     slice_order: string | null = null,
     zero_phase_offset: boolean = false,
     legacy_transform: number | null = null,
-): RetroTsPyParametersTagged {
+): RetroTsPyParamsDictTagged {
     const params = {
         "@type": "afni/RetroTS.py" as const,
         "num_slices": num_slices,
@@ -188,7 +188,7 @@ function retro_ts_py_params(
  * @returns Command-line arguments.
  */
 function retro_ts_py_cargs(
-    params: RetroTsPyParameters,
+    params: RetroTsPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -328,7 +328,7 @@ function retro_ts_py_cargs(
  * @returns Outputs object.
  */
 function retro_ts_py_outputs(
-    params: RetroTsPyParameters,
+    params: RetroTsPyParamsDict,
     execution: Execution,
 ): RetroTsPyOutputs {
     const ret: RetroTsPyOutputs = {
@@ -354,7 +354,7 @@ function retro_ts_py_outputs(
  * @returns NamedTuple of outputs (described in `RetroTsPyOutputs`).
  */
 function retro_ts_py_execute(
-    params: RetroTsPyParameters,
+    params: RetroTsPyParamsDict,
     runner: Runner | null = null,
 ): RetroTsPyOutputs {
     runner = runner || getGlobalRunner();
@@ -441,6 +441,8 @@ function retro_ts_py(
 export {
       RETRO_TS_PY_METADATA,
       RetroTsPyOutputs,
+      RetroTsPyParamsDict,
+      RetroTsPyParamsDictTagged,
       retro_ts_py,
       retro_ts_py_execute,
       retro_ts_py_params,

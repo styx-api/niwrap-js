@@ -11,16 +11,16 @@ const MRIS_SURF2VTK_METADATA: Metadata = {
 };
 
 
-interface MrisSurf2vtkParameters {
+interface MrisSurf2vtkParamsDict {
     "@type"?: "freesurfer/mris_surf2vtk";
     "input_surface": InputPathType;
     "output_surface": string;
 }
-type MrisSurf2vtkParametersTagged = Required<Pick<MrisSurf2vtkParameters, '@type'>> & MrisSurf2vtkParameters;
+type MrisSurf2vtkParamsDictTagged = Required<Pick<MrisSurf2vtkParamsDict, '@type'>> & MrisSurf2vtkParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSurf2vtkParameters(...)`.
+ * Output object returned when calling `MrisSurf2vtkParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MrisSurf2vtkOutputs {
 function mris_surf2vtk_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisSurf2vtkParametersTagged {
+): MrisSurf2vtkParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_surf2vtk" as const,
         "input_surface": input_surface,
@@ -66,7 +66,7 @@ function mris_surf2vtk_params(
  * @returns Command-line arguments.
  */
 function mris_surf2vtk_cargs(
-    params: MrisSurf2vtkParameters,
+    params: MrisSurf2vtkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function mris_surf2vtk_cargs(
  * @returns Outputs object.
  */
 function mris_surf2vtk_outputs(
-    params: MrisSurf2vtkParameters,
+    params: MrisSurf2vtkParamsDict,
     execution: Execution,
 ): MrisSurf2vtkOutputs {
     const ret: MrisSurf2vtkOutputs = {
@@ -118,7 +118,7 @@ function mris_surf2vtk_outputs(
  * @returns NamedTuple of outputs (described in `MrisSurf2vtkOutputs`).
  */
 function mris_surf2vtk_execute(
-    params: MrisSurf2vtkParameters,
+    params: MrisSurf2vtkParamsDict,
     runner: Runner | null = null,
 ): MrisSurf2vtkOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function mris_surf2vtk(
 export {
       MRIS_SURF2VTK_METADATA,
       MrisSurf2vtkOutputs,
+      MrisSurf2vtkParamsDict,
+      MrisSurf2vtkParamsDictTagged,
       mris_surf2vtk,
       mris_surf2vtk_execute,
       mris_surf2vtk_params,

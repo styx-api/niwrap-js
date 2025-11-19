@@ -11,7 +11,7 @@ const MRI_SYNTHMORPH_METADATA: Metadata = {
 };
 
 
-interface MriSynthmorphParameters {
+interface MriSynthmorphParamsDict {
     "@type"?: "freesurfer/mri_synthmorph";
     "moving_image": InputPathType;
     "fixed_image": InputPathType;
@@ -27,11 +27,11 @@ interface MriSynthmorphParameters {
     "model_weights"?: InputPathType | null | undefined;
     "inspect_directory"?: string | null | undefined;
 }
-type MriSynthmorphParametersTagged = Required<Pick<MriSynthmorphParameters, '@type'>> & MriSynthmorphParameters;
+type MriSynthmorphParamsDictTagged = Required<Pick<MriSynthmorphParamsDict, '@type'>> & MriSynthmorphParamsDict;
 
 
 /**
- * Output object returned when calling `MriSynthmorphParameters(...)`.
+ * Output object returned when calling `MriSynthmorphParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function mri_synthmorph_params(
     extent: number | null = null,
     model_weights: InputPathType | null = null,
     inspect_directory: string | null = null,
-): MriSynthmorphParametersTagged {
+): MriSynthmorphParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_synthmorph" as const,
         "moving_image": moving_image,
@@ -132,7 +132,7 @@ function mri_synthmorph_params(
  * @returns Command-line arguments.
  */
 function mri_synthmorph_cargs(
-    params: MriSynthmorphParameters,
+    params: MriSynthmorphParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function mri_synthmorph_cargs(
  * @returns Outputs object.
  */
 function mri_synthmorph_outputs(
-    params: MriSynthmorphParameters,
+    params: MriSynthmorphParamsDict,
     execution: Execution,
 ): MriSynthmorphOutputs {
     const ret: MriSynthmorphOutputs = {
@@ -239,7 +239,7 @@ function mri_synthmorph_outputs(
  * @returns NamedTuple of outputs (described in `MriSynthmorphOutputs`).
  */
 function mri_synthmorph_execute(
-    params: MriSynthmorphParameters,
+    params: MriSynthmorphParamsDict,
     runner: Runner | null = null,
 ): MriSynthmorphOutputs {
     runner = runner || getGlobalRunner();
@@ -302,6 +302,8 @@ function mri_synthmorph(
 export {
       MRI_SYNTHMORPH_METADATA,
       MriSynthmorphOutputs,
+      MriSynthmorphParamsDict,
+      MriSynthmorphParamsDictTagged,
       mri_synthmorph,
       mri_synthmorph_execute,
       mri_synthmorph_params,

@@ -11,26 +11,26 @@ const SH2PEAKS_METADATA: Metadata = {
 };
 
 
-interface Sh2peaksDirectionParameters {
+interface Sh2peaksDirectionParamsDict {
     "@type"?: "direction";
     "phi": number;
     "theta": number;
 }
-type Sh2peaksDirectionParametersTagged = Required<Pick<Sh2peaksDirectionParameters, '@type'>> & Sh2peaksDirectionParameters;
+type Sh2peaksDirectionParamsDictTagged = Required<Pick<Sh2peaksDirectionParamsDict, '@type'>> & Sh2peaksDirectionParamsDict;
 
 
-interface Sh2peaksConfigParameters {
+interface Sh2peaksConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Sh2peaksConfigParametersTagged = Required<Pick<Sh2peaksConfigParameters, '@type'>> & Sh2peaksConfigParameters;
+type Sh2peaksConfigParamsDictTagged = Required<Pick<Sh2peaksConfigParamsDict, '@type'>> & Sh2peaksConfigParamsDict;
 
 
-interface Sh2peaksParameters {
+interface Sh2peaksParamsDict {
     "@type"?: "mrtrix/sh2peaks";
     "num"?: number | null | undefined;
-    "direction"?: Array<Sh2peaksDirectionParameters> | null | undefined;
+    "direction"?: Array<Sh2peaksDirectionParamsDict> | null | undefined;
     "peaks"?: InputPathType | null | undefined;
     "threshold"?: number | null | undefined;
     "seeds"?: InputPathType | null | undefined;
@@ -41,13 +41,13 @@ interface Sh2peaksParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Sh2peaksConfigParameters> | null | undefined;
+    "config"?: Array<Sh2peaksConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "SH": InputPathType;
     "output": string;
 }
-type Sh2peaksParametersTagged = Required<Pick<Sh2peaksParameters, '@type'>> & Sh2peaksParameters;
+type Sh2peaksParamsDictTagged = Required<Pick<Sh2peaksParamsDict, '@type'>> & Sh2peaksParamsDict;
 
 
 /**
@@ -58,10 +58,10 @@ type Sh2peaksParametersTagged = Required<Pick<Sh2peaksParameters, '@type'>> & Sh
  *
  * @returns Parameter dictionary
  */
-function sh2peaks_direction_params(
+function sh2peaks_direction(
     phi: number,
     theta: number,
-): Sh2peaksDirectionParametersTagged {
+): Sh2peaksDirectionParamsDictTagged {
     const params = {
         "@type": "direction" as const,
         "phi": phi,
@@ -80,7 +80,7 @@ function sh2peaks_direction_params(
  * @returns Command-line arguments.
  */
 function sh2peaks_direction_cargs(
-    params: Sh2peaksDirectionParameters,
+    params: Sh2peaksDirectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,10 +99,10 @@ function sh2peaks_direction_cargs(
  *
  * @returns Parameter dictionary
  */
-function sh2peaks_config_params(
+function sh2peaks_config(
     key: string,
     value: string,
-): Sh2peaksConfigParametersTagged {
+): Sh2peaksConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -121,7 +121,7 @@ function sh2peaks_config_params(
  * @returns Command-line arguments.
  */
 function sh2peaks_config_cargs(
-    params: Sh2peaksConfigParameters,
+    params: Sh2peaksConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function sh2peaks_config_cargs(
 
 
 /**
- * Output object returned when calling `Sh2peaksParameters(...)`.
+ * Output object returned when calling `Sh2peaksParamsDict(...)`.
  *
  * @interface
  */
@@ -176,7 +176,7 @@ function sh2peaks_params(
     sh: InputPathType,
     output: string,
     num: number | null = null,
-    direction: Array<Sh2peaksDirectionParameters> | null = null,
+    direction: Array<Sh2peaksDirectionParamsDict> | null = null,
     peaks: InputPathType | null = null,
     threshold: number | null = null,
     seeds: InputPathType | null = null,
@@ -187,10 +187,10 @@ function sh2peaks_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2peaksConfigParameters> | null = null,
+    config: Array<Sh2peaksConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2peaksParametersTagged {
+): Sh2peaksParamsDictTagged {
     const params = {
         "@type": "mrtrix/sh2peaks" as const,
         "fast": fast,
@@ -240,7 +240,7 @@ function sh2peaks_params(
  * @returns Command-line arguments.
  */
 function sh2peaks_cargs(
-    params: Sh2peaksParameters,
+    params: Sh2peaksParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -323,7 +323,7 @@ function sh2peaks_cargs(
  * @returns Outputs object.
  */
 function sh2peaks_outputs(
-    params: Sh2peaksParameters,
+    params: Sh2peaksParamsDict,
     execution: Execution,
 ): Sh2peaksOutputs {
     const ret: Sh2peaksOutputs = {
@@ -358,7 +358,7 @@ function sh2peaks_outputs(
  * @returns NamedTuple of outputs (described in `Sh2peaksOutputs`).
  */
 function sh2peaks_execute(
-    params: Sh2peaksParameters,
+    params: Sh2peaksParamsDict,
     runner: Runner | null = null,
 ): Sh2peaksOutputs {
     runner = runner || getGlobalRunner();
@@ -414,7 +414,7 @@ function sh2peaks(
     sh: InputPathType,
     output: string,
     num: number | null = null,
-    direction: Array<Sh2peaksDirectionParameters> | null = null,
+    direction: Array<Sh2peaksDirectionParamsDict> | null = null,
     peaks: InputPathType | null = null,
     threshold: number | null = null,
     seeds: InputPathType | null = null,
@@ -425,7 +425,7 @@ function sh2peaks(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2peaksConfigParameters> | null = null,
+    config: Array<Sh2peaksConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -437,10 +437,16 @@ function sh2peaks(
 
 export {
       SH2PEAKS_METADATA,
+      Sh2peaksConfigParamsDict,
+      Sh2peaksConfigParamsDictTagged,
+      Sh2peaksDirectionParamsDict,
+      Sh2peaksDirectionParamsDictTagged,
       Sh2peaksOutputs,
+      Sh2peaksParamsDict,
+      Sh2peaksParamsDictTagged,
       sh2peaks,
-      sh2peaks_config_params,
-      sh2peaks_direction_params,
+      sh2peaks_config,
+      sh2peaks_direction,
       sh2peaks_execute,
       sh2peaks_params,
 };

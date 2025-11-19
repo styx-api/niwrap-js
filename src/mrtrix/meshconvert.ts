@@ -11,38 +11,38 @@ const MESHCONVERT_METADATA: Metadata = {
 };
 
 
-interface MeshconvertTransformParameters {
+interface MeshconvertTransformParamsDict {
     "@type"?: "transform";
     "mode": string;
     "image": InputPathType;
 }
-type MeshconvertTransformParametersTagged = Required<Pick<MeshconvertTransformParameters, '@type'>> & MeshconvertTransformParameters;
+type MeshconvertTransformParamsDictTagged = Required<Pick<MeshconvertTransformParamsDict, '@type'>> & MeshconvertTransformParamsDict;
 
 
-interface MeshconvertConfigParameters {
+interface MeshconvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MeshconvertConfigParametersTagged = Required<Pick<MeshconvertConfigParameters, '@type'>> & MeshconvertConfigParameters;
+type MeshconvertConfigParamsDictTagged = Required<Pick<MeshconvertConfigParamsDict, '@type'>> & MeshconvertConfigParamsDict;
 
 
-interface MeshconvertParameters {
+interface MeshconvertParamsDict {
     "@type"?: "mrtrix/meshconvert";
     "binary": boolean;
-    "transform"?: MeshconvertTransformParameters | null | undefined;
+    "transform"?: MeshconvertTransformParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MeshconvertConfigParameters> | null | undefined;
+    "config"?: Array<MeshconvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type MeshconvertParametersTagged = Required<Pick<MeshconvertParameters, '@type'>> & MeshconvertParameters;
+type MeshconvertParamsDictTagged = Required<Pick<MeshconvertParamsDict, '@type'>> & MeshconvertParamsDict;
 
 
 /**
@@ -53,10 +53,10 @@ type MeshconvertParametersTagged = Required<Pick<MeshconvertParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function meshconvert_transform_params(
+function meshconvert_transform(
     mode: string,
     image: InputPathType,
-): MeshconvertTransformParametersTagged {
+): MeshconvertTransformParamsDictTagged {
     const params = {
         "@type": "transform" as const,
         "mode": mode,
@@ -75,7 +75,7 @@ function meshconvert_transform_params(
  * @returns Command-line arguments.
  */
 function meshconvert_transform_cargs(
-    params: MeshconvertTransformParameters,
+    params: MeshconvertTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,10 +94,10 @@ function meshconvert_transform_cargs(
  *
  * @returns Parameter dictionary
  */
-function meshconvert_config_params(
+function meshconvert_config(
     key: string,
     value: string,
-): MeshconvertConfigParametersTagged {
+): MeshconvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -116,7 +116,7 @@ function meshconvert_config_params(
  * @returns Command-line arguments.
  */
 function meshconvert_config_cargs(
-    params: MeshconvertConfigParameters,
+    params: MeshconvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function meshconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `MeshconvertParameters(...)`.
+ * Output object returned when calling `MeshconvertParamsDict(...)`.
  *
  * @interface
  */
@@ -166,16 +166,16 @@ function meshconvert_params(
     input: InputPathType,
     output: string,
     binary: boolean = false,
-    transform: MeshconvertTransformParameters | null = null,
+    transform: MeshconvertTransformParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MeshconvertConfigParameters> | null = null,
+    config: Array<MeshconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MeshconvertParametersTagged {
+): MeshconvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/meshconvert" as const,
         "binary": binary,
@@ -210,7 +210,7 @@ function meshconvert_params(
  * @returns Command-line arguments.
  */
 function meshconvert_cargs(
-    params: MeshconvertParameters,
+    params: MeshconvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -263,7 +263,7 @@ function meshconvert_cargs(
  * @returns Outputs object.
  */
 function meshconvert_outputs(
-    params: MeshconvertParameters,
+    params: MeshconvertParamsDict,
     execution: Execution,
 ): MeshconvertOutputs {
     const ret: MeshconvertOutputs = {
@@ -295,7 +295,7 @@ function meshconvert_outputs(
  * @returns NamedTuple of outputs (described in `MeshconvertOutputs`).
  */
 function meshconvert_execute(
-    params: MeshconvertParameters,
+    params: MeshconvertParamsDict,
     runner: Runner | null = null,
 ): MeshconvertOutputs {
     runner = runner || getGlobalRunner();
@@ -343,13 +343,13 @@ function meshconvert(
     input: InputPathType,
     output: string,
     binary: boolean = false,
-    transform: MeshconvertTransformParameters | null = null,
+    transform: MeshconvertTransformParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MeshconvertConfigParameters> | null = null,
+    config: Array<MeshconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -361,10 +361,16 @@ function meshconvert(
 
 export {
       MESHCONVERT_METADATA,
+      MeshconvertConfigParamsDict,
+      MeshconvertConfigParamsDictTagged,
       MeshconvertOutputs,
+      MeshconvertParamsDict,
+      MeshconvertParamsDictTagged,
+      MeshconvertTransformParamsDict,
+      MeshconvertTransformParamsDictTagged,
       meshconvert,
-      meshconvert_config_params,
+      meshconvert_config,
       meshconvert_execute,
       meshconvert_params,
-      meshconvert_transform_params,
+      meshconvert_transform,
 };

@@ -11,23 +11,23 @@ const COMPUTE_LABEL_VOLUMES_CSH_METADATA: Metadata = {
 };
 
 
-interface ComputeLabelVolumesCshLabelLParameters {
+interface ComputeLabelVolumesCshLabelLParamsDict {
     "@type"?: "label_L";
     "upper_L"?: string | null | undefined;
     "lower_L"?: string | null | undefined;
 }
-type ComputeLabelVolumesCshLabelLParametersTagged = Required<Pick<ComputeLabelVolumesCshLabelLParameters, '@type'>> & ComputeLabelVolumesCshLabelLParameters;
+type ComputeLabelVolumesCshLabelLParamsDictTagged = Required<Pick<ComputeLabelVolumesCshLabelLParamsDict, '@type'>> & ComputeLabelVolumesCshLabelLParamsDict;
 
 
-interface ComputeLabelVolumesCshParameters {
+interface ComputeLabelVolumesCshParamsDict {
     "@type"?: "freesurfer/compute_label_volumes.csh";
     "label_vol": InputPathType;
     "output_file": string;
-    "label_L"?: ComputeLabelVolumesCshLabelLParameters | null | undefined;
+    "label_L"?: ComputeLabelVolumesCshLabelLParamsDict | null | undefined;
     "version": boolean;
     "help": boolean;
 }
-type ComputeLabelVolumesCshParametersTagged = Required<Pick<ComputeLabelVolumesCshParameters, '@type'>> & ComputeLabelVolumesCshParameters;
+type ComputeLabelVolumesCshParamsDictTagged = Required<Pick<ComputeLabelVolumesCshParamsDict, '@type'>> & ComputeLabelVolumesCshParamsDict;
 
 
 /**
@@ -38,10 +38,10 @@ type ComputeLabelVolumesCshParametersTagged = Required<Pick<ComputeLabelVolumesC
  *
  * @returns Parameter dictionary
  */
-function compute_label_volumes_csh_label_l_params(
+function compute_label_volumes_csh_label_l(
     upper_l: string | null = null,
     lower_l: string | null = null,
-): ComputeLabelVolumesCshLabelLParametersTagged {
+): ComputeLabelVolumesCshLabelLParamsDictTagged {
     const params = {
         "@type": "label_L" as const,
     };
@@ -64,7 +64,7 @@ function compute_label_volumes_csh_label_l_params(
  * @returns Command-line arguments.
  */
 function compute_label_volumes_csh_label_l_cargs(
-    params: ComputeLabelVolumesCshLabelLParameters,
+    params: ComputeLabelVolumesCshLabelLParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function compute_label_volumes_csh_label_l_cargs(
 
 
 /**
- * Output object returned when calling `ComputeLabelVolumesCshParameters(...)`.
+ * Output object returned when calling `ComputeLabelVolumesCshParamsDict(...)`.
  *
  * @interface
  */
@@ -115,10 +115,10 @@ interface ComputeLabelVolumesCshOutputs {
 function compute_label_volumes_csh_params(
     label_vol: InputPathType,
     output_file: string,
-    label_l: ComputeLabelVolumesCshLabelLParameters | null = null,
+    label_l: ComputeLabelVolumesCshLabelLParamsDict | null = null,
     version: boolean = false,
     help: boolean = false,
-): ComputeLabelVolumesCshParametersTagged {
+): ComputeLabelVolumesCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/compute_label_volumes.csh" as const,
         "label_vol": label_vol,
@@ -142,7 +142,7 @@ function compute_label_volumes_csh_params(
  * @returns Command-line arguments.
  */
 function compute_label_volumes_csh_cargs(
-    params: ComputeLabelVolumesCshParameters,
+    params: ComputeLabelVolumesCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function compute_label_volumes_csh_cargs(
  * @returns Outputs object.
  */
 function compute_label_volumes_csh_outputs(
-    params: ComputeLabelVolumesCshParameters,
+    params: ComputeLabelVolumesCshParamsDict,
     execution: Execution,
 ): ComputeLabelVolumesCshOutputs {
     const ret: ComputeLabelVolumesCshOutputs = {
@@ -203,7 +203,7 @@ function compute_label_volumes_csh_outputs(
  * @returns NamedTuple of outputs (described in `ComputeLabelVolumesCshOutputs`).
  */
 function compute_label_volumes_csh_execute(
-    params: ComputeLabelVolumesCshParameters,
+    params: ComputeLabelVolumesCshParamsDict,
     runner: Runner | null = null,
 ): ComputeLabelVolumesCshOutputs {
     runner = runner || getGlobalRunner();
@@ -237,7 +237,7 @@ function compute_label_volumes_csh_execute(
 function compute_label_volumes_csh(
     label_vol: InputPathType,
     output_file: string,
-    label_l: ComputeLabelVolumesCshLabelLParameters | null = null,
+    label_l: ComputeLabelVolumesCshLabelLParamsDict | null = null,
     version: boolean = false,
     help: boolean = false,
     runner: Runner | null = null,
@@ -249,9 +249,13 @@ function compute_label_volumes_csh(
 
 export {
       COMPUTE_LABEL_VOLUMES_CSH_METADATA,
+      ComputeLabelVolumesCshLabelLParamsDict,
+      ComputeLabelVolumesCshLabelLParamsDictTagged,
       ComputeLabelVolumesCshOutputs,
+      ComputeLabelVolumesCshParamsDict,
+      ComputeLabelVolumesCshParamsDictTagged,
       compute_label_volumes_csh,
       compute_label_volumes_csh_execute,
-      compute_label_volumes_csh_label_l_params,
+      compute_label_volumes_csh_label_l,
       compute_label_volumes_csh_params,
 };

@@ -11,7 +11,7 @@ const V_1DSOUND_METADATA: Metadata = {
 };
 
 
-interface V1dsoundParameters {
+interface V1dsoundParamsDict {
     "@type"?: "afni/1dsound";
     "tsfile": InputPathType;
     "prefix"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface V1dsoundParameters {
     "despike_option": boolean;
     "play_option": boolean;
 }
-type V1dsoundParametersTagged = Required<Pick<V1dsoundParameters, '@type'>> & V1dsoundParameters;
+type V1dsoundParamsDictTagged = Required<Pick<V1dsoundParamsDict, '@type'>> & V1dsoundParamsDict;
 
 
 /**
- * Output object returned when calling `V1dsoundParameters(...)`.
+ * Output object returned when calling `V1dsoundParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function v_1dsound_params(
     notewave_option: string | null = null,
     despike_option: boolean = false,
     play_option: boolean = false,
-): V1dsoundParametersTagged {
+): V1dsoundParamsDictTagged {
     const params = {
         "@type": "afni/1dsound" as const,
         "tsfile": tsfile,
@@ -108,7 +108,7 @@ function v_1dsound_params(
  * @returns Command-line arguments.
  */
 function v_1dsound_cargs(
-    params: V1dsoundParameters,
+    params: V1dsoundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -166,7 +166,7 @@ function v_1dsound_cargs(
  * @returns Outputs object.
  */
 function v_1dsound_outputs(
-    params: V1dsoundParameters,
+    params: V1dsoundParamsDict,
     execution: Execution,
 ): V1dsoundOutputs {
     const ret: V1dsoundOutputs = {
@@ -192,7 +192,7 @@ function v_1dsound_outputs(
  * @returns NamedTuple of outputs (described in `V1dsoundOutputs`).
  */
 function v_1dsound_execute(
-    params: V1dsoundParameters,
+    params: V1dsoundParamsDict,
     runner: Runner | null = null,
 ): V1dsoundOutputs {
     runner = runner || getGlobalRunner();
@@ -250,6 +250,8 @@ function v_1dsound(
 
 export {
       V1dsoundOutputs,
+      V1dsoundParamsDict,
+      V1dsoundParamsDictTagged,
       V_1DSOUND_METADATA,
       v_1dsound,
       v_1dsound_execute,

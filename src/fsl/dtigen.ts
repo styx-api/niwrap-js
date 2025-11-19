@@ -11,7 +11,7 @@ const DTIGEN_METADATA: Metadata = {
 };
 
 
-interface DtigenParameters {
+interface DtigenParamsDict {
     "@type"?: "fsl/dtigen";
     "tensor": InputPathType;
     "s0": InputPathType;
@@ -22,11 +22,11 @@ interface DtigenParameters {
     "kurtosis"?: InputPathType | null | undefined;
     "help": boolean;
 }
-type DtigenParametersTagged = Required<Pick<DtigenParameters, '@type'>> & DtigenParameters;
+type DtigenParamsDictTagged = Required<Pick<DtigenParamsDict, '@type'>> & DtigenParamsDict;
 
 
 /**
- * Output object returned when calling `DtigenParameters(...)`.
+ * Output object returned when calling `DtigenParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function dtigen_params(
     brainmask: InputPathType,
     kurtosis: InputPathType | null = null,
     help: boolean = false,
-): DtigenParametersTagged {
+): DtigenParamsDictTagged {
     const params = {
         "@type": "fsl/dtigen" as const,
         "tensor": tensor,
@@ -96,7 +96,7 @@ function dtigen_params(
  * @returns Command-line arguments.
  */
 function dtigen_cargs(
-    params: DtigenParameters,
+    params: DtigenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function dtigen_cargs(
  * @returns Outputs object.
  */
 function dtigen_outputs(
-    params: DtigenParameters,
+    params: DtigenParamsDict,
     execution: Execution,
 ): DtigenOutputs {
     const ret: DtigenOutputs = {
@@ -174,7 +174,7 @@ function dtigen_outputs(
  * @returns NamedTuple of outputs (described in `DtigenOutputs`).
  */
 function dtigen_execute(
-    params: DtigenParameters,
+    params: DtigenParamsDict,
     runner: Runner | null = null,
 ): DtigenOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function dtigen(
 export {
       DTIGEN_METADATA,
       DtigenOutputs,
+      DtigenParamsDict,
+      DtigenParamsDictTagged,
       dtigen,
       dtigen_execute,
       dtigen_params,

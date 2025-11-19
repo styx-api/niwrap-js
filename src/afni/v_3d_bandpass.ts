@@ -11,7 +11,7 @@ const V_3D_BANDPASS_METADATA: Metadata = {
 };
 
 
-interface V3dBandpassParameters {
+interface V3dBandpassParamsDict {
     "@type"?: "afni/3dBandpass";
     "prefix"?: string | null | undefined;
     "automask": boolean;
@@ -31,11 +31,11 @@ interface V3dBandpassParameters {
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "tr"?: number | null | undefined;
 }
-type V3dBandpassParametersTagged = Required<Pick<V3dBandpassParameters, '@type'>> & V3dBandpassParameters;
+type V3dBandpassParamsDictTagged = Required<Pick<V3dBandpassParamsDict, '@type'>> & V3dBandpassParamsDict;
 
 
 /**
- * Output object returned when calling `V3dBandpassParameters(...)`.
+ * Output object returned when calling `V3dBandpassParamsDict(...)`.
  *
  * @interface
  */
@@ -92,7 +92,7 @@ function v_3d_bandpass_params(
     orthogonalize_file: Array<InputPathType> | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     tr: number | null = null,
-): V3dBandpassParametersTagged {
+): V3dBandpassParamsDictTagged {
     const params = {
         "@type": "afni/3dBandpass" as const,
         "automask": automask,
@@ -144,7 +144,7 @@ function v_3d_bandpass_params(
  * @returns Command-line arguments.
  */
 function v_3d_bandpass_cargs(
-    params: V3dBandpassParameters,
+    params: V3dBandpassParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -231,7 +231,7 @@ function v_3d_bandpass_cargs(
  * @returns Outputs object.
  */
 function v_3d_bandpass_outputs(
-    params: V3dBandpassParameters,
+    params: V3dBandpassParamsDict,
     execution: Execution,
 ): V3dBandpassOutputs {
     const ret: V3dBandpassOutputs = {
@@ -257,7 +257,7 @@ function v_3d_bandpass_outputs(
  * @returns NamedTuple of outputs (described in `V3dBandpassOutputs`).
  */
 function v_3d_bandpass_execute(
-    params: V3dBandpassParameters,
+    params: V3dBandpassParamsDict,
     runner: Runner | null = null,
 ): V3dBandpassOutputs {
     runner = runner || getGlobalRunner();
@@ -327,6 +327,8 @@ function v_3d_bandpass(
 
 export {
       V3dBandpassOutputs,
+      V3dBandpassParamsDict,
+      V3dBandpassParamsDictTagged,
       V_3D_BANDPASS_METADATA,
       v_3d_bandpass,
       v_3d_bandpass_execute,

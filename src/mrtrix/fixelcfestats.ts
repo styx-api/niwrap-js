@@ -11,36 +11,36 @@ const FIXELCFESTATS_METADATA: Metadata = {
 };
 
 
-interface FixelcfestatsColumnParameters {
+interface FixelcfestatsColumnParamsDict {
     "@type"?: "column";
     "path": InputPathType;
 }
-type FixelcfestatsColumnParametersTagged = Required<Pick<FixelcfestatsColumnParameters, '@type'>> & FixelcfestatsColumnParameters;
+type FixelcfestatsColumnParamsDictTagged = Required<Pick<FixelcfestatsColumnParamsDict, '@type'>> & FixelcfestatsColumnParamsDict;
 
 
-interface FixelcfestatsConfigParameters {
+interface FixelcfestatsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type FixelcfestatsConfigParametersTagged = Required<Pick<FixelcfestatsConfigParameters, '@type'>> & FixelcfestatsConfigParameters;
+type FixelcfestatsConfigParamsDictTagged = Required<Pick<FixelcfestatsConfigParamsDict, '@type'>> & FixelcfestatsConfigParamsDict;
 
 
-interface FixelcfestatsVariousStringParameters {
+interface FixelcfestatsVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type FixelcfestatsVariousStringParametersTagged = Required<Pick<FixelcfestatsVariousStringParameters, '@type'>> & FixelcfestatsVariousStringParameters;
+type FixelcfestatsVariousStringParamsDictTagged = Required<Pick<FixelcfestatsVariousStringParamsDict, '@type'>> & FixelcfestatsVariousStringParamsDict;
 
 
-interface FixelcfestatsVariousFileParameters {
+interface FixelcfestatsVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type FixelcfestatsVariousFileParametersTagged = Required<Pick<FixelcfestatsVariousFileParameters, '@type'>> & FixelcfestatsVariousFileParameters;
+type FixelcfestatsVariousFileParamsDictTagged = Required<Pick<FixelcfestatsVariousFileParamsDict, '@type'>> & FixelcfestatsVariousFileParamsDict;
 
 
-interface FixelcfestatsParameters {
+interface FixelcfestatsParamsDict {
     "@type"?: "mrtrix/fixelcfestats";
     "mask"?: InputPathType | null | undefined;
     "notest": boolean;
@@ -62,23 +62,23 @@ interface FixelcfestatsParameters {
     "variance"?: InputPathType | null | undefined;
     "ftests"?: InputPathType | null | undefined;
     "fonly": boolean;
-    "column"?: Array<FixelcfestatsColumnParameters> | null | undefined;
+    "column"?: Array<FixelcfestatsColumnParamsDict> | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<FixelcfestatsConfigParameters> | null | undefined;
+    "config"?: Array<FixelcfestatsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in_fixel_directory": InputPathType;
     "subjects": InputPathType;
     "design": InputPathType;
     "contrast": InputPathType;
-    "connectivity": FixelcfestatsVariousStringParametersTagged | FixelcfestatsVariousFileParametersTagged;
+    "connectivity": FixelcfestatsVariousStringParamsDictTagged | FixelcfestatsVariousFileParamsDictTagged;
     "out_fixel_directory": string;
 }
-type FixelcfestatsParametersTagged = Required<Pick<FixelcfestatsParameters, '@type'>> & FixelcfestatsParameters;
+type FixelcfestatsParamsDictTagged = Required<Pick<FixelcfestatsParamsDict, '@type'>> & FixelcfestatsParamsDict;
 
 
 /**
@@ -122,9 +122,9 @@ function fixelcfestats_connectivity_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function fixelcfestats_column_params(
+function fixelcfestats_column(
     path: InputPathType,
-): FixelcfestatsColumnParametersTagged {
+): FixelcfestatsColumnParamsDictTagged {
     const params = {
         "@type": "column" as const,
         "path": path,
@@ -142,7 +142,7 @@ function fixelcfestats_column_params(
  * @returns Command-line arguments.
  */
 function fixelcfestats_column_cargs(
-    params: FixelcfestatsColumnParameters,
+    params: FixelcfestatsColumnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,10 +160,10 @@ function fixelcfestats_column_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelcfestats_config_params(
+function fixelcfestats_config(
     key: string,
     value: string,
-): FixelcfestatsConfigParametersTagged {
+): FixelcfestatsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -182,7 +182,7 @@ function fixelcfestats_config_params(
  * @returns Command-line arguments.
  */
 function fixelcfestats_config_cargs(
-    params: FixelcfestatsConfigParameters,
+    params: FixelcfestatsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,9 +200,9 @@ function fixelcfestats_config_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelcfestats_various_string_params(
+function fixelcfestats_various_string(
     obj: string,
-): FixelcfestatsVariousStringParametersTagged {
+): FixelcfestatsVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -220,7 +220,7 @@ function fixelcfestats_various_string_params(
  * @returns Command-line arguments.
  */
 function fixelcfestats_various_string_cargs(
-    params: FixelcfestatsVariousStringParameters,
+    params: FixelcfestatsVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -236,9 +236,9 @@ function fixelcfestats_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function fixelcfestats_various_file_params(
+function fixelcfestats_various_file(
     obj: InputPathType,
-): FixelcfestatsVariousFileParametersTagged {
+): FixelcfestatsVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -256,7 +256,7 @@ function fixelcfestats_various_file_params(
  * @returns Command-line arguments.
  */
 function fixelcfestats_various_file_cargs(
-    params: FixelcfestatsVariousFileParameters,
+    params: FixelcfestatsVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -266,7 +266,7 @@ function fixelcfestats_various_file_cargs(
 
 
 /**
- * Output object returned when calling `FixelcfestatsParameters(...)`.
+ * Output object returned when calling `FixelcfestatsParamsDict(...)`.
  *
  * @interface
  */
@@ -324,7 +324,7 @@ function fixelcfestats_params(
     subjects: InputPathType,
     design: InputPathType,
     contrast: InputPathType,
-    connectivity: FixelcfestatsVariousStringParametersTagged | FixelcfestatsVariousFileParametersTagged,
+    connectivity: FixelcfestatsVariousStringParamsDictTagged | FixelcfestatsVariousFileParamsDictTagged,
     out_fixel_directory: string,
     mask: InputPathType | null = null,
     notest: boolean = false,
@@ -346,16 +346,16 @@ function fixelcfestats_params(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<FixelcfestatsColumnParameters> | null = null,
+    column: Array<FixelcfestatsColumnParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelcfestatsConfigParameters> | null = null,
+    config: Array<FixelcfestatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelcfestatsParametersTagged {
+): FixelcfestatsParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixelcfestats" as const,
         "notest": notest,
@@ -443,7 +443,7 @@ function fixelcfestats_params(
  * @returns Command-line arguments.
  */
 function fixelcfestats_cargs(
-    params: FixelcfestatsParameters,
+    params: FixelcfestatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -602,7 +602,7 @@ function fixelcfestats_cargs(
  * @returns Outputs object.
  */
 function fixelcfestats_outputs(
-    params: FixelcfestatsParameters,
+    params: FixelcfestatsParamsDict,
     execution: Execution,
 ): FixelcfestatsOutputs {
     const ret: FixelcfestatsOutputs = {
@@ -643,7 +643,7 @@ function fixelcfestats_outputs(
  * @returns NamedTuple of outputs (described in `FixelcfestatsOutputs`).
  */
 function fixelcfestats_execute(
-    params: FixelcfestatsParameters,
+    params: FixelcfestatsParamsDict,
     runner: Runner | null = null,
 ): FixelcfestatsOutputs {
     runner = runner || getGlobalRunner();
@@ -725,7 +725,7 @@ function fixelcfestats(
     subjects: InputPathType,
     design: InputPathType,
     contrast: InputPathType,
-    connectivity: FixelcfestatsVariousStringParametersTagged | FixelcfestatsVariousFileParametersTagged,
+    connectivity: FixelcfestatsVariousStringParamsDictTagged | FixelcfestatsVariousFileParamsDictTagged,
     out_fixel_directory: string,
     mask: InputPathType | null = null,
     notest: boolean = false,
@@ -747,13 +747,13 @@ function fixelcfestats(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<FixelcfestatsColumnParameters> | null = null,
+    column: Array<FixelcfestatsColumnParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelcfestatsConfigParameters> | null = null,
+    config: Array<FixelcfestatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -765,12 +765,22 @@ function fixelcfestats(
 
 export {
       FIXELCFESTATS_METADATA,
+      FixelcfestatsColumnParamsDict,
+      FixelcfestatsColumnParamsDictTagged,
+      FixelcfestatsConfigParamsDict,
+      FixelcfestatsConfigParamsDictTagged,
       FixelcfestatsOutputs,
+      FixelcfestatsParamsDict,
+      FixelcfestatsParamsDictTagged,
+      FixelcfestatsVariousFileParamsDict,
+      FixelcfestatsVariousFileParamsDictTagged,
+      FixelcfestatsVariousStringParamsDict,
+      FixelcfestatsVariousStringParamsDictTagged,
       fixelcfestats,
-      fixelcfestats_column_params,
-      fixelcfestats_config_params,
+      fixelcfestats_column,
+      fixelcfestats_config,
       fixelcfestats_execute,
       fixelcfestats_params,
-      fixelcfestats_various_file_params,
-      fixelcfestats_various_string_params,
+      fixelcfestats_various_file,
+      fixelcfestats_various_string,
 };

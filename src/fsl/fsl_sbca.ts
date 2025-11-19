@@ -11,7 +11,7 @@ const FSL_SBCA_METADATA: Metadata = {
 };
 
 
-interface FslSbcaParameters {
+interface FslSbcaParamsDict {
     "@type"?: "fsl/fsl_sbca";
     "infile": InputPathType;
     "seed": InputPathType;
@@ -31,11 +31,11 @@ interface FslSbcaParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type FslSbcaParametersTagged = Required<Pick<FslSbcaParameters, '@type'>> & FslSbcaParameters;
+type FslSbcaParamsDictTagged = Required<Pick<FslSbcaParamsDict, '@type'>> & FslSbcaParamsDict;
 
 
 /**
- * Output object returned when calling `FslSbcaParameters(...)`.
+ * Output object returned when calling `FslSbcaParamsDict(...)`.
  *
  * @interface
  */
@@ -100,7 +100,7 @@ function fsl_sbca_params(
     out_conf_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FslSbcaParametersTagged {
+): FslSbcaParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_sbca" as const,
         "infile": infile,
@@ -140,7 +140,7 @@ function fsl_sbca_params(
  * @returns Command-line arguments.
  */
 function fsl_sbca_cargs(
-    params: FslSbcaParameters,
+    params: FslSbcaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,7 +222,7 @@ function fsl_sbca_cargs(
  * @returns Outputs object.
  */
 function fsl_sbca_outputs(
-    params: FslSbcaParameters,
+    params: FslSbcaParamsDict,
     execution: Execution,
 ): FslSbcaOutputs {
     const ret: FslSbcaOutputs = {
@@ -250,7 +250,7 @@ function fsl_sbca_outputs(
  * @returns NamedTuple of outputs (described in `FslSbcaOutputs`).
  */
 function fsl_sbca_execute(
-    params: FslSbcaParameters,
+    params: FslSbcaParamsDict,
     runner: Runner | null = null,
 ): FslSbcaOutputs {
     runner = runner || getGlobalRunner();
@@ -321,6 +321,8 @@ function fsl_sbca(
 export {
       FSL_SBCA_METADATA,
       FslSbcaOutputs,
+      FslSbcaParamsDict,
+      FslSbcaParamsDictTagged,
       fsl_sbca,
       fsl_sbca_execute,
       fsl_sbca_params,

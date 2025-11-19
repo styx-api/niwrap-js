@@ -11,7 +11,7 @@ const DCM2NIIX_METADATA: Metadata = {
 };
 
 
-interface Dcm2niixParameters {
+interface Dcm2niixParamsDict {
     "@type"?: "dcm2niix/dcm2niix";
     "compression_level"?: number | null | undefined;
     "adjacent"?: boolean | null | undefined;
@@ -43,11 +43,11 @@ interface Dcm2niixParameters {
     "xml": boolean;
     "input_dir": InputPathType;
 }
-type Dcm2niixParametersTagged = Required<Pick<Dcm2niixParameters, '@type'>> & Dcm2niixParameters;
+type Dcm2niixParamsDictTagged = Required<Pick<Dcm2niixParamsDict, '@type'>> & Dcm2niixParamsDict;
 
 
 /**
- * Output object returned when calling `Dcm2niixParameters(...)`.
+ * Output object returned when calling `Dcm2niixParamsDict(...)`.
  *
  * @interface
  */
@@ -124,7 +124,7 @@ function dcm2niix_params(
     ignore_trigger: boolean = false,
     terse: boolean = false,
     xml: boolean = false,
-): Dcm2niixParametersTagged {
+): Dcm2niixParamsDictTagged {
     const params = {
         "@type": "dcm2niix/dcm2niix" as const,
         "update_check": update_check,
@@ -218,7 +218,7 @@ function dcm2niix_params(
  * @returns Command-line arguments.
  */
 function dcm2niix_cargs(
-    params: Dcm2niixParameters,
+    params: Dcm2niixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -390,7 +390,7 @@ function dcm2niix_cargs(
  * @returns Outputs object.
  */
 function dcm2niix_outputs(
-    params: Dcm2niixParameters,
+    params: Dcm2niixParamsDict,
     execution: Execution,
 ): Dcm2niixOutputs {
     const ret: Dcm2niixOutputs = {
@@ -413,7 +413,7 @@ function dcm2niix_outputs(
  * @returns NamedTuple of outputs (described in `Dcm2niixOutputs`).
  */
 function dcm2niix_execute(
-    params: Dcm2niixParameters,
+    params: Dcm2niixParamsDict,
     runner: Runner | null = null,
 ): Dcm2niixOutputs {
     runner = runner || getGlobalRunner();
@@ -506,6 +506,8 @@ function dcm2niix_(
 export {
       DCM2NIIX_METADATA,
       Dcm2niixOutputs,
+      Dcm2niixParamsDict,
+      Dcm2niixParamsDictTagged,
       dcm2niix_,
       dcm2niix_execute,
       dcm2niix_params,

@@ -11,15 +11,15 @@ const MRCAT_METADATA: Metadata = {
 };
 
 
-interface MrcatConfigParameters {
+interface MrcatConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrcatConfigParametersTagged = Required<Pick<MrcatConfigParameters, '@type'>> & MrcatConfigParameters;
+type MrcatConfigParamsDictTagged = Required<Pick<MrcatConfigParamsDict, '@type'>> & MrcatConfigParamsDict;
 
 
-interface MrcatParameters {
+interface MrcatParamsDict {
     "@type"?: "mrtrix/mrcat";
     "axis"?: number | null | undefined;
     "datatype"?: string | null | undefined;
@@ -28,14 +28,14 @@ interface MrcatParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrcatConfigParameters> | null | undefined;
+    "config"?: Array<MrcatConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image1": InputPathType;
     "image2": Array<InputPathType>;
     "output": string;
 }
-type MrcatParametersTagged = Required<Pick<MrcatParameters, '@type'>> & MrcatParameters;
+type MrcatParamsDictTagged = Required<Pick<MrcatParamsDict, '@type'>> & MrcatParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type MrcatParametersTagged = Required<Pick<MrcatParameters, '@type'>> & MrcatPar
  *
  * @returns Parameter dictionary
  */
-function mrcat_config_params(
+function mrcat_config(
     key: string,
     value: string,
-): MrcatConfigParametersTagged {
+): MrcatConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -68,7 +68,7 @@ function mrcat_config_params(
  * @returns Command-line arguments.
  */
 function mrcat_config_cargs(
-    params: MrcatConfigParameters,
+    params: MrcatConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function mrcat_config_cargs(
 
 
 /**
- * Output object returned when calling `MrcatParameters(...)`.
+ * Output object returned when calling `MrcatParamsDict(...)`.
  *
  * @interface
  */
@@ -126,10 +126,10 @@ function mrcat_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcatConfigParameters> | null = null,
+    config: Array<MrcatConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcatParametersTagged {
+): MrcatParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrcat" as const,
         "info": info,
@@ -167,7 +167,7 @@ function mrcat_params(
  * @returns Command-line arguments.
  */
 function mrcat_cargs(
-    params: MrcatParameters,
+    params: MrcatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -227,7 +227,7 @@ function mrcat_cargs(
  * @returns Outputs object.
  */
 function mrcat_outputs(
-    params: MrcatParameters,
+    params: MrcatParamsDict,
     execution: Execution,
 ): MrcatOutputs {
     const ret: MrcatOutputs = {
@@ -259,7 +259,7 @@ function mrcat_outputs(
  * @returns NamedTuple of outputs (described in `MrcatOutputs`).
  */
 function mrcat_execute(
-    params: MrcatParameters,
+    params: MrcatParamsDict,
     runner: Runner | null = null,
 ): MrcatOutputs {
     runner = runner || getGlobalRunner();
@@ -315,7 +315,7 @@ function mrcat(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcatConfigParameters> | null = null,
+    config: Array<MrcatConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -327,9 +327,13 @@ function mrcat(
 
 export {
       MRCAT_METADATA,
+      MrcatConfigParamsDict,
+      MrcatConfigParamsDictTagged,
       MrcatOutputs,
+      MrcatParamsDict,
+      MrcatParamsDictTagged,
       mrcat,
-      mrcat_config_params,
+      mrcat_config,
       mrcat_execute,
       mrcat_params,
 };

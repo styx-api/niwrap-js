@@ -10,114 +10,114 @@ const CIFTI_CONVERT_METADATA: Metadata = {
 };
 
 
-interface CiftiConvertToGiftiExtParameters {
+interface CiftiConvertToGiftiExtParamsDict {
     "@type"?: "to-gifti-ext";
     "cifti-in": InputPathType;
     "gifti-out": string;
 }
-type CiftiConvertToGiftiExtParametersTagged = Required<Pick<CiftiConvertToGiftiExtParameters, '@type'>> & CiftiConvertToGiftiExtParameters;
+type CiftiConvertToGiftiExtParamsDictTagged = Required<Pick<CiftiConvertToGiftiExtParamsDict, '@type'>> & CiftiConvertToGiftiExtParamsDict;
 
 
-interface CiftiConvertResetTimepointsParameters {
+interface CiftiConvertResetTimepointsParamsDict {
     "@type"?: "reset-timepoints";
     "timestep": number;
     "timestart": number;
     "unit"?: string | null | undefined;
 }
-type CiftiConvertResetTimepointsParametersTagged = Required<Pick<CiftiConvertResetTimepointsParameters, '@type'>> & CiftiConvertResetTimepointsParameters;
+type CiftiConvertResetTimepointsParamsDictTagged = Required<Pick<CiftiConvertResetTimepointsParamsDict, '@type'>> & CiftiConvertResetTimepointsParamsDict;
 
 
-interface CiftiConvertReplaceBinaryParameters {
+interface CiftiConvertReplaceBinaryParamsDict {
     "@type"?: "replace-binary";
     "binary-in": string;
     "flip-endian": boolean;
     "transpose": boolean;
 }
-type CiftiConvertReplaceBinaryParametersTagged = Required<Pick<CiftiConvertReplaceBinaryParameters, '@type'>> & CiftiConvertReplaceBinaryParameters;
+type CiftiConvertReplaceBinaryParamsDictTagged = Required<Pick<CiftiConvertReplaceBinaryParamsDict, '@type'>> & CiftiConvertReplaceBinaryParamsDict;
 
 
-interface CiftiConvertFromGiftiExtParameters {
+interface CiftiConvertFromGiftiExtParamsDict {
     "@type"?: "from-gifti-ext";
     "gifti-in": string;
     "cifti-out": string;
-    "reset-timepoints"?: CiftiConvertResetTimepointsParameters | null | undefined;
+    "reset-timepoints"?: CiftiConvertResetTimepointsParamsDict | null | undefined;
     "reset-scalars": boolean;
     "column-reset-scalars": boolean;
-    "replace-binary"?: CiftiConvertReplaceBinaryParameters | null | undefined;
+    "replace-binary"?: CiftiConvertReplaceBinaryParamsDict | null | undefined;
 }
-type CiftiConvertFromGiftiExtParametersTagged = Required<Pick<CiftiConvertFromGiftiExtParameters, '@type'>> & CiftiConvertFromGiftiExtParameters;
+type CiftiConvertFromGiftiExtParamsDictTagged = Required<Pick<CiftiConvertFromGiftiExtParamsDict, '@type'>> & CiftiConvertFromGiftiExtParamsDict;
 
 
-interface CiftiConvertToNiftiParameters {
+interface CiftiConvertToNiftiParamsDict {
     "@type"?: "to-nifti";
     "cifti-in": InputPathType;
     "nifti-out": string;
     "smaller-file": boolean;
     "smaller-dims": boolean;
 }
-type CiftiConvertToNiftiParametersTagged = Required<Pick<CiftiConvertToNiftiParameters, '@type'>> & CiftiConvertToNiftiParameters;
+type CiftiConvertToNiftiParamsDictTagged = Required<Pick<CiftiConvertToNiftiParamsDict, '@type'>> & CiftiConvertToNiftiParamsDict;
 
 
-interface CiftiConvertResetTimepointsParameters_ {
+interface CiftiConvertResetTimepointsParamsDict_ {
     "@type"?: "reset-timepoints";
     "timestep": number;
     "timestart": number;
     "unit"?: string | null | undefined;
 }
-type CiftiConvertResetTimepointsParametersTagged_ = Required<Pick<CiftiConvertResetTimepointsParameters_, '@type'>> & CiftiConvertResetTimepointsParameters_;
+type CiftiConvertResetTimepointsParamsDictTagged_ = Required<Pick<CiftiConvertResetTimepointsParamsDict_, '@type'>> & CiftiConvertResetTimepointsParamsDict_;
 
 
-interface CiftiConvertFromNiftiParameters {
+interface CiftiConvertFromNiftiParamsDict {
     "@type"?: "from-nifti";
     "nifti-in": InputPathType;
     "cifti-template": InputPathType;
     "cifti-out": string;
-    "reset-timepoints"?: CiftiConvertResetTimepointsParameters_ | null | undefined;
+    "reset-timepoints"?: CiftiConvertResetTimepointsParamsDict_ | null | undefined;
     "reset-scalars": boolean;
 }
-type CiftiConvertFromNiftiParametersTagged = Required<Pick<CiftiConvertFromNiftiParameters, '@type'>> & CiftiConvertFromNiftiParameters;
+type CiftiConvertFromNiftiParamsDictTagged = Required<Pick<CiftiConvertFromNiftiParamsDict, '@type'>> & CiftiConvertFromNiftiParamsDict;
 
 
-interface CiftiConvertToTextParameters {
+interface CiftiConvertToTextParamsDict {
     "@type"?: "to-text";
     "cifti-in": InputPathType;
     "text-out": string;
     "delim-string"?: string | null | undefined;
 }
-type CiftiConvertToTextParametersTagged = Required<Pick<CiftiConvertToTextParameters, '@type'>> & CiftiConvertToTextParameters;
+type CiftiConvertToTextParamsDictTagged = Required<Pick<CiftiConvertToTextParamsDict, '@type'>> & CiftiConvertToTextParamsDict;
 
 
-interface CiftiConvertResetTimepointsParameters_2 {
+interface CiftiConvertResetTimepointsParamsDict_2 {
     "@type"?: "reset-timepoints";
     "timestep": number;
     "timestart": number;
     "unit"?: string | null | undefined;
 }
-type CiftiConvertResetTimepointsParametersTagged_2 = Required<Pick<CiftiConvertResetTimepointsParameters_2, '@type'>> & CiftiConvertResetTimepointsParameters_2;
+type CiftiConvertResetTimepointsParamsDictTagged_2 = Required<Pick<CiftiConvertResetTimepointsParamsDict_2, '@type'>> & CiftiConvertResetTimepointsParamsDict_2;
 
 
-interface CiftiConvertFromTextParameters {
+interface CiftiConvertFromTextParamsDict {
     "@type"?: "from-text";
     "text-in": string;
     "cifti-template": InputPathType;
     "cifti-out": string;
     "delim-string"?: string | null | undefined;
-    "reset-timepoints"?: CiftiConvertResetTimepointsParameters_2 | null | undefined;
+    "reset-timepoints"?: CiftiConvertResetTimepointsParamsDict_2 | null | undefined;
     "reset-scalars": boolean;
 }
-type CiftiConvertFromTextParametersTagged = Required<Pick<CiftiConvertFromTextParameters, '@type'>> & CiftiConvertFromTextParameters;
+type CiftiConvertFromTextParamsDictTagged = Required<Pick<CiftiConvertFromTextParamsDict, '@type'>> & CiftiConvertFromTextParamsDict;
 
 
-interface CiftiConvertParameters {
+interface CiftiConvertParamsDict {
     "@type"?: "workbench/cifti-convert";
-    "to-gifti-ext"?: CiftiConvertToGiftiExtParameters | null | undefined;
-    "from-gifti-ext"?: CiftiConvertFromGiftiExtParameters | null | undefined;
-    "to-nifti"?: CiftiConvertToNiftiParameters | null | undefined;
-    "from-nifti"?: CiftiConvertFromNiftiParameters | null | undefined;
-    "to-text"?: CiftiConvertToTextParameters | null | undefined;
-    "from-text"?: CiftiConvertFromTextParameters | null | undefined;
+    "to-gifti-ext"?: CiftiConvertToGiftiExtParamsDict | null | undefined;
+    "from-gifti-ext"?: CiftiConvertFromGiftiExtParamsDict | null | undefined;
+    "to-nifti"?: CiftiConvertToNiftiParamsDict | null | undefined;
+    "from-nifti"?: CiftiConvertFromNiftiParamsDict | null | undefined;
+    "to-text"?: CiftiConvertToTextParamsDict | null | undefined;
+    "from-text"?: CiftiConvertFromTextParamsDict | null | undefined;
 }
-type CiftiConvertParametersTagged = Required<Pick<CiftiConvertParameters, '@type'>> & CiftiConvertParameters;
+type CiftiConvertParamsDictTagged = Required<Pick<CiftiConvertParamsDict, '@type'>> & CiftiConvertParamsDict;
 
 
 /**
@@ -128,10 +128,10 @@ type CiftiConvertParametersTagged = Required<Pick<CiftiConvertParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_to_gifti_ext_params(
+function cifti_convert_to_gifti_ext(
     cifti_in: InputPathType,
     gifti_out: string,
-): CiftiConvertToGiftiExtParametersTagged {
+): CiftiConvertToGiftiExtParamsDictTagged {
     const params = {
         "@type": "to-gifti-ext" as const,
         "cifti-in": cifti_in,
@@ -150,7 +150,7 @@ function cifti_convert_to_gifti_ext_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_to_gifti_ext_cargs(
-    params: CiftiConvertToGiftiExtParameters,
+    params: CiftiConvertToGiftiExtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -174,11 +174,11 @@ unit identifier (default SECOND)
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_reset_timepoints_params(
+function cifti_convert_reset_timepoints(
     timestep: number,
     timestart: number,
     unit: string | null,
-): CiftiConvertResetTimepointsParametersTagged {
+): CiftiConvertResetTimepointsParamsDictTagged {
     const params = {
         "@type": "reset-timepoints" as const,
         "timestep": timestep,
@@ -200,7 +200,7 @@ function cifti_convert_reset_timepoints_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_reset_timepoints_cargs(
-    params: CiftiConvertResetTimepointsParameters,
+    params: CiftiConvertResetTimepointsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -226,11 +226,11 @@ function cifti_convert_reset_timepoints_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_replace_binary_params(
+function cifti_convert_replace_binary(
     binary_in: string,
     flip_endian: boolean = false,
     transpose: boolean = false,
-): CiftiConvertReplaceBinaryParametersTagged {
+): CiftiConvertReplaceBinaryParamsDictTagged {
     const params = {
         "@type": "replace-binary" as const,
         "binary-in": binary_in,
@@ -250,7 +250,7 @@ function cifti_convert_replace_binary_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_replace_binary_cargs(
-    params: CiftiConvertReplaceBinaryParameters,
+    params: CiftiConvertReplaceBinaryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -267,7 +267,7 @@ function cifti_convert_replace_binary_cargs(
 
 
 /**
- * Output object returned when calling `CiftiConvertFromGiftiExtParameters | null(...)`.
+ * Output object returned when calling `CiftiConvertFromGiftiExtParamsDict | null(...)`.
  *
  * @interface
  */
@@ -295,14 +295,14 @@ interface CiftiConvertFromGiftiExtOutputs {
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_from_gifti_ext_params(
+function cifti_convert_from_gifti_ext(
     gifti_in: string,
     cifti_out: string,
-    reset_timepoints: CiftiConvertResetTimepointsParameters | null = null,
+    reset_timepoints: CiftiConvertResetTimepointsParamsDict | null = null,
     reset_scalars: boolean = false,
     column_reset_scalars: boolean = false,
-    replace_binary: CiftiConvertReplaceBinaryParameters | null = null,
-): CiftiConvertFromGiftiExtParametersTagged {
+    replace_binary: CiftiConvertReplaceBinaryParamsDict | null = null,
+): CiftiConvertFromGiftiExtParamsDictTagged {
     const params = {
         "@type": "from-gifti-ext" as const,
         "gifti-in": gifti_in,
@@ -329,7 +329,7 @@ function cifti_convert_from_gifti_ext_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_from_gifti_ext_cargs(
-    params: CiftiConvertFromGiftiExtParameters,
+    params: CiftiConvertFromGiftiExtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -357,7 +357,7 @@ function cifti_convert_from_gifti_ext_cargs(
  * @returns Outputs object.
  */
 function cifti_convert_from_gifti_ext_outputs(
-    params: CiftiConvertFromGiftiExtParameters,
+    params: CiftiConvertFromGiftiExtParamsDict,
     execution: Execution,
 ): CiftiConvertFromGiftiExtOutputs {
     const ret: CiftiConvertFromGiftiExtOutputs = {
@@ -369,7 +369,7 @@ function cifti_convert_from_gifti_ext_outputs(
 
 
 /**
- * Output object returned when calling `CiftiConvertToNiftiParameters | null(...)`.
+ * Output object returned when calling `CiftiConvertToNiftiParamsDict | null(...)`.
  *
  * @interface
  */
@@ -395,12 +395,12 @@ interface CiftiConvertToNiftiOutputs {
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_to_nifti_params(
+function cifti_convert_to_nifti(
     cifti_in: InputPathType,
     nifti_out: string,
     smaller_file: boolean = false,
     smaller_dims: boolean = false,
-): CiftiConvertToNiftiParametersTagged {
+): CiftiConvertToNiftiParamsDictTagged {
     const params = {
         "@type": "to-nifti" as const,
         "cifti-in": cifti_in,
@@ -421,7 +421,7 @@ function cifti_convert_to_nifti_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_to_nifti_cargs(
-    params: CiftiConvertToNiftiParameters,
+    params: CiftiConvertToNiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -447,7 +447,7 @@ function cifti_convert_to_nifti_cargs(
  * @returns Outputs object.
  */
 function cifti_convert_to_nifti_outputs(
-    params: CiftiConvertToNiftiParameters,
+    params: CiftiConvertToNiftiParamsDict,
     execution: Execution,
 ): CiftiConvertToNiftiOutputs {
     const ret: CiftiConvertToNiftiOutputs = {
@@ -469,11 +469,11 @@ unit identifier (default SECOND)
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_reset_timepoints_params_(
+function cifti_convert_reset_timepoints_(
     timestep: number,
     timestart: number,
     unit: string | null,
-): CiftiConvertResetTimepointsParametersTagged_ {
+): CiftiConvertResetTimepointsParamsDictTagged_ {
     const params = {
         "@type": "reset-timepoints" as const,
         "timestep": timestep,
@@ -495,7 +495,7 @@ function cifti_convert_reset_timepoints_params_(
  * @returns Command-line arguments.
  */
 function cifti_convert_reset_timepoints_cargs_(
-    params: CiftiConvertResetTimepointsParameters_,
+    params: CiftiConvertResetTimepointsParamsDict_,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -513,7 +513,7 @@ function cifti_convert_reset_timepoints_cargs_(
 
 
 /**
- * Output object returned when calling `CiftiConvertFromNiftiParameters | null(...)`.
+ * Output object returned when calling `CiftiConvertFromNiftiParamsDict | null(...)`.
  *
  * @interface
  */
@@ -540,13 +540,13 @@ interface CiftiConvertFromNiftiOutputs {
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_from_nifti_params(
+function cifti_convert_from_nifti(
     nifti_in: InputPathType,
     cifti_template: InputPathType,
     cifti_out: string,
-    reset_timepoints: CiftiConvertResetTimepointsParameters_ | null = null,
+    reset_timepoints: CiftiConvertResetTimepointsParamsDict_ | null = null,
     reset_scalars: boolean = false,
-): CiftiConvertFromNiftiParametersTagged {
+): CiftiConvertFromNiftiParamsDictTagged {
     const params = {
         "@type": "from-nifti" as const,
         "nifti-in": nifti_in,
@@ -570,7 +570,7 @@ function cifti_convert_from_nifti_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_from_nifti_cargs(
-    params: CiftiConvertFromNiftiParameters,
+    params: CiftiConvertFromNiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -597,7 +597,7 @@ function cifti_convert_from_nifti_cargs(
  * @returns Outputs object.
  */
 function cifti_convert_from_nifti_outputs(
-    params: CiftiConvertFromNiftiParameters,
+    params: CiftiConvertFromNiftiParamsDict,
     execution: Execution,
 ): CiftiConvertFromNiftiOutputs {
     const ret: CiftiConvertFromNiftiOutputs = {
@@ -619,11 +619,11 @@ the string to use (default is a tab character)
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_to_text_params(
+function cifti_convert_to_text(
     cifti_in: InputPathType,
     text_out: string,
     delim_string: string | null,
-): CiftiConvertToTextParametersTagged {
+): CiftiConvertToTextParamsDictTagged {
     const params = {
         "@type": "to-text" as const,
         "cifti-in": cifti_in,
@@ -645,7 +645,7 @@ function cifti_convert_to_text_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_to_text_cargs(
-    params: CiftiConvertToTextParameters,
+    params: CiftiConvertToTextParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -673,11 +673,11 @@ unit identifier (default SECOND)
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_reset_timepoints_params_2(
+function cifti_convert_reset_timepoints_2(
     timestep: number,
     timestart: number,
     unit: string | null,
-): CiftiConvertResetTimepointsParametersTagged_2 {
+): CiftiConvertResetTimepointsParamsDictTagged_2 {
     const params = {
         "@type": "reset-timepoints" as const,
         "timestep": timestep,
@@ -699,7 +699,7 @@ function cifti_convert_reset_timepoints_params_2(
  * @returns Command-line arguments.
  */
 function cifti_convert_reset_timepoints_cargs_2(
-    params: CiftiConvertResetTimepointsParameters_2,
+    params: CiftiConvertResetTimepointsParamsDict_2,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -717,7 +717,7 @@ function cifti_convert_reset_timepoints_cargs_2(
 
 
 /**
- * Output object returned when calling `CiftiConvertFromTextParameters | null(...)`.
+ * Output object returned when calling `CiftiConvertFromTextParamsDict | null(...)`.
  *
  * @interface
  */
@@ -747,14 +747,14 @@ the string to use (default is any whitespace)
  *
  * @returns Parameter dictionary
  */
-function cifti_convert_from_text_params(
+function cifti_convert_from_text(
     text_in: string,
     cifti_template: InputPathType,
     cifti_out: string,
     delim_string: string | null,
-    reset_timepoints: CiftiConvertResetTimepointsParameters_2 | null = null,
+    reset_timepoints: CiftiConvertResetTimepointsParamsDict_2 | null = null,
     reset_scalars: boolean = false,
-): CiftiConvertFromTextParametersTagged {
+): CiftiConvertFromTextParamsDictTagged {
     const params = {
         "@type": "from-text" as const,
         "text-in": text_in,
@@ -781,7 +781,7 @@ function cifti_convert_from_text_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_from_text_cargs(
-    params: CiftiConvertFromTextParameters,
+    params: CiftiConvertFromTextParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -810,7 +810,7 @@ function cifti_convert_from_text_cargs(
  * @returns Outputs object.
  */
 function cifti_convert_from_text_outputs(
-    params: CiftiConvertFromTextParameters,
+    params: CiftiConvertFromTextParamsDict,
     execution: Execution,
 ): CiftiConvertFromTextOutputs {
     const ret: CiftiConvertFromTextOutputs = {
@@ -822,7 +822,7 @@ function cifti_convert_from_text_outputs(
 
 
 /**
- * Output object returned when calling `CiftiConvertParameters(...)`.
+ * Output object returned when calling `CiftiConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -863,13 +863,13 @@ interface CiftiConvertOutputs {
  * @returns Parameter dictionary
  */
 function cifti_convert_params(
-    to_gifti_ext: CiftiConvertToGiftiExtParameters | null = null,
-    from_gifti_ext: CiftiConvertFromGiftiExtParameters | null = null,
-    to_nifti: CiftiConvertToNiftiParameters | null = null,
-    from_nifti: CiftiConvertFromNiftiParameters | null = null,
-    to_text: CiftiConvertToTextParameters | null = null,
-    from_text: CiftiConvertFromTextParameters | null = null,
-): CiftiConvertParametersTagged {
+    to_gifti_ext: CiftiConvertToGiftiExtParamsDict | null = null,
+    from_gifti_ext: CiftiConvertFromGiftiExtParamsDict | null = null,
+    to_nifti: CiftiConvertToNiftiParamsDict | null = null,
+    from_nifti: CiftiConvertFromNiftiParamsDict | null = null,
+    to_text: CiftiConvertToTextParamsDict | null = null,
+    from_text: CiftiConvertFromTextParamsDict | null = null,
+): CiftiConvertParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-convert" as const,
     };
@@ -904,7 +904,7 @@ function cifti_convert_params(
  * @returns Command-line arguments.
  */
 function cifti_convert_cargs(
-    params: CiftiConvertParameters,
+    params: CiftiConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -933,7 +933,7 @@ function cifti_convert_cargs(
  * @returns Outputs object.
  */
 function cifti_convert_outputs(
-    params: CiftiConvertParameters,
+    params: CiftiConvertParamsDict,
     execution: Execution,
 ): CiftiConvertOutputs {
     const ret: CiftiConvertOutputs = {
@@ -975,7 +975,7 @@ function cifti_convert_outputs(
  * @returns NamedTuple of outputs (described in `CiftiConvertOutputs`).
  */
 function cifti_convert_execute(
-    params: CiftiConvertParameters,
+    params: CiftiConvertParamsDict,
     runner: Runner | null = null,
 ): CiftiConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -1021,12 +1021,12 @@ function cifti_convert_execute(
  * @returns NamedTuple of outputs (described in `CiftiConvertOutputs`).
  */
 function cifti_convert(
-    to_gifti_ext: CiftiConvertToGiftiExtParameters | null = null,
-    from_gifti_ext: CiftiConvertFromGiftiExtParameters | null = null,
-    to_nifti: CiftiConvertToNiftiParameters | null = null,
-    from_nifti: CiftiConvertFromNiftiParameters | null = null,
-    to_text: CiftiConvertToTextParameters | null = null,
-    from_text: CiftiConvertFromTextParameters | null = null,
+    to_gifti_ext: CiftiConvertToGiftiExtParamsDict | null = null,
+    from_gifti_ext: CiftiConvertFromGiftiExtParamsDict | null = null,
+    to_nifti: CiftiConvertToNiftiParamsDict | null = null,
+    from_nifti: CiftiConvertFromNiftiParamsDict | null = null,
+    to_text: CiftiConvertToTextParamsDict | null = null,
+    from_text: CiftiConvertFromTextParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiConvertOutputs {
     const params = cifti_convert_params(to_gifti_ext, from_gifti_ext, to_nifti, from_nifti, to_text, from_text)
@@ -1037,21 +1037,43 @@ function cifti_convert(
 export {
       CIFTI_CONVERT_METADATA,
       CiftiConvertFromGiftiExtOutputs,
+      CiftiConvertFromGiftiExtParamsDict,
+      CiftiConvertFromGiftiExtParamsDictTagged,
       CiftiConvertFromNiftiOutputs,
+      CiftiConvertFromNiftiParamsDict,
+      CiftiConvertFromNiftiParamsDictTagged,
       CiftiConvertFromTextOutputs,
+      CiftiConvertFromTextParamsDict,
+      CiftiConvertFromTextParamsDictTagged,
       CiftiConvertOutputs,
+      CiftiConvertParamsDict,
+      CiftiConvertParamsDictTagged,
+      CiftiConvertReplaceBinaryParamsDict,
+      CiftiConvertReplaceBinaryParamsDictTagged,
+      CiftiConvertResetTimepointsParamsDict,
+      CiftiConvertResetTimepointsParamsDictTagged,
+      CiftiConvertResetTimepointsParamsDictTagged_,
+      CiftiConvertResetTimepointsParamsDictTagged_2,
+      CiftiConvertResetTimepointsParamsDict_,
+      CiftiConvertResetTimepointsParamsDict_2,
+      CiftiConvertToGiftiExtParamsDict,
+      CiftiConvertToGiftiExtParamsDictTagged,
       CiftiConvertToNiftiOutputs,
+      CiftiConvertToNiftiParamsDict,
+      CiftiConvertToNiftiParamsDictTagged,
+      CiftiConvertToTextParamsDict,
+      CiftiConvertToTextParamsDictTagged,
       cifti_convert,
       cifti_convert_execute,
-      cifti_convert_from_gifti_ext_params,
-      cifti_convert_from_nifti_params,
-      cifti_convert_from_text_params,
+      cifti_convert_from_gifti_ext,
+      cifti_convert_from_nifti,
+      cifti_convert_from_text,
       cifti_convert_params,
-      cifti_convert_replace_binary_params,
-      cifti_convert_reset_timepoints_params,
-      cifti_convert_reset_timepoints_params_,
-      cifti_convert_reset_timepoints_params_2,
-      cifti_convert_to_gifti_ext_params,
-      cifti_convert_to_nifti_params,
-      cifti_convert_to_text_params,
+      cifti_convert_replace_binary,
+      cifti_convert_reset_timepoints,
+      cifti_convert_reset_timepoints_,
+      cifti_convert_reset_timepoints_2,
+      cifti_convert_to_gifti_ext,
+      cifti_convert_to_nifti,
+      cifti_convert_to_text,
 };

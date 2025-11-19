@@ -11,7 +11,7 @@ const V_3D_EXCHANGE_METADATA: Metadata = {
 };
 
 
-interface V3dExchangeParameters {
+interface V3dExchangeParamsDict {
     "@type"?: "afni/3dExchange";
     "prefix": string;
     "infile": InputPathType;
@@ -19,11 +19,11 @@ interface V3dExchangeParameters {
     "version": boolean;
     "help": boolean;
 }
-type V3dExchangeParametersTagged = Required<Pick<V3dExchangeParameters, '@type'>> & V3dExchangeParameters;
+type V3dExchangeParamsDictTagged = Required<Pick<V3dExchangeParamsDict, '@type'>> & V3dExchangeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dExchangeParameters(...)`.
+ * Output object returned when calling `V3dExchangeParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function v_3d_exchange_params(
     mapfile: InputPathType,
     version: boolean = false,
     help: boolean = false,
-): V3dExchangeParametersTagged {
+): V3dExchangeParamsDictTagged {
     const params = {
         "@type": "afni/3dExchange" as const,
         "prefix": prefix,
@@ -82,7 +82,7 @@ function v_3d_exchange_params(
  * @returns Command-line arguments.
  */
 function v_3d_exchange_cargs(
-    params: V3dExchangeParameters,
+    params: V3dExchangeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function v_3d_exchange_cargs(
  * @returns Outputs object.
  */
 function v_3d_exchange_outputs(
-    params: V3dExchangeParameters,
+    params: V3dExchangeParamsDict,
     execution: Execution,
 ): V3dExchangeOutputs {
     const ret: V3dExchangeOutputs = {
@@ -145,7 +145,7 @@ function v_3d_exchange_outputs(
  * @returns NamedTuple of outputs (described in `V3dExchangeOutputs`).
  */
 function v_3d_exchange_execute(
-    params: V3dExchangeParameters,
+    params: V3dExchangeParamsDict,
     runner: Runner | null = null,
 ): V3dExchangeOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function v_3d_exchange(
 
 export {
       V3dExchangeOutputs,
+      V3dExchangeParamsDict,
+      V3dExchangeParamsDictTagged,
       V_3D_EXCHANGE_METADATA,
       v_3d_exchange,
       v_3d_exchange_execute,

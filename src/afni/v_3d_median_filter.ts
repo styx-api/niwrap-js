@@ -11,7 +11,7 @@ const V_3D_MEDIAN_FILTER_METADATA: Metadata = {
 };
 
 
-interface V3dMedianFilterParameters {
+interface V3dMedianFilterParamsDict {
     "@type"?: "afni/3dMedianFilter";
     "irad"?: number | null | undefined;
     "iter"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface V3dMedianFilterParameters {
     "automask": boolean;
     "dataset": InputPathType;
 }
-type V3dMedianFilterParametersTagged = Required<Pick<V3dMedianFilterParameters, '@type'>> & V3dMedianFilterParameters;
+type V3dMedianFilterParamsDictTagged = Required<Pick<V3dMedianFilterParamsDict, '@type'>> & V3dMedianFilterParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMedianFilterParameters(...)`.
+ * Output object returned when calling `V3dMedianFilterParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function v_3d_median_filter_params(
     verbose: boolean = false,
     prefix: string | null = null,
     automask: boolean = false,
-): V3dMedianFilterParametersTagged {
+): V3dMedianFilterParamsDictTagged {
     const params = {
         "@type": "afni/3dMedianFilter" as const,
         "verbose": verbose,
@@ -92,7 +92,7 @@ function v_3d_median_filter_params(
  * @returns Command-line arguments.
  */
 function v_3d_median_filter_cargs(
-    params: V3dMedianFilterParameters,
+    params: V3dMedianFilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function v_3d_median_filter_cargs(
  * @returns Outputs object.
  */
 function v_3d_median_filter_outputs(
-    params: V3dMedianFilterParameters,
+    params: V3dMedianFilterParamsDict,
     execution: Execution,
 ): V3dMedianFilterOutputs {
     const ret: V3dMedianFilterOutputs = {
@@ -162,7 +162,7 @@ function v_3d_median_filter_outputs(
  * @returns NamedTuple of outputs (described in `V3dMedianFilterOutputs`).
  */
 function v_3d_median_filter_execute(
-    params: V3dMedianFilterParameters,
+    params: V3dMedianFilterParamsDict,
     runner: Runner | null = null,
 ): V3dMedianFilterOutputs {
     runner = runner || getGlobalRunner();
@@ -210,6 +210,8 @@ function v_3d_median_filter(
 
 export {
       V3dMedianFilterOutputs,
+      V3dMedianFilterParamsDict,
+      V3dMedianFilterParamsDictTagged,
       V_3D_MEDIAN_FILTER_METADATA,
       v_3d_median_filter,
       v_3d_median_filter_execute,

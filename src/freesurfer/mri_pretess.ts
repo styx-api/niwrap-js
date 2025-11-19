@@ -11,7 +11,7 @@ const MRI_PRETESS_METADATA: Metadata = {
 };
 
 
-interface MriPretessParameters {
+interface MriPretessParamsDict {
     "@type"?: "freesurfer/mri_pretess";
     "filledvol": InputPathType;
     "labelstring": string;
@@ -23,11 +23,11 @@ interface MriPretessParameters {
     "keep": boolean;
     "test": boolean;
 }
-type MriPretessParametersTagged = Required<Pick<MriPretessParameters, '@type'>> & MriPretessParameters;
+type MriPretessParamsDictTagged = Required<Pick<MriPretessParamsDict, '@type'>> & MriPretessParamsDict;
 
 
 /**
- * Output object returned when calling `MriPretessParameters(...)`.
+ * Output object returned when calling `MriPretessParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function mri_pretess_params(
     write: boolean = false,
     keep: boolean = false,
     test: boolean = false,
-): MriPretessParametersTagged {
+): MriPretessParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_pretess" as const,
         "filledvol": filledvol,
@@ -96,7 +96,7 @@ function mri_pretess_params(
  * @returns Command-line arguments.
  */
 function mri_pretess_cargs(
-    params: MriPretessParameters,
+    params: MriPretessParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function mri_pretess_cargs(
  * @returns Outputs object.
  */
 function mri_pretess_outputs(
-    params: MriPretessParameters,
+    params: MriPretessParamsDict,
     execution: Execution,
 ): MriPretessOutputs {
     const ret: MriPretessOutputs = {
@@ -162,7 +162,7 @@ function mri_pretess_outputs(
  * @returns NamedTuple of outputs (described in `MriPretessOutputs`).
  */
 function mri_pretess_execute(
-    params: MriPretessParameters,
+    params: MriPretessParamsDict,
     runner: Runner | null = null,
 ): MriPretessOutputs {
     runner = runner || getGlobalRunner();
@@ -217,6 +217,8 @@ function mri_pretess(
 export {
       MRI_PRETESS_METADATA,
       MriPretessOutputs,
+      MriPretessParamsDict,
+      MriPretessParamsDictTagged,
       mri_pretess,
       mri_pretess_execute,
       mri_pretess_params,

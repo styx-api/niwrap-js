@@ -11,16 +11,16 @@ const INFLATE_SUBJECT3_METADATA: Metadata = {
 };
 
 
-interface InflateSubject3Parameters {
+interface InflateSubject3ParamsDict {
     "@type"?: "freesurfer/inflate_subject3";
     "subjects_dir": string;
     "script_name": string;
 }
-type InflateSubject3ParametersTagged = Required<Pick<InflateSubject3Parameters, '@type'>> & InflateSubject3Parameters;
+type InflateSubject3ParamsDictTagged = Required<Pick<InflateSubject3ParamsDict, '@type'>> & InflateSubject3ParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubject3Parameters(...)`.
+ * Output object returned when calling `InflateSubject3ParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface InflateSubject3Outputs {
 function inflate_subject3_params(
     subjects_dir: string,
     script_name: string,
-): InflateSubject3ParametersTagged {
+): InflateSubject3ParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject3" as const,
         "subjects_dir": subjects_dir,
@@ -62,7 +62,7 @@ function inflate_subject3_params(
  * @returns Command-line arguments.
  */
 function inflate_subject3_cargs(
-    params: InflateSubject3Parameters,
+    params: InflateSubject3ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function inflate_subject3_cargs(
  * @returns Outputs object.
  */
 function inflate_subject3_outputs(
-    params: InflateSubject3Parameters,
+    params: InflateSubject3ParamsDict,
     execution: Execution,
 ): InflateSubject3Outputs {
     const ret: InflateSubject3Outputs = {
@@ -107,7 +107,7 @@ function inflate_subject3_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubject3Outputs`).
  */
 function inflate_subject3_execute(
-    params: InflateSubject3Parameters,
+    params: InflateSubject3ParamsDict,
     runner: Runner | null = null,
 ): InflateSubject3Outputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function inflate_subject3(
 export {
       INFLATE_SUBJECT3_METADATA,
       InflateSubject3Outputs,
+      InflateSubject3ParamsDict,
+      InflateSubject3ParamsDictTagged,
       inflate_subject3,
       inflate_subject3_execute,
       inflate_subject3_params,

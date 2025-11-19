@@ -11,7 +11,7 @@ const V__UPDATE_AFNI_BINARIES_METADATA: Metadata = {
 };
 
 
-interface VUpdateAfniBinariesParameters {
+interface VUpdateAfniBinariesParamsDict {
     "@type"?: "afni/@update.afni.binaries";
     "defaults_flag": boolean;
     "help_flag": boolean;
@@ -38,11 +38,11 @@ interface VUpdateAfniBinariesParameters {
     "prog_list"?: Array<string> | null | undefined;
     "package"?: string | null | undefined;
 }
-type VUpdateAfniBinariesParametersTagged = Required<Pick<VUpdateAfniBinariesParameters, '@type'>> & VUpdateAfniBinariesParameters;
+type VUpdateAfniBinariesParamsDictTagged = Required<Pick<VUpdateAfniBinariesParamsDict, '@type'>> & VUpdateAfniBinariesParamsDict;
 
 
 /**
- * Output object returned when calling `VUpdateAfniBinariesParameters(...)`.
+ * Output object returned when calling `VUpdateAfniBinariesParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function v__update_afni_binaries_params(
     local_package: string | null = null,
     prog_list: Array<string> | null = null,
     package_: string | null = null,
-): VUpdateAfniBinariesParametersTagged {
+): VUpdateAfniBinariesParamsDictTagged {
     const params = {
         "@type": "afni/@update.afni.binaries" as const,
         "defaults_flag": defaults_flag,
@@ -164,7 +164,7 @@ function v__update_afni_binaries_params(
  * @returns Command-line arguments.
  */
 function v__update_afni_binaries_cargs(
-    params: VUpdateAfniBinariesParameters,
+    params: VUpdateAfniBinariesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -275,7 +275,7 @@ function v__update_afni_binaries_cargs(
  * @returns Outputs object.
  */
 function v__update_afni_binaries_outputs(
-    params: VUpdateAfniBinariesParameters,
+    params: VUpdateAfniBinariesParamsDict,
     execution: Execution,
 ): VUpdateAfniBinariesOutputs {
     const ret: VUpdateAfniBinariesOutputs = {
@@ -300,7 +300,7 @@ function v__update_afni_binaries_outputs(
  * @returns NamedTuple of outputs (described in `VUpdateAfniBinariesOutputs`).
  */
 function v__update_afni_binaries_execute(
-    params: VUpdateAfniBinariesParameters,
+    params: VUpdateAfniBinariesParamsDict,
     runner: Runner | null = null,
 ): VUpdateAfniBinariesOutputs {
     runner = runner || getGlobalRunner();
@@ -384,6 +384,8 @@ function v__update_afni_binaries(
 
 export {
       VUpdateAfniBinariesOutputs,
+      VUpdateAfniBinariesParamsDict,
+      VUpdateAfniBinariesParamsDictTagged,
       V__UPDATE_AFNI_BINARIES_METADATA,
       v__update_afni_binaries,
       v__update_afni_binaries_execute,

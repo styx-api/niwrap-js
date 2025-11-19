@@ -11,7 +11,7 @@ const MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA: Metadata = {
 };
 
 
-interface MriSegmentHypothalamicSubunitsParameters {
+interface MriSegmentHypothalamicSubunitsParamsDict {
     "@type"?: "freesurfer/mri_segment_hypothalamic_subunits";
     "subjects"?: Array<string> | null | undefined;
     "subjects_dir"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface MriSegmentHypothalamicSubunitsParameters {
     "threads"?: number | null | undefined;
     "cpu": boolean;
 }
-type MriSegmentHypothalamicSubunitsParametersTagged = Required<Pick<MriSegmentHypothalamicSubunitsParameters, '@type'>> & MriSegmentHypothalamicSubunitsParameters;
+type MriSegmentHypothalamicSubunitsParamsDictTagged = Required<Pick<MriSegmentHypothalamicSubunitsParamsDict, '@type'>> & MriSegmentHypothalamicSubunitsParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegmentHypothalamicSubunitsParameters(...)`.
+ * Output object returned when calling `MriSegmentHypothalamicSubunitsParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function mri_segment_hypothalamic_subunits_params(
     crop_size: Array<number> | null = null,
     threads: number | null = null,
     cpu: boolean = false,
-): MriSegmentHypothalamicSubunitsParametersTagged {
+): MriSegmentHypothalamicSubunitsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_segment_hypothalamic_subunits" as const,
         "write_posteriors": write_posteriors,
@@ -132,7 +132,7 @@ function mri_segment_hypothalamic_subunits_params(
  * @returns Command-line arguments.
  */
 function mri_segment_hypothalamic_subunits_cargs(
-    params: MriSegmentHypothalamicSubunitsParameters,
+    params: MriSegmentHypothalamicSubunitsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function mri_segment_hypothalamic_subunits_cargs(
  * @returns Outputs object.
  */
 function mri_segment_hypothalamic_subunits_outputs(
-    params: MriSegmentHypothalamicSubunitsParameters,
+    params: MriSegmentHypothalamicSubunitsParamsDict,
     execution: Execution,
 ): MriSegmentHypothalamicSubunitsOutputs {
     const ret: MriSegmentHypothalamicSubunitsOutputs = {
@@ -239,7 +239,7 @@ function mri_segment_hypothalamic_subunits_outputs(
  * @returns NamedTuple of outputs (described in `MriSegmentHypothalamicSubunitsOutputs`).
  */
 function mri_segment_hypothalamic_subunits_execute(
-    params: MriSegmentHypothalamicSubunitsParameters,
+    params: MriSegmentHypothalamicSubunitsParamsDict,
     runner: Runner | null = null,
 ): MriSegmentHypothalamicSubunitsOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function mri_segment_hypothalamic_subunits(
 export {
       MRI_SEGMENT_HYPOTHALAMIC_SUBUNITS_METADATA,
       MriSegmentHypothalamicSubunitsOutputs,
+      MriSegmentHypothalamicSubunitsParamsDict,
+      MriSegmentHypothalamicSubunitsParamsDictTagged,
       mri_segment_hypothalamic_subunits,
       mri_segment_hypothalamic_subunits_execute,
       mri_segment_hypothalamic_subunits_params,

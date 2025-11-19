@@ -11,17 +11,17 @@ const V_3D_SKULL_STRIP_METADATA: Metadata = {
 };
 
 
-interface V3dSkullStripParameters {
+interface V3dSkullStripParamsDict {
     "@type"?: "afni/3dSkullStrip";
     "in_file": InputPathType;
     "num_threads"?: number | null | undefined;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
 }
-type V3dSkullStripParametersTagged = Required<Pick<V3dSkullStripParameters, '@type'>> & V3dSkullStripParameters;
+type V3dSkullStripParamsDictTagged = Required<Pick<V3dSkullStripParamsDict, '@type'>> & V3dSkullStripParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSkullStripParameters(...)`.
+ * Output object returned when calling `V3dSkullStripParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function v_3d_skull_strip_params(
     in_file: InputPathType,
     num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
-): V3dSkullStripParametersTagged {
+): V3dSkullStripParamsDictTagged {
     const params = {
         "@type": "afni/3dSkullStrip" as const,
         "in_file": in_file,
@@ -78,7 +78,7 @@ function v_3d_skull_strip_params(
  * @returns Command-line arguments.
  */
 function v_3d_skull_strip_cargs(
-    params: V3dSkullStripParameters,
+    params: V3dSkullStripParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function v_3d_skull_strip_cargs(
  * @returns Outputs object.
  */
 function v_3d_skull_strip_outputs(
-    params: V3dSkullStripParameters,
+    params: V3dSkullStripParamsDict,
     execution: Execution,
 ): V3dSkullStripOutputs {
     const ret: V3dSkullStripOutputs = {
@@ -133,7 +133,7 @@ function v_3d_skull_strip_outputs(
  * @returns NamedTuple of outputs (described in `V3dSkullStripOutputs`).
  */
 function v_3d_skull_strip_execute(
-    params: V3dSkullStripParameters,
+    params: V3dSkullStripParamsDict,
     runner: Runner | null = null,
 ): V3dSkullStripOutputs {
     runner = runner || getGlobalRunner();
@@ -175,6 +175,8 @@ function v_3d_skull_strip(
 
 export {
       V3dSkullStripOutputs,
+      V3dSkullStripParamsDict,
+      V3dSkullStripParamsDictTagged,
       V_3D_SKULL_STRIP_METADATA,
       v_3d_skull_strip,
       v_3d_skull_strip_execute,

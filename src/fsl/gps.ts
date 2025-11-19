@@ -11,7 +11,7 @@ const GPS_METADATA: Metadata = {
 };
 
 
-interface GpsParameters {
+interface GpsParamsDict {
     "@type"?: "fsl/gps";
     "ndir": number;
     "optws": boolean;
@@ -22,11 +22,11 @@ interface GpsParameters {
     "verbose": boolean;
     "help": boolean;
 }
-type GpsParametersTagged = Required<Pick<GpsParameters, '@type'>> & GpsParameters;
+type GpsParamsDictTagged = Required<Pick<GpsParamsDict, '@type'>> & GpsParamsDict;
 
 
 /**
- * Output object returned when calling `GpsParameters(...)`.
+ * Output object returned when calling `GpsParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function gps_params(
     report: boolean = false,
     verbose: boolean = false,
     help: boolean = false,
-): GpsParametersTagged {
+): GpsParamsDictTagged {
     const params = {
         "@type": "fsl/gps" as const,
         "ndir": ndir,
@@ -96,7 +96,7 @@ function gps_params(
  * @returns Command-line arguments.
  */
 function gps_cargs(
-    params: GpsParameters,
+    params: GpsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -148,7 +148,7 @@ function gps_cargs(
  * @returns Outputs object.
  */
 function gps_outputs(
-    params: GpsParameters,
+    params: GpsParamsDict,
     execution: Execution,
 ): GpsOutputs {
     const ret: GpsOutputs = {
@@ -174,7 +174,7 @@ function gps_outputs(
  * @returns NamedTuple of outputs (described in `GpsOutputs`).
  */
 function gps_execute(
-    params: GpsParameters,
+    params: GpsParamsDict,
     runner: Runner | null = null,
 ): GpsOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function gps(
 export {
       GPS_METADATA,
       GpsOutputs,
+      GpsParamsDict,
+      GpsParamsDictTagged,
       gps,
       gps_execute,
       gps_params,

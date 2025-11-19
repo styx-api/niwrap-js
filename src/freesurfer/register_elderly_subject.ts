@@ -11,7 +11,7 @@ const REGISTER_ELDERLY_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface RegisterElderlySubjectParameters {
+interface RegisterElderlySubjectParamsDict {
     "@type"?: "freesurfer/register_elderly_subject";
     "sampling_percentage"?: number | null | undefined;
     "output_fsamples": string;
@@ -20,11 +20,11 @@ interface RegisterElderlySubjectParameters {
     "gca_file": InputPathType;
     "transform_file": InputPathType;
 }
-type RegisterElderlySubjectParametersTagged = Required<Pick<RegisterElderlySubjectParameters, '@type'>> & RegisterElderlySubjectParameters;
+type RegisterElderlySubjectParamsDictTagged = Required<Pick<RegisterElderlySubjectParamsDict, '@type'>> & RegisterElderlySubjectParamsDict;
 
 
 /**
- * Output object returned when calling `RegisterElderlySubjectParameters(...)`.
+ * Output object returned when calling `RegisterElderlySubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function register_elderly_subject_params(
     gca_file: InputPathType,
     transform_file: InputPathType,
     sampling_percentage: number | null = null,
-): RegisterElderlySubjectParametersTagged {
+): RegisterElderlySubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/register_elderly_subject" as const,
         "output_fsamples": output_fsamples,
@@ -88,7 +88,7 @@ function register_elderly_subject_params(
  * @returns Command-line arguments.
  */
 function register_elderly_subject_cargs(
-    params: RegisterElderlySubjectParameters,
+    params: RegisterElderlySubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function register_elderly_subject_cargs(
  * @returns Outputs object.
  */
 function register_elderly_subject_outputs(
-    params: RegisterElderlySubjectParameters,
+    params: RegisterElderlySubjectParamsDict,
     execution: Execution,
 ): RegisterElderlySubjectOutputs {
     const ret: RegisterElderlySubjectOutputs = {
@@ -150,7 +150,7 @@ function register_elderly_subject_outputs(
  * @returns NamedTuple of outputs (described in `RegisterElderlySubjectOutputs`).
  */
 function register_elderly_subject_execute(
-    params: RegisterElderlySubjectParameters,
+    params: RegisterElderlySubjectParamsDict,
     runner: Runner | null = null,
 ): RegisterElderlySubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function register_elderly_subject(
 export {
       REGISTER_ELDERLY_SUBJECT_METADATA,
       RegisterElderlySubjectOutputs,
+      RegisterElderlySubjectParamsDict,
+      RegisterElderlySubjectParamsDictTagged,
       register_elderly_subject,
       register_elderly_subject_execute,
       register_elderly_subject_params,

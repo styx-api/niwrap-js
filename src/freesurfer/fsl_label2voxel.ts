@@ -11,18 +11,18 @@ const FSL_LABEL2VOXEL_METADATA: Metadata = {
 };
 
 
-interface FslLabel2voxelParameters {
+interface FslLabel2voxelParamsDict {
     "@type"?: "freesurfer/fsl_label2voxel";
     "label_value": number;
     "labeled_volume": InputPathType;
     "src_volume": InputPathType;
     "output_filename": string;
 }
-type FslLabel2voxelParametersTagged = Required<Pick<FslLabel2voxelParameters, '@type'>> & FslLabel2voxelParameters;
+type FslLabel2voxelParamsDictTagged = Required<Pick<FslLabel2voxelParamsDict, '@type'>> & FslLabel2voxelParamsDict;
 
 
 /**
- * Output object returned when calling `FslLabel2voxelParameters(...)`.
+ * Output object returned when calling `FslLabel2voxelParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function fsl_label2voxel_params(
     labeled_volume: InputPathType,
     src_volume: InputPathType,
     output_filename: string,
-): FslLabel2voxelParametersTagged {
+): FslLabel2voxelParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsl_label2voxel" as const,
         "label_value": label_value,
@@ -74,7 +74,7 @@ function fsl_label2voxel_params(
  * @returns Command-line arguments.
  */
 function fsl_label2voxel_cargs(
-    params: FslLabel2voxelParameters,
+    params: FslLabel2voxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function fsl_label2voxel_cargs(
  * @returns Outputs object.
  */
 function fsl_label2voxel_outputs(
-    params: FslLabel2voxelParameters,
+    params: FslLabel2voxelParamsDict,
     execution: Execution,
 ): FslLabel2voxelOutputs {
     const ret: FslLabel2voxelOutputs = {
@@ -122,7 +122,7 @@ function fsl_label2voxel_outputs(
  * @returns NamedTuple of outputs (described in `FslLabel2voxelOutputs`).
  */
 function fsl_label2voxel_execute(
-    params: FslLabel2voxelParameters,
+    params: FslLabel2voxelParamsDict,
     runner: Runner | null = null,
 ): FslLabel2voxelOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function fsl_label2voxel(
 export {
       FSL_LABEL2VOXEL_METADATA,
       FslLabel2voxelOutputs,
+      FslLabel2voxelParamsDict,
+      FslLabel2voxelParamsDictTagged,
       fsl_label2voxel,
       fsl_label2voxel_execute,
       fsl_label2voxel_params,

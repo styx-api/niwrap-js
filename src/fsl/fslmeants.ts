@@ -11,7 +11,7 @@ const FSLMEANTS_METADATA: Metadata = {
 };
 
 
-interface FslmeantsParameters {
+interface FslmeantsParamsDict {
     "@type"?: "fsl/fslmeants";
     "input_image": InputPathType;
     "output"?: string | null | undefined;
@@ -28,11 +28,11 @@ interface FslmeantsParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type FslmeantsParametersTagged = Required<Pick<FslmeantsParameters, '@type'>> & FslmeantsParameters;
+type FslmeantsParamsDictTagged = Required<Pick<FslmeantsParamsDict, '@type'>> & FslmeantsParamsDict;
 
 
 /**
- * Output object returned when calling `FslmeantsParameters(...)`.
+ * Output object returned when calling `FslmeantsParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function fslmeants_params(
     weighted_mean_flag: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): FslmeantsParametersTagged {
+): FslmeantsParamsDictTagged {
     const params = {
         "@type": "fsl/fslmeants" as const,
         "input_image": input_image,
@@ -124,7 +124,7 @@ function fslmeants_params(
  * @returns Command-line arguments.
  */
 function fslmeants_cargs(
-    params: FslmeantsParameters,
+    params: FslmeantsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function fslmeants_cargs(
  * @returns Outputs object.
  */
 function fslmeants_outputs(
-    params: FslmeantsParameters,
+    params: FslmeantsParamsDict,
     execution: Execution,
 ): FslmeantsOutputs {
     const ret: FslmeantsOutputs = {
@@ -226,7 +226,7 @@ function fslmeants_outputs(
  * @returns NamedTuple of outputs (described in `FslmeantsOutputs`).
  */
 function fslmeants_execute(
-    params: FslmeantsParameters,
+    params: FslmeantsParamsDict,
     runner: Runner | null = null,
 ): FslmeantsOutputs {
     runner = runner || getGlobalRunner();
@@ -291,6 +291,8 @@ function fslmeants(
 export {
       FSLMEANTS_METADATA,
       FslmeantsOutputs,
+      FslmeantsParamsDict,
+      FslmeantsParamsDictTagged,
       fslmeants,
       fslmeants_execute,
       fslmeants_params,

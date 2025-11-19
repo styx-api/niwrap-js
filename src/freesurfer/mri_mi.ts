@@ -11,18 +11,18 @@ const MRI_MI_METADATA: Metadata = {
 };
 
 
-interface MriMiParameters {
+interface MriMiParamsDict {
     "@type"?: "freesurfer/mri_mi";
     "input_file1": InputPathType;
     "input_file2": InputPathType;
     "bins"?: string | null | undefined;
     "silent": boolean;
 }
-type MriMiParametersTagged = Required<Pick<MriMiParameters, '@type'>> & MriMiParameters;
+type MriMiParamsDictTagged = Required<Pick<MriMiParamsDict, '@type'>> & MriMiParamsDict;
 
 
 /**
- * Output object returned when calling `MriMiParameters(...)`.
+ * Output object returned when calling `MriMiParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function mri_mi_params(
     input_file2: InputPathType,
     bins: string | null = null,
     silent: boolean = false,
-): MriMiParametersTagged {
+): MriMiParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_mi" as const,
         "input_file1": input_file1,
@@ -72,7 +72,7 @@ function mri_mi_params(
  * @returns Command-line arguments.
  */
 function mri_mi_cargs(
-    params: MriMiParameters,
+    params: MriMiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function mri_mi_cargs(
  * @returns Outputs object.
  */
 function mri_mi_outputs(
-    params: MriMiParameters,
+    params: MriMiParamsDict,
     execution: Execution,
 ): MriMiOutputs {
     const ret: MriMiOutputs = {
@@ -126,7 +126,7 @@ function mri_mi_outputs(
  * @returns NamedTuple of outputs (described in `MriMiOutputs`).
  */
 function mri_mi_execute(
-    params: MriMiParameters,
+    params: MriMiParamsDict,
     runner: Runner | null = null,
 ): MriMiOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function mri_mi(
 export {
       MRI_MI_METADATA,
       MriMiOutputs,
+      MriMiParamsDict,
+      MriMiParamsDictTagged,
       mri_mi,
       mri_mi_execute,
       mri_mi_params,

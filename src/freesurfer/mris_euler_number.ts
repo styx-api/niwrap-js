@@ -11,16 +11,16 @@ const MRIS_EULER_NUMBER_METADATA: Metadata = {
 };
 
 
-interface MrisEulerNumberParameters {
+interface MrisEulerNumberParamsDict {
     "@type"?: "freesurfer/mris_euler_number";
     "input_surface": InputPathType;
     "output_file"?: string | null | undefined;
 }
-type MrisEulerNumberParametersTagged = Required<Pick<MrisEulerNumberParameters, '@type'>> & MrisEulerNumberParameters;
+type MrisEulerNumberParamsDictTagged = Required<Pick<MrisEulerNumberParamsDict, '@type'>> & MrisEulerNumberParamsDict;
 
 
 /**
- * Output object returned when calling `MrisEulerNumberParameters(...)`.
+ * Output object returned when calling `MrisEulerNumberParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MrisEulerNumberOutputs {
 function mris_euler_number_params(
     input_surface: InputPathType,
     output_file: string | null = null,
-): MrisEulerNumberParametersTagged {
+): MrisEulerNumberParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_euler_number" as const,
         "input_surface": input_surface,
@@ -68,7 +68,7 @@ function mris_euler_number_params(
  * @returns Command-line arguments.
  */
 function mris_euler_number_cargs(
-    params: MrisEulerNumberParameters,
+    params: MrisEulerNumberParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function mris_euler_number_cargs(
  * @returns Outputs object.
  */
 function mris_euler_number_outputs(
-    params: MrisEulerNumberParameters,
+    params: MrisEulerNumberParamsDict,
     execution: Execution,
 ): MrisEulerNumberOutputs {
     const ret: MrisEulerNumberOutputs = {
@@ -119,7 +119,7 @@ function mris_euler_number_outputs(
  * @returns NamedTuple of outputs (described in `MrisEulerNumberOutputs`).
  */
 function mris_euler_number_execute(
-    params: MrisEulerNumberParameters,
+    params: MrisEulerNumberParamsDict,
     runner: Runner | null = null,
 ): MrisEulerNumberOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mris_euler_number(
 export {
       MRIS_EULER_NUMBER_METADATA,
       MrisEulerNumberOutputs,
+      MrisEulerNumberParamsDict,
+      MrisEulerNumberParamsDictTagged,
       mris_euler_number,
       mris_euler_number_execute,
       mris_euler_number_params,

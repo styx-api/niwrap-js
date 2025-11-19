@@ -11,15 +11,15 @@ const MORPH_RGB_RH_METADATA: Metadata = {
 };
 
 
-interface MorphRgbRhParameters {
+interface MorphRgbRhParamsDict {
     "@type"?: "freesurfer/morph_rgb-rh";
     "subject_id": string;
 }
-type MorphRgbRhParametersTagged = Required<Pick<MorphRgbRhParameters, '@type'>> & MorphRgbRhParameters;
+type MorphRgbRhParamsDictTagged = Required<Pick<MorphRgbRhParamsDict, '@type'>> & MorphRgbRhParamsDict;
 
 
 /**
- * Output object returned when calling `MorphRgbRhParameters(...)`.
+ * Output object returned when calling `MorphRgbRhParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MorphRgbRhOutputs {
  */
 function morph_rgb_rh_params(
     subject_id: string,
-): MorphRgbRhParametersTagged {
+): MorphRgbRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_rgb-rh" as const,
         "subject_id": subject_id,
@@ -58,7 +58,7 @@ function morph_rgb_rh_params(
  * @returns Command-line arguments.
  */
 function morph_rgb_rh_cargs(
-    params: MorphRgbRhParameters,
+    params: MorphRgbRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function morph_rgb_rh_cargs(
  * @returns Outputs object.
  */
 function morph_rgb_rh_outputs(
-    params: MorphRgbRhParameters,
+    params: MorphRgbRhParamsDict,
     execution: Execution,
 ): MorphRgbRhOutputs {
     const ret: MorphRgbRhOutputs = {
@@ -105,7 +105,7 @@ function morph_rgb_rh_outputs(
  * @returns NamedTuple of outputs (described in `MorphRgbRhOutputs`).
  */
 function morph_rgb_rh_execute(
-    params: MorphRgbRhParameters,
+    params: MorphRgbRhParamsDict,
     runner: Runner | null = null,
 ): MorphRgbRhOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function morph_rgb_rh(
 export {
       MORPH_RGB_RH_METADATA,
       MorphRgbRhOutputs,
+      MorphRgbRhParamsDict,
+      MorphRgbRhParamsDictTagged,
       morph_rgb_rh,
       morph_rgb_rh_execute,
       morph_rgb_rh_params,

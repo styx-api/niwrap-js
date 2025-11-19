@@ -11,16 +11,16 @@ const MRI_ADD_NEW_TP_METADATA: Metadata = {
 };
 
 
-interface MriAddNewTpParameters {
+interface MriAddNewTpParamsDict {
     "@type"?: "freesurfer/mri_add_new_tp";
     "base_id": string;
     "newtp_id": string;
 }
-type MriAddNewTpParametersTagged = Required<Pick<MriAddNewTpParameters, '@type'>> & MriAddNewTpParameters;
+type MriAddNewTpParamsDictTagged = Required<Pick<MriAddNewTpParamsDict, '@type'>> & MriAddNewTpParamsDict;
 
 
 /**
- * Output object returned when calling `MriAddNewTpParameters(...)`.
+ * Output object returned when calling `MriAddNewTpParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MriAddNewTpOutputs {
 function mri_add_new_tp_params(
     base_id: string,
     newtp_id: string,
-): MriAddNewTpParametersTagged {
+): MriAddNewTpParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_add_new_tp" as const,
         "base_id": base_id,
@@ -62,7 +62,7 @@ function mri_add_new_tp_params(
  * @returns Command-line arguments.
  */
 function mri_add_new_tp_cargs(
-    params: MriAddNewTpParameters,
+    params: MriAddNewTpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mri_add_new_tp_cargs(
  * @returns Outputs object.
  */
 function mri_add_new_tp_outputs(
-    params: MriAddNewTpParameters,
+    params: MriAddNewTpParamsDict,
     execution: Execution,
 ): MriAddNewTpOutputs {
     const ret: MriAddNewTpOutputs = {
@@ -107,7 +107,7 @@ function mri_add_new_tp_outputs(
  * @returns NamedTuple of outputs (described in `MriAddNewTpOutputs`).
  */
 function mri_add_new_tp_execute(
-    params: MriAddNewTpParameters,
+    params: MriAddNewTpParamsDict,
     runner: Runner | null = null,
 ): MriAddNewTpOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function mri_add_new_tp(
 export {
       MRI_ADD_NEW_TP_METADATA,
       MriAddNewTpOutputs,
+      MriAddNewTpParamsDict,
+      MriAddNewTpParamsDictTagged,
       mri_add_new_tp,
       mri_add_new_tp_execute,
       mri_add_new_tp_params,

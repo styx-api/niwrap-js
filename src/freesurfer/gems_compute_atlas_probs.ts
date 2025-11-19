@@ -11,7 +11,7 @@ const GEMS_COMPUTE_ATLAS_PROBS_METADATA: Metadata = {
 };
 
 
-interface GemsComputeAtlasProbsParameters {
+interface GemsComputeAtlasProbsParamsDict {
     "@type"?: "freesurfer/gems_compute_atlas_probs";
     "subjects_dir": string;
     "mesh_collections": Array<string>;
@@ -30,11 +30,11 @@ interface GemsComputeAtlasProbsParameters {
     "labels_file"?: string | null | undefined;
     "samseg_subdir"?: string | null | undefined;
 }
-type GemsComputeAtlasProbsParametersTagged = Required<Pick<GemsComputeAtlasProbsParameters, '@type'>> & GemsComputeAtlasProbsParameters;
+type GemsComputeAtlasProbsParamsDictTagged = Required<Pick<GemsComputeAtlasProbsParamsDict, '@type'>> & GemsComputeAtlasProbsParamsDict;
 
 
 /**
- * Output object returned when calling `GemsComputeAtlasProbsParameters(...)`.
+ * Output object returned when calling `GemsComputeAtlasProbsParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function gems_compute_atlas_probs_params(
     subjects_file: string | null = null,
     labels_file: string | null = null,
     samseg_subdir: string | null = null,
-): GemsComputeAtlasProbsParametersTagged {
+): GemsComputeAtlasProbsParamsDictTagged {
     const params = {
         "@type": "freesurfer/gems_compute_atlas_probs" as const,
         "subjects_dir": subjects_dir,
@@ -132,7 +132,7 @@ function gems_compute_atlas_probs_params(
  * @returns Command-line arguments.
  */
 function gems_compute_atlas_probs_cargs(
-    params: GemsComputeAtlasProbsParameters,
+    params: GemsComputeAtlasProbsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,7 +222,7 @@ function gems_compute_atlas_probs_cargs(
  * @returns Outputs object.
  */
 function gems_compute_atlas_probs_outputs(
-    params: GemsComputeAtlasProbsParameters,
+    params: GemsComputeAtlasProbsParamsDict,
     execution: Execution,
 ): GemsComputeAtlasProbsOutputs {
     const ret: GemsComputeAtlasProbsOutputs = {
@@ -247,7 +247,7 @@ function gems_compute_atlas_probs_outputs(
  * @returns NamedTuple of outputs (described in `GemsComputeAtlasProbsOutputs`).
  */
 function gems_compute_atlas_probs_execute(
-    params: GemsComputeAtlasProbsParameters,
+    params: GemsComputeAtlasProbsParamsDict,
     runner: Runner | null = null,
 ): GemsComputeAtlasProbsOutputs {
     runner = runner || getGlobalRunner();
@@ -316,6 +316,8 @@ function gems_compute_atlas_probs(
 export {
       GEMS_COMPUTE_ATLAS_PROBS_METADATA,
       GemsComputeAtlasProbsOutputs,
+      GemsComputeAtlasProbsParamsDict,
+      GemsComputeAtlasProbsParamsDictTagged,
       gems_compute_atlas_probs,
       gems_compute_atlas_probs_execute,
       gems_compute_atlas_probs_params,

@@ -11,18 +11,18 @@ const MRI_APARC2WMSEG_METADATA: Metadata = {
 };
 
 
-interface MriAparc2wmsegParameters {
+interface MriAparc2wmsegParamsDict {
     "@type"?: "freesurfer/mri_aparc2wmseg";
     "subject": string;
     "wmseg_file": string;
     "help": boolean;
     "version": boolean;
 }
-type MriAparc2wmsegParametersTagged = Required<Pick<MriAparc2wmsegParameters, '@type'>> & MriAparc2wmsegParameters;
+type MriAparc2wmsegParamsDictTagged = Required<Pick<MriAparc2wmsegParamsDict, '@type'>> & MriAparc2wmsegParamsDict;
 
 
 /**
- * Output object returned when calling `MriAparc2wmsegParameters(...)`.
+ * Output object returned when calling `MriAparc2wmsegParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function mri_aparc2wmseg_params(
     wmseg_file: string,
     help: boolean = false,
     version: boolean = false,
-): MriAparc2wmsegParametersTagged {
+): MriAparc2wmsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_aparc2wmseg" as const,
         "subject": subject,
@@ -70,7 +70,7 @@ function mri_aparc2wmseg_params(
  * @returns Command-line arguments.
  */
 function mri_aparc2wmseg_cargs(
-    params: MriAparc2wmsegParameters,
+    params: MriAparc2wmsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -102,7 +102,7 @@ function mri_aparc2wmseg_cargs(
  * @returns Outputs object.
  */
 function mri_aparc2wmseg_outputs(
-    params: MriAparc2wmsegParameters,
+    params: MriAparc2wmsegParamsDict,
     execution: Execution,
 ): MriAparc2wmsegOutputs {
     const ret: MriAparc2wmsegOutputs = {
@@ -127,7 +127,7 @@ function mri_aparc2wmseg_outputs(
  * @returns NamedTuple of outputs (described in `MriAparc2wmsegOutputs`).
  */
 function mri_aparc2wmseg_execute(
-    params: MriAparc2wmsegParameters,
+    params: MriAparc2wmsegParamsDict,
     runner: Runner | null = null,
 ): MriAparc2wmsegOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function mri_aparc2wmseg(
 export {
       MRI_APARC2WMSEG_METADATA,
       MriAparc2wmsegOutputs,
+      MriAparc2wmsegParamsDict,
+      MriAparc2wmsegParamsDictTagged,
       mri_aparc2wmseg,
       mri_aparc2wmseg_execute,
       mri_aparc2wmseg_params,

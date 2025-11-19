@@ -11,7 +11,7 @@ const RCA_FIX_ENTO_METADATA: Metadata = {
 };
 
 
-interface RcaFixEntoParameters {
+interface RcaFixEntoParamsDict {
     "@type"?: "freesurfer/rca-fix-ento";
     "subject": string;
     "threads"?: number | null | undefined;
@@ -19,11 +19,11 @@ interface RcaFixEntoParameters {
     "account"?: string | null | undefined;
     "brain_mask": boolean;
 }
-type RcaFixEntoParametersTagged = Required<Pick<RcaFixEntoParameters, '@type'>> & RcaFixEntoParameters;
+type RcaFixEntoParamsDictTagged = Required<Pick<RcaFixEntoParamsDict, '@type'>> & RcaFixEntoParamsDict;
 
 
 /**
- * Output object returned when calling `RcaFixEntoParameters(...)`.
+ * Output object returned when calling `RcaFixEntoParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function rca_fix_ento_params(
     submit: boolean = false,
     account: string | null = null,
     brain_mask: boolean = false,
-): RcaFixEntoParametersTagged {
+): RcaFixEntoParamsDictTagged {
     const params = {
         "@type": "freesurfer/rca-fix-ento" as const,
         "subject": subject,
@@ -90,7 +90,7 @@ function rca_fix_ento_params(
  * @returns Command-line arguments.
  */
 function rca_fix_ento_cargs(
-    params: RcaFixEntoParameters,
+    params: RcaFixEntoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function rca_fix_ento_cargs(
  * @returns Outputs object.
  */
 function rca_fix_ento_outputs(
-    params: RcaFixEntoParameters,
+    params: RcaFixEntoParamsDict,
     execution: Execution,
 ): RcaFixEntoOutputs {
     const ret: RcaFixEntoOutputs = {
@@ -158,7 +158,7 @@ function rca_fix_ento_outputs(
  * @returns NamedTuple of outputs (described in `RcaFixEntoOutputs`).
  */
 function rca_fix_ento_execute(
-    params: RcaFixEntoParameters,
+    params: RcaFixEntoParamsDict,
     runner: Runner | null = null,
 ): RcaFixEntoOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function rca_fix_ento(
 export {
       RCA_FIX_ENTO_METADATA,
       RcaFixEntoOutputs,
+      RcaFixEntoParamsDict,
+      RcaFixEntoParamsDictTagged,
       rca_fix_ento,
       rca_fix_ento_execute,
       rca_fix_ento_params,

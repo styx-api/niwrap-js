@@ -11,7 +11,7 @@ const MRI_CONCAT_METADATA: Metadata = {
 };
 
 
-interface MriConcatParameters {
+interface MriConcatParamsDict {
     "@type"?: "freesurfer/mri_concat";
     "input_files": Array<InputPathType>;
     "output_file": string;
@@ -62,11 +62,11 @@ interface MriConcatParameters {
     "rms": boolean;
     "no_check": boolean;
 }
-type MriConcatParametersTagged = Required<Pick<MriConcatParameters, '@type'>> & MriConcatParameters;
+type MriConcatParamsDictTagged = Required<Pick<MriConcatParamsDict, '@type'>> & MriConcatParamsDict;
 
 
 /**
- * Output object returned when calling `MriConcatParameters(...)`.
+ * Output object returned when calling `MriConcatParamsDict(...)`.
  *
  * @interface
  */
@@ -181,7 +181,7 @@ function mri_concat_params(
     mask_file: InputPathType | null = null,
     rms: boolean = false,
     no_check: boolean = false,
-): MriConcatParametersTagged {
+): MriConcatParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_concat" as const,
         "input_files": input_files,
@@ -270,7 +270,7 @@ function mri_concat_params(
  * @returns Command-line arguments.
  */
 function mri_concat_cargs(
-    params: MriConcatParameters,
+    params: MriConcatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -467,7 +467,7 @@ function mri_concat_cargs(
  * @returns Outputs object.
  */
 function mri_concat_outputs(
-    params: MriConcatParameters,
+    params: MriConcatParamsDict,
     execution: Execution,
 ): MriConcatOutputs {
     const ret: MriConcatOutputs = {
@@ -492,7 +492,7 @@ function mri_concat_outputs(
  * @returns NamedTuple of outputs (described in `MriConcatOutputs`).
  */
 function mri_concat_execute(
-    params: MriConcatParameters,
+    params: MriConcatParamsDict,
     runner: Runner | null = null,
 ): MriConcatOutputs {
     runner = runner || getGlobalRunner();
@@ -625,6 +625,8 @@ function mri_concat(
 export {
       MRI_CONCAT_METADATA,
       MriConcatOutputs,
+      MriConcatParamsDict,
+      MriConcatParamsDictTagged,
       mri_concat,
       mri_concat_execute,
       mri_concat_params,

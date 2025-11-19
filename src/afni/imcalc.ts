@@ -11,18 +11,18 @@ const IMCALC_METADATA: Metadata = {
 };
 
 
-interface ImcalcParameters {
+interface ImcalcParamsDict {
     "@type"?: "afni/imcalc";
     "datum_type"?: string | null | undefined;
     "image_inputs"?: Array<InputPathType> | null | undefined;
     "expression": string;
     "output_name"?: string | null | undefined;
 }
-type ImcalcParametersTagged = Required<Pick<ImcalcParameters, '@type'>> & ImcalcParameters;
+type ImcalcParamsDictTagged = Required<Pick<ImcalcParamsDict, '@type'>> & ImcalcParamsDict;
 
 
 /**
- * Output object returned when calling `ImcalcParameters(...)`.
+ * Output object returned when calling `ImcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function imcalc_params(
     datum_type: string | null = null,
     image_inputs: Array<InputPathType> | null = null,
     output_name: string | null = null,
-): ImcalcParametersTagged {
+): ImcalcParamsDictTagged {
     const params = {
         "@type": "afni/imcalc" as const,
         "expression": expression,
@@ -80,7 +80,7 @@ function imcalc_params(
  * @returns Command-line arguments.
  */
 function imcalc_cargs(
-    params: ImcalcParameters,
+    params: ImcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function imcalc_cargs(
  * @returns Outputs object.
  */
 function imcalc_outputs(
-    params: ImcalcParameters,
+    params: ImcalcParamsDict,
     execution: Execution,
 ): ImcalcOutputs {
     const ret: ImcalcOutputs = {
@@ -146,7 +146,7 @@ function imcalc_outputs(
  * @returns NamedTuple of outputs (described in `ImcalcOutputs`).
  */
 function imcalc_execute(
-    params: ImcalcParameters,
+    params: ImcalcParamsDict,
     runner: Runner | null = null,
 ): ImcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function imcalc(
 export {
       IMCALC_METADATA,
       ImcalcOutputs,
+      ImcalcParamsDict,
+      ImcalcParamsDictTagged,
       imcalc,
       imcalc_execute,
       imcalc_params,

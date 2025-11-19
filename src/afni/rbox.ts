@@ -11,7 +11,7 @@ const RBOX_METADATA: Metadata = {
 };
 
 
-interface RboxParameters {
+interface RboxParamsDict {
     "@type"?: "afni/rbox";
     "number_points": string;
     "dimension"?: string | null | undefined;
@@ -35,11 +35,11 @@ interface RboxParameters {
     "user_seed"?: number | null | undefined;
     "mesh_lattice"?: Array<string> | null | undefined;
 }
-type RboxParametersTagged = Required<Pick<RboxParameters, '@type'>> & RboxParameters;
+type RboxParamsDictTagged = Required<Pick<RboxParamsDict, '@type'>> & RboxParamsDict;
 
 
 /**
- * Output object returned when calling `RboxParameters(...)`.
+ * Output object returned when calling `RboxParamsDict(...)`.
  *
  * @interface
  */
@@ -100,7 +100,7 @@ function rbox_params(
     offset: number | null = null,
     user_seed: number | null = null,
     mesh_lattice: Array<string> | null = null,
-): RboxParametersTagged {
+): RboxParamsDictTagged {
     const params = {
         "@type": "afni/rbox" as const,
         "number_points": number_points,
@@ -154,7 +154,7 @@ function rbox_params(
  * @returns Command-line arguments.
  */
 function rbox_cargs(
-    params: RboxParameters,
+    params: RboxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -254,7 +254,7 @@ function rbox_cargs(
  * @returns Outputs object.
  */
 function rbox_outputs(
-    params: RboxParameters,
+    params: RboxParamsDict,
     execution: Execution,
 ): RboxOutputs {
     const ret: RboxOutputs = {
@@ -279,7 +279,7 @@ function rbox_outputs(
  * @returns NamedTuple of outputs (described in `RboxOutputs`).
  */
 function rbox_execute(
-    params: RboxParameters,
+    params: RboxParamsDict,
     runner: Runner | null = null,
 ): RboxOutputs {
     runner = runner || getGlobalRunner();
@@ -358,6 +358,8 @@ function rbox(
 export {
       RBOX_METADATA,
       RboxOutputs,
+      RboxParamsDict,
+      RboxParamsDictTagged,
       rbox,
       rbox_execute,
       rbox_params,

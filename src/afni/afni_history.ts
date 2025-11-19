@@ -11,7 +11,7 @@ const AFNI_HISTORY_METADATA: Metadata = {
 };
 
 
-interface AfniHistoryParameters {
+interface AfniHistoryParamsDict {
     "@type"?: "afni/afni_history";
     "verb_level"?: number | null | undefined;
     "check_date"?: string | null | undefined;
@@ -35,11 +35,11 @@ interface AfniHistoryParameters {
     "show_field"?: string | null | undefined;
     "show_field_names": boolean;
 }
-type AfniHistoryParametersTagged = Required<Pick<AfniHistoryParameters, '@type'>> & AfniHistoryParameters;
+type AfniHistoryParamsDictTagged = Required<Pick<AfniHistoryParamsDict, '@type'>> & AfniHistoryParamsDict;
 
 
 /**
- * Output object returned when calling `AfniHistoryParameters(...)`.
+ * Output object returned when calling `AfniHistoryParamsDict(...)`.
  *
  * @interface
  */
@@ -100,7 +100,7 @@ function afni_history_params(
     reverse: boolean = false,
     show_field: string | null = null,
     show_field_names: boolean = false,
-): AfniHistoryParametersTagged {
+): AfniHistoryParamsDictTagged {
     const params = {
         "@type": "afni/afni_history" as const,
         "help": help,
@@ -162,7 +162,7 @@ function afni_history_params(
  * @returns Command-line arguments.
  */
 function afni_history_cargs(
-    params: AfniHistoryParameters,
+    params: AfniHistoryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -279,7 +279,7 @@ function afni_history_cargs(
  * @returns Outputs object.
  */
 function afni_history_outputs(
-    params: AfniHistoryParameters,
+    params: AfniHistoryParamsDict,
     execution: Execution,
 ): AfniHistoryOutputs {
     const ret: AfniHistoryOutputs = {
@@ -304,7 +304,7 @@ function afni_history_outputs(
  * @returns NamedTuple of outputs (described in `AfniHistoryOutputs`).
  */
 function afni_history_execute(
-    params: AfniHistoryParameters,
+    params: AfniHistoryParamsDict,
     runner: Runner | null = null,
 ): AfniHistoryOutputs {
     runner = runner || getGlobalRunner();
@@ -383,6 +383,8 @@ function afni_history(
 export {
       AFNI_HISTORY_METADATA,
       AfniHistoryOutputs,
+      AfniHistoryParamsDict,
+      AfniHistoryParamsDictTagged,
       afni_history,
       afni_history_execute,
       afni_history_params,

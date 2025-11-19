@@ -11,16 +11,16 @@ const QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA: Metadata = {
 };
 
 
-interface QuantifyBrainstemStructuresShParameters {
+interface QuantifyBrainstemStructuresShParamsDict {
     "@type"?: "freesurfer/quantifyBrainstemStructures.sh";
     "output_file": string;
     "subjects_directory"?: string | null | undefined;
 }
-type QuantifyBrainstemStructuresShParametersTagged = Required<Pick<QuantifyBrainstemStructuresShParameters, '@type'>> & QuantifyBrainstemStructuresShParameters;
+type QuantifyBrainstemStructuresShParamsDictTagged = Required<Pick<QuantifyBrainstemStructuresShParamsDict, '@type'>> & QuantifyBrainstemStructuresShParamsDict;
 
 
 /**
- * Output object returned when calling `QuantifyBrainstemStructuresShParameters(...)`.
+ * Output object returned when calling `QuantifyBrainstemStructuresShParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface QuantifyBrainstemStructuresShOutputs {
 function quantify_brainstem_structures_sh_params(
     output_file: string,
     subjects_directory: string | null = null,
-): QuantifyBrainstemStructuresShParametersTagged {
+): QuantifyBrainstemStructuresShParamsDictTagged {
     const params = {
         "@type": "freesurfer/quantifyBrainstemStructures.sh" as const,
         "output_file": output_file,
@@ -68,7 +68,7 @@ function quantify_brainstem_structures_sh_params(
  * @returns Command-line arguments.
  */
 function quantify_brainstem_structures_sh_cargs(
-    params: QuantifyBrainstemStructuresShParameters,
+    params: QuantifyBrainstemStructuresShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function quantify_brainstem_structures_sh_cargs(
  * @returns Outputs object.
  */
 function quantify_brainstem_structures_sh_outputs(
-    params: QuantifyBrainstemStructuresShParameters,
+    params: QuantifyBrainstemStructuresShParamsDict,
     execution: Execution,
 ): QuantifyBrainstemStructuresShOutputs {
     const ret: QuantifyBrainstemStructuresShOutputs = {
@@ -116,7 +116,7 @@ function quantify_brainstem_structures_sh_outputs(
  * @returns NamedTuple of outputs (described in `QuantifyBrainstemStructuresShOutputs`).
  */
 function quantify_brainstem_structures_sh_execute(
-    params: QuantifyBrainstemStructuresShParameters,
+    params: QuantifyBrainstemStructuresShParamsDict,
     runner: Runner | null = null,
 ): QuantifyBrainstemStructuresShOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function quantify_brainstem_structures_sh(
 export {
       QUANTIFY_BRAINSTEM_STRUCTURES_SH_METADATA,
       QuantifyBrainstemStructuresShOutputs,
+      QuantifyBrainstemStructuresShParamsDict,
+      QuantifyBrainstemStructuresShParamsDictTagged,
       quantify_brainstem_structures_sh,
       quantify_brainstem_structures_sh_execute,
       quantify_brainstem_structures_sh_params,

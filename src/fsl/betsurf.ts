@@ -11,7 +11,7 @@ const BETSURF_METADATA: Metadata = {
 };
 
 
-interface BetsurfParameters {
+interface BetsurfParamsDict {
     "@type"?: "fsl/betsurf";
     "t1_image": InputPathType;
     "t2_image"?: InputPathType | null | undefined;
@@ -26,11 +26,11 @@ interface BetsurfParameters {
     "skull_mask_flag": boolean;
     "increased_precision"?: number | null | undefined;
 }
-type BetsurfParametersTagged = Required<Pick<BetsurfParameters, '@type'>> & BetsurfParameters;
+type BetsurfParamsDictTagged = Required<Pick<BetsurfParamsDict, '@type'>> & BetsurfParamsDict;
 
 
 /**
- * Output object returned when calling `BetsurfParameters(...)`.
+ * Output object returned when calling `BetsurfParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function betsurf_params(
     mask_flag: boolean = false,
     skull_mask_flag: boolean = false,
     increased_precision: number | null = null,
-): BetsurfParametersTagged {
+): BetsurfParamsDictTagged {
     const params = {
         "@type": "fsl/betsurf" as const,
         "t1_image": t1_image,
@@ -118,7 +118,7 @@ function betsurf_params(
  * @returns Command-line arguments.
  */
 function betsurf_cargs(
-    params: BetsurfParameters,
+    params: BetsurfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function betsurf_cargs(
  * @returns Outputs object.
  */
 function betsurf_outputs(
-    params: BetsurfParameters,
+    params: BetsurfParamsDict,
     execution: Execution,
 ): BetsurfOutputs {
     const ret: BetsurfOutputs = {
@@ -195,7 +195,7 @@ function betsurf_outputs(
  * @returns NamedTuple of outputs (described in `BetsurfOutputs`).
  */
 function betsurf_execute(
-    params: BetsurfParameters,
+    params: BetsurfParamsDict,
     runner: Runner | null = null,
 ): BetsurfOutputs {
     runner = runner || getGlobalRunner();
@@ -256,6 +256,8 @@ function betsurf(
 export {
       BETSURF_METADATA,
       BetsurfOutputs,
+      BetsurfParamsDict,
+      BetsurfParamsDictTagged,
       betsurf,
       betsurf_execute,
       betsurf_params,

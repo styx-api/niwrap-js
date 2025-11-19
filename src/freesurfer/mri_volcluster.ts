@@ -11,7 +11,7 @@ const MRI_VOLCLUSTER_METADATA: Metadata = {
 };
 
 
-interface MriVolclusterParameters {
+interface MriVolclusterParamsDict {
     "@type"?: "freesurfer/mri_volcluster";
     "input_file": InputPathType;
     "summary_file"?: string | null | undefined;
@@ -62,11 +62,11 @@ interface MriVolclusterParameters {
     "fill_params"?: string | null | undefined;
     "help_flag": boolean;
 }
-type MriVolclusterParametersTagged = Required<Pick<MriVolclusterParameters, '@type'>> & MriVolclusterParameters;
+type MriVolclusterParamsDictTagged = Required<Pick<MriVolclusterParamsDict, '@type'>> & MriVolclusterParamsDict;
 
 
 /**
- * Output object returned when calling `MriVolclusterParameters(...)`.
+ * Output object returned when calling `MriVolclusterParamsDict(...)`.
  *
  * @interface
  */
@@ -197,7 +197,7 @@ function mri_volcluster_params(
     diagnostic_level: number | null = null,
     fill_params: string | null = null,
     help_flag: boolean = false,
-): MriVolclusterParametersTagged {
+): MriVolclusterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_volcluster" as const,
         "input_file": input_file,
@@ -338,7 +338,7 @@ function mri_volcluster_params(
  * @returns Command-line arguments.
  */
 function mri_volcluster_cargs(
-    params: MriVolclusterParameters,
+    params: MriVolclusterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -615,7 +615,7 @@ function mri_volcluster_cargs(
  * @returns Outputs object.
  */
 function mri_volcluster_outputs(
-    params: MriVolclusterParameters,
+    params: MriVolclusterParamsDict,
     execution: Execution,
 ): MriVolclusterOutputs {
     const ret: MriVolclusterOutputs = {
@@ -644,7 +644,7 @@ function mri_volcluster_outputs(
  * @returns NamedTuple of outputs (described in `MriVolclusterOutputs`).
  */
 function mri_volcluster_execute(
-    params: MriVolclusterParameters,
+    params: MriVolclusterParamsDict,
     runner: Runner | null = null,
 ): MriVolclusterOutputs {
     runner = runner || getGlobalRunner();
@@ -777,6 +777,8 @@ function mri_volcluster(
 export {
       MRI_VOLCLUSTER_METADATA,
       MriVolclusterOutputs,
+      MriVolclusterParamsDict,
+      MriVolclusterParamsDictTagged,
       mri_volcluster,
       mri_volcluster_execute,
       mri_volcluster_params,

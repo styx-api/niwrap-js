@@ -11,15 +11,15 @@ const FNAME2STEM_METADATA: Metadata = {
 };
 
 
-interface Fname2stemParameters {
+interface Fname2stemParamsDict {
     "@type"?: "freesurfer/fname2stem";
     "filename": string;
 }
-type Fname2stemParametersTagged = Required<Pick<Fname2stemParameters, '@type'>> & Fname2stemParameters;
+type Fname2stemParamsDictTagged = Required<Pick<Fname2stemParamsDict, '@type'>> & Fname2stemParamsDict;
 
 
 /**
- * Output object returned when calling `Fname2stemParameters(...)`.
+ * Output object returned when calling `Fname2stemParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface Fname2stemOutputs {
  */
 function fname2stem_params(
     filename: string,
-): Fname2stemParametersTagged {
+): Fname2stemParamsDictTagged {
     const params = {
         "@type": "freesurfer/fname2stem" as const,
         "filename": filename,
@@ -58,7 +58,7 @@ function fname2stem_params(
  * @returns Command-line arguments.
  */
 function fname2stem_cargs(
-    params: Fname2stemParameters,
+    params: Fname2stemParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function fname2stem_cargs(
  * @returns Outputs object.
  */
 function fname2stem_outputs(
-    params: Fname2stemParameters,
+    params: Fname2stemParamsDict,
     execution: Execution,
 ): Fname2stemOutputs {
     const ret: Fname2stemOutputs = {
@@ -102,7 +102,7 @@ function fname2stem_outputs(
  * @returns NamedTuple of outputs (described in `Fname2stemOutputs`).
  */
 function fname2stem_execute(
-    params: Fname2stemParameters,
+    params: Fname2stemParamsDict,
     runner: Runner | null = null,
 ): Fname2stemOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function fname2stem(
 export {
       FNAME2STEM_METADATA,
       Fname2stemOutputs,
+      Fname2stemParamsDict,
+      Fname2stemParamsDictTagged,
       fname2stem,
       fname2stem_execute,
       fname2stem_params,

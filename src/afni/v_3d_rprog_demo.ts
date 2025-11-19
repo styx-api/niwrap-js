@@ -11,7 +11,7 @@ const V_3D_RPROG_DEMO_METADATA: Metadata = {
 };
 
 
-interface V3dRprogDemoParameters {
+interface V3dRprogDemoParamsDict {
     "@type"?: "afni/3dRprogDemo";
     "input_dsets": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
@@ -25,11 +25,11 @@ interface V3dRprogDemoParameters {
     "show_allowed_options": boolean;
     "verbosity_level"?: number | null | undefined;
 }
-type V3dRprogDemoParametersTagged = Required<Pick<V3dRprogDemoParameters, '@type'>> & V3dRprogDemoParameters;
+type V3dRprogDemoParamsDictTagged = Required<Pick<V3dRprogDemoParamsDict, '@type'>> & V3dRprogDemoParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRprogDemoParameters(...)`.
+ * Output object returned when calling `V3dRprogDemoParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function v_3d_rprog_demo_params(
     help: boolean = false,
     show_allowed_options: boolean = false,
     verbosity_level: number | null = null,
-): V3dRprogDemoParametersTagged {
+): V3dRprogDemoParamsDictTagged {
     const params = {
         "@type": "afni/3dRprogDemo" as const,
         "input_dsets": input_dsets,
@@ -106,7 +106,7 @@ function v_3d_rprog_demo_params(
  * @returns Command-line arguments.
  */
 function v_3d_rprog_demo_cargs(
-    params: V3dRprogDemoParameters,
+    params: V3dRprogDemoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function v_3d_rprog_demo_cargs(
  * @returns Outputs object.
  */
 function v_3d_rprog_demo_outputs(
-    params: V3dRprogDemoParameters,
+    params: V3dRprogDemoParamsDict,
     execution: Execution,
 ): V3dRprogDemoOutputs {
     const ret: V3dRprogDemoOutputs = {
@@ -189,7 +189,7 @@ function v_3d_rprog_demo_outputs(
  * @returns NamedTuple of outputs (described in `V3dRprogDemoOutputs`).
  */
 function v_3d_rprog_demo_execute(
-    params: V3dRprogDemoParameters,
+    params: V3dRprogDemoParamsDict,
     runner: Runner | null = null,
 ): V3dRprogDemoOutputs {
     runner = runner || getGlobalRunner();
@@ -247,6 +247,8 @@ function v_3d_rprog_demo(
 
 export {
       V3dRprogDemoOutputs,
+      V3dRprogDemoParamsDict,
+      V3dRprogDemoParamsDictTagged,
       V_3D_RPROG_DEMO_METADATA,
       v_3d_rprog_demo,
       v_3d_rprog_demo_execute,

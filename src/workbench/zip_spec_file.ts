@@ -10,7 +10,7 @@ const ZIP_SPEC_FILE_METADATA: Metadata = {
 };
 
 
-interface ZipSpecFileParameters {
+interface ZipSpecFileParamsDict {
     "@type"?: "workbench/zip-spec-file";
     "directory"?: string | null | undefined;
     "skip-missing": boolean;
@@ -18,11 +18,11 @@ interface ZipSpecFileParameters {
     "extract-folder": string;
     "zip-file": string;
 }
-type ZipSpecFileParametersTagged = Required<Pick<ZipSpecFileParameters, '@type'>> & ZipSpecFileParameters;
+type ZipSpecFileParamsDictTagged = Required<Pick<ZipSpecFileParamsDict, '@type'>> & ZipSpecFileParamsDict;
 
 
 /**
- * Output object returned when calling `ZipSpecFileParameters(...)`.
+ * Output object returned when calling `ZipSpecFileParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function zip_spec_file_params(
     extract_folder: string,
     zip_file: string,
     skip_missing: boolean = false,
-): ZipSpecFileParametersTagged {
+): ZipSpecFileParamsDictTagged {
     const params = {
         "@type": "workbench/zip-spec-file" as const,
         "skip-missing": skip_missing,
@@ -77,7 +77,7 @@ function zip_spec_file_params(
  * @returns Command-line arguments.
  */
 function zip_spec_file_cargs(
-    params: ZipSpecFileParameters,
+    params: ZipSpecFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function zip_spec_file_cargs(
  * @returns Outputs object.
  */
 function zip_spec_file_outputs(
-    params: ZipSpecFileParameters,
+    params: ZipSpecFileParamsDict,
     execution: Execution,
 ): ZipSpecFileOutputs {
     const ret: ZipSpecFileOutputs = {
@@ -127,7 +127,7 @@ function zip_spec_file_outputs(
  * @returns NamedTuple of outputs (described in `ZipSpecFileOutputs`).
  */
 function zip_spec_file_execute(
-    params: ZipSpecFileParameters,
+    params: ZipSpecFileParamsDict,
     runner: Runner | null = null,
 ): ZipSpecFileOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function zip_spec_file(
 export {
       ZIP_SPEC_FILE_METADATA,
       ZipSpecFileOutputs,
+      ZipSpecFileParamsDict,
+      ZipSpecFileParamsDictTagged,
       zip_spec_file,
       zip_spec_file_execute,
       zip_spec_file_params,

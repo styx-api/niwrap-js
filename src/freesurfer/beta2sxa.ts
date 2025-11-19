@@ -11,18 +11,18 @@ const BETA2SXA_METADATA: Metadata = {
 };
 
 
-interface Beta2sxaParameters {
+interface Beta2sxaParamsDict {
     "@type"?: "freesurfer/beta2sxa";
     "beta_files": Array<InputPathType>;
     "number_of_conditions": number;
     "number_of_per_subjects": number;
     "sxa_output"?: string | null | undefined;
 }
-type Beta2sxaParametersTagged = Required<Pick<Beta2sxaParameters, '@type'>> & Beta2sxaParameters;
+type Beta2sxaParamsDictTagged = Required<Pick<Beta2sxaParamsDict, '@type'>> & Beta2sxaParamsDict;
 
 
 /**
- * Output object returned when calling `Beta2sxaParameters(...)`.
+ * Output object returned when calling `Beta2sxaParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function beta2sxa_params(
     number_of_conditions: number,
     number_of_per_subjects: number,
     sxa_output: string | null = null,
-): Beta2sxaParametersTagged {
+): Beta2sxaParamsDictTagged {
     const params = {
         "@type": "freesurfer/beta2sxa" as const,
         "beta_files": beta_files,
@@ -76,7 +76,7 @@ function beta2sxa_params(
  * @returns Command-line arguments.
  */
 function beta2sxa_cargs(
-    params: Beta2sxaParameters,
+    params: Beta2sxaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function beta2sxa_cargs(
  * @returns Outputs object.
  */
 function beta2sxa_outputs(
-    params: Beta2sxaParameters,
+    params: Beta2sxaParamsDict,
     execution: Execution,
 ): Beta2sxaOutputs {
     const ret: Beta2sxaOutputs = {
@@ -138,7 +138,7 @@ function beta2sxa_outputs(
  * @returns NamedTuple of outputs (described in `Beta2sxaOutputs`).
  */
 function beta2sxa_execute(
-    params: Beta2sxaParameters,
+    params: Beta2sxaParamsDict,
     runner: Runner | null = null,
 ): Beta2sxaOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function beta2sxa(
 export {
       BETA2SXA_METADATA,
       Beta2sxaOutputs,
+      Beta2sxaParamsDict,
+      Beta2sxaParamsDictTagged,
       beta2sxa,
       beta2sxa_execute,
       beta2sxa_params,

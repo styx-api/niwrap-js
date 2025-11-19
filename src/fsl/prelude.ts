@@ -11,7 +11,7 @@ const PRELUDE_METADATA: Metadata = {
 };
 
 
-interface PreludeParameters {
+interface PreludeParamsDict {
     "@type"?: "fsl/prelude";
     "output_unwrap": string;
     "output_unwrap_alias": InputPathType;
@@ -44,11 +44,11 @@ interface PreludeParameters {
     "help": boolean;
     "help_alias": boolean;
 }
-type PreludeParametersTagged = Required<Pick<PreludeParameters, '@type'>> & PreludeParameters;
+type PreludeParamsDictTagged = Required<Pick<PreludeParamsDict, '@type'>> & PreludeParamsDict;
 
 
 /**
- * Output object returned when calling `PreludeParameters(...)`.
+ * Output object returned when calling `PreludeParamsDict(...)`.
  *
  * @interface
  */
@@ -143,7 +143,7 @@ function prelude_params(
     verbose_alias: boolean = false,
     help: boolean = false,
     help_alias: boolean = false,
-): PreludeParametersTagged {
+): PreludeParamsDictTagged {
     const params = {
         "@type": "fsl/prelude" as const,
         "output_unwrap": output_unwrap,
@@ -226,7 +226,7 @@ function prelude_params(
  * @returns Command-line arguments.
  */
 function prelude_cargs(
-    params: PreludeParameters,
+    params: PreludeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -390,7 +390,7 @@ function prelude_cargs(
  * @returns Outputs object.
  */
 function prelude_outputs(
-    params: PreludeParameters,
+    params: PreludeParamsDict,
     execution: Execution,
 ): PreludeOutputs {
     const ret: PreludeOutputs = {
@@ -419,7 +419,7 @@ function prelude_outputs(
  * @returns NamedTuple of outputs (described in `PreludeOutputs`).
  */
 function prelude_execute(
-    params: PreludeParameters,
+    params: PreludeParamsDict,
     runner: Runner | null = null,
 ): PreludeOutputs {
     runner = runner || getGlobalRunner();
@@ -516,6 +516,8 @@ function prelude(
 export {
       PRELUDE_METADATA,
       PreludeOutputs,
+      PreludeParamsDict,
+      PreludeParamsDictTagged,
       prelude,
       prelude_execute,
       prelude_params,

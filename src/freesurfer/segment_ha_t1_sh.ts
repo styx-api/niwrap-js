@@ -11,7 +11,7 @@ const SEGMENT_HA_T1_SH_METADATA: Metadata = {
 };
 
 
-interface SegmentHaT1ShParameters {
+interface SegmentHaT1ShParamsDict {
     "@type"?: "freesurfer/segmentHA_T1.sh";
     "input_image": InputPathType;
     "output_directory": string;
@@ -19,11 +19,11 @@ interface SegmentHaT1ShParameters {
     "verbose": boolean;
     "debug": boolean;
 }
-type SegmentHaT1ShParametersTagged = Required<Pick<SegmentHaT1ShParameters, '@type'>> & SegmentHaT1ShParameters;
+type SegmentHaT1ShParamsDictTagged = Required<Pick<SegmentHaT1ShParamsDict, '@type'>> & SegmentHaT1ShParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentHaT1ShParameters(...)`.
+ * Output object returned when calling `SegmentHaT1ShParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function segment_ha_t1_sh_params(
     brain_mask: InputPathType | null = null,
     verbose: boolean = false,
     debug: boolean = false,
-): SegmentHaT1ShParametersTagged {
+): SegmentHaT1ShParamsDictTagged {
     const params = {
         "@type": "freesurfer/segmentHA_T1.sh" as const,
         "input_image": input_image,
@@ -84,7 +84,7 @@ function segment_ha_t1_sh_params(
  * @returns Command-line arguments.
  */
 function segment_ha_t1_sh_cargs(
-    params: SegmentHaT1ShParameters,
+    params: SegmentHaT1ShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function segment_ha_t1_sh_cargs(
  * @returns Outputs object.
  */
 function segment_ha_t1_sh_outputs(
-    params: SegmentHaT1ShParameters,
+    params: SegmentHaT1ShParamsDict,
     execution: Execution,
 ): SegmentHaT1ShOutputs {
     const ret: SegmentHaT1ShOutputs = {
@@ -143,7 +143,7 @@ function segment_ha_t1_sh_outputs(
  * @returns NamedTuple of outputs (described in `SegmentHaT1ShOutputs`).
  */
 function segment_ha_t1_sh_execute(
-    params: SegmentHaT1ShParameters,
+    params: SegmentHaT1ShParamsDict,
     runner: Runner | null = null,
 ): SegmentHaT1ShOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function segment_ha_t1_sh(
 export {
       SEGMENT_HA_T1_SH_METADATA,
       SegmentHaT1ShOutputs,
+      SegmentHaT1ShParamsDict,
+      SegmentHaT1ShParamsDictTagged,
       segment_ha_t1_sh,
       segment_ha_t1_sh_execute,
       segment_ha_t1_sh_params,

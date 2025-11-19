@@ -11,16 +11,16 @@ const MRIS_TOPO_FIXER_METADATA: Metadata = {
 };
 
 
-interface MrisTopoFixerParameters {
+interface MrisTopoFixerParamsDict {
     "@type"?: "freesurfer/mris_topo_fixer";
     "input_surface": InputPathType;
     "output_surface": string;
 }
-type MrisTopoFixerParametersTagged = Required<Pick<MrisTopoFixerParameters, '@type'>> & MrisTopoFixerParameters;
+type MrisTopoFixerParamsDictTagged = Required<Pick<MrisTopoFixerParamsDict, '@type'>> & MrisTopoFixerParamsDict;
 
 
 /**
- * Output object returned when calling `MrisTopoFixerParameters(...)`.
+ * Output object returned when calling `MrisTopoFixerParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MrisTopoFixerOutputs {
 function mris_topo_fixer_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisTopoFixerParametersTagged {
+): MrisTopoFixerParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_topo_fixer" as const,
         "input_surface": input_surface,
@@ -66,7 +66,7 @@ function mris_topo_fixer_params(
  * @returns Command-line arguments.
  */
 function mris_topo_fixer_cargs(
-    params: MrisTopoFixerParameters,
+    params: MrisTopoFixerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mris_topo_fixer_cargs(
  * @returns Outputs object.
  */
 function mris_topo_fixer_outputs(
-    params: MrisTopoFixerParameters,
+    params: MrisTopoFixerParamsDict,
     execution: Execution,
 ): MrisTopoFixerOutputs {
     const ret: MrisTopoFixerOutputs = {
@@ -112,7 +112,7 @@ function mris_topo_fixer_outputs(
  * @returns NamedTuple of outputs (described in `MrisTopoFixerOutputs`).
  */
 function mris_topo_fixer_execute(
-    params: MrisTopoFixerParameters,
+    params: MrisTopoFixerParamsDict,
     runner: Runner | null = null,
 ): MrisTopoFixerOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mris_topo_fixer(
 export {
       MRIS_TOPO_FIXER_METADATA,
       MrisTopoFixerOutputs,
+      MrisTopoFixerParamsDict,
+      MrisTopoFixerParamsDictTagged,
       mris_topo_fixer,
       mris_topo_fixer_execute,
       mris_topo_fixer_params,

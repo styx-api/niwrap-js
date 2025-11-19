@@ -11,18 +11,18 @@ const SRATIO_METADATA: Metadata = {
 };
 
 
-interface SratioParameters {
+interface SratioParamsDict {
     "@type"?: "freesurfer/sratio";
     "value_a": number;
     "value_b": number;
     "abs_flag": boolean;
     "mask_threshold"?: number | null | undefined;
 }
-type SratioParametersTagged = Required<Pick<SratioParameters, '@type'>> & SratioParameters;
+type SratioParamsDictTagged = Required<Pick<SratioParamsDict, '@type'>> & SratioParamsDict;
 
 
 /**
- * Output object returned when calling `SratioParameters(...)`.
+ * Output object returned when calling `SratioParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function sratio_params(
     value_b: number,
     abs_flag: boolean = false,
     mask_threshold: number | null = null,
-): SratioParametersTagged {
+): SratioParamsDictTagged {
     const params = {
         "@type": "freesurfer/sratio" as const,
         "value_a": value_a,
@@ -76,7 +76,7 @@ function sratio_params(
  * @returns Command-line arguments.
  */
 function sratio_cargs(
-    params: SratioParameters,
+    params: SratioParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function sratio_cargs(
  * @returns Outputs object.
  */
 function sratio_outputs(
-    params: SratioParameters,
+    params: SratioParamsDict,
     execution: Execution,
 ): SratioOutputs {
     const ret: SratioOutputs = {
@@ -131,7 +131,7 @@ function sratio_outputs(
  * @returns NamedTuple of outputs (described in `SratioOutputs`).
  */
 function sratio_execute(
-    params: SratioParameters,
+    params: SratioParamsDict,
     runner: Runner | null = null,
 ): SratioOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function sratio(
 export {
       SRATIO_METADATA,
       SratioOutputs,
+      SratioParamsDict,
+      SratioParamsDictTagged,
       sratio,
       sratio_execute,
       sratio_params,

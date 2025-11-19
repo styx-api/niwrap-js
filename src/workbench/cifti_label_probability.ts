@@ -10,17 +10,17 @@ const CIFTI_LABEL_PROBABILITY_METADATA: Metadata = {
 };
 
 
-interface CiftiLabelProbabilityParameters {
+interface CiftiLabelProbabilityParamsDict {
     "@type"?: "workbench/cifti-label-probability";
     "probability-dscalar-out": string;
     "exclude-unlabeled": boolean;
     "label-maps": InputPathType;
 }
-type CiftiLabelProbabilityParametersTagged = Required<Pick<CiftiLabelProbabilityParameters, '@type'>> & CiftiLabelProbabilityParameters;
+type CiftiLabelProbabilityParamsDictTagged = Required<Pick<CiftiLabelProbabilityParamsDict, '@type'>> & CiftiLabelProbabilityParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiLabelProbabilityParameters(...)`.
+ * Output object returned when calling `CiftiLabelProbabilityParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function cifti_label_probability_params(
     probability_dscalar_out: string,
     label_maps: InputPathType,
     exclude_unlabeled: boolean = false,
-): CiftiLabelProbabilityParametersTagged {
+): CiftiLabelProbabilityParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-probability" as const,
         "probability-dscalar-out": probability_dscalar_out,
@@ -69,7 +69,7 @@ function cifti_label_probability_params(
  * @returns Command-line arguments.
  */
 function cifti_label_probability_cargs(
-    params: CiftiLabelProbabilityParameters,
+    params: CiftiLabelProbabilityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function cifti_label_probability_cargs(
  * @returns Outputs object.
  */
 function cifti_label_probability_outputs(
-    params: CiftiLabelProbabilityParameters,
+    params: CiftiLabelProbabilityParamsDict,
     execution: Execution,
 ): CiftiLabelProbabilityOutputs {
     const ret: CiftiLabelProbabilityOutputs = {
@@ -117,7 +117,7 @@ function cifti_label_probability_outputs(
  * @returns NamedTuple of outputs (described in `CiftiLabelProbabilityOutputs`).
  */
 function cifti_label_probability_execute(
-    params: CiftiLabelProbabilityParameters,
+    params: CiftiLabelProbabilityParamsDict,
     runner: Runner | null = null,
 ): CiftiLabelProbabilityOutputs {
     runner = runner || getGlobalRunner();
@@ -156,6 +156,8 @@ function cifti_label_probability(
 export {
       CIFTI_LABEL_PROBABILITY_METADATA,
       CiftiLabelProbabilityOutputs,
+      CiftiLabelProbabilityParamsDict,
+      CiftiLabelProbabilityParamsDictTagged,
       cifti_label_probability,
       cifti_label_probability_execute,
       cifti_label_probability_params,

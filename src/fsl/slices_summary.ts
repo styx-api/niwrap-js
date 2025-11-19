@@ -11,7 +11,7 @@ const SLICES_SUMMARY_METADATA: Metadata = {
 };
 
 
-interface SlicesSummaryParameters {
+interface SlicesSummaryParamsDict {
     "@type"?: "fsl/slices_summary";
     "4d_input_file": InputPathType;
     "threshold": number;
@@ -24,11 +24,11 @@ interface SlicesSummaryParameters {
     "output_png": string;
     "timepoints": string;
 }
-type SlicesSummaryParametersTagged = Required<Pick<SlicesSummaryParameters, '@type'>> & SlicesSummaryParameters;
+type SlicesSummaryParamsDictTagged = Required<Pick<SlicesSummaryParamsDict, '@type'>> & SlicesSummaryParamsDict;
 
 
 /**
- * Output object returned when calling `SlicesSummaryParameters(...)`.
+ * Output object returned when calling `SlicesSummaryParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function slices_summary_params(
     single_slice_flag: boolean = false,
     darker_background_flag: boolean = false,
     dumb_rule_flag: boolean = false,
-): SlicesSummaryParametersTagged {
+): SlicesSummaryParamsDictTagged {
     const params = {
         "@type": "fsl/slices_summary" as const,
         "4d_input_file": v_4d_input_file,
@@ -102,7 +102,7 @@ function slices_summary_params(
  * @returns Command-line arguments.
  */
 function slices_summary_cargs(
-    params: SlicesSummaryParameters,
+    params: SlicesSummaryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function slices_summary_cargs(
  * @returns Outputs object.
  */
 function slices_summary_outputs(
-    params: SlicesSummaryParameters,
+    params: SlicesSummaryParamsDict,
     execution: Execution,
 ): SlicesSummaryOutputs {
     const ret: SlicesSummaryOutputs = {
@@ -163,7 +163,7 @@ function slices_summary_outputs(
  * @returns NamedTuple of outputs (described in `SlicesSummaryOutputs`).
  */
 function slices_summary_execute(
-    params: SlicesSummaryParameters,
+    params: SlicesSummaryParamsDict,
     runner: Runner | null = null,
 ): SlicesSummaryOutputs {
     runner = runner || getGlobalRunner();
@@ -220,6 +220,8 @@ function slices_summary(
 export {
       SLICES_SUMMARY_METADATA,
       SlicesSummaryOutputs,
+      SlicesSummaryParamsDict,
+      SlicesSummaryParamsDictTagged,
       slices_summary,
       slices_summary_execute,
       slices_summary_params,

@@ -11,7 +11,7 @@ const FROM3D_METADATA: Metadata = {
 };
 
 
-interface From3dParameters {
+interface From3dParamsDict {
     "@type"?: "afni/from3d";
     "verbose": boolean;
     "nsize": boolean;
@@ -24,11 +24,11 @@ interface From3dParameters {
     "input": InputPathType;
     "prefix": string;
 }
-type From3dParametersTagged = Required<Pick<From3dParameters, '@type'>> & From3dParameters;
+type From3dParamsDictTagged = Required<Pick<From3dParamsDict, '@type'>> & From3dParamsDict;
 
 
 /**
- * Output object returned when calling `From3dParameters(...)`.
+ * Output object returned when calling `From3dParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function from3d_params(
     zlast: number | null = null,
     tfirst: number | null = null,
     tlast: number | null = null,
-): From3dParametersTagged {
+): From3dParamsDictTagged {
     const params = {
         "@type": "afni/from3d" as const,
         "verbose": verbose,
@@ -102,7 +102,7 @@ function from3d_params(
  * @returns Command-line arguments.
  */
 function from3d_cargs(
-    params: From3dParameters,
+    params: From3dParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function from3d_cargs(
  * @returns Outputs object.
  */
 function from3d_outputs(
-    params: From3dParameters,
+    params: From3dParamsDict,
     execution: Execution,
 ): From3dOutputs {
     const ret: From3dOutputs = {
@@ -189,7 +189,7 @@ function from3d_outputs(
  * @returns NamedTuple of outputs (described in `From3dOutputs`).
  */
 function from3d_execute(
-    params: From3dParameters,
+    params: From3dParamsDict,
     runner: Runner | null = null,
 ): From3dOutputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function from3d(
 export {
       FROM3D_METADATA,
       From3dOutputs,
+      From3dParamsDict,
+      From3dParamsDictTagged,
       from3d,
       from3d_execute,
       from3d_params,

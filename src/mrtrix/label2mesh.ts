@@ -11,15 +11,15 @@ const LABEL2MESH_METADATA: Metadata = {
 };
 
 
-interface Label2meshConfigParameters {
+interface Label2meshConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Label2meshConfigParametersTagged = Required<Pick<Label2meshConfigParameters, '@type'>> & Label2meshConfigParameters;
+type Label2meshConfigParamsDictTagged = Required<Pick<Label2meshConfigParamsDict, '@type'>> & Label2meshConfigParamsDict;
 
 
-interface Label2meshParameters {
+interface Label2meshParamsDict {
     "@type"?: "mrtrix/label2mesh";
     "blocky": boolean;
     "info": boolean;
@@ -27,13 +27,13 @@ interface Label2meshParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Label2meshConfigParameters> | null | undefined;
+    "config"?: Array<Label2meshConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "nodes_in": InputPathType;
     "mesh_out": string;
 }
-type Label2meshParametersTagged = Required<Pick<Label2meshParameters, '@type'>> & Label2meshParameters;
+type Label2meshParamsDictTagged = Required<Pick<Label2meshParamsDict, '@type'>> & Label2meshParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type Label2meshParametersTagged = Required<Pick<Label2meshParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function label2mesh_config_params(
+function label2mesh_config(
     key: string,
     value: string,
-): Label2meshConfigParametersTagged {
+): Label2meshConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function label2mesh_config_params(
  * @returns Command-line arguments.
  */
 function label2mesh_config_cargs(
-    params: Label2meshConfigParameters,
+    params: Label2meshConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function label2mesh_config_cargs(
 
 
 /**
- * Output object returned when calling `Label2meshParameters(...)`.
+ * Output object returned when calling `Label2meshParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function label2mesh_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Label2meshConfigParameters> | null = null,
+    config: Array<Label2meshConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Label2meshParametersTagged {
+): Label2meshParamsDictTagged {
     const params = {
         "@type": "mrtrix/label2mesh" as const,
         "blocky": blocky,
@@ -155,7 +155,7 @@ function label2mesh_params(
  * @returns Command-line arguments.
  */
 function label2mesh_cargs(
-    params: Label2meshParameters,
+    params: Label2meshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -205,7 +205,7 @@ function label2mesh_cargs(
  * @returns Outputs object.
  */
 function label2mesh_outputs(
-    params: Label2meshParameters,
+    params: Label2meshParamsDict,
     execution: Execution,
 ): Label2meshOutputs {
     const ret: Label2meshOutputs = {
@@ -237,7 +237,7 @@ function label2mesh_outputs(
  * @returns NamedTuple of outputs (described in `Label2meshOutputs`).
  */
 function label2mesh_execute(
-    params: Label2meshParameters,
+    params: Label2meshParamsDict,
     runner: Runner | null = null,
 ): Label2meshOutputs {
     runner = runner || getGlobalRunner();
@@ -289,7 +289,7 @@ function label2mesh(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Label2meshConfigParameters> | null = null,
+    config: Array<Label2meshConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -301,9 +301,13 @@ function label2mesh(
 
 export {
       LABEL2MESH_METADATA,
+      Label2meshConfigParamsDict,
+      Label2meshConfigParamsDictTagged,
       Label2meshOutputs,
+      Label2meshParamsDict,
+      Label2meshParamsDictTagged,
       label2mesh,
-      label2mesh_config_params,
+      label2mesh_config,
       label2mesh_execute,
       label2mesh_params,
 };

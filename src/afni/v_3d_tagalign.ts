@@ -11,7 +11,7 @@ const V_3D_TAGALIGN_METADATA: Metadata = {
 };
 
 
-interface V3dTagalignParameters {
+interface V3dTagalignParamsDict {
     "@type"?: "afni/3dTagalign";
     "input_dataset": InputPathType;
     "master_dataset": InputPathType;
@@ -29,11 +29,11 @@ interface V3dTagalignParameters {
     "nearest_neighbor_interpolation": boolean;
     "quintic_interpolation": boolean;
 }
-type V3dTagalignParametersTagged = Required<Pick<V3dTagalignParameters, '@type'>> & V3dTagalignParameters;
+type V3dTagalignParamsDictTagged = Required<Pick<V3dTagalignParamsDict, '@type'>> & V3dTagalignParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTagalignParameters(...)`.
+ * Output object returned when calling `V3dTagalignParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function v_3d_tagalign_params(
     cubic_interpolation: boolean = false,
     nearest_neighbor_interpolation: boolean = false,
     quintic_interpolation: boolean = false,
-): V3dTagalignParametersTagged {
+): V3dTagalignParamsDictTagged {
     const params = {
         "@type": "afni/3dTagalign" as const,
         "input_dataset": input_dataset,
@@ -132,7 +132,7 @@ function v_3d_tagalign_params(
  * @returns Command-line arguments.
  */
 function v_3d_tagalign_cargs(
-    params: V3dTagalignParameters,
+    params: V3dTagalignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function v_3d_tagalign_cargs(
  * @returns Outputs object.
  */
 function v_3d_tagalign_outputs(
-    params: V3dTagalignParameters,
+    params: V3dTagalignParamsDict,
     execution: Execution,
 ): V3dTagalignOutputs {
     const ret: V3dTagalignOutputs = {
@@ -231,7 +231,7 @@ function v_3d_tagalign_outputs(
  * @returns NamedTuple of outputs (described in `V3dTagalignOutputs`).
  */
 function v_3d_tagalign_execute(
-    params: V3dTagalignParameters,
+    params: V3dTagalignParamsDict,
     runner: Runner | null = null,
 ): V3dTagalignOutputs {
     runner = runner || getGlobalRunner();
@@ -297,6 +297,8 @@ function v_3d_tagalign(
 
 export {
       V3dTagalignOutputs,
+      V3dTagalignParamsDict,
+      V3dTagalignParamsDictTagged,
       V_3D_TAGALIGN_METADATA,
       v_3d_tagalign,
       v_3d_tagalign_execute,

@@ -11,7 +11,7 @@ const V_3DDELAY_METADATA: Metadata = {
 };
 
 
-interface V3ddelayParameters {
+interface V3ddelayParamsDict {
     "@type"?: "afni/3ddelay";
     "input_file": InputPathType;
     "reference_file": InputPathType;
@@ -38,11 +38,11 @@ interface V3ddelayParameters {
     "asc"?: string | null | undefined;
     "ascts"?: string | null | undefined;
 }
-type V3ddelayParametersTagged = Required<Pick<V3ddelayParameters, '@type'>> & V3ddelayParameters;
+type V3ddelayParamsDictTagged = Required<Pick<V3ddelayParamsDict, '@type'>> & V3ddelayParamsDict;
 
 
 /**
- * Output object returned when calling `V3ddelayParameters(...)`.
+ * Output object returned when calling `V3ddelayParamsDict(...)`.
  *
  * @interface
  */
@@ -125,7 +125,7 @@ function v_3ddelay_params(
     co: number | null = null,
     asc: string | null = null,
     ascts: string | null = null,
-): V3ddelayParametersTagged {
+): V3ddelayParamsDictTagged {
     const params = {
         "@type": "afni/3ddelay" as const,
         "input_file": input_file,
@@ -184,7 +184,7 @@ function v_3ddelay_params(
  * @returns Command-line arguments.
  */
 function v_3ddelay_cargs(
-    params: V3ddelayParameters,
+    params: V3ddelayParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -299,7 +299,7 @@ function v_3ddelay_cargs(
  * @returns Outputs object.
  */
 function v_3ddelay_outputs(
-    params: V3ddelayParameters,
+    params: V3ddelayParamsDict,
     execution: Execution,
 ): V3ddelayOutputs {
     const ret: V3ddelayOutputs = {
@@ -328,7 +328,7 @@ function v_3ddelay_outputs(
  * @returns NamedTuple of outputs (described in `V3ddelayOutputs`).
  */
 function v_3ddelay_execute(
-    params: V3ddelayParameters,
+    params: V3ddelayParamsDict,
     runner: Runner | null = null,
 ): V3ddelayOutputs {
     runner = runner || getGlobalRunner();
@@ -412,6 +412,8 @@ function v_3ddelay(
 
 export {
       V3ddelayOutputs,
+      V3ddelayParamsDict,
+      V3ddelayParamsDictTagged,
       V_3DDELAY_METADATA,
       v_3ddelay,
       v_3ddelay_execute,

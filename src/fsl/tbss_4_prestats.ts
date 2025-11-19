@@ -11,15 +11,15 @@ const TBSS_4_PRESTATS_METADATA: Metadata = {
 };
 
 
-interface Tbss4PrestatsParameters {
+interface Tbss4PrestatsParamsDict {
     "@type"?: "fsl/tbss_4_prestats";
     "threshold": number;
 }
-type Tbss4PrestatsParametersTagged = Required<Pick<Tbss4PrestatsParameters, '@type'>> & Tbss4PrestatsParameters;
+type Tbss4PrestatsParamsDictTagged = Required<Pick<Tbss4PrestatsParamsDict, '@type'>> & Tbss4PrestatsParamsDict;
 
 
 /**
- * Output object returned when calling `Tbss4PrestatsParameters(...)`.
+ * Output object returned when calling `Tbss4PrestatsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface Tbss4PrestatsOutputs {
  */
 function tbss_4_prestats_params(
     threshold: number = 0.2,
-): Tbss4PrestatsParametersTagged {
+): Tbss4PrestatsParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_4_prestats" as const,
         "threshold": threshold,
@@ -58,7 +58,7 @@ function tbss_4_prestats_params(
  * @returns Command-line arguments.
  */
 function tbss_4_prestats_cargs(
-    params: Tbss4PrestatsParameters,
+    params: Tbss4PrestatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function tbss_4_prestats_cargs(
  * @returns Outputs object.
  */
 function tbss_4_prestats_outputs(
-    params: Tbss4PrestatsParameters,
+    params: Tbss4PrestatsParamsDict,
     execution: Execution,
 ): Tbss4PrestatsOutputs {
     const ret: Tbss4PrestatsOutputs = {
@@ -102,7 +102,7 @@ function tbss_4_prestats_outputs(
  * @returns NamedTuple of outputs (described in `Tbss4PrestatsOutputs`).
  */
 function tbss_4_prestats_execute(
-    params: Tbss4PrestatsParameters,
+    params: Tbss4PrestatsParamsDict,
     runner: Runner | null = null,
 ): Tbss4PrestatsOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function tbss_4_prestats(
 export {
       TBSS_4_PRESTATS_METADATA,
       Tbss4PrestatsOutputs,
+      Tbss4PrestatsParamsDict,
+      Tbss4PrestatsParamsDictTagged,
       tbss_4_prestats,
       tbss_4_prestats_execute,
       tbss_4_prestats_params,

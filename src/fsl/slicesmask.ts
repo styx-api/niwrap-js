@@ -11,17 +11,17 @@ const SLICESMASK_METADATA: Metadata = {
 };
 
 
-interface SlicesmaskParameters {
+interface SlicesmaskParamsDict {
     "@type"?: "fsl/slicesmask";
     "image": InputPathType;
     "mask": InputPathType;
     "output": string;
 }
-type SlicesmaskParametersTagged = Required<Pick<SlicesmaskParameters, '@type'>> & SlicesmaskParameters;
+type SlicesmaskParamsDictTagged = Required<Pick<SlicesmaskParamsDict, '@type'>> & SlicesmaskParamsDict;
 
 
 /**
- * Output object returned when calling `SlicesmaskParameters(...)`.
+ * Output object returned when calling `SlicesmaskParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function slicesmask_params(
     image: InputPathType,
     mask: InputPathType,
     output: string,
-): SlicesmaskParametersTagged {
+): SlicesmaskParamsDictTagged {
     const params = {
         "@type": "fsl/slicesmask" as const,
         "image": image,
@@ -70,7 +70,7 @@ function slicesmask_params(
  * @returns Command-line arguments.
  */
 function slicesmask_cargs(
-    params: SlicesmaskParameters,
+    params: SlicesmaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function slicesmask_cargs(
  * @returns Outputs object.
  */
 function slicesmask_outputs(
-    params: SlicesmaskParameters,
+    params: SlicesmaskParamsDict,
     execution: Execution,
 ): SlicesmaskOutputs {
     const ret: SlicesmaskOutputs = {
@@ -117,7 +117,7 @@ function slicesmask_outputs(
  * @returns NamedTuple of outputs (described in `SlicesmaskOutputs`).
  */
 function slicesmask_execute(
-    params: SlicesmaskParameters,
+    params: SlicesmaskParamsDict,
     runner: Runner | null = null,
 ): SlicesmaskOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function slicesmask(
 export {
       SLICESMASK_METADATA,
       SlicesmaskOutputs,
+      SlicesmaskParamsDict,
+      SlicesmaskParamsDictTagged,
       slicesmask,
       slicesmask_execute,
       slicesmask_params,

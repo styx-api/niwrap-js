@@ -11,7 +11,7 @@ const SEGMENT_SUBREGIONS_METADATA: Metadata = {
 };
 
 
-interface SegmentSubregionsParameters {
+interface SegmentSubregionsParamsDict {
     "@type"?: "freesurfer/segment_subregions";
     "structure": string;
     "cross"?: string | null | undefined;
@@ -23,11 +23,11 @@ interface SegmentSubregionsParameters {
     "debug": boolean;
     "threads"?: number | null | undefined;
 }
-type SegmentSubregionsParametersTagged = Required<Pick<SegmentSubregionsParameters, '@type'>> & SegmentSubregionsParameters;
+type SegmentSubregionsParamsDictTagged = Required<Pick<SegmentSubregionsParamsDict, '@type'>> & SegmentSubregionsParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubregionsParameters(...)`.
+ * Output object returned when calling `SegmentSubregionsParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function segment_subregions_params(
     out_dir: string | null = null,
     debug: boolean = false,
     threads: number | null = null,
-): SegmentSubregionsParametersTagged {
+): SegmentSubregionsParamsDictTagged {
     const params = {
         "@type": "freesurfer/segment_subregions" as const,
         "structure": structure,
@@ -104,7 +104,7 @@ function segment_subregions_params(
  * @returns Command-line arguments.
  */
 function segment_subregions_cargs(
-    params: SegmentSubregionsParameters,
+    params: SegmentSubregionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,7 +168,7 @@ function segment_subregions_cargs(
  * @returns Outputs object.
  */
 function segment_subregions_outputs(
-    params: SegmentSubregionsParameters,
+    params: SegmentSubregionsParamsDict,
     execution: Execution,
 ): SegmentSubregionsOutputs {
     const ret: SegmentSubregionsOutputs = {
@@ -193,7 +193,7 @@ function segment_subregions_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubregionsOutputs`).
  */
 function segment_subregions_execute(
-    params: SegmentSubregionsParameters,
+    params: SegmentSubregionsParamsDict,
     runner: Runner | null = null,
 ): SegmentSubregionsOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function segment_subregions(
 export {
       SEGMENT_SUBREGIONS_METADATA,
       SegmentSubregionsOutputs,
+      SegmentSubregionsParamsDict,
+      SegmentSubregionsParamsDictTagged,
       segment_subregions,
       segment_subregions_execute,
       segment_subregions_params,

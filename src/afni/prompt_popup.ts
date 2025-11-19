@@ -11,7 +11,7 @@ const PROMPT_POPUP_METADATA: Metadata = {
 };
 
 
-interface PromptPopupParameters {
+interface PromptPopupParamsDict {
     "@type"?: "afni/prompt_popup";
     "message": string;
     "message_pause"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface PromptPopupParameters {
     "timeout"?: number | null | undefined;
     "timeout_to"?: number | null | undefined;
 }
-type PromptPopupParametersTagged = Required<Pick<PromptPopupParameters, '@type'>> & PromptPopupParameters;
+type PromptPopupParamsDictTagged = Required<Pick<PromptPopupParamsDict, '@type'>> & PromptPopupParamsDict;
 
 
 /**
- * Output object returned when calling `PromptPopupParameters(...)`.
+ * Output object returned when calling `PromptPopupParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function prompt_popup_params(
     buttons_b: Array<string> | null = null,
     timeout: number | null = null,
     timeout_to: number | null = null,
-): PromptPopupParametersTagged {
+): PromptPopupParamsDictTagged {
     const params = {
         "@type": "afni/prompt_popup" as const,
         "message": message,
@@ -88,7 +88,7 @@ function prompt_popup_params(
  * @returns Command-line arguments.
  */
 function prompt_popup_cargs(
-    params: PromptPopupParameters,
+    params: PromptPopupParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function prompt_popup_cargs(
  * @returns Outputs object.
  */
 function prompt_popup_outputs(
-    params: PromptPopupParameters,
+    params: PromptPopupParamsDict,
     execution: Execution,
 ): PromptPopupOutputs {
     const ret: PromptPopupOutputs = {
@@ -165,7 +165,7 @@ function prompt_popup_outputs(
  * @returns NamedTuple of outputs (described in `PromptPopupOutputs`).
  */
 function prompt_popup_execute(
-    params: PromptPopupParameters,
+    params: PromptPopupParamsDict,
     runner: Runner | null = null,
 ): PromptPopupOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function prompt_popup(
 export {
       PROMPT_POPUP_METADATA,
       PromptPopupOutputs,
+      PromptPopupParamsDict,
+      PromptPopupParamsDictTagged,
       prompt_popup,
       prompt_popup_execute,
       prompt_popup_params,

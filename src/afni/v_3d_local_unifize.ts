@@ -11,7 +11,7 @@ const V_3D_LOCAL_UNIFIZE_METADATA: Metadata = {
 };
 
 
-interface V3dLocalUnifizeParameters {
+interface V3dLocalUnifizeParamsDict {
     "@type"?: "afni/3dLocalUnifize";
     "input": InputPathType;
     "output": string;
@@ -23,11 +23,11 @@ interface V3dLocalUnifizeParameters {
     "local_mask"?: string | null | undefined;
     "filter_thr"?: number | null | undefined;
 }
-type V3dLocalUnifizeParametersTagged = Required<Pick<V3dLocalUnifizeParameters, '@type'>> & V3dLocalUnifizeParameters;
+type V3dLocalUnifizeParamsDictTagged = Required<Pick<V3dLocalUnifizeParamsDict, '@type'>> & V3dLocalUnifizeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLocalUnifizeParameters(...)`.
+ * Output object returned when calling `V3dLocalUnifizeParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_3d_local_unifize_params(
     local_perc: number | null = null,
     local_mask: string | null = null,
     filter_thr: number | null = null,
-): V3dLocalUnifizeParametersTagged {
+): V3dLocalUnifizeParamsDictTagged {
     const params = {
         "@type": "afni/3dLocalUnifize" as const,
         "input": input,
@@ -104,7 +104,7 @@ function v_3d_local_unifize_params(
  * @returns Command-line arguments.
  */
 function v_3d_local_unifize_cargs(
-    params: V3dLocalUnifizeParameters,
+    params: V3dLocalUnifizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function v_3d_local_unifize_cargs(
  * @returns Outputs object.
  */
 function v_3d_local_unifize_outputs(
-    params: V3dLocalUnifizeParameters,
+    params: V3dLocalUnifizeParamsDict,
     execution: Execution,
 ): V3dLocalUnifizeOutputs {
     const ret: V3dLocalUnifizeOutputs = {
@@ -189,7 +189,7 @@ function v_3d_local_unifize_outputs(
  * @returns NamedTuple of outputs (described in `V3dLocalUnifizeOutputs`).
  */
 function v_3d_local_unifize_execute(
-    params: V3dLocalUnifizeParameters,
+    params: V3dLocalUnifizeParamsDict,
     runner: Runner | null = null,
 ): V3dLocalUnifizeOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function v_3d_local_unifize(
 
 export {
       V3dLocalUnifizeOutputs,
+      V3dLocalUnifizeParamsDict,
+      V3dLocalUnifizeParamsDictTagged,
       V_3D_LOCAL_UNIFIZE_METADATA,
       v_3d_local_unifize,
       v_3d_local_unifize_execute,

@@ -10,20 +10,20 @@ const WBSPARSE_MERGE_DENSE_METADATA: Metadata = {
 };
 
 
-interface WbsparseMergeDenseWbsparseParameters {
+interface WbsparseMergeDenseWbsparseParamsDict {
     "@type"?: "wbsparse";
     "wbsparse-in": string;
 }
-type WbsparseMergeDenseWbsparseParametersTagged = Required<Pick<WbsparseMergeDenseWbsparseParameters, '@type'>> & WbsparseMergeDenseWbsparseParameters;
+type WbsparseMergeDenseWbsparseParamsDictTagged = Required<Pick<WbsparseMergeDenseWbsparseParamsDict, '@type'>> & WbsparseMergeDenseWbsparseParamsDict;
 
 
-interface WbsparseMergeDenseParameters {
+interface WbsparseMergeDenseParamsDict {
     "@type"?: "workbench/wbsparse-merge-dense";
-    "wbsparse"?: Array<WbsparseMergeDenseWbsparseParameters> | null | undefined;
+    "wbsparse"?: Array<WbsparseMergeDenseWbsparseParamsDict> | null | undefined;
     "direction": string;
     "wbsparse-out": string;
 }
-type WbsparseMergeDenseParametersTagged = Required<Pick<WbsparseMergeDenseParameters, '@type'>> & WbsparseMergeDenseParameters;
+type WbsparseMergeDenseParamsDictTagged = Required<Pick<WbsparseMergeDenseParamsDict, '@type'>> & WbsparseMergeDenseParamsDict;
 
 
 /**
@@ -33,9 +33,9 @@ type WbsparseMergeDenseParametersTagged = Required<Pick<WbsparseMergeDenseParame
  *
  * @returns Parameter dictionary
  */
-function wbsparse_merge_dense_wbsparse_params(
+function wbsparse_merge_dense_wbsparse(
     wbsparse_in: string,
-): WbsparseMergeDenseWbsparseParametersTagged {
+): WbsparseMergeDenseWbsparseParamsDictTagged {
     const params = {
         "@type": "wbsparse" as const,
         "wbsparse-in": wbsparse_in,
@@ -53,7 +53,7 @@ function wbsparse_merge_dense_wbsparse_params(
  * @returns Command-line arguments.
  */
 function wbsparse_merge_dense_wbsparse_cargs(
-    params: WbsparseMergeDenseWbsparseParameters,
+    params: WbsparseMergeDenseWbsparseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -66,7 +66,7 @@ function wbsparse_merge_dense_wbsparse_cargs(
 
 
 /**
- * Output object returned when calling `WbsparseMergeDenseParameters(...)`.
+ * Output object returned when calling `WbsparseMergeDenseParamsDict(...)`.
  *
  * @interface
  */
@@ -90,8 +90,8 @@ interface WbsparseMergeDenseOutputs {
 function wbsparse_merge_dense_params(
     direction: string,
     wbsparse_out: string,
-    wbsparse: Array<WbsparseMergeDenseWbsparseParameters> | null = null,
-): WbsparseMergeDenseParametersTagged {
+    wbsparse: Array<WbsparseMergeDenseWbsparseParamsDict> | null = null,
+): WbsparseMergeDenseParamsDictTagged {
     const params = {
         "@type": "workbench/wbsparse-merge-dense" as const,
         "direction": direction,
@@ -113,7 +113,7 @@ function wbsparse_merge_dense_params(
  * @returns Command-line arguments.
  */
 function wbsparse_merge_dense_cargs(
-    params: WbsparseMergeDenseParameters,
+    params: WbsparseMergeDenseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function wbsparse_merge_dense_cargs(
  * @returns Outputs object.
  */
 function wbsparse_merge_dense_outputs(
-    params: WbsparseMergeDenseParameters,
+    params: WbsparseMergeDenseParamsDict,
     execution: Execution,
 ): WbsparseMergeDenseOutputs {
     const ret: WbsparseMergeDenseOutputs = {
@@ -160,7 +160,7 @@ function wbsparse_merge_dense_outputs(
  * @returns NamedTuple of outputs (described in `WbsparseMergeDenseOutputs`).
  */
 function wbsparse_merge_dense_execute(
-    params: WbsparseMergeDenseParameters,
+    params: WbsparseMergeDenseParamsDict,
     runner: Runner | null = null,
 ): WbsparseMergeDenseOutputs {
     runner = runner || getGlobalRunner();
@@ -188,7 +188,7 @@ function wbsparse_merge_dense_execute(
 function wbsparse_merge_dense(
     direction: string,
     wbsparse_out: string,
-    wbsparse: Array<WbsparseMergeDenseWbsparseParameters> | null = null,
+    wbsparse: Array<WbsparseMergeDenseWbsparseParamsDict> | null = null,
     runner: Runner | null = null,
 ): WbsparseMergeDenseOutputs {
     const params = wbsparse_merge_dense_params(direction, wbsparse_out, wbsparse)
@@ -199,8 +199,12 @@ function wbsparse_merge_dense(
 export {
       WBSPARSE_MERGE_DENSE_METADATA,
       WbsparseMergeDenseOutputs,
+      WbsparseMergeDenseParamsDict,
+      WbsparseMergeDenseParamsDictTagged,
+      WbsparseMergeDenseWbsparseParamsDict,
+      WbsparseMergeDenseWbsparseParamsDictTagged,
       wbsparse_merge_dense,
       wbsparse_merge_dense_execute,
       wbsparse_merge_dense_params,
-      wbsparse_merge_dense_wbsparse_params,
+      wbsparse_merge_dense_wbsparse,
 };

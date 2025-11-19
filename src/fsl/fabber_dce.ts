@@ -11,7 +11,7 @@ const FABBER_DCE_METADATA: Metadata = {
 };
 
 
-interface FabberDceParameters {
+interface FabberDceParamsDict {
     "@type"?: "fsl/fabber_dce";
     "output_directory": string;
     "inference_method": string;
@@ -50,11 +50,11 @@ interface FabberDceParameters {
     "option_file"?: InputPathType | null | undefined;
     "debug": boolean;
 }
-type FabberDceParametersTagged = Required<Pick<FabberDceParameters, '@type'>> & FabberDceParameters;
+type FabberDceParamsDictTagged = Required<Pick<FabberDceParamsDict, '@type'>> & FabberDceParamsDict;
 
 
 /**
- * Output object returned when calling `FabberDceParameters(...)`.
+ * Output object returned when calling `FabberDceParamsDict(...)`.
  *
  * @interface
  */
@@ -149,7 +149,7 @@ function fabber_dce_params(
     save_free_energy: boolean = false,
     option_file: InputPathType | null = null,
     debug: boolean = false,
-): FabberDceParametersTagged {
+): FabberDceParamsDictTagged {
     const params = {
         "@type": "fsl/fabber_dce" as const,
         "output_directory": output_directory,
@@ -222,7 +222,7 @@ function fabber_dce_params(
  * @returns Command-line arguments.
  */
 function fabber_dce_cargs(
-    params: FabberDceParameters,
+    params: FabberDceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -382,7 +382,7 @@ function fabber_dce_cargs(
  * @returns Outputs object.
  */
 function fabber_dce_outputs(
-    params: FabberDceParameters,
+    params: FabberDceParamsDict,
     execution: Execution,
 ): FabberDceOutputs {
     const ret: FabberDceOutputs = {
@@ -408,7 +408,7 @@ function fabber_dce_outputs(
  * @returns NamedTuple of outputs (described in `FabberDceOutputs`).
  */
 function fabber_dce_execute(
-    params: FabberDceParameters,
+    params: FabberDceParamsDict,
     runner: Runner | null = null,
 ): FabberDceOutputs {
     runner = runner || getGlobalRunner();
@@ -517,6 +517,8 @@ function fabber_dce(
 export {
       FABBER_DCE_METADATA,
       FabberDceOutputs,
+      FabberDceParamsDict,
+      FabberDceParamsDictTagged,
       fabber_dce,
       fabber_dce_execute,
       fabber_dce_params,

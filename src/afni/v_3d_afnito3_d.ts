@@ -11,18 +11,18 @@ const V_3D_AFNITO3_D_METADATA: Metadata = {
 };
 
 
-interface V3dAfnito3DParameters {
+interface V3dAfnito3DParamsDict {
     "@type"?: "afni/3dAFNIto3D";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
     "binary": boolean;
     "text": boolean;
 }
-type V3dAfnito3DParametersTagged = Required<Pick<V3dAfnito3DParameters, '@type'>> & V3dAfnito3DParameters;
+type V3dAfnito3DParamsDictTagged = Required<Pick<V3dAfnito3DParamsDict, '@type'>> & V3dAfnito3DParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAfnito3DParameters(...)`.
+ * Output object returned when calling `V3dAfnito3DParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function v_3d_afnito3_d_params(
     prefix: string | null = null,
     binary: boolean = false,
     text: boolean = false,
-): V3dAfnito3DParametersTagged {
+): V3dAfnito3DParamsDictTagged {
     const params = {
         "@type": "afni/3dAFNIto3D" as const,
         "dataset": dataset,
@@ -76,7 +76,7 @@ function v_3d_afnito3_d_params(
  * @returns Command-line arguments.
  */
 function v_3d_afnito3_d_cargs(
-    params: V3dAfnito3DParameters,
+    params: V3dAfnito3DParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function v_3d_afnito3_d_cargs(
  * @returns Outputs object.
  */
 function v_3d_afnito3_d_outputs(
-    params: V3dAfnito3DParameters,
+    params: V3dAfnito3DParamsDict,
     execution: Execution,
 ): V3dAfnito3DOutputs {
     const ret: V3dAfnito3DOutputs = {
@@ -133,7 +133,7 @@ function v_3d_afnito3_d_outputs(
  * @returns NamedTuple of outputs (described in `V3dAfnito3DOutputs`).
  */
 function v_3d_afnito3_d_execute(
-    params: V3dAfnito3DParameters,
+    params: V3dAfnito3DParamsDict,
     runner: Runner | null = null,
 ): V3dAfnito3DOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function v_3d_afnito3_d(
 
 export {
       V3dAfnito3DOutputs,
+      V3dAfnito3DParamsDict,
+      V3dAfnito3DParamsDictTagged,
       V_3D_AFNITO3_D_METADATA,
       v_3d_afnito3_d,
       v_3d_afnito3_d_execute,

@@ -11,17 +11,17 @@ const MRI_EVALUATE_MORPH_METADATA: Metadata = {
 };
 
 
-interface MriEvaluateMorphParameters {
+interface MriEvaluateMorphParamsDict {
     "@type"?: "freesurfer/mri_evaluate_morph";
     "xform_name": InputPathType;
     "segmentation_files": Array<InputPathType>;
     "output_file": string;
 }
-type MriEvaluateMorphParametersTagged = Required<Pick<MriEvaluateMorphParameters, '@type'>> & MriEvaluateMorphParameters;
+type MriEvaluateMorphParamsDictTagged = Required<Pick<MriEvaluateMorphParamsDict, '@type'>> & MriEvaluateMorphParamsDict;
 
 
 /**
- * Output object returned when calling `MriEvaluateMorphParameters(...)`.
+ * Output object returned when calling `MriEvaluateMorphParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_evaluate_morph_params(
     xform_name: InputPathType,
     segmentation_files: Array<InputPathType>,
     output_file: string,
-): MriEvaluateMorphParametersTagged {
+): MriEvaluateMorphParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_evaluate_morph" as const,
         "xform_name": xform_name,
@@ -70,7 +70,7 @@ function mri_evaluate_morph_params(
  * @returns Command-line arguments.
  */
 function mri_evaluate_morph_cargs(
-    params: MriEvaluateMorphParameters,
+    params: MriEvaluateMorphParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_evaluate_morph_cargs(
  * @returns Outputs object.
  */
 function mri_evaluate_morph_outputs(
-    params: MriEvaluateMorphParameters,
+    params: MriEvaluateMorphParamsDict,
     execution: Execution,
 ): MriEvaluateMorphOutputs {
     const ret: MriEvaluateMorphOutputs = {
@@ -117,7 +117,7 @@ function mri_evaluate_morph_outputs(
  * @returns NamedTuple of outputs (described in `MriEvaluateMorphOutputs`).
  */
 function mri_evaluate_morph_execute(
-    params: MriEvaluateMorphParameters,
+    params: MriEvaluateMorphParamsDict,
     runner: Runner | null = null,
 ): MriEvaluateMorphOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_evaluate_morph(
 export {
       MRI_EVALUATE_MORPH_METADATA,
       MriEvaluateMorphOutputs,
+      MriEvaluateMorphParamsDict,
+      MriEvaluateMorphParamsDictTagged,
       mri_evaluate_morph,
       mri_evaluate_morph_execute,
       mri_evaluate_morph_params,

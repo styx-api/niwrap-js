@@ -11,7 +11,7 @@ const MRI_FWHM_METADATA: Metadata = {
 };
 
 
-interface MriFwhmParameters {
+interface MriFwhmParamsDict {
     "@type"?: "freesurfer/mri_fwhm";
     "inputvol": InputPathType;
     "outputvol": string;
@@ -49,11 +49,11 @@ interface MriFwhmParameters {
     "checkopts": boolean;
     "version": boolean;
 }
-type MriFwhmParametersTagged = Required<Pick<MriFwhmParameters, '@type'>> & MriFwhmParameters;
+type MriFwhmParamsDictTagged = Required<Pick<MriFwhmParamsDict, '@type'>> & MriFwhmParamsDict;
 
 
 /**
- * Output object returned when calling `MriFwhmParameters(...)`.
+ * Output object returned when calling `MriFwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -170,7 +170,7 @@ function mri_fwhm_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriFwhmParametersTagged {
+): MriFwhmParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fwhm" as const,
         "inputvol": inputvol,
@@ -268,7 +268,7 @@ function mri_fwhm_params(
  * @returns Command-line arguments.
  */
 function mri_fwhm_cargs(
-    params: MriFwhmParameters,
+    params: MriFwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -462,7 +462,7 @@ function mri_fwhm_cargs(
  * @returns Outputs object.
  */
 function mri_fwhm_outputs(
-    params: MriFwhmParameters,
+    params: MriFwhmParamsDict,
     execution: Execution,
 ): MriFwhmOutputs {
     const ret: MriFwhmOutputs = {
@@ -494,7 +494,7 @@ function mri_fwhm_outputs(
  * @returns NamedTuple of outputs (described in `MriFwhmOutputs`).
  */
 function mri_fwhm_execute(
-    params: MriFwhmParameters,
+    params: MriFwhmParamsDict,
     runner: Runner | null = null,
 ): MriFwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -601,6 +601,8 @@ function mri_fwhm(
 export {
       MRI_FWHM_METADATA,
       MriFwhmOutputs,
+      MriFwhmParamsDict,
+      MriFwhmParamsDictTagged,
       mri_fwhm,
       mri_fwhm_execute,
       mri_fwhm_params,

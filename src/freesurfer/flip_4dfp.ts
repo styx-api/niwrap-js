@@ -11,7 +11,7 @@ const FLIP_4DFP_METADATA: Metadata = {
 };
 
 
-interface Flip4dfpParameters {
+interface Flip4dfpParamsDict {
     "@type"?: "freesurfer/flip_4dfp";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface Flip4dfpParameters {
     "flip_z": boolean;
     "endianness"?: "b" | "l" | null | undefined;
 }
-type Flip4dfpParametersTagged = Required<Pick<Flip4dfpParameters, '@type'>> & Flip4dfpParameters;
+type Flip4dfpParamsDictTagged = Required<Pick<Flip4dfpParamsDict, '@type'>> & Flip4dfpParamsDict;
 
 
 /**
- * Output object returned when calling `Flip4dfpParameters(...)`.
+ * Output object returned when calling `Flip4dfpParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function flip_4dfp_params(
     flip_y: boolean = false,
     flip_z: boolean = false,
     endianness: "b" | "l" | null = null,
-): Flip4dfpParametersTagged {
+): Flip4dfpParamsDictTagged {
     const params = {
         "@type": "freesurfer/flip_4dfp" as const,
         "input_image": input_image,
@@ -86,7 +86,7 @@ function flip_4dfp_params(
  * @returns Command-line arguments.
  */
 function flip_4dfp_cargs(
-    params: Flip4dfpParameters,
+    params: Flip4dfpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function flip_4dfp_cargs(
  * @returns Outputs object.
  */
 function flip_4dfp_outputs(
-    params: Flip4dfpParameters,
+    params: Flip4dfpParamsDict,
     execution: Execution,
 ): Flip4dfpOutputs {
     const ret: Flip4dfpOutputs = {
@@ -149,7 +149,7 @@ function flip_4dfp_outputs(
  * @returns NamedTuple of outputs (described in `Flip4dfpOutputs`).
  */
 function flip_4dfp_execute(
-    params: Flip4dfpParameters,
+    params: Flip4dfpParamsDict,
     runner: Runner | null = null,
 ): Flip4dfpOutputs {
     runner = runner || getGlobalRunner();
@@ -198,6 +198,8 @@ function flip_4dfp(
 export {
       FLIP_4DFP_METADATA,
       Flip4dfpOutputs,
+      Flip4dfpParamsDict,
+      Flip4dfpParamsDictTagged,
       flip_4dfp,
       flip_4dfp_execute,
       flip_4dfp_params,

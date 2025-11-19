@@ -11,15 +11,15 @@ const CSVPRINT_METADATA: Metadata = {
 };
 
 
-interface CsvprintParameters {
+interface CsvprintParamsDict {
     "@type"?: "freesurfer/csvprint";
     "infile": InputPathType;
 }
-type CsvprintParametersTagged = Required<Pick<CsvprintParameters, '@type'>> & CsvprintParameters;
+type CsvprintParamsDictTagged = Required<Pick<CsvprintParamsDict, '@type'>> & CsvprintParamsDict;
 
 
 /**
- * Output object returned when calling `CsvprintParameters(...)`.
+ * Output object returned when calling `CsvprintParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface CsvprintOutputs {
  */
 function csvprint_params(
     infile: InputPathType,
-): CsvprintParametersTagged {
+): CsvprintParamsDictTagged {
     const params = {
         "@type": "freesurfer/csvprint" as const,
         "infile": infile,
@@ -58,7 +58,7 @@ function csvprint_params(
  * @returns Command-line arguments.
  */
 function csvprint_cargs(
-    params: CsvprintParameters,
+    params: CsvprintParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function csvprint_cargs(
  * @returns Outputs object.
  */
 function csvprint_outputs(
-    params: CsvprintParameters,
+    params: CsvprintParamsDict,
     execution: Execution,
 ): CsvprintOutputs {
     const ret: CsvprintOutputs = {
@@ -102,7 +102,7 @@ function csvprint_outputs(
  * @returns NamedTuple of outputs (described in `CsvprintOutputs`).
  */
 function csvprint_execute(
-    params: CsvprintParameters,
+    params: CsvprintParamsDict,
     runner: Runner | null = null,
 ): CsvprintOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function csvprint(
 export {
       CSVPRINT_METADATA,
       CsvprintOutputs,
+      CsvprintParamsDict,
+      CsvprintParamsDictTagged,
       csvprint,
       csvprint_execute,
       csvprint_params,

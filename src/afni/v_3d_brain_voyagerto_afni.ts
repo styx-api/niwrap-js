@@ -11,7 +11,7 @@ const V_3D_BRAIN_VOYAGERTO_AFNI_METADATA: Metadata = {
 };
 
 
-interface V3dBrainVoyagertoAfniParameters {
+interface V3dBrainVoyagertoAfniParamsDict {
     "@type"?: "afni/3dBRAIN_VOYAGERtoAFNI";
     "input_file": InputPathType;
     "force_byte_swap": boolean;
@@ -28,11 +28,11 @@ interface V3dBrainVoyagertoAfniParameters {
     "turn_off_memory_tracing": boolean;
     "turn_on_memory_tracing": boolean;
 }
-type V3dBrainVoyagertoAfniParametersTagged = Required<Pick<V3dBrainVoyagertoAfniParameters, '@type'>> & V3dBrainVoyagertoAfniParameters;
+type V3dBrainVoyagertoAfniParamsDictTagged = Required<Pick<V3dBrainVoyagertoAfniParamsDict, '@type'>> & V3dBrainVoyagertoAfniParamsDict;
 
 
 /**
- * Output object returned when calling `V3dBrainVoyagertoAfniParameters(...)`.
+ * Output object returned when calling `V3dBrainVoyagertoAfniParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function v_3d_brain_voyagerto_afni_params(
     trace_extreme_debugging: boolean = false,
     turn_off_memory_tracing: boolean = false,
     turn_on_memory_tracing: boolean = false,
-): V3dBrainVoyagertoAfniParametersTagged {
+): V3dBrainVoyagertoAfniParamsDictTagged {
     const params = {
         "@type": "afni/3dBRAIN_VOYAGERtoAFNI" as const,
         "input_file": input_file,
@@ -122,7 +122,7 @@ function v_3d_brain_voyagerto_afni_params(
  * @returns Command-line arguments.
  */
 function v_3d_brain_voyagerto_afni_cargs(
-    params: V3dBrainVoyagertoAfniParameters,
+    params: V3dBrainVoyagertoAfniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -189,7 +189,7 @@ function v_3d_brain_voyagerto_afni_cargs(
  * @returns Outputs object.
  */
 function v_3d_brain_voyagerto_afni_outputs(
-    params: V3dBrainVoyagertoAfniParameters,
+    params: V3dBrainVoyagertoAfniParamsDict,
     execution: Execution,
 ): V3dBrainVoyagertoAfniOutputs {
     const ret: V3dBrainVoyagertoAfniOutputs = {
@@ -216,7 +216,7 @@ function v_3d_brain_voyagerto_afni_outputs(
  * @returns NamedTuple of outputs (described in `V3dBrainVoyagertoAfniOutputs`).
  */
 function v_3d_brain_voyagerto_afni_execute(
-    params: V3dBrainVoyagertoAfniParameters,
+    params: V3dBrainVoyagertoAfniParamsDict,
     runner: Runner | null = null,
 ): V3dBrainVoyagertoAfniOutputs {
     runner = runner || getGlobalRunner();
@@ -280,6 +280,8 @@ function v_3d_brain_voyagerto_afni(
 
 export {
       V3dBrainVoyagertoAfniOutputs,
+      V3dBrainVoyagertoAfniParamsDict,
+      V3dBrainVoyagertoAfniParamsDictTagged,
       V_3D_BRAIN_VOYAGERTO_AFNI_METADATA,
       v_3d_brain_voyagerto_afni,
       v_3d_brain_voyagerto_afni_execute,

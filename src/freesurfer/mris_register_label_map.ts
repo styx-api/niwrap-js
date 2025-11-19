@@ -11,7 +11,7 @@ const MRIS_REGISTER_LABEL_MAP_METADATA: Metadata = {
 };
 
 
-interface MrisRegisterLabelMapParameters {
+interface MrisRegisterLabelMapParamsDict {
     "@type"?: "freesurfer/mris_register_label_map";
     "subjects_list": string;
     "target_subject": string;
@@ -25,11 +25,11 @@ interface MrisRegisterLabelMapParameters {
     "version": boolean;
     "vno"?: number | null | undefined;
 }
-type MrisRegisterLabelMapParametersTagged = Required<Pick<MrisRegisterLabelMapParameters, '@type'>> & MrisRegisterLabelMapParameters;
+type MrisRegisterLabelMapParamsDictTagged = Required<Pick<MrisRegisterLabelMapParamsDict, '@type'>> & MrisRegisterLabelMapParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRegisterLabelMapParameters(...)`.
+ * Output object returned when calling `MrisRegisterLabelMapParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function mris_register_label_map_params(
     subjects_dir: string | null = null,
     version: boolean = false,
     vno: number | null = null,
-): MrisRegisterLabelMapParametersTagged {
+): MrisRegisterLabelMapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_register_label_map" as const,
         "subjects_list": subjects_list,
@@ -102,7 +102,7 @@ function mris_register_label_map_params(
  * @returns Command-line arguments.
  */
 function mris_register_label_map_cargs(
-    params: MrisRegisterLabelMapParameters,
+    params: MrisRegisterLabelMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function mris_register_label_map_cargs(
  * @returns Outputs object.
  */
 function mris_register_label_map_outputs(
-    params: MrisRegisterLabelMapParameters,
+    params: MrisRegisterLabelMapParamsDict,
     execution: Execution,
 ): MrisRegisterLabelMapOutputs {
     const ret: MrisRegisterLabelMapOutputs = {
@@ -189,7 +189,7 @@ function mris_register_label_map_outputs(
  * @returns NamedTuple of outputs (described in `MrisRegisterLabelMapOutputs`).
  */
 function mris_register_label_map_execute(
-    params: MrisRegisterLabelMapParameters,
+    params: MrisRegisterLabelMapParamsDict,
     runner: Runner | null = null,
 ): MrisRegisterLabelMapOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function mris_register_label_map(
 export {
       MRIS_REGISTER_LABEL_MAP_METADATA,
       MrisRegisterLabelMapOutputs,
+      MrisRegisterLabelMapParamsDict,
+      MrisRegisterLabelMapParamsDictTagged,
       mris_register_label_map,
       mris_register_label_map_execute,
       mris_register_label_map_params,

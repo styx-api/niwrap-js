@@ -11,15 +11,15 @@ const MRI_AND_METADATA: Metadata = {
 };
 
 
-interface MriAndParameters {
+interface MriAndParamsDict {
     "@type"?: "freesurfer/mri_and";
     "input_files": Array<InputPathType>;
 }
-type MriAndParametersTagged = Required<Pick<MriAndParameters, '@type'>> & MriAndParameters;
+type MriAndParamsDictTagged = Required<Pick<MriAndParamsDict, '@type'>> & MriAndParamsDict;
 
 
 /**
- * Output object returned when calling `MriAndParameters(...)`.
+ * Output object returned when calling `MriAndParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MriAndOutputs {
  */
 function mri_and_params(
     input_files: Array<InputPathType>,
-): MriAndParametersTagged {
+): MriAndParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_and" as const,
         "input_files": input_files,
@@ -58,7 +58,7 @@ function mri_and_params(
  * @returns Command-line arguments.
  */
 function mri_and_cargs(
-    params: MriAndParameters,
+    params: MriAndParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function mri_and_cargs(
  * @returns Outputs object.
  */
 function mri_and_outputs(
-    params: MriAndParameters,
+    params: MriAndParamsDict,
     execution: Execution,
 ): MriAndOutputs {
     const ret: MriAndOutputs = {
@@ -102,7 +102,7 @@ function mri_and_outputs(
  * @returns NamedTuple of outputs (described in `MriAndOutputs`).
  */
 function mri_and_execute(
-    params: MriAndParameters,
+    params: MriAndParamsDict,
     runner: Runner | null = null,
 ): MriAndOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function mri_and(
 export {
       MRI_AND_METADATA,
       MriAndOutputs,
+      MriAndParamsDict,
+      MriAndParamsDictTagged,
       mri_and,
       mri_and_execute,
       mri_and_params,

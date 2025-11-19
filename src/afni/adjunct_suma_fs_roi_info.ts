@@ -11,7 +11,7 @@ const ADJUNCT_SUMA_FS_ROI_INFO_METADATA: Metadata = {
 };
 
 
-interface AdjunctSumaFsRoiInfoParameters {
+interface AdjunctSumaFsRoiInfoParamsDict {
     "@type"?: "afni/adjunct_suma_fs_roi_info";
     "subject_id": string;
     "suma_directory": string;
@@ -19,11 +19,11 @@ interface AdjunctSumaFsRoiInfoParameters {
     "hview": boolean;
     "version": boolean;
 }
-type AdjunctSumaFsRoiInfoParametersTagged = Required<Pick<AdjunctSumaFsRoiInfoParameters, '@type'>> & AdjunctSumaFsRoiInfoParameters;
+type AdjunctSumaFsRoiInfoParamsDictTagged = Required<Pick<AdjunctSumaFsRoiInfoParamsDict, '@type'>> & AdjunctSumaFsRoiInfoParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctSumaFsRoiInfoParameters(...)`.
+ * Output object returned when calling `AdjunctSumaFsRoiInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function adjunct_suma_fs_roi_info_params(
     help: boolean = false,
     hview: boolean = false,
     version: boolean = false,
-): AdjunctSumaFsRoiInfoParametersTagged {
+): AdjunctSumaFsRoiInfoParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_suma_fs_roi_info" as const,
         "subject_id": subject_id,
@@ -90,7 +90,7 @@ function adjunct_suma_fs_roi_info_params(
  * @returns Command-line arguments.
  */
 function adjunct_suma_fs_roi_info_cargs(
-    params: AdjunctSumaFsRoiInfoParameters,
+    params: AdjunctSumaFsRoiInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function adjunct_suma_fs_roi_info_cargs(
  * @returns Outputs object.
  */
 function adjunct_suma_fs_roi_info_outputs(
-    params: AdjunctSumaFsRoiInfoParameters,
+    params: AdjunctSumaFsRoiInfoParamsDict,
     execution: Execution,
 ): AdjunctSumaFsRoiInfoOutputs {
     const ret: AdjunctSumaFsRoiInfoOutputs = {
@@ -154,7 +154,7 @@ function adjunct_suma_fs_roi_info_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctSumaFsRoiInfoOutputs`).
  */
 function adjunct_suma_fs_roi_info_execute(
-    params: AdjunctSumaFsRoiInfoParameters,
+    params: AdjunctSumaFsRoiInfoParamsDict,
     runner: Runner | null = null,
 ): AdjunctSumaFsRoiInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function adjunct_suma_fs_roi_info(
 export {
       ADJUNCT_SUMA_FS_ROI_INFO_METADATA,
       AdjunctSumaFsRoiInfoOutputs,
+      AdjunctSumaFsRoiInfoParamsDict,
+      AdjunctSumaFsRoiInfoParamsDictTagged,
       adjunct_suma_fs_roi_info,
       adjunct_suma_fs_roi_info_execute,
       adjunct_suma_fs_roi_info_params,

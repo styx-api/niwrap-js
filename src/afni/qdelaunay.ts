@@ -11,7 +11,7 @@ const QDELAUNAY_METADATA: Metadata = {
 };
 
 
-interface QdelaunayParameters {
+interface QdelaunayParamsDict {
     "@type"?: "afni/qdelaunay";
     "input_file": InputPathType;
     "furthest_site": boolean;
@@ -47,11 +47,11 @@ interface QdelaunayParameters {
     "point_coordinates": boolean;
     "summary": boolean;
 }
-type QdelaunayParametersTagged = Required<Pick<QdelaunayParameters, '@type'>> & QdelaunayParameters;
+type QdelaunayParamsDictTagged = Required<Pick<QdelaunayParamsDict, '@type'>> & QdelaunayParamsDict;
 
 
 /**
- * Output object returned when calling `QdelaunayParameters(...)`.
+ * Output object returned when calling `QdelaunayParamsDict(...)`.
  *
  * @interface
  */
@@ -136,7 +136,7 @@ function qdelaunay_params(
     off_format: boolean = false,
     point_coordinates: boolean = false,
     summary: boolean = false,
-): QdelaunayParametersTagged {
+): QdelaunayParamsDictTagged {
     const params = {
         "@type": "afni/qdelaunay" as const,
         "input_file": input_file,
@@ -218,7 +218,7 @@ function qdelaunay_params(
  * @returns Command-line arguments.
  */
 function qdelaunay_cargs(
-    params: QdelaunayParameters,
+    params: QdelaunayParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -381,7 +381,7 @@ function qdelaunay_cargs(
  * @returns Outputs object.
  */
 function qdelaunay_outputs(
-    params: QdelaunayParameters,
+    params: QdelaunayParamsDict,
     execution: Execution,
 ): QdelaunayOutputs {
     const ret: QdelaunayOutputs = {
@@ -406,7 +406,7 @@ function qdelaunay_outputs(
  * @returns NamedTuple of outputs (described in `QdelaunayOutputs`).
  */
 function qdelaunay_execute(
-    params: QdelaunayParameters,
+    params: QdelaunayParamsDict,
     runner: Runner | null = null,
 ): QdelaunayOutputs {
     runner = runner || getGlobalRunner();
@@ -509,6 +509,8 @@ function qdelaunay(
 export {
       QDELAUNAY_METADATA,
       QdelaunayOutputs,
+      QdelaunayParamsDict,
+      QdelaunayParamsDictTagged,
       qdelaunay,
       qdelaunay_execute,
       qdelaunay_params,

@@ -11,7 +11,7 @@ const B0CALC_METADATA: Metadata = {
 };
 
 
-interface B0calcParameters {
+interface B0calcParamsDict {
     "@type"?: "fsl/b0calc";
     "input_file": InputPathType;
     "output_file": string;
@@ -29,11 +29,11 @@ interface B0calcParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type B0calcParametersTagged = Required<Pick<B0calcParameters, '@type'>> & B0calcParameters;
+type B0calcParamsDictTagged = Required<Pick<B0calcParamsDict, '@type'>> & B0calcParamsDict;
 
 
 /**
- * Output object returned when calling `B0calcParameters(...)`.
+ * Output object returned when calling `B0calcParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function b0calc_params(
     direct_conv: boolean = false,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): B0calcParametersTagged {
+): B0calcParamsDictTagged {
     const params = {
         "@type": "fsl/b0calc" as const,
         "input_file": input_file,
@@ -148,7 +148,7 @@ function b0calc_params(
  * @returns Command-line arguments.
  */
 function b0calc_cargs(
-    params: B0calcParameters,
+    params: B0calcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -240,7 +240,7 @@ function b0calc_cargs(
  * @returns Outputs object.
  */
 function b0calc_outputs(
-    params: B0calcParameters,
+    params: B0calcParamsDict,
     execution: Execution,
 ): B0calcOutputs {
     const ret: B0calcOutputs = {
@@ -269,7 +269,7 @@ function b0calc_outputs(
  * @returns NamedTuple of outputs (described in `B0calcOutputs`).
  */
 function b0calc_execute(
-    params: B0calcParameters,
+    params: B0calcParamsDict,
     runner: Runner | null = null,
 ): B0calcOutputs {
     runner = runner || getGlobalRunner();
@@ -336,6 +336,8 @@ function b0calc(
 export {
       B0CALC_METADATA,
       B0calcOutputs,
+      B0calcParamsDict,
+      B0calcParamsDictTagged,
       b0calc,
       b0calc_execute,
       b0calc_params,

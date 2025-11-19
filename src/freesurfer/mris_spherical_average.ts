@@ -11,7 +11,7 @@ const MRIS_SPHERICAL_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface MrisSphericalAverageParameters {
+interface MrisSphericalAverageParamsDict {
     "@type"?: "freesurfer/mris_spherical_average";
     "which": "coords" | "label" | "vals" | "curv" | "area";
     "fname": string;
@@ -28,11 +28,11 @@ interface MrisSphericalAverageParameters {
     "average_area": boolean;
     "summary_statistics"?: string | null | undefined;
 }
-type MrisSphericalAverageParametersTagged = Required<Pick<MrisSphericalAverageParameters, '@type'>> & MrisSphericalAverageParameters;
+type MrisSphericalAverageParamsDictTagged = Required<Pick<MrisSphericalAverageParamsDict, '@type'>> & MrisSphericalAverageParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSphericalAverageParameters(...)`.
+ * Output object returned when calling `MrisSphericalAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function mris_spherical_average_params(
     subjects_dir: string | null = null,
     average_area: boolean = false,
     summary_statistics: string | null = null,
-): MrisSphericalAverageParametersTagged {
+): MrisSphericalAverageParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_spherical_average" as const,
         "which": which,
@@ -120,7 +120,7 @@ function mris_spherical_average_params(
  * @returns Command-line arguments.
  */
 function mris_spherical_average_cargs(
-    params: MrisSphericalAverageParameters,
+    params: MrisSphericalAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,7 +183,7 @@ function mris_spherical_average_cargs(
  * @returns Outputs object.
  */
 function mris_spherical_average_outputs(
-    params: MrisSphericalAverageParameters,
+    params: MrisSphericalAverageParamsDict,
     execution: Execution,
 ): MrisSphericalAverageOutputs {
     const ret: MrisSphericalAverageOutputs = {
@@ -208,7 +208,7 @@ function mris_spherical_average_outputs(
  * @returns NamedTuple of outputs (described in `MrisSphericalAverageOutputs`).
  */
 function mris_spherical_average_execute(
-    params: MrisSphericalAverageParameters,
+    params: MrisSphericalAverageParamsDict,
     runner: Runner | null = null,
 ): MrisSphericalAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -273,6 +273,8 @@ function mris_spherical_average(
 export {
       MRIS_SPHERICAL_AVERAGE_METADATA,
       MrisSphericalAverageOutputs,
+      MrisSphericalAverageParamsDict,
+      MrisSphericalAverageParamsDictTagged,
       mris_spherical_average,
       mris_spherical_average_execute,
       mris_spherical_average_params,

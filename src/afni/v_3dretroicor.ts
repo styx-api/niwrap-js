@@ -11,7 +11,7 @@ const V_3DRETROICOR_METADATA: Metadata = {
 };
 
 
-interface V3dretroicorParameters {
+interface V3dretroicorParamsDict {
     "@type"?: "afni/3dretroicor";
     "ignore"?: number | null | undefined;
     "prefix"?: string | null | undefined;
@@ -23,11 +23,11 @@ interface V3dretroicorParameters {
     "order"?: number | null | undefined;
     "dataset": InputPathType;
 }
-type V3dretroicorParametersTagged = Required<Pick<V3dretroicorParameters, '@type'>> & V3dretroicorParameters;
+type V3dretroicorParamsDictTagged = Required<Pick<V3dretroicorParamsDict, '@type'>> & V3dretroicorParamsDict;
 
 
 /**
- * Output object returned when calling `V3dretroicorParameters(...)`.
+ * Output object returned when calling `V3dretroicorParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function v_3dretroicor_params(
     resp: InputPathType | null = null,
     respphase: string | null = null,
     order: number | null = null,
-): V3dretroicorParametersTagged {
+): V3dretroicorParamsDictTagged {
     const params = {
         "@type": "afni/3dretroicor" as const,
         "dataset": dataset,
@@ -118,7 +118,7 @@ function v_3dretroicor_params(
  * @returns Command-line arguments.
  */
 function v_3dretroicor_cargs(
-    params: V3dretroicorParameters,
+    params: V3dretroicorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function v_3dretroicor_cargs(
  * @returns Outputs object.
  */
 function v_3dretroicor_outputs(
-    params: V3dretroicorParameters,
+    params: V3dretroicorParamsDict,
     execution: Execution,
 ): V3dretroicorOutputs {
     const ret: V3dretroicorOutputs = {
@@ -213,7 +213,7 @@ function v_3dretroicor_outputs(
  * @returns NamedTuple of outputs (described in `V3dretroicorOutputs`).
  */
 function v_3dretroicor_execute(
-    params: V3dretroicorParameters,
+    params: V3dretroicorParamsDict,
     runner: Runner | null = null,
 ): V3dretroicorOutputs {
     runner = runner || getGlobalRunner();
@@ -267,6 +267,8 @@ function v_3dretroicor(
 
 export {
       V3dretroicorOutputs,
+      V3dretroicorParamsDict,
+      V3dretroicorParamsDictTagged,
       V_3DRETROICOR_METADATA,
       v_3dretroicor,
       v_3dretroicor_execute,

@@ -11,7 +11,7 @@ const MRIS_THICKNESS_COMPARISON_METADATA: Metadata = {
 };
 
 
-interface MrisThicknessComparisonParameters {
+interface MrisThicknessComparisonParamsDict {
     "@type"?: "freesurfer/mris_thickness_comparison";
     "subject": string;
     "hemi": string;
@@ -19,11 +19,11 @@ interface MrisThicknessComparisonParameters {
     "w_file": InputPathType;
     "labels": Array<string>;
 }
-type MrisThicknessComparisonParametersTagged = Required<Pick<MrisThicknessComparisonParameters, '@type'>> & MrisThicknessComparisonParameters;
+type MrisThicknessComparisonParamsDictTagged = Required<Pick<MrisThicknessComparisonParamsDict, '@type'>> & MrisThicknessComparisonParamsDict;
 
 
 /**
- * Output object returned when calling `MrisThicknessComparisonParameters(...)`.
+ * Output object returned when calling `MrisThicknessComparisonParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function mris_thickness_comparison_params(
     thickness_file: InputPathType,
     w_file: InputPathType,
     labels: Array<string>,
-): MrisThicknessComparisonParametersTagged {
+): MrisThicknessComparisonParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_thickness_comparison" as const,
         "subject": subject,
@@ -74,7 +74,7 @@ function mris_thickness_comparison_params(
  * @returns Command-line arguments.
  */
 function mris_thickness_comparison_cargs(
-    params: MrisThicknessComparisonParameters,
+    params: MrisThicknessComparisonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -97,7 +97,7 @@ function mris_thickness_comparison_cargs(
  * @returns Outputs object.
  */
 function mris_thickness_comparison_outputs(
-    params: MrisThicknessComparisonParameters,
+    params: MrisThicknessComparisonParamsDict,
     execution: Execution,
 ): MrisThicknessComparisonOutputs {
     const ret: MrisThicknessComparisonOutputs = {
@@ -122,7 +122,7 @@ function mris_thickness_comparison_outputs(
  * @returns NamedTuple of outputs (described in `MrisThicknessComparisonOutputs`).
  */
 function mris_thickness_comparison_execute(
-    params: MrisThicknessComparisonParameters,
+    params: MrisThicknessComparisonParamsDict,
     runner: Runner | null = null,
 ): MrisThicknessComparisonOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function mris_thickness_comparison(
 export {
       MRIS_THICKNESS_COMPARISON_METADATA,
       MrisThicknessComparisonOutputs,
+      MrisThicknessComparisonParamsDict,
+      MrisThicknessComparisonParamsDictTagged,
       mris_thickness_comparison,
       mris_thickness_comparison_execute,
       mris_thickness_comparison_params,

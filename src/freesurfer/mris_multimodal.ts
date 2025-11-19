@@ -11,7 +11,7 @@ const MRIS_MULTIMODAL_METADATA: Metadata = {
 };
 
 
-interface MrisMultimodalParameters {
+interface MrisMultimodalParamsDict {
     "@type"?: "freesurfer/mris_multimodal";
     "input_surface": InputPathType;
     "target_surface": InputPathType;
@@ -24,11 +24,11 @@ interface MrisMultimodalParameters {
     "csv_output": string;
     "vtk_output": boolean;
 }
-type MrisMultimodalParametersTagged = Required<Pick<MrisMultimodalParameters, '@type'>> & MrisMultimodalParameters;
+type MrisMultimodalParamsDictTagged = Required<Pick<MrisMultimodalParamsDict, '@type'>> & MrisMultimodalParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMultimodalParameters(...)`.
+ * Output object returned when calling `MrisMultimodalParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function mris_multimodal_params(
     curvature: boolean = false,
     thickness: boolean = false,
     vtk_output: boolean = false,
-): MrisMultimodalParametersTagged {
+): MrisMultimodalParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_multimodal" as const,
         "input_surface": input_surface,
@@ -110,7 +110,7 @@ function mris_multimodal_params(
  * @returns Command-line arguments.
  */
 function mris_multimodal_cargs(
-    params: MrisMultimodalParameters,
+    params: MrisMultimodalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function mris_multimodal_cargs(
  * @returns Outputs object.
  */
 function mris_multimodal_outputs(
-    params: MrisMultimodalParameters,
+    params: MrisMultimodalParamsDict,
     execution: Execution,
 ): MrisMultimodalOutputs {
     const ret: MrisMultimodalOutputs = {
@@ -193,7 +193,7 @@ function mris_multimodal_outputs(
  * @returns NamedTuple of outputs (described in `MrisMultimodalOutputs`).
  */
 function mris_multimodal_execute(
-    params: MrisMultimodalParameters,
+    params: MrisMultimodalParamsDict,
     runner: Runner | null = null,
 ): MrisMultimodalOutputs {
     runner = runner || getGlobalRunner();
@@ -250,6 +250,8 @@ function mris_multimodal(
 export {
       MRIS_MULTIMODAL_METADATA,
       MrisMultimodalOutputs,
+      MrisMultimodalParamsDict,
+      MrisMultimodalParamsDictTagged,
       mris_multimodal,
       mris_multimodal_execute,
       mris_multimodal_params,

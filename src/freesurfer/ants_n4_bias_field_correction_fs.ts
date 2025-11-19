@@ -11,7 +11,7 @@ const ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA: Metadata = {
 };
 
 
-interface AntsN4BiasFieldCorrectionFsParameters {
+interface AntsN4BiasFieldCorrectionFsParamsDict {
     "@type"?: "freesurfer/AntsN4BiasFieldCorrectionFs";
     "input_file": InputPathType;
     "output_file": string;
@@ -21,11 +21,11 @@ interface AntsN4BiasFieldCorrectionFsParameters {
     "output_dtype"?: string | null | undefined;
     "replace_zeros"?: string | null | undefined;
 }
-type AntsN4BiasFieldCorrectionFsParametersTagged = Required<Pick<AntsN4BiasFieldCorrectionFsParameters, '@type'>> & AntsN4BiasFieldCorrectionFsParameters;
+type AntsN4BiasFieldCorrectionFsParamsDictTagged = Required<Pick<AntsN4BiasFieldCorrectionFsParamsDict, '@type'>> & AntsN4BiasFieldCorrectionFsParamsDict;
 
 
 /**
- * Output object returned when calling `AntsN4BiasFieldCorrectionFsParameters(...)`.
+ * Output object returned when calling `AntsN4BiasFieldCorrectionFsParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function ants_n4_bias_field_correction_fs_params(
     iterations: Array<number> | null = null,
     output_dtype: string | null = null,
     replace_zeros: string | null = null,
-): AntsN4BiasFieldCorrectionFsParametersTagged {
+): AntsN4BiasFieldCorrectionFsParamsDictTagged {
     const params = {
         "@type": "freesurfer/AntsN4BiasFieldCorrectionFs" as const,
         "input_file": input_file,
@@ -96,7 +96,7 @@ function ants_n4_bias_field_correction_fs_params(
  * @returns Command-line arguments.
  */
 function ants_n4_bias_field_correction_fs_cargs(
-    params: AntsN4BiasFieldCorrectionFsParameters,
+    params: AntsN4BiasFieldCorrectionFsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,7 +152,7 @@ function ants_n4_bias_field_correction_fs_cargs(
  * @returns Outputs object.
  */
 function ants_n4_bias_field_correction_fs_outputs(
-    params: AntsN4BiasFieldCorrectionFsParameters,
+    params: AntsN4BiasFieldCorrectionFsParamsDict,
     execution: Execution,
 ): AntsN4BiasFieldCorrectionFsOutputs {
     const ret: AntsN4BiasFieldCorrectionFsOutputs = {
@@ -178,7 +178,7 @@ function ants_n4_bias_field_correction_fs_outputs(
  * @returns NamedTuple of outputs (described in `AntsN4BiasFieldCorrectionFsOutputs`).
  */
 function ants_n4_bias_field_correction_fs_execute(
-    params: AntsN4BiasFieldCorrectionFsParameters,
+    params: AntsN4BiasFieldCorrectionFsParamsDict,
     runner: Runner | null = null,
 ): AntsN4BiasFieldCorrectionFsOutputs {
     runner = runner || getGlobalRunner();
@@ -229,6 +229,8 @@ function ants_n4_bias_field_correction_fs(
 export {
       ANTS_N4_BIAS_FIELD_CORRECTION_FS_METADATA,
       AntsN4BiasFieldCorrectionFsOutputs,
+      AntsN4BiasFieldCorrectionFsParamsDict,
+      AntsN4BiasFieldCorrectionFsParamsDictTagged,
       ants_n4_bias_field_correction_fs,
       ants_n4_bias_field_correction_fs_execute,
       ants_n4_bias_field_correction_fs_params,

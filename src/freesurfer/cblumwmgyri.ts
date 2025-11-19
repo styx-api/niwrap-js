@@ -11,7 +11,7 @@ const CBLUMWMGYRI_METADATA: Metadata = {
 };
 
 
-interface CblumwmgyriParameters {
+interface CblumwmgyriParamsDict {
     "@type"?: "freesurfer/cblumwmgyri";
     "subject": string;
     "source_seg"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface CblumwmgyriParameters {
     "no_segstats": boolean;
     "subjects_dir"?: string | null | undefined;
 }
-type CblumwmgyriParametersTagged = Required<Pick<CblumwmgyriParameters, '@type'>> & CblumwmgyriParameters;
+type CblumwmgyriParamsDictTagged = Required<Pick<CblumwmgyriParamsDict, '@type'>> & CblumwmgyriParamsDict;
 
 
 /**
- * Output object returned when calling `CblumwmgyriParameters(...)`.
+ * Output object returned when calling `CblumwmgyriParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function cblumwmgyri_params(
     out_seg: string | null = null,
     no_segstats: boolean = false,
     subjects_dir: string | null = null,
-): CblumwmgyriParametersTagged {
+): CblumwmgyriParamsDictTagged {
     const params = {
         "@type": "freesurfer/cblumwmgyri" as const,
         "subject": subject,
@@ -90,7 +90,7 @@ function cblumwmgyri_params(
  * @returns Command-line arguments.
  */
 function cblumwmgyri_cargs(
-    params: CblumwmgyriParameters,
+    params: CblumwmgyriParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function cblumwmgyri_cargs(
  * @returns Outputs object.
  */
 function cblumwmgyri_outputs(
-    params: CblumwmgyriParameters,
+    params: CblumwmgyriParamsDict,
     execution: Execution,
 ): CblumwmgyriOutputs {
     const ret: CblumwmgyriOutputs = {
@@ -165,7 +165,7 @@ function cblumwmgyri_outputs(
  * @returns NamedTuple of outputs (described in `CblumwmgyriOutputs`).
  */
 function cblumwmgyri_execute(
-    params: CblumwmgyriParameters,
+    params: CblumwmgyriParamsDict,
     runner: Runner | null = null,
 ): CblumwmgyriOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function cblumwmgyri(
 export {
       CBLUMWMGYRI_METADATA,
       CblumwmgyriOutputs,
+      CblumwmgyriParamsDict,
+      CblumwmgyriParamsDictTagged,
       cblumwmgyri,
       cblumwmgyri_execute,
       cblumwmgyri_params,

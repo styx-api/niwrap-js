@@ -11,16 +11,16 @@ const MRI_MAKE_BEM_SURFACES_METADATA: Metadata = {
 };
 
 
-interface MriMakeBemSurfacesParameters {
+interface MriMakeBemSurfacesParamsDict {
     "@type"?: "freesurfer/mri_make_bem_surfaces";
     "name": string;
     "mfile"?: InputPathType | null | undefined;
 }
-type MriMakeBemSurfacesParametersTagged = Required<Pick<MriMakeBemSurfacesParameters, '@type'>> & MriMakeBemSurfacesParameters;
+type MriMakeBemSurfacesParamsDictTagged = Required<Pick<MriMakeBemSurfacesParamsDict, '@type'>> & MriMakeBemSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `MriMakeBemSurfacesParameters(...)`.
+ * Output object returned when calling `MriMakeBemSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface MriMakeBemSurfacesOutputs {
 function mri_make_bem_surfaces_params(
     name: string,
     mfile: InputPathType | null = null,
-): MriMakeBemSurfacesParametersTagged {
+): MriMakeBemSurfacesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_make_bem_surfaces" as const,
         "name": name,
@@ -72,7 +72,7 @@ function mri_make_bem_surfaces_params(
  * @returns Command-line arguments.
  */
 function mri_make_bem_surfaces_cargs(
-    params: MriMakeBemSurfacesParameters,
+    params: MriMakeBemSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function mri_make_bem_surfaces_cargs(
  * @returns Outputs object.
  */
 function mri_make_bem_surfaces_outputs(
-    params: MriMakeBemSurfacesParameters,
+    params: MriMakeBemSurfacesParamsDict,
     execution: Execution,
 ): MriMakeBemSurfacesOutputs {
     const ret: MriMakeBemSurfacesOutputs = {
@@ -121,7 +121,7 @@ function mri_make_bem_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `MriMakeBemSurfacesOutputs`).
  */
 function mri_make_bem_surfaces_execute(
-    params: MriMakeBemSurfacesParameters,
+    params: MriMakeBemSurfacesParamsDict,
     runner: Runner | null = null,
 ): MriMakeBemSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function mri_make_bem_surfaces(
 export {
       MRI_MAKE_BEM_SURFACES_METADATA,
       MriMakeBemSurfacesOutputs,
+      MriMakeBemSurfacesParamsDict,
+      MriMakeBemSurfacesParamsDictTagged,
       mri_make_bem_surfaces,
       mri_make_bem_surfaces_execute,
       mri_make_bem_surfaces_params,

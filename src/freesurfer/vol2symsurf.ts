@@ -11,7 +11,7 @@ const VOL2SYMSURF_METADATA: Metadata = {
 };
 
 
-interface Vol2symsurfParameters {
+interface Vol2symsurfParamsDict {
     "@type"?: "freesurfer/vol2symsurf";
     "registration_file": InputPathType;
     "input_volume": InputPathType;
@@ -22,11 +22,11 @@ interface Vol2symsurfParameters {
     "no_diff": boolean;
     "laterality_index": boolean;
 }
-type Vol2symsurfParametersTagged = Required<Pick<Vol2symsurfParameters, '@type'>> & Vol2symsurfParameters;
+type Vol2symsurfParamsDictTagged = Required<Pick<Vol2symsurfParamsDict, '@type'>> & Vol2symsurfParamsDict;
 
 
 /**
- * Output object returned when calling `Vol2symsurfParameters(...)`.
+ * Output object returned when calling `Vol2symsurfParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function vol2symsurf_params(
     projection_fraction: number | null = null,
     no_diff: boolean = false,
     laterality_index: boolean = false,
-): Vol2symsurfParametersTagged {
+): Vol2symsurfParamsDictTagged {
     const params = {
         "@type": "freesurfer/vol2symsurf" as const,
         "registration_file": registration_file,
@@ -108,7 +108,7 @@ function vol2symsurf_params(
  * @returns Command-line arguments.
  */
 function vol2symsurf_cargs(
-    params: Vol2symsurfParameters,
+    params: Vol2symsurfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,7 +162,7 @@ function vol2symsurf_cargs(
  * @returns Outputs object.
  */
 function vol2symsurf_outputs(
-    params: Vol2symsurfParameters,
+    params: Vol2symsurfParamsDict,
     execution: Execution,
 ): Vol2symsurfOutputs {
     const ret: Vol2symsurfOutputs = {
@@ -191,7 +191,7 @@ function vol2symsurf_outputs(
  * @returns NamedTuple of outputs (described in `Vol2symsurfOutputs`).
  */
 function vol2symsurf_execute(
-    params: Vol2symsurfParameters,
+    params: Vol2symsurfParamsDict,
     runner: Runner | null = null,
 ): Vol2symsurfOutputs {
     runner = runner || getGlobalRunner();
@@ -244,6 +244,8 @@ function vol2symsurf(
 export {
       VOL2SYMSURF_METADATA,
       Vol2symsurfOutputs,
+      Vol2symsurfParamsDict,
+      Vol2symsurfParamsDictTagged,
       vol2symsurf,
       vol2symsurf_execute,
       vol2symsurf_params,

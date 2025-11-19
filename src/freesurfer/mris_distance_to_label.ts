@@ -11,16 +11,16 @@ const MRIS_DISTANCE_TO_LABEL_METADATA: Metadata = {
 };
 
 
-interface MrisDistanceToLabelParameters {
+interface MrisDistanceToLabelParamsDict {
     "@type"?: "freesurfer/mris_distance_to_label";
     "hemisphere": string;
     "subject_1": string;
 }
-type MrisDistanceToLabelParametersTagged = Required<Pick<MrisDistanceToLabelParameters, '@type'>> & MrisDistanceToLabelParameters;
+type MrisDistanceToLabelParamsDictTagged = Required<Pick<MrisDistanceToLabelParamsDict, '@type'>> & MrisDistanceToLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MrisDistanceToLabelParameters(...)`.
+ * Output object returned when calling `MrisDistanceToLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MrisDistanceToLabelOutputs {
 function mris_distance_to_label_params(
     hemisphere: string,
     subject_1: string,
-): MrisDistanceToLabelParametersTagged {
+): MrisDistanceToLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_distance_to_label" as const,
         "hemisphere": hemisphere,
@@ -62,7 +62,7 @@ function mris_distance_to_label_params(
  * @returns Command-line arguments.
  */
 function mris_distance_to_label_cargs(
-    params: MrisDistanceToLabelParameters,
+    params: MrisDistanceToLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mris_distance_to_label_cargs(
  * @returns Outputs object.
  */
 function mris_distance_to_label_outputs(
-    params: MrisDistanceToLabelParameters,
+    params: MrisDistanceToLabelParamsDict,
     execution: Execution,
 ): MrisDistanceToLabelOutputs {
     const ret: MrisDistanceToLabelOutputs = {
@@ -107,7 +107,7 @@ function mris_distance_to_label_outputs(
  * @returns NamedTuple of outputs (described in `MrisDistanceToLabelOutputs`).
  */
 function mris_distance_to_label_execute(
-    params: MrisDistanceToLabelParameters,
+    params: MrisDistanceToLabelParamsDict,
     runner: Runner | null = null,
 ): MrisDistanceToLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function mris_distance_to_label(
 export {
       MRIS_DISTANCE_TO_LABEL_METADATA,
       MrisDistanceToLabelOutputs,
+      MrisDistanceToLabelParamsDict,
+      MrisDistanceToLabelParamsDictTagged,
       mris_distance_to_label,
       mris_distance_to_label_execute,
       mris_distance_to_label_params,

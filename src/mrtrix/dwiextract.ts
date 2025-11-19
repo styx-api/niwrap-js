@@ -11,78 +11,78 @@ const DWIEXTRACT_METADATA: Metadata = {
 };
 
 
-interface DwiextractFslgradParameters {
+interface DwiextractFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type DwiextractFslgradParametersTagged = Required<Pick<DwiextractFslgradParameters, '@type'>> & DwiextractFslgradParameters;
+type DwiextractFslgradParamsDictTagged = Required<Pick<DwiextractFslgradParamsDict, '@type'>> & DwiextractFslgradParamsDict;
 
 
-interface DwiextractExportGradFslParameters {
+interface DwiextractExportGradFslParamsDict {
     "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
-type DwiextractExportGradFslParametersTagged = Required<Pick<DwiextractExportGradFslParameters, '@type'>> & DwiextractExportGradFslParameters;
+type DwiextractExportGradFslParamsDictTagged = Required<Pick<DwiextractExportGradFslParamsDict, '@type'>> & DwiextractExportGradFslParamsDict;
 
 
-interface DwiextractImportPeEddyParameters {
+interface DwiextractImportPeEddyParamsDict {
     "@type"?: "import_pe_eddy";
     "config": InputPathType;
     "indices": InputPathType;
 }
-type DwiextractImportPeEddyParametersTagged = Required<Pick<DwiextractImportPeEddyParameters, '@type'>> & DwiextractImportPeEddyParameters;
+type DwiextractImportPeEddyParamsDictTagged = Required<Pick<DwiextractImportPeEddyParamsDict, '@type'>> & DwiextractImportPeEddyParamsDict;
 
 
-interface DwiextractVariousStringParameters {
+interface DwiextractVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type DwiextractVariousStringParametersTagged = Required<Pick<DwiextractVariousStringParameters, '@type'>> & DwiextractVariousStringParameters;
+type DwiextractVariousStringParamsDictTagged = Required<Pick<DwiextractVariousStringParamsDict, '@type'>> & DwiextractVariousStringParamsDict;
 
 
-interface DwiextractVariousFileParameters {
+interface DwiextractVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type DwiextractVariousFileParametersTagged = Required<Pick<DwiextractVariousFileParameters, '@type'>> & DwiextractVariousFileParameters;
+type DwiextractVariousFileParamsDictTagged = Required<Pick<DwiextractVariousFileParamsDict, '@type'>> & DwiextractVariousFileParamsDict;
 
 
-interface DwiextractConfigParameters {
+interface DwiextractConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DwiextractConfigParametersTagged = Required<Pick<DwiextractConfigParameters, '@type'>> & DwiextractConfigParameters;
+type DwiextractConfigParamsDictTagged = Required<Pick<DwiextractConfigParamsDict, '@type'>> & DwiextractConfigParamsDict;
 
 
-interface DwiextractParameters {
+interface DwiextractParamsDict {
     "@type"?: "mrtrix/dwiextract";
     "bzero": boolean;
     "no_bzero": boolean;
     "singleshell": boolean;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: DwiextractFslgradParameters | null | undefined;
+    "fslgrad"?: DwiextractFslgradParamsDict | null | undefined;
     "shells"?: Array<number> | null | undefined;
     "export_grad_mrtrix"?: string | null | undefined;
-    "export_grad_fsl"?: DwiextractExportGradFslParameters | null | undefined;
+    "export_grad_fsl"?: DwiextractExportGradFslParamsDict | null | undefined;
     "import_pe_table"?: InputPathType | null | undefined;
-    "import_pe_eddy"?: DwiextractImportPeEddyParameters | null | undefined;
+    "import_pe_eddy"?: DwiextractImportPeEddyParamsDict | null | undefined;
     "pe"?: Array<number> | null | undefined;
-    "strides"?: DwiextractVariousStringParametersTagged | DwiextractVariousFileParametersTagged | null | undefined;
+    "strides"?: DwiextractVariousStringParamsDictTagged | DwiextractVariousFileParamsDictTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DwiextractConfigParameters> | null | undefined;
+    "config"?: Array<DwiextractConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type DwiextractParametersTagged = Required<Pick<DwiextractParameters, '@type'>> & DwiextractParameters;
+type DwiextractParamsDictTagged = Required<Pick<DwiextractParamsDict, '@type'>> & DwiextractParamsDict;
 
 
 /**
@@ -127,10 +127,10 @@ function dwiextract_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function dwiextract_fslgrad_params(
+function dwiextract_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DwiextractFslgradParametersTagged {
+): DwiextractFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -149,7 +149,7 @@ function dwiextract_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dwiextract_fslgrad_cargs(
-    params: DwiextractFslgradParameters,
+    params: DwiextractFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function dwiextract_fslgrad_cargs(
 
 
 /**
- * Output object returned when calling `DwiextractExportGradFslParameters | null(...)`.
+ * Output object returned when calling `DwiextractExportGradFslParamsDict | null(...)`.
  *
  * @interface
  */
@@ -189,10 +189,10 @@ interface DwiextractExportGradFslOutputs {
  *
  * @returns Parameter dictionary
  */
-function dwiextract_export_grad_fsl_params(
+function dwiextract_export_grad_fsl(
     bvecs_path: string,
     bvals_path: string,
-): DwiextractExportGradFslParametersTagged {
+): DwiextractExportGradFslParamsDictTagged {
     const params = {
         "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
@@ -211,7 +211,7 @@ function dwiextract_export_grad_fsl_params(
  * @returns Command-line arguments.
  */
 function dwiextract_export_grad_fsl_cargs(
-    params: DwiextractExportGradFslParameters,
+    params: DwiextractExportGradFslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -231,7 +231,7 @@ function dwiextract_export_grad_fsl_cargs(
  * @returns Outputs object.
  */
 function dwiextract_export_grad_fsl_outputs(
-    params: DwiextractExportGradFslParameters,
+    params: DwiextractExportGradFslParamsDict,
     execution: Execution,
 ): DwiextractExportGradFslOutputs {
     const ret: DwiextractExportGradFslOutputs = {
@@ -251,10 +251,10 @@ function dwiextract_export_grad_fsl_outputs(
  *
  * @returns Parameter dictionary
  */
-function dwiextract_import_pe_eddy_params(
+function dwiextract_import_pe_eddy(
     config: InputPathType,
     indices: InputPathType,
-): DwiextractImportPeEddyParametersTagged {
+): DwiextractImportPeEddyParamsDictTagged {
     const params = {
         "@type": "import_pe_eddy" as const,
         "config": config,
@@ -273,7 +273,7 @@ function dwiextract_import_pe_eddy_params(
  * @returns Command-line arguments.
  */
 function dwiextract_import_pe_eddy_cargs(
-    params: DwiextractImportPeEddyParameters,
+    params: DwiextractImportPeEddyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -291,9 +291,9 @@ function dwiextract_import_pe_eddy_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwiextract_various_string_params(
+function dwiextract_various_string(
     obj: string,
-): DwiextractVariousStringParametersTagged {
+): DwiextractVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -311,7 +311,7 @@ function dwiextract_various_string_params(
  * @returns Command-line arguments.
  */
 function dwiextract_various_string_cargs(
-    params: DwiextractVariousStringParameters,
+    params: DwiextractVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -327,9 +327,9 @@ function dwiextract_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwiextract_various_file_params(
+function dwiextract_various_file(
     obj: InputPathType,
-): DwiextractVariousFileParametersTagged {
+): DwiextractVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -347,7 +347,7 @@ function dwiextract_various_file_params(
  * @returns Command-line arguments.
  */
 function dwiextract_various_file_cargs(
-    params: DwiextractVariousFileParameters,
+    params: DwiextractVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -364,10 +364,10 @@ function dwiextract_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwiextract_config_params(
+function dwiextract_config(
     key: string,
     value: string,
-): DwiextractConfigParametersTagged {
+): DwiextractConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -386,7 +386,7 @@ function dwiextract_config_params(
  * @returns Command-line arguments.
  */
 function dwiextract_config_cargs(
-    params: DwiextractConfigParameters,
+    params: DwiextractConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -398,7 +398,7 @@ function dwiextract_config_cargs(
 
 
 /**
- * Output object returned when calling `DwiextractParameters(...)`.
+ * Output object returned when calling `DwiextractParamsDict(...)`.
  *
  * @interface
  */
@@ -458,23 +458,23 @@ function dwiextract_params(
     no_bzero: boolean = false,
     singleshell: boolean = false,
     grad: InputPathType | null = null,
-    fslgrad: DwiextractFslgradParameters | null = null,
+    fslgrad: DwiextractFslgradParamsDict | null = null,
     shells: Array<number> | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: DwiextractExportGradFslParameters | null = null,
+    export_grad_fsl: DwiextractExportGradFslParamsDict | null = null,
     import_pe_table: InputPathType | null = null,
-    import_pe_eddy: DwiextractImportPeEddyParameters | null = null,
+    import_pe_eddy: DwiextractImportPeEddyParamsDict | null = null,
     pe: Array<number> | null = null,
-    strides: DwiextractVariousStringParametersTagged | DwiextractVariousFileParametersTagged | null = null,
+    strides: DwiextractVariousStringParamsDictTagged | DwiextractVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DwiextractConfigParameters> | null = null,
+    config: Array<DwiextractConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DwiextractParametersTagged {
+): DwiextractParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwiextract" as const,
         "bzero": bzero,
@@ -535,7 +535,7 @@ function dwiextract_params(
  * @returns Command-line arguments.
  */
 function dwiextract_cargs(
-    params: DwiextractParameters,
+    params: DwiextractParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -636,7 +636,7 @@ function dwiextract_cargs(
  * @returns Outputs object.
  */
 function dwiextract_outputs(
-    params: DwiextractParameters,
+    params: DwiextractParamsDict,
     execution: Execution,
 ): DwiextractOutputs {
     const ret: DwiextractOutputs = {
@@ -670,7 +670,7 @@ function dwiextract_outputs(
  * @returns NamedTuple of outputs (described in `DwiextractOutputs`).
  */
 function dwiextract_execute(
-    params: DwiextractParameters,
+    params: DwiextractParamsDict,
     runner: Runner | null = null,
 ): DwiextractOutputs {
     runner = runner || getGlobalRunner();
@@ -732,20 +732,20 @@ function dwiextract(
     no_bzero: boolean = false,
     singleshell: boolean = false,
     grad: InputPathType | null = null,
-    fslgrad: DwiextractFslgradParameters | null = null,
+    fslgrad: DwiextractFslgradParamsDict | null = null,
     shells: Array<number> | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: DwiextractExportGradFslParameters | null = null,
+    export_grad_fsl: DwiextractExportGradFslParamsDict | null = null,
     import_pe_table: InputPathType | null = null,
-    import_pe_eddy: DwiextractImportPeEddyParameters | null = null,
+    import_pe_eddy: DwiextractImportPeEddyParamsDict | null = null,
     pe: Array<number> | null = null,
-    strides: DwiextractVariousStringParametersTagged | DwiextractVariousFileParametersTagged | null = null,
+    strides: DwiextractVariousStringParamsDictTagged | DwiextractVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DwiextractConfigParameters> | null = null,
+    config: Array<DwiextractConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -757,15 +757,29 @@ function dwiextract(
 
 export {
       DWIEXTRACT_METADATA,
+      DwiextractConfigParamsDict,
+      DwiextractConfigParamsDictTagged,
       DwiextractExportGradFslOutputs,
+      DwiextractExportGradFslParamsDict,
+      DwiextractExportGradFslParamsDictTagged,
+      DwiextractFslgradParamsDict,
+      DwiextractFslgradParamsDictTagged,
+      DwiextractImportPeEddyParamsDict,
+      DwiextractImportPeEddyParamsDictTagged,
       DwiextractOutputs,
+      DwiextractParamsDict,
+      DwiextractParamsDictTagged,
+      DwiextractVariousFileParamsDict,
+      DwiextractVariousFileParamsDictTagged,
+      DwiextractVariousStringParamsDict,
+      DwiextractVariousStringParamsDictTagged,
       dwiextract,
-      dwiextract_config_params,
+      dwiextract_config,
       dwiextract_execute,
-      dwiextract_export_grad_fsl_params,
-      dwiextract_fslgrad_params,
-      dwiextract_import_pe_eddy_params,
+      dwiextract_export_grad_fsl,
+      dwiextract_fslgrad,
+      dwiextract_import_pe_eddy,
       dwiextract_params,
-      dwiextract_various_file_params,
-      dwiextract_various_string_params,
+      dwiextract_various_file,
+      dwiextract_various_string,
 };

@@ -11,7 +11,7 @@ const FILM_CIFTI_METADATA: Metadata = {
 };
 
 
-interface FilmCiftiParameters {
+interface FilmCiftiParamsDict {
     "@type"?: "fsl/film_cifti";
     "input_filename": InputPathType;
     "basename": string;
@@ -23,11 +23,11 @@ interface FilmCiftiParameters {
     "surface_extent"?: number | null | undefined;
     "film_options"?: string | null | undefined;
 }
-type FilmCiftiParametersTagged = Required<Pick<FilmCiftiParameters, '@type'>> & FilmCiftiParameters;
+type FilmCiftiParamsDictTagged = Required<Pick<FilmCiftiParamsDict, '@type'>> & FilmCiftiParamsDict;
 
 
 /**
- * Output object returned when calling `FilmCiftiParameters(...)`.
+ * Output object returned when calling `FilmCiftiParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function film_cifti_params(
     surface_sigma: number | null = null,
     surface_extent: number | null = null,
     film_options: string | null = null,
-): FilmCiftiParametersTagged {
+): FilmCiftiParamsDictTagged {
     const params = {
         "@type": "fsl/film_cifti" as const,
         "input_filename": input_filename,
@@ -104,7 +104,7 @@ function film_cifti_params(
  * @returns Command-line arguments.
  */
 function film_cifti_cargs(
-    params: FilmCiftiParameters,
+    params: FilmCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,7 +168,7 @@ function film_cifti_cargs(
  * @returns Outputs object.
  */
 function film_cifti_outputs(
-    params: FilmCiftiParameters,
+    params: FilmCiftiParamsDict,
     execution: Execution,
 ): FilmCiftiOutputs {
     const ret: FilmCiftiOutputs = {
@@ -194,7 +194,7 @@ function film_cifti_outputs(
  * @returns NamedTuple of outputs (described in `FilmCiftiOutputs`).
  */
 function film_cifti_execute(
-    params: FilmCiftiParameters,
+    params: FilmCiftiParamsDict,
     runner: Runner | null = null,
 ): FilmCiftiOutputs {
     runner = runner || getGlobalRunner();
@@ -249,6 +249,8 @@ function film_cifti(
 export {
       FILM_CIFTI_METADATA,
       FilmCiftiOutputs,
+      FilmCiftiParamsDict,
+      FilmCiftiParamsDictTagged,
       film_cifti,
       film_cifti_execute,
       film_cifti_params,

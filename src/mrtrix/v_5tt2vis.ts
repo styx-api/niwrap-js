@@ -11,15 +11,15 @@ const V_5TT2VIS_METADATA: Metadata = {
 };
 
 
-interface V5tt2visConfigParameters {
+interface V5tt2visConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type V5tt2visConfigParametersTagged = Required<Pick<V5tt2visConfigParameters, '@type'>> & V5tt2visConfigParameters;
+type V5tt2visConfigParamsDictTagged = Required<Pick<V5tt2visConfigParamsDict, '@type'>> & V5tt2visConfigParamsDict;
 
 
-interface V5tt2visParameters {
+interface V5tt2visParamsDict {
     "@type"?: "mrtrix/5tt2vis";
     "bg"?: number | null | undefined;
     "cgm"?: number | null | undefined;
@@ -32,13 +32,13 @@ interface V5tt2visParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<V5tt2visConfigParameters> | null | undefined;
+    "config"?: Array<V5tt2visConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type V5tt2visParametersTagged = Required<Pick<V5tt2visParameters, '@type'>> & V5tt2visParameters;
+type V5tt2visParamsDictTagged = Required<Pick<V5tt2visParamsDict, '@type'>> & V5tt2visParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type V5tt2visParametersTagged = Required<Pick<V5tt2visParameters, '@type'>> & V5
  *
  * @returns Parameter dictionary
  */
-function v_5tt2vis_config_params(
+function v_5tt2vis_config(
     key: string,
     value: string,
-): V5tt2visConfigParametersTagged {
+): V5tt2visConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -71,7 +71,7 @@ function v_5tt2vis_config_params(
  * @returns Command-line arguments.
  */
 function v_5tt2vis_config_cargs(
-    params: V5tt2visConfigParameters,
+    params: V5tt2visConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -83,7 +83,7 @@ function v_5tt2vis_config_cargs(
 
 
 /**
- * Output object returned when calling `V5tt2visParameters(...)`.
+ * Output object returned when calling `V5tt2visParamsDict(...)`.
  *
  * @interface
  */
@@ -135,10 +135,10 @@ function v_5tt2vis_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5tt2visConfigParameters> | null = null,
+    config: Array<V5tt2visConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5tt2visParametersTagged {
+): V5tt2visParamsDictTagged {
     const params = {
         "@type": "mrtrix/5tt2vis" as const,
         "info": info,
@@ -187,7 +187,7 @@ function v_5tt2vis_params(
  * @returns Command-line arguments.
  */
 function v_5tt2vis_cargs(
-    params: V5tt2visParameters,
+    params: V5tt2visParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -270,7 +270,7 @@ function v_5tt2vis_cargs(
  * @returns Outputs object.
  */
 function v_5tt2vis_outputs(
-    params: V5tt2visParameters,
+    params: V5tt2visParamsDict,
     execution: Execution,
 ): V5tt2visOutputs {
     const ret: V5tt2visOutputs = {
@@ -302,7 +302,7 @@ function v_5tt2vis_outputs(
  * @returns NamedTuple of outputs (described in `V5tt2visOutputs`).
  */
 function v_5tt2vis_execute(
-    params: V5tt2visParameters,
+    params: V5tt2visParamsDict,
     runner: Runner | null = null,
 ): V5tt2visOutputs {
     runner = runner || getGlobalRunner();
@@ -364,7 +364,7 @@ function v_5tt2vis(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5tt2visConfigParameters> | null = null,
+    config: Array<V5tt2visConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -375,10 +375,14 @@ function v_5tt2vis(
 
 
 export {
+      V5tt2visConfigParamsDict,
+      V5tt2visConfigParamsDictTagged,
       V5tt2visOutputs,
+      V5tt2visParamsDict,
+      V5tt2visParamsDictTagged,
       V_5TT2VIS_METADATA,
       v_5tt2vis,
-      v_5tt2vis_config_params,
+      v_5tt2vis_config,
       v_5tt2vis_execute,
       v_5tt2vis_params,
 };

@@ -11,7 +11,7 @@ const QHULL_METADATA: Metadata = {
 };
 
 
-interface QhullParameters {
+interface QhullParamsDict {
     "@type"?: "afni/qhull";
     "input_coords": string;
     "delaunay": boolean;
@@ -35,11 +35,11 @@ interface QhullParameters {
     "print_facets"?: string | null | undefined;
     "output_file"?: string | null | undefined;
 }
-type QhullParametersTagged = Required<Pick<QhullParameters, '@type'>> & QhullParameters;
+type QhullParamsDictTagged = Required<Pick<QhullParamsDict, '@type'>> & QhullParamsDict;
 
 
 /**
- * Output object returned when calling `QhullParameters(...)`.
+ * Output object returned when calling `QhullParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function qhull_params(
     mathematica_output: boolean = false,
     print_facets: string | null = null,
     output_file: string | null = null,
-): QhullParametersTagged {
+): QhullParamsDictTagged {
     const params = {
         "@type": "afni/qhull" as const,
         "input_coords": input_coords,
@@ -146,7 +146,7 @@ function qhull_params(
  * @returns Command-line arguments.
  */
 function qhull_cargs(
-    params: QhullParameters,
+    params: QhullParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -231,7 +231,7 @@ function qhull_cargs(
  * @returns Outputs object.
  */
 function qhull_outputs(
-    params: QhullParameters,
+    params: QhullParamsDict,
     execution: Execution,
 ): QhullOutputs {
     const ret: QhullOutputs = {
@@ -257,7 +257,7 @@ function qhull_outputs(
  * @returns NamedTuple of outputs (described in `QhullOutputs`).
  */
 function qhull_execute(
-    params: QhullParameters,
+    params: QhullParamsDict,
     runner: Runner | null = null,
 ): QhullOutputs {
     runner = runner || getGlobalRunner();
@@ -336,6 +336,8 @@ function qhull(
 export {
       QHULL_METADATA,
       QhullOutputs,
+      QhullParamsDict,
+      QhullParamsDictTagged,
       qhull,
       qhull_execute,
       qhull_params,

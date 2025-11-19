@@ -11,7 +11,7 @@ const V_1D_NLFIT_METADATA: Metadata = {
 };
 
 
-interface V1dNlfitParameters {
+interface V1dNlfitParamsDict {
     "@type"?: "afni/1dNLfit";
     "expression": string;
     "independent_variable": string;
@@ -19,11 +19,11 @@ interface V1dNlfitParameters {
     "dependent_data": InputPathType;
     "method"?: number | null | undefined;
 }
-type V1dNlfitParametersTagged = Required<Pick<V1dNlfitParameters, '@type'>> & V1dNlfitParameters;
+type V1dNlfitParamsDictTagged = Required<Pick<V1dNlfitParamsDict, '@type'>> & V1dNlfitParamsDict;
 
 
 /**
- * Output object returned when calling `V1dNlfitParameters(...)`.
+ * Output object returned when calling `V1dNlfitParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v_1d_nlfit_params(
     parameters: Array<string>,
     dependent_data: InputPathType,
     method: number | null = null,
-): V1dNlfitParametersTagged {
+): V1dNlfitParamsDictTagged {
     const params = {
         "@type": "afni/1dNLfit" as const,
         "expression": expression,
@@ -80,7 +80,7 @@ function v_1d_nlfit_params(
  * @returns Command-line arguments.
  */
 function v_1d_nlfit_cargs(
-    params: V1dNlfitParameters,
+    params: V1dNlfitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function v_1d_nlfit_cargs(
  * @returns Outputs object.
  */
 function v_1d_nlfit_outputs(
-    params: V1dNlfitParameters,
+    params: V1dNlfitParamsDict,
     execution: Execution,
 ): V1dNlfitOutputs {
     const ret: V1dNlfitOutputs = {
@@ -146,7 +146,7 @@ function v_1d_nlfit_outputs(
  * @returns NamedTuple of outputs (described in `V1dNlfitOutputs`).
  */
 function v_1d_nlfit_execute(
-    params: V1dNlfitParameters,
+    params: V1dNlfitParamsDict,
     runner: Runner | null = null,
 ): V1dNlfitOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function v_1d_nlfit(
 
 export {
       V1dNlfitOutputs,
+      V1dNlfitParamsDict,
+      V1dNlfitParamsDictTagged,
       V_1D_NLFIT_METADATA,
       v_1d_nlfit,
       v_1d_nlfit_execute,

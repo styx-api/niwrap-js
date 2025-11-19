@@ -11,18 +11,18 @@ const V_3D_ACOST_METADATA: Metadata = {
 };
 
 
-interface V3dAcostParameters {
+interface V3dAcostParamsDict {
     "@type"?: "afni/3dAcost";
     "infile": InputPathType;
     "basefile": InputPathType;
     "outfile": string;
     "all_cost": boolean;
 }
-type V3dAcostParametersTagged = Required<Pick<V3dAcostParameters, '@type'>> & V3dAcostParameters;
+type V3dAcostParamsDictTagged = Required<Pick<V3dAcostParamsDict, '@type'>> & V3dAcostParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAcostParameters(...)`.
+ * Output object returned when calling `V3dAcostParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function v_3d_acost_params(
     basefile: InputPathType,
     outfile: string,
     all_cost: boolean = false,
-): V3dAcostParametersTagged {
+): V3dAcostParamsDictTagged {
     const params = {
         "@type": "afni/3dAcost" as const,
         "infile": infile,
@@ -78,7 +78,7 @@ function v_3d_acost_params(
  * @returns Command-line arguments.
  */
 function v_3d_acost_cargs(
-    params: V3dAcostParameters,
+    params: V3dAcostParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function v_3d_acost_cargs(
  * @returns Outputs object.
  */
 function v_3d_acost_outputs(
-    params: V3dAcostParameters,
+    params: V3dAcostParamsDict,
     execution: Execution,
 ): V3dAcostOutputs {
     const ret: V3dAcostOutputs = {
@@ -135,7 +135,7 @@ function v_3d_acost_outputs(
  * @returns NamedTuple of outputs (described in `V3dAcostOutputs`).
  */
 function v_3d_acost_execute(
-    params: V3dAcostParameters,
+    params: V3dAcostParamsDict,
     runner: Runner | null = null,
 ): V3dAcostOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function v_3d_acost(
 
 export {
       V3dAcostOutputs,
+      V3dAcostParamsDict,
+      V3dAcostParamsDictTagged,
       V_3D_ACOST_METADATA,
       v_3d_acost,
       v_3d_acost_execute,

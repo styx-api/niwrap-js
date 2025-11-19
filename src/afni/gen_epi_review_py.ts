@@ -11,7 +11,7 @@ const GEN_EPI_REVIEW_PY_METADATA: Metadata = {
 };
 
 
-interface GenEpiReviewPyParameters {
+interface GenEpiReviewPyParamsDict {
     "@type"?: "afni/gen_epi_review.py";
     "datasets": Array<string>;
     "script_name"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface GenEpiReviewPyParameters {
     "graph_xoffset"?: number | null | undefined;
     "graph_yoffset"?: number | null | undefined;
 }
-type GenEpiReviewPyParametersTagged = Required<Pick<GenEpiReviewPyParameters, '@type'>> & GenEpiReviewPyParameters;
+type GenEpiReviewPyParamsDictTagged = Required<Pick<GenEpiReviewPyParamsDict, '@type'>> & GenEpiReviewPyParamsDict;
 
 
 /**
- * Output object returned when calling `GenEpiReviewPyParameters(...)`.
+ * Output object returned when calling `GenEpiReviewPyParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function gen_epi_review_py_params(
     graph_size: Array<number> | null = null,
     graph_xoffset: number | null = null,
     graph_yoffset: number | null = null,
-): GenEpiReviewPyParametersTagged {
+): GenEpiReviewPyParamsDictTagged {
     const params = {
         "@type": "afni/gen_epi_review.py" as const,
         "datasets": datasets,
@@ -112,7 +112,7 @@ function gen_epi_review_py_params(
  * @returns Command-line arguments.
  */
 function gen_epi_review_py_cargs(
-    params: GenEpiReviewPyParameters,
+    params: GenEpiReviewPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,7 +188,7 @@ function gen_epi_review_py_cargs(
  * @returns Outputs object.
  */
 function gen_epi_review_py_outputs(
-    params: GenEpiReviewPyParameters,
+    params: GenEpiReviewPyParamsDict,
     execution: Execution,
 ): GenEpiReviewPyOutputs {
     const ret: GenEpiReviewPyOutputs = {
@@ -213,7 +213,7 @@ function gen_epi_review_py_outputs(
  * @returns NamedTuple of outputs (described in `GenEpiReviewPyOutputs`).
  */
 function gen_epi_review_py_execute(
-    params: GenEpiReviewPyParameters,
+    params: GenEpiReviewPyParamsDict,
     runner: Runner | null = null,
 ): GenEpiReviewPyOutputs {
     runner = runner || getGlobalRunner();
@@ -270,6 +270,8 @@ function gen_epi_review_py(
 export {
       GEN_EPI_REVIEW_PY_METADATA,
       GenEpiReviewPyOutputs,
+      GenEpiReviewPyParamsDict,
+      GenEpiReviewPyParamsDictTagged,
       gen_epi_review_py,
       gen_epi_review_py_execute,
       gen_epi_review_py_params,

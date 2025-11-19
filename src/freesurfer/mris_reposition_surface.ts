@@ -11,7 +11,7 @@ const MRIS_REPOSITION_SURFACE_METADATA: Metadata = {
 };
 
 
-interface MrisRepositionSurfaceParameters {
+interface MrisRepositionSurfaceParamsDict {
     "@type"?: "freesurfer/mris_reposition_surface";
     "surf": InputPathType;
     "volume": InputPathType;
@@ -21,11 +21,11 @@ interface MrisRepositionSurfaceParameters {
     "sigma"?: number | null | undefined;
     "iterations"?: number | null | undefined;
 }
-type MrisRepositionSurfaceParametersTagged = Required<Pick<MrisRepositionSurfaceParameters, '@type'>> & MrisRepositionSurfaceParameters;
+type MrisRepositionSurfaceParamsDictTagged = Required<Pick<MrisRepositionSurfaceParamsDict, '@type'>> & MrisRepositionSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRepositionSurfaceParameters(...)`.
+ * Output object returned when calling `MrisRepositionSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_reposition_surface_params(
     size: number | null = null,
     sigma: number | null = null,
     iterations: number | null = null,
-): MrisRepositionSurfaceParametersTagged {
+): MrisRepositionSurfaceParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_reposition_surface" as const,
         "surf": surf,
@@ -92,7 +92,7 @@ function mris_reposition_surface_params(
  * @returns Command-line arguments.
  */
 function mris_reposition_surface_cargs(
-    params: MrisRepositionSurfaceParameters,
+    params: MrisRepositionSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function mris_reposition_surface_cargs(
  * @returns Outputs object.
  */
 function mris_reposition_surface_outputs(
-    params: MrisRepositionSurfaceParameters,
+    params: MrisRepositionSurfaceParamsDict,
     execution: Execution,
 ): MrisRepositionSurfaceOutputs {
     const ret: MrisRepositionSurfaceOutputs = {
@@ -170,7 +170,7 @@ function mris_reposition_surface_outputs(
  * @returns NamedTuple of outputs (described in `MrisRepositionSurfaceOutputs`).
  */
 function mris_reposition_surface_execute(
-    params: MrisRepositionSurfaceParameters,
+    params: MrisRepositionSurfaceParamsDict,
     runner: Runner | null = null,
 ): MrisRepositionSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -221,6 +221,8 @@ function mris_reposition_surface(
 export {
       MRIS_REPOSITION_SURFACE_METADATA,
       MrisRepositionSurfaceOutputs,
+      MrisRepositionSurfaceParamsDict,
+      MrisRepositionSurfaceParamsDictTagged,
       mris_reposition_surface,
       mris_reposition_surface_execute,
       mris_reposition_surface_params,

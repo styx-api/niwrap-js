@@ -11,7 +11,7 @@ const DMRI_PATHSTATS_METADATA: Metadata = {
 };
 
 
-interface DmriPathstatsParameters {
+interface DmriPathstatsParamsDict {
     "@type"?: "freesurfer/dmri_pathstats";
     "intrk": InputPathType;
     "rois"?: Array<InputPathType> | null | undefined;
@@ -33,11 +33,11 @@ interface DmriPathstatsParameters {
     "help": boolean;
     "version": boolean;
 }
-type DmriPathstatsParametersTagged = Required<Pick<DmriPathstatsParameters, '@type'>> & DmriPathstatsParameters;
+type DmriPathstatsParamsDictTagged = Required<Pick<DmriPathstatsParamsDict, '@type'>> & DmriPathstatsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriPathstatsParameters(...)`.
+ * Output object returned when calling `DmriPathstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -106,7 +106,7 @@ function dmri_pathstats_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriPathstatsParametersTagged {
+): DmriPathstatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_pathstats" as const,
         "intrk": intrk,
@@ -168,7 +168,7 @@ function dmri_pathstats_params(
  * @returns Command-line arguments.
  */
 function dmri_pathstats_cargs(
-    params: DmriPathstatsParameters,
+    params: DmriPathstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -284,7 +284,7 @@ function dmri_pathstats_cargs(
  * @returns Outputs object.
  */
 function dmri_pathstats_outputs(
-    params: DmriPathstatsParameters,
+    params: DmriPathstatsParamsDict,
     execution: Execution,
 ): DmriPathstatsOutputs {
     const ret: DmriPathstatsOutputs = {
@@ -312,7 +312,7 @@ function dmri_pathstats_outputs(
  * @returns NamedTuple of outputs (described in `DmriPathstatsOutputs`).
  */
 function dmri_pathstats_execute(
-    params: DmriPathstatsParameters,
+    params: DmriPathstatsParamsDict,
     runner: Runner | null = null,
 ): DmriPathstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -387,6 +387,8 @@ function dmri_pathstats(
 export {
       DMRI_PATHSTATS_METADATA,
       DmriPathstatsOutputs,
+      DmriPathstatsParamsDict,
+      DmriPathstatsParamsDictTagged,
       dmri_pathstats,
       dmri_pathstats_execute,
       dmri_pathstats_params,

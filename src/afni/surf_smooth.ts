@@ -11,7 +11,7 @@ const SURF_SMOOTH_METADATA: Metadata = {
 };
 
 
-interface SurfSmoothParameters {
+interface SurfSmoothParamsDict {
     "@type"?: "afni/SurfSmooth";
     "surface": string;
     "method": string;
@@ -30,11 +30,11 @@ interface SurfSmoothParameters {
     "talk_suma": boolean;
     "refresh_rate"?: number | null | undefined;
 }
-type SurfSmoothParametersTagged = Required<Pick<SurfSmoothParameters, '@type'>> & SurfSmoothParameters;
+type SurfSmoothParamsDictTagged = Required<Pick<SurfSmoothParamsDict, '@type'>> & SurfSmoothParamsDict;
 
 
 /**
- * Output object returned when calling `SurfSmoothParameters(...)`.
+ * Output object returned when calling `SurfSmoothParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function surf_smooth_params(
     use_neighbors_outside_mask: boolean = false,
     talk_suma: boolean = false,
     refresh_rate: number | null = null,
-): SurfSmoothParametersTagged {
+): SurfSmoothParamsDictTagged {
     const params = {
         "@type": "afni/SurfSmooth" as const,
         "surface": surface,
@@ -146,7 +146,7 @@ function surf_smooth_params(
  * @returns Command-line arguments.
  */
 function surf_smooth_cargs(
-    params: SurfSmoothParameters,
+    params: SurfSmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -250,7 +250,7 @@ function surf_smooth_cargs(
  * @returns Outputs object.
  */
 function surf_smooth_outputs(
-    params: SurfSmoothParameters,
+    params: SurfSmoothParamsDict,
     execution: Execution,
 ): SurfSmoothOutputs {
     const ret: SurfSmoothOutputs = {
@@ -276,7 +276,7 @@ function surf_smooth_outputs(
  * @returns NamedTuple of outputs (described in `SurfSmoothOutputs`).
  */
 function surf_smooth_execute(
-    params: SurfSmoothParameters,
+    params: SurfSmoothParamsDict,
     runner: Runner | null = null,
 ): SurfSmoothOutputs {
     runner = runner || getGlobalRunner();
@@ -345,6 +345,8 @@ function surf_smooth(
 export {
       SURF_SMOOTH_METADATA,
       SurfSmoothOutputs,
+      SurfSmoothParamsDict,
+      SurfSmoothParamsDictTagged,
       surf_smooth,
       surf_smooth_execute,
       surf_smooth_params,

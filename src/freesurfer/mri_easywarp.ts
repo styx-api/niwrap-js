@@ -11,7 +11,7 @@ const MRI_EASYWARP_METADATA: Metadata = {
 };
 
 
-interface MriEasywarpParameters {
+interface MriEasywarpParamsDict {
     "@type"?: "freesurfer/mri_easywarp";
     "input_image": InputPathType;
     "output_image": string;
@@ -19,11 +19,11 @@ interface MriEasywarpParameters {
     "nearest_neighbor": boolean;
     "num_threads"?: number | null | undefined;
 }
-type MriEasywarpParametersTagged = Required<Pick<MriEasywarpParameters, '@type'>> & MriEasywarpParameters;
+type MriEasywarpParamsDictTagged = Required<Pick<MriEasywarpParamsDict, '@type'>> & MriEasywarpParamsDict;
 
 
 /**
- * Output object returned when calling `MriEasywarpParameters(...)`.
+ * Output object returned when calling `MriEasywarpParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_easywarp_params(
     deformation_field: InputPathType | null = null,
     nearest_neighbor: boolean = false,
     num_threads: number | null = null,
-): MriEasywarpParametersTagged {
+): MriEasywarpParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_easywarp" as const,
         "input_image": input_image,
@@ -82,7 +82,7 @@ function mri_easywarp_params(
  * @returns Command-line arguments.
  */
 function mri_easywarp_cargs(
-    params: MriEasywarpParameters,
+    params: MriEasywarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function mri_easywarp_cargs(
  * @returns Outputs object.
  */
 function mri_easywarp_outputs(
-    params: MriEasywarpParameters,
+    params: MriEasywarpParamsDict,
     execution: Execution,
 ): MriEasywarpOutputs {
     const ret: MriEasywarpOutputs = {
@@ -149,7 +149,7 @@ function mri_easywarp_outputs(
  * @returns NamedTuple of outputs (described in `MriEasywarpOutputs`).
  */
 function mri_easywarp_execute(
-    params: MriEasywarpParameters,
+    params: MriEasywarpParamsDict,
     runner: Runner | null = null,
 ): MriEasywarpOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function mri_easywarp(
 export {
       MRI_EASYWARP_METADATA,
       MriEasywarpOutputs,
+      MriEasywarpParamsDict,
+      MriEasywarpParamsDictTagged,
       mri_easywarp,
       mri_easywarp_execute,
       mri_easywarp_params,

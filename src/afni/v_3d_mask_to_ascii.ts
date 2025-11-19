@@ -11,17 +11,17 @@ const V_3D_MASK_TO_ASCII_METADATA: Metadata = {
 };
 
 
-interface V3dMaskToAsciiParameters {
+interface V3dMaskToAsciiParamsDict {
     "@type"?: "afni/3dMaskToASCII";
     "tobin_flag": boolean;
     "dataset": InputPathType;
     "outputfile": string;
 }
-type V3dMaskToAsciiParametersTagged = Required<Pick<V3dMaskToAsciiParameters, '@type'>> & V3dMaskToAsciiParameters;
+type V3dMaskToAsciiParamsDictTagged = Required<Pick<V3dMaskToAsciiParamsDict, '@type'>> & V3dMaskToAsciiParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMaskToAsciiParameters(...)`.
+ * Output object returned when calling `V3dMaskToAsciiParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3d_mask_to_ascii_params(
     dataset: InputPathType,
     outputfile: string,
     tobin_flag: boolean = false,
-): V3dMaskToAsciiParametersTagged {
+): V3dMaskToAsciiParamsDictTagged {
     const params = {
         "@type": "afni/3dMaskToASCII" as const,
         "tobin_flag": tobin_flag,
@@ -70,7 +70,7 @@ function v_3d_mask_to_ascii_params(
  * @returns Command-line arguments.
  */
 function v_3d_mask_to_ascii_cargs(
-    params: V3dMaskToAsciiParameters,
+    params: V3dMaskToAsciiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function v_3d_mask_to_ascii_cargs(
  * @returns Outputs object.
  */
 function v_3d_mask_to_ascii_outputs(
-    params: V3dMaskToAsciiParameters,
+    params: V3dMaskToAsciiParamsDict,
     execution: Execution,
 ): V3dMaskToAsciiOutputs {
     const ret: V3dMaskToAsciiOutputs = {
@@ -119,7 +119,7 @@ function v_3d_mask_to_ascii_outputs(
  * @returns NamedTuple of outputs (described in `V3dMaskToAsciiOutputs`).
  */
 function v_3d_mask_to_ascii_execute(
-    params: V3dMaskToAsciiParameters,
+    params: V3dMaskToAsciiParamsDict,
     runner: Runner | null = null,
 ): V3dMaskToAsciiOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function v_3d_mask_to_ascii(
 
 export {
       V3dMaskToAsciiOutputs,
+      V3dMaskToAsciiParamsDict,
+      V3dMaskToAsciiParamsDictTagged,
       V_3D_MASK_TO_ASCII_METADATA,
       v_3d_mask_to_ascii,
       v_3d_mask_to_ascii_execute,

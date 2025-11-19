@@ -11,7 +11,7 @@ const V_3D_LRFLIP_METADATA: Metadata = {
 };
 
 
-interface V3dLrflipParameters {
+interface V3dLrflipParamsDict {
     "@type"?: "afni/3dLRflip";
     "flip_lr": boolean;
     "flip_ap": boolean;
@@ -22,11 +22,11 @@ interface V3dLrflipParameters {
     "output_prefix"?: string | null | undefined;
     "datasets": Array<InputPathType>;
 }
-type V3dLrflipParametersTagged = Required<Pick<V3dLrflipParameters, '@type'>> & V3dLrflipParameters;
+type V3dLrflipParamsDictTagged = Required<Pick<V3dLrflipParamsDict, '@type'>> & V3dLrflipParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLrflipParameters(...)`.
+ * Output object returned when calling `V3dLrflipParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function v_3d_lrflip_params(
     flip_y: boolean = false,
     flip_z: boolean = false,
     output_prefix: string | null = null,
-): V3dLrflipParametersTagged {
+): V3dLrflipParamsDictTagged {
     const params = {
         "@type": "afni/3dLRflip" as const,
         "flip_lr": flip_lr,
@@ -88,7 +88,7 @@ function v_3d_lrflip_params(
  * @returns Command-line arguments.
  */
 function v_3d_lrflip_cargs(
-    params: V3dLrflipParameters,
+    params: V3dLrflipParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -131,7 +131,7 @@ function v_3d_lrflip_cargs(
  * @returns Outputs object.
  */
 function v_3d_lrflip_outputs(
-    params: V3dLrflipParameters,
+    params: V3dLrflipParamsDict,
     execution: Execution,
 ): V3dLrflipOutputs {
     const ret: V3dLrflipOutputs = {
@@ -156,7 +156,7 @@ function v_3d_lrflip_outputs(
  * @returns NamedTuple of outputs (described in `V3dLrflipOutputs`).
  */
 function v_3d_lrflip_execute(
-    params: V3dLrflipParameters,
+    params: V3dLrflipParamsDict,
     runner: Runner | null = null,
 ): V3dLrflipOutputs {
     runner = runner || getGlobalRunner();
@@ -208,6 +208,8 @@ function v_3d_lrflip(
 
 export {
       V3dLrflipOutputs,
+      V3dLrflipParamsDict,
+      V3dLrflipParamsDictTagged,
       V_3D_LRFLIP_METADATA,
       v_3d_lrflip,
       v_3d_lrflip_execute,

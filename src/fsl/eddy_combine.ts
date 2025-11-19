@@ -11,7 +11,7 @@ const EDDY_COMBINE_METADATA: Metadata = {
 };
 
 
-interface EddyCombineParameters {
+interface EddyCombineParamsDict {
     "@type"?: "fsl/eddy_combine";
     "pos_data": InputPathType;
     "pos_bvals": InputPathType;
@@ -24,11 +24,11 @@ interface EddyCombineParameters {
     "output_path": string;
     "only_matched_flag": number;
 }
-type EddyCombineParametersTagged = Required<Pick<EddyCombineParameters, '@type'>> & EddyCombineParameters;
+type EddyCombineParamsDictTagged = Required<Pick<EddyCombineParamsDict, '@type'>> & EddyCombineParamsDict;
 
 
 /**
- * Output object returned when calling `EddyCombineParameters(...)`.
+ * Output object returned when calling `EddyCombineParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function eddy_combine_params(
     neg_series_vol: number,
     output_path: string,
     only_matched_flag: number,
-): EddyCombineParametersTagged {
+): EddyCombineParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_combine" as const,
         "pos_data": pos_data,
@@ -106,7 +106,7 @@ function eddy_combine_params(
  * @returns Command-line arguments.
  */
 function eddy_combine_cargs(
-    params: EddyCombineParameters,
+    params: EddyCombineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function eddy_combine_cargs(
  * @returns Outputs object.
  */
 function eddy_combine_outputs(
-    params: EddyCombineParameters,
+    params: EddyCombineParamsDict,
     execution: Execution,
 ): EddyCombineOutputs {
     const ret: EddyCombineOutputs = {
@@ -162,7 +162,7 @@ function eddy_combine_outputs(
  * @returns NamedTuple of outputs (described in `EddyCombineOutputs`).
  */
 function eddy_combine_execute(
-    params: EddyCombineParameters,
+    params: EddyCombineParamsDict,
     runner: Runner | null = null,
 ): EddyCombineOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function eddy_combine(
 export {
       EDDY_COMBINE_METADATA,
       EddyCombineOutputs,
+      EddyCombineParamsDict,
+      EddyCombineParamsDictTagged,
       eddy_combine,
       eddy_combine_execute,
       eddy_combine_params,

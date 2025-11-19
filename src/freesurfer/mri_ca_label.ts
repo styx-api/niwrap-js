@@ -11,7 +11,7 @@ const MRI_CA_LABEL_METADATA: Metadata = {
 };
 
 
-interface MriCaLabelParameters {
+interface MriCaLabelParamsDict {
     "@type"?: "freesurfer/mri_ca_label";
     "input_volumes": Array<InputPathType>;
     "transform_file": InputPathType;
@@ -66,11 +66,11 @@ interface MriCaLabelParameters {
     "sa_cblum_from_seg"?: string | null | undefined;
     "threads"?: number | null | undefined;
 }
-type MriCaLabelParametersTagged = Required<Pick<MriCaLabelParameters, '@type'>> & MriCaLabelParameters;
+type MriCaLabelParamsDictTagged = Required<Pick<MriCaLabelParamsDict, '@type'>> & MriCaLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MriCaLabelParameters(...)`.
+ * Output object returned when calling `MriCaLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -197,7 +197,7 @@ function mri_ca_label_params(
     cblum_from_seg: string | null = null,
     sa_cblum_from_seg: string | null = null,
     threads: number | null = null,
-): MriCaLabelParametersTagged {
+): MriCaLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_ca_label" as const,
         "input_volumes": input_volumes,
@@ -344,7 +344,7 @@ function mri_ca_label_params(
  * @returns Command-line arguments.
  */
 function mri_ca_label_cargs(
-    params: MriCaLabelParameters,
+    params: MriCaLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -627,7 +627,7 @@ function mri_ca_label_cargs(
  * @returns Outputs object.
  */
 function mri_ca_label_outputs(
-    params: MriCaLabelParameters,
+    params: MriCaLabelParamsDict,
     execution: Execution,
 ): MriCaLabelOutputs {
     const ret: MriCaLabelOutputs = {
@@ -653,7 +653,7 @@ function mri_ca_label_outputs(
  * @returns NamedTuple of outputs (described in `MriCaLabelOutputs`).
  */
 function mri_ca_label_execute(
-    params: MriCaLabelParameters,
+    params: MriCaLabelParamsDict,
     runner: Runner | null = null,
 ): MriCaLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -794,6 +794,8 @@ function mri_ca_label(
 export {
       MRI_CA_LABEL_METADATA,
       MriCaLabelOutputs,
+      MriCaLabelParamsDict,
+      MriCaLabelParamsDictTagged,
       mri_ca_label,
       mri_ca_label_execute,
       mri_ca_label_params,

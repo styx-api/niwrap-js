@@ -11,7 +11,7 @@ const V_3D_FRIEDMAN_METADATA: Metadata = {
 };
 
 
-interface V3dFriedmanParameters {
+interface V3dFriedmanParamsDict {
     "@type"?: "afni/3dFriedman";
     "levels": number;
     "datasets": Array<InputPathType>;
@@ -19,11 +19,11 @@ interface V3dFriedmanParameters {
     "voxel_num"?: number | null | undefined;
     "output_prefix": string;
 }
-type V3dFriedmanParametersTagged = Required<Pick<V3dFriedmanParameters, '@type'>> & V3dFriedmanParameters;
+type V3dFriedmanParamsDictTagged = Required<Pick<V3dFriedmanParamsDict, '@type'>> & V3dFriedmanParamsDict;
 
 
 /**
- * Output object returned when calling `V3dFriedmanParameters(...)`.
+ * Output object returned when calling `V3dFriedmanParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function v_3d_friedman_params(
     output_prefix: string,
     workmem: number | null = null,
     voxel_num: number | null = null,
-): V3dFriedmanParametersTagged {
+): V3dFriedmanParamsDictTagged {
     const params = {
         "@type": "afni/3dFriedman" as const,
         "levels": levels,
@@ -78,7 +78,7 @@ function v_3d_friedman_params(
  * @returns Command-line arguments.
  */
 function v_3d_friedman_cargs(
-    params: V3dFriedmanParameters,
+    params: V3dFriedmanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function v_3d_friedman_cargs(
  * @returns Outputs object.
  */
 function v_3d_friedman_outputs(
-    params: V3dFriedmanParameters,
+    params: V3dFriedmanParamsDict,
     execution: Execution,
 ): V3dFriedmanOutputs {
     const ret: V3dFriedmanOutputs = {
@@ -142,7 +142,7 @@ function v_3d_friedman_outputs(
  * @returns NamedTuple of outputs (described in `V3dFriedmanOutputs`).
  */
 function v_3d_friedman_execute(
-    params: V3dFriedmanParameters,
+    params: V3dFriedmanParamsDict,
     runner: Runner | null = null,
 ): V3dFriedmanOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function v_3d_friedman(
 
 export {
       V3dFriedmanOutputs,
+      V3dFriedmanParamsDict,
+      V3dFriedmanParamsDictTagged,
       V_3D_FRIEDMAN_METADATA,
       v_3d_friedman,
       v_3d_friedman_execute,

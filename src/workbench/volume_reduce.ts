@@ -10,23 +10,23 @@ const VOLUME_REDUCE_METADATA: Metadata = {
 };
 
 
-interface VolumeReduceExcludeOutliersParameters {
+interface VolumeReduceExcludeOutliersParamsDict {
     "@type"?: "exclude-outliers";
     "sigma-below": number;
     "sigma-above": number;
 }
-type VolumeReduceExcludeOutliersParametersTagged = Required<Pick<VolumeReduceExcludeOutliersParameters, '@type'>> & VolumeReduceExcludeOutliersParameters;
+type VolumeReduceExcludeOutliersParamsDictTagged = Required<Pick<VolumeReduceExcludeOutliersParamsDict, '@type'>> & VolumeReduceExcludeOutliersParamsDict;
 
 
-interface VolumeReduceParameters {
+interface VolumeReduceParamsDict {
     "@type"?: "workbench/volume-reduce";
     "volume-out": string;
-    "exclude-outliers"?: VolumeReduceExcludeOutliersParameters | null | undefined;
+    "exclude-outliers"?: VolumeReduceExcludeOutliersParamsDict | null | undefined;
     "only-numeric": boolean;
     "volume-in": InputPathType;
     "operation": string;
 }
-type VolumeReduceParametersTagged = Required<Pick<VolumeReduceParameters, '@type'>> & VolumeReduceParameters;
+type VolumeReduceParamsDictTagged = Required<Pick<VolumeReduceParamsDict, '@type'>> & VolumeReduceParamsDict;
 
 
 /**
@@ -37,10 +37,10 @@ type VolumeReduceParametersTagged = Required<Pick<VolumeReduceParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function volume_reduce_exclude_outliers_params(
+function volume_reduce_exclude_outliers(
     sigma_below: number,
     sigma_above: number,
-): VolumeReduceExcludeOutliersParametersTagged {
+): VolumeReduceExcludeOutliersParamsDictTagged {
     const params = {
         "@type": "exclude-outliers" as const,
         "sigma-below": sigma_below,
@@ -59,7 +59,7 @@ function volume_reduce_exclude_outliers_params(
  * @returns Command-line arguments.
  */
 function volume_reduce_exclude_outliers_cargs(
-    params: VolumeReduceExcludeOutliersParameters,
+    params: VolumeReduceExcludeOutliersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -73,7 +73,7 @@ function volume_reduce_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `VolumeReduceParameters(...)`.
+ * Output object returned when calling `VolumeReduceParamsDict(...)`.
  *
  * @interface
  */
@@ -104,9 +104,9 @@ function volume_reduce_params(
     volume_out: string,
     volume_in: InputPathType,
     operation: string,
-    exclude_outliers: VolumeReduceExcludeOutliersParameters | null = null,
+    exclude_outliers: VolumeReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
-): VolumeReduceParametersTagged {
+): VolumeReduceParamsDictTagged {
     const params = {
         "@type": "workbench/volume-reduce" as const,
         "volume-out": volume_out,
@@ -130,7 +130,7 @@ function volume_reduce_params(
  * @returns Command-line arguments.
  */
 function volume_reduce_cargs(
-    params: VolumeReduceParameters,
+    params: VolumeReduceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function volume_reduce_cargs(
  * @returns Outputs object.
  */
 function volume_reduce_outputs(
-    params: VolumeReduceParameters,
+    params: VolumeReduceParamsDict,
     execution: Execution,
 ): VolumeReduceOutputs {
     const ret: VolumeReduceOutputs = {
@@ -198,7 +198,7 @@ function volume_reduce_outputs(
  * @returns NamedTuple of outputs (described in `VolumeReduceOutputs`).
  */
 function volume_reduce_execute(
-    params: VolumeReduceParameters,
+    params: VolumeReduceParamsDict,
     runner: Runner | null = null,
 ): VolumeReduceOutputs {
     runner = runner || getGlobalRunner();
@@ -247,7 +247,7 @@ function volume_reduce(
     volume_out: string,
     volume_in: InputPathType,
     operation: string,
-    exclude_outliers: VolumeReduceExcludeOutliersParameters | null = null,
+    exclude_outliers: VolumeReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): VolumeReduceOutputs {
@@ -258,9 +258,13 @@ function volume_reduce(
 
 export {
       VOLUME_REDUCE_METADATA,
+      VolumeReduceExcludeOutliersParamsDict,
+      VolumeReduceExcludeOutliersParamsDictTagged,
       VolumeReduceOutputs,
+      VolumeReduceParamsDict,
+      VolumeReduceParamsDictTagged,
       volume_reduce,
-      volume_reduce_exclude_outliers_params,
+      volume_reduce_exclude_outliers,
       volume_reduce_execute,
       volume_reduce_params,
 };

@@ -11,15 +11,15 @@ const FIXEL2SH_METADATA: Metadata = {
 };
 
 
-interface Fixel2shConfigParameters {
+interface Fixel2shConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Fixel2shConfigParametersTagged = Required<Pick<Fixel2shConfigParameters, '@type'>> & Fixel2shConfigParameters;
+type Fixel2shConfigParamsDictTagged = Required<Pick<Fixel2shConfigParamsDict, '@type'>> & Fixel2shConfigParamsDict;
 
 
-interface Fixel2shParameters {
+interface Fixel2shParamsDict {
     "@type"?: "mrtrix/fixel2sh";
     "lmax"?: number | null | undefined;
     "info": boolean;
@@ -27,13 +27,13 @@ interface Fixel2shParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Fixel2shConfigParameters> | null | undefined;
+    "config"?: Array<Fixel2shConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "fixel_in": InputPathType;
     "sh_out": string;
 }
-type Fixel2shParametersTagged = Required<Pick<Fixel2shParameters, '@type'>> & Fixel2shParameters;
+type Fixel2shParamsDictTagged = Required<Pick<Fixel2shParamsDict, '@type'>> & Fixel2shParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type Fixel2shParametersTagged = Required<Pick<Fixel2shParameters, '@type'>> & Fi
  *
  * @returns Parameter dictionary
  */
-function fixel2sh_config_params(
+function fixel2sh_config(
     key: string,
     value: string,
-): Fixel2shConfigParametersTagged {
+): Fixel2shConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function fixel2sh_config_params(
  * @returns Command-line arguments.
  */
 function fixel2sh_config_cargs(
-    params: Fixel2shConfigParameters,
+    params: Fixel2shConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function fixel2sh_config_cargs(
 
 
 /**
- * Output object returned when calling `Fixel2shParameters(...)`.
+ * Output object returned when calling `Fixel2shParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function fixel2sh_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fixel2shConfigParameters> | null = null,
+    config: Array<Fixel2shConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Fixel2shParametersTagged {
+): Fixel2shParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixel2sh" as const,
         "info": info,
@@ -157,7 +157,7 @@ function fixel2sh_params(
  * @returns Command-line arguments.
  */
 function fixel2sh_cargs(
-    params: Fixel2shParameters,
+    params: Fixel2shParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function fixel2sh_cargs(
  * @returns Outputs object.
  */
 function fixel2sh_outputs(
-    params: Fixel2shParameters,
+    params: Fixel2shParamsDict,
     execution: Execution,
 ): Fixel2shOutputs {
     const ret: Fixel2shOutputs = {
@@ -245,7 +245,7 @@ function fixel2sh_outputs(
  * @returns NamedTuple of outputs (described in `Fixel2shOutputs`).
  */
 function fixel2sh_execute(
-    params: Fixel2shParameters,
+    params: Fixel2shParamsDict,
     runner: Runner | null = null,
 ): Fixel2shOutputs {
     runner = runner || getGlobalRunner();
@@ -300,7 +300,7 @@ function fixel2sh(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Fixel2shConfigParameters> | null = null,
+    config: Array<Fixel2shConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -312,9 +312,13 @@ function fixel2sh(
 
 export {
       FIXEL2SH_METADATA,
+      Fixel2shConfigParamsDict,
+      Fixel2shConfigParamsDictTagged,
       Fixel2shOutputs,
+      Fixel2shParamsDict,
+      Fixel2shParamsDictTagged,
       fixel2sh,
-      fixel2sh_config_params,
+      fixel2sh_config,
       fixel2sh_execute,
       fixel2sh_params,
 };

@@ -11,7 +11,7 @@ const NON_LOCAL_SUPER_RESOLUTION_METADATA: Metadata = {
 };
 
 
-interface NonLocalSuperResolutionParameters {
+interface NonLocalSuperResolutionParamsDict {
     "@type"?: "ants/NonLocalSuperResolution";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
@@ -26,11 +26,11 @@ interface NonLocalSuperResolutionParameters {
     "output": string;
     "verbose"?: boolean | null | undefined;
 }
-type NonLocalSuperResolutionParametersTagged = Required<Pick<NonLocalSuperResolutionParameters, '@type'>> & NonLocalSuperResolutionParameters;
+type NonLocalSuperResolutionParamsDictTagged = Required<Pick<NonLocalSuperResolutionParamsDict, '@type'>> & NonLocalSuperResolutionParamsDict;
 
 
 /**
- * Output object returned when calling `NonLocalSuperResolutionParameters(...)`.
+ * Output object returned when calling `NonLocalSuperResolutionParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function non_local_super_resolution_params(
     scale_levels: string | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | null = null,
     verbose: boolean | null = null,
-): NonLocalSuperResolutionParametersTagged {
+): NonLocalSuperResolutionParamsDictTagged {
     const params = {
         "@type": "ants/NonLocalSuperResolution" as const,
         "input_image": input_image,
@@ -126,7 +126,7 @@ function non_local_super_resolution_params(
  * @returns Command-line arguments.
  */
 function non_local_super_resolution_cargs(
-    params: NonLocalSuperResolutionParameters,
+    params: NonLocalSuperResolutionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function non_local_super_resolution_cargs(
  * @returns Outputs object.
  */
 function non_local_super_resolution_outputs(
-    params: NonLocalSuperResolutionParameters,
+    params: NonLocalSuperResolutionParamsDict,
     execution: Execution,
 ): NonLocalSuperResolutionOutputs {
     const ret: NonLocalSuperResolutionOutputs = {
@@ -238,7 +238,7 @@ function non_local_super_resolution_outputs(
  * @returns NamedTuple of outputs (described in `NonLocalSuperResolutionOutputs`).
  */
 function non_local_super_resolution_execute(
-    params: NonLocalSuperResolutionParameters,
+    params: NonLocalSuperResolutionParamsDict,
     runner: Runner | null = null,
 ): NonLocalSuperResolutionOutputs {
     runner = runner || getGlobalRunner();
@@ -299,6 +299,8 @@ function non_local_super_resolution(
 export {
       NON_LOCAL_SUPER_RESOLUTION_METADATA,
       NonLocalSuperResolutionOutputs,
+      NonLocalSuperResolutionParamsDict,
+      NonLocalSuperResolutionParamsDictTagged,
       non_local_super_resolution,
       non_local_super_resolution_execute,
       non_local_super_resolution_params,

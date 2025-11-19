@@ -11,7 +11,7 @@ const GROUPSTATS_METADATA: Metadata = {
 };
 
 
-interface GroupstatsParameters {
+interface GroupstatsParamsDict {
     "@type"?: "freesurfer/groupstats";
     "outdir": string;
     "group_fsgd"?: InputPathType | null | undefined;
@@ -31,11 +31,11 @@ interface GroupstatsParameters {
     "base": boolean;
     "keep53": boolean;
 }
-type GroupstatsParametersTagged = Required<Pick<GroupstatsParameters, '@type'>> & GroupstatsParameters;
+type GroupstatsParamsDictTagged = Required<Pick<GroupstatsParamsDict, '@type'>> & GroupstatsParamsDict;
 
 
 /**
- * Output object returned when calling `GroupstatsParameters(...)`.
+ * Output object returned when calling `GroupstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function groupstats_params(
     new_: boolean = false,
     base: boolean = false,
     keep53: boolean = false,
-): GroupstatsParametersTagged {
+): GroupstatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/groupstats" as const,
         "outdir": outdir,
@@ -134,7 +134,7 @@ function groupstats_params(
  * @returns Command-line arguments.
  */
 function groupstats_cargs(
-    params: GroupstatsParameters,
+    params: GroupstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,7 +222,7 @@ function groupstats_cargs(
  * @returns Outputs object.
  */
 function groupstats_outputs(
-    params: GroupstatsParameters,
+    params: GroupstatsParamsDict,
     execution: Execution,
 ): GroupstatsOutputs {
     const ret: GroupstatsOutputs = {
@@ -247,7 +247,7 @@ function groupstats_outputs(
  * @returns NamedTuple of outputs (described in `GroupstatsOutputs`).
  */
 function groupstats_execute(
-    params: GroupstatsParameters,
+    params: GroupstatsParamsDict,
     runner: Runner | null = null,
 ): GroupstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -318,6 +318,8 @@ function groupstats(
 export {
       GROUPSTATS_METADATA,
       GroupstatsOutputs,
+      GroupstatsParamsDict,
+      GroupstatsParamsDictTagged,
       groupstats,
       groupstats_execute,
       groupstats_params,

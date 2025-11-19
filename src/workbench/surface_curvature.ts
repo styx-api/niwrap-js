@@ -10,17 +10,17 @@ const SURFACE_CURVATURE_METADATA: Metadata = {
 };
 
 
-interface SurfaceCurvatureParameters {
+interface SurfaceCurvatureParamsDict {
     "@type"?: "workbench/surface-curvature";
     "mean-out"?: string | null | undefined;
     "gauss-out"?: string | null | undefined;
     "surface": InputPathType;
 }
-type SurfaceCurvatureParametersTagged = Required<Pick<SurfaceCurvatureParameters, '@type'>> & SurfaceCurvatureParameters;
+type SurfaceCurvatureParamsDictTagged = Required<Pick<SurfaceCurvatureParamsDict, '@type'>> & SurfaceCurvatureParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceCurvatureParameters(...)`.
+ * Output object returned when calling `SurfaceCurvatureParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function surface_curvature_params(
     mean_out: string | null,
     gauss_out: string | null,
     surface: InputPathType,
-): SurfaceCurvatureParametersTagged {
+): SurfaceCurvatureParamsDictTagged {
     const params = {
         "@type": "workbench/surface-curvature" as const,
         "surface": surface,
@@ -73,7 +73,7 @@ function surface_curvature_params(
  * @returns Command-line arguments.
  */
 function surface_curvature_cargs(
-    params: SurfaceCurvatureParameters,
+    params: SurfaceCurvatureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function surface_curvature_cargs(
  * @returns Outputs object.
  */
 function surface_curvature_outputs(
-    params: SurfaceCurvatureParameters,
+    params: SurfaceCurvatureParamsDict,
     execution: Execution,
 ): SurfaceCurvatureOutputs {
     const ret: SurfaceCurvatureOutputs = {
@@ -124,7 +124,7 @@ function surface_curvature_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
  */
 function surface_curvature_execute(
-    params: SurfaceCurvatureParameters,
+    params: SurfaceCurvatureParamsDict,
     runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function surface_curvature(
 export {
       SURFACE_CURVATURE_METADATA,
       SurfaceCurvatureOutputs,
+      SurfaceCurvatureParamsDict,
+      SurfaceCurvatureParamsDictTagged,
       surface_curvature,
       surface_curvature_execute,
       surface_curvature_params,

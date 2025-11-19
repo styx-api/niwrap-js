@@ -11,7 +11,7 @@ const XMAT_TOOL_PY_METADATA: Metadata = {
 };
 
 
-interface XmatToolPyParameters {
+interface XmatToolPyParamsDict {
     "@type"?: "afni/xmat_tool.py";
     "no_gui": boolean;
     "load_xmat"?: InputPathType | null | undefined;
@@ -35,11 +35,11 @@ interface XmatToolPyParameters {
     "show_1d": boolean;
     "gui_plot_xmat_as_one": boolean;
 }
-type XmatToolPyParametersTagged = Required<Pick<XmatToolPyParameters, '@type'>> & XmatToolPyParameters;
+type XmatToolPyParamsDictTagged = Required<Pick<XmatToolPyParamsDict, '@type'>> & XmatToolPyParamsDict;
 
 
 /**
- * Output object returned when calling `XmatToolPyParameters(...)`.
+ * Output object returned when calling `XmatToolPyParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function xmat_tool_py_params(
     show_xmat: boolean = false,
     show_1d: boolean = false,
     gui_plot_xmat_as_one: boolean = false,
-): XmatToolPyParametersTagged {
+): XmatToolPyParamsDictTagged {
     const params = {
         "@type": "afni/xmat_tool.py" as const,
         "no_gui": no_gui,
@@ -154,7 +154,7 @@ function xmat_tool_py_params(
  * @returns Command-line arguments.
  */
 function xmat_tool_py_cargs(
-    params: XmatToolPyParameters,
+    params: XmatToolPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -253,7 +253,7 @@ function xmat_tool_py_cargs(
  * @returns Outputs object.
  */
 function xmat_tool_py_outputs(
-    params: XmatToolPyParameters,
+    params: XmatToolPyParamsDict,
     execution: Execution,
 ): XmatToolPyOutputs {
     const ret: XmatToolPyOutputs = {
@@ -279,7 +279,7 @@ function xmat_tool_py_outputs(
  * @returns NamedTuple of outputs (described in `XmatToolPyOutputs`).
  */
 function xmat_tool_py_execute(
-    params: XmatToolPyParameters,
+    params: XmatToolPyParamsDict,
     runner: Runner | null = null,
 ): XmatToolPyOutputs {
     runner = runner || getGlobalRunner();
@@ -358,6 +358,8 @@ function xmat_tool_py(
 export {
       XMAT_TOOL_PY_METADATA,
       XmatToolPyOutputs,
+      XmatToolPyParamsDict,
+      XmatToolPyParamsDictTagged,
       xmat_tool_py,
       xmat_tool_py_execute,
       xmat_tool_py_params,

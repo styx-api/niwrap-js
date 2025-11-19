@@ -10,18 +10,18 @@ const VOLUME_ESTIMATE_FWHM_METADATA: Metadata = {
 };
 
 
-interface VolumeEstimateFwhmParameters {
+interface VolumeEstimateFwhmParamsDict {
     "@type"?: "workbench/volume-estimate-fwhm";
     "roivol"?: InputPathType | null | undefined;
     "subvol"?: string | null | undefined;
     "demean"?: boolean | null | undefined;
     "volume": InputPathType;
 }
-type VolumeEstimateFwhmParametersTagged = Required<Pick<VolumeEstimateFwhmParameters, '@type'>> & VolumeEstimateFwhmParameters;
+type VolumeEstimateFwhmParamsDictTagged = Required<Pick<VolumeEstimateFwhmParamsDict, '@type'>> & VolumeEstimateFwhmParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeEstimateFwhmParameters(...)`.
+ * Output object returned when calling `VolumeEstimateFwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function volume_estimate_fwhm_params(
     subvol: string | null,
     volume: InputPathType,
     demean: boolean | null = false,
-): VolumeEstimateFwhmParametersTagged {
+): VolumeEstimateFwhmParamsDictTagged {
     const params = {
         "@type": "workbench/volume-estimate-fwhm" as const,
         "volume": volume,
@@ -81,7 +81,7 @@ function volume_estimate_fwhm_params(
  * @returns Command-line arguments.
  */
 function volume_estimate_fwhm_cargs(
-    params: VolumeEstimateFwhmParameters,
+    params: VolumeEstimateFwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function volume_estimate_fwhm_cargs(
  * @returns Outputs object.
  */
 function volume_estimate_fwhm_outputs(
-    params: VolumeEstimateFwhmParameters,
+    params: VolumeEstimateFwhmParamsDict,
     execution: Execution,
 ): VolumeEstimateFwhmOutputs {
     const ret: VolumeEstimateFwhmOutputs = {
@@ -132,7 +132,7 @@ function volume_estimate_fwhm_outputs(
  * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
  */
 function volume_estimate_fwhm_execute(
-    params: VolumeEstimateFwhmParameters,
+    params: VolumeEstimateFwhmParamsDict,
     runner: Runner | null = null,
 ): VolumeEstimateFwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function volume_estimate_fwhm(
 export {
       VOLUME_ESTIMATE_FWHM_METADATA,
       VolumeEstimateFwhmOutputs,
+      VolumeEstimateFwhmParamsDict,
+      VolumeEstimateFwhmParamsDictTagged,
       volume_estimate_fwhm,
       volume_estimate_fwhm_execute,
       volume_estimate_fwhm_params,

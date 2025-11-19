@@ -11,7 +11,7 @@ const V_3DBUCKET_METADATA: Metadata = {
 };
 
 
-interface V3dbucketParameters {
+interface V3dbucketParamsDict {
     "@type"?: "afni/3dbucket";
     "prefix"?: string | null | undefined;
     "output"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface V3dbucketParameters {
     "abuc": boolean;
     "input_files": Array<string>;
 }
-type V3dbucketParametersTagged = Required<Pick<V3dbucketParameters, '@type'>> & V3dbucketParameters;
+type V3dbucketParamsDictTagged = Required<Pick<V3dbucketParamsDict, '@type'>> & V3dbucketParamsDict;
 
 
 /**
- * Output object returned when calling `V3dbucketParameters(...)`.
+ * Output object returned when calling `V3dbucketParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function v_3dbucket_params(
     verbose: boolean = false,
     fbuc: boolean = false,
     abuc: boolean = false,
-): V3dbucketParametersTagged {
+): V3dbucketParamsDictTagged {
     const params = {
         "@type": "afni/3dbucket" as const,
         "dry": dry,
@@ -104,7 +104,7 @@ function v_3dbucket_params(
  * @returns Command-line arguments.
  */
 function v_3dbucket_cargs(
-    params: V3dbucketParameters,
+    params: V3dbucketParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -165,7 +165,7 @@ function v_3dbucket_cargs(
  * @returns Outputs object.
  */
 function v_3dbucket_outputs(
-    params: V3dbucketParameters,
+    params: V3dbucketParamsDict,
     execution: Execution,
 ): V3dbucketOutputs {
     const ret: V3dbucketOutputs = {
@@ -190,7 +190,7 @@ function v_3dbucket_outputs(
  * @returns NamedTuple of outputs (described in `V3dbucketOutputs`).
  */
 function v_3dbucket_execute(
-    params: V3dbucketParameters,
+    params: V3dbucketParamsDict,
     runner: Runner | null = null,
 ): V3dbucketOutputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function v_3dbucket(
 
 export {
       V3dbucketOutputs,
+      V3dbucketParamsDict,
+      V3dbucketParamsDictTagged,
       V_3DBUCKET_METADATA,
       v_3dbucket,
       v_3dbucket_execute,

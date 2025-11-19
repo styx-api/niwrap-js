@@ -11,7 +11,7 @@ const V_1D_BPORT_METADATA: Metadata = {
 };
 
 
-interface V1dBportParameters {
+interface V1dBportParamsDict {
     "@type"?: "afni/1dBport";
     "band": Array<number>;
     "invert": boolean;
@@ -24,11 +24,11 @@ interface V1dBportParameters {
     "tr"?: number | null | undefined;
     "concat"?: InputPathType | null | undefined;
 }
-type V1dBportParametersTagged = Required<Pick<V1dBportParameters, '@type'>> & V1dBportParameters;
+type V1dBportParamsDictTagged = Required<Pick<V1dBportParamsDict, '@type'>> & V1dBportParamsDict;
 
 
 /**
- * Output object returned when calling `V1dBportParameters(...)`.
+ * Output object returned when calling `V1dBportParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function v_1d_bport_params(
     nodata: Array<number> | null = null,
     tr: number | null = null,
     concat: InputPathType | null = null,
-): V1dBportParametersTagged {
+): V1dBportParamsDictTagged {
     const params = {
         "@type": "afni/1dBport" as const,
         "band": band,
@@ -108,7 +108,7 @@ function v_1d_bport_params(
  * @returns Command-line arguments.
  */
 function v_1d_bport_cargs(
-    params: V1dBportParameters,
+    params: V1dBportParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -172,7 +172,7 @@ function v_1d_bport_cargs(
  * @returns Outputs object.
  */
 function v_1d_bport_outputs(
-    params: V1dBportParameters,
+    params: V1dBportParamsDict,
     execution: Execution,
 ): V1dBportOutputs {
     const ret: V1dBportOutputs = {
@@ -198,7 +198,7 @@ function v_1d_bport_outputs(
  * @returns NamedTuple of outputs (described in `V1dBportOutputs`).
  */
 function v_1d_bport_execute(
-    params: V1dBportParameters,
+    params: V1dBportParamsDict,
     runner: Runner | null = null,
 ): V1dBportOutputs {
     runner = runner || getGlobalRunner();
@@ -254,6 +254,8 @@ function v_1d_bport(
 
 export {
       V1dBportOutputs,
+      V1dBportParamsDict,
+      V1dBportParamsDictTagged,
       V_1D_BPORT_METADATA,
       v_1d_bport,
       v_1d_bport_execute,

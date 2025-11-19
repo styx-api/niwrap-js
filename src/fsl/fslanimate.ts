@@ -11,17 +11,17 @@ const FSLANIMATE_METADATA: Metadata = {
 };
 
 
-interface FslanimateParameters {
+interface FslanimateParamsDict {
     "@type"?: "fsl/fslanimate";
     "input_file": InputPathType;
     "output_file": string;
     "tmp_dir"?: string | null | undefined;
 }
-type FslanimateParametersTagged = Required<Pick<FslanimateParameters, '@type'>> & FslanimateParameters;
+type FslanimateParamsDictTagged = Required<Pick<FslanimateParamsDict, '@type'>> & FslanimateParamsDict;
 
 
 /**
- * Output object returned when calling `FslanimateParameters(...)`.
+ * Output object returned when calling `FslanimateParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function fslanimate_params(
     input_file: InputPathType,
     output_file: string,
     tmp_dir: string | null = null,
-): FslanimateParametersTagged {
+): FslanimateParamsDictTagged {
     const params = {
         "@type": "fsl/fslanimate" as const,
         "input_file": input_file,
@@ -72,7 +72,7 @@ function fslanimate_params(
  * @returns Command-line arguments.
  */
 function fslanimate_cargs(
-    params: FslanimateParameters,
+    params: FslanimateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function fslanimate_cargs(
  * @returns Outputs object.
  */
 function fslanimate_outputs(
-    params: FslanimateParameters,
+    params: FslanimateParamsDict,
     execution: Execution,
 ): FslanimateOutputs {
     const ret: FslanimateOutputs = {
@@ -121,7 +121,7 @@ function fslanimate_outputs(
  * @returns NamedTuple of outputs (described in `FslanimateOutputs`).
  */
 function fslanimate_execute(
-    params: FslanimateParameters,
+    params: FslanimateParamsDict,
     runner: Runner | null = null,
 ): FslanimateOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function fslanimate(
 export {
       FSLANIMATE_METADATA,
       FslanimateOutputs,
+      FslanimateParamsDict,
+      FslanimateParamsDictTagged,
       fslanimate,
       fslanimate_execute,
       fslanimate_params,

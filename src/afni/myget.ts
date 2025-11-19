@@ -11,17 +11,17 @@ const MYGET_METADATA: Metadata = {
 };
 
 
-interface MygetParameters {
+interface MygetParamsDict {
     "@type"?: "afni/myget";
     "protocol_version"?: "-1" | "-1.1" | null | undefined;
     "url": string;
     "output_file": string;
 }
-type MygetParametersTagged = Required<Pick<MygetParameters, '@type'>> & MygetParameters;
+type MygetParamsDictTagged = Required<Pick<MygetParamsDict, '@type'>> & MygetParamsDict;
 
 
 /**
- * Output object returned when calling `MygetParameters(...)`.
+ * Output object returned when calling `MygetParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function myget_params(
     url: string,
     output_file: string,
     protocol_version: "-1" | "-1.1" | null = null,
-): MygetParametersTagged {
+): MygetParamsDictTagged {
     const params = {
         "@type": "afni/myget" as const,
         "url": url,
@@ -72,7 +72,7 @@ function myget_params(
  * @returns Command-line arguments.
  */
 function myget_cargs(
-    params: MygetParameters,
+    params: MygetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function myget_cargs(
  * @returns Outputs object.
  */
 function myget_outputs(
-    params: MygetParameters,
+    params: MygetParamsDict,
     execution: Execution,
 ): MygetOutputs {
     const ret: MygetOutputs = {
@@ -124,7 +124,7 @@ function myget_outputs(
  * @returns NamedTuple of outputs (described in `MygetOutputs`).
  */
 function myget_execute(
-    params: MygetParameters,
+    params: MygetParamsDict,
     runner: Runner | null = null,
 ): MygetOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function myget(
 export {
       MYGET_METADATA,
       MygetOutputs,
+      MygetParamsDict,
+      MygetParamsDictTagged,
       myget,
       myget_execute,
       myget_params,

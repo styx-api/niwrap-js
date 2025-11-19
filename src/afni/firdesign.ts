@@ -11,7 +11,7 @@ const FIRDESIGN_METADATA: Metadata = {
 };
 
 
-interface FirdesignParameters {
+interface FirdesignParamsDict {
     "@type"?: "afni/FIRdesign";
     "fbot": number;
     "ftop": number;
@@ -20,11 +20,11 @@ interface FirdesignParameters {
     "alternative_band"?: Array<number> | null | undefined;
     "alternative_ntap"?: number | null | undefined;
 }
-type FirdesignParametersTagged = Required<Pick<FirdesignParameters, '@type'>> & FirdesignParameters;
+type FirdesignParamsDictTagged = Required<Pick<FirdesignParamsDict, '@type'>> & FirdesignParamsDict;
 
 
 /**
- * Output object returned when calling `FirdesignParameters(...)`.
+ * Output object returned when calling `FirdesignParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function firdesign_params(
     tr: number | null = null,
     alternative_band: Array<number> | null = null,
     alternative_ntap: number | null = null,
-): FirdesignParametersTagged {
+): FirdesignParamsDictTagged {
     const params = {
         "@type": "afni/FIRdesign" as const,
         "fbot": fbot,
@@ -84,7 +84,7 @@ function firdesign_params(
  * @returns Command-line arguments.
  */
 function firdesign_cargs(
-    params: FirdesignParameters,
+    params: FirdesignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function firdesign_cargs(
  * @returns Outputs object.
  */
 function firdesign_outputs(
-    params: FirdesignParameters,
+    params: FirdesignParamsDict,
     execution: Execution,
 ): FirdesignOutputs {
     const ret: FirdesignOutputs = {
@@ -148,7 +148,7 @@ function firdesign_outputs(
  * @returns NamedTuple of outputs (described in `FirdesignOutputs`).
  */
 function firdesign_execute(
-    params: FirdesignParameters,
+    params: FirdesignParamsDict,
     runner: Runner | null = null,
 ): FirdesignOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function firdesign(
 export {
       FIRDESIGN_METADATA,
       FirdesignOutputs,
+      FirdesignParamsDict,
+      FirdesignParamsDictTagged,
       firdesign,
       firdesign_execute,
       firdesign_params,

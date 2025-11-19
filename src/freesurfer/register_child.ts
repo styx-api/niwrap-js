@@ -11,16 +11,16 @@ const REGISTER_CHILD_METADATA: Metadata = {
 };
 
 
-interface RegisterChildParameters {
+interface RegisterChildParamsDict {
     "@type"?: "freesurfer/register_child";
     "input_volume": InputPathType;
     "output_directory": string;
 }
-type RegisterChildParametersTagged = Required<Pick<RegisterChildParameters, '@type'>> & RegisterChildParameters;
+type RegisterChildParamsDictTagged = Required<Pick<RegisterChildParamsDict, '@type'>> & RegisterChildParamsDict;
 
 
 /**
- * Output object returned when calling `RegisterChildParameters(...)`.
+ * Output object returned when calling `RegisterChildParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface RegisterChildOutputs {
 function register_child_params(
     input_volume: InputPathType,
     output_directory: string,
-): RegisterChildParametersTagged {
+): RegisterChildParamsDictTagged {
     const params = {
         "@type": "freesurfer/register_child" as const,
         "input_volume": input_volume,
@@ -70,7 +70,7 @@ function register_child_params(
  * @returns Command-line arguments.
  */
 function register_child_cargs(
-    params: RegisterChildParameters,
+    params: RegisterChildParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function register_child_cargs(
  * @returns Outputs object.
  */
 function register_child_outputs(
-    params: RegisterChildParameters,
+    params: RegisterChildParamsDict,
     execution: Execution,
 ): RegisterChildOutputs {
     const ret: RegisterChildOutputs = {
@@ -117,7 +117,7 @@ function register_child_outputs(
  * @returns NamedTuple of outputs (described in `RegisterChildOutputs`).
  */
 function register_child_execute(
-    params: RegisterChildParameters,
+    params: RegisterChildParamsDict,
     runner: Runner | null = null,
 ): RegisterChildOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function register_child(
 export {
       REGISTER_CHILD_METADATA,
       RegisterChildOutputs,
+      RegisterChildParamsDict,
+      RegisterChildParamsDictTagged,
       register_child,
       register_child_execute,
       register_child_params,

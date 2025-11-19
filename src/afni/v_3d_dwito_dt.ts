@@ -11,7 +11,7 @@ const V_3D_DWITO_DT_METADATA: Metadata = {
 };
 
 
-interface V3dDwitoDtParameters {
+interface V3dDwitoDtParamsDict {
     "@type"?: "afni/3dDWItoDT";
     "gradient_file": InputPathType;
     "dataset": InputPathType;
@@ -40,11 +40,11 @@ interface V3dDwitoDtParameters {
     "opt"?: string | null | undefined;
     "mean_b0": boolean;
 }
-type V3dDwitoDtParametersTagged = Required<Pick<V3dDwitoDtParameters, '@type'>> & V3dDwitoDtParameters;
+type V3dDwitoDtParamsDictTagged = Required<Pick<V3dDwitoDtParamsDict, '@type'>> & V3dDwitoDtParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDwitoDtParameters(...)`.
+ * Output object returned when calling `V3dDwitoDtParamsDict(...)`.
  *
  * @interface
  */
@@ -115,7 +115,7 @@ function v_3d_dwito_dt_params(
     csf_fa: number | null = null,
     opt: string | null = null,
     mean_b0: boolean = false,
-): V3dDwitoDtParametersTagged {
+): V3dDwitoDtParamsDictTagged {
     const params = {
         "@type": "afni/3dDWItoDT" as const,
         "gradient_file": gradient_file,
@@ -186,7 +186,7 @@ function v_3d_dwito_dt_params(
  * @returns Command-line arguments.
  */
 function v_3d_dwito_dt_cargs(
-    params: V3dDwitoDtParameters,
+    params: V3dDwitoDtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -320,7 +320,7 @@ function v_3d_dwito_dt_cargs(
  * @returns Outputs object.
  */
 function v_3d_dwito_dt_outputs(
-    params: V3dDwitoDtParameters,
+    params: V3dDwitoDtParamsDict,
     execution: Execution,
 ): V3dDwitoDtOutputs {
     const ret: V3dDwitoDtOutputs = {
@@ -345,7 +345,7 @@ function v_3d_dwito_dt_outputs(
  * @returns NamedTuple of outputs (described in `V3dDwitoDtOutputs`).
  */
 function v_3d_dwito_dt_execute(
-    params: V3dDwitoDtParameters,
+    params: V3dDwitoDtParamsDict,
     runner: Runner | null = null,
 ): V3dDwitoDtOutputs {
     runner = runner || getGlobalRunner();
@@ -433,6 +433,8 @@ function v_3d_dwito_dt(
 
 export {
       V3dDwitoDtOutputs,
+      V3dDwitoDtParamsDict,
+      V3dDwitoDtParamsDictTagged,
       V_3D_DWITO_DT_METADATA,
       v_3d_dwito_dt,
       v_3d_dwito_dt_execute,

@@ -11,7 +11,7 @@ const V_1D_TOOL_PY_METADATA: Metadata = {
 };
 
 
-interface V1dToolPyParameters {
+interface V1dToolPyParamsDict {
     "@type"?: "afni/1d_tool.py";
     "infile": InputPathType;
     "write"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface V1dToolPyParameters {
     "reverse": boolean;
     "show_max_displace": boolean;
 }
-type V1dToolPyParametersTagged = Required<Pick<V1dToolPyParameters, '@type'>> & V1dToolPyParameters;
+type V1dToolPyParamsDictTagged = Required<Pick<V1dToolPyParamsDict, '@type'>> & V1dToolPyParamsDict;
 
 
 /**
- * Output object returned when calling `V1dToolPyParameters(...)`.
+ * Output object returned when calling `V1dToolPyParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function v_1d_tool_py_params(
     transpose: boolean = false,
     reverse: boolean = false,
     show_max_displace: boolean = false,
-): V1dToolPyParametersTagged {
+): V1dToolPyParamsDictTagged {
     const params = {
         "@type": "afni/1d_tool.py" as const,
         "infile": infile,
@@ -126,7 +126,7 @@ function v_1d_tool_py_params(
  * @returns Command-line arguments.
  */
 function v_1d_tool_py_cargs(
-    params: V1dToolPyParameters,
+    params: V1dToolPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function v_1d_tool_py_cargs(
  * @returns Outputs object.
  */
 function v_1d_tool_py_outputs(
-    params: V1dToolPyParameters,
+    params: V1dToolPyParamsDict,
     execution: Execution,
 ): V1dToolPyOutputs {
     const ret: V1dToolPyOutputs = {
@@ -234,7 +234,7 @@ function v_1d_tool_py_outputs(
  * @returns NamedTuple of outputs (described in `V1dToolPyOutputs`).
  */
 function v_1d_tool_py_execute(
-    params: V1dToolPyParameters,
+    params: V1dToolPyParamsDict,
     runner: Runner | null = null,
 ): V1dToolPyOutputs {
     runner = runner || getGlobalRunner();
@@ -296,6 +296,8 @@ function v_1d_tool_py(
 
 export {
       V1dToolPyOutputs,
+      V1dToolPyParamsDict,
+      V1dToolPyParamsDictTagged,
       V_1D_TOOL_PY_METADATA,
       v_1d_tool_py,
       v_1d_tool_py_execute,

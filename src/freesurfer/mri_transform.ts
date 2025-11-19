@@ -11,7 +11,7 @@ const MRI_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface MriTransformParameters {
+interface MriTransformParamsDict {
     "@type"?: "freesurfer/mri_transform";
     "input_volume": InputPathType;
     "lta_file": InputPathType;
@@ -19,11 +19,11 @@ interface MriTransformParameters {
     "out_like"?: InputPathType | null | undefined;
     "invert": boolean;
 }
-type MriTransformParametersTagged = Required<Pick<MriTransformParameters, '@type'>> & MriTransformParameters;
+type MriTransformParamsDictTagged = Required<Pick<MriTransformParamsDict, '@type'>> & MriTransformParamsDict;
 
 
 /**
- * Output object returned when calling `MriTransformParameters(...)`.
+ * Output object returned when calling `MriTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_transform_params(
     output_file: string,
     out_like: InputPathType | null = null,
     invert: boolean = false,
-): MriTransformParametersTagged {
+): MriTransformParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_transform" as const,
         "input_volume": input_volume,
@@ -80,7 +80,7 @@ function mri_transform_params(
  * @returns Command-line arguments.
  */
 function mri_transform_cargs(
-    params: MriTransformParameters,
+    params: MriTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function mri_transform_cargs(
  * @returns Outputs object.
  */
 function mri_transform_outputs(
-    params: MriTransformParameters,
+    params: MriTransformParamsDict,
     execution: Execution,
 ): MriTransformOutputs {
     const ret: MriTransformOutputs = {
@@ -136,7 +136,7 @@ function mri_transform_outputs(
  * @returns NamedTuple of outputs (described in `MriTransformOutputs`).
  */
 function mri_transform_execute(
-    params: MriTransformParameters,
+    params: MriTransformParamsDict,
     runner: Runner | null = null,
 ): MriTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function mri_transform(
 export {
       MRI_TRANSFORM_METADATA,
       MriTransformOutputs,
+      MriTransformParamsDict,
+      MriTransformParamsDictTagged,
       mri_transform,
       mri_transform_execute,
       mri_transform_params,

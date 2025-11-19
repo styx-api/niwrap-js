@@ -11,7 +11,7 @@ const RUN_FIRST_ALL_METADATA: Metadata = {
 };
 
 
-interface RunFirstAllParameters {
+interface RunFirstAllParamsDict {
     "@type"?: "fsl/run_first_all";
     "method"?: "auto" | "fast" | "none" | null | undefined;
     "brainextract_flag": boolean;
@@ -23,11 +23,11 @@ interface RunFirstAllParameters {
     "input_image": InputPathType;
     "output_image": string;
 }
-type RunFirstAllParametersTagged = Required<Pick<RunFirstAllParameters, '@type'>> & RunFirstAllParameters;
+type RunFirstAllParamsDictTagged = Required<Pick<RunFirstAllParamsDict, '@type'>> & RunFirstAllParamsDict;
 
 
 /**
- * Output object returned when calling `RunFirstAllParameters(...)`.
+ * Output object returned when calling `RunFirstAllParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function run_first_all_params(
     threestage_flag: boolean = false,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): RunFirstAllParametersTagged {
+): RunFirstAllParamsDictTagged {
     const params = {
         "@type": "fsl/run_first_all" as const,
         "brainextract_flag": brainextract_flag,
@@ -100,7 +100,7 @@ function run_first_all_params(
  * @returns Command-line arguments.
  */
 function run_first_all_cargs(
-    params: RunFirstAllParameters,
+    params: RunFirstAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,7 +156,7 @@ function run_first_all_cargs(
  * @returns Outputs object.
  */
 function run_first_all_outputs(
-    params: RunFirstAllParameters,
+    params: RunFirstAllParamsDict,
     execution: Execution,
 ): RunFirstAllOutputs {
     const ret: RunFirstAllOutputs = {
@@ -182,7 +182,7 @@ function run_first_all_outputs(
  * @returns NamedTuple of outputs (described in `RunFirstAllOutputs`).
  */
 function run_first_all_execute(
-    params: RunFirstAllParameters,
+    params: RunFirstAllParamsDict,
     runner: Runner | null = null,
 ): RunFirstAllOutputs {
     runner = runner || getGlobalRunner();
@@ -237,6 +237,8 @@ function run_first_all(
 export {
       RUN_FIRST_ALL_METADATA,
       RunFirstAllOutputs,
+      RunFirstAllParamsDict,
+      RunFirstAllParamsDictTagged,
       run_first_all,
       run_first_all_execute,
       run_first_all_params,

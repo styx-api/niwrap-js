@@ -11,7 +11,7 @@ const MRI_GLMFIT_SIM_METADATA: Metadata = {
 };
 
 
-interface MriGlmfitSimParameters {
+interface MriGlmfitSimParamsDict {
     "@type"?: "freesurfer/mri_glmfit-sim";
     "glmdir": string;
     "cwp"?: number | null | undefined;
@@ -43,11 +43,11 @@ interface MriGlmfitSimParameters {
     "spatial_sum": boolean;
     "help": boolean;
 }
-type MriGlmfitSimParametersTagged = Required<Pick<MriGlmfitSimParameters, '@type'>> & MriGlmfitSimParameters;
+type MriGlmfitSimParamsDictTagged = Required<Pick<MriGlmfitSimParamsDict, '@type'>> & MriGlmfitSimParamsDict;
 
 
 /**
- * Output object returned when calling `MriGlmfitSimParameters(...)`.
+ * Output object returned when calling `MriGlmfitSimParamsDict(...)`.
  *
  * @interface
  */
@@ -152,7 +152,7 @@ function mri_glmfit_sim_params(
     centroid: boolean = false,
     spatial_sum: boolean = false,
     help: boolean = false,
-): MriGlmfitSimParametersTagged {
+): MriGlmfitSimParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_glmfit-sim" as const,
         "glmdir": glmdir,
@@ -232,7 +232,7 @@ function mri_glmfit_sim_params(
  * @returns Command-line arguments.
  */
 function mri_glmfit_sim_cargs(
-    params: MriGlmfitSimParameters,
+    params: MriGlmfitSimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -389,7 +389,7 @@ function mri_glmfit_sim_cargs(
  * @returns Outputs object.
  */
 function mri_glmfit_sim_outputs(
-    params: MriGlmfitSimParameters,
+    params: MriGlmfitSimParamsDict,
     execution: Execution,
 ): MriGlmfitSimOutputs {
     const ret: MriGlmfitSimOutputs = {
@@ -421,7 +421,7 @@ function mri_glmfit_sim_outputs(
  * @returns NamedTuple of outputs (described in `MriGlmfitSimOutputs`).
  */
 function mri_glmfit_sim_execute(
-    params: MriGlmfitSimParameters,
+    params: MriGlmfitSimParamsDict,
     runner: Runner | null = null,
 ): MriGlmfitSimOutputs {
     runner = runner || getGlobalRunner();
@@ -516,6 +516,8 @@ function mri_glmfit_sim(
 export {
       MRI_GLMFIT_SIM_METADATA,
       MriGlmfitSimOutputs,
+      MriGlmfitSimParamsDict,
+      MriGlmfitSimParamsDictTagged,
       mri_glmfit_sim,
       mri_glmfit_sim_execute,
       mri_glmfit_sim_params,

@@ -11,7 +11,7 @@ const SURF2SURF_METADATA: Metadata = {
 };
 
 
-interface Surf2surfParameters {
+interface Surf2surfParamsDict {
     "@type"?: "fsl/surf2surf";
     "input_surface": InputPathType;
     "output_surface": InputPathType;
@@ -23,11 +23,11 @@ interface Surf2surfParameters {
     "output_type"?: string | null | undefined;
     "output_values"?: string | null | undefined;
 }
-type Surf2surfParametersTagged = Required<Pick<Surf2surfParameters, '@type'>> & Surf2surfParameters;
+type Surf2surfParamsDictTagged = Required<Pick<Surf2surfParamsDict, '@type'>> & Surf2surfParamsDict;
 
 
 /**
- * Output object returned when calling `Surf2surfParameters(...)`.
+ * Output object returned when calling `Surf2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function surf2surf_params(
     transform: InputPathType | null = null,
     output_type: string | null = null,
     output_values: string | null = null,
-): Surf2surfParametersTagged {
+): Surf2surfParamsDictTagged {
     const params = {
         "@type": "fsl/surf2surf" as const,
         "input_surface": input_surface,
@@ -104,7 +104,7 @@ function surf2surf_params(
  * @returns Command-line arguments.
  */
 function surf2surf_cargs(
-    params: Surf2surfParameters,
+    params: Surf2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -166,7 +166,7 @@ function surf2surf_cargs(
  * @returns Outputs object.
  */
 function surf2surf_outputs(
-    params: Surf2surfParameters,
+    params: Surf2surfParamsDict,
     execution: Execution,
 ): Surf2surfOutputs {
     const ret: Surf2surfOutputs = {
@@ -191,7 +191,7 @@ function surf2surf_outputs(
  * @returns NamedTuple of outputs (described in `Surf2surfOutputs`).
  */
 function surf2surf_execute(
-    params: Surf2surfParameters,
+    params: Surf2surfParamsDict,
     runner: Runner | null = null,
 ): Surf2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function surf2surf(
 export {
       SURF2SURF_METADATA,
       Surf2surfOutputs,
+      Surf2surfParamsDict,
+      Surf2surfParamsDictTagged,
       surf2surf,
       surf2surf_execute,
       surf2surf_params,

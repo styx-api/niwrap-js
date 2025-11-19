@@ -10,50 +10,50 @@ const CONVERT_AFFINE_METADATA: Metadata = {
 };
 
 
-interface ConvertAffineFromWorldParameters {
+interface ConvertAffineFromWorldParamsDict {
     "@type"?: "from-world";
     "input": string;
     "inverse": boolean;
 }
-type ConvertAffineFromWorldParametersTagged = Required<Pick<ConvertAffineFromWorldParameters, '@type'>> & ConvertAffineFromWorldParameters;
+type ConvertAffineFromWorldParamsDictTagged = Required<Pick<ConvertAffineFromWorldParamsDict, '@type'>> & ConvertAffineFromWorldParamsDict;
 
 
-interface ConvertAffineFromFlirtParameters {
+interface ConvertAffineFromFlirtParamsDict {
     "@type"?: "from-flirt";
     "input": string;
     "source-volume": string;
     "target-volume": string;
 }
-type ConvertAffineFromFlirtParametersTagged = Required<Pick<ConvertAffineFromFlirtParameters, '@type'>> & ConvertAffineFromFlirtParameters;
+type ConvertAffineFromFlirtParamsDictTagged = Required<Pick<ConvertAffineFromFlirtParamsDict, '@type'>> & ConvertAffineFromFlirtParamsDict;
 
 
-interface ConvertAffineToWorldParameters {
+interface ConvertAffineToWorldParamsDict {
     "@type"?: "to-world";
     "output": string;
     "inverse": boolean;
 }
-type ConvertAffineToWorldParametersTagged = Required<Pick<ConvertAffineToWorldParameters, '@type'>> & ConvertAffineToWorldParameters;
+type ConvertAffineToWorldParamsDictTagged = Required<Pick<ConvertAffineToWorldParamsDict, '@type'>> & ConvertAffineToWorldParamsDict;
 
 
-interface ConvertAffineToFlirtParameters {
+interface ConvertAffineToFlirtParamsDict {
     "@type"?: "to-flirt";
     "output": string;
     "source-volume": string;
     "target-volume": string;
 }
-type ConvertAffineToFlirtParametersTagged = Required<Pick<ConvertAffineToFlirtParameters, '@type'>> & ConvertAffineToFlirtParameters;
+type ConvertAffineToFlirtParamsDictTagged = Required<Pick<ConvertAffineToFlirtParamsDict, '@type'>> & ConvertAffineToFlirtParamsDict;
 
 
-interface ConvertAffineParameters {
+interface ConvertAffineParamsDict {
     "@type"?: "workbench/convert-affine";
-    "from-world"?: ConvertAffineFromWorldParameters | null | undefined;
+    "from-world"?: ConvertAffineFromWorldParamsDict | null | undefined;
     "input"?: string | null | undefined;
-    "from-flirt"?: ConvertAffineFromFlirtParameters | null | undefined;
-    "to-world"?: ConvertAffineToWorldParameters | null | undefined;
+    "from-flirt"?: ConvertAffineFromFlirtParamsDict | null | undefined;
+    "to-world"?: ConvertAffineToWorldParamsDict | null | undefined;
     "output"?: string | null | undefined;
-    "to-flirt"?: Array<ConvertAffineToFlirtParameters> | null | undefined;
+    "to-flirt"?: Array<ConvertAffineToFlirtParamsDict> | null | undefined;
 }
-type ConvertAffineParametersTagged = Required<Pick<ConvertAffineParameters, '@type'>> & ConvertAffineParameters;
+type ConvertAffineParamsDictTagged = Required<Pick<ConvertAffineParamsDict, '@type'>> & ConvertAffineParamsDict;
 
 
 /**
@@ -64,10 +64,10 @@ type ConvertAffineParametersTagged = Required<Pick<ConvertAffineParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function convert_affine_from_world_params(
+function convert_affine_from_world(
     input: string,
     inverse: boolean = false,
-): ConvertAffineFromWorldParametersTagged {
+): ConvertAffineFromWorldParamsDictTagged {
     const params = {
         "@type": "from-world" as const,
         "input": input,
@@ -86,7 +86,7 @@ function convert_affine_from_world_params(
  * @returns Command-line arguments.
  */
 function convert_affine_from_world_cargs(
-    params: ConvertAffineFromWorldParameters,
+    params: ConvertAffineFromWorldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,11 +110,11 @@ function convert_affine_from_world_cargs(
  *
  * @returns Parameter dictionary
  */
-function convert_affine_from_flirt_params(
+function convert_affine_from_flirt(
     input: string,
     source_volume: string,
     target_volume: string,
-): ConvertAffineFromFlirtParametersTagged {
+): ConvertAffineFromFlirtParamsDictTagged {
     const params = {
         "@type": "from-flirt" as const,
         "input": input,
@@ -134,7 +134,7 @@ function convert_affine_from_flirt_params(
  * @returns Command-line arguments.
  */
 function convert_affine_from_flirt_cargs(
-    params: ConvertAffineFromFlirtParameters,
+    params: ConvertAffineFromFlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,10 +156,10 @@ function convert_affine_from_flirt_cargs(
  *
  * @returns Parameter dictionary
  */
-function convert_affine_to_world_params(
+function convert_affine_to_world(
     output: string,
     inverse: boolean = false,
-): ConvertAffineToWorldParametersTagged {
+): ConvertAffineToWorldParamsDictTagged {
     const params = {
         "@type": "to-world" as const,
         "output": output,
@@ -178,7 +178,7 @@ function convert_affine_to_world_params(
  * @returns Command-line arguments.
  */
 function convert_affine_to_world_cargs(
-    params: ConvertAffineToWorldParameters,
+    params: ConvertAffineToWorldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -202,11 +202,11 @@ function convert_affine_to_world_cargs(
  *
  * @returns Parameter dictionary
  */
-function convert_affine_to_flirt_params(
+function convert_affine_to_flirt(
     output: string,
     source_volume: string,
     target_volume: string,
-): ConvertAffineToFlirtParametersTagged {
+): ConvertAffineToFlirtParamsDictTagged {
     const params = {
         "@type": "to-flirt" as const,
         "output": output,
@@ -226,7 +226,7 @@ function convert_affine_to_flirt_params(
  * @returns Command-line arguments.
  */
 function convert_affine_to_flirt_cargs(
-    params: ConvertAffineToFlirtParameters,
+    params: ConvertAffineToFlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -241,7 +241,7 @@ function convert_affine_to_flirt_cargs(
 
 
 /**
- * Output object returned when calling `ConvertAffineParameters(...)`.
+ * Output object returned when calling `ConvertAffineParamsDict(...)`.
  *
  * @interface
  */
@@ -272,11 +272,11 @@ output - the output affine
 function convert_affine_params(
     input: string | null,
     output: string | null,
-    from_world: ConvertAffineFromWorldParameters | null = null,
-    from_flirt: ConvertAffineFromFlirtParameters | null = null,
-    to_world: ConvertAffineToWorldParameters | null = null,
-    to_flirt: Array<ConvertAffineToFlirtParameters> | null = null,
-): ConvertAffineParametersTagged {
+    from_world: ConvertAffineFromWorldParamsDict | null = null,
+    from_flirt: ConvertAffineFromFlirtParamsDict | null = null,
+    to_world: ConvertAffineToWorldParamsDict | null = null,
+    to_flirt: Array<ConvertAffineToFlirtParamsDict> | null = null,
+): ConvertAffineParamsDictTagged {
     const params = {
         "@type": "workbench/convert-affine" as const,
     };
@@ -311,7 +311,7 @@ function convert_affine_params(
  * @returns Command-line arguments.
  */
 function convert_affine_cargs(
-    params: ConvertAffineParameters,
+    params: ConvertAffineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -342,7 +342,7 @@ function convert_affine_cargs(
  * @returns Outputs object.
  */
 function convert_affine_outputs(
-    params: ConvertAffineParameters,
+    params: ConvertAffineParamsDict,
     execution: Execution,
 ): ConvertAffineOutputs {
     const ret: ConvertAffineOutputs = {
@@ -367,7 +367,7 @@ function convert_affine_outputs(
  * @returns NamedTuple of outputs (described in `ConvertAffineOutputs`).
  */
 function convert_affine_execute(
-    params: ConvertAffineParameters,
+    params: ConvertAffineParamsDict,
     runner: Runner | null = null,
 ): ConvertAffineOutputs {
     runner = runner || getGlobalRunner();
@@ -406,10 +406,10 @@ output - the output affine
 function convert_affine(
     input: string | null,
     output: string | null,
-    from_world: ConvertAffineFromWorldParameters | null = null,
-    from_flirt: ConvertAffineFromFlirtParameters | null = null,
-    to_world: ConvertAffineToWorldParameters | null = null,
-    to_flirt: Array<ConvertAffineToFlirtParameters> | null = null,
+    from_world: ConvertAffineFromWorldParamsDict | null = null,
+    from_flirt: ConvertAffineFromFlirtParamsDict | null = null,
+    to_world: ConvertAffineToWorldParamsDict | null = null,
+    to_flirt: Array<ConvertAffineToFlirtParamsDict> | null = null,
     runner: Runner | null = null,
 ): ConvertAffineOutputs {
     const params = convert_affine_params(input, output, from_world, from_flirt, to_world, to_flirt)
@@ -419,12 +419,22 @@ function convert_affine(
 
 export {
       CONVERT_AFFINE_METADATA,
+      ConvertAffineFromFlirtParamsDict,
+      ConvertAffineFromFlirtParamsDictTagged,
+      ConvertAffineFromWorldParamsDict,
+      ConvertAffineFromWorldParamsDictTagged,
       ConvertAffineOutputs,
+      ConvertAffineParamsDict,
+      ConvertAffineParamsDictTagged,
+      ConvertAffineToFlirtParamsDict,
+      ConvertAffineToFlirtParamsDictTagged,
+      ConvertAffineToWorldParamsDict,
+      ConvertAffineToWorldParamsDictTagged,
       convert_affine,
       convert_affine_execute,
-      convert_affine_from_flirt_params,
-      convert_affine_from_world_params,
+      convert_affine_from_flirt,
+      convert_affine_from_world,
       convert_affine_params,
-      convert_affine_to_flirt_params,
-      convert_affine_to_world_params,
+      convert_affine_to_flirt,
+      convert_affine_to_world,
 };

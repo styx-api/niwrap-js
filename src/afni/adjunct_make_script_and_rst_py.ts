@@ -11,7 +11,7 @@ const ADJUNCT_MAKE_SCRIPT_AND_RST_PY_METADATA: Metadata = {
 };
 
 
-interface AdjunctMakeScriptAndRstPyParameters {
+interface AdjunctMakeScriptAndRstPyParamsDict {
     "@type"?: "afni/adjunct_make_script_and_rst.py";
     "input_script": InputPathType;
     "prefix_rst": string;
@@ -19,11 +19,11 @@ interface AdjunctMakeScriptAndRstPyParameters {
     "reflink": string;
     "execute_script": boolean;
 }
-type AdjunctMakeScriptAndRstPyParametersTagged = Required<Pick<AdjunctMakeScriptAndRstPyParameters, '@type'>> & AdjunctMakeScriptAndRstPyParameters;
+type AdjunctMakeScriptAndRstPyParamsDictTagged = Required<Pick<AdjunctMakeScriptAndRstPyParamsDict, '@type'>> & AdjunctMakeScriptAndRstPyParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctMakeScriptAndRstPyParameters(...)`.
+ * Output object returned when calling `AdjunctMakeScriptAndRstPyParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function adjunct_make_script_and_rst_py_params(
     prefix_script: string,
     reflink: string,
     execute_script: boolean = false,
-): AdjunctMakeScriptAndRstPyParametersTagged {
+): AdjunctMakeScriptAndRstPyParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_make_script_and_rst.py" as const,
         "input_script": input_script,
@@ -86,7 +86,7 @@ function adjunct_make_script_and_rst_py_params(
  * @returns Command-line arguments.
  */
 function adjunct_make_script_and_rst_py_cargs(
-    params: AdjunctMakeScriptAndRstPyParameters,
+    params: AdjunctMakeScriptAndRstPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function adjunct_make_script_and_rst_py_cargs(
  * @returns Outputs object.
  */
 function adjunct_make_script_and_rst_py_outputs(
-    params: AdjunctMakeScriptAndRstPyParameters,
+    params: AdjunctMakeScriptAndRstPyParamsDict,
     execution: Execution,
 ): AdjunctMakeScriptAndRstPyOutputs {
     const ret: AdjunctMakeScriptAndRstPyOutputs = {
@@ -151,7 +151,7 @@ function adjunct_make_script_and_rst_py_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctMakeScriptAndRstPyOutputs`).
  */
 function adjunct_make_script_and_rst_py_execute(
-    params: AdjunctMakeScriptAndRstPyParameters,
+    params: AdjunctMakeScriptAndRstPyParamsDict,
     runner: Runner | null = null,
 ): AdjunctMakeScriptAndRstPyOutputs {
     runner = runner || getGlobalRunner();
@@ -198,6 +198,8 @@ function adjunct_make_script_and_rst_py(
 export {
       ADJUNCT_MAKE_SCRIPT_AND_RST_PY_METADATA,
       AdjunctMakeScriptAndRstPyOutputs,
+      AdjunctMakeScriptAndRstPyParamsDict,
+      AdjunctMakeScriptAndRstPyParamsDictTagged,
       adjunct_make_script_and_rst_py,
       adjunct_make_script_and_rst_py_execute,
       adjunct_make_script_and_rst_py_params,

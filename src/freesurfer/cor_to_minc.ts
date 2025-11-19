@@ -11,16 +11,16 @@ const COR_TO_MINC_METADATA: Metadata = {
 };
 
 
-interface CorToMincParameters {
+interface CorToMincParamsDict {
     "@type"?: "freesurfer/cor_to_minc";
     "cor_directory": string;
     "minc_file": string;
 }
-type CorToMincParametersTagged = Required<Pick<CorToMincParameters, '@type'>> & CorToMincParameters;
+type CorToMincParamsDictTagged = Required<Pick<CorToMincParamsDict, '@type'>> & CorToMincParamsDict;
 
 
 /**
- * Output object returned when calling `CorToMincParameters(...)`.
+ * Output object returned when calling `CorToMincParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface CorToMincOutputs {
 function cor_to_minc_params(
     cor_directory: string,
     minc_file: string,
-): CorToMincParametersTagged {
+): CorToMincParamsDictTagged {
     const params = {
         "@type": "freesurfer/cor_to_minc" as const,
         "cor_directory": cor_directory,
@@ -66,7 +66,7 @@ function cor_to_minc_params(
  * @returns Command-line arguments.
  */
 function cor_to_minc_cargs(
-    params: CorToMincParameters,
+    params: CorToMincParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function cor_to_minc_cargs(
  * @returns Outputs object.
  */
 function cor_to_minc_outputs(
-    params: CorToMincParameters,
+    params: CorToMincParamsDict,
     execution: Execution,
 ): CorToMincOutputs {
     const ret: CorToMincOutputs = {
@@ -112,7 +112,7 @@ function cor_to_minc_outputs(
  * @returns NamedTuple of outputs (described in `CorToMincOutputs`).
  */
 function cor_to_minc_execute(
-    params: CorToMincParameters,
+    params: CorToMincParamsDict,
     runner: Runner | null = null,
 ): CorToMincOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function cor_to_minc(
 export {
       COR_TO_MINC_METADATA,
       CorToMincOutputs,
+      CorToMincParamsDict,
+      CorToMincParamsDictTagged,
       cor_to_minc,
       cor_to_minc_execute,
       cor_to_minc_params,

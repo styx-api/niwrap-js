@@ -11,16 +11,16 @@ const MRI_STRIP_SUBJECT_INFO_METADATA: Metadata = {
 };
 
 
-interface MriStripSubjectInfoParameters {
+interface MriStripSubjectInfoParamsDict {
     "@type"?: "freesurfer/mri_strip_subject_info";
     "input_files": Array<InputPathType>;
     "output_directory": string;
 }
-type MriStripSubjectInfoParametersTagged = Required<Pick<MriStripSubjectInfoParameters, '@type'>> & MriStripSubjectInfoParameters;
+type MriStripSubjectInfoParamsDictTagged = Required<Pick<MriStripSubjectInfoParamsDict, '@type'>> & MriStripSubjectInfoParamsDict;
 
 
 /**
- * Output object returned when calling `MriStripSubjectInfoParameters(...)`.
+ * Output object returned when calling `MriStripSubjectInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MriStripSubjectInfoOutputs {
 function mri_strip_subject_info_params(
     input_files: Array<InputPathType>,
     output_directory: string,
-): MriStripSubjectInfoParametersTagged {
+): MriStripSubjectInfoParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_strip_subject_info" as const,
         "input_files": input_files,
@@ -62,7 +62,7 @@ function mri_strip_subject_info_params(
  * @returns Command-line arguments.
  */
 function mri_strip_subject_info_cargs(
-    params: MriStripSubjectInfoParameters,
+    params: MriStripSubjectInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mri_strip_subject_info_cargs(
  * @returns Outputs object.
  */
 function mri_strip_subject_info_outputs(
-    params: MriStripSubjectInfoParameters,
+    params: MriStripSubjectInfoParamsDict,
     execution: Execution,
 ): MriStripSubjectInfoOutputs {
     const ret: MriStripSubjectInfoOutputs = {
@@ -107,7 +107,7 @@ function mri_strip_subject_info_outputs(
  * @returns NamedTuple of outputs (described in `MriStripSubjectInfoOutputs`).
  */
 function mri_strip_subject_info_execute(
-    params: MriStripSubjectInfoParameters,
+    params: MriStripSubjectInfoParamsDict,
     runner: Runner | null = null,
 ): MriStripSubjectInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function mri_strip_subject_info(
 export {
       MRI_STRIP_SUBJECT_INFO_METADATA,
       MriStripSubjectInfoOutputs,
+      MriStripSubjectInfoParamsDict,
+      MriStripSubjectInfoParamsDictTagged,
       mri_strip_subject_info,
       mri_strip_subject_info_execute,
       mri_strip_subject_info_params,

@@ -11,7 +11,7 @@ const MRIS_INTENSITY_PROFILE_METADATA: Metadata = {
 };
 
 
-interface MrisIntensityProfileParameters {
+interface MrisIntensityProfileParamsDict {
     "@type"?: "freesurfer/mris_intensity_profile";
     "subject_name": string;
     "hemi": string;
@@ -28,11 +28,11 @@ interface MrisIntensityProfileParameters {
     "dst"?: InputPathType | null | undefined;
     "invert_flag": boolean;
 }
-type MrisIntensityProfileParametersTagged = Required<Pick<MrisIntensityProfileParameters, '@type'>> & MrisIntensityProfileParameters;
+type MrisIntensityProfileParamsDictTagged = Required<Pick<MrisIntensityProfileParamsDict, '@type'>> & MrisIntensityProfileParamsDict;
 
 
 /**
- * Output object returned when calling `MrisIntensityProfileParameters(...)`.
+ * Output object returned when calling `MrisIntensityProfileParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function mris_intensity_profile_params(
     src: InputPathType | null = null,
     dst: InputPathType | null = null,
     invert_flag: boolean = false,
-): MrisIntensityProfileParametersTagged {
+): MrisIntensityProfileParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_intensity_profile" as const,
         "subject_name": subject_name,
@@ -134,7 +134,7 @@ function mris_intensity_profile_params(
  * @returns Command-line arguments.
  */
 function mris_intensity_profile_cargs(
-    params: MrisIntensityProfileParameters,
+    params: MrisIntensityProfileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function mris_intensity_profile_cargs(
  * @returns Outputs object.
  */
 function mris_intensity_profile_outputs(
-    params: MrisIntensityProfileParameters,
+    params: MrisIntensityProfileParamsDict,
     execution: Execution,
 ): MrisIntensityProfileOutputs {
     const ret: MrisIntensityProfileOutputs = {
@@ -237,7 +237,7 @@ function mris_intensity_profile_outputs(
  * @returns NamedTuple of outputs (described in `MrisIntensityProfileOutputs`).
  */
 function mris_intensity_profile_execute(
-    params: MrisIntensityProfileParameters,
+    params: MrisIntensityProfileParamsDict,
     runner: Runner | null = null,
 ): MrisIntensityProfileOutputs {
     runner = runner || getGlobalRunner();
@@ -302,6 +302,8 @@ function mris_intensity_profile(
 export {
       MRIS_INTENSITY_PROFILE_METADATA,
       MrisIntensityProfileOutputs,
+      MrisIntensityProfileParamsDict,
+      MrisIntensityProfileParamsDictTagged,
       mris_intensity_profile,
       mris_intensity_profile_execute,
       mris_intensity_profile_params,

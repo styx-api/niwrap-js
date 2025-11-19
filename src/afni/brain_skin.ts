@@ -11,7 +11,7 @@ const BRAIN_SKIN_METADATA: Metadata = {
 };
 
 
-interface BrainSkinParameters {
+interface BrainSkinParamsDict {
     "@type"?: "afni/BrainSkin";
     "surface": string;
     "skingrid_volume": InputPathType;
@@ -27,11 +27,11 @@ interface BrainSkinParameters {
     "no_zero_attraction": boolean;
     "node_dbg"?: number | null | undefined;
 }
-type BrainSkinParametersTagged = Required<Pick<BrainSkinParameters, '@type'>> & BrainSkinParameters;
+type BrainSkinParamsDictTagged = Required<Pick<BrainSkinParamsDict, '@type'>> & BrainSkinParamsDict;
 
 
 /**
- * Output object returned when calling `BrainSkinParameters(...)`.
+ * Output object returned when calling `BrainSkinParamsDict(...)`.
  *
  * @interface
  */
@@ -120,7 +120,7 @@ function brain_skin_params(
     vol_hull: InputPathType | null = null,
     no_zero_attraction: boolean = false,
     node_dbg: number | null = null,
-): BrainSkinParametersTagged {
+): BrainSkinParamsDictTagged {
     const params = {
         "@type": "afni/BrainSkin" as const,
         "surface": surface,
@@ -168,7 +168,7 @@ function brain_skin_params(
  * @returns Command-line arguments.
  */
 function brain_skin_cargs(
-    params: BrainSkinParameters,
+    params: BrainSkinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -252,7 +252,7 @@ function brain_skin_cargs(
  * @returns Outputs object.
  */
 function brain_skin_outputs(
-    params: BrainSkinParameters,
+    params: BrainSkinParamsDict,
     execution: Execution,
 ): BrainSkinOutputs {
     const ret: BrainSkinOutputs = {
@@ -288,7 +288,7 @@ function brain_skin_outputs(
  * @returns NamedTuple of outputs (described in `BrainSkinOutputs`).
  */
 function brain_skin_execute(
-    params: BrainSkinParameters,
+    params: BrainSkinParamsDict,
     runner: Runner | null = null,
 ): BrainSkinOutputs {
     runner = runner || getGlobalRunner();
@@ -351,6 +351,8 @@ function brain_skin(
 export {
       BRAIN_SKIN_METADATA,
       BrainSkinOutputs,
+      BrainSkinParamsDict,
+      BrainSkinParamsDictTagged,
       brain_skin,
       brain_skin_execute,
       brain_skin_params,

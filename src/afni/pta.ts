@@ -11,7 +11,7 @@ const PTA_METADATA: Metadata = {
 };
 
 
-interface PtaParameters {
+interface PtaParamsDict {
     "@type"?: "afni/PTA";
     "prefix": string;
     "input_file": InputPathType;
@@ -22,11 +22,11 @@ interface PtaParameters {
     "response_var"?: string | null | undefined;
     "dbg_args": boolean;
 }
-type PtaParametersTagged = Required<Pick<PtaParameters, '@type'>> & PtaParameters;
+type PtaParamsDictTagged = Required<Pick<PtaParamsDict, '@type'>> & PtaParamsDict;
 
 
 /**
- * Output object returned when calling `PtaParameters(...)`.
+ * Output object returned when calling `PtaParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function pta_params(
     verbosity_level: number | null = null,
     response_var: string | null = null,
     dbg_args: boolean = false,
-): PtaParametersTagged {
+): PtaParamsDictTagged {
     const params = {
         "@type": "afni/PTA" as const,
         "prefix": prefix,
@@ -102,7 +102,7 @@ function pta_params(
  * @returns Command-line arguments.
  */
 function pta_cargs(
-    params: PtaParameters,
+    params: PtaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function pta_cargs(
  * @returns Outputs object.
  */
 function pta_outputs(
-    params: PtaParameters,
+    params: PtaParamsDict,
     execution: Execution,
 ): PtaOutputs {
     const ret: PtaOutputs = {
@@ -186,7 +186,7 @@ function pta_outputs(
  * @returns NamedTuple of outputs (described in `PtaOutputs`).
  */
 function pta_execute(
-    params: PtaParameters,
+    params: PtaParamsDict,
     runner: Runner | null = null,
 ): PtaOutputs {
     runner = runner || getGlobalRunner();
@@ -239,6 +239,8 @@ function pta(
 export {
       PTA_METADATA,
       PtaOutputs,
+      PtaParamsDict,
+      PtaParamsDictTagged,
       pta,
       pta_execute,
       pta_params,

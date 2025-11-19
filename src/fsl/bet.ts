@@ -11,7 +11,7 @@ const BET_METADATA: Metadata = {
 };
 
 
-interface BetParameters {
+interface BetParamsDict {
     "@type"?: "fsl/bet";
     "infile": InputPathType;
     "maskfile": string;
@@ -35,11 +35,11 @@ interface BetParameters {
     "verbose": boolean;
     "debug": boolean;
 }
-type BetParametersTagged = Required<Pick<BetParameters, '@type'>> & BetParameters;
+type BetParamsDictTagged = Required<Pick<BetParamsDict, '@type'>> & BetParamsDict;
 
 
 /**
- * Output object returned when calling `BetParameters(...)`.
+ * Output object returned when calling `BetParamsDict(...)`.
  *
  * @interface
  */
@@ -160,7 +160,7 @@ function bet_params(
     additional_surfaces_t2: InputPathType | null = null,
     verbose: boolean = false,
     debug: boolean = false,
-): BetParametersTagged {
+): BetParamsDictTagged {
     const params = {
         "@type": "fsl/bet" as const,
         "infile": infile,
@@ -208,7 +208,7 @@ function bet_params(
  * @returns Command-line arguments.
  */
 function bet_cargs(
-    params: BetParameters,
+    params: BetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -300,7 +300,7 @@ function bet_cargs(
  * @returns Outputs object.
  */
 function bet_outputs(
-    params: BetParameters,
+    params: BetParamsDict,
     execution: Execution,
 ): BetOutputs {
     const ret: BetOutputs = {
@@ -340,7 +340,7 @@ function bet_outputs(
  * @returns NamedTuple of outputs (described in `BetOutputs`).
  */
 function bet_execute(
-    params: BetParameters,
+    params: BetParamsDict,
     runner: Runner | null = null,
 ): BetOutputs {
     runner = runner || getGlobalRunner();
@@ -419,6 +419,8 @@ function bet(
 export {
       BET_METADATA,
       BetOutputs,
+      BetParamsDict,
+      BetParamsDictTagged,
       bet,
       bet_execute,
       bet_params,

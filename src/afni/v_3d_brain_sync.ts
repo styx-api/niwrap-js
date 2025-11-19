@@ -11,7 +11,7 @@ const V_3D_BRAIN_SYNC_METADATA: Metadata = {
 };
 
 
-interface V3dBrainSyncParameters {
+interface V3dBrainSyncParamsDict {
     "@type"?: "afni/3dBrainSync";
     "inset1": InputPathType;
     "inset2": InputPathType;
@@ -21,11 +21,11 @@ interface V3dBrainSyncParameters {
     "mask"?: InputPathType | null | undefined;
     "verb": boolean;
 }
-type V3dBrainSyncParametersTagged = Required<Pick<V3dBrainSyncParameters, '@type'>> & V3dBrainSyncParameters;
+type V3dBrainSyncParamsDictTagged = Required<Pick<V3dBrainSyncParamsDict, '@type'>> & V3dBrainSyncParamsDict;
 
 
 /**
- * Output object returned when calling `V3dBrainSyncParameters(...)`.
+ * Output object returned when calling `V3dBrainSyncParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function v_3d_brain_sync_params(
     normalize: boolean = false,
     mask: InputPathType | null = null,
     verb: boolean = false,
-): V3dBrainSyncParametersTagged {
+): V3dBrainSyncParamsDictTagged {
     const params = {
         "@type": "afni/3dBrainSync" as const,
         "inset1": inset1,
@@ -108,7 +108,7 @@ function v_3d_brain_sync_params(
  * @returns Command-line arguments.
  */
 function v_3d_brain_sync_cargs(
-    params: V3dBrainSyncParameters,
+    params: V3dBrainSyncParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function v_3d_brain_sync_cargs(
  * @returns Outputs object.
  */
 function v_3d_brain_sync_outputs(
-    params: V3dBrainSyncParameters,
+    params: V3dBrainSyncParamsDict,
     execution: Execution,
 ): V3dBrainSyncOutputs {
     const ret: V3dBrainSyncOutputs = {
@@ -188,7 +188,7 @@ function v_3d_brain_sync_outputs(
  * @returns NamedTuple of outputs (described in `V3dBrainSyncOutputs`).
  */
 function v_3d_brain_sync_execute(
-    params: V3dBrainSyncParameters,
+    params: V3dBrainSyncParamsDict,
     runner: Runner | null = null,
 ): V3dBrainSyncOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function v_3d_brain_sync(
 
 export {
       V3dBrainSyncOutputs,
+      V3dBrainSyncParamsDict,
+      V3dBrainSyncParamsDictTagged,
       V_3D_BRAIN_SYNC_METADATA,
       v_3d_brain_sync,
       v_3d_brain_sync_execute,

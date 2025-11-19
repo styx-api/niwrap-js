@@ -11,7 +11,7 @@ const V__ANIMAL_WARPER_METADATA: Metadata = {
 };
 
 
-interface VAnimalWarperParameters {
+interface VAnimalWarperParamsDict {
     "@type"?: "afni/@animal_warper";
     "input_file": InputPathType;
     "base_template": InputPathType;
@@ -48,11 +48,11 @@ interface VAnimalWarperParameters {
     "ok_to_exist": boolean;
     "echo": boolean;
 }
-type VAnimalWarperParametersTagged = Required<Pick<VAnimalWarperParameters, '@type'>> & VAnimalWarperParameters;
+type VAnimalWarperParamsDictTagged = Required<Pick<VAnimalWarperParamsDict, '@type'>> & VAnimalWarperParamsDict;
 
 
 /**
- * Output object returned when calling `VAnimalWarperParameters(...)`.
+ * Output object returned when calling `VAnimalWarperParamsDict(...)`.
  *
  * @interface
  */
@@ -163,7 +163,7 @@ function v__animal_warper_params(
     version: boolean = false,
     ok_to_exist: boolean = false,
     echo: boolean = false,
-): VAnimalWarperParametersTagged {
+): VAnimalWarperParamsDictTagged {
     const params = {
         "@type": "afni/@animal_warper" as const,
         "input_file": input_file,
@@ -262,7 +262,7 @@ function v__animal_warper_params(
  * @returns Command-line arguments.
  */
 function v__animal_warper_cargs(
-    params: VAnimalWarperParameters,
+    params: VAnimalWarperParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -445,7 +445,7 @@ function v__animal_warper_cargs(
  * @returns Outputs object.
  */
 function v__animal_warper_outputs(
-    params: VAnimalWarperParameters,
+    params: VAnimalWarperParamsDict,
     execution: Execution,
 ): VAnimalWarperOutputs {
     const ret: VAnimalWarperOutputs = {
@@ -476,7 +476,7 @@ function v__animal_warper_outputs(
  * @returns NamedTuple of outputs (described in `VAnimalWarperOutputs`).
  */
 function v__animal_warper_execute(
-    params: VAnimalWarperParameters,
+    params: VAnimalWarperParamsDict,
     runner: Runner | null = null,
 ): VAnimalWarperOutputs {
     runner = runner || getGlobalRunner();
@@ -580,6 +580,8 @@ function v__animal_warper(
 
 export {
       VAnimalWarperOutputs,
+      VAnimalWarperParamsDict,
+      VAnimalWarperParamsDictTagged,
       V__ANIMAL_WARPER_METADATA,
       v__animal_warper,
       v__animal_warper_execute,

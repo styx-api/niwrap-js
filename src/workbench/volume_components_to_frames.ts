@@ -10,16 +10,16 @@ const VOLUME_COMPONENTS_TO_FRAMES_METADATA: Metadata = {
 };
 
 
-interface VolumeComponentsToFramesParameters {
+interface VolumeComponentsToFramesParamsDict {
     "@type"?: "workbench/volume-components-to-frames";
     "output": string;
     "input": InputPathType;
 }
-type VolumeComponentsToFramesParametersTagged = Required<Pick<VolumeComponentsToFramesParameters, '@type'>> & VolumeComponentsToFramesParameters;
+type VolumeComponentsToFramesParamsDictTagged = Required<Pick<VolumeComponentsToFramesParamsDict, '@type'>> & VolumeComponentsToFramesParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeComponentsToFramesParameters(...)`.
+ * Output object returned when calling `VolumeComponentsToFramesParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface VolumeComponentsToFramesOutputs {
 function volume_components_to_frames_params(
     output: string,
     input: InputPathType,
-): VolumeComponentsToFramesParametersTagged {
+): VolumeComponentsToFramesParamsDictTagged {
     const params = {
         "@type": "workbench/volume-components-to-frames" as const,
         "output": output,
@@ -65,7 +65,7 @@ function volume_components_to_frames_params(
  * @returns Command-line arguments.
  */
 function volume_components_to_frames_cargs(
-    params: VolumeComponentsToFramesParameters,
+    params: VolumeComponentsToFramesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function volume_components_to_frames_cargs(
  * @returns Outputs object.
  */
 function volume_components_to_frames_outputs(
-    params: VolumeComponentsToFramesParameters,
+    params: VolumeComponentsToFramesParamsDict,
     execution: Execution,
 ): VolumeComponentsToFramesOutputs {
     const ret: VolumeComponentsToFramesOutputs = {
@@ -110,7 +110,7 @@ function volume_components_to_frames_outputs(
  * @returns NamedTuple of outputs (described in `VolumeComponentsToFramesOutputs`).
  */
 function volume_components_to_frames_execute(
-    params: VolumeComponentsToFramesParameters,
+    params: VolumeComponentsToFramesParamsDict,
     runner: Runner | null = null,
 ): VolumeComponentsToFramesOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function volume_components_to_frames(
 export {
       VOLUME_COMPONENTS_TO_FRAMES_METADATA,
       VolumeComponentsToFramesOutputs,
+      VolumeComponentsToFramesParamsDict,
+      VolumeComponentsToFramesParamsDictTagged,
       volume_components_to_frames,
       volume_components_to_frames_execute,
       volume_components_to_frames_params,

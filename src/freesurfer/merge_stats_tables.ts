@@ -11,7 +11,7 @@ const MERGE_STATS_TABLES_METADATA: Metadata = {
 };
 
 
-interface MergeStatsTablesParameters {
+interface MergeStatsTablesParamsDict {
     "@type"?: "freesurfer/merge_stats_tables";
     "subjects"?: Array<string> | null | undefined;
     "subject"?: string | null | undefined;
@@ -29,11 +29,11 @@ interface MergeStatsTablesParameters {
     "skip": boolean;
     "debug": boolean;
 }
-type MergeStatsTablesParametersTagged = Required<Pick<MergeStatsTablesParameters, '@type'>> & MergeStatsTablesParameters;
+type MergeStatsTablesParamsDictTagged = Required<Pick<MergeStatsTablesParamsDict, '@type'>> & MergeStatsTablesParamsDict;
 
 
 /**
- * Output object returned when calling `MergeStatsTablesParameters(...)`.
+ * Output object returned when calling `MergeStatsTablesParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function merge_stats_tables_params(
     transpose: boolean = false,
     skip: boolean = false,
     debug: boolean = false,
-): MergeStatsTablesParametersTagged {
+): MergeStatsTablesParamsDictTagged {
     const params = {
         "@type": "freesurfer/merge_stats_tables" as const,
         "outputfile": outputfile,
@@ -134,7 +134,7 @@ function merge_stats_tables_params(
  * @returns Command-line arguments.
  */
 function merge_stats_tables_cargs(
-    params: MergeStatsTablesParameters,
+    params: MergeStatsTablesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -223,7 +223,7 @@ function merge_stats_tables_cargs(
  * @returns Outputs object.
  */
 function merge_stats_tables_outputs(
-    params: MergeStatsTablesParameters,
+    params: MergeStatsTablesParamsDict,
     execution: Execution,
 ): MergeStatsTablesOutputs {
     const ret: MergeStatsTablesOutputs = {
@@ -249,7 +249,7 @@ function merge_stats_tables_outputs(
  * @returns NamedTuple of outputs (described in `MergeStatsTablesOutputs`).
  */
 function merge_stats_tables_execute(
-    params: MergeStatsTablesParameters,
+    params: MergeStatsTablesParamsDict,
     runner: Runner | null = null,
 ): MergeStatsTablesOutputs {
     runner = runner || getGlobalRunner();
@@ -316,6 +316,8 @@ function merge_stats_tables(
 export {
       MERGE_STATS_TABLES_METADATA,
       MergeStatsTablesOutputs,
+      MergeStatsTablesParamsDict,
+      MergeStatsTablesParamsDictTagged,
       merge_stats_tables,
       merge_stats_tables_execute,
       merge_stats_tables_params,

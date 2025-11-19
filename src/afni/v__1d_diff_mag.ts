@@ -11,15 +11,15 @@ const V__1D_DIFF_MAG_METADATA: Metadata = {
 };
 
 
-interface V1dDiffMagParameters {
+interface V1dDiffMagParamsDict {
     "@type"?: "afni/@1dDiffMag";
     "infile": InputPathType;
 }
-type V1dDiffMagParametersTagged = Required<Pick<V1dDiffMagParameters, '@type'>> & V1dDiffMagParameters;
+type V1dDiffMagParamsDictTagged = Required<Pick<V1dDiffMagParamsDict, '@type'>> & V1dDiffMagParamsDict;
 
 
 /**
- * Output object returned when calling `V1dDiffMagParameters(...)`.
+ * Output object returned when calling `V1dDiffMagParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface V1dDiffMagOutputs {
  */
 function v__1d_diff_mag_params(
     infile: InputPathType,
-): V1dDiffMagParametersTagged {
+): V1dDiffMagParamsDictTagged {
     const params = {
         "@type": "afni/@1dDiffMag" as const,
         "infile": infile,
@@ -62,7 +62,7 @@ function v__1d_diff_mag_params(
  * @returns Command-line arguments.
  */
 function v__1d_diff_mag_cargs(
-    params: V1dDiffMagParameters,
+    params: V1dDiffMagParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__1d_diff_mag_cargs(
  * @returns Outputs object.
  */
 function v__1d_diff_mag_outputs(
-    params: V1dDiffMagParameters,
+    params: V1dDiffMagParamsDict,
     execution: Execution,
 ): V1dDiffMagOutputs {
     const ret: V1dDiffMagOutputs = {
@@ -107,7 +107,7 @@ function v__1d_diff_mag_outputs(
  * @returns NamedTuple of outputs (described in `V1dDiffMagOutputs`).
  */
 function v__1d_diff_mag_execute(
-    params: V1dDiffMagParameters,
+    params: V1dDiffMagParamsDict,
     runner: Runner | null = null,
 ): V1dDiffMagOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__1d_diff_mag(
 
 export {
       V1dDiffMagOutputs,
+      V1dDiffMagParamsDict,
+      V1dDiffMagParamsDictTagged,
       V__1D_DIFF_MAG_METADATA,
       v__1d_diff_mag,
       v__1d_diff_mag_execute,

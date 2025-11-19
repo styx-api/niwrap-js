@@ -10,16 +10,16 @@ const SCENE_FILE_RELOCATE_METADATA: Metadata = {
 };
 
 
-interface SceneFileRelocateParameters {
+interface SceneFileRelocateParamsDict {
     "@type"?: "workbench/scene-file-relocate";
     "input-scene": string;
     "output-scene": string;
 }
-type SceneFileRelocateParametersTagged = Required<Pick<SceneFileRelocateParameters, '@type'>> & SceneFileRelocateParameters;
+type SceneFileRelocateParamsDictTagged = Required<Pick<SceneFileRelocateParamsDict, '@type'>> & SceneFileRelocateParamsDict;
 
 
 /**
- * Output object returned when calling `SceneFileRelocateParameters(...)`.
+ * Output object returned when calling `SceneFileRelocateParamsDict(...)`.
  *
  * @interface
  */
@@ -42,7 +42,7 @@ interface SceneFileRelocateOutputs {
 function scene_file_relocate_params(
     input_scene: string,
     output_scene: string,
-): SceneFileRelocateParametersTagged {
+): SceneFileRelocateParamsDictTagged {
     const params = {
         "@type": "workbench/scene-file-relocate" as const,
         "input-scene": input_scene,
@@ -61,7 +61,7 @@ function scene_file_relocate_params(
  * @returns Command-line arguments.
  */
 function scene_file_relocate_cargs(
-    params: SceneFileRelocateParameters,
+    params: SceneFileRelocateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function scene_file_relocate_cargs(
  * @returns Outputs object.
  */
 function scene_file_relocate_outputs(
-    params: SceneFileRelocateParameters,
+    params: SceneFileRelocateParamsDict,
     execution: Execution,
 ): SceneFileRelocateOutputs {
     const ret: SceneFileRelocateOutputs = {
@@ -105,7 +105,7 @@ function scene_file_relocate_outputs(
  * @returns NamedTuple of outputs (described in `SceneFileRelocateOutputs`).
  */
 function scene_file_relocate_execute(
-    params: SceneFileRelocateParameters,
+    params: SceneFileRelocateParamsDict,
     runner: Runner | null = null,
 ): SceneFileRelocateOutputs {
     runner = runner || getGlobalRunner();
@@ -142,6 +142,8 @@ function scene_file_relocate(
 export {
       SCENE_FILE_RELOCATE_METADATA,
       SceneFileRelocateOutputs,
+      SceneFileRelocateParamsDict,
+      SceneFileRelocateParamsDictTagged,
       scene_file_relocate,
       scene_file_relocate_execute,
       scene_file_relocate_params,

@@ -11,15 +11,15 @@ const MRMATH_METADATA: Metadata = {
 };
 
 
-interface MrmathConfigParameters {
+interface MrmathConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrmathConfigParametersTagged = Required<Pick<MrmathConfigParameters, '@type'>> & MrmathConfigParameters;
+type MrmathConfigParamsDictTagged = Required<Pick<MrmathConfigParamsDict, '@type'>> & MrmathConfigParamsDict;
 
 
-interface MrmathParameters {
+interface MrmathParamsDict {
     "@type"?: "mrtrix/mrmath";
     "axis"?: number | null | undefined;
     "keep_unary_axes": boolean;
@@ -29,14 +29,14 @@ interface MrmathParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrmathConfigParameters> | null | undefined;
+    "config"?: Array<MrmathConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": Array<InputPathType>;
     "operation": string;
     "output": string;
 }
-type MrmathParametersTagged = Required<Pick<MrmathParameters, '@type'>> & MrmathParameters;
+type MrmathParamsDictTagged = Required<Pick<MrmathParamsDict, '@type'>> & MrmathParamsDict;
 
 
 /**
@@ -47,10 +47,10 @@ type MrmathParametersTagged = Required<Pick<MrmathParameters, '@type'>> & Mrmath
  *
  * @returns Parameter dictionary
  */
-function mrmath_config_params(
+function mrmath_config(
     key: string,
     value: string,
-): MrmathConfigParametersTagged {
+): MrmathConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -69,7 +69,7 @@ function mrmath_config_params(
  * @returns Command-line arguments.
  */
 function mrmath_config_cargs(
-    params: MrmathConfigParameters,
+    params: MrmathConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function mrmath_config_cargs(
 
 
 /**
- * Output object returned when calling `MrmathParameters(...)`.
+ * Output object returned when calling `MrmathParamsDict(...)`.
  *
  * @interface
  */
@@ -129,10 +129,10 @@ function mrmath_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrmathConfigParameters> | null = null,
+    config: Array<MrmathConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrmathParametersTagged {
+): MrmathParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrmath" as const,
         "keep_unary_axes": keep_unary_axes,
@@ -171,7 +171,7 @@ function mrmath_params(
  * @returns Command-line arguments.
  */
 function mrmath_cargs(
-    params: MrmathParameters,
+    params: MrmathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -234,7 +234,7 @@ function mrmath_cargs(
  * @returns Outputs object.
  */
 function mrmath_outputs(
-    params: MrmathParameters,
+    params: MrmathParamsDict,
     execution: Execution,
 ): MrmathOutputs {
     const ret: MrmathOutputs = {
@@ -270,7 +270,7 @@ function mrmath_outputs(
  * @returns NamedTuple of outputs (described in `MrmathOutputs`).
  */
 function mrmath_execute(
-    params: MrmathParameters,
+    params: MrmathParamsDict,
     runner: Runner | null = null,
 ): MrmathOutputs {
     runner = runner || getGlobalRunner();
@@ -332,7 +332,7 @@ function mrmath(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrmathConfigParameters> | null = null,
+    config: Array<MrmathConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -344,9 +344,13 @@ function mrmath(
 
 export {
       MRMATH_METADATA,
+      MrmathConfigParamsDict,
+      MrmathConfigParamsDictTagged,
       MrmathOutputs,
+      MrmathParamsDict,
+      MrmathParamsDictTagged,
       mrmath,
-      mrmath_config_params,
+      mrmath_config,
       mrmath_execute,
       mrmath_params,
 };

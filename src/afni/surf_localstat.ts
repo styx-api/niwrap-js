@@ -11,7 +11,7 @@ const SURF_LOCALSTAT_METADATA: Metadata = {
 };
 
 
-interface SurfLocalstatParameters {
+interface SurfLocalstatParamsDict {
     "@type"?: "afni/SurfLocalstat";
     "hood"?: number | null | undefined;
     "nbhd_rad"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface SurfLocalstatParameters {
     "input_dataset": InputPathType;
     "surface": InputPathType;
 }
-type SurfLocalstatParametersTagged = Required<Pick<SurfLocalstatParameters, '@type'>> & SurfLocalstatParameters;
+type SurfLocalstatParamsDictTagged = Required<Pick<SurfLocalstatParamsDict, '@type'>> & SurfLocalstatParamsDict;
 
 
 /**
- * Output object returned when calling `SurfLocalstatParameters(...)`.
+ * Output object returned when calling `SurfLocalstatParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function surf_localstat_params(
     surface: InputPathType,
     hood: number | null = null,
     nbhd_rad: number | null = null,
-): SurfLocalstatParametersTagged {
+): SurfLocalstatParamsDictTagged {
     const params = {
         "@type": "afni/SurfLocalstat" as const,
         "prefix": prefix,
@@ -86,7 +86,7 @@ function surf_localstat_params(
  * @returns Command-line arguments.
  */
 function surf_localstat_cargs(
-    params: SurfLocalstatParameters,
+    params: SurfLocalstatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function surf_localstat_cargs(
  * @returns Outputs object.
  */
 function surf_localstat_outputs(
-    params: SurfLocalstatParameters,
+    params: SurfLocalstatParamsDict,
     execution: Execution,
 ): SurfLocalstatOutputs {
     const ret: SurfLocalstatOutputs = {
@@ -158,7 +158,7 @@ function surf_localstat_outputs(
  * @returns NamedTuple of outputs (described in `SurfLocalstatOutputs`).
  */
 function surf_localstat_execute(
-    params: SurfLocalstatParameters,
+    params: SurfLocalstatParamsDict,
     runner: Runner | null = null,
 ): SurfLocalstatOutputs {
     runner = runner || getGlobalRunner();
@@ -207,6 +207,8 @@ function surf_localstat(
 export {
       SURF_LOCALSTAT_METADATA,
       SurfLocalstatOutputs,
+      SurfLocalstatParamsDict,
+      SurfLocalstatParamsDictTagged,
       surf_localstat,
       surf_localstat_execute,
       surf_localstat_params,

@@ -11,22 +11,22 @@ const DENOISE_IMAGE_METADATA: Metadata = {
 };
 
 
-interface DenoiseImageCorrectedOutputParameters {
+interface DenoiseImageCorrectedOutputParamsDict {
     "@type"?: "correctedOutput";
     "correctedOutputFileName": string;
 }
-type DenoiseImageCorrectedOutputParametersTagged = Required<Pick<DenoiseImageCorrectedOutputParameters, '@type'>> & DenoiseImageCorrectedOutputParameters;
+type DenoiseImageCorrectedOutputParamsDictTagged = Required<Pick<DenoiseImageCorrectedOutputParamsDict, '@type'>> & DenoiseImageCorrectedOutputParamsDict;
 
 
-interface DenoiseImageCorrectedOutputNoiseParameters {
+interface DenoiseImageCorrectedOutputNoiseParamsDict {
     "@type"?: "correctedOutputNoise";
     "correctedOutputFileName": string;
     "noiseFile"?: string | null | undefined;
 }
-type DenoiseImageCorrectedOutputNoiseParametersTagged = Required<Pick<DenoiseImageCorrectedOutputNoiseParameters, '@type'>> & DenoiseImageCorrectedOutputNoiseParameters;
+type DenoiseImageCorrectedOutputNoiseParamsDictTagged = Required<Pick<DenoiseImageCorrectedOutputNoiseParamsDict, '@type'>> & DenoiseImageCorrectedOutputNoiseParamsDict;
 
 
-interface DenoiseImageParameters {
+interface DenoiseImageParamsDict {
     "@type"?: "ants/DenoiseImage";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "noise_model"?: "Gaussian" | "Rician" | null | undefined;
@@ -36,9 +36,9 @@ interface DenoiseImageParameters {
     "search_radius"?: string | null | undefined;
     "verbose"?: boolean | null | undefined;
     "input_image": InputPathType;
-    "output": DenoiseImageCorrectedOutputParametersTagged | DenoiseImageCorrectedOutputNoiseParametersTagged;
+    "output": DenoiseImageCorrectedOutputParamsDictTagged | DenoiseImageCorrectedOutputNoiseParamsDictTagged;
 }
-type DenoiseImageParametersTagged = Required<Pick<DenoiseImageParameters, '@type'>> & DenoiseImageParameters;
+type DenoiseImageParamsDictTagged = Required<Pick<DenoiseImageParamsDict, '@type'>> & DenoiseImageParamsDict;
 
 
 /**
@@ -78,7 +78,7 @@ function denoise_image_output_outputs_dyn_fn(
 
 
 /**
- * Output object returned when calling `DenoiseImageCorrectedOutputParameters(...)`.
+ * Output object returned when calling `DenoiseImageCorrectedOutputParamsDict(...)`.
  *
  * @interface
  */
@@ -101,9 +101,9 @@ interface DenoiseImageCorrectedOutputOutputs {
  *
  * @returns Parameter dictionary
  */
-function denoise_image_corrected_output_params(
+function denoise_image_corrected_output(
     corrected_output_file_name: string,
-): DenoiseImageCorrectedOutputParametersTagged {
+): DenoiseImageCorrectedOutputParamsDictTagged {
     const params = {
         "@type": "correctedOutput" as const,
         "correctedOutputFileName": corrected_output_file_name,
@@ -121,7 +121,7 @@ function denoise_image_corrected_output_params(
  * @returns Command-line arguments.
  */
 function denoise_image_corrected_output_cargs(
-    params: DenoiseImageCorrectedOutputParameters,
+    params: DenoiseImageCorrectedOutputParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function denoise_image_corrected_output_cargs(
  * @returns Outputs object.
  */
 function denoise_image_corrected_output_outputs(
-    params: DenoiseImageCorrectedOutputParameters,
+    params: DenoiseImageCorrectedOutputParamsDict,
     execution: Execution,
 ): DenoiseImageCorrectedOutputOutputs {
     const ret: DenoiseImageCorrectedOutputOutputs = {
@@ -151,7 +151,7 @@ function denoise_image_corrected_output_outputs(
 
 
 /**
- * Output object returned when calling `DenoiseImageCorrectedOutputNoiseParameters(...)`.
+ * Output object returned when calling `DenoiseImageCorrectedOutputNoiseParamsDict(...)`.
  *
  * @interface
  */
@@ -179,10 +179,10 @@ interface DenoiseImageCorrectedOutputNoiseOutputs {
  *
  * @returns Parameter dictionary
  */
-function denoise_image_corrected_output_noise_params(
+function denoise_image_corrected_output_noise(
     corrected_output_file_name: string,
     noise_file: string | null = null,
-): DenoiseImageCorrectedOutputNoiseParametersTagged {
+): DenoiseImageCorrectedOutputNoiseParamsDictTagged {
     const params = {
         "@type": "correctedOutputNoise" as const,
         "correctedOutputFileName": corrected_output_file_name,
@@ -203,7 +203,7 @@ function denoise_image_corrected_output_noise_params(
  * @returns Command-line arguments.
  */
 function denoise_image_corrected_output_noise_cargs(
-    params: DenoiseImageCorrectedOutputNoiseParameters,
+    params: DenoiseImageCorrectedOutputNoiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -223,7 +223,7 @@ function denoise_image_corrected_output_noise_cargs(
  * @returns Outputs object.
  */
 function denoise_image_corrected_output_noise_outputs(
-    params: DenoiseImageCorrectedOutputNoiseParameters,
+    params: DenoiseImageCorrectedOutputNoiseParamsDict,
     execution: Execution,
 ): DenoiseImageCorrectedOutputNoiseOutputs {
     const ret: DenoiseImageCorrectedOutputNoiseOutputs = {
@@ -236,7 +236,7 @@ function denoise_image_corrected_output_noise_outputs(
 
 
 /**
- * Output object returned when calling `DenoiseImageParameters(...)`.
+ * Output object returned when calling `DenoiseImageParamsDict(...)`.
  *
  * @interface
  */
@@ -246,7 +246,7 @@ interface DenoiseImageOutputs {
      */
     root: OutputPathType;
     /**
-     * Outputs from `DenoiseImageCorrectedOutputParameters` or `DenoiseImageCorrectedOutputNoiseParameters`.
+     * Outputs from `DenoiseImageCorrectedOutputParamsDict` or `DenoiseImageCorrectedOutputNoiseParamsDict`.
      */
     output: DenoiseImageCorrectedOutputOutputs | DenoiseImageCorrectedOutputNoiseOutputs;
 }
@@ -269,7 +269,7 @@ interface DenoiseImageOutputs {
  */
 function denoise_image_params(
     input_image: InputPathType,
-    output: DenoiseImageCorrectedOutputParametersTagged | DenoiseImageCorrectedOutputNoiseParametersTagged,
+    output: DenoiseImageCorrectedOutputParamsDictTagged | DenoiseImageCorrectedOutputNoiseParamsDictTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     noise_model: "Gaussian" | "Rician" | null = null,
     shrink_factor: number | null = null,
@@ -277,7 +277,7 @@ function denoise_image_params(
     patch_radius: string | null = null,
     search_radius: string | null = null,
     verbose: boolean | null = null,
-): DenoiseImageParametersTagged {
+): DenoiseImageParamsDictTagged {
     const params = {
         "@type": "ants/DenoiseImage" as const,
         "input_image": input_image,
@@ -317,7 +317,7 @@ function denoise_image_params(
  * @returns Command-line arguments.
  */
 function denoise_image_cargs(
-    params: DenoiseImageParameters,
+    params: DenoiseImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -385,7 +385,7 @@ function denoise_image_cargs(
  * @returns Outputs object.
  */
 function denoise_image_outputs(
-    params: DenoiseImageParameters,
+    params: DenoiseImageParamsDict,
     execution: Execution,
 ): DenoiseImageOutputs {
     const ret: DenoiseImageOutputs = {
@@ -411,7 +411,7 @@ function denoise_image_outputs(
  * @returns NamedTuple of outputs (described in `DenoiseImageOutputs`).
  */
 function denoise_image_execute(
-    params: DenoiseImageParameters,
+    params: DenoiseImageParamsDict,
     runner: Runner | null = null,
 ): DenoiseImageOutputs {
     runner = runner || getGlobalRunner();
@@ -448,7 +448,7 @@ function denoise_image_execute(
  */
 function denoise_image(
     input_image: InputPathType,
-    output: DenoiseImageCorrectedOutputParametersTagged | DenoiseImageCorrectedOutputNoiseParametersTagged,
+    output: DenoiseImageCorrectedOutputParamsDictTagged | DenoiseImageCorrectedOutputNoiseParamsDictTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     noise_model: "Gaussian" | "Rician" | null = null,
     shrink_factor: number | null = null,
@@ -466,11 +466,17 @@ function denoise_image(
 export {
       DENOISE_IMAGE_METADATA,
       DenoiseImageCorrectedOutputNoiseOutputs,
+      DenoiseImageCorrectedOutputNoiseParamsDict,
+      DenoiseImageCorrectedOutputNoiseParamsDictTagged,
       DenoiseImageCorrectedOutputOutputs,
+      DenoiseImageCorrectedOutputParamsDict,
+      DenoiseImageCorrectedOutputParamsDictTagged,
       DenoiseImageOutputs,
+      DenoiseImageParamsDict,
+      DenoiseImageParamsDictTagged,
       denoise_image,
-      denoise_image_corrected_output_noise_params,
-      denoise_image_corrected_output_params,
+      denoise_image_corrected_output,
+      denoise_image_corrected_output_noise,
       denoise_image_execute,
       denoise_image_params,
 };

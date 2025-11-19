@@ -11,7 +11,7 @@ const OVERLAY_METADATA: Metadata = {
 };
 
 
-interface OverlayParameters {
+interface OverlayParamsDict {
     "@type"?: "fsl/overlay";
     "auto_thresh_bg": boolean;
     "background_image": InputPathType;
@@ -26,11 +26,11 @@ interface OverlayParameters {
     "stat_thresh2"?: Array<number> | null | undefined;
     "use_checkerboard": boolean;
 }
-type OverlayParametersTagged = Required<Pick<OverlayParameters, '@type'>> & OverlayParameters;
+type OverlayParamsDictTagged = Required<Pick<OverlayParamsDict, '@type'>> & OverlayParamsDict;
 
 
 /**
- * Output object returned when calling `OverlayParameters(...)`.
+ * Output object returned when calling `OverlayParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function overlay_params(
     stat_image2: InputPathType | null = null,
     stat_thresh2: Array<number> | null = null,
     use_checkerboard: boolean = false,
-): OverlayParametersTagged {
+): OverlayParamsDictTagged {
     const params = {
         "@type": "fsl/overlay" as const,
         "auto_thresh_bg": auto_thresh_bg,
@@ -116,7 +116,7 @@ function overlay_params(
  * @returns Command-line arguments.
  */
 function overlay_cargs(
-    params: OverlayParameters,
+    params: OverlayParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,7 +162,7 @@ function overlay_cargs(
  * @returns Outputs object.
  */
 function overlay_outputs(
-    params: OverlayParameters,
+    params: OverlayParamsDict,
     execution: Execution,
 ): OverlayOutputs {
     const ret: OverlayOutputs = {
@@ -188,7 +188,7 @@ function overlay_outputs(
  * @returns NamedTuple of outputs (described in `OverlayOutputs`).
  */
 function overlay_execute(
-    params: OverlayParameters,
+    params: OverlayParamsDict,
     runner: Runner | null = null,
 ): OverlayOutputs {
     runner = runner || getGlobalRunner();
@@ -249,6 +249,8 @@ function overlay(
 export {
       OVERLAY_METADATA,
       OverlayOutputs,
+      OverlayParamsDict,
+      OverlayParamsDictTagged,
       overlay,
       overlay_execute,
       overlay_params,

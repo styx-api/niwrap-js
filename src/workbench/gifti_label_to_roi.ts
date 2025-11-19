@@ -10,7 +10,7 @@ const GIFTI_LABEL_TO_ROI_METADATA: Metadata = {
 };
 
 
-interface GiftiLabelToRoiParameters {
+interface GiftiLabelToRoiParamsDict {
     "@type"?: "workbench/gifti-label-to-roi";
     "metric-out": string;
     "label-name"?: string | null | undefined;
@@ -18,11 +18,11 @@ interface GiftiLabelToRoiParameters {
     "map"?: string | null | undefined;
     "label-in": InputPathType;
 }
-type GiftiLabelToRoiParametersTagged = Required<Pick<GiftiLabelToRoiParameters, '@type'>> & GiftiLabelToRoiParameters;
+type GiftiLabelToRoiParamsDictTagged = Required<Pick<GiftiLabelToRoiParamsDict, '@type'>> & GiftiLabelToRoiParamsDict;
 
 
 /**
- * Output object returned when calling `GiftiLabelToRoiParameters(...)`.
+ * Output object returned when calling `GiftiLabelToRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function gifti_label_to_roi_params(
     label_key: number | null,
     map: string | null,
     label_in: InputPathType,
-): GiftiLabelToRoiParametersTagged {
+): GiftiLabelToRoiParamsDictTagged {
     const params = {
         "@type": "workbench/gifti-label-to-roi" as const,
         "metric-out": metric_out,
@@ -89,7 +89,7 @@ function gifti_label_to_roi_params(
  * @returns Command-line arguments.
  */
 function gifti_label_to_roi_cargs(
-    params: GiftiLabelToRoiParameters,
+    params: GiftiLabelToRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function gifti_label_to_roi_cargs(
  * @returns Outputs object.
  */
 function gifti_label_to_roi_outputs(
-    params: GiftiLabelToRoiParameters,
+    params: GiftiLabelToRoiParamsDict,
     execution: Execution,
 ): GiftiLabelToRoiOutputs {
     const ret: GiftiLabelToRoiOutputs = {
@@ -142,7 +142,7 @@ function gifti_label_to_roi_outputs(
  * @returns NamedTuple of outputs (described in `GiftiLabelToRoiOutputs`).
  */
 function gifti_label_to_roi_execute(
-    params: GiftiLabelToRoiParameters,
+    params: GiftiLabelToRoiParamsDict,
     runner: Runner | null = null,
 ): GiftiLabelToRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function gifti_label_to_roi(
 export {
       GIFTI_LABEL_TO_ROI_METADATA,
       GiftiLabelToRoiOutputs,
+      GiftiLabelToRoiParamsDict,
+      GiftiLabelToRoiParamsDictTagged,
       gifti_label_to_roi,
       gifti_label_to_roi_execute,
       gifti_label_to_roi_params,

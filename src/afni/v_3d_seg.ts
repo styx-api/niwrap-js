@@ -11,7 +11,7 @@ const V_3D_SEG_METADATA: Metadata = {
 };
 
 
-interface V3dSegParameters {
+interface V3dSegParamsDict {
     "@type"?: "afni/3dSeg";
     "anat": InputPathType;
     "mask"?: string | null | undefined;
@@ -33,11 +33,11 @@ interface V3dSegParameters {
     "vox_debug"?: string | null | undefined;
     "vox_debug_file"?: string | null | undefined;
 }
-type V3dSegParametersTagged = Required<Pick<V3dSegParameters, '@type'>> & V3dSegParameters;
+type V3dSegParamsDictTagged = Required<Pick<V3dSegParamsDict, '@type'>> & V3dSegParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSegParameters(...)`.
+ * Output object returned when calling `V3dSegParamsDict(...)`.
  *
  * @interface
  */
@@ -106,7 +106,7 @@ function v_3d_seg_params(
     labeltable: InputPathType | null = null,
     vox_debug: string | null = null,
     vox_debug_file: string | null = null,
-): V3dSegParametersTagged {
+): V3dSegParamsDictTagged {
     const params = {
         "@type": "afni/3dSeg" as const,
         "anat": anat,
@@ -176,7 +176,7 @@ function v_3d_seg_params(
  * @returns Command-line arguments.
  */
 function v_3d_seg_cargs(
-    params: V3dSegParameters,
+    params: V3dSegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -303,7 +303,7 @@ function v_3d_seg_cargs(
  * @returns Outputs object.
  */
 function v_3d_seg_outputs(
-    params: V3dSegParameters,
+    params: V3dSegParamsDict,
     execution: Execution,
 ): V3dSegOutputs {
     const ret: V3dSegOutputs = {
@@ -331,7 +331,7 @@ function v_3d_seg_outputs(
  * @returns NamedTuple of outputs (described in `V3dSegOutputs`).
  */
 function v_3d_seg_execute(
-    params: V3dSegParameters,
+    params: V3dSegParamsDict,
     runner: Runner | null = null,
 ): V3dSegOutputs {
     runner = runner || getGlobalRunner();
@@ -405,6 +405,8 @@ function v_3d_seg(
 
 export {
       V3dSegOutputs,
+      V3dSegParamsDict,
+      V3dSegParamsDictTagged,
       V_3D_SEG_METADATA,
       v_3d_seg,
       v_3d_seg_execute,

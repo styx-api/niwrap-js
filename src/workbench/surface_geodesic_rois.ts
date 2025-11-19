@@ -10,7 +10,7 @@ const SURFACE_GEODESIC_ROIS_METADATA: Metadata = {
 };
 
 
-interface SurfaceGeodesicRoisParameters {
+interface SurfaceGeodesicRoisParamsDict {
     "@type"?: "workbench/surface-geodesic-rois";
     "metric-out": string;
     "sigma"?: number | null | undefined;
@@ -21,11 +21,11 @@ interface SurfaceGeodesicRoisParameters {
     "limit": number;
     "vertex-list-file": string;
 }
-type SurfaceGeodesicRoisParametersTagged = Required<Pick<SurfaceGeodesicRoisParameters, '@type'>> & SurfaceGeodesicRoisParameters;
+type SurfaceGeodesicRoisParamsDictTagged = Required<Pick<SurfaceGeodesicRoisParamsDict, '@type'>> & SurfaceGeodesicRoisParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceGeodesicRoisParameters(...)`.
+ * Output object returned when calling `SurfaceGeodesicRoisParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function surface_geodesic_rois_params(
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
-): SurfaceGeodesicRoisParametersTagged {
+): SurfaceGeodesicRoisParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-rois" as const,
         "metric-out": metric_out,
@@ -105,7 +105,7 @@ function surface_geodesic_rois_params(
  * @returns Command-line arguments.
  */
 function surface_geodesic_rois_cargs(
-    params: SurfaceGeodesicRoisParameters,
+    params: SurfaceGeodesicRoisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function surface_geodesic_rois_cargs(
  * @returns Outputs object.
  */
 function surface_geodesic_rois_outputs(
-    params: SurfaceGeodesicRoisParameters,
+    params: SurfaceGeodesicRoisParamsDict,
     execution: Execution,
 ): SurfaceGeodesicRoisOutputs {
     const ret: SurfaceGeodesicRoisOutputs = {
@@ -162,7 +162,7 @@ function surface_geodesic_rois_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicRoisOutputs`).
  */
 function surface_geodesic_rois_execute(
-    params: SurfaceGeodesicRoisParameters,
+    params: SurfaceGeodesicRoisParamsDict,
     runner: Runner | null = null,
 ): SurfaceGeodesicRoisOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function surface_geodesic_rois(
 export {
       SURFACE_GEODESIC_ROIS_METADATA,
       SurfaceGeodesicRoisOutputs,
+      SurfaceGeodesicRoisParamsDict,
+      SurfaceGeodesicRoisParamsDictTagged,
       surface_geodesic_rois,
       surface_geodesic_rois_execute,
       surface_geodesic_rois_params,

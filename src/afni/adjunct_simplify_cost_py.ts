@@ -11,15 +11,15 @@ const ADJUNCT_SIMPLIFY_COST_PY_METADATA: Metadata = {
 };
 
 
-interface AdjunctSimplifyCostPyParameters {
+interface AdjunctSimplifyCostPyParamsDict {
     "@type"?: "afni/adjunct_simplify_cost.py";
     "cost_function": string;
 }
-type AdjunctSimplifyCostPyParametersTagged = Required<Pick<AdjunctSimplifyCostPyParameters, '@type'>> & AdjunctSimplifyCostPyParameters;
+type AdjunctSimplifyCostPyParamsDictTagged = Required<Pick<AdjunctSimplifyCostPyParamsDict, '@type'>> & AdjunctSimplifyCostPyParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctSimplifyCostPyParameters(...)`.
+ * Output object returned when calling `AdjunctSimplifyCostPyParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface AdjunctSimplifyCostPyOutputs {
  */
 function adjunct_simplify_cost_py_params(
     cost_function: string,
-): AdjunctSimplifyCostPyParametersTagged {
+): AdjunctSimplifyCostPyParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_simplify_cost.py" as const,
         "cost_function": cost_function,
@@ -58,7 +58,7 @@ function adjunct_simplify_cost_py_params(
  * @returns Command-line arguments.
  */
 function adjunct_simplify_cost_py_cargs(
-    params: AdjunctSimplifyCostPyParameters,
+    params: AdjunctSimplifyCostPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function adjunct_simplify_cost_py_cargs(
  * @returns Outputs object.
  */
 function adjunct_simplify_cost_py_outputs(
-    params: AdjunctSimplifyCostPyParameters,
+    params: AdjunctSimplifyCostPyParamsDict,
     execution: Execution,
 ): AdjunctSimplifyCostPyOutputs {
     const ret: AdjunctSimplifyCostPyOutputs = {
@@ -102,7 +102,7 @@ function adjunct_simplify_cost_py_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctSimplifyCostPyOutputs`).
  */
 function adjunct_simplify_cost_py_execute(
-    params: AdjunctSimplifyCostPyParameters,
+    params: AdjunctSimplifyCostPyParamsDict,
     runner: Runner | null = null,
 ): AdjunctSimplifyCostPyOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function adjunct_simplify_cost_py(
 export {
       ADJUNCT_SIMPLIFY_COST_PY_METADATA,
       AdjunctSimplifyCostPyOutputs,
+      AdjunctSimplifyCostPyParamsDict,
+      AdjunctSimplifyCostPyParamsDictTagged,
       adjunct_simplify_cost_py,
       adjunct_simplify_cost_py_execute,
       adjunct_simplify_cost_py_params,

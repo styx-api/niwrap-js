@@ -11,7 +11,7 @@ const DCMSPLIT_METADATA: Metadata = {
 };
 
 
-interface DcmsplitParameters {
+interface DcmsplitParamsDict {
     "@type"?: "freesurfer/dcmsplit";
     "dcm_dir": string;
     "out_dir": string;
@@ -24,11 +24,11 @@ interface DcmsplitParameters {
     "dicom_tag"?: string | null | undefined;
     "study_description": boolean;
 }
-type DcmsplitParametersTagged = Required<Pick<DcmsplitParameters, '@type'>> & DcmsplitParameters;
+type DcmsplitParamsDictTagged = Required<Pick<DcmsplitParamsDict, '@type'>> & DcmsplitParamsDict;
 
 
 /**
- * Output object returned when calling `DcmsplitParameters(...)`.
+ * Output object returned when calling `DcmsplitParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function dcmsplit_params(
     series_plus: boolean = false,
     dicom_tag: string | null = null,
     study_description: boolean = false,
-): DcmsplitParametersTagged {
+): DcmsplitParamsDictTagged {
     const params = {
         "@type": "freesurfer/dcmsplit" as const,
         "dcm_dir": dcm_dir,
@@ -96,7 +96,7 @@ function dcmsplit_params(
  * @returns Command-line arguments.
  */
 function dcmsplit_cargs(
-    params: DcmsplitParameters,
+    params: DcmsplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function dcmsplit_cargs(
  * @returns Outputs object.
  */
 function dcmsplit_outputs(
-    params: DcmsplitParameters,
+    params: DcmsplitParamsDict,
     execution: Execution,
 ): DcmsplitOutputs {
     const ret: DcmsplitOutputs = {
@@ -174,7 +174,7 @@ function dcmsplit_outputs(
  * @returns NamedTuple of outputs (described in `DcmsplitOutputs`).
  */
 function dcmsplit_execute(
-    params: DcmsplitParameters,
+    params: DcmsplitParamsDict,
     runner: Runner | null = null,
 ): DcmsplitOutputs {
     runner = runner || getGlobalRunner();
@@ -231,6 +231,8 @@ function dcmsplit(
 export {
       DCMSPLIT_METADATA,
       DcmsplitOutputs,
+      DcmsplitParamsDict,
+      DcmsplitParamsDictTagged,
       dcmsplit,
       dcmsplit_execute,
       dcmsplit_params,

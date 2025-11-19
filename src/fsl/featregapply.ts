@@ -11,7 +11,7 @@ const FEATREGAPPLY_METADATA: Metadata = {
 };
 
 
-interface FeatregapplyParameters {
+interface FeatregapplyParamsDict {
     "@type"?: "fsl/featregapply";
     "feat_directory": string;
     "force_flag": boolean;
@@ -21,11 +21,11 @@ interface FeatregapplyParameters {
     "standard_space_res"?: number | null | undefined;
     "exclude_filtered_func_flag": boolean;
 }
-type FeatregapplyParametersTagged = Required<Pick<FeatregapplyParameters, '@type'>> & FeatregapplyParameters;
+type FeatregapplyParamsDictTagged = Required<Pick<FeatregapplyParamsDict, '@type'>> & FeatregapplyParamsDict;
 
 
 /**
- * Output object returned when calling `FeatregapplyParameters(...)`.
+ * Output object returned when calling `FeatregapplyParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function featregapply_params(
     upsample_spline: InputPathType | null = null,
     standard_space_res: number | null = null,
     exclude_filtered_func_flag: boolean = false,
-): FeatregapplyParametersTagged {
+): FeatregapplyParamsDictTagged {
     const params = {
         "@type": "fsl/featregapply" as const,
         "feat_directory": feat_directory,
@@ -92,7 +92,7 @@ function featregapply_params(
  * @returns Command-line arguments.
  */
 function featregapply_cargs(
-    params: FeatregapplyParameters,
+    params: FeatregapplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function featregapply_cargs(
  * @returns Outputs object.
  */
 function featregapply_outputs(
-    params: FeatregapplyParameters,
+    params: FeatregapplyParamsDict,
     execution: Execution,
 ): FeatregapplyOutputs {
     const ret: FeatregapplyOutputs = {
@@ -164,7 +164,7 @@ function featregapply_outputs(
  * @returns NamedTuple of outputs (described in `FeatregapplyOutputs`).
  */
 function featregapply_execute(
-    params: FeatregapplyParameters,
+    params: FeatregapplyParamsDict,
     runner: Runner | null = null,
 ): FeatregapplyOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function featregapply(
 export {
       FEATREGAPPLY_METADATA,
       FeatregapplyOutputs,
+      FeatregapplyParamsDict,
+      FeatregapplyParamsDictTagged,
       featregapply,
       featregapply_execute,
       featregapply_params,

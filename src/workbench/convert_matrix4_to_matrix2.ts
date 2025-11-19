@@ -10,27 +10,27 @@ const CONVERT_MATRIX4_TO_MATRIX2_METADATA: Metadata = {
 };
 
 
-interface ConvertMatrix4ToMatrix2IndividualFibersParameters {
+interface ConvertMatrix4ToMatrix2IndividualFibersParamsDict {
     "@type"?: "individual-fibers";
     "fiber-1": string;
     "fiber-2": string;
     "fiber-3": string;
 }
-type ConvertMatrix4ToMatrix2IndividualFibersParametersTagged = Required<Pick<ConvertMatrix4ToMatrix2IndividualFibersParameters, '@type'>> & ConvertMatrix4ToMatrix2IndividualFibersParameters;
+type ConvertMatrix4ToMatrix2IndividualFibersParamsDictTagged = Required<Pick<ConvertMatrix4ToMatrix2IndividualFibersParamsDict, '@type'>> & ConvertMatrix4ToMatrix2IndividualFibersParamsDict;
 
 
-interface ConvertMatrix4ToMatrix2Parameters {
+interface ConvertMatrix4ToMatrix2ParamsDict {
     "@type"?: "workbench/convert-matrix4-to-matrix2";
     "counts-out": string;
     "distance-out"?: string | null | undefined;
-    "individual-fibers"?: ConvertMatrix4ToMatrix2IndividualFibersParameters | null | undefined;
+    "individual-fibers"?: ConvertMatrix4ToMatrix2IndividualFibersParamsDict | null | undefined;
     "matrix4-wbsparse": string;
 }
-type ConvertMatrix4ToMatrix2ParametersTagged = Required<Pick<ConvertMatrix4ToMatrix2Parameters, '@type'>> & ConvertMatrix4ToMatrix2Parameters;
+type ConvertMatrix4ToMatrix2ParamsDictTagged = Required<Pick<ConvertMatrix4ToMatrix2ParamsDict, '@type'>> & ConvertMatrix4ToMatrix2ParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertMatrix4ToMatrix2IndividualFibersParameters | null(...)`.
+ * Output object returned when calling `ConvertMatrix4ToMatrix2IndividualFibersParamsDict | null(...)`.
  *
  * @interface
  */
@@ -63,11 +63,11 @@ interface ConvertMatrix4ToMatrix2IndividualFibersOutputs {
  *
  * @returns Parameter dictionary
  */
-function convert_matrix4_to_matrix2_individual_fibers_params(
+function convert_matrix4_to_matrix2_individual_fibers(
     fiber_1: string,
     fiber_2: string,
     fiber_3: string,
-): ConvertMatrix4ToMatrix2IndividualFibersParametersTagged {
+): ConvertMatrix4ToMatrix2IndividualFibersParamsDictTagged {
     const params = {
         "@type": "individual-fibers" as const,
         "fiber-1": fiber_1,
@@ -87,7 +87,7 @@ function convert_matrix4_to_matrix2_individual_fibers_params(
  * @returns Command-line arguments.
  */
 function convert_matrix4_to_matrix2_individual_fibers_cargs(
-    params: ConvertMatrix4ToMatrix2IndividualFibersParameters,
+    params: ConvertMatrix4ToMatrix2IndividualFibersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function convert_matrix4_to_matrix2_individual_fibers_cargs(
  * @returns Outputs object.
  */
 function convert_matrix4_to_matrix2_individual_fibers_outputs(
-    params: ConvertMatrix4ToMatrix2IndividualFibersParameters,
+    params: ConvertMatrix4ToMatrix2IndividualFibersParamsDict,
     execution: Execution,
 ): ConvertMatrix4ToMatrix2IndividualFibersOutputs {
     const ret: ConvertMatrix4ToMatrix2IndividualFibersOutputs = {
@@ -124,7 +124,7 @@ function convert_matrix4_to_matrix2_individual_fibers_outputs(
 
 
 /**
- * Output object returned when calling `ConvertMatrix4ToMatrix2Parameters(...)`.
+ * Output object returned when calling `ConvertMatrix4ToMatrix2ParamsDict(...)`.
  *
  * @interface
  */
@@ -160,8 +160,8 @@ function convert_matrix4_to_matrix2_params(
     counts_out: string,
     distance_out: string | null,
     matrix4_wbsparse: string,
-    individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParameters | null = null,
-): ConvertMatrix4ToMatrix2ParametersTagged {
+    individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParamsDict | null = null,
+): ConvertMatrix4ToMatrix2ParamsDictTagged {
     const params = {
         "@type": "workbench/convert-matrix4-to-matrix2" as const,
         "counts-out": counts_out,
@@ -186,7 +186,7 @@ function convert_matrix4_to_matrix2_params(
  * @returns Command-line arguments.
  */
 function convert_matrix4_to_matrix2_cargs(
-    params: ConvertMatrix4ToMatrix2Parameters,
+    params: ConvertMatrix4ToMatrix2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -214,7 +214,7 @@ function convert_matrix4_to_matrix2_cargs(
  * @returns Outputs object.
  */
 function convert_matrix4_to_matrix2_outputs(
-    params: ConvertMatrix4ToMatrix2Parameters,
+    params: ConvertMatrix4ToMatrix2ParamsDict,
     execution: Execution,
 ): ConvertMatrix4ToMatrix2Outputs {
     const ret: ConvertMatrix4ToMatrix2Outputs = {
@@ -237,7 +237,7 @@ function convert_matrix4_to_matrix2_outputs(
  * @returns NamedTuple of outputs (described in `ConvertMatrix4ToMatrix2Outputs`).
  */
 function convert_matrix4_to_matrix2_execute(
-    params: ConvertMatrix4ToMatrix2Parameters,
+    params: ConvertMatrix4ToMatrix2ParamsDict,
     runner: Runner | null = null,
 ): ConvertMatrix4ToMatrix2Outputs {
     runner = runner || getGlobalRunner();
@@ -269,7 +269,7 @@ function convert_matrix4_to_matrix2(
     counts_out: string,
     distance_out: string | null,
     matrix4_wbsparse: string,
-    individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParameters | null = null,
+    individual_fibers: ConvertMatrix4ToMatrix2IndividualFibersParamsDict | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToMatrix2Outputs {
     const params = convert_matrix4_to_matrix2_params(counts_out, distance_out, matrix4_wbsparse, individual_fibers)
@@ -280,9 +280,13 @@ function convert_matrix4_to_matrix2(
 export {
       CONVERT_MATRIX4_TO_MATRIX2_METADATA,
       ConvertMatrix4ToMatrix2IndividualFibersOutputs,
+      ConvertMatrix4ToMatrix2IndividualFibersParamsDict,
+      ConvertMatrix4ToMatrix2IndividualFibersParamsDictTagged,
       ConvertMatrix4ToMatrix2Outputs,
+      ConvertMatrix4ToMatrix2ParamsDict,
+      ConvertMatrix4ToMatrix2ParamsDictTagged,
       convert_matrix4_to_matrix2,
       convert_matrix4_to_matrix2_execute,
-      convert_matrix4_to_matrix2_individual_fibers_params,
+      convert_matrix4_to_matrix2_individual_fibers,
       convert_matrix4_to_matrix2_params,
 };

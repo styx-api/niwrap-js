@@ -11,7 +11,7 @@ const V__FAT_TRACT_COLORIZE_METADATA: Metadata = {
 };
 
 
-interface VFatTractColorizeParameters {
+interface VFatTractColorizeParamsDict {
     "@type"?: "afni/@fat_tract_colorize";
     "in_fa": InputPathType;
     "in_v1": InputPathType;
@@ -21,11 +21,11 @@ interface VFatTractColorizeParameters {
     "no_view": boolean;
     "only_view": boolean;
 }
-type VFatTractColorizeParametersTagged = Required<Pick<VFatTractColorizeParameters, '@type'>> & VFatTractColorizeParameters;
+type VFatTractColorizeParamsDictTagged = Required<Pick<VFatTractColorizeParamsDict, '@type'>> & VFatTractColorizeParamsDict;
 
 
 /**
- * Output object returned when calling `VFatTractColorizeParameters(...)`.
+ * Output object returned when calling `VFatTractColorizeParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function v__fat_tract_colorize_params(
     in_ulay: InputPathType | null = null,
     no_view: boolean = false,
     only_view: boolean = false,
-): VFatTractColorizeParametersTagged {
+): VFatTractColorizeParamsDictTagged {
     const params = {
         "@type": "afni/@fat_tract_colorize" as const,
         "in_fa": in_fa,
@@ -100,7 +100,7 @@ function v__fat_tract_colorize_params(
  * @returns Command-line arguments.
  */
 function v__fat_tract_colorize_cargs(
-    params: VFatTractColorizeParameters,
+    params: VFatTractColorizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -146,7 +146,7 @@ function v__fat_tract_colorize_cargs(
  * @returns Outputs object.
  */
 function v__fat_tract_colorize_outputs(
-    params: VFatTractColorizeParameters,
+    params: VFatTractColorizeParamsDict,
     execution: Execution,
 ): VFatTractColorizeOutputs {
     const ret: VFatTractColorizeOutputs = {
@@ -175,7 +175,7 @@ function v__fat_tract_colorize_outputs(
  * @returns NamedTuple of outputs (described in `VFatTractColorizeOutputs`).
  */
 function v__fat_tract_colorize_execute(
-    params: VFatTractColorizeParameters,
+    params: VFatTractColorizeParamsDict,
     runner: Runner | null = null,
 ): VFatTractColorizeOutputs {
     runner = runner || getGlobalRunner();
@@ -225,6 +225,8 @@ function v__fat_tract_colorize(
 
 export {
       VFatTractColorizeOutputs,
+      VFatTractColorizeParamsDict,
+      VFatTractColorizeParamsDictTagged,
       V__FAT_TRACT_COLORIZE_METADATA,
       v__fat_tract_colorize,
       v__fat_tract_colorize_execute,

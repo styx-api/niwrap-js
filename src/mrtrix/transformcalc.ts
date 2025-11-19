@@ -11,29 +11,29 @@ const TRANSFORMCALC_METADATA: Metadata = {
 };
 
 
-interface TransformcalcConfigParameters {
+interface TransformcalcConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TransformcalcConfigParametersTagged = Required<Pick<TransformcalcConfigParameters, '@type'>> & TransformcalcConfigParameters;
+type TransformcalcConfigParamsDictTagged = Required<Pick<TransformcalcConfigParamsDict, '@type'>> & TransformcalcConfigParamsDict;
 
 
-interface TransformcalcParameters {
+interface TransformcalcParamsDict {
     "@type"?: "mrtrix/transformcalc";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TransformcalcConfigParameters> | null | undefined;
+    "config"?: Array<TransformcalcConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "inputs": Array<string>;
     "operation": string;
     "output": string;
 }
-type TransformcalcParametersTagged = Required<Pick<TransformcalcParameters, '@type'>> & TransformcalcParameters;
+type TransformcalcParamsDictTagged = Required<Pick<TransformcalcParamsDict, '@type'>> & TransformcalcParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type TransformcalcParametersTagged = Required<Pick<TransformcalcParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function transformcalc_config_params(
+function transformcalc_config(
     key: string,
     value: string,
-): TransformcalcConfigParametersTagged {
+): TransformcalcConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function transformcalc_config_params(
  * @returns Command-line arguments.
  */
 function transformcalc_config_cargs(
-    params: TransformcalcConfigParameters,
+    params: TransformcalcConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function transformcalc_config_cargs(
 
 
 /**
- * Output object returned when calling `TransformcalcParameters(...)`.
+ * Output object returned when calling `TransformcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function transformcalc_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TransformcalcConfigParameters> | null = null,
+    config: Array<TransformcalcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TransformcalcParametersTagged {
+): TransformcalcParamsDictTagged {
     const params = {
         "@type": "mrtrix/transformcalc" as const,
         "info": info,
@@ -155,7 +155,7 @@ function transformcalc_params(
  * @returns Command-line arguments.
  */
 function transformcalc_cargs(
-    params: TransformcalcParameters,
+    params: TransformcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function transformcalc_cargs(
  * @returns Outputs object.
  */
 function transformcalc_outputs(
-    params: TransformcalcParameters,
+    params: TransformcalcParamsDict,
     execution: Execution,
 ): TransformcalcOutputs {
     const ret: TransformcalcOutputs = {
@@ -235,7 +235,7 @@ function transformcalc_outputs(
  * @returns NamedTuple of outputs (described in `TransformcalcOutputs`).
  */
 function transformcalc_execute(
-    params: TransformcalcParameters,
+    params: TransformcalcParamsDict,
     runner: Runner | null = null,
 ): TransformcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -287,7 +287,7 @@ function transformcalc(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TransformcalcConfigParameters> | null = null,
+    config: Array<TransformcalcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -299,9 +299,13 @@ function transformcalc(
 
 export {
       TRANSFORMCALC_METADATA,
+      TransformcalcConfigParamsDict,
+      TransformcalcConfigParamsDictTagged,
       TransformcalcOutputs,
+      TransformcalcParamsDict,
+      TransformcalcParamsDictTagged,
       transformcalc,
-      transformcalc_config_params,
+      transformcalc_config,
       transformcalc_execute,
       transformcalc_params,
 };

@@ -11,16 +11,16 @@ const FSL_FIX_TEXT_METADATA: Metadata = {
 };
 
 
-interface FslFixTextParameters {
+interface FslFixTextParamsDict {
     "@type"?: "fsl/fslFixText";
     "input_text_file": InputPathType;
     "output_text_file": string;
 }
-type FslFixTextParametersTagged = Required<Pick<FslFixTextParameters, '@type'>> & FslFixTextParameters;
+type FslFixTextParamsDictTagged = Required<Pick<FslFixTextParamsDict, '@type'>> & FslFixTextParamsDict;
 
 
 /**
- * Output object returned when calling `FslFixTextParameters(...)`.
+ * Output object returned when calling `FslFixTextParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FslFixTextOutputs {
 function fsl_fix_text_params(
     input_text_file: InputPathType,
     output_text_file: string,
-): FslFixTextParametersTagged {
+): FslFixTextParamsDictTagged {
     const params = {
         "@type": "fsl/fslFixText" as const,
         "input_text_file": input_text_file,
@@ -66,7 +66,7 @@ function fsl_fix_text_params(
  * @returns Command-line arguments.
  */
 function fsl_fix_text_cargs(
-    params: FslFixTextParameters,
+    params: FslFixTextParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function fsl_fix_text_cargs(
  * @returns Outputs object.
  */
 function fsl_fix_text_outputs(
-    params: FslFixTextParameters,
+    params: FslFixTextParamsDict,
     execution: Execution,
 ): FslFixTextOutputs {
     const ret: FslFixTextOutputs = {
@@ -112,7 +112,7 @@ function fsl_fix_text_outputs(
  * @returns NamedTuple of outputs (described in `FslFixTextOutputs`).
  */
 function fsl_fix_text_execute(
-    params: FslFixTextParameters,
+    params: FslFixTextParamsDict,
     runner: Runner | null = null,
 ): FslFixTextOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function fsl_fix_text(
 export {
       FSL_FIX_TEXT_METADATA,
       FslFixTextOutputs,
+      FslFixTextParamsDict,
+      FslFixTextParamsDictTagged,
       fsl_fix_text,
       fsl_fix_text_execute,
       fsl_fix_text_params,

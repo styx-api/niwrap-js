@@ -11,7 +11,7 @@ const POPP_METADATA: Metadata = {
 };
 
 
-interface PoppParameters {
+interface PoppParamsDict {
     "@type"?: "fsl/popp";
     "input_file": InputPathType;
     "output_basename": string;
@@ -47,11 +47,11 @@ interface PoppParameters {
     "debug_flag": boolean;
     "help_flag": boolean;
 }
-type PoppParametersTagged = Required<Pick<PoppParameters, '@type'>> & PoppParameters;
+type PoppParamsDictTagged = Required<Pick<PoppParamsDict, '@type'>> & PoppParamsDict;
 
 
 /**
- * Output object returned when calling `PoppParameters(...)`.
+ * Output object returned when calling `PoppParamsDict(...)`.
  *
  * @interface
  */
@@ -152,7 +152,7 @@ function popp_params(
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
     help_flag: boolean = false,
-): PoppParametersTagged {
+): PoppParamsDictTagged {
     const params = {
         "@type": "fsl/popp" as const,
         "input_file": input_file,
@@ -244,7 +244,7 @@ function popp_params(
  * @returns Command-line arguments.
  */
 function popp_cargs(
-    params: PoppParameters,
+    params: PoppParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -426,7 +426,7 @@ function popp_cargs(
  * @returns Outputs object.
  */
 function popp_outputs(
-    params: PoppParameters,
+    params: PoppParamsDict,
     execution: Execution,
 ): PoppOutputs {
     const ret: PoppOutputs = {
@@ -455,7 +455,7 @@ function popp_outputs(
  * @returns NamedTuple of outputs (described in `PoppOutputs`).
  */
 function popp_execute(
-    params: PoppParameters,
+    params: PoppParamsDict,
     runner: Runner | null = null,
 ): PoppOutputs {
     runner = runner || getGlobalRunner();
@@ -558,6 +558,8 @@ function popp(
 export {
       POPP_METADATA,
       PoppOutputs,
+      PoppParamsDict,
+      PoppParamsDictTagged,
       popp,
       popp_execute,
       popp_params,

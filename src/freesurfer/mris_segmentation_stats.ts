@@ -11,18 +11,18 @@ const MRIS_SEGMENTATION_STATS_METADATA: Metadata = {
 };
 
 
-interface MrisSegmentationStatsParameters {
+interface MrisSegmentationStatsParamsDict {
     "@type"?: "freesurfer/mris_segmentation_stats";
     "overlay_name": string;
     "segmentation_label_name": string;
     "subjects": Array<string>;
     "roc_file": string;
 }
-type MrisSegmentationStatsParametersTagged = Required<Pick<MrisSegmentationStatsParameters, '@type'>> & MrisSegmentationStatsParameters;
+type MrisSegmentationStatsParamsDictTagged = Required<Pick<MrisSegmentationStatsParamsDict, '@type'>> & MrisSegmentationStatsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSegmentationStatsParameters(...)`.
+ * Output object returned when calling `MrisSegmentationStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_segmentation_stats_params(
     segmentation_label_name: string,
     subjects: Array<string>,
     roc_file: string,
-): MrisSegmentationStatsParametersTagged {
+): MrisSegmentationStatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_segmentation_stats" as const,
         "overlay_name": overlay_name,
@@ -74,7 +74,7 @@ function mris_segmentation_stats_params(
  * @returns Command-line arguments.
  */
 function mris_segmentation_stats_cargs(
-    params: MrisSegmentationStatsParameters,
+    params: MrisSegmentationStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_segmentation_stats_cargs(
  * @returns Outputs object.
  */
 function mris_segmentation_stats_outputs(
-    params: MrisSegmentationStatsParameters,
+    params: MrisSegmentationStatsParamsDict,
     execution: Execution,
 ): MrisSegmentationStatsOutputs {
     const ret: MrisSegmentationStatsOutputs = {
@@ -122,7 +122,7 @@ function mris_segmentation_stats_outputs(
  * @returns NamedTuple of outputs (described in `MrisSegmentationStatsOutputs`).
  */
 function mris_segmentation_stats_execute(
-    params: MrisSegmentationStatsParameters,
+    params: MrisSegmentationStatsParamsDict,
     runner: Runner | null = null,
 ): MrisSegmentationStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_segmentation_stats(
 export {
       MRIS_SEGMENTATION_STATS_METADATA,
       MrisSegmentationStatsOutputs,
+      MrisSegmentationStatsParamsDict,
+      MrisSegmentationStatsParamsDictTagged,
       mris_segmentation_stats,
       mris_segmentation_stats_execute,
       mris_segmentation_stats_params,

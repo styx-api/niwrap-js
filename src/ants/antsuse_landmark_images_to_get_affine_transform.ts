@@ -11,18 +11,18 @@ const ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface AntsuseLandmarkImagesToGetAffineTransformParameters {
+interface AntsuseLandmarkImagesToGetAffineTransformParamsDict {
     "@type"?: "ants/ANTSUseLandmarkImagesToGetAffineTransform";
     "fixed_image": InputPathType;
     "moving_image": InputPathType;
     "transform_type": "rigid" | "affine";
     "output_affine": string;
 }
-type AntsuseLandmarkImagesToGetAffineTransformParametersTagged = Required<Pick<AntsuseLandmarkImagesToGetAffineTransformParameters, '@type'>> & AntsuseLandmarkImagesToGetAffineTransformParameters;
+type AntsuseLandmarkImagesToGetAffineTransformParamsDictTagged = Required<Pick<AntsuseLandmarkImagesToGetAffineTransformParamsDict, '@type'>> & AntsuseLandmarkImagesToGetAffineTransformParamsDict;
 
 
 /**
- * Output object returned when calling `AntsuseLandmarkImagesToGetAffineTransformParameters(...)`.
+ * Output object returned when calling `AntsuseLandmarkImagesToGetAffineTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function antsuse_landmark_images_to_get_affine_transform_params(
     moving_image: InputPathType,
     transform_type: "rigid" | "affine",
     output_affine: string,
-): AntsuseLandmarkImagesToGetAffineTransformParametersTagged {
+): AntsuseLandmarkImagesToGetAffineTransformParamsDictTagged {
     const params = {
         "@type": "ants/ANTSUseLandmarkImagesToGetAffineTransform" as const,
         "fixed_image": fixed_image,
@@ -74,7 +74,7 @@ function antsuse_landmark_images_to_get_affine_transform_params(
  * @returns Command-line arguments.
  */
 function antsuse_landmark_images_to_get_affine_transform_cargs(
-    params: AntsuseLandmarkImagesToGetAffineTransformParameters,
+    params: AntsuseLandmarkImagesToGetAffineTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function antsuse_landmark_images_to_get_affine_transform_cargs(
  * @returns Outputs object.
  */
 function antsuse_landmark_images_to_get_affine_transform_outputs(
-    params: AntsuseLandmarkImagesToGetAffineTransformParameters,
+    params: AntsuseLandmarkImagesToGetAffineTransformParamsDict,
     execution: Execution,
 ): AntsuseLandmarkImagesToGetAffineTransformOutputs {
     const ret: AntsuseLandmarkImagesToGetAffineTransformOutputs = {
@@ -122,7 +122,7 @@ function antsuse_landmark_images_to_get_affine_transform_outputs(
  * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetAffineTransformOutputs`).
  */
 function antsuse_landmark_images_to_get_affine_transform_execute(
-    params: AntsuseLandmarkImagesToGetAffineTransformParameters,
+    params: AntsuseLandmarkImagesToGetAffineTransformParamsDict,
     runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetAffineTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function antsuse_landmark_images_to_get_affine_transform(
 export {
       ANTSUSE_LANDMARK_IMAGES_TO_GET_AFFINE_TRANSFORM_METADATA,
       AntsuseLandmarkImagesToGetAffineTransformOutputs,
+      AntsuseLandmarkImagesToGetAffineTransformParamsDict,
+      AntsuseLandmarkImagesToGetAffineTransformParamsDictTagged,
       antsuse_landmark_images_to_get_affine_transform,
       antsuse_landmark_images_to_get_affine_transform_execute,
       antsuse_landmark_images_to_get_affine_transform_params,

@@ -11,7 +11,7 @@ const V_3D_ROIMAKER_METADATA: Metadata = {
 };
 
 
-interface V3dRoimakerParameters {
+interface V3dRoimakerParamsDict {
     "@type"?: "afni/3dROIMaker";
     "inset": InputPathType;
     "thresh": number;
@@ -34,11 +34,11 @@ interface V3dRoimakerParameters {
     "preinfl_inflate"?: number | null | undefined;
     "dump_no_labtab": boolean;
 }
-type V3dRoimakerParametersTagged = Required<Pick<V3dRoimakerParameters, '@type'>> & V3dRoimakerParameters;
+type V3dRoimakerParamsDictTagged = Required<Pick<V3dRoimakerParamsDict, '@type'>> & V3dRoimakerParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRoimakerParameters(...)`.
+ * Output object returned when calling `V3dRoimakerParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function v_3d_roimaker_params(
     preinfl_inset: InputPathType | null = null,
     preinfl_inflate: number | null = null,
     dump_no_labtab: boolean = false,
-): V3dRoimakerParametersTagged {
+): V3dRoimakerParamsDictTagged {
     const params = {
         "@type": "afni/3dROIMaker" as const,
         "inset": inset,
@@ -164,7 +164,7 @@ function v_3d_roimaker_params(
  * @returns Command-line arguments.
  */
 function v_3d_roimaker_cargs(
-    params: V3dRoimakerParameters,
+    params: V3dRoimakerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -275,7 +275,7 @@ function v_3d_roimaker_cargs(
  * @returns Outputs object.
  */
 function v_3d_roimaker_outputs(
-    params: V3dRoimakerParameters,
+    params: V3dRoimakerParamsDict,
     execution: Execution,
 ): V3dRoimakerOutputs {
     const ret: V3dRoimakerOutputs = {
@@ -302,7 +302,7 @@ function v_3d_roimaker_outputs(
  * @returns NamedTuple of outputs (described in `V3dRoimakerOutputs`).
  */
 function v_3d_roimaker_execute(
-    params: V3dRoimakerParameters,
+    params: V3dRoimakerParamsDict,
     runner: Runner | null = null,
 ): V3dRoimakerOutputs {
     runner = runner || getGlobalRunner();
@@ -378,6 +378,8 @@ function v_3d_roimaker(
 
 export {
       V3dRoimakerOutputs,
+      V3dRoimakerParamsDict,
+      V3dRoimakerParamsDictTagged,
       V_3D_ROIMAKER_METADATA,
       v_3d_roimaker,
       v_3d_roimaker_execute,

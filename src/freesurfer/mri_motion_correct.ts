@@ -11,16 +11,16 @@ const MRI_MOTION_CORRECT_METADATA: Metadata = {
 };
 
 
-interface MriMotionCorrectParameters {
+interface MriMotionCorrectParamsDict {
     "@type"?: "freesurfer/mri_motion_correct";
     "outfile": string;
     "infiles": Array<InputPathType>;
 }
-type MriMotionCorrectParametersTagged = Required<Pick<MriMotionCorrectParameters, '@type'>> & MriMotionCorrectParameters;
+type MriMotionCorrectParamsDictTagged = Required<Pick<MriMotionCorrectParamsDict, '@type'>> & MriMotionCorrectParamsDict;
 
 
 /**
- * Output object returned when calling `MriMotionCorrectParameters(...)`.
+ * Output object returned when calling `MriMotionCorrectParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriMotionCorrectOutputs {
 function mri_motion_correct_params(
     outfile: string,
     infiles: Array<InputPathType>,
-): MriMotionCorrectParametersTagged {
+): MriMotionCorrectParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_motion_correct" as const,
         "outfile": outfile,
@@ -66,7 +66,7 @@ function mri_motion_correct_params(
  * @returns Command-line arguments.
  */
 function mri_motion_correct_cargs(
-    params: MriMotionCorrectParameters,
+    params: MriMotionCorrectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_motion_correct_cargs(
  * @returns Outputs object.
  */
 function mri_motion_correct_outputs(
-    params: MriMotionCorrectParameters,
+    params: MriMotionCorrectParamsDict,
     execution: Execution,
 ): MriMotionCorrectOutputs {
     const ret: MriMotionCorrectOutputs = {
@@ -112,7 +112,7 @@ function mri_motion_correct_outputs(
  * @returns NamedTuple of outputs (described in `MriMotionCorrectOutputs`).
  */
 function mri_motion_correct_execute(
-    params: MriMotionCorrectParameters,
+    params: MriMotionCorrectParamsDict,
     runner: Runner | null = null,
 ): MriMotionCorrectOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_motion_correct(
 export {
       MRI_MOTION_CORRECT_METADATA,
       MriMotionCorrectOutputs,
+      MriMotionCorrectParamsDict,
+      MriMotionCorrectParamsDictTagged,
       mri_motion_correct,
       mri_motion_correct_execute,
       mri_motion_correct_params,

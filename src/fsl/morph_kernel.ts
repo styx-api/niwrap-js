@@ -11,16 +11,16 @@ const MORPH_KERNEL_METADATA: Metadata = {
 };
 
 
-interface MorphKernelParameters {
+interface MorphKernelParamsDict {
     "@type"?: "fsl/morph_kernel";
     "cube_side_length": number;
     "sphere_radius": number;
 }
-type MorphKernelParametersTagged = Required<Pick<MorphKernelParameters, '@type'>> & MorphKernelParameters;
+type MorphKernelParamsDictTagged = Required<Pick<MorphKernelParamsDict, '@type'>> & MorphKernelParamsDict;
 
 
 /**
- * Output object returned when calling `MorphKernelParameters(...)`.
+ * Output object returned when calling `MorphKernelParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MorphKernelOutputs {
 function morph_kernel_params(
     cube_side_length: number,
     sphere_radius: number,
-): MorphKernelParametersTagged {
+): MorphKernelParamsDictTagged {
     const params = {
         "@type": "fsl/morph_kernel" as const,
         "cube_side_length": cube_side_length,
@@ -66,7 +66,7 @@ function morph_kernel_params(
  * @returns Command-line arguments.
  */
 function morph_kernel_cargs(
-    params: MorphKernelParameters,
+    params: MorphKernelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function morph_kernel_cargs(
  * @returns Outputs object.
  */
 function morph_kernel_outputs(
-    params: MorphKernelParameters,
+    params: MorphKernelParamsDict,
     execution: Execution,
 ): MorphKernelOutputs {
     const ret: MorphKernelOutputs = {
@@ -112,7 +112,7 @@ function morph_kernel_outputs(
  * @returns NamedTuple of outputs (described in `MorphKernelOutputs`).
  */
 function morph_kernel_execute(
-    params: MorphKernelParameters,
+    params: MorphKernelParamsDict,
     runner: Runner | null = null,
 ): MorphKernelOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function morph_kernel(
 export {
       MORPH_KERNEL_METADATA,
       MorphKernelOutputs,
+      MorphKernelParamsDict,
+      MorphKernelParamsDictTagged,
       morph_kernel,
       morph_kernel_execute,
       morph_kernel_params,

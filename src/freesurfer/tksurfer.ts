@@ -11,18 +11,18 @@ const TKSURFER_METADATA: Metadata = {
 };
 
 
-interface TksurferParameters {
+interface TksurferParamsDict {
     "@type"?: "freesurfer/tksurfer";
     "subject_id": string;
     "hemisphere": string;
     "surface_name": string;
     "options"?: string | null | undefined;
 }
-type TksurferParametersTagged = Required<Pick<TksurferParameters, '@type'>> & TksurferParameters;
+type TksurferParamsDictTagged = Required<Pick<TksurferParamsDict, '@type'>> & TksurferParamsDict;
 
 
 /**
- * Output object returned when calling `TksurferParameters(...)`.
+ * Output object returned when calling `TksurferParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function tksurfer_params(
     hemisphere: string,
     surface_name: string,
     options: string | null = null,
-): TksurferParametersTagged {
+): TksurferParamsDictTagged {
     const params = {
         "@type": "freesurfer/tksurfer" as const,
         "subject_id": subject_id,
@@ -72,7 +72,7 @@ function tksurfer_params(
  * @returns Command-line arguments.
  */
 function tksurfer_cargs(
-    params: TksurferParameters,
+    params: TksurferParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function tksurfer_cargs(
  * @returns Outputs object.
  */
 function tksurfer_outputs(
-    params: TksurferParameters,
+    params: TksurferParamsDict,
     execution: Execution,
 ): TksurferOutputs {
     const ret: TksurferOutputs = {
@@ -121,7 +121,7 @@ function tksurfer_outputs(
  * @returns NamedTuple of outputs (described in `TksurferOutputs`).
  */
 function tksurfer_execute(
-    params: TksurferParameters,
+    params: TksurferParamsDict,
     runner: Runner | null = null,
 ): TksurferOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function tksurfer(
 export {
       TKSURFER_METADATA,
       TksurferOutputs,
+      TksurferParamsDict,
+      TksurferParamsDictTagged,
       tksurfer,
       tksurfer_execute,
       tksurfer_params,

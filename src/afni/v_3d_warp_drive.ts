@@ -11,7 +11,7 @@ const V_3D_WARP_DRIVE_METADATA: Metadata = {
 };
 
 
-interface V3dWarpDriveParameters {
+interface V3dWarpDriveParamsDict {
     "@type"?: "afni/3dWarpDrive";
     "dataset": InputPathType;
     "base_dataset": InputPathType;
@@ -50,11 +50,11 @@ interface V3dWarpDriveParameters {
     "ashift": boolean;
     "bshift": boolean;
 }
-type V3dWarpDriveParametersTagged = Required<Pick<V3dWarpDriveParameters, '@type'>> & V3dWarpDriveParameters;
+type V3dWarpDriveParamsDictTagged = Required<Pick<V3dWarpDriveParamsDict, '@type'>> & V3dWarpDriveParamsDict;
 
 
 /**
- * Output object returned when calling `V3dWarpDriveParameters(...)`.
+ * Output object returned when calling `V3dWarpDriveParamsDict(...)`.
  *
  * @interface
  */
@@ -161,7 +161,7 @@ function v_3d_warp_drive_params(
     slower_s_matrix: boolean = false,
     ashift: boolean = false,
     bshift: boolean = false,
-): V3dWarpDriveParametersTagged {
+): V3dWarpDriveParamsDictTagged {
     const params = {
         "@type": "afni/3dWarpDrive" as const,
         "dataset": dataset,
@@ -234,7 +234,7 @@ function v_3d_warp_drive_params(
  * @returns Command-line arguments.
  */
 function v_3d_warp_drive_cargs(
-    params: V3dWarpDriveParameters,
+    params: V3dWarpDriveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -390,7 +390,7 @@ function v_3d_warp_drive_cargs(
  * @returns Outputs object.
  */
 function v_3d_warp_drive_outputs(
-    params: V3dWarpDriveParameters,
+    params: V3dWarpDriveParamsDict,
     execution: Execution,
 ): V3dWarpDriveOutputs {
     const ret: V3dWarpDriveOutputs = {
@@ -419,7 +419,7 @@ function v_3d_warp_drive_outputs(
  * @returns NamedTuple of outputs (described in `V3dWarpDriveOutputs`).
  */
 function v_3d_warp_drive_execute(
-    params: V3dWarpDriveParameters,
+    params: V3dWarpDriveParamsDict,
     runner: Runner | null = null,
 ): V3dWarpDriveOutputs {
     runner = runner || getGlobalRunner();
@@ -527,6 +527,8 @@ function v_3d_warp_drive(
 
 export {
       V3dWarpDriveOutputs,
+      V3dWarpDriveParamsDict,
+      V3dWarpDriveParamsDictTagged,
       V_3D_WARP_DRIVE_METADATA,
       v_3d_warp_drive,
       v_3d_warp_drive_execute,

@@ -11,7 +11,7 @@ const PARC_ATLAS_JACKKNIFE_TEST_METADATA: Metadata = {
 };
 
 
-interface ParcAtlasJackknifeTestParameters {
+interface ParcAtlasJackknifeTestParamsDict {
     "@type"?: "freesurfer/parc_atlas_jackknife_test";
     "register": boolean;
     "reg_dist"?: string | null | undefined;
@@ -26,11 +26,11 @@ interface ParcAtlasJackknifeTestParameters {
     "binaries_path"?: string | null | undefined;
     "dontrun": boolean;
 }
-type ParcAtlasJackknifeTestParametersTagged = Required<Pick<ParcAtlasJackknifeTestParameters, '@type'>> & ParcAtlasJackknifeTestParameters;
+type ParcAtlasJackknifeTestParamsDictTagged = Required<Pick<ParcAtlasJackknifeTestParamsDict, '@type'>> & ParcAtlasJackknifeTestParamsDict;
 
 
 /**
- * Output object returned when calling `ParcAtlasJackknifeTestParameters(...)`.
+ * Output object returned when calling `ParcAtlasJackknifeTestParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function parc_atlas_jackknife_test_params(
     freesurfer_home: string | null = null,
     binaries_path: string | null = null,
     dontrun: boolean = false,
-): ParcAtlasJackknifeTestParametersTagged {
+): ParcAtlasJackknifeTestParamsDictTagged {
     const params = {
         "@type": "freesurfer/parc_atlas_jackknife_test" as const,
         "register": register,
@@ -118,7 +118,7 @@ function parc_atlas_jackknife_test_params(
  * @returns Command-line arguments.
  */
 function parc_atlas_jackknife_test_cargs(
-    params: ParcAtlasJackknifeTestParameters,
+    params: ParcAtlasJackknifeTestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -190,7 +190,7 @@ function parc_atlas_jackknife_test_cargs(
  * @returns Outputs object.
  */
 function parc_atlas_jackknife_test_outputs(
-    params: ParcAtlasJackknifeTestParameters,
+    params: ParcAtlasJackknifeTestParamsDict,
     execution: Execution,
 ): ParcAtlasJackknifeTestOutputs {
     const ret: ParcAtlasJackknifeTestOutputs = {
@@ -216,7 +216,7 @@ function parc_atlas_jackknife_test_outputs(
  * @returns NamedTuple of outputs (described in `ParcAtlasJackknifeTestOutputs`).
  */
 function parc_atlas_jackknife_test_execute(
-    params: ParcAtlasJackknifeTestParameters,
+    params: ParcAtlasJackknifeTestParamsDict,
     runner: Runner | null = null,
 ): ParcAtlasJackknifeTestOutputs {
     runner = runner || getGlobalRunner();
@@ -277,6 +277,8 @@ function parc_atlas_jackknife_test(
 export {
       PARC_ATLAS_JACKKNIFE_TEST_METADATA,
       ParcAtlasJackknifeTestOutputs,
+      ParcAtlasJackknifeTestParamsDict,
+      ParcAtlasJackknifeTestParamsDictTagged,
       parc_atlas_jackknife_test,
       parc_atlas_jackknife_test_execute,
       parc_atlas_jackknife_test_params,

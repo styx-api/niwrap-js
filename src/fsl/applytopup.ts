@@ -11,7 +11,7 @@ const APPLYTOPUP_METADATA: Metadata = {
 };
 
 
-interface ApplytopupParameters {
+interface ApplytopupParamsDict {
     "@type"?: "fsl/applytopup";
     "imain": Array<InputPathType>;
     "datain": InputPathType;
@@ -23,11 +23,11 @@ interface ApplytopupParameters {
     "datatype"?: "char" | "short" | "int" | "float" | "double" | null | undefined;
     "verbose": boolean;
 }
-type ApplytopupParametersTagged = Required<Pick<ApplytopupParameters, '@type'>> & ApplytopupParameters;
+type ApplytopupParamsDictTagged = Required<Pick<ApplytopupParamsDict, '@type'>> & ApplytopupParamsDict;
 
 
 /**
- * Output object returned when calling `ApplytopupParameters(...)`.
+ * Output object returned when calling `ApplytopupParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function applytopup_params(
     interp: "trilinear" | "spline" | null = null,
     datatype: "char" | "short" | "int" | "float" | "double" | null = null,
     verbose: boolean = false,
-): ApplytopupParametersTagged {
+): ApplytopupParamsDictTagged {
     const params = {
         "@type": "fsl/applytopup" as const,
         "imain": imain,
@@ -100,7 +100,7 @@ function applytopup_params(
  * @returns Command-line arguments.
  */
 function applytopup_cargs(
-    params: ApplytopupParameters,
+    params: ApplytopupParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function applytopup_cargs(
  * @returns Outputs object.
  */
 function applytopup_outputs(
-    params: ApplytopupParameters,
+    params: ApplytopupParamsDict,
     execution: Execution,
 ): ApplytopupOutputs {
     const ret: ApplytopupOutputs = {
@@ -161,7 +161,7 @@ function applytopup_outputs(
  * @returns NamedTuple of outputs (described in `ApplytopupOutputs`).
  */
 function applytopup_execute(
-    params: ApplytopupParameters,
+    params: ApplytopupParamsDict,
     runner: Runner | null = null,
 ): ApplytopupOutputs {
     runner = runner || getGlobalRunner();
@@ -216,6 +216,8 @@ function applytopup(
 export {
       APPLYTOPUP_METADATA,
       ApplytopupOutputs,
+      ApplytopupParamsDict,
+      ApplytopupParamsDictTagged,
       applytopup,
       applytopup_execute,
       applytopup_params,

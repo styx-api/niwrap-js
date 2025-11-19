@@ -11,7 +11,7 @@ const AIV_METADATA: Metadata = {
 };
 
 
-interface AivParameters {
+interface AivParamsDict {
     "@type"?: "afni/aiv";
     "verbose": boolean;
     "quiet": boolean;
@@ -20,11 +20,11 @@ interface AivParameters {
     "pad"?: string | null | undefined;
     "input_images": Array<InputPathType>;
 }
-type AivParametersTagged = Required<Pick<AivParameters, '@type'>> & AivParameters;
+type AivParamsDictTagged = Required<Pick<AivParamsDict, '@type'>> & AivParamsDict;
 
 
 /**
- * Output object returned when calling `AivParameters(...)`.
+ * Output object returned when calling `AivParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function aiv_params(
     title: string | null = null,
     port: number | null = null,
     pad: string | null = null,
-): AivParametersTagged {
+): AivParamsDictTagged {
     const params = {
         "@type": "afni/aiv" as const,
         "verbose": verbose,
@@ -84,7 +84,7 @@ function aiv_params(
  * @returns Command-line arguments.
  */
 function aiv_cargs(
-    params: AivParameters,
+    params: AivParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function aiv_cargs(
  * @returns Outputs object.
  */
 function aiv_outputs(
-    params: AivParameters,
+    params: AivParamsDict,
     execution: Execution,
 ): AivOutputs {
     const ret: AivOutputs = {
@@ -152,7 +152,7 @@ function aiv_outputs(
  * @returns NamedTuple of outputs (described in `AivOutputs`).
  */
 function aiv_execute(
-    params: AivParameters,
+    params: AivParamsDict,
     runner: Runner | null = null,
 ): AivOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function aiv(
 export {
       AIV_METADATA,
       AivOutputs,
+      AivParamsDict,
+      AivParamsDictTagged,
       aiv,
       aiv_execute,
       aiv_params,

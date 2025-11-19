@@ -11,15 +11,15 @@ const IMRM_METADATA: Metadata = {
 };
 
 
-interface ImrmParameters {
+interface ImrmParamsDict {
     "@type"?: "fsl/imrm";
     "images_to_remove": Array<string>;
 }
-type ImrmParametersTagged = Required<Pick<ImrmParameters, '@type'>> & ImrmParameters;
+type ImrmParamsDictTagged = Required<Pick<ImrmParamsDict, '@type'>> & ImrmParamsDict;
 
 
 /**
- * Output object returned when calling `ImrmParameters(...)`.
+ * Output object returned when calling `ImrmParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface ImrmOutputs {
  */
 function imrm_params(
     images_to_remove: Array<string>,
-): ImrmParametersTagged {
+): ImrmParamsDictTagged {
     const params = {
         "@type": "fsl/imrm" as const,
         "images_to_remove": images_to_remove,
@@ -58,7 +58,7 @@ function imrm_params(
  * @returns Command-line arguments.
  */
 function imrm_cargs(
-    params: ImrmParameters,
+    params: ImrmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function imrm_cargs(
  * @returns Outputs object.
  */
 function imrm_outputs(
-    params: ImrmParameters,
+    params: ImrmParamsDict,
     execution: Execution,
 ): ImrmOutputs {
     const ret: ImrmOutputs = {
@@ -102,7 +102,7 @@ function imrm_outputs(
  * @returns NamedTuple of outputs (described in `ImrmOutputs`).
  */
 function imrm_execute(
-    params: ImrmParameters,
+    params: ImrmParamsDict,
     runner: Runner | null = null,
 ): ImrmOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function imrm(
 export {
       IMRM_METADATA,
       ImrmOutputs,
+      ImrmParamsDict,
+      ImrmParamsDictTagged,
       imrm,
       imrm_execute,
       imrm_params,

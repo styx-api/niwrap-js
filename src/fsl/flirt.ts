@@ -11,7 +11,7 @@ const FLIRT_METADATA: Metadata = {
 };
 
 
-interface FlirtParameters {
+interface FlirtParamsDict {
     "@type"?: "fsl/flirt";
     "in_file": InputPathType;
     "reference": InputPathType;
@@ -59,11 +59,11 @@ interface FlirtParameters {
     "wmcoords"?: InputPathType | null | undefined;
     "wmnorms"?: InputPathType | null | undefined;
 }
-type FlirtParametersTagged = Required<Pick<FlirtParameters, '@type'>> & FlirtParameters;
+type FlirtParamsDictTagged = Required<Pick<FlirtParamsDict, '@type'>> & FlirtParamsDict;
 
 
 /**
- * Output object returned when calling `FlirtParameters(...)`.
+ * Output object returned when calling `FlirtParamsDict(...)`.
  *
  * @interface
  */
@@ -180,7 +180,7 @@ function flirt_params(
     wm_seg: InputPathType | null = null,
     wmcoords: InputPathType | null = null,
     wmnorms: InputPathType | null = null,
-): FlirtParametersTagged {
+): FlirtParamsDictTagged {
     const params = {
         "@type": "fsl/flirt" as const,
         "in_file": in_file,
@@ -306,7 +306,7 @@ function flirt_params(
  * @returns Command-line arguments.
  */
 function flirt_cargs(
-    params: FlirtParameters,
+    params: FlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -559,7 +559,7 @@ function flirt_cargs(
  * @returns Outputs object.
  */
 function flirt_outputs(
-    params: FlirtParameters,
+    params: FlirtParamsDict,
     execution: Execution,
 ): FlirtOutputs {
     const ret: FlirtOutputs = {
@@ -586,7 +586,7 @@ function flirt_outputs(
  * @returns NamedTuple of outputs (described in `FlirtOutputs`).
  */
 function flirt_execute(
-    params: FlirtParameters,
+    params: FlirtParamsDict,
     runner: Runner | null = null,
 ): FlirtOutputs {
     runner = runner || getGlobalRunner();
@@ -713,6 +713,8 @@ function flirt(
 export {
       FLIRT_METADATA,
       FlirtOutputs,
+      FlirtParamsDict,
+      FlirtParamsDictTagged,
       flirt,
       flirt_execute,
       flirt_params,

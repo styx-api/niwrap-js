@@ -10,24 +10,24 @@ const VOLUME_MATH_METADATA: Metadata = {
 };
 
 
-interface VolumeMathVarParameters {
+interface VolumeMathVarParamsDict {
     "@type"?: "var";
     "name": string;
     "volume": InputPathType;
     "subvol"?: string | null | undefined;
     "repeat": boolean;
 }
-type VolumeMathVarParametersTagged = Required<Pick<VolumeMathVarParameters, '@type'>> & VolumeMathVarParameters;
+type VolumeMathVarParamsDictTagged = Required<Pick<VolumeMathVarParamsDict, '@type'>> & VolumeMathVarParamsDict;
 
 
-interface VolumeMathParameters {
+interface VolumeMathParamsDict {
     "@type"?: "workbench/volume-math";
     "volume-out": string;
     "replace"?: number | null | undefined;
-    "var"?: Array<VolumeMathVarParameters> | null | undefined;
+    "var"?: Array<VolumeMathVarParamsDict> | null | undefined;
     "expression": string;
 }
-type VolumeMathParametersTagged = Required<Pick<VolumeMathParameters, '@type'>> & VolumeMathParameters;
+type VolumeMathParamsDictTagged = Required<Pick<VolumeMathParamsDict, '@type'>> & VolumeMathParamsDict;
 
 
 /**
@@ -42,12 +42,12 @@ the subvolume number or name
  *
  * @returns Parameter dictionary
  */
-function volume_math_var_params(
+function volume_math_var(
     name: string,
     volume: InputPathType,
     subvol: string | null,
     repeat: boolean = false,
-): VolumeMathVarParametersTagged {
+): VolumeMathVarParamsDictTagged {
     const params = {
         "@type": "var" as const,
         "name": name,
@@ -70,7 +70,7 @@ function volume_math_var_params(
  * @returns Command-line arguments.
  */
 function volume_math_var_cargs(
-    params: VolumeMathVarParameters,
+    params: VolumeMathVarParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function volume_math_var_cargs(
 
 
 /**
- * Output object returned when calling `VolumeMathParameters(...)`.
+ * Output object returned when calling `VolumeMathParamsDict(...)`.
  *
  * @interface
  */
@@ -121,8 +121,8 @@ function volume_math_params(
     volume_out: string,
     replace: number | null,
     expression: string,
-    var_: Array<VolumeMathVarParameters> | null = null,
-): VolumeMathParametersTagged {
+    var_: Array<VolumeMathVarParamsDict> | null = null,
+): VolumeMathParamsDictTagged {
     const params = {
         "@type": "workbench/volume-math" as const,
         "volume-out": volume_out,
@@ -147,7 +147,7 @@ function volume_math_params(
  * @returns Command-line arguments.
  */
 function volume_math_cargs(
-    params: VolumeMathParameters,
+    params: VolumeMathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -175,7 +175,7 @@ function volume_math_cargs(
  * @returns Outputs object.
  */
 function volume_math_outputs(
-    params: VolumeMathParameters,
+    params: VolumeMathParamsDict,
     execution: Execution,
 ): VolumeMathOutputs {
     const ret: VolumeMathOutputs = {
@@ -234,7 +234,7 @@ function volume_math_outputs(
  * @returns NamedTuple of outputs (described in `VolumeMathOutputs`).
  */
 function volume_math_execute(
-    params: VolumeMathParameters,
+    params: VolumeMathParamsDict,
     runner: Runner | null = null,
 ): VolumeMathOutputs {
     runner = runner || getGlobalRunner();
@@ -303,7 +303,7 @@ function volume_math(
     volume_out: string,
     replace: number | null,
     expression: string,
-    var_: Array<VolumeMathVarParameters> | null = null,
+    var_: Array<VolumeMathVarParamsDict> | null = null,
     runner: Runner | null = null,
 ): VolumeMathOutputs {
     const params = volume_math_params(volume_out, replace, expression, var_)
@@ -314,8 +314,12 @@ function volume_math(
 export {
       VOLUME_MATH_METADATA,
       VolumeMathOutputs,
+      VolumeMathParamsDict,
+      VolumeMathParamsDictTagged,
+      VolumeMathVarParamsDict,
+      VolumeMathVarParamsDictTagged,
       volume_math,
       volume_math_execute,
       volume_math_params,
-      volume_math_var_params,
+      volume_math_var,
 };

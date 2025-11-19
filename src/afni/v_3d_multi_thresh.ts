@@ -11,7 +11,7 @@ const V_3D_MULTI_THRESH_METADATA: Metadata = {
 };
 
 
-interface V3dMultiThreshParameters {
+interface V3dMultiThreshParamsDict {
     "@type"?: "afni/3dMultiThresh";
     "mthresh_file": InputPathType;
     "input_file": InputPathType;
@@ -25,11 +25,11 @@ interface V3dMultiThreshParameters {
     "no_zero_flag": boolean;
     "quiet_flag": boolean;
 }
-type V3dMultiThreshParametersTagged = Required<Pick<V3dMultiThreshParameters, '@type'>> & V3dMultiThreshParameters;
+type V3dMultiThreshParamsDictTagged = Required<Pick<V3dMultiThreshParamsDict, '@type'>> & V3dMultiThreshParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMultiThreshParameters(...)`.
+ * Output object returned when calling `V3dMultiThreshParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function v_3d_multi_thresh_params(
     all_mask: string | null = null,
     no_zero_flag: boolean = false,
     quiet_flag: boolean = false,
-): V3dMultiThreshParametersTagged {
+): V3dMultiThreshParamsDictTagged {
     const params = {
         "@type": "afni/3dMultiThresh" as const,
         "mthresh_file": mthresh_file,
@@ -118,7 +118,7 @@ function v_3d_multi_thresh_params(
  * @returns Command-line arguments.
  */
 function v_3d_multi_thresh_cargs(
-    params: V3dMultiThreshParameters,
+    params: V3dMultiThreshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,7 +183,7 @@ function v_3d_multi_thresh_cargs(
  * @returns Outputs object.
  */
 function v_3d_multi_thresh_outputs(
-    params: V3dMultiThreshParameters,
+    params: V3dMultiThreshParamsDict,
     execution: Execution,
 ): V3dMultiThreshOutputs {
     const ret: V3dMultiThreshOutputs = {
@@ -211,7 +211,7 @@ function v_3d_multi_thresh_outputs(
  * @returns NamedTuple of outputs (described in `V3dMultiThreshOutputs`).
  */
 function v_3d_multi_thresh_execute(
-    params: V3dMultiThreshParameters,
+    params: V3dMultiThreshParamsDict,
     runner: Runner | null = null,
 ): V3dMultiThreshOutputs {
     runner = runner || getGlobalRunner();
@@ -269,6 +269,8 @@ function v_3d_multi_thresh(
 
 export {
       V3dMultiThreshOutputs,
+      V3dMultiThreshParamsDict,
+      V3dMultiThreshParamsDictTagged,
       V_3D_MULTI_THRESH_METADATA,
       v_3d_multi_thresh,
       v_3d_multi_thresh_execute,

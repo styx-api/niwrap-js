@@ -11,7 +11,7 @@ const V_3D_FDR_METADATA: Metadata = {
 };
 
 
-interface V3dFdrParameters {
+interface V3dFdrParamsDict {
     "@type"?: "afni/3dFDR";
     "input_file": InputPathType;
     "input1d_file"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface V3dFdrParameters {
     "float": boolean;
     "qval": boolean;
 }
-type V3dFdrParametersTagged = Required<Pick<V3dFdrParameters, '@type'>> & V3dFdrParameters;
+type V3dFdrParamsDictTagged = Required<Pick<V3dFdrParamsDict, '@type'>> & V3dFdrParamsDict;
 
 
 /**
- * Output object returned when calling `V3dFdrParameters(...)`.
+ * Output object returned when calling `V3dFdrParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function v_3d_fdr_params(
     force: boolean = false,
     float: boolean = false,
     qval: boolean = false,
-): V3dFdrParametersTagged {
+): V3dFdrParamsDictTagged {
     const params = {
         "@type": "afni/3dFDR" as const,
         "input_file": input_file,
@@ -132,7 +132,7 @@ function v_3d_fdr_params(
  * @returns Command-line arguments.
  */
 function v_3d_fdr_cargs(
-    params: V3dFdrParameters,
+    params: V3dFdrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -209,7 +209,7 @@ function v_3d_fdr_cargs(
  * @returns Outputs object.
  */
 function v_3d_fdr_outputs(
-    params: V3dFdrParameters,
+    params: V3dFdrParamsDict,
     execution: Execution,
 ): V3dFdrOutputs {
     const ret: V3dFdrOutputs = {
@@ -237,7 +237,7 @@ function v_3d_fdr_outputs(
  * @returns NamedTuple of outputs (described in `V3dFdrOutputs`).
  */
 function v_3d_fdr_execute(
-    params: V3dFdrParameters,
+    params: V3dFdrParamsDict,
     runner: Runner | null = null,
 ): V3dFdrOutputs {
     runner = runner || getGlobalRunner();
@@ -301,6 +301,8 @@ function v_3d_fdr(
 
 export {
       V3dFdrOutputs,
+      V3dFdrParamsDict,
+      V3dFdrParamsDictTagged,
       V_3D_FDR_METADATA,
       v_3d_fdr,
       v_3d_fdr_execute,

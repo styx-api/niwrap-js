@@ -11,18 +11,18 @@ const ZTOP_METADATA: Metadata = {
 };
 
 
-interface ZtopParameters {
+interface ZtopParamsDict {
     "@type"?: "fsl/ztop";
     "z_score": number;
     "tail_flag": boolean;
     "grf_flag": boolean;
     "number_of_resels"?: number | null | undefined;
 }
-type ZtopParametersTagged = Required<Pick<ZtopParameters, '@type'>> & ZtopParameters;
+type ZtopParamsDictTagged = Required<Pick<ZtopParamsDict, '@type'>> & ZtopParamsDict;
 
 
 /**
- * Output object returned when calling `ZtopParameters(...)`.
+ * Output object returned when calling `ZtopParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function ztop_params(
     tail_flag: boolean = false,
     grf_flag: boolean = false,
     number_of_resels: number | null = null,
-): ZtopParametersTagged {
+): ZtopParamsDictTagged {
     const params = {
         "@type": "fsl/ztop" as const,
         "z_score": z_score,
@@ -72,7 +72,7 @@ function ztop_params(
  * @returns Command-line arguments.
  */
 function ztop_cargs(
-    params: ZtopParameters,
+    params: ZtopParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function ztop_cargs(
  * @returns Outputs object.
  */
 function ztop_outputs(
-    params: ZtopParameters,
+    params: ZtopParamsDict,
     execution: Execution,
 ): ZtopOutputs {
     const ret: ZtopOutputs = {
@@ -125,7 +125,7 @@ function ztop_outputs(
  * @returns NamedTuple of outputs (described in `ZtopOutputs`).
  */
 function ztop_execute(
-    params: ZtopParameters,
+    params: ZtopParamsDict,
     runner: Runner | null = null,
 ): ZtopOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function ztop(
 export {
       ZTOP_METADATA,
       ZtopOutputs,
+      ZtopParamsDict,
+      ZtopParamsDictTagged,
       ztop,
       ztop_execute,
       ztop_params,

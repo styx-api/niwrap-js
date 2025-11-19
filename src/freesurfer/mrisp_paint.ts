@@ -11,7 +11,7 @@ const MRISP_PAINT_METADATA: Metadata = {
 };
 
 
-interface MrispPaintParameters {
+interface MrispPaintParamsDict {
     "@type"?: "freesurfer/mrisp_paint";
     "template_file": InputPathType;
     "input_surface": InputPathType;
@@ -30,11 +30,11 @@ interface MrispPaintParameters {
     "version_flag": boolean;
     "diag_write_flag": boolean;
 }
-type MrispPaintParametersTagged = Required<Pick<MrispPaintParameters, '@type'>> & MrispPaintParameters;
+type MrispPaintParamsDictTagged = Required<Pick<MrispPaintParamsDict, '@type'>> & MrispPaintParamsDict;
 
 
 /**
- * Output object returned when calling `MrispPaintParameters(...)`.
+ * Output object returned when calling `MrispPaintParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function mrisp_paint_params(
     diag_vertex: number | null = null,
     version_flag: boolean = false,
     diag_write_flag: boolean = false,
-): MrispPaintParametersTagged {
+): MrispPaintParamsDictTagged {
     const params = {
         "@type": "freesurfer/mrisp_paint" as const,
         "template_file": template_file,
@@ -134,7 +134,7 @@ function mrisp_paint_params(
  * @returns Command-line arguments.
  */
 function mrisp_paint_cargs(
-    params: MrispPaintParameters,
+    params: MrispPaintParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function mrisp_paint_cargs(
  * @returns Outputs object.
  */
 function mrisp_paint_outputs(
-    params: MrispPaintParameters,
+    params: MrispPaintParamsDict,
     execution: Execution,
 ): MrispPaintOutputs {
     const ret: MrispPaintOutputs = {
@@ -238,7 +238,7 @@ function mrisp_paint_outputs(
  * @returns NamedTuple of outputs (described in `MrispPaintOutputs`).
  */
 function mrisp_paint_execute(
-    params: MrispPaintParameters,
+    params: MrispPaintParamsDict,
     runner: Runner | null = null,
 ): MrispPaintOutputs {
     runner = runner || getGlobalRunner();
@@ -307,6 +307,8 @@ function mrisp_paint(
 export {
       MRISP_PAINT_METADATA,
       MrispPaintOutputs,
+      MrispPaintParamsDict,
+      MrispPaintParamsDictTagged,
       mrisp_paint,
       mrisp_paint_execute,
       mrisp_paint_params,

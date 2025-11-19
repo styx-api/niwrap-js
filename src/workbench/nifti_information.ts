@@ -10,21 +10,21 @@ const NIFTI_INFORMATION_METADATA: Metadata = {
 };
 
 
-interface NiftiInformationPrintXmlParameters {
+interface NiftiInformationPrintXmlParamsDict {
     "@type"?: "print-xml";
     "version"?: string | null | undefined;
 }
-type NiftiInformationPrintXmlParametersTagged = Required<Pick<NiftiInformationPrintXmlParameters, '@type'>> & NiftiInformationPrintXmlParameters;
+type NiftiInformationPrintXmlParamsDictTagged = Required<Pick<NiftiInformationPrintXmlParamsDict, '@type'>> & NiftiInformationPrintXmlParamsDict;
 
 
-interface NiftiInformationParameters {
+interface NiftiInformationParamsDict {
     "@type"?: "workbench/nifti-information";
     "allow-truncated"?: boolean | null | undefined;
     "print-matrix": boolean;
-    "print-xml"?: NiftiInformationPrintXmlParameters | null | undefined;
+    "print-xml"?: NiftiInformationPrintXmlParamsDict | null | undefined;
     "nifti-file": string;
 }
-type NiftiInformationParametersTagged = Required<Pick<NiftiInformationParameters, '@type'>> & NiftiInformationParameters;
+type NiftiInformationParamsDictTagged = Required<Pick<NiftiInformationParamsDict, '@type'>> & NiftiInformationParamsDict;
 
 
 /**
@@ -36,9 +36,9 @@ the CIFTI version to use
  *
  * @returns Parameter dictionary
  */
-function nifti_information_print_xml_params(
+function nifti_information_print_xml(
     version: string | null,
-): NiftiInformationPrintXmlParametersTagged {
+): NiftiInformationPrintXmlParamsDictTagged {
     const params = {
         "@type": "print-xml" as const,
     };
@@ -58,7 +58,7 @@ function nifti_information_print_xml_params(
  * @returns Command-line arguments.
  */
 function nifti_information_print_xml_cargs(
-    params: NiftiInformationPrintXmlParameters,
+    params: NiftiInformationPrintXmlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -74,7 +74,7 @@ function nifti_information_print_xml_cargs(
 
 
 /**
- * Output object returned when calling `NiftiInformationParameters(...)`.
+ * Output object returned when calling `NiftiInformationParamsDict(...)`.
  *
  * @interface
  */
@@ -102,8 +102,8 @@ function nifti_information_params(
     nifti_file: string,
     allow_truncated: boolean | null = false,
     print_matrix: boolean = false,
-    print_xml: NiftiInformationPrintXmlParameters | null = null,
-): NiftiInformationParametersTagged {
+    print_xml: NiftiInformationPrintXmlParamsDict | null = null,
+): NiftiInformationParamsDictTagged {
     const params = {
         "@type": "workbench/nifti-information" as const,
         "print-matrix": print_matrix,
@@ -128,7 +128,7 @@ function nifti_information_params(
  * @returns Command-line arguments.
  */
 function nifti_information_cargs(
-    params: NiftiInformationParameters,
+    params: NiftiInformationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,7 +156,7 @@ function nifti_information_cargs(
  * @returns Outputs object.
  */
 function nifti_information_outputs(
-    params: NiftiInformationParameters,
+    params: NiftiInformationParamsDict,
     execution: Execution,
 ): NiftiInformationOutputs {
     const ret: NiftiInformationOutputs = {
@@ -177,7 +177,7 @@ function nifti_information_outputs(
  * @returns NamedTuple of outputs (described in `NiftiInformationOutputs`).
  */
 function nifti_information_execute(
-    params: NiftiInformationParameters,
+    params: NiftiInformationParamsDict,
     runner: Runner | null = null,
 ): NiftiInformationOutputs {
     runner = runner || getGlobalRunner();
@@ -209,7 +209,7 @@ function nifti_information(
     nifti_file: string,
     allow_truncated: boolean | null = false,
     print_matrix: boolean = false,
-    print_xml: NiftiInformationPrintXmlParameters | null = null,
+    print_xml: NiftiInformationPrintXmlParamsDict | null = null,
     runner: Runner | null = null,
 ): NiftiInformationOutputs {
     const params = nifti_information_params(nifti_file, allow_truncated, print_matrix, print_xml)
@@ -220,8 +220,12 @@ function nifti_information(
 export {
       NIFTI_INFORMATION_METADATA,
       NiftiInformationOutputs,
+      NiftiInformationParamsDict,
+      NiftiInformationParamsDictTagged,
+      NiftiInformationPrintXmlParamsDict,
+      NiftiInformationPrintXmlParamsDictTagged,
       nifti_information,
       nifti_information_execute,
       nifti_information_params,
-      nifti_information_print_xml_params,
+      nifti_information_print_xml,
 };

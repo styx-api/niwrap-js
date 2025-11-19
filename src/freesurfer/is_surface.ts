@@ -11,15 +11,15 @@ const IS_SURFACE_METADATA: Metadata = {
 };
 
 
-interface IsSurfaceParameters {
+interface IsSurfaceParamsDict {
     "@type"?: "freesurfer/is-surface";
     "infile": InputPathType;
 }
-type IsSurfaceParametersTagged = Required<Pick<IsSurfaceParameters, '@type'>> & IsSurfaceParameters;
+type IsSurfaceParamsDictTagged = Required<Pick<IsSurfaceParamsDict, '@type'>> & IsSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `IsSurfaceParameters(...)`.
+ * Output object returned when calling `IsSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface IsSurfaceOutputs {
  */
 function is_surface_params(
     infile: InputPathType,
-): IsSurfaceParametersTagged {
+): IsSurfaceParamsDictTagged {
     const params = {
         "@type": "freesurfer/is-surface" as const,
         "infile": infile,
@@ -58,7 +58,7 @@ function is_surface_params(
  * @returns Command-line arguments.
  */
 function is_surface_cargs(
-    params: IsSurfaceParameters,
+    params: IsSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function is_surface_cargs(
  * @returns Outputs object.
  */
 function is_surface_outputs(
-    params: IsSurfaceParameters,
+    params: IsSurfaceParamsDict,
     execution: Execution,
 ): IsSurfaceOutputs {
     const ret: IsSurfaceOutputs = {
@@ -105,7 +105,7 @@ function is_surface_outputs(
  * @returns NamedTuple of outputs (described in `IsSurfaceOutputs`).
  */
 function is_surface_execute(
-    params: IsSurfaceParameters,
+    params: IsSurfaceParamsDict,
     runner: Runner | null = null,
 ): IsSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function is_surface(
 export {
       IS_SURFACE_METADATA,
       IsSurfaceOutputs,
+      IsSurfaceParamsDict,
+      IsSurfaceParamsDictTagged,
       is_surface,
       is_surface_execute,
       is_surface_params,

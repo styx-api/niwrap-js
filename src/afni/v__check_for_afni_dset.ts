@@ -11,15 +11,15 @@ const V__CHECK_FOR_AFNI_DSET_METADATA: Metadata = {
 };
 
 
-interface VCheckForAfniDsetParameters {
+interface VCheckForAfniDsetParamsDict {
     "@type"?: "afni/@CheckForAfniDset";
     "dataset_name": string;
 }
-type VCheckForAfniDsetParametersTagged = Required<Pick<VCheckForAfniDsetParameters, '@type'>> & VCheckForAfniDsetParameters;
+type VCheckForAfniDsetParamsDictTagged = Required<Pick<VCheckForAfniDsetParamsDict, '@type'>> & VCheckForAfniDsetParamsDict;
 
 
 /**
- * Output object returned when calling `VCheckForAfniDsetParameters(...)`.
+ * Output object returned when calling `VCheckForAfniDsetParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VCheckForAfniDsetOutputs {
  */
 function v__check_for_afni_dset_params(
     dataset_name: string,
-): VCheckForAfniDsetParametersTagged {
+): VCheckForAfniDsetParamsDictTagged {
     const params = {
         "@type": "afni/@CheckForAfniDset" as const,
         "dataset_name": dataset_name,
@@ -62,7 +62,7 @@ function v__check_for_afni_dset_params(
  * @returns Command-line arguments.
  */
 function v__check_for_afni_dset_cargs(
-    params: VCheckForAfniDsetParameters,
+    params: VCheckForAfniDsetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__check_for_afni_dset_cargs(
  * @returns Outputs object.
  */
 function v__check_for_afni_dset_outputs(
-    params: VCheckForAfniDsetParameters,
+    params: VCheckForAfniDsetParamsDict,
     execution: Execution,
 ): VCheckForAfniDsetOutputs {
     const ret: VCheckForAfniDsetOutputs = {
@@ -107,7 +107,7 @@ function v__check_for_afni_dset_outputs(
  * @returns NamedTuple of outputs (described in `VCheckForAfniDsetOutputs`).
  */
 function v__check_for_afni_dset_execute(
-    params: VCheckForAfniDsetParameters,
+    params: VCheckForAfniDsetParamsDict,
     runner: Runner | null = null,
 ): VCheckForAfniDsetOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__check_for_afni_dset(
 
 export {
       VCheckForAfniDsetOutputs,
+      VCheckForAfniDsetParamsDict,
+      VCheckForAfniDsetParamsDictTagged,
       V__CHECK_FOR_AFNI_DSET_METADATA,
       v__check_for_afni_dset,
       v__check_for_afni_dset_execute,

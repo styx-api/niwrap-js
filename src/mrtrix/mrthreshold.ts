@@ -11,15 +11,15 @@ const MRTHRESHOLD_METADATA: Metadata = {
 };
 
 
-interface MrthresholdConfigParameters {
+interface MrthresholdConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrthresholdConfigParametersTagged = Required<Pick<MrthresholdConfigParameters, '@type'>> & MrthresholdConfigParameters;
+type MrthresholdConfigParamsDictTagged = Required<Pick<MrthresholdConfigParamsDict, '@type'>> & MrthresholdConfigParamsDict;
 
 
-interface MrthresholdParameters {
+interface MrthresholdParamsDict {
     "@type"?: "mrtrix/mrthreshold";
     "abs"?: number | null | undefined;
     "percentile"?: number | null | undefined;
@@ -37,13 +37,13 @@ interface MrthresholdParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrthresholdConfigParameters> | null | undefined;
+    "config"?: Array<MrthresholdConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-type MrthresholdParametersTagged = Required<Pick<MrthresholdParameters, '@type'>> & MrthresholdParameters;
+type MrthresholdParamsDictTagged = Required<Pick<MrthresholdParamsDict, '@type'>> & MrthresholdParamsDict;
 
 
 /**
@@ -54,10 +54,10 @@ type MrthresholdParametersTagged = Required<Pick<MrthresholdParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function mrthreshold_config_params(
+function mrthreshold_config(
     key: string,
     value: string,
-): MrthresholdConfigParametersTagged {
+): MrthresholdConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -76,7 +76,7 @@ function mrthreshold_config_params(
  * @returns Command-line arguments.
  */
 function mrthreshold_config_cargs(
-    params: MrthresholdConfigParameters,
+    params: MrthresholdConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function mrthreshold_config_cargs(
 
 
 /**
- * Output object returned when calling `MrthresholdParameters(...)`.
+ * Output object returned when calling `MrthresholdParamsDict(...)`.
  *
  * @interface
  */
@@ -149,11 +149,11 @@ function mrthreshold_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrthresholdConfigParameters> | null = null,
+    config: Array<MrthresholdConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MrthresholdParametersTagged {
+): MrthresholdParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrthreshold" as const,
         "allvolumes": allvolumes,
@@ -209,7 +209,7 @@ function mrthreshold_params(
  * @returns Command-line arguments.
  */
 function mrthreshold_cargs(
-    params: MrthresholdParameters,
+    params: MrthresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -309,7 +309,7 @@ function mrthreshold_cargs(
  * @returns Outputs object.
  */
 function mrthreshold_outputs(
-    params: MrthresholdParameters,
+    params: MrthresholdParamsDict,
     execution: Execution,
 ): MrthresholdOutputs {
     const ret: MrthresholdOutputs = {
@@ -354,7 +354,7 @@ function mrthreshold_outputs(
  * @returns NamedTuple of outputs (described in `MrthresholdOutputs`).
  */
 function mrthreshold_execute(
-    params: MrthresholdParameters,
+    params: MrthresholdParamsDict,
     runner: Runner | null = null,
 ): MrthresholdOutputs {
     runner = runner || getGlobalRunner();
@@ -438,7 +438,7 @@ function mrthreshold(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrthresholdConfigParameters> | null = null,
+    config: Array<MrthresholdConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
@@ -451,9 +451,13 @@ function mrthreshold(
 
 export {
       MRTHRESHOLD_METADATA,
+      MrthresholdConfigParamsDict,
+      MrthresholdConfigParamsDictTagged,
       MrthresholdOutputs,
+      MrthresholdParamsDict,
+      MrthresholdParamsDictTagged,
       mrthreshold,
-      mrthreshold_config_params,
+      mrthreshold_config,
       mrthreshold_execute,
       mrthreshold_params,
 };

@@ -11,16 +11,16 @@ const V__TIME_DIFF_METADATA: Metadata = {
 };
 
 
-interface VTimeDiffParameters {
+interface VTimeDiffParamsDict {
     "@type"?: "afni/@TimeDiff";
     "file1": InputPathType;
     "file2": InputPathType;
 }
-type VTimeDiffParametersTagged = Required<Pick<VTimeDiffParameters, '@type'>> & VTimeDiffParameters;
+type VTimeDiffParamsDictTagged = Required<Pick<VTimeDiffParamsDict, '@type'>> & VTimeDiffParamsDict;
 
 
 /**
- * Output object returned when calling `VTimeDiffParameters(...)`.
+ * Output object returned when calling `VTimeDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VTimeDiffOutputs {
 function v__time_diff_params(
     file1: InputPathType,
     file2: InputPathType,
-): VTimeDiffParametersTagged {
+): VTimeDiffParamsDictTagged {
     const params = {
         "@type": "afni/@TimeDiff" as const,
         "file1": file1,
@@ -62,7 +62,7 @@ function v__time_diff_params(
  * @returns Command-line arguments.
  */
 function v__time_diff_cargs(
-    params: VTimeDiffParameters,
+    params: VTimeDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function v__time_diff_cargs(
  * @returns Outputs object.
  */
 function v__time_diff_outputs(
-    params: VTimeDiffParameters,
+    params: VTimeDiffParamsDict,
     execution: Execution,
 ): VTimeDiffOutputs {
     const ret: VTimeDiffOutputs = {
@@ -107,7 +107,7 @@ function v__time_diff_outputs(
  * @returns NamedTuple of outputs (described in `VTimeDiffOutputs`).
  */
 function v__time_diff_execute(
-    params: VTimeDiffParameters,
+    params: VTimeDiffParamsDict,
     runner: Runner | null = null,
 ): VTimeDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function v__time_diff(
 
 export {
       VTimeDiffOutputs,
+      VTimeDiffParamsDict,
+      VTimeDiffParamsDictTagged,
       V__TIME_DIFF_METADATA,
       v__time_diff,
       v__time_diff_execute,

@@ -11,7 +11,7 @@ const IMGREG_4DFP_METADATA: Metadata = {
 };
 
 
-interface Imgreg4dfpParameters {
+interface Imgreg4dfpParamsDict {
     "@type"?: "freesurfer/imgreg_4dfp";
     "target_image": InputPathType;
     "target_mask": string;
@@ -20,11 +20,11 @@ interface Imgreg4dfpParameters {
     "t4file": string;
     "mode": string;
 }
-type Imgreg4dfpParametersTagged = Required<Pick<Imgreg4dfpParameters, '@type'>> & Imgreg4dfpParameters;
+type Imgreg4dfpParamsDictTagged = Required<Pick<Imgreg4dfpParamsDict, '@type'>> & Imgreg4dfpParamsDict;
 
 
 /**
- * Output object returned when calling `Imgreg4dfpParameters(...)`.
+ * Output object returned when calling `Imgreg4dfpParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function imgreg_4dfp_params(
     mode: string,
     target_mask: string = "none",
     source_mask: string = "none",
-): Imgreg4dfpParametersTagged {
+): Imgreg4dfpParamsDictTagged {
     const params = {
         "@type": "freesurfer/imgreg_4dfp" as const,
         "target_image": target_image,
@@ -78,7 +78,7 @@ function imgreg_4dfp_params(
  * @returns Command-line arguments.
  */
 function imgreg_4dfp_cargs(
-    params: Imgreg4dfpParameters,
+    params: Imgreg4dfpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -102,7 +102,7 @@ function imgreg_4dfp_cargs(
  * @returns Outputs object.
  */
 function imgreg_4dfp_outputs(
-    params: Imgreg4dfpParameters,
+    params: Imgreg4dfpParamsDict,
     execution: Execution,
 ): Imgreg4dfpOutputs {
     const ret: Imgreg4dfpOutputs = {
@@ -127,7 +127,7 @@ function imgreg_4dfp_outputs(
  * @returns NamedTuple of outputs (described in `Imgreg4dfpOutputs`).
  */
 function imgreg_4dfp_execute(
-    params: Imgreg4dfpParameters,
+    params: Imgreg4dfpParamsDict,
     runner: Runner | null = null,
 ): Imgreg4dfpOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function imgreg_4dfp(
 export {
       IMGREG_4DFP_METADATA,
       Imgreg4dfpOutputs,
+      Imgreg4dfpParamsDict,
+      Imgreg4dfpParamsDictTagged,
       imgreg_4dfp,
       imgreg_4dfp_execute,
       imgreg_4dfp_params,

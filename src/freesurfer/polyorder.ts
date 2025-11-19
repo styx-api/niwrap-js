@@ -11,17 +11,17 @@ const POLYORDER_METADATA: Metadata = {
 };
 
 
-interface PolyorderParameters {
+interface PolyorderParamsDict {
     "@type"?: "freesurfer/polyorder";
     "ntp": number;
     "tr": number;
     "cutoff": number;
 }
-type PolyorderParametersTagged = Required<Pick<PolyorderParameters, '@type'>> & PolyorderParameters;
+type PolyorderParamsDictTagged = Required<Pick<PolyorderParamsDict, '@type'>> & PolyorderParamsDict;
 
 
 /**
- * Output object returned when calling `PolyorderParameters(...)`.
+ * Output object returned when calling `PolyorderParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function polyorder_params(
     ntp: number,
     tr: number,
     cutoff: number,
-): PolyorderParametersTagged {
+): PolyorderParamsDictTagged {
     const params = {
         "@type": "freesurfer/polyorder" as const,
         "ntp": ntp,
@@ -66,7 +66,7 @@ function polyorder_params(
  * @returns Command-line arguments.
  */
 function polyorder_cargs(
-    params: PolyorderParameters,
+    params: PolyorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function polyorder_cargs(
  * @returns Outputs object.
  */
 function polyorder_outputs(
-    params: PolyorderParameters,
+    params: PolyorderParamsDict,
     execution: Execution,
 ): PolyorderOutputs {
     const ret: PolyorderOutputs = {
@@ -121,7 +121,7 @@ function polyorder_outputs(
  * @returns NamedTuple of outputs (described in `PolyorderOutputs`).
  */
 function polyorder_execute(
-    params: PolyorderParameters,
+    params: PolyorderParamsDict,
     runner: Runner | null = null,
 ): PolyorderOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function polyorder(
 export {
       POLYORDER_METADATA,
       PolyorderOutputs,
+      PolyorderParamsDict,
+      PolyorderParamsDictTagged,
       polyorder,
       polyorder_execute,
       polyorder_params,

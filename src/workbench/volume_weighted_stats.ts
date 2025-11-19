@@ -10,27 +10,27 @@ const VOLUME_WEIGHTED_STATS_METADATA: Metadata = {
 };
 
 
-interface VolumeWeightedStatsWeightVolumeParameters {
+interface VolumeWeightedStatsWeightVolumeParamsDict {
     "@type"?: "weight-volume";
     "weight-volume": InputPathType;
     "match-maps": boolean;
 }
-type VolumeWeightedStatsWeightVolumeParametersTagged = Required<Pick<VolumeWeightedStatsWeightVolumeParameters, '@type'>> & VolumeWeightedStatsWeightVolumeParameters;
+type VolumeWeightedStatsWeightVolumeParamsDictTagged = Required<Pick<VolumeWeightedStatsWeightVolumeParamsDict, '@type'>> & VolumeWeightedStatsWeightVolumeParamsDict;
 
 
-interface VolumeWeightedStatsRoiParameters {
+interface VolumeWeightedStatsRoiParamsDict {
     "@type"?: "roi";
     "roi-volume": InputPathType;
     "match-maps": boolean;
 }
-type VolumeWeightedStatsRoiParametersTagged = Required<Pick<VolumeWeightedStatsRoiParameters, '@type'>> & VolumeWeightedStatsRoiParameters;
+type VolumeWeightedStatsRoiParamsDictTagged = Required<Pick<VolumeWeightedStatsRoiParamsDict, '@type'>> & VolumeWeightedStatsRoiParamsDict;
 
 
-interface VolumeWeightedStatsParameters {
+interface VolumeWeightedStatsParamsDict {
     "@type"?: "workbench/volume-weighted-stats";
-    "weight-volume"?: VolumeWeightedStatsWeightVolumeParameters | null | undefined;
+    "weight-volume"?: VolumeWeightedStatsWeightVolumeParamsDict | null | undefined;
     "subvolume"?: string | null | undefined;
-    "roi"?: VolumeWeightedStatsRoiParameters | null | undefined;
+    "roi"?: VolumeWeightedStatsRoiParamsDict | null | undefined;
     "mean": boolean;
     "sample"?: boolean | null | undefined;
     "percent"?: number | null | undefined;
@@ -38,7 +38,7 @@ interface VolumeWeightedStatsParameters {
     "show-map-name": boolean;
     "volume-in": InputPathType;
 }
-type VolumeWeightedStatsParametersTagged = Required<Pick<VolumeWeightedStatsParameters, '@type'>> & VolumeWeightedStatsParameters;
+type VolumeWeightedStatsParamsDictTagged = Required<Pick<VolumeWeightedStatsParamsDict, '@type'>> & VolumeWeightedStatsParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type VolumeWeightedStatsParametersTagged = Required<Pick<VolumeWeightedStatsPara
  *
  * @returns Parameter dictionary
  */
-function volume_weighted_stats_weight_volume_params(
+function volume_weighted_stats_weight_volume(
     weight_volume: InputPathType,
     match_maps: boolean = false,
-): VolumeWeightedStatsWeightVolumeParametersTagged {
+): VolumeWeightedStatsWeightVolumeParamsDictTagged {
     const params = {
         "@type": "weight-volume" as const,
         "weight-volume": weight_volume,
@@ -71,7 +71,7 @@ function volume_weighted_stats_weight_volume_params(
  * @returns Command-line arguments.
  */
 function volume_weighted_stats_weight_volume_cargs(
-    params: VolumeWeightedStatsWeightVolumeParameters,
+    params: VolumeWeightedStatsWeightVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,10 +94,10 @@ function volume_weighted_stats_weight_volume_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_weighted_stats_roi_params(
+function volume_weighted_stats_roi(
     roi_volume: InputPathType,
     match_maps: boolean = false,
-): VolumeWeightedStatsRoiParametersTagged {
+): VolumeWeightedStatsRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-volume": roi_volume,
@@ -116,7 +116,7 @@ function volume_weighted_stats_roi_params(
  * @returns Command-line arguments.
  */
 function volume_weighted_stats_roi_cargs(
-    params: VolumeWeightedStatsRoiParameters,
+    params: VolumeWeightedStatsRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function volume_weighted_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `VolumeWeightedStatsParameters(...)`.
+ * Output object returned when calling `VolumeWeightedStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -169,13 +169,13 @@ function volume_weighted_stats_params(
     subvolume: string | null,
     percent: number | null,
     volume_in: InputPathType,
-    weight_volume: VolumeWeightedStatsWeightVolumeParameters | null = null,
-    roi: VolumeWeightedStatsRoiParameters | null = null,
+    weight_volume: VolumeWeightedStatsWeightVolumeParamsDict | null = null,
+    roi: VolumeWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
     sample: boolean | null = false,
     sum: boolean = false,
     show_map_name: boolean = false,
-): VolumeWeightedStatsParametersTagged {
+): VolumeWeightedStatsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-weighted-stats" as const,
         "mean": mean,
@@ -211,7 +211,7 @@ function volume_weighted_stats_params(
  * @returns Command-line arguments.
  */
 function volume_weighted_stats_cargs(
-    params: VolumeWeightedStatsParameters,
+    params: VolumeWeightedStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -246,7 +246,7 @@ function volume_weighted_stats_cargs(
  * @returns Outputs object.
  */
 function volume_weighted_stats_outputs(
-    params: VolumeWeightedStatsParameters,
+    params: VolumeWeightedStatsParamsDict,
     execution: Execution,
 ): VolumeWeightedStatsOutputs {
     const ret: VolumeWeightedStatsOutputs = {
@@ -269,7 +269,7 @@ function volume_weighted_stats_outputs(
  * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
  */
 function volume_weighted_stats_execute(
-    params: VolumeWeightedStatsParameters,
+    params: VolumeWeightedStatsParamsDict,
     runner: Runner | null = null,
 ): VolumeWeightedStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -312,8 +312,8 @@ function volume_weighted_stats(
     subvolume: string | null,
     percent: number | null,
     volume_in: InputPathType,
-    weight_volume: VolumeWeightedStatsWeightVolumeParameters | null = null,
-    roi: VolumeWeightedStatsRoiParameters | null = null,
+    weight_volume: VolumeWeightedStatsWeightVolumeParamsDict | null = null,
+    roi: VolumeWeightedStatsRoiParamsDict | null = null,
     mean: boolean = false,
     sample: boolean | null = false,
     sum: boolean = false,
@@ -328,9 +328,15 @@ function volume_weighted_stats(
 export {
       VOLUME_WEIGHTED_STATS_METADATA,
       VolumeWeightedStatsOutputs,
+      VolumeWeightedStatsParamsDict,
+      VolumeWeightedStatsParamsDictTagged,
+      VolumeWeightedStatsRoiParamsDict,
+      VolumeWeightedStatsRoiParamsDictTagged,
+      VolumeWeightedStatsWeightVolumeParamsDict,
+      VolumeWeightedStatsWeightVolumeParamsDictTagged,
       volume_weighted_stats,
       volume_weighted_stats_execute,
       volume_weighted_stats_params,
-      volume_weighted_stats_roi_params,
-      volume_weighted_stats_weight_volume_params,
+      volume_weighted_stats_roi,
+      volume_weighted_stats_weight_volume,
 };

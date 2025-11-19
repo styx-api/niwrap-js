@@ -11,7 +11,7 @@ const IMMASK_METADATA: Metadata = {
 };
 
 
-interface ImmaskParameters {
+interface ImmaskParamsDict {
     "@type"?: "afni/immask";
     "threshold"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface ImmaskParameters {
     "input_image": InputPathType;
     "output_image": string;
 }
-type ImmaskParametersTagged = Required<Pick<ImmaskParameters, '@type'>> & ImmaskParameters;
+type ImmaskParamsDictTagged = Required<Pick<ImmaskParamsDict, '@type'>> & ImmaskParamsDict;
 
 
 /**
- * Output object returned when calling `ImmaskParameters(...)`.
+ * Output object returned when calling `ImmaskParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function immask_params(
     threshold: number | null = null,
     mask_image: InputPathType | null = null,
     positive_only: boolean = false,
-): ImmaskParametersTagged {
+): ImmaskParamsDictTagged {
     const params = {
         "@type": "afni/immask" as const,
         "positive_only": positive_only,
@@ -82,7 +82,7 @@ function immask_params(
  * @returns Command-line arguments.
  */
 function immask_cargs(
-    params: ImmaskParameters,
+    params: ImmaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function immask_cargs(
  * @returns Outputs object.
  */
 function immask_outputs(
-    params: ImmaskParameters,
+    params: ImmaskParamsDict,
     execution: Execution,
 ): ImmaskOutputs {
     const ret: ImmaskOutputs = {
@@ -143,7 +143,7 @@ function immask_outputs(
  * @returns NamedTuple of outputs (described in `ImmaskOutputs`).
  */
 function immask_execute(
-    params: ImmaskParameters,
+    params: ImmaskParamsDict,
     runner: Runner | null = null,
 ): ImmaskOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function immask(
 export {
       IMMASK_METADATA,
       ImmaskOutputs,
+      ImmaskParamsDict,
+      ImmaskParamsDictTagged,
       immask,
       immask_execute,
       immask_params,

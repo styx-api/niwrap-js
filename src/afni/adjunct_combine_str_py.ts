@@ -11,17 +11,17 @@ const ADJUNCT_COMBINE_STR_PY_METADATA: Metadata = {
 };
 
 
-interface AdjunctCombineStrPyParameters {
+interface AdjunctCombineStrPyParamsDict {
     "@type"?: "afni/adjunct_combine_str.py";
     "output_file": string;
     "upper_index": number;
     "string_selectors": Array<string>;
 }
-type AdjunctCombineStrPyParametersTagged = Required<Pick<AdjunctCombineStrPyParameters, '@type'>> & AdjunctCombineStrPyParameters;
+type AdjunctCombineStrPyParamsDictTagged = Required<Pick<AdjunctCombineStrPyParamsDict, '@type'>> & AdjunctCombineStrPyParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctCombineStrPyParameters(...)`.
+ * Output object returned when calling `AdjunctCombineStrPyParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function adjunct_combine_str_py_params(
     output_file: string,
     upper_index: number,
     string_selectors: Array<string>,
-): AdjunctCombineStrPyParametersTagged {
+): AdjunctCombineStrPyParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_combine_str.py" as const,
         "output_file": output_file,
@@ -70,7 +70,7 @@ function adjunct_combine_str_py_params(
  * @returns Command-line arguments.
  */
 function adjunct_combine_str_py_cargs(
-    params: AdjunctCombineStrPyParameters,
+    params: AdjunctCombineStrPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function adjunct_combine_str_py_cargs(
  * @returns Outputs object.
  */
 function adjunct_combine_str_py_outputs(
-    params: AdjunctCombineStrPyParameters,
+    params: AdjunctCombineStrPyParamsDict,
     execution: Execution,
 ): AdjunctCombineStrPyOutputs {
     const ret: AdjunctCombineStrPyOutputs = {
@@ -117,7 +117,7 @@ function adjunct_combine_str_py_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctCombineStrPyOutputs`).
  */
 function adjunct_combine_str_py_execute(
-    params: AdjunctCombineStrPyParameters,
+    params: AdjunctCombineStrPyParamsDict,
     runner: Runner | null = null,
 ): AdjunctCombineStrPyOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function adjunct_combine_str_py(
 export {
       ADJUNCT_COMBINE_STR_PY_METADATA,
       AdjunctCombineStrPyOutputs,
+      AdjunctCombineStrPyParamsDict,
+      AdjunctCombineStrPyParamsDictTagged,
       adjunct_combine_str_py,
       adjunct_combine_str_py_execute,
       adjunct_combine_str_py_params,

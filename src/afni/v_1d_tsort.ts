@@ -11,7 +11,7 @@ const V_1D_TSORT_METADATA: Metadata = {
 };
 
 
-interface V1dTsortParameters {
+interface V1dTsortParamsDict {
     "@type"?: "afni/1dTsort";
     "inc_order": boolean;
     "dec_order": boolean;
@@ -20,11 +20,11 @@ interface V1dTsortParameters {
     "imode": boolean;
     "infile": InputPathType;
 }
-type V1dTsortParametersTagged = Required<Pick<V1dTsortParameters, '@type'>> & V1dTsortParameters;
+type V1dTsortParamsDictTagged = Required<Pick<V1dTsortParamsDict, '@type'>> & V1dTsortParamsDict;
 
 
 /**
- * Output object returned when calling `V1dTsortParameters(...)`.
+ * Output object returned when calling `V1dTsortParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function v_1d_tsort_params(
     transpose: boolean = false,
     column: number | null = null,
     imode: boolean = false,
-): V1dTsortParametersTagged {
+): V1dTsortParamsDictTagged {
     const params = {
         "@type": "afni/1dTsort" as const,
         "inc_order": inc_order,
@@ -80,7 +80,7 @@ function v_1d_tsort_params(
  * @returns Command-line arguments.
  */
 function v_1d_tsort_cargs(
-    params: V1dTsortParameters,
+    params: V1dTsortParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function v_1d_tsort_cargs(
  * @returns Outputs object.
  */
 function v_1d_tsort_outputs(
-    params: V1dTsortParameters,
+    params: V1dTsortParamsDict,
     execution: Execution,
 ): V1dTsortOutputs {
     const ret: V1dTsortOutputs = {
@@ -142,7 +142,7 @@ function v_1d_tsort_outputs(
  * @returns NamedTuple of outputs (described in `V1dTsortOutputs`).
  */
 function v_1d_tsort_execute(
-    params: V1dTsortParameters,
+    params: V1dTsortParamsDict,
     runner: Runner | null = null,
 ): V1dTsortOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function v_1d_tsort(
 
 export {
       V1dTsortOutputs,
+      V1dTsortParamsDict,
+      V1dTsortParamsDictTagged,
       V_1D_TSORT_METADATA,
       v_1d_tsort,
       v_1d_tsort_execute,

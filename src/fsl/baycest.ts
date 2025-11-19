@@ -11,7 +11,7 @@ const BAYCEST_METADATA: Metadata = {
 };
 
 
-interface BaycestParameters {
+interface BaycestParamsDict {
     "@type"?: "fsl/baycest";
     "data_file": InputPathType;
     "mask_file": InputPathType;
@@ -22,11 +22,11 @@ interface BaycestParameters {
     "spatial_flag": boolean;
     "t12prior_flag": boolean;
 }
-type BaycestParametersTagged = Required<Pick<BaycestParameters, '@type'>> & BaycestParameters;
+type BaycestParamsDictTagged = Required<Pick<BaycestParamsDict, '@type'>> & BaycestParamsDict;
 
 
 /**
- * Output object returned when calling `BaycestParameters(...)`.
+ * Output object returned when calling `BaycestParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function baycest_params(
     ptrain_file: InputPathType,
     spatial_flag: boolean = false,
     t12prior_flag: boolean = false,
-): BaycestParametersTagged {
+): BaycestParamsDictTagged {
     const params = {
         "@type": "fsl/baycest" as const,
         "data_file": data_file,
@@ -90,7 +90,7 @@ function baycest_params(
  * @returns Command-line arguments.
  */
 function baycest_cargs(
-    params: BaycestParameters,
+    params: BaycestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function baycest_cargs(
  * @returns Outputs object.
  */
 function baycest_outputs(
-    params: BaycestParameters,
+    params: BaycestParamsDict,
     execution: Execution,
 ): BaycestOutputs {
     const ret: BaycestOutputs = {
@@ -146,7 +146,7 @@ function baycest_outputs(
  * @returns NamedTuple of outputs (described in `BaycestOutputs`).
  */
 function baycest_execute(
-    params: BaycestParameters,
+    params: BaycestParamsDict,
     runner: Runner | null = null,
 ): BaycestOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function baycest(
 export {
       BAYCEST_METADATA,
       BaycestOutputs,
+      BaycestParamsDict,
+      BaycestParamsDictTagged,
       baycest,
       baycest_execute,
       baycest_params,

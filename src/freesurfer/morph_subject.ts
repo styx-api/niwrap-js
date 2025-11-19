@@ -11,15 +11,15 @@ const MORPH_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface MorphSubjectParameters {
+interface MorphSubjectParamsDict {
     "@type"?: "freesurfer/morph_subject";
     "subjid": string;
 }
-type MorphSubjectParametersTagged = Required<Pick<MorphSubjectParameters, '@type'>> & MorphSubjectParameters;
+type MorphSubjectParamsDictTagged = Required<Pick<MorphSubjectParamsDict, '@type'>> & MorphSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `MorphSubjectParameters(...)`.
+ * Output object returned when calling `MorphSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MorphSubjectOutputs {
  */
 function morph_subject_params(
     subjid: string,
-): MorphSubjectParametersTagged {
+): MorphSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_subject" as const,
         "subjid": subjid,
@@ -58,7 +58,7 @@ function morph_subject_params(
  * @returns Command-line arguments.
  */
 function morph_subject_cargs(
-    params: MorphSubjectParameters,
+    params: MorphSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function morph_subject_cargs(
  * @returns Outputs object.
  */
 function morph_subject_outputs(
-    params: MorphSubjectParameters,
+    params: MorphSubjectParamsDict,
     execution: Execution,
 ): MorphSubjectOutputs {
     const ret: MorphSubjectOutputs = {
@@ -102,7 +102,7 @@ function morph_subject_outputs(
  * @returns NamedTuple of outputs (described in `MorphSubjectOutputs`).
  */
 function morph_subject_execute(
-    params: MorphSubjectParameters,
+    params: MorphSubjectParamsDict,
     runner: Runner | null = null,
 ): MorphSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function morph_subject(
 export {
       MORPH_SUBJECT_METADATA,
       MorphSubjectOutputs,
+      MorphSubjectParamsDict,
+      MorphSubjectParamsDictTagged,
       morph_subject,
       morph_subject_execute,
       morph_subject_params,

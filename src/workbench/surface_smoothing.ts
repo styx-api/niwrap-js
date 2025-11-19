@@ -10,18 +10,18 @@ const SURFACE_SMOOTHING_METADATA: Metadata = {
 };
 
 
-interface SurfaceSmoothingParameters {
+interface SurfaceSmoothingParamsDict {
     "@type"?: "workbench/surface-smoothing";
     "surface-out": string;
     "surface-in": InputPathType;
     "smoothing-strength": number;
     "smoothing-iterations": number;
 }
-type SurfaceSmoothingParametersTagged = Required<Pick<SurfaceSmoothingParameters, '@type'>> & SurfaceSmoothingParameters;
+type SurfaceSmoothingParamsDictTagged = Required<Pick<SurfaceSmoothingParamsDict, '@type'>> & SurfaceSmoothingParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceSmoothingParameters(...)`.
+ * Output object returned when calling `SurfaceSmoothingParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function surface_smoothing_params(
     surface_in: InputPathType,
     smoothing_strength: number,
     smoothing_iterations: number,
-): SurfaceSmoothingParametersTagged {
+): SurfaceSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/surface-smoothing" as const,
         "surface-out": surface_out,
@@ -73,7 +73,7 @@ function surface_smoothing_params(
  * @returns Command-line arguments.
  */
 function surface_smoothing_cargs(
-    params: SurfaceSmoothingParameters,
+    params: SurfaceSmoothingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function surface_smoothing_cargs(
  * @returns Outputs object.
  */
 function surface_smoothing_outputs(
-    params: SurfaceSmoothingParameters,
+    params: SurfaceSmoothingParamsDict,
     execution: Execution,
 ): SurfaceSmoothingOutputs {
     const ret: SurfaceSmoothingOutputs = {
@@ -120,7 +120,7 @@ function surface_smoothing_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceSmoothingOutputs`).
  */
 function surface_smoothing_execute(
-    params: SurfaceSmoothingParameters,
+    params: SurfaceSmoothingParamsDict,
     runner: Runner | null = null,
 ): SurfaceSmoothingOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function surface_smoothing(
 export {
       SURFACE_SMOOTHING_METADATA,
       SurfaceSmoothingOutputs,
+      SurfaceSmoothingParamsDict,
+      SurfaceSmoothingParamsDictTagged,
       surface_smoothing,
       surface_smoothing_execute,
       surface_smoothing_params,

@@ -10,16 +10,16 @@ const SURFACE_COORDINATES_TO_METRIC_METADATA: Metadata = {
 };
 
 
-interface SurfaceCoordinatesToMetricParameters {
+interface SurfaceCoordinatesToMetricParamsDict {
     "@type"?: "workbench/surface-coordinates-to-metric";
     "metric-out": string;
     "surface": InputPathType;
 }
-type SurfaceCoordinatesToMetricParametersTagged = Required<Pick<SurfaceCoordinatesToMetricParameters, '@type'>> & SurfaceCoordinatesToMetricParameters;
+type SurfaceCoordinatesToMetricParamsDictTagged = Required<Pick<SurfaceCoordinatesToMetricParamsDict, '@type'>> & SurfaceCoordinatesToMetricParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceCoordinatesToMetricParameters(...)`.
+ * Output object returned when calling `SurfaceCoordinatesToMetricParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface SurfaceCoordinatesToMetricOutputs {
 function surface_coordinates_to_metric_params(
     metric_out: string,
     surface: InputPathType,
-): SurfaceCoordinatesToMetricParametersTagged {
+): SurfaceCoordinatesToMetricParamsDictTagged {
     const params = {
         "@type": "workbench/surface-coordinates-to-metric" as const,
         "metric-out": metric_out,
@@ -65,7 +65,7 @@ function surface_coordinates_to_metric_params(
  * @returns Command-line arguments.
  */
 function surface_coordinates_to_metric_cargs(
-    params: SurfaceCoordinatesToMetricParameters,
+    params: SurfaceCoordinatesToMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function surface_coordinates_to_metric_cargs(
  * @returns Outputs object.
  */
 function surface_coordinates_to_metric_outputs(
-    params: SurfaceCoordinatesToMetricParameters,
+    params: SurfaceCoordinatesToMetricParamsDict,
     execution: Execution,
 ): SurfaceCoordinatesToMetricOutputs {
     const ret: SurfaceCoordinatesToMetricOutputs = {
@@ -110,7 +110,7 @@ function surface_coordinates_to_metric_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceCoordinatesToMetricOutputs`).
  */
 function surface_coordinates_to_metric_execute(
-    params: SurfaceCoordinatesToMetricParameters,
+    params: SurfaceCoordinatesToMetricParamsDict,
     runner: Runner | null = null,
 ): SurfaceCoordinatesToMetricOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function surface_coordinates_to_metric(
 export {
       SURFACE_COORDINATES_TO_METRIC_METADATA,
       SurfaceCoordinatesToMetricOutputs,
+      SurfaceCoordinatesToMetricParamsDict,
+      SurfaceCoordinatesToMetricParamsDictTagged,
       surface_coordinates_to_metric,
       surface_coordinates_to_metric_execute,
       surface_coordinates_to_metric_params,

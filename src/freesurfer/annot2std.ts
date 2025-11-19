@@ -11,7 +11,7 @@ const ANNOT2STD_METADATA: Metadata = {
 };
 
 
-interface Annot2stdParameters {
+interface Annot2stdParamsDict {
     "@type"?: "freesurfer/annot2std";
     "output_annot_path": string;
     "subjects": Array<string>;
@@ -32,11 +32,11 @@ interface Annot2stdParameters {
     "help": boolean;
     "version": boolean;
 }
-type Annot2stdParametersTagged = Required<Pick<Annot2stdParameters, '@type'>> & Annot2stdParameters;
+type Annot2stdParamsDictTagged = Required<Pick<Annot2stdParamsDict, '@type'>> & Annot2stdParamsDict;
 
 
 /**
- * Output object returned when calling `Annot2stdParameters(...)`.
+ * Output object returned when calling `Annot2stdParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function annot2std_params(
     stack: string | null = null,
     help: boolean = false,
     version: boolean = false,
-): Annot2stdParametersTagged {
+): Annot2stdParamsDictTagged {
     const params = {
         "@type": "freesurfer/annot2std" as const,
         "output_annot_path": output_annot_path,
@@ -156,7 +156,7 @@ function annot2std_params(
  * @returns Command-line arguments.
  */
 function annot2std_cargs(
-    params: Annot2stdParameters,
+    params: Annot2stdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -257,7 +257,7 @@ function annot2std_cargs(
  * @returns Outputs object.
  */
 function annot2std_outputs(
-    params: Annot2stdParameters,
+    params: Annot2stdParamsDict,
     execution: Execution,
 ): Annot2stdOutputs {
     const ret: Annot2stdOutputs = {
@@ -285,7 +285,7 @@ function annot2std_outputs(
  * @returns NamedTuple of outputs (described in `Annot2stdOutputs`).
  */
 function annot2std_execute(
-    params: Annot2stdParameters,
+    params: Annot2stdParamsDict,
     runner: Runner | null = null,
 ): Annot2stdOutputs {
     runner = runner || getGlobalRunner();
@@ -358,6 +358,8 @@ function annot2std(
 export {
       ANNOT2STD_METADATA,
       Annot2stdOutputs,
+      Annot2stdParamsDict,
+      Annot2stdParamsDictTagged,
       annot2std,
       annot2std_execute,
       annot2std_params,

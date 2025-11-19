@@ -10,17 +10,17 @@ const GIFTI_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 };
 
 
-interface GiftiAllLabelsToRoisParameters {
+interface GiftiAllLabelsToRoisParamsDict {
     "@type"?: "workbench/gifti-all-labels-to-rois";
     "metric-out": string;
     "label-in": InputPathType;
     "map": string;
 }
-type GiftiAllLabelsToRoisParametersTagged = Required<Pick<GiftiAllLabelsToRoisParameters, '@type'>> & GiftiAllLabelsToRoisParameters;
+type GiftiAllLabelsToRoisParamsDictTagged = Required<Pick<GiftiAllLabelsToRoisParamsDict, '@type'>> & GiftiAllLabelsToRoisParamsDict;
 
 
 /**
- * Output object returned when calling `GiftiAllLabelsToRoisParameters(...)`.
+ * Output object returned when calling `GiftiAllLabelsToRoisParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function gifti_all_labels_to_rois_params(
     metric_out: string,
     label_in: InputPathType,
     map: string,
-): GiftiAllLabelsToRoisParametersTagged {
+): GiftiAllLabelsToRoisParamsDictTagged {
     const params = {
         "@type": "workbench/gifti-all-labels-to-rois" as const,
         "metric-out": metric_out,
@@ -69,7 +69,7 @@ function gifti_all_labels_to_rois_params(
  * @returns Command-line arguments.
  */
 function gifti_all_labels_to_rois_cargs(
-    params: GiftiAllLabelsToRoisParameters,
+    params: GiftiAllLabelsToRoisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function gifti_all_labels_to_rois_cargs(
  * @returns Outputs object.
  */
 function gifti_all_labels_to_rois_outputs(
-    params: GiftiAllLabelsToRoisParameters,
+    params: GiftiAllLabelsToRoisParamsDict,
     execution: Execution,
 ): GiftiAllLabelsToRoisOutputs {
     const ret: GiftiAllLabelsToRoisOutputs = {
@@ -115,7 +115,7 @@ function gifti_all_labels_to_rois_outputs(
  * @returns NamedTuple of outputs (described in `GiftiAllLabelsToRoisOutputs`).
  */
 function gifti_all_labels_to_rois_execute(
-    params: GiftiAllLabelsToRoisParameters,
+    params: GiftiAllLabelsToRoisParamsDict,
     runner: Runner | null = null,
 ): GiftiAllLabelsToRoisOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function gifti_all_labels_to_rois(
 export {
       GIFTI_ALL_LABELS_TO_ROIS_METADATA,
       GiftiAllLabelsToRoisOutputs,
+      GiftiAllLabelsToRoisParamsDict,
+      GiftiAllLabelsToRoisParamsDictTagged,
       gifti_all_labels_to_rois,
       gifti_all_labels_to_rois_execute,
       gifti_all_labels_to_rois_params,

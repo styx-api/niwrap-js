@@ -11,7 +11,7 @@ const ASL_FILE_METADATA: Metadata = {
 };
 
 
-interface AslFileParameters {
+interface AslFileParamsDict {
     "@type"?: "fsl/asl_file";
     "datafile": InputPathType;
     "ntis": number;
@@ -41,11 +41,11 @@ interface AslFileParameters {
     "help": boolean;
     "version": boolean;
 }
-type AslFileParametersTagged = Required<Pick<AslFileParameters, '@type'>> & AslFileParameters;
+type AslFileParamsDictTagged = Required<Pick<AslFileParamsDict, '@type'>> & AslFileParamsDict;
 
 
 /**
- * Output object returned when calling `AslFileParameters(...)`.
+ * Output object returned when calling `AslFileParamsDict(...)`.
  *
  * @interface
  */
@@ -126,7 +126,7 @@ function asl_file_params(
     aif: InputPathType | null = null,
     help: boolean = false,
     version: boolean = false,
-): AslFileParametersTagged {
+): AslFileParamsDictTagged {
     const params = {
         "@type": "fsl/asl_file" as const,
         "datafile": datafile,
@@ -198,7 +198,7 @@ function asl_file_params(
  * @returns Command-line arguments.
  */
 function asl_file_cargs(
-    params: AslFileParameters,
+    params: AslFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -342,7 +342,7 @@ function asl_file_cargs(
  * @returns Outputs object.
  */
 function asl_file_outputs(
-    params: AslFileParameters,
+    params: AslFileParamsDict,
     execution: Execution,
 ): AslFileOutputs {
     const ret: AslFileOutputs = {
@@ -369,7 +369,7 @@ function asl_file_outputs(
  * @returns NamedTuple of outputs (described in `AslFileOutputs`).
  */
 function asl_file_execute(
-    params: AslFileParameters,
+    params: AslFileParamsDict,
     runner: Runner | null = null,
 ): AslFileOutputs {
     runner = runner || getGlobalRunner();
@@ -460,6 +460,8 @@ function asl_file(
 export {
       ASL_FILE_METADATA,
       AslFileOutputs,
+      AslFileParamsDict,
+      AslFileParamsDictTagged,
       asl_file,
       asl_file_execute,
       asl_file_params,

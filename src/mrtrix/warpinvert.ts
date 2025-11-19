@@ -11,15 +11,15 @@ const WARPINVERT_METADATA: Metadata = {
 };
 
 
-interface WarpinvertConfigParameters {
+interface WarpinvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type WarpinvertConfigParametersTagged = Required<Pick<WarpinvertConfigParameters, '@type'>> & WarpinvertConfigParameters;
+type WarpinvertConfigParamsDictTagged = Required<Pick<WarpinvertConfigParamsDict, '@type'>> & WarpinvertConfigParamsDict;
 
 
-interface WarpinvertParameters {
+interface WarpinvertParamsDict {
     "@type"?: "mrtrix/warpinvert";
     "template"?: InputPathType | null | undefined;
     "displacement": boolean;
@@ -28,13 +28,13 @@ interface WarpinvertParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<WarpinvertConfigParameters> | null | undefined;
+    "config"?: Array<WarpinvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in": InputPathType;
     "out": string;
 }
-type WarpinvertParametersTagged = Required<Pick<WarpinvertParameters, '@type'>> & WarpinvertParameters;
+type WarpinvertParamsDictTagged = Required<Pick<WarpinvertParamsDict, '@type'>> & WarpinvertParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type WarpinvertParametersTagged = Required<Pick<WarpinvertParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function warpinvert_config_params(
+function warpinvert_config(
     key: string,
     value: string,
-): WarpinvertConfigParametersTagged {
+): WarpinvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function warpinvert_config_params(
  * @returns Command-line arguments.
  */
 function warpinvert_config_cargs(
-    params: WarpinvertConfigParameters,
+    params: WarpinvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function warpinvert_config_cargs(
 
 
 /**
- * Output object returned when calling `WarpinvertParameters(...)`.
+ * Output object returned when calling `WarpinvertParamsDict(...)`.
  *
  * @interface
  */
@@ -123,10 +123,10 @@ function warpinvert_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpinvertConfigParameters> | null = null,
+    config: Array<WarpinvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): WarpinvertParametersTagged {
+): WarpinvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/warpinvert" as const,
         "displacement": displacement,
@@ -161,7 +161,7 @@ function warpinvert_params(
  * @returns Command-line arguments.
  */
 function warpinvert_cargs(
-    params: WarpinvertParameters,
+    params: WarpinvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -217,7 +217,7 @@ function warpinvert_cargs(
  * @returns Outputs object.
  */
 function warpinvert_outputs(
-    params: WarpinvertParameters,
+    params: WarpinvertParamsDict,
     execution: Execution,
 ): WarpinvertOutputs {
     const ret: WarpinvertOutputs = {
@@ -249,7 +249,7 @@ function warpinvert_outputs(
  * @returns NamedTuple of outputs (described in `WarpinvertOutputs`).
  */
 function warpinvert_execute(
-    params: WarpinvertParameters,
+    params: WarpinvertParamsDict,
     runner: Runner | null = null,
 ): WarpinvertOutputs {
     runner = runner || getGlobalRunner();
@@ -303,7 +303,7 @@ function warpinvert(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpinvertConfigParameters> | null = null,
+    config: Array<WarpinvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -315,9 +315,13 @@ function warpinvert(
 
 export {
       WARPINVERT_METADATA,
+      WarpinvertConfigParamsDict,
+      WarpinvertConfigParamsDictTagged,
       WarpinvertOutputs,
+      WarpinvertParamsDict,
+      WarpinvertParamsDictTagged,
       warpinvert,
-      warpinvert_config_params,
+      warpinvert_config,
       warpinvert_execute,
       warpinvert_params,
 };

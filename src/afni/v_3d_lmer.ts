@@ -11,7 +11,7 @@ const V_3D_LMER_METADATA: Metadata = {
 };
 
 
-interface V3dLmerParameters {
+interface V3dLmerParamsDict {
     "@type"?: "afni/3dLMEr";
     "bound_lower"?: number | null | undefined;
     "bound_upper"?: number | null | undefined;
@@ -36,11 +36,11 @@ interface V3dLmerParameters {
     "vvar_centers"?: string | null | undefined;
     "vvars"?: string | null | undefined;
 }
-type V3dLmerParametersTagged = Required<Pick<V3dLmerParameters, '@type'>> & V3dLmerParameters;
+type V3dLmerParamsDictTagged = Required<Pick<V3dLmerParamsDict, '@type'>> & V3dLmerParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLmerParameters(...)`.
+ * Output object returned when calling `V3dLmerParamsDict(...)`.
  *
  * @interface
  */
@@ -111,7 +111,7 @@ function v_3d_lmer_params(
     trr: boolean = false,
     vvar_centers: string | null = null,
     vvars: string | null = null,
-): V3dLmerParametersTagged {
+): V3dLmerParamsDictTagged {
     const params = {
         "@type": "afni/3dLMEr" as const,
         "cio": cio,
@@ -176,7 +176,7 @@ function v_3d_lmer_params(
  * @returns Command-line arguments.
  */
 function v_3d_lmer_cargs(
-    params: V3dLmerParameters,
+    params: V3dLmerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -296,7 +296,7 @@ function v_3d_lmer_cargs(
  * @returns Outputs object.
  */
 function v_3d_lmer_outputs(
-    params: V3dLmerParameters,
+    params: V3dLmerParamsDict,
     execution: Execution,
 ): V3dLmerOutputs {
     const ret: V3dLmerOutputs = {
@@ -323,7 +323,7 @@ function v_3d_lmer_outputs(
  * @returns NamedTuple of outputs (described in `V3dLmerOutputs`).
  */
 function v_3d_lmer_execute(
-    params: V3dLmerParameters,
+    params: V3dLmerParamsDict,
     runner: Runner | null = null,
 ): V3dLmerOutputs {
     runner = runner || getGlobalRunner();
@@ -403,6 +403,8 @@ function v_3d_lmer(
 
 export {
       V3dLmerOutputs,
+      V3dLmerParamsDict,
+      V3dLmerParamsDictTagged,
       V_3D_LMER_METADATA,
       v_3d_lmer,
       v_3d_lmer_execute,

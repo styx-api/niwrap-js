@@ -11,29 +11,29 @@ const FIXELREORIENT_METADATA: Metadata = {
 };
 
 
-interface FixelreorientConfigParameters {
+interface FixelreorientConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type FixelreorientConfigParametersTagged = Required<Pick<FixelreorientConfigParameters, '@type'>> & FixelreorientConfigParameters;
+type FixelreorientConfigParamsDictTagged = Required<Pick<FixelreorientConfigParamsDict, '@type'>> & FixelreorientConfigParamsDict;
 
 
-interface FixelreorientParameters {
+interface FixelreorientParamsDict {
     "@type"?: "mrtrix/fixelreorient";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<FixelreorientConfigParameters> | null | undefined;
+    "config"?: Array<FixelreorientConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "fixel_in": InputPathType;
     "warp": InputPathType;
     "fixel_out": string;
 }
-type FixelreorientParametersTagged = Required<Pick<FixelreorientParameters, '@type'>> & FixelreorientParameters;
+type FixelreorientParamsDictTagged = Required<Pick<FixelreorientParamsDict, '@type'>> & FixelreorientParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type FixelreorientParametersTagged = Required<Pick<FixelreorientParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function fixelreorient_config_params(
+function fixelreorient_config(
     key: string,
     value: string,
-): FixelreorientConfigParametersTagged {
+): FixelreorientConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function fixelreorient_config_params(
  * @returns Command-line arguments.
  */
 function fixelreorient_config_cargs(
-    params: FixelreorientConfigParameters,
+    params: FixelreorientConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function fixelreorient_config_cargs(
 
 
 /**
- * Output object returned when calling `FixelreorientParameters(...)`.
+ * Output object returned when calling `FixelreorientParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function fixelreorient_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelreorientConfigParameters> | null = null,
+    config: Array<FixelreorientConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelreorientParametersTagged {
+): FixelreorientParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixelreorient" as const,
         "info": info,
@@ -155,7 +155,7 @@ function fixelreorient_params(
  * @returns Command-line arguments.
  */
 function fixelreorient_cargs(
-    params: FixelreorientParameters,
+    params: FixelreorientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function fixelreorient_cargs(
  * @returns Outputs object.
  */
 function fixelreorient_outputs(
-    params: FixelreorientParameters,
+    params: FixelreorientParamsDict,
     execution: Execution,
 ): FixelreorientOutputs {
     const ret: FixelreorientOutputs = {
@@ -235,7 +235,7 @@ function fixelreorient_outputs(
  * @returns NamedTuple of outputs (described in `FixelreorientOutputs`).
  */
 function fixelreorient_execute(
-    params: FixelreorientParameters,
+    params: FixelreorientParamsDict,
     runner: Runner | null = null,
 ): FixelreorientOutputs {
     runner = runner || getGlobalRunner();
@@ -287,7 +287,7 @@ function fixelreorient(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelreorientConfigParameters> | null = null,
+    config: Array<FixelreorientConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -299,9 +299,13 @@ function fixelreorient(
 
 export {
       FIXELREORIENT_METADATA,
+      FixelreorientConfigParamsDict,
+      FixelreorientConfigParamsDictTagged,
       FixelreorientOutputs,
+      FixelreorientParamsDict,
+      FixelreorientParamsDictTagged,
       fixelreorient,
-      fixelreorient_config_params,
+      fixelreorient_config,
       fixelreorient_execute,
       fixelreorient_params,
 };

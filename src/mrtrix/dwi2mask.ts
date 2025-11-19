@@ -11,39 +11,39 @@ const DWI2MASK_METADATA: Metadata = {
 };
 
 
-interface Dwi2maskFslgradParameters {
+interface Dwi2maskFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type Dwi2maskFslgradParametersTagged = Required<Pick<Dwi2maskFslgradParameters, '@type'>> & Dwi2maskFslgradParameters;
+type Dwi2maskFslgradParamsDictTagged = Required<Pick<Dwi2maskFslgradParamsDict, '@type'>> & Dwi2maskFslgradParamsDict;
 
 
-interface Dwi2maskConfigParameters {
+interface Dwi2maskConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Dwi2maskConfigParametersTagged = Required<Pick<Dwi2maskConfigParameters, '@type'>> & Dwi2maskConfigParameters;
+type Dwi2maskConfigParamsDictTagged = Required<Pick<Dwi2maskConfigParamsDict, '@type'>> & Dwi2maskConfigParamsDict;
 
 
-interface Dwi2maskParameters {
+interface Dwi2maskParamsDict {
     "@type"?: "mrtrix/dwi2mask";
     "clean_scale"?: number | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: Dwi2maskFslgradParameters | null | undefined;
+    "fslgrad"?: Dwi2maskFslgradParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Dwi2maskConfigParameters> | null | undefined;
+    "config"?: Array<Dwi2maskConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type Dwi2maskParametersTagged = Required<Pick<Dwi2maskParameters, '@type'>> & Dwi2maskParameters;
+type Dwi2maskParamsDictTagged = Required<Pick<Dwi2maskParamsDict, '@type'>> & Dwi2maskParamsDict;
 
 
 /**
@@ -54,10 +54,10 @@ type Dwi2maskParametersTagged = Required<Pick<Dwi2maskParameters, '@type'>> & Dw
  *
  * @returns Parameter dictionary
  */
-function dwi2mask_fslgrad_params(
+function dwi2mask_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2maskFslgradParametersTagged {
+): Dwi2maskFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -76,7 +76,7 @@ function dwi2mask_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dwi2mask_fslgrad_cargs(
-    params: Dwi2maskFslgradParameters,
+    params: Dwi2maskFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function dwi2mask_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwi2mask_config_params(
+function dwi2mask_config(
     key: string,
     value: string,
-): Dwi2maskConfigParametersTagged {
+): Dwi2maskConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -117,7 +117,7 @@ function dwi2mask_config_params(
  * @returns Command-line arguments.
  */
 function dwi2mask_config_cargs(
-    params: Dwi2maskConfigParameters,
+    params: Dwi2maskConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function dwi2mask_config_cargs(
 
 
 /**
- * Output object returned when calling `Dwi2maskParameters(...)`.
+ * Output object returned when calling `Dwi2maskParamsDict(...)`.
  *
  * @interface
  */
@@ -169,16 +169,16 @@ function dwi2mask_params(
     output: string,
     clean_scale: number | null = null,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2maskFslgradParameters | null = null,
+    fslgrad: Dwi2maskFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2maskConfigParameters> | null = null,
+    config: Array<Dwi2maskConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2maskParametersTagged {
+): Dwi2maskParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwi2mask" as const,
         "info": info,
@@ -218,7 +218,7 @@ function dwi2mask_params(
  * @returns Command-line arguments.
  */
 function dwi2mask_cargs(
-    params: Dwi2maskParameters,
+    params: Dwi2maskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -280,7 +280,7 @@ function dwi2mask_cargs(
  * @returns Outputs object.
  */
 function dwi2mask_outputs(
-    params: Dwi2maskParameters,
+    params: Dwi2maskParamsDict,
     execution: Execution,
 ): Dwi2maskOutputs {
     const ret: Dwi2maskOutputs = {
@@ -314,7 +314,7 @@ function dwi2mask_outputs(
  * @returns NamedTuple of outputs (described in `Dwi2maskOutputs`).
  */
 function dwi2mask_execute(
-    params: Dwi2maskParameters,
+    params: Dwi2maskParamsDict,
     runner: Runner | null = null,
 ): Dwi2maskOutputs {
     runner = runner || getGlobalRunner();
@@ -366,13 +366,13 @@ function dwi2mask(
     output: string,
     clean_scale: number | null = null,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2maskFslgradParameters | null = null,
+    fslgrad: Dwi2maskFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2maskConfigParameters> | null = null,
+    config: Array<Dwi2maskConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -384,10 +384,16 @@ function dwi2mask(
 
 export {
       DWI2MASK_METADATA,
+      Dwi2maskConfigParamsDict,
+      Dwi2maskConfigParamsDictTagged,
+      Dwi2maskFslgradParamsDict,
+      Dwi2maskFslgradParamsDictTagged,
       Dwi2maskOutputs,
+      Dwi2maskParamsDict,
+      Dwi2maskParamsDictTagged,
       dwi2mask,
-      dwi2mask_config_params,
+      dwi2mask_config,
       dwi2mask_execute,
-      dwi2mask_fslgrad_params,
+      dwi2mask_fslgrad,
       dwi2mask_params,
 };

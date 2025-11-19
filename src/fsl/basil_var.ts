@@ -11,16 +11,16 @@ const BASIL_VAR_METADATA: Metadata = {
 };
 
 
-interface BasilVarParameters {
+interface BasilVarParamsDict {
     "@type"?: "fsl/basil_var";
     "results_dir": string;
     "mask_image": InputPathType;
 }
-type BasilVarParametersTagged = Required<Pick<BasilVarParameters, '@type'>> & BasilVarParameters;
+type BasilVarParamsDictTagged = Required<Pick<BasilVarParamsDict, '@type'>> & BasilVarParamsDict;
 
 
 /**
- * Output object returned when calling `BasilVarParameters(...)`.
+ * Output object returned when calling `BasilVarParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface BasilVarOutputs {
 function basil_var_params(
     results_dir: string,
     mask_image: InputPathType,
-): BasilVarParametersTagged {
+): BasilVarParamsDictTagged {
     const params = {
         "@type": "fsl/basil_var" as const,
         "results_dir": results_dir,
@@ -62,7 +62,7 @@ function basil_var_params(
  * @returns Command-line arguments.
  */
 function basil_var_cargs(
-    params: BasilVarParameters,
+    params: BasilVarParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function basil_var_cargs(
  * @returns Outputs object.
  */
 function basil_var_outputs(
-    params: BasilVarParameters,
+    params: BasilVarParamsDict,
     execution: Execution,
 ): BasilVarOutputs {
     const ret: BasilVarOutputs = {
@@ -113,7 +113,7 @@ function basil_var_outputs(
  * @returns NamedTuple of outputs (described in `BasilVarOutputs`).
  */
 function basil_var_execute(
-    params: BasilVarParameters,
+    params: BasilVarParamsDict,
     runner: Runner | null = null,
 ): BasilVarOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function basil_var(
 export {
       BASIL_VAR_METADATA,
       BasilVarOutputs,
+      BasilVarParamsDict,
+      BasilVarParamsDictTagged,
       basil_var,
       basil_var_execute,
       basil_var_params,

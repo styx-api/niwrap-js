@@ -11,7 +11,7 @@ const TCALC_METADATA: Metadata = {
 };
 
 
-interface TcalcParameters {
+interface TcalcParamsDict {
     "@type"?: "fsl/tcalc";
     "input_image": InputPathType;
     "output_image": string;
@@ -29,11 +29,11 @@ interface TcalcParameters {
     "save_flag": boolean;
     "verbose_flag": boolean;
 }
-type TcalcParametersTagged = Required<Pick<TcalcParameters, '@type'>> & TcalcParameters;
+type TcalcParamsDictTagged = Required<Pick<TcalcParamsDict, '@type'>> & TcalcParamsDict;
 
 
 /**
- * Output object returned when calling `TcalcParameters(...)`.
+ * Output object returned when calling `TcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -90,7 +90,7 @@ function tcalc_params(
     noise_sigma: number | null = null,
     save_flag: boolean = false,
     verbose_flag: boolean = false,
-): TcalcParametersTagged {
+): TcalcParamsDictTagged {
     const params = {
         "@type": "fsl/tcalc" as const,
         "input_image": input_image,
@@ -144,7 +144,7 @@ function tcalc_params(
  * @returns Command-line arguments.
  */
 function tcalc_cargs(
-    params: TcalcParameters,
+    params: TcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -236,7 +236,7 @@ function tcalc_cargs(
  * @returns Outputs object.
  */
 function tcalc_outputs(
-    params: TcalcParameters,
+    params: TcalcParamsDict,
     execution: Execution,
 ): TcalcOutputs {
     const ret: TcalcOutputs = {
@@ -263,7 +263,7 @@ function tcalc_outputs(
  * @returns NamedTuple of outputs (described in `TcalcOutputs`).
  */
 function tcalc_execute(
-    params: TcalcParameters,
+    params: TcalcParamsDict,
     runner: Runner | null = null,
 ): TcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -330,6 +330,8 @@ function tcalc(
 export {
       TCALC_METADATA,
       TcalcOutputs,
+      TcalcParamsDict,
+      TcalcParamsDictTagged,
       tcalc,
       tcalc_execute,
       tcalc_params,

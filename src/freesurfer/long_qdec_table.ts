@@ -11,7 +11,7 @@ const LONG_QDEC_TABLE_METADATA: Metadata = {
 };
 
 
-interface LongQdecTableParameters {
+interface LongQdecTableParamsDict {
     "@type"?: "freesurfer/long_qdec_table";
     "qdec_table": InputPathType;
     "split"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface LongQdecTableParameters {
     "sort"?: string | null | undefined;
     "out"?: string | null | undefined;
 }
-type LongQdecTableParametersTagged = Required<Pick<LongQdecTableParameters, '@type'>> & LongQdecTableParameters;
+type LongQdecTableParamsDictTagged = Required<Pick<LongQdecTableParamsDict, '@type'>> & LongQdecTableParamsDict;
 
 
 /**
- * Output object returned when calling `LongQdecTableParameters(...)`.
+ * Output object returned when calling `LongQdecTableParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function long_qdec_table_params(
     cross_flag: boolean = false,
     sort: string | null = null,
     out: string | null = null,
-): LongQdecTableParametersTagged {
+): LongQdecTableParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_qdec_table" as const,
         "qdec_table": qdec_table,
@@ -84,7 +84,7 @@ function long_qdec_table_params(
  * @returns Command-line arguments.
  */
 function long_qdec_table_cargs(
-    params: LongQdecTableParameters,
+    params: LongQdecTableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function long_qdec_table_cargs(
  * @returns Outputs object.
  */
 function long_qdec_table_outputs(
-    params: LongQdecTableParameters,
+    params: LongQdecTableParamsDict,
     execution: Execution,
 ): LongQdecTableOutputs {
     const ret: LongQdecTableOutputs = {
@@ -153,7 +153,7 @@ function long_qdec_table_outputs(
  * @returns NamedTuple of outputs (described in `LongQdecTableOutputs`).
  */
 function long_qdec_table_execute(
-    params: LongQdecTableParameters,
+    params: LongQdecTableParamsDict,
     runner: Runner | null = null,
 ): LongQdecTableOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function long_qdec_table(
 export {
       LONG_QDEC_TABLE_METADATA,
       LongQdecTableOutputs,
+      LongQdecTableParamsDict,
+      LongQdecTableParamsDictTagged,
       long_qdec_table,
       long_qdec_table_execute,
       long_qdec_table_params,

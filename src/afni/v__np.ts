@@ -11,15 +11,15 @@ const V__NP_METADATA: Metadata = {
 };
 
 
-interface VNpParameters {
+interface VNpParamsDict {
     "@type"?: "afni/@np";
     "prefix": string;
 }
-type VNpParametersTagged = Required<Pick<VNpParameters, '@type'>> & VNpParameters;
+type VNpParamsDictTagged = Required<Pick<VNpParamsDict, '@type'>> & VNpParamsDict;
 
 
 /**
- * Output object returned when calling `VNpParameters(...)`.
+ * Output object returned when calling `VNpParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VNpOutputs {
  */
 function v__np_params(
     prefix: string,
-): VNpParametersTagged {
+): VNpParamsDictTagged {
     const params = {
         "@type": "afni/@np" as const,
         "prefix": prefix,
@@ -62,7 +62,7 @@ function v__np_params(
  * @returns Command-line arguments.
  */
 function v__np_cargs(
-    params: VNpParameters,
+    params: VNpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__np_cargs(
  * @returns Outputs object.
  */
 function v__np_outputs(
-    params: VNpParameters,
+    params: VNpParamsDict,
     execution: Execution,
 ): VNpOutputs {
     const ret: VNpOutputs = {
@@ -107,7 +107,7 @@ function v__np_outputs(
  * @returns NamedTuple of outputs (described in `VNpOutputs`).
  */
 function v__np_execute(
-    params: VNpParameters,
+    params: VNpParamsDict,
     runner: Runner | null = null,
 ): VNpOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__np(
 
 export {
       VNpOutputs,
+      VNpParamsDict,
+      VNpParamsDictTagged,
       V__NP_METADATA,
       v__np,
       v__np_execute,

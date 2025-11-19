@@ -11,15 +11,15 @@ const DICOM_TO_RAW_METADATA: Metadata = {
 };
 
 
-interface DicomToRawParameters {
+interface DicomToRawParamsDict {
     "@type"?: "afni/dicom_to_raw";
     "input_dicom": InputPathType;
 }
-type DicomToRawParametersTagged = Required<Pick<DicomToRawParameters, '@type'>> & DicomToRawParameters;
+type DicomToRawParamsDictTagged = Required<Pick<DicomToRawParamsDict, '@type'>> & DicomToRawParamsDict;
 
 
 /**
- * Output object returned when calling `DicomToRawParameters(...)`.
+ * Output object returned when calling `DicomToRawParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface DicomToRawOutputs {
  */
 function dicom_to_raw_params(
     input_dicom: InputPathType,
-): DicomToRawParametersTagged {
+): DicomToRawParamsDictTagged {
     const params = {
         "@type": "afni/dicom_to_raw" as const,
         "input_dicom": input_dicom,
@@ -62,7 +62,7 @@ function dicom_to_raw_params(
  * @returns Command-line arguments.
  */
 function dicom_to_raw_cargs(
-    params: DicomToRawParameters,
+    params: DicomToRawParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function dicom_to_raw_cargs(
  * @returns Outputs object.
  */
 function dicom_to_raw_outputs(
-    params: DicomToRawParameters,
+    params: DicomToRawParamsDict,
     execution: Execution,
 ): DicomToRawOutputs {
     const ret: DicomToRawOutputs = {
@@ -107,7 +107,7 @@ function dicom_to_raw_outputs(
  * @returns NamedTuple of outputs (described in `DicomToRawOutputs`).
  */
 function dicom_to_raw_execute(
-    params: DicomToRawParameters,
+    params: DicomToRawParamsDict,
     runner: Runner | null = null,
 ): DicomToRawOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function dicom_to_raw(
 export {
       DICOM_TO_RAW_METADATA,
       DicomToRawOutputs,
+      DicomToRawParamsDict,
+      DicomToRawParamsDictTagged,
       dicom_to_raw,
       dicom_to_raw_execute,
       dicom_to_raw_params,

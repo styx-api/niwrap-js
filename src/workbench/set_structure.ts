@@ -10,18 +10,18 @@ const SET_STRUCTURE_METADATA: Metadata = {
 };
 
 
-interface SetStructureParameters {
+interface SetStructureParamsDict {
     "@type"?: "workbench/set-structure";
     "type"?: string | null | undefined;
     "secondary type"?: string | null | undefined;
     "data-file": string;
     "structure": string;
 }
-type SetStructureParametersTagged = Required<Pick<SetStructureParameters, '@type'>> & SetStructureParameters;
+type SetStructureParamsDictTagged = Required<Pick<SetStructureParamsDict, '@type'>> & SetStructureParamsDict;
 
 
 /**
- * Output object returned when calling `SetStructureParameters(...)`.
+ * Output object returned when calling `SetStructureParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function set_structure_params(
     secondary_type: string | null,
     data_file: string,
     structure: string,
-): SetStructureParametersTagged {
+): SetStructureParamsDictTagged {
     const params = {
         "@type": "workbench/set-structure" as const,
         "data-file": data_file,
@@ -77,7 +77,7 @@ function set_structure_params(
  * @returns Command-line arguments.
  */
 function set_structure_cargs(
-    params: SetStructureParameters,
+    params: SetStructureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function set_structure_cargs(
  * @returns Outputs object.
  */
 function set_structure_outputs(
-    params: SetStructureParameters,
+    params: SetStructureParamsDict,
     execution: Execution,
 ): SetStructureOutputs {
     const ret: SetStructureOutputs = {
@@ -186,7 +186,7 @@ function set_structure_outputs(
  * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
  */
 function set_structure_execute(
-    params: SetStructureParameters,
+    params: SetStructureParamsDict,
     runner: Runner | null = null,
 ): SetStructureOutputs {
     runner = runner || getGlobalRunner();
@@ -290,6 +290,8 @@ function set_structure(
 export {
       SET_STRUCTURE_METADATA,
       SetStructureOutputs,
+      SetStructureParamsDict,
+      SetStructureParamsDictTagged,
       set_structure,
       set_structure_execute,
       set_structure_params,

@@ -11,17 +11,17 @@ const FSLMODHD_METADATA: Metadata = {
 };
 
 
-interface FslmodhdParameters {
+interface FslmodhdParamsDict {
     "@type"?: "fsl/fslmodhd";
     "image": InputPathType;
     "keyword": string;
     "value": string;
 }
-type FslmodhdParametersTagged = Required<Pick<FslmodhdParameters, '@type'>> & FslmodhdParameters;
+type FslmodhdParamsDictTagged = Required<Pick<FslmodhdParamsDict, '@type'>> & FslmodhdParamsDict;
 
 
 /**
- * Output object returned when calling `FslmodhdParameters(...)`.
+ * Output object returned when calling `FslmodhdParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function fslmodhd_params(
     image: InputPathType,
     keyword: string,
     value: string,
-): FslmodhdParametersTagged {
+): FslmodhdParamsDictTagged {
     const params = {
         "@type": "fsl/fslmodhd" as const,
         "image": image,
@@ -66,7 +66,7 @@ function fslmodhd_params(
  * @returns Command-line arguments.
  */
 function fslmodhd_cargs(
-    params: FslmodhdParameters,
+    params: FslmodhdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function fslmodhd_cargs(
  * @returns Outputs object.
  */
 function fslmodhd_outputs(
-    params: FslmodhdParameters,
+    params: FslmodhdParamsDict,
     execution: Execution,
 ): FslmodhdOutputs {
     const ret: FslmodhdOutputs = {
@@ -112,7 +112,7 @@ function fslmodhd_outputs(
  * @returns NamedTuple of outputs (described in `FslmodhdOutputs`).
  */
 function fslmodhd_execute(
-    params: FslmodhdParameters,
+    params: FslmodhdParamsDict,
     runner: Runner | null = null,
 ): FslmodhdOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function fslmodhd(
 export {
       FSLMODHD_METADATA,
       FslmodhdOutputs,
+      FslmodhdParamsDict,
+      FslmodhdParamsDictTagged,
       fslmodhd,
       fslmodhd_execute,
       fslmodhd_params,

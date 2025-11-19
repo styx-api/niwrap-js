@@ -11,18 +11,18 @@ const MRIS_REMOVE_VARIANCE_METADATA: Metadata = {
 };
 
 
-interface MrisRemoveVarianceParameters {
+interface MrisRemoveVarianceParamsDict {
     "@type"?: "freesurfer/mris_remove_variance";
     "input_surface_file": InputPathType;
     "curvature_file": InputPathType;
     "curvature_file_to_remove": InputPathType;
     "output_curvature_file": string;
 }
-type MrisRemoveVarianceParametersTagged = Required<Pick<MrisRemoveVarianceParameters, '@type'>> & MrisRemoveVarianceParameters;
+type MrisRemoveVarianceParamsDictTagged = Required<Pick<MrisRemoveVarianceParamsDict, '@type'>> & MrisRemoveVarianceParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRemoveVarianceParameters(...)`.
+ * Output object returned when calling `MrisRemoveVarianceParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_remove_variance_params(
     curvature_file: InputPathType,
     curvature_file_to_remove: InputPathType,
     output_curvature_file: string,
-): MrisRemoveVarianceParametersTagged {
+): MrisRemoveVarianceParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_remove_variance" as const,
         "input_surface_file": input_surface_file,
@@ -74,7 +74,7 @@ function mris_remove_variance_params(
  * @returns Command-line arguments.
  */
 function mris_remove_variance_cargs(
-    params: MrisRemoveVarianceParameters,
+    params: MrisRemoveVarianceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_remove_variance_cargs(
  * @returns Outputs object.
  */
 function mris_remove_variance_outputs(
-    params: MrisRemoveVarianceParameters,
+    params: MrisRemoveVarianceParamsDict,
     execution: Execution,
 ): MrisRemoveVarianceOutputs {
     const ret: MrisRemoveVarianceOutputs = {
@@ -122,7 +122,7 @@ function mris_remove_variance_outputs(
  * @returns NamedTuple of outputs (described in `MrisRemoveVarianceOutputs`).
  */
 function mris_remove_variance_execute(
-    params: MrisRemoveVarianceParameters,
+    params: MrisRemoveVarianceParamsDict,
     runner: Runner | null = null,
 ): MrisRemoveVarianceOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_remove_variance(
 export {
       MRIS_REMOVE_VARIANCE_METADATA,
       MrisRemoveVarianceOutputs,
+      MrisRemoveVarianceParamsDict,
+      MrisRemoveVarianceParamsDictTagged,
       mris_remove_variance,
       mris_remove_variance_execute,
       mris_remove_variance_params,

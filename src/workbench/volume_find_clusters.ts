@@ -10,7 +10,7 @@ const VOLUME_FIND_CLUSTERS_METADATA: Metadata = {
 };
 
 
-interface VolumeFindClustersParameters {
+interface VolumeFindClustersParamsDict {
     "@type"?: "workbench/volume-find-clusters";
     "volume-out": string;
     "less-than": boolean;
@@ -23,11 +23,11 @@ interface VolumeFindClustersParameters {
     "value-threshold": number;
     "minimum-volume": number;
 }
-type VolumeFindClustersParametersTagged = Required<Pick<VolumeFindClustersParameters, '@type'>> & VolumeFindClustersParameters;
+type VolumeFindClustersParamsDictTagged = Required<Pick<VolumeFindClustersParamsDict, '@type'>> & VolumeFindClustersParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeFindClustersParameters(...)`.
+ * Output object returned when calling `VolumeFindClustersParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function volume_find_clusters_params(
     value_threshold: number,
     minimum_volume: number,
     less_than: boolean = false,
-): VolumeFindClustersParametersTagged {
+): VolumeFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/volume-find-clusters" as const,
         "volume-out": volume_out,
@@ -117,7 +117,7 @@ function volume_find_clusters_params(
  * @returns Command-line arguments.
  */
 function volume_find_clusters_cargs(
-    params: VolumeFindClustersParameters,
+    params: VolumeFindClustersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,7 +155,7 @@ function volume_find_clusters_cargs(
  * @returns Outputs object.
  */
 function volume_find_clusters_outputs(
-    params: VolumeFindClustersParameters,
+    params: VolumeFindClustersParamsDict,
     execution: Execution,
 ): VolumeFindClustersOutputs {
     const ret: VolumeFindClustersOutputs = {
@@ -177,7 +177,7 @@ function volume_find_clusters_outputs(
  * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
  */
 function volume_find_clusters_execute(
-    params: VolumeFindClustersParameters,
+    params: VolumeFindClustersParamsDict,
     runner: Runner | null = null,
 ): VolumeFindClustersOutputs {
     runner = runner || getGlobalRunner();
@@ -240,6 +240,8 @@ function volume_find_clusters(
 export {
       VOLUME_FIND_CLUSTERS_METADATA,
       VolumeFindClustersOutputs,
+      VolumeFindClustersParamsDict,
+      VolumeFindClustersParamsDictTagged,
       volume_find_clusters,
       volume_find_clusters_execute,
       volume_find_clusters_params,

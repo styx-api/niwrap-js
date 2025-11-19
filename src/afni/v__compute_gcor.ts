@@ -11,7 +11,7 @@ const V__COMPUTE_GCOR_METADATA: Metadata = {
 };
 
 
-interface VComputeGcorParameters {
+interface VComputeGcorParamsDict {
     "@type"?: "afni/@compute_gcor";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface VComputeGcorParameters {
     "save_tmp": boolean;
     "verbose"?: number | null | undefined;
 }
-type VComputeGcorParametersTagged = Required<Pick<VComputeGcorParameters, '@type'>> & VComputeGcorParameters;
+type VComputeGcorParamsDictTagged = Required<Pick<VComputeGcorParamsDict, '@type'>> & VComputeGcorParamsDict;
 
 
 /**
- * Output object returned when calling `VComputeGcorParameters(...)`.
+ * Output object returned when calling `VComputeGcorParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function v__compute_gcor_params(
     no_demean: boolean = false,
     save_tmp: boolean = false,
     verbose: number | null = null,
-): VComputeGcorParametersTagged {
+): VComputeGcorParamsDictTagged {
     const params = {
         "@type": "afni/@compute_gcor" as const,
         "input": input,
@@ -98,7 +98,7 @@ function v__compute_gcor_params(
  * @returns Command-line arguments.
  */
 function v__compute_gcor_cargs(
-    params: VComputeGcorParameters,
+    params: VComputeGcorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function v__compute_gcor_cargs(
  * @returns Outputs object.
  */
 function v__compute_gcor_outputs(
-    params: VComputeGcorParameters,
+    params: VComputeGcorParamsDict,
     execution: Execution,
 ): VComputeGcorOutputs {
     const ret: VComputeGcorOutputs = {
@@ -171,7 +171,7 @@ function v__compute_gcor_outputs(
  * @returns NamedTuple of outputs (described in `VComputeGcorOutputs`).
  */
 function v__compute_gcor_execute(
-    params: VComputeGcorParameters,
+    params: VComputeGcorParamsDict,
     runner: Runner | null = null,
 ): VComputeGcorOutputs {
     runner = runner || getGlobalRunner();
@@ -221,6 +221,8 @@ function v__compute_gcor(
 
 export {
       VComputeGcorOutputs,
+      VComputeGcorParamsDict,
+      VComputeGcorParamsDictTagged,
       V__COMPUTE_GCOR_METADATA,
       v__compute_gcor,
       v__compute_gcor_execute,

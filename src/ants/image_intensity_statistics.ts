@@ -11,17 +11,17 @@ const IMAGE_INTENSITY_STATISTICS_METADATA: Metadata = {
 };
 
 
-interface ImageIntensityStatisticsParameters {
+interface ImageIntensityStatisticsParamsDict {
     "@type"?: "ants/ImageIntensityStatistics";
     "image_dimension": number;
     "input_image": InputPathType;
     "label_image"?: InputPathType | null | undefined;
 }
-type ImageIntensityStatisticsParametersTagged = Required<Pick<ImageIntensityStatisticsParameters, '@type'>> & ImageIntensityStatisticsParameters;
+type ImageIntensityStatisticsParamsDictTagged = Required<Pick<ImageIntensityStatisticsParamsDict, '@type'>> & ImageIntensityStatisticsParamsDict;
 
 
 /**
- * Output object returned when calling `ImageIntensityStatisticsParameters(...)`.
+ * Output object returned when calling `ImageIntensityStatisticsParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function image_intensity_statistics_params(
     image_dimension: number,
     input_image: InputPathType,
     label_image: InputPathType | null = null,
-): ImageIntensityStatisticsParametersTagged {
+): ImageIntensityStatisticsParamsDictTagged {
     const params = {
         "@type": "ants/ImageIntensityStatistics" as const,
         "image_dimension": image_dimension,
@@ -72,7 +72,7 @@ function image_intensity_statistics_params(
  * @returns Command-line arguments.
  */
 function image_intensity_statistics_cargs(
-    params: ImageIntensityStatisticsParameters,
+    params: ImageIntensityStatisticsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function image_intensity_statistics_cargs(
  * @returns Outputs object.
  */
 function image_intensity_statistics_outputs(
-    params: ImageIntensityStatisticsParameters,
+    params: ImageIntensityStatisticsParamsDict,
     execution: Execution,
 ): ImageIntensityStatisticsOutputs {
     const ret: ImageIntensityStatisticsOutputs = {
@@ -121,7 +121,7 @@ function image_intensity_statistics_outputs(
  * @returns NamedTuple of outputs (described in `ImageIntensityStatisticsOutputs`).
  */
 function image_intensity_statistics_execute(
-    params: ImageIntensityStatisticsParameters,
+    params: ImageIntensityStatisticsParamsDict,
     runner: Runner | null = null,
 ): ImageIntensityStatisticsOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function image_intensity_statistics(
 export {
       IMAGE_INTENSITY_STATISTICS_METADATA,
       ImageIntensityStatisticsOutputs,
+      ImageIntensityStatisticsParamsDict,
+      ImageIntensityStatisticsParamsDictTagged,
       image_intensity_statistics,
       image_intensity_statistics_execute,
       image_intensity_statistics_params,

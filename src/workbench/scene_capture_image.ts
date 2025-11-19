@@ -10,51 +10,51 @@ const SCENE_CAPTURE_IMAGE_METADATA: Metadata = {
 };
 
 
-interface SceneCaptureImageSizeWidthHeightParameters {
+interface SceneCaptureImageSizeWidthHeightParamsDict {
     "@type"?: "size-width-height";
     "width": number;
     "height": number;
 }
-type SceneCaptureImageSizeWidthHeightParametersTagged = Required<Pick<SceneCaptureImageSizeWidthHeightParameters, '@type'>> & SceneCaptureImageSizeWidthHeightParameters;
+type SceneCaptureImageSizeWidthHeightParamsDictTagged = Required<Pick<SceneCaptureImageSizeWidthHeightParamsDict, '@type'>> & SceneCaptureImageSizeWidthHeightParamsDict;
 
 
-interface SceneCaptureImageResolutionParameters {
+interface SceneCaptureImageResolutionParamsDict {
     "@type"?: "resolution";
     "Number of pixels": number;
     "Units Name": string;
 }
-type SceneCaptureImageResolutionParametersTagged = Required<Pick<SceneCaptureImageResolutionParameters, '@type'>> & SceneCaptureImageResolutionParameters;
+type SceneCaptureImageResolutionParamsDictTagged = Required<Pick<SceneCaptureImageResolutionParamsDict, '@type'>> & SceneCaptureImageResolutionParamsDict;
 
 
-interface SceneCaptureImageSetMapYokeParameters {
+interface SceneCaptureImageSetMapYokeParamsDict {
     "@type"?: "set-map-yoke";
     "map yoking roman numeral": string;
     "map undex": number;
 }
-type SceneCaptureImageSetMapYokeParametersTagged = Required<Pick<SceneCaptureImageSetMapYokeParameters, '@type'>> & SceneCaptureImageSetMapYokeParameters;
+type SceneCaptureImageSetMapYokeParamsDictTagged = Required<Pick<SceneCaptureImageSetMapYokeParamsDict, '@type'>> & SceneCaptureImageSetMapYokeParamsDict;
 
 
-interface SceneCaptureImageConnDbLoginParameters {
+interface SceneCaptureImageConnDbLoginParamsDict {
     "@type"?: "conn-db-login";
     "username": string;
     "password": string;
 }
-type SceneCaptureImageConnDbLoginParametersTagged = Required<Pick<SceneCaptureImageConnDbLoginParameters, '@type'>> & SceneCaptureImageConnDbLoginParameters;
+type SceneCaptureImageConnDbLoginParamsDictTagged = Required<Pick<SceneCaptureImageConnDbLoginParamsDict, '@type'>> & SceneCaptureImageConnDbLoginParamsDict;
 
 
-interface SceneCaptureImageParameters {
+interface SceneCaptureImageParamsDict {
     "@type"?: "workbench/scene-capture-image";
     "size-window": boolean;
     "size-capture": boolean;
-    "size-width-height"?: SceneCaptureImageSizeWidthHeightParameters | null | undefined;
+    "size-width-height"?: SceneCaptureImageSizeWidthHeightParamsDict | null | undefined;
     "width"?: number | null | undefined;
     "height"?: number | null | undefined;
     "units"?: string | null | undefined;
-    "resolution"?: SceneCaptureImageResolutionParameters | null | undefined;
+    "resolution"?: SceneCaptureImageResolutionParamsDict | null | undefined;
     "size"?: number | null | undefined;
     "no-scene-colors": boolean;
-    "set-map-yoke"?: SceneCaptureImageSetMapYokeParameters | null | undefined;
-    "conn-db-login"?: SceneCaptureImageConnDbLoginParameters | null | undefined;
+    "set-map-yoke"?: SceneCaptureImageSetMapYokeParamsDict | null | undefined;
+    "conn-db-login"?: SceneCaptureImageConnDbLoginParamsDict | null | undefined;
     "show-capture-settings": boolean;
     "Renderer"?: string | null | undefined;
     "print-image-info": boolean;
@@ -62,7 +62,7 @@ interface SceneCaptureImageParameters {
     "scene-name-or-number": string;
     "image-file-name": string;
 }
-type SceneCaptureImageParametersTagged = Required<Pick<SceneCaptureImageParameters, '@type'>> & SceneCaptureImageParameters;
+type SceneCaptureImageParamsDictTagged = Required<Pick<SceneCaptureImageParamsDict, '@type'>> & SceneCaptureImageParamsDict;
 
 
 /**
@@ -73,10 +73,10 @@ type SceneCaptureImageParametersTagged = Required<Pick<SceneCaptureImageParamete
  *
  * @returns Parameter dictionary
  */
-function scene_capture_image_size_width_height_params(
+function scene_capture_image_size_width_height(
     width: number,
     height: number,
-): SceneCaptureImageSizeWidthHeightParametersTagged {
+): SceneCaptureImageSizeWidthHeightParamsDictTagged {
     const params = {
         "@type": "size-width-height" as const,
         "width": width,
@@ -95,7 +95,7 @@ function scene_capture_image_size_width_height_params(
  * @returns Command-line arguments.
  */
 function scene_capture_image_size_width_height_cargs(
-    params: SceneCaptureImageSizeWidthHeightParameters,
+    params: SceneCaptureImageSizeWidthHeightParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,10 +121,10 @@ function scene_capture_image_size_width_height_cargs(
  *
  * @returns Parameter dictionary
  */
-function scene_capture_image_resolution_params(
+function scene_capture_image_resolution(
     number_of_pixels: number,
     units_name: string,
-): SceneCaptureImageResolutionParametersTagged {
+): SceneCaptureImageResolutionParamsDictTagged {
     const params = {
         "@type": "resolution" as const,
         "Number of pixels": number_of_pixels,
@@ -143,7 +143,7 @@ function scene_capture_image_resolution_params(
  * @returns Command-line arguments.
  */
 function scene_capture_image_resolution_cargs(
-    params: SceneCaptureImageResolutionParameters,
+    params: SceneCaptureImageResolutionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,10 +164,10 @@ function scene_capture_image_resolution_cargs(
  *
  * @returns Parameter dictionary
  */
-function scene_capture_image_set_map_yoke_params(
+function scene_capture_image_set_map_yoke(
     map_yoking_roman_numeral: string,
     map_undex: number,
-): SceneCaptureImageSetMapYokeParametersTagged {
+): SceneCaptureImageSetMapYokeParamsDictTagged {
     const params = {
         "@type": "set-map-yoke" as const,
         "map yoking roman numeral": map_yoking_roman_numeral,
@@ -186,7 +186,7 @@ function scene_capture_image_set_map_yoke_params(
  * @returns Command-line arguments.
  */
 function scene_capture_image_set_map_yoke_cargs(
-    params: SceneCaptureImageSetMapYokeParameters,
+    params: SceneCaptureImageSetMapYokeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -207,10 +207,10 @@ function scene_capture_image_set_map_yoke_cargs(
  *
  * @returns Parameter dictionary
  */
-function scene_capture_image_conn_db_login_params(
+function scene_capture_image_conn_db_login(
     username: string,
     password: string,
-): SceneCaptureImageConnDbLoginParametersTagged {
+): SceneCaptureImageConnDbLoginParamsDictTagged {
     const params = {
         "@type": "conn-db-login" as const,
         "username": username,
@@ -229,7 +229,7 @@ function scene_capture_image_conn_db_login_params(
  * @returns Command-line arguments.
  */
 function scene_capture_image_conn_db_login_cargs(
-    params: SceneCaptureImageConnDbLoginParameters,
+    params: SceneCaptureImageConnDbLoginParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function scene_capture_image_conn_db_login_cargs(
 
 
 /**
- * Output object returned when calling `SceneCaptureImageParameters(...)`.
+ * Output object returned when calling `SceneCaptureImageParamsDict(...)`.
  *
  * @interface
  */
@@ -313,14 +313,14 @@ function scene_capture_image_params(
     image_file_name: string,
     size_window: boolean = false,
     size_capture: boolean = false,
-    size_width_height: SceneCaptureImageSizeWidthHeightParameters | null = null,
-    resolution: SceneCaptureImageResolutionParameters | null = null,
+    size_width_height: SceneCaptureImageSizeWidthHeightParamsDict | null = null,
+    resolution: SceneCaptureImageResolutionParamsDict | null = null,
     no_scene_colors: boolean = false,
-    set_map_yoke: SceneCaptureImageSetMapYokeParameters | null = null,
-    conn_db_login: SceneCaptureImageConnDbLoginParameters | null = null,
+    set_map_yoke: SceneCaptureImageSetMapYokeParamsDict | null = null,
+    conn_db_login: SceneCaptureImageConnDbLoginParamsDict | null = null,
     show_capture_settings: boolean = false,
     print_image_info: boolean = false,
-): SceneCaptureImageParametersTagged {
+): SceneCaptureImageParamsDictTagged {
     const params = {
         "@type": "workbench/scene-capture-image" as const,
         "size-window": size_window,
@@ -372,7 +372,7 @@ function scene_capture_image_params(
  * @returns Command-line arguments.
  */
 function scene_capture_image_cargs(
-    params: SceneCaptureImageParameters,
+    params: SceneCaptureImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -417,7 +417,7 @@ function scene_capture_image_cargs(
  * @returns Outputs object.
  */
 function scene_capture_image_outputs(
-    params: SceneCaptureImageParameters,
+    params: SceneCaptureImageParamsDict,
     execution: Execution,
 ): SceneCaptureImageOutputs {
     const ret: SceneCaptureImageOutputs = {
@@ -465,7 +465,7 @@ function scene_capture_image_outputs(
  * @returns NamedTuple of outputs (described in `SceneCaptureImageOutputs`).
  */
 function scene_capture_image_execute(
-    params: SceneCaptureImageParameters,
+    params: SceneCaptureImageParamsDict,
     runner: Runner | null = null,
 ): SceneCaptureImageOutputs {
     runner = runner || getGlobalRunner();
@@ -566,11 +566,11 @@ function scene_capture_image(
     image_file_name: string,
     size_window: boolean = false,
     size_capture: boolean = false,
-    size_width_height: SceneCaptureImageSizeWidthHeightParameters | null = null,
-    resolution: SceneCaptureImageResolutionParameters | null = null,
+    size_width_height: SceneCaptureImageSizeWidthHeightParamsDict | null = null,
+    resolution: SceneCaptureImageResolutionParamsDict | null = null,
     no_scene_colors: boolean = false,
-    set_map_yoke: SceneCaptureImageSetMapYokeParameters | null = null,
-    conn_db_login: SceneCaptureImageConnDbLoginParameters | null = null,
+    set_map_yoke: SceneCaptureImageSetMapYokeParamsDict | null = null,
+    conn_db_login: SceneCaptureImageConnDbLoginParamsDict | null = null,
     show_capture_settings: boolean = false,
     print_image_info: boolean = false,
     runner: Runner | null = null,
@@ -582,12 +582,22 @@ function scene_capture_image(
 
 export {
       SCENE_CAPTURE_IMAGE_METADATA,
+      SceneCaptureImageConnDbLoginParamsDict,
+      SceneCaptureImageConnDbLoginParamsDictTagged,
       SceneCaptureImageOutputs,
+      SceneCaptureImageParamsDict,
+      SceneCaptureImageParamsDictTagged,
+      SceneCaptureImageResolutionParamsDict,
+      SceneCaptureImageResolutionParamsDictTagged,
+      SceneCaptureImageSetMapYokeParamsDict,
+      SceneCaptureImageSetMapYokeParamsDictTagged,
+      SceneCaptureImageSizeWidthHeightParamsDict,
+      SceneCaptureImageSizeWidthHeightParamsDictTagged,
       scene_capture_image,
-      scene_capture_image_conn_db_login_params,
+      scene_capture_image_conn_db_login,
       scene_capture_image_execute,
       scene_capture_image_params,
-      scene_capture_image_resolution_params,
-      scene_capture_image_set_map_yoke_params,
-      scene_capture_image_size_width_height_params,
+      scene_capture_image_resolution,
+      scene_capture_image_set_map_yoke,
+      scene_capture_image_size_width_height,
 };

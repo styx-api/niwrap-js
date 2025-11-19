@@ -10,7 +10,7 @@ const VOLUME_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface VolumeRoisFromExtremaParameters {
+interface VolumeRoisFromExtremaParamsDict {
     "@type"?: "workbench/volume-rois-from-extrema";
     "volume-out": string;
     "sigma"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface VolumeRoisFromExtremaParameters {
     "volume-in": InputPathType;
     "limit": number;
 }
-type VolumeRoisFromExtremaParametersTagged = Required<Pick<VolumeRoisFromExtremaParameters, '@type'>> & VolumeRoisFromExtremaParameters;
+type VolumeRoisFromExtremaParamsDictTagged = Required<Pick<VolumeRoisFromExtremaParamsDict, '@type'>> & VolumeRoisFromExtremaParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeRoisFromExtremaParameters(...)`.
+ * Output object returned when calling `VolumeRoisFromExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function volume_rois_from_extrema_params(
     subvol: string | null,
     volume_in: InputPathType,
     limit: number,
-): VolumeRoisFromExtremaParametersTagged {
+): VolumeRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/volume-rois-from-extrema" as const,
         "volume-out": volume_out,
@@ -101,7 +101,7 @@ function volume_rois_from_extrema_params(
  * @returns Command-line arguments.
  */
 function volume_rois_from_extrema_cargs(
-    params: VolumeRoisFromExtremaParameters,
+    params: VolumeRoisFromExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function volume_rois_from_extrema_cargs(
  * @returns Outputs object.
  */
 function volume_rois_from_extrema_outputs(
-    params: VolumeRoisFromExtremaParameters,
+    params: VolumeRoisFromExtremaParamsDict,
     execution: Execution,
 ): VolumeRoisFromExtremaOutputs {
     const ret: VolumeRoisFromExtremaOutputs = {
@@ -157,7 +157,7 @@ function volume_rois_from_extrema_outputs(
  * @returns NamedTuple of outputs (described in `VolumeRoisFromExtremaOutputs`).
  */
 function volume_rois_from_extrema_execute(
-    params: VolumeRoisFromExtremaParameters,
+    params: VolumeRoisFromExtremaParamsDict,
     runner: Runner | null = null,
 ): VolumeRoisFromExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -212,6 +212,8 @@ function volume_rois_from_extrema(
 export {
       VOLUME_ROIS_FROM_EXTREMA_METADATA,
       VolumeRoisFromExtremaOutputs,
+      VolumeRoisFromExtremaParamsDict,
+      VolumeRoisFromExtremaParamsDictTagged,
       volume_rois_from_extrema,
       volume_rois_from_extrema_execute,
       volume_rois_from_extrema_params,

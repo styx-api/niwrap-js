@@ -11,7 +11,7 @@ const MRIS_MS_REFINE_METADATA: Metadata = {
 };
 
 
-interface MrisMsRefineParameters {
+interface MrisMsRefineParamsDict {
     "@type"?: "freesurfer/mris_ms_refine";
     "subject_name": string;
     "hemisphere": string;
@@ -23,11 +23,11 @@ interface MrisMsRefineParameters {
     "average_curvature"?: number | null | undefined;
     "white_only": boolean;
 }
-type MrisMsRefineParametersTagged = Required<Pick<MrisMsRefineParameters, '@type'>> & MrisMsRefineParameters;
+type MrisMsRefineParamsDictTagged = Required<Pick<MrisMsRefineParamsDict, '@type'>> & MrisMsRefineParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMsRefineParameters(...)`.
+ * Output object returned when calling `MrisMsRefineParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function mris_ms_refine_params(
     create_curvature_files: boolean = false,
     average_curvature: number | null = null,
     white_only: boolean = false,
-): MrisMsRefineParametersTagged {
+): MrisMsRefineParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_ms_refine" as const,
         "subject_name": subject_name,
@@ -108,7 +108,7 @@ function mris_ms_refine_params(
  * @returns Command-line arguments.
  */
 function mris_ms_refine_cargs(
-    params: MrisMsRefineParameters,
+    params: MrisMsRefineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -146,7 +146,7 @@ function mris_ms_refine_cargs(
  * @returns Outputs object.
  */
 function mris_ms_refine_outputs(
-    params: MrisMsRefineParameters,
+    params: MrisMsRefineParamsDict,
     execution: Execution,
 ): MrisMsRefineOutputs {
     const ret: MrisMsRefineOutputs = {
@@ -175,7 +175,7 @@ function mris_ms_refine_outputs(
  * @returns NamedTuple of outputs (described in `MrisMsRefineOutputs`).
  */
 function mris_ms_refine_execute(
-    params: MrisMsRefineParameters,
+    params: MrisMsRefineParamsDict,
     runner: Runner | null = null,
 ): MrisMsRefineOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function mris_ms_refine(
 export {
       MRIS_MS_REFINE_METADATA,
       MrisMsRefineOutputs,
+      MrisMsRefineParamsDict,
+      MrisMsRefineParamsDictTagged,
       mris_ms_refine,
       mris_ms_refine_execute,
       mris_ms_refine_params,

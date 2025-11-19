@@ -11,7 +11,7 @@ const V_3D_MEAN_METADATA: Metadata = {
 };
 
 
-interface V3dMeanParameters {
+interface V3dMeanParamsDict {
     "@type"?: "afni/3dMean";
     "input_files": Array<InputPathType>;
     "verbose": boolean;
@@ -33,11 +33,11 @@ interface V3dMeanParameters {
     "mask_union": boolean;
     "weightset"?: InputPathType | null | undefined;
 }
-type V3dMeanParametersTagged = Required<Pick<V3dMeanParameters, '@type'>> & V3dMeanParameters;
+type V3dMeanParamsDictTagged = Required<Pick<V3dMeanParamsDict, '@type'>> & V3dMeanParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMeanParameters(...)`.
+ * Output object returned when calling `V3dMeanParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function v_3d_mean_params(
     mask_inter: boolean = false,
     mask_union: boolean = false,
     weightset: InputPathType | null = null,
-): V3dMeanParametersTagged {
+): V3dMeanParamsDictTagged {
     const params = {
         "@type": "afni/3dMean" as const,
         "input_files": input_files,
@@ -140,7 +140,7 @@ function v_3d_mean_params(
  * @returns Command-line arguments.
  */
 function v_3d_mean_cargs(
-    params: V3dMeanParameters,
+    params: V3dMeanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,7 +222,7 @@ function v_3d_mean_cargs(
  * @returns Outputs object.
  */
 function v_3d_mean_outputs(
-    params: V3dMeanParameters,
+    params: V3dMeanParamsDict,
     execution: Execution,
 ): V3dMeanOutputs {
     const ret: V3dMeanOutputs = {
@@ -248,7 +248,7 @@ function v_3d_mean_outputs(
  * @returns NamedTuple of outputs (described in `V3dMeanOutputs`).
  */
 function v_3d_mean_execute(
-    params: V3dMeanParameters,
+    params: V3dMeanParamsDict,
     runner: Runner | null = null,
 ): V3dMeanOutputs {
     runner = runner || getGlobalRunner();
@@ -322,6 +322,8 @@ function v_3d_mean(
 
 export {
       V3dMeanOutputs,
+      V3dMeanParamsDict,
+      V3dMeanParamsDictTagged,
       V_3D_MEAN_METADATA,
       v_3d_mean,
       v_3d_mean_execute,

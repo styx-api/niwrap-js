@@ -11,7 +11,7 @@ const V_3DROTATE_METADATA: Metadata = {
 };
 
 
-interface V3drotateParameters {
+interface V3drotateParamsDict {
     "@type"?: "afni/3drotate";
     "dataset": InputPathType;
     "prefix"?: string | null | undefined;
@@ -39,11 +39,11 @@ interface V3drotateParameters {
     "noclip": boolean;
     "zpad"?: number | null | undefined;
 }
-type V3drotateParametersTagged = Required<Pick<V3drotateParameters, '@type'>> & V3drotateParameters;
+type V3drotateParamsDictTagged = Required<Pick<V3drotateParamsDict, '@type'>> & V3drotateParamsDict;
 
 
 /**
- * Output object returned when calling `V3drotateParameters(...)`.
+ * Output object returned when calling `V3drotateParamsDict(...)`.
  *
  * @interface
  */
@@ -120,7 +120,7 @@ function v_3drotate_params(
     clipit: boolean = false,
     noclip: boolean = false,
     zpad: number | null = null,
-): V3drotateParametersTagged {
+): V3drotateParamsDictTagged {
     const params = {
         "@type": "afni/3drotate" as const,
         "dataset": dataset,
@@ -188,7 +188,7 @@ function v_3drotate_params(
  * @returns Command-line arguments.
  */
 function v_3drotate_cargs(
-    params: V3drotateParameters,
+    params: V3drotateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -318,7 +318,7 @@ function v_3drotate_cargs(
  * @returns Outputs object.
  */
 function v_3drotate_outputs(
-    params: V3drotateParameters,
+    params: V3drotateParamsDict,
     execution: Execution,
 ): V3drotateOutputs {
     const ret: V3drotateOutputs = {
@@ -345,7 +345,7 @@ function v_3drotate_outputs(
  * @returns NamedTuple of outputs (described in `V3drotateOutputs`).
  */
 function v_3drotate_execute(
-    params: V3drotateParameters,
+    params: V3drotateParamsDict,
     runner: Runner | null = null,
 ): V3drotateOutputs {
     runner = runner || getGlobalRunner();
@@ -431,6 +431,8 @@ function v_3drotate(
 
 export {
       V3drotateOutputs,
+      V3drotateParamsDict,
+      V3drotateParamsDictTagged,
       V_3DROTATE_METADATA,
       v_3drotate,
       v_3drotate_execute,

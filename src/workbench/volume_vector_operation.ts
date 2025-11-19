@@ -10,7 +10,7 @@ const VOLUME_VECTOR_OPERATION_METADATA: Metadata = {
 };
 
 
-interface VolumeVectorOperationParameters {
+interface VolumeVectorOperationParamsDict {
     "@type"?: "workbench/volume-vector-operation";
     "volume-out": string;
     "normalize-a": boolean;
@@ -21,11 +21,11 @@ interface VolumeVectorOperationParameters {
     "vectors-b": InputPathType;
     "operation": string;
 }
-type VolumeVectorOperationParametersTagged = Required<Pick<VolumeVectorOperationParameters, '@type'>> & VolumeVectorOperationParameters;
+type VolumeVectorOperationParamsDictTagged = Required<Pick<VolumeVectorOperationParamsDict, '@type'>> & VolumeVectorOperationParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeVectorOperationParameters(...)`.
+ * Output object returned when calling `VolumeVectorOperationParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function volume_vector_operation_params(
     normalize_b: boolean = false,
     normalize_output: boolean = false,
     magnitude: boolean = false,
-): VolumeVectorOperationParametersTagged {
+): VolumeVectorOperationParamsDictTagged {
     const params = {
         "@type": "workbench/volume-vector-operation" as const,
         "volume-out": volume_out,
@@ -89,7 +89,7 @@ function volume_vector_operation_params(
  * @returns Command-line arguments.
  */
 function volume_vector_operation_cargs(
-    params: VolumeVectorOperationParameters,
+    params: VolumeVectorOperationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function volume_vector_operation_cargs(
  * @returns Outputs object.
  */
 function volume_vector_operation_outputs(
-    params: VolumeVectorOperationParameters,
+    params: VolumeVectorOperationParamsDict,
     execution: Execution,
 ): VolumeVectorOperationOutputs {
     const ret: VolumeVectorOperationOutputs = {
@@ -147,7 +147,7 @@ function volume_vector_operation_outputs(
  * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
  */
 function volume_vector_operation_execute(
-    params: VolumeVectorOperationParameters,
+    params: VolumeVectorOperationParamsDict,
     runner: Runner | null = null,
 ): VolumeVectorOperationOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function volume_vector_operation(
 export {
       VOLUME_VECTOR_OPERATION_METADATA,
       VolumeVectorOperationOutputs,
+      VolumeVectorOperationParamsDict,
+      VolumeVectorOperationParamsDictTagged,
       volume_vector_operation,
       volume_vector_operation_execute,
       volume_vector_operation_params,

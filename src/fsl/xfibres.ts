@@ -11,7 +11,7 @@ const XFIBRES_METADATA: Metadata = {
 };
 
 
-interface XfibresParameters {
+interface XfibresParamsDict {
     "@type"?: "fsl/xfibres";
     "datafile": InputPathType;
     "maskfile": InputPathType;
@@ -41,11 +41,11 @@ interface XfibresParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type XfibresParametersTagged = Required<Pick<XfibresParameters, '@type'>> & XfibresParameters;
+type XfibresParamsDictTagged = Required<Pick<XfibresParamsDict, '@type'>> & XfibresParamsDict;
 
 
 /**
- * Output object returned when calling `XfibresParameters(...)`.
+ * Output object returned when calling `XfibresParamsDict(...)`.
  *
  * @interface
  */
@@ -122,7 +122,7 @@ function xfibres_params(
     rstd: number | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): XfibresParametersTagged {
+): XfibresParamsDictTagged {
     const params = {
         "@type": "fsl/xfibres" as const,
         "datafile": datafile,
@@ -190,7 +190,7 @@ function xfibres_params(
  * @returns Command-line arguments.
  */
 function xfibres_cargs(
-    params: XfibresParameters,
+    params: XfibresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -329,7 +329,7 @@ function xfibres_cargs(
  * @returns Outputs object.
  */
 function xfibres_outputs(
-    params: XfibresParameters,
+    params: XfibresParamsDict,
     execution: Execution,
 ): XfibresOutputs {
     const ret: XfibresOutputs = {
@@ -355,7 +355,7 @@ function xfibres_outputs(
  * @returns NamedTuple of outputs (described in `XfibresOutputs`).
  */
 function xfibres_execute(
-    params: XfibresParameters,
+    params: XfibresParamsDict,
     runner: Runner | null = null,
 ): XfibresOutputs {
     runner = runner || getGlobalRunner();
@@ -446,6 +446,8 @@ function xfibres(
 export {
       XFIBRES_METADATA,
       XfibresOutputs,
+      XfibresParamsDict,
+      XfibresParamsDictTagged,
       xfibres,
       xfibres_execute,
       xfibres_params,

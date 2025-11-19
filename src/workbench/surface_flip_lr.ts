@@ -10,16 +10,16 @@ const SURFACE_FLIP_LR_METADATA: Metadata = {
 };
 
 
-interface SurfaceFlipLrParameters {
+interface SurfaceFlipLrParamsDict {
     "@type"?: "workbench/surface-flip-lr";
     "surface-out": string;
     "surface": InputPathType;
 }
-type SurfaceFlipLrParametersTagged = Required<Pick<SurfaceFlipLrParameters, '@type'>> & SurfaceFlipLrParameters;
+type SurfaceFlipLrParamsDictTagged = Required<Pick<SurfaceFlipLrParamsDict, '@type'>> & SurfaceFlipLrParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceFlipLrParameters(...)`.
+ * Output object returned when calling `SurfaceFlipLrParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface SurfaceFlipLrOutputs {
 function surface_flip_lr_params(
     surface_out: string,
     surface: InputPathType,
-): SurfaceFlipLrParametersTagged {
+): SurfaceFlipLrParamsDictTagged {
     const params = {
         "@type": "workbench/surface-flip-lr" as const,
         "surface-out": surface_out,
@@ -65,7 +65,7 @@ function surface_flip_lr_params(
  * @returns Command-line arguments.
  */
 function surface_flip_lr_cargs(
-    params: SurfaceFlipLrParameters,
+    params: SurfaceFlipLrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function surface_flip_lr_cargs(
  * @returns Outputs object.
  */
 function surface_flip_lr_outputs(
-    params: SurfaceFlipLrParameters,
+    params: SurfaceFlipLrParamsDict,
     execution: Execution,
 ): SurfaceFlipLrOutputs {
     const ret: SurfaceFlipLrOutputs = {
@@ -110,7 +110,7 @@ function surface_flip_lr_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
  */
 function surface_flip_lr_execute(
-    params: SurfaceFlipLrParameters,
+    params: SurfaceFlipLrParamsDict,
     runner: Runner | null = null,
 ): SurfaceFlipLrOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function surface_flip_lr(
 export {
       SURFACE_FLIP_LR_METADATA,
       SurfaceFlipLrOutputs,
+      SurfaceFlipLrParamsDict,
+      SurfaceFlipLrParamsDictTagged,
       surface_flip_lr,
       surface_flip_lr_execute,
       surface_flip_lr_params,

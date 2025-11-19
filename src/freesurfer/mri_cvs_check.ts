@@ -11,7 +11,7 @@ const MRI_CVS_CHECK_METADATA: Metadata = {
 };
 
 
-interface MriCvsCheckParameters {
+interface MriCvsCheckParamsDict {
     "@type"?: "freesurfer/mri_cvs_check";
     "mov_subjid": string;
     "template_subjid"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface MriCvsCheckParameters {
     "help": boolean;
     "version": boolean;
 }
-type MriCvsCheckParametersTagged = Required<Pick<MriCvsCheckParameters, '@type'>> & MriCvsCheckParameters;
+type MriCvsCheckParamsDictTagged = Required<Pick<MriCvsCheckParamsDict, '@type'>> & MriCvsCheckParamsDict;
 
 
 /**
- * Output object returned when calling `MriCvsCheckParameters(...)`.
+ * Output object returned when calling `MriCvsCheckParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function mri_cvs_check_params(
     hemi: "lh" | "rh" | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriCvsCheckParametersTagged {
+): MriCvsCheckParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_cvs_check" as const,
         "mov_subjid": mov_subjid,
@@ -78,7 +78,7 @@ function mri_cvs_check_params(
  * @returns Command-line arguments.
  */
 function mri_cvs_check_cargs(
-    params: MriCvsCheckParameters,
+    params: MriCvsCheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function mri_cvs_check_cargs(
  * @returns Outputs object.
  */
 function mri_cvs_check_outputs(
-    params: MriCvsCheckParameters,
+    params: MriCvsCheckParamsDict,
     execution: Execution,
 ): MriCvsCheckOutputs {
     const ret: MriCvsCheckOutputs = {
@@ -143,7 +143,7 @@ function mri_cvs_check_outputs(
  * @returns NamedTuple of outputs (described in `MriCvsCheckOutputs`).
  */
 function mri_cvs_check_execute(
-    params: MriCvsCheckParameters,
+    params: MriCvsCheckParamsDict,
     runner: Runner | null = null,
 ): MriCvsCheckOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function mri_cvs_check(
 export {
       MRI_CVS_CHECK_METADATA,
       MriCvsCheckOutputs,
+      MriCvsCheckParamsDict,
+      MriCvsCheckParamsDictTagged,
       mri_cvs_check,
       mri_cvs_check_execute,
       mri_cvs_check_params,

@@ -11,15 +11,15 @@ const MRCOLOUR_METADATA: Metadata = {
 };
 
 
-interface MrcolourConfigParameters {
+interface MrcolourConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrcolourConfigParametersTagged = Required<Pick<MrcolourConfigParameters, '@type'>> & MrcolourConfigParameters;
+type MrcolourConfigParamsDictTagged = Required<Pick<MrcolourConfigParamsDict, '@type'>> & MrcolourConfigParamsDict;
 
 
-interface MrcolourParameters {
+interface MrcolourParamsDict {
     "@type"?: "mrtrix/mrcolour";
     "upper"?: number | null | undefined;
     "lower"?: number | null | undefined;
@@ -29,14 +29,14 @@ interface MrcolourParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrcolourConfigParameters> | null | undefined;
+    "config"?: Array<MrcolourConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "map": string;
     "output": string;
 }
-type MrcolourParametersTagged = Required<Pick<MrcolourParameters, '@type'>> & MrcolourParameters;
+type MrcolourParamsDictTagged = Required<Pick<MrcolourParamsDict, '@type'>> & MrcolourParamsDict;
 
 
 /**
@@ -47,10 +47,10 @@ type MrcolourParametersTagged = Required<Pick<MrcolourParameters, '@type'>> & Mr
  *
  * @returns Parameter dictionary
  */
-function mrcolour_config_params(
+function mrcolour_config(
     key: string,
     value: string,
-): MrcolourConfigParametersTagged {
+): MrcolourConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -69,7 +69,7 @@ function mrcolour_config_params(
  * @returns Command-line arguments.
  */
 function mrcolour_config_cargs(
-    params: MrcolourConfigParameters,
+    params: MrcolourConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function mrcolour_config_cargs(
 
 
 /**
- * Output object returned when calling `MrcolourParameters(...)`.
+ * Output object returned when calling `MrcolourParamsDict(...)`.
  *
  * @interface
  */
@@ -129,10 +129,10 @@ function mrcolour_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcolourConfigParameters> | null = null,
+    config: Array<MrcolourConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcolourParametersTagged {
+): MrcolourParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrcolour" as const,
         "info": info,
@@ -173,7 +173,7 @@ function mrcolour_params(
  * @returns Command-line arguments.
  */
 function mrcolour_cargs(
-    params: MrcolourParameters,
+    params: MrcolourParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -239,7 +239,7 @@ function mrcolour_cargs(
  * @returns Outputs object.
  */
 function mrcolour_outputs(
-    params: MrcolourParameters,
+    params: MrcolourParamsDict,
     execution: Execution,
 ): MrcolourOutputs {
     const ret: MrcolourOutputs = {
@@ -273,7 +273,7 @@ function mrcolour_outputs(
  * @returns NamedTuple of outputs (described in `MrcolourOutputs`).
  */
 function mrcolour_execute(
-    params: MrcolourParameters,
+    params: MrcolourParamsDict,
     runner: Runner | null = null,
 ): MrcolourOutputs {
     runner = runner || getGlobalRunner();
@@ -333,7 +333,7 @@ function mrcolour(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcolourConfigParameters> | null = null,
+    config: Array<MrcolourConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -345,9 +345,13 @@ function mrcolour(
 
 export {
       MRCOLOUR_METADATA,
+      MrcolourConfigParamsDict,
+      MrcolourConfigParamsDictTagged,
       MrcolourOutputs,
+      MrcolourParamsDict,
+      MrcolourParamsDictTagged,
       mrcolour,
-      mrcolour_config_params,
+      mrcolour_config,
       mrcolour_execute,
       mrcolour_params,
 };

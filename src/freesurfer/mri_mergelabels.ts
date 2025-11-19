@@ -11,17 +11,17 @@ const MRI_MERGELABELS_METADATA: Metadata = {
 };
 
 
-interface MriMergelabelsParameters {
+interface MriMergelabelsParamsDict {
     "@type"?: "freesurfer/mri_mergelabels";
     "input_labels": Array<InputPathType>;
     "output_label": string;
     "input_directory"?: string | null | undefined;
 }
-type MriMergelabelsParametersTagged = Required<Pick<MriMergelabelsParameters, '@type'>> & MriMergelabelsParameters;
+type MriMergelabelsParamsDictTagged = Required<Pick<MriMergelabelsParamsDict, '@type'>> & MriMergelabelsParamsDict;
 
 
 /**
- * Output object returned when calling `MriMergelabelsParameters(...)`.
+ * Output object returned when calling `MriMergelabelsParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_mergelabels_params(
     input_labels: Array<InputPathType>,
     output_label: string,
     input_directory: string | null = null,
-): MriMergelabelsParametersTagged {
+): MriMergelabelsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_mergelabels" as const,
         "input_labels": input_labels,
@@ -72,7 +72,7 @@ function mri_mergelabels_params(
  * @returns Command-line arguments.
  */
 function mri_mergelabels_cargs(
-    params: MriMergelabelsParameters,
+    params: MriMergelabelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function mri_mergelabels_cargs(
  * @returns Outputs object.
  */
 function mri_mergelabels_outputs(
-    params: MriMergelabelsParameters,
+    params: MriMergelabelsParamsDict,
     execution: Execution,
 ): MriMergelabelsOutputs {
     const ret: MriMergelabelsOutputs = {
@@ -130,7 +130,7 @@ function mri_mergelabels_outputs(
  * @returns NamedTuple of outputs (described in `MriMergelabelsOutputs`).
  */
 function mri_mergelabels_execute(
-    params: MriMergelabelsParameters,
+    params: MriMergelabelsParamsDict,
     runner: Runner | null = null,
 ): MriMergelabelsOutputs {
     runner = runner || getGlobalRunner();
@@ -173,6 +173,8 @@ function mri_mergelabels(
 export {
       MRI_MERGELABELS_METADATA,
       MriMergelabelsOutputs,
+      MriMergelabelsParamsDict,
+      MriMergelabelsParamsDictTagged,
       mri_mergelabels,
       mri_mergelabels_execute,
       mri_mergelabels_params,

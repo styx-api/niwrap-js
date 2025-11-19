@@ -11,16 +11,16 @@ const V__TO_MNI_AWARP_METADATA: Metadata = {
 };
 
 
-interface VToMniAwarpParameters {
+interface VToMniAwarpParamsDict {
     "@type"?: "afni/@toMNI_Awarp";
     "directory": string;
     "datasets": Array<InputPathType>;
 }
-type VToMniAwarpParametersTagged = Required<Pick<VToMniAwarpParameters, '@type'>> & VToMniAwarpParameters;
+type VToMniAwarpParamsDictTagged = Required<Pick<VToMniAwarpParamsDict, '@type'>> & VToMniAwarpParamsDict;
 
 
 /**
- * Output object returned when calling `VToMniAwarpParameters(...)`.
+ * Output object returned when calling `VToMniAwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VToMniAwarpOutputs {
 function v__to_mni_awarp_params(
     directory: string,
     datasets: Array<InputPathType>,
-): VToMniAwarpParametersTagged {
+): VToMniAwarpParamsDictTagged {
     const params = {
         "@type": "afni/@toMNI_Awarp" as const,
         "directory": directory,
@@ -62,7 +62,7 @@ function v__to_mni_awarp_params(
  * @returns Command-line arguments.
  */
 function v__to_mni_awarp_cargs(
-    params: VToMniAwarpParameters,
+    params: VToMniAwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function v__to_mni_awarp_cargs(
  * @returns Outputs object.
  */
 function v__to_mni_awarp_outputs(
-    params: VToMniAwarpParameters,
+    params: VToMniAwarpParamsDict,
     execution: Execution,
 ): VToMniAwarpOutputs {
     const ret: VToMniAwarpOutputs = {
@@ -107,7 +107,7 @@ function v__to_mni_awarp_outputs(
  * @returns NamedTuple of outputs (described in `VToMniAwarpOutputs`).
  */
 function v__to_mni_awarp_execute(
-    params: VToMniAwarpParameters,
+    params: VToMniAwarpParamsDict,
     runner: Runner | null = null,
 ): VToMniAwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function v__to_mni_awarp(
 
 export {
       VToMniAwarpOutputs,
+      VToMniAwarpParamsDict,
+      VToMniAwarpParamsDictTagged,
       V__TO_MNI_AWARP_METADATA,
       v__to_mni_awarp,
       v__to_mni_awarp_execute,

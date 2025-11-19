@@ -10,28 +10,28 @@ const METRIC_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface MetricExtremaPresmoothParameters {
+interface MetricExtremaPresmoothParamsDict {
     "@type"?: "presmooth";
     "kernel": number;
     "fwhm": boolean;
 }
-type MetricExtremaPresmoothParametersTagged = Required<Pick<MetricExtremaPresmoothParameters, '@type'>> & MetricExtremaPresmoothParameters;
+type MetricExtremaPresmoothParamsDictTagged = Required<Pick<MetricExtremaPresmoothParamsDict, '@type'>> & MetricExtremaPresmoothParamsDict;
 
 
-interface MetricExtremaThresholdParameters {
+interface MetricExtremaThresholdParamsDict {
     "@type"?: "threshold";
     "low": number;
     "high": number;
 }
-type MetricExtremaThresholdParametersTagged = Required<Pick<MetricExtremaThresholdParameters, '@type'>> & MetricExtremaThresholdParameters;
+type MetricExtremaThresholdParamsDictTagged = Required<Pick<MetricExtremaThresholdParamsDict, '@type'>> & MetricExtremaThresholdParamsDict;
 
 
-interface MetricExtremaParameters {
+interface MetricExtremaParamsDict {
     "@type"?: "workbench/metric-extrema";
     "metric-out": string;
-    "presmooth"?: MetricExtremaPresmoothParameters | null | undefined;
+    "presmooth"?: MetricExtremaPresmoothParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "threshold"?: MetricExtremaThresholdParameters | null | undefined;
+    "threshold"?: MetricExtremaThresholdParamsDict | null | undefined;
     "sum-columns": boolean;
     "consolidate-mode": boolean;
     "only-maxima": boolean;
@@ -41,7 +41,7 @@ interface MetricExtremaParameters {
     "metric-in": InputPathType;
     "distance": number;
 }
-type MetricExtremaParametersTagged = Required<Pick<MetricExtremaParameters, '@type'>> & MetricExtremaParameters;
+type MetricExtremaParamsDictTagged = Required<Pick<MetricExtremaParamsDict, '@type'>> & MetricExtremaParamsDict;
 
 
 /**
@@ -52,10 +52,10 @@ type MetricExtremaParametersTagged = Required<Pick<MetricExtremaParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function metric_extrema_presmooth_params(
+function metric_extrema_presmooth(
     kernel: number,
     fwhm: boolean = false,
-): MetricExtremaPresmoothParametersTagged {
+): MetricExtremaPresmoothParamsDictTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
@@ -74,7 +74,7 @@ function metric_extrema_presmooth_params(
  * @returns Command-line arguments.
  */
 function metric_extrema_presmooth_cargs(
-    params: MetricExtremaPresmoothParameters,
+    params: MetricExtremaPresmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -97,10 +97,10 @@ function metric_extrema_presmooth_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_extrema_threshold_params(
+function metric_extrema_threshold(
     low: number,
     high: number,
-): MetricExtremaThresholdParametersTagged {
+): MetricExtremaThresholdParamsDictTagged {
     const params = {
         "@type": "threshold" as const,
         "low": low,
@@ -119,7 +119,7 @@ function metric_extrema_threshold_params(
  * @returns Command-line arguments.
  */
 function metric_extrema_threshold_cargs(
-    params: MetricExtremaThresholdParameters,
+    params: MetricExtremaThresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function metric_extrema_threshold_cargs(
 
 
 /**
- * Output object returned when calling `MetricExtremaParameters(...)`.
+ * Output object returned when calling `MetricExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -178,13 +178,13 @@ function metric_extrema_params(
     surface: InputPathType,
     metric_in: InputPathType,
     distance: number,
-    presmooth: MetricExtremaPresmoothParameters | null = null,
-    threshold: MetricExtremaThresholdParameters | null = null,
+    presmooth: MetricExtremaPresmoothParamsDict | null = null,
+    threshold: MetricExtremaThresholdParamsDict | null = null,
     sum_columns: boolean = false,
     consolidate_mode: boolean = false,
     only_maxima: boolean = false,
     only_minima: boolean = false,
-): MetricExtremaParametersTagged {
+): MetricExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/metric-extrema" as const,
         "metric-out": metric_out,
@@ -221,7 +221,7 @@ function metric_extrema_params(
  * @returns Command-line arguments.
  */
 function metric_extrema_cargs(
-    params: MetricExtremaParameters,
+    params: MetricExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -258,7 +258,7 @@ function metric_extrema_cargs(
  * @returns Outputs object.
  */
 function metric_extrema_outputs(
-    params: MetricExtremaParameters,
+    params: MetricExtremaParamsDict,
     execution: Execution,
 ): MetricExtremaOutputs {
     const ret: MetricExtremaOutputs = {
@@ -288,7 +288,7 @@ function metric_extrema_outputs(
  * @returns NamedTuple of outputs (described in `MetricExtremaOutputs`).
  */
 function metric_extrema_execute(
-    params: MetricExtremaParameters,
+    params: MetricExtremaParamsDict,
     runner: Runner | null = null,
 ): MetricExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -341,8 +341,8 @@ function metric_extrema(
     surface: InputPathType,
     metric_in: InputPathType,
     distance: number,
-    presmooth: MetricExtremaPresmoothParameters | null = null,
-    threshold: MetricExtremaThresholdParameters | null = null,
+    presmooth: MetricExtremaPresmoothParamsDict | null = null,
+    threshold: MetricExtremaThresholdParamsDict | null = null,
     sum_columns: boolean = false,
     consolidate_mode: boolean = false,
     only_maxima: boolean = false,
@@ -357,9 +357,15 @@ function metric_extrema(
 export {
       METRIC_EXTREMA_METADATA,
       MetricExtremaOutputs,
+      MetricExtremaParamsDict,
+      MetricExtremaParamsDictTagged,
+      MetricExtremaPresmoothParamsDict,
+      MetricExtremaPresmoothParamsDictTagged,
+      MetricExtremaThresholdParamsDict,
+      MetricExtremaThresholdParamsDictTagged,
       metric_extrema,
       metric_extrema_execute,
       metric_extrema_params,
-      metric_extrema_presmooth_params,
-      metric_extrema_threshold_params,
+      metric_extrema_presmooth,
+      metric_extrema_threshold,
 };

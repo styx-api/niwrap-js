@@ -11,7 +11,7 @@ const MRIS_REGISTER_TO_LABEL_METADATA: Metadata = {
 };
 
 
-interface MrisRegisterToLabelParameters {
+interface MrisRegisterToLabelParamsDict {
     "@type"?: "freesurfer/mris_register_to_label";
     "surface": InputPathType;
     "regfile": InputPathType;
@@ -26,11 +26,11 @@ interface MrisRegisterToLabelParameters {
     "downsample"?: number | null | undefined;
     "cost_file"?: InputPathType | null | undefined;
 }
-type MrisRegisterToLabelParametersTagged = Required<Pick<MrisRegisterToLabelParameters, '@type'>> & MrisRegisterToLabelParameters;
+type MrisRegisterToLabelParamsDictTagged = Required<Pick<MrisRegisterToLabelParamsDict, '@type'>> & MrisRegisterToLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRegisterToLabelParameters(...)`.
+ * Output object returned when calling `MrisRegisterToLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function mris_register_to_label_params(
     out_reg: string | null = null,
     downsample: number | null = null,
     cost_file: InputPathType | null = null,
-): MrisRegisterToLabelParametersTagged {
+): MrisRegisterToLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_register_to_label" as const,
         "surface": surface,
@@ -116,7 +116,7 @@ function mris_register_to_label_params(
  * @returns Command-line arguments.
  */
 function mris_register_to_label_cargs(
-    params: MrisRegisterToLabelParameters,
+    params: MrisRegisterToLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -196,7 +196,7 @@ function mris_register_to_label_cargs(
  * @returns Outputs object.
  */
 function mris_register_to_label_outputs(
-    params: MrisRegisterToLabelParameters,
+    params: MrisRegisterToLabelParamsDict,
     execution: Execution,
 ): MrisRegisterToLabelOutputs {
     const ret: MrisRegisterToLabelOutputs = {
@@ -221,7 +221,7 @@ function mris_register_to_label_outputs(
  * @returns NamedTuple of outputs (described in `MrisRegisterToLabelOutputs`).
  */
 function mris_register_to_label_execute(
-    params: MrisRegisterToLabelParameters,
+    params: MrisRegisterToLabelParamsDict,
     runner: Runner | null = null,
 ): MrisRegisterToLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -282,6 +282,8 @@ function mris_register_to_label(
 export {
       MRIS_REGISTER_TO_LABEL_METADATA,
       MrisRegisterToLabelOutputs,
+      MrisRegisterToLabelParamsDict,
+      MrisRegisterToLabelParamsDictTagged,
       mris_register_to_label,
       mris_register_to_label_execute,
       mris_register_to_label_params,

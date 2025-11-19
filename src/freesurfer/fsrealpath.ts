@@ -11,16 +11,16 @@ const FSREALPATH_METADATA: Metadata = {
 };
 
 
-interface FsrealpathParameters {
+interface FsrealpathParamsDict {
     "@type"?: "freesurfer/fsrealpath";
     "path": string;
     "help": boolean;
 }
-type FsrealpathParametersTagged = Required<Pick<FsrealpathParameters, '@type'>> & FsrealpathParameters;
+type FsrealpathParamsDictTagged = Required<Pick<FsrealpathParamsDict, '@type'>> & FsrealpathParamsDict;
 
 
 /**
- * Output object returned when calling `FsrealpathParameters(...)`.
+ * Output object returned when calling `FsrealpathParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FsrealpathOutputs {
 function fsrealpath_params(
     path: string,
     help: boolean = false,
-): FsrealpathParametersTagged {
+): FsrealpathParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsrealpath" as const,
         "path": path,
@@ -62,7 +62,7 @@ function fsrealpath_params(
  * @returns Command-line arguments.
  */
 function fsrealpath_cargs(
-    params: FsrealpathParameters,
+    params: FsrealpathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function fsrealpath_cargs(
  * @returns Outputs object.
  */
 function fsrealpath_outputs(
-    params: FsrealpathParameters,
+    params: FsrealpathParamsDict,
     execution: Execution,
 ): FsrealpathOutputs {
     const ret: FsrealpathOutputs = {
@@ -109,7 +109,7 @@ function fsrealpath_outputs(
  * @returns NamedTuple of outputs (described in `FsrealpathOutputs`).
  */
 function fsrealpath_execute(
-    params: FsrealpathParameters,
+    params: FsrealpathParamsDict,
     runner: Runner | null = null,
 ): FsrealpathOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function fsrealpath(
 export {
       FSREALPATH_METADATA,
       FsrealpathOutputs,
+      FsrealpathParamsDict,
+      FsrealpathParamsDictTagged,
       fsrealpath,
       fsrealpath_execute,
       fsrealpath_params,

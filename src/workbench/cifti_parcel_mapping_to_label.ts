@@ -10,18 +10,18 @@ const CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA: Metadata = {
 };
 
 
-interface CiftiParcelMappingToLabelParameters {
+interface CiftiParcelMappingToLabelParamsDict {
     "@type"?: "workbench/cifti-parcel-mapping-to-label";
     "dlabel-out": string;
     "cifti-in": InputPathType;
     "direction": string;
     "template-cifti": InputPathType;
 }
-type CiftiParcelMappingToLabelParametersTagged = Required<Pick<CiftiParcelMappingToLabelParameters, '@type'>> & CiftiParcelMappingToLabelParameters;
+type CiftiParcelMappingToLabelParamsDictTagged = Required<Pick<CiftiParcelMappingToLabelParamsDict, '@type'>> & CiftiParcelMappingToLabelParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiParcelMappingToLabelParameters(...)`.
+ * Output object returned when calling `CiftiParcelMappingToLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function cifti_parcel_mapping_to_label_params(
     cifti_in: InputPathType,
     direction: string,
     template_cifti: InputPathType,
-): CiftiParcelMappingToLabelParametersTagged {
+): CiftiParcelMappingToLabelParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-parcel-mapping-to-label" as const,
         "dlabel-out": dlabel_out,
@@ -73,7 +73,7 @@ function cifti_parcel_mapping_to_label_params(
  * @returns Command-line arguments.
  */
 function cifti_parcel_mapping_to_label_cargs(
-    params: CiftiParcelMappingToLabelParameters,
+    params: CiftiParcelMappingToLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function cifti_parcel_mapping_to_label_cargs(
  * @returns Outputs object.
  */
 function cifti_parcel_mapping_to_label_outputs(
-    params: CiftiParcelMappingToLabelParameters,
+    params: CiftiParcelMappingToLabelParamsDict,
     execution: Execution,
 ): CiftiParcelMappingToLabelOutputs {
     const ret: CiftiParcelMappingToLabelOutputs = {
@@ -122,7 +122,7 @@ function cifti_parcel_mapping_to_label_outputs(
  * @returns NamedTuple of outputs (described in `CiftiParcelMappingToLabelOutputs`).
  */
 function cifti_parcel_mapping_to_label_execute(
-    params: CiftiParcelMappingToLabelParameters,
+    params: CiftiParcelMappingToLabelParamsDict,
     runner: Runner | null = null,
 ): CiftiParcelMappingToLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -165,6 +165,8 @@ function cifti_parcel_mapping_to_label(
 export {
       CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA,
       CiftiParcelMappingToLabelOutputs,
+      CiftiParcelMappingToLabelParamsDict,
+      CiftiParcelMappingToLabelParamsDictTagged,
       cifti_parcel_mapping_to_label,
       cifti_parcel_mapping_to_label_execute,
       cifti_parcel_mapping_to_label_params,

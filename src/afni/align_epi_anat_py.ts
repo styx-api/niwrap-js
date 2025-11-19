@@ -11,7 +11,7 @@ const ALIGN_EPI_ANAT_PY_METADATA: Metadata = {
 };
 
 
-interface AlignEpiAnatPyParameters {
+interface AlignEpiAnatPyParamsDict {
     "@type"?: "afni/align_epi_anat.py";
     "epi": InputPathType;
     "anat": InputPathType;
@@ -31,11 +31,11 @@ interface AlignEpiAnatPyParameters {
     "ex_mode"?: "quiet" | "echo" | "dry_run" | "script" | null | undefined;
     "overwrite": boolean;
 }
-type AlignEpiAnatPyParametersTagged = Required<Pick<AlignEpiAnatPyParameters, '@type'>> & AlignEpiAnatPyParameters;
+type AlignEpiAnatPyParamsDictTagged = Required<Pick<AlignEpiAnatPyParamsDict, '@type'>> & AlignEpiAnatPyParamsDict;
 
 
 /**
- * Output object returned when calling `AlignEpiAnatPyParameters(...)`.
+ * Output object returned when calling `AlignEpiAnatPyParamsDict(...)`.
  *
  * @interface
  */
@@ -96,7 +96,7 @@ function align_epi_anat_py_params(
     volreg_method: "3dvolreg" | "3dWarpDrive" | "3dAllineate" | null = null,
     ex_mode: "quiet" | "echo" | "dry_run" | "script" | null = null,
     overwrite: boolean = false,
-): AlignEpiAnatPyParametersTagged {
+): AlignEpiAnatPyParamsDictTagged {
     const params = {
         "@type": "afni/align_epi_anat.py" as const,
         "epi": epi,
@@ -140,7 +140,7 @@ function align_epi_anat_py_params(
  * @returns Command-line arguments.
  */
 function align_epi_anat_py_cargs(
-    params: AlignEpiAnatPyParameters,
+    params: AlignEpiAnatPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -227,7 +227,7 @@ function align_epi_anat_py_cargs(
  * @returns Outputs object.
  */
 function align_epi_anat_py_outputs(
-    params: AlignEpiAnatPyParameters,
+    params: AlignEpiAnatPyParamsDict,
     execution: Execution,
 ): AlignEpiAnatPyOutputs {
     const ret: AlignEpiAnatPyOutputs = {
@@ -254,7 +254,7 @@ function align_epi_anat_py_outputs(
  * @returns NamedTuple of outputs (described in `AlignEpiAnatPyOutputs`).
  */
 function align_epi_anat_py_execute(
-    params: AlignEpiAnatPyParameters,
+    params: AlignEpiAnatPyParamsDict,
     runner: Runner | null = null,
 ): AlignEpiAnatPyOutputs {
     runner = runner || getGlobalRunner();
@@ -325,6 +325,8 @@ function align_epi_anat_py(
 export {
       ALIGN_EPI_ANAT_PY_METADATA,
       AlignEpiAnatPyOutputs,
+      AlignEpiAnatPyParamsDict,
+      AlignEpiAnatPyParamsDictTagged,
       align_epi_anat_py,
       align_epi_anat_py_execute,
       align_epi_anat_py_params,

@@ -11,28 +11,28 @@ const TSFMULT_METADATA: Metadata = {
 };
 
 
-interface TsfmultConfigParameters {
+interface TsfmultConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TsfmultConfigParametersTagged = Required<Pick<TsfmultConfigParameters, '@type'>> & TsfmultConfigParameters;
+type TsfmultConfigParamsDictTagged = Required<Pick<TsfmultConfigParamsDict, '@type'>> & TsfmultConfigParamsDict;
 
 
-interface TsfmultParameters {
+interface TsfmultParamsDict {
     "@type"?: "mrtrix/tsfmult";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TsfmultConfigParameters> | null | undefined;
+    "config"?: Array<TsfmultConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input1": InputPathType;
     "output": string;
 }
-type TsfmultParametersTagged = Required<Pick<TsfmultParameters, '@type'>> & TsfmultParameters;
+type TsfmultParamsDictTagged = Required<Pick<TsfmultParamsDict, '@type'>> & TsfmultParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type TsfmultParametersTagged = Required<Pick<TsfmultParameters, '@type'>> & Tsfm
  *
  * @returns Parameter dictionary
  */
-function tsfmult_config_params(
+function tsfmult_config(
     key: string,
     value: string,
-): TsfmultConfigParametersTagged {
+): TsfmultConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function tsfmult_config_params(
  * @returns Command-line arguments.
  */
 function tsfmult_config_cargs(
-    params: TsfmultConfigParameters,
+    params: TsfmultConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function tsfmult_config_cargs(
 
 
 /**
- * Output object returned when calling `TsfmultParameters(...)`.
+ * Output object returned when calling `TsfmultParamsDict(...)`.
  *
  * @interface
  */
@@ -117,10 +117,10 @@ function tsfmult_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfmultConfigParameters> | null = null,
+    config: Array<TsfmultConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfmultParametersTagged {
+): TsfmultParamsDictTagged {
     const params = {
         "@type": "mrtrix/tsfmult" as const,
         "info": info,
@@ -151,7 +151,7 @@ function tsfmult_params(
  * @returns Command-line arguments.
  */
 function tsfmult_cargs(
-    params: TsfmultParameters,
+    params: TsfmultParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -198,7 +198,7 @@ function tsfmult_cargs(
  * @returns Outputs object.
  */
 function tsfmult_outputs(
-    params: TsfmultParameters,
+    params: TsfmultParamsDict,
     execution: Execution,
 ): TsfmultOutputs {
     const ret: TsfmultOutputs = {
@@ -230,7 +230,7 @@ function tsfmult_outputs(
  * @returns NamedTuple of outputs (described in `TsfmultOutputs`).
  */
 function tsfmult_execute(
-    params: TsfmultParameters,
+    params: TsfmultParamsDict,
     runner: Runner | null = null,
 ): TsfmultOutputs {
     runner = runner || getGlobalRunner();
@@ -280,7 +280,7 @@ function tsfmult(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfmultConfigParameters> | null = null,
+    config: Array<TsfmultConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -292,9 +292,13 @@ function tsfmult(
 
 export {
       TSFMULT_METADATA,
+      TsfmultConfigParamsDict,
+      TsfmultConfigParamsDictTagged,
       TsfmultOutputs,
+      TsfmultParamsDict,
+      TsfmultParamsDictTagged,
       tsfmult,
-      tsfmult_config_params,
+      tsfmult_config,
       tsfmult_execute,
       tsfmult_params,
 };

@@ -11,7 +11,7 @@ const THICKDIFFMAP_METADATA: Metadata = {
 };
 
 
-interface ThickdiffmapParameters {
+interface ThickdiffmapParamsDict {
     "@type"?: "freesurfer/thickdiffmap";
     "subjscan1": InputPathType;
     "subjscan2": InputPathType;
@@ -19,11 +19,11 @@ interface ThickdiffmapParameters {
     "hemi": string;
     "steps"?: Array<string> | null | undefined;
 }
-type ThickdiffmapParametersTagged = Required<Pick<ThickdiffmapParameters, '@type'>> & ThickdiffmapParameters;
+type ThickdiffmapParamsDictTagged = Required<Pick<ThickdiffmapParamsDict, '@type'>> & ThickdiffmapParamsDict;
 
 
 /**
- * Output object returned when calling `ThickdiffmapParameters(...)`.
+ * Output object returned when calling `ThickdiffmapParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function thickdiffmap_params(
     commonsubj: string,
     hemi: string,
     steps: Array<string> | null = null,
-): ThickdiffmapParametersTagged {
+): ThickdiffmapParamsDictTagged {
     const params = {
         "@type": "freesurfer/thickdiffmap" as const,
         "subjscan1": subjscan1,
@@ -76,7 +76,7 @@ function thickdiffmap_params(
  * @returns Command-line arguments.
  */
 function thickdiffmap_cargs(
-    params: ThickdiffmapParameters,
+    params: ThickdiffmapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function thickdiffmap_cargs(
  * @returns Outputs object.
  */
 function thickdiffmap_outputs(
-    params: ThickdiffmapParameters,
+    params: ThickdiffmapParamsDict,
     execution: Execution,
 ): ThickdiffmapOutputs {
     const ret: ThickdiffmapOutputs = {
@@ -126,7 +126,7 @@ function thickdiffmap_outputs(
  * @returns NamedTuple of outputs (described in `ThickdiffmapOutputs`).
  */
 function thickdiffmap_execute(
-    params: ThickdiffmapParameters,
+    params: ThickdiffmapParamsDict,
     runner: Runner | null = null,
 ): ThickdiffmapOutputs {
     runner = runner || getGlobalRunner();
@@ -173,6 +173,8 @@ function thickdiffmap(
 export {
       THICKDIFFMAP_METADATA,
       ThickdiffmapOutputs,
+      ThickdiffmapParamsDict,
+      ThickdiffmapParamsDictTagged,
       thickdiffmap,
       thickdiffmap_execute,
       thickdiffmap_params,

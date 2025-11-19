@@ -11,7 +11,7 @@ const QUICKSPEC_SL_METADATA: Metadata = {
 };
 
 
-interface QuickspecSlParameters {
+interface QuickspecSlParamsDict {
     "@type"?: "afni/quickspecSL";
     "surf_A": InputPathType;
     "surf_B": InputPathType;
@@ -22,11 +22,11 @@ interface QuickspecSlParameters {
     "both_lr_flag": boolean;
     "out_spec"?: string | null | undefined;
 }
-type QuickspecSlParametersTagged = Required<Pick<QuickspecSlParameters, '@type'>> & QuickspecSlParameters;
+type QuickspecSlParamsDictTagged = Required<Pick<QuickspecSlParamsDict, '@type'>> & QuickspecSlParamsDict;
 
 
 /**
- * Output object returned when calling `QuickspecSlParameters(...)`.
+ * Output object returned when calling `QuickspecSlParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function quickspec_sl_params(
     infl_surf_intermed_pref: string | null = null,
     both_lr_flag: boolean = false,
     out_spec: string | null = null,
-): QuickspecSlParametersTagged {
+): QuickspecSlParamsDictTagged {
     const params = {
         "@type": "afni/quickspecSL" as const,
         "surf_A": surf_a,
@@ -100,7 +100,7 @@ function quickspec_sl_params(
  * @returns Command-line arguments.
  */
 function quickspec_sl_cargs(
-    params: QuickspecSlParameters,
+    params: QuickspecSlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function quickspec_sl_cargs(
  * @returns Outputs object.
  */
 function quickspec_sl_outputs(
-    params: QuickspecSlParameters,
+    params: QuickspecSlParamsDict,
     execution: Execution,
 ): QuickspecSlOutputs {
     const ret: QuickspecSlOutputs = {
@@ -185,7 +185,7 @@ function quickspec_sl_outputs(
  * @returns NamedTuple of outputs (described in `QuickspecSlOutputs`).
  */
 function quickspec_sl_execute(
-    params: QuickspecSlParameters,
+    params: QuickspecSlParamsDict,
     runner: Runner | null = null,
 ): QuickspecSlOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function quickspec_sl(
 export {
       QUICKSPEC_SL_METADATA,
       QuickspecSlOutputs,
+      QuickspecSlParamsDict,
+      QuickspecSlParamsDictTagged,
       quickspec_sl,
       quickspec_sl_execute,
       quickspec_sl_params,

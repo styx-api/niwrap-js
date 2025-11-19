@@ -11,17 +11,17 @@ const V__SUMA_MAKE_SPEC_SF_METADATA: Metadata = {
 };
 
 
-interface VSumaMakeSpecSfParameters {
+interface VSumaMakeSpecSfParamsDict {
     "@type"?: "afni/@SUMA_Make_Spec_SF";
     "debug_level"?: number | null | undefined;
     "surface_path"?: string | null | undefined;
     "subject_id": string;
 }
-type VSumaMakeSpecSfParametersTagged = Required<Pick<VSumaMakeSpecSfParameters, '@type'>> & VSumaMakeSpecSfParameters;
+type VSumaMakeSpecSfParamsDictTagged = Required<Pick<VSumaMakeSpecSfParamsDict, '@type'>> & VSumaMakeSpecSfParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaMakeSpecSfParameters(...)`.
+ * Output object returned when calling `VSumaMakeSpecSfParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v__suma_make_spec_sf_params(
     subject_id: string,
     debug_level: number | null = null,
     surface_path: string | null = null,
-): VSumaMakeSpecSfParametersTagged {
+): VSumaMakeSpecSfParamsDictTagged {
     const params = {
         "@type": "afni/@SUMA_Make_Spec_SF" as const,
         "subject_id": subject_id,
@@ -74,7 +74,7 @@ function v__suma_make_spec_sf_params(
  * @returns Command-line arguments.
  */
 function v__suma_make_spec_sf_cargs(
-    params: VSumaMakeSpecSfParameters,
+    params: VSumaMakeSpecSfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function v__suma_make_spec_sf_cargs(
  * @returns Outputs object.
  */
 function v__suma_make_spec_sf_outputs(
-    params: VSumaMakeSpecSfParameters,
+    params: VSumaMakeSpecSfParamsDict,
     execution: Execution,
 ): VSumaMakeSpecSfOutputs {
     const ret: VSumaMakeSpecSfOutputs = {
@@ -134,7 +134,7 @@ function v__suma_make_spec_sf_outputs(
  * @returns NamedTuple of outputs (described in `VSumaMakeSpecSfOutputs`).
  */
 function v__suma_make_spec_sf_execute(
-    params: VSumaMakeSpecSfParameters,
+    params: VSumaMakeSpecSfParamsDict,
     runner: Runner | null = null,
 ): VSumaMakeSpecSfOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function v__suma_make_spec_sf(
 
 export {
       VSumaMakeSpecSfOutputs,
+      VSumaMakeSpecSfParamsDict,
+      VSumaMakeSpecSfParamsDictTagged,
       V__SUMA_MAKE_SPEC_SF_METADATA,
       v__suma_make_spec_sf,
       v__suma_make_spec_sf_execute,

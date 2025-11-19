@@ -11,7 +11,7 @@ const APARCSTATS2TABLE_METADATA: Metadata = {
 };
 
 
-interface Aparcstats2tableParameters {
+interface Aparcstats2tableParamsDict {
     "@type"?: "freesurfer/aparcstats2table";
     "subjects"?: Array<string> | null | undefined;
     "subjectsfile"?: InputPathType | null | undefined;
@@ -32,11 +32,11 @@ interface Aparcstats2tableParameters {
     "etiv": boolean;
     "scale"?: number | null | undefined;
 }
-type Aparcstats2tableParametersTagged = Required<Pick<Aparcstats2tableParameters, '@type'>> & Aparcstats2tableParameters;
+type Aparcstats2tableParamsDictTagged = Required<Pick<Aparcstats2tableParamsDict, '@type'>> & Aparcstats2tableParamsDict;
 
 
 /**
- * Output object returned when calling `Aparcstats2tableParameters(...)`.
+ * Output object returned when calling `Aparcstats2tableParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function aparcstats2table_params(
     debug: boolean = false,
     etiv: boolean = false,
     scale: number | null = null,
-): Aparcstats2tableParametersTagged {
+): Aparcstats2tableParamsDictTagged {
     const params = {
         "@type": "freesurfer/aparcstats2table" as const,
         "hemi": hemi,
@@ -148,7 +148,7 @@ function aparcstats2table_params(
  * @returns Command-line arguments.
  */
 function aparcstats2table_cargs(
-    params: Aparcstats2tableParameters,
+    params: Aparcstats2tableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -249,7 +249,7 @@ function aparcstats2table_cargs(
  * @returns Outputs object.
  */
 function aparcstats2table_outputs(
-    params: Aparcstats2tableParameters,
+    params: Aparcstats2tableParamsDict,
     execution: Execution,
 ): Aparcstats2tableOutputs {
     const ret: Aparcstats2tableOutputs = {
@@ -275,7 +275,7 @@ function aparcstats2table_outputs(
  * @returns NamedTuple of outputs (described in `Aparcstats2tableOutputs`).
  */
 function aparcstats2table_execute(
-    params: Aparcstats2tableParameters,
+    params: Aparcstats2tableParamsDict,
     runner: Runner | null = null,
 ): Aparcstats2tableOutputs {
     runner = runner || getGlobalRunner();
@@ -348,6 +348,8 @@ function aparcstats2table(
 export {
       APARCSTATS2TABLE_METADATA,
       Aparcstats2tableOutputs,
+      Aparcstats2tableParamsDict,
+      Aparcstats2tableParamsDictTagged,
       aparcstats2table,
       aparcstats2table_execute,
       aparcstats2table_params,

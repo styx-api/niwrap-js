@@ -11,7 +11,7 @@ const MRI_RIBBON_METADATA: Metadata = {
 };
 
 
-interface MriRibbonParameters {
+interface MriRibbonParamsDict {
     "@type"?: "freesurfer/mri_ribbon";
     "label_file"?: InputPathType | null | undefined;
     "inner_surface": InputPathType;
@@ -19,11 +19,11 @@ interface MriRibbonParameters {
     "input_volume": string;
     "output_volume": string;
 }
-type MriRibbonParametersTagged = Required<Pick<MriRibbonParameters, '@type'>> & MriRibbonParameters;
+type MriRibbonParamsDictTagged = Required<Pick<MriRibbonParamsDict, '@type'>> & MriRibbonParamsDict;
 
 
 /**
- * Output object returned when calling `MriRibbonParameters(...)`.
+ * Output object returned when calling `MriRibbonParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_ribbon_params(
     input_volume: string,
     output_volume: string,
     label_file: InputPathType | null = null,
-): MriRibbonParametersTagged {
+): MriRibbonParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_ribbon" as const,
         "inner_surface": inner_surface,
@@ -80,7 +80,7 @@ function mri_ribbon_params(
  * @returns Command-line arguments.
  */
 function mri_ribbon_cargs(
-    params: MriRibbonParameters,
+    params: MriRibbonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function mri_ribbon_cargs(
  * @returns Outputs object.
  */
 function mri_ribbon_outputs(
-    params: MriRibbonParameters,
+    params: MriRibbonParamsDict,
     execution: Execution,
 ): MriRibbonOutputs {
     const ret: MriRibbonOutputs = {
@@ -134,7 +134,7 @@ function mri_ribbon_outputs(
  * @returns NamedTuple of outputs (described in `MriRibbonOutputs`).
  */
 function mri_ribbon_execute(
-    params: MriRibbonParameters,
+    params: MriRibbonParamsDict,
     runner: Runner | null = null,
 ): MriRibbonOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function mri_ribbon(
 export {
       MRI_RIBBON_METADATA,
       MriRibbonOutputs,
+      MriRibbonParamsDict,
+      MriRibbonParamsDictTagged,
       mri_ribbon,
       mri_ribbon_execute,
       mri_ribbon_params,

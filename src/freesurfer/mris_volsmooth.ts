@@ -11,7 +11,7 @@ const MRIS_VOLSMOOTH_METADATA: Metadata = {
 };
 
 
-interface MrisVolsmoothParameters {
+interface MrisVolsmoothParamsDict {
     "@type"?: "freesurfer/mris_volsmooth";
     "input_volume": InputPathType;
     "output_volume": string;
@@ -27,11 +27,11 @@ interface MrisVolsmoothParameters {
     "nocleanup": boolean;
     "debug": boolean;
 }
-type MrisVolsmoothParametersTagged = Required<Pick<MrisVolsmoothParameters, '@type'>> & MrisVolsmoothParameters;
+type MrisVolsmoothParamsDictTagged = Required<Pick<MrisVolsmoothParamsDict, '@type'>> & MrisVolsmoothParamsDict;
 
 
 /**
- * Output object returned when calling `MrisVolsmoothParameters(...)`.
+ * Output object returned when calling `MrisVolsmoothParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function mris_volsmooth_params(
     log: string | null = null,
     nocleanup: boolean = false,
     debug: boolean = false,
-): MrisVolsmoothParametersTagged {
+): MrisVolsmoothParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_volsmooth" as const,
         "input_volume": input_volume,
@@ -132,7 +132,7 @@ function mris_volsmooth_params(
  * @returns Command-line arguments.
  */
 function mris_volsmooth_cargs(
-    params: MrisVolsmoothParameters,
+    params: MrisVolsmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -213,7 +213,7 @@ function mris_volsmooth_cargs(
  * @returns Outputs object.
  */
 function mris_volsmooth_outputs(
-    params: MrisVolsmoothParameters,
+    params: MrisVolsmoothParamsDict,
     execution: Execution,
 ): MrisVolsmoothOutputs {
     const ret: MrisVolsmoothOutputs = {
@@ -241,7 +241,7 @@ function mris_volsmooth_outputs(
  * @returns NamedTuple of outputs (described in `MrisVolsmoothOutputs`).
  */
 function mris_volsmooth_execute(
-    params: MrisVolsmoothParameters,
+    params: MrisVolsmoothParamsDict,
     runner: Runner | null = null,
 ): MrisVolsmoothOutputs {
     runner = runner || getGlobalRunner();
@@ -304,6 +304,8 @@ function mris_volsmooth(
 export {
       MRIS_VOLSMOOTH_METADATA,
       MrisVolsmoothOutputs,
+      MrisVolsmoothParamsDict,
+      MrisVolsmoothParamsDictTagged,
       mris_volsmooth,
       mris_volsmooth_execute,
       mris_volsmooth_params,

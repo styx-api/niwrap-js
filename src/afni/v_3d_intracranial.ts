@@ -11,7 +11,7 @@ const V_3D_INTRACRANIAL_METADATA: Metadata = {
 };
 
 
-interface V3dIntracranialParameters {
+interface V3dIntracranialParamsDict {
     "@type"?: "afni/3dIntracranial";
     "infile": InputPathType;
     "prefix": string;
@@ -23,11 +23,11 @@ interface V3dIntracranialParameters {
     "mask": boolean;
     "quiet": boolean;
 }
-type V3dIntracranialParametersTagged = Required<Pick<V3dIntracranialParameters, '@type'>> & V3dIntracranialParameters;
+type V3dIntracranialParamsDictTagged = Required<Pick<V3dIntracranialParamsDict, '@type'>> & V3dIntracranialParamsDict;
 
 
 /**
- * Output object returned when calling `V3dIntracranialParameters(...)`.
+ * Output object returned when calling `V3dIntracranialParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_3d_intracranial_params(
     no_smooth: boolean = false,
     mask: boolean = false,
     quiet: boolean = false,
-): V3dIntracranialParametersTagged {
+): V3dIntracranialParamsDictTagged {
     const params = {
         "@type": "afni/3dIntracranial" as const,
         "infile": infile,
@@ -102,7 +102,7 @@ function v_3d_intracranial_params(
  * @returns Command-line arguments.
  */
 function v_3d_intracranial_cargs(
-    params: V3dIntracranialParameters,
+    params: V3dIntracranialParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function v_3d_intracranial_cargs(
  * @returns Outputs object.
  */
 function v_3d_intracranial_outputs(
-    params: V3dIntracranialParameters,
+    params: V3dIntracranialParamsDict,
     execution: Execution,
 ): V3dIntracranialOutputs {
     const ret: V3dIntracranialOutputs = {
@@ -187,7 +187,7 @@ function v_3d_intracranial_outputs(
  * @returns NamedTuple of outputs (described in `V3dIntracranialOutputs`).
  */
 function v_3d_intracranial_execute(
-    params: V3dIntracranialParameters,
+    params: V3dIntracranialParamsDict,
     runner: Runner | null = null,
 ): V3dIntracranialOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function v_3d_intracranial(
 
 export {
       V3dIntracranialOutputs,
+      V3dIntracranialParamsDict,
+      V3dIntracranialParamsDictTagged,
       V_3D_INTRACRANIAL_METADATA,
       v_3d_intracranial,
       v_3d_intracranial_execute,

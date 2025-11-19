@@ -11,16 +11,16 @@ const V_3D_DETREND_METADATA: Metadata = {
 };
 
 
-interface V3dDetrendParameters {
+interface V3dDetrendParamsDict {
     "@type"?: "afni/3dDetrend";
     "in_file": InputPathType;
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
 }
-type V3dDetrendParametersTagged = Required<Pick<V3dDetrendParameters, '@type'>> & V3dDetrendParameters;
+type V3dDetrendParamsDictTagged = Required<Pick<V3dDetrendParamsDict, '@type'>> & V3dDetrendParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDetrendParameters(...)`.
+ * Output object returned when calling `V3dDetrendParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface V3dDetrendOutputs {
 function v_3d_detrend_params(
     in_file: InputPathType,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
-): V3dDetrendParametersTagged {
+): V3dDetrendParamsDictTagged {
     const params = {
         "@type": "afni/3dDetrend" as const,
         "in_file": in_file,
@@ -72,7 +72,7 @@ function v_3d_detrend_params(
  * @returns Command-line arguments.
  */
 function v_3d_detrend_cargs(
-    params: V3dDetrendParameters,
+    params: V3dDetrendParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function v_3d_detrend_cargs(
  * @returns Outputs object.
  */
 function v_3d_detrend_outputs(
-    params: V3dDetrendParameters,
+    params: V3dDetrendParamsDict,
     execution: Execution,
 ): V3dDetrendOutputs {
     const ret: V3dDetrendOutputs = {
@@ -121,7 +121,7 @@ function v_3d_detrend_outputs(
  * @returns NamedTuple of outputs (described in `V3dDetrendOutputs`).
  */
 function v_3d_detrend_execute(
-    params: V3dDetrendParameters,
+    params: V3dDetrendParamsDict,
     runner: Runner | null = null,
 ): V3dDetrendOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function v_3d_detrend(
 
 export {
       V3dDetrendOutputs,
+      V3dDetrendParamsDict,
+      V3dDetrendParamsDictTagged,
       V_3D_DETREND_METADATA,
       v_3d_detrend,
       v_3d_detrend_execute,

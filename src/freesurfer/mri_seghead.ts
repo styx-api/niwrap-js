@@ -11,7 +11,7 @@ const MRI_SEGHEAD_METADATA: Metadata = {
 };
 
 
-interface MriSegheadParameters {
+interface MriSegheadParamsDict {
     "@type"?: "freesurfer/mri_seghead";
     "input_volume": string;
     "output_volume": string;
@@ -29,11 +29,11 @@ interface MriSegheadParameters {
     "or_mask_file"?: InputPathType | null | undefined;
     "gdiag_option"?: string | null | undefined;
 }
-type MriSegheadParametersTagged = Required<Pick<MriSegheadParameters, '@type'>> & MriSegheadParameters;
+type MriSegheadParamsDictTagged = Required<Pick<MriSegheadParamsDict, '@type'>> & MriSegheadParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegheadParameters(...)`.
+ * Output object returned when calling `MriSegheadParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function mri_seghead_params(
     seed_point: Array<number> | null = null,
     or_mask_file: InputPathType | null = null,
     gdiag_option: string | null = null,
-): MriSegheadParametersTagged {
+): MriSegheadParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_seghead" as const,
         "input_volume": input_volume,
@@ -134,7 +134,7 @@ function mri_seghead_params(
  * @returns Command-line arguments.
  */
 function mri_seghead_cargs(
-    params: MriSegheadParameters,
+    params: MriSegheadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -229,7 +229,7 @@ function mri_seghead_cargs(
  * @returns Outputs object.
  */
 function mri_seghead_outputs(
-    params: MriSegheadParameters,
+    params: MriSegheadParamsDict,
     execution: Execution,
 ): MriSegheadOutputs {
     const ret: MriSegheadOutputs = {
@@ -254,7 +254,7 @@ function mri_seghead_outputs(
  * @returns NamedTuple of outputs (described in `MriSegheadOutputs`).
  */
 function mri_seghead_execute(
-    params: MriSegheadParameters,
+    params: MriSegheadParamsDict,
     runner: Runner | null = null,
 ): MriSegheadOutputs {
     runner = runner || getGlobalRunner();
@@ -321,6 +321,8 @@ function mri_seghead(
 export {
       MRI_SEGHEAD_METADATA,
       MriSegheadOutputs,
+      MriSegheadParamsDict,
+      MriSegheadParamsDictTagged,
       mri_seghead,
       mri_seghead_execute,
       mri_seghead_params,

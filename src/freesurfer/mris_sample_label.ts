@@ -11,17 +11,17 @@ const MRIS_SAMPLE_LABEL_METADATA: Metadata = {
 };
 
 
-interface MrisSampleLabelParameters {
+interface MrisSampleLabelParamsDict {
     "@type"?: "freesurfer/mris_sample_label";
     "input_label_file": InputPathType;
     "input_surface_file": InputPathType;
     "output_label_file": string;
 }
-type MrisSampleLabelParametersTagged = Required<Pick<MrisSampleLabelParameters, '@type'>> & MrisSampleLabelParameters;
+type MrisSampleLabelParamsDictTagged = Required<Pick<MrisSampleLabelParamsDict, '@type'>> & MrisSampleLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSampleLabelParameters(...)`.
+ * Output object returned when calling `MrisSampleLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_sample_label_params(
     input_label_file: InputPathType,
     input_surface_file: InputPathType,
     output_label_file: string,
-): MrisSampleLabelParametersTagged {
+): MrisSampleLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_sample_label" as const,
         "input_label_file": input_label_file,
@@ -70,7 +70,7 @@ function mris_sample_label_params(
  * @returns Command-line arguments.
  */
 function mris_sample_label_cargs(
-    params: MrisSampleLabelParameters,
+    params: MrisSampleLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mris_sample_label_cargs(
  * @returns Outputs object.
  */
 function mris_sample_label_outputs(
-    params: MrisSampleLabelParameters,
+    params: MrisSampleLabelParamsDict,
     execution: Execution,
 ): MrisSampleLabelOutputs {
     const ret: MrisSampleLabelOutputs = {
@@ -117,7 +117,7 @@ function mris_sample_label_outputs(
  * @returns NamedTuple of outputs (described in `MrisSampleLabelOutputs`).
  */
 function mris_sample_label_execute(
-    params: MrisSampleLabelParameters,
+    params: MrisSampleLabelParamsDict,
     runner: Runner | null = null,
 ): MrisSampleLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mris_sample_label(
 export {
       MRIS_SAMPLE_LABEL_METADATA,
       MrisSampleLabelOutputs,
+      MrisSampleLabelParamsDict,
+      MrisSampleLabelParamsDictTagged,
       mris_sample_label,
       mris_sample_label_execute,
       mris_sample_label_params,

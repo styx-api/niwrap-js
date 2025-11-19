@@ -10,16 +10,16 @@ const SPEC_FILE_RELOCATE_METADATA: Metadata = {
 };
 
 
-interface SpecFileRelocateParameters {
+interface SpecFileRelocateParamsDict {
     "@type"?: "workbench/spec-file-relocate";
     "input-spec": string;
     "output-spec": string;
 }
-type SpecFileRelocateParametersTagged = Required<Pick<SpecFileRelocateParameters, '@type'>> & SpecFileRelocateParameters;
+type SpecFileRelocateParamsDictTagged = Required<Pick<SpecFileRelocateParamsDict, '@type'>> & SpecFileRelocateParamsDict;
 
 
 /**
- * Output object returned when calling `SpecFileRelocateParameters(...)`.
+ * Output object returned when calling `SpecFileRelocateParamsDict(...)`.
  *
  * @interface
  */
@@ -42,7 +42,7 @@ interface SpecFileRelocateOutputs {
 function spec_file_relocate_params(
     input_spec: string,
     output_spec: string,
-): SpecFileRelocateParametersTagged {
+): SpecFileRelocateParamsDictTagged {
     const params = {
         "@type": "workbench/spec-file-relocate" as const,
         "input-spec": input_spec,
@@ -61,7 +61,7 @@ function spec_file_relocate_params(
  * @returns Command-line arguments.
  */
 function spec_file_relocate_cargs(
-    params: SpecFileRelocateParameters,
+    params: SpecFileRelocateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function spec_file_relocate_cargs(
  * @returns Outputs object.
  */
 function spec_file_relocate_outputs(
-    params: SpecFileRelocateParameters,
+    params: SpecFileRelocateParamsDict,
     execution: Execution,
 ): SpecFileRelocateOutputs {
     const ret: SpecFileRelocateOutputs = {
@@ -105,7 +105,7 @@ function spec_file_relocate_outputs(
  * @returns NamedTuple of outputs (described in `SpecFileRelocateOutputs`).
  */
 function spec_file_relocate_execute(
-    params: SpecFileRelocateParameters,
+    params: SpecFileRelocateParamsDict,
     runner: Runner | null = null,
 ): SpecFileRelocateOutputs {
     runner = runner || getGlobalRunner();
@@ -142,6 +142,8 @@ function spec_file_relocate(
 export {
       SPEC_FILE_RELOCATE_METADATA,
       SpecFileRelocateOutputs,
+      SpecFileRelocateParamsDict,
+      SpecFileRelocateParamsDictTagged,
       spec_file_relocate,
       spec_file_relocate_execute,
       spec_file_relocate_params,

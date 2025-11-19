@@ -11,7 +11,7 @@ const AFNI_BATCH_R_METADATA: Metadata = {
 };
 
 
-interface AfniBatchRParameters {
+interface AfniBatchRParamsDict {
     "@type"?: "afni/AFNI_Batch_R";
     "no_restore": boolean;
     "save_workspace": boolean;
@@ -19,11 +19,11 @@ interface AfniBatchRParameters {
     "vanilla_mode": boolean;
     "help": boolean;
 }
-type AfniBatchRParametersTagged = Required<Pick<AfniBatchRParameters, '@type'>> & AfniBatchRParameters;
+type AfniBatchRParamsDictTagged = Required<Pick<AfniBatchRParamsDict, '@type'>> & AfniBatchRParamsDict;
 
 
 /**
- * Output object returned when calling `AfniBatchRParameters(...)`.
+ * Output object returned when calling `AfniBatchRParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function afni_batch_r_params(
     no_readline: boolean = false,
     vanilla_mode: boolean = false,
     help: boolean = false,
-): AfniBatchRParametersTagged {
+): AfniBatchRParamsDictTagged {
     const params = {
         "@type": "afni/AFNI_Batch_R" as const,
         "no_restore": no_restore,
@@ -74,7 +74,7 @@ function afni_batch_r_params(
  * @returns Command-line arguments.
  */
 function afni_batch_r_cargs(
-    params: AfniBatchRParameters,
+    params: AfniBatchRParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function afni_batch_r_cargs(
  * @returns Outputs object.
  */
 function afni_batch_r_outputs(
-    params: AfniBatchRParameters,
+    params: AfniBatchRParamsDict,
     execution: Execution,
 ): AfniBatchROutputs {
     const ret: AfniBatchROutputs = {
@@ -135,7 +135,7 @@ function afni_batch_r_outputs(
  * @returns NamedTuple of outputs (described in `AfniBatchROutputs`).
  */
 function afni_batch_r_execute(
-    params: AfniBatchRParameters,
+    params: AfniBatchRParamsDict,
     runner: Runner | null = null,
 ): AfniBatchROutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function afni_batch_r(
 export {
       AFNI_BATCH_R_METADATA,
       AfniBatchROutputs,
+      AfniBatchRParamsDict,
+      AfniBatchRParamsDictTagged,
       afni_batch_r,
       afni_batch_r_execute,
       afni_batch_r_params,

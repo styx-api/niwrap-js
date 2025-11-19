@@ -11,7 +11,7 @@ const AUTO_WARP_PY_METADATA: Metadata = {
 };
 
 
-interface AutoWarpPyParameters {
+interface AutoWarpPyParamsDict {
     "@type"?: "afni/auto_warp.py";
     "base": InputPathType;
     "input": InputPathType;
@@ -47,11 +47,11 @@ interface AutoWarpPyParameters {
     "skullstrip_opts"?: string | null | undefined;
     "at_opts"?: string | null | undefined;
 }
-type AutoWarpPyParametersTagged = Required<Pick<AutoWarpPyParameters, '@type'>> & AutoWarpPyParameters;
+type AutoWarpPyParamsDictTagged = Required<Pick<AutoWarpPyParamsDict, '@type'>> & AutoWarpPyParamsDict;
 
 
 /**
- * Output object returned when calling `AutoWarpPyParameters(...)`.
+ * Output object returned when calling `AutoWarpPyParamsDict(...)`.
  *
  * @interface
  */
@@ -136,7 +136,7 @@ function auto_warp_py_params(
     affine_followers_xmat: string | null = null,
     skullstrip_opts: string | null = null,
     at_opts: string | null = null,
-): AutoWarpPyParametersTagged {
+): AutoWarpPyParamsDictTagged {
     const params = {
         "@type": "afni/auto_warp.py" as const,
         "base": base,
@@ -214,7 +214,7 @@ function auto_warp_py_params(
  * @returns Command-line arguments.
  */
 function auto_warp_py_cargs(
-    params: AutoWarpPyParameters,
+    params: AutoWarpPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -375,7 +375,7 @@ function auto_warp_py_cargs(
  * @returns Outputs object.
  */
 function auto_warp_py_outputs(
-    params: AutoWarpPyParameters,
+    params: AutoWarpPyParamsDict,
     execution: Execution,
 ): AutoWarpPyOutputs {
     const ret: AutoWarpPyOutputs = {
@@ -400,7 +400,7 @@ function auto_warp_py_outputs(
  * @returns NamedTuple of outputs (described in `AutoWarpPyOutputs`).
  */
 function auto_warp_py_execute(
-    params: AutoWarpPyParameters,
+    params: AutoWarpPyParamsDict,
     runner: Runner | null = null,
 ): AutoWarpPyOutputs {
     runner = runner || getGlobalRunner();
@@ -503,6 +503,8 @@ function auto_warp_py(
 export {
       AUTO_WARP_PY_METADATA,
       AutoWarpPyOutputs,
+      AutoWarpPyParamsDict,
+      AutoWarpPyParamsDictTagged,
       auto_warp_py,
       auto_warp_py_execute,
       auto_warp_py_params,

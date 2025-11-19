@@ -11,7 +11,7 @@ const ISOLATE_LABELS_CSH_METADATA: Metadata = {
 };
 
 
-interface IsolateLabelsCshParameters {
+interface IsolateLabelsCshParamsDict {
     "@type"?: "freesurfer/isolate_labels.csh";
     "label_volume": InputPathType;
     "output_prefix": string;
@@ -21,11 +21,11 @@ interface IsolateLabelsCshParameters {
     "keepval": boolean;
     "help": boolean;
 }
-type IsolateLabelsCshParametersTagged = Required<Pick<IsolateLabelsCshParameters, '@type'>> & IsolateLabelsCshParameters;
+type IsolateLabelsCshParamsDictTagged = Required<Pick<IsolateLabelsCshParamsDict, '@type'>> & IsolateLabelsCshParamsDict;
 
 
 /**
- * Output object returned when calling `IsolateLabelsCshParameters(...)`.
+ * Output object returned when calling `IsolateLabelsCshParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function isolate_labels_csh_params(
     version: boolean = false,
     keepval: boolean = false,
     help: boolean = false,
-): IsolateLabelsCshParametersTagged {
+): IsolateLabelsCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/isolate_labels.csh" as const,
         "label_volume": label_volume,
@@ -86,7 +86,7 @@ function isolate_labels_csh_params(
  * @returns Command-line arguments.
  */
 function isolate_labels_csh_cargs(
-    params: IsolateLabelsCshParameters,
+    params: IsolateLabelsCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function isolate_labels_csh_cargs(
  * @returns Outputs object.
  */
 function isolate_labels_csh_outputs(
-    params: IsolateLabelsCshParameters,
+    params: IsolateLabelsCshParamsDict,
     execution: Execution,
 ): IsolateLabelsCshOutputs {
     const ret: IsolateLabelsCshOutputs = {
@@ -158,7 +158,7 @@ function isolate_labels_csh_outputs(
  * @returns NamedTuple of outputs (described in `IsolateLabelsCshOutputs`).
  */
 function isolate_labels_csh_execute(
-    params: IsolateLabelsCshParameters,
+    params: IsolateLabelsCshParamsDict,
     runner: Runner | null = null,
 ): IsolateLabelsCshOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function isolate_labels_csh(
 export {
       ISOLATE_LABELS_CSH_METADATA,
       IsolateLabelsCshOutputs,
+      IsolateLabelsCshParamsDict,
+      IsolateLabelsCshParamsDictTagged,
       isolate_labels_csh,
       isolate_labels_csh_execute,
       isolate_labels_csh_params,

@@ -11,123 +11,123 @@ const GREEDY_METADATA: Metadata = {
 };
 
 
-interface GreedyInputImagesParameters {
+interface GreedyInputImagesParamsDict {
     "@type"?: "input_images";
     "fixed": InputPathType;
     "moving": InputPathType;
 }
-type GreedyInputImagesParametersTagged = Required<Pick<GreedyInputImagesParameters, '@type'>> & GreedyInputImagesParameters;
+type GreedyInputImagesParamsDictTagged = Required<Pick<GreedyInputImagesParamsDict, '@type'>> & GreedyInputImagesParamsDict;
 
 
-interface GreedyInvertParameters {
+interface GreedyInvertParamsDict {
     "@type"?: "invert";
     "inwarp": InputPathType;
     "outwarp": string;
 }
-type GreedyInvertParametersTagged = Required<Pick<GreedyInvertParameters, '@type'>> & GreedyInvertParameters;
+type GreedyInvertParamsDictTagged = Required<Pick<GreedyInvertParamsDict, '@type'>> & GreedyInvertParamsDict;
 
 
-interface GreedyRootParameters {
+interface GreedyRootParamsDict {
     "@type"?: "root";
     "inwarp": InputPathType;
     "outwarp": string;
     "n": number;
 }
-type GreedyRootParametersTagged = Required<Pick<GreedyRootParameters, '@type'>> & GreedyRootParameters;
+type GreedyRootParamsDictTagged = Required<Pick<GreedyRootParamsDict, '@type'>> & GreedyRootParamsDict;
 
 
-interface GreedyJacobianParameters {
+interface GreedyJacobianParamsDict {
     "@type"?: "jacobian";
     "inwarp": InputPathType;
     "outjac": string;
 }
-type GreedyJacobianParametersTagged = Required<Pick<GreedyJacobianParameters, '@type'>> & GreedyJacobianParameters;
+type GreedyJacobianParamsDictTagged = Required<Pick<GreedyJacobianParamsDict, '@type'>> & GreedyJacobianParamsDict;
 
 
-interface GreedyMetricParameters {
+interface GreedyMetricParamsDict {
     "@type"?: "metric";
     "metric_type": "SSD" | "MI" | "NMI" | "NCC" | "MAHAL";
     "metric_param"?: number | null | undefined;
 }
-type GreedyMetricParametersTagged = Required<Pick<GreedyMetricParameters, '@type'>> & GreedyMetricParameters;
+type GreedyMetricParamsDictTagged = Required<Pick<GreedyMetricParamsDict, '@type'>> & GreedyMetricParamsDict;
 
 
-interface GreedyTjrParameters {
+interface GreedyTjrParamsDict {
     "@type"?: "tjr";
     "mesh": InputPathType;
     "weight": number;
 }
-type GreedyTjrParametersTagged = Required<Pick<GreedyTjrParameters, '@type'>> & GreedyTjrParameters;
+type GreedyTjrParamsDictTagged = Required<Pick<GreedyTjrParamsDict, '@type'>> & GreedyTjrParamsDict;
 
 
-interface GreedySearchParameters {
+interface GreedySearchParamsDict {
     "@type"?: "search";
     "n": number;
     "rot": string;
     "tran": number;
 }
-type GreedySearchParametersTagged = Required<Pick<GreedySearchParameters, '@type'>> & GreedySearchParameters;
+type GreedySearchParamsDictTagged = Required<Pick<GreedySearchParamsDict, '@type'>> & GreedySearchParamsDict;
 
 
-interface GreedyResliceMovingImageParameters {
+interface GreedyResliceMovingImageParamsDict {
     "@type"?: "reslice_moving_image";
     "moving": InputPathType;
     "output": string;
 }
-type GreedyResliceMovingImageParametersTagged = Required<Pick<GreedyResliceMovingImageParameters, '@type'>> & GreedyResliceMovingImageParameters;
+type GreedyResliceMovingImageParamsDictTagged = Required<Pick<GreedyResliceMovingImageParamsDict, '@type'>> & GreedyResliceMovingImageParamsDict;
 
 
-interface GreedyResliceSurfaceParameters {
+interface GreedyResliceSurfaceParamsDict {
     "@type"?: "reslice_surface";
     "inmesh": InputPathType;
     "outmesh": string;
 }
-type GreedyResliceSurfaceParametersTagged = Required<Pick<GreedyResliceSurfaceParameters, '@type'>> & GreedyResliceSurfaceParameters;
+type GreedyResliceSurfaceParamsDictTagged = Required<Pick<GreedyResliceSurfaceParamsDict, '@type'>> & GreedyResliceSurfaceParamsDict;
 
 
-interface GreedyNnParameters {
+interface GreedyNnParamsDict {
     "@type"?: "nn";
 }
-type GreedyNnParametersTagged = Required<Pick<GreedyNnParameters, '@type'>> & GreedyNnParameters;
+type GreedyNnParamsDictTagged = Required<Pick<GreedyNnParamsDict, '@type'>> & GreedyNnParamsDict;
 
 
-interface GreedyLinearParameters {
+interface GreedyLinearParamsDict {
     "@type"?: "linear";
 }
-type GreedyLinearParametersTagged = Required<Pick<GreedyLinearParameters, '@type'>> & GreedyLinearParameters;
+type GreedyLinearParamsDictTagged = Required<Pick<GreedyLinearParamsDict, '@type'>> & GreedyLinearParamsDict;
 
 
-interface GreedyLabelParameters {
+interface GreedyLabelParamsDict {
     "@type"?: "label";
     "sigma_spec": string;
 }
-type GreedyLabelParametersTagged = Required<Pick<GreedyLabelParameters, '@type'>> & GreedyLabelParameters;
+type GreedyLabelParamsDictTagged = Required<Pick<GreedyLabelParamsDict, '@type'>> & GreedyLabelParamsDict;
 
 
-interface GreedyResliceSimplexJacobianParameters {
+interface GreedyResliceSimplexJacobianParamsDict {
     "@type"?: "reslice_simplex_jacobian";
     "inmesh": InputPathType;
     "outmesh": string;
 }
-type GreedyResliceSimplexJacobianParametersTagged = Required<Pick<GreedyResliceSimplexJacobianParameters, '@type'>> & GreedyResliceSimplexJacobianParameters;
+type GreedyResliceSimplexJacobianParamsDictTagged = Required<Pick<GreedyResliceSimplexJacobianParamsDict, '@type'>> & GreedyResliceSimplexJacobianParamsDict;
 
 
-interface GreedyParameters {
+interface GreedyParamsDict {
     "@type"?: "greedy/greedy";
     "dimensions": number;
-    "input_images"?: GreedyInputImagesParameters | null | undefined;
+    "input_images"?: GreedyInputImagesParamsDict | null | undefined;
     "output"?: string | null | undefined;
     "affine": boolean;
     "brute"?: string | null | undefined;
     "moments"?: 1 | 2 | null | undefined;
     "reslice"?: Array<InputPathType> | null | undefined;
-    "invert"?: GreedyInvertParameters | null | undefined;
-    "root"?: GreedyRootParameters | null | undefined;
-    "jacobian"?: GreedyJacobianParameters | null | undefined;
+    "invert"?: GreedyInvertParamsDict | null | undefined;
+    "root"?: GreedyRootParamsDict | null | undefined;
+    "jacobian"?: GreedyJacobianParamsDict | null | undefined;
     "metric_mode": boolean;
     "defopt": boolean;
     "weight"?: number | null | undefined;
-    "metric"?: GreedyMetricParameters | null | undefined;
+    "metric"?: GreedyMetricParamsDict | null | undefined;
     "step_size"?: string | null | undefined;
     "iterations"?: string | null | undefined;
     "threads"?: number | null | undefined;
@@ -151,7 +151,7 @@ interface GreedyParameters {
     "svlb": boolean;
     "sv_incompr": boolean;
     "initial_warp"?: InputPathType | null | undefined;
-    "tjr"?: GreedyTjrParameters | null | undefined;
+    "tjr"?: GreedyTjrParamsDict | null | undefined;
     "wr"?: number | null | undefined;
     "initial_affine"?: InputPathType | null | undefined;
     "ia_identity": boolean;
@@ -161,18 +161,18 @@ interface GreedyParameters {
     "ia_moments"?: 1 | 2 | null | undefined;
     "affine_dof"?: 6 | 7 | 12 | null | undefined;
     "jitter"?: number | null | undefined;
-    "search"?: GreedySearchParameters | null | undefined;
+    "search"?: GreedySearchParamsDict | null | undefined;
     "det"?: -1 | 1 | null | undefined;
     "cov_id": boolean;
     "fixed_reslicing_image"?: InputPathType | null | undefined;
-    "reslice_moving_image"?: GreedyResliceMovingImageParameters | null | undefined;
-    "reslice_surface"?: GreedyResliceSurfaceParameters | null | undefined;
-    "interpolation"?: GreedyNnParametersTagged | GreedyLinearParametersTagged | GreedyLabelParametersTagged | null | undefined;
+    "reslice_moving_image"?: GreedyResliceMovingImageParamsDict | null | undefined;
+    "reslice_surface"?: GreedyResliceSurfaceParamsDict | null | undefined;
+    "interpolation"?: GreedyNnParamsDictTagged | GreedyLinearParamsDictTagged | GreedyLabelParamsDictTagged | null | undefined;
     "reslice_background"?: number | null | undefined;
     "reslice_datatype"?: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null | undefined;
     "reslice_composite"?: InputPathType | null | undefined;
     "reslice_jacobian"?: InputPathType | null | undefined;
-    "reslice_simplex_jacobian"?: GreedyResliceSimplexJacobianParameters | null | undefined;
+    "reslice_simplex_jacobian"?: GreedyResliceSimplexJacobianParamsDict | null | undefined;
     "reslice_mask"?: InputPathType | null | undefined;
     "metric_gradient"?: InputPathType | null | undefined;
     "debug_deriv": boolean;
@@ -187,7 +187,7 @@ interface GreedyParameters {
     "version": boolean;
     "verbosity"?: 0 | 1 | 2 | null | undefined;
 }
-type GreedyParametersTagged = Required<Pick<GreedyParameters, '@type'>> & GreedyParameters;
+type GreedyParamsDictTagged = Required<Pick<GreedyParamsDict, '@type'>> & GreedyParamsDict;
 
 
 /**
@@ -233,10 +233,10 @@ function greedy_interpolation_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function greedy_input_images_params(
+function greedy_input_images(
     fixed: InputPathType,
     moving: InputPathType,
-): GreedyInputImagesParametersTagged {
+): GreedyInputImagesParamsDictTagged {
     const params = {
         "@type": "input_images" as const,
         "fixed": fixed,
@@ -255,7 +255,7 @@ function greedy_input_images_params(
  * @returns Command-line arguments.
  */
 function greedy_input_images_cargs(
-    params: GreedyInputImagesParameters,
+    params: GreedyInputImagesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -266,7 +266,7 @@ function greedy_input_images_cargs(
 
 
 /**
- * Output object returned when calling `GreedyInvertParameters | null(...)`.
+ * Output object returned when calling `GreedyInvertParamsDict | null(...)`.
  *
  * @interface
  */
@@ -290,10 +290,10 @@ interface GreedyInvertOutputs {
  *
  * @returns Parameter dictionary
  */
-function greedy_invert_params(
+function greedy_invert(
     inwarp: InputPathType,
     outwarp: string,
-): GreedyInvertParametersTagged {
+): GreedyInvertParamsDictTagged {
     const params = {
         "@type": "invert" as const,
         "inwarp": inwarp,
@@ -312,7 +312,7 @@ function greedy_invert_params(
  * @returns Command-line arguments.
  */
 function greedy_invert_cargs(
-    params: GreedyInvertParameters,
+    params: GreedyInvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -331,7 +331,7 @@ function greedy_invert_cargs(
  * @returns Outputs object.
  */
 function greedy_invert_outputs(
-    params: GreedyInvertParameters,
+    params: GreedyInvertParamsDict,
     execution: Execution,
 ): GreedyInvertOutputs {
     const ret: GreedyInvertOutputs = {
@@ -343,7 +343,7 @@ function greedy_invert_outputs(
 
 
 /**
- * Output object returned when calling `GreedyRootParameters | null(...)`.
+ * Output object returned when calling `GreedyRootParamsDict | null(...)`.
  *
  * @interface
  */
@@ -368,11 +368,11 @@ interface GreedyRootOutputs {
  *
  * @returns Parameter dictionary
  */
-function greedy_root_params(
+function greedy_root(
     inwarp: InputPathType,
     outwarp: string,
     n: number,
-): GreedyRootParametersTagged {
+): GreedyRootParamsDictTagged {
     const params = {
         "@type": "root" as const,
         "inwarp": inwarp,
@@ -392,7 +392,7 @@ function greedy_root_params(
  * @returns Command-line arguments.
  */
 function greedy_root_cargs(
-    params: GreedyRootParameters,
+    params: GreedyRootParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -412,7 +412,7 @@ function greedy_root_cargs(
  * @returns Outputs object.
  */
 function greedy_root_outputs(
-    params: GreedyRootParameters,
+    params: GreedyRootParamsDict,
     execution: Execution,
 ): GreedyRootOutputs {
     const ret: GreedyRootOutputs = {
@@ -424,7 +424,7 @@ function greedy_root_outputs(
 
 
 /**
- * Output object returned when calling `GreedyJacobianParameters | null(...)`.
+ * Output object returned when calling `GreedyJacobianParamsDict | null(...)`.
  *
  * @interface
  */
@@ -448,10 +448,10 @@ interface GreedyJacobianOutputs {
  *
  * @returns Parameter dictionary
  */
-function greedy_jacobian_params(
+function greedy_jacobian(
     inwarp: InputPathType,
     outjac: string,
-): GreedyJacobianParametersTagged {
+): GreedyJacobianParamsDictTagged {
     const params = {
         "@type": "jacobian" as const,
         "inwarp": inwarp,
@@ -470,7 +470,7 @@ function greedy_jacobian_params(
  * @returns Command-line arguments.
  */
 function greedy_jacobian_cargs(
-    params: GreedyJacobianParameters,
+    params: GreedyJacobianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -489,7 +489,7 @@ function greedy_jacobian_cargs(
  * @returns Outputs object.
  */
 function greedy_jacobian_outputs(
-    params: GreedyJacobianParameters,
+    params: GreedyJacobianParamsDict,
     execution: Execution,
 ): GreedyJacobianOutputs {
     const ret: GreedyJacobianOutputs = {
@@ -508,10 +508,10 @@ function greedy_jacobian_outputs(
  *
  * @returns Parameter dictionary
  */
-function greedy_metric_params(
+function greedy_metric(
     metric_type: "SSD" | "MI" | "NMI" | "NCC" | "MAHAL",
     metric_param: number | null = null,
-): GreedyMetricParametersTagged {
+): GreedyMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
         "metric_type": metric_type,
@@ -532,7 +532,7 @@ function greedy_metric_params(
  * @returns Command-line arguments.
  */
 function greedy_metric_cargs(
-    params: GreedyMetricParameters,
+    params: GreedyMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -552,10 +552,10 @@ function greedy_metric_cargs(
  *
  * @returns Parameter dictionary
  */
-function greedy_tjr_params(
+function greedy_tjr(
     mesh: InputPathType,
     weight: number,
-): GreedyTjrParametersTagged {
+): GreedyTjrParamsDictTagged {
     const params = {
         "@type": "tjr" as const,
         "mesh": mesh,
@@ -574,7 +574,7 @@ function greedy_tjr_params(
  * @returns Command-line arguments.
  */
 function greedy_tjr_cargs(
-    params: GreedyTjrParameters,
+    params: GreedyTjrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -593,11 +593,11 @@ function greedy_tjr_cargs(
  *
  * @returns Parameter dictionary
  */
-function greedy_search_params(
+function greedy_search(
     n: number,
     rot: string,
     tran: number,
-): GreedySearchParametersTagged {
+): GreedySearchParamsDictTagged {
     const params = {
         "@type": "search" as const,
         "n": n,
@@ -617,7 +617,7 @@ function greedy_search_params(
  * @returns Command-line arguments.
  */
 function greedy_search_cargs(
-    params: GreedySearchParameters,
+    params: GreedySearchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -629,7 +629,7 @@ function greedy_search_cargs(
 
 
 /**
- * Output object returned when calling `GreedyResliceMovingImageParameters | null(...)`.
+ * Output object returned when calling `GreedyResliceMovingImageParamsDict | null(...)`.
  *
  * @interface
  */
@@ -653,10 +653,10 @@ interface GreedyResliceMovingImageOutputs {
  *
  * @returns Parameter dictionary
  */
-function greedy_reslice_moving_image_params(
+function greedy_reslice_moving_image(
     moving: InputPathType,
     output: string,
-): GreedyResliceMovingImageParametersTagged {
+): GreedyResliceMovingImageParamsDictTagged {
     const params = {
         "@type": "reslice_moving_image" as const,
         "moving": moving,
@@ -675,7 +675,7 @@ function greedy_reslice_moving_image_params(
  * @returns Command-line arguments.
  */
 function greedy_reslice_moving_image_cargs(
-    params: GreedyResliceMovingImageParameters,
+    params: GreedyResliceMovingImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -694,7 +694,7 @@ function greedy_reslice_moving_image_cargs(
  * @returns Outputs object.
  */
 function greedy_reslice_moving_image_outputs(
-    params: GreedyResliceMovingImageParameters,
+    params: GreedyResliceMovingImageParamsDict,
     execution: Execution,
 ): GreedyResliceMovingImageOutputs {
     const ret: GreedyResliceMovingImageOutputs = {
@@ -706,7 +706,7 @@ function greedy_reslice_moving_image_outputs(
 
 
 /**
- * Output object returned when calling `GreedyResliceSurfaceParameters | null(...)`.
+ * Output object returned when calling `GreedyResliceSurfaceParamsDict | null(...)`.
  *
  * @interface
  */
@@ -730,10 +730,10 @@ interface GreedyResliceSurfaceOutputs {
  *
  * @returns Parameter dictionary
  */
-function greedy_reslice_surface_params(
+function greedy_reslice_surface(
     inmesh: InputPathType,
     outmesh: string,
-): GreedyResliceSurfaceParametersTagged {
+): GreedyResliceSurfaceParamsDictTagged {
     const params = {
         "@type": "reslice_surface" as const,
         "inmesh": inmesh,
@@ -752,7 +752,7 @@ function greedy_reslice_surface_params(
  * @returns Command-line arguments.
  */
 function greedy_reslice_surface_cargs(
-    params: GreedyResliceSurfaceParameters,
+    params: GreedyResliceSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -771,7 +771,7 @@ function greedy_reslice_surface_cargs(
  * @returns Outputs object.
  */
 function greedy_reslice_surface_outputs(
-    params: GreedyResliceSurfaceParameters,
+    params: GreedyResliceSurfaceParamsDict,
     execution: Execution,
 ): GreedyResliceSurfaceOutputs {
     const ret: GreedyResliceSurfaceOutputs = {
@@ -787,8 +787,8 @@ function greedy_reslice_surface_outputs(
  *
  * @returns Parameter dictionary
  */
-function greedy_nn_params(
-): GreedyNnParametersTagged {
+function greedy_nn(
+): GreedyNnParamsDictTagged {
     const params = {
         "@type": "nn" as const,
     };
@@ -805,7 +805,7 @@ function greedy_nn_params(
  * @returns Command-line arguments.
  */
 function greedy_nn_cargs(
-    params: GreedyNnParameters,
+    params: GreedyNnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -819,8 +819,8 @@ function greedy_nn_cargs(
  *
  * @returns Parameter dictionary
  */
-function greedy_linear_params(
-): GreedyLinearParametersTagged {
+function greedy_linear(
+): GreedyLinearParamsDictTagged {
     const params = {
         "@type": "linear" as const,
     };
@@ -837,7 +837,7 @@ function greedy_linear_params(
  * @returns Command-line arguments.
  */
 function greedy_linear_cargs(
-    params: GreedyLinearParameters,
+    params: GreedyLinearParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -853,9 +853,9 @@ function greedy_linear_cargs(
  *
  * @returns Parameter dictionary
  */
-function greedy_label_params(
+function greedy_label(
     sigma_spec: string,
-): GreedyLabelParametersTagged {
+): GreedyLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
         "sigma_spec": sigma_spec,
@@ -873,7 +873,7 @@ function greedy_label_params(
  * @returns Command-line arguments.
  */
 function greedy_label_cargs(
-    params: GreedyLabelParameters,
+    params: GreedyLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -884,7 +884,7 @@ function greedy_label_cargs(
 
 
 /**
- * Output object returned when calling `GreedyResliceSimplexJacobianParameters | null(...)`.
+ * Output object returned when calling `GreedyResliceSimplexJacobianParamsDict | null(...)`.
  *
  * @interface
  */
@@ -908,10 +908,10 @@ interface GreedyResliceSimplexJacobianOutputs {
  *
  * @returns Parameter dictionary
  */
-function greedy_reslice_simplex_jacobian_params(
+function greedy_reslice_simplex_jacobian(
     inmesh: InputPathType,
     outmesh: string,
-): GreedyResliceSimplexJacobianParametersTagged {
+): GreedyResliceSimplexJacobianParamsDictTagged {
     const params = {
         "@type": "reslice_simplex_jacobian" as const,
         "inmesh": inmesh,
@@ -930,7 +930,7 @@ function greedy_reslice_simplex_jacobian_params(
  * @returns Command-line arguments.
  */
 function greedy_reslice_simplex_jacobian_cargs(
-    params: GreedyResliceSimplexJacobianParameters,
+    params: GreedyResliceSimplexJacobianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -949,7 +949,7 @@ function greedy_reslice_simplex_jacobian_cargs(
  * @returns Outputs object.
  */
 function greedy_reslice_simplex_jacobian_outputs(
-    params: GreedyResliceSimplexJacobianParameters,
+    params: GreedyResliceSimplexJacobianParamsDict,
     execution: Execution,
 ): GreedyResliceSimplexJacobianOutputs {
     const ret: GreedyResliceSimplexJacobianOutputs = {
@@ -961,7 +961,7 @@ function greedy_reslice_simplex_jacobian_outputs(
 
 
 /**
- * Output object returned when calling `GreedyParameters(...)`.
+ * Output object returned when calling `GreedyParamsDict(...)`.
  *
  * @interface
  */
@@ -1081,19 +1081,19 @@ interface GreedyOutputs {
  */
 function greedy_params(
     dimensions: number,
-    input_images: GreedyInputImagesParameters | null = null,
+    input_images: GreedyInputImagesParamsDict | null = null,
     output: string | null = null,
     affine: boolean = false,
     brute: string | null = null,
     moments: 1 | 2 | null = null,
     reslice: Array<InputPathType> | null = null,
-    invert: GreedyInvertParameters | null = null,
-    root: GreedyRootParameters | null = null,
-    jacobian: GreedyJacobianParameters | null = null,
+    invert: GreedyInvertParamsDict | null = null,
+    root: GreedyRootParamsDict | null = null,
+    jacobian: GreedyJacobianParamsDict | null = null,
     metric_mode: boolean = false,
     defopt: boolean = false,
     weight: number | null = null,
-    metric: GreedyMetricParameters | null = null,
+    metric: GreedyMetricParamsDict | null = null,
     step_size: string | null = null,
     iterations: string | null = null,
     threads: number | null = null,
@@ -1117,7 +1117,7 @@ function greedy_params(
     svlb: boolean = false,
     sv_incompr: boolean = false,
     initial_warp: InputPathType | null = null,
-    tjr: GreedyTjrParameters | null = null,
+    tjr: GreedyTjrParamsDict | null = null,
     wr: number | null = null,
     initial_affine: InputPathType | null = null,
     ia_identity: boolean = false,
@@ -1127,18 +1127,18 @@ function greedy_params(
     ia_moments: 1 | 2 | null = null,
     affine_dof: 6 | 7 | 12 | null = null,
     jitter: number | null = null,
-    search: GreedySearchParameters | null = null,
+    search: GreedySearchParamsDict | null = null,
     det: -1 | 1 | null = null,
     cov_id: boolean = false,
     fixed_reslicing_image: InputPathType | null = null,
-    reslice_moving_image: GreedyResliceMovingImageParameters | null = null,
-    reslice_surface: GreedyResliceSurfaceParameters | null = null,
-    interpolation: GreedyNnParametersTagged | GreedyLinearParametersTagged | GreedyLabelParametersTagged | null = null,
+    reslice_moving_image: GreedyResliceMovingImageParamsDict | null = null,
+    reslice_surface: GreedyResliceSurfaceParamsDict | null = null,
+    interpolation: GreedyNnParamsDictTagged | GreedyLinearParamsDictTagged | GreedyLabelParamsDictTagged | null = null,
     reslice_background: number | null = null,
     reslice_datatype: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null = null,
     reslice_composite: InputPathType | null = null,
     reslice_jacobian: InputPathType | null = null,
-    reslice_simplex_jacobian: GreedyResliceSimplexJacobianParameters | null = null,
+    reslice_simplex_jacobian: GreedyResliceSimplexJacobianParamsDict | null = null,
     reslice_mask: InputPathType | null = null,
     metric_gradient: InputPathType | null = null,
     debug_deriv: boolean = false,
@@ -1152,7 +1152,7 @@ function greedy_params(
     float: boolean = false,
     version: boolean = false,
     verbosity: 0 | 1 | 2 | null = null,
-): GreedyParametersTagged {
+): GreedyParamsDictTagged {
     const params = {
         "@type": "greedy/greedy" as const,
         "dimensions": dimensions,
@@ -1345,7 +1345,7 @@ function greedy_params(
  * @returns Command-line arguments.
  */
 function greedy_cargs(
-    params: GreedyParameters,
+    params: GreedyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1736,7 +1736,7 @@ function greedy_cargs(
  * @returns Outputs object.
  */
 function greedy_outputs(
-    params: GreedyParameters,
+    params: GreedyParamsDict,
     execution: Execution,
 ): GreedyOutputs {
     const ret: GreedyOutputs = {
@@ -1768,7 +1768,7 @@ function greedy_outputs(
  * @returns NamedTuple of outputs (described in `GreedyOutputs`).
  */
 function greedy_execute(
-    params: GreedyParameters,
+    params: GreedyParamsDict,
     runner: Runner | null = null,
 ): GreedyOutputs {
     runner = runner || getGlobalRunner();
@@ -1868,19 +1868,19 @@ function greedy_execute(
  */
 function greedy_(
     dimensions: number,
-    input_images: GreedyInputImagesParameters | null = null,
+    input_images: GreedyInputImagesParamsDict | null = null,
     output: string | null = null,
     affine: boolean = false,
     brute: string | null = null,
     moments: 1 | 2 | null = null,
     reslice: Array<InputPathType> | null = null,
-    invert: GreedyInvertParameters | null = null,
-    root: GreedyRootParameters | null = null,
-    jacobian: GreedyJacobianParameters | null = null,
+    invert: GreedyInvertParamsDict | null = null,
+    root: GreedyRootParamsDict | null = null,
+    jacobian: GreedyJacobianParamsDict | null = null,
     metric_mode: boolean = false,
     defopt: boolean = false,
     weight: number | null = null,
-    metric: GreedyMetricParameters | null = null,
+    metric: GreedyMetricParamsDict | null = null,
     step_size: string | null = null,
     iterations: string | null = null,
     threads: number | null = null,
@@ -1904,7 +1904,7 @@ function greedy_(
     svlb: boolean = false,
     sv_incompr: boolean = false,
     initial_warp: InputPathType | null = null,
-    tjr: GreedyTjrParameters | null = null,
+    tjr: GreedyTjrParamsDict | null = null,
     wr: number | null = null,
     initial_affine: InputPathType | null = null,
     ia_identity: boolean = false,
@@ -1914,18 +1914,18 @@ function greedy_(
     ia_moments: 1 | 2 | null = null,
     affine_dof: 6 | 7 | 12 | null = null,
     jitter: number | null = null,
-    search: GreedySearchParameters | null = null,
+    search: GreedySearchParamsDict | null = null,
     det: -1 | 1 | null = null,
     cov_id: boolean = false,
     fixed_reslicing_image: InputPathType | null = null,
-    reslice_moving_image: GreedyResliceMovingImageParameters | null = null,
-    reslice_surface: GreedyResliceSurfaceParameters | null = null,
-    interpolation: GreedyNnParametersTagged | GreedyLinearParametersTagged | GreedyLabelParametersTagged | null = null,
+    reslice_moving_image: GreedyResliceMovingImageParamsDict | null = null,
+    reslice_surface: GreedyResliceSurfaceParamsDict | null = null,
+    interpolation: GreedyNnParamsDictTagged | GreedyLinearParamsDictTagged | GreedyLabelParamsDictTagged | null = null,
     reslice_background: number | null = null,
     reslice_datatype: "auto" | "double" | "float" | "uint" | "int" | "ushort" | "short" | "uchar" | "char" | null = null,
     reslice_composite: InputPathType | null = null,
     reslice_jacobian: InputPathType | null = null,
-    reslice_simplex_jacobian: GreedyResliceSimplexJacobianParameters | null = null,
+    reslice_simplex_jacobian: GreedyResliceSimplexJacobianParamsDict | null = null,
     reslice_mask: InputPathType | null = null,
     metric_gradient: InputPathType | null = null,
     debug_deriv: boolean = false,
@@ -1948,27 +1948,55 @@ function greedy_(
 
 export {
       GREEDY_METADATA,
+      GreedyInputImagesParamsDict,
+      GreedyInputImagesParamsDictTagged,
       GreedyInvertOutputs,
+      GreedyInvertParamsDict,
+      GreedyInvertParamsDictTagged,
       GreedyJacobianOutputs,
+      GreedyJacobianParamsDict,
+      GreedyJacobianParamsDictTagged,
+      GreedyLabelParamsDict,
+      GreedyLabelParamsDictTagged,
+      GreedyLinearParamsDict,
+      GreedyLinearParamsDictTagged,
+      GreedyMetricParamsDict,
+      GreedyMetricParamsDictTagged,
+      GreedyNnParamsDict,
+      GreedyNnParamsDictTagged,
       GreedyOutputs,
+      GreedyParamsDict,
+      GreedyParamsDictTagged,
       GreedyResliceMovingImageOutputs,
+      GreedyResliceMovingImageParamsDict,
+      GreedyResliceMovingImageParamsDictTagged,
       GreedyResliceSimplexJacobianOutputs,
+      GreedyResliceSimplexJacobianParamsDict,
+      GreedyResliceSimplexJacobianParamsDictTagged,
       GreedyResliceSurfaceOutputs,
+      GreedyResliceSurfaceParamsDict,
+      GreedyResliceSurfaceParamsDictTagged,
       GreedyRootOutputs,
+      GreedyRootParamsDict,
+      GreedyRootParamsDictTagged,
+      GreedySearchParamsDict,
+      GreedySearchParamsDictTagged,
+      GreedyTjrParamsDict,
+      GreedyTjrParamsDictTagged,
       greedy_,
       greedy_execute,
-      greedy_input_images_params,
-      greedy_invert_params,
-      greedy_jacobian_params,
-      greedy_label_params,
-      greedy_linear_params,
-      greedy_metric_params,
-      greedy_nn_params,
+      greedy_input_images,
+      greedy_invert,
+      greedy_jacobian,
+      greedy_label,
+      greedy_linear,
+      greedy_metric,
+      greedy_nn,
       greedy_params,
-      greedy_reslice_moving_image_params,
-      greedy_reslice_simplex_jacobian_params,
-      greedy_reslice_surface_params,
-      greedy_root_params,
-      greedy_search_params,
-      greedy_tjr_params,
+      greedy_reslice_moving_image,
+      greedy_reslice_simplex_jacobian,
+      greedy_reslice_surface,
+      greedy_root,
+      greedy_search,
+      greedy_tjr,
 };

@@ -11,7 +11,7 @@ const V_3D_TNORM_METADATA: Metadata = {
 };
 
 
-interface V3dTnormParameters {
+interface V3dTnormParamsDict {
     "@type"?: "afni/3dTnorm";
     "prefix"?: string | null | undefined;
     "norm2": boolean;
@@ -22,11 +22,11 @@ interface V3dTnormParameters {
     "L1fit": boolean;
     "input_dataset": InputPathType;
 }
-type V3dTnormParametersTagged = Required<Pick<V3dTnormParameters, '@type'>> & V3dTnormParameters;
+type V3dTnormParamsDictTagged = Required<Pick<V3dTnormParamsDict, '@type'>> & V3dTnormParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTnormParameters(...)`.
+ * Output object returned when calling `V3dTnormParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_tnorm_params(
     normx: boolean = false,
     polort: number | null = null,
     l1fit: boolean = false,
-): V3dTnormParametersTagged {
+): V3dTnormParamsDictTagged {
     const params = {
         "@type": "afni/3dTnorm" as const,
         "norm2": norm2,
@@ -94,7 +94,7 @@ function v_3d_tnorm_params(
  * @returns Command-line arguments.
  */
 function v_3d_tnorm_cargs(
-    params: V3dTnormParameters,
+    params: V3dTnormParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function v_3d_tnorm_cargs(
  * @returns Outputs object.
  */
 function v_3d_tnorm_outputs(
-    params: V3dTnormParameters,
+    params: V3dTnormParamsDict,
     execution: Execution,
 ): V3dTnormOutputs {
     const ret: V3dTnormOutputs = {
@@ -166,7 +166,7 @@ function v_3d_tnorm_outputs(
  * @returns NamedTuple of outputs (described in `V3dTnormOutputs`).
  */
 function v_3d_tnorm_execute(
-    params: V3dTnormParameters,
+    params: V3dTnormParamsDict,
     runner: Runner | null = null,
 ): V3dTnormOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function v_3d_tnorm(
 
 export {
       V3dTnormOutputs,
+      V3dTnormParamsDict,
+      V3dTnormParamsDictTagged,
       V_3D_TNORM_METADATA,
       v_3d_tnorm,
       v_3d_tnorm_execute,

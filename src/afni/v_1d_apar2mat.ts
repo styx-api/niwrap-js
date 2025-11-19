@@ -11,7 +11,7 @@ const V_1D_APAR2MAT_METADATA: Metadata = {
 };
 
 
-interface V1dApar2matParameters {
+interface V1dApar2matParamsDict {
     "@type"?: "afni/1dApar2mat";
     "x_shift": number;
     "y_shift": number;
@@ -26,11 +26,11 @@ interface V1dApar2matParameters {
     "z_x_shear": number;
     "z_y_shear": number;
 }
-type V1dApar2matParametersTagged = Required<Pick<V1dApar2matParameters, '@type'>> & V1dApar2matParameters;
+type V1dApar2matParamsDictTagged = Required<Pick<V1dApar2matParamsDict, '@type'>> & V1dApar2matParamsDict;
 
 
 /**
- * Output object returned when calling `V1dApar2matParameters(...)`.
+ * Output object returned when calling `V1dApar2matParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function v_1d_apar2mat_params(
     y_x_shear: number,
     z_x_shear: number,
     z_y_shear: number,
-): V1dApar2matParametersTagged {
+): V1dApar2matParamsDictTagged {
     const params = {
         "@type": "afni/1dApar2mat" as const,
         "x_shift": x_shift,
@@ -102,7 +102,7 @@ function v_1d_apar2mat_params(
  * @returns Command-line arguments.
  */
 function v_1d_apar2mat_cargs(
-    params: V1dApar2matParameters,
+    params: V1dApar2matParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function v_1d_apar2mat_cargs(
  * @returns Outputs object.
  */
 function v_1d_apar2mat_outputs(
-    params: V1dApar2matParameters,
+    params: V1dApar2matParamsDict,
     execution: Execution,
 ): V1dApar2matOutputs {
     const ret: V1dApar2matOutputs = {
@@ -157,7 +157,7 @@ function v_1d_apar2mat_outputs(
  * @returns NamedTuple of outputs (described in `V1dApar2matOutputs`).
  */
 function v_1d_apar2mat_execute(
-    params: V1dApar2matParameters,
+    params: V1dApar2matParamsDict,
     runner: Runner | null = null,
 ): V1dApar2matOutputs {
     runner = runner || getGlobalRunner();
@@ -217,6 +217,8 @@ function v_1d_apar2mat(
 
 export {
       V1dApar2matOutputs,
+      V1dApar2matParamsDict,
+      V1dApar2matParamsDictTagged,
       V_1D_APAR2MAT_METADATA,
       v_1d_apar2mat,
       v_1d_apar2mat_execute,

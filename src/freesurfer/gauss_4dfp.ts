@@ -11,7 +11,7 @@ const GAUSS_4DFP_METADATA: Metadata = {
 };
 
 
-interface Gauss4dfpParameters {
+interface Gauss4dfpParamsDict {
     "@type"?: "freesurfer/gauss_4dfp";
     "input_file": string;
     "f_half": number;
@@ -20,11 +20,11 @@ interface Gauss4dfpParameters {
     "wrap_flag": boolean;
     "differentiate_flag": boolean;
 }
-type Gauss4dfpParametersTagged = Required<Pick<Gauss4dfpParameters, '@type'>> & Gauss4dfpParameters;
+type Gauss4dfpParamsDictTagged = Required<Pick<Gauss4dfpParamsDict, '@type'>> & Gauss4dfpParamsDict;
 
 
 /**
- * Output object returned when calling `Gauss4dfpParameters(...)`.
+ * Output object returned when calling `Gauss4dfpParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function gauss_4dfp_params(
     endian_flag: string | null = null,
     wrap_flag: boolean = false,
     differentiate_flag: boolean = false,
-): Gauss4dfpParametersTagged {
+): Gauss4dfpParamsDictTagged {
     const params = {
         "@type": "freesurfer/gauss_4dfp" as const,
         "input_file": input_file,
@@ -86,7 +86,7 @@ function gauss_4dfp_params(
  * @returns Command-line arguments.
  */
 function gauss_4dfp_cargs(
-    params: Gauss4dfpParameters,
+    params: Gauss4dfpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function gauss_4dfp_cargs(
  * @returns Outputs object.
  */
 function gauss_4dfp_outputs(
-    params: Gauss4dfpParameters,
+    params: Gauss4dfpParamsDict,
     execution: Execution,
 ): Gauss4dfpOutputs {
     const ret: Gauss4dfpOutputs = {
@@ -147,7 +147,7 @@ function gauss_4dfp_outputs(
  * @returns NamedTuple of outputs (described in `Gauss4dfpOutputs`).
  */
 function gauss_4dfp_execute(
-    params: Gauss4dfpParameters,
+    params: Gauss4dfpParamsDict,
     runner: Runner | null = null,
 ): Gauss4dfpOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function gauss_4dfp(
 export {
       GAUSS_4DFP_METADATA,
       Gauss4dfpOutputs,
+      Gauss4dfpParamsDict,
+      Gauss4dfpParamsDictTagged,
       gauss_4dfp,
       gauss_4dfp_execute,
       gauss_4dfp_params,

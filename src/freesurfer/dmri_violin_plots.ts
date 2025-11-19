@@ -11,17 +11,17 @@ const DMRI_VIOLIN_PLOTS_METADATA: Metadata = {
 };
 
 
-interface DmriViolinPlotsParameters {
+interface DmriViolinPlotsParamsDict {
     "@type"?: "freesurfer/dmri_violinPlots";
     "input_directory": string;
     "labels": InputPathType;
     "structure": string;
 }
-type DmriViolinPlotsParametersTagged = Required<Pick<DmriViolinPlotsParameters, '@type'>> & DmriViolinPlotsParameters;
+type DmriViolinPlotsParamsDictTagged = Required<Pick<DmriViolinPlotsParamsDict, '@type'>> & DmriViolinPlotsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriViolinPlotsParameters(...)`.
+ * Output object returned when calling `DmriViolinPlotsParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function dmri_violin_plots_params(
     input_directory: string,
     labels: InputPathType,
     structure: string,
-): DmriViolinPlotsParametersTagged {
+): DmriViolinPlotsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_violinPlots" as const,
         "input_directory": input_directory,
@@ -66,7 +66,7 @@ function dmri_violin_plots_params(
  * @returns Command-line arguments.
  */
 function dmri_violin_plots_cargs(
-    params: DmriViolinPlotsParameters,
+    params: DmriViolinPlotsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function dmri_violin_plots_cargs(
  * @returns Outputs object.
  */
 function dmri_violin_plots_outputs(
-    params: DmriViolinPlotsParameters,
+    params: DmriViolinPlotsParamsDict,
     execution: Execution,
 ): DmriViolinPlotsOutputs {
     const ret: DmriViolinPlotsOutputs = {
@@ -121,7 +121,7 @@ function dmri_violin_plots_outputs(
  * @returns NamedTuple of outputs (described in `DmriViolinPlotsOutputs`).
  */
 function dmri_violin_plots_execute(
-    params: DmriViolinPlotsParameters,
+    params: DmriViolinPlotsParamsDict,
     runner: Runner | null = null,
 ): DmriViolinPlotsOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function dmri_violin_plots(
 export {
       DMRI_VIOLIN_PLOTS_METADATA,
       DmriViolinPlotsOutputs,
+      DmriViolinPlotsParamsDict,
+      DmriViolinPlotsParamsDictTagged,
       dmri_violin_plots,
       dmri_violin_plots_execute,
       dmri_violin_plots_params,

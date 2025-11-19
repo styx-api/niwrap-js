@@ -11,17 +11,17 @@ const MRIS_SPHERE_METADATA: Metadata = {
 };
 
 
-interface MrisSphereParameters {
+interface MrisSphereParamsDict {
     "@type"?: "freesurfer/mris_sphere";
     "surface_file": InputPathType;
     "patch_file": InputPathType;
     "output_patch": string;
 }
-type MrisSphereParametersTagged = Required<Pick<MrisSphereParameters, '@type'>> & MrisSphereParameters;
+type MrisSphereParamsDictTagged = Required<Pick<MrisSphereParamsDict, '@type'>> & MrisSphereParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSphereParameters(...)`.
+ * Output object returned when calling `MrisSphereParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_sphere_params(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
-): MrisSphereParametersTagged {
+): MrisSphereParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_sphere" as const,
         "surface_file": surface_file,
@@ -70,7 +70,7 @@ function mris_sphere_params(
  * @returns Command-line arguments.
  */
 function mris_sphere_cargs(
-    params: MrisSphereParameters,
+    params: MrisSphereParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mris_sphere_cargs(
  * @returns Outputs object.
  */
 function mris_sphere_outputs(
-    params: MrisSphereParameters,
+    params: MrisSphereParamsDict,
     execution: Execution,
 ): MrisSphereOutputs {
     const ret: MrisSphereOutputs = {
@@ -117,7 +117,7 @@ function mris_sphere_outputs(
  * @returns NamedTuple of outputs (described in `MrisSphereOutputs`).
  */
 function mris_sphere_execute(
-    params: MrisSphereParameters,
+    params: MrisSphereParamsDict,
     runner: Runner | null = null,
 ): MrisSphereOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mris_sphere(
 export {
       MRIS_SPHERE_METADATA,
       MrisSphereOutputs,
+      MrisSphereParamsDict,
+      MrisSphereParamsDictTagged,
       mris_sphere,
       mris_sphere_execute,
       mris_sphere_params,

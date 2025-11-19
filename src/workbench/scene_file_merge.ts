@@ -10,36 +10,36 @@ const SCENE_FILE_MERGE_METADATA: Metadata = {
 };
 
 
-interface SceneFileMergeUpToParameters {
+interface SceneFileMergeUpToParamsDict {
     "@type"?: "up-to";
     "last-column": string;
     "reverse": boolean;
 }
-type SceneFileMergeUpToParametersTagged = Required<Pick<SceneFileMergeUpToParameters, '@type'>> & SceneFileMergeUpToParameters;
+type SceneFileMergeUpToParamsDictTagged = Required<Pick<SceneFileMergeUpToParamsDict, '@type'>> & SceneFileMergeUpToParamsDict;
 
 
-interface SceneFileMergeSceneParameters {
+interface SceneFileMergeSceneParamsDict {
     "@type"?: "scene";
     "scene": string;
-    "up-to"?: SceneFileMergeUpToParameters | null | undefined;
+    "up-to"?: SceneFileMergeUpToParamsDict | null | undefined;
 }
-type SceneFileMergeSceneParametersTagged = Required<Pick<SceneFileMergeSceneParameters, '@type'>> & SceneFileMergeSceneParameters;
+type SceneFileMergeSceneParamsDictTagged = Required<Pick<SceneFileMergeSceneParamsDict, '@type'>> & SceneFileMergeSceneParamsDict;
 
 
-interface SceneFileMergeSceneFileParameters {
+interface SceneFileMergeSceneFileParamsDict {
     "@type"?: "scene-file";
     "scene-file": string;
-    "scene"?: Array<SceneFileMergeSceneParameters> | null | undefined;
+    "scene"?: Array<SceneFileMergeSceneParamsDict> | null | undefined;
 }
-type SceneFileMergeSceneFileParametersTagged = Required<Pick<SceneFileMergeSceneFileParameters, '@type'>> & SceneFileMergeSceneFileParameters;
+type SceneFileMergeSceneFileParamsDictTagged = Required<Pick<SceneFileMergeSceneFileParamsDict, '@type'>> & SceneFileMergeSceneFileParamsDict;
 
 
-interface SceneFileMergeParameters {
+interface SceneFileMergeParamsDict {
     "@type"?: "workbench/scene-file-merge";
-    "scene-file"?: Array<SceneFileMergeSceneFileParameters> | null | undefined;
+    "scene-file"?: Array<SceneFileMergeSceneFileParamsDict> | null | undefined;
     "scene-file-out": string;
 }
-type SceneFileMergeParametersTagged = Required<Pick<SceneFileMergeParameters, '@type'>> & SceneFileMergeParameters;
+type SceneFileMergeParamsDictTagged = Required<Pick<SceneFileMergeParamsDict, '@type'>> & SceneFileMergeParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type SceneFileMergeParametersTagged = Required<Pick<SceneFileMergeParameters, '@
  *
  * @returns Parameter dictionary
  */
-function scene_file_merge_up_to_params(
+function scene_file_merge_up_to(
     last_column: string,
     reverse: boolean = false,
-): SceneFileMergeUpToParametersTagged {
+): SceneFileMergeUpToParamsDictTagged {
     const params = {
         "@type": "up-to" as const,
         "last-column": last_column,
@@ -72,7 +72,7 @@ function scene_file_merge_up_to_params(
  * @returns Command-line arguments.
  */
 function scene_file_merge_up_to_cargs(
-    params: SceneFileMergeUpToParameters,
+    params: SceneFileMergeUpToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function scene_file_merge_up_to_cargs(
  *
  * @returns Parameter dictionary
  */
-function scene_file_merge_scene_params(
+function scene_file_merge_scene(
     scene: string,
-    up_to: SceneFileMergeUpToParameters | null = null,
-): SceneFileMergeSceneParametersTagged {
+    up_to: SceneFileMergeUpToParamsDict | null = null,
+): SceneFileMergeSceneParamsDictTagged {
     const params = {
         "@type": "scene" as const,
         "scene": scene,
@@ -119,7 +119,7 @@ function scene_file_merge_scene_params(
  * @returns Command-line arguments.
  */
 function scene_file_merge_scene_cargs(
-    params: SceneFileMergeSceneParameters,
+    params: SceneFileMergeSceneParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,10 +142,10 @@ function scene_file_merge_scene_cargs(
  *
  * @returns Parameter dictionary
  */
-function scene_file_merge_scene_file_params(
+function scene_file_merge_scene_file(
     scene_file: string,
-    scene: Array<SceneFileMergeSceneParameters> | null = null,
-): SceneFileMergeSceneFileParametersTagged {
+    scene: Array<SceneFileMergeSceneParamsDict> | null = null,
+): SceneFileMergeSceneFileParamsDictTagged {
     const params = {
         "@type": "scene-file" as const,
         "scene-file": scene_file,
@@ -166,7 +166,7 @@ function scene_file_merge_scene_file_params(
  * @returns Command-line arguments.
  */
 function scene_file_merge_scene_file_cargs(
-    params: SceneFileMergeSceneFileParameters,
+    params: SceneFileMergeSceneFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function scene_file_merge_scene_file_cargs(
 
 
 /**
- * Output object returned when calling `SceneFileMergeParameters(...)`.
+ * Output object returned when calling `SceneFileMergeParamsDict(...)`.
  *
  * @interface
  */
@@ -204,8 +204,8 @@ interface SceneFileMergeOutputs {
  */
 function scene_file_merge_params(
     scene_file_out: string,
-    scene_file: Array<SceneFileMergeSceneFileParameters> | null = null,
-): SceneFileMergeParametersTagged {
+    scene_file: Array<SceneFileMergeSceneFileParamsDict> | null = null,
+): SceneFileMergeParamsDictTagged {
     const params = {
         "@type": "workbench/scene-file-merge" as const,
         "scene-file-out": scene_file_out,
@@ -226,7 +226,7 @@ function scene_file_merge_params(
  * @returns Command-line arguments.
  */
 function scene_file_merge_cargs(
-    params: SceneFileMergeParameters,
+    params: SceneFileMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -251,7 +251,7 @@ function scene_file_merge_cargs(
  * @returns Outputs object.
  */
 function scene_file_merge_outputs(
-    params: SceneFileMergeParameters,
+    params: SceneFileMergeParamsDict,
     execution: Execution,
 ): SceneFileMergeOutputs {
     const ret: SceneFileMergeOutputs = {
@@ -276,7 +276,7 @@ function scene_file_merge_outputs(
  * @returns NamedTuple of outputs (described in `SceneFileMergeOutputs`).
  */
 function scene_file_merge_execute(
-    params: SceneFileMergeParameters,
+    params: SceneFileMergeParamsDict,
     runner: Runner | null = null,
 ): SceneFileMergeOutputs {
     runner = runner || getGlobalRunner();
@@ -306,7 +306,7 @@ function scene_file_merge_execute(
  */
 function scene_file_merge(
     scene_file_out: string,
-    scene_file: Array<SceneFileMergeSceneFileParameters> | null = null,
+    scene_file: Array<SceneFileMergeSceneFileParamsDict> | null = null,
     runner: Runner | null = null,
 ): SceneFileMergeOutputs {
     const params = scene_file_merge_params(scene_file_out, scene_file)
@@ -317,10 +317,18 @@ function scene_file_merge(
 export {
       SCENE_FILE_MERGE_METADATA,
       SceneFileMergeOutputs,
+      SceneFileMergeParamsDict,
+      SceneFileMergeParamsDictTagged,
+      SceneFileMergeSceneFileParamsDict,
+      SceneFileMergeSceneFileParamsDictTagged,
+      SceneFileMergeSceneParamsDict,
+      SceneFileMergeSceneParamsDictTagged,
+      SceneFileMergeUpToParamsDict,
+      SceneFileMergeUpToParamsDictTagged,
       scene_file_merge,
       scene_file_merge_execute,
       scene_file_merge_params,
-      scene_file_merge_scene_file_params,
-      scene_file_merge_scene_params,
-      scene_file_merge_up_to_params,
+      scene_file_merge_scene,
+      scene_file_merge_scene_file,
+      scene_file_merge_up_to,
 };

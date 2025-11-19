@@ -11,7 +11,7 @@ const FS_TEMP_FILE_METADATA: Metadata = {
 };
 
 
-interface FsTempFileParameters {
+interface FsTempFileParamsDict {
     "@type"?: "freesurfer/fs_temp_file";
     "base_dir"?: string | null | undefined;
     "base_dir_alt"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface FsTempFileParameters {
     "help": boolean;
     "help_alt": boolean;
 }
-type FsTempFileParametersTagged = Required<Pick<FsTempFileParameters, '@type'>> & FsTempFileParameters;
+type FsTempFileParamsDictTagged = Required<Pick<FsTempFileParamsDict, '@type'>> & FsTempFileParamsDict;
 
 
 /**
- * Output object returned when calling `FsTempFileParameters(...)`.
+ * Output object returned when calling `FsTempFileParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function fs_temp_file_params(
     scratch: boolean = false,
     help: boolean = false,
     help_alt: boolean = false,
-): FsTempFileParametersTagged {
+): FsTempFileParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_temp_file" as const,
         "scratch": scratch,
@@ -90,7 +90,7 @@ function fs_temp_file_params(
  * @returns Command-line arguments.
  */
 function fs_temp_file_cargs(
-    params: FsTempFileParameters,
+    params: FsTempFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function fs_temp_file_cargs(
  * @returns Outputs object.
  */
 function fs_temp_file_outputs(
-    params: FsTempFileParameters,
+    params: FsTempFileParamsDict,
     execution: Execution,
 ): FsTempFileOutputs {
     const ret: FsTempFileOutputs = {
@@ -166,7 +166,7 @@ function fs_temp_file_outputs(
  * @returns NamedTuple of outputs (described in `FsTempFileOutputs`).
  */
 function fs_temp_file_execute(
-    params: FsTempFileParameters,
+    params: FsTempFileParamsDict,
     runner: Runner | null = null,
 ): FsTempFileOutputs {
     runner = runner || getGlobalRunner();
@@ -217,6 +217,8 @@ function fs_temp_file(
 export {
       FS_TEMP_FILE_METADATA,
       FsTempFileOutputs,
+      FsTempFileParamsDict,
+      FsTempFileParamsDictTagged,
       fs_temp_file,
       fs_temp_file_execute,
       fs_temp_file_params,

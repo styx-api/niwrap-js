@@ -11,17 +11,17 @@ const HISTO_COMPUTE_JOINT_DENSITY_METADATA: Metadata = {
 };
 
 
-interface HistoComputeJointDensityParameters {
+interface HistoComputeJointDensityParamsDict {
     "@type"?: "freesurfer/histo_compute_joint_density";
     "volume1": InputPathType;
     "volume2": InputPathType;
     "joint_density_file": string;
 }
-type HistoComputeJointDensityParametersTagged = Required<Pick<HistoComputeJointDensityParameters, '@type'>> & HistoComputeJointDensityParameters;
+type HistoComputeJointDensityParamsDictTagged = Required<Pick<HistoComputeJointDensityParamsDict, '@type'>> & HistoComputeJointDensityParamsDict;
 
 
 /**
- * Output object returned when calling `HistoComputeJointDensityParameters(...)`.
+ * Output object returned when calling `HistoComputeJointDensityParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function histo_compute_joint_density_params(
     volume1: InputPathType,
     volume2: InputPathType,
     joint_density_file: string,
-): HistoComputeJointDensityParametersTagged {
+): HistoComputeJointDensityParamsDictTagged {
     const params = {
         "@type": "freesurfer/histo_compute_joint_density" as const,
         "volume1": volume1,
@@ -70,7 +70,7 @@ function histo_compute_joint_density_params(
  * @returns Command-line arguments.
  */
 function histo_compute_joint_density_cargs(
-    params: HistoComputeJointDensityParameters,
+    params: HistoComputeJointDensityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function histo_compute_joint_density_cargs(
  * @returns Outputs object.
  */
 function histo_compute_joint_density_outputs(
-    params: HistoComputeJointDensityParameters,
+    params: HistoComputeJointDensityParamsDict,
     execution: Execution,
 ): HistoComputeJointDensityOutputs {
     const ret: HistoComputeJointDensityOutputs = {
@@ -117,7 +117,7 @@ function histo_compute_joint_density_outputs(
  * @returns NamedTuple of outputs (described in `HistoComputeJointDensityOutputs`).
  */
 function histo_compute_joint_density_execute(
-    params: HistoComputeJointDensityParameters,
+    params: HistoComputeJointDensityParamsDict,
     runner: Runner | null = null,
 ): HistoComputeJointDensityOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function histo_compute_joint_density(
 export {
       HISTO_COMPUTE_JOINT_DENSITY_METADATA,
       HistoComputeJointDensityOutputs,
+      HistoComputeJointDensityParamsDict,
+      HistoComputeJointDensityParamsDictTagged,
       histo_compute_joint_density,
       histo_compute_joint_density_execute,
       histo_compute_joint_density_params,

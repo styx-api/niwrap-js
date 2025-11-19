@@ -11,7 +11,7 @@ const V__MAKE_LABEL_TABLE_METADATA: Metadata = {
 };
 
 
-interface VMakeLabelTableParameters {
+interface VMakeLabelTableParamsDict {
     "@type"?: "afni/@MakeLabelTable";
     "labeltable": string;
     "atlas_pointlist"?: string | null | undefined;
@@ -49,11 +49,11 @@ interface VMakeLabelTableParameters {
     "all_opts": boolean;
     "h_find"?: string | null | undefined;
 }
-type VMakeLabelTableParametersTagged = Required<Pick<VMakeLabelTableParameters, '@type'>> & VMakeLabelTableParameters;
+type VMakeLabelTableParamsDictTagged = Required<Pick<VMakeLabelTableParamsDict, '@type'>> & VMakeLabelTableParamsDict;
 
 
 /**
- * Output object returned when calling `VMakeLabelTableParameters(...)`.
+ * Output object returned when calling `VMakeLabelTableParamsDict(...)`.
  *
  * @interface
  */
@@ -158,7 +158,7 @@ function v__make_label_table_params(
     h_view: boolean = false,
     all_opts: boolean = false,
     h_find: string | null = null,
-): VMakeLabelTableParametersTagged {
+): VMakeLabelTableParamsDictTagged {
     const params = {
         "@type": "afni/@MakeLabelTable" as const,
         "labeltable": labeltable,
@@ -258,7 +258,7 @@ function v__make_label_table_params(
  * @returns Command-line arguments.
  */
 function v__make_label_table_cargs(
-    params: VMakeLabelTableParameters,
+    params: VMakeLabelTableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -454,7 +454,7 @@ function v__make_label_table_cargs(
  * @returns Outputs object.
  */
 function v__make_label_table_outputs(
-    params: VMakeLabelTableParameters,
+    params: VMakeLabelTableParamsDict,
     execution: Execution,
 ): VMakeLabelTableOutputs {
     const ret: VMakeLabelTableOutputs = {
@@ -483,7 +483,7 @@ function v__make_label_table_outputs(
  * @returns NamedTuple of outputs (described in `VMakeLabelTableOutputs`).
  */
 function v__make_label_table_execute(
-    params: VMakeLabelTableParameters,
+    params: VMakeLabelTableParamsDict,
     runner: Runner | null = null,
 ): VMakeLabelTableOutputs {
     runner = runner || getGlobalRunner();
@@ -589,6 +589,8 @@ function v__make_label_table(
 
 export {
       VMakeLabelTableOutputs,
+      VMakeLabelTableParamsDict,
+      VMakeLabelTableParamsDictTagged,
       V__MAKE_LABEL_TABLE_METADATA,
       v__make_label_table,
       v__make_label_table_execute,

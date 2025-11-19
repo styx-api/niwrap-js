@@ -11,7 +11,7 @@ const V_1DEVAL_METADATA: Metadata = {
 };
 
 
-interface V1devalParameters {
+interface V1devalParamsDict {
     "@type"?: "afni/1deval";
     "del"?: number | null | undefined;
     "start"?: number | null | undefined;
@@ -22,11 +22,11 @@ interface V1devalParameters {
     "symbol_values"?: Array<string> | null | undefined;
     "expression": string;
 }
-type V1devalParametersTagged = Required<Pick<V1devalParameters, '@type'>> & V1devalParameters;
+type V1devalParamsDictTagged = Required<Pick<V1devalParamsDict, '@type'>> & V1devalParamsDict;
 
 
 /**
- * Output object returned when calling `V1devalParameters(...)`.
+ * Output object returned when calling `V1devalParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_1deval_params(
     v_1_d: boolean = false,
     symbols: Array<InputPathType> | null = null,
     symbol_values: Array<string> | null = null,
-): V1devalParametersTagged {
+): V1devalParamsDictTagged {
     const params = {
         "@type": "afni/1deval" as const,
         "1D": v_1_d,
@@ -102,7 +102,7 @@ function v_1deval_params(
  * @returns Command-line arguments.
  */
 function v_1deval_cargs(
-    params: V1devalParameters,
+    params: V1devalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function v_1deval_cargs(
  * @returns Outputs object.
  */
 function v_1deval_outputs(
-    params: V1devalParameters,
+    params: V1devalParamsDict,
     execution: Execution,
 ): V1devalOutputs {
     const ret: V1devalOutputs = {
@@ -189,7 +189,7 @@ function v_1deval_outputs(
  * @returns NamedTuple of outputs (described in `V1devalOutputs`).
  */
 function v_1deval_execute(
-    params: V1devalParameters,
+    params: V1devalParamsDict,
     runner: Runner | null = null,
 ): V1devalOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function v_1deval(
 
 export {
       V1devalOutputs,
+      V1devalParamsDict,
+      V1devalParamsDictTagged,
       V_1DEVAL_METADATA,
       v_1deval,
       v_1deval_execute,

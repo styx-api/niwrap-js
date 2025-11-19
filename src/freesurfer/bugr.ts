@@ -11,18 +11,18 @@ const BUGR_METADATA: Metadata = {
 };
 
 
-interface BugrParameters {
+interface BugrParamsDict {
     "@type"?: "freesurfer/bugr";
     "subject_name": string;
     "command_line": string;
     "error_message": string;
     "log_file"?: InputPathType | null | undefined;
 }
-type BugrParametersTagged = Required<Pick<BugrParameters, '@type'>> & BugrParameters;
+type BugrParamsDictTagged = Required<Pick<BugrParamsDict, '@type'>> & BugrParamsDict;
 
 
 /**
- * Output object returned when calling `BugrParameters(...)`.
+ * Output object returned when calling `BugrParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function bugr_params(
     command_line: string,
     error_message: string,
     log_file: InputPathType | null = null,
-): BugrParametersTagged {
+): BugrParamsDictTagged {
     const params = {
         "@type": "freesurfer/bugr" as const,
         "subject_name": subject_name,
@@ -72,7 +72,7 @@ function bugr_params(
  * @returns Command-line arguments.
  */
 function bugr_cargs(
-    params: BugrParameters,
+    params: BugrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function bugr_cargs(
  * @returns Outputs object.
  */
 function bugr_outputs(
-    params: BugrParameters,
+    params: BugrParamsDict,
     execution: Execution,
 ): BugrOutputs {
     const ret: BugrOutputs = {
@@ -133,7 +133,7 @@ function bugr_outputs(
  * @returns NamedTuple of outputs (described in `BugrOutputs`).
  */
 function bugr_execute(
-    params: BugrParameters,
+    params: BugrParamsDict,
     runner: Runner | null = null,
 ): BugrOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function bugr(
 export {
       BUGR_METADATA,
       BugrOutputs,
+      BugrParamsDict,
+      BugrParamsDictTagged,
       bugr,
       bugr_execute,
       bugr_params,

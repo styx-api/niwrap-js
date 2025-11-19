@@ -11,7 +11,7 @@ const ROI2DATASET_METADATA: Metadata = {
 };
 
 
-interface Roi2datasetParameters {
+interface Roi2datasetParamsDict {
     "@type"?: "afni/ROI2dataset";
     "prefix": string;
     "input_rois": Array<InputPathType>;
@@ -25,11 +25,11 @@ interface Roi2datasetParameters {
     "pad_to_node"?: number | null | undefined;
     "pad_label"?: number | null | undefined;
 }
-type Roi2datasetParametersTagged = Required<Pick<Roi2datasetParameters, '@type'>> & Roi2datasetParameters;
+type Roi2datasetParamsDictTagged = Required<Pick<Roi2datasetParamsDict, '@type'>> & Roi2datasetParamsDict;
 
 
 /**
- * Output object returned when calling `Roi2datasetParameters(...)`.
+ * Output object returned when calling `Roi2datasetParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function roi2dataset_params(
     domain_parent_id: string | null = null,
     pad_to_node: number | null = null,
     pad_label: number | null = null,
-): Roi2datasetParametersTagged {
+): Roi2datasetParamsDictTagged {
     const params = {
         "@type": "afni/ROI2dataset" as const,
         "prefix": prefix,
@@ -112,7 +112,7 @@ function roi2dataset_params(
  * @returns Command-line arguments.
  */
 function roi2dataset_cargs(
-    params: Roi2datasetParameters,
+    params: Roi2datasetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,7 +183,7 @@ function roi2dataset_cargs(
  * @returns Outputs object.
  */
 function roi2dataset_outputs(
-    params: Roi2datasetParameters,
+    params: Roi2datasetParamsDict,
     execution: Execution,
 ): Roi2datasetOutputs {
     const ret: Roi2datasetOutputs = {
@@ -208,7 +208,7 @@ function roi2dataset_outputs(
  * @returns NamedTuple of outputs (described in `Roi2datasetOutputs`).
  */
 function roi2dataset_execute(
-    params: Roi2datasetParameters,
+    params: Roi2datasetParamsDict,
     runner: Runner | null = null,
 ): Roi2datasetOutputs {
     runner = runner || getGlobalRunner();
@@ -267,6 +267,8 @@ function roi2dataset(
 export {
       ROI2DATASET_METADATA,
       Roi2datasetOutputs,
+      Roi2datasetParamsDict,
+      Roi2datasetParamsDictTagged,
       roi2dataset,
       roi2dataset_execute,
       roi2dataset_params,

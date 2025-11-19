@@ -11,18 +11,18 @@ const MAKE_SYMMETRIC_METADATA: Metadata = {
 };
 
 
-interface MakeSymmetricParameters {
+interface MakeSymmetricParamsDict {
     "@type"?: "freesurfer/make_symmetric";
     "hemi": string;
     "input_file": InputPathType;
     "output_file": string;
     "transform_map": string;
 }
-type MakeSymmetricParametersTagged = Required<Pick<MakeSymmetricParameters, '@type'>> & MakeSymmetricParameters;
+type MakeSymmetricParamsDictTagged = Required<Pick<MakeSymmetricParamsDict, '@type'>> & MakeSymmetricParamsDict;
 
 
 /**
- * Output object returned when calling `MakeSymmetricParameters(...)`.
+ * Output object returned when calling `MakeSymmetricParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function make_symmetric_params(
     input_file: InputPathType,
     output_file: string,
     transform_map: string,
-): MakeSymmetricParametersTagged {
+): MakeSymmetricParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_symmetric" as const,
         "hemi": hemi,
@@ -78,7 +78,7 @@ function make_symmetric_params(
  * @returns Command-line arguments.
  */
 function make_symmetric_cargs(
-    params: MakeSymmetricParameters,
+    params: MakeSymmetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function make_symmetric_cargs(
  * @returns Outputs object.
  */
 function make_symmetric_outputs(
-    params: MakeSymmetricParameters,
+    params: MakeSymmetricParamsDict,
     execution: Execution,
 ): MakeSymmetricOutputs {
     const ret: MakeSymmetricOutputs = {
@@ -127,7 +127,7 @@ function make_symmetric_outputs(
  * @returns NamedTuple of outputs (described in `MakeSymmetricOutputs`).
  */
 function make_symmetric_execute(
-    params: MakeSymmetricParameters,
+    params: MakeSymmetricParamsDict,
     runner: Runner | null = null,
 ): MakeSymmetricOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function make_symmetric(
 export {
       MAKE_SYMMETRIC_METADATA,
       MakeSymmetricOutputs,
+      MakeSymmetricParamsDict,
+      MakeSymmetricParamsDictTagged,
       make_symmetric,
       make_symmetric_execute,
       make_symmetric_params,

@@ -11,7 +11,7 @@ const MRI_SURF2VOLSEG_METADATA: Metadata = {
 };
 
 
-interface MriSurf2volsegParameters {
+interface MriSurf2volsegParamsDict {
     "@type"?: "freesurfer/mri_surf2volseg";
     "input_segmentation"?: InputPathType | null | undefined;
     "output_segmentation"?: string | null | undefined;
@@ -39,11 +39,11 @@ interface MriSurf2volsegParameters {
     "ctab_file"?: InputPathType | null | undefined;
     "threads_number"?: number | null | undefined;
 }
-type MriSurf2volsegParametersTagged = Required<Pick<MriSurf2volsegParameters, '@type'>> & MriSurf2volsegParameters;
+type MriSurf2volsegParamsDictTagged = Required<Pick<MriSurf2volsegParamsDict, '@type'>> & MriSurf2volsegParamsDict;
 
 
 /**
- * Output object returned when calling `MriSurf2volsegParameters(...)`.
+ * Output object returned when calling `MriSurf2volsegParamsDict(...)`.
  *
  * @interface
  */
@@ -112,7 +112,7 @@ function mri_surf2volseg_params(
     crs_test: Array<number> | null = null,
     ctab_file: InputPathType | null = null,
     threads_number: number | null = null,
-): MriSurf2volsegParametersTagged {
+): MriSurf2volsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_surf2volseg" as const,
         "label_cortex": label_cortex,
@@ -192,7 +192,7 @@ function mri_surf2volseg_params(
  * @returns Command-line arguments.
  */
 function mri_surf2volseg_cargs(
-    params: MriSurf2volsegParameters,
+    params: MriSurf2volsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -342,7 +342,7 @@ function mri_surf2volseg_cargs(
  * @returns Outputs object.
  */
 function mri_surf2volseg_outputs(
-    params: MriSurf2volsegParameters,
+    params: MriSurf2volsegParamsDict,
     execution: Execution,
 ): MriSurf2volsegOutputs {
     const ret: MriSurf2volsegOutputs = {
@@ -367,7 +367,7 @@ function mri_surf2volseg_outputs(
  * @returns NamedTuple of outputs (described in `MriSurf2volsegOutputs`).
  */
 function mri_surf2volseg_execute(
-    params: MriSurf2volsegParameters,
+    params: MriSurf2volsegParamsDict,
     runner: Runner | null = null,
 ): MriSurf2volsegOutputs {
     runner = runner || getGlobalRunner();
@@ -454,6 +454,8 @@ function mri_surf2volseg(
 export {
       MRI_SURF2VOLSEG_METADATA,
       MriSurf2volsegOutputs,
+      MriSurf2volsegParamsDict,
+      MriSurf2volsegParamsDictTagged,
       mri_surf2volseg,
       mri_surf2volseg_execute,
       mri_surf2volseg_params,

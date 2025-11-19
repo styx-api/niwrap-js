@@ -11,7 +11,7 @@ const MRI_PATH2LABEL_METADATA: Metadata = {
 };
 
 
-interface MriPath2labelParameters {
+interface MriPath2labelParamsDict {
     "@type"?: "freesurfer/mri_path2label";
     "input_file": string;
     "output_file": string;
@@ -25,11 +25,11 @@ interface MriPath2labelParameters {
     "source_file"?: string | null | undefined;
     "dest_file"?: string | null | undefined;
 }
-type MriPath2labelParametersTagged = Required<Pick<MriPath2labelParameters, '@type'>> & MriPath2labelParameters;
+type MriPath2labelParamsDictTagged = Required<Pick<MriPath2labelParamsDict, '@type'>> & MriPath2labelParamsDict;
 
 
 /**
- * Output object returned when calling `MriPath2labelParameters(...)`.
+ * Output object returned when calling `MriPath2labelParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function mri_path2label_params(
     confill: Array<string> | null = null,
     source_file: string | null = null,
     dest_file: string | null = null,
-): MriPath2labelParametersTagged {
+): MriPath2labelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_path2label" as const,
         "input_file": input_file,
@@ -110,7 +110,7 @@ function mri_path2label_params(
  * @returns Command-line arguments.
  */
 function mri_path2label_cargs(
-    params: MriPath2labelParameters,
+    params: MriPath2labelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -175,7 +175,7 @@ function mri_path2label_cargs(
  * @returns Outputs object.
  */
 function mri_path2label_outputs(
-    params: MriPath2labelParameters,
+    params: MriPath2labelParamsDict,
     execution: Execution,
 ): MriPath2labelOutputs {
     const ret: MriPath2labelOutputs = {
@@ -200,7 +200,7 @@ function mri_path2label_outputs(
  * @returns NamedTuple of outputs (described in `MriPath2labelOutputs`).
  */
 function mri_path2label_execute(
-    params: MriPath2labelParameters,
+    params: MriPath2labelParamsDict,
     runner: Runner | null = null,
 ): MriPath2labelOutputs {
     runner = runner || getGlobalRunner();
@@ -259,6 +259,8 @@ function mri_path2label(
 export {
       MRI_PATH2LABEL_METADATA,
       MriPath2labelOutputs,
+      MriPath2labelParamsDict,
+      MriPath2labelParamsDictTagged,
       mri_path2label,
       mri_path2label_execute,
       mri_path2label_params,

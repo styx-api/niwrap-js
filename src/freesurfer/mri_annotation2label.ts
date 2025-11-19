@@ -11,7 +11,7 @@ const MRI_ANNOTATION2LABEL_METADATA: Metadata = {
 };
 
 
-interface MriAnnotation2labelParameters {
+interface MriAnnotation2labelParamsDict {
     "@type"?: "freesurfer/mri_annotation2label";
     "subject": string;
     "hemi": string;
@@ -33,11 +33,11 @@ interface MriAnnotation2labelParameters {
     "help": boolean;
     "version": boolean;
 }
-type MriAnnotation2labelParametersTagged = Required<Pick<MriAnnotation2labelParameters, '@type'>> & MriAnnotation2labelParameters;
+type MriAnnotation2labelParamsDictTagged = Required<Pick<MriAnnotation2labelParamsDict, '@type'>> & MriAnnotation2labelParamsDict;
 
 
 /**
- * Output object returned when calling `MriAnnotation2labelParameters(...)`.
+ * Output object returned when calling `MriAnnotation2labelParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function mri_annotation2label_params(
     stat: InputPathType | null = null,
     help: boolean = false,
     version: boolean = false,
-): MriAnnotation2labelParametersTagged {
+): MriAnnotation2labelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_annotation2label" as const,
         "subject": subject,
@@ -160,7 +160,7 @@ function mri_annotation2label_params(
  * @returns Command-line arguments.
  */
 function mri_annotation2label_cargs(
-    params: MriAnnotation2labelParameters,
+    params: MriAnnotation2labelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -282,7 +282,7 @@ function mri_annotation2label_cargs(
  * @returns Outputs object.
  */
 function mri_annotation2label_outputs(
-    params: MriAnnotation2labelParameters,
+    params: MriAnnotation2labelParamsDict,
     execution: Execution,
 ): MriAnnotation2labelOutputs {
     const ret: MriAnnotation2labelOutputs = {
@@ -307,7 +307,7 @@ function mri_annotation2label_outputs(
  * @returns NamedTuple of outputs (described in `MriAnnotation2labelOutputs`).
  */
 function mri_annotation2label_execute(
-    params: MriAnnotation2labelParameters,
+    params: MriAnnotation2labelParamsDict,
     runner: Runner | null = null,
 ): MriAnnotation2labelOutputs {
     runner = runner || getGlobalRunner();
@@ -382,6 +382,8 @@ function mri_annotation2label(
 export {
       MRI_ANNOTATION2LABEL_METADATA,
       MriAnnotation2labelOutputs,
+      MriAnnotation2labelParamsDict,
+      MriAnnotation2labelParamsDictTagged,
       mri_annotation2label,
       mri_annotation2label_execute,
       mri_annotation2label_params,

@@ -11,7 +11,7 @@ const LONG_MRIS_SLOPES_METADATA: Metadata = {
 };
 
 
-interface LongMrisSlopesParameters {
+interface LongMrisSlopesParamsDict {
     "@type"?: "freesurfer/long_mris_slopes";
     "qdec": InputPathType;
     "meas": string;
@@ -48,11 +48,11 @@ interface LongMrisSlopesParameters {
     "stack_spc"?: string | null | undefined;
     "stack_resid"?: string | null | undefined;
 }
-type LongMrisSlopesParametersTagged = Required<Pick<LongMrisSlopesParameters, '@type'>> & LongMrisSlopesParameters;
+type LongMrisSlopesParamsDictTagged = Required<Pick<LongMrisSlopesParamsDict, '@type'>> & LongMrisSlopesParamsDict;
 
 
 /**
- * Output object returned when calling `LongMrisSlopesParameters(...)`.
+ * Output object returned when calling `LongMrisSlopesParamsDict(...)`.
  *
  * @interface
  */
@@ -139,7 +139,7 @@ function long_mris_slopes_params(
     stack_pc1: string | null = null,
     stack_spc: string | null = null,
     stack_resid: string | null = null,
-): LongMrisSlopesParametersTagged {
+): LongMrisSlopesParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_mris_slopes" as const,
         "qdec": qdec,
@@ -230,7 +230,7 @@ function long_mris_slopes_params(
  * @returns Command-line arguments.
  */
 function long_mris_slopes_cargs(
-    params: LongMrisSlopesParameters,
+    params: LongMrisSlopesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -414,7 +414,7 @@ function long_mris_slopes_cargs(
  * @returns Outputs object.
  */
 function long_mris_slopes_outputs(
-    params: LongMrisSlopesParameters,
+    params: LongMrisSlopesParamsDict,
     execution: Execution,
 ): LongMrisSlopesOutputs {
     const ret: LongMrisSlopesOutputs = {
@@ -439,7 +439,7 @@ function long_mris_slopes_outputs(
  * @returns NamedTuple of outputs (described in `LongMrisSlopesOutputs`).
  */
 function long_mris_slopes_execute(
-    params: LongMrisSlopesParameters,
+    params: LongMrisSlopesParamsDict,
     runner: Runner | null = null,
 ): LongMrisSlopesOutputs {
     runner = runner || getGlobalRunner();
@@ -544,6 +544,8 @@ function long_mris_slopes(
 export {
       LONG_MRIS_SLOPES_METADATA,
       LongMrisSlopesOutputs,
+      LongMrisSlopesParamsDict,
+      LongMrisSlopesParamsDictTagged,
       long_mris_slopes,
       long_mris_slopes_execute,
       long_mris_slopes_params,

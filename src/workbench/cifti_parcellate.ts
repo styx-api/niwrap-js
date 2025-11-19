@@ -10,7 +10,7 @@ const CIFTI_PARCELLATE_METADATA: Metadata = {
 };
 
 
-interface CiftiParcellateSpatialWeightsParameters {
+interface CiftiParcellateSpatialWeightsParamsDict {
     "@type"?: "spatial-weights";
     "left-surf"?: InputPathType | null | undefined;
     "right-surf"?: InputPathType | null | undefined;
@@ -19,24 +19,24 @@ interface CiftiParcellateSpatialWeightsParameters {
     "right-metric"?: InputPathType | null | undefined;
     "cerebellum-metric"?: InputPathType | null | undefined;
 }
-type CiftiParcellateSpatialWeightsParametersTagged = Required<Pick<CiftiParcellateSpatialWeightsParameters, '@type'>> & CiftiParcellateSpatialWeightsParameters;
+type CiftiParcellateSpatialWeightsParamsDictTagged = Required<Pick<CiftiParcellateSpatialWeightsParamsDict, '@type'>> & CiftiParcellateSpatialWeightsParamsDict;
 
 
-interface CiftiParcellateExcludeOutliersParameters {
+interface CiftiParcellateExcludeOutliersParamsDict {
     "@type"?: "exclude-outliers";
     "sigma-below": number;
     "sigma-above": number;
 }
-type CiftiParcellateExcludeOutliersParametersTagged = Required<Pick<CiftiParcellateExcludeOutliersParameters, '@type'>> & CiftiParcellateExcludeOutliersParameters;
+type CiftiParcellateExcludeOutliersParamsDictTagged = Required<Pick<CiftiParcellateExcludeOutliersParamsDict, '@type'>> & CiftiParcellateExcludeOutliersParamsDict;
 
 
-interface CiftiParcellateParameters {
+interface CiftiParcellateParamsDict {
     "@type"?: "workbench/cifti-parcellate";
     "cifti-out": string;
-    "spatial-weights"?: CiftiParcellateSpatialWeightsParameters | null | undefined;
+    "spatial-weights"?: CiftiParcellateSpatialWeightsParamsDict | null | undefined;
     "weight-cifti"?: InputPathType | null | undefined;
     "method"?: string | null | undefined;
-    "exclude-outliers"?: CiftiParcellateExcludeOutliersParameters | null | undefined;
+    "exclude-outliers"?: CiftiParcellateExcludeOutliersParamsDict | null | undefined;
     "only-numeric": boolean;
     "value"?: number | null | undefined;
     "mask-out"?: string | null | undefined;
@@ -46,7 +46,7 @@ interface CiftiParcellateParameters {
     "cifti-label": InputPathType;
     "direction": string;
 }
-type CiftiParcellateParametersTagged = Required<Pick<CiftiParcellateParameters, '@type'>> & CiftiParcellateParameters;
+type CiftiParcellateParamsDictTagged = Required<Pick<CiftiParcellateParamsDict, '@type'>> & CiftiParcellateParamsDict;
 
 
 /**
@@ -73,14 +73,14 @@ metric file containing cerebellum vertex weights
  *
  * @returns Parameter dictionary
  */
-function cifti_parcellate_spatial_weights_params(
+function cifti_parcellate_spatial_weights(
     left_surf: InputPathType | null,
     right_surf: InputPathType | null,
     cerebellum_surf: InputPathType | null,
     left_metric: InputPathType | null,
     right_metric: InputPathType | null,
     cerebellum_metric: InputPathType | null,
-): CiftiParcellateSpatialWeightsParametersTagged {
+): CiftiParcellateSpatialWeightsParamsDictTagged {
     const params = {
         "@type": "spatial-weights" as const,
     };
@@ -115,7 +115,7 @@ function cifti_parcellate_spatial_weights_params(
  * @returns Command-line arguments.
  */
 function cifti_parcellate_spatial_weights_cargs(
-    params: CiftiParcellateSpatialWeightsParameters,
+    params: CiftiParcellateSpatialWeightsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -148,10 +148,10 @@ function cifti_parcellate_spatial_weights_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_parcellate_exclude_outliers_params(
+function cifti_parcellate_exclude_outliers(
     sigma_below: number,
     sigma_above: number,
-): CiftiParcellateExcludeOutliersParametersTagged {
+): CiftiParcellateExcludeOutliersParamsDictTagged {
     const params = {
         "@type": "exclude-outliers" as const,
         "sigma-below": sigma_below,
@@ -170,7 +170,7 @@ function cifti_parcellate_exclude_outliers_params(
  * @returns Command-line arguments.
  */
 function cifti_parcellate_exclude_outliers_cargs(
-    params: CiftiParcellateExcludeOutliersParameters,
+    params: CiftiParcellateExcludeOutliersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -184,7 +184,7 @@ function cifti_parcellate_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `CiftiParcellateParameters(...)`.
+ * Output object returned when calling `CiftiParcellateParamsDict(...)`.
  *
  * @interface
  */
@@ -236,12 +236,12 @@ function cifti_parcellate_params(
     cifti_in: InputPathType,
     cifti_label: InputPathType,
     direction: string,
-    spatial_weights: CiftiParcellateSpatialWeightsParameters | null = null,
-    exclude_outliers: CiftiParcellateExcludeOutliersParameters | null = null,
+    spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
+    exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     legacy_mode: boolean = false,
     include_empty: boolean = false,
-): CiftiParcellateParametersTagged {
+): CiftiParcellateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-parcellate" as const,
         "cifti-out": cifti_out,
@@ -283,7 +283,7 @@ function cifti_parcellate_params(
  * @returns Command-line arguments.
  */
 function cifti_parcellate_cargs(
-    params: CiftiParcellateParameters,
+    params: CiftiParcellateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -323,7 +323,7 @@ function cifti_parcellate_cargs(
  * @returns Outputs object.
  */
 function cifti_parcellate_outputs(
-    params: CiftiParcellateParameters,
+    params: CiftiParcellateParamsDict,
     execution: Execution,
 ): CiftiParcellateOutputs {
     const ret: CiftiParcellateOutputs = {
@@ -368,7 +368,7 @@ function cifti_parcellate_outputs(
  * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
  */
 function cifti_parcellate_execute(
-    params: CiftiParcellateParameters,
+    params: CiftiParcellateParamsDict,
     runner: Runner | null = null,
 ): CiftiParcellateOutputs {
     runner = runner || getGlobalRunner();
@@ -443,8 +443,8 @@ function cifti_parcellate(
     cifti_in: InputPathType,
     cifti_label: InputPathType,
     direction: string,
-    spatial_weights: CiftiParcellateSpatialWeightsParameters | null = null,
-    exclude_outliers: CiftiParcellateExcludeOutliersParameters | null = null,
+    spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
+    exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     legacy_mode: boolean = false,
     include_empty: boolean = false,
@@ -457,10 +457,16 @@ function cifti_parcellate(
 
 export {
       CIFTI_PARCELLATE_METADATA,
+      CiftiParcellateExcludeOutliersParamsDict,
+      CiftiParcellateExcludeOutliersParamsDictTagged,
       CiftiParcellateOutputs,
+      CiftiParcellateParamsDict,
+      CiftiParcellateParamsDictTagged,
+      CiftiParcellateSpatialWeightsParamsDict,
+      CiftiParcellateSpatialWeightsParamsDictTagged,
       cifti_parcellate,
-      cifti_parcellate_exclude_outliers_params,
+      cifti_parcellate_exclude_outliers,
       cifti_parcellate_execute,
       cifti_parcellate_params,
-      cifti_parcellate_spatial_weights_params,
+      cifti_parcellate_spatial_weights,
 };

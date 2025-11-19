@@ -11,17 +11,17 @@ const IMGLOB_METADATA: Metadata = {
 };
 
 
-interface ImglobParameters {
+interface ImglobParamsDict {
     "@type"?: "fsl/imglob";
     "multiple_extensions": boolean;
     "input_list": Array<string>;
     "single_extension": boolean;
 }
-type ImglobParametersTagged = Required<Pick<ImglobParameters, '@type'>> & ImglobParameters;
+type ImglobParamsDictTagged = Required<Pick<ImglobParamsDict, '@type'>> & ImglobParamsDict;
 
 
 /**
- * Output object returned when calling `ImglobParameters(...)`.
+ * Output object returned when calling `ImglobParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function imglob_params(
     input_list: Array<string>,
     multiple_extensions: boolean = false,
     single_extension: boolean = false,
-): ImglobParametersTagged {
+): ImglobParamsDictTagged {
     const params = {
         "@type": "fsl/imglob" as const,
         "multiple_extensions": multiple_extensions,
@@ -66,7 +66,7 @@ function imglob_params(
  * @returns Command-line arguments.
  */
 function imglob_cargs(
-    params: ImglobParameters,
+    params: ImglobParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function imglob_cargs(
  * @returns Outputs object.
  */
 function imglob_outputs(
-    params: ImglobParameters,
+    params: ImglobParamsDict,
     execution: Execution,
 ): ImglobOutputs {
     const ret: ImglobOutputs = {
@@ -116,7 +116,7 @@ function imglob_outputs(
  * @returns NamedTuple of outputs (described in `ImglobOutputs`).
  */
 function imglob_execute(
-    params: ImglobParameters,
+    params: ImglobParamsDict,
     runner: Runner | null = null,
 ): ImglobOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function imglob(
 export {
       IMGLOB_METADATA,
       ImglobOutputs,
+      ImglobParamsDict,
+      ImglobParamsDictTagged,
       imglob,
       imglob_execute,
       imglob_params,

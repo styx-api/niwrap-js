@@ -11,7 +11,7 @@ const V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA: Metadata = {
 };
 
 
-interface VDjunctSswIntermedEdgeImgsParameters {
+interface VDjunctSswIntermedEdgeImgsParamsDict {
     "@type"?: "afni/@djunct_ssw_intermed_edge_imgs";
     "prefix": string;
     "ulay": InputPathType;
@@ -27,11 +27,11 @@ interface VDjunctSswIntermedEdgeImgsParameters {
     "version": boolean;
     "no_clean": boolean;
 }
-type VDjunctSswIntermedEdgeImgsParametersTagged = Required<Pick<VDjunctSswIntermedEdgeImgsParameters, '@type'>> & VDjunctSswIntermedEdgeImgsParameters;
+type VDjunctSswIntermedEdgeImgsParamsDictTagged = Required<Pick<VDjunctSswIntermedEdgeImgsParamsDict, '@type'>> & VDjunctSswIntermedEdgeImgsParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunctSswIntermedEdgeImgsParameters(...)`.
+ * Output object returned when calling `VDjunctSswIntermedEdgeImgsParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function v__djunct_ssw_intermed_edge_imgs_params(
     help: boolean = false,
     version: boolean = false,
     no_clean: boolean = false,
-): VDjunctSswIntermedEdgeImgsParametersTagged {
+): VDjunctSswIntermedEdgeImgsParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_ssw_intermed_edge_imgs" as const,
         "prefix": prefix,
@@ -118,7 +118,7 @@ function v__djunct_ssw_intermed_edge_imgs_params(
  * @returns Command-line arguments.
  */
 function v__djunct_ssw_intermed_edge_imgs_cargs(
-    params: VDjunctSswIntermedEdgeImgsParameters,
+    params: VDjunctSswIntermedEdgeImgsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -196,7 +196,7 @@ function v__djunct_ssw_intermed_edge_imgs_cargs(
  * @returns Outputs object.
  */
 function v__djunct_ssw_intermed_edge_imgs_outputs(
-    params: VDjunctSswIntermedEdgeImgsParameters,
+    params: VDjunctSswIntermedEdgeImgsParamsDict,
     execution: Execution,
 ): VDjunctSswIntermedEdgeImgsOutputs {
     const ret: VDjunctSswIntermedEdgeImgsOutputs = {
@@ -221,7 +221,7 @@ function v__djunct_ssw_intermed_edge_imgs_outputs(
  * @returns NamedTuple of outputs (described in `VDjunctSswIntermedEdgeImgsOutputs`).
  */
 function v__djunct_ssw_intermed_edge_imgs_execute(
-    params: VDjunctSswIntermedEdgeImgsParameters,
+    params: VDjunctSswIntermedEdgeImgsParamsDict,
     runner: Runner | null = null,
 ): VDjunctSswIntermedEdgeImgsOutputs {
     runner = runner || getGlobalRunner();
@@ -283,6 +283,8 @@ function v__djunct_ssw_intermed_edge_imgs(
 
 export {
       VDjunctSswIntermedEdgeImgsOutputs,
+      VDjunctSswIntermedEdgeImgsParamsDict,
+      VDjunctSswIntermedEdgeImgsParamsDictTagged,
       V__DJUNCT_SSW_INTERMED_EDGE_IMGS_METADATA,
       v__djunct_ssw_intermed_edge_imgs,
       v__djunct_ssw_intermed_edge_imgs_execute,

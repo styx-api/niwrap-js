@@ -11,7 +11,7 @@ const DT_RECON_METADATA: Metadata = {
 };
 
 
-interface DtReconParameters {
+interface DtReconParamsDict {
     "@type"?: "freesurfer/dt_recon";
     "input_volume": InputPathType;
     "bvals_bvecs"?: string | null | undefined;
@@ -32,11 +32,11 @@ interface DtReconParameters {
     "debug_flag": boolean;
     "version_flag": boolean;
 }
-type DtReconParametersTagged = Required<Pick<DtReconParameters, '@type'>> & DtReconParameters;
+type DtReconParamsDictTagged = Required<Pick<DtReconParamsDict, '@type'>> & DtReconParamsDict;
 
 
 /**
- * Output object returned when calling `DtReconParameters(...)`.
+ * Output object returned when calling `DtReconParamsDict(...)`.
  *
  * @interface
  */
@@ -119,7 +119,7 @@ function dt_recon_params(
     init_fsl_flag: boolean = false,
     debug_flag: boolean = false,
     version_flag: boolean = false,
-): DtReconParametersTagged {
+): DtReconParamsDictTagged {
     const params = {
         "@type": "freesurfer/dt_recon" as const,
         "input_volume": input_volume,
@@ -166,7 +166,7 @@ function dt_recon_params(
  * @returns Command-line arguments.
  */
 function dt_recon_cargs(
-    params: DtReconParameters,
+    params: DtReconParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -259,7 +259,7 @@ function dt_recon_cargs(
  * @returns Outputs object.
  */
 function dt_recon_outputs(
-    params: DtReconParameters,
+    params: DtReconParamsDict,
     execution: Execution,
 ): DtReconOutputs {
     const ret: DtReconOutputs = {
@@ -291,7 +291,7 @@ function dt_recon_outputs(
  * @returns NamedTuple of outputs (described in `DtReconOutputs`).
  */
 function dt_recon_execute(
-    params: DtReconParameters,
+    params: DtReconParamsDict,
     runner: Runner | null = null,
 ): DtReconOutputs {
     runner = runner || getGlobalRunner();
@@ -364,6 +364,8 @@ function dt_recon(
 export {
       DT_RECON_METADATA,
       DtReconOutputs,
+      DtReconParamsDict,
+      DtReconParamsDictTagged,
       dt_recon,
       dt_recon_execute,
       dt_recon_params,

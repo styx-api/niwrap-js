@@ -11,17 +11,17 @@ const V__2DWARPER_ALLIN_METADATA: Metadata = {
 };
 
 
-interface V2dwarperAllinParameters {
+interface V2dwarperAllinParamsDict {
     "@type"?: "afni/@2dwarper.Allin";
     "input_prefix": string;
     "mask_prefix"?: string | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
-type V2dwarperAllinParametersTagged = Required<Pick<V2dwarperAllinParameters, '@type'>> & V2dwarperAllinParameters;
+type V2dwarperAllinParamsDictTagged = Required<Pick<V2dwarperAllinParamsDict, '@type'>> & V2dwarperAllinParamsDict;
 
 
 /**
- * Output object returned when calling `V2dwarperAllinParameters(...)`.
+ * Output object returned when calling `V2dwarperAllinParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function v__2dwarper_allin_params(
     input_prefix: string,
     mask_prefix: string | null = null,
     output_prefix: string | null = null,
-): V2dwarperAllinParametersTagged {
+): V2dwarperAllinParamsDictTagged {
     const params = {
         "@type": "afni/@2dwarper.Allin" as const,
         "input_prefix": input_prefix,
@@ -78,7 +78,7 @@ function v__2dwarper_allin_params(
  * @returns Command-line arguments.
  */
 function v__2dwarper_allin_cargs(
-    params: V2dwarperAllinParameters,
+    params: V2dwarperAllinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function v__2dwarper_allin_cargs(
  * @returns Outputs object.
  */
 function v__2dwarper_allin_outputs(
-    params: V2dwarperAllinParameters,
+    params: V2dwarperAllinParamsDict,
     execution: Execution,
 ): V2dwarperAllinOutputs {
     const ret: V2dwarperAllinOutputs = {
@@ -136,7 +136,7 @@ function v__2dwarper_allin_outputs(
  * @returns NamedTuple of outputs (described in `V2dwarperAllinOutputs`).
  */
 function v__2dwarper_allin_execute(
-    params: V2dwarperAllinParameters,
+    params: V2dwarperAllinParamsDict,
     runner: Runner | null = null,
 ): V2dwarperAllinOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function v__2dwarper_allin(
 
 export {
       V2dwarperAllinOutputs,
+      V2dwarperAllinParamsDict,
+      V2dwarperAllinParamsDictTagged,
       V__2DWARPER_ALLIN_METADATA,
       v__2dwarper_allin,
       v__2dwarper_allin_execute,

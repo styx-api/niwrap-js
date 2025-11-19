@@ -11,15 +11,15 @@ const INFLATE_SUBJECT_RH_METADATA: Metadata = {
 };
 
 
-interface InflateSubjectRhParameters {
+interface InflateSubjectRhParamsDict {
     "@type"?: "freesurfer/inflate_subject-rh";
     "arguments"?: string | null | undefined;
 }
-type InflateSubjectRhParametersTagged = Required<Pick<InflateSubjectRhParameters, '@type'>> & InflateSubjectRhParameters;
+type InflateSubjectRhParamsDictTagged = Required<Pick<InflateSubjectRhParamsDict, '@type'>> & InflateSubjectRhParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubjectRhParameters(...)`.
+ * Output object returned when calling `InflateSubjectRhParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface InflateSubjectRhOutputs {
  */
 function inflate_subject_rh_params(
     arguments_: string | null = null,
-): InflateSubjectRhParametersTagged {
+): InflateSubjectRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject-rh" as const,
     };
@@ -60,7 +60,7 @@ function inflate_subject_rh_params(
  * @returns Command-line arguments.
  */
 function inflate_subject_rh_cargs(
-    params: InflateSubjectRhParameters,
+    params: InflateSubjectRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function inflate_subject_rh_cargs(
  * @returns Outputs object.
  */
 function inflate_subject_rh_outputs(
-    params: InflateSubjectRhParameters,
+    params: InflateSubjectRhParamsDict,
     execution: Execution,
 ): InflateSubjectRhOutputs {
     const ret: InflateSubjectRhOutputs = {
@@ -109,7 +109,7 @@ function inflate_subject_rh_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubjectRhOutputs`).
  */
 function inflate_subject_rh_execute(
-    params: InflateSubjectRhParameters,
+    params: InflateSubjectRhParamsDict,
     runner: Runner | null = null,
 ): InflateSubjectRhOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function inflate_subject_rh(
 export {
       INFLATE_SUBJECT_RH_METADATA,
       InflateSubjectRhOutputs,
+      InflateSubjectRhParamsDict,
+      InflateSubjectRhParamsDictTagged,
       inflate_subject_rh,
       inflate_subject_rh_execute,
       inflate_subject_rh_params,

@@ -11,7 +11,7 @@ const GET_AFNI_MODEL_PRF_6_METADATA: Metadata = {
 };
 
 
-interface GetAfniModelPrf6Parameters {
+interface GetAfniModelPrf6ParamsDict {
     "@type"?: "afni/get_afni_model_PRF_6";
     "NT": number;
     "AMP": number;
@@ -21,11 +21,11 @@ interface GetAfniModelPrf6Parameters {
     "SIGRAT": number;
     "THETA": number;
 }
-type GetAfniModelPrf6ParametersTagged = Required<Pick<GetAfniModelPrf6Parameters, '@type'>> & GetAfniModelPrf6Parameters;
+type GetAfniModelPrf6ParamsDictTagged = Required<Pick<GetAfniModelPrf6ParamsDict, '@type'>> & GetAfniModelPrf6ParamsDict;
 
 
 /**
- * Output object returned when calling `GetAfniModelPrf6Parameters(...)`.
+ * Output object returned when calling `GetAfniModelPrf6ParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function get_afni_model_prf_6_params(
     sigma: number,
     sigrat: number,
     theta: number,
-): GetAfniModelPrf6ParametersTagged {
+): GetAfniModelPrf6ParamsDictTagged {
     const params = {
         "@type": "afni/get_afni_model_PRF_6" as const,
         "NT": nt,
@@ -82,7 +82,7 @@ function get_afni_model_prf_6_params(
  * @returns Command-line arguments.
  */
 function get_afni_model_prf_6_cargs(
-    params: GetAfniModelPrf6Parameters,
+    params: GetAfniModelPrf6ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function get_afni_model_prf_6_cargs(
  * @returns Outputs object.
  */
 function get_afni_model_prf_6_outputs(
-    params: GetAfniModelPrf6Parameters,
+    params: GetAfniModelPrf6ParamsDict,
     execution: Execution,
 ): GetAfniModelPrf6Outputs {
     const ret: GetAfniModelPrf6Outputs = {
@@ -132,7 +132,7 @@ function get_afni_model_prf_6_outputs(
  * @returns NamedTuple of outputs (described in `GetAfniModelPrf6Outputs`).
  */
 function get_afni_model_prf_6_execute(
-    params: GetAfniModelPrf6Parameters,
+    params: GetAfniModelPrf6ParamsDict,
     runner: Runner | null = null,
 ): GetAfniModelPrf6Outputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function get_afni_model_prf_6(
 export {
       GET_AFNI_MODEL_PRF_6_METADATA,
       GetAfniModelPrf6Outputs,
+      GetAfniModelPrf6ParamsDict,
+      GetAfniModelPrf6ParamsDictTagged,
       get_afni_model_prf_6,
       get_afni_model_prf_6_execute,
       get_afni_model_prf_6_params,

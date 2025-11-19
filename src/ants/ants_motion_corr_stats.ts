@@ -11,7 +11,7 @@ const ANTS_MOTION_CORR_STATS_METADATA: Metadata = {
 };
 
 
-interface AntsMotionCorrStatsParameters {
+interface AntsMotionCorrStatsParamsDict {
     "@type"?: "ants/antsMotionCorrStats";
     "mask": InputPathType;
     "moco_params": InputPathType;
@@ -22,11 +22,11 @@ interface AntsMotionCorrStatsParameters {
     "timeseries_displacement": boolean;
     "help"?: boolean | null | undefined;
 }
-type AntsMotionCorrStatsParametersTagged = Required<Pick<AntsMotionCorrStatsParameters, '@type'>> & AntsMotionCorrStatsParameters;
+type AntsMotionCorrStatsParamsDictTagged = Required<Pick<AntsMotionCorrStatsParamsDict, '@type'>> & AntsMotionCorrStatsParamsDict;
 
 
 /**
- * Output object returned when calling `AntsMotionCorrStatsParameters(...)`.
+ * Output object returned when calling `AntsMotionCorrStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function ants_motion_corr_stats_params(
     spatial_map: boolean = false,
     timeseries_displacement: boolean = false,
     help: boolean | null = null,
-): AntsMotionCorrStatsParametersTagged {
+): AntsMotionCorrStatsParamsDictTagged {
     const params = {
         "@type": "ants/antsMotionCorrStats" as const,
         "mask": mask,
@@ -96,7 +96,7 @@ function ants_motion_corr_stats_params(
  * @returns Command-line arguments.
  */
 function ants_motion_corr_stats_cargs(
-    params: AntsMotionCorrStatsParameters,
+    params: AntsMotionCorrStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function ants_motion_corr_stats_cargs(
  * @returns Outputs object.
  */
 function ants_motion_corr_stats_outputs(
-    params: AntsMotionCorrStatsParameters,
+    params: AntsMotionCorrStatsParamsDict,
     execution: Execution,
 ): AntsMotionCorrStatsOutputs {
     const ret: AntsMotionCorrStatsOutputs = {
@@ -176,7 +176,7 @@ function ants_motion_corr_stats_outputs(
  * @returns NamedTuple of outputs (described in `AntsMotionCorrStatsOutputs`).
  */
 function ants_motion_corr_stats_execute(
-    params: AntsMotionCorrStatsParameters,
+    params: AntsMotionCorrStatsParamsDict,
     runner: Runner | null = null,
 ): AntsMotionCorrStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -229,6 +229,8 @@ function ants_motion_corr_stats(
 export {
       ANTS_MOTION_CORR_STATS_METADATA,
       AntsMotionCorrStatsOutputs,
+      AntsMotionCorrStatsParamsDict,
+      AntsMotionCorrStatsParamsDictTagged,
       ants_motion_corr_stats,
       ants_motion_corr_stats_execute,
       ants_motion_corr_stats_params,

@@ -11,39 +11,39 @@ const DIRSTAT_METADATA: Metadata = {
 };
 
 
-interface DirstatFslgradParameters {
+interface DirstatFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type DirstatFslgradParametersTagged = Required<Pick<DirstatFslgradParameters, '@type'>> & DirstatFslgradParameters;
+type DirstatFslgradParamsDictTagged = Required<Pick<DirstatFslgradParamsDict, '@type'>> & DirstatFslgradParamsDict;
 
 
-interface DirstatConfigParameters {
+interface DirstatConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DirstatConfigParametersTagged = Required<Pick<DirstatConfigParameters, '@type'>> & DirstatConfigParameters;
+type DirstatConfigParamsDictTagged = Required<Pick<DirstatConfigParamsDict, '@type'>> & DirstatConfigParamsDict;
 
 
-interface DirstatParameters {
+interface DirstatParamsDict {
     "@type"?: "mrtrix/dirstat";
     "output"?: string | null | undefined;
     "shells"?: Array<number> | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: DirstatFslgradParameters | null | undefined;
+    "fslgrad"?: DirstatFslgradParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DirstatConfigParameters> | null | undefined;
+    "config"?: Array<DirstatConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "dirs": InputPathType;
 }
-type DirstatParametersTagged = Required<Pick<DirstatParameters, '@type'>> & DirstatParameters;
+type DirstatParamsDictTagged = Required<Pick<DirstatParamsDict, '@type'>> & DirstatParamsDict;
 
 
 /**
@@ -54,10 +54,10 @@ type DirstatParametersTagged = Required<Pick<DirstatParameters, '@type'>> & Dirs
  *
  * @returns Parameter dictionary
  */
-function dirstat_fslgrad_params(
+function dirstat_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DirstatFslgradParametersTagged {
+): DirstatFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -76,7 +76,7 @@ function dirstat_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dirstat_fslgrad_cargs(
-    params: DirstatFslgradParameters,
+    params: DirstatFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function dirstat_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function dirstat_config_params(
+function dirstat_config(
     key: string,
     value: string,
-): DirstatConfigParametersTagged {
+): DirstatConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -117,7 +117,7 @@ function dirstat_config_params(
  * @returns Command-line arguments.
  */
 function dirstat_config_cargs(
-    params: DirstatConfigParameters,
+    params: DirstatConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function dirstat_config_cargs(
 
 
 /**
- * Output object returned when calling `DirstatParameters(...)`.
+ * Output object returned when calling `DirstatParamsDict(...)`.
  *
  * @interface
  */
@@ -166,16 +166,16 @@ function dirstat_params(
     output: string | null = null,
     shells: Array<number> | null = null,
     grad: InputPathType | null = null,
-    fslgrad: DirstatFslgradParameters | null = null,
+    fslgrad: DirstatFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirstatConfigParameters> | null = null,
+    config: Array<DirstatConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirstatParametersTagged {
+): DirstatParamsDictTagged {
     const params = {
         "@type": "mrtrix/dirstat" as const,
         "info": info,
@@ -217,7 +217,7 @@ function dirstat_params(
  * @returns Command-line arguments.
  */
 function dirstat_cargs(
-    params: DirstatParameters,
+    params: DirstatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -284,7 +284,7 @@ function dirstat_cargs(
  * @returns Outputs object.
  */
 function dirstat_outputs(
-    params: DirstatParameters,
+    params: DirstatParamsDict,
     execution: Execution,
 ): DirstatOutputs {
     const ret: DirstatOutputs = {
@@ -335,7 +335,7 @@ function dirstat_outputs(
  * @returns NamedTuple of outputs (described in `DirstatOutputs`).
  */
 function dirstat_execute(
-    params: DirstatParameters,
+    params: DirstatParamsDict,
     runner: Runner | null = null,
 ): DirstatOutputs {
     runner = runner || getGlobalRunner();
@@ -406,13 +406,13 @@ function dirstat(
     output: string | null = null,
     shells: Array<number> | null = null,
     grad: InputPathType | null = null,
-    fslgrad: DirstatFslgradParameters | null = null,
+    fslgrad: DirstatFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirstatConfigParameters> | null = null,
+    config: Array<DirstatConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -424,10 +424,16 @@ function dirstat(
 
 export {
       DIRSTAT_METADATA,
+      DirstatConfigParamsDict,
+      DirstatConfigParamsDictTagged,
+      DirstatFslgradParamsDict,
+      DirstatFslgradParamsDictTagged,
       DirstatOutputs,
+      DirstatParamsDict,
+      DirstatParamsDictTagged,
       dirstat,
-      dirstat_config_params,
+      dirstat_config,
       dirstat_execute,
-      dirstat_fslgrad_params,
+      dirstat_fslgrad,
       dirstat_params,
 };

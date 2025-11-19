@@ -11,16 +11,16 @@ const MRI_SEGREG_METADATA: Metadata = {
 };
 
 
-interface MriSegregParameters {
+interface MriSegregParamsDict {
     "@type"?: "freesurfer/mri_segreg";
     "input_file": InputPathType;
     "output_file": string;
 }
-type MriSegregParametersTagged = Required<Pick<MriSegregParameters, '@type'>> & MriSegregParameters;
+type MriSegregParamsDictTagged = Required<Pick<MriSegregParamsDict, '@type'>> & MriSegregParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegregParameters(...)`.
+ * Output object returned when calling `MriSegregParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriSegregOutputs {
 function mri_segreg_params(
     input_file: InputPathType,
     output_file: string = "output.mgz",
-): MriSegregParametersTagged {
+): MriSegregParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_segreg" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function mri_segreg_params(
  * @returns Command-line arguments.
  */
 function mri_segreg_cargs(
-    params: MriSegregParameters,
+    params: MriSegregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_segreg_cargs(
  * @returns Outputs object.
  */
 function mri_segreg_outputs(
-    params: MriSegregParameters,
+    params: MriSegregParamsDict,
     execution: Execution,
 ): MriSegregOutputs {
     const ret: MriSegregOutputs = {
@@ -112,7 +112,7 @@ function mri_segreg_outputs(
  * @returns NamedTuple of outputs (described in `MriSegregOutputs`).
  */
 function mri_segreg_execute(
-    params: MriSegregParameters,
+    params: MriSegregParamsDict,
     runner: Runner | null = null,
 ): MriSegregOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_segreg(
 export {
       MRI_SEGREG_METADATA,
       MriSegregOutputs,
+      MriSegregParamsDict,
+      MriSegregParamsDictTagged,
       mri_segreg,
       mri_segreg_execute,
       mri_segreg_params,

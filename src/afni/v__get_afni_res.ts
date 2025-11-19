@@ -11,16 +11,16 @@ const V__GET_AFNI_RES_METADATA: Metadata = {
 };
 
 
-interface VGetAfniResParameters {
+interface VGetAfniResParamsDict {
     "@type"?: "afni/@GetAfniRes";
     "output_type"?: "-min" | "-max" | "-mean" | null | undefined;
     "input_dataset": InputPathType;
 }
-type VGetAfniResParametersTagged = Required<Pick<VGetAfniResParameters, '@type'>> & VGetAfniResParameters;
+type VGetAfniResParamsDictTagged = Required<Pick<VGetAfniResParamsDict, '@type'>> & VGetAfniResParamsDict;
 
 
 /**
- * Output object returned when calling `VGetAfniResParameters(...)`.
+ * Output object returned when calling `VGetAfniResParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VGetAfniResOutputs {
 function v__get_afni_res_params(
     input_dataset: InputPathType,
     output_type: "-min" | "-max" | "-mean" | null = null,
-): VGetAfniResParametersTagged {
+): VGetAfniResParamsDictTagged {
     const params = {
         "@type": "afni/@GetAfniRes" as const,
         "input_dataset": input_dataset,
@@ -64,7 +64,7 @@ function v__get_afni_res_params(
  * @returns Command-line arguments.
  */
 function v__get_afni_res_cargs(
-    params: VGetAfniResParameters,
+    params: VGetAfniResParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function v__get_afni_res_cargs(
  * @returns Outputs object.
  */
 function v__get_afni_res_outputs(
-    params: VGetAfniResParameters,
+    params: VGetAfniResParamsDict,
     execution: Execution,
 ): VGetAfniResOutputs {
     const ret: VGetAfniResOutputs = {
@@ -111,7 +111,7 @@ function v__get_afni_res_outputs(
  * @returns NamedTuple of outputs (described in `VGetAfniResOutputs`).
  */
 function v__get_afni_res_execute(
-    params: VGetAfniResParameters,
+    params: VGetAfniResParamsDict,
     runner: Runner | null = null,
 ): VGetAfniResOutputs {
     runner = runner || getGlobalRunner();
@@ -151,6 +151,8 @@ function v__get_afni_res(
 
 export {
       VGetAfniResOutputs,
+      VGetAfniResParamsDict,
+      VGetAfniResParamsDictTagged,
       V__GET_AFNI_RES_METADATA,
       v__get_afni_res,
       v__get_afni_res_execute,

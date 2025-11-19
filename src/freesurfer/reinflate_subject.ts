@@ -11,15 +11,15 @@ const REINFLATE_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface ReinflateSubjectParameters {
+interface ReinflateSubjectParamsDict {
     "@type"?: "freesurfer/reinflate_subject";
     "args"?: string | null | undefined;
 }
-type ReinflateSubjectParametersTagged = Required<Pick<ReinflateSubjectParameters, '@type'>> & ReinflateSubjectParameters;
+type ReinflateSubjectParamsDictTagged = Required<Pick<ReinflateSubjectParamsDict, '@type'>> & ReinflateSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `ReinflateSubjectParameters(...)`.
+ * Output object returned when calling `ReinflateSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface ReinflateSubjectOutputs {
  */
 function reinflate_subject_params(
     args: string | null = null,
-): ReinflateSubjectParametersTagged {
+): ReinflateSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/reinflate_subject" as const,
     };
@@ -60,7 +60,7 @@ function reinflate_subject_params(
  * @returns Command-line arguments.
  */
 function reinflate_subject_cargs(
-    params: ReinflateSubjectParameters,
+    params: ReinflateSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function reinflate_subject_cargs(
  * @returns Outputs object.
  */
 function reinflate_subject_outputs(
-    params: ReinflateSubjectParameters,
+    params: ReinflateSubjectParamsDict,
     execution: Execution,
 ): ReinflateSubjectOutputs {
     const ret: ReinflateSubjectOutputs = {
@@ -106,7 +106,7 @@ function reinflate_subject_outputs(
  * @returns NamedTuple of outputs (described in `ReinflateSubjectOutputs`).
  */
 function reinflate_subject_execute(
-    params: ReinflateSubjectParameters,
+    params: ReinflateSubjectParamsDict,
     runner: Runner | null = null,
 ): ReinflateSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function reinflate_subject(
 export {
       REINFLATE_SUBJECT_METADATA,
       ReinflateSubjectOutputs,
+      ReinflateSubjectParamsDict,
+      ReinflateSubjectParamsDictTagged,
       reinflate_subject,
       reinflate_subject_execute,
       reinflate_subject_params,

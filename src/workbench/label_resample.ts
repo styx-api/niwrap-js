@@ -10,27 +10,27 @@ const LABEL_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface LabelResampleAreaSurfsParameters {
+interface LabelResampleAreaSurfsParamsDict {
     "@type"?: "area-surfs";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type LabelResampleAreaSurfsParametersTagged = Required<Pick<LabelResampleAreaSurfsParameters, '@type'>> & LabelResampleAreaSurfsParameters;
+type LabelResampleAreaSurfsParamsDictTagged = Required<Pick<LabelResampleAreaSurfsParamsDict, '@type'>> & LabelResampleAreaSurfsParamsDict;
 
 
-interface LabelResampleAreaMetricsParameters {
+interface LabelResampleAreaMetricsParamsDict {
     "@type"?: "area-metrics";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type LabelResampleAreaMetricsParametersTagged = Required<Pick<LabelResampleAreaMetricsParameters, '@type'>> & LabelResampleAreaMetricsParameters;
+type LabelResampleAreaMetricsParamsDictTagged = Required<Pick<LabelResampleAreaMetricsParamsDict, '@type'>> & LabelResampleAreaMetricsParamsDict;
 
 
-interface LabelResampleParameters {
+interface LabelResampleParamsDict {
     "@type"?: "workbench/label-resample";
     "label-out": string;
-    "area-surfs"?: LabelResampleAreaSurfsParameters | null | undefined;
-    "area-metrics"?: LabelResampleAreaMetricsParameters | null | undefined;
+    "area-surfs"?: LabelResampleAreaSurfsParamsDict | null | undefined;
+    "area-metrics"?: LabelResampleAreaMetricsParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-out"?: string | null | undefined;
     "largest": boolean;
@@ -40,7 +40,7 @@ interface LabelResampleParameters {
     "new-sphere": InputPathType;
     "method": string;
 }
-type LabelResampleParametersTagged = Required<Pick<LabelResampleParameters, '@type'>> & LabelResampleParameters;
+type LabelResampleParamsDictTagged = Required<Pick<LabelResampleParamsDict, '@type'>> & LabelResampleParamsDict;
 
 
 /**
@@ -51,10 +51,10 @@ type LabelResampleParametersTagged = Required<Pick<LabelResampleParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function label_resample_area_surfs_params(
+function label_resample_area_surfs(
     current_area: InputPathType,
     new_area: InputPathType,
-): LabelResampleAreaSurfsParametersTagged {
+): LabelResampleAreaSurfsParamsDictTagged {
     const params = {
         "@type": "area-surfs" as const,
         "current-area": current_area,
@@ -73,7 +73,7 @@ function label_resample_area_surfs_params(
  * @returns Command-line arguments.
  */
 function label_resample_area_surfs_cargs(
-    params: LabelResampleAreaSurfsParameters,
+    params: LabelResampleAreaSurfsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,10 +94,10 @@ function label_resample_area_surfs_cargs(
  *
  * @returns Parameter dictionary
  */
-function label_resample_area_metrics_params(
+function label_resample_area_metrics(
     current_area: InputPathType,
     new_area: InputPathType,
-): LabelResampleAreaMetricsParametersTagged {
+): LabelResampleAreaMetricsParamsDictTagged {
     const params = {
         "@type": "area-metrics" as const,
         "current-area": current_area,
@@ -116,7 +116,7 @@ function label_resample_area_metrics_params(
  * @returns Command-line arguments.
  */
 function label_resample_area_metrics_cargs(
-    params: LabelResampleAreaMetricsParameters,
+    params: LabelResampleAreaMetricsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function label_resample_area_metrics_cargs(
 
 
 /**
- * Output object returned when calling `LabelResampleParameters(...)`.
+ * Output object returned when calling `LabelResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -175,11 +175,11 @@ function label_resample_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    area_surfs: LabelResampleAreaSurfsParameters | null = null,
-    area_metrics: LabelResampleAreaMetricsParameters | null = null,
+    area_surfs: LabelResampleAreaSurfsParamsDict | null = null,
+    area_metrics: LabelResampleAreaMetricsParamsDict | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
-): LabelResampleParametersTagged {
+): LabelResampleParamsDictTagged {
     const params = {
         "@type": "workbench/label-resample" as const,
         "label-out": label_out,
@@ -215,7 +215,7 @@ function label_resample_params(
  * @returns Command-line arguments.
  */
 function label_resample_cargs(
-    params: LabelResampleParameters,
+    params: LabelResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -251,7 +251,7 @@ function label_resample_cargs(
  * @returns Outputs object.
  */
 function label_resample_outputs(
-    params: LabelResampleParameters,
+    params: LabelResampleParamsDict,
     execution: Execution,
 ): LabelResampleOutputs {
     const ret: LabelResampleOutputs = {
@@ -285,7 +285,7 @@ function label_resample_outputs(
  * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
  */
 function label_resample_execute(
-    params: LabelResampleParameters,
+    params: LabelResampleParamsDict,
     runner: Runner | null = null,
 ): LabelResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -342,8 +342,8 @@ function label_resample(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    area_surfs: LabelResampleAreaSurfsParameters | null = null,
-    area_metrics: LabelResampleAreaMetricsParameters | null = null,
+    area_surfs: LabelResampleAreaSurfsParamsDict | null = null,
+    area_metrics: LabelResampleAreaMetricsParamsDict | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
@@ -355,10 +355,16 @@ function label_resample(
 
 export {
       LABEL_RESAMPLE_METADATA,
+      LabelResampleAreaMetricsParamsDict,
+      LabelResampleAreaMetricsParamsDictTagged,
+      LabelResampleAreaSurfsParamsDict,
+      LabelResampleAreaSurfsParamsDictTagged,
       LabelResampleOutputs,
+      LabelResampleParamsDict,
+      LabelResampleParamsDictTagged,
       label_resample,
-      label_resample_area_metrics_params,
-      label_resample_area_surfs_params,
+      label_resample_area_metrics,
+      label_resample_area_surfs,
       label_resample_execute,
       label_resample_params,
 };

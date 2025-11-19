@@ -10,7 +10,7 @@ const VOLUME_PARCEL_SMOOTHING_METADATA: Metadata = {
 };
 
 
-interface VolumeParcelSmoothingParameters {
+interface VolumeParcelSmoothingParamsDict {
     "@type"?: "workbench/volume-parcel-smoothing";
     "volume-out": string;
     "fwhm": boolean;
@@ -20,11 +20,11 @@ interface VolumeParcelSmoothingParameters {
     "label-volume": InputPathType;
     "kernel": number;
 }
-type VolumeParcelSmoothingParametersTagged = Required<Pick<VolumeParcelSmoothingParameters, '@type'>> & VolumeParcelSmoothingParameters;
+type VolumeParcelSmoothingParamsDictTagged = Required<Pick<VolumeParcelSmoothingParamsDict, '@type'>> & VolumeParcelSmoothingParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeParcelSmoothingParameters(...)`.
+ * Output object returned when calling `VolumeParcelSmoothingParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function volume_parcel_smoothing_params(
     kernel: number,
     fwhm: boolean = false,
     fix_zeros: boolean = false,
-): VolumeParcelSmoothingParametersTagged {
+): VolumeParcelSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-parcel-smoothing" as const,
         "volume-out": volume_out,
@@ -89,7 +89,7 @@ function volume_parcel_smoothing_params(
  * @returns Command-line arguments.
  */
 function volume_parcel_smoothing_cargs(
-    params: VolumeParcelSmoothingParameters,
+    params: VolumeParcelSmoothingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function volume_parcel_smoothing_cargs(
  * @returns Outputs object.
  */
 function volume_parcel_smoothing_outputs(
-    params: VolumeParcelSmoothingParameters,
+    params: VolumeParcelSmoothingParamsDict,
     execution: Execution,
 ): VolumeParcelSmoothingOutputs {
     const ret: VolumeParcelSmoothingOutputs = {
@@ -142,7 +142,7 @@ function volume_parcel_smoothing_outputs(
  * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
  */
 function volume_parcel_smoothing_execute(
-    params: VolumeParcelSmoothingParameters,
+    params: VolumeParcelSmoothingParamsDict,
     runner: Runner | null = null,
 ): VolumeParcelSmoothingOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function volume_parcel_smoothing(
 export {
       VOLUME_PARCEL_SMOOTHING_METADATA,
       VolumeParcelSmoothingOutputs,
+      VolumeParcelSmoothingParamsDict,
+      VolumeParcelSmoothingParamsDictTagged,
       volume_parcel_smoothing,
       volume_parcel_smoothing_execute,
       volume_parcel_smoothing_params,

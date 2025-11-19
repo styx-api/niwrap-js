@@ -11,7 +11,7 @@ const MRI_CONVERT_METADATA: Metadata = {
 };
 
 
-interface MriConvertParameters {
+interface MriConvertParamsDict {
     "@type"?: "freesurfer/mri_convert";
     "inp_volume": InputPathType;
     "out_volume": string;
@@ -33,11 +33,11 @@ interface MriConvertParameters {
     "bfile_little_endian": boolean;
     "sphinx": boolean;
 }
-type MriConvertParametersTagged = Required<Pick<MriConvertParameters, '@type'>> & MriConvertParameters;
+type MriConvertParamsDictTagged = Required<Pick<MriConvertParamsDict, '@type'>> & MriConvertParamsDict;
 
 
 /**
- * Output object returned when calling `MriConvertParameters(...)`.
+ * Output object returned when calling `MriConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function mri_convert_params(
     scale_factor: number | null = null,
     bfile_little_endian: boolean = false,
     sphinx: boolean = false,
-): MriConvertParametersTagged {
+): MriConvertParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_convert" as const,
         "inp_volume": inp_volume,
@@ -150,7 +150,7 @@ function mri_convert_params(
  * @returns Command-line arguments.
  */
 function mri_convert_cargs(
-    params: MriConvertParameters,
+    params: MriConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -245,7 +245,7 @@ function mri_convert_cargs(
  * @returns Outputs object.
  */
 function mri_convert_outputs(
-    params: MriConvertParameters,
+    params: MriConvertParamsDict,
     execution: Execution,
 ): MriConvertOutputs {
     const ret: MriConvertOutputs = {
@@ -271,7 +271,7 @@ function mri_convert_outputs(
  * @returns NamedTuple of outputs (described in `MriConvertOutputs`).
  */
 function mri_convert_execute(
-    params: MriConvertParameters,
+    params: MriConvertParamsDict,
     runner: Runner | null = null,
 ): MriConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -346,6 +346,8 @@ function mri_convert(
 export {
       MRI_CONVERT_METADATA,
       MriConvertOutputs,
+      MriConvertParamsDict,
+      MriConvertParamsDictTagged,
       mri_convert,
       mri_convert_execute,
       mri_convert_params,

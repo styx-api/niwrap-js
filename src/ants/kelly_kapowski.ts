@@ -11,7 +11,7 @@ const KELLY_KAPOWSKI_METADATA: Metadata = {
 };
 
 
-interface KellyKapowskiParameters {
+interface KellyKapowskiParamsDict {
     "@type"?: "ants/KellyKapowski";
     "image_dimensionality"?: 2 | 3 | null | undefined;
     "segmentation_image"?: InputPathType | null | undefined;
@@ -32,11 +32,11 @@ interface KellyKapowskiParameters {
     "output": string;
     "verbose"?: boolean | null | undefined;
 }
-type KellyKapowskiParametersTagged = Required<Pick<KellyKapowskiParameters, '@type'>> & KellyKapowskiParameters;
+type KellyKapowskiParamsDictTagged = Required<Pick<KellyKapowskiParamsDict, '@type'>> & KellyKapowskiParamsDict;
 
 
 /**
- * Output object returned when calling `KellyKapowskiParameters(...)`.
+ * Output object returned when calling `KellyKapowskiParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function kelly_kapowski_params(
     number_of_integration_points: number | null = null,
     maximum_number_of_invert_displacement_field_iterations: number | null = null,
     verbose: boolean | null = null,
-): KellyKapowskiParametersTagged {
+): KellyKapowskiParamsDictTagged {
     const params = {
         "@type": "ants/KellyKapowski" as const,
         "output": output,
@@ -164,7 +164,7 @@ function kelly_kapowski_params(
  * @returns Command-line arguments.
  */
 function kelly_kapowski_cargs(
-    params: KellyKapowskiParameters,
+    params: KellyKapowskiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -288,7 +288,7 @@ function kelly_kapowski_cargs(
  * @returns Outputs object.
  */
 function kelly_kapowski_outputs(
-    params: KellyKapowskiParameters,
+    params: KellyKapowskiParamsDict,
     execution: Execution,
 ): KellyKapowskiOutputs {
     const ret: KellyKapowskiOutputs = {
@@ -314,7 +314,7 @@ function kelly_kapowski_outputs(
  * @returns NamedTuple of outputs (described in `KellyKapowskiOutputs`).
  */
 function kelly_kapowski_execute(
-    params: KellyKapowskiParameters,
+    params: KellyKapowskiParamsDict,
     runner: Runner | null = null,
 ): KellyKapowskiOutputs {
     runner = runner || getGlobalRunner();
@@ -387,6 +387,8 @@ function kelly_kapowski(
 export {
       KELLY_KAPOWSKI_METADATA,
       KellyKapowskiOutputs,
+      KellyKapowskiParamsDict,
+      KellyKapowskiParamsDictTagged,
       kelly_kapowski,
       kelly_kapowski_execute,
       kelly_kapowski_params,

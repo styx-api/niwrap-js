@@ -11,18 +11,18 @@ const BIANCA_CLUSTER_STATS_METADATA: Metadata = {
 };
 
 
-interface BiancaClusterStatsParameters {
+interface BiancaClusterStatsParamsDict {
     "@type"?: "fsl/bianca_cluster_stats";
     "bianca_output_map": InputPathType;
     "threshold": number;
     "min_cluster_size": number;
     "mask"?: InputPathType | null | undefined;
 }
-type BiancaClusterStatsParametersTagged = Required<Pick<BiancaClusterStatsParameters, '@type'>> & BiancaClusterStatsParameters;
+type BiancaClusterStatsParamsDictTagged = Required<Pick<BiancaClusterStatsParamsDict, '@type'>> & BiancaClusterStatsParamsDict;
 
 
 /**
- * Output object returned when calling `BiancaClusterStatsParameters(...)`.
+ * Output object returned when calling `BiancaClusterStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function bianca_cluster_stats_params(
     threshold: number,
     min_cluster_size: number,
     mask: InputPathType | null = null,
-): BiancaClusterStatsParametersTagged {
+): BiancaClusterStatsParamsDictTagged {
     const params = {
         "@type": "fsl/bianca_cluster_stats" as const,
         "bianca_output_map": bianca_output_map,
@@ -72,7 +72,7 @@ function bianca_cluster_stats_params(
  * @returns Command-line arguments.
  */
 function bianca_cluster_stats_cargs(
-    params: BiancaClusterStatsParameters,
+    params: BiancaClusterStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function bianca_cluster_stats_cargs(
  * @returns Outputs object.
  */
 function bianca_cluster_stats_outputs(
-    params: BiancaClusterStatsParameters,
+    params: BiancaClusterStatsParamsDict,
     execution: Execution,
 ): BiancaClusterStatsOutputs {
     const ret: BiancaClusterStatsOutputs = {
@@ -121,7 +121,7 @@ function bianca_cluster_stats_outputs(
  * @returns NamedTuple of outputs (described in `BiancaClusterStatsOutputs`).
  */
 function bianca_cluster_stats_execute(
-    params: BiancaClusterStatsParameters,
+    params: BiancaClusterStatsParamsDict,
     runner: Runner | null = null,
 ): BiancaClusterStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function bianca_cluster_stats(
 export {
       BIANCA_CLUSTER_STATS_METADATA,
       BiancaClusterStatsOutputs,
+      BiancaClusterStatsParamsDict,
+      BiancaClusterStatsParamsDictTagged,
       bianca_cluster_stats,
       bianca_cluster_stats_execute,
       bianca_cluster_stats_params,

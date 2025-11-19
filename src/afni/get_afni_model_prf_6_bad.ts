@@ -11,7 +11,7 @@ const GET_AFNI_MODEL_PRF_6_BAD_METADATA: Metadata = {
 };
 
 
-interface GetAfniModelPrf6BadParameters {
+interface GetAfniModelPrf6BadParamsDict {
     "@type"?: "afni/get_afni_model_PRF_6_BAD";
     "amplitude": number;
     "x_coord": number;
@@ -20,11 +20,11 @@ interface GetAfniModelPrf6BadParameters {
     "sigrat": number;
     "theta": number;
 }
-type GetAfniModelPrf6BadParametersTagged = Required<Pick<GetAfniModelPrf6BadParameters, '@type'>> & GetAfniModelPrf6BadParameters;
+type GetAfniModelPrf6BadParamsDictTagged = Required<Pick<GetAfniModelPrf6BadParamsDict, '@type'>> & GetAfniModelPrf6BadParamsDict;
 
 
 /**
- * Output object returned when calling `GetAfniModelPrf6BadParameters(...)`.
+ * Output object returned when calling `GetAfniModelPrf6BadParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function get_afni_model_prf_6_bad_params(
     sigma: number,
     sigrat: number,
     theta: number,
-): GetAfniModelPrf6BadParametersTagged {
+): GetAfniModelPrf6BadParamsDictTagged {
     const params = {
         "@type": "afni/get_afni_model_PRF_6_BAD" as const,
         "amplitude": amplitude,
@@ -78,7 +78,7 @@ function get_afni_model_prf_6_bad_params(
  * @returns Command-line arguments.
  */
 function get_afni_model_prf_6_bad_cargs(
-    params: GetAfniModelPrf6BadParameters,
+    params: GetAfniModelPrf6BadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -102,7 +102,7 @@ function get_afni_model_prf_6_bad_cargs(
  * @returns Outputs object.
  */
 function get_afni_model_prf_6_bad_outputs(
-    params: GetAfniModelPrf6BadParameters,
+    params: GetAfniModelPrf6BadParamsDict,
     execution: Execution,
 ): GetAfniModelPrf6BadOutputs {
     const ret: GetAfniModelPrf6BadOutputs = {
@@ -127,7 +127,7 @@ function get_afni_model_prf_6_bad_outputs(
  * @returns NamedTuple of outputs (described in `GetAfniModelPrf6BadOutputs`).
  */
 function get_afni_model_prf_6_bad_execute(
-    params: GetAfniModelPrf6BadParameters,
+    params: GetAfniModelPrf6BadParamsDict,
     runner: Runner | null = null,
 ): GetAfniModelPrf6BadOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function get_afni_model_prf_6_bad(
 export {
       GET_AFNI_MODEL_PRF_6_BAD_METADATA,
       GetAfniModelPrf6BadOutputs,
+      GetAfniModelPrf6BadParamsDict,
+      GetAfniModelPrf6BadParamsDictTagged,
       get_afni_model_prf_6_bad,
       get_afni_model_prf_6_bad_execute,
       get_afni_model_prf_6_bad_params,

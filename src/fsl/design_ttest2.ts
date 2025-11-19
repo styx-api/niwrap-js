@@ -11,18 +11,18 @@ const DESIGN_TTEST2_METADATA: Metadata = {
 };
 
 
-interface DesignTtest2Parameters {
+interface DesignTtest2ParamsDict {
     "@type"?: "fsl/design_ttest2";
     "design_files_rootname": string;
     "ngroupa": number;
     "ngroupb": number;
     "include_mean_contrasts": boolean;
 }
-type DesignTtest2ParametersTagged = Required<Pick<DesignTtest2Parameters, '@type'>> & DesignTtest2Parameters;
+type DesignTtest2ParamsDictTagged = Required<Pick<DesignTtest2ParamsDict, '@type'>> & DesignTtest2ParamsDict;
 
 
 /**
- * Output object returned when calling `DesignTtest2Parameters(...)`.
+ * Output object returned when calling `DesignTtest2ParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function design_ttest2_params(
     ngroupa: number,
     ngroupb: number,
     include_mean_contrasts: boolean = false,
-): DesignTtest2ParametersTagged {
+): DesignTtest2ParamsDictTagged {
     const params = {
         "@type": "fsl/design_ttest2" as const,
         "design_files_rootname": design_files_rootname,
@@ -70,7 +70,7 @@ function design_ttest2_params(
  * @returns Command-line arguments.
  */
 function design_ttest2_cargs(
-    params: DesignTtest2Parameters,
+    params: DesignTtest2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function design_ttest2_cargs(
  * @returns Outputs object.
  */
 function design_ttest2_outputs(
-    params: DesignTtest2Parameters,
+    params: DesignTtest2ParamsDict,
     execution: Execution,
 ): DesignTtest2Outputs {
     const ret: DesignTtest2Outputs = {
@@ -119,7 +119,7 @@ function design_ttest2_outputs(
  * @returns NamedTuple of outputs (described in `DesignTtest2Outputs`).
  */
 function design_ttest2_execute(
-    params: DesignTtest2Parameters,
+    params: DesignTtest2ParamsDict,
     runner: Runner | null = null,
 ): DesignTtest2Outputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function design_ttest2(
 export {
       DESIGN_TTEST2_METADATA,
       DesignTtest2Outputs,
+      DesignTtest2ParamsDict,
+      DesignTtest2ParamsDictTagged,
       design_ttest2,
       design_ttest2_execute,
       design_ttest2_params,

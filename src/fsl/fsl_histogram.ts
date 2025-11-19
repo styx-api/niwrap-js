@@ -11,7 +11,7 @@ const FSL_HISTOGRAM_METADATA: Metadata = {
 };
 
 
-interface FslHistogramParameters {
+interface FslHistogramParamsDict {
     "@type"?: "fsl/fsl_histogram";
     "input_file": InputPathType;
     "input_file_duplicate": InputPathType;
@@ -39,11 +39,11 @@ interface FslHistogramParameters {
     "zoom_factor_duplicate"?: number | null | undefined;
     "use_gmm_flag": boolean;
 }
-type FslHistogramParametersTagged = Required<Pick<FslHistogramParameters, '@type'>> & FslHistogramParameters;
+type FslHistogramParamsDictTagged = Required<Pick<FslHistogramParamsDict, '@type'>> & FslHistogramParamsDict;
 
 
 /**
- * Output object returned when calling `FslHistogramParameters(...)`.
+ * Output object returned when calling `FslHistogramParamsDict(...)`.
  *
  * @interface
  */
@@ -116,7 +116,7 @@ function fsl_histogram_params(
     zoom_factor: number | null = null,
     zoom_factor_duplicate: number | null = null,
     use_gmm_flag: boolean = false,
-): FslHistogramParametersTagged {
+): FslHistogramParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_histogram" as const,
         "input_file": input_file,
@@ -198,7 +198,7 @@ function fsl_histogram_params(
  * @returns Command-line arguments.
  */
 function fsl_histogram_cargs(
-    params: FslHistogramParameters,
+    params: FslHistogramParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -355,7 +355,7 @@ function fsl_histogram_cargs(
  * @returns Outputs object.
  */
 function fsl_histogram_outputs(
-    params: FslHistogramParameters,
+    params: FslHistogramParamsDict,
     execution: Execution,
 ): FslHistogramOutputs {
     const ret: FslHistogramOutputs = {
@@ -381,7 +381,7 @@ function fsl_histogram_outputs(
  * @returns NamedTuple of outputs (described in `FslHistogramOutputs`).
  */
 function fsl_histogram_execute(
-    params: FslHistogramParameters,
+    params: FslHistogramParamsDict,
     runner: Runner | null = null,
 ): FslHistogramOutputs {
     runner = runner || getGlobalRunner();
@@ -468,6 +468,8 @@ function fsl_histogram(
 export {
       FSL_HISTOGRAM_METADATA,
       FslHistogramOutputs,
+      FslHistogramParamsDict,
+      FslHistogramParamsDictTagged,
       fsl_histogram,
       fsl_histogram_execute,
       fsl_histogram_params,

@@ -11,18 +11,18 @@ const MRIS_HAUSDORFF_DIST_METADATA: Metadata = {
 };
 
 
-interface MrisHausdorffDistParameters {
+interface MrisHausdorffDistParamsDict {
     "@type"?: "freesurfer/mris_hausdorff_dist";
     "surface": InputPathType;
     "label1": InputPathType;
     "label2": InputPathType;
     "annot_name"?: string | null | undefined;
 }
-type MrisHausdorffDistParametersTagged = Required<Pick<MrisHausdorffDistParameters, '@type'>> & MrisHausdorffDistParameters;
+type MrisHausdorffDistParamsDictTagged = Required<Pick<MrisHausdorffDistParamsDict, '@type'>> & MrisHausdorffDistParamsDict;
 
 
 /**
- * Output object returned when calling `MrisHausdorffDistParameters(...)`.
+ * Output object returned when calling `MrisHausdorffDistParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_hausdorff_dist_params(
     label1: InputPathType,
     label2: InputPathType,
     annot_name: string | null = null,
-): MrisHausdorffDistParametersTagged {
+): MrisHausdorffDistParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_hausdorff_dist" as const,
         "surface": surface,
@@ -76,7 +76,7 @@ function mris_hausdorff_dist_params(
  * @returns Command-line arguments.
  */
 function mris_hausdorff_dist_cargs(
-    params: MrisHausdorffDistParameters,
+    params: MrisHausdorffDistParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function mris_hausdorff_dist_cargs(
  * @returns Outputs object.
  */
 function mris_hausdorff_dist_outputs(
-    params: MrisHausdorffDistParameters,
+    params: MrisHausdorffDistParamsDict,
     execution: Execution,
 ): MrisHausdorffDistOutputs {
     const ret: MrisHausdorffDistOutputs = {
@@ -129,7 +129,7 @@ function mris_hausdorff_dist_outputs(
  * @returns NamedTuple of outputs (described in `MrisHausdorffDistOutputs`).
  */
 function mris_hausdorff_dist_execute(
-    params: MrisHausdorffDistParameters,
+    params: MrisHausdorffDistParamsDict,
     runner: Runner | null = null,
 ): MrisHausdorffDistOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mris_hausdorff_dist(
 export {
       MRIS_HAUSDORFF_DIST_METADATA,
       MrisHausdorffDistOutputs,
+      MrisHausdorffDistParamsDict,
+      MrisHausdorffDistParamsDictTagged,
       mris_hausdorff_dist,
       mris_hausdorff_dist_execute,
       mris_hausdorff_dist_params,

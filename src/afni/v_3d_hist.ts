@@ -11,7 +11,7 @@ const V_3D_HIST_METADATA: Metadata = {
 };
 
 
-interface V3dHistParameters {
+interface V3dHistParamsDict {
     "@type"?: "afni/3dHist";
     "input": InputPathType;
     "dind_subbrick"?: number | null | undefined;
@@ -34,11 +34,11 @@ interface V3dHistParameters {
     "val_at"?: string | null | undefined;
     "quiet": boolean;
 }
-type V3dHistParametersTagged = Required<Pick<V3dHistParameters, '@type'>> & V3dHistParameters;
+type V3dHistParamsDictTagged = Required<Pick<V3dHistParamsDict, '@type'>> & V3dHistParamsDict;
 
 
 /**
- * Output object returned when calling `V3dHistParameters(...)`.
+ * Output object returned when calling `V3dHistParamsDict(...)`.
  *
  * @interface
  */
@@ -97,7 +97,7 @@ function v_3d_hist_params(
     voxvol: number | null = null,
     val_at: string | null = null,
     quiet: boolean = false,
-): V3dHistParametersTagged {
+): V3dHistParamsDictTagged {
     const params = {
         "@type": "afni/3dHist" as const,
         "input": input,
@@ -166,7 +166,7 @@ function v_3d_hist_params(
  * @returns Command-line arguments.
  */
 function v_3d_hist_cargs(
-    params: V3dHistParameters,
+    params: V3dHistParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -290,7 +290,7 @@ function v_3d_hist_cargs(
  * @returns Outputs object.
  */
 function v_3d_hist_outputs(
-    params: V3dHistParameters,
+    params: V3dHistParamsDict,
     execution: Execution,
 ): V3dHistOutputs {
     const ret: V3dHistOutputs = {
@@ -315,7 +315,7 @@ function v_3d_hist_outputs(
  * @returns NamedTuple of outputs (described in `V3dHistOutputs`).
  */
 function v_3d_hist_execute(
-    params: V3dHistParameters,
+    params: V3dHistParamsDict,
     runner: Runner | null = null,
 ): V3dHistOutputs {
     runner = runner || getGlobalRunner();
@@ -391,6 +391,8 @@ function v_3d_hist(
 
 export {
       V3dHistOutputs,
+      V3dHistParamsDict,
+      V3dHistParamsDictTagged,
       V_3D_HIST_METADATA,
       v_3d_hist,
       v_3d_hist_execute,

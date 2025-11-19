@@ -11,7 +11,7 @@ const V_3D_THREETO_RGB_METADATA: Metadata = {
 };
 
 
-interface V3dThreetoRgbParameters {
+interface V3dThreetoRgbParamsDict {
     "@type"?: "afni/3dThreetoRGB";
     "output_prefix"?: string | null | undefined;
     "scale_factor"?: number | null | undefined;
@@ -22,11 +22,11 @@ interface V3dThreetoRgbParameters {
     "input_dataset2"?: InputPathType | null | undefined;
     "input_dataset3"?: InputPathType | null | undefined;
 }
-type V3dThreetoRgbParametersTagged = Required<Pick<V3dThreetoRgbParameters, '@type'>> & V3dThreetoRgbParameters;
+type V3dThreetoRgbParamsDictTagged = Required<Pick<V3dThreetoRgbParamsDict, '@type'>> & V3dThreetoRgbParamsDict;
 
 
 /**
- * Output object returned when calling `V3dThreetoRgbParameters(...)`.
+ * Output object returned when calling `V3dThreetoRgbParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v_3d_threeto_rgb_params(
     anat: boolean = false,
     input_dataset2: InputPathType | null = null,
     input_dataset3: InputPathType | null = null,
-): V3dThreetoRgbParametersTagged {
+): V3dThreetoRgbParamsDictTagged {
     const params = {
         "@type": "afni/3dThreetoRGB" as const,
         "fim": fim,
@@ -104,7 +104,7 @@ function v_3d_threeto_rgb_params(
  * @returns Command-line arguments.
  */
 function v_3d_threeto_rgb_cargs(
-    params: V3dThreetoRgbParameters,
+    params: V3dThreetoRgbParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function v_3d_threeto_rgb_cargs(
  * @returns Outputs object.
  */
 function v_3d_threeto_rgb_outputs(
-    params: V3dThreetoRgbParameters,
+    params: V3dThreetoRgbParamsDict,
     execution: Execution,
 ): V3dThreetoRgbOutputs {
     const ret: V3dThreetoRgbOutputs = {
@@ -180,7 +180,7 @@ function v_3d_threeto_rgb_outputs(
  * @returns NamedTuple of outputs (described in `V3dThreetoRgbOutputs`).
  */
 function v_3d_threeto_rgb_execute(
-    params: V3dThreetoRgbParameters,
+    params: V3dThreetoRgbParamsDict,
     runner: Runner | null = null,
 ): V3dThreetoRgbOutputs {
     runner = runner || getGlobalRunner();
@@ -232,6 +232,8 @@ function v_3d_threeto_rgb(
 
 export {
       V3dThreetoRgbOutputs,
+      V3dThreetoRgbParamsDict,
+      V3dThreetoRgbParamsDictTagged,
       V_3D_THREETO_RGB_METADATA,
       v_3d_threeto_rgb,
       v_3d_threeto_rgb_execute,

@@ -11,17 +11,17 @@ const MRI_NL_ALIGN_BINARY_METADATA: Metadata = {
 };
 
 
-interface MriNlAlignBinaryParameters {
+interface MriNlAlignBinaryParamsDict {
     "@type"?: "freesurfer/mri_nl_align_binary";
     "source_file": InputPathType;
     "target_file": InputPathType;
     "warp_file": string;
 }
-type MriNlAlignBinaryParametersTagged = Required<Pick<MriNlAlignBinaryParameters, '@type'>> & MriNlAlignBinaryParameters;
+type MriNlAlignBinaryParamsDictTagged = Required<Pick<MriNlAlignBinaryParamsDict, '@type'>> & MriNlAlignBinaryParamsDict;
 
 
 /**
- * Output object returned when calling `MriNlAlignBinaryParameters(...)`.
+ * Output object returned when calling `MriNlAlignBinaryParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_nl_align_binary_params(
     source_file: InputPathType,
     target_file: InputPathType,
     warp_file: string,
-): MriNlAlignBinaryParametersTagged {
+): MriNlAlignBinaryParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_nl_align_binary" as const,
         "source_file": source_file,
@@ -70,7 +70,7 @@ function mri_nl_align_binary_params(
  * @returns Command-line arguments.
  */
 function mri_nl_align_binary_cargs(
-    params: MriNlAlignBinaryParameters,
+    params: MriNlAlignBinaryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_nl_align_binary_cargs(
  * @returns Outputs object.
  */
 function mri_nl_align_binary_outputs(
-    params: MriNlAlignBinaryParameters,
+    params: MriNlAlignBinaryParamsDict,
     execution: Execution,
 ): MriNlAlignBinaryOutputs {
     const ret: MriNlAlignBinaryOutputs = {
@@ -117,7 +117,7 @@ function mri_nl_align_binary_outputs(
  * @returns NamedTuple of outputs (described in `MriNlAlignBinaryOutputs`).
  */
 function mri_nl_align_binary_execute(
-    params: MriNlAlignBinaryParameters,
+    params: MriNlAlignBinaryParamsDict,
     runner: Runner | null = null,
 ): MriNlAlignBinaryOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_nl_align_binary(
 export {
       MRI_NL_ALIGN_BINARY_METADATA,
       MriNlAlignBinaryOutputs,
+      MriNlAlignBinaryParamsDict,
+      MriNlAlignBinaryParamsDictTagged,
       mri_nl_align_binary,
       mri_nl_align_binary_execute,
       mri_nl_align_binary_params,

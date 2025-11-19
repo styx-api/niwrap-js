@@ -11,7 +11,7 @@ const V__AUTO_TLRC_METADATA: Metadata = {
 };
 
 
-interface VAutoTlrcParameters {
+interface VAutoTlrcParamsDict {
     "@type"?: "afni/@auto_tlrc";
     "base_template": InputPathType;
     "input_anat": InputPathType;
@@ -53,11 +53,11 @@ interface VAutoTlrcParameters {
     "use_gz": boolean;
     "verb": boolean;
 }
-type VAutoTlrcParametersTagged = Required<Pick<VAutoTlrcParameters, '@type'>> & VAutoTlrcParameters;
+type VAutoTlrcParamsDictTagged = Required<Pick<VAutoTlrcParamsDict, '@type'>> & VAutoTlrcParamsDict;
 
 
 /**
- * Output object returned when calling `VAutoTlrcParameters(...)`.
+ * Output object returned when calling `VAutoTlrcParamsDict(...)`.
  *
  * @interface
  */
@@ -162,7 +162,7 @@ function v__auto_tlrc_params(
     base_list: boolean = false,
     use_gz: boolean = false,
     verb: boolean = false,
-): VAutoTlrcParametersTagged {
+): VAutoTlrcParamsDictTagged {
     const params = {
         "@type": "afni/@auto_tlrc" as const,
         "base_template": base_template,
@@ -248,7 +248,7 @@ function v__auto_tlrc_params(
  * @returns Command-line arguments.
  */
 function v__auto_tlrc_cargs(
-    params: VAutoTlrcParameters,
+    params: VAutoTlrcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -432,7 +432,7 @@ function v__auto_tlrc_cargs(
  * @returns Outputs object.
  */
 function v__auto_tlrc_outputs(
-    params: VAutoTlrcParameters,
+    params: VAutoTlrcParamsDict,
     execution: Execution,
 ): VAutoTlrcOutputs {
     const ret: VAutoTlrcOutputs = {
@@ -459,7 +459,7 @@ function v__auto_tlrc_outputs(
  * @returns NamedTuple of outputs (described in `VAutoTlrcOutputs`).
  */
 function v__auto_tlrc_execute(
-    params: VAutoTlrcParameters,
+    params: VAutoTlrcParamsDict,
     runner: Runner | null = null,
 ): VAutoTlrcOutputs {
     runner = runner || getGlobalRunner();
@@ -573,6 +573,8 @@ function v__auto_tlrc(
 
 export {
       VAutoTlrcOutputs,
+      VAutoTlrcParamsDict,
+      VAutoTlrcParamsDictTagged,
       V__AUTO_TLRC_METADATA,
       v__auto_tlrc,
       v__auto_tlrc_execute,

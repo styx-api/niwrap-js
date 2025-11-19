@@ -11,18 +11,18 @@ const FS_RUN_FROM_MCR_METADATA: Metadata = {
 };
 
 
-interface FsRunFromMcrParameters {
+interface FsRunFromMcrParamsDict {
     "@type"?: "freesurfer/fs_run_from_mcr";
     "name"?: string | null | undefined;
     "command"?: string | null | undefined;
     "zeroth_flag": boolean;
     "empty_env_flag": boolean;
 }
-type FsRunFromMcrParametersTagged = Required<Pick<FsRunFromMcrParameters, '@type'>> & FsRunFromMcrParameters;
+type FsRunFromMcrParamsDictTagged = Required<Pick<FsRunFromMcrParamsDict, '@type'>> & FsRunFromMcrParamsDict;
 
 
 /**
- * Output object returned when calling `FsRunFromMcrParameters(...)`.
+ * Output object returned when calling `FsRunFromMcrParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function fs_run_from_mcr_params(
     command: string | null = null,
     zeroth_flag: boolean = false,
     empty_env_flag: boolean = false,
-): FsRunFromMcrParametersTagged {
+): FsRunFromMcrParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_run_from_mcr" as const,
         "zeroth_flag": zeroth_flag,
@@ -74,7 +74,7 @@ function fs_run_from_mcr_params(
  * @returns Command-line arguments.
  */
 function fs_run_from_mcr_cargs(
-    params: FsRunFromMcrParameters,
+    params: FsRunFromMcrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function fs_run_from_mcr_cargs(
  * @returns Outputs object.
  */
 function fs_run_from_mcr_outputs(
-    params: FsRunFromMcrParameters,
+    params: FsRunFromMcrParamsDict,
     execution: Execution,
 ): FsRunFromMcrOutputs {
     const ret: FsRunFromMcrOutputs = {
@@ -132,7 +132,7 @@ function fs_run_from_mcr_outputs(
  * @returns NamedTuple of outputs (described in `FsRunFromMcrOutputs`).
  */
 function fs_run_from_mcr_execute(
-    params: FsRunFromMcrParameters,
+    params: FsRunFromMcrParamsDict,
     runner: Runner | null = null,
 ): FsRunFromMcrOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function fs_run_from_mcr(
 export {
       FS_RUN_FROM_MCR_METADATA,
       FsRunFromMcrOutputs,
+      FsRunFromMcrParamsDict,
+      FsRunFromMcrParamsDictTagged,
       fs_run_from_mcr,
       fs_run_from_mcr_execute,
       fs_run_from_mcr_params,

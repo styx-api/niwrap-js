@@ -11,17 +11,17 @@ const V__THICKNESS_MASTER_METADATA: Metadata = {
 };
 
 
-interface VThicknessMasterParameters {
+interface VThicknessMasterParamsDict {
     "@type"?: "afni/@thickness_master";
     "maskset": InputPathType;
     "surfset": InputPathType;
     "outdir"?: string | null | undefined;
 }
-type VThicknessMasterParametersTagged = Required<Pick<VThicknessMasterParameters, '@type'>> & VThicknessMasterParameters;
+type VThicknessMasterParamsDictTagged = Required<Pick<VThicknessMasterParamsDict, '@type'>> & VThicknessMasterParamsDict;
 
 
 /**
- * Output object returned when calling `VThicknessMasterParameters(...)`.
+ * Output object returned when calling `VThicknessMasterParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function v__thickness_master_params(
     maskset: InputPathType,
     surfset: InputPathType,
     outdir: string | null = null,
-): VThicknessMasterParametersTagged {
+): VThicknessMasterParamsDictTagged {
     const params = {
         "@type": "afni/@thickness_master" as const,
         "maskset": maskset,
@@ -80,7 +80,7 @@ function v__thickness_master_params(
  * @returns Command-line arguments.
  */
 function v__thickness_master_cargs(
-    params: VThicknessMasterParameters,
+    params: VThicknessMasterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function v__thickness_master_cargs(
  * @returns Outputs object.
  */
 function v__thickness_master_outputs(
-    params: VThicknessMasterParameters,
+    params: VThicknessMasterParamsDict,
     execution: Execution,
 ): VThicknessMasterOutputs {
     const ret: VThicknessMasterOutputs = {
@@ -140,7 +140,7 @@ function v__thickness_master_outputs(
  * @returns NamedTuple of outputs (described in `VThicknessMasterOutputs`).
  */
 function v__thickness_master_execute(
-    params: VThicknessMasterParameters,
+    params: VThicknessMasterParamsDict,
     runner: Runner | null = null,
 ): VThicknessMasterOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function v__thickness_master(
 
 export {
       VThicknessMasterOutputs,
+      VThicknessMasterParamsDict,
+      VThicknessMasterParamsDictTagged,
       V__THICKNESS_MASTER_METADATA,
       v__thickness_master,
       v__thickness_master_execute,

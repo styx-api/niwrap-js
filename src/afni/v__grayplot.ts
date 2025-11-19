@@ -11,7 +11,7 @@ const V__GRAYPLOT_METADATA: Metadata = {
 };
 
 
-interface VGrayplotParameters {
+interface VGrayplotParamsDict {
     "@type"?: "afni/@grayplot";
     "dirname": string;
     "pvorder": boolean;
@@ -19,11 +19,11 @@ interface VGrayplotParameters {
     "ijkorder": boolean;
     "allorder": boolean;
 }
-type VGrayplotParametersTagged = Required<Pick<VGrayplotParameters, '@type'>> & VGrayplotParameters;
+type VGrayplotParamsDictTagged = Required<Pick<VGrayplotParamsDict, '@type'>> & VGrayplotParamsDict;
 
 
 /**
- * Output object returned when calling `VGrayplotParameters(...)`.
+ * Output object returned when calling `VGrayplotParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v__grayplot_params(
     peelorder: boolean = false,
     ijkorder: boolean = false,
     allorder: boolean = false,
-): VGrayplotParametersTagged {
+): VGrayplotParamsDictTagged {
     const params = {
         "@type": "afni/@grayplot" as const,
         "dirname": dirname,
@@ -78,7 +78,7 @@ function v__grayplot_params(
  * @returns Command-line arguments.
  */
 function v__grayplot_cargs(
-    params: VGrayplotParameters,
+    params: VGrayplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function v__grayplot_cargs(
  * @returns Outputs object.
  */
 function v__grayplot_outputs(
-    params: VGrayplotParameters,
+    params: VGrayplotParamsDict,
     execution: Execution,
 ): VGrayplotOutputs {
     const ret: VGrayplotOutputs = {
@@ -135,7 +135,7 @@ function v__grayplot_outputs(
  * @returns NamedTuple of outputs (described in `VGrayplotOutputs`).
  */
 function v__grayplot_execute(
-    params: VGrayplotParameters,
+    params: VGrayplotParamsDict,
     runner: Runner | null = null,
 ): VGrayplotOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function v__grayplot(
 
 export {
       VGrayplotOutputs,
+      VGrayplotParamsDict,
+      VGrayplotParamsDictTagged,
       V__GRAYPLOT_METADATA,
       v__grayplot,
       v__grayplot_execute,

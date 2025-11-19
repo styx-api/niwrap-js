@@ -11,7 +11,7 @@ const V_3D_UNIFIZE_METADATA: Metadata = {
 };
 
 
-interface V3dUnifizeParameters {
+interface V3dUnifizeParamsDict {
     "@type"?: "afni/3dUnifize";
     "cl_frac"?: number | null | undefined;
     "epi": boolean;
@@ -28,11 +28,11 @@ interface V3dUnifizeParameters {
     "urad"?: number | null | undefined;
     "in_file": InputPathType;
 }
-type V3dUnifizeParametersTagged = Required<Pick<V3dUnifizeParameters, '@type'>> & V3dUnifizeParameters;
+type V3dUnifizeParamsDictTagged = Required<Pick<V3dUnifizeParamsDict, '@type'>> & V3dUnifizeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dUnifizeParameters(...)`.
+ * Output object returned when calling `V3dUnifizeParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function v_3d_unifize_params(
     t2: boolean = false,
     t2_up: number | null = null,
     urad: number | null = null,
-): V3dUnifizeParametersTagged {
+): V3dUnifizeParamsDictTagged {
     const params = {
         "@type": "afni/3dUnifize" as const,
         "epi": epi,
@@ -134,7 +134,7 @@ function v_3d_unifize_params(
  * @returns Command-line arguments.
  */
 function v_3d_unifize_cargs(
-    params: V3dUnifizeParameters,
+    params: V3dUnifizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -213,7 +213,7 @@ function v_3d_unifize_cargs(
  * @returns Outputs object.
  */
 function v_3d_unifize_outputs(
-    params: V3dUnifizeParameters,
+    params: V3dUnifizeParamsDict,
     execution: Execution,
 ): V3dUnifizeOutputs {
     const ret: V3dUnifizeOutputs = {
@@ -247,7 +247,7 @@ function v_3d_unifize_outputs(
  * @returns NamedTuple of outputs (described in `V3dUnifizeOutputs`).
  */
 function v_3d_unifize_execute(
-    params: V3dUnifizeParameters,
+    params: V3dUnifizeParamsDict,
     runner: Runner | null = null,
 ): V3dUnifizeOutputs {
     runner = runner || getGlobalRunner();
@@ -318,6 +318,8 @@ function v_3d_unifize(
 
 export {
       V3dUnifizeOutputs,
+      V3dUnifizeParamsDict,
+      V3dUnifizeParamsDictTagged,
       V_3D_UNIFIZE_METADATA,
       v_3d_unifize,
       v_3d_unifize_execute,

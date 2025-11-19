@@ -11,7 +11,7 @@ const BUILD_AFNI_PY_METADATA: Metadata = {
 };
 
 
-interface BuildAfniPyParameters {
+interface BuildAfniPyParamsDict {
     "@type"?: "afni/build_afni.py";
     "build_root": string;
     "clean_root"?: string | null | undefined;
@@ -30,11 +30,11 @@ interface BuildAfniPyParameters {
     "show_valid_opts": boolean;
     "version": boolean;
 }
-type BuildAfniPyParametersTagged = Required<Pick<BuildAfniPyParameters, '@type'>> & BuildAfniPyParameters;
+type BuildAfniPyParamsDictTagged = Required<Pick<BuildAfniPyParamsDict, '@type'>> & BuildAfniPyParamsDict;
 
 
 /**
- * Output object returned when calling `BuildAfniPyParameters(...)`.
+ * Output object returned when calling `BuildAfniPyParamsDict(...)`.
  *
  * @interface
  */
@@ -93,7 +93,7 @@ function build_afni_py_params(
     history: boolean = false,
     show_valid_opts: boolean = false,
     version: boolean = false,
-): BuildAfniPyParametersTagged {
+): BuildAfniPyParamsDictTagged {
     const params = {
         "@type": "afni/build_afni.py" as const,
         "build_root": build_root,
@@ -146,7 +146,7 @@ function build_afni_py_params(
  * @returns Command-line arguments.
  */
 function build_afni_py_cargs(
-    params: BuildAfniPyParameters,
+    params: BuildAfniPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function build_afni_py_cargs(
  * @returns Outputs object.
  */
 function build_afni_py_outputs(
-    params: BuildAfniPyParameters,
+    params: BuildAfniPyParamsDict,
     execution: Execution,
 ): BuildAfniPyOutputs {
     const ret: BuildAfniPyOutputs = {
@@ -270,7 +270,7 @@ function build_afni_py_outputs(
  * @returns NamedTuple of outputs (described in `BuildAfniPyOutputs`).
  */
 function build_afni_py_execute(
-    params: BuildAfniPyParameters,
+    params: BuildAfniPyParamsDict,
     runner: Runner | null = null,
 ): BuildAfniPyOutputs {
     runner = runner || getGlobalRunner();
@@ -339,6 +339,8 @@ function build_afni_py(
 export {
       BUILD_AFNI_PY_METADATA,
       BuildAfniPyOutputs,
+      BuildAfniPyParamsDict,
+      BuildAfniPyParamsDictTagged,
       build_afni_py,
       build_afni_py_execute,
       build_afni_py_params,

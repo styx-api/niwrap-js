@@ -11,7 +11,7 @@ const SWE_METADATA: Metadata = {
 };
 
 
-interface SweParameters {
+interface SweParamsDict {
     "@type"?: "fsl/swe";
     "input_file": InputPathType;
     "output_root": string;
@@ -48,11 +48,11 @@ interface SweParameters {
     "voxelwise_evs"?: Array<InputPathType> | null | undefined;
     "glm_output": boolean;
 }
-type SweParametersTagged = Required<Pick<SweParameters, '@type'>> & SweParameters;
+type SweParamsDictTagged = Required<Pick<SweParamsDict, '@type'>> & SweParamsDict;
 
 
 /**
- * Output object returned when calling `SweParameters(...)`.
+ * Output object returned when calling `SweParamsDict(...)`.
  *
  * @interface
  */
@@ -171,7 +171,7 @@ function swe_params(
     voxelwise_ev: Array<number> | null = null,
     voxelwise_evs: Array<InputPathType> | null = null,
     glm_output: boolean = false,
-): SweParametersTagged {
+): SweParamsDictTagged {
     const params = {
         "@type": "fsl/swe" as const,
         "input_file": input_file,
@@ -250,7 +250,7 @@ function swe_params(
  * @returns Command-line arguments.
  */
 function swe_cargs(
-    params: SweParameters,
+    params: SweParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -417,7 +417,7 @@ function swe_cargs(
  * @returns Outputs object.
  */
 function swe_outputs(
-    params: SweParameters,
+    params: SweParamsDict,
     execution: Execution,
 ): SweOutputs {
     const ret: SweOutputs = {
@@ -450,7 +450,7 @@ function swe_outputs(
  * @returns NamedTuple of outputs (described in `SweOutputs`).
  */
 function swe_execute(
-    params: SweParameters,
+    params: SweParamsDict,
     runner: Runner | null = null,
 ): SweOutputs {
     runner = runner || getGlobalRunner();
@@ -555,6 +555,8 @@ function swe(
 export {
       SWE_METADATA,
       SweOutputs,
+      SweParamsDict,
+      SweParamsDictTagged,
       swe,
       swe_execute,
       swe_params,

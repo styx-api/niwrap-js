@@ -11,7 +11,7 @@ const PLUGOUT_TTA_METADATA: Metadata = {
 };
 
 
-interface PlugoutTtaParameters {
+interface PlugoutTtaParamsDict {
     "@type"?: "afni/plugout_tta";
     "host"?: string | null | undefined;
     "port"?: number | null | undefined;
@@ -24,11 +24,11 @@ interface PlugoutTtaParameters {
     "num_assigned_ports": boolean;
     "num_assigned_ports_quiet": boolean;
 }
-type PlugoutTtaParametersTagged = Required<Pick<PlugoutTtaParameters, '@type'>> & PlugoutTtaParameters;
+type PlugoutTtaParamsDictTagged = Required<Pick<PlugoutTtaParamsDict, '@type'>> & PlugoutTtaParamsDict;
 
 
 /**
- * Output object returned when calling `PlugoutTtaParameters(...)`.
+ * Output object returned when calling `PlugoutTtaParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function plugout_tta_params(
     max_port_bloc_quiet: boolean = false,
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
-): PlugoutTtaParametersTagged {
+): PlugoutTtaParamsDictTagged {
     const params = {
         "@type": "afni/plugout_tta" as const,
         "verbose": verbose,
@@ -104,7 +104,7 @@ function plugout_tta_params(
  * @returns Command-line arguments.
  */
 function plugout_tta_cargs(
-    params: PlugoutTtaParameters,
+    params: PlugoutTtaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function plugout_tta_cargs(
  * @returns Outputs object.
  */
 function plugout_tta_outputs(
-    params: PlugoutTtaParameters,
+    params: PlugoutTtaParamsDict,
     execution: Execution,
 ): PlugoutTtaOutputs {
     const ret: PlugoutTtaOutputs = {
@@ -192,7 +192,7 @@ function plugout_tta_outputs(
  * @returns NamedTuple of outputs (described in `PlugoutTtaOutputs`).
  */
 function plugout_tta_execute(
-    params: PlugoutTtaParameters,
+    params: PlugoutTtaParamsDict,
     runner: Runner | null = null,
 ): PlugoutTtaOutputs {
     runner = runner || getGlobalRunner();
@@ -249,6 +249,8 @@ function plugout_tta(
 export {
       PLUGOUT_TTA_METADATA,
       PlugoutTtaOutputs,
+      PlugoutTtaParamsDict,
+      PlugoutTtaParamsDictTagged,
       plugout_tta,
       plugout_tta_execute,
       plugout_tta_params,

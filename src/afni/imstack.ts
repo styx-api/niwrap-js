@@ -11,17 +11,17 @@ const IMSTACK_METADATA: Metadata = {
 };
 
 
-interface ImstackParameters {
+interface ImstackParamsDict {
     "@type"?: "afni/imstack";
     "image_files": Array<InputPathType>;
     "data_type"?: "short" | "float" | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
-type ImstackParametersTagged = Required<Pick<ImstackParameters, '@type'>> & ImstackParameters;
+type ImstackParamsDictTagged = Required<Pick<ImstackParamsDict, '@type'>> & ImstackParamsDict;
 
 
 /**
- * Output object returned when calling `ImstackParameters(...)`.
+ * Output object returned when calling `ImstackParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function imstack_params(
     image_files: Array<InputPathType>,
     data_type: "short" | "float" | null = null,
     output_prefix: string | null = null,
-): ImstackParametersTagged {
+): ImstackParamsDictTagged {
     const params = {
         "@type": "afni/imstack" as const,
         "image_files": image_files,
@@ -78,7 +78,7 @@ function imstack_params(
  * @returns Command-line arguments.
  */
 function imstack_cargs(
-    params: ImstackParameters,
+    params: ImstackParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function imstack_cargs(
  * @returns Outputs object.
  */
 function imstack_outputs(
-    params: ImstackParameters,
+    params: ImstackParamsDict,
     execution: Execution,
 ): ImstackOutputs {
     const ret: ImstackOutputs = {
@@ -136,7 +136,7 @@ function imstack_outputs(
  * @returns NamedTuple of outputs (described in `ImstackOutputs`).
  */
 function imstack_execute(
-    params: ImstackParameters,
+    params: ImstackParamsDict,
     runner: Runner | null = null,
 ): ImstackOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function imstack(
 export {
       IMSTACK_METADATA,
       ImstackOutputs,
+      ImstackParamsDict,
+      ImstackParamsDictTagged,
       imstack,
       imstack_execute,
       imstack_params,

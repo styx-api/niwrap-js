@@ -11,7 +11,7 @@ const V_3D_ZREGRID_METADATA: Metadata = {
 };
 
 
-interface V3dZregridParameters {
+interface V3dZregridParamsDict {
     "@type"?: "afni/3dZregrid";
     "z_thickness"?: number | null | undefined;
     "slice_count"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface V3dZregridParameters {
     "infile": InputPathType;
     "verbose": boolean;
 }
-type V3dZregridParametersTagged = Required<Pick<V3dZregridParameters, '@type'>> & V3dZregridParameters;
+type V3dZregridParamsDictTagged = Required<Pick<V3dZregridParamsDict, '@type'>> & V3dZregridParamsDict;
 
 
 /**
- * Output object returned when calling `V3dZregridParameters(...)`.
+ * Output object returned when calling `V3dZregridParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function v_3d_zregrid_params(
     z_size: number | null = null,
     prefix: string | null = null,
     verbose: boolean = false,
-): V3dZregridParametersTagged {
+): V3dZregridParamsDictTagged {
     const params = {
         "@type": "afni/3dZregrid" as const,
         "infile": infile,
@@ -94,7 +94,7 @@ function v_3d_zregrid_params(
  * @returns Command-line arguments.
  */
 function v_3d_zregrid_cargs(
-    params: V3dZregridParameters,
+    params: V3dZregridParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function v_3d_zregrid_cargs(
  * @returns Outputs object.
  */
 function v_3d_zregrid_outputs(
-    params: V3dZregridParameters,
+    params: V3dZregridParamsDict,
     execution: Execution,
 ): V3dZregridOutputs {
     const ret: V3dZregridOutputs = {
@@ -167,7 +167,7 @@ function v_3d_zregrid_outputs(
  * @returns NamedTuple of outputs (described in `V3dZregridOutputs`).
  */
 function v_3d_zregrid_execute(
-    params: V3dZregridParameters,
+    params: V3dZregridParamsDict,
     runner: Runner | null = null,
 ): V3dZregridOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function v_3d_zregrid(
 
 export {
       V3dZregridOutputs,
+      V3dZregridParamsDict,
+      V3dZregridParamsDictTagged,
       V_3D_ZREGRID_METADATA,
       v_3d_zregrid,
       v_3d_zregrid_execute,

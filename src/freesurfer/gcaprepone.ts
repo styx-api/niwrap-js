@@ -11,7 +11,7 @@ const GCAPREPONE_METADATA: Metadata = {
 };
 
 
-interface GcapreponeParameters {
+interface GcapreponeParamsDict {
     "@type"?: "freesurfer/gcaprepone";
     "gcadir": string;
     "subject": string;
@@ -20,11 +20,11 @@ interface GcapreponeParameters {
     "done_file": string;
     "no_emreg": boolean;
 }
-type GcapreponeParametersTagged = Required<Pick<GcapreponeParameters, '@type'>> & GcapreponeParameters;
+type GcapreponeParamsDictTagged = Required<Pick<GcapreponeParamsDict, '@type'>> & GcapreponeParamsDict;
 
 
 /**
- * Output object returned when calling `GcapreponeParameters(...)`.
+ * Output object returned when calling `GcapreponeParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function gcaprepone_params(
     done_file: string,
     init_subject: boolean = false,
     no_emreg: boolean = false,
-): GcapreponeParametersTagged {
+): GcapreponeParamsDictTagged {
     const params = {
         "@type": "freesurfer/gcaprepone" as const,
         "gcadir": gcadir,
@@ -78,7 +78,7 @@ function gcaprepone_params(
  * @returns Command-line arguments.
  */
 function gcaprepone_cargs(
-    params: GcapreponeParameters,
+    params: GcapreponeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function gcaprepone_cargs(
  * @returns Outputs object.
  */
 function gcaprepone_outputs(
-    params: GcapreponeParameters,
+    params: GcapreponeParamsDict,
     execution: Execution,
 ): GcapreponeOutputs {
     const ret: GcapreponeOutputs = {
@@ -143,7 +143,7 @@ function gcaprepone_outputs(
  * @returns NamedTuple of outputs (described in `GcapreponeOutputs`).
  */
 function gcaprepone_execute(
-    params: GcapreponeParameters,
+    params: GcapreponeParamsDict,
     runner: Runner | null = null,
 ): GcapreponeOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function gcaprepone(
 export {
       GCAPREPONE_METADATA,
       GcapreponeOutputs,
+      GcapreponeParamsDict,
+      GcapreponeParamsDictTagged,
       gcaprepone,
       gcaprepone_execute,
       gcaprepone_params,

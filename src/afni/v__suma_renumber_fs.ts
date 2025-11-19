@@ -11,15 +11,15 @@ const V__SUMA_RENUMBER_FS_METADATA: Metadata = {
 };
 
 
-interface VSumaRenumberFsParameters {
+interface VSumaRenumberFsParamsDict {
     "@type"?: "afni/@SUMA_renumber_FS";
     "sumadir": string;
 }
-type VSumaRenumberFsParametersTagged = Required<Pick<VSumaRenumberFsParameters, '@type'>> & VSumaRenumberFsParameters;
+type VSumaRenumberFsParamsDictTagged = Required<Pick<VSumaRenumberFsParamsDict, '@type'>> & VSumaRenumberFsParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaRenumberFsParameters(...)`.
+ * Output object returned when calling `VSumaRenumberFsParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ interface VSumaRenumberFsOutputs {
  */
 function v__suma_renumber_fs_params(
     sumadir: string,
-): VSumaRenumberFsParametersTagged {
+): VSumaRenumberFsParamsDictTagged {
     const params = {
         "@type": "afni/@SUMA_renumber_FS" as const,
         "sumadir": sumadir,
@@ -102,7 +102,7 @@ function v__suma_renumber_fs_params(
  * @returns Command-line arguments.
  */
 function v__suma_renumber_fs_cargs(
-    params: VSumaRenumberFsParameters,
+    params: VSumaRenumberFsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function v__suma_renumber_fs_cargs(
  * @returns Outputs object.
  */
 function v__suma_renumber_fs_outputs(
-    params: VSumaRenumberFsParameters,
+    params: VSumaRenumberFsParamsDict,
     execution: Execution,
 ): VSumaRenumberFsOutputs {
     const ret: VSumaRenumberFsOutputs = {
@@ -157,7 +157,7 @@ function v__suma_renumber_fs_outputs(
  * @returns NamedTuple of outputs (described in `VSumaRenumberFsOutputs`).
  */
 function v__suma_renumber_fs_execute(
-    params: VSumaRenumberFsParameters,
+    params: VSumaRenumberFsParamsDict,
     runner: Runner | null = null,
 ): VSumaRenumberFsOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function v__suma_renumber_fs(
 
 export {
       VSumaRenumberFsOutputs,
+      VSumaRenumberFsParamsDict,
+      VSumaRenumberFsParamsDictTagged,
       V__SUMA_RENUMBER_FS_METADATA,
       v__suma_renumber_fs,
       v__suma_renumber_fs_execute,

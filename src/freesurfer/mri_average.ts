@@ -11,7 +11,7 @@ const MRI_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface MriAverageParameters {
+interface MriAverageParamsDict {
     "@type"?: "freesurfer/mri_average";
     "input_volumes": Array<InputPathType>;
     "output_volume": string;
@@ -35,11 +35,11 @@ interface MriAverageParameters {
     "binarize"?: number | null | undefined;
     "absolute": boolean;
 }
-type MriAverageParametersTagged = Required<Pick<MriAverageParameters, '@type'>> & MriAverageParameters;
+type MriAverageParamsDictTagged = Required<Pick<MriAverageParamsDict, '@type'>> & MriAverageParamsDict;
 
 
 /**
- * Output object returned when calling `MriAverageParameters(...)`.
+ * Output object returned when calling `MriAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function mri_average_params(
     percent: boolean = false,
     binarize: number | null = null,
     absolute: boolean = false,
-): MriAverageParametersTagged {
+): MriAverageParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_average" as const,
         "input_volumes": input_volumes,
@@ -160,7 +160,7 @@ function mri_average_params(
  * @returns Command-line arguments.
  */
 function mri_average_cargs(
-    params: MriAverageParameters,
+    params: MriAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -264,7 +264,7 @@ function mri_average_cargs(
  * @returns Outputs object.
  */
 function mri_average_outputs(
-    params: MriAverageParameters,
+    params: MriAverageParamsDict,
     execution: Execution,
 ): MriAverageOutputs {
     const ret: MriAverageOutputs = {
@@ -290,7 +290,7 @@ function mri_average_outputs(
  * @returns NamedTuple of outputs (described in `MriAverageOutputs`).
  */
 function mri_average_execute(
-    params: MriAverageParameters,
+    params: MriAverageParamsDict,
     runner: Runner | null = null,
 ): MriAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -369,6 +369,8 @@ function mri_average(
 export {
       MRI_AVERAGE_METADATA,
       MriAverageOutputs,
+      MriAverageParamsDict,
+      MriAverageParamsDictTagged,
       mri_average,
       mri_average_execute,
       mri_average_params,

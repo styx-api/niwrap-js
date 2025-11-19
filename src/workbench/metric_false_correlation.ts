@@ -10,7 +10,7 @@ const METRIC_FALSE_CORRELATION_METADATA: Metadata = {
 };
 
 
-interface MetricFalseCorrelationParameters {
+interface MetricFalseCorrelationParamsDict {
     "@type"?: "workbench/metric-false-correlation";
     "metric-out": string;
     "roi-metric"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface MetricFalseCorrelationParameters {
     "geo-outer": number;
     "geo-inner": number;
 }
-type MetricFalseCorrelationParametersTagged = Required<Pick<MetricFalseCorrelationParameters, '@type'>> & MetricFalseCorrelationParameters;
+type MetricFalseCorrelationParamsDictTagged = Required<Pick<MetricFalseCorrelationParamsDict, '@type'>> & MetricFalseCorrelationParamsDict;
 
 
 /**
- * Output object returned when calling `MetricFalseCorrelationParameters(...)`.
+ * Output object returned when calling `MetricFalseCorrelationParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function metric_false_correlation_params(
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
-): MetricFalseCorrelationParametersTagged {
+): MetricFalseCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/metric-false-correlation" as const,
         "metric-out": metric_out,
@@ -97,7 +97,7 @@ function metric_false_correlation_params(
  * @returns Command-line arguments.
  */
 function metric_false_correlation_cargs(
-    params: MetricFalseCorrelationParameters,
+    params: MetricFalseCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function metric_false_correlation_cargs(
  * @returns Outputs object.
  */
 function metric_false_correlation_outputs(
-    params: MetricFalseCorrelationParameters,
+    params: MetricFalseCorrelationParamsDict,
     execution: Execution,
 ): MetricFalseCorrelationOutputs {
     const ret: MetricFalseCorrelationOutputs = {
@@ -152,7 +152,7 @@ function metric_false_correlation_outputs(
  * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
  */
 function metric_false_correlation_execute(
-    params: MetricFalseCorrelationParameters,
+    params: MetricFalseCorrelationParamsDict,
     runner: Runner | null = null,
 ): MetricFalseCorrelationOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function metric_false_correlation(
 export {
       METRIC_FALSE_CORRELATION_METADATA,
       MetricFalseCorrelationOutputs,
+      MetricFalseCorrelationParamsDict,
+      MetricFalseCorrelationParamsDictTagged,
       metric_false_correlation,
       metric_false_correlation_execute,
       metric_false_correlation_params,

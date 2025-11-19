@@ -11,7 +11,7 @@ const FSR_COREG_METADATA: Metadata = {
 };
 
 
-interface FsrCoregParameters {
+interface FsrCoregParamsDict {
     "@type"?: "freesurfer/fsr-coreg";
     "import_dir": string;
     "reference_mode": string;
@@ -20,11 +20,11 @@ interface FsrCoregParameters {
     "output_dir"?: string | null | undefined;
     "expert_options"?: InputPathType | null | undefined;
 }
-type FsrCoregParametersTagged = Required<Pick<FsrCoregParameters, '@type'>> & FsrCoregParameters;
+type FsrCoregParamsDictTagged = Required<Pick<FsrCoregParamsDict, '@type'>> & FsrCoregParamsDict;
 
 
 /**
- * Output object returned when calling `FsrCoregParameters(...)`.
+ * Output object returned when calling `FsrCoregParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function fsr_coreg_params(
     force_update: boolean = false,
     output_dir: string | null = null,
     expert_options: InputPathType | null = null,
-): FsrCoregParametersTagged {
+): FsrCoregParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsr-coreg" as const,
         "import_dir": import_dir,
@@ -92,7 +92,7 @@ function fsr_coreg_params(
  * @returns Command-line arguments.
  */
 function fsr_coreg_cargs(
-    params: FsrCoregParameters,
+    params: FsrCoregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function fsr_coreg_cargs(
  * @returns Outputs object.
  */
 function fsr_coreg_outputs(
-    params: FsrCoregParameters,
+    params: FsrCoregParamsDict,
     execution: Execution,
 ): FsrCoregOutputs {
     const ret: FsrCoregOutputs = {
@@ -166,7 +166,7 @@ function fsr_coreg_outputs(
  * @returns NamedTuple of outputs (described in `FsrCoregOutputs`).
  */
 function fsr_coreg_execute(
-    params: FsrCoregParameters,
+    params: FsrCoregParamsDict,
     runner: Runner | null = null,
 ): FsrCoregOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function fsr_coreg(
 export {
       FSR_COREG_METADATA,
       FsrCoregOutputs,
+      FsrCoregParamsDict,
+      FsrCoregParamsDictTagged,
       fsr_coreg,
       fsr_coreg_execute,
       fsr_coreg_params,

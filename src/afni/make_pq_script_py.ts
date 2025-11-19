@@ -11,18 +11,18 @@ const MAKE_PQ_SCRIPT_PY_METADATA: Metadata = {
 };
 
 
-interface MakePqScriptPyParameters {
+interface MakePqScriptPyParamsDict {
     "@type"?: "afni/make_pq_script.py";
     "dataset": InputPathType;
     "brick_index": number;
     "mask": InputPathType;
     "out_script": string;
 }
-type MakePqScriptPyParametersTagged = Required<Pick<MakePqScriptPyParameters, '@type'>> & MakePqScriptPyParameters;
+type MakePqScriptPyParamsDictTagged = Required<Pick<MakePqScriptPyParamsDict, '@type'>> & MakePqScriptPyParamsDict;
 
 
 /**
- * Output object returned when calling `MakePqScriptPyParameters(...)`.
+ * Output object returned when calling `MakePqScriptPyParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function make_pq_script_py_params(
     brick_index: number,
     mask: InputPathType,
     out_script: string,
-): MakePqScriptPyParametersTagged {
+): MakePqScriptPyParamsDictTagged {
     const params = {
         "@type": "afni/make_pq_script.py" as const,
         "dataset": dataset,
@@ -74,7 +74,7 @@ function make_pq_script_py_params(
  * @returns Command-line arguments.
  */
 function make_pq_script_py_cargs(
-    params: MakePqScriptPyParameters,
+    params: MakePqScriptPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function make_pq_script_py_cargs(
  * @returns Outputs object.
  */
 function make_pq_script_py_outputs(
-    params: MakePqScriptPyParameters,
+    params: MakePqScriptPyParamsDict,
     execution: Execution,
 ): MakePqScriptPyOutputs {
     const ret: MakePqScriptPyOutputs = {
@@ -122,7 +122,7 @@ function make_pq_script_py_outputs(
  * @returns NamedTuple of outputs (described in `MakePqScriptPyOutputs`).
  */
 function make_pq_script_py_execute(
-    params: MakePqScriptPyParameters,
+    params: MakePqScriptPyParamsDict,
     runner: Runner | null = null,
 ): MakePqScriptPyOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function make_pq_script_py(
 export {
       MAKE_PQ_SCRIPT_PY_METADATA,
       MakePqScriptPyOutputs,
+      MakePqScriptPyParamsDict,
+      MakePqScriptPyParamsDictTagged,
       make_pq_script_py,
       make_pq_script_py_execute,
       make_pq_script_py_params,

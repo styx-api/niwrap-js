@@ -11,18 +11,18 @@ const EXTRACTTXT_METADATA: Metadata = {
 };
 
 
-interface ExtracttxtParameters {
+interface ExtracttxtParamsDict {
     "@type"?: "fsl/extracttxt";
     "search_word": string;
     "file": InputPathType;
     "num_trailing_lines"?: number | null | undefined;
     "relative_start"?: number | null | undefined;
 }
-type ExtracttxtParametersTagged = Required<Pick<ExtracttxtParameters, '@type'>> & ExtracttxtParameters;
+type ExtracttxtParamsDictTagged = Required<Pick<ExtracttxtParamsDict, '@type'>> & ExtracttxtParamsDict;
 
 
 /**
- * Output object returned when calling `ExtracttxtParameters(...)`.
+ * Output object returned when calling `ExtracttxtParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function extracttxt_params(
     file: InputPathType,
     num_trailing_lines: number | null = null,
     relative_start: number | null = null,
-): ExtracttxtParametersTagged {
+): ExtracttxtParamsDictTagged {
     const params = {
         "@type": "fsl/extracttxt" as const,
         "search_word": search_word,
@@ -78,7 +78,7 @@ function extracttxt_params(
  * @returns Command-line arguments.
  */
 function extracttxt_cargs(
-    params: ExtracttxtParameters,
+    params: ExtracttxtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function extracttxt_cargs(
  * @returns Outputs object.
  */
 function extracttxt_outputs(
-    params: ExtracttxtParameters,
+    params: ExtracttxtParamsDict,
     execution: Execution,
 ): ExtracttxtOutputs {
     const ret: ExtracttxtOutputs = {
@@ -130,7 +130,7 @@ function extracttxt_outputs(
  * @returns NamedTuple of outputs (described in `ExtracttxtOutputs`).
  */
 function extracttxt_execute(
-    params: ExtracttxtParameters,
+    params: ExtracttxtParamsDict,
     runner: Runner | null = null,
 ): ExtracttxtOutputs {
     runner = runner || getGlobalRunner();
@@ -175,6 +175,8 @@ function extracttxt(
 export {
       EXTRACTTXT_METADATA,
       ExtracttxtOutputs,
+      ExtracttxtParamsDict,
+      ExtracttxtParamsDictTagged,
       extracttxt,
       extracttxt_execute,
       extracttxt_params,

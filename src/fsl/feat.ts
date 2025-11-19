@@ -11,15 +11,15 @@ const FEAT_METADATA: Metadata = {
 };
 
 
-interface FeatParameters {
+interface FeatParamsDict {
     "@type"?: "fsl/feat";
     "design_file": InputPathType;
 }
-type FeatParametersTagged = Required<Pick<FeatParameters, '@type'>> & FeatParameters;
+type FeatParamsDictTagged = Required<Pick<FeatParamsDict, '@type'>> & FeatParamsDict;
 
 
 /**
- * Output object returned when calling `FeatParameters(...)`.
+ * Output object returned when calling `FeatParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface FeatOutputs {
  */
 function feat_params(
     design_file: InputPathType,
-): FeatParametersTagged {
+): FeatParamsDictTagged {
     const params = {
         "@type": "fsl/feat" as const,
         "design_file": design_file,
@@ -62,7 +62,7 @@ function feat_params(
  * @returns Command-line arguments.
  */
 function feat_cargs(
-    params: FeatParameters,
+    params: FeatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function feat_cargs(
  * @returns Outputs object.
  */
 function feat_outputs(
-    params: FeatParameters,
+    params: FeatParamsDict,
     execution: Execution,
 ): FeatOutputs {
     const ret: FeatOutputs = {
@@ -107,7 +107,7 @@ function feat_outputs(
  * @returns NamedTuple of outputs (described in `FeatOutputs`).
  */
 function feat_execute(
-    params: FeatParameters,
+    params: FeatParamsDict,
     runner: Runner | null = null,
 ): FeatOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function feat(
 export {
       FEAT_METADATA,
       FeatOutputs,
+      FeatParamsDict,
+      FeatParamsDictTagged,
       feat,
       feat_execute,
       feat_params,

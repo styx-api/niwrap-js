@@ -11,7 +11,7 @@ const FABBER_DUALECHO_METADATA: Metadata = {
 };
 
 
-interface FabberDualechoParameters {
+interface FabberDualechoParamsDict {
     "@type"?: "fsl/fabber_dualecho";
     "output_directory": string;
     "method": string;
@@ -49,11 +49,11 @@ interface FabberDualechoParameters {
     "save_free_energy_flag": boolean;
     "debug_flag": boolean;
 }
-type FabberDualechoParametersTagged = Required<Pick<FabberDualechoParameters, '@type'>> & FabberDualechoParameters;
+type FabberDualechoParamsDictTagged = Required<Pick<FabberDualechoParamsDict, '@type'>> & FabberDualechoParamsDict;
 
 
 /**
- * Output object returned when calling `FabberDualechoParameters(...)`.
+ * Output object returned when calling `FabberDualechoParamsDict(...)`.
  *
  * @interface
  */
@@ -146,7 +146,7 @@ function fabber_dualecho_params(
     save_noise_std_flag: boolean = false,
     save_free_energy_flag: boolean = false,
     debug_flag: boolean = false,
-): FabberDualechoParametersTagged {
+): FabberDualechoParamsDictTagged {
     const params = {
         "@type": "fsl/fabber_dualecho" as const,
         "output_directory": output_directory,
@@ -216,7 +216,7 @@ function fabber_dualecho_params(
  * @returns Command-line arguments.
  */
 function fabber_dualecho_cargs(
-    params: FabberDualechoParameters,
+    params: FabberDualechoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -367,7 +367,7 @@ function fabber_dualecho_cargs(
  * @returns Outputs object.
  */
 function fabber_dualecho_outputs(
-    params: FabberDualechoParameters,
+    params: FabberDualechoParamsDict,
     execution: Execution,
 ): FabberDualechoOutputs {
     const ret: FabberDualechoOutputs = {
@@ -393,7 +393,7 @@ function fabber_dualecho_outputs(
  * @returns NamedTuple of outputs (described in `FabberDualechoOutputs`).
  */
 function fabber_dualecho_execute(
-    params: FabberDualechoParameters,
+    params: FabberDualechoParamsDict,
     runner: Runner | null = null,
 ): FabberDualechoOutputs {
     runner = runner || getGlobalRunner();
@@ -500,6 +500,8 @@ function fabber_dualecho(
 export {
       FABBER_DUALECHO_METADATA,
       FabberDualechoOutputs,
+      FabberDualechoParamsDict,
+      FabberDualechoParamsDictTagged,
       fabber_dualecho,
       fabber_dualecho_execute,
       fabber_dualecho_params,

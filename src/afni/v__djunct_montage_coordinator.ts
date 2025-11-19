@@ -11,7 +11,7 @@ const V__DJUNCT_MONTAGE_COORDINATOR_METADATA: Metadata = {
 };
 
 
-interface VDjunctMontageCoordinatorParameters {
+interface VDjunctMontageCoordinatorParamsDict {
     "@type"?: "afni/@djunct_montage_coordinator";
     "input_file": InputPathType;
     "montx": number;
@@ -21,11 +21,11 @@ interface VDjunctMontageCoordinatorParameters {
     "help": boolean;
     "version": boolean;
 }
-type VDjunctMontageCoordinatorParametersTagged = Required<Pick<VDjunctMontageCoordinatorParameters, '@type'>> & VDjunctMontageCoordinatorParameters;
+type VDjunctMontageCoordinatorParamsDictTagged = Required<Pick<VDjunctMontageCoordinatorParamsDict, '@type'>> & VDjunctMontageCoordinatorParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunctMontageCoordinatorParameters(...)`.
+ * Output object returned when calling `VDjunctMontageCoordinatorParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v__djunct_montage_coordinator_params(
     out_xyz: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): VDjunctMontageCoordinatorParametersTagged {
+): VDjunctMontageCoordinatorParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_montage_coordinator" as const,
         "input_file": input_file,
@@ -86,7 +86,7 @@ function v__djunct_montage_coordinator_params(
  * @returns Command-line arguments.
  */
 function v__djunct_montage_coordinator_cargs(
-    params: VDjunctMontageCoordinatorParameters,
+    params: VDjunctMontageCoordinatorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function v__djunct_montage_coordinator_cargs(
  * @returns Outputs object.
  */
 function v__djunct_montage_coordinator_outputs(
-    params: VDjunctMontageCoordinatorParameters,
+    params: VDjunctMontageCoordinatorParamsDict,
     execution: Execution,
 ): VDjunctMontageCoordinatorOutputs {
     const ret: VDjunctMontageCoordinatorOutputs = {
@@ -154,7 +154,7 @@ function v__djunct_montage_coordinator_outputs(
  * @returns NamedTuple of outputs (described in `VDjunctMontageCoordinatorOutputs`).
  */
 function v__djunct_montage_coordinator_execute(
-    params: VDjunctMontageCoordinatorParameters,
+    params: VDjunctMontageCoordinatorParamsDict,
     runner: Runner | null = null,
 ): VDjunctMontageCoordinatorOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function v__djunct_montage_coordinator(
 
 export {
       VDjunctMontageCoordinatorOutputs,
+      VDjunctMontageCoordinatorParamsDict,
+      VDjunctMontageCoordinatorParamsDictTagged,
       V__DJUNCT_MONTAGE_COORDINATOR_METADATA,
       v__djunct_montage_coordinator,
       v__djunct_montage_coordinator_execute,

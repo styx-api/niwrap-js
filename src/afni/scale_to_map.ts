@@ -11,15 +11,15 @@ const SCALE_TO_MAP_METADATA: Metadata = {
 };
 
 
-interface ScaleToMapTraceParameters {
+interface ScaleToMapTraceParamsDict {
     "@type"?: "trace";
     "trace": boolean;
     "TRACE": boolean;
 }
-type ScaleToMapTraceParametersTagged = Required<Pick<ScaleToMapTraceParameters, '@type'>> & ScaleToMapTraceParameters;
+type ScaleToMapTraceParamsDictTagged = Required<Pick<ScaleToMapTraceParamsDict, '@type'>> & ScaleToMapTraceParamsDict;
 
 
-interface ScaleToMapParameters {
+interface ScaleToMapParamsDict {
     "@type"?: "afni/ScaleToMap";
     "input_file": InputPathType;
     "icol": number;
@@ -47,11 +47,11 @@ interface ScaleToMapParameters {
     "novolreg": boolean;
     "noxform": boolean;
     "setenv"?: string | null | undefined;
-    "trace"?: ScaleToMapTraceParameters | null | undefined;
+    "trace"?: ScaleToMapTraceParamsDict | null | undefined;
     "nomall": boolean;
     "yesmall": boolean;
 }
-type ScaleToMapParametersTagged = Required<Pick<ScaleToMapParameters, '@type'>> & ScaleToMapParameters;
+type ScaleToMapParamsDictTagged = Required<Pick<ScaleToMapParamsDict, '@type'>> & ScaleToMapParamsDict;
 
 
 /**
@@ -62,10 +62,10 @@ type ScaleToMapParametersTagged = Required<Pick<ScaleToMapParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function scale_to_map_trace_params(
+function scale_to_map_trace(
     trace: boolean = false,
     trace_: boolean = false,
-): ScaleToMapTraceParametersTagged {
+): ScaleToMapTraceParamsDictTagged {
     const params = {
         "@type": "trace" as const,
         "trace": trace,
@@ -84,7 +84,7 @@ function scale_to_map_trace_params(
  * @returns Command-line arguments.
  */
 function scale_to_map_trace_cargs(
-    params: ScaleToMapTraceParameters,
+    params: ScaleToMapTraceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function scale_to_map_trace_cargs(
 
 
 /**
- * Output object returned when calling `ScaleToMapParameters(...)`.
+ * Output object returned when calling `ScaleToMapParamsDict(...)`.
  *
  * @interface
  */
@@ -173,10 +173,10 @@ function scale_to_map_params(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: ScaleToMapTraceParameters | null = null,
+    trace: ScaleToMapTraceParamsDict | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
-): ScaleToMapParametersTagged {
+): ScaleToMapParamsDictTagged {
     const params = {
         "@type": "afni/ScaleToMap" as const,
         "input_file": input_file,
@@ -246,7 +246,7 @@ function scale_to_map_params(
  * @returns Command-line arguments.
  */
 function scale_to_map_cargs(
-    params: ScaleToMapParameters,
+    params: ScaleToMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -378,7 +378,7 @@ function scale_to_map_cargs(
  * @returns Outputs object.
  */
 function scale_to_map_outputs(
-    params: ScaleToMapParameters,
+    params: ScaleToMapParamsDict,
     execution: Execution,
 ): ScaleToMapOutputs {
     const ret: ScaleToMapOutputs = {
@@ -403,7 +403,7 @@ function scale_to_map_outputs(
  * @returns NamedTuple of outputs (described in `ScaleToMapOutputs`).
  */
 function scale_to_map_execute(
-    params: ScaleToMapParameters,
+    params: ScaleToMapParamsDict,
     runner: Runner | null = null,
 ): ScaleToMapOutputs {
     runner = runner || getGlobalRunner();
@@ -485,7 +485,7 @@ function scale_to_map(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: ScaleToMapTraceParameters | null = null,
+    trace: ScaleToMapTraceParamsDict | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
     runner: Runner | null = null,
@@ -498,8 +498,12 @@ function scale_to_map(
 export {
       SCALE_TO_MAP_METADATA,
       ScaleToMapOutputs,
+      ScaleToMapParamsDict,
+      ScaleToMapParamsDictTagged,
+      ScaleToMapTraceParamsDict,
+      ScaleToMapTraceParamsDictTagged,
       scale_to_map,
       scale_to_map_execute,
       scale_to_map_params,
-      scale_to_map_trace_params,
+      scale_to_map_trace,
 };

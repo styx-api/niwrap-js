@@ -11,7 +11,7 @@ const MMPPSP_METADATA: Metadata = {
 };
 
 
-interface MmppspParameters {
+interface MmppspParamsDict {
     "@type"?: "freesurfer/mmppsp";
     "samseg_dir": string;
     "outdir": string;
@@ -25,11 +25,11 @@ interface MmppspParameters {
     "stop_after"?: string | null | undefined;
     "wexpanddist"?: number | null | undefined;
 }
-type MmppspParametersTagged = Required<Pick<MmppspParameters, '@type'>> & MmppspParameters;
+type MmppspParamsDictTagged = Required<Pick<MmppspParamsDict, '@type'>> & MmppspParamsDict;
 
 
 /**
- * Output object returned when calling `MmppspParameters(...)`.
+ * Output object returned when calling `MmppspParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function mmppsp_params(
     no_initsphreg_flag: boolean = false,
     stop_after: string | null = null,
     wexpanddist: number | null = null,
-): MmppspParametersTagged {
+): MmppspParamsDictTagged {
     const params = {
         "@type": "freesurfer/mmppsp" as const,
         "samseg_dir": samseg_dir,
@@ -108,7 +108,7 @@ function mmppsp_params(
  * @returns Command-line arguments.
  */
 function mmppsp_cargs(
-    params: MmppspParameters,
+    params: MmppspParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -170,7 +170,7 @@ function mmppsp_cargs(
  * @returns Outputs object.
  */
 function mmppsp_outputs(
-    params: MmppspParameters,
+    params: MmppspParamsDict,
     execution: Execution,
 ): MmppspOutputs {
     const ret: MmppspOutputs = {
@@ -196,7 +196,7 @@ function mmppsp_outputs(
  * @returns NamedTuple of outputs (described in `MmppspOutputs`).
  */
 function mmppsp_execute(
-    params: MmppspParameters,
+    params: MmppspParamsDict,
     runner: Runner | null = null,
 ): MmppspOutputs {
     runner = runner || getGlobalRunner();
@@ -255,6 +255,8 @@ function mmppsp(
 export {
       MMPPSP_METADATA,
       MmppspOutputs,
+      MmppspParamsDict,
+      MmppspParamsDictTagged,
       mmppsp,
       mmppsp_execute,
       mmppsp_params,

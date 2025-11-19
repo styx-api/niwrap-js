@@ -10,7 +10,7 @@ const SURFACE_INFLATION_METADATA: Metadata = {
 };
 
 
-interface SurfaceInflationParameters {
+interface SurfaceInflationParamsDict {
     "@type"?: "workbench/surface-inflation";
     "surface-out": string;
     "anatomical-surface-in": InputPathType;
@@ -20,11 +20,11 @@ interface SurfaceInflationParameters {
     "smoothing-iterations": number;
     "inflation-factor": number;
 }
-type SurfaceInflationParametersTagged = Required<Pick<SurfaceInflationParameters, '@type'>> & SurfaceInflationParameters;
+type SurfaceInflationParamsDictTagged = Required<Pick<SurfaceInflationParamsDict, '@type'>> & SurfaceInflationParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceInflationParameters(...)`.
+ * Output object returned when calling `SurfaceInflationParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function surface_inflation_params(
     smoothing_strength: number,
     smoothing_iterations: number,
     inflation_factor: number,
-): SurfaceInflationParametersTagged {
+): SurfaceInflationParamsDictTagged {
     const params = {
         "@type": "workbench/surface-inflation" as const,
         "surface-out": surface_out,
@@ -85,7 +85,7 @@ function surface_inflation_params(
  * @returns Command-line arguments.
  */
 function surface_inflation_cargs(
-    params: SurfaceInflationParameters,
+    params: SurfaceInflationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function surface_inflation_cargs(
  * @returns Outputs object.
  */
 function surface_inflation_outputs(
-    params: SurfaceInflationParameters,
+    params: SurfaceInflationParamsDict,
     execution: Execution,
 ): SurfaceInflationOutputs {
     const ret: SurfaceInflationOutputs = {
@@ -135,7 +135,7 @@ function surface_inflation_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceInflationOutputs`).
  */
 function surface_inflation_execute(
-    params: SurfaceInflationParameters,
+    params: SurfaceInflationParamsDict,
     runner: Runner | null = null,
 ): SurfaceInflationOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function surface_inflation(
 export {
       SURFACE_INFLATION_METADATA,
       SurfaceInflationOutputs,
+      SurfaceInflationParamsDict,
+      SurfaceInflationParamsDictTagged,
       surface_inflation,
       surface_inflation_execute,
       surface_inflation_params,

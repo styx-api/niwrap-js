@@ -11,7 +11,7 @@ const MRIS_PLACE_SURFACE_METADATA: Metadata = {
 };
 
 
-interface MrisPlaceSurfaceParameters {
+interface MrisPlaceSurfaceParamsDict {
     "@type"?: "freesurfer/mris_place_surface";
     "output_surface": string;
     "input_surface": string;
@@ -58,11 +58,11 @@ interface MrisPlaceSurfaceParameters {
     "white_border_low_factor"?: number | null | undefined;
     "fill_lateral_ventricles"?: Array<number> | null | undefined;
 }
-type MrisPlaceSurfaceParametersTagged = Required<Pick<MrisPlaceSurfaceParameters, '@type'>> & MrisPlaceSurfaceParameters;
+type MrisPlaceSurfaceParamsDictTagged = Required<Pick<MrisPlaceSurfaceParamsDict, '@type'>> & MrisPlaceSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `MrisPlaceSurfaceParameters(...)`.
+ * Output object returned when calling `MrisPlaceSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -169,7 +169,7 @@ function mris_place_surface_params(
     first_peak_d2: boolean = false,
     white_border_low_factor: number | null = null,
     fill_lateral_ventricles: Array<number> | null = null,
-): MrisPlaceSurfaceParametersTagged {
+): MrisPlaceSurfaceParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_place_surface" as const,
         "output_surface": output_surface,
@@ -278,7 +278,7 @@ function mris_place_surface_params(
  * @returns Command-line arguments.
  */
 function mris_place_surface_cargs(
-    params: MrisPlaceSurfaceParameters,
+    params: MrisPlaceSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -500,7 +500,7 @@ function mris_place_surface_cargs(
  * @returns Outputs object.
  */
 function mris_place_surface_outputs(
-    params: MrisPlaceSurfaceParameters,
+    params: MrisPlaceSurfaceParamsDict,
     execution: Execution,
 ): MrisPlaceSurfaceOutputs {
     const ret: MrisPlaceSurfaceOutputs = {
@@ -525,7 +525,7 @@ function mris_place_surface_outputs(
  * @returns NamedTuple of outputs (described in `MrisPlaceSurfaceOutputs`).
  */
 function mris_place_surface_execute(
-    params: MrisPlaceSurfaceParameters,
+    params: MrisPlaceSurfaceParamsDict,
     runner: Runner | null = null,
 ): MrisPlaceSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -650,6 +650,8 @@ function mris_place_surface(
 export {
       MRIS_PLACE_SURFACE_METADATA,
       MrisPlaceSurfaceOutputs,
+      MrisPlaceSurfaceParamsDict,
+      MrisPlaceSurfaceParamsDictTagged,
       mris_place_surface,
       mris_place_surface_execute,
       mris_place_surface_params,

@@ -11,18 +11,18 @@ const MRI_FUSE_INTENSITY_IMAGES_METADATA: Metadata = {
 };
 
 
-interface MriFuseIntensityImagesParameters {
+interface MriFuseIntensityImagesParamsDict {
     "@type"?: "freesurfer/mri_fuse_intensity_images";
     "longitudinal_time_point_file": InputPathType;
     "input_volume": InputPathType;
     "transform_file": InputPathType;
     "output_volume": string;
 }
-type MriFuseIntensityImagesParametersTagged = Required<Pick<MriFuseIntensityImagesParameters, '@type'>> & MriFuseIntensityImagesParameters;
+type MriFuseIntensityImagesParamsDictTagged = Required<Pick<MriFuseIntensityImagesParamsDict, '@type'>> & MriFuseIntensityImagesParamsDict;
 
 
 /**
- * Output object returned when calling `MriFuseIntensityImagesParameters(...)`.
+ * Output object returned when calling `MriFuseIntensityImagesParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_fuse_intensity_images_params(
     input_volume: InputPathType,
     transform_file: InputPathType,
     output_volume: string,
-): MriFuseIntensityImagesParametersTagged {
+): MriFuseIntensityImagesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fuse_intensity_images" as const,
         "longitudinal_time_point_file": longitudinal_time_point_file,
@@ -74,7 +74,7 @@ function mri_fuse_intensity_images_params(
  * @returns Command-line arguments.
  */
 function mri_fuse_intensity_images_cargs(
-    params: MriFuseIntensityImagesParameters,
+    params: MriFuseIntensityImagesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_fuse_intensity_images_cargs(
  * @returns Outputs object.
  */
 function mri_fuse_intensity_images_outputs(
-    params: MriFuseIntensityImagesParameters,
+    params: MriFuseIntensityImagesParamsDict,
     execution: Execution,
 ): MriFuseIntensityImagesOutputs {
     const ret: MriFuseIntensityImagesOutputs = {
@@ -122,7 +122,7 @@ function mri_fuse_intensity_images_outputs(
  * @returns NamedTuple of outputs (described in `MriFuseIntensityImagesOutputs`).
  */
 function mri_fuse_intensity_images_execute(
-    params: MriFuseIntensityImagesParameters,
+    params: MriFuseIntensityImagesParamsDict,
     runner: Runner | null = null,
 ): MriFuseIntensityImagesOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mri_fuse_intensity_images(
 export {
       MRI_FUSE_INTENSITY_IMAGES_METADATA,
       MriFuseIntensityImagesOutputs,
+      MriFuseIntensityImagesParamsDict,
+      MriFuseIntensityImagesParamsDictTagged,
       mri_fuse_intensity_images,
       mri_fuse_intensity_images_execute,
       mri_fuse_intensity_images_params,

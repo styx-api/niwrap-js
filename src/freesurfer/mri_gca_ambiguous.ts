@@ -11,16 +11,16 @@ const MRI_GCA_AMBIGUOUS_METADATA: Metadata = {
 };
 
 
-interface MriGcaAmbiguousParameters {
+interface MriGcaAmbiguousParamsDict {
     "@type"?: "freesurfer/mri_gca_ambiguous";
     "gca_file": InputPathType;
     "output_volume": string;
 }
-type MriGcaAmbiguousParametersTagged = Required<Pick<MriGcaAmbiguousParameters, '@type'>> & MriGcaAmbiguousParameters;
+type MriGcaAmbiguousParamsDictTagged = Required<Pick<MriGcaAmbiguousParamsDict, '@type'>> & MriGcaAmbiguousParamsDict;
 
 
 /**
- * Output object returned when calling `MriGcaAmbiguousParameters(...)`.
+ * Output object returned when calling `MriGcaAmbiguousParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MriGcaAmbiguousOutputs {
 function mri_gca_ambiguous_params(
     gca_file: InputPathType,
     output_volume: string,
-): MriGcaAmbiguousParametersTagged {
+): MriGcaAmbiguousParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gca_ambiguous" as const,
         "gca_file": gca_file,
@@ -66,7 +66,7 @@ function mri_gca_ambiguous_params(
  * @returns Command-line arguments.
  */
 function mri_gca_ambiguous_cargs(
-    params: MriGcaAmbiguousParameters,
+    params: MriGcaAmbiguousParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mri_gca_ambiguous_cargs(
  * @returns Outputs object.
  */
 function mri_gca_ambiguous_outputs(
-    params: MriGcaAmbiguousParameters,
+    params: MriGcaAmbiguousParamsDict,
     execution: Execution,
 ): MriGcaAmbiguousOutputs {
     const ret: MriGcaAmbiguousOutputs = {
@@ -112,7 +112,7 @@ function mri_gca_ambiguous_outputs(
  * @returns NamedTuple of outputs (described in `MriGcaAmbiguousOutputs`).
  */
 function mri_gca_ambiguous_execute(
-    params: MriGcaAmbiguousParameters,
+    params: MriGcaAmbiguousParamsDict,
     runner: Runner | null = null,
 ): MriGcaAmbiguousOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mri_gca_ambiguous(
 export {
       MRI_GCA_AMBIGUOUS_METADATA,
       MriGcaAmbiguousOutputs,
+      MriGcaAmbiguousParamsDict,
+      MriGcaAmbiguousParamsDictTagged,
       mri_gca_ambiguous,
       mri_gca_ambiguous_execute,
       mri_gca_ambiguous_params,

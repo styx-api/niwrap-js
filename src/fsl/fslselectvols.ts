@@ -11,7 +11,7 @@ const FSLSELECTVOLS_METADATA: Metadata = {
 };
 
 
-interface FslselectvolsParameters {
+interface FslselectvolsParamsDict {
     "@type"?: "fsl/fslselectvols";
     "input_file": InputPathType;
     "output_file": string;
@@ -20,11 +20,11 @@ interface FslselectvolsParameters {
     "output_variance_flag": boolean;
     "help_flag": boolean;
 }
-type FslselectvolsParametersTagged = Required<Pick<FslselectvolsParameters, '@type'>> & FslselectvolsParameters;
+type FslselectvolsParamsDictTagged = Required<Pick<FslselectvolsParamsDict, '@type'>> & FslselectvolsParamsDict;
 
 
 /**
- * Output object returned when calling `FslselectvolsParameters(...)`.
+ * Output object returned when calling `FslselectvolsParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function fslselectvols_params(
     output_mean_flag: boolean = false,
     output_variance_flag: boolean = false,
     help_flag: boolean = false,
-): FslselectvolsParametersTagged {
+): FslselectvolsParamsDictTagged {
     const params = {
         "@type": "fsl/fslselectvols" as const,
         "input_file": input_file,
@@ -82,7 +82,7 @@ function fslselectvols_params(
  * @returns Command-line arguments.
  */
 function fslselectvols_cargs(
-    params: FslselectvolsParameters,
+    params: FslselectvolsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function fslselectvols_cargs(
  * @returns Outputs object.
  */
 function fslselectvols_outputs(
-    params: FslselectvolsParameters,
+    params: FslselectvolsParamsDict,
     execution: Execution,
 ): FslselectvolsOutputs {
     const ret: FslselectvolsOutputs = {
@@ -147,7 +147,7 @@ function fslselectvols_outputs(
  * @returns NamedTuple of outputs (described in `FslselectvolsOutputs`).
  */
 function fslselectvols_execute(
-    params: FslselectvolsParameters,
+    params: FslselectvolsParamsDict,
     runner: Runner | null = null,
 ): FslselectvolsOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function fslselectvols(
 export {
       FSLSELECTVOLS_METADATA,
       FslselectvolsOutputs,
+      FslselectvolsParamsDict,
+      FslselectvolsParamsDictTagged,
       fslselectvols,
       fslselectvols_execute,
       fslselectvols_params,

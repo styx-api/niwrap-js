@@ -11,16 +11,16 @@ const MRIS_DISTANCE_MAP_METADATA: Metadata = {
 };
 
 
-interface MrisDistanceMapParameters {
+interface MrisDistanceMapParamsDict {
     "@type"?: "freesurfer/mris_distance_map";
     "input_surface_file": InputPathType;
     "output_scalar_field": string;
 }
-type MrisDistanceMapParametersTagged = Required<Pick<MrisDistanceMapParameters, '@type'>> & MrisDistanceMapParameters;
+type MrisDistanceMapParamsDictTagged = Required<Pick<MrisDistanceMapParamsDict, '@type'>> & MrisDistanceMapParamsDict;
 
 
 /**
- * Output object returned when calling `MrisDistanceMapParameters(...)`.
+ * Output object returned when calling `MrisDistanceMapParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MrisDistanceMapOutputs {
 function mris_distance_map_params(
     input_surface_file: InputPathType,
     output_scalar_field: string,
-): MrisDistanceMapParametersTagged {
+): MrisDistanceMapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_distance_map" as const,
         "input_surface_file": input_surface_file,
@@ -66,7 +66,7 @@ function mris_distance_map_params(
  * @returns Command-line arguments.
  */
 function mris_distance_map_cargs(
-    params: MrisDistanceMapParameters,
+    params: MrisDistanceMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mris_distance_map_cargs(
  * @returns Outputs object.
  */
 function mris_distance_map_outputs(
-    params: MrisDistanceMapParameters,
+    params: MrisDistanceMapParamsDict,
     execution: Execution,
 ): MrisDistanceMapOutputs {
     const ret: MrisDistanceMapOutputs = {
@@ -112,7 +112,7 @@ function mris_distance_map_outputs(
  * @returns NamedTuple of outputs (described in `MrisDistanceMapOutputs`).
  */
 function mris_distance_map_execute(
-    params: MrisDistanceMapParameters,
+    params: MrisDistanceMapParamsDict,
     runner: Runner | null = null,
 ): MrisDistanceMapOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mris_distance_map(
 export {
       MRIS_DISTANCE_MAP_METADATA,
       MrisDistanceMapOutputs,
+      MrisDistanceMapParamsDict,
+      MrisDistanceMapParamsDictTagged,
       mris_distance_map,
       mris_distance_map_execute,
       mris_distance_map_params,

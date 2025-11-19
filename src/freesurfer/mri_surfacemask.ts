@@ -11,17 +11,17 @@ const MRI_SURFACEMASK_METADATA: Metadata = {
 };
 
 
-interface MriSurfacemaskParameters {
+interface MriSurfacemaskParamsDict {
     "@type"?: "freesurfer/mri_surfacemask";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
     "output_volume": string;
 }
-type MriSurfacemaskParametersTagged = Required<Pick<MriSurfacemaskParameters, '@type'>> & MriSurfacemaskParameters;
+type MriSurfacemaskParamsDictTagged = Required<Pick<MriSurfacemaskParamsDict, '@type'>> & MriSurfacemaskParamsDict;
 
 
 /**
- * Output object returned when calling `MriSurfacemaskParameters(...)`.
+ * Output object returned when calling `MriSurfacemaskParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_surfacemask_params(
     input_volume: InputPathType,
     input_surface: InputPathType,
     output_volume: string,
-): MriSurfacemaskParametersTagged {
+): MriSurfacemaskParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_surfacemask" as const,
         "input_volume": input_volume,
@@ -70,7 +70,7 @@ function mri_surfacemask_params(
  * @returns Command-line arguments.
  */
 function mri_surfacemask_cargs(
-    params: MriSurfacemaskParameters,
+    params: MriSurfacemaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_surfacemask_cargs(
  * @returns Outputs object.
  */
 function mri_surfacemask_outputs(
-    params: MriSurfacemaskParameters,
+    params: MriSurfacemaskParamsDict,
     execution: Execution,
 ): MriSurfacemaskOutputs {
     const ret: MriSurfacemaskOutputs = {
@@ -117,7 +117,7 @@ function mri_surfacemask_outputs(
  * @returns NamedTuple of outputs (described in `MriSurfacemaskOutputs`).
  */
 function mri_surfacemask_execute(
-    params: MriSurfacemaskParameters,
+    params: MriSurfacemaskParamsDict,
     runner: Runner | null = null,
 ): MriSurfacemaskOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_surfacemask(
 export {
       MRI_SURFACEMASK_METADATA,
       MriSurfacemaskOutputs,
+      MriSurfacemaskParamsDict,
+      MriSurfacemaskParamsDictTagged,
       mri_surfacemask,
       mri_surfacemask_execute,
       mri_surfacemask_params,

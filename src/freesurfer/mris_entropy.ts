@@ -11,7 +11,7 @@ const MRIS_ENTROPY_METADATA: Metadata = {
 };
 
 
-interface MrisEntropyParameters {
+interface MrisEntropyParamsDict {
     "@type"?: "freesurfer/mris_entropy";
     "subject": string;
     "hemi": string;
@@ -20,11 +20,11 @@ interface MrisEntropyParameters {
     "average_iterations"?: number | null | undefined;
     "normalize": boolean;
 }
-type MrisEntropyParametersTagged = Required<Pick<MrisEntropyParameters, '@type'>> & MrisEntropyParameters;
+type MrisEntropyParamsDictTagged = Required<Pick<MrisEntropyParamsDict, '@type'>> & MrisEntropyParamsDict;
 
 
 /**
- * Output object returned when calling `MrisEntropyParameters(...)`.
+ * Output object returned when calling `MrisEntropyParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_entropy_params(
     curvfile: InputPathType,
     average_iterations: number | null = null,
     normalize: boolean = false,
-): MrisEntropyParametersTagged {
+): MrisEntropyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_entropy" as const,
         "subject": subject,
@@ -84,7 +84,7 @@ function mris_entropy_params(
  * @returns Command-line arguments.
  */
 function mris_entropy_cargs(
-    params: MrisEntropyParameters,
+    params: MrisEntropyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function mris_entropy_cargs(
  * @returns Outputs object.
  */
 function mris_entropy_outputs(
-    params: MrisEntropyParameters,
+    params: MrisEntropyParamsDict,
     execution: Execution,
 ): MrisEntropyOutputs {
     const ret: MrisEntropyOutputs = {
@@ -141,7 +141,7 @@ function mris_entropy_outputs(
  * @returns NamedTuple of outputs (described in `MrisEntropyOutputs`).
  */
 function mris_entropy_execute(
-    params: MrisEntropyParameters,
+    params: MrisEntropyParamsDict,
     runner: Runner | null = null,
 ): MrisEntropyOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function mris_entropy(
 export {
       MRIS_ENTROPY_METADATA,
       MrisEntropyOutputs,
+      MrisEntropyParamsDict,
+      MrisEntropyParamsDictTagged,
       mris_entropy,
       mris_entropy_execute,
       mris_entropy_params,

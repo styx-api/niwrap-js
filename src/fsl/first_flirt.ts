@@ -11,7 +11,7 @@ const FIRST_FLIRT_METADATA: Metadata = {
 };
 
 
-interface FirstFlirtParameters {
+interface FirstFlirtParamsDict {
     "@type"?: "fsl/first_flirt";
     "input_image": InputPathType;
     "output_basename": string;
@@ -22,11 +22,11 @@ interface FirstFlirtParameters {
     "cort_flag": boolean;
     "cost_function"?: string | null | undefined;
 }
-type FirstFlirtParametersTagged = Required<Pick<FirstFlirtParameters, '@type'>> & FirstFlirtParameters;
+type FirstFlirtParamsDictTagged = Required<Pick<FirstFlirtParamsDict, '@type'>> & FirstFlirtParamsDict;
 
 
 /**
- * Output object returned when calling `FirstFlirtParameters(...)`.
+ * Output object returned when calling `FirstFlirtParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function first_flirt_params(
     strucweight_mask: InputPathType | null = null,
     cort_flag: boolean = false,
     cost_function: string | null = null,
-): FirstFlirtParametersTagged {
+): FirstFlirtParamsDictTagged {
     const params = {
         "@type": "fsl/first_flirt" as const,
         "input_image": input_image,
@@ -102,7 +102,7 @@ function first_flirt_params(
  * @returns Command-line arguments.
  */
 function first_flirt_cargs(
-    params: FirstFlirtParameters,
+    params: FirstFlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -146,7 +146,7 @@ function first_flirt_cargs(
  * @returns Outputs object.
  */
 function first_flirt_outputs(
-    params: FirstFlirtParameters,
+    params: FirstFlirtParamsDict,
     execution: Execution,
 ): FirstFlirtOutputs {
     const ret: FirstFlirtOutputs = {
@@ -174,7 +174,7 @@ function first_flirt_outputs(
  * @returns NamedTuple of outputs (described in `FirstFlirtOutputs`).
  */
 function first_flirt_execute(
-    params: FirstFlirtParameters,
+    params: FirstFlirtParamsDict,
     runner: Runner | null = null,
 ): FirstFlirtOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function first_flirt(
 export {
       FIRST_FLIRT_METADATA,
       FirstFlirtOutputs,
+      FirstFlirtParamsDict,
+      FirstFlirtParamsDictTagged,
       first_flirt,
       first_flirt_execute,
       first_flirt_params,

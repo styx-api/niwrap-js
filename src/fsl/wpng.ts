@@ -11,7 +11,7 @@ const WPNG_METADATA: Metadata = {
 };
 
 
-interface WpngParameters {
+interface WpngParamsDict {
     "@type"?: "fsl/wpng";
     "input_file"?: InputPathType | null | undefined;
     "gamma"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface WpngParameters {
     "time_flag": boolean;
     "interlace_flag": boolean;
 }
-type WpngParametersTagged = Required<Pick<WpngParameters, '@type'>> & WpngParameters;
+type WpngParamsDictTagged = Required<Pick<WpngParamsDict, '@type'>> & WpngParamsDict;
 
 
 /**
- * Output object returned when calling `WpngParameters(...)`.
+ * Output object returned when calling `WpngParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function wpng_params(
     text_flag: boolean = false,
     time_flag: boolean = false,
     interlace_flag: boolean = false,
-): WpngParametersTagged {
+): WpngParamsDictTagged {
     const params = {
         "@type": "fsl/wpng" as const,
         "text_flag": text_flag,
@@ -88,7 +88,7 @@ function wpng_params(
  * @returns Command-line arguments.
  */
 function wpng_cargs(
-    params: WpngParameters,
+    params: WpngParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function wpng_cargs(
  * @returns Outputs object.
  */
 function wpng_outputs(
-    params: WpngParameters,
+    params: WpngParamsDict,
     execution: Execution,
 ): WpngOutputs {
     const ret: WpngOutputs = {
@@ -156,7 +156,7 @@ function wpng_outputs(
  * @returns NamedTuple of outputs (described in `WpngOutputs`).
  */
 function wpng_execute(
-    params: WpngParameters,
+    params: WpngParamsDict,
     runner: Runner | null = null,
 ): WpngOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function wpng(
 export {
       WPNG_METADATA,
       WpngOutputs,
+      WpngParamsDict,
+      WpngParamsDictTagged,
       wpng,
       wpng_execute,
       wpng_params,

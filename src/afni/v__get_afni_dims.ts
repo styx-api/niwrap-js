@@ -11,15 +11,15 @@ const V__GET_AFNI_DIMS_METADATA: Metadata = {
 };
 
 
-interface VGetAfniDimsParameters {
+interface VGetAfniDimsParamsDict {
     "@type"?: "afni/@GetAfniDims";
     "input_dset": InputPathType;
 }
-type VGetAfniDimsParametersTagged = Required<Pick<VGetAfniDimsParameters, '@type'>> & VGetAfniDimsParameters;
+type VGetAfniDimsParamsDictTagged = Required<Pick<VGetAfniDimsParamsDict, '@type'>> & VGetAfniDimsParamsDict;
 
 
 /**
- * Output object returned when calling `VGetAfniDimsParameters(...)`.
+ * Output object returned when calling `VGetAfniDimsParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VGetAfniDimsOutputs {
  */
 function v__get_afni_dims_params(
     input_dset: InputPathType,
-): VGetAfniDimsParametersTagged {
+): VGetAfniDimsParamsDictTagged {
     const params = {
         "@type": "afni/@GetAfniDims" as const,
         "input_dset": input_dset,
@@ -62,7 +62,7 @@ function v__get_afni_dims_params(
  * @returns Command-line arguments.
  */
 function v__get_afni_dims_cargs(
-    params: VGetAfniDimsParameters,
+    params: VGetAfniDimsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__get_afni_dims_cargs(
  * @returns Outputs object.
  */
 function v__get_afni_dims_outputs(
-    params: VGetAfniDimsParameters,
+    params: VGetAfniDimsParamsDict,
     execution: Execution,
 ): VGetAfniDimsOutputs {
     const ret: VGetAfniDimsOutputs = {
@@ -107,7 +107,7 @@ function v__get_afni_dims_outputs(
  * @returns NamedTuple of outputs (described in `VGetAfniDimsOutputs`).
  */
 function v__get_afni_dims_execute(
-    params: VGetAfniDimsParameters,
+    params: VGetAfniDimsParamsDict,
     runner: Runner | null = null,
 ): VGetAfniDimsOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__get_afni_dims(
 
 export {
       VGetAfniDimsOutputs,
+      VGetAfniDimsParamsDict,
+      VGetAfniDimsParamsDictTagged,
       V__GET_AFNI_DIMS_METADATA,
       v__get_afni_dims,
       v__get_afni_dims_execute,

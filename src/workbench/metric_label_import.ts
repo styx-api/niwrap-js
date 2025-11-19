@@ -10,7 +10,7 @@ const METRIC_LABEL_IMPORT_METADATA: Metadata = {
 };
 
 
-interface MetricLabelImportParameters {
+interface MetricLabelImportParamsDict {
     "@type"?: "workbench/metric-label-import";
     "output": string;
     "discard-others": boolean;
@@ -21,11 +21,11 @@ interface MetricLabelImportParameters {
     "input": InputPathType;
     "label-list-file": string;
 }
-type MetricLabelImportParametersTagged = Required<Pick<MetricLabelImportParameters, '@type'>> & MetricLabelImportParameters;
+type MetricLabelImportParamsDictTagged = Required<Pick<MetricLabelImportParamsDict, '@type'>> & MetricLabelImportParamsDict;
 
 
 /**
- * Output object returned when calling `MetricLabelImportParameters(...)`.
+ * Output object returned when calling `MetricLabelImportParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function metric_label_import_params(
     label_list_file: string,
     discard_others: boolean = false,
     drop_unused_labels: boolean = false,
-): MetricLabelImportParametersTagged {
+): MetricLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/metric-label-import" as const,
         "output": output,
@@ -101,7 +101,7 @@ function metric_label_import_params(
  * @returns Command-line arguments.
  */
 function metric_label_import_cargs(
-    params: MetricLabelImportParameters,
+    params: MetricLabelImportParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function metric_label_import_cargs(
  * @returns Outputs object.
  */
 function metric_label_import_outputs(
-    params: MetricLabelImportParameters,
+    params: MetricLabelImportParamsDict,
     execution: Execution,
 ): MetricLabelImportOutputs {
     const ret: MetricLabelImportOutputs = {
@@ -165,7 +165,7 @@ function metric_label_import_outputs(
  * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
  */
 function metric_label_import_execute(
-    params: MetricLabelImportParameters,
+    params: MetricLabelImportParamsDict,
     runner: Runner | null = null,
 ): MetricLabelImportOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function metric_label_import(
 export {
       METRIC_LABEL_IMPORT_METADATA,
       MetricLabelImportOutputs,
+      MetricLabelImportParamsDict,
+      MetricLabelImportParamsDictTagged,
       metric_label_import,
       metric_label_import_execute,
       metric_label_import_params,

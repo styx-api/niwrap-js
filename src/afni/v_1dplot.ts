@@ -11,38 +11,38 @@ const V_1DPLOT_METADATA: Metadata = {
 };
 
 
-interface V1dplotNolineParameters {
+interface V1dplotNolineParamsDict {
     "@type"?: "noline";
     "noline": boolean;
     "NOLINE": boolean;
 }
-type V1dplotNolineParametersTagged = Required<Pick<V1dplotNolineParameters, '@type'>> & V1dplotNolineParameters;
+type V1dplotNolineParamsDictTagged = Required<Pick<V1dplotNolineParamsDict, '@type'>> & V1dplotNolineParamsDict;
 
 
-interface V1dplotThickParameters {
+interface V1dplotThickParamsDict {
     "@type"?: "thick";
     "thick": boolean;
     "THICK": boolean;
 }
-type V1dplotThickParametersTagged = Required<Pick<V1dplotThickParameters, '@type'>> & V1dplotThickParameters;
+type V1dplotThickParamsDictTagged = Required<Pick<V1dplotThickParamsDict, '@type'>> & V1dplotThickParamsDict;
 
 
-interface V1dplotRboxParameters {
+interface V1dplotRboxParamsDict {
     "@type"?: "rbox";
     "rbox"?: string | null | undefined;
     "Rbox"?: string | null | undefined;
 }
-type V1dplotRboxParametersTagged = Required<Pick<V1dplotRboxParameters, '@type'>> & V1dplotRboxParameters;
+type V1dplotRboxParamsDictTagged = Required<Pick<V1dplotRboxParamsDict, '@type'>> & V1dplotRboxParamsDict;
 
 
-interface V1dplotParameters {
+interface V1dplotParamsDict {
     "@type"?: "afni/1dplot";
     "tsfiles": Array<InputPathType>;
     "install": boolean;
     "sep": boolean;
     "one": boolean;
     "sepscl": boolean;
-    "noline"?: V1dplotNolineParameters | null | undefined;
+    "noline"?: V1dplotNolineParamsDict | null | undefined;
     "box": boolean;
     "hist": boolean;
     "norm2": boolean;
@@ -79,17 +79,17 @@ interface V1dplotParameters {
     "yaxis"?: string | null | undefined;
     "ynames"?: Array<string> | null | undefined;
     "volreg": boolean;
-    "thick"?: V1dplotThickParameters | null | undefined;
+    "thick"?: V1dplotThickParamsDict | null | undefined;
     "dashed"?: string | null | undefined;
     "setenv"?: string | null | undefined;
     "censor_RGB"?: string | null | undefined;
     "censor"?: InputPathType | null | undefined;
     "CENSORTR"?: Array<string> | null | undefined;
     "concat"?: InputPathType | null | undefined;
-    "rbox"?: V1dplotRboxParameters | null | undefined;
+    "rbox"?: V1dplotRboxParamsDict | null | undefined;
     "line"?: string | null | undefined;
 }
-type V1dplotParametersTagged = Required<Pick<V1dplotParameters, '@type'>> & V1dplotParameters;
+type V1dplotParamsDictTagged = Required<Pick<V1dplotParamsDict, '@type'>> & V1dplotParamsDict;
 
 
 /**
@@ -100,10 +100,10 @@ type V1dplotParametersTagged = Required<Pick<V1dplotParameters, '@type'>> & V1dp
  *
  * @returns Parameter dictionary
  */
-function v_1dplot_noline_params(
+function v_1dplot_noline(
     noline: boolean = false,
     noline_: boolean = false,
-): V1dplotNolineParametersTagged {
+): V1dplotNolineParamsDictTagged {
     const params = {
         "@type": "noline" as const,
         "noline": noline,
@@ -122,7 +122,7 @@ function v_1dplot_noline_params(
  * @returns Command-line arguments.
  */
 function v_1dplot_noline_cargs(
-    params: V1dplotNolineParameters,
+    params: V1dplotNolineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,10 +144,10 @@ function v_1dplot_noline_cargs(
  *
  * @returns Parameter dictionary
  */
-function v_1dplot_thick_params(
+function v_1dplot_thick(
     thick: boolean = false,
     thick_: boolean = false,
-): V1dplotThickParametersTagged {
+): V1dplotThickParamsDictTagged {
     const params = {
         "@type": "thick" as const,
         "thick": thick,
@@ -166,7 +166,7 @@ function v_1dplot_thick_params(
  * @returns Command-line arguments.
  */
 function v_1dplot_thick_cargs(
-    params: V1dplotThickParameters,
+    params: V1dplotThickParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,10 +188,10 @@ function v_1dplot_thick_cargs(
  *
  * @returns Parameter dictionary
  */
-function v_1dplot_rbox_params(
+function v_1dplot_rbox(
     rbox: string | null = null,
     rbox_: string | null = null,
-): V1dplotRboxParametersTagged {
+): V1dplotRboxParamsDictTagged {
     const params = {
         "@type": "rbox" as const,
     };
@@ -214,7 +214,7 @@ function v_1dplot_rbox_params(
  * @returns Command-line arguments.
  */
 function v_1dplot_rbox_cargs(
-    params: V1dplotRboxParameters,
+    params: V1dplotRboxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -235,7 +235,7 @@ function v_1dplot_rbox_cargs(
 
 
 /**
- * Output object returned when calling `V1dplotParameters(...)`.
+ * Output object returned when calling `V1dplotParamsDict(...)`.
  *
  * @interface
  */
@@ -310,7 +310,7 @@ function v_1dplot_params(
     sep: boolean = false,
     one: boolean = false,
     sepscl: boolean = false,
-    noline: V1dplotNolineParameters | null = null,
+    noline: V1dplotNolineParamsDict | null = null,
     box: boolean = false,
     hist: boolean = false,
     norm2: boolean = false,
@@ -347,16 +347,16 @@ function v_1dplot_params(
     yaxis: string | null = null,
     ynames: Array<string> | null = null,
     volreg: boolean = false,
-    thick: V1dplotThickParameters | null = null,
+    thick: V1dplotThickParamsDict | null = null,
     dashed: string | null = null,
     setenv: string | null = null,
     censor_rgb: string | null = null,
     censor: InputPathType | null = null,
     censortr: Array<string> | null = null,
     concat: InputPathType | null = null,
-    rbox: V1dplotRboxParameters | null = null,
+    rbox: V1dplotRboxParamsDict | null = null,
     line: string | null = null,
-): V1dplotParametersTagged {
+): V1dplotParamsDictTagged {
     const params = {
         "@type": "afni/1dplot" as const,
         "tsfiles": tsfiles,
@@ -494,7 +494,7 @@ function v_1dplot_params(
  * @returns Command-line arguments.
  */
 function v_1dplot_cargs(
-    params: V1dplotParameters,
+    params: V1dplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -759,7 +759,7 @@ function v_1dplot_cargs(
  * @returns Outputs object.
  */
 function v_1dplot_outputs(
-    params: V1dplotParameters,
+    params: V1dplotParamsDict,
     execution: Execution,
 ): V1dplotOutputs {
     const ret: V1dplotOutputs = {
@@ -784,7 +784,7 @@ function v_1dplot_outputs(
  * @returns NamedTuple of outputs (described in `V1dplotOutputs`).
  */
 function v_1dplot_execute(
-    params: V1dplotParameters,
+    params: V1dplotParamsDict,
     runner: Runner | null = null,
 ): V1dplotOutputs {
     runner = runner || getGlobalRunner();
@@ -867,7 +867,7 @@ function v_1dplot(
     sep: boolean = false,
     one: boolean = false,
     sepscl: boolean = false,
-    noline: V1dplotNolineParameters | null = null,
+    noline: V1dplotNolineParamsDict | null = null,
     box: boolean = false,
     hist: boolean = false,
     norm2: boolean = false,
@@ -904,14 +904,14 @@ function v_1dplot(
     yaxis: string | null = null,
     ynames: Array<string> | null = null,
     volreg: boolean = false,
-    thick: V1dplotThickParameters | null = null,
+    thick: V1dplotThickParamsDict | null = null,
     dashed: string | null = null,
     setenv: string | null = null,
     censor_rgb: string | null = null,
     censor: InputPathType | null = null,
     censortr: Array<string> | null = null,
     concat: InputPathType | null = null,
-    rbox: V1dplotRboxParameters | null = null,
+    rbox: V1dplotRboxParamsDict | null = null,
     line: string | null = null,
     runner: Runner | null = null,
 ): V1dplotOutputs {
@@ -921,12 +921,20 @@ function v_1dplot(
 
 
 export {
+      V1dplotNolineParamsDict,
+      V1dplotNolineParamsDictTagged,
       V1dplotOutputs,
+      V1dplotParamsDict,
+      V1dplotParamsDictTagged,
+      V1dplotRboxParamsDict,
+      V1dplotRboxParamsDictTagged,
+      V1dplotThickParamsDict,
+      V1dplotThickParamsDictTagged,
       V_1DPLOT_METADATA,
       v_1dplot,
       v_1dplot_execute,
-      v_1dplot_noline_params,
+      v_1dplot_noline,
       v_1dplot_params,
-      v_1dplot_rbox_params,
-      v_1dplot_thick_params,
+      v_1dplot_rbox,
+      v_1dplot_thick,
 };

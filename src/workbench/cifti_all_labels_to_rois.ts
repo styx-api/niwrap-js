@@ -10,17 +10,17 @@ const CIFTI_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 };
 
 
-interface CiftiAllLabelsToRoisParameters {
+interface CiftiAllLabelsToRoisParamsDict {
     "@type"?: "workbench/cifti-all-labels-to-rois";
     "cifti-out": string;
     "label-in": InputPathType;
     "map": string;
 }
-type CiftiAllLabelsToRoisParametersTagged = Required<Pick<CiftiAllLabelsToRoisParameters, '@type'>> & CiftiAllLabelsToRoisParameters;
+type CiftiAllLabelsToRoisParamsDictTagged = Required<Pick<CiftiAllLabelsToRoisParamsDict, '@type'>> & CiftiAllLabelsToRoisParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiAllLabelsToRoisParameters(...)`.
+ * Output object returned when calling `CiftiAllLabelsToRoisParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function cifti_all_labels_to_rois_params(
     cifti_out: string,
     label_in: InputPathType,
     map: string,
-): CiftiAllLabelsToRoisParametersTagged {
+): CiftiAllLabelsToRoisParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-all-labels-to-rois" as const,
         "cifti-out": cifti_out,
@@ -69,7 +69,7 @@ function cifti_all_labels_to_rois_params(
  * @returns Command-line arguments.
  */
 function cifti_all_labels_to_rois_cargs(
-    params: CiftiAllLabelsToRoisParameters,
+    params: CiftiAllLabelsToRoisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function cifti_all_labels_to_rois_cargs(
  * @returns Outputs object.
  */
 function cifti_all_labels_to_rois_outputs(
-    params: CiftiAllLabelsToRoisParameters,
+    params: CiftiAllLabelsToRoisParamsDict,
     execution: Execution,
 ): CiftiAllLabelsToRoisOutputs {
     const ret: CiftiAllLabelsToRoisOutputs = {
@@ -117,7 +117,7 @@ function cifti_all_labels_to_rois_outputs(
  * @returns NamedTuple of outputs (described in `CiftiAllLabelsToRoisOutputs`).
  */
 function cifti_all_labels_to_rois_execute(
-    params: CiftiAllLabelsToRoisParameters,
+    params: CiftiAllLabelsToRoisParamsDict,
     runner: Runner | null = null,
 ): CiftiAllLabelsToRoisOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function cifti_all_labels_to_rois(
 export {
       CIFTI_ALL_LABELS_TO_ROIS_METADATA,
       CiftiAllLabelsToRoisOutputs,
+      CiftiAllLabelsToRoisParamsDict,
+      CiftiAllLabelsToRoisParamsDictTagged,
       cifti_all_labels_to_rois,
       cifti_all_labels_to_rois_execute,
       cifti_all_labels_to_rois_params,

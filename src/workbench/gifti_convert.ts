@@ -10,17 +10,17 @@ const GIFTI_CONVERT_METADATA: Metadata = {
 };
 
 
-interface GiftiConvertParameters {
+interface GiftiConvertParamsDict {
     "@type"?: "workbench/gifti-convert";
     "gifti-encoding": string;
     "input-gifti-file": string;
     "output-gifti-file": string;
 }
-type GiftiConvertParametersTagged = Required<Pick<GiftiConvertParameters, '@type'>> & GiftiConvertParameters;
+type GiftiConvertParamsDictTagged = Required<Pick<GiftiConvertParamsDict, '@type'>> & GiftiConvertParamsDict;
 
 
 /**
- * Output object returned when calling `GiftiConvertParameters(...)`.
+ * Output object returned when calling `GiftiConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function gifti_convert_params(
     gifti_encoding: string,
     input_gifti_file: string,
     output_gifti_file: string,
-): GiftiConvertParametersTagged {
+): GiftiConvertParamsDictTagged {
     const params = {
         "@type": "workbench/gifti-convert" as const,
         "gifti-encoding": gifti_encoding,
@@ -65,7 +65,7 @@ function gifti_convert_params(
  * @returns Command-line arguments.
  */
 function gifti_convert_cargs(
-    params: GiftiConvertParameters,
+    params: GiftiConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function gifti_convert_cargs(
  * @returns Outputs object.
  */
 function gifti_convert_outputs(
-    params: GiftiConvertParameters,
+    params: GiftiConvertParamsDict,
     execution: Execution,
 ): GiftiConvertOutputs {
     const ret: GiftiConvertOutputs = {
@@ -115,7 +115,7 @@ function gifti_convert_outputs(
  * @returns NamedTuple of outputs (described in `GiftiConvertOutputs`).
  */
 function gifti_convert_execute(
-    params: GiftiConvertParameters,
+    params: GiftiConvertParamsDict,
     runner: Runner | null = null,
 ): GiftiConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function gifti_convert(
 export {
       GIFTI_CONVERT_METADATA,
       GiftiConvertOutputs,
+      GiftiConvertParamsDict,
+      GiftiConvertParamsDictTagged,
       gifti_convert,
       gifti_convert_execute,
       gifti_convert_params,

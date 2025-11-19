@@ -11,7 +11,7 @@ const MRIS_ROTATE_METADATA: Metadata = {
 };
 
 
-interface MrisRotateParameters {
+interface MrisRotateParamsDict {
     "@type"?: "freesurfer/mris_rotate";
     "input_surface": InputPathType;
     "alpha_deg": number;
@@ -21,11 +21,11 @@ interface MrisRotateParameters {
     "regfile"?: InputPathType | null | undefined;
     "invalidate_geometry": boolean;
 }
-type MrisRotateParametersTagged = Required<Pick<MrisRotateParameters, '@type'>> & MrisRotateParameters;
+type MrisRotateParamsDictTagged = Required<Pick<MrisRotateParamsDict, '@type'>> & MrisRotateParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRotateParameters(...)`.
+ * Output object returned when calling `MrisRotateParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_rotate_params(
     output_surface: string,
     regfile: InputPathType | null = null,
     invalidate_geometry: boolean = false,
-): MrisRotateParametersTagged {
+): MrisRotateParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_rotate" as const,
         "input_surface": input_surface,
@@ -88,7 +88,7 @@ function mris_rotate_params(
  * @returns Command-line arguments.
  */
 function mris_rotate_cargs(
-    params: MrisRotateParameters,
+    params: MrisRotateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function mris_rotate_cargs(
  * @returns Outputs object.
  */
 function mris_rotate_outputs(
-    params: MrisRotateParameters,
+    params: MrisRotateParamsDict,
     execution: Execution,
 ): MrisRotateOutputs {
     const ret: MrisRotateOutputs = {
@@ -146,7 +146,7 @@ function mris_rotate_outputs(
  * @returns NamedTuple of outputs (described in `MrisRotateOutputs`).
  */
 function mris_rotate_execute(
-    params: MrisRotateParameters,
+    params: MrisRotateParamsDict,
     runner: Runner | null = null,
 ): MrisRotateOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function mris_rotate(
 export {
       MRIS_ROTATE_METADATA,
       MrisRotateOutputs,
+      MrisRotateParamsDict,
+      MrisRotateParamsDictTagged,
       mris_rotate,
       mris_rotate_execute,
       mris_rotate_params,

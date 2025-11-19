@@ -11,17 +11,17 @@ const T4IMG_4DFP_METADATA: Metadata = {
 };
 
 
-interface T4img4dfpParameters {
+interface T4img4dfpParamsDict {
     "@type"?: "freesurfer/t4img_4dfp";
     "t4file": InputPathType;
     "imgfile": InputPathType;
     "outfile"?: string | null | undefined;
 }
-type T4img4dfpParametersTagged = Required<Pick<T4img4dfpParameters, '@type'>> & T4img4dfpParameters;
+type T4img4dfpParamsDictTagged = Required<Pick<T4img4dfpParamsDict, '@type'>> & T4img4dfpParamsDict;
 
 
 /**
- * Output object returned when calling `T4img4dfpParameters(...)`.
+ * Output object returned when calling `T4img4dfpParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function t4img_4dfp_params(
     t4file: InputPathType,
     imgfile: InputPathType,
     outfile: string | null = null,
-): T4img4dfpParametersTagged {
+): T4img4dfpParamsDictTagged {
     const params = {
         "@type": "freesurfer/t4img_4dfp" as const,
         "t4file": t4file,
@@ -72,7 +72,7 @@ function t4img_4dfp_params(
  * @returns Command-line arguments.
  */
 function t4img_4dfp_cargs(
-    params: T4img4dfpParameters,
+    params: T4img4dfpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function t4img_4dfp_cargs(
  * @returns Outputs object.
  */
 function t4img_4dfp_outputs(
-    params: T4img4dfpParameters,
+    params: T4img4dfpParamsDict,
     execution: Execution,
 ): T4img4dfpOutputs {
     const ret: T4img4dfpOutputs = {
@@ -121,7 +121,7 @@ function t4img_4dfp_outputs(
  * @returns NamedTuple of outputs (described in `T4img4dfpOutputs`).
  */
 function t4img_4dfp_execute(
-    params: T4img4dfpParameters,
+    params: T4img4dfpParamsDict,
     runner: Runner | null = null,
 ): T4img4dfpOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function t4img_4dfp(
 export {
       T4IMG_4DFP_METADATA,
       T4img4dfpOutputs,
+      T4img4dfpParamsDict,
+      T4img4dfpParamsDictTagged,
       t4img_4dfp,
       t4img_4dfp_execute,
       t4img_4dfp_params,

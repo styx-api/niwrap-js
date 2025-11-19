@@ -11,15 +11,15 @@ const TSFSMOOTH_METADATA: Metadata = {
 };
 
 
-interface TsfsmoothConfigParameters {
+interface TsfsmoothConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TsfsmoothConfigParametersTagged = Required<Pick<TsfsmoothConfigParameters, '@type'>> & TsfsmoothConfigParameters;
+type TsfsmoothConfigParamsDictTagged = Required<Pick<TsfsmoothConfigParamsDict, '@type'>> & TsfsmoothConfigParamsDict;
 
 
-interface TsfsmoothParameters {
+interface TsfsmoothParamsDict {
     "@type"?: "mrtrix/tsfsmooth";
     "stdev"?: number | null | undefined;
     "info": boolean;
@@ -27,13 +27,13 @@ interface TsfsmoothParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TsfsmoothConfigParameters> | null | undefined;
+    "config"?: Array<TsfsmoothConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type TsfsmoothParametersTagged = Required<Pick<TsfsmoothParameters, '@type'>> & TsfsmoothParameters;
+type TsfsmoothParamsDictTagged = Required<Pick<TsfsmoothParamsDict, '@type'>> & TsfsmoothParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type TsfsmoothParametersTagged = Required<Pick<TsfsmoothParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function tsfsmooth_config_params(
+function tsfsmooth_config(
     key: string,
     value: string,
-): TsfsmoothConfigParametersTagged {
+): TsfsmoothConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function tsfsmooth_config_params(
  * @returns Command-line arguments.
  */
 function tsfsmooth_config_cargs(
-    params: TsfsmoothConfigParameters,
+    params: TsfsmoothConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function tsfsmooth_config_cargs(
 
 
 /**
- * Output object returned when calling `TsfsmoothParameters(...)`.
+ * Output object returned when calling `TsfsmoothParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function tsfsmooth_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfsmoothConfigParameters> | null = null,
+    config: Array<TsfsmoothConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfsmoothParametersTagged {
+): TsfsmoothParamsDictTagged {
     const params = {
         "@type": "mrtrix/tsfsmooth" as const,
         "info": info,
@@ -157,7 +157,7 @@ function tsfsmooth_params(
  * @returns Command-line arguments.
  */
 function tsfsmooth_cargs(
-    params: TsfsmoothParameters,
+    params: TsfsmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function tsfsmooth_cargs(
  * @returns Outputs object.
  */
 function tsfsmooth_outputs(
-    params: TsfsmoothParameters,
+    params: TsfsmoothParamsDict,
     execution: Execution,
 ): TsfsmoothOutputs {
     const ret: TsfsmoothOutputs = {
@@ -242,7 +242,7 @@ function tsfsmooth_outputs(
  * @returns NamedTuple of outputs (described in `TsfsmoothOutputs`).
  */
 function tsfsmooth_execute(
-    params: TsfsmoothParameters,
+    params: TsfsmoothParamsDict,
     runner: Runner | null = null,
 ): TsfsmoothOutputs {
     runner = runner || getGlobalRunner();
@@ -294,7 +294,7 @@ function tsfsmooth(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfsmoothConfigParameters> | null = null,
+    config: Array<TsfsmoothConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -306,9 +306,13 @@ function tsfsmooth(
 
 export {
       TSFSMOOTH_METADATA,
+      TsfsmoothConfigParamsDict,
+      TsfsmoothConfigParamsDictTagged,
       TsfsmoothOutputs,
+      TsfsmoothParamsDict,
+      TsfsmoothParamsDictTagged,
       tsfsmooth,
-      tsfsmooth_config_params,
+      tsfsmooth_config,
       tsfsmooth_execute,
       tsfsmooth_params,
 };

@@ -11,7 +11,7 @@ const MAKE_DYADIC_VECTORS_METADATA: Metadata = {
 };
 
 
-interface MakeDyadicVectorsParameters {
+interface MakeDyadicVectorsParamsDict {
     "@type"?: "fsl/make_dyadic_vectors";
     "theta_vol": InputPathType;
     "phi_vol": InputPathType;
@@ -19,11 +19,11 @@ interface MakeDyadicVectorsParameters {
     "output": string;
     "perc"?: number | null | undefined;
 }
-type MakeDyadicVectorsParametersTagged = Required<Pick<MakeDyadicVectorsParameters, '@type'>> & MakeDyadicVectorsParameters;
+type MakeDyadicVectorsParamsDictTagged = Required<Pick<MakeDyadicVectorsParamsDict, '@type'>> & MakeDyadicVectorsParamsDict;
 
 
 /**
- * Output object returned when calling `MakeDyadicVectorsParameters(...)`.
+ * Output object returned when calling `MakeDyadicVectorsParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function make_dyadic_vectors_params(
     output: string,
     mask: InputPathType | null = null,
     perc: number | null = null,
-): MakeDyadicVectorsParametersTagged {
+): MakeDyadicVectorsParamsDictTagged {
     const params = {
         "@type": "fsl/make_dyadic_vectors" as const,
         "theta_vol": theta_vol,
@@ -82,7 +82,7 @@ function make_dyadic_vectors_params(
  * @returns Command-line arguments.
  */
 function make_dyadic_vectors_cargs(
-    params: MakeDyadicVectorsParameters,
+    params: MakeDyadicVectorsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function make_dyadic_vectors_cargs(
  * @returns Outputs object.
  */
 function make_dyadic_vectors_outputs(
-    params: MakeDyadicVectorsParameters,
+    params: MakeDyadicVectorsParamsDict,
     execution: Execution,
 ): MakeDyadicVectorsOutputs {
     const ret: MakeDyadicVectorsOutputs = {
@@ -135,7 +135,7 @@ function make_dyadic_vectors_outputs(
  * @returns NamedTuple of outputs (described in `MakeDyadicVectorsOutputs`).
  */
 function make_dyadic_vectors_execute(
-    params: MakeDyadicVectorsParameters,
+    params: MakeDyadicVectorsParamsDict,
     runner: Runner | null = null,
 ): MakeDyadicVectorsOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function make_dyadic_vectors(
 export {
       MAKE_DYADIC_VECTORS_METADATA,
       MakeDyadicVectorsOutputs,
+      MakeDyadicVectorsParamsDict,
+      MakeDyadicVectorsParamsDictTagged,
       make_dyadic_vectors,
       make_dyadic_vectors_execute,
       make_dyadic_vectors_params,

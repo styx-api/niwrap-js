@@ -11,7 +11,7 @@ const V_3D_ALLINEATE_METADATA: Metadata = {
 };
 
 
-interface V3dAllineateParameters {
+interface V3dAllineateParamsDict {
     "@type"?: "afni/3dAllineate";
     "source": InputPathType;
     "base"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface V3dAllineateParameters {
     "verbose": boolean;
     "quiet": boolean;
 }
-type V3dAllineateParametersTagged = Required<Pick<V3dAllineateParameters, '@type'>> & V3dAllineateParameters;
+type V3dAllineateParamsDictTagged = Required<Pick<V3dAllineateParamsDict, '@type'>> & V3dAllineateParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAllineateParameters(...)`.
+ * Output object returned when calling `V3dAllineateParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function v_3d_allineate_params(
     nopad: boolean = false,
     verbose: boolean = false,
     quiet: boolean = false,
-): V3dAllineateParametersTagged {
+): V3dAllineateParamsDictTagged {
     const params = {
         "@type": "afni/3dAllineate" as const,
         "source": source,
@@ -144,7 +144,7 @@ function v_3d_allineate_params(
  * @returns Command-line arguments.
  */
 function v_3d_allineate_cargs(
-    params: V3dAllineateParameters,
+    params: V3dAllineateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -230,7 +230,7 @@ function v_3d_allineate_cargs(
  * @returns Outputs object.
  */
 function v_3d_allineate_outputs(
-    params: V3dAllineateParameters,
+    params: V3dAllineateParamsDict,
     execution: Execution,
 ): V3dAllineateOutputs {
     const ret: V3dAllineateOutputs = {
@@ -259,7 +259,7 @@ function v_3d_allineate_outputs(
  * @returns NamedTuple of outputs (described in `V3dAllineateOutputs`).
  */
 function v_3d_allineate_execute(
-    params: V3dAllineateParameters,
+    params: V3dAllineateParamsDict,
     runner: Runner | null = null,
 ): V3dAllineateOutputs {
     runner = runner || getGlobalRunner();
@@ -323,6 +323,8 @@ function v_3d_allineate(
 
 export {
       V3dAllineateOutputs,
+      V3dAllineateParamsDict,
+      V3dAllineateParamsDictTagged,
       V_3D_ALLINEATE_METADATA,
       v_3d_allineate,
       v_3d_allineate_execute,

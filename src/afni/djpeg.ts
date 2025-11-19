@@ -11,7 +11,7 @@ const DJPEG_METADATA: Metadata = {
 };
 
 
-interface DjpegParameters {
+interface DjpegParamsDict {
     "@type"?: "afni/djpeg";
     "input_file": InputPathType;
     "output_file": string;
@@ -21,11 +21,11 @@ interface DjpegParameters {
     "pseudo_pixel_ratio": boolean;
     "crop_region"?: string | null | undefined;
 }
-type DjpegParametersTagged = Required<Pick<DjpegParameters, '@type'>> & DjpegParameters;
+type DjpegParamsDictTagged = Required<Pick<DjpegParamsDict, '@type'>> & DjpegParamsDict;
 
 
 /**
- * Output object returned when calling `DjpegParameters(...)`.
+ * Output object returned when calling `DjpegParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function djpeg_params(
     one_pixel_height: boolean = false,
     pseudo_pixel_ratio: boolean = false,
     crop_region: string | null = null,
-): DjpegParametersTagged {
+): DjpegParamsDictTagged {
     const params = {
         "@type": "afni/djpeg" as const,
         "input_file": input_file,
@@ -88,7 +88,7 @@ function djpeg_params(
  * @returns Command-line arguments.
  */
 function djpeg_cargs(
-    params: DjpegParameters,
+    params: DjpegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function djpeg_cargs(
  * @returns Outputs object.
  */
 function djpeg_outputs(
-    params: DjpegParameters,
+    params: DjpegParamsDict,
     execution: Execution,
 ): DjpegOutputs {
     const ret: DjpegOutputs = {
@@ -152,7 +152,7 @@ function djpeg_outputs(
  * @returns NamedTuple of outputs (described in `DjpegOutputs`).
  */
 function djpeg_execute(
-    params: DjpegParameters,
+    params: DjpegParamsDict,
     runner: Runner | null = null,
 ): DjpegOutputs {
     runner = runner || getGlobalRunner();
@@ -203,6 +203,8 @@ function djpeg(
 export {
       DJPEG_METADATA,
       DjpegOutputs,
+      DjpegParamsDict,
+      DjpegParamsDictTagged,
       djpeg,
       djpeg_execute,
       djpeg_params,

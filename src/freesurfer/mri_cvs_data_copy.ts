@@ -11,7 +11,7 @@ const MRI_CVS_DATA_COPY_METADATA: Metadata = {
 };
 
 
-interface MriCvsDataCopyParameters {
+interface MriCvsDataCopyParamsDict {
     "@type"?: "freesurfer/mri_cvs_data_copy";
     "subjid": string;
     "olddir": string;
@@ -19,11 +19,11 @@ interface MriCvsDataCopyParameters {
     "version": boolean;
     "help": boolean;
 }
-type MriCvsDataCopyParametersTagged = Required<Pick<MriCvsDataCopyParameters, '@type'>> & MriCvsDataCopyParameters;
+type MriCvsDataCopyParamsDictTagged = Required<Pick<MriCvsDataCopyParamsDict, '@type'>> & MriCvsDataCopyParamsDict;
 
 
 /**
- * Output object returned when calling `MriCvsDataCopyParameters(...)`.
+ * Output object returned when calling `MriCvsDataCopyParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function mri_cvs_data_copy_params(
     newdir: string,
     version: boolean = false,
     help: boolean = false,
-): MriCvsDataCopyParametersTagged {
+): MriCvsDataCopyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_cvs_data_copy" as const,
         "subjid": subjid,
@@ -74,7 +74,7 @@ function mri_cvs_data_copy_params(
  * @returns Command-line arguments.
  */
 function mri_cvs_data_copy_cargs(
-    params: MriCvsDataCopyParameters,
+    params: MriCvsDataCopyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function mri_cvs_data_copy_cargs(
  * @returns Outputs object.
  */
 function mri_cvs_data_copy_outputs(
-    params: MriCvsDataCopyParameters,
+    params: MriCvsDataCopyParamsDict,
     execution: Execution,
 ): MriCvsDataCopyOutputs {
     const ret: MriCvsDataCopyOutputs = {
@@ -135,7 +135,7 @@ function mri_cvs_data_copy_outputs(
  * @returns NamedTuple of outputs (described in `MriCvsDataCopyOutputs`).
  */
 function mri_cvs_data_copy_execute(
-    params: MriCvsDataCopyParameters,
+    params: MriCvsDataCopyParamsDict,
     runner: Runner | null = null,
 ): MriCvsDataCopyOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function mri_cvs_data_copy(
 export {
       MRI_CVS_DATA_COPY_METADATA,
       MriCvsDataCopyOutputs,
+      MriCvsDataCopyParamsDict,
+      MriCvsDataCopyParamsDictTagged,
       mri_cvs_data_copy,
       mri_cvs_data_copy_execute,
       mri_cvs_data_copy_params,

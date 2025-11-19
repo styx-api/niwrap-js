@@ -11,7 +11,7 @@ const V__SSWARPER_METADATA: Metadata = {
 };
 
 
-interface VSswarperParameters {
+interface VSswarperParamsDict {
     "@type"?: "afni/@SSwarper";
     "input_file": InputPathType;
     "base_template": InputPathType;
@@ -37,11 +37,11 @@ interface VSswarperParameters {
     "verbose": boolean;
     "noclean": boolean;
 }
-type VSswarperParametersTagged = Required<Pick<VSswarperParameters, '@type'>> & VSswarperParameters;
+type VSswarperParamsDictTagged = Required<Pick<VSswarperParamsDict, '@type'>> & VSswarperParamsDict;
 
 
 /**
- * Output object returned when calling `VSswarperParameters(...)`.
+ * Output object returned when calling `VSswarperParamsDict(...)`.
  *
  * @interface
  */
@@ -162,7 +162,7 @@ function v__sswarper_params(
     echo: boolean = false,
     verbose: boolean = false,
     noclean: boolean = false,
-): VSswarperParametersTagged {
+): VSswarperParamsDictTagged {
     const params = {
         "@type": "afni/@SSwarper" as const,
         "input_file": input_file,
@@ -214,7 +214,7 @@ function v__sswarper_params(
  * @returns Command-line arguments.
  */
 function v__sswarper_cargs(
-    params: VSswarperParameters,
+    params: VSswarperParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -322,7 +322,7 @@ function v__sswarper_cargs(
  * @returns Outputs object.
  */
 function v__sswarper_outputs(
-    params: VSswarperParameters,
+    params: VSswarperParamsDict,
     execution: Execution,
 ): VSswarperOutputs {
     const ret: VSswarperOutputs = {
@@ -361,7 +361,7 @@ function v__sswarper_outputs(
  * @returns NamedTuple of outputs (described in `VSswarperOutputs`).
  */
 function v__sswarper_execute(
-    params: VSswarperParameters,
+    params: VSswarperParamsDict,
     runner: Runner | null = null,
 ): VSswarperOutputs {
     runner = runner || getGlobalRunner();
@@ -443,6 +443,8 @@ function v__sswarper(
 
 export {
       VSswarperOutputs,
+      VSswarperParamsDict,
+      VSswarperParamsDictTagged,
       V__SSWARPER_METADATA,
       v__sswarper,
       v__sswarper_execute,

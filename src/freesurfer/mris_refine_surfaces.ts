@@ -11,7 +11,7 @@ const MRIS_REFINE_SURFACES_METADATA: Metadata = {
 };
 
 
-interface MrisRefineSurfacesParameters {
+interface MrisRefineSurfacesParamsDict {
     "@type"?: "freesurfer/mris_refine_surfaces";
     "subject_name": string;
     "hemi": string;
@@ -22,11 +22,11 @@ interface MrisRefineSurfacesParameters {
     "use_mgz": boolean;
     "suffix"?: string | null | undefined;
 }
-type MrisRefineSurfacesParametersTagged = Required<Pick<MrisRefineSurfacesParameters, '@type'>> & MrisRefineSurfacesParameters;
+type MrisRefineSurfacesParamsDictTagged = Required<Pick<MrisRefineSurfacesParamsDict, '@type'>> & MrisRefineSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRefineSurfacesParameters(...)`.
+ * Output object returned when calling `MrisRefineSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function mris_refine_surfaces_params(
     sdir: string | null = null,
     use_mgz: boolean = false,
     suffix: string | null = null,
-): MrisRefineSurfacesParametersTagged {
+): MrisRefineSurfacesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_refine_surfaces" as const,
         "subject_name": subject_name,
@@ -100,7 +100,7 @@ function mris_refine_surfaces_params(
  * @returns Command-line arguments.
  */
 function mris_refine_surfaces_cargs(
-    params: MrisRefineSurfacesParameters,
+    params: MrisRefineSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function mris_refine_surfaces_cargs(
  * @returns Outputs object.
  */
 function mris_refine_surfaces_outputs(
-    params: MrisRefineSurfacesParameters,
+    params: MrisRefineSurfacesParamsDict,
     execution: Execution,
 ): MrisRefineSurfacesOutputs {
     const ret: MrisRefineSurfacesOutputs = {
@@ -167,7 +167,7 @@ function mris_refine_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `MrisRefineSurfacesOutputs`).
  */
 function mris_refine_surfaces_execute(
-    params: MrisRefineSurfacesParameters,
+    params: MrisRefineSurfacesParamsDict,
     runner: Runner | null = null,
 ): MrisRefineSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -220,6 +220,8 @@ function mris_refine_surfaces(
 export {
       MRIS_REFINE_SURFACES_METADATA,
       MrisRefineSurfacesOutputs,
+      MrisRefineSurfacesParamsDict,
+      MrisRefineSurfacesParamsDictTagged,
       mris_refine_surfaces,
       mris_refine_surfaces_execute,
       mris_refine_surfaces_params,

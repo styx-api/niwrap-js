@@ -11,48 +11,48 @@ const DWI2FOD_METADATA: Metadata = {
 };
 
 
-interface Dwi2fodFslgradParameters {
+interface Dwi2fodFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type Dwi2fodFslgradParametersTagged = Required<Pick<Dwi2fodFslgradParameters, '@type'>> & Dwi2fodFslgradParameters;
+type Dwi2fodFslgradParamsDictTagged = Required<Pick<Dwi2fodFslgradParamsDict, '@type'>> & Dwi2fodFslgradParamsDict;
 
 
-interface Dwi2fodVariousStringParameters {
+interface Dwi2fodVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type Dwi2fodVariousStringParametersTagged = Required<Pick<Dwi2fodVariousStringParameters, '@type'>> & Dwi2fodVariousStringParameters;
+type Dwi2fodVariousStringParamsDictTagged = Required<Pick<Dwi2fodVariousStringParamsDict, '@type'>> & Dwi2fodVariousStringParamsDict;
 
 
-interface Dwi2fodVariousFileParameters {
+interface Dwi2fodVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type Dwi2fodVariousFileParametersTagged = Required<Pick<Dwi2fodVariousFileParameters, '@type'>> & Dwi2fodVariousFileParameters;
+type Dwi2fodVariousFileParamsDictTagged = Required<Pick<Dwi2fodVariousFileParamsDict, '@type'>> & Dwi2fodVariousFileParamsDict;
 
 
-interface Dwi2fodConfigParameters {
+interface Dwi2fodConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Dwi2fodConfigParametersTagged = Required<Pick<Dwi2fodConfigParameters, '@type'>> & Dwi2fodConfigParameters;
+type Dwi2fodConfigParamsDictTagged = Required<Pick<Dwi2fodConfigParamsDict, '@type'>> & Dwi2fodConfigParamsDict;
 
 
-interface Dwi2fodResponseOdfParameters {
+interface Dwi2fodResponseOdfParamsDict {
     "@type"?: "response_odf";
     "response": InputPathType;
     "odf": string;
 }
-type Dwi2fodResponseOdfParametersTagged = Required<Pick<Dwi2fodResponseOdfParameters, '@type'>> & Dwi2fodResponseOdfParameters;
+type Dwi2fodResponseOdfParamsDictTagged = Required<Pick<Dwi2fodResponseOdfParamsDict, '@type'>> & Dwi2fodResponseOdfParamsDict;
 
 
-interface Dwi2fodParameters {
+interface Dwi2fodParamsDict {
     "@type"?: "mrtrix/dwi2fod";
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: Dwi2fodFslgradParameters | null | undefined;
+    "fslgrad"?: Dwi2fodFslgradParamsDict | null | undefined;
     "shells"?: Array<number> | null | undefined;
     "directions"?: InputPathType | null | undefined;
     "lmax"?: Array<number> | null | undefined;
@@ -65,20 +65,20 @@ interface Dwi2fodParameters {
     "norm_lambda_1"?: number | null | undefined;
     "neg_lambda_1"?: number | null | undefined;
     "predicted_signal"?: string | null | undefined;
-    "strides"?: Dwi2fodVariousStringParametersTagged | Dwi2fodVariousFileParametersTagged | null | undefined;
+    "strides"?: Dwi2fodVariousStringParamsDictTagged | Dwi2fodVariousFileParamsDictTagged | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Dwi2fodConfigParameters> | null | undefined;
+    "config"?: Array<Dwi2fodConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "algorithm": string;
     "dwi": InputPathType;
-    "response_odf": Array<Dwi2fodResponseOdfParameters>;
+    "response_odf": Array<Dwi2fodResponseOdfParamsDict>;
 }
-type Dwi2fodParametersTagged = Required<Pick<Dwi2fodParameters, '@type'>> & Dwi2fodParameters;
+type Dwi2fodParamsDictTagged = Required<Pick<Dwi2fodParamsDict, '@type'>> & Dwi2fodParamsDict;
 
 
 /**
@@ -123,10 +123,10 @@ function dwi2fod_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function dwi2fod_fslgrad_params(
+function dwi2fod_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2fodFslgradParametersTagged {
+): Dwi2fodFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -145,7 +145,7 @@ function dwi2fod_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dwi2fod_fslgrad_cargs(
-    params: Dwi2fodFslgradParameters,
+    params: Dwi2fodFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,9 +163,9 @@ function dwi2fod_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwi2fod_various_string_params(
+function dwi2fod_various_string(
     obj: string,
-): Dwi2fodVariousStringParametersTagged {
+): Dwi2fodVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -183,7 +183,7 @@ function dwi2fod_various_string_params(
  * @returns Command-line arguments.
  */
 function dwi2fod_various_string_cargs(
-    params: Dwi2fodVariousStringParameters,
+    params: Dwi2fodVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,9 +199,9 @@ function dwi2fod_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwi2fod_various_file_params(
+function dwi2fod_various_file(
     obj: InputPathType,
-): Dwi2fodVariousFileParametersTagged {
+): Dwi2fodVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -219,7 +219,7 @@ function dwi2fod_various_file_params(
  * @returns Command-line arguments.
  */
 function dwi2fod_various_file_cargs(
-    params: Dwi2fodVariousFileParameters,
+    params: Dwi2fodVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -236,10 +236,10 @@ function dwi2fod_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwi2fod_config_params(
+function dwi2fod_config(
     key: string,
     value: string,
-): Dwi2fodConfigParametersTagged {
+): Dwi2fodConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -258,7 +258,7 @@ function dwi2fod_config_params(
  * @returns Command-line arguments.
  */
 function dwi2fod_config_cargs(
-    params: Dwi2fodConfigParameters,
+    params: Dwi2fodConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -270,7 +270,7 @@ function dwi2fod_config_cargs(
 
 
 /**
- * Output object returned when calling `Array<Dwi2fodResponseOdfParameters>(...)`.
+ * Output object returned when calling `Array<Dwi2fodResponseOdfParamsDict>(...)`.
  *
  * @interface
  */
@@ -294,10 +294,10 @@ interface Dwi2fodResponseOdfOutputs {
  *
  * @returns Parameter dictionary
  */
-function dwi2fod_response_odf_params(
+function dwi2fod_response_odf(
     response: InputPathType,
     odf: string,
-): Dwi2fodResponseOdfParametersTagged {
+): Dwi2fodResponseOdfParamsDictTagged {
     const params = {
         "@type": "response_odf" as const,
         "response": response,
@@ -316,7 +316,7 @@ function dwi2fod_response_odf_params(
  * @returns Command-line arguments.
  */
 function dwi2fod_response_odf_cargs(
-    params: Dwi2fodResponseOdfParameters,
+    params: Dwi2fodResponseOdfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -335,7 +335,7 @@ function dwi2fod_response_odf_cargs(
  * @returns Outputs object.
  */
 function dwi2fod_response_odf_outputs(
-    params: Dwi2fodResponseOdfParameters,
+    params: Dwi2fodResponseOdfParamsDict,
     execution: Execution,
 ): Dwi2fodResponseOdfOutputs {
     const ret: Dwi2fodResponseOdfOutputs = {
@@ -347,7 +347,7 @@ function dwi2fod_response_odf_outputs(
 
 
 /**
- * Output object returned when calling `Dwi2fodParameters(...)`.
+ * Output object returned when calling `Dwi2fodParamsDict(...)`.
  *
  * @interface
  */
@@ -403,9 +403,9 @@ WARNING: note that, even though the b=0 volumes are never referred to as shells 
 function dwi2fod_params(
     algorithm: string,
     dwi: InputPathType,
-    response_odf: Array<Dwi2fodResponseOdfParameters>,
+    response_odf: Array<Dwi2fodResponseOdfParamsDict>,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2fodFslgradParameters | null = null,
+    fslgrad: Dwi2fodFslgradParamsDict | null = null,
     shells: Array<number> | null = null,
     directions: InputPathType | null = null,
     lmax: Array<number> | null = null,
@@ -418,16 +418,16 @@ function dwi2fod_params(
     norm_lambda_1: number | null = null,
     neg_lambda_1: number | null = null,
     predicted_signal: string | null = null,
-    strides: Dwi2fodVariousStringParametersTagged | Dwi2fodVariousFileParametersTagged | null = null,
+    strides: Dwi2fodVariousStringParamsDictTagged | Dwi2fodVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2fodConfigParameters> | null = null,
+    config: Array<Dwi2fodConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2fodParametersTagged {
+): Dwi2fodParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwi2fod" as const,
         "info": info,
@@ -504,7 +504,7 @@ function dwi2fod_params(
  * @returns Command-line arguments.
  */
 function dwi2fod_cargs(
-    params: Dwi2fodParameters,
+    params: Dwi2fodParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -639,7 +639,7 @@ function dwi2fod_cargs(
  * @returns Outputs object.
  */
 function dwi2fod_outputs(
-    params: Dwi2fodParameters,
+    params: Dwi2fodParamsDict,
     execution: Execution,
 ): Dwi2fodOutputs {
     const ret: Dwi2fodOutputs = {
@@ -679,7 +679,7 @@ function dwi2fod_outputs(
  * @returns NamedTuple of outputs (described in `Dwi2fodOutputs`).
  */
 function dwi2fod_execute(
-    params: Dwi2fodParameters,
+    params: Dwi2fodParamsDict,
     runner: Runner | null = null,
 ): Dwi2fodOutputs {
     runner = runner || getGlobalRunner();
@@ -748,9 +748,9 @@ WARNING: note that, even though the b=0 volumes are never referred to as shells 
 function dwi2fod(
     algorithm: string,
     dwi: InputPathType,
-    response_odf: Array<Dwi2fodResponseOdfParameters>,
+    response_odf: Array<Dwi2fodResponseOdfParamsDict>,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2fodFslgradParameters | null = null,
+    fslgrad: Dwi2fodFslgradParamsDict | null = null,
     shells: Array<number> | null = null,
     directions: InputPathType | null = null,
     lmax: Array<number> | null = null,
@@ -763,13 +763,13 @@ function dwi2fod(
     norm_lambda_1: number | null = null,
     neg_lambda_1: number | null = null,
     predicted_signal: string | null = null,
-    strides: Dwi2fodVariousStringParametersTagged | Dwi2fodVariousFileParametersTagged | null = null,
+    strides: Dwi2fodVariousStringParamsDictTagged | Dwi2fodVariousFileParamsDictTagged | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2fodConfigParameters> | null = null,
+    config: Array<Dwi2fodConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -781,14 +781,26 @@ function dwi2fod(
 
 export {
       DWI2FOD_METADATA,
+      Dwi2fodConfigParamsDict,
+      Dwi2fodConfigParamsDictTagged,
+      Dwi2fodFslgradParamsDict,
+      Dwi2fodFslgradParamsDictTagged,
       Dwi2fodOutputs,
+      Dwi2fodParamsDict,
+      Dwi2fodParamsDictTagged,
       Dwi2fodResponseOdfOutputs,
+      Dwi2fodResponseOdfParamsDict,
+      Dwi2fodResponseOdfParamsDictTagged,
+      Dwi2fodVariousFileParamsDict,
+      Dwi2fodVariousFileParamsDictTagged,
+      Dwi2fodVariousStringParamsDict,
+      Dwi2fodVariousStringParamsDictTagged,
       dwi2fod,
-      dwi2fod_config_params,
+      dwi2fod_config,
       dwi2fod_execute,
-      dwi2fod_fslgrad_params,
+      dwi2fod_fslgrad,
       dwi2fod_params,
-      dwi2fod_response_odf_params,
-      dwi2fod_various_file_params,
-      dwi2fod_various_string_params,
+      dwi2fod_response_odf,
+      dwi2fod_various_file,
+      dwi2fod_various_string,
 };

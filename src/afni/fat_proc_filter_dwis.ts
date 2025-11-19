@@ -11,7 +11,7 @@ const FAT_PROC_FILTER_DWIS_METADATA: Metadata = {
 };
 
 
-interface FatProcFilterDwisParameters {
+interface FatProcFilterDwisParamsDict {
     "@type"?: "afni/fat_proc_filter_dwis";
     "input_dwi": InputPathType;
     "input_gradient": InputPathType;
@@ -25,11 +25,11 @@ interface FatProcFilterDwisParameters {
     "no_cmd_out": boolean;
     "do_movie"?: "AGIF" | "MPEG" | null | undefined;
 }
-type FatProcFilterDwisParametersTagged = Required<Pick<FatProcFilterDwisParameters, '@type'>> & FatProcFilterDwisParameters;
+type FatProcFilterDwisParamsDictTagged = Required<Pick<FatProcFilterDwisParamsDict, '@type'>> & FatProcFilterDwisParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcFilterDwisParameters(...)`.
+ * Output object returned when calling `FatProcFilterDwisParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function fat_proc_filter_dwis_params(
     no_qc_view: boolean = false,
     no_cmd_out: boolean = false,
     do_movie: "AGIF" | "MPEG" | null = null,
-): FatProcFilterDwisParametersTagged {
+): FatProcFilterDwisParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_filter_dwis" as const,
         "input_dwi": input_dwi,
@@ -118,7 +118,7 @@ function fat_proc_filter_dwis_params(
  * @returns Command-line arguments.
  */
 function fat_proc_filter_dwis_cargs(
-    params: FatProcFilterDwisParameters,
+    params: FatProcFilterDwisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -185,7 +185,7 @@ function fat_proc_filter_dwis_cargs(
  * @returns Outputs object.
  */
 function fat_proc_filter_dwis_outputs(
-    params: FatProcFilterDwisParameters,
+    params: FatProcFilterDwisParamsDict,
     execution: Execution,
 ): FatProcFilterDwisOutputs {
     const ret: FatProcFilterDwisOutputs = {
@@ -213,7 +213,7 @@ function fat_proc_filter_dwis_outputs(
  * @returns NamedTuple of outputs (described in `FatProcFilterDwisOutputs`).
  */
 function fat_proc_filter_dwis_execute(
-    params: FatProcFilterDwisParameters,
+    params: FatProcFilterDwisParamsDict,
     runner: Runner | null = null,
 ): FatProcFilterDwisOutputs {
     runner = runner || getGlobalRunner();
@@ -272,6 +272,8 @@ function fat_proc_filter_dwis(
 export {
       FAT_PROC_FILTER_DWIS_METADATA,
       FatProcFilterDwisOutputs,
+      FatProcFilterDwisParamsDict,
+      FatProcFilterDwisParamsDictTagged,
       fat_proc_filter_dwis,
       fat_proc_filter_dwis_execute,
       fat_proc_filter_dwis_params,

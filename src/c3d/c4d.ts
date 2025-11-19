@@ -11,1266 +11,1266 @@ const C4D_METADATA: Metadata = {
 };
 
 
-interface C4dAccumParameters {
+interface C4dAccumParamsDict {
     "@type"?: "accum";
     "accum": string;
 }
-type C4dAccumParametersTagged = Required<Pick<C4dAccumParameters, '@type'>> & C4dAccumParameters;
+type C4dAccumParamsDictTagged = Required<Pick<C4dAccumParamsDict, '@type'>> & C4dAccumParamsDict;
 
 
-interface C4dAcosParameters {
+interface C4dAcosParamsDict {
     "@type"?: "acos";
     "acos": string;
 }
-type C4dAcosParametersTagged = Required<Pick<C4dAcosParameters, '@type'>> & C4dAcosParameters;
+type C4dAcosParamsDictTagged = Required<Pick<C4dAcosParamsDict, '@type'>> & C4dAcosParamsDict;
 
 
-interface C4dAddParameters {
+interface C4dAddParamsDict {
     "@type"?: "add";
     "add": string;
 }
-type C4dAddParametersTagged = Required<Pick<C4dAddParameters, '@type'>> & C4dAddParameters;
+type C4dAddParamsDictTagged = Required<Pick<C4dAddParamsDict, '@type'>> & C4dAddParamsDict;
 
 
-interface C4dAlignLandmarksParameters {
+interface C4dAlignLandmarksParamsDict {
     "@type"?: "align_landmarks";
     "align_landmarks": string;
 }
-type C4dAlignLandmarksParametersTagged = Required<Pick<C4dAlignLandmarksParameters, '@type'>> & C4dAlignLandmarksParameters;
+type C4dAlignLandmarksParamsDictTagged = Required<Pick<C4dAlignLandmarksParamsDict, '@type'>> & C4dAlignLandmarksParamsDict;
 
 
-interface C4dAnisotropicDiffusionParameters {
+interface C4dAnisotropicDiffusionParamsDict {
     "@type"?: "anisotropic_diffusion";
     "anisotropic_diffusion": string;
 }
-type C4dAnisotropicDiffusionParametersTagged = Required<Pick<C4dAnisotropicDiffusionParameters, '@type'>> & C4dAnisotropicDiffusionParameters;
+type C4dAnisotropicDiffusionParamsDictTagged = Required<Pick<C4dAnisotropicDiffusionParamsDict, '@type'>> & C4dAnisotropicDiffusionParamsDict;
 
 
-interface C4dAntialiasParameters {
+interface C4dAntialiasParamsDict {
     "@type"?: "antialias";
     "antialias": string;
 }
-type C4dAntialiasParametersTagged = Required<Pick<C4dAntialiasParameters, '@type'>> & C4dAntialiasParameters;
+type C4dAntialiasParamsDictTagged = Required<Pick<C4dAntialiasParamsDict, '@type'>> & C4dAntialiasParamsDict;
 
 
-interface C4dSetParameters {
+interface C4dSetParamsDict {
     "@type"?: "set";
     "set": string;
 }
-type C4dSetParametersTagged = Required<Pick<C4dSetParameters, '@type'>> & C4dSetParameters;
+type C4dSetParamsDictTagged = Required<Pick<C4dSetParamsDict, '@type'>> & C4dSetParamsDict;
 
 
-interface C4dAsinParameters {
+interface C4dAsinParamsDict {
     "@type"?: "asin";
     "asin": string;
 }
-type C4dAsinParametersTagged = Required<Pick<C4dAsinParameters, '@type'>> & C4dAsinParameters;
+type C4dAsinParamsDictTagged = Required<Pick<C4dAsinParamsDict, '@type'>> & C4dAsinParamsDict;
 
 
-interface C4dAtan2Parameters {
+interface C4dAtan2ParamsDict {
     "@type"?: "atan2";
     "atan2": string;
 }
-type C4dAtan2ParametersTagged = Required<Pick<C4dAtan2Parameters, '@type'>> & C4dAtan2Parameters;
+type C4dAtan2ParamsDictTagged = Required<Pick<C4dAtan2ParamsDict, '@type'>> & C4dAtan2ParamsDict;
 
 
-interface C4dBackgroundParameters {
+interface C4dBackgroundParamsDict {
     "@type"?: "background";
     "background": string;
 }
-type C4dBackgroundParametersTagged = Required<Pick<C4dBackgroundParameters, '@type'>> & C4dBackgroundParameters;
+type C4dBackgroundParamsDictTagged = Required<Pick<C4dBackgroundParamsDict, '@type'>> & C4dBackgroundParamsDict;
 
 
-interface C4dN4BiasCorrectionParameters {
+interface C4dN4BiasCorrectionParamsDict {
     "@type"?: "n4_bias_correction";
     "n4_bias_correction": string;
 }
-type C4dN4BiasCorrectionParametersTagged = Required<Pick<C4dN4BiasCorrectionParameters, '@type'>> & C4dN4BiasCorrectionParameters;
+type C4dN4BiasCorrectionParamsDictTagged = Required<Pick<C4dN4BiasCorrectionParamsDict, '@type'>> & C4dN4BiasCorrectionParamsDict;
 
 
-interface C4dBinarizeParameters {
+interface C4dBinarizeParamsDict {
     "@type"?: "binarize";
     "binarize": string;
 }
-type C4dBinarizeParametersTagged = Required<Pick<C4dBinarizeParameters, '@type'>> & C4dBinarizeParameters;
+type C4dBinarizeParamsDictTagged = Required<Pick<C4dBinarizeParamsDict, '@type'>> & C4dBinarizeParamsDict;
 
 
-interface C4dCannyParameters {
+interface C4dCannyParamsDict {
     "@type"?: "canny";
     "canny": string;
 }
-type C4dCannyParametersTagged = Required<Pick<C4dCannyParameters, '@type'>> & C4dCannyParameters;
+type C4dCannyParamsDictTagged = Required<Pick<C4dCannyParamsDict, '@type'>> & C4dCannyParamsDict;
 
 
-interface C4dCeilParameters {
+interface C4dCeilParamsDict {
     "@type"?: "ceil";
     "ceil": string;
 }
-type C4dCeilParametersTagged = Required<Pick<C4dCeilParameters, '@type'>> & C4dCeilParameters;
+type C4dCeilParamsDictTagged = Required<Pick<C4dCeilParamsDict, '@type'>> & C4dCeilParamsDict;
 
 
-interface C4dCentroidParameters {
+interface C4dCentroidParamsDict {
     "@type"?: "centroid";
     "centroid": string;
 }
-type C4dCentroidParametersTagged = Required<Pick<C4dCentroidParameters, '@type'>> & C4dCentroidParameters;
+type C4dCentroidParamsDictTagged = Required<Pick<C4dCentroidParamsDict, '@type'>> & C4dCentroidParamsDict;
 
 
-interface C4dCentroidMarkParameters {
+interface C4dCentroidMarkParamsDict {
     "@type"?: "centroid_mark";
     "centroid_mark": string;
 }
-type C4dCentroidMarkParametersTagged = Required<Pick<C4dCentroidMarkParameters, '@type'>> & C4dCentroidMarkParameters;
+type C4dCentroidMarkParamsDictTagged = Required<Pick<C4dCentroidMarkParamsDict, '@type'>> & C4dCentroidMarkParamsDict;
 
 
-interface C4dConnectedComponentsParameters {
+interface C4dConnectedComponentsParamsDict {
     "@type"?: "connected_components";
     "connected_components": string;
 }
-type C4dConnectedComponentsParametersTagged = Required<Pick<C4dConnectedComponentsParameters, '@type'>> & C4dConnectedComponentsParameters;
+type C4dConnectedComponentsParamsDictTagged = Required<Pick<C4dConnectedComponentsParamsDict, '@type'>> & C4dConnectedComponentsParamsDict;
 
 
-interface C4dClearParameters {
+interface C4dClearParamsDict {
     "@type"?: "clear";
     "clear": string;
 }
-type C4dClearParametersTagged = Required<Pick<C4dClearParameters, '@type'>> & C4dClearParameters;
+type C4dClearParamsDictTagged = Required<Pick<C4dClearParamsDict, '@type'>> & C4dClearParamsDict;
 
 
-interface C4dClipParameters {
+interface C4dClipParamsDict {
     "@type"?: "clip";
     "clip": string;
 }
-type C4dClipParametersTagged = Required<Pick<C4dClipParameters, '@type'>> & C4dClipParameters;
+type C4dClipParamsDictTagged = Required<Pick<C4dClipParamsDict, '@type'>> & C4dClipParamsDict;
 
 
-interface C4dColorMapParameters {
+interface C4dColorMapParamsDict {
     "@type"?: "color_map";
     "color_map": string;
 }
-type C4dColorMapParametersTagged = Required<Pick<C4dColorMapParameters, '@type'>> & C4dColorMapParameters;
+type C4dColorMapParamsDictTagged = Required<Pick<C4dColorMapParamsDict, '@type'>> & C4dColorMapParamsDict;
 
 
-interface C4dCompressParameters {
+interface C4dCompressParamsDict {
     "@type"?: "compress";
     "compress": string;
 }
-type C4dCompressParametersTagged = Required<Pick<C4dCompressParameters, '@type'>> & C4dCompressParameters;
+type C4dCompressParamsDictTagged = Required<Pick<C4dCompressParamsDict, '@type'>> & C4dCompressParamsDict;
 
 
-interface C4dNoCompressParameters {
+interface C4dNoCompressParamsDict {
     "@type"?: "no_compress";
     "no_compress": string;
 }
-type C4dNoCompressParametersTagged = Required<Pick<C4dNoCompressParameters, '@type'>> & C4dNoCompressParameters;
+type C4dNoCompressParamsDictTagged = Required<Pick<C4dNoCompressParamsDict, '@type'>> & C4dNoCompressParamsDict;
 
 
-interface C4dConvParameters {
+interface C4dConvParamsDict {
     "@type"?: "conv";
     "conv": string;
 }
-type C4dConvParametersTagged = Required<Pick<C4dConvParameters, '@type'>> & C4dConvParameters;
+type C4dConvParamsDictTagged = Required<Pick<C4dConvParamsDict, '@type'>> & C4dConvParamsDict;
 
 
-interface C4dCoordinateMapVoxelParameters {
+interface C4dCoordinateMapVoxelParamsDict {
     "@type"?: "coordinate_map_voxel";
     "coordinate_map_voxel": string;
 }
-type C4dCoordinateMapVoxelParametersTagged = Required<Pick<C4dCoordinateMapVoxelParameters, '@type'>> & C4dCoordinateMapVoxelParameters;
+type C4dCoordinateMapVoxelParamsDictTagged = Required<Pick<C4dCoordinateMapVoxelParamsDict, '@type'>> & C4dCoordinateMapVoxelParamsDict;
 
 
-interface C4dCoordinateMapPhysicalParameters {
+interface C4dCoordinateMapPhysicalParamsDict {
     "@type"?: "coordinate_map_physical";
     "coordinate_map_physical": string;
 }
-type C4dCoordinateMapPhysicalParametersTagged = Required<Pick<C4dCoordinateMapPhysicalParameters, '@type'>> & C4dCoordinateMapPhysicalParameters;
+type C4dCoordinateMapPhysicalParamsDictTagged = Required<Pick<C4dCoordinateMapPhysicalParamsDict, '@type'>> & C4dCoordinateMapPhysicalParamsDict;
 
 
-interface C4dCopyTransformParameters {
+interface C4dCopyTransformParamsDict {
     "@type"?: "copy_transform";
     "copy_transform": string;
 }
-type C4dCopyTransformParametersTagged = Required<Pick<C4dCopyTransformParameters, '@type'>> & C4dCopyTransformParameters;
+type C4dCopyTransformParamsDictTagged = Required<Pick<C4dCopyTransformParamsDict, '@type'>> & C4dCopyTransformParamsDict;
 
 
-interface C4dCosParameters {
+interface C4dCosParamsDict {
     "@type"?: "cos";
     "cos": string;
 }
-type C4dCosParametersTagged = Required<Pick<C4dCosParameters, '@type'>> & C4dCosParameters;
+type C4dCosParamsDictTagged = Required<Pick<C4dCosParamsDict, '@type'>> & C4dCosParamsDict;
 
 
-interface C4dCreateParameters {
+interface C4dCreateParamsDict {
     "@type"?: "create";
     "create": string;
 }
-type C4dCreateParametersTagged = Required<Pick<C4dCreateParameters, '@type'>> & C4dCreateParameters;
+type C4dCreateParamsDictTagged = Required<Pick<C4dCreateParamsDict, '@type'>> & C4dCreateParamsDict;
 
 
-interface C4dDicomSeriesListParameters {
+interface C4dDicomSeriesListParamsDict {
     "@type"?: "dicom_series_list";
     "dicom_series_list": string;
 }
-type C4dDicomSeriesListParametersTagged = Required<Pick<C4dDicomSeriesListParameters, '@type'>> & C4dDicomSeriesListParameters;
+type C4dDicomSeriesListParamsDictTagged = Required<Pick<C4dDicomSeriesListParamsDict, '@type'>> & C4dDicomSeriesListParamsDict;
 
 
-interface C4dDicomSeriesReadParameters {
+interface C4dDicomSeriesReadParamsDict {
     "@type"?: "dicom_series_read";
     "dicom_series_read": string;
 }
-type C4dDicomSeriesReadParametersTagged = Required<Pick<C4dDicomSeriesReadParameters, '@type'>> & C4dDicomSeriesReadParameters;
+type C4dDicomSeriesReadParamsDictTagged = Required<Pick<C4dDicomSeriesReadParamsDict, '@type'>> & C4dDicomSeriesReadParamsDict;
 
 
-interface C4dDilateParameters {
+interface C4dDilateParamsDict {
     "@type"?: "dilate";
     "dilate": string;
 }
-type C4dDilateParametersTagged = Required<Pick<C4dDilateParameters, '@type'>> & C4dDilateParameters;
+type C4dDilateParamsDictTagged = Required<Pick<C4dDilateParamsDict, '@type'>> & C4dDilateParamsDict;
 
 
-interface C4dDivideParameters {
+interface C4dDivideParamsDict {
     "@type"?: "divide";
     "divide": string;
 }
-type C4dDivideParametersTagged = Required<Pick<C4dDivideParameters, '@type'>> & C4dDivideParameters;
+type C4dDivideParamsDictTagged = Required<Pick<C4dDivideParamsDict, '@type'>> & C4dDivideParamsDict;
 
 
-interface C4dDuplicateParameters {
+interface C4dDuplicateParamsDict {
     "@type"?: "duplicate";
     "duplicate": string;
 }
-type C4dDuplicateParametersTagged = Required<Pick<C4dDuplicateParameters, '@type'>> & C4dDuplicateParameters;
+type C4dDuplicateParamsDictTagged = Required<Pick<C4dDuplicateParamsDict, '@type'>> & C4dDuplicateParamsDict;
 
 
-interface C4dEndaccumParameters {
+interface C4dEndaccumParamsDict {
     "@type"?: "endaccum";
     "endaccum": string;
 }
-type C4dEndaccumParametersTagged = Required<Pick<C4dEndaccumParameters, '@type'>> & C4dEndaccumParameters;
+type C4dEndaccumParamsDictTagged = Required<Pick<C4dEndaccumParamsDict, '@type'>> & C4dEndaccumParamsDict;
 
 
-interface C4dEndforParameters {
+interface C4dEndforParamsDict {
     "@type"?: "endfor";
     "endfor": string;
 }
-type C4dEndforParametersTagged = Required<Pick<C4dEndforParameters, '@type'>> & C4dEndforParameters;
+type C4dEndforParamsDictTagged = Required<Pick<C4dEndforParamsDict, '@type'>> & C4dEndforParamsDict;
 
 
-interface C4dErodeParameters {
+interface C4dErodeParamsDict {
     "@type"?: "erode";
     "erode": string;
 }
-type C4dErodeParametersTagged = Required<Pick<C4dErodeParameters, '@type'>> & C4dErodeParameters;
+type C4dErodeParamsDictTagged = Required<Pick<C4dErodeParamsDict, '@type'>> & C4dErodeParamsDict;
 
 
-interface C4dErfParameters {
+interface C4dErfParamsDict {
     "@type"?: "erf";
     "erf": string;
 }
-type C4dErfParametersTagged = Required<Pick<C4dErfParameters, '@type'>> & C4dErfParameters;
+type C4dErfParamsDictTagged = Required<Pick<C4dErfParamsDict, '@type'>> & C4dErfParamsDict;
 
 
-interface C4dExpParameters {
+interface C4dExpParamsDict {
     "@type"?: "exp";
     "exp": string;
 }
-type C4dExpParametersTagged = Required<Pick<C4dExpParameters, '@type'>> & C4dExpParameters;
+type C4dExpParamsDictTagged = Required<Pick<C4dExpParamsDict, '@type'>> & C4dExpParamsDict;
 
 
-interface C4dExportPatchesParameters {
+interface C4dExportPatchesParamsDict {
     "@type"?: "export_patches";
     "export_patches": string;
 }
-type C4dExportPatchesParametersTagged = Required<Pick<C4dExportPatchesParameters, '@type'>> & C4dExportPatchesParameters;
+type C4dExportPatchesParamsDictTagged = Required<Pick<C4dExportPatchesParamsDict, '@type'>> & C4dExportPatchesParamsDict;
 
 
-interface C4dExportPatchesAugParameters {
+interface C4dExportPatchesAugParamsDict {
     "@type"?: "export_patches_aug";
     "export_patches_aug": string;
 }
-type C4dExportPatchesAugParametersTagged = Required<Pick<C4dExportPatchesAugParameters, '@type'>> & C4dExportPatchesAugParameters;
+type C4dExportPatchesAugParamsDictTagged = Required<Pick<C4dExportPatchesAugParamsDict, '@type'>> & C4dExportPatchesAugParamsDict;
 
 
-interface C4dExtrudeSegParameters {
+interface C4dExtrudeSegParamsDict {
     "@type"?: "extrude_seg";
     "extrude_seg": string;
 }
-type C4dExtrudeSegParametersTagged = Required<Pick<C4dExtrudeSegParameters, '@type'>> & C4dExtrudeSegParameters;
+type C4dExtrudeSegParamsDictTagged = Required<Pick<C4dExtrudeSegParamsDict, '@type'>> & C4dExtrudeSegParamsDict;
 
 
-interface C4dFillBackgroundWithNoiseParameters {
+interface C4dFillBackgroundWithNoiseParamsDict {
     "@type"?: "fill_background_with_noise";
     "fill_background_with_noise": string;
 }
-type C4dFillBackgroundWithNoiseParametersTagged = Required<Pick<C4dFillBackgroundWithNoiseParameters, '@type'>> & C4dFillBackgroundWithNoiseParameters;
+type C4dFillBackgroundWithNoiseParamsDictTagged = Required<Pick<C4dFillBackgroundWithNoiseParamsDict, '@type'>> & C4dFillBackgroundWithNoiseParamsDict;
 
 
-interface C4dFftParameters {
+interface C4dFftParamsDict {
     "@type"?: "fft";
     "fft": string;
 }
-type C4dFftParametersTagged = Required<Pick<C4dFftParameters, '@type'>> & C4dFftParameters;
+type C4dFftParamsDictTagged = Required<Pick<C4dFftParamsDict, '@type'>> & C4dFftParamsDict;
 
 
-interface C4dFlipParameters {
+interface C4dFlipParamsDict {
     "@type"?: "flip";
     "flip": string;
 }
-type C4dFlipParametersTagged = Required<Pick<C4dFlipParameters, '@type'>> & C4dFlipParameters;
+type C4dFlipParamsDictTagged = Required<Pick<C4dFlipParamsDict, '@type'>> & C4dFlipParamsDict;
 
 
-interface C4dFloorParameters {
+interface C4dFloorParamsDict {
     "@type"?: "floor";
     "floor": string;
 }
-type C4dFloorParametersTagged = Required<Pick<C4dFloorParameters, '@type'>> & C4dFloorParameters;
+type C4dFloorParamsDictTagged = Required<Pick<C4dFloorParamsDict, '@type'>> & C4dFloorParamsDict;
 
 
-interface C4dForeachParameters {
+interface C4dForeachParamsDict {
     "@type"?: "foreach";
     "foreach": string;
 }
-type C4dForeachParametersTagged = Required<Pick<C4dForeachParameters, '@type'>> & C4dForeachParameters;
+type C4dForeachParamsDictTagged = Required<Pick<C4dForeachParamsDict, '@type'>> & C4dForeachParamsDict;
 
 
-interface C4dForeachCompParameters {
+interface C4dForeachCompParamsDict {
     "@type"?: "foreach_comp";
     "foreach_comp": string;
 }
-type C4dForeachCompParametersTagged = Required<Pick<C4dForeachCompParameters, '@type'>> & C4dForeachCompParameters;
+type C4dForeachCompParamsDictTagged = Required<Pick<C4dForeachCompParamsDict, '@type'>> & C4dForeachCompParamsDict;
 
 
-interface C4dGlmParameters {
+interface C4dGlmParamsDict {
     "@type"?: "glm";
     "glm": string;
 }
-type C4dGlmParametersTagged = Required<Pick<C4dGlmParameters, '@type'>> & C4dGlmParameters;
+type C4dGlmParamsDictTagged = Required<Pick<C4dGlmParamsDict, '@type'>> & C4dGlmParamsDict;
 
 
-interface C4dGradientParameters {
+interface C4dGradientParamsDict {
     "@type"?: "gradient";
     "gradient": string;
 }
-type C4dGradientParametersTagged = Required<Pick<C4dGradientParameters, '@type'>> & C4dGradientParameters;
+type C4dGradientParamsDictTagged = Required<Pick<C4dGradientParamsDict, '@type'>> & C4dGradientParamsDict;
 
 
-interface C4dHelpParameters {
+interface C4dHelpParamsDict {
     "@type"?: "_help";
     "_help": string;
 }
-type C4dHelpParametersTagged = Required<Pick<C4dHelpParameters, '@type'>> & C4dHelpParameters;
+type C4dHelpParamsDictTagged = Required<Pick<C4dHelpParamsDict, '@type'>> & C4dHelpParamsDict;
 
 
-interface C4dHolefillParameters {
+interface C4dHolefillParamsDict {
     "@type"?: "holefill";
     "holefill": string;
 }
-type C4dHolefillParametersTagged = Required<Pick<C4dHolefillParameters, '@type'>> & C4dHolefillParameters;
+type C4dHolefillParamsDictTagged = Required<Pick<C4dHolefillParamsDict, '@type'>> & C4dHolefillParamsDict;
 
 
-interface C4dHessianEigenvaluesParameters {
+interface C4dHessianEigenvaluesParamsDict {
     "@type"?: "hessian_eigenvalues";
     "hessian_eigenvalues": string;
 }
-type C4dHessianEigenvaluesParametersTagged = Required<Pick<C4dHessianEigenvaluesParameters, '@type'>> & C4dHessianEigenvaluesParameters;
+type C4dHessianEigenvaluesParamsDictTagged = Required<Pick<C4dHessianEigenvaluesParamsDict, '@type'>> & C4dHessianEigenvaluesParamsDict;
 
 
-interface C4dHessianObjectnessParameters {
+interface C4dHessianObjectnessParamsDict {
     "@type"?: "hessian_objectness";
     "hessian_objectness": string;
 }
-type C4dHessianObjectnessParametersTagged = Required<Pick<C4dHessianObjectnessParameters, '@type'>> & C4dHessianObjectnessParameters;
+type C4dHessianObjectnessParamsDictTagged = Required<Pick<C4dHessianObjectnessParamsDict, '@type'>> & C4dHessianObjectnessParamsDict;
 
 
-interface C4dHistogramMatchParameters {
+interface C4dHistogramMatchParamsDict {
     "@type"?: "histogram_match";
     "histogram_match": string;
 }
-type C4dHistogramMatchParametersTagged = Required<Pick<C4dHistogramMatchParameters, '@type'>> & C4dHistogramMatchParameters;
+type C4dHistogramMatchParamsDictTagged = Required<Pick<C4dHistogramMatchParamsDict, '@type'>> & C4dHistogramMatchParamsDict;
 
 
-interface C4dInfoParameters {
+interface C4dInfoParamsDict {
     "@type"?: "info";
     "info": string;
 }
-type C4dInfoParametersTagged = Required<Pick<C4dInfoParameters, '@type'>> & C4dInfoParameters;
+type C4dInfoParamsDictTagged = Required<Pick<C4dInfoParamsDict, '@type'>> & C4dInfoParamsDict;
 
 
-interface C4dInfoFullParameters {
+interface C4dInfoFullParamsDict {
     "@type"?: "info_full";
     "info_full": string;
 }
-type C4dInfoFullParametersTagged = Required<Pick<C4dInfoFullParameters, '@type'>> & C4dInfoFullParameters;
+type C4dInfoFullParamsDictTagged = Required<Pick<C4dInfoFullParamsDict, '@type'>> & C4dInfoFullParamsDict;
 
 
-interface C4dInsertParameters {
+interface C4dInsertParamsDict {
     "@type"?: "insert";
     "insert": string;
 }
-type C4dInsertParametersTagged = Required<Pick<C4dInsertParameters, '@type'>> & C4dInsertParameters;
+type C4dInsertParamsDictTagged = Required<Pick<C4dInsertParamsDict, '@type'>> & C4dInsertParamsDict;
 
 
-interface C4dInterpolationParameters {
+interface C4dInterpolationParamsDict {
     "@type"?: "interpolation";
     "interpolation": string;
 }
-type C4dInterpolationParametersTagged = Required<Pick<C4dInterpolationParameters, '@type'>> & C4dInterpolationParameters;
+type C4dInterpolationParamsDictTagged = Required<Pick<C4dInterpolationParamsDict, '@type'>> & C4dInterpolationParamsDict;
 
 
-interface C4dIterationsParameters {
+interface C4dIterationsParamsDict {
     "@type"?: "iterations";
     "iterations": string;
 }
-type C4dIterationsParametersTagged = Required<Pick<C4dIterationsParameters, '@type'>> & C4dIterationsParameters;
+type C4dIterationsParamsDictTagged = Required<Pick<C4dIterationsParamsDict, '@type'>> & C4dIterationsParamsDict;
 
 
-interface C4dLabelOverlapParameters {
+interface C4dLabelOverlapParamsDict {
     "@type"?: "label_overlap";
     "label_overlap": string;
 }
-type C4dLabelOverlapParametersTagged = Required<Pick<C4dLabelOverlapParameters, '@type'>> & C4dLabelOverlapParameters;
+type C4dLabelOverlapParamsDictTagged = Required<Pick<C4dLabelOverlapParamsDict, '@type'>> & C4dLabelOverlapParamsDict;
 
 
-interface C4dLabelStatisticsParameters {
+interface C4dLabelStatisticsParamsDict {
     "@type"?: "label_statistics";
     "label_statistics": string;
 }
-type C4dLabelStatisticsParametersTagged = Required<Pick<C4dLabelStatisticsParameters, '@type'>> & C4dLabelStatisticsParameters;
+type C4dLabelStatisticsParamsDictTagged = Required<Pick<C4dLabelStatisticsParamsDict, '@type'>> & C4dLabelStatisticsParamsDict;
 
 
-interface C4dLandmarksToSpheresParameters {
+interface C4dLandmarksToSpheresParamsDict {
     "@type"?: "landmarks_to_spheres";
     "landmarks_to_spheres": string;
 }
-type C4dLandmarksToSpheresParametersTagged = Required<Pick<C4dLandmarksToSpheresParameters, '@type'>> & C4dLandmarksToSpheresParameters;
+type C4dLandmarksToSpheresParamsDictTagged = Required<Pick<C4dLandmarksToSpheresParamsDict, '@type'>> & C4dLandmarksToSpheresParamsDict;
 
 
-interface C4dLaplacianParameters {
+interface C4dLaplacianParamsDict {
     "@type"?: "laplacian";
     "laplacian": string;
 }
-type C4dLaplacianParametersTagged = Required<Pick<C4dLaplacianParameters, '@type'>> & C4dLaplacianParameters;
+type C4dLaplacianParamsDictTagged = Required<Pick<C4dLaplacianParamsDict, '@type'>> & C4dLaplacianParamsDict;
 
 
-interface C4dLevelsetParameters {
+interface C4dLevelsetParamsDict {
     "@type"?: "levelset";
     "levelset": string;
 }
-type C4dLevelsetParametersTagged = Required<Pick<C4dLevelsetParameters, '@type'>> & C4dLevelsetParameters;
+type C4dLevelsetParamsDictTagged = Required<Pick<C4dLevelsetParamsDict, '@type'>> & C4dLevelsetParamsDict;
 
 
-interface C4dLevelsetCurvatureParameters {
+interface C4dLevelsetCurvatureParamsDict {
     "@type"?: "levelset_curvature";
     "levelset_curvature": string;
 }
-type C4dLevelsetCurvatureParametersTagged = Required<Pick<C4dLevelsetCurvatureParameters, '@type'>> & C4dLevelsetCurvatureParameters;
+type C4dLevelsetCurvatureParamsDictTagged = Required<Pick<C4dLevelsetCurvatureParamsDict, '@type'>> & C4dLevelsetCurvatureParamsDict;
 
 
-interface C4dLevelsetAdvectionParameters {
+interface C4dLevelsetAdvectionParamsDict {
     "@type"?: "levelset_advection";
     "levelset_advection": string;
 }
-type C4dLevelsetAdvectionParametersTagged = Required<Pick<C4dLevelsetAdvectionParameters, '@type'>> & C4dLevelsetAdvectionParameters;
+type C4dLevelsetAdvectionParamsDictTagged = Required<Pick<C4dLevelsetAdvectionParamsDict, '@type'>> & C4dLevelsetAdvectionParamsDict;
 
 
-interface C4dLogParameters {
+interface C4dLogParamsDict {
     "@type"?: "log";
     "log": string;
 }
-type C4dLogParametersTagged = Required<Pick<C4dLogParameters, '@type'>> & C4dLogParameters;
+type C4dLogParamsDictTagged = Required<Pick<C4dLogParamsDict, '@type'>> & C4dLogParamsDict;
 
 
-interface C4dLog10Parameters {
+interface C4dLog10ParamsDict {
     "@type"?: "log10";
     "log10": string;
 }
-type C4dLog10ParametersTagged = Required<Pick<C4dLog10Parameters, '@type'>> & C4dLog10Parameters;
+type C4dLog10ParamsDictTagged = Required<Pick<C4dLog10ParamsDict, '@type'>> & C4dLog10ParamsDict;
 
 
-interface C4dManualParameters {
+interface C4dManualParamsDict {
     "@type"?: "manual";
     "manual": string;
 }
-type C4dManualParametersTagged = Required<Pick<C4dManualParameters, '@type'>> & C4dManualParameters;
+type C4dManualParamsDictTagged = Required<Pick<C4dManualParamsDict, '@type'>> & C4dManualParamsDict;
 
 
-interface C4dMatchBoundingBoxParameters {
+interface C4dMatchBoundingBoxParamsDict {
     "@type"?: "match_bounding_box";
     "match_bounding_box": string;
 }
-type C4dMatchBoundingBoxParametersTagged = Required<Pick<C4dMatchBoundingBoxParameters, '@type'>> & C4dMatchBoundingBoxParameters;
+type C4dMatchBoundingBoxParamsDictTagged = Required<Pick<C4dMatchBoundingBoxParamsDict, '@type'>> & C4dMatchBoundingBoxParamsDict;
 
 
-interface C4dMaximumParameters {
+interface C4dMaximumParamsDict {
     "@type"?: "maximum";
     "maximum": string;
 }
-type C4dMaximumParametersTagged = Required<Pick<C4dMaximumParameters, '@type'>> & C4dMaximumParameters;
+type C4dMaximumParamsDictTagged = Required<Pick<C4dMaximumParamsDict, '@type'>> & C4dMaximumParamsDict;
 
 
-interface C4dMulticomponentSplitParameters {
+interface C4dMulticomponentSplitParamsDict {
     "@type"?: "multicomponent_split";
     "multicomponent_split": string;
 }
-type C4dMulticomponentSplitParametersTagged = Required<Pick<C4dMulticomponentSplitParameters, '@type'>> & C4dMulticomponentSplitParameters;
+type C4dMulticomponentSplitParamsDictTagged = Required<Pick<C4dMulticomponentSplitParamsDict, '@type'>> & C4dMulticomponentSplitParamsDict;
 
 
-interface C4dMeanParameters {
+interface C4dMeanParamsDict {
     "@type"?: "mean";
     "mean": string;
 }
-type C4dMeanParametersTagged = Required<Pick<C4dMeanParameters, '@type'>> & C4dMeanParameters;
+type C4dMeanParamsDictTagged = Required<Pick<C4dMeanParamsDict, '@type'>> & C4dMeanParamsDict;
 
 
-interface C4dMedianFilterParameters {
+interface C4dMedianFilterParamsDict {
     "@type"?: "median_filter";
     "median_filter": string;
 }
-type C4dMedianFilterParametersTagged = Required<Pick<C4dMedianFilterParameters, '@type'>> & C4dMedianFilterParameters;
+type C4dMedianFilterParamsDictTagged = Required<Pick<C4dMedianFilterParamsDict, '@type'>> & C4dMedianFilterParamsDict;
 
 
-interface C4dMergeParameters {
+interface C4dMergeParamsDict {
     "@type"?: "merge";
     "merge": string;
 }
-type C4dMergeParametersTagged = Required<Pick<C4dMergeParameters, '@type'>> & C4dMergeParameters;
+type C4dMergeParamsDictTagged = Required<Pick<C4dMergeParamsDict, '@type'>> & C4dMergeParamsDict;
 
 
-interface C4dMeanFilterParameters {
+interface C4dMeanFilterParamsDict {
     "@type"?: "mean_filter";
     "mean_filter": string;
 }
-type C4dMeanFilterParametersTagged = Required<Pick<C4dMeanFilterParameters, '@type'>> & C4dMeanFilterParameters;
+type C4dMeanFilterParamsDictTagged = Required<Pick<C4dMeanFilterParamsDict, '@type'>> & C4dMeanFilterParamsDict;
 
 
-interface C4dMutualInfoParameters {
+interface C4dMutualInfoParamsDict {
     "@type"?: "mutual_info";
     "mutual_info": string;
 }
-type C4dMutualInfoParametersTagged = Required<Pick<C4dMutualInfoParameters, '@type'>> & C4dMutualInfoParameters;
+type C4dMutualInfoParamsDictTagged = Required<Pick<C4dMutualInfoParamsDict, '@type'>> & C4dMutualInfoParamsDict;
 
 
-interface C4dMinimumParameters {
+interface C4dMinimumParamsDict {
     "@type"?: "minimum";
     "minimum": string;
 }
-type C4dMinimumParametersTagged = Required<Pick<C4dMinimumParameters, '@type'>> & C4dMinimumParameters;
+type C4dMinimumParamsDictTagged = Required<Pick<C4dMinimumParamsDict, '@type'>> & C4dMinimumParamsDict;
 
 
-interface C4dMixtureModelParameters {
+interface C4dMixtureModelParamsDict {
     "@type"?: "mixture_model";
     "mixture_model": string;
 }
-type C4dMixtureModelParametersTagged = Required<Pick<C4dMixtureModelParameters, '@type'>> & C4dMixtureModelParameters;
+type C4dMixtureModelParamsDictTagged = Required<Pick<C4dMixtureModelParamsDict, '@type'>> & C4dMixtureModelParamsDict;
 
 
-interface C4dMomentsParameters {
+interface C4dMomentsParamsDict {
     "@type"?: "moments";
     "moments": string;
 }
-type C4dMomentsParametersTagged = Required<Pick<C4dMomentsParameters, '@type'>> & C4dMomentsParameters;
+type C4dMomentsParamsDictTagged = Required<Pick<C4dMomentsParamsDict, '@type'>> & C4dMomentsParamsDict;
 
 
-interface C4dMattesMutualInfoParameters {
+interface C4dMattesMutualInfoParamsDict {
     "@type"?: "mattes_mutual_info";
     "mattes_mutual_info": string;
 }
-type C4dMattesMutualInfoParametersTagged = Required<Pick<C4dMattesMutualInfoParameters, '@type'>> & C4dMattesMutualInfoParameters;
+type C4dMattesMutualInfoParamsDictTagged = Required<Pick<C4dMattesMutualInfoParamsDict, '@type'>> & C4dMattesMutualInfoParamsDict;
 
 
-interface C4dMeanSquareParameters {
+interface C4dMeanSquareParamsDict {
     "@type"?: "mean_square";
     "mean_square": string;
 }
-type C4dMeanSquareParametersTagged = Required<Pick<C4dMeanSquareParameters, '@type'>> & C4dMeanSquareParameters;
+type C4dMeanSquareParamsDictTagged = Required<Pick<C4dMeanSquareParamsDict, '@type'>> & C4dMeanSquareParamsDict;
 
 
-interface C4dMultiplyParameters {
+interface C4dMultiplyParamsDict {
     "@type"?: "multiply";
     "multiply": string;
 }
-type C4dMultiplyParametersTagged = Required<Pick<C4dMultiplyParameters, '@type'>> & C4dMultiplyParameters;
+type C4dMultiplyParamsDictTagged = Required<Pick<C4dMultiplyParamsDict, '@type'>> & C4dMultiplyParamsDict;
 
 
-interface C4dNormalizedCrossCorrelationParameters {
+interface C4dNormalizedCrossCorrelationParamsDict {
     "@type"?: "normalized_cross_correlation";
     "normalized_cross_correlation": string;
 }
-type C4dNormalizedCrossCorrelationParametersTagged = Required<Pick<C4dNormalizedCrossCorrelationParameters, '@type'>> & C4dNormalizedCrossCorrelationParameters;
+type C4dNormalizedCrossCorrelationParamsDictTagged = Required<Pick<C4dNormalizedCrossCorrelationParamsDict, '@type'>> & C4dNormalizedCrossCorrelationParamsDict;
 
 
-interface C4dNormalizedCorrelationParameters {
+interface C4dNormalizedCorrelationParamsDict {
     "@type"?: "normalized_correlation";
     "normalized_correlation": string;
 }
-type C4dNormalizedCorrelationParametersTagged = Required<Pick<C4dNormalizedCorrelationParameters, '@type'>> & C4dNormalizedCorrelationParameters;
+type C4dNormalizedCorrelationParamsDictTagged = Required<Pick<C4dNormalizedCorrelationParamsDict, '@type'>> & C4dNormalizedCorrelationParamsDict;
 
 
-interface C4dNormalizedMutualInfoParameters {
+interface C4dNormalizedMutualInfoParamsDict {
     "@type"?: "normalized_mutual_info";
     "normalized_mutual_info": string;
 }
-type C4dNormalizedMutualInfoParametersTagged = Required<Pick<C4dNormalizedMutualInfoParameters, '@type'>> & C4dNormalizedMutualInfoParameters;
+type C4dNormalizedMutualInfoParamsDictTagged = Required<Pick<C4dNormalizedMutualInfoParamsDict, '@type'>> & C4dNormalizedMutualInfoParamsDict;
 
 
-interface C4dNoiseGaussianParameters {
+interface C4dNoiseGaussianParamsDict {
     "@type"?: "noise_gaussian";
     "noise_gaussian": string;
 }
-type C4dNoiseGaussianParametersTagged = Required<Pick<C4dNoiseGaussianParameters, '@type'>> & C4dNoiseGaussianParameters;
+type C4dNoiseGaussianParamsDictTagged = Required<Pick<C4dNoiseGaussianParamsDict, '@type'>> & C4dNoiseGaussianParamsDict;
 
 
-interface C4dNoisePoissonParameters {
+interface C4dNoisePoissonParamsDict {
     "@type"?: "noise_poisson";
     "noise_poisson": string;
 }
-type C4dNoisePoissonParametersTagged = Required<Pick<C4dNoisePoissonParameters, '@type'>> & C4dNoisePoissonParameters;
+type C4dNoisePoissonParamsDictTagged = Required<Pick<C4dNoisePoissonParamsDict, '@type'>> & C4dNoisePoissonParamsDict;
 
 
-interface C4dNoiseSpeckleParameters {
+interface C4dNoiseSpeckleParamsDict {
     "@type"?: "noise_speckle";
     "noise_speckle": string;
 }
-type C4dNoiseSpeckleParametersTagged = Required<Pick<C4dNoiseSpeckleParameters, '@type'>> & C4dNoiseSpeckleParameters;
+type C4dNoiseSpeckleParamsDictTagged = Required<Pick<C4dNoiseSpeckleParamsDict, '@type'>> & C4dNoiseSpeckleParamsDict;
 
 
-interface C4dNoiseSaltPepperParameters {
+interface C4dNoiseSaltPepperParamsDict {
     "@type"?: "noise_salt_pepper";
     "noise_salt_pepper": string;
 }
-type C4dNoiseSaltPepperParametersTagged = Required<Pick<C4dNoiseSaltPepperParameters, '@type'>> & C4dNoiseSaltPepperParameters;
+type C4dNoiseSaltPepperParamsDictTagged = Required<Pick<C4dNoiseSaltPepperParamsDict, '@type'>> & C4dNoiseSaltPepperParamsDict;
 
 
-interface C4dNoMulticomponentSplitParameters {
+interface C4dNoMulticomponentSplitParamsDict {
     "@type"?: "no_multicomponent_split";
     "no_multicomponent_split": string;
 }
-type C4dNoMulticomponentSplitParametersTagged = Required<Pick<C4dNoMulticomponentSplitParameters, '@type'>> & C4dNoMulticomponentSplitParameters;
+type C4dNoMulticomponentSplitParamsDictTagged = Required<Pick<C4dNoMulticomponentSplitParamsDict, '@type'>> & C4dNoMulticomponentSplitParamsDict;
 
 
-interface C4dNormalizeLocalWindowParameters {
+interface C4dNormalizeLocalWindowParamsDict {
     "@type"?: "normalize_local_window";
     "normalize_local_window": string;
 }
-type C4dNormalizeLocalWindowParametersTagged = Required<Pick<C4dNormalizeLocalWindowParameters, '@type'>> & C4dNormalizeLocalWindowParameters;
+type C4dNormalizeLocalWindowParamsDictTagged = Required<Pick<C4dNormalizeLocalWindowParamsDict, '@type'>> & C4dNormalizeLocalWindowParamsDict;
 
 
-interface C4dNormpdfParameters {
+interface C4dNormpdfParamsDict {
     "@type"?: "normpdf";
     "normpdf": string;
 }
-type C4dNormpdfParametersTagged = Required<Pick<C4dNormpdfParameters, '@type'>> & C4dNormpdfParameters;
+type C4dNormpdfParamsDictTagged = Required<Pick<C4dNormpdfParamsDict, '@type'>> & C4dNormpdfParamsDict;
 
 
-interface C4dNoroundParameters {
+interface C4dNoroundParamsDict {
     "@type"?: "noround";
     "noround": string;
 }
-type C4dNoroundParametersTagged = Required<Pick<C4dNoroundParameters, '@type'>> & C4dNoroundParameters;
+type C4dNoroundParamsDictTagged = Required<Pick<C4dNoroundParamsDict, '@type'>> & C4dNoroundParamsDict;
 
 
-interface C4dNospmParameters {
+interface C4dNospmParamsDict {
     "@type"?: "nospm";
     "nospm": string;
 }
-type C4dNospmParametersTagged = Required<Pick<C4dNospmParameters, '@type'>> & C4dNospmParameters;
+type C4dNospmParamsDictTagged = Required<Pick<C4dNospmParamsDict, '@type'>> & C4dNospmParamsDict;
 
 
-interface C4dOutputParameters {
+interface C4dOutputParamsDict {
     "@type"?: "output";
     "output": string;
 }
-type C4dOutputParametersTagged = Required<Pick<C4dOutputParameters, '@type'>> & C4dOutputParameters;
+type C4dOutputParamsDictTagged = Required<Pick<C4dOutputParamsDict, '@type'>> & C4dOutputParamsDict;
 
 
-interface C4dOutputMulticomponentParameters {
+interface C4dOutputMulticomponentParamsDict {
     "@type"?: "output_multicomponent";
     "output_multicomponent": string;
 }
-type C4dOutputMulticomponentParametersTagged = Required<Pick<C4dOutputMulticomponentParameters, '@type'>> & C4dOutputMulticomponentParameters;
+type C4dOutputMulticomponentParamsDictTagged = Required<Pick<C4dOutputMulticomponentParamsDict, '@type'>> & C4dOutputMulticomponentParamsDict;
 
 
-interface C4dOutputMultipleMulticomponentParameters {
+interface C4dOutputMultipleMulticomponentParamsDict {
     "@type"?: "output_multiple_multicomponent";
     "output_multiple_multicomponent": string;
 }
-type C4dOutputMultipleMulticomponentParametersTagged = Required<Pick<C4dOutputMultipleMulticomponentParameters, '@type'>> & C4dOutputMultipleMulticomponentParameters;
+type C4dOutputMultipleMulticomponentParamsDictTagged = Required<Pick<C4dOutputMultipleMulticomponentParamsDict, '@type'>> & C4dOutputMultipleMulticomponentParamsDict;
 
 
-interface C4dOrientParameters {
+interface C4dOrientParamsDict {
     "@type"?: "orient";
     "orient": string;
 }
-type C4dOrientParametersTagged = Required<Pick<C4dOrientParameters, '@type'>> & C4dOrientParameters;
+type C4dOrientParamsDictTagged = Required<Pick<C4dOrientParamsDict, '@type'>> & C4dOrientParamsDict;
 
 
-interface C4dOutputMultipleParameters {
+interface C4dOutputMultipleParamsDict {
     "@type"?: "output_multiple";
     "output_multiple": string;
 }
-type C4dOutputMultipleParametersTagged = Required<Pick<C4dOutputMultipleParameters, '@type'>> & C4dOutputMultipleParameters;
+type C4dOutputMultipleParamsDictTagged = Required<Pick<C4dOutputMultipleParamsDict, '@type'>> & C4dOutputMultipleParamsDict;
 
 
-interface C4dOrient1Parameters {
+interface C4dOrient1ParamsDict {
     "@type"?: "orient_1";
     "orient": string;
 }
-type C4dOrient1ParametersTagged = Required<Pick<C4dOrient1Parameters, '@type'>> & C4dOrient1Parameters;
+type C4dOrient1ParamsDictTagged = Required<Pick<C4dOrient1ParamsDict, '@type'>> & C4dOrient1ParamsDict;
 
 
-interface C4dOriginParameters {
+interface C4dOriginParamsDict {
     "@type"?: "origin";
     "origin": string;
 }
-type C4dOriginParametersTagged = Required<Pick<C4dOriginParameters, '@type'>> & C4dOriginParameters;
+type C4dOriginParamsDictTagged = Required<Pick<C4dOriginParamsDict, '@type'>> & C4dOriginParamsDict;
 
 
-interface C4dOriginVoxelParameters {
+interface C4dOriginVoxelParamsDict {
     "@type"?: "origin_voxel";
     "origin_voxel": string;
 }
-type C4dOriginVoxelParametersTagged = Required<Pick<C4dOriginVoxelParameters, '@type'>> & C4dOriginVoxelParameters;
+type C4dOriginVoxelParamsDictTagged = Required<Pick<C4dOriginVoxelParamsDict, '@type'>> & C4dOriginVoxelParamsDict;
 
 
-interface C4dOriginVoxelCoordParameters {
+interface C4dOriginVoxelCoordParamsDict {
     "@type"?: "origin_voxel_coord";
     "origin_voxel_coord": string;
 }
-type C4dOriginVoxelCoordParametersTagged = Required<Pick<C4dOriginVoxelCoordParameters, '@type'>> & C4dOriginVoxelCoordParameters;
+type C4dOriginVoxelCoordParamsDictTagged = Required<Pick<C4dOriginVoxelCoordParamsDict, '@type'>> & C4dOriginVoxelCoordParamsDict;
 
 
-interface C4dOverlapParameters {
+interface C4dOverlapParamsDict {
     "@type"?: "overlap";
     "overlap": string;
 }
-type C4dOverlapParametersTagged = Required<Pick<C4dOverlapParameters, '@type'>> & C4dOverlapParameters;
+type C4dOverlapParamsDictTagged = Required<Pick<C4dOverlapParamsDict, '@type'>> & C4dOverlapParamsDict;
 
 
-interface C4dOverlayLabelImageParameters {
+interface C4dOverlayLabelImageParamsDict {
     "@type"?: "overlay_label_image";
     "overlay_label_image": string;
 }
-type C4dOverlayLabelImageParametersTagged = Required<Pick<C4dOverlayLabelImageParameters, '@type'>> & C4dOverlayLabelImageParameters;
+type C4dOverlayLabelImageParamsDictTagged = Required<Pick<C4dOverlayLabelImageParamsDict, '@type'>> & C4dOverlayLabelImageParamsDict;
 
 
-interface C4dPadParameters {
+interface C4dPadParamsDict {
     "@type"?: "pad";
     "pad": string;
 }
-type C4dPadParametersTagged = Required<Pick<C4dPadParameters, '@type'>> & C4dPadParameters;
+type C4dPadParamsDictTagged = Required<Pick<C4dPadParamsDict, '@type'>> & C4dPadParamsDict;
 
 
-interface C4dPadToParameters {
+interface C4dPadToParamsDict {
     "@type"?: "pad_to";
     "pad_to": string;
 }
-type C4dPadToParametersTagged = Required<Pick<C4dPadToParameters, '@type'>> & C4dPadToParameters;
+type C4dPadToParamsDictTagged = Required<Pick<C4dPadToParamsDict, '@type'>> & C4dPadToParamsDict;
 
 
-interface C4dPcaParameters {
+interface C4dPcaParamsDict {
     "@type"?: "pca";
     "pca": string;
 }
-type C4dPcaParametersTagged = Required<Pick<C4dPcaParameters, '@type'>> & C4dPcaParameters;
+type C4dPcaParamsDictTagged = Required<Pick<C4dPcaParamsDict, '@type'>> & C4dPcaParamsDict;
 
 
-interface C4dPercentIntensityModeParameters {
+interface C4dPercentIntensityModeParamsDict {
     "@type"?: "percent_intensity_mode";
     "percent_intensity_mode": string;
 }
-type C4dPercentIntensityModeParametersTagged = Required<Pick<C4dPercentIntensityModeParameters, '@type'>> & C4dPercentIntensityModeParameters;
+type C4dPercentIntensityModeParamsDictTagged = Required<Pick<C4dPercentIntensityModeParamsDict, '@type'>> & C4dPercentIntensityModeParamsDict;
 
 
-interface C4dPixelParameters {
+interface C4dPixelParamsDict {
     "@type"?: "pixel";
     "pixel": string;
 }
-type C4dPixelParametersTagged = Required<Pick<C4dPixelParameters, '@type'>> & C4dPixelParameters;
+type C4dPixelParamsDictTagged = Required<Pick<C4dPixelParamsDict, '@type'>> & C4dPixelParamsDict;
 
 
-interface C4dPopParameters {
+interface C4dPopParamsDict {
     "@type"?: "pop";
     "pop": string;
 }
-type C4dPopParametersTagged = Required<Pick<C4dPopParameters, '@type'>> & C4dPopParameters;
+type C4dPopParamsDictTagged = Required<Pick<C4dPopParamsDict, '@type'>> & C4dPopParamsDict;
 
 
-interface C4dPopasParameters {
+interface C4dPopasParamsDict {
     "@type"?: "popas";
     "popas": string;
 }
-type C4dPopasParametersTagged = Required<Pick<C4dPopasParameters, '@type'>> & C4dPopasParameters;
+type C4dPopasParamsDictTagged = Required<Pick<C4dPopasParamsDict, '@type'>> & C4dPopasParamsDict;
 
 
-interface C4dProbeParameters {
+interface C4dProbeParamsDict {
     "@type"?: "probe";
     "probe": string;
 }
-type C4dProbeParametersTagged = Required<Pick<C4dProbeParameters, '@type'>> & C4dProbeParameters;
+type C4dProbeParamsDictTagged = Required<Pick<C4dProbeParamsDict, '@type'>> & C4dProbeParamsDict;
 
 
-interface C4dPushParameters {
+interface C4dPushParamsDict {
     "@type"?: "push";
     "push": string;
 }
-type C4dPushParametersTagged = Required<Pick<C4dPushParameters, '@type'>> & C4dPushParameters;
+type C4dPushParamsDictTagged = Required<Pick<C4dPushParamsDict, '@type'>> & C4dPushParamsDict;
 
 
-interface C4dRankParameters {
+interface C4dRankParamsDict {
     "@type"?: "rank";
     "rank": string;
 }
-type C4dRankParametersTagged = Required<Pick<C4dRankParameters, '@type'>> & C4dRankParameters;
+type C4dRankParamsDictTagged = Required<Pick<C4dRankParamsDict, '@type'>> & C4dRankParamsDict;
 
 
-interface C4dReciprocalParameters {
+interface C4dReciprocalParamsDict {
     "@type"?: "reciprocal";
     "reciprocal": string;
 }
-type C4dReciprocalParametersTagged = Required<Pick<C4dReciprocalParameters, '@type'>> & C4dReciprocalParameters;
+type C4dReciprocalParamsDictTagged = Required<Pick<C4dReciprocalParamsDict, '@type'>> & C4dReciprocalParamsDict;
 
 
-interface C4dRegionParameters {
+interface C4dRegionParamsDict {
     "@type"?: "region";
     "region": string;
 }
-type C4dRegionParametersTagged = Required<Pick<C4dRegionParameters, '@type'>> & C4dRegionParameters;
+type C4dRegionParamsDictTagged = Required<Pick<C4dRegionParamsDict, '@type'>> & C4dRegionParamsDict;
 
 
-interface C4dReorderParameters {
+interface C4dReorderParamsDict {
     "@type"?: "reorder";
     "reorder": string;
 }
-type C4dReorderParametersTagged = Required<Pick<C4dReorderParameters, '@type'>> & C4dReorderParameters;
+type C4dReorderParamsDictTagged = Required<Pick<C4dReorderParamsDict, '@type'>> & C4dReorderParamsDict;
 
 
-interface C4dRetainLabelsParameters {
+interface C4dRetainLabelsParamsDict {
     "@type"?: "retain_labels";
     "retain_labels": string;
 }
-type C4dRetainLabelsParametersTagged = Required<Pick<C4dRetainLabelsParameters, '@type'>> & C4dRetainLabelsParameters;
+type C4dRetainLabelsParamsDictTagged = Required<Pick<C4dRetainLabelsParamsDict, '@type'>> & C4dRetainLabelsParamsDict;
 
 
-interface C4dRfApplyParameters {
+interface C4dRfApplyParamsDict {
     "@type"?: "rf_apply";
     "rf_apply": string;
 }
-type C4dRfApplyParametersTagged = Required<Pick<C4dRfApplyParameters, '@type'>> & C4dRfApplyParameters;
+type C4dRfApplyParamsDictTagged = Required<Pick<C4dRfApplyParamsDict, '@type'>> & C4dRfApplyParamsDict;
 
 
-interface C4dRfTrainParameters {
+interface C4dRfTrainParamsDict {
     "@type"?: "rf_train";
     "rf_train": string;
 }
-type C4dRfTrainParametersTagged = Required<Pick<C4dRfTrainParameters, '@type'>> & C4dRfTrainParameters;
+type C4dRfTrainParamsDictTagged = Required<Pick<C4dRfTrainParamsDict, '@type'>> & C4dRfTrainParamsDict;
 
 
-interface C4dRfParamPatchParameters {
+interface C4dRfParamPatchParamsDict {
     "@type"?: "rf_param_patch";
     "rf_param_patch": string;
 }
-type C4dRfParamPatchParametersTagged = Required<Pick<C4dRfParamPatchParameters, '@type'>> & C4dRfParamPatchParameters;
+type C4dRfParamPatchParamsDictTagged = Required<Pick<C4dRfParamPatchParamsDict, '@type'>> & C4dRfParamPatchParamsDict;
 
 
-interface C4dRfParamUsexyzParameters {
+interface C4dRfParamUsexyzParamsDict {
     "@type"?: "rf_param_usexyz";
     "rf_param_usexyz": string;
 }
-type C4dRfParamUsexyzParametersTagged = Required<Pick<C4dRfParamUsexyzParameters, '@type'>> & C4dRfParamUsexyzParameters;
+type C4dRfParamUsexyzParamsDictTagged = Required<Pick<C4dRfParamUsexyzParamsDict, '@type'>> & C4dRfParamUsexyzParamsDict;
 
 
-interface C4dRfParamNousexyzParameters {
+interface C4dRfParamNousexyzParamsDict {
     "@type"?: "rf_param_nousexyz";
     "rf_param_nousexyz": string;
 }
-type C4dRfParamNousexyzParametersTagged = Required<Pick<C4dRfParamNousexyzParameters, '@type'>> & C4dRfParamNousexyzParameters;
+type C4dRfParamNousexyzParamsDictTagged = Required<Pick<C4dRfParamNousexyzParamsDict, '@type'>> & C4dRfParamNousexyzParamsDict;
 
 
-interface C4dRfParamNtreesParameters {
+interface C4dRfParamNtreesParamsDict {
     "@type"?: "rf_param_ntrees";
     "rf_param_ntrees": string;
 }
-type C4dRfParamNtreesParametersTagged = Required<Pick<C4dRfParamNtreesParameters, '@type'>> & C4dRfParamNtreesParameters;
+type C4dRfParamNtreesParamsDictTagged = Required<Pick<C4dRfParamNtreesParamsDict, '@type'>> & C4dRfParamNtreesParamsDict;
 
 
-interface C4dRfParamTreedepthParameters {
+interface C4dRfParamTreedepthParamsDict {
     "@type"?: "rf_param_treedepth";
     "rf_param_treedepth": string;
 }
-type C4dRfParamTreedepthParametersTagged = Required<Pick<C4dRfParamTreedepthParameters, '@type'>> & C4dRfParamTreedepthParameters;
+type C4dRfParamTreedepthParamsDictTagged = Required<Pick<C4dRfParamTreedepthParamsDict, '@type'>> & C4dRfParamTreedepthParamsDict;
 
 
-interface C4dSetSformParameters {
+interface C4dSetSformParamsDict {
     "@type"?: "set_sform";
     "set_sform": string;
 }
-type C4dSetSformParametersTagged = Required<Pick<C4dSetSformParameters, '@type'>> & C4dSetSformParameters;
+type C4dSetSformParamsDictTagged = Required<Pick<C4dSetSformParamsDict, '@type'>> & C4dSetSformParamsDict;
 
 
-interface C4dReplaceParameters {
+interface C4dReplaceParamsDict {
     "@type"?: "replace";
     "replace": string;
 }
-type C4dReplaceParametersTagged = Required<Pick<C4dReplaceParameters, '@type'>> & C4dReplaceParameters;
+type C4dReplaceParamsDictTagged = Required<Pick<C4dReplaceParamsDict, '@type'>> & C4dReplaceParamsDict;
 
 
-interface C4dResampleParameters {
+interface C4dResampleParamsDict {
     "@type"?: "resample";
     "resample": string;
 }
-type C4dResampleParametersTagged = Required<Pick<C4dResampleParameters, '@type'>> & C4dResampleParameters;
+type C4dResampleParamsDictTagged = Required<Pick<C4dResampleParamsDict, '@type'>> & C4dResampleParamsDict;
 
 
-interface C4dResampleIsoParameters {
+interface C4dResampleIsoParamsDict {
     "@type"?: "resample_iso";
     "resample_iso": string;
 }
-type C4dResampleIsoParametersTagged = Required<Pick<C4dResampleIsoParameters, '@type'>> & C4dResampleIsoParameters;
+type C4dResampleIsoParamsDictTagged = Required<Pick<C4dResampleIsoParamsDict, '@type'>> & C4dResampleIsoParamsDict;
 
 
-interface C4dResampleMmParameters {
+interface C4dResampleMmParamsDict {
     "@type"?: "resample_mm";
     "resample_mm": string;
 }
-type C4dResampleMmParametersTagged = Required<Pick<C4dResampleMmParameters, '@type'>> & C4dResampleMmParameters;
+type C4dResampleMmParamsDictTagged = Required<Pick<C4dResampleMmParamsDict, '@type'>> & C4dResampleMmParamsDict;
 
 
-interface C4dResliceItkParameters {
+interface C4dResliceItkParamsDict {
     "@type"?: "reslice_itk";
     "reslice_itk": string;
 }
-type C4dResliceItkParametersTagged = Required<Pick<C4dResliceItkParameters, '@type'>> & C4dResliceItkParameters;
+type C4dResliceItkParamsDictTagged = Required<Pick<C4dResliceItkParamsDict, '@type'>> & C4dResliceItkParamsDict;
 
 
-interface C4dResliceMatrixParameters {
+interface C4dResliceMatrixParamsDict {
     "@type"?: "reslice_matrix";
     "reslice_matrix": string;
 }
-type C4dResliceMatrixParametersTagged = Required<Pick<C4dResliceMatrixParameters, '@type'>> & C4dResliceMatrixParameters;
+type C4dResliceMatrixParamsDictTagged = Required<Pick<C4dResliceMatrixParamsDict, '@type'>> & C4dResliceMatrixParamsDict;
 
 
-interface C4dResliceIdentityParameters {
+interface C4dResliceIdentityParamsDict {
     "@type"?: "reslice_identity";
     "reslice_identity": string;
 }
-type C4dResliceIdentityParametersTagged = Required<Pick<C4dResliceIdentityParameters, '@type'>> & C4dResliceIdentityParameters;
+type C4dResliceIdentityParamsDictTagged = Required<Pick<C4dResliceIdentityParamsDict, '@type'>> & C4dResliceIdentityParamsDict;
 
 
-interface C4dRgb2hsvParameters {
+interface C4dRgb2hsvParamsDict {
     "@type"?: "rgb2hsv";
     "rgb2hsv": string;
 }
-type C4dRgb2hsvParametersTagged = Required<Pick<C4dRgb2hsvParameters, '@type'>> & C4dRgb2hsvParameters;
+type C4dRgb2hsvParamsDictTagged = Required<Pick<C4dRgb2hsvParamsDict, '@type'>> & C4dRgb2hsvParamsDict;
 
 
-interface C4dRmsParameters {
+interface C4dRmsParamsDict {
     "@type"?: "rms";
     "rms": string;
 }
-type C4dRmsParametersTagged = Required<Pick<C4dRmsParameters, '@type'>> & C4dRmsParameters;
+type C4dRmsParamsDictTagged = Required<Pick<C4dRmsParamsDict, '@type'>> & C4dRmsParamsDict;
 
 
-interface C4dRoundParameters {
+interface C4dRoundParamsDict {
     "@type"?: "round";
     "round": string;
 }
-type C4dRoundParametersTagged = Required<Pick<C4dRoundParameters, '@type'>> & C4dRoundParameters;
+type C4dRoundParamsDictTagged = Required<Pick<C4dRoundParamsDict, '@type'>> & C4dRoundParamsDict;
 
 
-interface C4dScaleParameters {
+interface C4dScaleParamsDict {
     "@type"?: "scale";
     "scale": string;
 }
-type C4dScaleParametersTagged = Required<Pick<C4dScaleParameters, '@type'>> & C4dScaleParameters;
+type C4dScaleParamsDictTagged = Required<Pick<C4dScaleParamsDict, '@type'>> & C4dScaleParamsDict;
 
 
-interface C4dSetSform1Parameters {
+interface C4dSetSform1ParamsDict {
     "@type"?: "set_sform_1";
     "set_sform": string;
 }
-type C4dSetSform1ParametersTagged = Required<Pick<C4dSetSform1Parameters, '@type'>> & C4dSetSform1Parameters;
+type C4dSetSform1ParamsDictTagged = Required<Pick<C4dSetSform1ParamsDict, '@type'>> & C4dSetSform1ParamsDict;
 
 
-interface C4dSinParameters {
+interface C4dSinParamsDict {
     "@type"?: "sin";
     "sin": string;
 }
-type C4dSinParametersTagged = Required<Pick<C4dSinParameters, '@type'>> & C4dSinParameters;
+type C4dSinParamsDictTagged = Required<Pick<C4dSinParamsDict, '@type'>> & C4dSinParamsDict;
 
 
-interface C4dSliceParameters {
+interface C4dSliceParamsDict {
     "@type"?: "slice";
     "slice": string;
 }
-type C4dSliceParametersTagged = Required<Pick<C4dSliceParameters, '@type'>> & C4dSliceParameters;
+type C4dSliceParamsDictTagged = Required<Pick<C4dSliceParamsDict, '@type'>> & C4dSliceParamsDict;
 
 
-interface C4dSliceAllParameters {
+interface C4dSliceAllParamsDict {
     "@type"?: "slice_all";
     "slice_all": string;
 }
-type C4dSliceAllParametersTagged = Required<Pick<C4dSliceAllParameters, '@type'>> & C4dSliceAllParameters;
+type C4dSliceAllParamsDictTagged = Required<Pick<C4dSliceAllParamsDict, '@type'>> & C4dSliceAllParamsDict;
 
 
-interface C4dSharpenParameters {
+interface C4dSharpenParamsDict {
     "@type"?: "sharpen";
     "sharpen": string;
 }
-type C4dSharpenParametersTagged = Required<Pick<C4dSharpenParameters, '@type'>> & C4dSharpenParameters;
+type C4dSharpenParamsDictTagged = Required<Pick<C4dSharpenParamsDict, '@type'>> & C4dSharpenParamsDict;
 
 
-interface C4dShiftParameters {
+interface C4dShiftParamsDict {
     "@type"?: "shift";
     "shift": string;
 }
-type C4dShiftParametersTagged = Required<Pick<C4dShiftParameters, '@type'>> & C4dShiftParameters;
+type C4dShiftParamsDictTagged = Required<Pick<C4dShiftParamsDict, '@type'>> & C4dShiftParamsDict;
 
 
-interface C4dSignedDistanceTransformParameters {
+interface C4dSignedDistanceTransformParamsDict {
     "@type"?: "signed_distance_transform";
     "signed_distance_transform": string;
 }
-type C4dSignedDistanceTransformParametersTagged = Required<Pick<C4dSignedDistanceTransformParameters, '@type'>> & C4dSignedDistanceTransformParameters;
+type C4dSignedDistanceTransformParamsDictTagged = Required<Pick<C4dSignedDistanceTransformParamsDict, '@type'>> & C4dSignedDistanceTransformParamsDict;
 
 
-interface C4dSmoothParameters {
+interface C4dSmoothParamsDict {
     "@type"?: "smooth";
     "smooth": string;
 }
-type C4dSmoothParametersTagged = Required<Pick<C4dSmoothParameters, '@type'>> & C4dSmoothParameters;
+type C4dSmoothParamsDictTagged = Required<Pick<C4dSmoothParamsDict, '@type'>> & C4dSmoothParamsDict;
 
 
-interface C4dSmoothFastParameters {
+interface C4dSmoothFastParamsDict {
     "@type"?: "smooth_fast";
     "smooth_fast": string;
 }
-type C4dSmoothFastParametersTagged = Required<Pick<C4dSmoothFastParameters, '@type'>> & C4dSmoothFastParameters;
+type C4dSmoothFastParamsDictTagged = Required<Pick<C4dSmoothFastParamsDict, '@type'>> & C4dSmoothFastParamsDict;
 
 
-interface C4dSpacingParameters {
+interface C4dSpacingParamsDict {
     "@type"?: "spacing";
     "spacing": string;
 }
-type C4dSpacingParametersTagged = Required<Pick<C4dSpacingParameters, '@type'>> & C4dSpacingParameters;
+type C4dSpacingParamsDictTagged = Required<Pick<C4dSpacingParamsDict, '@type'>> & C4dSpacingParamsDict;
 
 
-interface C4dSplitParameters {
+interface C4dSplitParamsDict {
     "@type"?: "split";
     "split": string;
 }
-type C4dSplitParametersTagged = Required<Pick<C4dSplitParameters, '@type'>> & C4dSplitParameters;
+type C4dSplitParamsDictTagged = Required<Pick<C4dSplitParamsDict, '@type'>> & C4dSplitParamsDict;
 
 
-interface C4dSqrtParameters {
+interface C4dSqrtParamsDict {
     "@type"?: "sqrt";
     "sqrt": string;
 }
-type C4dSqrtParametersTagged = Required<Pick<C4dSqrtParameters, '@type'>> & C4dSqrtParameters;
+type C4dSqrtParamsDictTagged = Required<Pick<C4dSqrtParamsDict, '@type'>> & C4dSqrtParamsDict;
 
 
-interface C4dStapleParameters {
+interface C4dStapleParamsDict {
     "@type"?: "staple";
     "staple": string;
 }
-type C4dStapleParametersTagged = Required<Pick<C4dStapleParameters, '@type'>> & C4dStapleParameters;
+type C4dStapleParamsDictTagged = Required<Pick<C4dStapleParamsDict, '@type'>> & C4dStapleParamsDict;
 
 
-interface C4dStructureTensorEigenvaluesParameters {
+interface C4dStructureTensorEigenvaluesParamsDict {
     "@type"?: "structure_tensor_eigenvalues";
     "structure_tensor_eigenvalues": string;
 }
-type C4dStructureTensorEigenvaluesParametersTagged = Required<Pick<C4dStructureTensorEigenvaluesParameters, '@type'>> & C4dStructureTensorEigenvaluesParameters;
+type C4dStructureTensorEigenvaluesParamsDictTagged = Required<Pick<C4dStructureTensorEigenvaluesParamsDict, '@type'>> & C4dStructureTensorEigenvaluesParamsDict;
 
 
-interface C4dSpmParameters {
+interface C4dSpmParamsDict {
     "@type"?: "spm";
     "spm": string;
 }
-type C4dSpmParametersTagged = Required<Pick<C4dSpmParameters, '@type'>> & C4dSpmParameters;
+type C4dSpmParamsDictTagged = Required<Pick<C4dSpmParamsDict, '@type'>> & C4dSpmParamsDict;
 
 
-interface C4dSubtractParameters {
+interface C4dSubtractParamsDict {
     "@type"?: "subtract";
     "subtract": string;
 }
-type C4dSubtractParametersTagged = Required<Pick<C4dSubtractParameters, '@type'>> & C4dSubtractParameters;
+type C4dSubtractParamsDictTagged = Required<Pick<C4dSubtractParamsDict, '@type'>> & C4dSubtractParamsDict;
 
 
-interface C4dSupervoxelParameters {
+interface C4dSupervoxelParamsDict {
     "@type"?: "supervoxel";
     "supervoxel": string;
 }
-type C4dSupervoxelParametersTagged = Required<Pick<C4dSupervoxelParameters, '@type'>> & C4dSupervoxelParameters;
+type C4dSupervoxelParamsDictTagged = Required<Pick<C4dSupervoxelParamsDict, '@type'>> & C4dSupervoxelParamsDict;
 
 
-interface C4dStretchParameters {
+interface C4dStretchParamsDict {
     "@type"?: "stretch";
     "stretch": string;
 }
-type C4dStretchParametersTagged = Required<Pick<C4dStretchParameters, '@type'>> & C4dStretchParameters;
+type C4dStretchParamsDictTagged = Required<Pick<C4dStretchParamsDict, '@type'>> & C4dStretchParamsDict;
 
 
-interface C4dSwapdimParameters {
+interface C4dSwapdimParamsDict {
     "@type"?: "swapdim";
     "swapdim": string;
 }
-type C4dSwapdimParametersTagged = Required<Pick<C4dSwapdimParameters, '@type'>> & C4dSwapdimParameters;
+type C4dSwapdimParamsDictTagged = Required<Pick<C4dSwapdimParamsDict, '@type'>> & C4dSwapdimParamsDict;
 
 
-interface C4dTestImageParameters {
+interface C4dTestImageParamsDict {
     "@type"?: "test_image";
     "test_image": string;
 }
-type C4dTestImageParametersTagged = Required<Pick<C4dTestImageParameters, '@type'>> & C4dTestImageParameters;
+type C4dTestImageParamsDictTagged = Required<Pick<C4dTestImageParamsDict, '@type'>> & C4dTestImageParamsDict;
 
 
-interface C4dTestProbeParameters {
+interface C4dTestProbeParamsDict {
     "@type"?: "test_probe";
     "test_probe": string;
 }
-type C4dTestProbeParametersTagged = Required<Pick<C4dTestProbeParameters, '@type'>> & C4dTestProbeParameters;
+type C4dTestProbeParamsDictTagged = Required<Pick<C4dTestProbeParamsDict, '@type'>> & C4dTestProbeParamsDict;
 
 
-interface C4dThresholdParameters {
+interface C4dThresholdParamsDict {
     "@type"?: "threshold";
     "threshold": string;
 }
-type C4dThresholdParametersTagged = Required<Pick<C4dThresholdParameters, '@type'>> & C4dThresholdParameters;
+type C4dThresholdParamsDictTagged = Required<Pick<C4dThresholdParamsDict, '@type'>> & C4dThresholdParamsDict;
 
 
-interface C4dTileParameters {
+interface C4dTileParamsDict {
     "@type"?: "tile";
     "tile": string;
 }
-type C4dTileParametersTagged = Required<Pick<C4dTileParameters, '@type'>> & C4dTileParameters;
+type C4dTileParamsDictTagged = Required<Pick<C4dTileParamsDict, '@type'>> & C4dTileParamsDict;
 
 
-interface C4dTrimParameters {
+interface C4dTrimParamsDict {
     "@type"?: "trim";
     "trim": string;
 }
-type C4dTrimParametersTagged = Required<Pick<C4dTrimParameters, '@type'>> & C4dTrimParameters;
+type C4dTrimParamsDictTagged = Required<Pick<C4dTrimParamsDict, '@type'>> & C4dTrimParamsDict;
 
 
-interface C4dTrimToSizeParameters {
+interface C4dTrimToSizeParamsDict {
     "@type"?: "trim_to_size";
     "trim_to_size": string;
 }
-type C4dTrimToSizeParametersTagged = Required<Pick<C4dTrimToSizeParameters, '@type'>> & C4dTrimToSizeParameters;
+type C4dTrimToSizeParamsDictTagged = Required<Pick<C4dTrimToSizeParamsDict, '@type'>> & C4dTrimToSizeParamsDict;
 
 
-interface C4dTypeParameters {
+interface C4dTypeParamsDict {
     "@type"?: "type";
     "type": string;
 }
-type C4dTypeParametersTagged = Required<Pick<C4dTypeParameters, '@type'>> & C4dTypeParameters;
+type C4dTypeParamsDictTagged = Required<Pick<C4dTypeParamsDict, '@type'>> & C4dTypeParamsDict;
 
 
-interface C4dVerboseParameters {
+interface C4dVerboseParamsDict {
     "@type"?: "verbose";
     "verbose": string;
 }
-type C4dVerboseParametersTagged = Required<Pick<C4dVerboseParameters, '@type'>> & C4dVerboseParameters;
+type C4dVerboseParamsDictTagged = Required<Pick<C4dVerboseParamsDict, '@type'>> & C4dVerboseParamsDict;
 
 
-interface C4dNoverboseParameters {
+interface C4dNoverboseParamsDict {
     "@type"?: "noverbose";
     "noverbose": string;
 }
-type C4dNoverboseParametersTagged = Required<Pick<C4dNoverboseParameters, '@type'>> & C4dNoverboseParameters;
+type C4dNoverboseParamsDictTagged = Required<Pick<C4dNoverboseParamsDict, '@type'>> & C4dNoverboseParamsDict;
 
 
-interface C4dVersionParameters {
+interface C4dVersionParamsDict {
     "@type"?: "version";
     "version": string;
 }
-type C4dVersionParametersTagged = Required<Pick<C4dVersionParameters, '@type'>> & C4dVersionParameters;
+type C4dVersionParamsDictTagged = Required<Pick<C4dVersionParamsDict, '@type'>> & C4dVersionParamsDict;
 
 
-interface C4dVoteParameters {
+interface C4dVoteParamsDict {
     "@type"?: "vote";
     "vote": string;
 }
-type C4dVoteParametersTagged = Required<Pick<C4dVoteParameters, '@type'>> & C4dVoteParameters;
+type C4dVoteParamsDictTagged = Required<Pick<C4dVoteParamsDict, '@type'>> & C4dVoteParamsDict;
 
 
-interface C4dVoteMrfParameters {
+interface C4dVoteMrfParamsDict {
     "@type"?: "vote_mrf";
     "vote_mrf": string;
 }
-type C4dVoteMrfParametersTagged = Required<Pick<C4dVoteMrfParameters, '@type'>> & C4dVoteMrfParameters;
+type C4dVoteMrfParamsDictTagged = Required<Pick<C4dVoteMrfParamsDict, '@type'>> & C4dVoteMrfParamsDict;
 
 
-interface C4dVoteLabelParameters {
+interface C4dVoteLabelParamsDict {
     "@type"?: "vote_label";
     "vote_label": string;
 }
-type C4dVoteLabelParametersTagged = Required<Pick<C4dVoteLabelParameters, '@type'>> & C4dVoteLabelParameters;
+type C4dVoteLabelParamsDictTagged = Required<Pick<C4dVoteLabelParamsDict, '@type'>> & C4dVoteLabelParamsDict;
 
 
-interface C4dVoxelSumParameters {
+interface C4dVoxelSumParamsDict {
     "@type"?: "voxel_sum";
     "voxel_sum": string;
 }
-type C4dVoxelSumParametersTagged = Required<Pick<C4dVoxelSumParameters, '@type'>> & C4dVoxelSumParameters;
+type C4dVoxelSumParamsDictTagged = Required<Pick<C4dVoxelSumParamsDict, '@type'>> & C4dVoxelSumParamsDict;
 
 
-interface C4dVoxelIntegralParameters {
+interface C4dVoxelIntegralParamsDict {
     "@type"?: "voxel_integral";
     "voxel_integral": string;
 }
-type C4dVoxelIntegralParametersTagged = Required<Pick<C4dVoxelIntegralParameters, '@type'>> & C4dVoxelIntegralParameters;
+type C4dVoxelIntegralParamsDictTagged = Required<Pick<C4dVoxelIntegralParamsDict, '@type'>> & C4dVoxelIntegralParamsDict;
 
 
-interface C4dVoxelwiseRegressionParameters {
+interface C4dVoxelwiseRegressionParamsDict {
     "@type"?: "voxelwise_regression";
     "voxelwise_regression": string;
 }
-type C4dVoxelwiseRegressionParametersTagged = Required<Pick<C4dVoxelwiseRegressionParameters, '@type'>> & C4dVoxelwiseRegressionParameters;
+type C4dVoxelwiseRegressionParamsDictTagged = Required<Pick<C4dVoxelwiseRegressionParamsDict, '@type'>> & C4dVoxelwiseRegressionParamsDict;
 
 
-interface C4dWarpParameters {
+interface C4dWarpParamsDict {
     "@type"?: "warp";
     "warp": string;
 }
-type C4dWarpParametersTagged = Required<Pick<C4dWarpParameters, '@type'>> & C4dWarpParameters;
+type C4dWarpParamsDictTagged = Required<Pick<C4dWarpParamsDict, '@type'>> & C4dWarpParamsDict;
 
 
-interface C4dWarpLabelParameters {
+interface C4dWarpLabelParamsDict {
     "@type"?: "warp_label";
     "warp_label": string;
 }
-type C4dWarpLabelParametersTagged = Required<Pick<C4dWarpLabelParameters, '@type'>> & C4dWarpLabelParameters;
+type C4dWarpLabelParamsDictTagged = Required<Pick<C4dWarpLabelParamsDict, '@type'>> & C4dWarpLabelParamsDict;
 
 
-interface C4dWrapParameters {
+interface C4dWrapParamsDict {
     "@type"?: "wrap";
     "wrap": string;
 }
-type C4dWrapParametersTagged = Required<Pick<C4dWrapParameters, '@type'>> & C4dWrapParameters;
+type C4dWrapParamsDictTagged = Required<Pick<C4dWrapParamsDict, '@type'>> & C4dWrapParamsDict;
 
 
-interface C4dWeightedSumParameters {
+interface C4dWeightedSumParamsDict {
     "@type"?: "weighted_sum";
     "weighted_sum": string;
 }
-type C4dWeightedSumParametersTagged = Required<Pick<C4dWeightedSumParameters, '@type'>> & C4dWeightedSumParameters;
+type C4dWeightedSumParamsDictTagged = Required<Pick<C4dWeightedSumParamsDict, '@type'>> & C4dWeightedSumParamsDict;
 
 
-interface C4dWeightedSumVoxelwiseParameters {
+interface C4dWeightedSumVoxelwiseParamsDict {
     "@type"?: "weighted_sum_voxelwise";
     "weighted_sum_voxelwise": string;
 }
-type C4dWeightedSumVoxelwiseParametersTagged = Required<Pick<C4dWeightedSumVoxelwiseParameters, '@type'>> & C4dWeightedSumVoxelwiseParameters;
+type C4dWeightedSumVoxelwiseParamsDictTagged = Required<Pick<C4dWeightedSumVoxelwiseParamsDict, '@type'>> & C4dWeightedSumVoxelwiseParamsDict;
 
 
-interface C4dParameters {
+interface C4dParamsDict {
     "@type"?: "c3d/c4d";
     "input": Array<InputPathType>;
-    "operations": Array<C4dAccumParametersTagged | C4dAcosParametersTagged | C4dAddParametersTagged | C4dAlignLandmarksParametersTagged | C4dAnisotropicDiffusionParametersTagged | C4dAntialiasParametersTagged | C4dSetParametersTagged | C4dAsinParametersTagged | C4dAtan2ParametersTagged | C4dBackgroundParametersTagged | C4dN4BiasCorrectionParametersTagged | C4dBinarizeParametersTagged | C4dCannyParametersTagged | C4dCeilParametersTagged | C4dCentroidParametersTagged | C4dCentroidMarkParametersTagged | C4dConnectedComponentsParametersTagged | C4dClearParametersTagged | C4dClipParametersTagged | C4dColorMapParametersTagged | C4dCompressParametersTagged | C4dNoCompressParametersTagged | C4dConvParametersTagged | C4dCoordinateMapVoxelParametersTagged | C4dCoordinateMapPhysicalParametersTagged | C4dCopyTransformParametersTagged | C4dCosParametersTagged | C4dCreateParametersTagged | C4dDicomSeriesListParametersTagged | C4dDicomSeriesReadParametersTagged | C4dDilateParametersTagged | C4dDivideParametersTagged | C4dDuplicateParametersTagged | C4dEndaccumParametersTagged | C4dEndforParametersTagged | C4dErodeParametersTagged | C4dErfParametersTagged | C4dExpParametersTagged | C4dExportPatchesParametersTagged | C4dExportPatchesAugParametersTagged | C4dExtrudeSegParametersTagged | C4dFillBackgroundWithNoiseParametersTagged | C4dFftParametersTagged | C4dFlipParametersTagged | C4dFloorParametersTagged | C4dForeachParametersTagged | C4dForeachCompParametersTagged | C4dGlmParametersTagged | C4dGradientParametersTagged | C4dHelpParametersTagged | C4dHolefillParametersTagged | C4dHessianEigenvaluesParametersTagged | C4dHessianObjectnessParametersTagged | C4dHistogramMatchParametersTagged | C4dInfoParametersTagged | C4dInfoFullParametersTagged | C4dInsertParametersTagged | C4dInterpolationParametersTagged | C4dIterationsParametersTagged | C4dLabelOverlapParametersTagged | C4dLabelStatisticsParametersTagged | C4dLandmarksToSpheresParametersTagged | C4dLaplacianParametersTagged | C4dLevelsetParametersTagged | C4dLevelsetCurvatureParametersTagged | C4dLevelsetAdvectionParametersTagged | C4dLogParametersTagged | C4dLog10ParametersTagged | C4dManualParametersTagged | C4dMatchBoundingBoxParametersTagged | C4dMaximumParametersTagged | C4dMulticomponentSplitParametersTagged | C4dMeanParametersTagged | C4dMedianFilterParametersTagged | C4dMergeParametersTagged | C4dMeanFilterParametersTagged | C4dMutualInfoParametersTagged | C4dMinimumParametersTagged | C4dMixtureModelParametersTagged | C4dMomentsParametersTagged | C4dMattesMutualInfoParametersTagged | C4dMeanSquareParametersTagged | C4dMultiplyParametersTagged | C4dNormalizedCrossCorrelationParametersTagged | C4dNormalizedCorrelationParametersTagged | C4dNormalizedMutualInfoParametersTagged | C4dNoiseGaussianParametersTagged | C4dNoisePoissonParametersTagged | C4dNoiseSpeckleParametersTagged | C4dNoiseSaltPepperParametersTagged | C4dNoMulticomponentSplitParametersTagged | C4dNormalizeLocalWindowParametersTagged | C4dNormpdfParametersTagged | C4dNoroundParametersTagged | C4dNospmParametersTagged | C4dOutputParametersTagged | C4dOutputMulticomponentParametersTagged | C4dOutputMultipleMulticomponentParametersTagged | C4dOrientParametersTagged | C4dOutputMultipleParametersTagged | C4dOrient1ParametersTagged | C4dOriginParametersTagged | C4dOriginVoxelParametersTagged | C4dOriginVoxelCoordParametersTagged | C4dOverlapParametersTagged | C4dOverlayLabelImageParametersTagged | C4dPadParametersTagged | C4dPadToParametersTagged | C4dPcaParametersTagged | C4dPercentIntensityModeParametersTagged | C4dPixelParametersTagged | C4dPopParametersTagged | C4dPopasParametersTagged | C4dProbeParametersTagged | C4dPushParametersTagged | C4dRankParametersTagged | C4dReciprocalParametersTagged | C4dRegionParametersTagged | C4dReorderParametersTagged | C4dRetainLabelsParametersTagged | C4dRfApplyParametersTagged | C4dRfTrainParametersTagged | C4dRfParamPatchParametersTagged | C4dRfParamUsexyzParametersTagged | C4dRfParamNousexyzParametersTagged | C4dRfParamNtreesParametersTagged | C4dRfParamTreedepthParametersTagged | C4dSetSformParametersTagged | C4dReplaceParametersTagged | C4dResampleParametersTagged | C4dResampleIsoParametersTagged | C4dResampleMmParametersTagged | C4dResliceItkParametersTagged | C4dResliceMatrixParametersTagged | C4dResliceIdentityParametersTagged | C4dRgb2hsvParametersTagged | C4dRmsParametersTagged | C4dRoundParametersTagged | C4dScaleParametersTagged | C4dSetSform1ParametersTagged | C4dSinParametersTagged | C4dSliceParametersTagged | C4dSliceAllParametersTagged | C4dSharpenParametersTagged | C4dShiftParametersTagged | C4dSignedDistanceTransformParametersTagged | C4dSmoothParametersTagged | C4dSmoothFastParametersTagged | C4dSpacingParametersTagged | C4dSplitParametersTagged | C4dSqrtParametersTagged | C4dStapleParametersTagged | C4dStructureTensorEigenvaluesParametersTagged | C4dSpmParametersTagged | C4dSubtractParametersTagged | C4dSupervoxelParametersTagged | C4dStretchParametersTagged | C4dSwapdimParametersTagged | C4dTestImageParametersTagged | C4dTestProbeParametersTagged | C4dThresholdParametersTagged | C4dTileParametersTagged | C4dTrimParametersTagged | C4dTrimToSizeParametersTagged | C4dTypeParametersTagged | C4dVerboseParametersTagged | C4dNoverboseParametersTagged | C4dVersionParametersTagged | C4dVoteParametersTagged | C4dVoteMrfParametersTagged | C4dVoteLabelParametersTagged | C4dVoxelSumParametersTagged | C4dVoxelIntegralParametersTagged | C4dVoxelwiseRegressionParametersTagged | C4dWarpParametersTagged | C4dWarpLabelParametersTagged | C4dWrapParametersTagged | C4dWeightedSumParametersTagged | C4dWeightedSumVoxelwiseParametersTagged>;
+    "operations": Array<C4dAccumParamsDictTagged | C4dAcosParamsDictTagged | C4dAddParamsDictTagged | C4dAlignLandmarksParamsDictTagged | C4dAnisotropicDiffusionParamsDictTagged | C4dAntialiasParamsDictTagged | C4dSetParamsDictTagged | C4dAsinParamsDictTagged | C4dAtan2ParamsDictTagged | C4dBackgroundParamsDictTagged | C4dN4BiasCorrectionParamsDictTagged | C4dBinarizeParamsDictTagged | C4dCannyParamsDictTagged | C4dCeilParamsDictTagged | C4dCentroidParamsDictTagged | C4dCentroidMarkParamsDictTagged | C4dConnectedComponentsParamsDictTagged | C4dClearParamsDictTagged | C4dClipParamsDictTagged | C4dColorMapParamsDictTagged | C4dCompressParamsDictTagged | C4dNoCompressParamsDictTagged | C4dConvParamsDictTagged | C4dCoordinateMapVoxelParamsDictTagged | C4dCoordinateMapPhysicalParamsDictTagged | C4dCopyTransformParamsDictTagged | C4dCosParamsDictTagged | C4dCreateParamsDictTagged | C4dDicomSeriesListParamsDictTagged | C4dDicomSeriesReadParamsDictTagged | C4dDilateParamsDictTagged | C4dDivideParamsDictTagged | C4dDuplicateParamsDictTagged | C4dEndaccumParamsDictTagged | C4dEndforParamsDictTagged | C4dErodeParamsDictTagged | C4dErfParamsDictTagged | C4dExpParamsDictTagged | C4dExportPatchesParamsDictTagged | C4dExportPatchesAugParamsDictTagged | C4dExtrudeSegParamsDictTagged | C4dFillBackgroundWithNoiseParamsDictTagged | C4dFftParamsDictTagged | C4dFlipParamsDictTagged | C4dFloorParamsDictTagged | C4dForeachParamsDictTagged | C4dForeachCompParamsDictTagged | C4dGlmParamsDictTagged | C4dGradientParamsDictTagged | C4dHelpParamsDictTagged | C4dHolefillParamsDictTagged | C4dHessianEigenvaluesParamsDictTagged | C4dHessianObjectnessParamsDictTagged | C4dHistogramMatchParamsDictTagged | C4dInfoParamsDictTagged | C4dInfoFullParamsDictTagged | C4dInsertParamsDictTagged | C4dInterpolationParamsDictTagged | C4dIterationsParamsDictTagged | C4dLabelOverlapParamsDictTagged | C4dLabelStatisticsParamsDictTagged | C4dLandmarksToSpheresParamsDictTagged | C4dLaplacianParamsDictTagged | C4dLevelsetParamsDictTagged | C4dLevelsetCurvatureParamsDictTagged | C4dLevelsetAdvectionParamsDictTagged | C4dLogParamsDictTagged | C4dLog10ParamsDictTagged | C4dManualParamsDictTagged | C4dMatchBoundingBoxParamsDictTagged | C4dMaximumParamsDictTagged | C4dMulticomponentSplitParamsDictTagged | C4dMeanParamsDictTagged | C4dMedianFilterParamsDictTagged | C4dMergeParamsDictTagged | C4dMeanFilterParamsDictTagged | C4dMutualInfoParamsDictTagged | C4dMinimumParamsDictTagged | C4dMixtureModelParamsDictTagged | C4dMomentsParamsDictTagged | C4dMattesMutualInfoParamsDictTagged | C4dMeanSquareParamsDictTagged | C4dMultiplyParamsDictTagged | C4dNormalizedCrossCorrelationParamsDictTagged | C4dNormalizedCorrelationParamsDictTagged | C4dNormalizedMutualInfoParamsDictTagged | C4dNoiseGaussianParamsDictTagged | C4dNoisePoissonParamsDictTagged | C4dNoiseSpeckleParamsDictTagged | C4dNoiseSaltPepperParamsDictTagged | C4dNoMulticomponentSplitParamsDictTagged | C4dNormalizeLocalWindowParamsDictTagged | C4dNormpdfParamsDictTagged | C4dNoroundParamsDictTagged | C4dNospmParamsDictTagged | C4dOutputParamsDictTagged | C4dOutputMulticomponentParamsDictTagged | C4dOutputMultipleMulticomponentParamsDictTagged | C4dOrientParamsDictTagged | C4dOutputMultipleParamsDictTagged | C4dOrient1ParamsDictTagged | C4dOriginParamsDictTagged | C4dOriginVoxelParamsDictTagged | C4dOriginVoxelCoordParamsDictTagged | C4dOverlapParamsDictTagged | C4dOverlayLabelImageParamsDictTagged | C4dPadParamsDictTagged | C4dPadToParamsDictTagged | C4dPcaParamsDictTagged | C4dPercentIntensityModeParamsDictTagged | C4dPixelParamsDictTagged | C4dPopParamsDictTagged | C4dPopasParamsDictTagged | C4dProbeParamsDictTagged | C4dPushParamsDictTagged | C4dRankParamsDictTagged | C4dReciprocalParamsDictTagged | C4dRegionParamsDictTagged | C4dReorderParamsDictTagged | C4dRetainLabelsParamsDictTagged | C4dRfApplyParamsDictTagged | C4dRfTrainParamsDictTagged | C4dRfParamPatchParamsDictTagged | C4dRfParamUsexyzParamsDictTagged | C4dRfParamNousexyzParamsDictTagged | C4dRfParamNtreesParamsDictTagged | C4dRfParamTreedepthParamsDictTagged | C4dSetSformParamsDictTagged | C4dReplaceParamsDictTagged | C4dResampleParamsDictTagged | C4dResampleIsoParamsDictTagged | C4dResampleMmParamsDictTagged | C4dResliceItkParamsDictTagged | C4dResliceMatrixParamsDictTagged | C4dResliceIdentityParamsDictTagged | C4dRgb2hsvParamsDictTagged | C4dRmsParamsDictTagged | C4dRoundParamsDictTagged | C4dScaleParamsDictTagged | C4dSetSform1ParamsDictTagged | C4dSinParamsDictTagged | C4dSliceParamsDictTagged | C4dSliceAllParamsDictTagged | C4dSharpenParamsDictTagged | C4dShiftParamsDictTagged | C4dSignedDistanceTransformParamsDictTagged | C4dSmoothParamsDictTagged | C4dSmoothFastParamsDictTagged | C4dSpacingParamsDictTagged | C4dSplitParamsDictTagged | C4dSqrtParamsDictTagged | C4dStapleParamsDictTagged | C4dStructureTensorEigenvaluesParamsDictTagged | C4dSpmParamsDictTagged | C4dSubtractParamsDictTagged | C4dSupervoxelParamsDictTagged | C4dStretchParamsDictTagged | C4dSwapdimParamsDictTagged | C4dTestImageParamsDictTagged | C4dTestProbeParamsDictTagged | C4dThresholdParamsDictTagged | C4dTileParamsDictTagged | C4dTrimParamsDictTagged | C4dTrimToSizeParamsDictTagged | C4dTypeParamsDictTagged | C4dVerboseParamsDictTagged | C4dNoverboseParamsDictTagged | C4dVersionParamsDictTagged | C4dVoteParamsDictTagged | C4dVoteMrfParamsDictTagged | C4dVoteLabelParamsDictTagged | C4dVoxelSumParamsDictTagged | C4dVoxelIntegralParamsDictTagged | C4dVoxelwiseRegressionParamsDictTagged | C4dWarpParamsDictTagged | C4dWarpLabelParamsDictTagged | C4dWrapParamsDictTagged | C4dWeightedSumParamsDictTagged | C4dWeightedSumVoxelwiseParamsDictTagged>;
     "output": string;
 }
-type C4dParametersTagged = Required<Pick<C4dParameters, '@type'>> & C4dParameters;
+type C4dParamsDictTagged = Required<Pick<C4dParamsDict, '@type'>> & C4dParamsDict;
 
 
 /**
@@ -1498,9 +1498,9 @@ Apply a binary operation (such as addition or multiplication) to all the images 
  *
  * @returns Parameter dictionary
  */
-function c4d_accum_params(
+function c4d_accum(
     accum: string,
-): C4dAccumParametersTagged {
+): C4dAccumParamsDictTagged {
     const params = {
         "@type": "accum" as const,
         "accum": accum,
@@ -1518,7 +1518,7 @@ function c4d_accum_params(
  * @returns Command-line arguments.
  */
 function c4d_accum_cargs(
-    params: C4dAccumParameters,
+    params: C4dAccumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1537,9 +1537,9 @@ function c4d_accum_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_acos_params(
+function c4d_acos(
     acos: string,
-): C4dAcosParametersTagged {
+): C4dAcosParamsDictTagged {
     const params = {
         "@type": "acos" as const,
         "acos": acos,
@@ -1557,7 +1557,7 @@ function c4d_acos_params(
  * @returns Command-line arguments.
  */
 function c4d_acos_cargs(
-    params: C4dAcosParameters,
+    params: C4dAcosParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1590,9 +1590,9 @@ Adds the last two images on the stack, and places the sum at the end of the stac
  *
  * @returns Parameter dictionary
  */
-function c4d_add_params(
+function c4d_add(
     add: string,
-): C4dAddParametersTagged {
+): C4dAddParamsDictTagged {
     const params = {
         "@type": "add" as const,
         "add": add,
@@ -1610,7 +1610,7 @@ function c4d_add_params(
  * @returns Command-line arguments.
  */
 function c4d_add_cargs(
-    params: C4dAddParameters,
+    params: C4dAddParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1636,9 +1636,9 @@ Performs rigid or affine alignment between to sets of landmark images. A landmar
  *
  * @returns Parameter dictionary
  */
-function c4d_align_landmarks_params(
+function c4d_align_landmarks(
     align_landmarks: string,
-): C4dAlignLandmarksParametersTagged {
+): C4dAlignLandmarksParamsDictTagged {
     const params = {
         "@type": "align_landmarks" as const,
         "align_landmarks": align_landmarks,
@@ -1656,7 +1656,7 @@ function c4d_align_landmarks_params(
  * @returns Command-line arguments.
  */
 function c4d_align_landmarks_cargs(
-    params: C4dAlignLandmarksParameters,
+    params: C4dAlignLandmarksParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1689,9 +1689,9 @@ Adds the last two images on the stack, and places the sum at the end of the stac
  *
  * @returns Parameter dictionary
  */
-function c4d_anisotropic_diffusion_params(
+function c4d_anisotropic_diffusion(
     anisotropic_diffusion: string,
-): C4dAnisotropicDiffusionParametersTagged {
+): C4dAnisotropicDiffusionParamsDictTagged {
     const params = {
         "@type": "anisotropic_diffusion" as const,
         "anisotropic_diffusion": anisotropic_diffusion,
@@ -1709,7 +1709,7 @@ function c4d_anisotropic_diffusion_params(
  * @returns Command-line arguments.
  */
 function c4d_anisotropic_diffusion_cargs(
-    params: C4dAnisotropicDiffusionParameters,
+    params: C4dAnisotropicDiffusionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1728,9 +1728,9 @@ function c4d_anisotropic_diffusion_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_antialias_params(
+function c4d_antialias(
     antialias: string,
-): C4dAntialiasParametersTagged {
+): C4dAntialiasParamsDictTagged {
     const params = {
         "@type": "antialias" as const,
         "antialias": antialias,
@@ -1748,7 +1748,7 @@ function c4d_antialias_params(
  * @returns Command-line arguments.
  */
 function c4d_antialias_cargs(
-    params: C4dAntialiasParameters,
+    params: C4dAntialiasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1773,9 +1773,9 @@ Associates the image currently at the end of the stack with variable name 'var'.
  *
  * @returns Parameter dictionary
  */
-function c4d_set_params(
+function c4d_set(
     set_: string,
-): C4dSetParametersTagged {
+): C4dSetParamsDictTagged {
     const params = {
         "@type": "set" as const,
         "set": set_,
@@ -1793,7 +1793,7 @@ function c4d_set_params(
  * @returns Command-line arguments.
  */
 function c4d_set_cargs(
-    params: C4dSetParameters,
+    params: C4dSetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1812,9 +1812,9 @@ function c4d_set_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_asin_params(
+function c4d_asin(
     asin: string,
-): C4dAsinParametersTagged {
+): C4dAsinParamsDictTagged {
     const params = {
         "@type": "asin" as const,
         "asin": asin,
@@ -1832,7 +1832,7 @@ function c4d_asin_params(
  * @returns Command-line arguments.
  */
 function c4d_asin_cargs(
-    params: C4dAsinParameters,
+    params: C4dAsinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1857,9 +1857,9 @@ Computes the angle in radians from images containing sine and cosine. This is a 
  *
  * @returns Parameter dictionary
  */
-function c4d_atan2_params(
+function c4d_atan2(
     atan2: string,
-): C4dAtan2ParametersTagged {
+): C4dAtan2ParamsDictTagged {
     const params = {
         "@type": "atan2" as const,
         "atan2": atan2,
@@ -1877,7 +1877,7 @@ function c4d_atan2_params(
  * @returns Command-line arguments.
  */
 function c4d_atan2_cargs(
-    params: C4dAtan2Parameters,
+    params: C4dAtan2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1900,9 +1900,9 @@ Sets the background intensity for interpolation and other operations where some 
  *
  * @returns Parameter dictionary
  */
-function c4d_background_params(
+function c4d_background(
     background: string,
-): C4dBackgroundParametersTagged {
+): C4dBackgroundParamsDictTagged {
     const params = {
         "@type": "background" as const,
         "background": background,
@@ -1920,7 +1920,7 @@ function c4d_background_params(
  * @returns Command-line arguments.
  */
 function c4d_background_cargs(
-    params: C4dBackgroundParameters,
+    params: C4dBackgroundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1945,9 +1945,9 @@ Performs automatic bias field correction for MRI images. This feature uses the [
  *
  * @returns Parameter dictionary
  */
-function c4d_n4_bias_correction_params(
+function c4d_n4_bias_correction(
     n4_bias_correction: string,
-): C4dN4BiasCorrectionParametersTagged {
+): C4dN4BiasCorrectionParamsDictTagged {
     const params = {
         "@type": "n4_bias_correction" as const,
         "n4_bias_correction": n4_bias_correction,
@@ -1965,7 +1965,7 @@ function c4d_n4_bias_correction_params(
  * @returns Command-line arguments.
  */
 function c4d_n4_bias_correction_cargs(
-    params: C4dN4BiasCorrectionParameters,
+    params: C4dN4BiasCorrectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1992,9 +1992,9 @@ Converts an image to binary by mapping all background values (the background is 
  *
  * @returns Parameter dictionary
  */
-function c4d_binarize_params(
+function c4d_binarize(
     binarize: string,
-): C4dBinarizeParametersTagged {
+): C4dBinarizeParamsDictTagged {
     const params = {
         "@type": "binarize" as const,
         "binarize": binarize,
@@ -2012,7 +2012,7 @@ function c4d_binarize_params(
  * @returns Command-line arguments.
  */
 function c4d_binarize_cargs(
-    params: C4dBinarizeParameters,
+    params: C4dBinarizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2035,9 +2035,9 @@ Performs edge detection on the last image on the stack using the Canny filter. T
  *
  * @returns Parameter dictionary
  */
-function c4d_canny_params(
+function c4d_canny(
     canny: string,
-): C4dCannyParametersTagged {
+): C4dCannyParamsDictTagged {
     const params = {
         "@type": "canny" as const,
         "canny": canny,
@@ -2055,7 +2055,7 @@ function c4d_canny_params(
  * @returns Command-line arguments.
  */
 function c4d_canny_cargs(
-    params: C4dCannyParameters,
+    params: C4dCannyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2080,9 +2080,9 @@ Each image intensity is replaced by the smallest integer larger or equal to it
  *
  * @returns Parameter dictionary
  */
-function c4d_ceil_params(
+function c4d_ceil(
     ceil: string,
-): C4dCeilParametersTagged {
+): C4dCeilParamsDictTagged {
     const params = {
         "@type": "ceil" as const,
         "ceil": ceil,
@@ -2100,7 +2100,7 @@ function c4d_ceil_params(
  * @returns Command-line arguments.
  */
 function c4d_ceil_cargs(
-    params: C4dCeilParameters,
+    params: C4dCeilParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2128,9 +2128,9 @@ Reports the centroid, in physical coordinates, of all foreground voxels in the i
  *
  * @returns Parameter dictionary
  */
-function c4d_centroid_params(
+function c4d_centroid(
     centroid: string,
-): C4dCentroidParametersTagged {
+): C4dCentroidParamsDictTagged {
     const params = {
         "@type": "centroid" as const,
         "centroid": centroid,
@@ -2148,7 +2148,7 @@ function c4d_centroid_params(
  * @returns Command-line arguments.
  */
 function c4d_centroid_cargs(
-    params: C4dCentroidParameters,
+    params: C4dCentroidParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2174,9 +2174,9 @@ Marks the centroid of the foreground voxels in an image. Unlike **-centroid**, t
  *
  * @returns Parameter dictionary
  */
-function c4d_centroid_mark_params(
+function c4d_centroid_mark(
     centroid_mark: string,
-): C4dCentroidMarkParametersTagged {
+): C4dCentroidMarkParamsDictTagged {
     const params = {
         "@type": "centroid_mark" as const,
         "centroid_mark": centroid_mark,
@@ -2194,7 +2194,7 @@ function c4d_centroid_mark_params(
  * @returns Command-line arguments.
  */
 function c4d_centroid_mark_cargs(
-    params: C4dCentroidMarkParameters,
+    params: C4dCentroidMarkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2220,9 +2220,9 @@ Computes the connected components of a binary image. Each connected component is
  *
  * @returns Parameter dictionary
  */
-function c4d_connected_components_params(
+function c4d_connected_components(
     connected_components: string,
-): C4dConnectedComponentsParametersTagged {
+): C4dConnectedComponentsParamsDictTagged {
     const params = {
         "@type": "connected_components" as const,
         "connected_components": connected_components,
@@ -2240,7 +2240,7 @@ function c4d_connected_components_params(
  * @returns Command-line arguments.
  */
 function c4d_connected_components_cargs(
-    params: C4dConnectedComponentsParameters,
+    params: C4dConnectedComponentsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2263,9 +2263,9 @@ Clears the image stack. Images assigned a name with the **-as** command will rem
  *
  * @returns Parameter dictionary
  */
-function c4d_clear_params(
+function c4d_clear(
     clear: string,
-): C4dClearParametersTagged {
+): C4dClearParamsDictTagged {
     const params = {
         "@type": "clear" as const,
         "clear": clear,
@@ -2283,7 +2283,7 @@ function c4d_clear_params(
  * @returns Command-line arguments.
  */
 function c4d_clear_cargs(
-    params: C4dClearParameters,
+    params: C4dClearParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2310,9 +2310,9 @@ Clips image intensities, so that the values below *iMin* are converted to *iMin*
  *
  * @returns Parameter dictionary
  */
-function c4d_clip_params(
+function c4d_clip(
     clip: string,
-): C4dClipParametersTagged {
+): C4dClipParamsDictTagged {
     const params = {
         "@type": "clip" as const,
         "clip": clip,
@@ -2330,7 +2330,7 @@ function c4d_clip_params(
  * @returns Command-line arguments.
  */
 function c4d_clip_cargs(
-    params: C4dClipParameters,
+    params: C4dClipParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2359,9 +2359,9 @@ By default the full image intensity range is mapped. The optional **min** and **
  *
  * @returns Parameter dictionary
  */
-function c4d_color_map_params(
+function c4d_color_map(
     color_map: string,
-): C4dColorMapParametersTagged {
+): C4dColorMapParamsDictTagged {
     const params = {
         "@type": "color_map" as const,
         "color_map": color_map,
@@ -2379,7 +2379,7 @@ function c4d_color_map_params(
  * @returns Command-line arguments.
  */
 function c4d_color_map_cargs(
-    params: C4dColorMapParameters,
+    params: C4dColorMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2405,9 +2405,9 @@ Turns on compressing for image file formats that support it. For some file forma
  *
  * @returns Parameter dictionary
  */
-function c4d_compress_params(
+function c4d_compress(
     compress: string,
-): C4dCompressParametersTagged {
+): C4dCompressParamsDictTagged {
     const params = {
         "@type": "compress" as const,
         "compress": compress,
@@ -2425,7 +2425,7 @@ function c4d_compress_params(
  * @returns Command-line arguments.
  */
 function c4d_compress_cargs(
-    params: C4dCompressParameters,
+    params: C4dCompressParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2451,9 +2451,9 @@ Turns on compressing for image file formats that support it. For some file forma
  *
  * @returns Parameter dictionary
  */
-function c4d_no_compress_params(
+function c4d_no_compress(
     no_compress: string,
-): C4dNoCompressParametersTagged {
+): C4dNoCompressParamsDictTagged {
     const params = {
         "@type": "no_compress" as const,
         "no_compress": no_compress,
@@ -2471,7 +2471,7 @@ function c4d_no_compress_params(
  * @returns Command-line arguments.
  */
 function c4d_no_compress_cargs(
-    params: C4dNoCompressParameters,
+    params: C4dNoCompressParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2499,9 +2499,9 @@ Performs convolution between the last two images on the stack. The convolution i
  *
  * @returns Parameter dictionary
  */
-function c4d_conv_params(
+function c4d_conv(
     conv: string,
-): C4dConvParametersTagged {
+): C4dConvParamsDictTagged {
     const params = {
         "@type": "conv" as const,
         "conv": conv,
@@ -2519,7 +2519,7 @@ function c4d_conv_params(
  * @returns Command-line arguments.
  */
 function c4d_conv_cargs(
-    params: C4dConvParameters,
+    params: C4dConvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2551,9 +2551,9 @@ One can use this command to split a brain segmentation image into a left hemisph
  *
  * @returns Parameter dictionary
  */
-function c4d_coordinate_map_voxel_params(
+function c4d_coordinate_map_voxel(
     coordinate_map_voxel: string,
-): C4dCoordinateMapVoxelParametersTagged {
+): C4dCoordinateMapVoxelParamsDictTagged {
     const params = {
         "@type": "coordinate_map_voxel" as const,
         "coordinate_map_voxel": coordinate_map_voxel,
@@ -2571,7 +2571,7 @@ function c4d_coordinate_map_voxel_params(
  * @returns Command-line arguments.
  */
 function c4d_coordinate_map_voxel_cargs(
-    params: C4dCoordinateMapVoxelParameters,
+    params: C4dCoordinateMapVoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2594,9 +2594,9 @@ This command is similar to **-cmv** (**-coordinate-map-voxel**), but the output 
  *
  * @returns Parameter dictionary
  */
-function c4d_coordinate_map_physical_params(
+function c4d_coordinate_map_physical(
     coordinate_map_physical: string,
-): C4dCoordinateMapPhysicalParametersTagged {
+): C4dCoordinateMapPhysicalParamsDictTagged {
     const params = {
         "@type": "coordinate_map_physical" as const,
         "coordinate_map_physical": coordinate_map_physical,
@@ -2614,7 +2614,7 @@ function c4d_coordinate_map_physical_params(
  * @returns Command-line arguments.
  */
 function c4d_coordinate_map_physical_cargs(
-    params: C4dCoordinateMapPhysicalParameters,
+    params: C4dCoordinateMapPhysicalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2639,9 +2639,9 @@ Copies the image header, specifically the image to physical space transform (ori
  *
  * @returns Parameter dictionary
  */
-function c4d_copy_transform_params(
+function c4d_copy_transform(
     copy_transform: string,
-): C4dCopyTransformParametersTagged {
+): C4dCopyTransformParamsDictTagged {
     const params = {
         "@type": "copy_transform" as const,
         "copy_transform": copy_transform,
@@ -2659,7 +2659,7 @@ function c4d_copy_transform_params(
  * @returns Command-line arguments.
  */
 function c4d_copy_transform_cargs(
-    params: C4dCopyTransformParameters,
+    params: C4dCopyTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2678,9 +2678,9 @@ function c4d_copy_transform_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_cos_params(
+function c4d_cos(
     cos: string,
-): C4dCosParametersTagged {
+): C4dCosParamsDictTagged {
     const params = {
         "@type": "cos" as const,
         "cos": cos,
@@ -2698,7 +2698,7 @@ function c4d_cos_params(
  * @returns Command-line arguments.
  */
 function c4d_cos_cargs(
-    params: C4dCosParameters,
+    params: C4dCosParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2724,9 +2724,9 @@ Creates a new blank image with specified dimensions and voxel size, and places i
  *
  * @returns Parameter dictionary
  */
-function c4d_create_params(
+function c4d_create(
     create: string,
-): C4dCreateParametersTagged {
+): C4dCreateParamsDictTagged {
     const params = {
         "@type": "create" as const,
         "create": create,
@@ -2744,7 +2744,7 @@ function c4d_create_params(
  * @returns Command-line arguments.
  */
 function c4d_create_cargs(
-    params: C4dCreateParameters,
+    params: C4dCreateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2767,9 +2767,9 @@ Prints out a table of DICOM series ids and corresponding image information to st
  *
  * @returns Parameter dictionary
  */
-function c4d_dicom_series_list_params(
+function c4d_dicom_series_list(
     dicom_series_list: string,
-): C4dDicomSeriesListParametersTagged {
+): C4dDicomSeriesListParamsDictTagged {
     const params = {
         "@type": "dicom_series_list" as const,
         "dicom_series_list": dicom_series_list,
@@ -2787,7 +2787,7 @@ function c4d_dicom_series_list_params(
  * @returns Command-line arguments.
  */
 function c4d_dicom_series_list_cargs(
-    params: C4dDicomSeriesListParameters,
+    params: C4dDicomSeriesListParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2811,9 +2811,9 @@ The **seried_id** is a string identifier for the series that can be obtained by 
  *
  * @returns Parameter dictionary
  */
-function c4d_dicom_series_read_params(
+function c4d_dicom_series_read(
     dicom_series_read: string,
-): C4dDicomSeriesReadParametersTagged {
+): C4dDicomSeriesReadParamsDictTagged {
     const params = {
         "@type": "dicom_series_read" as const,
         "dicom_series_read": dicom_series_read,
@@ -2831,7 +2831,7 @@ function c4d_dicom_series_read_params(
  * @returns Command-line arguments.
  */
 function c4d_dicom_series_read_cargs(
-    params: C4dDicomSeriesReadParameters,
+    params: C4dDicomSeriesReadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2856,9 +2856,9 @@ Applies the dilation [mathematical morphology][5] operation to a binary image. T
  *
  * @returns Parameter dictionary
  */
-function c4d_dilate_params(
+function c4d_dilate(
     dilate: string,
-): C4dDilateParametersTagged {
+): C4dDilateParamsDictTagged {
     const params = {
         "@type": "dilate" as const,
         "dilate": dilate,
@@ -2876,7 +2876,7 @@ function c4d_dilate_params(
  * @returns Command-line arguments.
  */
 function c4d_dilate_cargs(
-    params: C4dDilateParameters,
+    params: C4dDilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2905,9 +2905,9 @@ Divison may generate infinite and not-a-number (NaN) values if B contains zeros.
  *
  * @returns Parameter dictionary
  */
-function c4d_divide_params(
+function c4d_divide(
     divide: string,
-): C4dDivideParametersTagged {
+): C4dDivideParamsDictTagged {
     const params = {
         "@type": "divide" as const,
         "divide": divide,
@@ -2925,7 +2925,7 @@ function c4d_divide_params(
  * @returns Command-line arguments.
  */
 function c4d_divide_cargs(
-    params: C4dDivideParameters,
+    params: C4dDivideParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2952,9 +2952,9 @@ Duplicates the image at the end of the stack. This is equivalent to **-as var -p
  *
  * @returns Parameter dictionary
  */
-function c4d_duplicate_params(
+function c4d_duplicate(
     duplicate: string,
-): C4dDuplicateParametersTagged {
+): C4dDuplicateParamsDictTagged {
     const params = {
         "@type": "duplicate" as const,
         "duplicate": duplicate,
@@ -2972,7 +2972,7 @@ function c4d_duplicate_params(
  * @returns Command-line arguments.
  */
 function c4d_duplicate_cargs(
-    params: C4dDuplicateParameters,
+    params: C4dDuplicateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -2997,9 +2997,9 @@ Apply a binary operation (such as addition or multiplication) to all the images 
  *
  * @returns Parameter dictionary
  */
-function c4d_endaccum_params(
+function c4d_endaccum(
     endaccum: string,
-): C4dEndaccumParametersTagged {
+): C4dEndaccumParamsDictTagged {
     const params = {
         "@type": "endaccum" as const,
         "endaccum": endaccum,
@@ -3017,7 +3017,7 @@ function c4d_endaccum_params(
  * @returns Command-line arguments.
  */
 function c4d_endaccum_cargs(
-    params: C4dEndaccumParameters,
+    params: C4dEndaccumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3042,9 +3042,9 @@ This command forces the commands between **-foreach** and **-endfor** to be appl
  *
  * @returns Parameter dictionary
  */
-function c4d_endfor_params(
+function c4d_endfor(
     endfor: string,
-): C4dEndforParametersTagged {
+): C4dEndforParamsDictTagged {
     const params = {
         "@type": "endfor" as const,
         "endfor": endfor,
@@ -3062,7 +3062,7 @@ function c4d_endfor_params(
  * @returns Command-line arguments.
  */
 function c4d_endfor_cargs(
-    params: C4dEndforParameters,
+    params: C4dEndforParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3087,9 +3087,9 @@ Applies erosion [mathematical morphology][5] operation to a binary image. The fi
  *
  * @returns Parameter dictionary
  */
-function c4d_erode_params(
+function c4d_erode(
     erode: string,
-): C4dErodeParametersTagged {
+): C4dErodeParamsDictTagged {
     const params = {
         "@type": "erode" as const,
         "erode": erode,
@@ -3107,7 +3107,7 @@ function c4d_erode_params(
  * @returns Command-line arguments.
  */
 function c4d_erode_cargs(
-    params: C4dErodeParameters,
+    params: C4dErodeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3132,9 +3132,9 @@ Computes the standard error function. This is useful for applying soft threshold
  *
  * @returns Parameter dictionary
  */
-function c4d_erf_params(
+function c4d_erf(
     erf: string,
-): C4dErfParametersTagged {
+): C4dErfParamsDictTagged {
     const params = {
         "@type": "erf" as const,
         "erf": erf,
@@ -3152,7 +3152,7 @@ function c4d_erf_params(
  * @returns Command-line arguments.
  */
 function c4d_erf_cargs(
-    params: C4dErfParameters,
+    params: C4dErfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3177,9 +3177,9 @@ Computes exponent of each voxel in the last image on the stack.
  *
  * @returns Parameter dictionary
  */
-function c4d_exp_params(
+function c4d_exp(
     exp: string,
-): C4dExpParametersTagged {
+): C4dExpParamsDictTagged {
     const params = {
         "@type": "exp" as const,
         "exp": exp,
@@ -3197,7 +3197,7 @@ function c4d_exp_params(
  * @returns Command-line arguments.
  */
 function c4d_exp_cargs(
-    params: C4dExpParameters,
+    params: C4dExpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3242,9 +3242,9 @@ In the above example, **-centroid-mark** transforms the lesion segmentation into
  *
  * @returns Parameter dictionary
  */
-function c4d_export_patches_params(
+function c4d_export_patches(
     export_patches: string,
-): C4dExportPatchesParametersTagged {
+): C4dExportPatchesParamsDictTagged {
     const params = {
         "@type": "export_patches" as const,
         "export_patches": export_patches,
@@ -3262,7 +3262,7 @@ function c4d_export_patches_params(
  * @returns Command-line arguments.
  */
 function c4d_export_patches_cargs(
-    params: C4dExportPatchesParameters,
+    params: C4dExportPatchesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3287,9 +3287,9 @@ This command must precede the `-export-patches (-xp)` command and instructs this
  *
  * @returns Parameter dictionary
  */
-function c4d_export_patches_aug_params(
+function c4d_export_patches_aug(
     export_patches_aug: string,
-): C4dExportPatchesAugParametersTagged {
+): C4dExportPatchesAugParamsDictTagged {
     const params = {
         "@type": "export_patches_aug" as const,
         "export_patches_aug": export_patches_aug,
@@ -3307,7 +3307,7 @@ function c4d_export_patches_aug_params(
  * @returns Command-line arguments.
  */
 function c4d_export_patches_aug_cargs(
-    params: C4dExportPatchesAugParameters,
+    params: C4dExportPatchesAugParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3326,9 +3326,9 @@ function c4d_export_patches_aug_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_extrude_seg_params(
+function c4d_extrude_seg(
     extrude_seg: string,
-): C4dExtrudeSegParametersTagged {
+): C4dExtrudeSegParamsDictTagged {
     const params = {
         "@type": "extrude_seg" as const,
         "extrude_seg": extrude_seg,
@@ -3346,7 +3346,7 @@ function c4d_extrude_seg_params(
  * @returns Command-line arguments.
  */
 function c4d_extrude_seg_cargs(
-    params: C4dExtrudeSegParameters,
+    params: C4dExtrudeSegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3365,9 +3365,9 @@ function c4d_extrude_seg_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_fill_background_with_noise_params(
+function c4d_fill_background_with_noise(
     fill_background_with_noise: string,
-): C4dFillBackgroundWithNoiseParametersTagged {
+): C4dFillBackgroundWithNoiseParamsDictTagged {
     const params = {
         "@type": "fill_background_with_noise" as const,
         "fill_background_with_noise": fill_background_with_noise,
@@ -3385,7 +3385,7 @@ function c4d_fill_background_with_noise_params(
  * @returns Command-line arguments.
  */
 function c4d_fill_background_with_noise_cargs(
-    params: C4dFillBackgroundWithNoiseParameters,
+    params: C4dFillBackgroundWithNoiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3410,9 +3410,9 @@ Computes the Fourier transform of a real-valued image at the end of the stack. T
  *
  * @returns Parameter dictionary
  */
-function c4d_fft_params(
+function c4d_fft(
     fft: string,
-): C4dFftParametersTagged {
+): C4dFftParamsDictTagged {
     const params = {
         "@type": "fft" as const,
         "fft": fft,
@@ -3430,7 +3430,7 @@ function c4d_fft_params(
  * @returns Command-line arguments.
  */
 function c4d_fft_cargs(
-    params: C4dFftParameters,
+    params: C4dFftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3455,9 +3455,9 @@ Flips the image around specified axes. The parameter 'axes' may be any combinati
  *
  * @returns Parameter dictionary
  */
-function c4d_flip_params(
+function c4d_flip(
     flip: string,
-): C4dFlipParametersTagged {
+): C4dFlipParamsDictTagged {
     const params = {
         "@type": "flip" as const,
         "flip": flip,
@@ -3475,7 +3475,7 @@ function c4d_flip_params(
  * @returns Command-line arguments.
  */
 function c4d_flip_cargs(
-    params: C4dFlipParameters,
+    params: C4dFlipParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3504,9 +3504,9 @@ To round each intensity to the closest integer, use
  *
  * @returns Parameter dictionary
  */
-function c4d_floor_params(
+function c4d_floor(
     floor: string,
-): C4dFloorParametersTagged {
+): C4dFloorParamsDictTagged {
     const params = {
         "@type": "floor" as const,
         "floor": floor,
@@ -3524,7 +3524,7 @@ function c4d_floor_params(
  * @returns Command-line arguments.
  */
 function c4d_floor_cargs(
-    params: C4dFloorParameters,
+    params: C4dFloorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3549,9 +3549,9 @@ This command forces the commands between **-foreach** and **-endfor** to be appl
  *
  * @returns Parameter dictionary
  */
-function c4d_foreach_params(
+function c4d_foreach(
     foreach: string,
-): C4dForeachParametersTagged {
+): C4dForeachParamsDictTagged {
     const params = {
         "@type": "foreach" as const,
         "foreach": foreach,
@@ -3569,7 +3569,7 @@ function c4d_foreach_params(
  * @returns Command-line arguments.
  */
 function c4d_foreach_cargs(
-    params: C4dForeachParameters,
+    params: C4dForeachParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3594,9 +3594,9 @@ This command runs the list of commands separately for each component of a set of
  *
  * @returns Parameter dictionary
  */
-function c4d_foreach_comp_params(
+function c4d_foreach_comp(
     foreach_comp: string,
-): C4dForeachCompParametersTagged {
+): C4dForeachCompParamsDictTagged {
     const params = {
         "@type": "foreach_comp" as const,
         "foreach_comp": foreach_comp,
@@ -3614,7 +3614,7 @@ function c4d_foreach_comp_params(
  * @returns Command-line arguments.
  */
 function c4d_foreach_comp_cargs(
-    params: C4dForeachCompParameters,
+    params: C4dForeachCompParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3644,9 +3644,9 @@ Applies voxel-wise general linear model to a set of images. More precisely, the 
  *
  * @returns Parameter dictionary
  */
-function c4d_glm_params(
+function c4d_glm(
     glm: string,
-): C4dGlmParametersTagged {
+): C4dGlmParamsDictTagged {
     const params = {
         "@type": "glm" as const,
         "glm": glm,
@@ -3664,7 +3664,7 @@ function c4d_glm_params(
  * @returns Command-line arguments.
  */
 function c4d_glm_cargs(
-    params: C4dGlmParameters,
+    params: C4dGlmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3689,9 +3689,9 @@ Computes the gradient of the image. Each component of the gradient is placed on 
  *
  * @returns Parameter dictionary
  */
-function c4d_gradient_params(
+function c4d_gradient(
     gradient: string,
-): C4dGradientParametersTagged {
+): C4dGradientParamsDictTagged {
     const params = {
         "@type": "gradient" as const,
         "gradient": gradient,
@@ -3709,7 +3709,7 @@ function c4d_gradient_params(
  * @returns Command-line arguments.
  */
 function c4d_gradient_cargs(
-    params: C4dGradientParameters,
+    params: C4dGradientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3734,9 +3734,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  *
  * @returns Parameter dictionary
  */
-function c4d__help_params(
+function c4d__help(
     v__help: string,
-): C4dHelpParametersTagged {
+): C4dHelpParamsDictTagged {
     const params = {
         "@type": "_help" as const,
         "_help": v__help,
@@ -3754,7 +3754,7 @@ function c4d__help_params(
  * @returns Command-line arguments.
  */
 function c4d__help_cargs(
-    params: C4dHelpParameters,
+    params: C4dHelpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3779,9 +3779,9 @@ Apply the binary hole filling algorithm to a particular intensity value in the i
  *
  * @returns Parameter dictionary
  */
-function c4d_holefill_params(
+function c4d_holefill(
     holefill: string,
-): C4dHolefillParametersTagged {
+): C4dHolefillParamsDictTagged {
     const params = {
         "@type": "holefill" as const,
         "holefill": holefill,
@@ -3799,7 +3799,7 @@ function c4d_holefill_params(
  * @returns Command-line arguments.
  */
 function c4d_holefill_cargs(
-    params: C4dHolefillParameters,
+    params: C4dHolefillParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3824,9 +3824,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  *
  * @returns Parameter dictionary
  */
-function c4d_hessian_eigenvalues_params(
+function c4d_hessian_eigenvalues(
     hessian_eigenvalues: string,
-): C4dHessianEigenvaluesParametersTagged {
+): C4dHessianEigenvaluesParamsDictTagged {
     const params = {
         "@type": "hessian_eigenvalues" as const,
         "hessian_eigenvalues": hessian_eigenvalues,
@@ -3844,7 +3844,7 @@ function c4d_hessian_eigenvalues_params(
  * @returns Command-line arguments.
  */
 function c4d_hessian_eigenvalues_cargs(
-    params: C4dHessianEigenvaluesParameters,
+    params: C4dHessianEigenvaluesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3874,9 +3874,9 @@ Parameter `dimension` is an integer that determines the kind of features that ar
  *
  * @returns Parameter dictionary
  */
-function c4d_hessian_objectness_params(
+function c4d_hessian_objectness(
     hessian_objectness: string,
-): C4dHessianObjectnessParametersTagged {
+): C4dHessianObjectnessParamsDictTagged {
     const params = {
         "@type": "hessian_objectness" as const,
         "hessian_objectness": hessian_objectness,
@@ -3894,7 +3894,7 @@ function c4d_hessian_objectness_params(
  * @returns Command-line arguments.
  */
 function c4d_hessian_objectness_cargs(
-    params: C4dHessianObjectnessParameters,
+    params: C4dHessianObjectnessParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3913,9 +3913,9 @@ function c4d_hessian_objectness_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_histogram_match_params(
+function c4d_histogram_match(
     histogram_match: string,
-): C4dHistogramMatchParametersTagged {
+): C4dHistogramMatchParamsDictTagged {
     const params = {
         "@type": "histogram_match" as const,
         "histogram_match": histogram_match,
@@ -3933,7 +3933,7 @@ function c4d_histogram_match_params(
  * @returns Command-line arguments.
  */
 function c4d_histogram_match_cargs(
-    params: C4dHistogramMatchParameters,
+    params: C4dHistogramMatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -3962,9 +3962,9 @@ Use with the **-foreach** command to get information on multiple images
  *
  * @returns Parameter dictionary
  */
-function c4d_info_params(
+function c4d_info(
     info: string,
-): C4dInfoParametersTagged {
+): C4dInfoParamsDictTagged {
     const params = {
         "@type": "info" as const,
         "info": info,
@@ -3982,7 +3982,7 @@ function c4d_info_params(
  * @returns Command-line arguments.
  */
 function c4d_info_cargs(
-    params: C4dInfoParameters,
+    params: C4dInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4007,9 +4007,9 @@ Prints extended information about the last image on the stack, such as the metad
  *
  * @returns Parameter dictionary
  */
-function c4d_info_full_params(
+function c4d_info_full(
     info_full: string,
-): C4dInfoFullParametersTagged {
+): C4dInfoFullParamsDictTagged {
     const params = {
         "@type": "info_full" as const,
         "info_full": info_full,
@@ -4027,7 +4027,7 @@ function c4d_info_full_params(
  * @returns Command-line arguments.
  */
 function c4d_info_full_cargs(
-    params: C4dInfoFullParameters,
+    params: C4dInfoFullParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4050,9 +4050,9 @@ This command is similar to **-push**, but allows you to insert the image associa
  *
  * @returns Parameter dictionary
  */
-function c4d_insert_params(
+function c4d_insert(
     insert: string,
-): C4dInsertParametersTagged {
+): C4dInsertParamsDictTagged {
     const params = {
         "@type": "insert" as const,
         "insert": insert,
@@ -4070,7 +4070,7 @@ function c4d_insert_params(
  * @returns Command-line arguments.
  */
 function c4d_insert_cargs(
-    params: C4dInsertParameters,
+    params: C4dInsertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4097,9 +4097,9 @@ Shorthand 0 can be used for *NearestNeighbor*, 1 for *Linear* and 3 for *Cubic*.
  *
  * @returns Parameter dictionary
  */
-function c4d_interpolation_params(
+function c4d_interpolation(
     interpolation: string,
-): C4dInterpolationParametersTagged {
+): C4dInterpolationParamsDictTagged {
     const params = {
         "@type": "interpolation" as const,
         "interpolation": interpolation,
@@ -4117,7 +4117,7 @@ function c4d_interpolation_params(
  * @returns Command-line arguments.
  */
 function c4d_interpolation_cargs(
-    params: C4dInterpolationParameters,
+    params: C4dInterpolationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4136,9 +4136,9 @@ function c4d_interpolation_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_iterations_params(
+function c4d_iterations(
     iterations: string,
-): C4dIterationsParametersTagged {
+): C4dIterationsParamsDictTagged {
     const params = {
         "@type": "iterations" as const,
         "iterations": iterations,
@@ -4156,7 +4156,7 @@ function c4d_iterations_params(
  * @returns Command-line arguments.
  */
 function c4d_iterations_cargs(
-    params: C4dIterationsParameters,
+    params: C4dIterationsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4175,9 +4175,9 @@ function c4d_iterations_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_label_overlap_params(
+function c4d_label_overlap(
     label_overlap: string,
-): C4dLabelOverlapParametersTagged {
+): C4dLabelOverlapParamsDictTagged {
     const params = {
         "@type": "label_overlap" as const,
         "label_overlap": label_overlap,
@@ -4195,7 +4195,7 @@ function c4d_label_overlap_params(
  * @returns Command-line arguments.
  */
 function c4d_label_overlap_cargs(
-    params: C4dLabelOverlapParameters,
+    params: C4dLabelOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4224,9 +4224,9 @@ The output contains the mean, standard deviation, maximum intensity and minimum 
  *
  * @returns Parameter dictionary
  */
-function c4d_label_statistics_params(
+function c4d_label_statistics(
     label_statistics: string,
-): C4dLabelStatisticsParametersTagged {
+): C4dLabelStatisticsParamsDictTagged {
     const params = {
         "@type": "label_statistics" as const,
         "label_statistics": label_statistics,
@@ -4244,7 +4244,7 @@ function c4d_label_statistics_params(
  * @returns Command-line arguments.
  */
 function c4d_label_statistics_cargs(
-    params: C4dLabelStatisticsParameters,
+    params: C4dLabelStatisticsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4263,9 +4263,9 @@ function c4d_label_statistics_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_landmarks_to_spheres_params(
+function c4d_landmarks_to_spheres(
     landmarks_to_spheres: string,
-): C4dLandmarksToSpheresParametersTagged {
+): C4dLandmarksToSpheresParamsDictTagged {
     const params = {
         "@type": "landmarks_to_spheres" as const,
         "landmarks_to_spheres": landmarks_to_spheres,
@@ -4283,7 +4283,7 @@ function c4d_landmarks_to_spheres_params(
  * @returns Command-line arguments.
  */
 function c4d_landmarks_to_spheres_cargs(
-    params: C4dLandmarksToSpheresParameters,
+    params: C4dLandmarksToSpheresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4308,9 +4308,9 @@ Applies the Laplacian filter to the image. Used to detect ridges of intensity. T
  *
  * @returns Parameter dictionary
  */
-function c4d_laplacian_params(
+function c4d_laplacian(
     laplacian: string,
-): C4dLaplacianParametersTagged {
+): C4dLaplacianParamsDictTagged {
     const params = {
         "@type": "laplacian" as const,
         "laplacian": laplacian,
@@ -4328,7 +4328,7 @@ function c4d_laplacian_params(
  * @returns Command-line arguments.
  */
 function c4d_laplacian_cargs(
-    params: C4dLaplacianParameters,
+    params: C4dLaplacianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4372,9 +4372,9 @@ Another example of smoothing a binary image that is useful for cleaning up manua
  *
  * @returns Parameter dictionary
  */
-function c4d_levelset_params(
+function c4d_levelset(
     levelset: string,
-): C4dLevelsetParametersTagged {
+): C4dLevelsetParamsDictTagged {
     const params = {
         "@type": "levelset" as const,
         "levelset": levelset,
@@ -4392,7 +4392,7 @@ function c4d_levelset_params(
  * @returns Command-line arguments.
  */
 function c4d_levelset_cargs(
-    params: C4dLevelsetParameters,
+    params: C4dLevelsetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4411,9 +4411,9 @@ function c4d_levelset_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_levelset_curvature_params(
+function c4d_levelset_curvature(
     levelset_curvature: string,
-): C4dLevelsetCurvatureParametersTagged {
+): C4dLevelsetCurvatureParamsDictTagged {
     const params = {
         "@type": "levelset_curvature" as const,
         "levelset_curvature": levelset_curvature,
@@ -4431,7 +4431,7 @@ function c4d_levelset_curvature_params(
  * @returns Command-line arguments.
  */
 function c4d_levelset_curvature_cargs(
-    params: C4dLevelsetCurvatureParameters,
+    params: C4dLevelsetCurvatureParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4450,9 +4450,9 @@ function c4d_levelset_curvature_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_levelset_advection_params(
+function c4d_levelset_advection(
     levelset_advection: string,
-): C4dLevelsetAdvectionParametersTagged {
+): C4dLevelsetAdvectionParamsDictTagged {
     const params = {
         "@type": "levelset_advection" as const,
         "levelset_advection": levelset_advection,
@@ -4470,7 +4470,7 @@ function c4d_levelset_advection_params(
  * @returns Command-line arguments.
  */
 function c4d_levelset_advection_cargs(
-    params: C4dLevelsetAdvectionParameters,
+    params: C4dLevelsetAdvectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4493,9 +4493,9 @@ Computes natural logarithm of each voxel in the last image on the stack.
  *
  * @returns Parameter dictionary
  */
-function c4d_log_params(
+function c4d_log(
     log: string,
-): C4dLogParametersTagged {
+): C4dLogParamsDictTagged {
     const params = {
         "@type": "log" as const,
         "log": log,
@@ -4513,7 +4513,7 @@ function c4d_log_params(
  * @returns Command-line arguments.
  */
 function c4d_log_cargs(
-    params: C4dLogParameters,
+    params: C4dLogParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4536,9 +4536,9 @@ Computes base 10 logarithm of each voxel in the last image on the stack.
  *
  * @returns Parameter dictionary
  */
-function c4d_log10_params(
+function c4d_log10(
     log10: string,
-): C4dLog10ParametersTagged {
+): C4dLog10ParamsDictTagged {
     const params = {
         "@type": "log10" as const,
         "log10": log10,
@@ -4556,7 +4556,7 @@ function c4d_log10_params(
  * @returns Command-line arguments.
  */
 function c4d_log10_cargs(
-    params: C4dLog10Parameters,
+    params: C4dLog10ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4575,9 +4575,9 @@ function c4d_log10_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_manual_params(
+function c4d_manual(
     manual: string,
-): C4dManualParametersTagged {
+): C4dManualParamsDictTagged {
     const params = {
         "@type": "manual" as const,
         "manual": manual,
@@ -4595,7 +4595,7 @@ function c4d_manual_params(
  * @returns Command-line arguments.
  */
 function c4d_manual_cargs(
-    params: C4dManualParameters,
+    params: C4dManualParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4620,9 +4620,9 @@ Given two images on the stack (reference and target), sets the header of the tar
  *
  * @returns Parameter dictionary
  */
-function c4d_match_bounding_box_params(
+function c4d_match_bounding_box(
     match_bounding_box: string,
-): C4dMatchBoundingBoxParametersTagged {
+): C4dMatchBoundingBoxParamsDictTagged {
     const params = {
         "@type": "match_bounding_box" as const,
         "match_bounding_box": match_bounding_box,
@@ -4640,7 +4640,7 @@ function c4d_match_bounding_box_params(
  * @returns Command-line arguments.
  */
 function c4d_match_bounding_box_cargs(
-    params: C4dMatchBoundingBoxParameters,
+    params: C4dMatchBoundingBoxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4666,9 +4666,9 @@ Computes the voxel-wise maximum of two images. Can be used with the **-accum** c
  *
  * @returns Parameter dictionary
  */
-function c4d_maximum_params(
+function c4d_maximum(
     maximum: string,
-): C4dMaximumParametersTagged {
+): C4dMaximumParamsDictTagged {
     const params = {
         "@type": "maximum" as const,
         "maximum": maximum,
@@ -4686,7 +4686,7 @@ function c4d_maximum_params(
  * @returns Command-line arguments.
  */
 function c4d_maximum_cargs(
-    params: C4dMaximumParameters,
+    params: C4dMaximumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4717,9 +4717,9 @@ Enable reading of multi-component images. By default, when a multi-component ima
  *
  * @returns Parameter dictionary
  */
-function c4d_multicomponent_split_params(
+function c4d_multicomponent_split(
     multicomponent_split: string,
-): C4dMulticomponentSplitParametersTagged {
+): C4dMulticomponentSplitParamsDictTagged {
     const params = {
         "@type": "multicomponent_split" as const,
         "multicomponent_split": multicomponent_split,
@@ -4737,7 +4737,7 @@ function c4d_multicomponent_split_params(
  * @returns Command-line arguments.
  */
 function c4d_multicomponent_split_cargs(
-    params: C4dMulticomponentSplitParameters,
+    params: C4dMulticomponentSplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4762,9 +4762,9 @@ Computes the mean of all the images on the stack. All images on the stack are re
  *
  * @returns Parameter dictionary
  */
-function c4d_mean_params(
+function c4d_mean(
     mean: string,
-): C4dMeanParametersTagged {
+): C4dMeanParamsDictTagged {
     const params = {
         "@type": "mean" as const,
         "mean": mean,
@@ -4782,7 +4782,7 @@ function c4d_mean_params(
  * @returns Command-line arguments.
  */
 function c4d_mean_cargs(
-    params: C4dMeanParameters,
+    params: C4dMeanParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4807,9 +4807,9 @@ Applies the median filter: the intensity of each voxel is replaced by the median
  *
  * @returns Parameter dictionary
  */
-function c4d_median_filter_params(
+function c4d_median_filter(
     median_filter: string,
-): C4dMedianFilterParametersTagged {
+): C4dMedianFilterParamsDictTagged {
     const params = {
         "@type": "median_filter" as const,
         "median_filter": median_filter,
@@ -4827,7 +4827,7 @@ function c4d_median_filter_params(
  * @returns Command-line arguments.
  */
 function c4d_median_filter_cargs(
-    params: C4dMedianFilterParameters,
+    params: C4dMedianFilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4850,9 +4850,9 @@ Works in conjunction with the **-split** command. Has similar behavior to **-vot
  *
  * @returns Parameter dictionary
  */
-function c4d_merge_params(
+function c4d_merge(
     merge: string,
-): C4dMergeParametersTagged {
+): C4dMergeParamsDictTagged {
     const params = {
         "@type": "merge" as const,
         "merge": merge,
@@ -4870,7 +4870,7 @@ function c4d_merge_params(
  * @returns Command-line arguments.
  */
 function c4d_merge_cargs(
-    params: C4dMergeParameters,
+    params: C4dMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4895,9 +4895,9 @@ Applies the mean filter: the intensity of each voxel is replaced by the mean of 
  *
  * @returns Parameter dictionary
  */
-function c4d_mean_filter_params(
+function c4d_mean_filter(
     mean_filter: string,
-): C4dMeanFilterParametersTagged {
+): C4dMeanFilterParamsDictTagged {
     const params = {
         "@type": "mean_filter" as const,
         "mean_filter": mean_filter,
@@ -4915,7 +4915,7 @@ function c4d_mean_filter_params(
  * @returns Command-line arguments.
  */
 function c4d_mean_filter_cargs(
-    params: C4dMeanFilterParameters,
+    params: C4dMeanFilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4941,9 +4941,9 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
  *
  * @returns Parameter dictionary
  */
-function c4d_mutual_info_params(
+function c4d_mutual_info(
     mutual_info: string,
-): C4dMutualInfoParametersTagged {
+): C4dMutualInfoParamsDictTagged {
     const params = {
         "@type": "mutual_info" as const,
         "mutual_info": mutual_info,
@@ -4961,7 +4961,7 @@ function c4d_mutual_info_params(
  * @returns Command-line arguments.
  */
 function c4d_mutual_info_cargs(
-    params: C4dMutualInfoParameters,
+    params: C4dMutualInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -4987,9 +4987,9 @@ Computes the voxel-wise minimum of two images. Can be used with the **-accum** c
  *
  * @returns Parameter dictionary
  */
-function c4d_minimum_params(
+function c4d_minimum(
     minimum: string,
-): C4dMinimumParametersTagged {
+): C4dMinimumParamsDictTagged {
     const params = {
         "@type": "minimum" as const,
         "minimum": minimum,
@@ -5007,7 +5007,7 @@ function c4d_minimum_params(
  * @returns Command-line arguments.
  */
 function c4d_minimum_cargs(
-    params: C4dMinimumParameters,
+    params: C4dMinimumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5026,9 +5026,9 @@ function c4d_minimum_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_mixture_model_params(
+function c4d_mixture_model(
     mixture_model: string,
-): C4dMixtureModelParametersTagged {
+): C4dMixtureModelParamsDictTagged {
     const params = {
         "@type": "mixture_model" as const,
         "mixture_model": mixture_model,
@@ -5046,7 +5046,7 @@ function c4d_mixture_model_params(
  * @returns Command-line arguments.
  */
 function c4d_mixture_model_cargs(
-    params: C4dMixtureModelParameters,
+    params: C4dMixtureModelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5065,9 +5065,9 @@ function c4d_mixture_model_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_moments_params(
+function c4d_moments(
     moments: string,
-): C4dMomentsParametersTagged {
+): C4dMomentsParamsDictTagged {
     const params = {
         "@type": "moments" as const,
         "moments": moments,
@@ -5085,7 +5085,7 @@ function c4d_moments_params(
  * @returns Command-line arguments.
  */
 function c4d_moments_cargs(
-    params: C4dMomentsParameters,
+    params: C4dMomentsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5104,9 +5104,9 @@ function c4d_moments_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_mattes_mutual_info_params(
+function c4d_mattes_mutual_info(
     mattes_mutual_info: string,
-): C4dMattesMutualInfoParametersTagged {
+): C4dMattesMutualInfoParamsDictTagged {
     const params = {
         "@type": "mattes_mutual_info" as const,
         "mattes_mutual_info": mattes_mutual_info,
@@ -5124,7 +5124,7 @@ function c4d_mattes_mutual_info_params(
  * @returns Command-line arguments.
  */
 function c4d_mattes_mutual_info_cargs(
-    params: C4dMattesMutualInfoParameters,
+    params: C4dMattesMutualInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5156,9 +5156,9 @@ Compute the mean square difference metric between the last two images on the sta
  *
  * @returns Parameter dictionary
  */
-function c4d_mean_square_params(
+function c4d_mean_square(
     mean_square: string,
-): C4dMeanSquareParametersTagged {
+): C4dMeanSquareParamsDictTagged {
     const params = {
         "@type": "mean_square" as const,
         "mean_square": mean_square,
@@ -5176,7 +5176,7 @@ function c4d_mean_square_params(
  * @returns Command-line arguments.
  */
 function c4d_mean_square_cargs(
-    params: C4dMeanSquareParameters,
+    params: C4dMeanSquareParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5210,9 +5210,9 @@ Combine with the **-dup** command to compute voxelwise square of the image
  *
  * @returns Parameter dictionary
  */
-function c4d_multiply_params(
+function c4d_multiply(
     multiply: string,
-): C4dMultiplyParametersTagged {
+): C4dMultiplyParamsDictTagged {
     const params = {
         "@type": "multiply" as const,
         "multiply": multiply,
@@ -5230,7 +5230,7 @@ function c4d_multiply_params(
  * @returns Command-line arguments.
  */
 function c4d_multiply_cargs(
-    params: C4dMultiplyParameters,
+    params: C4dMultiplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5253,9 +5253,9 @@ Computes normalized cross-correlation between two images that occupy the same ph
  *
  * @returns Parameter dictionary
  */
-function c4d_normalized_cross_correlation_params(
+function c4d_normalized_cross_correlation(
     normalized_cross_correlation: string,
-): C4dNormalizedCrossCorrelationParametersTagged {
+): C4dNormalizedCrossCorrelationParamsDictTagged {
     const params = {
         "@type": "normalized_cross_correlation" as const,
         "normalized_cross_correlation": normalized_cross_correlation,
@@ -5273,7 +5273,7 @@ function c4d_normalized_cross_correlation_params(
  * @returns Command-line arguments.
  */
 function c4d_normalized_cross_correlation_cargs(
-    params: C4dNormalizedCrossCorrelationParameters,
+    params: C4dNormalizedCrossCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5296,9 +5296,9 @@ Syntax: `-ncor [movtransform.mat] [reftransform.mat]`
  *
  * @returns Parameter dictionary
  */
-function c4d_normalized_correlation_params(
+function c4d_normalized_correlation(
     normalized_correlation: string,
-): C4dNormalizedCorrelationParametersTagged {
+): C4dNormalizedCorrelationParamsDictTagged {
     const params = {
         "@type": "normalized_correlation" as const,
         "normalized_correlation": normalized_correlation,
@@ -5316,7 +5316,7 @@ function c4d_normalized_correlation_params(
  * @returns Command-line arguments.
  */
 function c4d_normalized_correlation_cargs(
-    params: C4dNormalizedCorrelationParameters,
+    params: C4dNormalizedCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5339,9 +5339,9 @@ Compute the Mattes mutual information metric between the last two images on the 
  *
  * @returns Parameter dictionary
  */
-function c4d_normalized_mutual_info_params(
+function c4d_normalized_mutual_info(
     normalized_mutual_info: string,
-): C4dNormalizedMutualInfoParametersTagged {
+): C4dNormalizedMutualInfoParamsDictTagged {
     const params = {
         "@type": "normalized_mutual_info" as const,
         "normalized_mutual_info": normalized_mutual_info,
@@ -5359,7 +5359,7 @@ function c4d_normalized_mutual_info_params(
  * @returns Command-line arguments.
  */
 function c4d_normalized_mutual_info_cargs(
-    params: C4dNormalizedMutualInfoParameters,
+    params: C4dNormalizedMutualInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5384,9 +5384,9 @@ Adds Gaussian noise to an image with zero mean and standard deviation sigma. Ple
  *
  * @returns Parameter dictionary
  */
-function c4d_noise_gaussian_params(
+function c4d_noise_gaussian(
     noise_gaussian: string,
-): C4dNoiseGaussianParametersTagged {
+): C4dNoiseGaussianParamsDictTagged {
     const params = {
         "@type": "noise_gaussian" as const,
         "noise_gaussian": noise_gaussian,
@@ -5404,7 +5404,7 @@ function c4d_noise_gaussian_params(
  * @returns Command-line arguments.
  */
 function c4d_noise_gaussian_cargs(
-    params: C4dNoiseGaussianParameters,
+    params: C4dNoiseGaussianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5428,9 +5428,9 @@ Applies Poisson (shot) noise to an image with given scale. Please see [Noise sim
  *
  * @returns Parameter dictionary
  */
-function c4d_noise_poisson_params(
+function c4d_noise_poisson(
     noise_poisson: string,
-): C4dNoisePoissonParametersTagged {
+): C4dNoisePoissonParamsDictTagged {
     const params = {
         "@type": "noise_poisson" as const,
         "noise_poisson": noise_poisson,
@@ -5448,7 +5448,7 @@ function c4d_noise_poisson_params(
  * @returns Command-line arguments.
  */
 function c4d_noise_poisson_cargs(
-    params: C4dNoisePoissonParameters,
+    params: C4dNoisePoissonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5472,9 +5472,9 @@ Applies Speckle noise to an image with given standard deviation. Please see [Noi
  *
  * @returns Parameter dictionary
  */
-function c4d_noise_speckle_params(
+function c4d_noise_speckle(
     noise_speckle: string,
-): C4dNoiseSpeckleParametersTagged {
+): C4dNoiseSpeckleParamsDictTagged {
     const params = {
         "@type": "noise_speckle" as const,
         "noise_speckle": noise_speckle,
@@ -5492,7 +5492,7 @@ function c4d_noise_speckle_params(
  * @returns Command-line arguments.
  */
 function c4d_noise_speckle_cargs(
-    params: C4dNoiseSpeckleParameters,
+    params: C4dNoiseSpeckleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5516,9 +5516,9 @@ Applies salt and pepper noise to an image with given probability. Please see [No
  *
  * @returns Parameter dictionary
  */
-function c4d_noise_salt_pepper_params(
+function c4d_noise_salt_pepper(
     noise_salt_pepper: string,
-): C4dNoiseSaltPepperParametersTagged {
+): C4dNoiseSaltPepperParamsDictTagged {
     const params = {
         "@type": "noise_salt_pepper" as const,
         "noise_salt_pepper": noise_salt_pepper,
@@ -5536,7 +5536,7 @@ function c4d_noise_salt_pepper_params(
  * @returns Command-line arguments.
  */
 function c4d_noise_salt_pepper_cargs(
-    params: C4dNoiseSaltPepperParameters,
+    params: C4dNoiseSaltPepperParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5559,9 +5559,9 @@ Used to reverse the effect of previous **-mcs** command.
  *
  * @returns Parameter dictionary
  */
-function c4d_no_multicomponent_split_params(
+function c4d_no_multicomponent_split(
     no_multicomponent_split: string,
-): C4dNoMulticomponentSplitParametersTagged {
+): C4dNoMulticomponentSplitParamsDictTagged {
     const params = {
         "@type": "no_multicomponent_split" as const,
         "no_multicomponent_split": no_multicomponent_split,
@@ -5579,7 +5579,7 @@ function c4d_no_multicomponent_split_params(
  * @returns Command-line arguments.
  */
 function c4d_no_multicomponent_split_cargs(
-    params: C4dNoMulticomponentSplitParameters,
+    params: C4dNoMulticomponentSplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5604,9 +5604,9 @@ This command takes as inputs an image and a mask image. At each voxel, the mean 
  *
  * @returns Parameter dictionary
  */
-function c4d_normalize_local_window_params(
+function c4d_normalize_local_window(
     normalize_local_window: string,
-): C4dNormalizeLocalWindowParametersTagged {
+): C4dNormalizeLocalWindowParamsDictTagged {
     const params = {
         "@type": "normalize_local_window" as const,
         "normalize_local_window": normalize_local_window,
@@ -5624,7 +5624,7 @@ function c4d_normalize_local_window_params(
  * @returns Command-line arguments.
  */
 function c4d_normalize_local_window_cargs(
-    params: C4dNormalizeLocalWindowParameters,
+    params: C4dNormalizeLocalWindowParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5643,9 +5643,9 @@ function c4d_normalize_local_window_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_normpdf_params(
+function c4d_normpdf(
     normpdf: string,
-): C4dNormpdfParametersTagged {
+): C4dNormpdfParamsDictTagged {
     const params = {
         "@type": "normpdf" as const,
         "normpdf": normpdf,
@@ -5663,7 +5663,7 @@ function c4d_normpdf_params(
  * @returns Command-line arguments.
  */
 function c4d_normpdf_cargs(
-    params: C4dNormpdfParameters,
+    params: C4dNormpdfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5688,9 +5688,9 @@ By default, **convert3d** will round floating point values when converting to an
  *
  * @returns Parameter dictionary
  */
-function c4d_noround_params(
+function c4d_noround(
     noround: string,
-): C4dNoroundParametersTagged {
+): C4dNoroundParamsDictTagged {
     const params = {
         "@type": "noround" as const,
         "noround": noround,
@@ -5708,7 +5708,7 @@ function c4d_noround_params(
  * @returns Command-line arguments.
  */
 function c4d_noround_cargs(
-    params: C4dNoroundParameters,
+    params: C4dNoroundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5733,9 +5733,9 @@ These options specify whether use the SPM extension to the Analyze (.hdr,.img) f
  *
  * @returns Parameter dictionary
  */
-function c4d_nospm_params(
+function c4d_nospm(
     nospm: string,
-): C4dNospmParametersTagged {
+): C4dNospmParamsDictTagged {
     const params = {
         "@type": "nospm" as const,
         "nospm": nospm,
@@ -5753,7 +5753,7 @@ function c4d_nospm_params(
  * @returns Command-line arguments.
  */
 function c4d_nospm_cargs(
-    params: C4dNospmParameters,
+    params: C4dNospmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5766,7 +5766,7 @@ function c4d_nospm_cargs(
 
 
 /**
- * Output object returned when calling `C4dOutputParameters(...)`.
+ * Output object returned when calling `C4dOutputParamsDict(...)`.
  *
  * @interface
  */
@@ -5799,9 +5799,9 @@ The **-o** option can also be used to save an intermediate image in the stack:
  *
  * @returns Parameter dictionary
  */
-function c4d_output_params(
+function c4d_output(
     output: string,
-): C4dOutputParametersTagged {
+): C4dOutputParamsDictTagged {
     const params = {
         "@type": "output" as const,
         "output": output,
@@ -5819,7 +5819,7 @@ function c4d_output_params(
  * @returns Command-line arguments.
  */
 function c4d_output_cargs(
-    params: C4dOutputParameters,
+    params: C4dOutputParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5840,7 +5840,7 @@ function c4d_output_cargs(
  * @returns Outputs object.
  */
 function c4d_output_outputs(
-    params: C4dOutputParameters,
+    params: C4dOutputParamsDict,
     execution: Execution,
 ): C4dOutputOutputs {
     const ret: C4dOutputOutputs = {
@@ -5868,9 +5868,9 @@ For 2D images, this command can be used to generate color PNG files:
  *
  * @returns Parameter dictionary
  */
-function c4d_output_multicomponent_params(
+function c4d_output_multicomponent(
     output_multicomponent: string,
-): C4dOutputMulticomponentParametersTagged {
+): C4dOutputMulticomponentParamsDictTagged {
     const params = {
         "@type": "output_multicomponent" as const,
         "output_multicomponent": output_multicomponent,
@@ -5888,7 +5888,7 @@ function c4d_output_multicomponent_params(
  * @returns Command-line arguments.
  */
 function c4d_output_multicomponent_cargs(
-    params: C4dOutputMulticomponentParameters,
+    params: C4dOutputMulticomponentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5917,9 +5917,9 @@ Sometimes, for complex operations, it is useful to change the order of the image
  *
  * @returns Parameter dictionary
  */
-function c4d_output_multiple_multicomponent_params(
+function c4d_output_multiple_multicomponent(
     output_multiple_multicomponent: string,
-): C4dOutputMultipleMulticomponentParametersTagged {
+): C4dOutputMultipleMulticomponentParamsDictTagged {
     const params = {
         "@type": "output_multiple_multicomponent" as const,
         "output_multiple_multicomponent": output_multiple_multicomponent,
@@ -5937,7 +5937,7 @@ function c4d_output_multiple_multicomponent_params(
  * @returns Command-line arguments.
  */
 function c4d_output_multiple_multicomponent_cargs(
-    params: C4dOutputMultipleMulticomponentParameters,
+    params: C4dOutputMultipleMulticomponentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -5967,9 +5967,9 @@ This command has the same behavior as the 'Reorient Image' menu option in ITK-SN
  *
  * @returns Parameter dictionary
  */
-function c4d_orient_params(
+function c4d_orient(
     orient: string,
-): C4dOrientParametersTagged {
+): C4dOrientParamsDictTagged {
     const params = {
         "@type": "orient" as const,
         "orient": orient,
@@ -5987,7 +5987,7 @@ function c4d_orient_params(
  * @returns Command-line arguments.
  */
 function c4d_orient_cargs(
-    params: C4dOrientParameters,
+    params: C4dOrientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6020,9 +6020,9 @@ will generate images *label00.nii*, *label01.nii*, *label02.nii* and so on. The 
  *
  * @returns Parameter dictionary
  */
-function c4d_output_multiple_params(
+function c4d_output_multiple(
     output_multiple: string,
-): C4dOutputMultipleParametersTagged {
+): C4dOutputMultipleParamsDictTagged {
     const params = {
         "@type": "output_multiple" as const,
         "output_multiple": output_multiple,
@@ -6040,7 +6040,7 @@ function c4d_output_multiple_params(
  * @returns Command-line arguments.
  */
 function c4d_output_multiple_cargs(
-    params: C4dOutputMultipleParameters,
+    params: C4dOutputMultipleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6070,9 +6070,9 @@ This command has the same behavior as the 'Reorient Image' menu option in ITK-SN
  *
  * @returns Parameter dictionary
  */
-function c4d_orient_1_params(
+function c4d_orient_1(
     orient: string,
-): C4dOrient1ParametersTagged {
+): C4dOrient1ParamsDictTagged {
     const params = {
         "@type": "orient_1" as const,
         "orient": orient,
@@ -6090,7 +6090,7 @@ function c4d_orient_1_params(
  * @returns Command-line arguments.
  */
 function c4d_orient_1_cargs(
-    params: C4dOrient1Parameters,
+    params: C4dOrient1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6115,9 +6115,9 @@ Set the origin of the image. The origin is the world coordinate (in NIfTI coordi
  *
  * @returns Parameter dictionary
  */
-function c4d_origin_params(
+function c4d_origin(
     origin: string,
-): C4dOriginParametersTagged {
+): C4dOriginParamsDictTagged {
     const params = {
         "@type": "origin" as const,
         "origin": origin,
@@ -6135,7 +6135,7 @@ function c4d_origin_params(
  * @returns Command-line arguments.
  */
 function c4d_origin_cargs(
-    params: C4dOriginParameters,
+    params: C4dOriginParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6161,9 +6161,9 @@ Set the origin of the image by specifying the voxel coordinates of the center of
  *
  * @returns Parameter dictionary
  */
-function c4d_origin_voxel_params(
+function c4d_origin_voxel(
     origin_voxel: string,
-): C4dOriginVoxelParametersTagged {
+): C4dOriginVoxelParamsDictTagged {
     const params = {
         "@type": "origin_voxel" as const,
         "origin_voxel": origin_voxel,
@@ -6181,7 +6181,7 @@ function c4d_origin_voxel_params(
  * @returns Command-line arguments.
  */
 function c4d_origin_voxel_cargs(
-    params: C4dOriginVoxelParameters,
+    params: C4dOriginVoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6206,9 +6206,9 @@ This command updates the origin of the image such that the specifed voxel has th
  *
  * @returns Parameter dictionary
  */
-function c4d_origin_voxel_coord_params(
+function c4d_origin_voxel_coord(
     origin_voxel_coord: string,
-): C4dOriginVoxelCoordParametersTagged {
+): C4dOriginVoxelCoordParamsDictTagged {
     const params = {
         "@type": "origin_voxel_coord" as const,
         "origin_voxel_coord": origin_voxel_coord,
@@ -6226,7 +6226,7 @@ function c4d_origin_voxel_coord_params(
  * @returns Command-line arguments.
  */
 function c4d_origin_voxel_coord_cargs(
-    params: C4dOriginVoxelCoordParameters,
+    params: C4dOriginVoxelCoordParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6267,9 +6267,9 @@ This command does not alter the stack.
  *
  * @returns Parameter dictionary
  */
-function c4d_overlap_params(
+function c4d_overlap(
     overlap: string,
-): C4dOverlapParametersTagged {
+): C4dOverlapParamsDictTagged {
     const params = {
         "@type": "overlap" as const,
         "overlap": overlap,
@@ -6287,7 +6287,7 @@ function c4d_overlap_params(
  * @returns Command-line arguments.
  */
 function c4d_overlap_cargs(
-    params: C4dOverlapParameters,
+    params: C4dOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6324,9 +6324,9 @@ Here is a more complex example, used to visualize a segmentation result. We do a
  *
  * @returns Parameter dictionary
  */
-function c4d_overlay_label_image_params(
+function c4d_overlay_label_image(
     overlay_label_image: string,
-): C4dOverlayLabelImageParametersTagged {
+): C4dOverlayLabelImageParamsDictTagged {
     const params = {
         "@type": "overlay_label_image" as const,
         "overlay_label_image": overlay_label_image,
@@ -6344,7 +6344,7 @@ function c4d_overlay_label_image_params(
  * @returns Command-line arguments.
  */
 function c4d_overlay_label_image_cargs(
-    params: C4dOverlayLabelImageParameters,
+    params: C4dOverlayLabelImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6381,9 +6381,9 @@ Adds 10% to all sides of the image, and fills the new voxels with the value 1.
  *
  * @returns Parameter dictionary
  */
-function c4d_pad_params(
+function c4d_pad(
     pad: string,
-): C4dPadParametersTagged {
+): C4dPadParamsDictTagged {
     const params = {
         "@type": "pad" as const,
         "pad": pad,
@@ -6401,7 +6401,7 @@ function c4d_pad_params(
  * @returns Command-line arguments.
  */
 function c4d_pad_cargs(
-    params: C4dPadParameters,
+    params: C4dPadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6420,9 +6420,9 @@ function c4d_pad_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_pad_to_params(
+function c4d_pad_to(
     pad_to: string,
-): C4dPadToParametersTagged {
+): C4dPadToParamsDictTagged {
     const params = {
         "@type": "pad_to" as const,
         "pad_to": pad_to,
@@ -6440,7 +6440,7 @@ function c4d_pad_to_params(
  * @returns Command-line arguments.
  */
 function c4d_pad_to_cargs(
-    params: C4dPadToParameters,
+    params: C4dPadToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6467,9 +6467,9 @@ Similar to the *-centroid* command, computes the centroid and prinicipal compone
  *
  * @returns Parameter dictionary
  */
-function c4d_pca_params(
+function c4d_pca(
     pca: string,
-): C4dPcaParametersTagged {
+): C4dPcaParamsDictTagged {
     const params = {
         "@type": "pca" as const,
         "pca": pca,
@@ -6487,7 +6487,7 @@ function c4d_pca_params(
  * @returns Command-line arguments.
  */
 function c4d_pca_cargs(
-    params: C4dPcaParameters,
+    params: C4dPcaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6519,9 +6519,9 @@ This options changes how the percent sign (%) is interpreted when specifying int
  *
  * @returns Parameter dictionary
  */
-function c4d_percent_intensity_mode_params(
+function c4d_percent_intensity_mode(
     percent_intensity_mode: string,
-): C4dPercentIntensityModeParametersTagged {
+): C4dPercentIntensityModeParamsDictTagged {
     const params = {
         "@type": "percent_intensity_mode" as const,
         "percent_intensity_mode": percent_intensity_mode,
@@ -6539,7 +6539,7 @@ function c4d_percent_intensity_mode_params(
  * @returns Command-line arguments.
  */
 function c4d_percent_intensity_mode_cargs(
-    params: C4dPercentIntensityModeParameters,
+    params: C4dPercentIntensityModeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6558,9 +6558,9 @@ function c4d_percent_intensity_mode_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_pixel_params(
+function c4d_pixel(
     pixel: string,
-): C4dPixelParametersTagged {
+): C4dPixelParamsDictTagged {
     const params = {
         "@type": "pixel" as const,
         "pixel": pixel,
@@ -6578,7 +6578,7 @@ function c4d_pixel_params(
  * @returns Command-line arguments.
  */
 function c4d_pixel_cargs(
-    params: C4dPixelParameters,
+    params: C4dPixelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6601,9 +6601,9 @@ Removes the last image from the image stack. Images assigned a name with the **-
  *
  * @returns Parameter dictionary
  */
-function c4d_pop_params(
+function c4d_pop(
     pop: string,
-): C4dPopParametersTagged {
+): C4dPopParamsDictTagged {
     const params = {
         "@type": "pop" as const,
         "pop": pop,
@@ -6621,7 +6621,7 @@ function c4d_pop_params(
  * @returns Command-line arguments.
  */
 function c4d_pop_cargs(
-    params: C4dPopParameters,
+    params: C4dPopParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6644,9 +6644,9 @@ Removes the last image from the stack, but also assigns it the name 'var', keepi
  *
  * @returns Parameter dictionary
  */
-function c4d_popas_params(
+function c4d_popas(
     popas: string,
-): C4dPopasParametersTagged {
+): C4dPopasParamsDictTagged {
     const params = {
         "@type": "popas" as const,
         "popas": popas,
@@ -6664,7 +6664,7 @@ function c4d_popas_params(
  * @returns Command-line arguments.
  */
 function c4d_popas_cargs(
-    params: C4dPopasParameters,
+    params: C4dPopasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6691,9 +6691,9 @@ Prints the value of the image at the position specified by the parameter `point_
  *
  * @returns Parameter dictionary
  */
-function c4d_probe_params(
+function c4d_probe(
     probe: string,
-): C4dProbeParametersTagged {
+): C4dProbeParamsDictTagged {
     const params = {
         "@type": "probe" as const,
         "probe": probe,
@@ -6711,7 +6711,7 @@ function c4d_probe_params(
  * @returns Command-line arguments.
  */
 function c4d_probe_cargs(
-    params: C4dProbeParameters,
+    params: C4dProbeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6736,9 +6736,9 @@ Places the image associated with variable name 'var' on end of the image stack. 
  *
  * @returns Parameter dictionary
  */
-function c4d_push_params(
+function c4d_push(
     push: string,
-): C4dPushParametersTagged {
+): C4dPushParamsDictTagged {
     const params = {
         "@type": "push" as const,
         "push": push,
@@ -6756,7 +6756,7 @@ function c4d_push_params(
  * @returns Command-line arguments.
  */
 function c4d_push_cargs(
-    params: C4dPushParameters,
+    params: C4dPushParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6781,9 +6781,9 @@ This command takes N images as the input (all the images on the stack are used).
  *
  * @returns Parameter dictionary
  */
-function c4d_rank_params(
+function c4d_rank(
     rank: string,
-): C4dRankParametersTagged {
+): C4dRankParamsDictTagged {
     const params = {
         "@type": "rank" as const,
         "rank": rank,
@@ -6801,7 +6801,7 @@ function c4d_rank_params(
  * @returns Command-line arguments.
  */
 function c4d_rank_cargs(
-    params: C4dRankParameters,
+    params: C4dRankParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6826,9 +6826,9 @@ Computes the reciprocal of an image. For instance to compute B = 1 / A, use the 
  *
  * @returns Parameter dictionary
  */
-function c4d_reciprocal_params(
+function c4d_reciprocal(
     reciprocal: string,
-): C4dReciprocalParametersTagged {
+): C4dReciprocalParamsDictTagged {
     const params = {
         "@type": "reciprocal" as const,
         "reciprocal": reciprocal,
@@ -6846,7 +6846,7 @@ function c4d_reciprocal_params(
  * @returns Command-line arguments.
  */
 function c4d_reciprocal_cargs(
-    params: C4dReciprocalParameters,
+    params: C4dReciprocalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6872,9 +6872,9 @@ Extract a rectangular region from the image. The first parameter is the position
  *
  * @returns Parameter dictionary
  */
-function c4d_region_params(
+function c4d_region(
     region: string,
-): C4dRegionParametersTagged {
+): C4dRegionParamsDictTagged {
     const params = {
         "@type": "region" as const,
         "region": region,
@@ -6892,7 +6892,7 @@ function c4d_region_params(
  * @returns Command-line arguments.
  */
 function c4d_region_cargs(
-    params: C4dRegionParameters,
+    params: C4dRegionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6929,9 +6929,9 @@ is equivalent to the command
  *
  * @returns Parameter dictionary
  */
-function c4d_reorder_params(
+function c4d_reorder(
     reorder: string,
-): C4dReorderParametersTagged {
+): C4dReorderParamsDictTagged {
     const params = {
         "@type": "reorder" as const,
         "reorder": reorder,
@@ -6949,7 +6949,7 @@ function c4d_reorder_params(
  * @returns Command-line arguments.
  */
 function c4d_reorder_cargs(
-    params: C4dReorderParameters,
+    params: C4dReorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -6974,9 +6974,9 @@ Assuming that the input is a multi-label segmentation image, this command keeps 
  *
  * @returns Parameter dictionary
  */
-function c4d_retain_labels_params(
+function c4d_retain_labels(
     retain_labels: string,
-): C4dRetainLabelsParametersTagged {
+): C4dRetainLabelsParamsDictTagged {
     const params = {
         "@type": "retain_labels" as const,
         "retain_labels": retain_labels,
@@ -6994,7 +6994,7 @@ function c4d_retain_labels_params(
  * @returns Command-line arguments.
  */
 function c4d_retain_labels_cargs(
-    params: C4dRetainLabelsParameters,
+    params: C4dRetainLabelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7017,9 +7017,9 @@ This command applies a classifier trained previously by **-rf-train**. The stack
  *
  * @returns Parameter dictionary
  */
-function c4d_rf_apply_params(
+function c4d_rf_apply(
     rf_apply: string,
-): C4dRfApplyParametersTagged {
+): C4dRfApplyParamsDictTagged {
     const params = {
         "@type": "rf_apply" as const,
         "rf_apply": rf_apply,
@@ -7037,7 +7037,7 @@ function c4d_rf_apply_params(
  * @returns Command-line arguments.
  */
 function c4d_rf_apply_cargs(
-    params: C4dRfApplyParameters,
+    params: C4dRfApplyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7083,9 +7083,9 @@ The commands are meant to replicate the "classification" pre-segmentation mode i
  *
  * @returns Parameter dictionary
  */
-function c4d_rf_train_params(
+function c4d_rf_train(
     rf_train: string,
-): C4dRfTrainParametersTagged {
+): C4dRfTrainParamsDictTagged {
     const params = {
         "@type": "rf_train" as const,
         "rf_train": rf_train,
@@ -7103,7 +7103,7 @@ function c4d_rf_train_params(
  * @returns Command-line arguments.
  */
 function c4d_rf_train_cargs(
-    params: C4dRfTrainParameters,
+    params: C4dRfTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7129,9 +7129,9 @@ Set the radius of the patch used to generate features for the RF classifier. By 
  *
  * @returns Parameter dictionary
  */
-function c4d_rf_param_patch_params(
+function c4d_rf_param_patch(
     rf_param_patch: string,
-): C4dRfParamPatchParametersTagged {
+): C4dRfParamPatchParamsDictTagged {
     const params = {
         "@type": "rf_param_patch" as const,
         "rf_param_patch": rf_param_patch,
@@ -7149,7 +7149,7 @@ function c4d_rf_param_patch_params(
  * @returns Command-line arguments.
  */
 function c4d_rf_param_patch_cargs(
-    params: C4dRfParamPatchParameters,
+    params: C4dRfParamPatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7172,9 +7172,9 @@ Use the coordinates of voxels as additional features. This allows some geometric
  *
  * @returns Parameter dictionary
  */
-function c4d_rf_param_usexyz_params(
+function c4d_rf_param_usexyz(
     rf_param_usexyz: string,
-): C4dRfParamUsexyzParametersTagged {
+): C4dRfParamUsexyzParamsDictTagged {
     const params = {
         "@type": "rf_param_usexyz" as const,
         "rf_param_usexyz": rf_param_usexyz,
@@ -7192,7 +7192,7 @@ function c4d_rf_param_usexyz_params(
  * @returns Command-line arguments.
  */
 function c4d_rf_param_usexyz_cargs(
-    params: C4dRfParamUsexyzParameters,
+    params: C4dRfParamUsexyzParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7211,9 +7211,9 @@ function c4d_rf_param_usexyz_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_rf_param_nousexyz_params(
+function c4d_rf_param_nousexyz(
     rf_param_nousexyz: string,
-): C4dRfParamNousexyzParametersTagged {
+): C4dRfParamNousexyzParamsDictTagged {
     const params = {
         "@type": "rf_param_nousexyz" as const,
         "rf_param_nousexyz": rf_param_nousexyz,
@@ -7231,7 +7231,7 @@ function c4d_rf_param_nousexyz_params(
  * @returns Command-line arguments.
  */
 function c4d_rf_param_nousexyz_cargs(
-    params: C4dRfParamNousexyzParameters,
+    params: C4dRfParamNousexyzParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7254,9 +7254,9 @@ Sets the number of trees in the forest. Default value is 50. Larger forests are 
  *
  * @returns Parameter dictionary
  */
-function c4d_rf_param_ntrees_params(
+function c4d_rf_param_ntrees(
     rf_param_ntrees: string,
-): C4dRfParamNtreesParametersTagged {
+): C4dRfParamNtreesParamsDictTagged {
     const params = {
         "@type": "rf_param_ntrees" as const,
         "rf_param_ntrees": rf_param_ntrees,
@@ -7274,7 +7274,7 @@ function c4d_rf_param_ntrees_params(
  * @returns Command-line arguments.
  */
 function c4d_rf_param_ntrees_cargs(
-    params: C4dRfParamNtreesParameters,
+    params: C4dRfParamNtreesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7297,9 +7297,9 @@ Sets the depth of the trees in the classifier. Default value is 30. Deeper trees
  *
  * @returns Parameter dictionary
  */
-function c4d_rf_param_treedepth_params(
+function c4d_rf_param_treedepth(
     rf_param_treedepth: string,
-): C4dRfParamTreedepthParametersTagged {
+): C4dRfParamTreedepthParamsDictTagged {
     const params = {
         "@type": "rf_param_treedepth" as const,
         "rf_param_treedepth": rf_param_treedepth,
@@ -7317,7 +7317,7 @@ function c4d_rf_param_treedepth_params(
  * @returns Command-line arguments.
  */
 function c4d_rf_param_treedepth_cargs(
-    params: C4dRfParamTreedepthParameters,
+    params: C4dRfParamTreedepthParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7340,9 +7340,9 @@ Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
  *
  * @returns Parameter dictionary
  */
-function c4d_set_sform_params(
+function c4d_set_sform(
     set_sform: string,
-): C4dSetSformParametersTagged {
+): C4dSetSformParamsDictTagged {
     const params = {
         "@type": "set_sform" as const,
         "set_sform": set_sform,
@@ -7360,7 +7360,7 @@ function c4d_set_sform_params(
  * @returns Command-line arguments.
  */
 function c4d_set_sform_cargs(
-    params: C4dSetSformParameters,
+    params: C4dSetSformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7385,9 +7385,9 @@ Replace intensity I1 by J1, I2 by J2 and so on. Allowed values of intensity incl
  *
  * @returns Parameter dictionary
  */
-function c4d_replace_params(
+function c4d_replace(
     replace: string,
-): C4dReplaceParametersTagged {
+): C4dReplaceParamsDictTagged {
     const params = {
         "@type": "replace" as const,
         "replace": replace,
@@ -7405,7 +7405,7 @@ function c4d_replace_params(
  * @returns Command-line arguments.
  */
 function c4d_replace_cargs(
-    params: C4dReplaceParameters,
+    params: C4dReplaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7433,9 +7433,9 @@ Resamples the image, keeping the bounding box the same, but changing the number 
  *
  * @returns Parameter dictionary
  */
-function c4d_resample_params(
+function c4d_resample(
     resample: string,
-): C4dResampleParametersTagged {
+): C4dResampleParamsDictTagged {
     const params = {
         "@type": "resample" as const,
         "resample": resample,
@@ -7453,7 +7453,7 @@ function c4d_resample_params(
  * @returns Command-line arguments.
  */
 function c4d_resample_cargs(
-    params: C4dResampleParameters,
+    params: C4dResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7478,9 +7478,9 @@ Resamples the image to have approximately isotropic resolution, either based on 
  *
  * @returns Parameter dictionary
  */
-function c4d_resample_iso_params(
+function c4d_resample_iso(
     resample_iso: string,
-): C4dResampleIsoParametersTagged {
+): C4dResampleIsoParamsDictTagged {
     const params = {
         "@type": "resample_iso" as const,
         "resample_iso": resample_iso,
@@ -7498,7 +7498,7 @@ function c4d_resample_iso_params(
  * @returns Command-line arguments.
  */
 function c4d_resample_iso_cargs(
-    params: C4dResampleIsoParameters,
+    params: C4dResampleIsoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7523,9 +7523,9 @@ Resamples the image as in **-resample**, but the user specifies the new voxel si
  *
  * @returns Parameter dictionary
  */
-function c4d_resample_mm_params(
+function c4d_resample_mm(
     resample_mm: string,
-): C4dResampleMmParametersTagged {
+): C4dResampleMmParamsDictTagged {
     const params = {
         "@type": "resample_mm" as const,
         "resample_mm": resample_mm,
@@ -7543,7 +7543,7 @@ function c4d_resample_mm_params(
  * @returns Command-line arguments.
  */
 function c4d_resample_mm_cargs(
-    params: C4dResampleMmParameters,
+    params: C4dResampleMmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7566,9 +7566,9 @@ Applies affine (or other) transform in ITK (ANTs) format to an image. See notes 
  *
  * @returns Parameter dictionary
  */
-function c4d_reslice_itk_params(
+function c4d_reslice_itk(
     reslice_itk: string,
-): C4dResliceItkParametersTagged {
+): C4dResliceItkParamsDictTagged {
     const params = {
         "@type": "reslice_itk" as const,
         "reslice_itk": reslice_itk,
@@ -7586,7 +7586,7 @@ function c4d_reslice_itk_params(
  * @returns Command-line arguments.
  */
 function c4d_reslice_itk_cargs(
-    params: C4dResliceItkParameters,
+    params: C4dResliceItkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7605,9 +7605,9 @@ function c4d_reslice_itk_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_reslice_matrix_params(
+function c4d_reslice_matrix(
     reslice_matrix: string,
-): C4dResliceMatrixParametersTagged {
+): C4dResliceMatrixParamsDictTagged {
     const params = {
         "@type": "reslice_matrix" as const,
         "reslice_matrix": reslice_matrix,
@@ -7625,7 +7625,7 @@ function c4d_reslice_matrix_params(
  * @returns Command-line arguments.
  */
 function c4d_reslice_matrix_cargs(
-    params: C4dResliceMatrixParameters,
+    params: C4dResliceMatrixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7650,9 +7650,9 @@ Applies the **-reslice-matrix** command with the identity transform. This is use
  *
  * @returns Parameter dictionary
  */
-function c4d_reslice_identity_params(
+function c4d_reslice_identity(
     reslice_identity: string,
-): C4dResliceIdentityParametersTagged {
+): C4dResliceIdentityParamsDictTagged {
     const params = {
         "@type": "reslice_identity" as const,
         "reslice_identity": reslice_identity,
@@ -7670,7 +7670,7 @@ function c4d_reslice_identity_params(
  * @returns Command-line arguments.
  */
 function c4d_reslice_identity_cargs(
-    params: C4dResliceIdentityParameters,
+    params: C4dResliceIdentityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7695,9 +7695,9 @@ Takes the last three images on the stack and treats them as red, green, and blue
  *
  * @returns Parameter dictionary
  */
-function c4d_rgb2hsv_params(
+function c4d_rgb2hsv(
     rgb2hsv: string,
-): C4dRgb2hsvParametersTagged {
+): C4dRgb2hsvParamsDictTagged {
     const params = {
         "@type": "rgb2hsv" as const,
         "rgb2hsv": rgb2hsv,
@@ -7715,7 +7715,7 @@ function c4d_rgb2hsv_params(
  * @returns Command-line arguments.
  */
 function c4d_rgb2hsv_cargs(
-    params: C4dRgb2hsvParameters,
+    params: C4dRgb2hsvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7745,9 +7745,9 @@ The equivalent of this command is
  *
  * @returns Parameter dictionary
  */
-function c4d_rms_params(
+function c4d_rms(
     rms: string,
-): C4dRmsParametersTagged {
+): C4dRmsParamsDictTagged {
     const params = {
         "@type": "rms" as const,
         "rms": rms,
@@ -7765,7 +7765,7 @@ function c4d_rms_params(
  * @returns Command-line arguments.
  */
 function c4d_rms_cargs(
-    params: C4dRmsParameters,
+    params: C4dRmsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7790,9 +7790,9 @@ By default, **convert3d** will round floating point values when converting to an
  *
  * @returns Parameter dictionary
  */
-function c4d_round_params(
+function c4d_round(
     round: string,
-): C4dRoundParametersTagged {
+): C4dRoundParamsDictTagged {
     const params = {
         "@type": "round" as const,
         "round": round,
@@ -7810,7 +7810,7 @@ function c4d_round_params(
  * @returns Command-line arguments.
  */
 function c4d_round_cargs(
-    params: C4dRoundParameters,
+    params: C4dRoundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7835,9 +7835,9 @@ Multiplies the intensity of each voxel in the last image on the stack by the giv
  *
  * @returns Parameter dictionary
  */
-function c4d_scale_params(
+function c4d_scale(
     scale: string,
-): C4dScaleParametersTagged {
+): C4dScaleParamsDictTagged {
     const params = {
         "@type": "scale" as const,
         "scale": scale,
@@ -7855,7 +7855,7 @@ function c4d_scale_params(
  * @returns Command-line arguments.
  */
 function c4d_scale_cargs(
-    params: C4dScaleParameters,
+    params: C4dScaleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7878,9 +7878,9 @@ Sets the Nifti sform of the last image on the stack to the 4x4 matrix provided.
  *
  * @returns Parameter dictionary
  */
-function c4d_set_sform_1_params(
+function c4d_set_sform_1(
     set_sform: string,
-): C4dSetSform1ParametersTagged {
+): C4dSetSform1ParamsDictTagged {
     const params = {
         "@type": "set_sform_1" as const,
         "set_sform": set_sform,
@@ -7898,7 +7898,7 @@ function c4d_set_sform_1_params(
  * @returns Command-line arguments.
  */
 function c4d_set_sform_1_cargs(
-    params: C4dSetSform1Parameters,
+    params: C4dSetSform1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7921,9 +7921,9 @@ Replaces the last image on the stack with the cosine trigonometric operation app
  *
  * @returns Parameter dictionary
  */
-function c4d_sin_params(
+function c4d_sin(
     sin: string,
-): C4dSinParametersTagged {
+): C4dSinParamsDictTagged {
     const params = {
         "@type": "sin" as const,
         "sin": sin,
@@ -7941,7 +7941,7 @@ function c4d_sin_params(
  * @returns Command-line arguments.
  */
 function c4d_sin_cargs(
-    params: C4dSinParameters,
+    params: C4dSinParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -7974,9 +7974,9 @@ With the new command **c4d**, the **-slice** command can be used to extract volu
  *
  * @returns Parameter dictionary
  */
-function c4d_slice_params(
+function c4d_slice(
     slice: string,
-): C4dSliceParametersTagged {
+): C4dSliceParamsDictTagged {
     const params = {
         "@type": "slice" as const,
         "slice": slice,
@@ -7994,7 +7994,7 @@ function c4d_slice_params(
  * @returns Command-line arguments.
  */
 function c4d_slice_cargs(
-    params: C4dSliceParameters,
+    params: C4dSliceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8019,9 +8019,9 @@ This command behaves identical to the **-slice** command, but all images on the 
  *
  * @returns Parameter dictionary
  */
-function c4d_slice_all_params(
+function c4d_slice_all(
     slice_all: string,
-): C4dSliceAllParametersTagged {
+): C4dSliceAllParamsDictTagged {
     const params = {
         "@type": "slice_all" as const,
         "slice_all": slice_all,
@@ -8039,7 +8039,7 @@ function c4d_slice_all_params(
  * @returns Command-line arguments.
  */
 function c4d_slice_all_cargs(
-    params: C4dSliceAllParameters,
+    params: C4dSliceAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8064,9 +8064,9 @@ Applies the Laplacian sharpening filter from ITK, which accentuates the edges in
  *
  * @returns Parameter dictionary
  */
-function c4d_sharpen_params(
+function c4d_sharpen(
     sharpen: string,
-): C4dSharpenParametersTagged {
+): C4dSharpenParamsDictTagged {
     const params = {
         "@type": "sharpen" as const,
         "sharpen": sharpen,
@@ -8084,7 +8084,7 @@ function c4d_sharpen_params(
  * @returns Command-line arguments.
  */
 function c4d_sharpen_cargs(
-    params: C4dSharpenParameters,
+    params: C4dSharpenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8109,9 +8109,9 @@ Adds the given constant to every voxel.
  *
  * @returns Parameter dictionary
  */
-function c4d_shift_params(
+function c4d_shift(
     shift: string,
-): C4dShiftParametersTagged {
+): C4dShiftParamsDictTagged {
     const params = {
         "@type": "shift" as const,
         "shift": shift,
@@ -8129,7 +8129,7 @@ function c4d_shift_params(
  * @returns Command-line arguments.
  */
 function c4d_shift_cargs(
-    params: C4dShiftParameters,
+    params: C4dShiftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8154,9 +8154,9 @@ Computes the signed distance transform of a binary image. Voxels where the binar
  *
  * @returns Parameter dictionary
  */
-function c4d_signed_distance_transform_params(
+function c4d_signed_distance_transform(
     signed_distance_transform: string,
-): C4dSignedDistanceTransformParametersTagged {
+): C4dSignedDistanceTransformParamsDictTagged {
     const params = {
         "@type": "signed_distance_transform" as const,
         "signed_distance_transform": signed_distance_transform,
@@ -8174,7 +8174,7 @@ function c4d_signed_distance_transform_params(
  * @returns Command-line arguments.
  */
 function c4d_signed_distance_transform_cargs(
-    params: C4dSignedDistanceTransformParameters,
+    params: C4dSignedDistanceTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8199,9 +8199,9 @@ Applies Gaussian smoothing to the image. The parameter vector specifies the stan
  *
  * @returns Parameter dictionary
  */
-function c4d_smooth_params(
+function c4d_smooth(
     smooth: string,
-): C4dSmoothParametersTagged {
+): C4dSmoothParamsDictTagged {
     const params = {
         "@type": "smooth" as const,
         "smooth": smooth,
@@ -8219,7 +8219,7 @@ function c4d_smooth_params(
  * @returns Command-line arguments.
  */
 function c4d_smooth_cargs(
-    params: C4dSmoothParameters,
+    params: C4dSmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8244,9 +8244,9 @@ Applies Gaussian smoothing to the image using the fast [Deriche recursive smooth
  *
  * @returns Parameter dictionary
  */
-function c4d_smooth_fast_params(
+function c4d_smooth_fast(
     smooth_fast: string,
-): C4dSmoothFastParametersTagged {
+): C4dSmoothFastParamsDictTagged {
     const params = {
         "@type": "smooth_fast" as const,
         "smooth_fast": smooth_fast,
@@ -8264,7 +8264,7 @@ function c4d_smooth_fast_params(
  * @returns Command-line arguments.
  */
 function c4d_smooth_fast_cargs(
-    params: C4dSmoothFastParameters,
+    params: C4dSmoothFastParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8289,9 +8289,9 @@ Sets the voxel spacing of the image. This should always be a vector with positiv
  *
  * @returns Parameter dictionary
  */
-function c4d_spacing_params(
+function c4d_spacing(
     spacing: string,
-): C4dSpacingParametersTagged {
+): C4dSpacingParamsDictTagged {
     const params = {
         "@type": "spacing" as const,
         "spacing": spacing,
@@ -8309,7 +8309,7 @@ function c4d_spacing_params(
  * @returns Command-line arguments.
  */
 function c4d_spacing_cargs(
-    params: C4dSpacingParameters,
+    params: C4dSpacingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8336,9 +8336,9 @@ Also of note is that the **-split** command will disregard infinite intensity va
  *
  * @returns Parameter dictionary
  */
-function c4d_split_params(
+function c4d_split(
     split: string,
-): C4dSplitParametersTagged {
+): C4dSplitParamsDictTagged {
     const params = {
         "@type": "split" as const,
         "split": split,
@@ -8356,7 +8356,7 @@ function c4d_split_params(
  * @returns Command-line arguments.
  */
 function c4d_split_cargs(
-    params: C4dSplitParameters,
+    params: C4dSplitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8381,9 +8381,9 @@ Computes square root of each voxel in the image.
  *
  * @returns Parameter dictionary
  */
-function c4d_sqrt_params(
+function c4d_sqrt(
     sqrt: string,
-): C4dSqrtParametersTagged {
+): C4dSqrtParamsDictTagged {
     const params = {
         "@type": "sqrt" as const,
         "sqrt": sqrt,
@@ -8401,7 +8401,7 @@ function c4d_sqrt_params(
  * @returns Command-line arguments.
  */
 function c4d_sqrt_cargs(
-    params: C4dSqrtParameters,
+    params: C4dSqrtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8427,9 +8427,9 @@ Runs the ITK implementation of the STAPLE algorithm ([See Paper][11]). STAPLE ge
  *
  * @returns Parameter dictionary
  */
-function c4d_staple_params(
+function c4d_staple(
     staple: string,
-): C4dStapleParametersTagged {
+): C4dStapleParamsDictTagged {
     const params = {
         "@type": "staple" as const,
         "staple": staple,
@@ -8447,7 +8447,7 @@ function c4d_staple_params(
  * @returns Command-line arguments.
  */
 function c4d_staple_cargs(
-    params: C4dStapleParameters,
+    params: C4dStapleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8472,9 +8472,9 @@ Computes the Hessian matrix at every pixel of an image and the eigenvalues of th
  *
  * @returns Parameter dictionary
  */
-function c4d_structure_tensor_eigenvalues_params(
+function c4d_structure_tensor_eigenvalues(
     structure_tensor_eigenvalues: string,
-): C4dStructureTensorEigenvaluesParametersTagged {
+): C4dStructureTensorEigenvaluesParamsDictTagged {
     const params = {
         "@type": "structure_tensor_eigenvalues" as const,
         "structure_tensor_eigenvalues": structure_tensor_eigenvalues,
@@ -8492,7 +8492,7 @@ function c4d_structure_tensor_eigenvalues_params(
  * @returns Command-line arguments.
  */
 function c4d_structure_tensor_eigenvalues_cargs(
-    params: C4dStructureTensorEigenvaluesParameters,
+    params: C4dStructureTensorEigenvaluesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8517,9 +8517,9 @@ These options specify whether use the SPM extension to the Analyze (.hdr,.img) f
  *
  * @returns Parameter dictionary
  */
-function c4d_spm_params(
+function c4d_spm(
     spm: string,
-): C4dSpmParametersTagged {
+): C4dSpmParamsDictTagged {
     const params = {
         "@type": "spm" as const,
         "spm": spm,
@@ -8537,7 +8537,7 @@ function c4d_spm_params(
  * @returns Command-line arguments.
  */
 function c4d_spm_cargs(
-    params: C4dSpmParameters,
+    params: C4dSpmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8556,9 +8556,9 @@ function c4d_spm_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_subtract_params(
+function c4d_subtract(
     subtract: string,
-): C4dSubtractParametersTagged {
+): C4dSubtractParamsDictTagged {
     const params = {
         "@type": "subtract" as const,
         "subtract": subtract,
@@ -8576,7 +8576,7 @@ function c4d_subtract_params(
  * @returns Command-line arguments.
  */
 function c4d_subtract_cargs(
-    params: C4dSubtractParameters,
+    params: C4dSubtractParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8595,9 +8595,9 @@ function c4d_subtract_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_supervoxel_params(
+function c4d_supervoxel(
     supervoxel: string,
-): C4dSupervoxelParametersTagged {
+): C4dSupervoxelParamsDictTagged {
     const params = {
         "@type": "supervoxel" as const,
         "supervoxel": supervoxel,
@@ -8615,7 +8615,7 @@ function c4d_supervoxel_params(
  * @returns Command-line arguments.
  */
 function c4d_supervoxel_cargs(
-    params: C4dSupervoxelParameters,
+    params: C4dSupervoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8640,9 +8640,9 @@ Stretches the intensities in the image linearly, such that u1 maps to v1 and u2 
  *
  * @returns Parameter dictionary
  */
-function c4d_stretch_params(
+function c4d_stretch(
     stretch: string,
-): C4dStretchParametersTagged {
+): C4dStretchParamsDictTagged {
     const params = {
         "@type": "stretch" as const,
         "stretch": stretch,
@@ -8660,7 +8660,7 @@ function c4d_stretch_params(
  * @returns Command-line arguments.
  */
 function c4d_stretch_cargs(
-    params: C4dStretchParameters,
+    params: C4dStretchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8690,9 +8690,9 @@ The following commands invoke an action that is applied to images. Unary command
  *
  * @returns Parameter dictionary
  */
-function c4d_swapdim_params(
+function c4d_swapdim(
     swapdim: string,
-): C4dSwapdimParametersTagged {
+): C4dSwapdimParamsDictTagged {
     const params = {
         "@type": "swapdim" as const,
         "swapdim": swapdim,
@@ -8710,7 +8710,7 @@ function c4d_swapdim_params(
  * @returns Command-line arguments.
  */
 function c4d_swapdim_cargs(
-    params: C4dSwapdimParameters,
+    params: C4dSwapdimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8741,9 +8741,9 @@ These advanced commands (with more to come in the future) are primarily meant to
  *
  * @returns Parameter dictionary
  */
-function c4d_test_image_params(
+function c4d_test_image(
     test_image: string,
-): C4dTestImageParametersTagged {
+): C4dTestImageParamsDictTagged {
     const params = {
         "@type": "test_image" as const,
         "test_image": test_image,
@@ -8761,7 +8761,7 @@ function c4d_test_image_params(
  * @returns Command-line arguments.
  */
 function c4d_test_image_cargs(
-    params: C4dTestImageParameters,
+    params: C4dTestImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8792,9 +8792,9 @@ These advanced commands (with more to come in the future) are primarily meant to
  *
  * @returns Parameter dictionary
  */
-function c4d_test_probe_params(
+function c4d_test_probe(
     test_probe: string,
-): C4dTestProbeParametersTagged {
+): C4dTestProbeParamsDictTagged {
     const params = {
         "@type": "test_probe" as const,
         "test_probe": test_probe,
@@ -8812,7 +8812,7 @@ function c4d_test_probe_params(
  * @returns Command-line arguments.
  */
 function c4d_test_probe_cargs(
-    params: C4dTestProbeParameters,
+    params: C4dTestProbeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8838,9 +8838,9 @@ Thresholds the image, setting voxels whose intensity is in the range [u1,u2] to 
  *
  * @returns Parameter dictionary
  */
-function c4d_threshold_params(
+function c4d_threshold(
     threshold: string,
-): C4dThresholdParametersTagged {
+): C4dThresholdParamsDictTagged {
     const params = {
         "@type": "threshold" as const,
         "threshold": threshold,
@@ -8858,7 +8858,7 @@ function c4d_threshold_params(
  * @returns Command-line arguments.
  */
 function c4d_threshold_cargs(
-    params: C4dThresholdParameters,
+    params: C4dThresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8887,9 +8887,9 @@ And to arrange the same 2D slices into a 2D montage of 4 images per row, we woul
  *
  * @returns Parameter dictionary
  */
-function c4d_tile_params(
+function c4d_tile(
     tile: string,
-): C4dTileParametersTagged {
+): C4dTileParamsDictTagged {
     const params = {
         "@type": "tile" as const,
         "tile": tile,
@@ -8907,7 +8907,7 @@ function c4d_tile_params(
  * @returns Command-line arguments.
  */
 function c4d_tile_cargs(
-    params: C4dTileParameters,
+    params: C4dTileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8932,9 +8932,9 @@ Use this command to trim background in an image. When most of the image is fille
  *
  * @returns Parameter dictionary
  */
-function c4d_trim_params(
+function c4d_trim(
     trim: string,
-): C4dTrimParametersTagged {
+): C4dTrimParamsDictTagged {
     const params = {
         "@type": "trim" as const,
         "trim": trim,
@@ -8952,7 +8952,7 @@ function c4d_trim_params(
  * @returns Command-line arguments.
  */
 function c4d_trim_cargs(
-    params: C4dTrimParameters,
+    params: C4dTrimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -8977,9 +8977,9 @@ Like **-trim**, this command trims the background in an image. However, instead 
  *
  * @returns Parameter dictionary
  */
-function c4d_trim_to_size_params(
+function c4d_trim_to_size(
     trim_to_size: string,
-): C4dTrimToSizeParametersTagged {
+): C4dTrimToSizeParamsDictTagged {
     const params = {
         "@type": "trim_to_size" as const,
         "trim_to_size": trim_to_size,
@@ -8997,7 +8997,7 @@ function c4d_trim_to_size_params(
  * @returns Command-line arguments.
  */
 function c4d_trim_to_size_cargs(
-    params: C4dTrimToSizeParameters,
+    params: C4dTrimToSizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9024,9 +9024,9 @@ Some images require data in certain types. For example, to save PNG images, ucha
  *
  * @returns Parameter dictionary
  */
-function c4d_type_params(
+function c4d_type(
     type_: string,
-): C4dTypeParametersTagged {
+): C4dTypeParamsDictTagged {
     const params = {
         "@type": "type" as const,
         "type": type_,
@@ -9044,7 +9044,7 @@ function c4d_type_params(
  * @returns Command-line arguments.
  */
 function c4d_type_cargs(
-    params: C4dTypeParameters,
+    params: C4dTypeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9069,9 +9069,9 @@ Commands entered after the **-verbose** command will print debugging information
  *
  * @returns Parameter dictionary
  */
-function c4d_verbose_params(
+function c4d_verbose(
     verbose: string,
-): C4dVerboseParametersTagged {
+): C4dVerboseParamsDictTagged {
     const params = {
         "@type": "verbose" as const,
         "verbose": verbose,
@@ -9089,7 +9089,7 @@ function c4d_verbose_params(
  * @returns Command-line arguments.
  */
 function c4d_verbose_cargs(
-    params: C4dVerboseParameters,
+    params: C4dVerboseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9108,9 +9108,9 @@ function c4d_verbose_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_noverbose_params(
+function c4d_noverbose(
     noverbose: string,
-): C4dNoverboseParametersTagged {
+): C4dNoverboseParamsDictTagged {
     const params = {
         "@type": "noverbose" as const,
         "noverbose": noverbose,
@@ -9128,7 +9128,7 @@ function c4d_noverbose_params(
  * @returns Command-line arguments.
  */
 function c4d_noverbose_cargs(
-    params: C4dNoverboseParameters,
+    params: C4dNoverboseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9147,9 +9147,9 @@ function c4d_noverbose_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_version_params(
+function c4d_version(
     version: string,
-): C4dVersionParametersTagged {
+): C4dVersionParamsDictTagged {
     const params = {
         "@type": "version" as const,
         "version": version,
@@ -9167,7 +9167,7 @@ function c4d_version_params(
  * @returns Command-line arguments.
  */
 function c4d_version_cargs(
-    params: C4dVersionParameters,
+    params: C4dVersionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9194,9 +9194,9 @@ The value assigned to each image is based on its position from the bottom of the
  *
  * @returns Parameter dictionary
  */
-function c4d_vote_params(
+function c4d_vote(
     vote: string,
-): C4dVoteParametersTagged {
+): C4dVoteParamsDictTagged {
     const params = {
         "@type": "vote" as const,
         "vote": vote,
@@ -9214,7 +9214,7 @@ function c4d_vote_params(
  * @returns Command-line arguments.
  */
 function c4d_vote_cargs(
-    params: C4dVoteParameters,
+    params: C4dVoteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9263,9 +9263,9 @@ The example below illustrates applying **-vote-mrf** with a user-specified mask.
  *
  * @returns Parameter dictionary
  */
-function c4d_vote_mrf_params(
+function c4d_vote_mrf(
     vote_mrf: string,
-): C4dVoteMrfParametersTagged {
+): C4dVoteMrfParamsDictTagged {
     const params = {
         "@type": "vote_mrf" as const,
         "vote_mrf": vote_mrf,
@@ -9283,7 +9283,7 @@ function c4d_vote_mrf_params(
  * @returns Command-line arguments.
  */
 function c4d_vote_mrf_cargs(
-    params: C4dVoteMrfParameters,
+    params: C4dVoteMrfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9302,9 +9302,9 @@ function c4d_vote_mrf_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_vote_label_params(
+function c4d_vote_label(
     vote_label: string,
-): C4dVoteLabelParametersTagged {
+): C4dVoteLabelParamsDictTagged {
     const params = {
         "@type": "vote_label" as const,
         "vote_label": vote_label,
@@ -9322,7 +9322,7 @@ function c4d_vote_label_params(
  * @returns Command-line arguments.
  */
 function c4d_vote_label_cargs(
-    params: C4dVoteLabelParameters,
+    params: C4dVoteLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9348,9 +9348,9 @@ Print the sum of all voxels in the image.
  *
  * @returns Parameter dictionary
  */
-function c4d_voxel_sum_params(
+function c4d_voxel_sum(
     voxel_sum: string,
-): C4dVoxelSumParametersTagged {
+): C4dVoxelSumParamsDictTagged {
     const params = {
         "@type": "voxel_sum" as const,
         "voxel_sum": voxel_sum,
@@ -9368,7 +9368,7 @@ function c4d_voxel_sum_params(
  * @returns Command-line arguments.
  */
 function c4d_voxel_sum_cargs(
-    params: C4dVoxelSumParameters,
+    params: C4dVoxelSumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9394,9 +9394,9 @@ Like **-voxel-sum**, but multiplies the sum of voxel intensities by voxel volume
  *
  * @returns Parameter dictionary
  */
-function c4d_voxel_integral_params(
+function c4d_voxel_integral(
     voxel_integral: string,
-): C4dVoxelIntegralParametersTagged {
+): C4dVoxelIntegralParamsDictTagged {
     const params = {
         "@type": "voxel_integral" as const,
         "voxel_integral": voxel_integral,
@@ -9414,7 +9414,7 @@ function c4d_voxel_integral_params(
  * @returns Command-line arguments.
  */
 function c4d_voxel_integral_cargs(
-    params: C4dVoxelIntegralParameters,
+    params: C4dVoxelIntegralParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9445,9 +9445,9 @@ Perform regression between corresponding voxels in two images. This command take
  *
  * @returns Parameter dictionary
  */
-function c4d_voxelwise_regression_params(
+function c4d_voxelwise_regression(
     voxelwise_regression: string,
-): C4dVoxelwiseRegressionParametersTagged {
+): C4dVoxelwiseRegressionParamsDictTagged {
     const params = {
         "@type": "voxelwise_regression" as const,
         "voxelwise_regression": voxelwise_regression,
@@ -9465,7 +9465,7 @@ function c4d_voxelwise_regression_params(
  * @returns Command-line arguments.
  */
 function c4d_voxelwise_regression_cargs(
-    params: C4dVoxelwiseRegressionParameters,
+    params: C4dVoxelwiseRegressionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9484,9 +9484,9 @@ function c4d_voxelwise_regression_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_warp_params(
+function c4d_warp(
     warp: string,
-): C4dWarpParametersTagged {
+): C4dWarpParamsDictTagged {
     const params = {
         "@type": "warp" as const,
         "warp": warp,
@@ -9504,7 +9504,7 @@ function c4d_warp_params(
  * @returns Command-line arguments.
  */
 function c4d_warp_cargs(
-    params: C4dWarpParameters,
+    params: C4dWarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9523,9 +9523,9 @@ function c4d_warp_cargs(
  *
  * @returns Parameter dictionary
  */
-function c4d_warp_label_params(
+function c4d_warp_label(
     warp_label: string,
-): C4dWarpLabelParametersTagged {
+): C4dWarpLabelParamsDictTagged {
     const params = {
         "@type": "warp_label" as const,
         "warp_label": warp_label,
@@ -9543,7 +9543,7 @@ function c4d_warp_label_params(
  * @returns Command-line arguments.
  */
 function c4d_warp_label_cargs(
-    params: C4dWarpLabelParameters,
+    params: C4dWarpLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9575,9 +9575,9 @@ Options change the behavior of commands that *appear later on the command line*.
  *
  * @returns Parameter dictionary
  */
-function c4d_wrap_params(
+function c4d_wrap(
     wrap: string,
-): C4dWrapParametersTagged {
+): C4dWrapParamsDictTagged {
     const params = {
         "@type": "wrap" as const,
         "wrap": wrap,
@@ -9595,7 +9595,7 @@ function c4d_wrap_params(
  * @returns Command-line arguments.
  */
 function c4d_wrap_cargs(
-    params: C4dWrapParameters,
+    params: C4dWrapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9624,9 +9624,9 @@ This command is particularly useful for combining components in a multicomponent
  *
  * @returns Parameter dictionary
  */
-function c4d_weighted_sum_params(
+function c4d_weighted_sum(
     weighted_sum: string,
-): C4dWeightedSumParametersTagged {
+): C4dWeightedSumParamsDictTagged {
     const params = {
         "@type": "weighted_sum" as const,
         "weighted_sum": weighted_sum,
@@ -9644,7 +9644,7 @@ function c4d_weighted_sum_params(
  * @returns Command-line arguments.
  */
 function c4d_weighted_sum_cargs(
-    params: C4dWeightedSumParameters,
+    params: C4dWeightedSumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9675,9 +9675,9 @@ The **-reorder** command can simplify loading the images:
  *
  * @returns Parameter dictionary
  */
-function c4d_weighted_sum_voxelwise_params(
+function c4d_weighted_sum_voxelwise(
     weighted_sum_voxelwise: string,
-): C4dWeightedSumVoxelwiseParametersTagged {
+): C4dWeightedSumVoxelwiseParamsDictTagged {
     const params = {
         "@type": "weighted_sum_voxelwise" as const,
         "weighted_sum_voxelwise": weighted_sum_voxelwise,
@@ -9695,7 +9695,7 @@ function c4d_weighted_sum_voxelwise_params(
  * @returns Command-line arguments.
  */
 function c4d_weighted_sum_voxelwise_cargs(
-    params: C4dWeightedSumVoxelwiseParameters,
+    params: C4dWeightedSumVoxelwiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9708,7 +9708,7 @@ function c4d_weighted_sum_voxelwise_cargs(
 
 
 /**
- * Output object returned when calling `C4dParameters(...)`.
+ * Output object returned when calling `C4dParamsDict(...)`.
  *
  * @interface
  */
@@ -9718,7 +9718,7 @@ interface C4dOutputs {
      */
     root: OutputPathType;
     /**
-     * Outputs from `C4dOutputParameters`.This is a list of outputs with the same length and order as the inputs.
+     * Outputs from `C4dOutputParamsDict`.This is a list of outputs with the same length and order as the inputs.
      */
     operations: Array<C4dOutputOutputs>;
 }
@@ -9735,9 +9735,9 @@ interface C4dOutputs {
  */
 function c4d_params(
     input: Array<InputPathType>,
-    operations: Array<C4dAccumParametersTagged | C4dAcosParametersTagged | C4dAddParametersTagged | C4dAlignLandmarksParametersTagged | C4dAnisotropicDiffusionParametersTagged | C4dAntialiasParametersTagged | C4dSetParametersTagged | C4dAsinParametersTagged | C4dAtan2ParametersTagged | C4dBackgroundParametersTagged | C4dN4BiasCorrectionParametersTagged | C4dBinarizeParametersTagged | C4dCannyParametersTagged | C4dCeilParametersTagged | C4dCentroidParametersTagged | C4dCentroidMarkParametersTagged | C4dConnectedComponentsParametersTagged | C4dClearParametersTagged | C4dClipParametersTagged | C4dColorMapParametersTagged | C4dCompressParametersTagged | C4dNoCompressParametersTagged | C4dConvParametersTagged | C4dCoordinateMapVoxelParametersTagged | C4dCoordinateMapPhysicalParametersTagged | C4dCopyTransformParametersTagged | C4dCosParametersTagged | C4dCreateParametersTagged | C4dDicomSeriesListParametersTagged | C4dDicomSeriesReadParametersTagged | C4dDilateParametersTagged | C4dDivideParametersTagged | C4dDuplicateParametersTagged | C4dEndaccumParametersTagged | C4dEndforParametersTagged | C4dErodeParametersTagged | C4dErfParametersTagged | C4dExpParametersTagged | C4dExportPatchesParametersTagged | C4dExportPatchesAugParametersTagged | C4dExtrudeSegParametersTagged | C4dFillBackgroundWithNoiseParametersTagged | C4dFftParametersTagged | C4dFlipParametersTagged | C4dFloorParametersTagged | C4dForeachParametersTagged | C4dForeachCompParametersTagged | C4dGlmParametersTagged | C4dGradientParametersTagged | C4dHelpParametersTagged | C4dHolefillParametersTagged | C4dHessianEigenvaluesParametersTagged | C4dHessianObjectnessParametersTagged | C4dHistogramMatchParametersTagged | C4dInfoParametersTagged | C4dInfoFullParametersTagged | C4dInsertParametersTagged | C4dInterpolationParametersTagged | C4dIterationsParametersTagged | C4dLabelOverlapParametersTagged | C4dLabelStatisticsParametersTagged | C4dLandmarksToSpheresParametersTagged | C4dLaplacianParametersTagged | C4dLevelsetParametersTagged | C4dLevelsetCurvatureParametersTagged | C4dLevelsetAdvectionParametersTagged | C4dLogParametersTagged | C4dLog10ParametersTagged | C4dManualParametersTagged | C4dMatchBoundingBoxParametersTagged | C4dMaximumParametersTagged | C4dMulticomponentSplitParametersTagged | C4dMeanParametersTagged | C4dMedianFilterParametersTagged | C4dMergeParametersTagged | C4dMeanFilterParametersTagged | C4dMutualInfoParametersTagged | C4dMinimumParametersTagged | C4dMixtureModelParametersTagged | C4dMomentsParametersTagged | C4dMattesMutualInfoParametersTagged | C4dMeanSquareParametersTagged | C4dMultiplyParametersTagged | C4dNormalizedCrossCorrelationParametersTagged | C4dNormalizedCorrelationParametersTagged | C4dNormalizedMutualInfoParametersTagged | C4dNoiseGaussianParametersTagged | C4dNoisePoissonParametersTagged | C4dNoiseSpeckleParametersTagged | C4dNoiseSaltPepperParametersTagged | C4dNoMulticomponentSplitParametersTagged | C4dNormalizeLocalWindowParametersTagged | C4dNormpdfParametersTagged | C4dNoroundParametersTagged | C4dNospmParametersTagged | C4dOutputParametersTagged | C4dOutputMulticomponentParametersTagged | C4dOutputMultipleMulticomponentParametersTagged | C4dOrientParametersTagged | C4dOutputMultipleParametersTagged | C4dOrient1ParametersTagged | C4dOriginParametersTagged | C4dOriginVoxelParametersTagged | C4dOriginVoxelCoordParametersTagged | C4dOverlapParametersTagged | C4dOverlayLabelImageParametersTagged | C4dPadParametersTagged | C4dPadToParametersTagged | C4dPcaParametersTagged | C4dPercentIntensityModeParametersTagged | C4dPixelParametersTagged | C4dPopParametersTagged | C4dPopasParametersTagged | C4dProbeParametersTagged | C4dPushParametersTagged | C4dRankParametersTagged | C4dReciprocalParametersTagged | C4dRegionParametersTagged | C4dReorderParametersTagged | C4dRetainLabelsParametersTagged | C4dRfApplyParametersTagged | C4dRfTrainParametersTagged | C4dRfParamPatchParametersTagged | C4dRfParamUsexyzParametersTagged | C4dRfParamNousexyzParametersTagged | C4dRfParamNtreesParametersTagged | C4dRfParamTreedepthParametersTagged | C4dSetSformParametersTagged | C4dReplaceParametersTagged | C4dResampleParametersTagged | C4dResampleIsoParametersTagged | C4dResampleMmParametersTagged | C4dResliceItkParametersTagged | C4dResliceMatrixParametersTagged | C4dResliceIdentityParametersTagged | C4dRgb2hsvParametersTagged | C4dRmsParametersTagged | C4dRoundParametersTagged | C4dScaleParametersTagged | C4dSetSform1ParametersTagged | C4dSinParametersTagged | C4dSliceParametersTagged | C4dSliceAllParametersTagged | C4dSharpenParametersTagged | C4dShiftParametersTagged | C4dSignedDistanceTransformParametersTagged | C4dSmoothParametersTagged | C4dSmoothFastParametersTagged | C4dSpacingParametersTagged | C4dSplitParametersTagged | C4dSqrtParametersTagged | C4dStapleParametersTagged | C4dStructureTensorEigenvaluesParametersTagged | C4dSpmParametersTagged | C4dSubtractParametersTagged | C4dSupervoxelParametersTagged | C4dStretchParametersTagged | C4dSwapdimParametersTagged | C4dTestImageParametersTagged | C4dTestProbeParametersTagged | C4dThresholdParametersTagged | C4dTileParametersTagged | C4dTrimParametersTagged | C4dTrimToSizeParametersTagged | C4dTypeParametersTagged | C4dVerboseParametersTagged | C4dNoverboseParametersTagged | C4dVersionParametersTagged | C4dVoteParametersTagged | C4dVoteMrfParametersTagged | C4dVoteLabelParametersTagged | C4dVoxelSumParametersTagged | C4dVoxelIntegralParametersTagged | C4dVoxelwiseRegressionParametersTagged | C4dWarpParametersTagged | C4dWarpLabelParametersTagged | C4dWrapParametersTagged | C4dWeightedSumParametersTagged | C4dWeightedSumVoxelwiseParametersTagged>,
+    operations: Array<C4dAccumParamsDictTagged | C4dAcosParamsDictTagged | C4dAddParamsDictTagged | C4dAlignLandmarksParamsDictTagged | C4dAnisotropicDiffusionParamsDictTagged | C4dAntialiasParamsDictTagged | C4dSetParamsDictTagged | C4dAsinParamsDictTagged | C4dAtan2ParamsDictTagged | C4dBackgroundParamsDictTagged | C4dN4BiasCorrectionParamsDictTagged | C4dBinarizeParamsDictTagged | C4dCannyParamsDictTagged | C4dCeilParamsDictTagged | C4dCentroidParamsDictTagged | C4dCentroidMarkParamsDictTagged | C4dConnectedComponentsParamsDictTagged | C4dClearParamsDictTagged | C4dClipParamsDictTagged | C4dColorMapParamsDictTagged | C4dCompressParamsDictTagged | C4dNoCompressParamsDictTagged | C4dConvParamsDictTagged | C4dCoordinateMapVoxelParamsDictTagged | C4dCoordinateMapPhysicalParamsDictTagged | C4dCopyTransformParamsDictTagged | C4dCosParamsDictTagged | C4dCreateParamsDictTagged | C4dDicomSeriesListParamsDictTagged | C4dDicomSeriesReadParamsDictTagged | C4dDilateParamsDictTagged | C4dDivideParamsDictTagged | C4dDuplicateParamsDictTagged | C4dEndaccumParamsDictTagged | C4dEndforParamsDictTagged | C4dErodeParamsDictTagged | C4dErfParamsDictTagged | C4dExpParamsDictTagged | C4dExportPatchesParamsDictTagged | C4dExportPatchesAugParamsDictTagged | C4dExtrudeSegParamsDictTagged | C4dFillBackgroundWithNoiseParamsDictTagged | C4dFftParamsDictTagged | C4dFlipParamsDictTagged | C4dFloorParamsDictTagged | C4dForeachParamsDictTagged | C4dForeachCompParamsDictTagged | C4dGlmParamsDictTagged | C4dGradientParamsDictTagged | C4dHelpParamsDictTagged | C4dHolefillParamsDictTagged | C4dHessianEigenvaluesParamsDictTagged | C4dHessianObjectnessParamsDictTagged | C4dHistogramMatchParamsDictTagged | C4dInfoParamsDictTagged | C4dInfoFullParamsDictTagged | C4dInsertParamsDictTagged | C4dInterpolationParamsDictTagged | C4dIterationsParamsDictTagged | C4dLabelOverlapParamsDictTagged | C4dLabelStatisticsParamsDictTagged | C4dLandmarksToSpheresParamsDictTagged | C4dLaplacianParamsDictTagged | C4dLevelsetParamsDictTagged | C4dLevelsetCurvatureParamsDictTagged | C4dLevelsetAdvectionParamsDictTagged | C4dLogParamsDictTagged | C4dLog10ParamsDictTagged | C4dManualParamsDictTagged | C4dMatchBoundingBoxParamsDictTagged | C4dMaximumParamsDictTagged | C4dMulticomponentSplitParamsDictTagged | C4dMeanParamsDictTagged | C4dMedianFilterParamsDictTagged | C4dMergeParamsDictTagged | C4dMeanFilterParamsDictTagged | C4dMutualInfoParamsDictTagged | C4dMinimumParamsDictTagged | C4dMixtureModelParamsDictTagged | C4dMomentsParamsDictTagged | C4dMattesMutualInfoParamsDictTagged | C4dMeanSquareParamsDictTagged | C4dMultiplyParamsDictTagged | C4dNormalizedCrossCorrelationParamsDictTagged | C4dNormalizedCorrelationParamsDictTagged | C4dNormalizedMutualInfoParamsDictTagged | C4dNoiseGaussianParamsDictTagged | C4dNoisePoissonParamsDictTagged | C4dNoiseSpeckleParamsDictTagged | C4dNoiseSaltPepperParamsDictTagged | C4dNoMulticomponentSplitParamsDictTagged | C4dNormalizeLocalWindowParamsDictTagged | C4dNormpdfParamsDictTagged | C4dNoroundParamsDictTagged | C4dNospmParamsDictTagged | C4dOutputParamsDictTagged | C4dOutputMulticomponentParamsDictTagged | C4dOutputMultipleMulticomponentParamsDictTagged | C4dOrientParamsDictTagged | C4dOutputMultipleParamsDictTagged | C4dOrient1ParamsDictTagged | C4dOriginParamsDictTagged | C4dOriginVoxelParamsDictTagged | C4dOriginVoxelCoordParamsDictTagged | C4dOverlapParamsDictTagged | C4dOverlayLabelImageParamsDictTagged | C4dPadParamsDictTagged | C4dPadToParamsDictTagged | C4dPcaParamsDictTagged | C4dPercentIntensityModeParamsDictTagged | C4dPixelParamsDictTagged | C4dPopParamsDictTagged | C4dPopasParamsDictTagged | C4dProbeParamsDictTagged | C4dPushParamsDictTagged | C4dRankParamsDictTagged | C4dReciprocalParamsDictTagged | C4dRegionParamsDictTagged | C4dReorderParamsDictTagged | C4dRetainLabelsParamsDictTagged | C4dRfApplyParamsDictTagged | C4dRfTrainParamsDictTagged | C4dRfParamPatchParamsDictTagged | C4dRfParamUsexyzParamsDictTagged | C4dRfParamNousexyzParamsDictTagged | C4dRfParamNtreesParamsDictTagged | C4dRfParamTreedepthParamsDictTagged | C4dSetSformParamsDictTagged | C4dReplaceParamsDictTagged | C4dResampleParamsDictTagged | C4dResampleIsoParamsDictTagged | C4dResampleMmParamsDictTagged | C4dResliceItkParamsDictTagged | C4dResliceMatrixParamsDictTagged | C4dResliceIdentityParamsDictTagged | C4dRgb2hsvParamsDictTagged | C4dRmsParamsDictTagged | C4dRoundParamsDictTagged | C4dScaleParamsDictTagged | C4dSetSform1ParamsDictTagged | C4dSinParamsDictTagged | C4dSliceParamsDictTagged | C4dSliceAllParamsDictTagged | C4dSharpenParamsDictTagged | C4dShiftParamsDictTagged | C4dSignedDistanceTransformParamsDictTagged | C4dSmoothParamsDictTagged | C4dSmoothFastParamsDictTagged | C4dSpacingParamsDictTagged | C4dSplitParamsDictTagged | C4dSqrtParamsDictTagged | C4dStapleParamsDictTagged | C4dStructureTensorEigenvaluesParamsDictTagged | C4dSpmParamsDictTagged | C4dSubtractParamsDictTagged | C4dSupervoxelParamsDictTagged | C4dStretchParamsDictTagged | C4dSwapdimParamsDictTagged | C4dTestImageParamsDictTagged | C4dTestProbeParamsDictTagged | C4dThresholdParamsDictTagged | C4dTileParamsDictTagged | C4dTrimParamsDictTagged | C4dTrimToSizeParamsDictTagged | C4dTypeParamsDictTagged | C4dVerboseParamsDictTagged | C4dNoverboseParamsDictTagged | C4dVersionParamsDictTagged | C4dVoteParamsDictTagged | C4dVoteMrfParamsDictTagged | C4dVoteLabelParamsDictTagged | C4dVoxelSumParamsDictTagged | C4dVoxelIntegralParamsDictTagged | C4dVoxelwiseRegressionParamsDictTagged | C4dWarpParamsDictTagged | C4dWarpLabelParamsDictTagged | C4dWrapParamsDictTagged | C4dWeightedSumParamsDictTagged | C4dWeightedSumVoxelwiseParamsDictTagged>,
     output: string,
-): C4dParametersTagged {
+): C4dParamsDictTagged {
     const params = {
         "@type": "c3d/c4d" as const,
         "input": input,
@@ -9757,7 +9757,7 @@ function c4d_params(
  * @returns Command-line arguments.
  */
 function c4d_cargs(
-    params: C4dParameters,
+    params: C4dParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -9781,7 +9781,7 @@ function c4d_cargs(
  * @returns Outputs object.
  */
 function c4d_outputs(
-    params: C4dParameters,
+    params: C4dParamsDict,
     execution: Execution,
 ): C4dOutputs {
     const ret: C4dOutputs = {
@@ -9807,7 +9807,7 @@ function c4d_outputs(
  * @returns NamedTuple of outputs (described in `C4dOutputs`).
  */
 function c4d_execute(
-    params: C4dParameters,
+    params: C4dParamsDict,
     runner: Runner | null = null,
 ): C4dOutputs {
     runner = runner || getGlobalRunner();
@@ -9838,7 +9838,7 @@ function c4d_execute(
  */
 function c4d(
     input: Array<InputPathType>,
-    operations: Array<C4dAccumParametersTagged | C4dAcosParametersTagged | C4dAddParametersTagged | C4dAlignLandmarksParametersTagged | C4dAnisotropicDiffusionParametersTagged | C4dAntialiasParametersTagged | C4dSetParametersTagged | C4dAsinParametersTagged | C4dAtan2ParametersTagged | C4dBackgroundParametersTagged | C4dN4BiasCorrectionParametersTagged | C4dBinarizeParametersTagged | C4dCannyParametersTagged | C4dCeilParametersTagged | C4dCentroidParametersTagged | C4dCentroidMarkParametersTagged | C4dConnectedComponentsParametersTagged | C4dClearParametersTagged | C4dClipParametersTagged | C4dColorMapParametersTagged | C4dCompressParametersTagged | C4dNoCompressParametersTagged | C4dConvParametersTagged | C4dCoordinateMapVoxelParametersTagged | C4dCoordinateMapPhysicalParametersTagged | C4dCopyTransformParametersTagged | C4dCosParametersTagged | C4dCreateParametersTagged | C4dDicomSeriesListParametersTagged | C4dDicomSeriesReadParametersTagged | C4dDilateParametersTagged | C4dDivideParametersTagged | C4dDuplicateParametersTagged | C4dEndaccumParametersTagged | C4dEndforParametersTagged | C4dErodeParametersTagged | C4dErfParametersTagged | C4dExpParametersTagged | C4dExportPatchesParametersTagged | C4dExportPatchesAugParametersTagged | C4dExtrudeSegParametersTagged | C4dFillBackgroundWithNoiseParametersTagged | C4dFftParametersTagged | C4dFlipParametersTagged | C4dFloorParametersTagged | C4dForeachParametersTagged | C4dForeachCompParametersTagged | C4dGlmParametersTagged | C4dGradientParametersTagged | C4dHelpParametersTagged | C4dHolefillParametersTagged | C4dHessianEigenvaluesParametersTagged | C4dHessianObjectnessParametersTagged | C4dHistogramMatchParametersTagged | C4dInfoParametersTagged | C4dInfoFullParametersTagged | C4dInsertParametersTagged | C4dInterpolationParametersTagged | C4dIterationsParametersTagged | C4dLabelOverlapParametersTagged | C4dLabelStatisticsParametersTagged | C4dLandmarksToSpheresParametersTagged | C4dLaplacianParametersTagged | C4dLevelsetParametersTagged | C4dLevelsetCurvatureParametersTagged | C4dLevelsetAdvectionParametersTagged | C4dLogParametersTagged | C4dLog10ParametersTagged | C4dManualParametersTagged | C4dMatchBoundingBoxParametersTagged | C4dMaximumParametersTagged | C4dMulticomponentSplitParametersTagged | C4dMeanParametersTagged | C4dMedianFilterParametersTagged | C4dMergeParametersTagged | C4dMeanFilterParametersTagged | C4dMutualInfoParametersTagged | C4dMinimumParametersTagged | C4dMixtureModelParametersTagged | C4dMomentsParametersTagged | C4dMattesMutualInfoParametersTagged | C4dMeanSquareParametersTagged | C4dMultiplyParametersTagged | C4dNormalizedCrossCorrelationParametersTagged | C4dNormalizedCorrelationParametersTagged | C4dNormalizedMutualInfoParametersTagged | C4dNoiseGaussianParametersTagged | C4dNoisePoissonParametersTagged | C4dNoiseSpeckleParametersTagged | C4dNoiseSaltPepperParametersTagged | C4dNoMulticomponentSplitParametersTagged | C4dNormalizeLocalWindowParametersTagged | C4dNormpdfParametersTagged | C4dNoroundParametersTagged | C4dNospmParametersTagged | C4dOutputParametersTagged | C4dOutputMulticomponentParametersTagged | C4dOutputMultipleMulticomponentParametersTagged | C4dOrientParametersTagged | C4dOutputMultipleParametersTagged | C4dOrient1ParametersTagged | C4dOriginParametersTagged | C4dOriginVoxelParametersTagged | C4dOriginVoxelCoordParametersTagged | C4dOverlapParametersTagged | C4dOverlayLabelImageParametersTagged | C4dPadParametersTagged | C4dPadToParametersTagged | C4dPcaParametersTagged | C4dPercentIntensityModeParametersTagged | C4dPixelParametersTagged | C4dPopParametersTagged | C4dPopasParametersTagged | C4dProbeParametersTagged | C4dPushParametersTagged | C4dRankParametersTagged | C4dReciprocalParametersTagged | C4dRegionParametersTagged | C4dReorderParametersTagged | C4dRetainLabelsParametersTagged | C4dRfApplyParametersTagged | C4dRfTrainParametersTagged | C4dRfParamPatchParametersTagged | C4dRfParamUsexyzParametersTagged | C4dRfParamNousexyzParametersTagged | C4dRfParamNtreesParametersTagged | C4dRfParamTreedepthParametersTagged | C4dSetSformParametersTagged | C4dReplaceParametersTagged | C4dResampleParametersTagged | C4dResampleIsoParametersTagged | C4dResampleMmParametersTagged | C4dResliceItkParametersTagged | C4dResliceMatrixParametersTagged | C4dResliceIdentityParametersTagged | C4dRgb2hsvParametersTagged | C4dRmsParametersTagged | C4dRoundParametersTagged | C4dScaleParametersTagged | C4dSetSform1ParametersTagged | C4dSinParametersTagged | C4dSliceParametersTagged | C4dSliceAllParametersTagged | C4dSharpenParametersTagged | C4dShiftParametersTagged | C4dSignedDistanceTransformParametersTagged | C4dSmoothParametersTagged | C4dSmoothFastParametersTagged | C4dSpacingParametersTagged | C4dSplitParametersTagged | C4dSqrtParametersTagged | C4dStapleParametersTagged | C4dStructureTensorEigenvaluesParametersTagged | C4dSpmParametersTagged | C4dSubtractParametersTagged | C4dSupervoxelParametersTagged | C4dStretchParametersTagged | C4dSwapdimParametersTagged | C4dTestImageParametersTagged | C4dTestProbeParametersTagged | C4dThresholdParametersTagged | C4dTileParametersTagged | C4dTrimParametersTagged | C4dTrimToSizeParametersTagged | C4dTypeParametersTagged | C4dVerboseParametersTagged | C4dNoverboseParametersTagged | C4dVersionParametersTagged | C4dVoteParametersTagged | C4dVoteMrfParametersTagged | C4dVoteLabelParametersTagged | C4dVoxelSumParametersTagged | C4dVoxelIntegralParametersTagged | C4dVoxelwiseRegressionParametersTagged | C4dWarpParametersTagged | C4dWarpLabelParametersTagged | C4dWrapParametersTagged | C4dWeightedSumParametersTagged | C4dWeightedSumVoxelwiseParametersTagged>,
+    operations: Array<C4dAccumParamsDictTagged | C4dAcosParamsDictTagged | C4dAddParamsDictTagged | C4dAlignLandmarksParamsDictTagged | C4dAnisotropicDiffusionParamsDictTagged | C4dAntialiasParamsDictTagged | C4dSetParamsDictTagged | C4dAsinParamsDictTagged | C4dAtan2ParamsDictTagged | C4dBackgroundParamsDictTagged | C4dN4BiasCorrectionParamsDictTagged | C4dBinarizeParamsDictTagged | C4dCannyParamsDictTagged | C4dCeilParamsDictTagged | C4dCentroidParamsDictTagged | C4dCentroidMarkParamsDictTagged | C4dConnectedComponentsParamsDictTagged | C4dClearParamsDictTagged | C4dClipParamsDictTagged | C4dColorMapParamsDictTagged | C4dCompressParamsDictTagged | C4dNoCompressParamsDictTagged | C4dConvParamsDictTagged | C4dCoordinateMapVoxelParamsDictTagged | C4dCoordinateMapPhysicalParamsDictTagged | C4dCopyTransformParamsDictTagged | C4dCosParamsDictTagged | C4dCreateParamsDictTagged | C4dDicomSeriesListParamsDictTagged | C4dDicomSeriesReadParamsDictTagged | C4dDilateParamsDictTagged | C4dDivideParamsDictTagged | C4dDuplicateParamsDictTagged | C4dEndaccumParamsDictTagged | C4dEndforParamsDictTagged | C4dErodeParamsDictTagged | C4dErfParamsDictTagged | C4dExpParamsDictTagged | C4dExportPatchesParamsDictTagged | C4dExportPatchesAugParamsDictTagged | C4dExtrudeSegParamsDictTagged | C4dFillBackgroundWithNoiseParamsDictTagged | C4dFftParamsDictTagged | C4dFlipParamsDictTagged | C4dFloorParamsDictTagged | C4dForeachParamsDictTagged | C4dForeachCompParamsDictTagged | C4dGlmParamsDictTagged | C4dGradientParamsDictTagged | C4dHelpParamsDictTagged | C4dHolefillParamsDictTagged | C4dHessianEigenvaluesParamsDictTagged | C4dHessianObjectnessParamsDictTagged | C4dHistogramMatchParamsDictTagged | C4dInfoParamsDictTagged | C4dInfoFullParamsDictTagged | C4dInsertParamsDictTagged | C4dInterpolationParamsDictTagged | C4dIterationsParamsDictTagged | C4dLabelOverlapParamsDictTagged | C4dLabelStatisticsParamsDictTagged | C4dLandmarksToSpheresParamsDictTagged | C4dLaplacianParamsDictTagged | C4dLevelsetParamsDictTagged | C4dLevelsetCurvatureParamsDictTagged | C4dLevelsetAdvectionParamsDictTagged | C4dLogParamsDictTagged | C4dLog10ParamsDictTagged | C4dManualParamsDictTagged | C4dMatchBoundingBoxParamsDictTagged | C4dMaximumParamsDictTagged | C4dMulticomponentSplitParamsDictTagged | C4dMeanParamsDictTagged | C4dMedianFilterParamsDictTagged | C4dMergeParamsDictTagged | C4dMeanFilterParamsDictTagged | C4dMutualInfoParamsDictTagged | C4dMinimumParamsDictTagged | C4dMixtureModelParamsDictTagged | C4dMomentsParamsDictTagged | C4dMattesMutualInfoParamsDictTagged | C4dMeanSquareParamsDictTagged | C4dMultiplyParamsDictTagged | C4dNormalizedCrossCorrelationParamsDictTagged | C4dNormalizedCorrelationParamsDictTagged | C4dNormalizedMutualInfoParamsDictTagged | C4dNoiseGaussianParamsDictTagged | C4dNoisePoissonParamsDictTagged | C4dNoiseSpeckleParamsDictTagged | C4dNoiseSaltPepperParamsDictTagged | C4dNoMulticomponentSplitParamsDictTagged | C4dNormalizeLocalWindowParamsDictTagged | C4dNormpdfParamsDictTagged | C4dNoroundParamsDictTagged | C4dNospmParamsDictTagged | C4dOutputParamsDictTagged | C4dOutputMulticomponentParamsDictTagged | C4dOutputMultipleMulticomponentParamsDictTagged | C4dOrientParamsDictTagged | C4dOutputMultipleParamsDictTagged | C4dOrient1ParamsDictTagged | C4dOriginParamsDictTagged | C4dOriginVoxelParamsDictTagged | C4dOriginVoxelCoordParamsDictTagged | C4dOverlapParamsDictTagged | C4dOverlayLabelImageParamsDictTagged | C4dPadParamsDictTagged | C4dPadToParamsDictTagged | C4dPcaParamsDictTagged | C4dPercentIntensityModeParamsDictTagged | C4dPixelParamsDictTagged | C4dPopParamsDictTagged | C4dPopasParamsDictTagged | C4dProbeParamsDictTagged | C4dPushParamsDictTagged | C4dRankParamsDictTagged | C4dReciprocalParamsDictTagged | C4dRegionParamsDictTagged | C4dReorderParamsDictTagged | C4dRetainLabelsParamsDictTagged | C4dRfApplyParamsDictTagged | C4dRfTrainParamsDictTagged | C4dRfParamPatchParamsDictTagged | C4dRfParamUsexyzParamsDictTagged | C4dRfParamNousexyzParamsDictTagged | C4dRfParamNtreesParamsDictTagged | C4dRfParamTreedepthParamsDictTagged | C4dSetSformParamsDictTagged | C4dReplaceParamsDictTagged | C4dResampleParamsDictTagged | C4dResampleIsoParamsDictTagged | C4dResampleMmParamsDictTagged | C4dResliceItkParamsDictTagged | C4dResliceMatrixParamsDictTagged | C4dResliceIdentityParamsDictTagged | C4dRgb2hsvParamsDictTagged | C4dRmsParamsDictTagged | C4dRoundParamsDictTagged | C4dScaleParamsDictTagged | C4dSetSform1ParamsDictTagged | C4dSinParamsDictTagged | C4dSliceParamsDictTagged | C4dSliceAllParamsDictTagged | C4dSharpenParamsDictTagged | C4dShiftParamsDictTagged | C4dSignedDistanceTransformParamsDictTagged | C4dSmoothParamsDictTagged | C4dSmoothFastParamsDictTagged | C4dSpacingParamsDictTagged | C4dSplitParamsDictTagged | C4dSqrtParamsDictTagged | C4dStapleParamsDictTagged | C4dStructureTensorEigenvaluesParamsDictTagged | C4dSpmParamsDictTagged | C4dSubtractParamsDictTagged | C4dSupervoxelParamsDictTagged | C4dStretchParamsDictTagged | C4dSwapdimParamsDictTagged | C4dTestImageParamsDictTagged | C4dTestProbeParamsDictTagged | C4dThresholdParamsDictTagged | C4dTileParamsDictTagged | C4dTrimParamsDictTagged | C4dTrimToSizeParamsDictTagged | C4dTypeParamsDictTagged | C4dVerboseParamsDictTagged | C4dNoverboseParamsDictTagged | C4dVersionParamsDictTagged | C4dVoteParamsDictTagged | C4dVoteMrfParamsDictTagged | C4dVoteLabelParamsDictTagged | C4dVoxelSumParamsDictTagged | C4dVoxelIntegralParamsDictTagged | C4dVoxelwiseRegressionParamsDictTagged | C4dWarpParamsDictTagged | C4dWarpLabelParamsDictTagged | C4dWrapParamsDictTagged | C4dWeightedSumParamsDictTagged | C4dWeightedSumVoxelwiseParamsDictTagged>,
     output: string,
     runner: Runner | null = null,
 ): C4dOutputs {
@@ -9849,188 +9849,548 @@ function c4d(
 
 export {
       C4D_METADATA,
+      C4dAccumParamsDict,
+      C4dAccumParamsDictTagged,
+      C4dAcosParamsDict,
+      C4dAcosParamsDictTagged,
+      C4dAddParamsDict,
+      C4dAddParamsDictTagged,
+      C4dAlignLandmarksParamsDict,
+      C4dAlignLandmarksParamsDictTagged,
+      C4dAnisotropicDiffusionParamsDict,
+      C4dAnisotropicDiffusionParamsDictTagged,
+      C4dAntialiasParamsDict,
+      C4dAntialiasParamsDictTagged,
+      C4dAsinParamsDict,
+      C4dAsinParamsDictTagged,
+      C4dAtan2ParamsDict,
+      C4dAtan2ParamsDictTagged,
+      C4dBackgroundParamsDict,
+      C4dBackgroundParamsDictTagged,
+      C4dBinarizeParamsDict,
+      C4dBinarizeParamsDictTagged,
+      C4dCannyParamsDict,
+      C4dCannyParamsDictTagged,
+      C4dCeilParamsDict,
+      C4dCeilParamsDictTagged,
+      C4dCentroidMarkParamsDict,
+      C4dCentroidMarkParamsDictTagged,
+      C4dCentroidParamsDict,
+      C4dCentroidParamsDictTagged,
+      C4dClearParamsDict,
+      C4dClearParamsDictTagged,
+      C4dClipParamsDict,
+      C4dClipParamsDictTagged,
+      C4dColorMapParamsDict,
+      C4dColorMapParamsDictTagged,
+      C4dCompressParamsDict,
+      C4dCompressParamsDictTagged,
+      C4dConnectedComponentsParamsDict,
+      C4dConnectedComponentsParamsDictTagged,
+      C4dConvParamsDict,
+      C4dConvParamsDictTagged,
+      C4dCoordinateMapPhysicalParamsDict,
+      C4dCoordinateMapPhysicalParamsDictTagged,
+      C4dCoordinateMapVoxelParamsDict,
+      C4dCoordinateMapVoxelParamsDictTagged,
+      C4dCopyTransformParamsDict,
+      C4dCopyTransformParamsDictTagged,
+      C4dCosParamsDict,
+      C4dCosParamsDictTagged,
+      C4dCreateParamsDict,
+      C4dCreateParamsDictTagged,
+      C4dDicomSeriesListParamsDict,
+      C4dDicomSeriesListParamsDictTagged,
+      C4dDicomSeriesReadParamsDict,
+      C4dDicomSeriesReadParamsDictTagged,
+      C4dDilateParamsDict,
+      C4dDilateParamsDictTagged,
+      C4dDivideParamsDict,
+      C4dDivideParamsDictTagged,
+      C4dDuplicateParamsDict,
+      C4dDuplicateParamsDictTagged,
+      C4dEndaccumParamsDict,
+      C4dEndaccumParamsDictTagged,
+      C4dEndforParamsDict,
+      C4dEndforParamsDictTagged,
+      C4dErfParamsDict,
+      C4dErfParamsDictTagged,
+      C4dErodeParamsDict,
+      C4dErodeParamsDictTagged,
+      C4dExpParamsDict,
+      C4dExpParamsDictTagged,
+      C4dExportPatchesAugParamsDict,
+      C4dExportPatchesAugParamsDictTagged,
+      C4dExportPatchesParamsDict,
+      C4dExportPatchesParamsDictTagged,
+      C4dExtrudeSegParamsDict,
+      C4dExtrudeSegParamsDictTagged,
+      C4dFftParamsDict,
+      C4dFftParamsDictTagged,
+      C4dFillBackgroundWithNoiseParamsDict,
+      C4dFillBackgroundWithNoiseParamsDictTagged,
+      C4dFlipParamsDict,
+      C4dFlipParamsDictTagged,
+      C4dFloorParamsDict,
+      C4dFloorParamsDictTagged,
+      C4dForeachCompParamsDict,
+      C4dForeachCompParamsDictTagged,
+      C4dForeachParamsDict,
+      C4dForeachParamsDictTagged,
+      C4dGlmParamsDict,
+      C4dGlmParamsDictTagged,
+      C4dGradientParamsDict,
+      C4dGradientParamsDictTagged,
+      C4dHelpParamsDict,
+      C4dHelpParamsDictTagged,
+      C4dHessianEigenvaluesParamsDict,
+      C4dHessianEigenvaluesParamsDictTagged,
+      C4dHessianObjectnessParamsDict,
+      C4dHessianObjectnessParamsDictTagged,
+      C4dHistogramMatchParamsDict,
+      C4dHistogramMatchParamsDictTagged,
+      C4dHolefillParamsDict,
+      C4dHolefillParamsDictTagged,
+      C4dInfoFullParamsDict,
+      C4dInfoFullParamsDictTagged,
+      C4dInfoParamsDict,
+      C4dInfoParamsDictTagged,
+      C4dInsertParamsDict,
+      C4dInsertParamsDictTagged,
+      C4dInterpolationParamsDict,
+      C4dInterpolationParamsDictTagged,
+      C4dIterationsParamsDict,
+      C4dIterationsParamsDictTagged,
+      C4dLabelOverlapParamsDict,
+      C4dLabelOverlapParamsDictTagged,
+      C4dLabelStatisticsParamsDict,
+      C4dLabelStatisticsParamsDictTagged,
+      C4dLandmarksToSpheresParamsDict,
+      C4dLandmarksToSpheresParamsDictTagged,
+      C4dLaplacianParamsDict,
+      C4dLaplacianParamsDictTagged,
+      C4dLevelsetAdvectionParamsDict,
+      C4dLevelsetAdvectionParamsDictTagged,
+      C4dLevelsetCurvatureParamsDict,
+      C4dLevelsetCurvatureParamsDictTagged,
+      C4dLevelsetParamsDict,
+      C4dLevelsetParamsDictTagged,
+      C4dLog10ParamsDict,
+      C4dLog10ParamsDictTagged,
+      C4dLogParamsDict,
+      C4dLogParamsDictTagged,
+      C4dManualParamsDict,
+      C4dManualParamsDictTagged,
+      C4dMatchBoundingBoxParamsDict,
+      C4dMatchBoundingBoxParamsDictTagged,
+      C4dMattesMutualInfoParamsDict,
+      C4dMattesMutualInfoParamsDictTagged,
+      C4dMaximumParamsDict,
+      C4dMaximumParamsDictTagged,
+      C4dMeanFilterParamsDict,
+      C4dMeanFilterParamsDictTagged,
+      C4dMeanParamsDict,
+      C4dMeanParamsDictTagged,
+      C4dMeanSquareParamsDict,
+      C4dMeanSquareParamsDictTagged,
+      C4dMedianFilterParamsDict,
+      C4dMedianFilterParamsDictTagged,
+      C4dMergeParamsDict,
+      C4dMergeParamsDictTagged,
+      C4dMinimumParamsDict,
+      C4dMinimumParamsDictTagged,
+      C4dMixtureModelParamsDict,
+      C4dMixtureModelParamsDictTagged,
+      C4dMomentsParamsDict,
+      C4dMomentsParamsDictTagged,
+      C4dMulticomponentSplitParamsDict,
+      C4dMulticomponentSplitParamsDictTagged,
+      C4dMultiplyParamsDict,
+      C4dMultiplyParamsDictTagged,
+      C4dMutualInfoParamsDict,
+      C4dMutualInfoParamsDictTagged,
+      C4dN4BiasCorrectionParamsDict,
+      C4dN4BiasCorrectionParamsDictTagged,
+      C4dNoCompressParamsDict,
+      C4dNoCompressParamsDictTagged,
+      C4dNoMulticomponentSplitParamsDict,
+      C4dNoMulticomponentSplitParamsDictTagged,
+      C4dNoiseGaussianParamsDict,
+      C4dNoiseGaussianParamsDictTagged,
+      C4dNoisePoissonParamsDict,
+      C4dNoisePoissonParamsDictTagged,
+      C4dNoiseSaltPepperParamsDict,
+      C4dNoiseSaltPepperParamsDictTagged,
+      C4dNoiseSpeckleParamsDict,
+      C4dNoiseSpeckleParamsDictTagged,
+      C4dNormalizeLocalWindowParamsDict,
+      C4dNormalizeLocalWindowParamsDictTagged,
+      C4dNormalizedCorrelationParamsDict,
+      C4dNormalizedCorrelationParamsDictTagged,
+      C4dNormalizedCrossCorrelationParamsDict,
+      C4dNormalizedCrossCorrelationParamsDictTagged,
+      C4dNormalizedMutualInfoParamsDict,
+      C4dNormalizedMutualInfoParamsDictTagged,
+      C4dNormpdfParamsDict,
+      C4dNormpdfParamsDictTagged,
+      C4dNoroundParamsDict,
+      C4dNoroundParamsDictTagged,
+      C4dNospmParamsDict,
+      C4dNospmParamsDictTagged,
+      C4dNoverboseParamsDict,
+      C4dNoverboseParamsDictTagged,
+      C4dOrient1ParamsDict,
+      C4dOrient1ParamsDictTagged,
+      C4dOrientParamsDict,
+      C4dOrientParamsDictTagged,
+      C4dOriginParamsDict,
+      C4dOriginParamsDictTagged,
+      C4dOriginVoxelCoordParamsDict,
+      C4dOriginVoxelCoordParamsDictTagged,
+      C4dOriginVoxelParamsDict,
+      C4dOriginVoxelParamsDictTagged,
+      C4dOutputMulticomponentParamsDict,
+      C4dOutputMulticomponentParamsDictTagged,
+      C4dOutputMultipleMulticomponentParamsDict,
+      C4dOutputMultipleMulticomponentParamsDictTagged,
+      C4dOutputMultipleParamsDict,
+      C4dOutputMultipleParamsDictTagged,
       C4dOutputOutputs,
+      C4dOutputParamsDict,
+      C4dOutputParamsDictTagged,
       C4dOutputs,
+      C4dOverlapParamsDict,
+      C4dOverlapParamsDictTagged,
+      C4dOverlayLabelImageParamsDict,
+      C4dOverlayLabelImageParamsDictTagged,
+      C4dPadParamsDict,
+      C4dPadParamsDictTagged,
+      C4dPadToParamsDict,
+      C4dPadToParamsDictTagged,
+      C4dParamsDict,
+      C4dParamsDictTagged,
+      C4dPcaParamsDict,
+      C4dPcaParamsDictTagged,
+      C4dPercentIntensityModeParamsDict,
+      C4dPercentIntensityModeParamsDictTagged,
+      C4dPixelParamsDict,
+      C4dPixelParamsDictTagged,
+      C4dPopParamsDict,
+      C4dPopParamsDictTagged,
+      C4dPopasParamsDict,
+      C4dPopasParamsDictTagged,
+      C4dProbeParamsDict,
+      C4dProbeParamsDictTagged,
+      C4dPushParamsDict,
+      C4dPushParamsDictTagged,
+      C4dRankParamsDict,
+      C4dRankParamsDictTagged,
+      C4dReciprocalParamsDict,
+      C4dReciprocalParamsDictTagged,
+      C4dRegionParamsDict,
+      C4dRegionParamsDictTagged,
+      C4dReorderParamsDict,
+      C4dReorderParamsDictTagged,
+      C4dReplaceParamsDict,
+      C4dReplaceParamsDictTagged,
+      C4dResampleIsoParamsDict,
+      C4dResampleIsoParamsDictTagged,
+      C4dResampleMmParamsDict,
+      C4dResampleMmParamsDictTagged,
+      C4dResampleParamsDict,
+      C4dResampleParamsDictTagged,
+      C4dResliceIdentityParamsDict,
+      C4dResliceIdentityParamsDictTagged,
+      C4dResliceItkParamsDict,
+      C4dResliceItkParamsDictTagged,
+      C4dResliceMatrixParamsDict,
+      C4dResliceMatrixParamsDictTagged,
+      C4dRetainLabelsParamsDict,
+      C4dRetainLabelsParamsDictTagged,
+      C4dRfApplyParamsDict,
+      C4dRfApplyParamsDictTagged,
+      C4dRfParamNousexyzParamsDict,
+      C4dRfParamNousexyzParamsDictTagged,
+      C4dRfParamNtreesParamsDict,
+      C4dRfParamNtreesParamsDictTagged,
+      C4dRfParamPatchParamsDict,
+      C4dRfParamPatchParamsDictTagged,
+      C4dRfParamTreedepthParamsDict,
+      C4dRfParamTreedepthParamsDictTagged,
+      C4dRfParamUsexyzParamsDict,
+      C4dRfParamUsexyzParamsDictTagged,
+      C4dRfTrainParamsDict,
+      C4dRfTrainParamsDictTagged,
+      C4dRgb2hsvParamsDict,
+      C4dRgb2hsvParamsDictTagged,
+      C4dRmsParamsDict,
+      C4dRmsParamsDictTagged,
+      C4dRoundParamsDict,
+      C4dRoundParamsDictTagged,
+      C4dScaleParamsDict,
+      C4dScaleParamsDictTagged,
+      C4dSetParamsDict,
+      C4dSetParamsDictTagged,
+      C4dSetSform1ParamsDict,
+      C4dSetSform1ParamsDictTagged,
+      C4dSetSformParamsDict,
+      C4dSetSformParamsDictTagged,
+      C4dSharpenParamsDict,
+      C4dSharpenParamsDictTagged,
+      C4dShiftParamsDict,
+      C4dShiftParamsDictTagged,
+      C4dSignedDistanceTransformParamsDict,
+      C4dSignedDistanceTransformParamsDictTagged,
+      C4dSinParamsDict,
+      C4dSinParamsDictTagged,
+      C4dSliceAllParamsDict,
+      C4dSliceAllParamsDictTagged,
+      C4dSliceParamsDict,
+      C4dSliceParamsDictTagged,
+      C4dSmoothFastParamsDict,
+      C4dSmoothFastParamsDictTagged,
+      C4dSmoothParamsDict,
+      C4dSmoothParamsDictTagged,
+      C4dSpacingParamsDict,
+      C4dSpacingParamsDictTagged,
+      C4dSplitParamsDict,
+      C4dSplitParamsDictTagged,
+      C4dSpmParamsDict,
+      C4dSpmParamsDictTagged,
+      C4dSqrtParamsDict,
+      C4dSqrtParamsDictTagged,
+      C4dStapleParamsDict,
+      C4dStapleParamsDictTagged,
+      C4dStretchParamsDict,
+      C4dStretchParamsDictTagged,
+      C4dStructureTensorEigenvaluesParamsDict,
+      C4dStructureTensorEigenvaluesParamsDictTagged,
+      C4dSubtractParamsDict,
+      C4dSubtractParamsDictTagged,
+      C4dSupervoxelParamsDict,
+      C4dSupervoxelParamsDictTagged,
+      C4dSwapdimParamsDict,
+      C4dSwapdimParamsDictTagged,
+      C4dTestImageParamsDict,
+      C4dTestImageParamsDictTagged,
+      C4dTestProbeParamsDict,
+      C4dTestProbeParamsDictTagged,
+      C4dThresholdParamsDict,
+      C4dThresholdParamsDictTagged,
+      C4dTileParamsDict,
+      C4dTileParamsDictTagged,
+      C4dTrimParamsDict,
+      C4dTrimParamsDictTagged,
+      C4dTrimToSizeParamsDict,
+      C4dTrimToSizeParamsDictTagged,
+      C4dTypeParamsDict,
+      C4dTypeParamsDictTagged,
+      C4dVerboseParamsDict,
+      C4dVerboseParamsDictTagged,
+      C4dVersionParamsDict,
+      C4dVersionParamsDictTagged,
+      C4dVoteLabelParamsDict,
+      C4dVoteLabelParamsDictTagged,
+      C4dVoteMrfParamsDict,
+      C4dVoteMrfParamsDictTagged,
+      C4dVoteParamsDict,
+      C4dVoteParamsDictTagged,
+      C4dVoxelIntegralParamsDict,
+      C4dVoxelIntegralParamsDictTagged,
+      C4dVoxelSumParamsDict,
+      C4dVoxelSumParamsDictTagged,
+      C4dVoxelwiseRegressionParamsDict,
+      C4dVoxelwiseRegressionParamsDictTagged,
+      C4dWarpLabelParamsDict,
+      C4dWarpLabelParamsDictTagged,
+      C4dWarpParamsDict,
+      C4dWarpParamsDictTagged,
+      C4dWeightedSumParamsDict,
+      C4dWeightedSumParamsDictTagged,
+      C4dWeightedSumVoxelwiseParamsDict,
+      C4dWeightedSumVoxelwiseParamsDictTagged,
+      C4dWrapParamsDict,
+      C4dWrapParamsDictTagged,
       c4d,
-      c4d__help_params,
-      c4d_accum_params,
-      c4d_acos_params,
-      c4d_add_params,
-      c4d_align_landmarks_params,
-      c4d_anisotropic_diffusion_params,
-      c4d_antialias_params,
-      c4d_asin_params,
-      c4d_atan2_params,
-      c4d_background_params,
-      c4d_binarize_params,
-      c4d_canny_params,
-      c4d_ceil_params,
-      c4d_centroid_mark_params,
-      c4d_centroid_params,
-      c4d_clear_params,
-      c4d_clip_params,
-      c4d_color_map_params,
-      c4d_compress_params,
-      c4d_connected_components_params,
-      c4d_conv_params,
-      c4d_coordinate_map_physical_params,
-      c4d_coordinate_map_voxel_params,
-      c4d_copy_transform_params,
-      c4d_cos_params,
-      c4d_create_params,
-      c4d_dicom_series_list_params,
-      c4d_dicom_series_read_params,
-      c4d_dilate_params,
-      c4d_divide_params,
-      c4d_duplicate_params,
-      c4d_endaccum_params,
-      c4d_endfor_params,
-      c4d_erf_params,
-      c4d_erode_params,
+      c4d__help,
+      c4d_accum,
+      c4d_acos,
+      c4d_add,
+      c4d_align_landmarks,
+      c4d_anisotropic_diffusion,
+      c4d_antialias,
+      c4d_asin,
+      c4d_atan2,
+      c4d_background,
+      c4d_binarize,
+      c4d_canny,
+      c4d_ceil,
+      c4d_centroid,
+      c4d_centroid_mark,
+      c4d_clear,
+      c4d_clip,
+      c4d_color_map,
+      c4d_compress,
+      c4d_connected_components,
+      c4d_conv,
+      c4d_coordinate_map_physical,
+      c4d_coordinate_map_voxel,
+      c4d_copy_transform,
+      c4d_cos,
+      c4d_create,
+      c4d_dicom_series_list,
+      c4d_dicom_series_read,
+      c4d_dilate,
+      c4d_divide,
+      c4d_duplicate,
+      c4d_endaccum,
+      c4d_endfor,
+      c4d_erf,
+      c4d_erode,
       c4d_execute,
-      c4d_exp_params,
-      c4d_export_patches_aug_params,
-      c4d_export_patches_params,
-      c4d_extrude_seg_params,
-      c4d_fft_params,
-      c4d_fill_background_with_noise_params,
-      c4d_flip_params,
-      c4d_floor_params,
-      c4d_foreach_comp_params,
-      c4d_foreach_params,
-      c4d_glm_params,
-      c4d_gradient_params,
-      c4d_hessian_eigenvalues_params,
-      c4d_hessian_objectness_params,
-      c4d_histogram_match_params,
-      c4d_holefill_params,
-      c4d_info_full_params,
-      c4d_info_params,
-      c4d_insert_params,
-      c4d_interpolation_params,
-      c4d_iterations_params,
-      c4d_label_overlap_params,
-      c4d_label_statistics_params,
-      c4d_landmarks_to_spheres_params,
-      c4d_laplacian_params,
-      c4d_levelset_advection_params,
-      c4d_levelset_curvature_params,
-      c4d_levelset_params,
-      c4d_log10_params,
-      c4d_log_params,
-      c4d_manual_params,
-      c4d_match_bounding_box_params,
-      c4d_mattes_mutual_info_params,
-      c4d_maximum_params,
-      c4d_mean_filter_params,
-      c4d_mean_params,
-      c4d_mean_square_params,
-      c4d_median_filter_params,
-      c4d_merge_params,
-      c4d_minimum_params,
-      c4d_mixture_model_params,
-      c4d_moments_params,
-      c4d_multicomponent_split_params,
-      c4d_multiply_params,
-      c4d_mutual_info_params,
-      c4d_n4_bias_correction_params,
-      c4d_no_compress_params,
-      c4d_no_multicomponent_split_params,
-      c4d_noise_gaussian_params,
-      c4d_noise_poisson_params,
-      c4d_noise_salt_pepper_params,
-      c4d_noise_speckle_params,
-      c4d_normalize_local_window_params,
-      c4d_normalized_correlation_params,
-      c4d_normalized_cross_correlation_params,
-      c4d_normalized_mutual_info_params,
-      c4d_normpdf_params,
-      c4d_noround_params,
-      c4d_nospm_params,
-      c4d_noverbose_params,
-      c4d_orient_1_params,
-      c4d_orient_params,
-      c4d_origin_params,
-      c4d_origin_voxel_coord_params,
-      c4d_origin_voxel_params,
-      c4d_output_multicomponent_params,
-      c4d_output_multiple_multicomponent_params,
-      c4d_output_multiple_params,
-      c4d_output_params,
-      c4d_overlap_params,
-      c4d_overlay_label_image_params,
-      c4d_pad_params,
-      c4d_pad_to_params,
+      c4d_exp,
+      c4d_export_patches,
+      c4d_export_patches_aug,
+      c4d_extrude_seg,
+      c4d_fft,
+      c4d_fill_background_with_noise,
+      c4d_flip,
+      c4d_floor,
+      c4d_foreach,
+      c4d_foreach_comp,
+      c4d_glm,
+      c4d_gradient,
+      c4d_hessian_eigenvalues,
+      c4d_hessian_objectness,
+      c4d_histogram_match,
+      c4d_holefill,
+      c4d_info,
+      c4d_info_full,
+      c4d_insert,
+      c4d_interpolation,
+      c4d_iterations,
+      c4d_label_overlap,
+      c4d_label_statistics,
+      c4d_landmarks_to_spheres,
+      c4d_laplacian,
+      c4d_levelset,
+      c4d_levelset_advection,
+      c4d_levelset_curvature,
+      c4d_log,
+      c4d_log10,
+      c4d_manual,
+      c4d_match_bounding_box,
+      c4d_mattes_mutual_info,
+      c4d_maximum,
+      c4d_mean,
+      c4d_mean_filter,
+      c4d_mean_square,
+      c4d_median_filter,
+      c4d_merge,
+      c4d_minimum,
+      c4d_mixture_model,
+      c4d_moments,
+      c4d_multicomponent_split,
+      c4d_multiply,
+      c4d_mutual_info,
+      c4d_n4_bias_correction,
+      c4d_no_compress,
+      c4d_no_multicomponent_split,
+      c4d_noise_gaussian,
+      c4d_noise_poisson,
+      c4d_noise_salt_pepper,
+      c4d_noise_speckle,
+      c4d_normalize_local_window,
+      c4d_normalized_correlation,
+      c4d_normalized_cross_correlation,
+      c4d_normalized_mutual_info,
+      c4d_normpdf,
+      c4d_noround,
+      c4d_nospm,
+      c4d_noverbose,
+      c4d_orient,
+      c4d_orient_1,
+      c4d_origin,
+      c4d_origin_voxel,
+      c4d_origin_voxel_coord,
+      c4d_output,
+      c4d_output_multicomponent,
+      c4d_output_multiple,
+      c4d_output_multiple_multicomponent,
+      c4d_overlap,
+      c4d_overlay_label_image,
+      c4d_pad,
+      c4d_pad_to,
       c4d_params,
-      c4d_pca_params,
-      c4d_percent_intensity_mode_params,
-      c4d_pixel_params,
-      c4d_pop_params,
-      c4d_popas_params,
-      c4d_probe_params,
-      c4d_push_params,
-      c4d_rank_params,
-      c4d_reciprocal_params,
-      c4d_region_params,
-      c4d_reorder_params,
-      c4d_replace_params,
-      c4d_resample_iso_params,
-      c4d_resample_mm_params,
-      c4d_resample_params,
-      c4d_reslice_identity_params,
-      c4d_reslice_itk_params,
-      c4d_reslice_matrix_params,
-      c4d_retain_labels_params,
-      c4d_rf_apply_params,
-      c4d_rf_param_nousexyz_params,
-      c4d_rf_param_ntrees_params,
-      c4d_rf_param_patch_params,
-      c4d_rf_param_treedepth_params,
-      c4d_rf_param_usexyz_params,
-      c4d_rf_train_params,
-      c4d_rgb2hsv_params,
-      c4d_rms_params,
-      c4d_round_params,
-      c4d_scale_params,
-      c4d_set_params,
-      c4d_set_sform_1_params,
-      c4d_set_sform_params,
-      c4d_sharpen_params,
-      c4d_shift_params,
-      c4d_signed_distance_transform_params,
-      c4d_sin_params,
-      c4d_slice_all_params,
-      c4d_slice_params,
-      c4d_smooth_fast_params,
-      c4d_smooth_params,
-      c4d_spacing_params,
-      c4d_split_params,
-      c4d_spm_params,
-      c4d_sqrt_params,
-      c4d_staple_params,
-      c4d_stretch_params,
-      c4d_structure_tensor_eigenvalues_params,
-      c4d_subtract_params,
-      c4d_supervoxel_params,
-      c4d_swapdim_params,
-      c4d_test_image_params,
-      c4d_test_probe_params,
-      c4d_threshold_params,
-      c4d_tile_params,
-      c4d_trim_params,
-      c4d_trim_to_size_params,
-      c4d_type_params,
-      c4d_verbose_params,
-      c4d_version_params,
-      c4d_vote_label_params,
-      c4d_vote_mrf_params,
-      c4d_vote_params,
-      c4d_voxel_integral_params,
-      c4d_voxel_sum_params,
-      c4d_voxelwise_regression_params,
-      c4d_warp_label_params,
-      c4d_warp_params,
-      c4d_weighted_sum_params,
-      c4d_weighted_sum_voxelwise_params,
-      c4d_wrap_params,
+      c4d_pca,
+      c4d_percent_intensity_mode,
+      c4d_pixel,
+      c4d_pop,
+      c4d_popas,
+      c4d_probe,
+      c4d_push,
+      c4d_rank,
+      c4d_reciprocal,
+      c4d_region,
+      c4d_reorder,
+      c4d_replace,
+      c4d_resample,
+      c4d_resample_iso,
+      c4d_resample_mm,
+      c4d_reslice_identity,
+      c4d_reslice_itk,
+      c4d_reslice_matrix,
+      c4d_retain_labels,
+      c4d_rf_apply,
+      c4d_rf_param_nousexyz,
+      c4d_rf_param_ntrees,
+      c4d_rf_param_patch,
+      c4d_rf_param_treedepth,
+      c4d_rf_param_usexyz,
+      c4d_rf_train,
+      c4d_rgb2hsv,
+      c4d_rms,
+      c4d_round,
+      c4d_scale,
+      c4d_set,
+      c4d_set_sform,
+      c4d_set_sform_1,
+      c4d_sharpen,
+      c4d_shift,
+      c4d_signed_distance_transform,
+      c4d_sin,
+      c4d_slice,
+      c4d_slice_all,
+      c4d_smooth,
+      c4d_smooth_fast,
+      c4d_spacing,
+      c4d_split,
+      c4d_spm,
+      c4d_sqrt,
+      c4d_staple,
+      c4d_stretch,
+      c4d_structure_tensor_eigenvalues,
+      c4d_subtract,
+      c4d_supervoxel,
+      c4d_swapdim,
+      c4d_test_image,
+      c4d_test_probe,
+      c4d_threshold,
+      c4d_tile,
+      c4d_trim,
+      c4d_trim_to_size,
+      c4d_type,
+      c4d_verbose,
+      c4d_version,
+      c4d_vote,
+      c4d_vote_label,
+      c4d_vote_mrf,
+      c4d_voxel_integral,
+      c4d_voxel_sum,
+      c4d_voxelwise_regression,
+      c4d_warp,
+      c4d_warp_label,
+      c4d_weighted_sum,
+      c4d_weighted_sum_voxelwise,
+      c4d_wrap,
 };

@@ -11,7 +11,7 @@ const P2DSETSTAT_METADATA: Metadata = {
 };
 
 
-interface P2dsetstatParameters {
+interface P2dsetstatParamsDict {
     "@type"?: "afni/p2dsetstat";
     "dataset": string;
     "pvalue": number;
@@ -20,11 +20,11 @@ interface P2dsetstatParameters {
     "onesided": boolean;
     "quiet": boolean;
 }
-type P2dsetstatParametersTagged = Required<Pick<P2dsetstatParameters, '@type'>> & P2dsetstatParameters;
+type P2dsetstatParamsDictTagged = Required<Pick<P2dsetstatParamsDict, '@type'>> & P2dsetstatParamsDict;
 
 
 /**
- * Output object returned when calling `P2dsetstatParameters(...)`.
+ * Output object returned when calling `P2dsetstatParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function p2dsetstat_params(
     twosided: boolean = false,
     onesided: boolean = false,
     quiet: boolean = false,
-): P2dsetstatParametersTagged {
+): P2dsetstatParamsDictTagged {
     const params = {
         "@type": "afni/p2dsetstat" as const,
         "dataset": dataset,
@@ -82,7 +82,7 @@ function p2dsetstat_params(
  * @returns Command-line arguments.
  */
 function p2dsetstat_cargs(
-    params: P2dsetstatParameters,
+    params: P2dsetstatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function p2dsetstat_cargs(
  * @returns Outputs object.
  */
 function p2dsetstat_outputs(
-    params: P2dsetstatParameters,
+    params: P2dsetstatParamsDict,
     execution: Execution,
 ): P2dsetstatOutputs {
     const ret: P2dsetstatOutputs = {
@@ -146,7 +146,7 @@ function p2dsetstat_outputs(
  * @returns NamedTuple of outputs (described in `P2dsetstatOutputs`).
  */
 function p2dsetstat_execute(
-    params: P2dsetstatParameters,
+    params: P2dsetstatParamsDict,
     runner: Runner | null = null,
 ): P2dsetstatOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function p2dsetstat(
 export {
       P2DSETSTAT_METADATA,
       P2dsetstatOutputs,
+      P2dsetstatParamsDict,
+      P2dsetstatParamsDictTagged,
       p2dsetstat,
       p2dsetstat_execute,
       p2dsetstat_params,

@@ -11,15 +11,15 @@ const ANATOMI_CUTS_UTILS_METADATA: Metadata = {
 };
 
 
-interface AnatomiCutsUtilsParameters {
+interface AnatomiCutsUtilsParamsDict {
     "@type"?: "freesurfer/anatomiCutsUtils";
     "modules"?: Array<string> | null | undefined;
 }
-type AnatomiCutsUtilsParametersTagged = Required<Pick<AnatomiCutsUtilsParameters, '@type'>> & AnatomiCutsUtilsParameters;
+type AnatomiCutsUtilsParamsDictTagged = Required<Pick<AnatomiCutsUtilsParamsDict, '@type'>> & AnatomiCutsUtilsParamsDict;
 
 
 /**
- * Output object returned when calling `AnatomiCutsUtilsParameters(...)`.
+ * Output object returned when calling `AnatomiCutsUtilsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface AnatomiCutsUtilsOutputs {
  */
 function anatomi_cuts_utils_params(
     modules: Array<string> | null = null,
-): AnatomiCutsUtilsParametersTagged {
+): AnatomiCutsUtilsParamsDictTagged {
     const params = {
         "@type": "freesurfer/anatomiCutsUtils" as const,
     };
@@ -60,7 +60,7 @@ function anatomi_cuts_utils_params(
  * @returns Command-line arguments.
  */
 function anatomi_cuts_utils_cargs(
-    params: AnatomiCutsUtilsParameters,
+    params: AnatomiCutsUtilsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function anatomi_cuts_utils_cargs(
  * @returns Outputs object.
  */
 function anatomi_cuts_utils_outputs(
-    params: AnatomiCutsUtilsParameters,
+    params: AnatomiCutsUtilsParamsDict,
     execution: Execution,
 ): AnatomiCutsUtilsOutputs {
     const ret: AnatomiCutsUtilsOutputs = {
@@ -106,7 +106,7 @@ function anatomi_cuts_utils_outputs(
  * @returns NamedTuple of outputs (described in `AnatomiCutsUtilsOutputs`).
  */
 function anatomi_cuts_utils_execute(
-    params: AnatomiCutsUtilsParameters,
+    params: AnatomiCutsUtilsParamsDict,
     runner: Runner | null = null,
 ): AnatomiCutsUtilsOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function anatomi_cuts_utils(
 export {
       ANATOMI_CUTS_UTILS_METADATA,
       AnatomiCutsUtilsOutputs,
+      AnatomiCutsUtilsParamsDict,
+      AnatomiCutsUtilsParamsDictTagged,
       anatomi_cuts_utils,
       anatomi_cuts_utils_execute,
       anatomi_cuts_utils_params,

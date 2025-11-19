@@ -11,16 +11,16 @@ const HIAM_MAKE_SURFACES_METADATA: Metadata = {
 };
 
 
-interface HiamMakeSurfacesParameters {
+interface HiamMakeSurfacesParamsDict {
     "@type"?: "freesurfer/hiam_make_surfaces";
     "subject_name": string;
     "structure": "RA" | "LA" | "RH" | "LH";
 }
-type HiamMakeSurfacesParametersTagged = Required<Pick<HiamMakeSurfacesParameters, '@type'>> & HiamMakeSurfacesParameters;
+type HiamMakeSurfacesParamsDictTagged = Required<Pick<HiamMakeSurfacesParamsDict, '@type'>> & HiamMakeSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `HiamMakeSurfacesParameters(...)`.
+ * Output object returned when calling `HiamMakeSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface HiamMakeSurfacesOutputs {
 function hiam_make_surfaces_params(
     subject_name: string,
     structure: "RA" | "LA" | "RH" | "LH",
-): HiamMakeSurfacesParametersTagged {
+): HiamMakeSurfacesParamsDictTagged {
     const params = {
         "@type": "freesurfer/hiam_make_surfaces" as const,
         "subject_name": subject_name,
@@ -62,7 +62,7 @@ function hiam_make_surfaces_params(
  * @returns Command-line arguments.
  */
 function hiam_make_surfaces_cargs(
-    params: HiamMakeSurfacesParameters,
+    params: HiamMakeSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function hiam_make_surfaces_cargs(
  * @returns Outputs object.
  */
 function hiam_make_surfaces_outputs(
-    params: HiamMakeSurfacesParameters,
+    params: HiamMakeSurfacesParamsDict,
     execution: Execution,
 ): HiamMakeSurfacesOutputs {
     const ret: HiamMakeSurfacesOutputs = {
@@ -107,7 +107,7 @@ function hiam_make_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `HiamMakeSurfacesOutputs`).
  */
 function hiam_make_surfaces_execute(
-    params: HiamMakeSurfacesParameters,
+    params: HiamMakeSurfacesParamsDict,
     runner: Runner | null = null,
 ): HiamMakeSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function hiam_make_surfaces(
 export {
       HIAM_MAKE_SURFACES_METADATA,
       HiamMakeSurfacesOutputs,
+      HiamMakeSurfacesParamsDict,
+      HiamMakeSurfacesParamsDictTagged,
       hiam_make_surfaces,
       hiam_make_surfaces_execute,
       hiam_make_surfaces_params,

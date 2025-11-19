@@ -11,7 +11,7 @@ const DMRI_PATHS_METADATA: Metadata = {
 };
 
 
-interface DmriPathsParameters {
+interface DmriPathsParamsDict {
     "@type"?: "freesurfer/dmri_paths";
     "indir"?: string | null | undefined;
     "outdir"?: string | null | undefined;
@@ -50,11 +50,11 @@ interface DmriPathsParameters {
     "checkopts": boolean;
     "version": boolean;
 }
-type DmriPathsParametersTagged = Required<Pick<DmriPathsParameters, '@type'>> & DmriPathsParameters;
+type DmriPathsParamsDictTagged = Required<Pick<DmriPathsParamsDict, '@type'>> & DmriPathsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriPathsParameters(...)`.
+ * Output object returned when calling `DmriPathsParamsDict(...)`.
  *
  * @interface
  */
@@ -145,7 +145,7 @@ function dmri_paths_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): DmriPathsParametersTagged {
+): DmriPathsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_paths" as const,
         "debug": debug,
@@ -264,7 +264,7 @@ function dmri_paths_params(
  * @returns Command-line arguments.
  */
 function dmri_paths_cargs(
-    params: DmriPathsParameters,
+    params: DmriPathsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -489,7 +489,7 @@ function dmri_paths_cargs(
  * @returns Outputs object.
  */
 function dmri_paths_outputs(
-    params: DmriPathsParameters,
+    params: DmriPathsParamsDict,
     execution: Execution,
 ): DmriPathsOutputs {
     const ret: DmriPathsOutputs = {
@@ -514,7 +514,7 @@ function dmri_paths_outputs(
  * @returns NamedTuple of outputs (described in `DmriPathsOutputs`).
  */
 function dmri_paths_execute(
-    params: DmriPathsParameters,
+    params: DmriPathsParamsDict,
     runner: Runner | null = null,
 ): DmriPathsOutputs {
     runner = runner || getGlobalRunner();
@@ -623,6 +623,8 @@ function dmri_paths(
 export {
       DMRI_PATHS_METADATA,
       DmriPathsOutputs,
+      DmriPathsParamsDict,
+      DmriPathsParamsDictTagged,
       dmri_paths,
       dmri_paths_execute,
       dmri_paths_params,

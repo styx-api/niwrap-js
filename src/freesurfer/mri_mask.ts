@@ -11,7 +11,7 @@ const MRI_MASK_METADATA: Metadata = {
 };
 
 
-interface MriMaskParameters {
+interface MriMaskParamsDict {
     "@type"?: "freesurfer/mri_mask";
     "input_volume": InputPathType;
     "mask_volume": InputPathType;
@@ -35,11 +35,11 @@ interface MriMaskParameters {
     "keep_mask_deletion_edits": boolean;
     "samseg": boolean;
 }
-type MriMaskParametersTagged = Required<Pick<MriMaskParameters, '@type'>> & MriMaskParameters;
+type MriMaskParamsDictTagged = Required<Pick<MriMaskParamsDict, '@type'>> & MriMaskParamsDict;
 
 
 /**
- * Output object returned when calling `MriMaskParameters(...)`.
+ * Output object returned when calling `MriMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -104,7 +104,7 @@ function mri_mask_params(
     transfer_value: number | null = null,
     keep_mask_deletion_edits: boolean = false,
     samseg: boolean = false,
-): MriMaskParametersTagged {
+): MriMaskParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_mask" as const,
         "input_volume": input_volume,
@@ -162,7 +162,7 @@ function mri_mask_params(
  * @returns Command-line arguments.
  */
 function mri_mask_cargs(
-    params: MriMaskParameters,
+    params: MriMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -267,7 +267,7 @@ function mri_mask_cargs(
  * @returns Outputs object.
  */
 function mri_mask_outputs(
-    params: MriMaskParameters,
+    params: MriMaskParamsDict,
     execution: Execution,
 ): MriMaskOutputs {
     const ret: MriMaskOutputs = {
@@ -293,7 +293,7 @@ function mri_mask_outputs(
  * @returns NamedTuple of outputs (described in `MriMaskOutputs`).
  */
 function mri_mask_execute(
-    params: MriMaskParameters,
+    params: MriMaskParamsDict,
     runner: Runner | null = null,
 ): MriMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -372,6 +372,8 @@ function mri_mask(
 export {
       MRI_MASK_METADATA,
       MriMaskOutputs,
+      MriMaskParamsDict,
+      MriMaskParamsDictTagged,
       mri_mask,
       mri_mask_execute,
       mri_mask_params,

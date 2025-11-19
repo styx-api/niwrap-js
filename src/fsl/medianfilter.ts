@@ -11,16 +11,16 @@ const MEDIANFILTER_METADATA: Metadata = {
 };
 
 
-interface MedianfilterParameters {
+interface MedianfilterParamsDict {
     "@type"?: "fsl/medianfilter";
     "infile": InputPathType;
     "outfile": InputPathType;
 }
-type MedianfilterParametersTagged = Required<Pick<MedianfilterParameters, '@type'>> & MedianfilterParameters;
+type MedianfilterParamsDictTagged = Required<Pick<MedianfilterParamsDict, '@type'>> & MedianfilterParamsDict;
 
 
 /**
- * Output object returned when calling `MedianfilterParameters(...)`.
+ * Output object returned when calling `MedianfilterParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MedianfilterOutputs {
 function medianfilter_params(
     infile: InputPathType,
     outfile: InputPathType,
-): MedianfilterParametersTagged {
+): MedianfilterParamsDictTagged {
     const params = {
         "@type": "fsl/medianfilter" as const,
         "infile": infile,
@@ -66,7 +66,7 @@ function medianfilter_params(
  * @returns Command-line arguments.
  */
 function medianfilter_cargs(
-    params: MedianfilterParameters,
+    params: MedianfilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function medianfilter_cargs(
  * @returns Outputs object.
  */
 function medianfilter_outputs(
-    params: MedianfilterParameters,
+    params: MedianfilterParamsDict,
     execution: Execution,
 ): MedianfilterOutputs {
     const ret: MedianfilterOutputs = {
@@ -112,7 +112,7 @@ function medianfilter_outputs(
  * @returns NamedTuple of outputs (described in `MedianfilterOutputs`).
  */
 function medianfilter_execute(
-    params: MedianfilterParameters,
+    params: MedianfilterParamsDict,
     runner: Runner | null = null,
 ): MedianfilterOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function medianfilter(
 export {
       MEDIANFILTER_METADATA,
       MedianfilterOutputs,
+      MedianfilterParamsDict,
+      MedianfilterParamsDictTagged,
       medianfilter,
       medianfilter_execute,
       medianfilter_params,

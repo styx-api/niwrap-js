@@ -10,17 +10,17 @@ const VOLUME_REORIENT_METADATA: Metadata = {
 };
 
 
-interface VolumeReorientParameters {
+interface VolumeReorientParamsDict {
     "@type"?: "workbench/volume-reorient";
     "volume": InputPathType;
     "orient-string": string;
     "volume-out": string;
 }
-type VolumeReorientParametersTagged = Required<Pick<VolumeReorientParameters, '@type'>> & VolumeReorientParameters;
+type VolumeReorientParamsDictTagged = Required<Pick<VolumeReorientParamsDict, '@type'>> & VolumeReorientParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeReorientParameters(...)`.
+ * Output object returned when calling `VolumeReorientParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function volume_reorient_params(
     volume: InputPathType,
     orient_string: string,
     volume_out: string,
-): VolumeReorientParametersTagged {
+): VolumeReorientParamsDictTagged {
     const params = {
         "@type": "workbench/volume-reorient" as const,
         "volume": volume,
@@ -65,7 +65,7 @@ function volume_reorient_params(
  * @returns Command-line arguments.
  */
 function volume_reorient_cargs(
-    params: VolumeReorientParameters,
+    params: VolumeReorientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function volume_reorient_cargs(
  * @returns Outputs object.
  */
 function volume_reorient_outputs(
-    params: VolumeReorientParameters,
+    params: VolumeReorientParamsDict,
     execution: Execution,
 ): VolumeReorientOutputs {
     const ret: VolumeReorientOutputs = {
@@ -117,7 +117,7 @@ function volume_reorient_outputs(
  * @returns NamedTuple of outputs (described in `VolumeReorientOutputs`).
  */
 function volume_reorient_execute(
-    params: VolumeReorientParameters,
+    params: VolumeReorientParamsDict,
     runner: Runner | null = null,
 ): VolumeReorientOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function volume_reorient(
 export {
       VOLUME_REORIENT_METADATA,
       VolumeReorientOutputs,
+      VolumeReorientParamsDict,
+      VolumeReorientParamsDictTagged,
       volume_reorient,
       volume_reorient_execute,
       volume_reorient_params,

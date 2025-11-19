@@ -11,17 +11,17 @@ const SBTIV_METADATA: Metadata = {
 };
 
 
-interface SbtivParameters {
+interface SbtivParamsDict {
     "@type"?: "freesurfer/sbtiv";
     "input_file": InputPathType;
     "output_file"?: string | null | undefined;
     "labels_file"?: InputPathType | null | undefined;
 }
-type SbtivParametersTagged = Required<Pick<SbtivParameters, '@type'>> & SbtivParameters;
+type SbtivParamsDictTagged = Required<Pick<SbtivParamsDict, '@type'>> & SbtivParamsDict;
 
 
 /**
- * Output object returned when calling `SbtivParameters(...)`.
+ * Output object returned when calling `SbtivParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function sbtiv_params(
     input_file: InputPathType,
     output_file: string | null = null,
     labels_file: InputPathType | null = null,
-): SbtivParametersTagged {
+): SbtivParamsDictTagged {
     const params = {
         "@type": "freesurfer/sbtiv" as const,
         "input_file": input_file,
@@ -74,7 +74,7 @@ function sbtiv_params(
  * @returns Command-line arguments.
  */
 function sbtiv_cargs(
-    params: SbtivParameters,
+    params: SbtivParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function sbtiv_cargs(
  * @returns Outputs object.
  */
 function sbtiv_outputs(
-    params: SbtivParameters,
+    params: SbtivParamsDict,
     execution: Execution,
 ): SbtivOutputs {
     const ret: SbtivOutputs = {
@@ -131,7 +131,7 @@ function sbtiv_outputs(
  * @returns NamedTuple of outputs (described in `SbtivOutputs`).
  */
 function sbtiv_execute(
-    params: SbtivParameters,
+    params: SbtivParamsDict,
     runner: Runner | null = null,
 ): SbtivOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function sbtiv(
 export {
       SBTIV_METADATA,
       SbtivOutputs,
+      SbtivParamsDict,
+      SbtivParamsDictTagged,
       sbtiv,
       sbtiv_execute,
       sbtiv_params,

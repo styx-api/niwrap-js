@@ -11,7 +11,7 @@ const V_3D_FFT_METADATA: Metadata = {
 };
 
 
-interface V3dFftParameters {
+interface V3dFftParamsDict {
     "@type"?: "afni/3dFFT";
     "dataset": InputPathType;
     "abs": boolean;
@@ -26,11 +26,11 @@ interface V3dFftParameters {
     "input"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
 }
-type V3dFftParametersTagged = Required<Pick<V3dFftParameters, '@type'>> & V3dFftParameters;
+type V3dFftParamsDictTagged = Required<Pick<V3dFftParamsDict, '@type'>> & V3dFftParamsDict;
 
 
 /**
- * Output object returned when calling `V3dFftParameters(...)`.
+ * Output object returned when calling `V3dFftParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function v_3d_fft_params(
     alt_out: boolean = false,
     input: InputPathType | null = null,
     prefix: string | null = null,
-): V3dFftParametersTagged {
+): V3dFftParamsDictTagged {
     const params = {
         "@type": "afni/3dFFT" as const,
         "dataset": dataset,
@@ -116,7 +116,7 @@ function v_3d_fft_params(
  * @returns Command-line arguments.
  */
 function v_3d_fft_cargs(
-    params: V3dFftParameters,
+    params: V3dFftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,7 +183,7 @@ function v_3d_fft_cargs(
  * @returns Outputs object.
  */
 function v_3d_fft_outputs(
-    params: V3dFftParameters,
+    params: V3dFftParamsDict,
     execution: Execution,
 ): V3dFftOutputs {
     const ret: V3dFftOutputs = {
@@ -209,7 +209,7 @@ function v_3d_fft_outputs(
  * @returns NamedTuple of outputs (described in `V3dFftOutputs`).
  */
 function v_3d_fft_execute(
-    params: V3dFftParameters,
+    params: V3dFftParamsDict,
     runner: Runner | null = null,
 ): V3dFftOutputs {
     runner = runner || getGlobalRunner();
@@ -269,6 +269,8 @@ function v_3d_fft(
 
 export {
       V3dFftOutputs,
+      V3dFftParamsDict,
+      V3dFftParamsDictTagged,
       V_3D_FFT_METADATA,
       v_3d_fft,
       v_3d_fft_execute,

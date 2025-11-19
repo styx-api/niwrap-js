@@ -11,17 +11,17 @@ const MRI_DCT_ALIGN_METADATA: Metadata = {
 };
 
 
-interface MriDctAlignParameters {
+interface MriDctAlignParamsDict {
     "@type"?: "freesurfer/mri_dct_align";
     "source": InputPathType;
     "destination": InputPathType;
     "output_xform": string;
 }
-type MriDctAlignParametersTagged = Required<Pick<MriDctAlignParameters, '@type'>> & MriDctAlignParameters;
+type MriDctAlignParamsDictTagged = Required<Pick<MriDctAlignParamsDict, '@type'>> & MriDctAlignParamsDict;
 
 
 /**
- * Output object returned when calling `MriDctAlignParameters(...)`.
+ * Output object returned when calling `MriDctAlignParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_dct_align_params(
     source: InputPathType,
     destination: InputPathType,
     output_xform: string,
-): MriDctAlignParametersTagged {
+): MriDctAlignParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_dct_align" as const,
         "source": source,
@@ -70,7 +70,7 @@ function mri_dct_align_params(
  * @returns Command-line arguments.
  */
 function mri_dct_align_cargs(
-    params: MriDctAlignParameters,
+    params: MriDctAlignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_dct_align_cargs(
  * @returns Outputs object.
  */
 function mri_dct_align_outputs(
-    params: MriDctAlignParameters,
+    params: MriDctAlignParamsDict,
     execution: Execution,
 ): MriDctAlignOutputs {
     const ret: MriDctAlignOutputs = {
@@ -117,7 +117,7 @@ function mri_dct_align_outputs(
  * @returns NamedTuple of outputs (described in `MriDctAlignOutputs`).
  */
 function mri_dct_align_execute(
-    params: MriDctAlignParameters,
+    params: MriDctAlignParamsDict,
     runner: Runner | null = null,
 ): MriDctAlignOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_dct_align(
 export {
       MRI_DCT_ALIGN_METADATA,
       MriDctAlignOutputs,
+      MriDctAlignParamsDict,
+      MriDctAlignParamsDictTagged,
       mri_dct_align,
       mri_dct_align_execute,
       mri_dct_align_params,

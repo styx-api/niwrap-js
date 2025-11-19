@@ -11,7 +11,7 @@ const V_3D_TORTOISETO_HERE_METADATA: Metadata = {
 };
 
 
-interface V3dTortoisetoHereParameters {
+interface V3dTortoisetoHereParamsDict {
     "@type"?: "afni/3dTORTOISEtoHere";
     "dt_tort": InputPathType;
     "prefix": string;
@@ -20,11 +20,11 @@ interface V3dTortoisetoHereParameters {
     "flip_y": boolean;
     "flip_z": boolean;
 }
-type V3dTortoisetoHereParametersTagged = Required<Pick<V3dTortoisetoHereParameters, '@type'>> & V3dTortoisetoHereParameters;
+type V3dTortoisetoHereParamsDictTagged = Required<Pick<V3dTortoisetoHereParamsDict, '@type'>> & V3dTortoisetoHereParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTortoisetoHereParameters(...)`.
+ * Output object returned when calling `V3dTortoisetoHereParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_tortoiseto_here_params(
     flip_x: boolean = false,
     flip_y: boolean = false,
     flip_z: boolean = false,
-): V3dTortoisetoHereParametersTagged {
+): V3dTortoisetoHereParamsDictTagged {
     const params = {
         "@type": "afni/3dTORTOISEtoHere" as const,
         "dt_tort": dt_tort,
@@ -84,7 +84,7 @@ function v_3d_tortoiseto_here_params(
  * @returns Command-line arguments.
  */
 function v_3d_tortoiseto_here_cargs(
-    params: V3dTortoisetoHereParameters,
+    params: V3dTortoisetoHereParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function v_3d_tortoiseto_here_cargs(
  * @returns Outputs object.
  */
 function v_3d_tortoiseto_here_outputs(
-    params: V3dTortoisetoHereParameters,
+    params: V3dTortoisetoHereParamsDict,
     execution: Execution,
 ): V3dTortoisetoHereOutputs {
     const ret: V3dTortoisetoHereOutputs = {
@@ -151,7 +151,7 @@ function v_3d_tortoiseto_here_outputs(
  * @returns NamedTuple of outputs (described in `V3dTortoisetoHereOutputs`).
  */
 function v_3d_tortoiseto_here_execute(
-    params: V3dTortoisetoHereParameters,
+    params: V3dTortoisetoHereParamsDict,
     runner: Runner | null = null,
 ): V3dTortoisetoHereOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function v_3d_tortoiseto_here(
 
 export {
       V3dTortoisetoHereOutputs,
+      V3dTortoisetoHereParamsDict,
+      V3dTortoisetoHereParamsDictTagged,
       V_3D_TORTOISETO_HERE_METADATA,
       v_3d_tortoiseto_here,
       v_3d_tortoiseto_here_execute,

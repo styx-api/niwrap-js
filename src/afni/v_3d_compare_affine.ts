@@ -11,17 +11,17 @@ const V_3D_COMPARE_AFFINE_METADATA: Metadata = {
 };
 
 
-interface V3dCompareAffineParameters {
+interface V3dCompareAffineParamsDict {
     "@type"?: "afni/3dCompareAffine";
     "mask"?: string | null | undefined;
     "dset"?: InputPathType | null | undefined;
     "affine"?: Array<string> | null | undefined;
 }
-type V3dCompareAffineParametersTagged = Required<Pick<V3dCompareAffineParameters, '@type'>> & V3dCompareAffineParameters;
+type V3dCompareAffineParamsDictTagged = Required<Pick<V3dCompareAffineParamsDict, '@type'>> & V3dCompareAffineParamsDict;
 
 
 /**
- * Output object returned when calling `V3dCompareAffineParameters(...)`.
+ * Output object returned when calling `V3dCompareAffineParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3d_compare_affine_params(
     mask: string | null = null,
     dset: InputPathType | null = null,
     affine: Array<string> | null = null,
-): V3dCompareAffineParametersTagged {
+): V3dCompareAffineParamsDictTagged {
     const params = {
         "@type": "afni/3dCompareAffine" as const,
     };
@@ -76,7 +76,7 @@ function v_3d_compare_affine_params(
  * @returns Command-line arguments.
  */
 function v_3d_compare_affine_cargs(
-    params: V3dCompareAffineParameters,
+    params: V3dCompareAffineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function v_3d_compare_affine_cargs(
  * @returns Outputs object.
  */
 function v_3d_compare_affine_outputs(
-    params: V3dCompareAffineParameters,
+    params: V3dCompareAffineParamsDict,
     execution: Execution,
 ): V3dCompareAffineOutputs {
     const ret: V3dCompareAffineOutputs = {
@@ -138,7 +138,7 @@ function v_3d_compare_affine_outputs(
  * @returns NamedTuple of outputs (described in `V3dCompareAffineOutputs`).
  */
 function v_3d_compare_affine_execute(
-    params: V3dCompareAffineParameters,
+    params: V3dCompareAffineParamsDict,
     runner: Runner | null = null,
 ): V3dCompareAffineOutputs {
     runner = runner || getGlobalRunner();
@@ -180,6 +180,8 @@ function v_3d_compare_affine(
 
 export {
       V3dCompareAffineOutputs,
+      V3dCompareAffineParamsDict,
+      V3dCompareAffineParamsDictTagged,
       V_3D_COMPARE_AFFINE_METADATA,
       v_3d_compare_affine,
       v_3d_compare_affine_execute,

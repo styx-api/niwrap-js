@@ -11,17 +11,17 @@ const V_3D_NWARP_ADJUST_METADATA: Metadata = {
 };
 
 
-interface V3dNwarpAdjustParameters {
+interface V3dNwarpAdjustParamsDict {
     "@type"?: "afni/3dNwarpAdjust";
     "input_warps": Array<InputPathType>;
     "source_datasets"?: Array<InputPathType> | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
-type V3dNwarpAdjustParametersTagged = Required<Pick<V3dNwarpAdjustParameters, '@type'>> & V3dNwarpAdjustParameters;
+type V3dNwarpAdjustParamsDictTagged = Required<Pick<V3dNwarpAdjustParamsDict, '@type'>> & V3dNwarpAdjustParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNwarpAdjustParameters(...)`.
+ * Output object returned when calling `V3dNwarpAdjustParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function v_3d_nwarp_adjust_params(
     input_warps: Array<InputPathType>,
     source_datasets: Array<InputPathType> | null = null,
     output_prefix: string | null = null,
-): V3dNwarpAdjustParametersTagged {
+): V3dNwarpAdjustParamsDictTagged {
     const params = {
         "@type": "afni/3dNwarpAdjust" as const,
         "input_warps": input_warps,
@@ -78,7 +78,7 @@ function v_3d_nwarp_adjust_params(
  * @returns Command-line arguments.
  */
 function v_3d_nwarp_adjust_cargs(
-    params: V3dNwarpAdjustParameters,
+    params: V3dNwarpAdjustParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function v_3d_nwarp_adjust_cargs(
  * @returns Outputs object.
  */
 function v_3d_nwarp_adjust_outputs(
-    params: V3dNwarpAdjustParameters,
+    params: V3dNwarpAdjustParamsDict,
     execution: Execution,
 ): V3dNwarpAdjustOutputs {
     const ret: V3dNwarpAdjustOutputs = {
@@ -139,7 +139,7 @@ function v_3d_nwarp_adjust_outputs(
  * @returns NamedTuple of outputs (described in `V3dNwarpAdjustOutputs`).
  */
 function v_3d_nwarp_adjust_execute(
-    params: V3dNwarpAdjustParameters,
+    params: V3dNwarpAdjustParamsDict,
     runner: Runner | null = null,
 ): V3dNwarpAdjustOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function v_3d_nwarp_adjust(
 
 export {
       V3dNwarpAdjustOutputs,
+      V3dNwarpAdjustParamsDict,
+      V3dNwarpAdjustParamsDictTagged,
       V_3D_NWARP_ADJUST_METADATA,
       v_3d_nwarp_adjust,
       v_3d_nwarp_adjust_execute,

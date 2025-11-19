@@ -11,16 +11,16 @@ const V__GET_AFNI_ORIENT_METADATA: Metadata = {
 };
 
 
-interface VGetAfniOrientParameters {
+interface VGetAfniOrientParamsDict {
     "@type"?: "afni/@GetAfniOrient";
     "exploratory": boolean;
     "infile": InputPathType;
 }
-type VGetAfniOrientParametersTagged = Required<Pick<VGetAfniOrientParameters, '@type'>> & VGetAfniOrientParameters;
+type VGetAfniOrientParamsDictTagged = Required<Pick<VGetAfniOrientParamsDict, '@type'>> & VGetAfniOrientParamsDict;
 
 
 /**
- * Output object returned when calling `VGetAfniOrientParameters(...)`.
+ * Output object returned when calling `VGetAfniOrientParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface VGetAfniOrientOutputs {
 function v__get_afni_orient_params(
     infile: InputPathType,
     exploratory: boolean = false,
-): VGetAfniOrientParametersTagged {
+): VGetAfniOrientParamsDictTagged {
     const params = {
         "@type": "afni/@GetAfniOrient" as const,
         "exploratory": exploratory,
@@ -66,7 +66,7 @@ function v__get_afni_orient_params(
  * @returns Command-line arguments.
  */
 function v__get_afni_orient_cargs(
-    params: VGetAfniOrientParameters,
+    params: VGetAfniOrientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function v__get_afni_orient_cargs(
  * @returns Outputs object.
  */
 function v__get_afni_orient_outputs(
-    params: VGetAfniOrientParameters,
+    params: VGetAfniOrientParamsDict,
     execution: Execution,
 ): VGetAfniOrientOutputs {
     const ret: VGetAfniOrientOutputs = {
@@ -114,7 +114,7 @@ function v__get_afni_orient_outputs(
  * @returns NamedTuple of outputs (described in `VGetAfniOrientOutputs`).
  */
 function v__get_afni_orient_execute(
-    params: VGetAfniOrientParameters,
+    params: VGetAfniOrientParamsDict,
     runner: Runner | null = null,
 ): VGetAfniOrientOutputs {
     runner = runner || getGlobalRunner();
@@ -154,6 +154,8 @@ function v__get_afni_orient(
 
 export {
       VGetAfniOrientOutputs,
+      VGetAfniOrientParamsDict,
+      VGetAfniOrientParamsDictTagged,
       V__GET_AFNI_ORIENT_METADATA,
       v__get_afni_orient,
       v__get_afni_orient_execute,

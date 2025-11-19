@@ -11,16 +11,16 @@ const MRIS_MAP_CUTS_METADATA: Metadata = {
 };
 
 
-interface MrisMapCutsParameters {
+interface MrisMapCutsParamsDict {
     "@type"?: "freesurfer/mris_map_cuts";
     "input_patch": InputPathType;
     "output_patch": string;
 }
-type MrisMapCutsParametersTagged = Required<Pick<MrisMapCutsParameters, '@type'>> & MrisMapCutsParameters;
+type MrisMapCutsParamsDictTagged = Required<Pick<MrisMapCutsParamsDict, '@type'>> & MrisMapCutsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMapCutsParameters(...)`.
+ * Output object returned when calling `MrisMapCutsParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MrisMapCutsOutputs {
 function mris_map_cuts_params(
     input_patch: InputPathType,
     output_patch: string,
-): MrisMapCutsParametersTagged {
+): MrisMapCutsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_map_cuts" as const,
         "input_patch": input_patch,
@@ -62,7 +62,7 @@ function mris_map_cuts_params(
  * @returns Command-line arguments.
  */
 function mris_map_cuts_cargs(
-    params: MrisMapCutsParameters,
+    params: MrisMapCutsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mris_map_cuts_cargs(
  * @returns Outputs object.
  */
 function mris_map_cuts_outputs(
-    params: MrisMapCutsParameters,
+    params: MrisMapCutsParamsDict,
     execution: Execution,
 ): MrisMapCutsOutputs {
     const ret: MrisMapCutsOutputs = {
@@ -107,7 +107,7 @@ function mris_map_cuts_outputs(
  * @returns NamedTuple of outputs (described in `MrisMapCutsOutputs`).
  */
 function mris_map_cuts_execute(
-    params: MrisMapCutsParameters,
+    params: MrisMapCutsParamsDict,
     runner: Runner | null = null,
 ): MrisMapCutsOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function mris_map_cuts(
 export {
       MRIS_MAP_CUTS_METADATA,
       MrisMapCutsOutputs,
+      MrisMapCutsParamsDict,
+      MrisMapCutsParamsDictTagged,
       mris_map_cuts,
       mris_map_cuts_execute,
       mris_map_cuts_params,

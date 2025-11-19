@@ -11,7 +11,7 @@ const TKMEDITFV_METADATA: Metadata = {
 };
 
 
-interface TkmeditfvParameters {
+interface TkmeditfvParamsDict {
     "@type"?: "freesurfer/tkmeditfv";
     "subject"?: string | null | undefined;
     "mainvol": InputPathType;
@@ -46,11 +46,11 @@ interface TkmeditfvParameters {
     "use_tkmedit": boolean;
     "load_aparc_aseg": boolean;
 }
-type TkmeditfvParametersTagged = Required<Pick<TkmeditfvParameters, '@type'>> & TkmeditfvParameters;
+type TkmeditfvParamsDictTagged = Required<Pick<TkmeditfvParamsDict, '@type'>> & TkmeditfvParamsDict;
 
 
 /**
- * Output object returned when calling `TkmeditfvParameters(...)`.
+ * Output object returned when calling `TkmeditfvParamsDict(...)`.
  *
  * @interface
  */
@@ -133,7 +133,7 @@ function tkmeditfv_params(
     vgl_display: boolean = false,
     use_tkmedit: boolean = false,
     load_aparc_aseg: boolean = false,
-): TkmeditfvParametersTagged {
+): TkmeditfvParamsDictTagged {
     const params = {
         "@type": "freesurfer/tkmeditfv" as const,
         "mainvol": mainvol,
@@ -210,7 +210,7 @@ function tkmeditfv_params(
  * @returns Command-line arguments.
  */
 function tkmeditfv_cargs(
-    params: TkmeditfvParameters,
+    params: TkmeditfvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -361,7 +361,7 @@ function tkmeditfv_cargs(
  * @returns Outputs object.
  */
 function tkmeditfv_outputs(
-    params: TkmeditfvParameters,
+    params: TkmeditfvParamsDict,
     execution: Execution,
 ): TkmeditfvOutputs {
     const ret: TkmeditfvOutputs = {
@@ -386,7 +386,7 @@ function tkmeditfv_outputs(
  * @returns NamedTuple of outputs (described in `TkmeditfvOutputs`).
  */
 function tkmeditfv_execute(
-    params: TkmeditfvParameters,
+    params: TkmeditfvParamsDict,
     runner: Runner | null = null,
 ): TkmeditfvOutputs {
     runner = runner || getGlobalRunner();
@@ -487,6 +487,8 @@ function tkmeditfv(
 export {
       TKMEDITFV_METADATA,
       TkmeditfvOutputs,
+      TkmeditfvParamsDict,
+      TkmeditfvParamsDictTagged,
       tkmeditfv,
       tkmeditfv_execute,
       tkmeditfv_params,

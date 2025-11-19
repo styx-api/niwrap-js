@@ -11,7 +11,7 @@ const TRAC_PREPROC_METADATA: Metadata = {
 };
 
 
-interface TracPreprocParameters {
+interface TracPreprocParamsDict {
     "@type"?: "freesurfer/trac-preproc";
     "dmrirc_file": InputPathType;
     "log_file"?: string | null | undefined;
@@ -26,11 +26,11 @@ interface TracPreprocParameters {
     "dontrun": boolean;
     "version": boolean;
 }
-type TracPreprocParametersTagged = Required<Pick<TracPreprocParameters, '@type'>> & TracPreprocParameters;
+type TracPreprocParamsDictTagged = Required<Pick<TracPreprocParamsDict, '@type'>> & TracPreprocParamsDict;
 
 
 /**
- * Output object returned when calling `TracPreprocParameters(...)`.
+ * Output object returned when calling `TracPreprocParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function trac_preproc_params(
     debug: boolean = false,
     dontrun: boolean = false,
     version: boolean = false,
-): TracPreprocParametersTagged {
+): TracPreprocParamsDictTagged {
     const params = {
         "@type": "freesurfer/trac-preproc" as const,
         "dmrirc_file": dmrirc_file,
@@ -110,7 +110,7 @@ function trac_preproc_params(
  * @returns Command-line arguments.
  */
 function trac_preproc_cargs(
-    params: TracPreprocParameters,
+    params: TracPreprocParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function trac_preproc_cargs(
  * @returns Outputs object.
  */
 function trac_preproc_outputs(
-    params: TracPreprocParameters,
+    params: TracPreprocParamsDict,
     execution: Execution,
 ): TracPreprocOutputs {
     const ret: TracPreprocOutputs = {
@@ -202,7 +202,7 @@ function trac_preproc_outputs(
  * @returns NamedTuple of outputs (described in `TracPreprocOutputs`).
  */
 function trac_preproc_execute(
-    params: TracPreprocParameters,
+    params: TracPreprocParamsDict,
     runner: Runner | null = null,
 ): TracPreprocOutputs {
     runner = runner || getGlobalRunner();
@@ -263,6 +263,8 @@ function trac_preproc(
 export {
       TRAC_PREPROC_METADATA,
       TracPreprocOutputs,
+      TracPreprocParamsDict,
+      TracPreprocParamsDictTagged,
       trac_preproc,
       trac_preproc_execute,
       trac_preproc_params,

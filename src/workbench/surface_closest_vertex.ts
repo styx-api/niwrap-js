@@ -10,17 +10,17 @@ const SURFACE_CLOSEST_VERTEX_METADATA: Metadata = {
 };
 
 
-interface SurfaceClosestVertexParameters {
+interface SurfaceClosestVertexParamsDict {
     "@type"?: "workbench/surface-closest-vertex";
     "surface": InputPathType;
     "coord-list-file": string;
     "vertex-list-out": string;
 }
-type SurfaceClosestVertexParametersTagged = Required<Pick<SurfaceClosestVertexParameters, '@type'>> & SurfaceClosestVertexParameters;
+type SurfaceClosestVertexParamsDictTagged = Required<Pick<SurfaceClosestVertexParamsDict, '@type'>> & SurfaceClosestVertexParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceClosestVertexParameters(...)`.
+ * Output object returned when calling `SurfaceClosestVertexParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function surface_closest_vertex_params(
     surface: InputPathType,
     coord_list_file: string,
     vertex_list_out: string,
-): SurfaceClosestVertexParametersTagged {
+): SurfaceClosestVertexParamsDictTagged {
     const params = {
         "@type": "workbench/surface-closest-vertex" as const,
         "surface": surface,
@@ -65,7 +65,7 @@ function surface_closest_vertex_params(
  * @returns Command-line arguments.
  */
 function surface_closest_vertex_cargs(
-    params: SurfaceClosestVertexParameters,
+    params: SurfaceClosestVertexParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function surface_closest_vertex_cargs(
  * @returns Outputs object.
  */
 function surface_closest_vertex_outputs(
-    params: SurfaceClosestVertexParameters,
+    params: SurfaceClosestVertexParamsDict,
     execution: Execution,
 ): SurfaceClosestVertexOutputs {
     const ret: SurfaceClosestVertexOutputs = {
@@ -113,7 +113,7 @@ function surface_closest_vertex_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceClosestVertexOutputs`).
  */
 function surface_closest_vertex_execute(
-    params: SurfaceClosestVertexParameters,
+    params: SurfaceClosestVertexParamsDict,
     runner: Runner | null = null,
 ): SurfaceClosestVertexOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function surface_closest_vertex(
 export {
       SURFACE_CLOSEST_VERTEX_METADATA,
       SurfaceClosestVertexOutputs,
+      SurfaceClosestVertexParamsDict,
+      SurfaceClosestVertexParamsDictTagged,
       surface_closest_vertex,
       surface_closest_vertex_execute,
       surface_closest_vertex_params,

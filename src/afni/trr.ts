@@ -11,7 +11,7 @@ const TRR_METADATA: Metadata = {
 };
 
 
-interface TrrParameters {
+interface TrrParamsDict {
     "@type"?: "afni/TRR";
     "prefix": string;
     "chains"?: number | null | undefined;
@@ -32,11 +32,11 @@ interface TrrParameters {
     "debug": boolean;
     "verbose"?: number | null | undefined;
 }
-type TrrParametersTagged = Required<Pick<TrrParameters, '@type'>> & TrrParameters;
+type TrrParamsDictTagged = Required<Pick<TrrParamsDict, '@type'>> & TrrParamsDict;
 
 
 /**
- * Output object returned when calling `TrrParameters(...)`.
+ * Output object returned when calling `TrrParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function trr_params(
     within_chain_parallelization: number | null = null,
     debug: boolean = false,
     verbose: number | null = null,
-): TrrParametersTagged {
+): TrrParamsDictTagged {
     const params = {
         "@type": "afni/TRR" as const,
         "prefix": prefix,
@@ -164,7 +164,7 @@ function trr_params(
  * @returns Command-line arguments.
  */
 function trr_cargs(
-    params: TrrParameters,
+    params: TrrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -279,7 +279,7 @@ function trr_cargs(
  * @returns Outputs object.
  */
 function trr_outputs(
-    params: TrrParameters,
+    params: TrrParamsDict,
     execution: Execution,
 ): TrrOutputs {
     const ret: TrrOutputs = {
@@ -307,7 +307,7 @@ function trr_outputs(
  * @returns NamedTuple of outputs (described in `TrrOutputs`).
  */
 function trr_execute(
-    params: TrrParameters,
+    params: TrrParamsDict,
     runner: Runner | null = null,
 ): TrrOutputs {
     runner = runner || getGlobalRunner();
@@ -380,6 +380,8 @@ function trr(
 export {
       TRR_METADATA,
       TrrOutputs,
+      TrrParamsDict,
+      TrrParamsDictTagged,
       trr,
       trr_execute,
       trr_params,

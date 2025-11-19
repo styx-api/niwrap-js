@@ -11,7 +11,7 @@ const SURF_MEASURES_METADATA: Metadata = {
 };
 
 
-interface SurfMeasuresParameters {
+interface SurfMeasuresParamsDict {
     "@type"?: "afni/SurfMeasures";
     "spec_file": InputPathType;
     "surf_A": string;
@@ -32,11 +32,11 @@ interface SurfMeasuresParameters {
     "info_volg": boolean;
     "ver": boolean;
 }
-type SurfMeasuresParametersTagged = Required<Pick<SurfMeasuresParameters, '@type'>> & SurfMeasuresParameters;
+type SurfMeasuresParamsDictTagged = Required<Pick<SurfMeasuresParamsDict, '@type'>> & SurfMeasuresParamsDict;
 
 
 /**
- * Output object returned when calling `SurfMeasuresParameters(...)`.
+ * Output object returned when calling `SurfMeasuresParamsDict(...)`.
  *
  * @interface
  */
@@ -99,7 +99,7 @@ function surf_measures_params(
     info_vol: boolean = false,
     info_volg: boolean = false,
     ver: boolean = false,
-): SurfMeasuresParametersTagged {
+): SurfMeasuresParamsDictTagged {
     const params = {
         "@type": "afni/SurfMeasures" as const,
         "spec_file": spec_file,
@@ -150,7 +150,7 @@ function surf_measures_params(
  * @returns Command-line arguments.
  */
 function surf_measures_cargs(
-    params: SurfMeasuresParameters,
+    params: SurfMeasuresParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -249,7 +249,7 @@ function surf_measures_cargs(
  * @returns Outputs object.
  */
 function surf_measures_outputs(
-    params: SurfMeasuresParameters,
+    params: SurfMeasuresParamsDict,
     execution: Execution,
 ): SurfMeasuresOutputs {
     const ret: SurfMeasuresOutputs = {
@@ -276,7 +276,7 @@ function surf_measures_outputs(
  * @returns NamedTuple of outputs (described in `SurfMeasuresOutputs`).
  */
 function surf_measures_execute(
-    params: SurfMeasuresParameters,
+    params: SurfMeasuresParamsDict,
     runner: Runner | null = null,
 ): SurfMeasuresOutputs {
     runner = runner || getGlobalRunner();
@@ -349,6 +349,8 @@ function surf_measures(
 export {
       SURF_MEASURES_METADATA,
       SurfMeasuresOutputs,
+      SurfMeasuresParamsDict,
+      SurfMeasuresParamsDictTagged,
       surf_measures,
       surf_measures_execute,
       surf_measures_params,

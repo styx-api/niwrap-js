@@ -11,7 +11,7 @@ const MKSURFATLAS_METADATA: Metadata = {
 };
 
 
-interface MksurfatlasParameters {
+interface MksurfatlasParamsDict {
     "@type"?: "freesurfer/mksurfatlas";
     "atlas": string;
     "hemi": string;
@@ -23,11 +23,11 @@ interface MksurfatlasParameters {
     "version": boolean;
     "help": boolean;
 }
-type MksurfatlasParametersTagged = Required<Pick<MksurfatlasParameters, '@type'>> & MksurfatlasParameters;
+type MksurfatlasParamsDictTagged = Required<Pick<MksurfatlasParamsDict, '@type'>> & MksurfatlasParamsDict;
 
 
 /**
- * Output object returned when calling `MksurfatlasParameters(...)`.
+ * Output object returned when calling `MksurfatlasParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function mksurfatlas_params(
     debug: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): MksurfatlasParametersTagged {
+): MksurfatlasParamsDictTagged {
     const params = {
         "@type": "freesurfer/mksurfatlas" as const,
         "atlas": atlas,
@@ -98,7 +98,7 @@ function mksurfatlas_params(
  * @returns Command-line arguments.
  */
 function mksurfatlas_cargs(
-    params: MksurfatlasParameters,
+    params: MksurfatlasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function mksurfatlas_cargs(
  * @returns Outputs object.
  */
 function mksurfatlas_outputs(
-    params: MksurfatlasParameters,
+    params: MksurfatlasParamsDict,
     execution: Execution,
 ): MksurfatlasOutputs {
     const ret: MksurfatlasOutputs = {
@@ -179,7 +179,7 @@ function mksurfatlas_outputs(
  * @returns NamedTuple of outputs (described in `MksurfatlasOutputs`).
  */
 function mksurfatlas_execute(
-    params: MksurfatlasParameters,
+    params: MksurfatlasParamsDict,
     runner: Runner | null = null,
 ): MksurfatlasOutputs {
     runner = runner || getGlobalRunner();
@@ -234,6 +234,8 @@ function mksurfatlas(
 export {
       MKSURFATLAS_METADATA,
       MksurfatlasOutputs,
+      MksurfatlasParamsDict,
+      MksurfatlasParamsDictTagged,
       mksurfatlas,
       mksurfatlas_execute,
       mksurfatlas_params,

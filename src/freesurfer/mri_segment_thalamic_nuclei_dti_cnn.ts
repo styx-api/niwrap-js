@@ -11,7 +11,7 @@ const MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA: Metadata = {
 };
 
 
-interface MriSegmentThalamicNucleiDtiCnnParameters {
+interface MriSegmentThalamicNucleiDtiCnnParamsDict {
     "@type"?: "freesurfer/mri_segment_thalamic_nuclei_dti_cnn";
     "t1_images": InputPathType;
     "aseg"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface MriSegmentThalamicNucleiDtiCnnParameters {
     "force_cpu": boolean;
     "model"?: InputPathType | null | undefined;
 }
-type MriSegmentThalamicNucleiDtiCnnParametersTagged = Required<Pick<MriSegmentThalamicNucleiDtiCnnParameters, '@type'>> & MriSegmentThalamicNucleiDtiCnnParameters;
+type MriSegmentThalamicNucleiDtiCnnParamsDictTagged = Required<Pick<MriSegmentThalamicNucleiDtiCnnParamsDict, '@type'>> & MriSegmentThalamicNucleiDtiCnnParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegmentThalamicNucleiDtiCnnParameters(...)`.
+ * Output object returned when calling `MriSegmentThalamicNucleiDtiCnnParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function mri_segment_thalamic_nuclei_dti_cnn_params(
     threads: number | null = null,
     force_cpu: boolean = false,
     model: InputPathType | null = null,
-): MriSegmentThalamicNucleiDtiCnnParametersTagged {
+): MriSegmentThalamicNucleiDtiCnnParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_segment_thalamic_nuclei_dti_cnn" as const,
         "t1_images": t1_images,
@@ -116,7 +116,7 @@ function mri_segment_thalamic_nuclei_dti_cnn_params(
  * @returns Command-line arguments.
  */
 function mri_segment_thalamic_nuclei_dti_cnn_cargs(
-    params: MriSegmentThalamicNucleiDtiCnnParameters,
+    params: MriSegmentThalamicNucleiDtiCnnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -183,7 +183,7 @@ function mri_segment_thalamic_nuclei_dti_cnn_cargs(
  * @returns Outputs object.
  */
 function mri_segment_thalamic_nuclei_dti_cnn_outputs(
-    params: MriSegmentThalamicNucleiDtiCnnParameters,
+    params: MriSegmentThalamicNucleiDtiCnnParamsDict,
     execution: Execution,
 ): MriSegmentThalamicNucleiDtiCnnOutputs {
     const ret: MriSegmentThalamicNucleiDtiCnnOutputs = {
@@ -211,7 +211,7 @@ function mri_segment_thalamic_nuclei_dti_cnn_outputs(
  * @returns NamedTuple of outputs (described in `MriSegmentThalamicNucleiDtiCnnOutputs`).
  */
 function mri_segment_thalamic_nuclei_dti_cnn_execute(
-    params: MriSegmentThalamicNucleiDtiCnnParameters,
+    params: MriSegmentThalamicNucleiDtiCnnParamsDict,
     runner: Runner | null = null,
 ): MriSegmentThalamicNucleiDtiCnnOutputs {
     runner = runner || getGlobalRunner();
@@ -268,6 +268,8 @@ function mri_segment_thalamic_nuclei_dti_cnn(
 export {
       MRI_SEGMENT_THALAMIC_NUCLEI_DTI_CNN_METADATA,
       MriSegmentThalamicNucleiDtiCnnOutputs,
+      MriSegmentThalamicNucleiDtiCnnParamsDict,
+      MriSegmentThalamicNucleiDtiCnnParamsDictTagged,
       mri_segment_thalamic_nuclei_dti_cnn,
       mri_segment_thalamic_nuclei_dti_cnn_execute,
       mri_segment_thalamic_nuclei_dti_cnn_params,

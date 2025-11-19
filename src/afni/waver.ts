@@ -11,7 +11,7 @@ const WAVER_METADATA: Metadata = {
 };
 
 
-interface WaverParameters {
+interface WaverParamsDict {
     "@type"?: "afni/waver";
     "wav": boolean;
     "gam": boolean;
@@ -36,11 +36,11 @@ interface WaverParameters {
     "numout"?: number | null | undefined;
     "ver_flag": boolean;
 }
-type WaverParametersTagged = Required<Pick<WaverParameters, '@type'>> & WaverParameters;
+type WaverParamsDictTagged = Required<Pick<WaverParamsDict, '@type'>> & WaverParamsDict;
 
 
 /**
- * Output object returned when calling `WaverParameters(...)`.
+ * Output object returned when calling `WaverParamsDict(...)`.
  *
  * @interface
  */
@@ -107,7 +107,7 @@ function waver_params(
     when_data: string | null = null,
     numout: number | null = null,
     ver_flag: boolean = false,
-): WaverParametersTagged {
+): WaverParamsDictTagged {
     const params = {
         "@type": "afni/waver" as const,
         "wav": wav,
@@ -182,7 +182,7 @@ function waver_params(
  * @returns Command-line arguments.
  */
 function waver_cargs(
-    params: WaverParameters,
+    params: WaverParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -320,7 +320,7 @@ function waver_cargs(
  * @returns Outputs object.
  */
 function waver_outputs(
-    params: WaverParameters,
+    params: WaverParamsDict,
     execution: Execution,
 ): WaverOutputs {
     const ret: WaverOutputs = {
@@ -346,7 +346,7 @@ function waver_outputs(
  * @returns NamedTuple of outputs (described in `WaverOutputs`).
  */
 function waver_execute(
-    params: WaverParameters,
+    params: WaverParamsDict,
     runner: Runner | null = null,
 ): WaverOutputs {
     runner = runner || getGlobalRunner();
@@ -427,6 +427,8 @@ function waver(
 export {
       WAVER_METADATA,
       WaverOutputs,
+      WaverParamsDict,
+      WaverParamsDictTagged,
       waver,
       waver_execute,
       waver_params,

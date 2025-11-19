@@ -11,7 +11,7 @@ const MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA: Metadata = {
 };
 
 
-interface MrisMultimodalSurfacePlacementParameters {
+interface MrisMultimodalSurfacePlacementParamsDict {
     "@type"?: "freesurfer/mris_multimodal_surface_placement";
     "input_surface": InputPathType;
     "output_surface": InputPathType;
@@ -30,11 +30,11 @@ interface MrisMultimodalSurfacePlacementParameters {
     "flair_image": InputPathType;
     "min_max": boolean;
 }
-type MrisMultimodalSurfacePlacementParametersTagged = Required<Pick<MrisMultimodalSurfacePlacementParameters, '@type'>> & MrisMultimodalSurfacePlacementParameters;
+type MrisMultimodalSurfacePlacementParamsDictTagged = Required<Pick<MrisMultimodalSurfacePlacementParamsDict, '@type'>> & MrisMultimodalSurfacePlacementParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMultimodalSurfacePlacementParameters(...)`.
+ * Output object returned when calling `MrisMultimodalSurfacePlacementParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function mris_multimodal_surface_placement_params(
     flair_image: InputPathType,
     debug_vertex: number | null = null,
     min_max: boolean = false,
-): MrisMultimodalSurfacePlacementParametersTagged {
+): MrisMultimodalSurfacePlacementParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_multimodal_surface_placement" as const,
         "input_surface": input_surface,
@@ -120,7 +120,7 @@ function mris_multimodal_surface_placement_params(
  * @returns Command-line arguments.
  */
 function mris_multimodal_surface_placement_cargs(
-    params: MrisMultimodalSurfacePlacementParameters,
+    params: MrisMultimodalSurfacePlacementParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function mris_multimodal_surface_placement_cargs(
  * @returns Outputs object.
  */
 function mris_multimodal_surface_placement_outputs(
-    params: MrisMultimodalSurfacePlacementParameters,
+    params: MrisMultimodalSurfacePlacementParamsDict,
     execution: Execution,
 ): MrisMultimodalSurfacePlacementOutputs {
     const ret: MrisMultimodalSurfacePlacementOutputs = {
@@ -228,7 +228,7 @@ function mris_multimodal_surface_placement_outputs(
  * @returns NamedTuple of outputs (described in `MrisMultimodalSurfacePlacementOutputs`).
  */
 function mris_multimodal_surface_placement_execute(
-    params: MrisMultimodalSurfacePlacementParameters,
+    params: MrisMultimodalSurfacePlacementParamsDict,
     runner: Runner | null = null,
 ): MrisMultimodalSurfacePlacementOutputs {
     runner = runner || getGlobalRunner();
@@ -297,6 +297,8 @@ function mris_multimodal_surface_placement(
 export {
       MRIS_MULTIMODAL_SURFACE_PLACEMENT_METADATA,
       MrisMultimodalSurfacePlacementOutputs,
+      MrisMultimodalSurfacePlacementParamsDict,
+      MrisMultimodalSurfacePlacementParamsDictTagged,
       mris_multimodal_surface_placement,
       mris_multimodal_surface_placement_execute,
       mris_multimodal_surface_placement_params,

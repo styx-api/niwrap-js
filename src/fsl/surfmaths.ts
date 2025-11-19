@@ -11,17 +11,17 @@ const SURFMATHS_METADATA: Metadata = {
 };
 
 
-interface SurfmathsParameters {
+interface SurfmathsParamsDict {
     "@type"?: "fsl/surfmaths";
     "first_input": InputPathType;
     "operations_inputs"?: Array<string> | null | undefined;
     "output": string;
 }
-type SurfmathsParametersTagged = Required<Pick<SurfmathsParameters, '@type'>> & SurfmathsParameters;
+type SurfmathsParamsDictTagged = Required<Pick<SurfmathsParamsDict, '@type'>> & SurfmathsParamsDict;
 
 
 /**
- * Output object returned when calling `SurfmathsParameters(...)`.
+ * Output object returned when calling `SurfmathsParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function surfmaths_params(
     first_input: InputPathType,
     output: string,
     operations_inputs: Array<string> | null = null,
-): SurfmathsParametersTagged {
+): SurfmathsParamsDictTagged {
     const params = {
         "@type": "fsl/surfmaths" as const,
         "first_input": first_input,
@@ -72,7 +72,7 @@ function surfmaths_params(
  * @returns Command-line arguments.
  */
 function surfmaths_cargs(
-    params: SurfmathsParameters,
+    params: SurfmathsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function surfmaths_cargs(
  * @returns Outputs object.
  */
 function surfmaths_outputs(
-    params: SurfmathsParameters,
+    params: SurfmathsParamsDict,
     execution: Execution,
 ): SurfmathsOutputs {
     const ret: SurfmathsOutputs = {
@@ -121,7 +121,7 @@ function surfmaths_outputs(
  * @returns NamedTuple of outputs (described in `SurfmathsOutputs`).
  */
 function surfmaths_execute(
-    params: SurfmathsParameters,
+    params: SurfmathsParamsDict,
     runner: Runner | null = null,
 ): SurfmathsOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function surfmaths(
 export {
       SURFMATHS_METADATA,
       SurfmathsOutputs,
+      SurfmathsParamsDict,
+      SurfmathsParamsDictTagged,
       surfmaths,
       surfmaths_execute,
       surfmaths_params,

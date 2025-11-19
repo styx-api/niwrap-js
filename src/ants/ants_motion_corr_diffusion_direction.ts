@@ -11,7 +11,7 @@ const ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA: Metadata = {
 };
 
 
-interface AntsMotionCorrDiffusionDirectionParameters {
+interface AntsMotionCorrDiffusionDirectionParamsDict {
     "@type"?: "ants/antsMotionCorrDiffusionDirection";
     "scheme": InputPathType;
     "bvec": InputPathType;
@@ -19,11 +19,11 @@ interface AntsMotionCorrDiffusionDirectionParameters {
     "moco": InputPathType;
     "output": string;
 }
-type AntsMotionCorrDiffusionDirectionParametersTagged = Required<Pick<AntsMotionCorrDiffusionDirectionParameters, '@type'>> & AntsMotionCorrDiffusionDirectionParameters;
+type AntsMotionCorrDiffusionDirectionParamsDictTagged = Required<Pick<AntsMotionCorrDiffusionDirectionParamsDict, '@type'>> & AntsMotionCorrDiffusionDirectionParamsDict;
 
 
 /**
- * Output object returned when calling `AntsMotionCorrDiffusionDirectionParameters(...)`.
+ * Output object returned when calling `AntsMotionCorrDiffusionDirectionParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function ants_motion_corr_diffusion_direction_params(
     physical: InputPathType,
     moco: InputPathType,
     output: string,
-): AntsMotionCorrDiffusionDirectionParametersTagged {
+): AntsMotionCorrDiffusionDirectionParamsDictTagged {
     const params = {
         "@type": "ants/antsMotionCorrDiffusionDirection" as const,
         "scheme": scheme,
@@ -78,7 +78,7 @@ function ants_motion_corr_diffusion_direction_params(
  * @returns Command-line arguments.
  */
 function ants_motion_corr_diffusion_direction_cargs(
-    params: AntsMotionCorrDiffusionDirectionParameters,
+    params: AntsMotionCorrDiffusionDirectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function ants_motion_corr_diffusion_direction_cargs(
  * @returns Outputs object.
  */
 function ants_motion_corr_diffusion_direction_outputs(
-    params: AntsMotionCorrDiffusionDirectionParameters,
+    params: AntsMotionCorrDiffusionDirectionParamsDict,
     execution: Execution,
 ): AntsMotionCorrDiffusionDirectionOutputs {
     const ret: AntsMotionCorrDiffusionDirectionOutputs = {
@@ -142,7 +142,7 @@ function ants_motion_corr_diffusion_direction_outputs(
  * @returns NamedTuple of outputs (described in `AntsMotionCorrDiffusionDirectionOutputs`).
  */
 function ants_motion_corr_diffusion_direction_execute(
-    params: AntsMotionCorrDiffusionDirectionParameters,
+    params: AntsMotionCorrDiffusionDirectionParamsDict,
     runner: Runner | null = null,
 ): AntsMotionCorrDiffusionDirectionOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function ants_motion_corr_diffusion_direction(
 export {
       ANTS_MOTION_CORR_DIFFUSION_DIRECTION_METADATA,
       AntsMotionCorrDiffusionDirectionOutputs,
+      AntsMotionCorrDiffusionDirectionParamsDict,
+      AntsMotionCorrDiffusionDirectionParamsDictTagged,
       ants_motion_corr_diffusion_direction,
       ants_motion_corr_diffusion_direction_execute,
       ants_motion_corr_diffusion_direction_params,

@@ -11,7 +11,7 @@ const MRI_Z2P_METADATA: Metadata = {
 };
 
 
-interface MriZ2pParameters {
+interface MriZ2pParamsDict {
     "@type"?: "freesurfer/mri_z2p";
     "z_volume": InputPathType;
     "p_volume": string;
@@ -30,11 +30,11 @@ interface MriZ2pParameters {
     "debug": boolean;
     "check_opts": boolean;
 }
-type MriZ2pParametersTagged = Required<Pick<MriZ2pParameters, '@type'>> & MriZ2pParameters;
+type MriZ2pParamsDictTagged = Required<Pick<MriZ2pParamsDict, '@type'>> & MriZ2pParamsDict;
 
 
 /**
- * Output object returned when calling `MriZ2pParameters(...)`.
+ * Output object returned when calling `MriZ2pParamsDict(...)`.
  *
  * @interface
  */
@@ -93,7 +93,7 @@ function mri_z2p_params(
     img_format: boolean = false,
     debug: boolean = false,
     check_opts: boolean = false,
-): MriZ2pParametersTagged {
+): MriZ2pParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_z2p" as const,
         "z_volume": z_volume,
@@ -132,7 +132,7 @@ function mri_z2p_params(
  * @returns Command-line arguments.
  */
 function mri_z2p_cargs(
-    params: MriZ2pParameters,
+    params: MriZ2pParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function mri_z2p_cargs(
  * @returns Outputs object.
  */
 function mri_z2p_outputs(
-    params: MriZ2pParameters,
+    params: MriZ2pParamsDict,
     execution: Execution,
 ): MriZ2pOutputs {
     const ret: MriZ2pOutputs = {
@@ -237,7 +237,7 @@ function mri_z2p_outputs(
  * @returns NamedTuple of outputs (described in `MriZ2pOutputs`).
  */
 function mri_z2p_execute(
-    params: MriZ2pParameters,
+    params: MriZ2pParamsDict,
     runner: Runner | null = null,
 ): MriZ2pOutputs {
     runner = runner || getGlobalRunner();
@@ -306,6 +306,8 @@ function mri_z2p(
 export {
       MRI_Z2P_METADATA,
       MriZ2pOutputs,
+      MriZ2pParamsDict,
+      MriZ2pParamsDictTagged,
       mri_z2p,
       mri_z2p_execute,
       mri_z2p_params,

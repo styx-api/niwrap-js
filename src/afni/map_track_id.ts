@@ -11,7 +11,7 @@ const MAP_TRACK_ID_METADATA: Metadata = {
 };
 
 
-interface MapTrackIdParameters {
+interface MapTrackIdParamsDict {
     "@type"?: "afni/map_TrackID";
     "prefix": string;
     "in_trk": InputPathType;
@@ -22,11 +22,11 @@ interface MapTrackIdParameters {
     "line_only_num": boolean;
     "already_inv": boolean;
 }
-type MapTrackIdParametersTagged = Required<Pick<MapTrackIdParameters, '@type'>> & MapTrackIdParameters;
+type MapTrackIdParamsDictTagged = Required<Pick<MapTrackIdParamsDict, '@type'>> & MapTrackIdParamsDict;
 
 
 /**
- * Output object returned when calling `MapTrackIdParameters(...)`.
+ * Output object returned when calling `MapTrackIdParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function map_track_id_params(
     orig_zero: boolean = false,
     line_only_num: boolean = false,
     already_inv: boolean = false,
-): MapTrackIdParametersTagged {
+): MapTrackIdParamsDictTagged {
     const params = {
         "@type": "afni/map_TrackID" as const,
         "prefix": prefix,
@@ -90,7 +90,7 @@ function map_track_id_params(
  * @returns Command-line arguments.
  */
 function map_track_id_cargs(
-    params: MapTrackIdParameters,
+    params: MapTrackIdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,7 +136,7 @@ function map_track_id_cargs(
  * @returns Outputs object.
  */
 function map_track_id_outputs(
-    params: MapTrackIdParameters,
+    params: MapTrackIdParamsDict,
     execution: Execution,
 ): MapTrackIdOutputs {
     const ret: MapTrackIdOutputs = {
@@ -162,7 +162,7 @@ function map_track_id_outputs(
  * @returns NamedTuple of outputs (described in `MapTrackIdOutputs`).
  */
 function map_track_id_execute(
-    params: MapTrackIdParameters,
+    params: MapTrackIdParamsDict,
     runner: Runner | null = null,
 ): MapTrackIdOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function map_track_id(
 export {
       MAP_TRACK_ID_METADATA,
       MapTrackIdOutputs,
+      MapTrackIdParamsDict,
+      MapTrackIdParamsDictTagged,
       map_track_id,
       map_track_id_execute,
       map_track_id_params,

@@ -10,7 +10,7 @@ const METRIC_ROIS_TO_BORDER_METADATA: Metadata = {
 };
 
 
-interface MetricRoisToBorderParameters {
+interface MetricRoisToBorderParamsDict {
     "@type"?: "workbench/metric-rois-to-border";
     "border-out": string;
     "fraction"?: number | null | undefined;
@@ -19,11 +19,11 @@ interface MetricRoisToBorderParameters {
     "metric": InputPathType;
     "class-name": string;
 }
-type MetricRoisToBorderParametersTagged = Required<Pick<MetricRoisToBorderParameters, '@type'>> & MetricRoisToBorderParameters;
+type MetricRoisToBorderParamsDictTagged = Required<Pick<MetricRoisToBorderParamsDict, '@type'>> & MetricRoisToBorderParamsDict;
 
 
 /**
- * Output object returned when calling `MetricRoisToBorderParameters(...)`.
+ * Output object returned when calling `MetricRoisToBorderParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function metric_rois_to_border_params(
     surface: InputPathType,
     metric: InputPathType,
     class_name: string,
-): MetricRoisToBorderParametersTagged {
+): MetricRoisToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/metric-rois-to-border" as const,
         "border-out": border_out,
@@ -89,7 +89,7 @@ function metric_rois_to_border_params(
  * @returns Command-line arguments.
  */
 function metric_rois_to_border_cargs(
-    params: MetricRoisToBorderParameters,
+    params: MetricRoisToBorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function metric_rois_to_border_cargs(
  * @returns Outputs object.
  */
 function metric_rois_to_border_outputs(
-    params: MetricRoisToBorderParameters,
+    params: MetricRoisToBorderParamsDict,
     execution: Execution,
 ): MetricRoisToBorderOutputs {
     const ret: MetricRoisToBorderOutputs = {
@@ -142,7 +142,7 @@ function metric_rois_to_border_outputs(
  * @returns NamedTuple of outputs (described in `MetricRoisToBorderOutputs`).
  */
 function metric_rois_to_border_execute(
-    params: MetricRoisToBorderParameters,
+    params: MetricRoisToBorderParamsDict,
     runner: Runner | null = null,
 ): MetricRoisToBorderOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function metric_rois_to_border(
 export {
       METRIC_ROIS_TO_BORDER_METADATA,
       MetricRoisToBorderOutputs,
+      MetricRoisToBorderParamsDict,
+      MetricRoisToBorderParamsDictTagged,
       metric_rois_to_border,
       metric_rois_to_border_execute,
       metric_rois_to_border_params,

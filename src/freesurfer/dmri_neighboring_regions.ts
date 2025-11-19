@@ -11,16 +11,16 @@ const DMRI_NEIGHBORING_REGIONS_METADATA: Metadata = {
 };
 
 
-interface DmriNeighboringRegionsParameters {
+interface DmriNeighboringRegionsParamsDict {
     "@type"?: "freesurfer/dmri_neighboringRegions";
     "input_file": InputPathType;
     "output_file": string;
 }
-type DmriNeighboringRegionsParametersTagged = Required<Pick<DmriNeighboringRegionsParameters, '@type'>> & DmriNeighboringRegionsParameters;
+type DmriNeighboringRegionsParamsDictTagged = Required<Pick<DmriNeighboringRegionsParamsDict, '@type'>> & DmriNeighboringRegionsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriNeighboringRegionsParameters(...)`.
+ * Output object returned when calling `DmriNeighboringRegionsParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface DmriNeighboringRegionsOutputs {
 function dmri_neighboring_regions_params(
     input_file: InputPathType,
     output_file: string,
-): DmriNeighboringRegionsParametersTagged {
+): DmriNeighboringRegionsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_neighboringRegions" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function dmri_neighboring_regions_params(
  * @returns Command-line arguments.
  */
 function dmri_neighboring_regions_cargs(
-    params: DmriNeighboringRegionsParameters,
+    params: DmriNeighboringRegionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function dmri_neighboring_regions_cargs(
  * @returns Outputs object.
  */
 function dmri_neighboring_regions_outputs(
-    params: DmriNeighboringRegionsParameters,
+    params: DmriNeighboringRegionsParamsDict,
     execution: Execution,
 ): DmriNeighboringRegionsOutputs {
     const ret: DmriNeighboringRegionsOutputs = {
@@ -112,7 +112,7 @@ function dmri_neighboring_regions_outputs(
  * @returns NamedTuple of outputs (described in `DmriNeighboringRegionsOutputs`).
  */
 function dmri_neighboring_regions_execute(
-    params: DmriNeighboringRegionsParameters,
+    params: DmriNeighboringRegionsParamsDict,
     runner: Runner | null = null,
 ): DmriNeighboringRegionsOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function dmri_neighboring_regions(
 export {
       DMRI_NEIGHBORING_REGIONS_METADATA,
       DmriNeighboringRegionsOutputs,
+      DmriNeighboringRegionsParamsDict,
+      DmriNeighboringRegionsParamsDictTagged,
       dmri_neighboring_regions,
       dmri_neighboring_regions_execute,
       dmri_neighboring_regions_params,

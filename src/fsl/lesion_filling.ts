@@ -11,7 +11,7 @@ const LESION_FILLING_METADATA: Metadata = {
 };
 
 
-interface LesionFillingParameters {
+interface LesionFillingParamsDict {
     "@type"?: "fsl/lesion_filling";
     "infile": InputPathType;
     "outfile": string;
@@ -21,11 +21,11 @@ interface LesionFillingParameters {
     "components_flag": boolean;
     "help_flag": boolean;
 }
-type LesionFillingParametersTagged = Required<Pick<LesionFillingParameters, '@type'>> & LesionFillingParameters;
+type LesionFillingParamsDictTagged = Required<Pick<LesionFillingParamsDict, '@type'>> & LesionFillingParamsDict;
 
 
 /**
- * Output object returned when calling `LesionFillingParameters(...)`.
+ * Output object returned when calling `LesionFillingParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function lesion_filling_params(
     verbose_flag: boolean = false,
     components_flag: boolean = false,
     help_flag: boolean = false,
-): LesionFillingParametersTagged {
+): LesionFillingParamsDictTagged {
     const params = {
         "@type": "fsl/lesion_filling" as const,
         "infile": infile,
@@ -88,7 +88,7 @@ function lesion_filling_params(
  * @returns Command-line arguments.
  */
 function lesion_filling_cargs(
-    params: LesionFillingParameters,
+    params: LesionFillingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function lesion_filling_cargs(
  * @returns Outputs object.
  */
 function lesion_filling_outputs(
-    params: LesionFillingParameters,
+    params: LesionFillingParamsDict,
     execution: Execution,
 ): LesionFillingOutputs {
     const ret: LesionFillingOutputs = {
@@ -159,7 +159,7 @@ function lesion_filling_outputs(
  * @returns NamedTuple of outputs (described in `LesionFillingOutputs`).
  */
 function lesion_filling_execute(
-    params: LesionFillingParameters,
+    params: LesionFillingParamsDict,
     runner: Runner | null = null,
 ): LesionFillingOutputs {
     runner = runner || getGlobalRunner();
@@ -210,6 +210,8 @@ function lesion_filling(
 export {
       LESION_FILLING_METADATA,
       LesionFillingOutputs,
+      LesionFillingParamsDict,
+      LesionFillingParamsDictTagged,
       lesion_filling,
       lesion_filling_execute,
       lesion_filling_params,

@@ -11,7 +11,7 @@ const V__ROI_CORR_MAT_METADATA: Metadata = {
 };
 
 
-interface VRoiCorrMatParameters {
+interface VRoiCorrMatParamsDict {
     "@type"?: "afni/@ROI_Corr_Mat";
     "ts_vol": InputPathType;
     "roi_vol": InputPathType;
@@ -24,11 +24,11 @@ interface VRoiCorrMatParameters {
     "echo": boolean;
     "verb": boolean;
 }
-type VRoiCorrMatParametersTagged = Required<Pick<VRoiCorrMatParameters, '@type'>> & VRoiCorrMatParameters;
+type VRoiCorrMatParamsDictTagged = Required<Pick<VRoiCorrMatParamsDict, '@type'>> & VRoiCorrMatParamsDict;
 
 
 /**
- * Output object returned when calling `VRoiCorrMatParameters(...)`.
+ * Output object returned when calling `VRoiCorrMatParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function v__roi_corr_mat_params(
     keep_tmp: boolean = false,
     echo: boolean = false,
     verb: boolean = false,
-): VRoiCorrMatParametersTagged {
+): VRoiCorrMatParamsDictTagged {
     const params = {
         "@type": "afni/@ROI_Corr_Mat" as const,
         "ts_vol": ts_vol,
@@ -106,7 +106,7 @@ function v__roi_corr_mat_params(
  * @returns Command-line arguments.
  */
 function v__roi_corr_mat_cargs(
-    params: VRoiCorrMatParameters,
+    params: VRoiCorrMatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function v__roi_corr_mat_cargs(
  * @returns Outputs object.
  */
 function v__roi_corr_mat_outputs(
-    params: VRoiCorrMatParameters,
+    params: VRoiCorrMatParamsDict,
     execution: Execution,
 ): VRoiCorrMatOutputs {
     const ret: VRoiCorrMatOutputs = {
@@ -190,7 +190,7 @@ function v__roi_corr_mat_outputs(
  * @returns NamedTuple of outputs (described in `VRoiCorrMatOutputs`).
  */
 function v__roi_corr_mat_execute(
-    params: VRoiCorrMatParameters,
+    params: VRoiCorrMatParamsDict,
     runner: Runner | null = null,
 ): VRoiCorrMatOutputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function v__roi_corr_mat(
 
 export {
       VRoiCorrMatOutputs,
+      VRoiCorrMatParamsDict,
+      VRoiCorrMatParamsDictTagged,
       V__ROI_CORR_MAT_METADATA,
       v__roi_corr_mat,
       v__roi_corr_mat_execute,

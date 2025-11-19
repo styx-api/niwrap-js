@@ -11,7 +11,7 @@ const MRI_CA_TRAIN_METADATA: Metadata = {
 };
 
 
-interface MriCaTrainParameters {
+interface MriCaTrainParamsDict {
     "@type"?: "freesurfer/mri_ca_train";
     "subjects": Array<string>;
     "output_gca": string;
@@ -28,11 +28,11 @@ interface MriCaTrainParameters {
     "threads"?: number | null | undefined;
     "done_file"?: string | null | undefined;
 }
-type MriCaTrainParametersTagged = Required<Pick<MriCaTrainParameters, '@type'>> & MriCaTrainParameters;
+type MriCaTrainParamsDictTagged = Required<Pick<MriCaTrainParamsDict, '@type'>> & MriCaTrainParamsDict;
 
 
 /**
- * Output object returned when calling `MriCaTrainParameters(...)`.
+ * Output object returned when calling `MriCaTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function mri_ca_train_params(
     sanity_check: boolean = false,
     threads: number | null = null,
     done_file: string | null = null,
-): MriCaTrainParametersTagged {
+): MriCaTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_ca_train" as const,
         "subjects": subjects,
@@ -128,7 +128,7 @@ function mri_ca_train_params(
  * @returns Command-line arguments.
  */
 function mri_ca_train_cargs(
-    params: MriCaTrainParameters,
+    params: MriCaTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function mri_ca_train_cargs(
  * @returns Outputs object.
  */
 function mri_ca_train_outputs(
-    params: MriCaTrainParameters,
+    params: MriCaTrainParamsDict,
     execution: Execution,
 ): MriCaTrainOutputs {
     const ret: MriCaTrainOutputs = {
@@ -237,7 +237,7 @@ function mri_ca_train_outputs(
  * @returns NamedTuple of outputs (described in `MriCaTrainOutputs`).
  */
 function mri_ca_train_execute(
-    params: MriCaTrainParameters,
+    params: MriCaTrainParamsDict,
     runner: Runner | null = null,
 ): MriCaTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -302,6 +302,8 @@ function mri_ca_train(
 export {
       MRI_CA_TRAIN_METADATA,
       MriCaTrainOutputs,
+      MriCaTrainParamsDict,
+      MriCaTrainParamsDictTagged,
       mri_ca_train,
       mri_ca_train_execute,
       mri_ca_train_params,

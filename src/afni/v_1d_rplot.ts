@@ -11,7 +11,7 @@ const V_1D_RPLOT_METADATA: Metadata = {
 };
 
 
-interface V1dRplotParameters {
+interface V1dRplotParamsDict {
     "@type"?: "afni/1dRplot";
     "input_file": InputPathType;
     "output_prefix"?: string | null | undefined;
@@ -33,11 +33,11 @@ interface V1dRplotParameters {
     "save_plot": boolean;
     "column_name_show": boolean;
 }
-type V1dRplotParametersTagged = Required<Pick<V1dRplotParameters, '@type'>> & V1dRplotParameters;
+type V1dRplotParamsDictTagged = Required<Pick<V1dRplotParamsDict, '@type'>> & V1dRplotParamsDict;
 
 
 /**
- * Output object returned when calling `V1dRplotParameters(...)`.
+ * Output object returned when calling `V1dRplotParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function v_1d_rplot_params(
     legend_position: "bottomright" | "bottom" | "bottomleft" | "left" | "topleft" | "top" | "topright" | "right" | "center" | null = null,
     save_plot: boolean = false,
     column_name_show: boolean = false,
-): V1dRplotParametersTagged {
+): V1dRplotParamsDictTagged {
     const params = {
         "@type": "afni/1dRplot" as const,
         "input_file": input_file,
@@ -164,7 +164,7 @@ function v_1d_rplot_params(
  * @returns Command-line arguments.
  */
 function v_1d_rplot_cargs(
-    params: V1dRplotParameters,
+    params: V1dRplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -285,7 +285,7 @@ function v_1d_rplot_cargs(
  * @returns Outputs object.
  */
 function v_1d_rplot_outputs(
-    params: V1dRplotParameters,
+    params: V1dRplotParamsDict,
     execution: Execution,
 ): V1dRplotOutputs {
     const ret: V1dRplotOutputs = {
@@ -311,7 +311,7 @@ function v_1d_rplot_outputs(
  * @returns NamedTuple of outputs (described in `V1dRplotOutputs`).
  */
 function v_1d_rplot_execute(
-    params: V1dRplotParameters,
+    params: V1dRplotParamsDict,
     runner: Runner | null = null,
 ): V1dRplotOutputs {
     runner = runner || getGlobalRunner();
@@ -385,6 +385,8 @@ function v_1d_rplot(
 
 export {
       V1dRplotOutputs,
+      V1dRplotParamsDict,
+      V1dRplotParamsDictTagged,
       V_1D_RPLOT_METADATA,
       v_1d_rplot,
       v_1d_rplot_execute,

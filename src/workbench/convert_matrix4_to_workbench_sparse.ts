@@ -10,18 +10,18 @@ const CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA: Metadata = {
 };
 
 
-interface ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters {
+interface ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict {
     "@type"?: "volume-seeds";
     "cifti-template": InputPathType;
     "direction": string;
 }
-type ConvertMatrix4ToWorkbenchSparseVolumeSeedsParametersTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters, '@type'>> & ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters;
+type ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDictTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict, '@type'>> & ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict;
 
 
-interface ConvertMatrix4ToWorkbenchSparseParameters {
+interface ConvertMatrix4ToWorkbenchSparseParamsDict {
     "@type"?: "workbench/convert-matrix4-to-workbench-sparse";
     "seed-roi"?: InputPathType | null | undefined;
-    "volume-seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null | undefined;
+    "volume-seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null | undefined;
     "matrix4_1": string;
     "matrix4_2": string;
     "matrix4_3": string;
@@ -29,7 +29,7 @@ interface ConvertMatrix4ToWorkbenchSparseParameters {
     "voxel-list": string;
     "wb-sparse-out": string;
 }
-type ConvertMatrix4ToWorkbenchSparseParametersTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseParameters, '@type'>> & ConvertMatrix4ToWorkbenchSparseParameters;
+type ConvertMatrix4ToWorkbenchSparseParamsDictTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseParamsDict, '@type'>> & ConvertMatrix4ToWorkbenchSparseParamsDict;
 
 
 /**
@@ -40,10 +40,10 @@ type ConvertMatrix4ToWorkbenchSparseParametersTagged = Required<Pick<ConvertMatr
  *
  * @returns Parameter dictionary
  */
-function convert_matrix4_to_workbench_sparse_volume_seeds_params(
+function convert_matrix4_to_workbench_sparse_volume_seeds(
     cifti_template: InputPathType,
     direction: string,
-): ConvertMatrix4ToWorkbenchSparseVolumeSeedsParametersTagged {
+): ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDictTagged {
     const params = {
         "@type": "volume-seeds" as const,
         "cifti-template": cifti_template,
@@ -62,7 +62,7 @@ function convert_matrix4_to_workbench_sparse_volume_seeds_params(
  * @returns Command-line arguments.
  */
 function convert_matrix4_to_workbench_sparse_volume_seeds_cargs(
-    params: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters,
+    params: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -76,7 +76,7 @@ function convert_matrix4_to_workbench_sparse_volume_seeds_cargs(
 
 
 /**
- * Output object returned when calling `ConvertMatrix4ToWorkbenchSparseParameters(...)`.
+ * Output object returned when calling `ConvertMatrix4ToWorkbenchSparseParamsDict(...)`.
  *
  * @interface
  */
@@ -112,8 +112,8 @@ function convert_matrix4_to_workbench_sparse_params(
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
-    volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
-): ConvertMatrix4ToWorkbenchSparseParametersTagged {
+    volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null = null,
+): ConvertMatrix4ToWorkbenchSparseParamsDictTagged {
     const params = {
         "@type": "workbench/convert-matrix4-to-workbench-sparse" as const,
         "matrix4_1": matrix4_1,
@@ -142,7 +142,7 @@ function convert_matrix4_to_workbench_sparse_params(
  * @returns Command-line arguments.
  */
 function convert_matrix4_to_workbench_sparse_cargs(
-    params: ConvertMatrix4ToWorkbenchSparseParameters,
+    params: ConvertMatrix4ToWorkbenchSparseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -174,7 +174,7 @@ function convert_matrix4_to_workbench_sparse_cargs(
  * @returns Outputs object.
  */
 function convert_matrix4_to_workbench_sparse_outputs(
-    params: ConvertMatrix4ToWorkbenchSparseParameters,
+    params: ConvertMatrix4ToWorkbenchSparseParamsDict,
     execution: Execution,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
     const ret: ConvertMatrix4ToWorkbenchSparseOutputs = {
@@ -195,7 +195,7 @@ function convert_matrix4_to_workbench_sparse_outputs(
  * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
  */
 function convert_matrix4_to_workbench_sparse_execute(
-    params: ConvertMatrix4ToWorkbenchSparseParameters,
+    params: ConvertMatrix4ToWorkbenchSparseParamsDict,
     runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
     runner = runner || getGlobalRunner();
@@ -235,7 +235,7 @@ function convert_matrix4_to_workbench_sparse(
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
-    volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParameters | null = null,
+    volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
     const params = convert_matrix4_to_workbench_sparse_params(seed_roi, matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, volume_seeds)
@@ -246,8 +246,12 @@ function convert_matrix4_to_workbench_sparse(
 export {
       CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA,
       ConvertMatrix4ToWorkbenchSparseOutputs,
+      ConvertMatrix4ToWorkbenchSparseParamsDict,
+      ConvertMatrix4ToWorkbenchSparseParamsDictTagged,
+      ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict,
+      ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDictTagged,
       convert_matrix4_to_workbench_sparse,
       convert_matrix4_to_workbench_sparse_execute,
       convert_matrix4_to_workbench_sparse_params,
-      convert_matrix4_to_workbench_sparse_volume_seeds_params,
+      convert_matrix4_to_workbench_sparse_volume_seeds,
 };

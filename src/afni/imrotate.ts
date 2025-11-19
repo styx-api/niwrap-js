@@ -11,7 +11,7 @@ const IMROTATE_METADATA: Metadata = {
 };
 
 
-interface ImrotateParameters {
+interface ImrotateParamsDict {
     "@type"?: "afni/imrotate";
     "linear_interpolation": boolean;
     "fourier_interpolation": boolean;
@@ -21,11 +21,11 @@ interface ImrotateParameters {
     "input_image": InputPathType;
     "output_image": string;
 }
-type ImrotateParametersTagged = Required<Pick<ImrotateParameters, '@type'>> & ImrotateParameters;
+type ImrotateParamsDictTagged = Required<Pick<ImrotateParamsDict, '@type'>> & ImrotateParamsDict;
 
 
 /**
- * Output object returned when calling `ImrotateParameters(...)`.
+ * Output object returned when calling `ImrotateParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function imrotate_params(
     output_image: string,
     linear_interpolation: boolean = false,
     fourier_interpolation: boolean = false,
-): ImrotateParametersTagged {
+): ImrotateParamsDictTagged {
     const params = {
         "@type": "afni/imrotate" as const,
         "linear_interpolation": linear_interpolation,
@@ -86,7 +86,7 @@ function imrotate_params(
  * @returns Command-line arguments.
  */
 function imrotate_cargs(
-    params: ImrotateParameters,
+    params: ImrotateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function imrotate_cargs(
  * @returns Outputs object.
  */
 function imrotate_outputs(
-    params: ImrotateParameters,
+    params: ImrotateParamsDict,
     execution: Execution,
 ): ImrotateOutputs {
     const ret: ImrotateOutputs = {
@@ -141,7 +141,7 @@ function imrotate_outputs(
  * @returns NamedTuple of outputs (described in `ImrotateOutputs`).
  */
 function imrotate_execute(
-    params: ImrotateParameters,
+    params: ImrotateParamsDict,
     runner: Runner | null = null,
 ): ImrotateOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function imrotate(
 export {
       IMROTATE_METADATA,
       ImrotateOutputs,
+      ImrotateParamsDict,
+      ImrotateParamsDictTagged,
       imrotate,
       imrotate_execute,
       imrotate_params,

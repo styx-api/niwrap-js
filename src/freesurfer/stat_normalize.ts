@@ -11,7 +11,7 @@ const STAT_NORMALIZE_METADATA: Metadata = {
 };
 
 
-interface StatNormalizeParameters {
+interface StatNormalizeParamsDict {
     "@type"?: "freesurfer/stat_normalize";
     "input_sv_prefix": string;
     "output_sv_prefix": string;
@@ -22,11 +22,11 @@ interface StatNormalizeParameters {
     "fix_xfm_flag": boolean;
     "float2int_option"?: string | null | undefined;
 }
-type StatNormalizeParametersTagged = Required<Pick<StatNormalizeParameters, '@type'>> & StatNormalizeParameters;
+type StatNormalizeParamsDictTagged = Required<Pick<StatNormalizeParamsDict, '@type'>> & StatNormalizeParamsDict;
 
 
 /**
- * Output object returned when calling `StatNormalizeParameters(...)`.
+ * Output object returned when calling `StatNormalizeParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function stat_normalize_params(
     xfm_file: string | null = null,
     fix_xfm_flag: boolean = false,
     float2int_option: string | null = null,
-): StatNormalizeParametersTagged {
+): StatNormalizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/stat_normalize" as const,
         "input_sv_prefix": input_sv_prefix,
@@ -96,7 +96,7 @@ function stat_normalize_params(
  * @returns Command-line arguments.
  */
 function stat_normalize_cargs(
-    params: StatNormalizeParameters,
+    params: StatNormalizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function stat_normalize_cargs(
  * @returns Outputs object.
  */
 function stat_normalize_outputs(
-    params: StatNormalizeParameters,
+    params: StatNormalizeParamsDict,
     execution: Execution,
 ): StatNormalizeOutputs {
     const ret: StatNormalizeOutputs = {
@@ -174,7 +174,7 @@ function stat_normalize_outputs(
  * @returns NamedTuple of outputs (described in `StatNormalizeOutputs`).
  */
 function stat_normalize_execute(
-    params: StatNormalizeParameters,
+    params: StatNormalizeParamsDict,
     runner: Runner | null = null,
 ): StatNormalizeOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function stat_normalize(
 export {
       STAT_NORMALIZE_METADATA,
       StatNormalizeOutputs,
+      StatNormalizeParamsDict,
+      StatNormalizeParamsDictTagged,
       stat_normalize,
       stat_normalize_execute,
       stat_normalize_params,

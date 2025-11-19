@@ -11,18 +11,18 @@ const FSLADD_METADATA: Metadata = {
 };
 
 
-interface FsladdParameters {
+interface FsladdParamsDict {
     "@type"?: "fsl/fsladd";
     "output_file": string;
     "mean_flag": boolean;
     "scale_flag": boolean;
     "volume_list": Array<InputPathType>;
 }
-type FsladdParametersTagged = Required<Pick<FsladdParameters, '@type'>> & FsladdParameters;
+type FsladdParamsDictTagged = Required<Pick<FsladdParamsDict, '@type'>> & FsladdParamsDict;
 
 
 /**
- * Output object returned when calling `FsladdParameters(...)`.
+ * Output object returned when calling `FsladdParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function fsladd_params(
     volume_list: Array<InputPathType>,
     mean_flag: boolean = false,
     scale_flag: boolean = false,
-): FsladdParametersTagged {
+): FsladdParamsDictTagged {
     const params = {
         "@type": "fsl/fsladd" as const,
         "output_file": output_file,
@@ -74,7 +74,7 @@ function fsladd_params(
  * @returns Command-line arguments.
  */
 function fsladd_cargs(
-    params: FsladdParameters,
+    params: FsladdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function fsladd_cargs(
  * @returns Outputs object.
  */
 function fsladd_outputs(
-    params: FsladdParameters,
+    params: FsladdParamsDict,
     execution: Execution,
 ): FsladdOutputs {
     const ret: FsladdOutputs = {
@@ -126,7 +126,7 @@ function fsladd_outputs(
  * @returns NamedTuple of outputs (described in `FsladdOutputs`).
  */
 function fsladd_execute(
-    params: FsladdParameters,
+    params: FsladdParamsDict,
     runner: Runner | null = null,
 ): FsladdOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function fsladd(
 export {
       FSLADD_METADATA,
       FsladdOutputs,
+      FsladdParamsDict,
+      FsladdParamsDictTagged,
       fsladd,
       fsladd_execute,
       fsladd_params,

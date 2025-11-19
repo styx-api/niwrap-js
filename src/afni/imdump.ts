@@ -11,15 +11,15 @@ const IMDUMP_METADATA: Metadata = {
 };
 
 
-interface ImdumpParameters {
+interface ImdumpParamsDict {
     "@type"?: "afni/imdump";
     "input_image": InputPathType;
 }
-type ImdumpParametersTagged = Required<Pick<ImdumpParameters, '@type'>> & ImdumpParameters;
+type ImdumpParamsDictTagged = Required<Pick<ImdumpParamsDict, '@type'>> & ImdumpParamsDict;
 
 
 /**
- * Output object returned when calling `ImdumpParameters(...)`.
+ * Output object returned when calling `ImdumpParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface ImdumpOutputs {
  */
 function imdump_params(
     input_image: InputPathType,
-): ImdumpParametersTagged {
+): ImdumpParamsDictTagged {
     const params = {
         "@type": "afni/imdump" as const,
         "input_image": input_image,
@@ -62,7 +62,7 @@ function imdump_params(
  * @returns Command-line arguments.
  */
 function imdump_cargs(
-    params: ImdumpParameters,
+    params: ImdumpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function imdump_cargs(
  * @returns Outputs object.
  */
 function imdump_outputs(
-    params: ImdumpParameters,
+    params: ImdumpParamsDict,
     execution: Execution,
 ): ImdumpOutputs {
     const ret: ImdumpOutputs = {
@@ -107,7 +107,7 @@ function imdump_outputs(
  * @returns NamedTuple of outputs (described in `ImdumpOutputs`).
  */
 function imdump_execute(
-    params: ImdumpParameters,
+    params: ImdumpParamsDict,
     runner: Runner | null = null,
 ): ImdumpOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function imdump(
 export {
       IMDUMP_METADATA,
       ImdumpOutputs,
+      ImdumpParamsDict,
+      ImdumpParamsDictTagged,
       imdump,
       imdump_execute,
       imdump_params,

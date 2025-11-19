@@ -10,22 +10,22 @@ const VOLUME_DILATE_METADATA: Metadata = {
 };
 
 
-interface VolumeDilatePresmoothParameters {
+interface VolumeDilatePresmoothParamsDict {
     "@type"?: "presmooth";
     "kernel": number;
     "fwhm": boolean;
 }
-type VolumeDilatePresmoothParametersTagged = Required<Pick<VolumeDilatePresmoothParameters, '@type'>> & VolumeDilatePresmoothParameters;
+type VolumeDilatePresmoothParamsDictTagged = Required<Pick<VolumeDilatePresmoothParamsDict, '@type'>> & VolumeDilatePresmoothParamsDict;
 
 
-interface VolumeDilateGradExtrapolateParameters {
+interface VolumeDilateGradExtrapolateParamsDict {
     "@type"?: "grad-extrapolate";
-    "presmooth"?: VolumeDilatePresmoothParameters | null | undefined;
+    "presmooth"?: VolumeDilatePresmoothParamsDict | null | undefined;
 }
-type VolumeDilateGradExtrapolateParametersTagged = Required<Pick<VolumeDilateGradExtrapolateParameters, '@type'>> & VolumeDilateGradExtrapolateParameters;
+type VolumeDilateGradExtrapolateParamsDictTagged = Required<Pick<VolumeDilateGradExtrapolateParamsDict, '@type'>> & VolumeDilateGradExtrapolateParamsDict;
 
 
-interface VolumeDilateParameters {
+interface VolumeDilateParamsDict {
     "@type"?: "workbench/volume-dilate";
     "volume-out": string;
     "exponent"?: number | null | undefined;
@@ -33,12 +33,12 @@ interface VolumeDilateParameters {
     "roi-volume"?: InputPathType | null | undefined;
     "subvol"?: string | null | undefined;
     "legacy-cutoff": boolean;
-    "grad-extrapolate"?: VolumeDilateGradExtrapolateParameters | null | undefined;
+    "grad-extrapolate"?: VolumeDilateGradExtrapolateParamsDict | null | undefined;
     "volume": InputPathType;
     "distance": number;
     "method": string;
 }
-type VolumeDilateParametersTagged = Required<Pick<VolumeDilateParameters, '@type'>> & VolumeDilateParameters;
+type VolumeDilateParamsDictTagged = Required<Pick<VolumeDilateParamsDict, '@type'>> & VolumeDilateParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type VolumeDilateParametersTagged = Required<Pick<VolumeDilateParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function volume_dilate_presmooth_params(
+function volume_dilate_presmooth(
     kernel: number,
     fwhm: boolean = false,
-): VolumeDilatePresmoothParametersTagged {
+): VolumeDilatePresmoothParamsDictTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
@@ -71,7 +71,7 @@ function volume_dilate_presmooth_params(
  * @returns Command-line arguments.
  */
 function volume_dilate_presmooth_cargs(
-    params: VolumeDilatePresmoothParameters,
+    params: VolumeDilatePresmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,9 +93,9 @@ function volume_dilate_presmooth_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_dilate_grad_extrapolate_params(
-    presmooth: VolumeDilatePresmoothParameters | null = null,
-): VolumeDilateGradExtrapolateParametersTagged {
+function volume_dilate_grad_extrapolate(
+    presmooth: VolumeDilatePresmoothParamsDict | null = null,
+): VolumeDilateGradExtrapolateParamsDictTagged {
     const params = {
         "@type": "grad-extrapolate" as const,
     };
@@ -115,7 +115,7 @@ function volume_dilate_grad_extrapolate_params(
  * @returns Command-line arguments.
  */
 function volume_dilate_grad_extrapolate_cargs(
-    params: VolumeDilateGradExtrapolateParameters,
+    params: VolumeDilateGradExtrapolateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -130,7 +130,7 @@ function volume_dilate_grad_extrapolate_cargs(
 
 
 /**
- * Output object returned when calling `VolumeDilateParameters(...)`.
+ * Output object returned when calling `VolumeDilateParamsDict(...)`.
  *
  * @interface
  */
@@ -180,8 +180,8 @@ function volume_dilate_params(
     distance: number,
     method: string,
     legacy_cutoff: boolean = false,
-    grad_extrapolate: VolumeDilateGradExtrapolateParameters | null = null,
-): VolumeDilateParametersTagged {
+    grad_extrapolate: VolumeDilateGradExtrapolateParamsDict | null = null,
+): VolumeDilateParamsDictTagged {
     const params = {
         "@type": "workbench/volume-dilate" as const,
         "volume-out": volume_out,
@@ -218,7 +218,7 @@ function volume_dilate_params(
  * @returns Command-line arguments.
  */
 function volume_dilate_cargs(
-    params: VolumeDilateParameters,
+    params: VolumeDilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,7 +255,7 @@ function volume_dilate_cargs(
  * @returns Outputs object.
  */
 function volume_dilate_outputs(
-    params: VolumeDilateParameters,
+    params: VolumeDilateParamsDict,
     execution: Execution,
 ): VolumeDilateOutputs {
     const ret: VolumeDilateOutputs = {
@@ -286,7 +286,7 @@ function volume_dilate_outputs(
  * @returns NamedTuple of outputs (described in `VolumeDilateOutputs`).
  */
 function volume_dilate_execute(
-    params: VolumeDilateParameters,
+    params: VolumeDilateParamsDict,
     runner: Runner | null = null,
 ): VolumeDilateOutputs {
     runner = runner || getGlobalRunner();
@@ -345,7 +345,7 @@ function volume_dilate(
     distance: number,
     method: string,
     legacy_cutoff: boolean = false,
-    grad_extrapolate: VolumeDilateGradExtrapolateParameters | null = null,
+    grad_extrapolate: VolumeDilateGradExtrapolateParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeDilateOutputs {
     const params = volume_dilate_params(volume_out, exponent, roi_volume, roi_volume_, subvol, volume, distance, method, legacy_cutoff, grad_extrapolate)
@@ -355,10 +355,16 @@ function volume_dilate(
 
 export {
       VOLUME_DILATE_METADATA,
+      VolumeDilateGradExtrapolateParamsDict,
+      VolumeDilateGradExtrapolateParamsDictTagged,
       VolumeDilateOutputs,
+      VolumeDilateParamsDict,
+      VolumeDilateParamsDictTagged,
+      VolumeDilatePresmoothParamsDict,
+      VolumeDilatePresmoothParamsDictTagged,
       volume_dilate,
       volume_dilate_execute,
-      volume_dilate_grad_extrapolate_params,
+      volume_dilate_grad_extrapolate,
       volume_dilate_params,
-      volume_dilate_presmooth_params,
+      volume_dilate_presmooth,
 };

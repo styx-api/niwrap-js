@@ -11,15 +11,15 @@ const TCK2FIXEL_METADATA: Metadata = {
 };
 
 
-interface Tck2fixelConfigParameters {
+interface Tck2fixelConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Tck2fixelConfigParametersTagged = Required<Pick<Tck2fixelConfigParameters, '@type'>> & Tck2fixelConfigParameters;
+type Tck2fixelConfigParamsDictTagged = Required<Pick<Tck2fixelConfigParamsDict, '@type'>> & Tck2fixelConfigParamsDict;
 
 
-interface Tck2fixelParameters {
+interface Tck2fixelParamsDict {
     "@type"?: "mrtrix/tck2fixel";
     "angle"?: number | null | undefined;
     "info": boolean;
@@ -27,7 +27,7 @@ interface Tck2fixelParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Tck2fixelConfigParameters> | null | undefined;
+    "config"?: Array<Tck2fixelConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks": InputPathType;
@@ -35,7 +35,7 @@ interface Tck2fixelParameters {
     "fixel_folder_out": string;
     "fixel_data_out": string;
 }
-type Tck2fixelParametersTagged = Required<Pick<Tck2fixelParameters, '@type'>> & Tck2fixelParameters;
+type Tck2fixelParamsDictTagged = Required<Pick<Tck2fixelParamsDict, '@type'>> & Tck2fixelParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type Tck2fixelParametersTagged = Required<Pick<Tck2fixelParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function tck2fixel_config_params(
+function tck2fixel_config(
     key: string,
     value: string,
-): Tck2fixelConfigParametersTagged {
+): Tck2fixelConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -68,7 +68,7 @@ function tck2fixel_config_params(
  * @returns Command-line arguments.
  */
 function tck2fixel_config_cargs(
-    params: Tck2fixelConfigParameters,
+    params: Tck2fixelConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function tck2fixel_config_cargs(
 
 
 /**
- * Output object returned when calling `Tck2fixelParameters(...)`.
+ * Output object returned when calling `Tck2fixelParamsDict(...)`.
  *
  * @interface
  */
@@ -122,10 +122,10 @@ function tck2fixel_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tck2fixelConfigParameters> | null = null,
+    config: Array<Tck2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Tck2fixelParametersTagged {
+): Tck2fixelParamsDictTagged {
     const params = {
         "@type": "mrtrix/tck2fixel" as const,
         "info": info,
@@ -161,7 +161,7 @@ function tck2fixel_params(
  * @returns Command-line arguments.
  */
 function tck2fixel_cargs(
-    params: Tck2fixelParameters,
+    params: Tck2fixelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -216,7 +216,7 @@ function tck2fixel_cargs(
  * @returns Outputs object.
  */
 function tck2fixel_outputs(
-    params: Tck2fixelParameters,
+    params: Tck2fixelParamsDict,
     execution: Execution,
 ): Tck2fixelOutputs {
     const ret: Tck2fixelOutputs = {
@@ -247,7 +247,7 @@ function tck2fixel_outputs(
  * @returns NamedTuple of outputs (described in `Tck2fixelOutputs`).
  */
 function tck2fixel_execute(
-    params: Tck2fixelParameters,
+    params: Tck2fixelParamsDict,
     runner: Runner | null = null,
 ): Tck2fixelOutputs {
     runner = runner || getGlobalRunner();
@@ -303,7 +303,7 @@ function tck2fixel(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Tck2fixelConfigParameters> | null = null,
+    config: Array<Tck2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -315,9 +315,13 @@ function tck2fixel(
 
 export {
       TCK2FIXEL_METADATA,
+      Tck2fixelConfigParamsDict,
+      Tck2fixelConfigParamsDictTagged,
       Tck2fixelOutputs,
+      Tck2fixelParamsDict,
+      Tck2fixelParamsDictTagged,
       tck2fixel,
-      tck2fixel_config_params,
+      tck2fixel_config,
       tck2fixel_execute,
       tck2fixel_params,
 };

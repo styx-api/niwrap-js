@@ -11,16 +11,16 @@ const SLICEANIMATE_METADATA: Metadata = {
 };
 
 
-interface SliceanimateParameters {
+interface SliceanimateParamsDict {
     "@type"?: "fsl/sliceanimate";
     "output_file": string;
     "input_files": Array<InputPathType>;
 }
-type SliceanimateParametersTagged = Required<Pick<SliceanimateParameters, '@type'>> & SliceanimateParameters;
+type SliceanimateParamsDictTagged = Required<Pick<SliceanimateParamsDict, '@type'>> & SliceanimateParamsDict;
 
 
 /**
- * Output object returned when calling `SliceanimateParameters(...)`.
+ * Output object returned when calling `SliceanimateParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface SliceanimateOutputs {
 function sliceanimate_params(
     output_file: string,
     input_files: Array<InputPathType>,
-): SliceanimateParametersTagged {
+): SliceanimateParamsDictTagged {
     const params = {
         "@type": "fsl/sliceanimate" as const,
         "output_file": output_file,
@@ -66,7 +66,7 @@ function sliceanimate_params(
  * @returns Command-line arguments.
  */
 function sliceanimate_cargs(
-    params: SliceanimateParameters,
+    params: SliceanimateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function sliceanimate_cargs(
  * @returns Outputs object.
  */
 function sliceanimate_outputs(
-    params: SliceanimateParameters,
+    params: SliceanimateParamsDict,
     execution: Execution,
 ): SliceanimateOutputs {
     const ret: SliceanimateOutputs = {
@@ -112,7 +112,7 @@ function sliceanimate_outputs(
  * @returns NamedTuple of outputs (described in `SliceanimateOutputs`).
  */
 function sliceanimate_execute(
-    params: SliceanimateParameters,
+    params: SliceanimateParamsDict,
     runner: Runner | null = null,
 ): SliceanimateOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function sliceanimate(
 export {
       SLICEANIMATE_METADATA,
       SliceanimateOutputs,
+      SliceanimateParamsDict,
+      SliceanimateParamsDictTagged,
       sliceanimate,
       sliceanimate_execute,
       sliceanimate_params,

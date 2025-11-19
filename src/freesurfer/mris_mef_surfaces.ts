@@ -11,7 +11,7 @@ const MRIS_MEF_SURFACES_METADATA: Metadata = {
 };
 
 
-interface MrisMefSurfacesParameters {
+interface MrisMefSurfacesParamsDict {
     "@type"?: "freesurfer/mris_mef_surfaces";
     "subject_name": string;
     "hemisphere": string;
@@ -20,11 +20,11 @@ interface MrisMefSurfacesParameters {
     "average_curvature"?: number | null | undefined;
     "white_only": boolean;
 }
-type MrisMefSurfacesParametersTagged = Required<Pick<MrisMefSurfacesParameters, '@type'>> & MrisMefSurfacesParameters;
+type MrisMefSurfacesParamsDictTagged = Required<Pick<MrisMefSurfacesParamsDict, '@type'>> & MrisMefSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMefSurfacesParameters(...)`.
+ * Output object returned when calling `MrisMefSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function mris_mef_surfaces_params(
     curvature: boolean = false,
     average_curvature: number | null = null,
     white_only: boolean = false,
-): MrisMefSurfacesParametersTagged {
+): MrisMefSurfacesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_mef_surfaces" as const,
         "subject_name": subject_name,
@@ -80,7 +80,7 @@ function mris_mef_surfaces_params(
  * @returns Command-line arguments.
  */
 function mris_mef_surfaces_cargs(
-    params: MrisMefSurfacesParameters,
+    params: MrisMefSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function mris_mef_surfaces_cargs(
  * @returns Outputs object.
  */
 function mris_mef_surfaces_outputs(
-    params: MrisMefSurfacesParameters,
+    params: MrisMefSurfacesParamsDict,
     execution: Execution,
 ): MrisMefSurfacesOutputs {
     const ret: MrisMefSurfacesOutputs = {
@@ -140,7 +140,7 @@ function mris_mef_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `MrisMefSurfacesOutputs`).
  */
 function mris_mef_surfaces_execute(
-    params: MrisMefSurfacesParameters,
+    params: MrisMefSurfacesParamsDict,
     runner: Runner | null = null,
 ): MrisMefSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function mris_mef_surfaces(
 export {
       MRIS_MEF_SURFACES_METADATA,
       MrisMefSurfacesOutputs,
+      MrisMefSurfacesParamsDict,
+      MrisMefSurfacesParamsDictTagged,
       mris_mef_surfaces,
       mris_mef_surfaces_execute,
       mris_mef_surfaces_params,

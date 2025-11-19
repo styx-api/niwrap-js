@@ -11,7 +11,7 @@ const V_3D_KRUSKAL_WALLIS_METADATA: Metadata = {
 };
 
 
-interface V3dKruskalWallisParameters {
+interface V3dKruskalWallisParamsDict {
     "@type"?: "afni/3dKruskalWallis";
     "levels": number;
     "datasets": Array<string>;
@@ -19,11 +19,11 @@ interface V3dKruskalWallisParameters {
     "voxel"?: number | null | undefined;
     "output": string;
 }
-type V3dKruskalWallisParametersTagged = Required<Pick<V3dKruskalWallisParameters, '@type'>> & V3dKruskalWallisParameters;
+type V3dKruskalWallisParamsDictTagged = Required<Pick<V3dKruskalWallisParamsDict, '@type'>> & V3dKruskalWallisParamsDict;
 
 
 /**
- * Output object returned when calling `V3dKruskalWallisParameters(...)`.
+ * Output object returned when calling `V3dKruskalWallisParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v_3d_kruskal_wallis_params(
     output: string,
     workmem: number | null = null,
     voxel: number | null = null,
-): V3dKruskalWallisParametersTagged {
+): V3dKruskalWallisParamsDictTagged {
     const params = {
         "@type": "afni/3dKruskalWallis" as const,
         "levels": levels,
@@ -82,7 +82,7 @@ function v_3d_kruskal_wallis_params(
  * @returns Command-line arguments.
  */
 function v_3d_kruskal_wallis_cargs(
-    params: V3dKruskalWallisParameters,
+    params: V3dKruskalWallisParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function v_3d_kruskal_wallis_cargs(
  * @returns Outputs object.
  */
 function v_3d_kruskal_wallis_outputs(
-    params: V3dKruskalWallisParameters,
+    params: V3dKruskalWallisParamsDict,
     execution: Execution,
 ): V3dKruskalWallisOutputs {
     const ret: V3dKruskalWallisOutputs = {
@@ -150,7 +150,7 @@ function v_3d_kruskal_wallis_outputs(
  * @returns NamedTuple of outputs (described in `V3dKruskalWallisOutputs`).
  */
 function v_3d_kruskal_wallis_execute(
-    params: V3dKruskalWallisParameters,
+    params: V3dKruskalWallisParamsDict,
     runner: Runner | null = null,
 ): V3dKruskalWallisOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function v_3d_kruskal_wallis(
 
 export {
       V3dKruskalWallisOutputs,
+      V3dKruskalWallisParamsDict,
+      V3dKruskalWallisParamsDictTagged,
       V_3D_KRUSKAL_WALLIS_METADATA,
       v_3d_kruskal_wallis,
       v_3d_kruskal_wallis_execute,

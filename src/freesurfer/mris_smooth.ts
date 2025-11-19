@@ -11,7 +11,7 @@ const MRIS_SMOOTH_METADATA: Metadata = {
 };
 
 
-interface MrisSmoothParameters {
+interface MrisSmoothParamsDict {
     "@type"?: "freesurfer/mris_smooth";
     "input_surface": InputPathType;
     "output_surface": string;
@@ -25,11 +25,11 @@ interface MrisSmoothParameters {
     "momentum"?: number | null | undefined;
     "snapshot_interval"?: number | null | undefined;
 }
-type MrisSmoothParametersTagged = Required<Pick<MrisSmoothParameters, '@type'>> & MrisSmoothParameters;
+type MrisSmoothParamsDictTagged = Required<Pick<MrisSmoothParamsDict, '@type'>> & MrisSmoothParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSmoothParameters(...)`.
+ * Output object returned when calling `MrisSmoothParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function mris_smooth_params(
     normalize_area: boolean = false,
     momentum: number | null = null,
     snapshot_interval: number | null = null,
-): MrisSmoothParametersTagged {
+): MrisSmoothParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_smooth" as const,
         "input_surface": input_surface,
@@ -124,7 +124,7 @@ function mris_smooth_params(
  * @returns Command-line arguments.
  */
 function mris_smooth_cargs(
-    params: MrisSmoothParameters,
+    params: MrisSmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -192,7 +192,7 @@ function mris_smooth_cargs(
  * @returns Outputs object.
  */
 function mris_smooth_outputs(
-    params: MrisSmoothParameters,
+    params: MrisSmoothParamsDict,
     execution: Execution,
 ): MrisSmoothOutputs {
     const ret: MrisSmoothOutputs = {
@@ -220,7 +220,7 @@ function mris_smooth_outputs(
  * @returns NamedTuple of outputs (described in `MrisSmoothOutputs`).
  */
 function mris_smooth_execute(
-    params: MrisSmoothParameters,
+    params: MrisSmoothParamsDict,
     runner: Runner | null = null,
 ): MrisSmoothOutputs {
     runner = runner || getGlobalRunner();
@@ -279,6 +279,8 @@ function mris_smooth(
 export {
       MRIS_SMOOTH_METADATA,
       MrisSmoothOutputs,
+      MrisSmoothParamsDict,
+      MrisSmoothParamsDictTagged,
       mris_smooth,
       mris_smooth_execute,
       mris_smooth_params,

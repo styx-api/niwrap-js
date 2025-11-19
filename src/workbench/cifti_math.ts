@@ -10,33 +10,33 @@ const CIFTI_MATH_METADATA: Metadata = {
 };
 
 
-interface CiftiMathSelectParameters {
+interface CiftiMathSelectParamsDict {
     "@type"?: "select";
     "dim": number;
     "index": string;
     "repeat": boolean;
 }
-type CiftiMathSelectParametersTagged = Required<Pick<CiftiMathSelectParameters, '@type'>> & CiftiMathSelectParameters;
+type CiftiMathSelectParamsDictTagged = Required<Pick<CiftiMathSelectParamsDict, '@type'>> & CiftiMathSelectParamsDict;
 
 
-interface CiftiMathVarParameters {
+interface CiftiMathVarParamsDict {
     "@type"?: "var";
     "name": string;
     "cifti": InputPathType;
-    "select"?: Array<CiftiMathSelectParameters> | null | undefined;
+    "select"?: Array<CiftiMathSelectParamsDict> | null | undefined;
 }
-type CiftiMathVarParametersTagged = Required<Pick<CiftiMathVarParameters, '@type'>> & CiftiMathVarParameters;
+type CiftiMathVarParamsDictTagged = Required<Pick<CiftiMathVarParamsDict, '@type'>> & CiftiMathVarParamsDict;
 
 
-interface CiftiMathParameters {
+interface CiftiMathParamsDict {
     "@type"?: "workbench/cifti-math";
     "cifti-out": string;
     "replace"?: number | null | undefined;
     "override-mapping-check": boolean;
-    "var"?: Array<CiftiMathVarParameters> | null | undefined;
+    "var"?: Array<CiftiMathVarParamsDict> | null | undefined;
     "expression": string;
 }
-type CiftiMathParametersTagged = Required<Pick<CiftiMathParameters, '@type'>> & CiftiMathParameters;
+type CiftiMathParamsDictTagged = Required<Pick<CiftiMathParamsDict, '@type'>> & CiftiMathParamsDict;
 
 
 /**
@@ -48,11 +48,11 @@ type CiftiMathParametersTagged = Required<Pick<CiftiMathParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function cifti_math_select_params(
+function cifti_math_select(
     dim: number,
     index: string,
     repeat: boolean = false,
-): CiftiMathSelectParametersTagged {
+): CiftiMathSelectParamsDictTagged {
     const params = {
         "@type": "select" as const,
         "dim": dim,
@@ -72,7 +72,7 @@ function cifti_math_select_params(
  * @returns Command-line arguments.
  */
 function cifti_math_select_cargs(
-    params: CiftiMathSelectParameters,
+    params: CiftiMathSelectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -97,11 +97,11 @@ function cifti_math_select_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_math_var_params(
+function cifti_math_var(
     name: string,
     cifti: InputPathType,
-    select: Array<CiftiMathSelectParameters> | null = null,
-): CiftiMathVarParametersTagged {
+    select: Array<CiftiMathSelectParamsDict> | null = null,
+): CiftiMathVarParamsDictTagged {
     const params = {
         "@type": "var" as const,
         "name": name,
@@ -123,7 +123,7 @@ function cifti_math_var_params(
  * @returns Command-line arguments.
  */
 function cifti_math_var_cargs(
-    params: CiftiMathVarParameters,
+    params: CiftiMathVarParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function cifti_math_var_cargs(
 
 
 /**
- * Output object returned when calling `CiftiMathParameters(...)`.
+ * Output object returned when calling `CiftiMathParamsDict(...)`.
  *
  * @interface
  */
@@ -174,8 +174,8 @@ function cifti_math_params(
     replace: number | null,
     expression: string,
     override_mapping_check: boolean = false,
-    var_: Array<CiftiMathVarParameters> | null = null,
-): CiftiMathParametersTagged {
+    var_: Array<CiftiMathVarParamsDict> | null = null,
+): CiftiMathParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-math" as const,
         "cifti-out": cifti_out,
@@ -201,7 +201,7 @@ function cifti_math_params(
  * @returns Command-line arguments.
  */
 function cifti_math_cargs(
-    params: CiftiMathParameters,
+    params: CiftiMathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -230,7 +230,7 @@ function cifti_math_cargs(
  * @returns Outputs object.
  */
 function cifti_math_outputs(
-    params: CiftiMathParameters,
+    params: CiftiMathParamsDict,
     execution: Execution,
 ): CiftiMathOutputs {
     const ret: CiftiMathOutputs = {
@@ -293,7 +293,7 @@ function cifti_math_outputs(
  * @returns NamedTuple of outputs (described in `CiftiMathOutputs`).
  */
 function cifti_math_execute(
-    params: CiftiMathParameters,
+    params: CiftiMathParamsDict,
     runner: Runner | null = null,
 ): CiftiMathOutputs {
     runner = runner || getGlobalRunner();
@@ -368,7 +368,7 @@ function cifti_math(
     replace: number | null,
     expression: string,
     override_mapping_check: boolean = false,
-    var_: Array<CiftiMathVarParameters> | null = null,
+    var_: Array<CiftiMathVarParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMathOutputs {
     const params = cifti_math_params(cifti_out, replace, expression, override_mapping_check, var_)
@@ -379,9 +379,15 @@ function cifti_math(
 export {
       CIFTI_MATH_METADATA,
       CiftiMathOutputs,
+      CiftiMathParamsDict,
+      CiftiMathParamsDictTagged,
+      CiftiMathSelectParamsDict,
+      CiftiMathSelectParamsDictTagged,
+      CiftiMathVarParamsDict,
+      CiftiMathVarParamsDictTagged,
       cifti_math,
       cifti_math_execute,
       cifti_math_params,
-      cifti_math_select_params,
-      cifti_math_var_params,
+      cifti_math_select,
+      cifti_math_var,
 };

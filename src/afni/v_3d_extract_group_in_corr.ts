@@ -11,16 +11,16 @@ const V_3D_EXTRACT_GROUP_IN_CORR_METADATA: Metadata = {
 };
 
 
-interface V3dExtractGroupInCorrParameters {
+interface V3dExtractGroupInCorrParamsDict {
     "@type"?: "afni/3dExtractGroupInCorr";
     "group_in_corr_file": InputPathType;
     "prefix"?: string | null | undefined;
 }
-type V3dExtractGroupInCorrParametersTagged = Required<Pick<V3dExtractGroupInCorrParameters, '@type'>> & V3dExtractGroupInCorrParameters;
+type V3dExtractGroupInCorrParamsDictTagged = Required<Pick<V3dExtractGroupInCorrParamsDict, '@type'>> & V3dExtractGroupInCorrParamsDict;
 
 
 /**
- * Output object returned when calling `V3dExtractGroupInCorrParameters(...)`.
+ * Output object returned when calling `V3dExtractGroupInCorrParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface V3dExtractGroupInCorrOutputs {
 function v_3d_extract_group_in_corr_params(
     group_in_corr_file: InputPathType,
     prefix: string | null = null,
-): V3dExtractGroupInCorrParametersTagged {
+): V3dExtractGroupInCorrParamsDictTagged {
     const params = {
         "@type": "afni/3dExtractGroupInCorr" as const,
         "group_in_corr_file": group_in_corr_file,
@@ -68,7 +68,7 @@ function v_3d_extract_group_in_corr_params(
  * @returns Command-line arguments.
  */
 function v_3d_extract_group_in_corr_cargs(
-    params: V3dExtractGroupInCorrParameters,
+    params: V3dExtractGroupInCorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function v_3d_extract_group_in_corr_cargs(
  * @returns Outputs object.
  */
 function v_3d_extract_group_in_corr_outputs(
-    params: V3dExtractGroupInCorrParameters,
+    params: V3dExtractGroupInCorrParamsDict,
     execution: Execution,
 ): V3dExtractGroupInCorrOutputs {
     const ret: V3dExtractGroupInCorrOutputs = {
@@ -119,7 +119,7 @@ function v_3d_extract_group_in_corr_outputs(
  * @returns NamedTuple of outputs (described in `V3dExtractGroupInCorrOutputs`).
  */
 function v_3d_extract_group_in_corr_execute(
-    params: V3dExtractGroupInCorrParameters,
+    params: V3dExtractGroupInCorrParamsDict,
     runner: Runner | null = null,
 ): V3dExtractGroupInCorrOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function v_3d_extract_group_in_corr(
 
 export {
       V3dExtractGroupInCorrOutputs,
+      V3dExtractGroupInCorrParamsDict,
+      V3dExtractGroupInCorrParamsDictTagged,
       V_3D_EXTRACT_GROUP_IN_CORR_METADATA,
       v_3d_extract_group_in_corr,
       v_3d_extract_group_in_corr_execute,

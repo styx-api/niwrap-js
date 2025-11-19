@@ -11,7 +11,7 @@ const EDDY_CUDA9_1_METADATA: Metadata = {
 };
 
 
-interface EddyCuda91Parameters {
+interface EddyCuda91ParamsDict {
     "@type"?: "fsl/eddy_cuda9.1";
     "imain": InputPathType;
     "mask": InputPathType;
@@ -58,11 +58,11 @@ interface EddyCuda91Parameters {
     "data_is_shelled": boolean;
     "verbose": boolean;
 }
-type EddyCuda91ParametersTagged = Required<Pick<EddyCuda91Parameters, '@type'>> & EddyCuda91Parameters;
+type EddyCuda91ParamsDictTagged = Required<Pick<EddyCuda91ParamsDict, '@type'>> & EddyCuda91ParamsDict;
 
 
 /**
- * Output object returned when calling `EddyCuda91Parameters(...)`.
+ * Output object returned when calling `EddyCuda91ParamsDict(...)`.
  *
  * @interface
  */
@@ -245,7 +245,7 @@ function eddy_cuda9_1_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyCuda91ParametersTagged {
+): EddyCuda91ParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_cuda9.1" as const,
         "imain": imain,
@@ -358,7 +358,7 @@ function eddy_cuda9_1_params(
  * @returns Command-line arguments.
  */
 function eddy_cuda9_1_cargs(
-    params: EddyCuda91Parameters,
+    params: EddyCuda91ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -494,7 +494,7 @@ function eddy_cuda9_1_cargs(
  * @returns Outputs object.
  */
 function eddy_cuda9_1_outputs(
-    params: EddyCuda91Parameters,
+    params: EddyCuda91ParamsDict,
     execution: Execution,
 ): EddyCuda91Outputs {
     const ret: EddyCuda91Outputs = {
@@ -538,7 +538,7 @@ function eddy_cuda9_1_outputs(
  * @returns NamedTuple of outputs (described in `EddyCuda91Outputs`).
  */
 function eddy_cuda9_1_execute(
-    params: EddyCuda91Parameters,
+    params: EddyCuda91ParamsDict,
     runner: Runner | null = null,
 ): EddyCuda91Outputs {
     runner = runner || getGlobalRunner();
@@ -663,6 +663,8 @@ function eddy_cuda9_1(
 export {
       EDDY_CUDA9_1_METADATA,
       EddyCuda91Outputs,
+      EddyCuda91ParamsDict,
+      EddyCuda91ParamsDictTagged,
       eddy_cuda9_1,
       eddy_cuda9_1_execute,
       eddy_cuda9_1_params,

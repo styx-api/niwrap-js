@@ -11,7 +11,7 @@ const V_3DKMEANS_METADATA: Metadata = {
 };
 
 
-interface V3dkmeansParameters {
+interface V3dkmeansParamsDict {
     "@type"?: "afni/3dkmeans";
     "version": boolean;
     "input": Array<InputPathType>;
@@ -33,11 +33,11 @@ interface V3dkmeansParameters {
     "voxdbg"?: Array<number> | null | undefined;
     "seed"?: number | null | undefined;
 }
-type V3dkmeansParametersTagged = Required<Pick<V3dkmeansParameters, '@type'>> & V3dkmeansParameters;
+type V3dkmeansParamsDictTagged = Required<Pick<V3dkmeansParamsDict, '@type'>> & V3dkmeansParamsDict;
 
 
 /**
- * Output object returned when calling `V3dkmeansParameters(...)`.
+ * Output object returned when calling `V3dkmeansParamsDict(...)`.
  *
  * @interface
  */
@@ -121,7 +121,7 @@ function v_3dkmeans_params(
     write_dists: boolean = false,
     voxdbg: Array<number> | null = null,
     seed: number | null = null,
-): V3dkmeansParametersTagged {
+): V3dkmeansParamsDictTagged {
     const params = {
         "@type": "afni/3dkmeans" as const,
         "version": version,
@@ -187,7 +187,7 @@ function v_3dkmeans_params(
  * @returns Command-line arguments.
  */
 function v_3dkmeans_cargs(
-    params: V3dkmeansParameters,
+    params: V3dkmeansParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -308,7 +308,7 @@ function v_3dkmeans_cargs(
  * @returns Outputs object.
  */
 function v_3dkmeans_outputs(
-    params: V3dkmeansParameters,
+    params: V3dkmeansParamsDict,
     execution: Execution,
 ): V3dkmeansOutputs {
     const ret: V3dkmeansOutputs = {
@@ -340,7 +340,7 @@ function v_3dkmeans_outputs(
  * @returns NamedTuple of outputs (described in `V3dkmeansOutputs`).
  */
 function v_3dkmeans_execute(
-    params: V3dkmeansParameters,
+    params: V3dkmeansParamsDict,
     runner: Runner | null = null,
 ): V3dkmeansOutputs {
     runner = runner || getGlobalRunner();
@@ -413,6 +413,8 @@ function v_3dkmeans(
 
 export {
       V3dkmeansOutputs,
+      V3dkmeansParamsDict,
+      V3dkmeansParamsDictTagged,
       V_3DKMEANS_METADATA,
       v_3dkmeans,
       v_3dkmeans_execute,

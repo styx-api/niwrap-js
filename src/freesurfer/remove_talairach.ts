@@ -11,16 +11,16 @@ const REMOVE_TALAIRACH_METADATA: Metadata = {
 };
 
 
-interface RemoveTalairachParameters {
+interface RemoveTalairachParamsDict {
     "@type"?: "freesurfer/remove_talairach";
     "input_file": InputPathType;
     "output_file": string;
 }
-type RemoveTalairachParametersTagged = Required<Pick<RemoveTalairachParameters, '@type'>> & RemoveTalairachParameters;
+type RemoveTalairachParamsDictTagged = Required<Pick<RemoveTalairachParamsDict, '@type'>> & RemoveTalairachParamsDict;
 
 
 /**
- * Output object returned when calling `RemoveTalairachParameters(...)`.
+ * Output object returned when calling `RemoveTalairachParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface RemoveTalairachOutputs {
 function remove_talairach_params(
     input_file: InputPathType,
     output_file: string,
-): RemoveTalairachParametersTagged {
+): RemoveTalairachParamsDictTagged {
     const params = {
         "@type": "freesurfer/remove_talairach" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function remove_talairach_params(
  * @returns Command-line arguments.
  */
 function remove_talairach_cargs(
-    params: RemoveTalairachParameters,
+    params: RemoveTalairachParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function remove_talairach_cargs(
  * @returns Outputs object.
  */
 function remove_talairach_outputs(
-    params: RemoveTalairachParameters,
+    params: RemoveTalairachParamsDict,
     execution: Execution,
 ): RemoveTalairachOutputs {
     const ret: RemoveTalairachOutputs = {
@@ -112,7 +112,7 @@ function remove_talairach_outputs(
  * @returns NamedTuple of outputs (described in `RemoveTalairachOutputs`).
  */
 function remove_talairach_execute(
-    params: RemoveTalairachParameters,
+    params: RemoveTalairachParamsDict,
     runner: Runner | null = null,
 ): RemoveTalairachOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function remove_talairach(
 export {
       REMOVE_TALAIRACH_METADATA,
       RemoveTalairachOutputs,
+      RemoveTalairachParamsDict,
+      RemoveTalairachParamsDictTagged,
       remove_talairach,
       remove_talairach_execute,
       remove_talairach_params,

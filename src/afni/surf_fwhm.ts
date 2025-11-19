@@ -11,7 +11,7 @@ const SURF_FWHM_METADATA: Metadata = {
 };
 
 
-interface SurfFwhmParameters {
+interface SurfFwhmParamsDict {
     "@type"?: "afni/SurfFWHM";
     "input_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface SurfFwhmParameters {
     "examples": boolean;
     "slice": boolean;
 }
-type SurfFwhmParametersTagged = Required<Pick<SurfFwhmParameters, '@type'>> & SurfFwhmParameters;
+type SurfFwhmParamsDictTagged = Required<Pick<SurfFwhmParamsDict, '@type'>> & SurfFwhmParamsDict;
 
 
 /**
- * Output object returned when calling `SurfFwhmParameters(...)`.
+ * Output object returned when calling `SurfFwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function surf_fwhm_params(
     ok_warn: boolean = false,
     examples: boolean = false,
     slice: boolean = false,
-): SurfFwhmParametersTagged {
+): SurfFwhmParamsDictTagged {
     const params = {
         "@type": "afni/SurfFWHM" as const,
         "input_file": input_file,
@@ -144,7 +144,7 @@ function surf_fwhm_params(
  * @returns Command-line arguments.
  */
 function surf_fwhm_cargs(
-    params: SurfFwhmParameters,
+    params: SurfFwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -229,7 +229,7 @@ function surf_fwhm_cargs(
  * @returns Outputs object.
  */
 function surf_fwhm_outputs(
-    params: SurfFwhmParameters,
+    params: SurfFwhmParamsDict,
     execution: Execution,
 ): SurfFwhmOutputs {
     const ret: SurfFwhmOutputs = {
@@ -258,7 +258,7 @@ function surf_fwhm_outputs(
  * @returns NamedTuple of outputs (described in `SurfFwhmOutputs`).
  */
 function surf_fwhm_execute(
-    params: SurfFwhmParameters,
+    params: SurfFwhmParamsDict,
     runner: Runner | null = null,
 ): SurfFwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -323,6 +323,8 @@ function surf_fwhm(
 export {
       SURF_FWHM_METADATA,
       SurfFwhmOutputs,
+      SurfFwhmParamsDict,
+      SurfFwhmParamsDictTagged,
       surf_fwhm,
       surf_fwhm_execute,
       surf_fwhm_params,

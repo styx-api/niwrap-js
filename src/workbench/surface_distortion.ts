@@ -10,33 +10,33 @@ const SURFACE_DISTORTION_METADATA: Metadata = {
 };
 
 
-interface SurfaceDistortionSmoothParameters {
+interface SurfaceDistortionSmoothParamsDict {
     "@type"?: "smooth";
     "sigma": number;
     "fwhm": boolean;
 }
-type SurfaceDistortionSmoothParametersTagged = Required<Pick<SurfaceDistortionSmoothParameters, '@type'>> & SurfaceDistortionSmoothParameters;
+type SurfaceDistortionSmoothParamsDictTagged = Required<Pick<SurfaceDistortionSmoothParamsDict, '@type'>> & SurfaceDistortionSmoothParamsDict;
 
 
-interface SurfaceDistortionMatchSurfaceAreaParameters {
+interface SurfaceDistortionMatchSurfaceAreaParamsDict {
     "@type"?: "match-surface-area";
     "roi-metric"?: InputPathType | null | undefined;
 }
-type SurfaceDistortionMatchSurfaceAreaParametersTagged = Required<Pick<SurfaceDistortionMatchSurfaceAreaParameters, '@type'>> & SurfaceDistortionMatchSurfaceAreaParameters;
+type SurfaceDistortionMatchSurfaceAreaParamsDictTagged = Required<Pick<SurfaceDistortionMatchSurfaceAreaParamsDict, '@type'>> & SurfaceDistortionMatchSurfaceAreaParamsDict;
 
 
-interface SurfaceDistortionParameters {
+interface SurfaceDistortionParamsDict {
     "@type"?: "workbench/surface-distortion";
     "metric-out": string;
-    "smooth"?: SurfaceDistortionSmoothParameters | null | undefined;
-    "match-surface-area"?: SurfaceDistortionMatchSurfaceAreaParameters | null | undefined;
+    "smooth"?: SurfaceDistortionSmoothParamsDict | null | undefined;
+    "match-surface-area"?: SurfaceDistortionMatchSurfaceAreaParamsDict | null | undefined;
     "caret5-method": boolean;
     "edge-method": boolean;
     "log2"?: boolean | null | undefined;
     "surface-reference": InputPathType;
     "surface-distorted": InputPathType;
 }
-type SurfaceDistortionParametersTagged = Required<Pick<SurfaceDistortionParameters, '@type'>> & SurfaceDistortionParameters;
+type SurfaceDistortionParamsDictTagged = Required<Pick<SurfaceDistortionParamsDict, '@type'>> & SurfaceDistortionParamsDict;
 
 
 /**
@@ -47,10 +47,10 @@ type SurfaceDistortionParametersTagged = Required<Pick<SurfaceDistortionParamete
  *
  * @returns Parameter dictionary
  */
-function surface_distortion_smooth_params(
+function surface_distortion_smooth(
     sigma: number,
     fwhm: boolean = false,
-): SurfaceDistortionSmoothParametersTagged {
+): SurfaceDistortionSmoothParamsDictTagged {
     const params = {
         "@type": "smooth" as const,
         "sigma": sigma,
@@ -69,7 +69,7 @@ function surface_distortion_smooth_params(
  * @returns Command-line arguments.
  */
 function surface_distortion_smooth_cargs(
-    params: SurfaceDistortionSmoothParameters,
+    params: SurfaceDistortionSmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,9 +93,9 @@ the ROI to use, as a metric file
  *
  * @returns Parameter dictionary
  */
-function surface_distortion_match_surface_area_params(
+function surface_distortion_match_surface_area(
     roi_metric: InputPathType | null,
-): SurfaceDistortionMatchSurfaceAreaParametersTagged {
+): SurfaceDistortionMatchSurfaceAreaParamsDictTagged {
     const params = {
         "@type": "match-surface-area" as const,
     };
@@ -115,7 +115,7 @@ function surface_distortion_match_surface_area_params(
  * @returns Command-line arguments.
  */
 function surface_distortion_match_surface_area_cargs(
-    params: SurfaceDistortionMatchSurfaceAreaParameters,
+    params: SurfaceDistortionMatchSurfaceAreaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -131,7 +131,7 @@ function surface_distortion_match_surface_area_cargs(
 
 
 /**
- * Output object returned when calling `SurfaceDistortionParameters(...)`.
+ * Output object returned when calling `SurfaceDistortionParamsDict(...)`.
  *
  * @interface
  */
@@ -167,12 +167,12 @@ function surface_distortion_params(
     metric_out: string,
     surface_reference: InputPathType,
     surface_distorted: InputPathType,
-    smooth: SurfaceDistortionSmoothParameters | null = null,
-    match_surface_area: SurfaceDistortionMatchSurfaceAreaParameters | null = null,
+    smooth: SurfaceDistortionSmoothParamsDict | null = null,
+    match_surface_area: SurfaceDistortionMatchSurfaceAreaParamsDict | null = null,
     caret5_method: boolean = false,
     edge_method: boolean = false,
     log2: boolean | null = false,
-): SurfaceDistortionParametersTagged {
+): SurfaceDistortionParamsDictTagged {
     const params = {
         "@type": "workbench/surface-distortion" as const,
         "metric-out": metric_out,
@@ -203,7 +203,7 @@ function surface_distortion_params(
  * @returns Command-line arguments.
  */
 function surface_distortion_cargs(
-    params: SurfaceDistortionParameters,
+    params: SurfaceDistortionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -235,7 +235,7 @@ function surface_distortion_cargs(
  * @returns Outputs object.
  */
 function surface_distortion_outputs(
-    params: SurfaceDistortionParameters,
+    params: SurfaceDistortionParamsDict,
     execution: Execution,
 ): SurfaceDistortionOutputs {
     const ret: SurfaceDistortionOutputs = {
@@ -263,7 +263,7 @@ function surface_distortion_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceDistortionOutputs`).
  */
 function surface_distortion_execute(
-    params: SurfaceDistortionParameters,
+    params: SurfaceDistortionParamsDict,
     runner: Runner | null = null,
 ): SurfaceDistortionOutputs {
     runner = runner || getGlobalRunner();
@@ -305,8 +305,8 @@ function surface_distortion(
     metric_out: string,
     surface_reference: InputPathType,
     surface_distorted: InputPathType,
-    smooth: SurfaceDistortionSmoothParameters | null = null,
-    match_surface_area: SurfaceDistortionMatchSurfaceAreaParameters | null = null,
+    smooth: SurfaceDistortionSmoothParamsDict | null = null,
+    match_surface_area: SurfaceDistortionMatchSurfaceAreaParamsDict | null = null,
     caret5_method: boolean = false,
     edge_method: boolean = false,
     log2: boolean | null = false,
@@ -319,10 +319,16 @@ function surface_distortion(
 
 export {
       SURFACE_DISTORTION_METADATA,
+      SurfaceDistortionMatchSurfaceAreaParamsDict,
+      SurfaceDistortionMatchSurfaceAreaParamsDictTagged,
       SurfaceDistortionOutputs,
+      SurfaceDistortionParamsDict,
+      SurfaceDistortionParamsDictTagged,
+      SurfaceDistortionSmoothParamsDict,
+      SurfaceDistortionSmoothParamsDictTagged,
       surface_distortion,
       surface_distortion_execute,
-      surface_distortion_match_surface_area_params,
+      surface_distortion_match_surface_area,
       surface_distortion_params,
-      surface_distortion_smooth_params,
+      surface_distortion_smooth,
 };

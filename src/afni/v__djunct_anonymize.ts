@@ -11,18 +11,18 @@ const V__DJUNCT_ANONYMIZE_METADATA: Metadata = {
 };
 
 
-interface VDjunctAnonymizeParameters {
+interface VDjunctAnonymizeParamsDict {
     "@type"?: "afni/@djunct_anonymize";
     "input": InputPathType;
     "add_note"?: string | null | undefined;
     "copy_to"?: InputPathType | null | undefined;
     "overwrite": boolean;
 }
-type VDjunctAnonymizeParametersTagged = Required<Pick<VDjunctAnonymizeParameters, '@type'>> & VDjunctAnonymizeParameters;
+type VDjunctAnonymizeParamsDictTagged = Required<Pick<VDjunctAnonymizeParamsDict, '@type'>> & VDjunctAnonymizeParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunctAnonymizeParameters(...)`.
+ * Output object returned when calling `VDjunctAnonymizeParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function v__djunct_anonymize_params(
     add_note: string | null = null,
     copy_to: InputPathType | null = null,
     overwrite: boolean = false,
-): VDjunctAnonymizeParametersTagged {
+): VDjunctAnonymizeParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_anonymize" as const,
         "input": input,
@@ -74,7 +74,7 @@ function v__djunct_anonymize_params(
  * @returns Command-line arguments.
  */
 function v__djunct_anonymize_cargs(
-    params: VDjunctAnonymizeParameters,
+    params: VDjunctAnonymizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function v__djunct_anonymize_cargs(
  * @returns Outputs object.
  */
 function v__djunct_anonymize_outputs(
-    params: VDjunctAnonymizeParameters,
+    params: VDjunctAnonymizeParamsDict,
     execution: Execution,
 ): VDjunctAnonymizeOutputs {
     const ret: VDjunctAnonymizeOutputs = {
@@ -133,7 +133,7 @@ function v__djunct_anonymize_outputs(
  * @returns NamedTuple of outputs (described in `VDjunctAnonymizeOutputs`).
  */
 function v__djunct_anonymize_execute(
-    params: VDjunctAnonymizeParameters,
+    params: VDjunctAnonymizeParamsDict,
     runner: Runner | null = null,
 ): VDjunctAnonymizeOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function v__djunct_anonymize(
 
 export {
       VDjunctAnonymizeOutputs,
+      VDjunctAnonymizeParamsDict,
+      VDjunctAnonymizeParamsDictTagged,
       V__DJUNCT_ANONYMIZE_METADATA,
       v__djunct_anonymize,
       v__djunct_anonymize_execute,

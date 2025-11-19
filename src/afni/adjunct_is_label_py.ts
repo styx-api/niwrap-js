@@ -11,16 +11,16 @@ const ADJUNCT_IS_LABEL_PY_METADATA: Metadata = {
 };
 
 
-interface AdjunctIsLabelPyParameters {
+interface AdjunctIsLabelPyParamsDict {
     "@type"?: "afni/adjunct_is_label.py";
     "infile": InputPathType;
     "label": string;
 }
-type AdjunctIsLabelPyParametersTagged = Required<Pick<AdjunctIsLabelPyParameters, '@type'>> & AdjunctIsLabelPyParameters;
+type AdjunctIsLabelPyParamsDictTagged = Required<Pick<AdjunctIsLabelPyParamsDict, '@type'>> & AdjunctIsLabelPyParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctIsLabelPyParameters(...)`.
+ * Output object returned when calling `AdjunctIsLabelPyParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface AdjunctIsLabelPyOutputs {
 function adjunct_is_label_py_params(
     infile: InputPathType,
     label: string,
-): AdjunctIsLabelPyParametersTagged {
+): AdjunctIsLabelPyParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_is_label.py" as const,
         "infile": infile,
@@ -62,7 +62,7 @@ function adjunct_is_label_py_params(
  * @returns Command-line arguments.
  */
 function adjunct_is_label_py_cargs(
-    params: AdjunctIsLabelPyParameters,
+    params: AdjunctIsLabelPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function adjunct_is_label_py_cargs(
  * @returns Outputs object.
  */
 function adjunct_is_label_py_outputs(
-    params: AdjunctIsLabelPyParameters,
+    params: AdjunctIsLabelPyParamsDict,
     execution: Execution,
 ): AdjunctIsLabelPyOutputs {
     const ret: AdjunctIsLabelPyOutputs = {
@@ -107,7 +107,7 @@ function adjunct_is_label_py_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctIsLabelPyOutputs`).
  */
 function adjunct_is_label_py_execute(
-    params: AdjunctIsLabelPyParameters,
+    params: AdjunctIsLabelPyParamsDict,
     runner: Runner | null = null,
 ): AdjunctIsLabelPyOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function adjunct_is_label_py(
 export {
       ADJUNCT_IS_LABEL_PY_METADATA,
       AdjunctIsLabelPyOutputs,
+      AdjunctIsLabelPyParamsDict,
+      AdjunctIsLabelPyParamsDictTagged,
       adjunct_is_label_py,
       adjunct_is_label_py_execute,
       adjunct_is_label_py_params,

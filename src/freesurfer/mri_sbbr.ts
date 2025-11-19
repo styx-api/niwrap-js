@@ -11,7 +11,7 @@ const MRI_SBBR_METADATA: Metadata = {
 };
 
 
-interface MriSbbrParameters {
+interface MriSbbrParamsDict {
     "@type"?: "freesurfer/mri_sbbr";
     "template_volume": InputPathType;
     "surface_file": InputPathType;
@@ -38,11 +38,11 @@ interface MriSbbrParameters {
     "diagnostic": boolean;
     "check_options": boolean;
 }
-type MriSbbrParametersTagged = Required<Pick<MriSbbrParameters, '@type'>> & MriSbbrParameters;
+type MriSbbrParamsDictTagged = Required<Pick<MriSbbrParamsDict, '@type'>> & MriSbbrParamsDict;
 
 
 /**
- * Output object returned when calling `MriSbbrParameters(...)`.
+ * Output object returned when calling `MriSbbrParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function mri_sbbr_params(
     debug: boolean = false,
     diagnostic: boolean = false,
     check_options: boolean = false,
-): MriSbbrParametersTagged {
+): MriSbbrParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_sbbr" as const,
         "template_volume": template_volume,
@@ -182,7 +182,7 @@ function mri_sbbr_params(
  * @returns Command-line arguments.
  */
 function mri_sbbr_cargs(
-    params: MriSbbrParameters,
+    params: MriSbbrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -323,7 +323,7 @@ function mri_sbbr_cargs(
  * @returns Outputs object.
  */
 function mri_sbbr_outputs(
-    params: MriSbbrParameters,
+    params: MriSbbrParamsDict,
     execution: Execution,
 ): MriSbbrOutputs {
     const ret: MriSbbrOutputs = {
@@ -348,7 +348,7 @@ function mri_sbbr_outputs(
  * @returns NamedTuple of outputs (described in `MriSbbrOutputs`).
  */
 function mri_sbbr_execute(
-    params: MriSbbrParameters,
+    params: MriSbbrParamsDict,
     runner: Runner | null = null,
 ): MriSbbrOutputs {
     runner = runner || getGlobalRunner();
@@ -433,6 +433,8 @@ function mri_sbbr(
 export {
       MRI_SBBR_METADATA,
       MriSbbrOutputs,
+      MriSbbrParamsDict,
+      MriSbbrParamsDictTagged,
       mri_sbbr,
       mri_sbbr_execute,
       mri_sbbr_params,

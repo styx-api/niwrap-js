@@ -11,29 +11,29 @@ const TCKTRANSFORM_METADATA: Metadata = {
 };
 
 
-interface TcktransformConfigParameters {
+interface TcktransformConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TcktransformConfigParametersTagged = Required<Pick<TcktransformConfigParameters, '@type'>> & TcktransformConfigParameters;
+type TcktransformConfigParamsDictTagged = Required<Pick<TcktransformConfigParamsDict, '@type'>> & TcktransformConfigParamsDict;
 
 
-interface TcktransformParameters {
+interface TcktransformParamsDict {
     "@type"?: "mrtrix/tcktransform";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TcktransformConfigParameters> | null | undefined;
+    "config"?: Array<TcktransformConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks": InputPathType;
     "transform": InputPathType;
     "output": string;
 }
-type TcktransformParametersTagged = Required<Pick<TcktransformParameters, '@type'>> & TcktransformParameters;
+type TcktransformParamsDictTagged = Required<Pick<TcktransformParamsDict, '@type'>> & TcktransformParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type TcktransformParametersTagged = Required<Pick<TcktransformParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function tcktransform_config_params(
+function tcktransform_config(
     key: string,
     value: string,
-): TcktransformConfigParametersTagged {
+): TcktransformConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function tcktransform_config_params(
  * @returns Command-line arguments.
  */
 function tcktransform_config_cargs(
-    params: TcktransformConfigParameters,
+    params: TcktransformConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function tcktransform_config_cargs(
 
 
 /**
- * Output object returned when calling `TcktransformParameters(...)`.
+ * Output object returned when calling `TcktransformParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function tcktransform_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TcktransformConfigParameters> | null = null,
+    config: Array<TcktransformConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TcktransformParametersTagged {
+): TcktransformParamsDictTagged {
     const params = {
         "@type": "mrtrix/tcktransform" as const,
         "info": info,
@@ -155,7 +155,7 @@ function tcktransform_params(
  * @returns Command-line arguments.
  */
 function tcktransform_cargs(
-    params: TcktransformParameters,
+    params: TcktransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function tcktransform_cargs(
  * @returns Outputs object.
  */
 function tcktransform_outputs(
-    params: TcktransformParameters,
+    params: TcktransformParamsDict,
     execution: Execution,
 ): TcktransformOutputs {
     const ret: TcktransformOutputs = {
@@ -235,7 +235,7 @@ function tcktransform_outputs(
  * @returns NamedTuple of outputs (described in `TcktransformOutputs`).
  */
 function tcktransform_execute(
-    params: TcktransformParameters,
+    params: TcktransformParamsDict,
     runner: Runner | null = null,
 ): TcktransformOutputs {
     runner = runner || getGlobalRunner();
@@ -287,7 +287,7 @@ function tcktransform(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TcktransformConfigParameters> | null = null,
+    config: Array<TcktransformConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -299,9 +299,13 @@ function tcktransform(
 
 export {
       TCKTRANSFORM_METADATA,
+      TcktransformConfigParamsDict,
+      TcktransformConfigParamsDictTagged,
       TcktransformOutputs,
+      TcktransformParamsDict,
+      TcktransformParamsDictTagged,
       tcktransform,
-      tcktransform_config_params,
+      tcktransform_config,
       tcktransform_execute,
       tcktransform_params,
 };

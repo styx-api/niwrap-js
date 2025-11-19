@@ -11,7 +11,7 @@ const ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA: Metadata = {
 };
 
 
-interface AntsSliceRegularizedRegistrationParameters {
+interface AntsSliceRegularizedRegistrationParamsDict {
     "@type"?: "ants/antsSliceRegularizedRegistration";
     "polydegree": number;
     "output": string;
@@ -24,11 +24,11 @@ interface AntsSliceRegularizedRegistrationParameters {
     "interpolation"?: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null | undefined;
     "verbose"?: 0 | null | undefined;
 }
-type AntsSliceRegularizedRegistrationParametersTagged = Required<Pick<AntsSliceRegularizedRegistrationParameters, '@type'>> & AntsSliceRegularizedRegistrationParameters;
+type AntsSliceRegularizedRegistrationParamsDictTagged = Required<Pick<AntsSliceRegularizedRegistrationParamsDict, '@type'>> & AntsSliceRegularizedRegistrationParamsDict;
 
 
 /**
- * Output object returned when calling `AntsSliceRegularizedRegistrationParameters(...)`.
+ * Output object returned when calling `AntsSliceRegularizedRegistrationParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function ants_slice_regularized_registration_params(
     mask: InputPathType | null = null,
     interpolation: "Linear" | "NearestNeighbor" | "MultiLabel" | "Gaussian" | "BSpline" | "CosineWindowedSinc" | "WelchWindowedSinc" | "HammingWindowedSinc" | "LanczosWindowedSinc" | "GenericLabel" | null = null,
     verbose: 0 | null = null,
-): AntsSliceRegularizedRegistrationParametersTagged {
+): AntsSliceRegularizedRegistrationParamsDictTagged {
     const params = {
         "@type": "ants/antsSliceRegularizedRegistration" as const,
         "polydegree": polydegree,
@@ -108,7 +108,7 @@ function ants_slice_regularized_registration_params(
  * @returns Command-line arguments.
  */
 function ants_slice_regularized_registration_cargs(
-    params: AntsSliceRegularizedRegistrationParameters,
+    params: AntsSliceRegularizedRegistrationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -172,7 +172,7 @@ function ants_slice_regularized_registration_cargs(
  * @returns Outputs object.
  */
 function ants_slice_regularized_registration_outputs(
-    params: AntsSliceRegularizedRegistrationParameters,
+    params: AntsSliceRegularizedRegistrationParamsDict,
     execution: Execution,
 ): AntsSliceRegularizedRegistrationOutputs {
     const ret: AntsSliceRegularizedRegistrationOutputs = {
@@ -199,7 +199,7 @@ function ants_slice_regularized_registration_outputs(
  * @returns NamedTuple of outputs (described in `AntsSliceRegularizedRegistrationOutputs`).
  */
 function ants_slice_regularized_registration_execute(
-    params: AntsSliceRegularizedRegistrationParameters,
+    params: AntsSliceRegularizedRegistrationParamsDict,
     runner: Runner | null = null,
 ): AntsSliceRegularizedRegistrationOutputs {
     runner = runner || getGlobalRunner();
@@ -256,6 +256,8 @@ function ants_slice_regularized_registration(
 export {
       ANTS_SLICE_REGULARIZED_REGISTRATION_METADATA,
       AntsSliceRegularizedRegistrationOutputs,
+      AntsSliceRegularizedRegistrationParamsDict,
+      AntsSliceRegularizedRegistrationParamsDictTagged,
       ants_slice_regularized_registration,
       ants_slice_regularized_registration_execute,
       ants_slice_regularized_registration_params,

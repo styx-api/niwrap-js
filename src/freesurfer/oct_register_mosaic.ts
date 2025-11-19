@@ -11,18 +11,18 @@ const OCT_REGISTER_MOSAIC_METADATA: Metadata = {
 };
 
 
-interface OctRegisterMosaicParameters {
+interface OctRegisterMosaicParamsDict {
     "@type"?: "freesurfer/oct_register_mosaic";
     "tiles_or_mosaic_list": Array<string>;
     "output_volume": string;
     "downsample"?: number | null | undefined;
     "weight_file"?: InputPathType | null | undefined;
 }
-type OctRegisterMosaicParametersTagged = Required<Pick<OctRegisterMosaicParameters, '@type'>> & OctRegisterMosaicParameters;
+type OctRegisterMosaicParamsDictTagged = Required<Pick<OctRegisterMosaicParamsDict, '@type'>> & OctRegisterMosaicParamsDict;
 
 
 /**
- * Output object returned when calling `OctRegisterMosaicParameters(...)`.
+ * Output object returned when calling `OctRegisterMosaicParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function oct_register_mosaic_params(
     output_volume: string,
     downsample: number | null = null,
     weight_file: InputPathType | null = null,
-): OctRegisterMosaicParametersTagged {
+): OctRegisterMosaicParamsDictTagged {
     const params = {
         "@type": "freesurfer/oct_register_mosaic" as const,
         "tiles_or_mosaic_list": tiles_or_mosaic_list,
@@ -78,7 +78,7 @@ function oct_register_mosaic_params(
  * @returns Command-line arguments.
  */
 function oct_register_mosaic_cargs(
-    params: OctRegisterMosaicParameters,
+    params: OctRegisterMosaicParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function oct_register_mosaic_cargs(
  * @returns Outputs object.
  */
 function oct_register_mosaic_outputs(
-    params: OctRegisterMosaicParameters,
+    params: OctRegisterMosaicParamsDict,
     execution: Execution,
 ): OctRegisterMosaicOutputs {
     const ret: OctRegisterMosaicOutputs = {
@@ -136,7 +136,7 @@ function oct_register_mosaic_outputs(
  * @returns NamedTuple of outputs (described in `OctRegisterMosaicOutputs`).
  */
 function oct_register_mosaic_execute(
-    params: OctRegisterMosaicParameters,
+    params: OctRegisterMosaicParamsDict,
     runner: Runner | null = null,
 ): OctRegisterMosaicOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function oct_register_mosaic(
 export {
       OCT_REGISTER_MOSAIC_METADATA,
       OctRegisterMosaicOutputs,
+      OctRegisterMosaicParamsDict,
+      OctRegisterMosaicParamsDictTagged,
       oct_register_mosaic,
       oct_register_mosaic_execute,
       oct_register_mosaic_params,

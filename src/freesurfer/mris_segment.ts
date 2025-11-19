@@ -11,17 +11,17 @@ const MRIS_SEGMENT_METADATA: Metadata = {
 };
 
 
-interface MrisSegmentParameters {
+interface MrisSegmentParamsDict {
     "@type"?: "freesurfer/mris_segment";
     "subjects": Array<string>;
     "output_subject": string;
     "output_file": string;
 }
-type MrisSegmentParametersTagged = Required<Pick<MrisSegmentParameters, '@type'>> & MrisSegmentParameters;
+type MrisSegmentParamsDictTagged = Required<Pick<MrisSegmentParamsDict, '@type'>> & MrisSegmentParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSegmentParameters(...)`.
+ * Output object returned when calling `MrisSegmentParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_segment_params(
     subjects: Array<string>,
     output_subject: string,
     output_file: string,
-): MrisSegmentParametersTagged {
+): MrisSegmentParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_segment" as const,
         "subjects": subjects,
@@ -70,7 +70,7 @@ function mris_segment_params(
  * @returns Command-line arguments.
  */
 function mris_segment_cargs(
-    params: MrisSegmentParameters,
+    params: MrisSegmentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mris_segment_cargs(
  * @returns Outputs object.
  */
 function mris_segment_outputs(
-    params: MrisSegmentParameters,
+    params: MrisSegmentParamsDict,
     execution: Execution,
 ): MrisSegmentOutputs {
     const ret: MrisSegmentOutputs = {
@@ -117,7 +117,7 @@ function mris_segment_outputs(
  * @returns NamedTuple of outputs (described in `MrisSegmentOutputs`).
  */
 function mris_segment_execute(
-    params: MrisSegmentParameters,
+    params: MrisSegmentParamsDict,
     runner: Runner | null = null,
 ): MrisSegmentOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mris_segment(
 export {
       MRIS_SEGMENT_METADATA,
       MrisSegmentOutputs,
+      MrisSegmentParamsDict,
+      MrisSegmentParamsDictTagged,
       mris_segment,
       mris_segment_execute,
       mris_segment_params,

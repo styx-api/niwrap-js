@@ -11,16 +11,16 @@ const FATCAT_MATPLOT_METADATA: Metadata = {
 };
 
 
-interface FatcatMatplotParameters {
+interface FatcatMatplotParamsDict {
     "@type"?: "afni/FATCAT_matplot";
     "directory": string;
     "shiny_folder": boolean;
 }
-type FatcatMatplotParametersTagged = Required<Pick<FatcatMatplotParameters, '@type'>> & FatcatMatplotParameters;
+type FatcatMatplotParamsDictTagged = Required<Pick<FatcatMatplotParamsDict, '@type'>> & FatcatMatplotParamsDict;
 
 
 /**
- * Output object returned when calling `FatcatMatplotParameters(...)`.
+ * Output object returned when calling `FatcatMatplotParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FatcatMatplotOutputs {
 function fatcat_matplot_params(
     directory: string,
     shiny_folder: boolean = false,
-): FatcatMatplotParametersTagged {
+): FatcatMatplotParamsDictTagged {
     const params = {
         "@type": "afni/FATCAT_matplot" as const,
         "directory": directory,
@@ -62,7 +62,7 @@ function fatcat_matplot_params(
  * @returns Command-line arguments.
  */
 function fatcat_matplot_cargs(
-    params: FatcatMatplotParameters,
+    params: FatcatMatplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function fatcat_matplot_cargs(
  * @returns Outputs object.
  */
 function fatcat_matplot_outputs(
-    params: FatcatMatplotParameters,
+    params: FatcatMatplotParamsDict,
     execution: Execution,
 ): FatcatMatplotOutputs {
     const ret: FatcatMatplotOutputs = {
@@ -109,7 +109,7 @@ function fatcat_matplot_outputs(
  * @returns NamedTuple of outputs (described in `FatcatMatplotOutputs`).
  */
 function fatcat_matplot_execute(
-    params: FatcatMatplotParameters,
+    params: FatcatMatplotParamsDict,
     runner: Runner | null = null,
 ): FatcatMatplotOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function fatcat_matplot(
 export {
       FATCAT_MATPLOT_METADATA,
       FatcatMatplotOutputs,
+      FatcatMatplotParamsDict,
+      FatcatMatplotParamsDictTagged,
       fatcat_matplot,
       fatcat_matplot_execute,
       fatcat_matplot_params,

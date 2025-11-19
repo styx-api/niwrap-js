@@ -11,7 +11,7 @@ const V_3D_CLUST_SIM_METADATA: Metadata = {
 };
 
 
-interface V3dClustSimParameters {
+interface V3dClustSimParamsDict {
     "@type"?: "afni/3dClustSim";
     "nxyz"?: string | null | undefined;
     "dxyz"?: string | null | undefined;
@@ -36,11 +36,11 @@ interface V3dClustSimParameters {
     "quiet": boolean;
     "ssave"?: string | null | undefined;
 }
-type V3dClustSimParametersTagged = Required<Pick<V3dClustSimParameters, '@type'>> & V3dClustSimParameters;
+type V3dClustSimParamsDictTagged = Required<Pick<V3dClustSimParamsDict, '@type'>> & V3dClustSimParamsDict;
 
 
 /**
- * Output object returned when calling `V3dClustSimParameters(...)`.
+ * Output object returned when calling `V3dClustSimParamsDict(...)`.
  *
  * @interface
  */
@@ -143,7 +143,7 @@ function v_3d_clust_sim_params(
     cmd: string | null = null,
     quiet: boolean = false,
     ssave: string | null = null,
-): V3dClustSimParametersTagged {
+): V3dClustSimParamsDictTagged {
     const params = {
         "@type": "afni/3dClustSim" as const,
         "ball": ball,
@@ -208,7 +208,7 @@ function v_3d_clust_sim_params(
  * @returns Command-line arguments.
  */
 function v_3d_clust_sim_cargs(
-    params: V3dClustSimParameters,
+    params: V3dClustSimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -331,7 +331,7 @@ function v_3d_clust_sim_cargs(
  * @returns Outputs object.
  */
 function v_3d_clust_sim_outputs(
-    params: V3dClustSimParameters,
+    params: V3dClustSimParamsDict,
     execution: Execution,
 ): V3dClustSimOutputs {
     const ret: V3dClustSimOutputs = {
@@ -366,7 +366,7 @@ function v_3d_clust_sim_outputs(
  * @returns NamedTuple of outputs (described in `V3dClustSimOutputs`).
  */
 function v_3d_clust_sim_execute(
-    params: V3dClustSimParameters,
+    params: V3dClustSimParamsDict,
     runner: Runner | null = null,
 ): V3dClustSimOutputs {
     runner = runner || getGlobalRunner();
@@ -446,6 +446,8 @@ function v_3d_clust_sim(
 
 export {
       V3dClustSimOutputs,
+      V3dClustSimParamsDict,
+      V3dClustSimParamsDictTagged,
       V_3D_CLUST_SIM_METADATA,
       v_3d_clust_sim,
       v_3d_clust_sim_execute,

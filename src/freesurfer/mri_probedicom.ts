@@ -11,17 +11,17 @@ const MRI_PROBEDICOM_METADATA: Metadata = {
 };
 
 
-interface MriProbedicomParameters {
+interface MriProbedicomParamsDict {
     "@type"?: "freesurfer/mri_probedicom";
     "dicom_file": InputPathType;
     "option1"?: string | null | undefined;
     "option2"?: string | null | undefined;
 }
-type MriProbedicomParametersTagged = Required<Pick<MriProbedicomParameters, '@type'>> & MriProbedicomParameters;
+type MriProbedicomParamsDictTagged = Required<Pick<MriProbedicomParamsDict, '@type'>> & MriProbedicomParamsDict;
 
 
 /**
- * Output object returned when calling `MriProbedicomParameters(...)`.
+ * Output object returned when calling `MriProbedicomParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_probedicom_params(
     dicom_file: InputPathType,
     option1: string | null = null,
     option2: string | null = null,
-): MriProbedicomParametersTagged {
+): MriProbedicomParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_probedicom" as const,
         "dicom_file": dicom_file,
@@ -74,7 +74,7 @@ function mri_probedicom_params(
  * @returns Command-line arguments.
  */
 function mri_probedicom_cargs(
-    params: MriProbedicomParameters,
+    params: MriProbedicomParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function mri_probedicom_cargs(
  * @returns Outputs object.
  */
 function mri_probedicom_outputs(
-    params: MriProbedicomParameters,
+    params: MriProbedicomParamsDict,
     execution: Execution,
 ): MriProbedicomOutputs {
     const ret: MriProbedicomOutputs = {
@@ -131,7 +131,7 @@ function mri_probedicom_outputs(
  * @returns NamedTuple of outputs (described in `MriProbedicomOutputs`).
  */
 function mri_probedicom_execute(
-    params: MriProbedicomParameters,
+    params: MriProbedicomParamsDict,
     runner: Runner | null = null,
 ): MriProbedicomOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mri_probedicom(
 export {
       MRI_PROBEDICOM_METADATA,
       MriProbedicomOutputs,
+      MriProbedicomParamsDict,
+      MriProbedicomParamsDictTagged,
       mri_probedicom,
       mri_probedicom_execute,
       mri_probedicom_params,

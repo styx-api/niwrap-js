@@ -10,24 +10,24 @@ const CIFTI_CREATE_SCALAR_SERIES_METADATA: Metadata = {
 };
 
 
-interface CiftiCreateScalarSeriesSeriesParameters {
+interface CiftiCreateScalarSeriesSeriesParamsDict {
     "@type"?: "series";
     "unit": string;
     "start": number;
     "step": number;
 }
-type CiftiCreateScalarSeriesSeriesParametersTagged = Required<Pick<CiftiCreateScalarSeriesSeriesParameters, '@type'>> & CiftiCreateScalarSeriesSeriesParameters;
+type CiftiCreateScalarSeriesSeriesParamsDictTagged = Required<Pick<CiftiCreateScalarSeriesSeriesParamsDict, '@type'>> & CiftiCreateScalarSeriesSeriesParamsDict;
 
 
-interface CiftiCreateScalarSeriesParameters {
+interface CiftiCreateScalarSeriesParamsDict {
     "@type"?: "workbench/cifti-create-scalar-series";
     "cifti-out": string;
     "transpose": boolean;
     "file"?: string | null | undefined;
-    "series"?: CiftiCreateScalarSeriesSeriesParameters | null | undefined;
+    "series"?: CiftiCreateScalarSeriesSeriesParamsDict | null | undefined;
     "input": string;
 }
-type CiftiCreateScalarSeriesParametersTagged = Required<Pick<CiftiCreateScalarSeriesParameters, '@type'>> & CiftiCreateScalarSeriesParameters;
+type CiftiCreateScalarSeriesParamsDictTagged = Required<Pick<CiftiCreateScalarSeriesParamsDict, '@type'>> & CiftiCreateScalarSeriesParamsDict;
 
 
 /**
@@ -39,11 +39,11 @@ type CiftiCreateScalarSeriesParametersTagged = Required<Pick<CiftiCreateScalarSe
  *
  * @returns Parameter dictionary
  */
-function cifti_create_scalar_series_series_params(
+function cifti_create_scalar_series_series(
     unit: string,
     start: number,
     step: number,
-): CiftiCreateScalarSeriesSeriesParametersTagged {
+): CiftiCreateScalarSeriesSeriesParamsDictTagged {
     const params = {
         "@type": "series" as const,
         "unit": unit,
@@ -63,7 +63,7 @@ function cifti_create_scalar_series_series_params(
  * @returns Command-line arguments.
  */
 function cifti_create_scalar_series_series_cargs(
-    params: CiftiCreateScalarSeriesSeriesParameters,
+    params: CiftiCreateScalarSeriesSeriesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function cifti_create_scalar_series_series_cargs(
 
 
 /**
- * Output object returned when calling `CiftiCreateScalarSeriesParameters(...)`.
+ * Output object returned when calling `CiftiCreateScalarSeriesParamsDict(...)`.
  *
  * @interface
  */
@@ -112,8 +112,8 @@ function cifti_create_scalar_series_params(
     file: string | null,
     input: string,
     transpose: boolean = false,
-    series: CiftiCreateScalarSeriesSeriesParameters | null = null,
-): CiftiCreateScalarSeriesParametersTagged {
+    series: CiftiCreateScalarSeriesSeriesParamsDict | null = null,
+): CiftiCreateScalarSeriesParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-scalar-series" as const,
         "cifti-out": cifti_out,
@@ -139,7 +139,7 @@ function cifti_create_scalar_series_params(
  * @returns Command-line arguments.
  */
 function cifti_create_scalar_series_cargs(
-    params: CiftiCreateScalarSeriesParameters,
+    params: CiftiCreateScalarSeriesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,7 +168,7 @@ function cifti_create_scalar_series_cargs(
  * @returns Outputs object.
  */
 function cifti_create_scalar_series_outputs(
-    params: CiftiCreateScalarSeriesParameters,
+    params: CiftiCreateScalarSeriesParamsDict,
     execution: Execution,
 ): CiftiCreateScalarSeriesOutputs {
     const ret: CiftiCreateScalarSeriesOutputs = {
@@ -197,7 +197,7 @@ function cifti_create_scalar_series_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
  */
 function cifti_create_scalar_series_execute(
-    params: CiftiCreateScalarSeriesParameters,
+    params: CiftiCreateScalarSeriesParamsDict,
     runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
     runner = runner || getGlobalRunner();
@@ -238,7 +238,7 @@ function cifti_create_scalar_series(
     file: string | null,
     input: string,
     transpose: boolean = false,
-    series: CiftiCreateScalarSeriesSeriesParameters | null = null,
+    series: CiftiCreateScalarSeriesSeriesParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
     const params = cifti_create_scalar_series_params(cifti_out, file, input, transpose, series)
@@ -249,8 +249,12 @@ function cifti_create_scalar_series(
 export {
       CIFTI_CREATE_SCALAR_SERIES_METADATA,
       CiftiCreateScalarSeriesOutputs,
+      CiftiCreateScalarSeriesParamsDict,
+      CiftiCreateScalarSeriesParamsDictTagged,
+      CiftiCreateScalarSeriesSeriesParamsDict,
+      CiftiCreateScalarSeriesSeriesParamsDictTagged,
       cifti_create_scalar_series,
       cifti_create_scalar_series_execute,
       cifti_create_scalar_series_params,
-      cifti_create_scalar_series_series_params,
+      cifti_create_scalar_series_series,
 };

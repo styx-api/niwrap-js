@@ -11,7 +11,7 @@ const V_3DMATMULT_METADATA: Metadata = {
 };
 
 
-interface V3dmatmultParameters {
+interface V3dmatmultParamsDict {
     "@type"?: "afni/3dmatmult";
     "inputA": InputPathType;
     "inputB": InputPathType;
@@ -19,11 +19,11 @@ interface V3dmatmultParameters {
     "datum"?: string | null | undefined;
     "verb"?: number | null | undefined;
 }
-type V3dmatmultParametersTagged = Required<Pick<V3dmatmultParameters, '@type'>> & V3dmatmultParameters;
+type V3dmatmultParamsDictTagged = Required<Pick<V3dmatmultParamsDict, '@type'>> & V3dmatmultParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmatmultParameters(...)`.
+ * Output object returned when calling `V3dmatmultParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v_3dmatmult_params(
     prefix: string,
     datum: string | null = null,
     verb: number | null = null,
-): V3dmatmultParametersTagged {
+): V3dmatmultParamsDictTagged {
     const params = {
         "@type": "afni/3dmatmult" as const,
         "inputA": input_a,
@@ -82,7 +82,7 @@ function v_3dmatmult_params(
  * @returns Command-line arguments.
  */
 function v_3dmatmult_cargs(
-    params: V3dmatmultParameters,
+    params: V3dmatmultParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function v_3dmatmult_cargs(
  * @returns Outputs object.
  */
 function v_3dmatmult_outputs(
-    params: V3dmatmultParameters,
+    params: V3dmatmultParamsDict,
     execution: Execution,
 ): V3dmatmultOutputs {
     const ret: V3dmatmultOutputs = {
@@ -150,7 +150,7 @@ function v_3dmatmult_outputs(
  * @returns NamedTuple of outputs (described in `V3dmatmultOutputs`).
  */
 function v_3dmatmult_execute(
-    params: V3dmatmultParameters,
+    params: V3dmatmultParamsDict,
     runner: Runner | null = null,
 ): V3dmatmultOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function v_3dmatmult(
 
 export {
       V3dmatmultOutputs,
+      V3dmatmultParamsDict,
+      V3dmatmultParamsDictTagged,
       V_3DMATMULT_METADATA,
       v_3dmatmult,
       v_3dmatmult_execute,

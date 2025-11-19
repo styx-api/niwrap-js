@@ -11,7 +11,7 @@ const MRIS_REMOVE_INTERSECTION_METADATA: Metadata = {
 };
 
 
-interface MrisRemoveIntersectionParameters {
+interface MrisRemoveIntersectionParamsDict {
     "@type"?: "freesurfer/mris_remove_intersection";
     "surface_in_file": InputPathType;
     "corrected_surface_out_file": string;
@@ -19,11 +19,11 @@ interface MrisRemoveIntersectionParameters {
     "map_option"?: InputPathType | null | undefined;
     "projdistmm"?: number | null | undefined;
 }
-type MrisRemoveIntersectionParametersTagged = Required<Pick<MrisRemoveIntersectionParameters, '@type'>> & MrisRemoveIntersectionParameters;
+type MrisRemoveIntersectionParamsDictTagged = Required<Pick<MrisRemoveIntersectionParamsDict, '@type'>> & MrisRemoveIntersectionParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRemoveIntersectionParameters(...)`.
+ * Output object returned when calling `MrisRemoveIntersectionParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function mris_remove_intersection_params(
     fill_holes: boolean = false,
     map_option: InputPathType | null = null,
     projdistmm: number | null = null,
-): MrisRemoveIntersectionParametersTagged {
+): MrisRemoveIntersectionParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_remove_intersection" as const,
         "surface_in_file": surface_in_file,
@@ -86,7 +86,7 @@ function mris_remove_intersection_params(
  * @returns Command-line arguments.
  */
 function mris_remove_intersection_cargs(
-    params: MrisRemoveIntersectionParameters,
+    params: MrisRemoveIntersectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function mris_remove_intersection_cargs(
  * @returns Outputs object.
  */
 function mris_remove_intersection_outputs(
-    params: MrisRemoveIntersectionParameters,
+    params: MrisRemoveIntersectionParamsDict,
     execution: Execution,
 ): MrisRemoveIntersectionOutputs {
     const ret: MrisRemoveIntersectionOutputs = {
@@ -145,7 +145,7 @@ function mris_remove_intersection_outputs(
  * @returns NamedTuple of outputs (described in `MrisRemoveIntersectionOutputs`).
  */
 function mris_remove_intersection_execute(
-    params: MrisRemoveIntersectionParameters,
+    params: MrisRemoveIntersectionParamsDict,
     runner: Runner | null = null,
 ): MrisRemoveIntersectionOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function mris_remove_intersection(
 export {
       MRIS_REMOVE_INTERSECTION_METADATA,
       MrisRemoveIntersectionOutputs,
+      MrisRemoveIntersectionParamsDict,
+      MrisRemoveIntersectionParamsDictTagged,
       mris_remove_intersection,
       mris_remove_intersection_execute,
       mris_remove_intersection_params,

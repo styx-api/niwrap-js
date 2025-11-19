@@ -11,7 +11,7 @@ const V__FS_ROI_LABEL_METADATA: Metadata = {
 };
 
 
-interface VFsRoiLabelParameters {
+interface VFsRoiLabelParamsDict {
     "@type"?: "afni/@FS_roi_label";
     "label_int"?: number | null | undefined;
     "lab_flag"?: number | null | undefined;
@@ -23,11 +23,11 @@ interface VFsRoiLabelParameters {
     "slab_int"?: number | null | undefined;
     "sname_name"?: string | null | undefined;
 }
-type VFsRoiLabelParametersTagged = Required<Pick<VFsRoiLabelParameters, '@type'>> & VFsRoiLabelParameters;
+type VFsRoiLabelParamsDictTagged = Required<Pick<VFsRoiLabelParamsDict, '@type'>> & VFsRoiLabelParamsDict;
 
 
 /**
- * Output object returned when calling `VFsRoiLabelParameters(...)`.
+ * Output object returned when calling `VFsRoiLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function v__fs_roi_label_params(
     surf_annot_cmap: InputPathType | null = null,
     slab_int: number | null = null,
     sname_name: string | null = null,
-): VFsRoiLabelParametersTagged {
+): VFsRoiLabelParamsDictTagged {
     const params = {
         "@type": "afni/@FS_roi_label" as const,
     };
@@ -108,7 +108,7 @@ function v__fs_roi_label_params(
  * @returns Command-line arguments.
  */
 function v__fs_roi_label_cargs(
-    params: VFsRoiLabelParameters,
+    params: VFsRoiLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function v__fs_roi_label_cargs(
  * @returns Outputs object.
  */
 function v__fs_roi_label_outputs(
-    params: VFsRoiLabelParameters,
+    params: VFsRoiLabelParamsDict,
     execution: Execution,
 ): VFsRoiLabelOutputs {
     const ret: VFsRoiLabelOutputs = {
@@ -202,7 +202,7 @@ function v__fs_roi_label_outputs(
  * @returns NamedTuple of outputs (described in `VFsRoiLabelOutputs`).
  */
 function v__fs_roi_label_execute(
-    params: VFsRoiLabelParameters,
+    params: VFsRoiLabelParamsDict,
     runner: Runner | null = null,
 ): VFsRoiLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -256,6 +256,8 @@ function v__fs_roi_label(
 
 export {
       VFsRoiLabelOutputs,
+      VFsRoiLabelParamsDict,
+      VFsRoiLabelParamsDictTagged,
       V__FS_ROI_LABEL_METADATA,
       v__fs_roi_label,
       v__fs_roi_label_execute,

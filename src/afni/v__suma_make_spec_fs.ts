@@ -11,7 +11,7 @@ const V__SUMA_MAKE_SPEC_FS_METADATA: Metadata = {
 };
 
 
-interface VSumaMakeSpecFsParameters {
+interface VSumaMakeSpecFsParamsDict {
     "@type"?: "afni/@SUMA_Make_Spec_FS";
     "subject_id": string;
     "debug"?: number | null | undefined;
@@ -30,11 +30,11 @@ interface VSumaMakeSpecFsParameters {
     "ldpref"?: string | null | undefined;
     "no_ld": boolean;
 }
-type VSumaMakeSpecFsParametersTagged = Required<Pick<VSumaMakeSpecFsParameters, '@type'>> & VSumaMakeSpecFsParameters;
+type VSumaMakeSpecFsParamsDictTagged = Required<Pick<VSumaMakeSpecFsParamsDict, '@type'>> & VSumaMakeSpecFsParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaMakeSpecFsParameters(...)`.
+ * Output object returned when calling `VSumaMakeSpecFsParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function v__suma_make_spec_fs_params(
     ld: number | null = null,
     ldpref: string | null = null,
     no_ld: boolean = false,
-): VSumaMakeSpecFsParametersTagged {
+): VSumaMakeSpecFsParamsDictTagged {
     const params = {
         "@type": "afni/@SUMA_Make_Spec_FS" as const,
         "subject_id": subject_id,
@@ -138,7 +138,7 @@ function v__suma_make_spec_fs_params(
  * @returns Command-line arguments.
  */
 function v__suma_make_spec_fs_cargs(
-    params: VSumaMakeSpecFsParameters,
+    params: VSumaMakeSpecFsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -229,7 +229,7 @@ function v__suma_make_spec_fs_cargs(
  * @returns Outputs object.
  */
 function v__suma_make_spec_fs_outputs(
-    params: VSumaMakeSpecFsParameters,
+    params: VSumaMakeSpecFsParamsDict,
     execution: Execution,
 ): VSumaMakeSpecFsOutputs {
     const ret: VSumaMakeSpecFsOutputs = {
@@ -255,7 +255,7 @@ function v__suma_make_spec_fs_outputs(
  * @returns NamedTuple of outputs (described in `VSumaMakeSpecFsOutputs`).
  */
 function v__suma_make_spec_fs_execute(
-    params: VSumaMakeSpecFsParameters,
+    params: VSumaMakeSpecFsParamsDict,
     runner: Runner | null = null,
 ): VSumaMakeSpecFsOutputs {
     runner = runner || getGlobalRunner();
@@ -323,6 +323,8 @@ function v__suma_make_spec_fs(
 
 export {
       VSumaMakeSpecFsOutputs,
+      VSumaMakeSpecFsParamsDict,
+      VSumaMakeSpecFsParamsDictTagged,
       V__SUMA_MAKE_SPEC_FS_METADATA,
       v__suma_make_spec_fs,
       v__suma_make_spec_fs_execute,

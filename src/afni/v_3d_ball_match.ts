@@ -11,7 +11,7 @@ const V_3D_BALL_MATCH_METADATA: Metadata = {
 };
 
 
-interface V3dBallMatchParameters {
+interface V3dBallMatchParamsDict {
     "@type"?: "afni/3dBallMatch";
     "input_dataset": InputPathType;
     "radius"?: number | null | undefined;
@@ -19,11 +19,11 @@ interface V3dBallMatchParameters {
     "ball_radius"?: number | null | undefined;
     "spheroid_axes"?: Array<number> | null | undefined;
 }
-type V3dBallMatchParametersTagged = Required<Pick<V3dBallMatchParameters, '@type'>> & V3dBallMatchParameters;
+type V3dBallMatchParamsDictTagged = Required<Pick<V3dBallMatchParamsDict, '@type'>> & V3dBallMatchParamsDict;
 
 
 /**
- * Output object returned when calling `V3dBallMatchParameters(...)`.
+ * Output object returned when calling `V3dBallMatchParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v_3d_ball_match_params(
     dataset_option: string | null = null,
     ball_radius: number | null = null,
     spheroid_axes: Array<number> | null = null,
-): V3dBallMatchParametersTagged {
+): V3dBallMatchParamsDictTagged {
     const params = {
         "@type": "afni/3dBallMatch" as const,
         "input_dataset": input_dataset,
@@ -86,7 +86,7 @@ function v_3d_ball_match_params(
  * @returns Command-line arguments.
  */
 function v_3d_ball_match_cargs(
-    params: V3dBallMatchParameters,
+    params: V3dBallMatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function v_3d_ball_match_cargs(
  * @returns Outputs object.
  */
 function v_3d_ball_match_outputs(
-    params: V3dBallMatchParameters,
+    params: V3dBallMatchParamsDict,
     execution: Execution,
 ): V3dBallMatchOutputs {
     const ret: V3dBallMatchOutputs = {
@@ -152,7 +152,7 @@ function v_3d_ball_match_outputs(
  * @returns NamedTuple of outputs (described in `V3dBallMatchOutputs`).
  */
 function v_3d_ball_match_execute(
-    params: V3dBallMatchParameters,
+    params: V3dBallMatchParamsDict,
     runner: Runner | null = null,
 ): V3dBallMatchOutputs {
     runner = runner || getGlobalRunner();
@@ -198,6 +198,8 @@ function v_3d_ball_match(
 
 export {
       V3dBallMatchOutputs,
+      V3dBallMatchParamsDict,
+      V3dBallMatchParamsDictTagged,
       V_3D_BALL_MATCH_METADATA,
       v_3d_ball_match,
       v_3d_ball_match_execute,

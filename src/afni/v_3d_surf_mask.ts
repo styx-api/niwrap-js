@@ -11,7 +11,7 @@ const V_3D_SURF_MASK_METADATA: Metadata = {
 };
 
 
-interface V3dSurfMaskParameters {
+interface V3dSurfMaskParamsDict {
     "@type"?: "afni/3dSurfMask";
     "surface_type": string;
     "surface_file": InputPathType;
@@ -23,11 +23,11 @@ interface V3dSurfMaskParameters {
     "flip_orientation": boolean;
     "no_distance": boolean;
 }
-type V3dSurfMaskParametersTagged = Required<Pick<V3dSurfMaskParameters, '@type'>> & V3dSurfMaskParameters;
+type V3dSurfMaskParamsDictTagged = Required<Pick<V3dSurfMaskParamsDict, '@type'>> & V3dSurfMaskParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSurfMaskParameters(...)`.
+ * Output object returned when calling `V3dSurfMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_surf_mask_params(
     mask_only: boolean = false,
     flip_orientation: boolean = false,
     no_distance: boolean = false,
-): V3dSurfMaskParametersTagged {
+): V3dSurfMaskParamsDictTagged {
     const params = {
         "@type": "afni/3dSurfMask" as const,
         "surface_type": surface_type,
@@ -102,7 +102,7 @@ function v_3d_surf_mask_params(
  * @returns Command-line arguments.
  */
 function v_3d_surf_mask_cargs(
-    params: V3dSurfMaskParameters,
+    params: V3dSurfMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function v_3d_surf_mask_cargs(
  * @returns Outputs object.
  */
 function v_3d_surf_mask_outputs(
-    params: V3dSurfMaskParameters,
+    params: V3dSurfMaskParamsDict,
     execution: Execution,
 ): V3dSurfMaskOutputs {
     const ret: V3dSurfMaskOutputs = {
@@ -172,7 +172,7 @@ function v_3d_surf_mask_outputs(
  * @returns NamedTuple of outputs (described in `V3dSurfMaskOutputs`).
  */
 function v_3d_surf_mask_execute(
-    params: V3dSurfMaskParameters,
+    params: V3dSurfMaskParamsDict,
     runner: Runner | null = null,
 ): V3dSurfMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -226,6 +226,8 @@ function v_3d_surf_mask(
 
 export {
       V3dSurfMaskOutputs,
+      V3dSurfMaskParamsDict,
+      V3dSurfMaskParamsDictTagged,
       V_3D_SURF_MASK_METADATA,
       v_3d_surf_mask,
       v_3d_surf_mask_execute,

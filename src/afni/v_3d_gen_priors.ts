@@ -11,7 +11,7 @@ const V_3D_GEN_PRIORS_METADATA: Metadata = {
 };
 
 
-interface V3dGenPriorsParameters {
+interface V3dGenPriorsParamsDict {
     "@type"?: "afni/3dGenPriors";
     "sigs": InputPathType;
     "tdist": InputPathType;
@@ -40,11 +40,11 @@ interface V3dGenPriorsParameters {
     "fast": boolean;
     "slow": boolean;
 }
-type V3dGenPriorsParametersTagged = Required<Pick<V3dGenPriorsParameters, '@type'>> & V3dGenPriorsParameters;
+type V3dGenPriorsParamsDictTagged = Required<Pick<V3dGenPriorsParamsDict, '@type'>> & V3dGenPriorsParamsDict;
 
 
 /**
- * Output object returned when calling `V3dGenPriorsParameters(...)`.
+ * Output object returned when calling `V3dGenPriorsParamsDict(...)`.
  *
  * @interface
  */
@@ -123,7 +123,7 @@ function v_3d_gen_priors_params(
     show_this_dist: string | null = null,
     fast: boolean = false,
     slow: boolean = false,
-): V3dGenPriorsParametersTagged {
+): V3dGenPriorsParamsDictTagged {
     const params = {
         "@type": "afni/3dGenPriors" as const,
         "sigs": sigs,
@@ -196,7 +196,7 @@ function v_3d_gen_priors_params(
  * @returns Command-line arguments.
  */
 function v_3d_gen_priors_cargs(
-    params: V3dGenPriorsParameters,
+    params: V3dGenPriorsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -343,7 +343,7 @@ function v_3d_gen_priors_cargs(
  * @returns Outputs object.
  */
 function v_3d_gen_priors_outputs(
-    params: V3dGenPriorsParameters,
+    params: V3dGenPriorsParamsDict,
     execution: Execution,
 ): V3dGenPriorsOutputs {
     const ret: V3dGenPriorsOutputs = {
@@ -370,7 +370,7 @@ function v_3d_gen_priors_outputs(
  * @returns NamedTuple of outputs (described in `V3dGenPriorsOutputs`).
  */
 function v_3d_gen_priors_execute(
-    params: V3dGenPriorsParameters,
+    params: V3dGenPriorsParamsDict,
     runner: Runner | null = null,
 ): V3dGenPriorsOutputs {
     runner = runner || getGlobalRunner();
@@ -458,6 +458,8 @@ function v_3d_gen_priors(
 
 export {
       V3dGenPriorsOutputs,
+      V3dGenPriorsParamsDict,
+      V3dGenPriorsParamsDictTagged,
       V_3D_GEN_PRIORS_METADATA,
       v_3d_gen_priors,
       v_3d_gen_priors_execute,

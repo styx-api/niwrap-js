@@ -11,7 +11,7 @@ const TKREGISTERFV_METADATA: Metadata = {
 };
 
 
-interface TkregisterfvParameters {
+interface TkregisterfvParamsDict {
     "@type"?: "freesurfer/tkregisterfv";
     "mov"?: InputPathType | null | undefined;
     "targ"?: InputPathType | null | undefined;
@@ -46,11 +46,11 @@ interface TkregisterfvParameters {
     "fstal": boolean;
     "aux"?: InputPathType | null | undefined;
 }
-type TkregisterfvParametersTagged = Required<Pick<TkregisterfvParameters, '@type'>> & TkregisterfvParameters;
+type TkregisterfvParamsDictTagged = Required<Pick<TkregisterfvParamsDict, '@type'>> & TkregisterfvParamsDict;
 
 
 /**
- * Output object returned when calling `TkregisterfvParameters(...)`.
+ * Output object returned when calling `TkregisterfvParamsDict(...)`.
  *
  * @interface
  */
@@ -133,7 +133,7 @@ function tkregisterfv_params(
     flip_z_flag: boolean = false,
     fstal: boolean = false,
     aux: InputPathType | null = null,
-): TkregisterfvParametersTagged {
+): TkregisterfvParamsDictTagged {
     const params = {
         "@type": "freesurfer/tkregisterfv" as const,
         "reg": reg,
@@ -214,7 +214,7 @@ function tkregisterfv_params(
  * @returns Command-line arguments.
  */
 function tkregisterfv_cargs(
-    params: TkregisterfvParameters,
+    params: TkregisterfvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -377,7 +377,7 @@ function tkregisterfv_cargs(
  * @returns Outputs object.
  */
 function tkregisterfv_outputs(
-    params: TkregisterfvParameters,
+    params: TkregisterfvParamsDict,
     execution: Execution,
 ): TkregisterfvOutputs {
     const ret: TkregisterfvOutputs = {
@@ -402,7 +402,7 @@ function tkregisterfv_outputs(
  * @returns NamedTuple of outputs (described in `TkregisterfvOutputs`).
  */
 function tkregisterfv_execute(
-    params: TkregisterfvParameters,
+    params: TkregisterfvParamsDict,
     runner: Runner | null = null,
 ): TkregisterfvOutputs {
     runner = runner || getGlobalRunner();
@@ -503,6 +503,8 @@ function tkregisterfv(
 export {
       TKREGISTERFV_METADATA,
       TkregisterfvOutputs,
+      TkregisterfvParamsDict,
+      TkregisterfvParamsDictTagged,
       tkregisterfv,
       tkregisterfv_execute,
       tkregisterfv_params,

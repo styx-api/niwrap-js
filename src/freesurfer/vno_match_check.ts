@@ -11,18 +11,18 @@ const VNO_MATCH_CHECK_METADATA: Metadata = {
 };
 
 
-interface VnoMatchCheckParameters {
+interface VnoMatchCheckParamsDict {
     "@type"?: "freesurfer/vno_match_check";
     "subjid": string;
     "debug": boolean;
     "right_hemi": boolean;
     "left_hemi": boolean;
 }
-type VnoMatchCheckParametersTagged = Required<Pick<VnoMatchCheckParameters, '@type'>> & VnoMatchCheckParameters;
+type VnoMatchCheckParamsDictTagged = Required<Pick<VnoMatchCheckParamsDict, '@type'>> & VnoMatchCheckParamsDict;
 
 
 /**
- * Output object returned when calling `VnoMatchCheckParameters(...)`.
+ * Output object returned when calling `VnoMatchCheckParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function vno_match_check_params(
     debug: boolean = false,
     right_hemi: boolean = false,
     left_hemi: boolean = false,
-): VnoMatchCheckParametersTagged {
+): VnoMatchCheckParamsDictTagged {
     const params = {
         "@type": "freesurfer/vno_match_check" as const,
         "subjid": subjid,
@@ -70,7 +70,7 @@ function vno_match_check_params(
  * @returns Command-line arguments.
  */
 function vno_match_check_cargs(
-    params: VnoMatchCheckParameters,
+    params: VnoMatchCheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function vno_match_check_cargs(
  * @returns Outputs object.
  */
 function vno_match_check_outputs(
-    params: VnoMatchCheckParameters,
+    params: VnoMatchCheckParamsDict,
     execution: Execution,
 ): VnoMatchCheckOutputs {
     const ret: VnoMatchCheckOutputs = {
@@ -123,7 +123,7 @@ function vno_match_check_outputs(
  * @returns NamedTuple of outputs (described in `VnoMatchCheckOutputs`).
  */
 function vno_match_check_execute(
-    params: VnoMatchCheckParameters,
+    params: VnoMatchCheckParamsDict,
     runner: Runner | null = null,
 ): VnoMatchCheckOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function vno_match_check(
 export {
       VNO_MATCH_CHECK_METADATA,
       VnoMatchCheckOutputs,
+      VnoMatchCheckParamsDict,
+      VnoMatchCheckParamsDictTagged,
       vno_match_check,
       vno_match_check_execute,
       vno_match_check_params,

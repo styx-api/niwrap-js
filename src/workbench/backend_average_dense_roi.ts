@@ -10,16 +10,16 @@ const BACKEND_AVERAGE_DENSE_ROI_METADATA: Metadata = {
 };
 
 
-interface BackendAverageDenseRoiParameters {
+interface BackendAverageDenseRoiParamsDict {
     "@type"?: "workbench/backend-average-dense-roi";
     "index-list": string;
     "out-file": string;
 }
-type BackendAverageDenseRoiParametersTagged = Required<Pick<BackendAverageDenseRoiParameters, '@type'>> & BackendAverageDenseRoiParameters;
+type BackendAverageDenseRoiParamsDictTagged = Required<Pick<BackendAverageDenseRoiParamsDict, '@type'>> & BackendAverageDenseRoiParamsDict;
 
 
 /**
- * Output object returned when calling `BackendAverageDenseRoiParameters(...)`.
+ * Output object returned when calling `BackendAverageDenseRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -42,7 +42,7 @@ interface BackendAverageDenseRoiOutputs {
 function backend_average_dense_roi_params(
     index_list: string,
     out_file: string,
-): BackendAverageDenseRoiParametersTagged {
+): BackendAverageDenseRoiParamsDictTagged {
     const params = {
         "@type": "workbench/backend-average-dense-roi" as const,
         "index-list": index_list,
@@ -61,7 +61,7 @@ function backend_average_dense_roi_params(
  * @returns Command-line arguments.
  */
 function backend_average_dense_roi_cargs(
-    params: BackendAverageDenseRoiParameters,
+    params: BackendAverageDenseRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function backend_average_dense_roi_cargs(
  * @returns Outputs object.
  */
 function backend_average_dense_roi_outputs(
-    params: BackendAverageDenseRoiParameters,
+    params: BackendAverageDenseRoiParamsDict,
     execution: Execution,
 ): BackendAverageDenseRoiOutputs {
     const ret: BackendAverageDenseRoiOutputs = {
@@ -105,7 +105,7 @@ function backend_average_dense_roi_outputs(
  * @returns NamedTuple of outputs (described in `BackendAverageDenseRoiOutputs`).
  */
 function backend_average_dense_roi_execute(
-    params: BackendAverageDenseRoiParameters,
+    params: BackendAverageDenseRoiParamsDict,
     runner: Runner | null = null,
 ): BackendAverageDenseRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -142,6 +142,8 @@ function backend_average_dense_roi(
 export {
       BACKEND_AVERAGE_DENSE_ROI_METADATA,
       BackendAverageDenseRoiOutputs,
+      BackendAverageDenseRoiParamsDict,
+      BackendAverageDenseRoiParamsDictTagged,
       backend_average_dense_roi,
       backend_average_dense_roi_execute,
       backend_average_dense_roi_params,

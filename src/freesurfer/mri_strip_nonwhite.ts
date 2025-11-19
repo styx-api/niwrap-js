@@ -11,18 +11,18 @@ const MRI_STRIP_NONWHITE_METADATA: Metadata = {
 };
 
 
-interface MriStripNonwhiteParameters {
+interface MriStripNonwhiteParamsDict {
     "@type"?: "freesurfer/mri_strip_nonwhite";
     "input_volume": InputPathType;
     "transform": InputPathType;
     "template_volume": InputPathType;
     "output_volume": string;
 }
-type MriStripNonwhiteParametersTagged = Required<Pick<MriStripNonwhiteParameters, '@type'>> & MriStripNonwhiteParameters;
+type MriStripNonwhiteParamsDictTagged = Required<Pick<MriStripNonwhiteParamsDict, '@type'>> & MriStripNonwhiteParamsDict;
 
 
 /**
- * Output object returned when calling `MriStripNonwhiteParameters(...)`.
+ * Output object returned when calling `MriStripNonwhiteParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_strip_nonwhite_params(
     transform: InputPathType,
     template_volume: InputPathType,
     output_volume: string,
-): MriStripNonwhiteParametersTagged {
+): MriStripNonwhiteParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_strip_nonwhite" as const,
         "input_volume": input_volume,
@@ -74,7 +74,7 @@ function mri_strip_nonwhite_params(
  * @returns Command-line arguments.
  */
 function mri_strip_nonwhite_cargs(
-    params: MriStripNonwhiteParameters,
+    params: MriStripNonwhiteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_strip_nonwhite_cargs(
  * @returns Outputs object.
  */
 function mri_strip_nonwhite_outputs(
-    params: MriStripNonwhiteParameters,
+    params: MriStripNonwhiteParamsDict,
     execution: Execution,
 ): MriStripNonwhiteOutputs {
     const ret: MriStripNonwhiteOutputs = {
@@ -122,7 +122,7 @@ function mri_strip_nonwhite_outputs(
  * @returns NamedTuple of outputs (described in `MriStripNonwhiteOutputs`).
  */
 function mri_strip_nonwhite_execute(
-    params: MriStripNonwhiteParameters,
+    params: MriStripNonwhiteParamsDict,
     runner: Runner | null = null,
 ): MriStripNonwhiteOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mri_strip_nonwhite(
 export {
       MRI_STRIP_NONWHITE_METADATA,
       MriStripNonwhiteOutputs,
+      MriStripNonwhiteParamsDict,
+      MriStripNonwhiteParamsDictTagged,
       mri_strip_nonwhite,
       mri_strip_nonwhite_execute,
       mri_strip_nonwhite_params,

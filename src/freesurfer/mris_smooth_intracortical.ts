@@ -11,7 +11,7 @@ const MRIS_SMOOTH_INTRACORTICAL_METADATA: Metadata = {
 };
 
 
-interface MrisSmoothIntracorticalParameters {
+interface MrisSmoothIntracorticalParamsDict {
     "@type"?: "freesurfer/mris_smooth_intracortical";
     "surf_dir": string;
     "surf_name": string;
@@ -24,11 +24,11 @@ interface MrisSmoothIntracorticalParameters {
     "rad_start"?: number | null | undefined;
     "tan_weights"?: string | null | undefined;
 }
-type MrisSmoothIntracorticalParametersTagged = Required<Pick<MrisSmoothIntracorticalParameters, '@type'>> & MrisSmoothIntracorticalParameters;
+type MrisSmoothIntracorticalParamsDictTagged = Required<Pick<MrisSmoothIntracorticalParamsDict, '@type'>> & MrisSmoothIntracorticalParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSmoothIntracorticalParameters(...)`.
+ * Output object returned when calling `MrisSmoothIntracorticalParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function mris_smooth_intracortical_params(
     rad_size: number | null = null,
     rad_start: number | null = null,
     tan_weights: string | null = null,
-): MrisSmoothIntracorticalParametersTagged {
+): MrisSmoothIntracorticalParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_smooth_intracortical" as const,
         "surf_dir": surf_dir,
@@ -110,7 +110,7 @@ function mris_smooth_intracortical_params(
  * @returns Command-line arguments.
  */
 function mris_smooth_intracortical_cargs(
-    params: MrisSmoothIntracorticalParameters,
+    params: MrisSmoothIntracorticalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -180,7 +180,7 @@ function mris_smooth_intracortical_cargs(
  * @returns Outputs object.
  */
 function mris_smooth_intracortical_outputs(
-    params: MrisSmoothIntracorticalParameters,
+    params: MrisSmoothIntracorticalParamsDict,
     execution: Execution,
 ): MrisSmoothIntracorticalOutputs {
     const ret: MrisSmoothIntracorticalOutputs = {
@@ -206,7 +206,7 @@ function mris_smooth_intracortical_outputs(
  * @returns NamedTuple of outputs (described in `MrisSmoothIntracorticalOutputs`).
  */
 function mris_smooth_intracortical_execute(
-    params: MrisSmoothIntracorticalParameters,
+    params: MrisSmoothIntracorticalParamsDict,
     runner: Runner | null = null,
 ): MrisSmoothIntracorticalOutputs {
     runner = runner || getGlobalRunner();
@@ -263,6 +263,8 @@ function mris_smooth_intracortical(
 export {
       MRIS_SMOOTH_INTRACORTICAL_METADATA,
       MrisSmoothIntracorticalOutputs,
+      MrisSmoothIntracorticalParamsDict,
+      MrisSmoothIntracorticalParamsDictTagged,
       mris_smooth_intracortical,
       mris_smooth_intracortical_execute,
       mris_smooth_intracortical_params,

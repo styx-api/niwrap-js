@@ -11,17 +11,17 @@ const V__NOISY_SKULL_STRIP_METADATA: Metadata = {
 };
 
 
-interface VNoisySkullStripParameters {
+interface VNoisySkullStripParamsDict {
     "@type"?: "afni/@NoisySkullStrip";
     "input_file": InputPathType;
     "keep_tmp": boolean;
     "3dskullstrip_opts"?: string | null | undefined;
 }
-type VNoisySkullStripParametersTagged = Required<Pick<VNoisySkullStripParameters, '@type'>> & VNoisySkullStripParameters;
+type VNoisySkullStripParamsDictTagged = Required<Pick<VNoisySkullStripParamsDict, '@type'>> & VNoisySkullStripParamsDict;
 
 
 /**
- * Output object returned when calling `VNoisySkullStripParameters(...)`.
+ * Output object returned when calling `VNoisySkullStripParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v__noisy_skull_strip_params(
     input_file: InputPathType,
     keep_tmp: boolean = false,
     v_3dskullstrip_opts: string | null = null,
-): VNoisySkullStripParametersTagged {
+): VNoisySkullStripParamsDictTagged {
     const params = {
         "@type": "afni/@NoisySkullStrip" as const,
         "input_file": input_file,
@@ -84,7 +84,7 @@ function v__noisy_skull_strip_params(
  * @returns Command-line arguments.
  */
 function v__noisy_skull_strip_cargs(
-    params: VNoisySkullStripParameters,
+    params: VNoisySkullStripParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function v__noisy_skull_strip_cargs(
  * @returns Outputs object.
  */
 function v__noisy_skull_strip_outputs(
-    params: VNoisySkullStripParameters,
+    params: VNoisySkullStripParamsDict,
     execution: Execution,
 ): VNoisySkullStripOutputs {
     const ret: VNoisySkullStripOutputs = {
@@ -144,7 +144,7 @@ function v__noisy_skull_strip_outputs(
  * @returns NamedTuple of outputs (described in `VNoisySkullStripOutputs`).
  */
 function v__noisy_skull_strip_execute(
-    params: VNoisySkullStripParameters,
+    params: VNoisySkullStripParamsDict,
     runner: Runner | null = null,
 ): VNoisySkullStripOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function v__noisy_skull_strip(
 
 export {
       VNoisySkullStripOutputs,
+      VNoisySkullStripParamsDict,
+      VNoisySkullStripParamsDictTagged,
       V__NOISY_SKULL_STRIP_METADATA,
       v__noisy_skull_strip,
       v__noisy_skull_strip_execute,

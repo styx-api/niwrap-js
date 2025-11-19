@@ -10,24 +10,24 @@ const METRIC_MATH_METADATA: Metadata = {
 };
 
 
-interface MetricMathVarParameters {
+interface MetricMathVarParamsDict {
     "@type"?: "var";
     "name": string;
     "metric": InputPathType;
     "column"?: string | null | undefined;
     "repeat": boolean;
 }
-type MetricMathVarParametersTagged = Required<Pick<MetricMathVarParameters, '@type'>> & MetricMathVarParameters;
+type MetricMathVarParamsDictTagged = Required<Pick<MetricMathVarParamsDict, '@type'>> & MetricMathVarParamsDict;
 
 
-interface MetricMathParameters {
+interface MetricMathParamsDict {
     "@type"?: "workbench/metric-math";
     "metric-out": string;
     "replace"?: number | null | undefined;
-    "var"?: Array<MetricMathVarParameters> | null | undefined;
+    "var"?: Array<MetricMathVarParamsDict> | null | undefined;
     "expression": string;
 }
-type MetricMathParametersTagged = Required<Pick<MetricMathParameters, '@type'>> & MetricMathParameters;
+type MetricMathParamsDictTagged = Required<Pick<MetricMathParamsDict, '@type'>> & MetricMathParamsDict;
 
 
 /**
@@ -42,12 +42,12 @@ the column number or name
  *
  * @returns Parameter dictionary
  */
-function metric_math_var_params(
+function metric_math_var(
     name: string,
     metric: InputPathType,
     column: string | null,
     repeat: boolean = false,
-): MetricMathVarParametersTagged {
+): MetricMathVarParamsDictTagged {
     const params = {
         "@type": "var" as const,
         "name": name,
@@ -70,7 +70,7 @@ function metric_math_var_params(
  * @returns Command-line arguments.
  */
 function metric_math_var_cargs(
-    params: MetricMathVarParameters,
+    params: MetricMathVarParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function metric_math_var_cargs(
 
 
 /**
- * Output object returned when calling `MetricMathParameters(...)`.
+ * Output object returned when calling `MetricMathParamsDict(...)`.
  *
  * @interface
  */
@@ -121,8 +121,8 @@ function metric_math_params(
     metric_out: string,
     replace: number | null,
     expression: string,
-    var_: Array<MetricMathVarParameters> | null = null,
-): MetricMathParametersTagged {
+    var_: Array<MetricMathVarParamsDict> | null = null,
+): MetricMathParamsDictTagged {
     const params = {
         "@type": "workbench/metric-math" as const,
         "metric-out": metric_out,
@@ -147,7 +147,7 @@ function metric_math_params(
  * @returns Command-line arguments.
  */
 function metric_math_cargs(
-    params: MetricMathParameters,
+    params: MetricMathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -175,7 +175,7 @@ function metric_math_cargs(
  * @returns Outputs object.
  */
 function metric_math_outputs(
-    params: MetricMathParameters,
+    params: MetricMathParamsDict,
     execution: Execution,
 ): MetricMathOutputs {
     const ret: MetricMathOutputs = {
@@ -234,7 +234,7 @@ function metric_math_outputs(
  * @returns NamedTuple of outputs (described in `MetricMathOutputs`).
  */
 function metric_math_execute(
-    params: MetricMathParameters,
+    params: MetricMathParamsDict,
     runner: Runner | null = null,
 ): MetricMathOutputs {
     runner = runner || getGlobalRunner();
@@ -303,7 +303,7 @@ function metric_math(
     metric_out: string,
     replace: number | null,
     expression: string,
-    var_: Array<MetricMathVarParameters> | null = null,
+    var_: Array<MetricMathVarParamsDict> | null = null,
     runner: Runner | null = null,
 ): MetricMathOutputs {
     const params = metric_math_params(metric_out, replace, expression, var_)
@@ -314,8 +314,12 @@ function metric_math(
 export {
       METRIC_MATH_METADATA,
       MetricMathOutputs,
+      MetricMathParamsDict,
+      MetricMathParamsDictTagged,
+      MetricMathVarParamsDict,
+      MetricMathVarParamsDictTagged,
       metric_math,
       metric_math_execute,
       metric_math_params,
-      metric_math_var_params,
+      metric_math_var,
 };

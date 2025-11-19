@@ -11,7 +11,7 @@ const FSLMATHS_METADATA: Metadata = {
 };
 
 
-interface FslmathsOperationParameters {
+interface FslmathsOperationParamsDict {
     "@type"?: "operation";
     "add"?: number | null | undefined;
     "sub"?: number | null | undefined;
@@ -112,18 +112,18 @@ interface FslmathsOperationParameters {
     "bptf"?: Array<number> | null | undefined;
     "roc"?: Array<number> | null | undefined;
 }
-type FslmathsOperationParametersTagged = Required<Pick<FslmathsOperationParameters, '@type'>> & FslmathsOperationParameters;
+type FslmathsOperationParamsDictTagged = Required<Pick<FslmathsOperationParamsDict, '@type'>> & FslmathsOperationParamsDict;
 
 
-interface FslmathsParameters {
+interface FslmathsParamsDict {
     "@type"?: "fsl/fslmaths";
     "datatype_internal"?: "char" | "short" | "int" | "float" | "double" | "input" | null | undefined;
     "input_files": Array<InputPathType>;
-    "operations": Array<FslmathsOperationParameters>;
+    "operations": Array<FslmathsOperationParamsDict>;
     "output": string;
     "output_datatype"?: "char" | "short" | "int" | "float" | "double" | "input" | null | undefined;
 }
-type FslmathsParametersTagged = Required<Pick<FslmathsParameters, '@type'>> & FslmathsParameters;
+type FslmathsParamsDictTagged = Required<Pick<FslmathsParamsDict, '@type'>> & FslmathsParamsDict;
 
 
 /**
@@ -230,7 +230,7 @@ type FslmathsParametersTagged = Required<Pick<FslmathsParameters, '@type'>> & Fs
  *
  * @returns Parameter dictionary
  */
-function fslmaths_operation_params(
+function fslmaths_operation(
     add: number | null = null,
     sub: number | null = null,
     mul: number | null = null,
@@ -329,7 +329,7 @@ function fslmaths_operation_params(
     roi: Array<number> | null = null,
     bptf: Array<number> | null = null,
     roc: Array<number> | null = null,
-): FslmathsOperationParametersTagged {
+): FslmathsOperationParamsDictTagged {
     const params = {
         "@type": "operation" as const,
         "save": save,
@@ -514,7 +514,7 @@ function fslmaths_operation_params(
  * @returns Command-line arguments.
  */
 function fslmaths_operation_cargs(
-    params: FslmathsOperationParameters,
+    params: FslmathsOperationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -922,7 +922,7 @@ function fslmaths_operation_cargs(
 
 
 /**
- * Output object returned when calling `FslmathsParameters(...)`.
+ * Output object returned when calling `FslmathsParamsDict(...)`.
  *
  * @interface
  */
@@ -951,11 +951,11 @@ interface FslmathsOutputs {
  */
 function fslmaths_params(
     input_files: Array<InputPathType>,
-    operations: Array<FslmathsOperationParameters>,
+    operations: Array<FslmathsOperationParamsDict>,
     output: string,
     datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
-): FslmathsParametersTagged {
+): FslmathsParamsDictTagged {
     const params = {
         "@type": "fsl/fslmaths" as const,
         "input_files": input_files,
@@ -981,7 +981,7 @@ function fslmaths_params(
  * @returns Command-line arguments.
  */
 function fslmaths_cargs(
-    params: FslmathsParameters,
+    params: FslmathsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1014,7 +1014,7 @@ function fslmaths_cargs(
  * @returns Outputs object.
  */
 function fslmaths_outputs(
-    params: FslmathsParameters,
+    params: FslmathsParamsDict,
     execution: Execution,
 ): FslmathsOutputs {
     const ret: FslmathsOutputs = {
@@ -1040,7 +1040,7 @@ function fslmaths_outputs(
  * @returns NamedTuple of outputs (described in `FslmathsOutputs`).
  */
 function fslmaths_execute(
-    params: FslmathsParameters,
+    params: FslmathsParamsDict,
     runner: Runner | null = null,
 ): FslmathsOutputs {
     runner = runner || getGlobalRunner();
@@ -1073,7 +1073,7 @@ function fslmaths_execute(
  */
 function fslmaths(
     input_files: Array<InputPathType>,
-    operations: Array<FslmathsOperationParameters>,
+    operations: Array<FslmathsOperationParamsDict>,
     output: string,
     datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
@@ -1086,9 +1086,13 @@ function fslmaths(
 
 export {
       FSLMATHS_METADATA,
+      FslmathsOperationParamsDict,
+      FslmathsOperationParamsDictTagged,
       FslmathsOutputs,
+      FslmathsParamsDict,
+      FslmathsParamsDictTagged,
       fslmaths,
       fslmaths_execute,
-      fslmaths_operation_params,
+      fslmaths_operation,
       fslmaths_params,
 };

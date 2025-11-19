@@ -11,16 +11,16 @@ const FSLHD_METADATA: Metadata = {
 };
 
 
-interface FslhdParameters {
+interface FslhdParamsDict {
     "@type"?: "fsl/fslhd";
     "xml_flag": boolean;
     "input_file": InputPathType;
 }
-type FslhdParametersTagged = Required<Pick<FslhdParameters, '@type'>> & FslhdParameters;
+type FslhdParamsDictTagged = Required<Pick<FslhdParamsDict, '@type'>> & FslhdParamsDict;
 
 
 /**
- * Output object returned when calling `FslhdParameters(...)`.
+ * Output object returned when calling `FslhdParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FslhdOutputs {
 function fslhd_params(
     input_file: InputPathType,
     xml_flag: boolean = false,
-): FslhdParametersTagged {
+): FslhdParamsDictTagged {
     const params = {
         "@type": "fsl/fslhd" as const,
         "xml_flag": xml_flag,
@@ -62,7 +62,7 @@ function fslhd_params(
  * @returns Command-line arguments.
  */
 function fslhd_cargs(
-    params: FslhdParameters,
+    params: FslhdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function fslhd_cargs(
  * @returns Outputs object.
  */
 function fslhd_outputs(
-    params: FslhdParameters,
+    params: FslhdParamsDict,
     execution: Execution,
 ): FslhdOutputs {
     const ret: FslhdOutputs = {
@@ -109,7 +109,7 @@ function fslhd_outputs(
  * @returns NamedTuple of outputs (described in `FslhdOutputs`).
  */
 function fslhd_execute(
-    params: FslhdParameters,
+    params: FslhdParamsDict,
     runner: Runner | null = null,
 ): FslhdOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function fslhd(
 export {
       FSLHD_METADATA,
       FslhdOutputs,
+      FslhdParamsDict,
+      FslhdParamsDictTagged,
       fslhd,
       fslhd_execute,
       fslhd_params,

@@ -11,7 +11,7 @@ const CUTOFFCALC_METADATA: Metadata = {
 };
 
 
-interface CutoffcalcParameters {
+interface CutoffcalcParamsDict {
     "@type"?: "fsl/cutoffcalc";
     "input_design": InputPathType;
     "threshold"?: number | null | undefined;
@@ -21,11 +21,11 @@ interface CutoffcalcParameters {
     "verbose_flag": boolean;
     "debug_flag": boolean;
 }
-type CutoffcalcParametersTagged = Required<Pick<CutoffcalcParameters, '@type'>> & CutoffcalcParameters;
+type CutoffcalcParamsDictTagged = Required<Pick<CutoffcalcParamsDict, '@type'>> & CutoffcalcParamsDict;
 
 
 /**
- * Output object returned when calling `CutoffcalcParameters(...)`.
+ * Output object returned when calling `CutoffcalcParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function cutoffcalc_params(
     example_sigma: number | null = null,
     verbose_flag: boolean = false,
     debug_flag: boolean = false,
-): CutoffcalcParametersTagged {
+): CutoffcalcParamsDictTagged {
     const params = {
         "@type": "fsl/cutoffcalc" as const,
         "input_design": input_design,
@@ -94,7 +94,7 @@ function cutoffcalc_params(
  * @returns Command-line arguments.
  */
 function cutoffcalc_cargs(
-    params: CutoffcalcParameters,
+    params: CutoffcalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -131,7 +131,7 @@ function cutoffcalc_cargs(
  * @returns Outputs object.
  */
 function cutoffcalc_outputs(
-    params: CutoffcalcParameters,
+    params: CutoffcalcParamsDict,
     execution: Execution,
 ): CutoffcalcOutputs {
     const ret: CutoffcalcOutputs = {
@@ -157,7 +157,7 @@ function cutoffcalc_outputs(
  * @returns NamedTuple of outputs (described in `CutoffcalcOutputs`).
  */
 function cutoffcalc_execute(
-    params: CutoffcalcParameters,
+    params: CutoffcalcParamsDict,
     runner: Runner | null = null,
 ): CutoffcalcOutputs {
     runner = runner || getGlobalRunner();
@@ -208,6 +208,8 @@ function cutoffcalc(
 export {
       CUTOFFCALC_METADATA,
       CutoffcalcOutputs,
+      CutoffcalcParamsDict,
+      CutoffcalcParamsDictTagged,
       cutoffcalc,
       cutoffcalc_execute,
       cutoffcalc_params,

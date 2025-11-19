@@ -11,7 +11,7 @@ const CONVERT_XFM_METADATA: Metadata = {
 };
 
 
-interface ConvertXfmParameters {
+interface ConvertXfmParamsDict {
     "@type"?: "fsl/convert_xfm";
     "out_file"?: string | null | undefined;
     "invert_xfm": boolean;
@@ -19,11 +19,11 @@ interface ConvertXfmParameters {
     "fix_scale_skew"?: InputPathType | null | undefined;
     "in_file": InputPathType;
 }
-type ConvertXfmParametersTagged = Required<Pick<ConvertXfmParameters, '@type'>> & ConvertXfmParameters;
+type ConvertXfmParamsDictTagged = Required<Pick<ConvertXfmParamsDict, '@type'>> & ConvertXfmParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertXfmParameters(...)`.
+ * Output object returned when calling `ConvertXfmParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function convert_xfm_params(
     invert_xfm: boolean = false,
     concat_xfm: InputPathType | null = null,
     fix_scale_skew: InputPathType | null = null,
-): ConvertXfmParametersTagged {
+): ConvertXfmParamsDictTagged {
     const params = {
         "@type": "fsl/convert_xfm" as const,
         "invert_xfm": invert_xfm,
@@ -84,7 +84,7 @@ function convert_xfm_params(
  * @returns Command-line arguments.
  */
 function convert_xfm_cargs(
-    params: ConvertXfmParameters,
+    params: ConvertXfmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function convert_xfm_cargs(
  * @returns Outputs object.
  */
 function convert_xfm_outputs(
-    params: ConvertXfmParameters,
+    params: ConvertXfmParamsDict,
     execution: Execution,
 ): ConvertXfmOutputs {
     const ret: ConvertXfmOutputs = {
@@ -150,7 +150,7 @@ function convert_xfm_outputs(
  * @returns NamedTuple of outputs (described in `ConvertXfmOutputs`).
  */
 function convert_xfm_execute(
-    params: ConvertXfmParameters,
+    params: ConvertXfmParamsDict,
     runner: Runner | null = null,
 ): ConvertXfmOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function convert_xfm(
 export {
       CONVERT_XFM_METADATA,
       ConvertXfmOutputs,
+      ConvertXfmParamsDict,
+      ConvertXfmParamsDictTagged,
       convert_xfm,
       convert_xfm_execute,
       convert_xfm_params,

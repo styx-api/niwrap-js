@@ -11,7 +11,7 @@ const FAT_PROC_AXIALIZE_ANAT_METADATA: Metadata = {
 };
 
 
-interface FatProcAxializeAnatParameters {
+interface FatProcAxializeAnatParamsDict {
     "@type"?: "afni/fat_proc_axialize_anat";
     "in_file": InputPathType;
     "ref_file": InputPathType;
@@ -36,11 +36,11 @@ interface FatProcAxializeAnatParameters {
     "no_qc_view": boolean;
     "qc_prefix"?: string | null | undefined;
 }
-type FatProcAxializeAnatParametersTagged = Required<Pick<FatProcAxializeAnatParameters, '@type'>> & FatProcAxializeAnatParameters;
+type FatProcAxializeAnatParamsDictTagged = Required<Pick<FatProcAxializeAnatParamsDict, '@type'>> & FatProcAxializeAnatParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcAxializeAnatParameters(...)`.
+ * Output object returned when calling `FatProcAxializeAnatParamsDict(...)`.
  *
  * @interface
  */
@@ -111,7 +111,7 @@ function fat_proc_axialize_anat_params(
     qc_ulay_range: Array<number> | null = null,
     no_qc_view: boolean = false,
     qc_prefix: string | null = null,
-): FatProcAxializeAnatParametersTagged {
+): FatProcAxializeAnatParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_axialize_anat" as const,
         "in_file": in_file,
@@ -166,7 +166,7 @@ function fat_proc_axialize_anat_params(
  * @returns Command-line arguments.
  */
 function fat_proc_axialize_anat_cargs(
-    params: FatProcAxializeAnatParameters,
+    params: FatProcAxializeAnatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function fat_proc_axialize_anat_cargs(
  * @returns Outputs object.
  */
 function fat_proc_axialize_anat_outputs(
-    params: FatProcAxializeAnatParameters,
+    params: FatProcAxializeAnatParamsDict,
     execution: Execution,
 ): FatProcAxializeAnatOutputs {
     const ret: FatProcAxializeAnatOutputs = {
@@ -295,7 +295,7 @@ function fat_proc_axialize_anat_outputs(
  * @returns NamedTuple of outputs (described in `FatProcAxializeAnatOutputs`).
  */
 function fat_proc_axialize_anat_execute(
-    params: FatProcAxializeAnatParameters,
+    params: FatProcAxializeAnatParamsDict,
     runner: Runner | null = null,
 ): FatProcAxializeAnatOutputs {
     runner = runner || getGlobalRunner();
@@ -376,6 +376,8 @@ function fat_proc_axialize_anat(
 export {
       FAT_PROC_AXIALIZE_ANAT_METADATA,
       FatProcAxializeAnatOutputs,
+      FatProcAxializeAnatParamsDict,
+      FatProcAxializeAnatParamsDictTagged,
       fat_proc_axialize_anat,
       fat_proc_axialize_anat_execute,
       fat_proc_axialize_anat_params,

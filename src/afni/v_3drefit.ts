@@ -11,7 +11,7 @@ const V_3DREFIT_METADATA: Metadata = {
 };
 
 
-interface V3drefitParameters {
+interface V3drefitParamsDict {
     "@type"?: "afni/3drefit";
     "atrcopy"?: Array<string> | null | undefined;
     "atrfloat"?: Array<string> | null | undefined;
@@ -31,11 +31,11 @@ interface V3drefitParameters {
     "zdel"?: number | null | undefined;
     "zorigin"?: string | null | undefined;
 }
-type V3drefitParametersTagged = Required<Pick<V3drefitParameters, '@type'>> & V3drefitParameters;
+type V3drefitParamsDictTagged = Required<Pick<V3drefitParamsDict, '@type'>> & V3drefitParamsDict;
 
 
 /**
- * Output object returned when calling `V3drefitParameters(...)`.
+ * Output object returned when calling `V3drefitParamsDict(...)`.
  *
  * @interface
  */
@@ -92,7 +92,7 @@ function v_3drefit_params(
     yorigin: string | null = null,
     zdel: number | null = null,
     zorigin: string | null = null,
-): V3drefitParametersTagged {
+): V3drefitParamsDictTagged {
     const params = {
         "@type": "afni/3drefit" as const,
         "deoblique": deoblique,
@@ -152,7 +152,7 @@ function v_3drefit_params(
  * @returns Command-line arguments.
  */
 function v_3drefit_cargs(
-    params: V3drefitParameters,
+    params: V3drefitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -258,7 +258,7 @@ function v_3drefit_cargs(
  * @returns Outputs object.
  */
 function v_3drefit_outputs(
-    params: V3drefitParameters,
+    params: V3drefitParamsDict,
     execution: Execution,
 ): V3drefitOutputs {
     const ret: V3drefitOutputs = {
@@ -284,7 +284,7 @@ function v_3drefit_outputs(
  * @returns NamedTuple of outputs (described in `V3drefitOutputs`).
  */
 function v_3drefit_execute(
-    params: V3drefitParameters,
+    params: V3drefitParamsDict,
     runner: Runner | null = null,
 ): V3drefitOutputs {
     runner = runner || getGlobalRunner();
@@ -354,6 +354,8 @@ function v_3drefit(
 
 export {
       V3drefitOutputs,
+      V3drefitParamsDict,
+      V3drefitParamsDictTagged,
       V_3DREFIT_METADATA,
       v_3drefit,
       v_3drefit_execute,

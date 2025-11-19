@@ -11,18 +11,18 @@ const HIAM_MAKE_TEMPLATE_METADATA: Metadata = {
 };
 
 
-interface HiamMakeTemplateParameters {
+interface HiamMakeTemplateParamsDict {
     "@type"?: "freesurfer/hiam_make_template";
     "hemi": string;
     "surface_name": string;
     "subjects": Array<string>;
     "output_name": string;
 }
-type HiamMakeTemplateParametersTagged = Required<Pick<HiamMakeTemplateParameters, '@type'>> & HiamMakeTemplateParameters;
+type HiamMakeTemplateParamsDictTagged = Required<Pick<HiamMakeTemplateParamsDict, '@type'>> & HiamMakeTemplateParamsDict;
 
 
 /**
- * Output object returned when calling `HiamMakeTemplateParameters(...)`.
+ * Output object returned when calling `HiamMakeTemplateParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function hiam_make_template_params(
     surface_name: string,
     subjects: Array<string>,
     output_name: string,
-): HiamMakeTemplateParametersTagged {
+): HiamMakeTemplateParamsDictTagged {
     const params = {
         "@type": "freesurfer/hiam_make_template" as const,
         "hemi": hemi,
@@ -70,7 +70,7 @@ function hiam_make_template_params(
  * @returns Command-line arguments.
  */
 function hiam_make_template_cargs(
-    params: HiamMakeTemplateParameters,
+    params: HiamMakeTemplateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function hiam_make_template_cargs(
  * @returns Outputs object.
  */
 function hiam_make_template_outputs(
-    params: HiamMakeTemplateParameters,
+    params: HiamMakeTemplateParamsDict,
     execution: Execution,
 ): HiamMakeTemplateOutputs {
     const ret: HiamMakeTemplateOutputs = {
@@ -117,7 +117,7 @@ function hiam_make_template_outputs(
  * @returns NamedTuple of outputs (described in `HiamMakeTemplateOutputs`).
  */
 function hiam_make_template_execute(
-    params: HiamMakeTemplateParameters,
+    params: HiamMakeTemplateParamsDict,
     runner: Runner | null = null,
 ): HiamMakeTemplateOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function hiam_make_template(
 export {
       HIAM_MAKE_TEMPLATE_METADATA,
       HiamMakeTemplateOutputs,
+      HiamMakeTemplateParamsDict,
+      HiamMakeTemplateParamsDictTagged,
       hiam_make_template,
       hiam_make_template_execute,
       hiam_make_template_params,

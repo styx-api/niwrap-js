@@ -11,7 +11,7 @@ const REG_JACOBIAN_METADATA: Metadata = {
 };
 
 
-interface RegJacobianParameters {
+interface RegJacobianParamsDict {
     "@type"?: "niftyreg/reg_jacobian";
     "reference_image": InputPathType;
     "deformation_field"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface RegJacobianParameters {
     "output_log_jacobian"?: string | null | undefined;
     "affine_matrix"?: InputPathType | null | undefined;
 }
-type RegJacobianParametersTagged = Required<Pick<RegJacobianParameters, '@type'>> & RegJacobianParameters;
+type RegJacobianParamsDictTagged = Required<Pick<RegJacobianParamsDict, '@type'>> & RegJacobianParamsDict;
 
 
 /**
- * Output object returned when calling `RegJacobianParameters(...)`.
+ * Output object returned when calling `RegJacobianParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function reg_jacobian_params(
     output_jacobian_matrix: string | null = null,
     output_log_jacobian: string | null = null,
     affine_matrix: InputPathType | null = null,
-): RegJacobianParametersTagged {
+): RegJacobianParamsDictTagged {
     const params = {
         "@type": "niftyreg/reg_jacobian" as const,
         "reference_image": reference_image,
@@ -106,7 +106,7 @@ function reg_jacobian_params(
  * @returns Command-line arguments.
  */
 function reg_jacobian_cargs(
-    params: RegJacobianParameters,
+    params: RegJacobianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function reg_jacobian_cargs(
  * @returns Outputs object.
  */
 function reg_jacobian_outputs(
-    params: RegJacobianParameters,
+    params: RegJacobianParamsDict,
     execution: Execution,
 ): RegJacobianOutputs {
     const ret: RegJacobianOutputs = {
@@ -192,7 +192,7 @@ function reg_jacobian_outputs(
  * @returns NamedTuple of outputs (described in `RegJacobianOutputs`).
  */
 function reg_jacobian_execute(
-    params: RegJacobianParameters,
+    params: RegJacobianParamsDict,
     runner: Runner | null = null,
 ): RegJacobianOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function reg_jacobian(
 export {
       REG_JACOBIAN_METADATA,
       RegJacobianOutputs,
+      RegJacobianParamsDict,
+      RegJacobianParamsDictTagged,
       reg_jacobian,
       reg_jacobian_execute,
       reg_jacobian_params,

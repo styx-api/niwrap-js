@@ -10,16 +10,16 @@ const METADATA_REMOVE_PROVENANCE_METADATA: Metadata = {
 };
 
 
-interface MetadataRemoveProvenanceParameters {
+interface MetadataRemoveProvenanceParamsDict {
     "@type"?: "workbench/metadata-remove-provenance";
     "input-file": string;
     "output-file": string;
 }
-type MetadataRemoveProvenanceParametersTagged = Required<Pick<MetadataRemoveProvenanceParameters, '@type'>> & MetadataRemoveProvenanceParameters;
+type MetadataRemoveProvenanceParamsDictTagged = Required<Pick<MetadataRemoveProvenanceParamsDict, '@type'>> & MetadataRemoveProvenanceParamsDict;
 
 
 /**
- * Output object returned when calling `MetadataRemoveProvenanceParameters(...)`.
+ * Output object returned when calling `MetadataRemoveProvenanceParamsDict(...)`.
  *
  * @interface
  */
@@ -42,7 +42,7 @@ interface MetadataRemoveProvenanceOutputs {
 function metadata_remove_provenance_params(
     input_file: string,
     output_file: string,
-): MetadataRemoveProvenanceParametersTagged {
+): MetadataRemoveProvenanceParamsDictTagged {
     const params = {
         "@type": "workbench/metadata-remove-provenance" as const,
         "input-file": input_file,
@@ -61,7 +61,7 @@ function metadata_remove_provenance_params(
  * @returns Command-line arguments.
  */
 function metadata_remove_provenance_cargs(
-    params: MetadataRemoveProvenanceParameters,
+    params: MetadataRemoveProvenanceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function metadata_remove_provenance_cargs(
  * @returns Outputs object.
  */
 function metadata_remove_provenance_outputs(
-    params: MetadataRemoveProvenanceParameters,
+    params: MetadataRemoveProvenanceParamsDict,
     execution: Execution,
 ): MetadataRemoveProvenanceOutputs {
     const ret: MetadataRemoveProvenanceOutputs = {
@@ -105,7 +105,7 @@ function metadata_remove_provenance_outputs(
  * @returns NamedTuple of outputs (described in `MetadataRemoveProvenanceOutputs`).
  */
 function metadata_remove_provenance_execute(
-    params: MetadataRemoveProvenanceParameters,
+    params: MetadataRemoveProvenanceParamsDict,
     runner: Runner | null = null,
 ): MetadataRemoveProvenanceOutputs {
     runner = runner || getGlobalRunner();
@@ -142,6 +142,8 @@ function metadata_remove_provenance(
 export {
       METADATA_REMOVE_PROVENANCE_METADATA,
       MetadataRemoveProvenanceOutputs,
+      MetadataRemoveProvenanceParamsDict,
+      MetadataRemoveProvenanceParamsDictTagged,
       metadata_remove_provenance,
       metadata_remove_provenance_execute,
       metadata_remove_provenance_params,

@@ -10,34 +10,34 @@ const METRIC_TFCE_METADATA: Metadata = {
 };
 
 
-interface MetricTfcePresmoothParameters {
+interface MetricTfcePresmoothParamsDict {
     "@type"?: "presmooth";
     "kernel": number;
     "fwhm": boolean;
 }
-type MetricTfcePresmoothParametersTagged = Required<Pick<MetricTfcePresmoothParameters, '@type'>> & MetricTfcePresmoothParameters;
+type MetricTfcePresmoothParamsDictTagged = Required<Pick<MetricTfcePresmoothParamsDict, '@type'>> & MetricTfcePresmoothParamsDict;
 
 
-interface MetricTfceParametersParameters {
+interface MetricTfceParametersParamsDict {
     "@type"?: "parameters";
     "E": number;
     "H": number;
 }
-type MetricTfceParametersParametersTagged = Required<Pick<MetricTfceParametersParameters, '@type'>> & MetricTfceParametersParameters;
+type MetricTfceParametersParamsDictTagged = Required<Pick<MetricTfceParametersParamsDict, '@type'>> & MetricTfceParametersParamsDict;
 
 
-interface MetricTfceParameters {
+interface MetricTfceParamsDict {
     "@type"?: "workbench/metric-tfce";
     "metric-out": string;
-    "presmooth"?: MetricTfcePresmoothParameters | null | undefined;
+    "presmooth"?: MetricTfcePresmoothParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "parameters"?: MetricTfceParametersParameters | null | undefined;
+    "parameters"?: MetricTfceParametersParamsDict | null | undefined;
     "column"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "metric-in": InputPathType;
 }
-type MetricTfceParametersTagged = Required<Pick<MetricTfceParameters, '@type'>> & MetricTfceParameters;
+type MetricTfceParamsDictTagged = Required<Pick<MetricTfceParamsDict, '@type'>> & MetricTfceParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type MetricTfceParametersTagged = Required<Pick<MetricTfceParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function metric_tfce_presmooth_params(
+function metric_tfce_presmooth(
     kernel: number,
     fwhm: boolean = false,
-): MetricTfcePresmoothParametersTagged {
+): MetricTfcePresmoothParamsDictTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
@@ -70,7 +70,7 @@ function metric_tfce_presmooth_params(
  * @returns Command-line arguments.
  */
 function metric_tfce_presmooth_cargs(
-    params: MetricTfcePresmoothParameters,
+    params: MetricTfcePresmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,10 +93,10 @@ function metric_tfce_presmooth_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_tfce_parameters_params(
+function metric_tfce_parameters(
     e: number,
     h: number,
-): MetricTfceParametersParametersTagged {
+): MetricTfceParametersParamsDictTagged {
     const params = {
         "@type": "parameters" as const,
         "E": e,
@@ -115,7 +115,7 @@ function metric_tfce_parameters_params(
  * @returns Command-line arguments.
  */
 function metric_tfce_parameters_cargs(
-    params: MetricTfceParametersParameters,
+    params: MetricTfceParametersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function metric_tfce_parameters_cargs(
 
 
 /**
- * Output object returned when calling `MetricTfceParameters(...)`.
+ * Output object returned when calling `MetricTfceParamsDict(...)`.
  *
  * @interface
  */
@@ -172,9 +172,9 @@ function metric_tfce_params(
     area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    presmooth: MetricTfcePresmoothParameters | null = null,
-    parameters: MetricTfceParametersParameters | null = null,
-): MetricTfceParametersTagged {
+    presmooth: MetricTfcePresmoothParamsDict | null = null,
+    parameters: MetricTfceParametersParamsDict | null = null,
+): MetricTfceParamsDictTagged {
     const params = {
         "@type": "workbench/metric-tfce" as const,
         "metric-out": metric_out,
@@ -209,7 +209,7 @@ function metric_tfce_params(
  * @returns Command-line arguments.
  */
 function metric_tfce_cargs(
-    params: MetricTfceParameters,
+    params: MetricTfceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function metric_tfce_cargs(
  * @returns Outputs object.
  */
 function metric_tfce_outputs(
-    params: MetricTfceParameters,
+    params: MetricTfceParamsDict,
     execution: Execution,
 ): MetricTfceOutputs {
     const ret: MetricTfceOutputs = {
@@ -275,7 +275,7 @@ function metric_tfce_outputs(
  * @returns NamedTuple of outputs (described in `MetricTfceOutputs`).
  */
 function metric_tfce_execute(
-    params: MetricTfceParameters,
+    params: MetricTfceParamsDict,
     runner: Runner | null = null,
 ): MetricTfceOutputs {
     runner = runner || getGlobalRunner();
@@ -328,8 +328,8 @@ function metric_tfce(
     area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    presmooth: MetricTfcePresmoothParameters | null = null,
-    parameters: MetricTfceParametersParameters | null = null,
+    presmooth: MetricTfcePresmoothParamsDict | null = null,
+    parameters: MetricTfceParametersParamsDict | null = null,
     runner: Runner | null = null,
 ): MetricTfceOutputs {
     const params = metric_tfce_params(metric_out, roi_metric, column, area_metric, surface, metric_in, presmooth, parameters)
@@ -340,9 +340,15 @@ function metric_tfce(
 export {
       METRIC_TFCE_METADATA,
       MetricTfceOutputs,
+      MetricTfceParametersParamsDict,
+      MetricTfceParametersParamsDictTagged,
+      MetricTfceParamsDict,
+      MetricTfceParamsDictTagged,
+      MetricTfcePresmoothParamsDict,
+      MetricTfcePresmoothParamsDictTagged,
       metric_tfce,
       metric_tfce_execute,
-      metric_tfce_parameters_params,
+      metric_tfce_parameters,
       metric_tfce_params,
-      metric_tfce_presmooth_params,
+      metric_tfce_presmooth,
 };

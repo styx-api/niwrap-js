@@ -11,7 +11,7 @@ const V_1D_BANDPASS_METADATA: Metadata = {
 };
 
 
-interface V1dBandpassParameters {
+interface V1dBandpassParamsDict {
     "@type"?: "afni/1dBandpass";
     "fbot": number;
     "ftop": number;
@@ -21,11 +21,11 @@ interface V1dBandpassParameters {
     "nodetrend": boolean;
     "norm": boolean;
 }
-type V1dBandpassParametersTagged = Required<Pick<V1dBandpassParameters, '@type'>> & V1dBandpassParameters;
+type V1dBandpassParamsDictTagged = Required<Pick<V1dBandpassParamsDict, '@type'>> & V1dBandpassParamsDict;
 
 
 /**
- * Output object returned when calling `V1dBandpassParameters(...)`.
+ * Output object returned when calling `V1dBandpassParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function v_1d_bandpass_params(
     ortfile: InputPathType | null = null,
     nodetrend: boolean = false,
     norm: boolean = false,
-): V1dBandpassParametersTagged {
+): V1dBandpassParamsDictTagged {
     const params = {
         "@type": "afni/1dBandpass" as const,
         "fbot": fbot,
@@ -86,7 +86,7 @@ function v_1d_bandpass_params(
  * @returns Command-line arguments.
  */
 function v_1d_bandpass_cargs(
-    params: V1dBandpassParameters,
+    params: V1dBandpassParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function v_1d_bandpass_cargs(
  * @returns Outputs object.
  */
 function v_1d_bandpass_outputs(
-    params: V1dBandpassParameters,
+    params: V1dBandpassParamsDict,
     execution: Execution,
 ): V1dBandpassOutputs {
     const ret: V1dBandpassOutputs = {
@@ -150,7 +150,7 @@ function v_1d_bandpass_outputs(
  * @returns NamedTuple of outputs (described in `V1dBandpassOutputs`).
  */
 function v_1d_bandpass_execute(
-    params: V1dBandpassParameters,
+    params: V1dBandpassParamsDict,
     runner: Runner | null = null,
 ): V1dBandpassOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function v_1d_bandpass(
 
 export {
       V1dBandpassOutputs,
+      V1dBandpassParamsDict,
+      V1dBandpassParamsDictTagged,
       V_1D_BANDPASS_METADATA,
       v_1d_bandpass,
       v_1d_bandpass_execute,

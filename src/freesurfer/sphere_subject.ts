@@ -11,17 +11,17 @@ const SPHERE_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface SphereSubjectParameters {
+interface SphereSubjectParamsDict {
     "@type"?: "freesurfer/sphere_subject";
     "input_dir": string;
     "output_file": string;
     "license_file"?: string | null | undefined;
 }
-type SphereSubjectParametersTagged = Required<Pick<SphereSubjectParameters, '@type'>> & SphereSubjectParameters;
+type SphereSubjectParamsDictTagged = Required<Pick<SphereSubjectParamsDict, '@type'>> & SphereSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `SphereSubjectParameters(...)`.
+ * Output object returned when calling `SphereSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function sphere_subject_params(
     input_dir: string,
     output_file: string,
     license_file: string | null = null,
-): SphereSubjectParametersTagged {
+): SphereSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/sphere_subject" as const,
         "input_dir": input_dir,
@@ -72,7 +72,7 @@ function sphere_subject_params(
  * @returns Command-line arguments.
  */
 function sphere_subject_cargs(
-    params: SphereSubjectParameters,
+    params: SphereSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function sphere_subject_cargs(
  * @returns Outputs object.
  */
 function sphere_subject_outputs(
-    params: SphereSubjectParameters,
+    params: SphereSubjectParamsDict,
     execution: Execution,
 ): SphereSubjectOutputs {
     const ret: SphereSubjectOutputs = {
@@ -121,7 +121,7 @@ function sphere_subject_outputs(
  * @returns NamedTuple of outputs (described in `SphereSubjectOutputs`).
  */
 function sphere_subject_execute(
-    params: SphereSubjectParameters,
+    params: SphereSubjectParamsDict,
     runner: Runner | null = null,
 ): SphereSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function sphere_subject(
 export {
       SPHERE_SUBJECT_METADATA,
       SphereSubjectOutputs,
+      SphereSubjectParamsDict,
+      SphereSubjectParamsDictTagged,
       sphere_subject,
       sphere_subject_execute,
       sphere_subject_params,

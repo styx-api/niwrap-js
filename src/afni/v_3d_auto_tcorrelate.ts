@@ -11,7 +11,7 @@ const V_3D_AUTO_TCORRELATE_METADATA: Metadata = {
 };
 
 
-interface V3dAutoTcorrelateParameters {
+interface V3dAutoTcorrelateParamsDict {
     "@type"?: "afni/3dAutoTcorrelate";
     "input_dataset": InputPathType;
     "pearson": boolean;
@@ -27,11 +27,11 @@ interface V3dAutoTcorrelateParameters {
     "time": boolean;
     "mmap": boolean;
 }
-type V3dAutoTcorrelateParametersTagged = Required<Pick<V3dAutoTcorrelateParameters, '@type'>> & V3dAutoTcorrelateParameters;
+type V3dAutoTcorrelateParamsDictTagged = Required<Pick<V3dAutoTcorrelateParamsDict, '@type'>> & V3dAutoTcorrelateParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAutoTcorrelateParameters(...)`.
+ * Output object returned when calling `V3dAutoTcorrelateParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function v_3d_auto_tcorrelate_params(
     out1d: string | null = null,
     time: boolean = false,
     mmap: boolean = false,
-): V3dAutoTcorrelateParametersTagged {
+): V3dAutoTcorrelateParamsDictTagged {
     const params = {
         "@type": "afni/3dAutoTcorrelate" as const,
         "input_dataset": input_dataset,
@@ -128,7 +128,7 @@ function v_3d_auto_tcorrelate_params(
  * @returns Command-line arguments.
  */
 function v_3d_auto_tcorrelate_cargs(
-    params: V3dAutoTcorrelateParameters,
+    params: V3dAutoTcorrelateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -198,7 +198,7 @@ function v_3d_auto_tcorrelate_cargs(
  * @returns Outputs object.
  */
 function v_3d_auto_tcorrelate_outputs(
-    params: V3dAutoTcorrelateParameters,
+    params: V3dAutoTcorrelateParamsDict,
     execution: Execution,
 ): V3dAutoTcorrelateOutputs {
     const ret: V3dAutoTcorrelateOutputs = {
@@ -226,7 +226,7 @@ function v_3d_auto_tcorrelate_outputs(
  * @returns NamedTuple of outputs (described in `V3dAutoTcorrelateOutputs`).
  */
 function v_3d_auto_tcorrelate_execute(
-    params: V3dAutoTcorrelateParameters,
+    params: V3dAutoTcorrelateParamsDict,
     runner: Runner | null = null,
 ): V3dAutoTcorrelateOutputs {
     runner = runner || getGlobalRunner();
@@ -288,6 +288,8 @@ function v_3d_auto_tcorrelate(
 
 export {
       V3dAutoTcorrelateOutputs,
+      V3dAutoTcorrelateParamsDict,
+      V3dAutoTcorrelateParamsDictTagged,
       V_3D_AUTO_TCORRELATE_METADATA,
       v_3d_auto_tcorrelate,
       v_3d_auto_tcorrelate_execute,

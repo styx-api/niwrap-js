@@ -11,7 +11,7 @@ const TFIM_METADATA: Metadata = {
 };
 
 
-interface TfimParameters {
+interface TfimParamsDict {
     "@type"?: "afni/tfim";
     "prefix"?: string | null | undefined;
     "pthresh"?: number | null | undefined;
@@ -21,11 +21,11 @@ interface TfimParameters {
     "set2_images": Array<InputPathType>;
     "base1_value"?: number | null | undefined;
 }
-type TfimParametersTagged = Required<Pick<TfimParameters, '@type'>> & TfimParameters;
+type TfimParamsDictTagged = Required<Pick<TfimParamsDict, '@type'>> & TfimParamsDict;
 
 
 /**
- * Output object returned when calling `TfimParameters(...)`.
+ * Output object returned when calling `TfimParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function tfim_params(
     eqcorr: number | null = null,
     paired: boolean = false,
     base1_value: number | null = null,
-): TfimParametersTagged {
+): TfimParamsDictTagged {
     const params = {
         "@type": "afni/tfim" as const,
         "paired": paired,
@@ -102,7 +102,7 @@ function tfim_params(
  * @returns Command-line arguments.
  */
 function tfim_cargs(
-    params: TfimParameters,
+    params: TfimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,7 +155,7 @@ function tfim_cargs(
  * @returns Outputs object.
  */
 function tfim_outputs(
-    params: TfimParameters,
+    params: TfimParamsDict,
     execution: Execution,
 ): TfimOutputs {
     const ret: TfimOutputs = {
@@ -183,7 +183,7 @@ function tfim_outputs(
  * @returns NamedTuple of outputs (described in `TfimOutputs`).
  */
 function tfim_execute(
-    params: TfimParameters,
+    params: TfimParamsDict,
     runner: Runner | null = null,
 ): TfimOutputs {
     runner = runner || getGlobalRunner();
@@ -234,6 +234,8 @@ function tfim(
 export {
       TFIM_METADATA,
       TfimOutputs,
+      TfimParamsDict,
+      TfimParamsDictTagged,
       tfim,
       tfim_execute,
       tfim_params,

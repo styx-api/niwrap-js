@@ -10,7 +10,7 @@ const VOLUME_ERODE_METADATA: Metadata = {
 };
 
 
-interface VolumeErodeParameters {
+interface VolumeErodeParamsDict {
     "@type"?: "workbench/volume-erode";
     "volume-out": string;
     "roi-volume"?: InputPathType | null | undefined;
@@ -18,11 +18,11 @@ interface VolumeErodeParameters {
     "volume": InputPathType;
     "distance": number;
 }
-type VolumeErodeParametersTagged = Required<Pick<VolumeErodeParameters, '@type'>> & VolumeErodeParameters;
+type VolumeErodeParamsDictTagged = Required<Pick<VolumeErodeParamsDict, '@type'>> & VolumeErodeParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeErodeParameters(...)`.
+ * Output object returned when calling `VolumeErodeParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function volume_erode_params(
     subvol: string | null,
     volume: InputPathType,
     distance: number,
-): VolumeErodeParametersTagged {
+): VolumeErodeParamsDictTagged {
     const params = {
         "@type": "workbench/volume-erode" as const,
         "volume-out": volume_out,
@@ -85,7 +85,7 @@ function volume_erode_params(
  * @returns Command-line arguments.
  */
 function volume_erode_cargs(
-    params: VolumeErodeParameters,
+    params: VolumeErodeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function volume_erode_cargs(
  * @returns Outputs object.
  */
 function volume_erode_outputs(
-    params: VolumeErodeParameters,
+    params: VolumeErodeParamsDict,
     execution: Execution,
 ): VolumeErodeOutputs {
     const ret: VolumeErodeOutputs = {
@@ -137,7 +137,7 @@ function volume_erode_outputs(
  * @returns NamedTuple of outputs (described in `VolumeErodeOutputs`).
  */
 function volume_erode_execute(
-    params: VolumeErodeParameters,
+    params: VolumeErodeParamsDict,
     runner: Runner | null = null,
 ): VolumeErodeOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function volume_erode(
 export {
       VOLUME_ERODE_METADATA,
       VolumeErodeOutputs,
+      VolumeErodeParamsDict,
+      VolumeErodeParamsDictTagged,
       volume_erode,
       volume_erode_execute,
       volume_erode_params,

@@ -11,7 +11,7 @@ const DMRI_MOTION_METADATA: Metadata = {
 };
 
 
-interface DmriMotionParameters {
+interface DmriMotionParamsDict {
     "@type"?: "freesurfer/dmri_motion";
     "outfile": InputPathType;
     "outf"?: InputPathType | null | undefined;
@@ -25,11 +25,11 @@ interface DmriMotionParameters {
     "help": boolean;
     "version": boolean;
 }
-type DmriMotionParametersTagged = Required<Pick<DmriMotionParameters, '@type'>> & DmriMotionParameters;
+type DmriMotionParamsDictTagged = Required<Pick<DmriMotionParamsDict, '@type'>> & DmriMotionParamsDict;
 
 
 /**
- * Output object returned when calling `DmriMotionParameters(...)`.
+ * Output object returned when calling `DmriMotionParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function dmri_motion_params(
     checkopts: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriMotionParametersTagged {
+): DmriMotionParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_motion" as const,
         "outfile": outfile,
@@ -118,7 +118,7 @@ function dmri_motion_params(
  * @returns Command-line arguments.
  */
 function dmri_motion_cargs(
-    params: DmriMotionParameters,
+    params: DmriMotionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -188,7 +188,7 @@ function dmri_motion_cargs(
  * @returns Outputs object.
  */
 function dmri_motion_outputs(
-    params: DmriMotionParameters,
+    params: DmriMotionParamsDict,
     execution: Execution,
 ): DmriMotionOutputs {
     const ret: DmriMotionOutputs = {
@@ -215,7 +215,7 @@ function dmri_motion_outputs(
  * @returns NamedTuple of outputs (described in `DmriMotionOutputs`).
  */
 function dmri_motion_execute(
-    params: DmriMotionParameters,
+    params: DmriMotionParamsDict,
     runner: Runner | null = null,
 ): DmriMotionOutputs {
     runner = runner || getGlobalRunner();
@@ -274,6 +274,8 @@ function dmri_motion(
 export {
       DMRI_MOTION_METADATA,
       DmriMotionOutputs,
+      DmriMotionParamsDict,
+      DmriMotionParamsDictTagged,
       dmri_motion,
       dmri_motion_execute,
       dmri_motion_params,

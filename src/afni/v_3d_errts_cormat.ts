@@ -11,7 +11,7 @@ const V_3D_ERRTS_CORMAT_METADATA: Metadata = {
 };
 
 
-interface V3dErrtsCormatParameters {
+interface V3dErrtsCormatParamsDict {
     "@type"?: "afni/3dErrtsCormat";
     "dset": InputPathType;
     "concat"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface V3dErrtsCormatParameters {
     "maxlag"?: number | null | undefined;
     "polort"?: number | null | undefined;
 }
-type V3dErrtsCormatParametersTagged = Required<Pick<V3dErrtsCormatParameters, '@type'>> & V3dErrtsCormatParameters;
+type V3dErrtsCormatParamsDictTagged = Required<Pick<V3dErrtsCormatParamsDict, '@type'>> & V3dErrtsCormatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dErrtsCormatParameters(...)`.
+ * Output object returned when calling `V3dErrtsCormatParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_errts_cormat_params(
     mask: InputPathType | null = null,
     maxlag: number | null = null,
     polort: number | null = null,
-): V3dErrtsCormatParametersTagged {
+): V3dErrtsCormatParamsDictTagged {
     const params = {
         "@type": "afni/3dErrtsCormat" as const,
         "dset": dset,
@@ -92,7 +92,7 @@ function v_3d_errts_cormat_params(
  * @returns Command-line arguments.
  */
 function v_3d_errts_cormat_cargs(
-    params: V3dErrtsCormatParameters,
+    params: V3dErrtsCormatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function v_3d_errts_cormat_cargs(
  * @returns Outputs object.
  */
 function v_3d_errts_cormat_outputs(
-    params: V3dErrtsCormatParameters,
+    params: V3dErrtsCormatParamsDict,
     execution: Execution,
 ): V3dErrtsCormatOutputs {
     const ret: V3dErrtsCormatOutputs = {
@@ -167,7 +167,7 @@ function v_3d_errts_cormat_outputs(
  * @returns NamedTuple of outputs (described in `V3dErrtsCormatOutputs`).
  */
 function v_3d_errts_cormat_execute(
-    params: V3dErrtsCormatParameters,
+    params: V3dErrtsCormatParamsDict,
     runner: Runner | null = null,
 ): V3dErrtsCormatOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function v_3d_errts_cormat(
 
 export {
       V3dErrtsCormatOutputs,
+      V3dErrtsCormatParamsDict,
+      V3dErrtsCormatParamsDictTagged,
       V_3D_ERRTS_CORMAT_METADATA,
       v_3d_errts_cormat,
       v_3d_errts_cormat_execute,

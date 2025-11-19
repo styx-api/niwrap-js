@@ -11,7 +11,7 @@ const SEG2FILLED_METADATA: Metadata = {
 };
 
 
-interface Seg2filledParameters {
+interface Seg2filledParamsDict {
     "@type"?: "freesurfer/seg2filled";
     "seg_file": InputPathType;
     "norm_file": InputPathType;
@@ -21,11 +21,11 @@ interface Seg2filledParameters {
     "surf_name"?: string | null | undefined;
     "surf_dir"?: string | null | undefined;
 }
-type Seg2filledParametersTagged = Required<Pick<Seg2filledParameters, '@type'>> & Seg2filledParameters;
+type Seg2filledParamsDictTagged = Required<Pick<Seg2filledParamsDict, '@type'>> & Seg2filledParamsDict;
 
 
 /**
- * Output object returned when calling `Seg2filledParameters(...)`.
+ * Output object returned when calling `Seg2filledParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function seg2filled_params(
     cavity_flag: boolean = false,
     surf_name: string | null = null,
     surf_dir: string | null = null,
-): Seg2filledParametersTagged {
+): Seg2filledParamsDictTagged {
     const params = {
         "@type": "freesurfer/seg2filled" as const,
         "seg_file": seg_file,
@@ -92,7 +92,7 @@ function seg2filled_params(
  * @returns Command-line arguments.
  */
 function seg2filled_cargs(
-    params: Seg2filledParameters,
+    params: Seg2filledParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function seg2filled_cargs(
  * @returns Outputs object.
  */
 function seg2filled_outputs(
-    params: Seg2filledParameters,
+    params: Seg2filledParamsDict,
     execution: Execution,
 ): Seg2filledOutputs {
     const ret: Seg2filledOutputs = {
@@ -169,7 +169,7 @@ function seg2filled_outputs(
  * @returns NamedTuple of outputs (described in `Seg2filledOutputs`).
  */
 function seg2filled_execute(
-    params: Seg2filledParameters,
+    params: Seg2filledParamsDict,
     runner: Runner | null = null,
 ): Seg2filledOutputs {
     runner = runner || getGlobalRunner();
@@ -220,6 +220,8 @@ function seg2filled(
 export {
       SEG2FILLED_METADATA,
       Seg2filledOutputs,
+      Seg2filledParamsDict,
+      Seg2filledParamsDictTagged,
       seg2filled,
       seg2filled_execute,
       seg2filled_params,

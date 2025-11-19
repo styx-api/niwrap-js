@@ -11,7 +11,7 @@ const FAT_PROC_MAP_TO_DTI_METADATA: Metadata = {
 };
 
 
-interface FatProcMapToDtiParameters {
+interface FatProcMapToDtiParamsDict {
     "@type"?: "afni/fat_proc_map_to_dti";
     "source": InputPathType;
     "base": InputPathType;
@@ -26,11 +26,11 @@ interface FatProcMapToDtiParameters {
     "no_cmd_out": boolean;
     "no_clean": boolean;
 }
-type FatProcMapToDtiParametersTagged = Required<Pick<FatProcMapToDtiParameters, '@type'>> & FatProcMapToDtiParameters;
+type FatProcMapToDtiParamsDictTagged = Required<Pick<FatProcMapToDtiParamsDict, '@type'>> & FatProcMapToDtiParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcMapToDtiParameters(...)`.
+ * Output object returned when calling `FatProcMapToDtiParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function fat_proc_map_to_dti_params(
     workdir: string | null = null,
     no_cmd_out: boolean = false,
     no_clean: boolean = false,
-): FatProcMapToDtiParametersTagged {
+): FatProcMapToDtiParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_map_to_dti" as const,
         "source": source,
@@ -116,7 +116,7 @@ function fat_proc_map_to_dti_params(
  * @returns Command-line arguments.
  */
 function fat_proc_map_to_dti_cargs(
-    params: FatProcMapToDtiParameters,
+    params: FatProcMapToDtiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -194,7 +194,7 @@ function fat_proc_map_to_dti_cargs(
  * @returns Outputs object.
  */
 function fat_proc_map_to_dti_outputs(
-    params: FatProcMapToDtiParameters,
+    params: FatProcMapToDtiParamsDict,
     execution: Execution,
 ): FatProcMapToDtiOutputs {
     const ret: FatProcMapToDtiOutputs = {
@@ -219,7 +219,7 @@ function fat_proc_map_to_dti_outputs(
  * @returns NamedTuple of outputs (described in `FatProcMapToDtiOutputs`).
  */
 function fat_proc_map_to_dti_execute(
-    params: FatProcMapToDtiParameters,
+    params: FatProcMapToDtiParamsDict,
     runner: Runner | null = null,
 ): FatProcMapToDtiOutputs {
     runner = runner || getGlobalRunner();
@@ -280,6 +280,8 @@ function fat_proc_map_to_dti(
 export {
       FAT_PROC_MAP_TO_DTI_METADATA,
       FatProcMapToDtiOutputs,
+      FatProcMapToDtiParamsDict,
+      FatProcMapToDtiParamsDictTagged,
       fat_proc_map_to_dti,
       fat_proc_map_to_dti_execute,
       fat_proc_map_to_dti_params,

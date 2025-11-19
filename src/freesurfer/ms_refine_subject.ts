@@ -11,15 +11,15 @@ const MS_REFINE_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface MsRefineSubjectParameters {
+interface MsRefineSubjectParamsDict {
     "@type"?: "freesurfer/ms_refine_subject";
     "subjects_dir": string;
 }
-type MsRefineSubjectParametersTagged = Required<Pick<MsRefineSubjectParameters, '@type'>> & MsRefineSubjectParameters;
+type MsRefineSubjectParamsDictTagged = Required<Pick<MsRefineSubjectParamsDict, '@type'>> & MsRefineSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `MsRefineSubjectParameters(...)`.
+ * Output object returned when calling `MsRefineSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MsRefineSubjectOutputs {
  */
 function ms_refine_subject_params(
     subjects_dir: string,
-): MsRefineSubjectParametersTagged {
+): MsRefineSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/ms_refine_subject" as const,
         "subjects_dir": subjects_dir,
@@ -58,7 +58,7 @@ function ms_refine_subject_params(
  * @returns Command-line arguments.
  */
 function ms_refine_subject_cargs(
-    params: MsRefineSubjectParameters,
+    params: MsRefineSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function ms_refine_subject_cargs(
  * @returns Outputs object.
  */
 function ms_refine_subject_outputs(
-    params: MsRefineSubjectParameters,
+    params: MsRefineSubjectParamsDict,
     execution: Execution,
 ): MsRefineSubjectOutputs {
     const ret: MsRefineSubjectOutputs = {
@@ -102,7 +102,7 @@ function ms_refine_subject_outputs(
  * @returns NamedTuple of outputs (described in `MsRefineSubjectOutputs`).
  */
 function ms_refine_subject_execute(
-    params: MsRefineSubjectParameters,
+    params: MsRefineSubjectParamsDict,
     runner: Runner | null = null,
 ): MsRefineSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function ms_refine_subject(
 export {
       MS_REFINE_SUBJECT_METADATA,
       MsRefineSubjectOutputs,
+      MsRefineSubjectParamsDict,
+      MsRefineSubjectParamsDictTagged,
       ms_refine_subject,
       ms_refine_subject_execute,
       ms_refine_subject_params,

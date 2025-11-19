@@ -11,15 +11,15 @@ const RENORMALIZE_T1_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface RenormalizeT1SubjectParameters {
+interface RenormalizeT1SubjectParamsDict {
     "@type"?: "freesurfer/renormalize_T1_subject";
     "subject_dir": string;
 }
-type RenormalizeT1SubjectParametersTagged = Required<Pick<RenormalizeT1SubjectParameters, '@type'>> & RenormalizeT1SubjectParameters;
+type RenormalizeT1SubjectParamsDictTagged = Required<Pick<RenormalizeT1SubjectParamsDict, '@type'>> & RenormalizeT1SubjectParamsDict;
 
 
 /**
- * Output object returned when calling `RenormalizeT1SubjectParameters(...)`.
+ * Output object returned when calling `RenormalizeT1SubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface RenormalizeT1SubjectOutputs {
  */
 function renormalize_t1_subject_params(
     subject_dir: string,
-): RenormalizeT1SubjectParametersTagged {
+): RenormalizeT1SubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/renormalize_T1_subject" as const,
         "subject_dir": subject_dir,
@@ -58,7 +58,7 @@ function renormalize_t1_subject_params(
  * @returns Command-line arguments.
  */
 function renormalize_t1_subject_cargs(
-    params: RenormalizeT1SubjectParameters,
+    params: RenormalizeT1SubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function renormalize_t1_subject_cargs(
  * @returns Outputs object.
  */
 function renormalize_t1_subject_outputs(
-    params: RenormalizeT1SubjectParameters,
+    params: RenormalizeT1SubjectParamsDict,
     execution: Execution,
 ): RenormalizeT1SubjectOutputs {
     const ret: RenormalizeT1SubjectOutputs = {
@@ -102,7 +102,7 @@ function renormalize_t1_subject_outputs(
  * @returns NamedTuple of outputs (described in `RenormalizeT1SubjectOutputs`).
  */
 function renormalize_t1_subject_execute(
-    params: RenormalizeT1SubjectParameters,
+    params: RenormalizeT1SubjectParamsDict,
     runner: Runner | null = null,
 ): RenormalizeT1SubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function renormalize_t1_subject(
 export {
       RENORMALIZE_T1_SUBJECT_METADATA,
       RenormalizeT1SubjectOutputs,
+      RenormalizeT1SubjectParamsDict,
+      RenormalizeT1SubjectParamsDictTagged,
       renormalize_t1_subject,
       renormalize_t1_subject_execute,
       renormalize_t1_subject_params,

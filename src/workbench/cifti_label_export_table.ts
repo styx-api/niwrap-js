@@ -10,18 +10,18 @@ const CIFTI_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 };
 
 
-interface CiftiLabelExportTableParameters {
+interface CiftiLabelExportTableParamsDict {
     "@type"?: "workbench/cifti-label-export-table";
     "json-out"?: string | null | undefined;
     "label-in": InputPathType;
     "map": string;
     "table-out": string;
 }
-type CiftiLabelExportTableParametersTagged = Required<Pick<CiftiLabelExportTableParameters, '@type'>> & CiftiLabelExportTableParameters;
+type CiftiLabelExportTableParamsDictTagged = Required<Pick<CiftiLabelExportTableParamsDict, '@type'>> & CiftiLabelExportTableParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiLabelExportTableParameters(...)`.
+ * Output object returned when calling `CiftiLabelExportTableParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function cifti_label_export_table_params(
     label_in: InputPathType,
     map: string,
     table_out: string,
-): CiftiLabelExportTableParametersTagged {
+): CiftiLabelExportTableParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-export-table" as const,
         "label-in": label_in,
@@ -73,7 +73,7 @@ function cifti_label_export_table_params(
  * @returns Command-line arguments.
  */
 function cifti_label_export_table_cargs(
-    params: CiftiLabelExportTableParameters,
+    params: CiftiLabelExportTableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function cifti_label_export_table_cargs(
  * @returns Outputs object.
  */
 function cifti_label_export_table_outputs(
-    params: CiftiLabelExportTableParameters,
+    params: CiftiLabelExportTableParamsDict,
     execution: Execution,
 ): CiftiLabelExportTableOutputs {
     const ret: CiftiLabelExportTableOutputs = {
@@ -122,7 +122,7 @@ function cifti_label_export_table_outputs(
  * @returns NamedTuple of outputs (described in `CiftiLabelExportTableOutputs`).
  */
 function cifti_label_export_table_execute(
-    params: CiftiLabelExportTableParameters,
+    params: CiftiLabelExportTableParamsDict,
     runner: Runner | null = null,
 ): CiftiLabelExportTableOutputs {
     runner = runner || getGlobalRunner();
@@ -165,6 +165,8 @@ function cifti_label_export_table(
 export {
       CIFTI_LABEL_EXPORT_TABLE_METADATA,
       CiftiLabelExportTableOutputs,
+      CiftiLabelExportTableParamsDict,
+      CiftiLabelExportTableParamsDictTagged,
       cifti_label_export_table,
       cifti_label_export_table_execute,
       cifti_label_export_table_params,

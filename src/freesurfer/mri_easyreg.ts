@@ -11,7 +11,7 @@ const MRI_EASYREG_METADATA: Metadata = {
 };
 
 
-interface MriEasyregParameters {
+interface MriEasyregParamsDict {
     "@type"?: "freesurfer/mri_easyreg";
     "reference_image": InputPathType;
     "reference_segmentation"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface MriEasyregParameters {
     "affine_only": boolean;
     "threads"?: number | null | undefined;
 }
-type MriEasyregParametersTagged = Required<Pick<MriEasyregParameters, '@type'>> & MriEasyregParameters;
+type MriEasyregParamsDictTagged = Required<Pick<MriEasyregParamsDict, '@type'>> & MriEasyregParamsDict;
 
 
 /**
- * Output object returned when calling `MriEasyregParameters(...)`.
+ * Output object returned when calling `MriEasyregParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function mri_easyreg_params(
     inverse_field: InputPathType | null = null,
     affine_only: boolean = false,
     threads: number | null = null,
-): MriEasyregParametersTagged {
+): MriEasyregParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_easyreg" as const,
         "reference_image": reference_image,
@@ -124,7 +124,7 @@ function mri_easyreg_params(
  * @returns Command-line arguments.
  */
 function mri_easyreg_cargs(
-    params: MriEasyregParameters,
+    params: MriEasyregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -195,7 +195,7 @@ function mri_easyreg_cargs(
  * @returns Outputs object.
  */
 function mri_easyreg_outputs(
-    params: MriEasyregParameters,
+    params: MriEasyregParamsDict,
     execution: Execution,
 ): MriEasyregOutputs {
     const ret: MriEasyregOutputs = {
@@ -224,7 +224,7 @@ function mri_easyreg_outputs(
  * @returns NamedTuple of outputs (described in `MriEasyregOutputs`).
  */
 function mri_easyreg_execute(
-    params: MriEasyregParameters,
+    params: MriEasyregParamsDict,
     runner: Runner | null = null,
 ): MriEasyregOutputs {
     runner = runner || getGlobalRunner();
@@ -281,6 +281,8 @@ function mri_easyreg(
 export {
       MRI_EASYREG_METADATA,
       MriEasyregOutputs,
+      MriEasyregParamsDict,
+      MriEasyregParamsDictTagged,
       mri_easyreg,
       mri_easyreg_execute,
       mri_easyreg_params,

@@ -11,7 +11,7 @@ const MRIS_APPLY_REG_METADATA: Metadata = {
 };
 
 
-interface MrisApplyRegParameters {
+interface MrisApplyRegParamsDict {
     "@type"?: "freesurfer/mris_apply_reg";
     "src_input": InputPathType;
     "trg_output": string;
@@ -37,11 +37,11 @@ interface MrisApplyRegParameters {
     "debug_mode": boolean;
     "check_options": boolean;
 }
-type MrisApplyRegParametersTagged = Required<Pick<MrisApplyRegParameters, '@type'>> & MrisApplyRegParameters;
+type MrisApplyRegParamsDictTagged = Required<Pick<MrisApplyRegParamsDict, '@type'>> & MrisApplyRegParamsDict;
 
 
 /**
- * Output object returned when calling `MrisApplyRegParameters(...)`.
+ * Output object returned when calling `MrisApplyRegParamsDict(...)`.
  *
  * @interface
  */
@@ -110,7 +110,7 @@ function mris_apply_reg_params(
     trg_reg_scale: number | null = null,
     debug_mode: boolean = false,
     check_options: boolean = false,
-): MrisApplyRegParametersTagged {
+): MrisApplyRegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_apply_reg" as const,
         "src_input": src_input,
@@ -174,7 +174,7 @@ function mris_apply_reg_params(
  * @returns Command-line arguments.
  */
 function mris_apply_reg_cargs(
-    params: MrisApplyRegParameters,
+    params: MrisApplyRegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -300,7 +300,7 @@ function mris_apply_reg_cargs(
  * @returns Outputs object.
  */
 function mris_apply_reg_outputs(
-    params: MrisApplyRegParameters,
+    params: MrisApplyRegParamsDict,
     execution: Execution,
 ): MrisApplyRegOutputs {
     const ret: MrisApplyRegOutputs = {
@@ -326,7 +326,7 @@ function mris_apply_reg_outputs(
  * @returns NamedTuple of outputs (described in `MrisApplyRegOutputs`).
  */
 function mris_apply_reg_execute(
-    params: MrisApplyRegParameters,
+    params: MrisApplyRegParamsDict,
     runner: Runner | null = null,
 ): MrisApplyRegOutputs {
     runner = runner || getGlobalRunner();
@@ -409,6 +409,8 @@ function mris_apply_reg(
 export {
       MRIS_APPLY_REG_METADATA,
       MrisApplyRegOutputs,
+      MrisApplyRegParamsDict,
+      MrisApplyRegParamsDictTagged,
       mris_apply_reg,
       mris_apply_reg_execute,
       mris_apply_reg_params,

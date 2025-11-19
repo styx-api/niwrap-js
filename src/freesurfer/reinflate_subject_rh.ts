@@ -11,16 +11,16 @@ const REINFLATE_SUBJECT_RH_METADATA: Metadata = {
 };
 
 
-interface ReinflateSubjectRhParameters {
+interface ReinflateSubjectRhParamsDict {
     "@type"?: "freesurfer/reinflate_subject-rh";
     "subject_dir": string;
     "additional_options"?: string | null | undefined;
 }
-type ReinflateSubjectRhParametersTagged = Required<Pick<ReinflateSubjectRhParameters, '@type'>> & ReinflateSubjectRhParameters;
+type ReinflateSubjectRhParamsDictTagged = Required<Pick<ReinflateSubjectRhParamsDict, '@type'>> & ReinflateSubjectRhParamsDict;
 
 
 /**
- * Output object returned when calling `ReinflateSubjectRhParameters(...)`.
+ * Output object returned when calling `ReinflateSubjectRhParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface ReinflateSubjectRhOutputs {
 function reinflate_subject_rh_params(
     subject_dir: string,
     additional_options: string | null = null,
-): ReinflateSubjectRhParametersTagged {
+): ReinflateSubjectRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/reinflate_subject-rh" as const,
         "subject_dir": subject_dir,
@@ -64,7 +64,7 @@ function reinflate_subject_rh_params(
  * @returns Command-line arguments.
  */
 function reinflate_subject_rh_cargs(
-    params: ReinflateSubjectRhParameters,
+    params: ReinflateSubjectRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function reinflate_subject_rh_cargs(
  * @returns Outputs object.
  */
 function reinflate_subject_rh_outputs(
-    params: ReinflateSubjectRhParameters,
+    params: ReinflateSubjectRhParamsDict,
     execution: Execution,
 ): ReinflateSubjectRhOutputs {
     const ret: ReinflateSubjectRhOutputs = {
@@ -114,7 +114,7 @@ function reinflate_subject_rh_outputs(
  * @returns NamedTuple of outputs (described in `ReinflateSubjectRhOutputs`).
  */
 function reinflate_subject_rh_execute(
-    params: ReinflateSubjectRhParameters,
+    params: ReinflateSubjectRhParamsDict,
     runner: Runner | null = null,
 ): ReinflateSubjectRhOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function reinflate_subject_rh(
 export {
       REINFLATE_SUBJECT_RH_METADATA,
       ReinflateSubjectRhOutputs,
+      ReinflateSubjectRhParamsDict,
+      ReinflateSubjectRhParamsDictTagged,
       reinflate_subject_rh,
       reinflate_subject_rh_execute,
       reinflate_subject_rh_params,

@@ -11,7 +11,7 @@ const MRI_SEG_DIFF_METADATA: Metadata = {
 };
 
 
-interface MriSegDiffParameters {
+interface MriSegDiffParamsDict {
     "@type"?: "freesurfer/mri_seg_diff";
     "seg1"?: InputPathType | null | undefined;
     "seg2"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface MriSegDiffParameters {
     "checkopts": boolean;
     "version": boolean;
 }
-type MriSegDiffParametersTagged = Required<Pick<MriSegDiffParameters, '@type'>> & MriSegDiffParameters;
+type MriSegDiffParamsDictTagged = Required<Pick<MriSegDiffParamsDict, '@type'>> & MriSegDiffParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegDiffParameters(...)`.
+ * Output object returned when calling `MriSegDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function mri_seg_diff_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriSegDiffParametersTagged {
+): MriSegDiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_seg_diff" as const,
         "diff": diff,
@@ -112,7 +112,7 @@ function mri_seg_diff_params(
  * @returns Command-line arguments.
  */
 function mri_seg_diff_cargs(
-    params: MriSegDiffParameters,
+    params: MriSegDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -176,7 +176,7 @@ function mri_seg_diff_cargs(
  * @returns Outputs object.
  */
 function mri_seg_diff_outputs(
-    params: MriSegDiffParameters,
+    params: MriSegDiffParamsDict,
     execution: Execution,
 ): MriSegDiffOutputs {
     const ret: MriSegDiffOutputs = {
@@ -203,7 +203,7 @@ function mri_seg_diff_outputs(
  * @returns NamedTuple of outputs (described in `MriSegDiffOutputs`).
  */
 function mri_seg_diff_execute(
-    params: MriSegDiffParameters,
+    params: MriSegDiffParamsDict,
     runner: Runner | null = null,
 ): MriSegDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -260,6 +260,8 @@ function mri_seg_diff(
 export {
       MRI_SEG_DIFF_METADATA,
       MriSegDiffOutputs,
+      MriSegDiffParamsDict,
+      MriSegDiffParamsDictTagged,
       mri_seg_diff,
       mri_seg_diff_execute,
       mri_seg_diff_params,

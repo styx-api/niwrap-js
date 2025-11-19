@@ -11,17 +11,17 @@ const MAKE_HEMI_MASK_METADATA: Metadata = {
 };
 
 
-interface MakeHemiMaskParameters {
+interface MakeHemiMaskParamsDict {
     "@type"?: "freesurfer/make_hemi_mask";
     "hemi": string;
     "input_file": InputPathType;
     "output_file": string;
 }
-type MakeHemiMaskParametersTagged = Required<Pick<MakeHemiMaskParameters, '@type'>> & MakeHemiMaskParameters;
+type MakeHemiMaskParamsDictTagged = Required<Pick<MakeHemiMaskParamsDict, '@type'>> & MakeHemiMaskParamsDict;
 
 
 /**
- * Output object returned when calling `MakeHemiMaskParameters(...)`.
+ * Output object returned when calling `MakeHemiMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function make_hemi_mask_params(
     hemi: string,
     input_file: InputPathType,
     output_file: string,
-): MakeHemiMaskParametersTagged {
+): MakeHemiMaskParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_hemi_mask" as const,
         "hemi": hemi,
@@ -70,7 +70,7 @@ function make_hemi_mask_params(
  * @returns Command-line arguments.
  */
 function make_hemi_mask_cargs(
-    params: MakeHemiMaskParameters,
+    params: MakeHemiMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function make_hemi_mask_cargs(
  * @returns Outputs object.
  */
 function make_hemi_mask_outputs(
-    params: MakeHemiMaskParameters,
+    params: MakeHemiMaskParamsDict,
     execution: Execution,
 ): MakeHemiMaskOutputs {
     const ret: MakeHemiMaskOutputs = {
@@ -117,7 +117,7 @@ function make_hemi_mask_outputs(
  * @returns NamedTuple of outputs (described in `MakeHemiMaskOutputs`).
  */
 function make_hemi_mask_execute(
-    params: MakeHemiMaskParameters,
+    params: MakeHemiMaskParamsDict,
     runner: Runner | null = null,
 ): MakeHemiMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function make_hemi_mask(
 export {
       MAKE_HEMI_MASK_METADATA,
       MakeHemiMaskOutputs,
+      MakeHemiMaskParamsDict,
+      MakeHemiMaskParamsDictTagged,
       make_hemi_mask,
       make_hemi_mask_execute,
       make_hemi_mask_params,

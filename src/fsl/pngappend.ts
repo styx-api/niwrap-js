@@ -11,16 +11,16 @@ const PNGAPPEND_METADATA: Metadata = {
 };
 
 
-interface PngappendParameters {
+interface PngappendParamsDict {
     "@type"?: "fsl/pngappend";
     "input_files_and_options": Array<string>;
     "output_file": InputPathType;
 }
-type PngappendParametersTagged = Required<Pick<PngappendParameters, '@type'>> & PngappendParameters;
+type PngappendParamsDictTagged = Required<Pick<PngappendParamsDict, '@type'>> & PngappendParamsDict;
 
 
 /**
- * Output object returned when calling `PngappendParameters(...)`.
+ * Output object returned when calling `PngappendParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface PngappendOutputs {
 function pngappend_params(
     input_files_and_options: Array<string>,
     output_file: InputPathType,
-): PngappendParametersTagged {
+): PngappendParamsDictTagged {
     const params = {
         "@type": "fsl/pngappend" as const,
         "input_files_and_options": input_files_and_options,
@@ -62,7 +62,7 @@ function pngappend_params(
  * @returns Command-line arguments.
  */
 function pngappend_cargs(
-    params: PngappendParameters,
+    params: PngappendParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function pngappend_cargs(
  * @returns Outputs object.
  */
 function pngappend_outputs(
-    params: PngappendParameters,
+    params: PngappendParamsDict,
     execution: Execution,
 ): PngappendOutputs {
     const ret: PngappendOutputs = {
@@ -107,7 +107,7 @@ function pngappend_outputs(
  * @returns NamedTuple of outputs (described in `PngappendOutputs`).
  */
 function pngappend_execute(
-    params: PngappendParameters,
+    params: PngappendParamsDict,
     runner: Runner | null = null,
 ): PngappendOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function pngappend(
 export {
       PNGAPPEND_METADATA,
       PngappendOutputs,
+      PngappendParamsDict,
+      PngappendParamsDictTagged,
       pngappend,
       pngappend_execute,
       pngappend_params,

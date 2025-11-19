@@ -11,7 +11,7 @@ const V_4DFPTOANALYZE_METADATA: Metadata = {
 };
 
 
-interface V4dfptoanalyzeParameters {
+interface V4dfptoanalyzeParamsDict {
     "@type"?: "freesurfer/4dfptoanalyze";
     "input_file": InputPathType;
     "scale_factor"?: number | null | undefined;
@@ -19,11 +19,11 @@ interface V4dfptoanalyzeParameters {
     "spm99": boolean;
     "endianness"?: string | null | undefined;
 }
-type V4dfptoanalyzeParametersTagged = Required<Pick<V4dfptoanalyzeParameters, '@type'>> & V4dfptoanalyzeParameters;
+type V4dfptoanalyzeParamsDictTagged = Required<Pick<V4dfptoanalyzeParamsDict, '@type'>> & V4dfptoanalyzeParamsDict;
 
 
 /**
- * Output object returned when calling `V4dfptoanalyzeParameters(...)`.
+ * Output object returned when calling `V4dfptoanalyzeParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function v_4dfptoanalyze_params(
     output_8bit: boolean = false,
     spm99: boolean = false,
     endianness: string | null = null,
-): V4dfptoanalyzeParametersTagged {
+): V4dfptoanalyzeParamsDictTagged {
     const params = {
         "@type": "freesurfer/4dfptoanalyze" as const,
         "input_file": input_file,
@@ -86,7 +86,7 @@ function v_4dfptoanalyze_params(
  * @returns Command-line arguments.
  */
 function v_4dfptoanalyze_cargs(
-    params: V4dfptoanalyzeParameters,
+    params: V4dfptoanalyzeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function v_4dfptoanalyze_cargs(
  * @returns Outputs object.
  */
 function v_4dfptoanalyze_outputs(
-    params: V4dfptoanalyzeParameters,
+    params: V4dfptoanalyzeParamsDict,
     execution: Execution,
 ): V4dfptoanalyzeOutputs {
     const ret: V4dfptoanalyzeOutputs = {
@@ -150,7 +150,7 @@ function v_4dfptoanalyze_outputs(
  * @returns NamedTuple of outputs (described in `V4dfptoanalyzeOutputs`).
  */
 function v_4dfptoanalyze_execute(
-    params: V4dfptoanalyzeParameters,
+    params: V4dfptoanalyzeParamsDict,
     runner: Runner | null = null,
 ): V4dfptoanalyzeOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function v_4dfptoanalyze(
 
 export {
       V4dfptoanalyzeOutputs,
+      V4dfptoanalyzeParamsDict,
+      V4dfptoanalyzeParamsDictTagged,
       V_4DFPTOANALYZE_METADATA,
       v_4dfptoanalyze,
       v_4dfptoanalyze_execute,

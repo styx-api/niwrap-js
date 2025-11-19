@@ -11,7 +11,7 @@ const MRI_WARP_CONVERT_METADATA: Metadata = {
 };
 
 
-interface MriWarpConvertParameters {
+interface MriWarpConvertParamsDict {
     "@type"?: "freesurfer/mri_warp_convert";
     "inm3z"?: InputPathType | null | undefined;
     "infsl"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface MriWarpConvertParameters {
     "insrcgeom"?: InputPathType | null | undefined;
     "downsample": boolean;
 }
-type MriWarpConvertParametersTagged = Required<Pick<MriWarpConvertParameters, '@type'>> & MriWarpConvertParameters;
+type MriWarpConvertParamsDictTagged = Required<Pick<MriWarpConvertParamsDict, '@type'>> & MriWarpConvertParamsDict;
 
 
 /**
- * Output object returned when calling `MriWarpConvertParameters(...)`.
+ * Output object returned when calling `MriWarpConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function mri_warp_convert_params(
     outvox: string | null = null,
     insrcgeom: InputPathType | null = null,
     downsample: boolean = false,
-): MriWarpConvertParametersTagged {
+): MriWarpConvertParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_warp_convert" as const,
         "downsample": downsample,
@@ -140,7 +140,7 @@ function mri_warp_convert_params(
  * @returns Command-line arguments.
  */
 function mri_warp_convert_cargs(
-    params: MriWarpConvertParameters,
+    params: MriWarpConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -239,7 +239,7 @@ function mri_warp_convert_cargs(
  * @returns Outputs object.
  */
 function mri_warp_convert_outputs(
-    params: MriWarpConvertParameters,
+    params: MriWarpConvertParamsDict,
     execution: Execution,
 ): MriWarpConvertOutputs {
     const ret: MriWarpConvertOutputs = {
@@ -265,7 +265,7 @@ function mri_warp_convert_outputs(
  * @returns NamedTuple of outputs (described in `MriWarpConvertOutputs`).
  */
 function mri_warp_convert_execute(
-    params: MriWarpConvertParameters,
+    params: MriWarpConvertParamsDict,
     runner: Runner | null = null,
 ): MriWarpConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -330,6 +330,8 @@ function mri_warp_convert(
 export {
       MRI_WARP_CONVERT_METADATA,
       MriWarpConvertOutputs,
+      MriWarpConvertParamsDict,
+      MriWarpConvertParamsDictTagged,
       mri_warp_convert,
       mri_warp_convert_execute,
       mri_warp_convert_params,

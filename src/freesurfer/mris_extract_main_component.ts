@@ -11,16 +11,16 @@ const MRIS_EXTRACT_MAIN_COMPONENT_METADATA: Metadata = {
 };
 
 
-interface MrisExtractMainComponentParameters {
+interface MrisExtractMainComponentParamsDict {
     "@type"?: "freesurfer/mris_extract_main_component";
     "input_surface": InputPathType;
     "output_surface": string;
 }
-type MrisExtractMainComponentParametersTagged = Required<Pick<MrisExtractMainComponentParameters, '@type'>> & MrisExtractMainComponentParameters;
+type MrisExtractMainComponentParamsDictTagged = Required<Pick<MrisExtractMainComponentParamsDict, '@type'>> & MrisExtractMainComponentParamsDict;
 
 
 /**
- * Output object returned when calling `MrisExtractMainComponentParameters(...)`.
+ * Output object returned when calling `MrisExtractMainComponentParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MrisExtractMainComponentOutputs {
 function mris_extract_main_component_params(
     input_surface: InputPathType,
     output_surface: string,
-): MrisExtractMainComponentParametersTagged {
+): MrisExtractMainComponentParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_extract_main_component" as const,
         "input_surface": input_surface,
@@ -66,7 +66,7 @@ function mris_extract_main_component_params(
  * @returns Command-line arguments.
  */
 function mris_extract_main_component_cargs(
-    params: MrisExtractMainComponentParameters,
+    params: MrisExtractMainComponentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mris_extract_main_component_cargs(
  * @returns Outputs object.
  */
 function mris_extract_main_component_outputs(
-    params: MrisExtractMainComponentParameters,
+    params: MrisExtractMainComponentParamsDict,
     execution: Execution,
 ): MrisExtractMainComponentOutputs {
     const ret: MrisExtractMainComponentOutputs = {
@@ -112,7 +112,7 @@ function mris_extract_main_component_outputs(
  * @returns NamedTuple of outputs (described in `MrisExtractMainComponentOutputs`).
  */
 function mris_extract_main_component_execute(
-    params: MrisExtractMainComponentParameters,
+    params: MrisExtractMainComponentParamsDict,
     runner: Runner | null = null,
 ): MrisExtractMainComponentOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mris_extract_main_component(
 export {
       MRIS_EXTRACT_MAIN_COMPONENT_METADATA,
       MrisExtractMainComponentOutputs,
+      MrisExtractMainComponentParamsDict,
+      MrisExtractMainComponentParamsDictTagged,
       mris_extract_main_component,
       mris_extract_main_component_execute,
       mris_extract_main_component_params,

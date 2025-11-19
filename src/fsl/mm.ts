@@ -11,7 +11,7 @@ const MM_METADATA: Metadata = {
 };
 
 
-interface MmParameters {
+interface MmParamsDict {
     "@type"?: "fsl/mm";
     "spatial_data_file": InputPathType;
     "mask_file": InputPathType;
@@ -31,11 +31,11 @@ interface MmParameters {
     "niters"?: number | null | undefined;
     "threshold"?: number | null | undefined;
 }
-type MmParametersTagged = Required<Pick<MmParameters, '@type'>> & MmParameters;
+type MmParamsDictTagged = Required<Pick<MmParamsDict, '@type'>> & MmParamsDict;
 
 
 /**
- * Output object returned when calling `MmParameters(...)`.
+ * Output object returned when calling `MmParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function mm_params(
     phi: number | null = null,
     niters: number | null = null,
     threshold: number | null = null,
-): MmParametersTagged {
+): MmParamsDictTagged {
     const params = {
         "@type": "fsl/mm" as const,
         "spatial_data_file": spatial_data_file,
@@ -140,7 +140,7 @@ function mm_params(
  * @returns Command-line arguments.
  */
 function mm_cargs(
-    params: MmParameters,
+    params: MmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -238,7 +238,7 @@ function mm_cargs(
  * @returns Outputs object.
  */
 function mm_outputs(
-    params: MmParameters,
+    params: MmParamsDict,
     execution: Execution,
 ): MmOutputs {
     const ret: MmOutputs = {
@@ -263,7 +263,7 @@ function mm_outputs(
  * @returns NamedTuple of outputs (described in `MmOutputs`).
  */
 function mm_execute(
-    params: MmParameters,
+    params: MmParamsDict,
     runner: Runner | null = null,
 ): MmOutputs {
     runner = runner || getGlobalRunner();
@@ -334,6 +334,8 @@ function mm(
 export {
       MM_METADATA,
       MmOutputs,
+      MmParamsDict,
+      MmParamsDictTagged,
       mm,
       mm_execute,
       mm_params,

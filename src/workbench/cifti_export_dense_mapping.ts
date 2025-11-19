@@ -10,42 +10,42 @@ const CIFTI_EXPORT_DENSE_MAPPING_METADATA: Metadata = {
 };
 
 
-interface CiftiExportDenseMappingVolumeAllParameters {
+interface CiftiExportDenseMappingVolumeAllParamsDict {
     "@type"?: "volume-all";
     "text-out": string;
     "no-cifti-index": boolean;
     "structure": boolean;
 }
-type CiftiExportDenseMappingVolumeAllParametersTagged = Required<Pick<CiftiExportDenseMappingVolumeAllParameters, '@type'>> & CiftiExportDenseMappingVolumeAllParameters;
+type CiftiExportDenseMappingVolumeAllParamsDictTagged = Required<Pick<CiftiExportDenseMappingVolumeAllParamsDict, '@type'>> & CiftiExportDenseMappingVolumeAllParamsDict;
 
 
-interface CiftiExportDenseMappingSurfaceParameters {
+interface CiftiExportDenseMappingSurfaceParamsDict {
     "@type"?: "surface";
     "structure": string;
     "text-out": string;
     "no-cifti-index": boolean;
 }
-type CiftiExportDenseMappingSurfaceParametersTagged = Required<Pick<CiftiExportDenseMappingSurfaceParameters, '@type'>> & CiftiExportDenseMappingSurfaceParameters;
+type CiftiExportDenseMappingSurfaceParamsDictTagged = Required<Pick<CiftiExportDenseMappingSurfaceParamsDict, '@type'>> & CiftiExportDenseMappingSurfaceParamsDict;
 
 
-interface CiftiExportDenseMappingVolumeParameters {
+interface CiftiExportDenseMappingVolumeParamsDict {
     "@type"?: "volume";
     "structure": string;
     "text-out": string;
     "no-cifti-index": boolean;
 }
-type CiftiExportDenseMappingVolumeParametersTagged = Required<Pick<CiftiExportDenseMappingVolumeParameters, '@type'>> & CiftiExportDenseMappingVolumeParameters;
+type CiftiExportDenseMappingVolumeParamsDictTagged = Required<Pick<CiftiExportDenseMappingVolumeParamsDict, '@type'>> & CiftiExportDenseMappingVolumeParamsDict;
 
 
-interface CiftiExportDenseMappingParameters {
+interface CiftiExportDenseMappingParamsDict {
     "@type"?: "workbench/cifti-export-dense-mapping";
-    "volume-all"?: CiftiExportDenseMappingVolumeAllParameters | null | undefined;
-    "surface"?: Array<CiftiExportDenseMappingSurfaceParameters> | null | undefined;
-    "volume"?: Array<CiftiExportDenseMappingVolumeParameters> | null | undefined;
+    "volume-all"?: CiftiExportDenseMappingVolumeAllParamsDict | null | undefined;
+    "surface"?: Array<CiftiExportDenseMappingSurfaceParamsDict> | null | undefined;
+    "volume"?: Array<CiftiExportDenseMappingVolumeParamsDict> | null | undefined;
     "cifti": InputPathType;
     "direction": string;
 }
-type CiftiExportDenseMappingParametersTagged = Required<Pick<CiftiExportDenseMappingParameters, '@type'>> & CiftiExportDenseMappingParameters;
+type CiftiExportDenseMappingParamsDictTagged = Required<Pick<CiftiExportDenseMappingParamsDict, '@type'>> & CiftiExportDenseMappingParamsDict;
 
 
 /**
@@ -57,11 +57,11 @@ type CiftiExportDenseMappingParametersTagged = Required<Pick<CiftiExportDenseMap
  *
  * @returns Parameter dictionary
  */
-function cifti_export_dense_mapping_volume_all_params(
+function cifti_export_dense_mapping_volume_all(
     text_out: string,
     no_cifti_index: boolean = false,
     structure: boolean = false,
-): CiftiExportDenseMappingVolumeAllParametersTagged {
+): CiftiExportDenseMappingVolumeAllParamsDictTagged {
     const params = {
         "@type": "volume-all" as const,
         "text-out": text_out,
@@ -81,7 +81,7 @@ function cifti_export_dense_mapping_volume_all_params(
  * @returns Command-line arguments.
  */
 function cifti_export_dense_mapping_volume_all_cargs(
-    params: CiftiExportDenseMappingVolumeAllParameters,
+    params: CiftiExportDenseMappingVolumeAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,11 +106,11 @@ function cifti_export_dense_mapping_volume_all_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_export_dense_mapping_surface_params(
+function cifti_export_dense_mapping_surface(
     structure: string,
     text_out: string,
     no_cifti_index: boolean = false,
-): CiftiExportDenseMappingSurfaceParametersTagged {
+): CiftiExportDenseMappingSurfaceParamsDictTagged {
     const params = {
         "@type": "surface" as const,
         "structure": structure,
@@ -130,7 +130,7 @@ function cifti_export_dense_mapping_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_export_dense_mapping_surface_cargs(
-    params: CiftiExportDenseMappingSurfaceParameters,
+    params: CiftiExportDenseMappingSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,11 +155,11 @@ function cifti_export_dense_mapping_surface_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_export_dense_mapping_volume_params(
+function cifti_export_dense_mapping_volume(
     structure: string,
     text_out: string,
     no_cifti_index: boolean = false,
-): CiftiExportDenseMappingVolumeParametersTagged {
+): CiftiExportDenseMappingVolumeParamsDictTagged {
     const params = {
         "@type": "volume" as const,
         "structure": structure,
@@ -179,7 +179,7 @@ function cifti_export_dense_mapping_volume_params(
  * @returns Command-line arguments.
  */
 function cifti_export_dense_mapping_volume_cargs(
-    params: CiftiExportDenseMappingVolumeParameters,
+    params: CiftiExportDenseMappingVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -196,7 +196,7 @@ function cifti_export_dense_mapping_volume_cargs(
 
 
 /**
- * Output object returned when calling `CiftiExportDenseMappingParameters(...)`.
+ * Output object returned when calling `CiftiExportDenseMappingParamsDict(...)`.
  *
  * @interface
  */
@@ -222,10 +222,10 @@ interface CiftiExportDenseMappingOutputs {
 function cifti_export_dense_mapping_params(
     cifti: InputPathType,
     direction: string,
-    volume_all: CiftiExportDenseMappingVolumeAllParameters | null = null,
-    surface: Array<CiftiExportDenseMappingSurfaceParameters> | null = null,
-    volume: Array<CiftiExportDenseMappingVolumeParameters> | null = null,
-): CiftiExportDenseMappingParametersTagged {
+    volume_all: CiftiExportDenseMappingVolumeAllParamsDict | null = null,
+    surface: Array<CiftiExportDenseMappingSurfaceParamsDict> | null = null,
+    volume: Array<CiftiExportDenseMappingVolumeParamsDict> | null = null,
+): CiftiExportDenseMappingParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-export-dense-mapping" as const,
         "cifti": cifti,
@@ -253,7 +253,7 @@ function cifti_export_dense_mapping_params(
  * @returns Command-line arguments.
  */
 function cifti_export_dense_mapping_cargs(
-    params: CiftiExportDenseMappingParameters,
+    params: CiftiExportDenseMappingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -281,7 +281,7 @@ function cifti_export_dense_mapping_cargs(
  * @returns Outputs object.
  */
 function cifti_export_dense_mapping_outputs(
-    params: CiftiExportDenseMappingParameters,
+    params: CiftiExportDenseMappingParamsDict,
     execution: Execution,
 ): CiftiExportDenseMappingOutputs {
     const ret: CiftiExportDenseMappingOutputs = {
@@ -346,7 +346,7 @@ function cifti_export_dense_mapping_outputs(
  * @returns NamedTuple of outputs (described in `CiftiExportDenseMappingOutputs`).
  */
 function cifti_export_dense_mapping_execute(
-    params: CiftiExportDenseMappingParameters,
+    params: CiftiExportDenseMappingParamsDict,
     runner: Runner | null = null,
 ): CiftiExportDenseMappingOutputs {
     runner = runner || getGlobalRunner();
@@ -420,9 +420,9 @@ function cifti_export_dense_mapping_execute(
 function cifti_export_dense_mapping(
     cifti: InputPathType,
     direction: string,
-    volume_all: CiftiExportDenseMappingVolumeAllParameters | null = null,
-    surface: Array<CiftiExportDenseMappingSurfaceParameters> | null = null,
-    volume: Array<CiftiExportDenseMappingVolumeParameters> | null = null,
+    volume_all: CiftiExportDenseMappingVolumeAllParamsDict | null = null,
+    surface: Array<CiftiExportDenseMappingSurfaceParamsDict> | null = null,
+    volume: Array<CiftiExportDenseMappingVolumeParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiExportDenseMappingOutputs {
     const params = cifti_export_dense_mapping_params(cifti, direction, volume_all, surface, volume)
@@ -433,10 +433,18 @@ function cifti_export_dense_mapping(
 export {
       CIFTI_EXPORT_DENSE_MAPPING_METADATA,
       CiftiExportDenseMappingOutputs,
+      CiftiExportDenseMappingParamsDict,
+      CiftiExportDenseMappingParamsDictTagged,
+      CiftiExportDenseMappingSurfaceParamsDict,
+      CiftiExportDenseMappingSurfaceParamsDictTagged,
+      CiftiExportDenseMappingVolumeAllParamsDict,
+      CiftiExportDenseMappingVolumeAllParamsDictTagged,
+      CiftiExportDenseMappingVolumeParamsDict,
+      CiftiExportDenseMappingVolumeParamsDictTagged,
       cifti_export_dense_mapping,
       cifti_export_dense_mapping_execute,
       cifti_export_dense_mapping_params,
-      cifti_export_dense_mapping_surface_params,
-      cifti_export_dense_mapping_volume_all_params,
-      cifti_export_dense_mapping_volume_params,
+      cifti_export_dense_mapping_surface,
+      cifti_export_dense_mapping_volume,
+      cifti_export_dense_mapping_volume_all,
 };

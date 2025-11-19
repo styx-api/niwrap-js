@@ -11,7 +11,7 @@ const BAYESIAN_GROUP_ANA_PY_METADATA: Metadata = {
 };
 
 
-interface BayesianGroupAnaPyParameters {
+interface BayesianGroupAnaPyParamsDict {
     "@type"?: "afni/BayesianGroupAna.py";
     "dataTable": InputPathType;
     "y_variable": string;
@@ -28,11 +28,11 @@ interface BayesianGroupAnaPyParameters {
     "overwrite": boolean;
     "help": boolean;
 }
-type BayesianGroupAnaPyParametersTagged = Required<Pick<BayesianGroupAnaPyParameters, '@type'>> & BayesianGroupAnaPyParameters;
+type BayesianGroupAnaPyParamsDictTagged = Required<Pick<BayesianGroupAnaPyParamsDict, '@type'>> & BayesianGroupAnaPyParamsDict;
 
 
 /**
- * Output object returned when calling `BayesianGroupAnaPyParameters(...)`.
+ * Output object returned when calling `BayesianGroupAnaPyParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function bayesian_group_ana_py_params(
     seed: number | null = null,
     overwrite: boolean = false,
     help: boolean = false,
-): BayesianGroupAnaPyParametersTagged {
+): BayesianGroupAnaPyParamsDictTagged {
     const params = {
         "@type": "afni/BayesianGroupAna.py" as const,
         "dataTable": data_table,
@@ -140,7 +140,7 @@ function bayesian_group_ana_py_params(
  * @returns Command-line arguments.
  */
 function bayesian_group_ana_py_cargs(
-    params: BayesianGroupAnaPyParameters,
+    params: BayesianGroupAnaPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -217,7 +217,7 @@ function bayesian_group_ana_py_cargs(
  * @returns Outputs object.
  */
 function bayesian_group_ana_py_outputs(
-    params: BayesianGroupAnaPyParameters,
+    params: BayesianGroupAnaPyParamsDict,
     execution: Execution,
 ): BayesianGroupAnaPyOutputs {
     const ret: BayesianGroupAnaPyOutputs = {
@@ -246,7 +246,7 @@ function bayesian_group_ana_py_outputs(
  * @returns NamedTuple of outputs (described in `BayesianGroupAnaPyOutputs`).
  */
 function bayesian_group_ana_py_execute(
-    params: BayesianGroupAnaPyParameters,
+    params: BayesianGroupAnaPyParamsDict,
     runner: Runner | null = null,
 ): BayesianGroupAnaPyOutputs {
     runner = runner || getGlobalRunner();
@@ -311,6 +311,8 @@ function bayesian_group_ana_py(
 export {
       BAYESIAN_GROUP_ANA_PY_METADATA,
       BayesianGroupAnaPyOutputs,
+      BayesianGroupAnaPyParamsDict,
+      BayesianGroupAnaPyParamsDictTagged,
       bayesian_group_ana_py,
       bayesian_group_ana_py_execute,
       bayesian_group_ana_py_params,

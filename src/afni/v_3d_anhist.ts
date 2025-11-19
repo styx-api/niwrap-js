@@ -11,7 +11,7 @@ const V_3D_ANHIST_METADATA: Metadata = {
 };
 
 
-interface V3dAnhistParameters {
+interface V3dAnhistParamsDict {
     "@type"?: "afni/3dAnhist";
     "dataset": InputPathType;
     "quiet": boolean;
@@ -22,11 +22,11 @@ interface V3dAnhistParameters {
     "label"?: string | null | undefined;
     "filename"?: string | null | undefined;
 }
-type V3dAnhistParametersTagged = Required<Pick<V3dAnhistParameters, '@type'>> & V3dAnhistParameters;
+type V3dAnhistParamsDictTagged = Required<Pick<V3dAnhistParamsDict, '@type'>> & V3dAnhistParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAnhistParameters(...)`.
+ * Output object returned when calling `V3dAnhistParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v_3d_anhist_params(
     top_2peaks: boolean = false,
     label: string | null = null,
     filename: string | null = null,
-): V3dAnhistParametersTagged {
+): V3dAnhistParamsDictTagged {
     const params = {
         "@type": "afni/3dAnhist" as const,
         "dataset": dataset,
@@ -100,7 +100,7 @@ function v_3d_anhist_params(
  * @returns Command-line arguments.
  */
 function v_3d_anhist_cargs(
-    params: V3dAnhistParameters,
+    params: V3dAnhistParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function v_3d_anhist_cargs(
  * @returns Outputs object.
  */
 function v_3d_anhist_outputs(
-    params: V3dAnhistParameters,
+    params: V3dAnhistParamsDict,
     execution: Execution,
 ): V3dAnhistOutputs {
     const ret: V3dAnhistOutputs = {
@@ -176,7 +176,7 @@ function v_3d_anhist_outputs(
  * @returns NamedTuple of outputs (described in `V3dAnhistOutputs`).
  */
 function v_3d_anhist_execute(
-    params: V3dAnhistParameters,
+    params: V3dAnhistParamsDict,
     runner: Runner | null = null,
 ): V3dAnhistOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function v_3d_anhist(
 
 export {
       V3dAnhistOutputs,
+      V3dAnhistParamsDict,
+      V3dAnhistParamsDictTagged,
       V_3D_ANHIST_METADATA,
       v_3d_anhist,
       v_3d_anhist_execute,

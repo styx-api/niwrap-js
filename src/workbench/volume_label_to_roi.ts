@@ -10,7 +10,7 @@ const VOLUME_LABEL_TO_ROI_METADATA: Metadata = {
 };
 
 
-interface VolumeLabelToRoiParameters {
+interface VolumeLabelToRoiParamsDict {
     "@type"?: "workbench/volume-label-to-roi";
     "volume-out": string;
     "label-name"?: string | null | undefined;
@@ -18,11 +18,11 @@ interface VolumeLabelToRoiParameters {
     "map"?: string | null | undefined;
     "label-in": InputPathType;
 }
-type VolumeLabelToRoiParametersTagged = Required<Pick<VolumeLabelToRoiParameters, '@type'>> & VolumeLabelToRoiParameters;
+type VolumeLabelToRoiParamsDictTagged = Required<Pick<VolumeLabelToRoiParamsDict, '@type'>> & VolumeLabelToRoiParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeLabelToRoiParameters(...)`.
+ * Output object returned when calling `VolumeLabelToRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function volume_label_to_roi_params(
     label_key: number | null,
     map: string | null,
     label_in: InputPathType,
-): VolumeLabelToRoiParametersTagged {
+): VolumeLabelToRoiParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-to-roi" as const,
         "volume-out": volume_out,
@@ -89,7 +89,7 @@ function volume_label_to_roi_params(
  * @returns Command-line arguments.
  */
 function volume_label_to_roi_cargs(
-    params: VolumeLabelToRoiParameters,
+    params: VolumeLabelToRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function volume_label_to_roi_cargs(
  * @returns Outputs object.
  */
 function volume_label_to_roi_outputs(
-    params: VolumeLabelToRoiParameters,
+    params: VolumeLabelToRoiParamsDict,
     execution: Execution,
 ): VolumeLabelToRoiOutputs {
     const ret: VolumeLabelToRoiOutputs = {
@@ -142,7 +142,7 @@ function volume_label_to_roi_outputs(
  * @returns NamedTuple of outputs (described in `VolumeLabelToRoiOutputs`).
  */
 function volume_label_to_roi_execute(
-    params: VolumeLabelToRoiParameters,
+    params: VolumeLabelToRoiParamsDict,
     runner: Runner | null = null,
 ): VolumeLabelToRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function volume_label_to_roi(
 export {
       VOLUME_LABEL_TO_ROI_METADATA,
       VolumeLabelToRoiOutputs,
+      VolumeLabelToRoiParamsDict,
+      VolumeLabelToRoiParamsDictTagged,
       volume_label_to_roi,
       volume_label_to_roi_execute,
       volume_label_to_roi_params,

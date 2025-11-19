@@ -11,18 +11,18 @@ const MRI_HIRES_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MriHiresRegisterParameters {
+interface MriHiresRegisterParamsDict {
     "@type"?: "freesurfer/mri_hires_register";
     "hires_labeling": InputPathType;
     "input_intensity": InputPathType;
     "input_aseg": InputPathType;
     "output_xform": string;
 }
-type MriHiresRegisterParametersTagged = Required<Pick<MriHiresRegisterParameters, '@type'>> & MriHiresRegisterParameters;
+type MriHiresRegisterParamsDictTagged = Required<Pick<MriHiresRegisterParamsDict, '@type'>> & MriHiresRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MriHiresRegisterParameters(...)`.
+ * Output object returned when calling `MriHiresRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_hires_register_params(
     input_intensity: InputPathType,
     input_aseg: InputPathType,
     output_xform: string,
-): MriHiresRegisterParametersTagged {
+): MriHiresRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_hires_register" as const,
         "hires_labeling": hires_labeling,
@@ -74,7 +74,7 @@ function mri_hires_register_params(
  * @returns Command-line arguments.
  */
 function mri_hires_register_cargs(
-    params: MriHiresRegisterParameters,
+    params: MriHiresRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_hires_register_cargs(
  * @returns Outputs object.
  */
 function mri_hires_register_outputs(
-    params: MriHiresRegisterParameters,
+    params: MriHiresRegisterParamsDict,
     execution: Execution,
 ): MriHiresRegisterOutputs {
     const ret: MriHiresRegisterOutputs = {
@@ -122,7 +122,7 @@ function mri_hires_register_outputs(
  * @returns NamedTuple of outputs (described in `MriHiresRegisterOutputs`).
  */
 function mri_hires_register_execute(
-    params: MriHiresRegisterParameters,
+    params: MriHiresRegisterParamsDict,
     runner: Runner | null = null,
 ): MriHiresRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mri_hires_register(
 export {
       MRI_HIRES_REGISTER_METADATA,
       MriHiresRegisterOutputs,
+      MriHiresRegisterParamsDict,
+      MriHiresRegisterParamsDictTagged,
       mri_hires_register,
       mri_hires_register_execute,
       mri_hires_register_params,

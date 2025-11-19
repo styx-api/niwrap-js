@@ -11,7 +11,7 @@ const HISTO_REGISTER_BLOCK_METADATA: Metadata = {
 };
 
 
-interface HistoRegisterBlockParameters {
+interface HistoRegisterBlockParamsDict {
     "@type"?: "freesurfer/histo_register_block";
     "seg_time1": InputPathType;
     "seg_time2": InputPathType;
@@ -21,11 +21,11 @@ interface HistoRegisterBlockParameters {
     "out_like"?: InputPathType | null | undefined;
     "invert_transform": boolean;
 }
-type HistoRegisterBlockParametersTagged = Required<Pick<HistoRegisterBlockParameters, '@type'>> & HistoRegisterBlockParameters;
+type HistoRegisterBlockParamsDictTagged = Required<Pick<HistoRegisterBlockParamsDict, '@type'>> & HistoRegisterBlockParamsDict;
 
 
 /**
- * Output object returned when calling `HistoRegisterBlockParameters(...)`.
+ * Output object returned when calling `HistoRegisterBlockParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function histo_register_block_params(
     output_file: string,
     out_like: InputPathType | null = null,
     invert_transform: boolean = false,
-): HistoRegisterBlockParametersTagged {
+): HistoRegisterBlockParamsDictTagged {
     const params = {
         "@type": "freesurfer/histo_register_block" as const,
         "seg_time1": seg_time1,
@@ -88,7 +88,7 @@ function histo_register_block_params(
  * @returns Command-line arguments.
  */
 function histo_register_block_cargs(
-    params: HistoRegisterBlockParameters,
+    params: HistoRegisterBlockParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function histo_register_block_cargs(
  * @returns Outputs object.
  */
 function histo_register_block_outputs(
-    params: HistoRegisterBlockParameters,
+    params: HistoRegisterBlockParamsDict,
     execution: Execution,
 ): HistoRegisterBlockOutputs {
     const ret: HistoRegisterBlockOutputs = {
@@ -146,7 +146,7 @@ function histo_register_block_outputs(
  * @returns NamedTuple of outputs (described in `HistoRegisterBlockOutputs`).
  */
 function histo_register_block_execute(
-    params: HistoRegisterBlockParameters,
+    params: HistoRegisterBlockParamsDict,
     runner: Runner | null = null,
 ): HistoRegisterBlockOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function histo_register_block(
 export {
       HISTO_REGISTER_BLOCK_METADATA,
       HistoRegisterBlockOutputs,
+      HistoRegisterBlockParamsDict,
+      HistoRegisterBlockParamsDictTagged,
       histo_register_block,
       histo_register_block_execute,
       histo_register_block_params,

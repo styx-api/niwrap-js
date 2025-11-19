@@ -11,7 +11,7 @@ const BALLOON_METADATA: Metadata = {
 };
 
 
-interface BalloonParameters {
+interface BalloonParamsDict {
     "@type"?: "afni/balloon";
     "tr": number;
     "num_scans": number;
@@ -20,11 +20,11 @@ interface BalloonParameters {
     "t_fall"?: Array<number> | null | undefined;
     "t_sustain"?: Array<number> | null | undefined;
 }
-type BalloonParametersTagged = Required<Pick<BalloonParameters, '@type'>> & BalloonParameters;
+type BalloonParamsDictTagged = Required<Pick<BalloonParamsDict, '@type'>> & BalloonParamsDict;
 
 
 /**
- * Output object returned when calling `BalloonParameters(...)`.
+ * Output object returned when calling `BalloonParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function balloon_params(
     t_rise: Array<number> | null = null,
     t_fall: Array<number> | null = null,
     t_sustain: Array<number> | null = null,
-): BalloonParametersTagged {
+): BalloonParamsDictTagged {
     const params = {
         "@type": "afni/balloon" as const,
         "tr": tr,
@@ -84,7 +84,7 @@ function balloon_params(
  * @returns Command-line arguments.
  */
 function balloon_cargs(
-    params: BalloonParameters,
+    params: BalloonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function balloon_cargs(
  * @returns Outputs object.
  */
 function balloon_outputs(
-    params: BalloonParameters,
+    params: BalloonParamsDict,
     execution: Execution,
 ): BalloonOutputs {
     const ret: BalloonOutputs = {
@@ -139,7 +139,7 @@ function balloon_outputs(
  * @returns NamedTuple of outputs (described in `BalloonOutputs`).
  */
 function balloon_execute(
-    params: BalloonParameters,
+    params: BalloonParamsDict,
     runner: Runner | null = null,
 ): BalloonOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function balloon(
 export {
       BALLOON_METADATA,
       BalloonOutputs,
+      BalloonParamsDict,
+      BalloonParamsDictTagged,
       balloon,
       balloon_execute,
       balloon_params,

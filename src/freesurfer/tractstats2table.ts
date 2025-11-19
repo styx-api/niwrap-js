@@ -11,7 +11,7 @@ const TRACTSTATS2TABLE_METADATA: Metadata = {
 };
 
 
-interface Tractstats2tableParameters {
+interface Tractstats2tableParamsDict {
     "@type"?: "freesurfer/tractstats2table";
     "inputs"?: Array<string> | null | undefined;
     "load_pathstats_from_file"?: InputPathType | null | undefined;
@@ -23,11 +23,11 @@ interface Tractstats2tableParameters {
     "transpose": boolean;
     "debug": boolean;
 }
-type Tractstats2tableParametersTagged = Required<Pick<Tractstats2tableParameters, '@type'>> & Tractstats2tableParameters;
+type Tractstats2tableParamsDictTagged = Required<Pick<Tractstats2tableParamsDict, '@type'>> & Tractstats2tableParamsDict;
 
 
 /**
- * Output object returned when calling `Tractstats2tableParameters(...)`.
+ * Output object returned when calling `Tractstats2tableParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function tractstats2table_params(
     delimiter: "tab" | "comma" | "space" | "semicolon" | null = null,
     transpose: boolean = false,
     debug: boolean = false,
-): Tractstats2tableParametersTagged {
+): Tractstats2tableParamsDictTagged {
     const params = {
         "@type": "freesurfer/tractstats2table" as const,
         "overall": overall,
@@ -102,7 +102,7 @@ function tractstats2table_params(
  * @returns Command-line arguments.
  */
 function tractstats2table_cargs(
-    params: Tractstats2tableParameters,
+    params: Tractstats2tableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,7 +160,7 @@ function tractstats2table_cargs(
  * @returns Outputs object.
  */
 function tractstats2table_outputs(
-    params: Tractstats2tableParameters,
+    params: Tractstats2tableParamsDict,
     execution: Execution,
 ): Tractstats2tableOutputs {
     const ret: Tractstats2tableOutputs = {
@@ -186,7 +186,7 @@ function tractstats2table_outputs(
  * @returns NamedTuple of outputs (described in `Tractstats2tableOutputs`).
  */
 function tractstats2table_execute(
-    params: Tractstats2tableParameters,
+    params: Tractstats2tableParamsDict,
     runner: Runner | null = null,
 ): Tractstats2tableOutputs {
     runner = runner || getGlobalRunner();
@@ -241,6 +241,8 @@ function tractstats2table(
 export {
       TRACTSTATS2TABLE_METADATA,
       Tractstats2tableOutputs,
+      Tractstats2tableParamsDict,
+      Tractstats2tableParamsDictTagged,
       tractstats2table,
       tractstats2table_execute,
       tractstats2table_params,

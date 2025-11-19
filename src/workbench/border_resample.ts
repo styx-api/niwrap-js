@@ -10,18 +10,18 @@ const BORDER_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface BorderResampleParameters {
+interface BorderResampleParamsDict {
     "@type"?: "workbench/border-resample";
     "border-out": string;
     "border-in": InputPathType;
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
 }
-type BorderResampleParametersTagged = Required<Pick<BorderResampleParameters, '@type'>> & BorderResampleParameters;
+type BorderResampleParamsDictTagged = Required<Pick<BorderResampleParamsDict, '@type'>> & BorderResampleParamsDict;
 
 
 /**
- * Output object returned when calling `BorderResampleParameters(...)`.
+ * Output object returned when calling `BorderResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function border_resample_params(
     border_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
-): BorderResampleParametersTagged {
+): BorderResampleParamsDictTagged {
     const params = {
         "@type": "workbench/border-resample" as const,
         "border-out": border_out,
@@ -73,7 +73,7 @@ function border_resample_params(
  * @returns Command-line arguments.
  */
 function border_resample_cargs(
-    params: BorderResampleParameters,
+    params: BorderResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function border_resample_cargs(
  * @returns Outputs object.
  */
 function border_resample_outputs(
-    params: BorderResampleParameters,
+    params: BorderResampleParamsDict,
     execution: Execution,
 ): BorderResampleOutputs {
     const ret: BorderResampleOutputs = {
@@ -120,7 +120,7 @@ function border_resample_outputs(
  * @returns NamedTuple of outputs (described in `BorderResampleOutputs`).
  */
 function border_resample_execute(
-    params: BorderResampleParameters,
+    params: BorderResampleParamsDict,
     runner: Runner | null = null,
 ): BorderResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function border_resample(
 export {
       BORDER_RESAMPLE_METADATA,
       BorderResampleOutputs,
+      BorderResampleParamsDict,
+      BorderResampleParamsDictTagged,
       border_resample,
       border_resample_execute,
       border_resample_params,

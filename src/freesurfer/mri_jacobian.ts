@@ -11,7 +11,7 @@ const MRI_JACOBIAN_METADATA: Metadata = {
 };
 
 
-interface MriJacobianParameters {
+interface MriJacobianParamsDict {
     "@type"?: "freesurfer/mri_jacobian";
     "morph_file": InputPathType;
     "template_vol": InputPathType;
@@ -28,11 +28,11 @@ interface MriJacobianParameters {
     "debug_voxel"?: Array<number> | null | undefined;
     "remove": boolean;
 }
-type MriJacobianParametersTagged = Required<Pick<MriJacobianParameters, '@type'>> & MriJacobianParameters;
+type MriJacobianParamsDictTagged = Required<Pick<MriJacobianParamsDict, '@type'>> & MriJacobianParamsDict;
 
 
 /**
- * Output object returned when calling `MriJacobianParameters(...)`.
+ * Output object returned when calling `MriJacobianParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function mri_jacobian_params(
     dt: boolean = false,
     debug_voxel: Array<number> | null = null,
     remove: boolean = false,
-): MriJacobianParametersTagged {
+): MriJacobianParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_jacobian" as const,
         "morph_file": morph_file,
@@ -118,7 +118,7 @@ function mri_jacobian_params(
  * @returns Command-line arguments.
  */
 function mri_jacobian_cargs(
-    params: MriJacobianParameters,
+    params: MriJacobianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -178,7 +178,7 @@ function mri_jacobian_cargs(
  * @returns Outputs object.
  */
 function mri_jacobian_outputs(
-    params: MriJacobianParameters,
+    params: MriJacobianParamsDict,
     execution: Execution,
 ): MriJacobianOutputs {
     const ret: MriJacobianOutputs = {
@@ -204,7 +204,7 @@ function mri_jacobian_outputs(
  * @returns NamedTuple of outputs (described in `MriJacobianOutputs`).
  */
 function mri_jacobian_execute(
-    params: MriJacobianParameters,
+    params: MriJacobianParamsDict,
     runner: Runner | null = null,
 ): MriJacobianOutputs {
     runner = runner || getGlobalRunner();
@@ -269,6 +269,8 @@ function mri_jacobian(
 export {
       MRI_JACOBIAN_METADATA,
       MriJacobianOutputs,
+      MriJacobianParamsDict,
+      MriJacobianParamsDictTagged,
       mri_jacobian,
       mri_jacobian_execute,
       mri_jacobian_params,

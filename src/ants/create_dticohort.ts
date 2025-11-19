@@ -11,7 +11,7 @@ const CREATE_DTICOHORT_METADATA: Metadata = {
 };
 
 
-interface CreateDticohortParameters {
+interface CreateDticohortParamsDict {
     "@type"?: "ants/CreateDTICohort";
     "image_dimensionality"?: 2 | 3 | null | undefined;
     "dti_atlas": InputPathType;
@@ -22,11 +22,11 @@ interface CreateDticohortParameters {
     "registered_population"?: InputPathType | null | undefined;
     "output": string;
 }
-type CreateDticohortParametersTagged = Required<Pick<CreateDticohortParameters, '@type'>> & CreateDticohortParameters;
+type CreateDticohortParamsDictTagged = Required<Pick<CreateDticohortParamsDict, '@type'>> & CreateDticohortParamsDict;
 
 
 /**
- * Output object returned when calling `CreateDticohortParameters(...)`.
+ * Output object returned when calling `CreateDticohortParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function create_dticohort_params(
     noise_sigma: number | null = null,
     pathology: string | null = null,
     registered_population: InputPathType | null = null,
-): CreateDticohortParametersTagged {
+): CreateDticohortParamsDictTagged {
     const params = {
         "@type": "ants/CreateDTICohort" as const,
         "dti_atlas": dti_atlas,
@@ -100,7 +100,7 @@ function create_dticohort_params(
  * @returns Command-line arguments.
  */
 function create_dticohort_cargs(
-    params: CreateDticohortParameters,
+    params: CreateDticohortParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -160,7 +160,7 @@ function create_dticohort_cargs(
  * @returns Outputs object.
  */
 function create_dticohort_outputs(
-    params: CreateDticohortParameters,
+    params: CreateDticohortParamsDict,
     execution: Execution,
 ): CreateDticohortOutputs {
     const ret: CreateDticohortOutputs = {
@@ -186,7 +186,7 @@ function create_dticohort_outputs(
  * @returns NamedTuple of outputs (described in `CreateDticohortOutputs`).
  */
 function create_dticohort_execute(
-    params: CreateDticohortParameters,
+    params: CreateDticohortParamsDict,
     runner: Runner | null = null,
 ): CreateDticohortOutputs {
     runner = runner || getGlobalRunner();
@@ -239,6 +239,8 @@ function create_dticohort(
 export {
       CREATE_DTICOHORT_METADATA,
       CreateDticohortOutputs,
+      CreateDticohortParamsDict,
+      CreateDticohortParamsDictTagged,
       create_dticohort,
       create_dticohort_execute,
       create_dticohort_params,

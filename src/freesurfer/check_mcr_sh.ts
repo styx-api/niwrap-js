@@ -11,15 +11,15 @@ const CHECK_MCR_SH_METADATA: Metadata = {
 };
 
 
-interface CheckMcrShParameters {
+interface CheckMcrShParamsDict {
     "@type"?: "freesurfer/checkMCR.sh";
     "help": boolean;
 }
-type CheckMcrShParametersTagged = Required<Pick<CheckMcrShParameters, '@type'>> & CheckMcrShParameters;
+type CheckMcrShParamsDictTagged = Required<Pick<CheckMcrShParamsDict, '@type'>> & CheckMcrShParamsDict;
 
 
 /**
- * Output object returned when calling `CheckMcrShParameters(...)`.
+ * Output object returned when calling `CheckMcrShParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface CheckMcrShOutputs {
  */
 function check_mcr_sh_params(
     help: boolean = false,
-): CheckMcrShParametersTagged {
+): CheckMcrShParamsDictTagged {
     const params = {
         "@type": "freesurfer/checkMCR.sh" as const,
         "help": help,
@@ -58,7 +58,7 @@ function check_mcr_sh_params(
  * @returns Command-line arguments.
  */
 function check_mcr_sh_cargs(
-    params: CheckMcrShParameters,
+    params: CheckMcrShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function check_mcr_sh_cargs(
  * @returns Outputs object.
  */
 function check_mcr_sh_outputs(
-    params: CheckMcrShParameters,
+    params: CheckMcrShParamsDict,
     execution: Execution,
 ): CheckMcrShOutputs {
     const ret: CheckMcrShOutputs = {
@@ -104,7 +104,7 @@ function check_mcr_sh_outputs(
  * @returns NamedTuple of outputs (described in `CheckMcrShOutputs`).
  */
 function check_mcr_sh_execute(
-    params: CheckMcrShParameters,
+    params: CheckMcrShParamsDict,
     runner: Runner | null = null,
 ): CheckMcrShOutputs {
     runner = runner || getGlobalRunner();
@@ -143,6 +143,8 @@ function check_mcr_sh(
 export {
       CHECK_MCR_SH_METADATA,
       CheckMcrShOutputs,
+      CheckMcrShParamsDict,
+      CheckMcrShParamsDictTagged,
       check_mcr_sh,
       check_mcr_sh_execute,
       check_mcr_sh_params,

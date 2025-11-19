@@ -11,7 +11,7 @@ const CJPEG_METADATA: Metadata = {
 };
 
 
-interface CjpegParameters {
+interface CjpegParamsDict {
     "@type"?: "afni/cjpeg";
     "quality"?: number | null | undefined;
     "grayscale": boolean;
@@ -21,11 +21,11 @@ interface CjpegParameters {
     "outfile": string;
     "infile": InputPathType;
 }
-type CjpegParametersTagged = Required<Pick<CjpegParameters, '@type'>> & CjpegParameters;
+type CjpegParamsDictTagged = Required<Pick<CjpegParamsDict, '@type'>> & CjpegParamsDict;
 
 
 /**
- * Output object returned when calling `CjpegParameters(...)`.
+ * Output object returned when calling `CjpegParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function cjpeg_params(
     optimize: boolean = false,
     baseline: boolean = false,
     progressive: boolean = false,
-): CjpegParametersTagged {
+): CjpegParamsDictTagged {
     const params = {
         "@type": "afni/cjpeg" as const,
         "grayscale": grayscale,
@@ -88,7 +88,7 @@ function cjpeg_params(
  * @returns Command-line arguments.
  */
 function cjpeg_cargs(
-    params: CjpegParameters,
+    params: CjpegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function cjpeg_cargs(
  * @returns Outputs object.
  */
 function cjpeg_outputs(
-    params: CjpegParameters,
+    params: CjpegParamsDict,
     execution: Execution,
 ): CjpegOutputs {
     const ret: CjpegOutputs = {
@@ -152,7 +152,7 @@ function cjpeg_outputs(
  * @returns NamedTuple of outputs (described in `CjpegOutputs`).
  */
 function cjpeg_execute(
-    params: CjpegParameters,
+    params: CjpegParamsDict,
     runner: Runner | null = null,
 ): CjpegOutputs {
     runner = runner || getGlobalRunner();
@@ -203,6 +203,8 @@ function cjpeg(
 export {
       CJPEG_METADATA,
       CjpegOutputs,
+      CjpegParamsDict,
+      CjpegParamsDictTagged,
       cjpeg,
       cjpeg_execute,
       cjpeg_params,

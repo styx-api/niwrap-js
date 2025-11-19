@@ -10,67 +10,67 @@ const METRIC_PALETTE_METADATA: Metadata = {
 };
 
 
-interface MetricPalettePosPercentParameters {
+interface MetricPalettePosPercentParamsDict {
     "@type"?: "pos-percent";
     "pos-min-%": number;
     "pos-max-%": number;
 }
-type MetricPalettePosPercentParametersTagged = Required<Pick<MetricPalettePosPercentParameters, '@type'>> & MetricPalettePosPercentParameters;
+type MetricPalettePosPercentParamsDictTagged = Required<Pick<MetricPalettePosPercentParamsDict, '@type'>> & MetricPalettePosPercentParamsDict;
 
 
-interface MetricPaletteNegPercentParameters {
+interface MetricPaletteNegPercentParamsDict {
     "@type"?: "neg-percent";
     "neg-min-%": number;
     "neg-max-%": number;
 }
-type MetricPaletteNegPercentParametersTagged = Required<Pick<MetricPaletteNegPercentParameters, '@type'>> & MetricPaletteNegPercentParameters;
+type MetricPaletteNegPercentParamsDictTagged = Required<Pick<MetricPaletteNegPercentParamsDict, '@type'>> & MetricPaletteNegPercentParamsDict;
 
 
-interface MetricPalettePosUserParameters {
+interface MetricPalettePosUserParamsDict {
     "@type"?: "pos-user";
     "pos-min-user": number;
     "pos-max-user": number;
 }
-type MetricPalettePosUserParametersTagged = Required<Pick<MetricPalettePosUserParameters, '@type'>> & MetricPalettePosUserParameters;
+type MetricPalettePosUserParamsDictTagged = Required<Pick<MetricPalettePosUserParamsDict, '@type'>> & MetricPalettePosUserParamsDict;
 
 
-interface MetricPaletteNegUserParameters {
+interface MetricPaletteNegUserParamsDict {
     "@type"?: "neg-user";
     "neg-min-user": number;
     "neg-max-user": number;
 }
-type MetricPaletteNegUserParametersTagged = Required<Pick<MetricPaletteNegUserParameters, '@type'>> & MetricPaletteNegUserParameters;
+type MetricPaletteNegUserParamsDictTagged = Required<Pick<MetricPaletteNegUserParamsDict, '@type'>> & MetricPaletteNegUserParamsDict;
 
 
-interface MetricPaletteThresholdingParameters {
+interface MetricPaletteThresholdingParamsDict {
     "@type"?: "thresholding";
     "type": string;
     "test": string;
     "min": number;
     "max": number;
 }
-type MetricPaletteThresholdingParametersTagged = Required<Pick<MetricPaletteThresholdingParameters, '@type'>> & MetricPaletteThresholdingParameters;
+type MetricPaletteThresholdingParamsDictTagged = Required<Pick<MetricPaletteThresholdingParamsDict, '@type'>> & MetricPaletteThresholdingParamsDict;
 
 
-interface MetricPaletteParameters {
+interface MetricPaletteParamsDict {
     "@type"?: "workbench/metric-palette";
     "column"?: string | null | undefined;
-    "pos-percent"?: MetricPalettePosPercentParameters | null | undefined;
-    "neg-percent"?: MetricPaletteNegPercentParameters | null | undefined;
-    "pos-user"?: MetricPalettePosUserParameters | null | undefined;
-    "neg-user"?: MetricPaletteNegUserParameters | null | undefined;
+    "pos-percent"?: MetricPalettePosPercentParamsDict | null | undefined;
+    "neg-percent"?: MetricPaletteNegPercentParamsDict | null | undefined;
+    "pos-user"?: MetricPalettePosUserParamsDict | null | undefined;
+    "neg-user"?: MetricPaletteNegUserParamsDict | null | undefined;
     "interpolate"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "name"?: string | null | undefined;
-    "thresholding"?: MetricPaletteThresholdingParameters | null | undefined;
+    "thresholding"?: MetricPaletteThresholdingParamsDict | null | undefined;
     "type"?: string | null | undefined;
     "type"?: string | null | undefined;
     "metric": string;
     "mode": string;
 }
-type MetricPaletteParametersTagged = Required<Pick<MetricPaletteParameters, '@type'>> & MetricPaletteParameters;
+type MetricPaletteParamsDictTagged = Required<Pick<MetricPaletteParamsDict, '@type'>> & MetricPaletteParamsDict;
 
 
 /**
@@ -81,10 +81,10 @@ type MetricPaletteParametersTagged = Required<Pick<MetricPaletteParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function metric_palette_pos_percent_params(
+function metric_palette_pos_percent(
     pos_min__: number,
     pos_max__: number,
-): MetricPalettePosPercentParametersTagged {
+): MetricPalettePosPercentParamsDictTagged {
     const params = {
         "@type": "pos-percent" as const,
         "pos-min-%": pos_min__,
@@ -103,7 +103,7 @@ function metric_palette_pos_percent_params(
  * @returns Command-line arguments.
  */
 function metric_palette_pos_percent_cargs(
-    params: MetricPalettePosPercentParameters,
+    params: MetricPalettePosPercentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,10 +124,10 @@ function metric_palette_pos_percent_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_palette_neg_percent_params(
+function metric_palette_neg_percent(
     neg_min__: number,
     neg_max__: number,
-): MetricPaletteNegPercentParametersTagged {
+): MetricPaletteNegPercentParamsDictTagged {
     const params = {
         "@type": "neg-percent" as const,
         "neg-min-%": neg_min__,
@@ -146,7 +146,7 @@ function metric_palette_neg_percent_params(
  * @returns Command-line arguments.
  */
 function metric_palette_neg_percent_cargs(
-    params: MetricPaletteNegPercentParameters,
+    params: MetricPaletteNegPercentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,10 +167,10 @@ function metric_palette_neg_percent_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_palette_pos_user_params(
+function metric_palette_pos_user(
     pos_min_user: number,
     pos_max_user: number,
-): MetricPalettePosUserParametersTagged {
+): MetricPalettePosUserParamsDictTagged {
     const params = {
         "@type": "pos-user" as const,
         "pos-min-user": pos_min_user,
@@ -189,7 +189,7 @@ function metric_palette_pos_user_params(
  * @returns Command-line arguments.
  */
 function metric_palette_pos_user_cargs(
-    params: MetricPalettePosUserParameters,
+    params: MetricPalettePosUserParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,10 +210,10 @@ function metric_palette_pos_user_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_palette_neg_user_params(
+function metric_palette_neg_user(
     neg_min_user: number,
     neg_max_user: number,
-): MetricPaletteNegUserParametersTagged {
+): MetricPaletteNegUserParamsDictTagged {
     const params = {
         "@type": "neg-user" as const,
         "neg-min-user": neg_min_user,
@@ -232,7 +232,7 @@ function metric_palette_neg_user_params(
  * @returns Command-line arguments.
  */
 function metric_palette_neg_user_cargs(
-    params: MetricPaletteNegUserParameters,
+    params: MetricPaletteNegUserParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,12 +255,12 @@ function metric_palette_neg_user_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_palette_thresholding_params(
+function metric_palette_thresholding(
     type_: string,
     test: string,
     min: number,
     max: number,
-): MetricPaletteThresholdingParametersTagged {
+): MetricPaletteThresholdingParamsDictTagged {
     const params = {
         "@type": "thresholding" as const,
         "type": type_,
@@ -281,7 +281,7 @@ function metric_palette_thresholding_params(
  * @returns Command-line arguments.
  */
 function metric_palette_thresholding_cargs(
-    params: MetricPaletteThresholdingParameters,
+    params: MetricPaletteThresholdingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -297,7 +297,7 @@ function metric_palette_thresholding_cargs(
 
 
 /**
- * Output object returned when calling `MetricPaletteParameters(...)`.
+ * Output object returned when calling `MetricPaletteParamsDict(...)`.
  *
  * @interface
  */
@@ -357,12 +357,12 @@ function metric_palette_params(
     type_2: string | null,
     metric: string,
     mode: string,
-    pos_percent: MetricPalettePosPercentParameters | null = null,
-    neg_percent: MetricPaletteNegPercentParameters | null = null,
-    pos_user: MetricPalettePosUserParameters | null = null,
-    neg_user: MetricPaletteNegUserParameters | null = null,
-    thresholding: MetricPaletteThresholdingParameters | null = null,
-): MetricPaletteParametersTagged {
+    pos_percent: MetricPalettePosPercentParamsDict | null = null,
+    neg_percent: MetricPaletteNegPercentParamsDict | null = null,
+    pos_user: MetricPalettePosUserParamsDict | null = null,
+    neg_user: MetricPaletteNegUserParamsDict | null = null,
+    thresholding: MetricPaletteThresholdingParamsDict | null = null,
+): MetricPaletteParamsDictTagged {
     const params = {
         "@type": "workbench/metric-palette" as const,
         "metric": metric,
@@ -420,7 +420,7 @@ function metric_palette_params(
  * @returns Command-line arguments.
  */
 function metric_palette_cargs(
-    params: MetricPaletteParameters,
+    params: MetricPaletteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -466,7 +466,7 @@ function metric_palette_cargs(
  * @returns Outputs object.
  */
 function metric_palette_outputs(
-    params: MetricPaletteParameters,
+    params: MetricPaletteParamsDict,
     execution: Execution,
 ): MetricPaletteOutputs {
     const ret: MetricPaletteOutputs = {
@@ -562,7 +562,7 @@ function metric_palette_outputs(
  * @returns NamedTuple of outputs (described in `MetricPaletteOutputs`).
  */
 function metric_palette_execute(
-    params: MetricPaletteParameters,
+    params: MetricPaletteParamsDict,
     runner: Runner | null = null,
 ): MetricPaletteOutputs {
     runner = runner || getGlobalRunner();
@@ -701,11 +701,11 @@ function metric_palette(
     type_2: string | null,
     metric: string,
     mode: string,
-    pos_percent: MetricPalettePosPercentParameters | null = null,
-    neg_percent: MetricPaletteNegPercentParameters | null = null,
-    pos_user: MetricPalettePosUserParameters | null = null,
-    neg_user: MetricPaletteNegUserParameters | null = null,
-    thresholding: MetricPaletteThresholdingParameters | null = null,
+    pos_percent: MetricPalettePosPercentParamsDict | null = null,
+    neg_percent: MetricPaletteNegPercentParamsDict | null = null,
+    pos_user: MetricPalettePosUserParamsDict | null = null,
+    neg_user: MetricPaletteNegUserParamsDict | null = null,
+    thresholding: MetricPaletteThresholdingParamsDict | null = null,
     runner: Runner | null = null,
 ): MetricPaletteOutputs {
     const params = metric_palette_params(column, interpolate, display, display_, display_2, name, type_, type_2, metric, mode, pos_percent, neg_percent, pos_user, neg_user, thresholding)
@@ -715,13 +715,25 @@ function metric_palette(
 
 export {
       METRIC_PALETTE_METADATA,
+      MetricPaletteNegPercentParamsDict,
+      MetricPaletteNegPercentParamsDictTagged,
+      MetricPaletteNegUserParamsDict,
+      MetricPaletteNegUserParamsDictTagged,
       MetricPaletteOutputs,
+      MetricPaletteParamsDict,
+      MetricPaletteParamsDictTagged,
+      MetricPalettePosPercentParamsDict,
+      MetricPalettePosPercentParamsDictTagged,
+      MetricPalettePosUserParamsDict,
+      MetricPalettePosUserParamsDictTagged,
+      MetricPaletteThresholdingParamsDict,
+      MetricPaletteThresholdingParamsDictTagged,
       metric_palette,
       metric_palette_execute,
-      metric_palette_neg_percent_params,
-      metric_palette_neg_user_params,
+      metric_palette_neg_percent,
+      metric_palette_neg_user,
       metric_palette_params,
-      metric_palette_pos_percent_params,
-      metric_palette_pos_user_params,
-      metric_palette_thresholding_params,
+      metric_palette_pos_percent,
+      metric_palette_pos_user,
+      metric_palette_thresholding,
 };

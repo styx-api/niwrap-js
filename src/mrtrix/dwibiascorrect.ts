@@ -11,29 +11,29 @@ const DWIBIASCORRECT_METADATA: Metadata = {
 };
 
 
-interface DwibiascorrectFslgradParameters {
+interface DwibiascorrectFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type DwibiascorrectFslgradParametersTagged = Required<Pick<DwibiascorrectFslgradParameters, '@type'>> & DwibiascorrectFslgradParameters;
+type DwibiascorrectFslgradParamsDictTagged = Required<Pick<DwibiascorrectFslgradParamsDict, '@type'>> & DwibiascorrectFslgradParamsDict;
 
 
-interface DwibiascorrectConfigParameters {
+interface DwibiascorrectConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DwibiascorrectConfigParametersTagged = Required<Pick<DwibiascorrectConfigParameters, '@type'>> & DwibiascorrectConfigParameters;
+type DwibiascorrectConfigParamsDictTagged = Required<Pick<DwibiascorrectConfigParamsDict, '@type'>> & DwibiascorrectConfigParamsDict;
 
 
-interface DwibiascorrectParameters {
+interface DwibiascorrectParamsDict {
     "@type"?: "mrtrix/dwibiascorrect";
     "algorithm": string;
     "input_image": InputPathType;
     "output_image": string;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: DwibiascorrectFslgradParameters | null | undefined;
+    "fslgrad"?: DwibiascorrectFslgradParamsDict | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "bias_image"?: InputPathType | null | undefined;
     "nocleanup": boolean;
@@ -44,14 +44,14 @@ interface DwibiascorrectParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DwibiascorrectConfigParameters> | null | undefined;
+    "config"?: Array<DwibiascorrectConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "ants_b"?: string | null | undefined;
     "ants_c"?: string | null | undefined;
     "ants_s"?: string | null | undefined;
 }
-type DwibiascorrectParametersTagged = Required<Pick<DwibiascorrectParameters, '@type'>> & DwibiascorrectParameters;
+type DwibiascorrectParamsDictTagged = Required<Pick<DwibiascorrectParamsDict, '@type'>> & DwibiascorrectParamsDict;
 
 
 /**
@@ -62,10 +62,10 @@ type DwibiascorrectParametersTagged = Required<Pick<DwibiascorrectParameters, '@
  *
  * @returns Parameter dictionary
  */
-function dwibiascorrect_fslgrad_params(
+function dwibiascorrect_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): DwibiascorrectFslgradParametersTagged {
+): DwibiascorrectFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -84,7 +84,7 @@ function dwibiascorrect_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dwibiascorrect_fslgrad_cargs(
-    params: DwibiascorrectFslgradParameters,
+    params: DwibiascorrectFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,10 +103,10 @@ function dwibiascorrect_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwibiascorrect_config_params(
+function dwibiascorrect_config(
     key: string,
     value: string,
-): DwibiascorrectConfigParametersTagged {
+): DwibiascorrectConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -125,7 +125,7 @@ function dwibiascorrect_config_params(
  * @returns Command-line arguments.
  */
 function dwibiascorrect_config_cargs(
-    params: DwibiascorrectConfigParameters,
+    params: DwibiascorrectConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -137,7 +137,7 @@ function dwibiascorrect_config_cargs(
 
 
 /**
- * Output object returned when calling `DwibiascorrectParameters(...)`.
+ * Output object returned when calling `DwibiascorrectParamsDict(...)`.
  *
  * @interface
  */
@@ -189,7 +189,7 @@ function dwibiascorrect_params(
     input_image: InputPathType,
     output_image: string,
     grad: InputPathType | null = null,
-    fslgrad: DwibiascorrectFslgradParameters | null = null,
+    fslgrad: DwibiascorrectFslgradParamsDict | null = null,
     mask_image: InputPathType | null = null,
     bias_image: InputPathType | null = null,
     nocleanup: boolean = false,
@@ -200,13 +200,13 @@ function dwibiascorrect_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DwibiascorrectConfigParameters> | null = null,
+    config: Array<DwibiascorrectConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     ants_b: string | null = null,
     ants_c: string | null = null,
     ants_s: string | null = null,
-): DwibiascorrectParametersTagged {
+): DwibiascorrectParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwibiascorrect" as const,
         "algorithm": algorithm,
@@ -266,7 +266,7 @@ function dwibiascorrect_params(
  * @returns Command-line arguments.
  */
 function dwibiascorrect_cargs(
-    params: DwibiascorrectParameters,
+    params: DwibiascorrectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -368,7 +368,7 @@ function dwibiascorrect_cargs(
  * @returns Outputs object.
  */
 function dwibiascorrect_outputs(
-    params: DwibiascorrectParameters,
+    params: DwibiascorrectParamsDict,
     execution: Execution,
 ): DwibiascorrectOutputs {
     const ret: DwibiascorrectOutputs = {
@@ -395,7 +395,7 @@ function dwibiascorrect_outputs(
  * @returns NamedTuple of outputs (described in `DwibiascorrectOutputs`).
  */
 function dwibiascorrect_execute(
-    params: DwibiascorrectParameters,
+    params: DwibiascorrectParamsDict,
     runner: Runner | null = null,
 ): DwibiascorrectOutputs {
     runner = runner || getGlobalRunner();
@@ -447,7 +447,7 @@ function dwibiascorrect(
     input_image: InputPathType,
     output_image: string,
     grad: InputPathType | null = null,
-    fslgrad: DwibiascorrectFslgradParameters | null = null,
+    fslgrad: DwibiascorrectFslgradParamsDict | null = null,
     mask_image: InputPathType | null = null,
     bias_image: InputPathType | null = null,
     nocleanup: boolean = false,
@@ -458,7 +458,7 @@ function dwibiascorrect(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DwibiascorrectConfigParameters> | null = null,
+    config: Array<DwibiascorrectConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     ants_b: string | null = null,
@@ -473,10 +473,16 @@ function dwibiascorrect(
 
 export {
       DWIBIASCORRECT_METADATA,
+      DwibiascorrectConfigParamsDict,
+      DwibiascorrectConfigParamsDictTagged,
+      DwibiascorrectFslgradParamsDict,
+      DwibiascorrectFslgradParamsDictTagged,
       DwibiascorrectOutputs,
+      DwibiascorrectParamsDict,
+      DwibiascorrectParamsDictTagged,
       dwibiascorrect,
-      dwibiascorrect_config_params,
+      dwibiascorrect_config,
       dwibiascorrect_execute,
-      dwibiascorrect_fslgrad_params,
+      dwibiascorrect_fslgrad,
       dwibiascorrect_params,
 };

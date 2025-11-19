@@ -11,7 +11,7 @@ const SURFACE_BASED_SMOOTHING_METADATA: Metadata = {
 };
 
 
-interface SurfaceBasedSmoothingParameters {
+interface SurfaceBasedSmoothingParamsDict {
     "@type"?: "ants/SurfaceBasedSmoothing";
     "image_to_smooth": InputPathType;
     "sigma": number;
@@ -19,11 +19,11 @@ interface SurfaceBasedSmoothingParameters {
     "outname": string;
     "num_repeats"?: number | null | undefined;
 }
-type SurfaceBasedSmoothingParametersTagged = Required<Pick<SurfaceBasedSmoothingParameters, '@type'>> & SurfaceBasedSmoothingParameters;
+type SurfaceBasedSmoothingParamsDictTagged = Required<Pick<SurfaceBasedSmoothingParamsDict, '@type'>> & SurfaceBasedSmoothingParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceBasedSmoothingParameters(...)`.
+ * Output object returned when calling `SurfaceBasedSmoothingParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function surface_based_smoothing_params(
     surface_image: InputPathType,
     outname: string,
     num_repeats: number | null = null,
-): SurfaceBasedSmoothingParametersTagged {
+): SurfaceBasedSmoothingParamsDictTagged {
     const params = {
         "@type": "ants/SurfaceBasedSmoothing" as const,
         "image_to_smooth": image_to_smooth,
@@ -80,7 +80,7 @@ function surface_based_smoothing_params(
  * @returns Command-line arguments.
  */
 function surface_based_smoothing_cargs(
-    params: SurfaceBasedSmoothingParameters,
+    params: SurfaceBasedSmoothingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function surface_based_smoothing_cargs(
  * @returns Outputs object.
  */
 function surface_based_smoothing_outputs(
-    params: SurfaceBasedSmoothingParameters,
+    params: SurfaceBasedSmoothingParamsDict,
     execution: Execution,
 ): SurfaceBasedSmoothingOutputs {
     const ret: SurfaceBasedSmoothingOutputs = {
@@ -131,7 +131,7 @@ function surface_based_smoothing_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceBasedSmoothingOutputs`).
  */
 function surface_based_smoothing_execute(
-    params: SurfaceBasedSmoothingParameters,
+    params: SurfaceBasedSmoothingParamsDict,
     runner: Runner | null = null,
 ): SurfaceBasedSmoothingOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function surface_based_smoothing(
 export {
       SURFACE_BASED_SMOOTHING_METADATA,
       SurfaceBasedSmoothingOutputs,
+      SurfaceBasedSmoothingParamsDict,
+      SurfaceBasedSmoothingParamsDictTagged,
       surface_based_smoothing,
       surface_based_smoothing_execute,
       surface_based_smoothing_params,

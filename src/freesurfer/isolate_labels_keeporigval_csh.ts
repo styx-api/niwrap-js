@@ -11,7 +11,7 @@ const ISOLATE_LABELS_KEEPORIGVAL_CSH_METADATA: Metadata = {
 };
 
 
-interface IsolateLabelsKeeporigvalCshParameters {
+interface IsolateLabelsKeeporigvalCshParamsDict {
     "@type"?: "freesurfer/isolate_labels_keeporigval.csh";
     "vol": InputPathType;
     "outprefix": string;
@@ -19,11 +19,11 @@ interface IsolateLabelsKeeporigvalCshParameters {
     "version": boolean;
     "help": boolean;
 }
-type IsolateLabelsKeeporigvalCshParametersTagged = Required<Pick<IsolateLabelsKeeporigvalCshParameters, '@type'>> & IsolateLabelsKeeporigvalCshParameters;
+type IsolateLabelsKeeporigvalCshParamsDictTagged = Required<Pick<IsolateLabelsKeeporigvalCshParamsDict, '@type'>> & IsolateLabelsKeeporigvalCshParamsDict;
 
 
 /**
- * Output object returned when calling `IsolateLabelsKeeporigvalCshParameters(...)`.
+ * Output object returned when calling `IsolateLabelsKeeporigvalCshParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function isolate_labels_keeporigval_csh_params(
     label: string | null = null,
     version: boolean = false,
     help: boolean = false,
-): IsolateLabelsKeeporigvalCshParametersTagged {
+): IsolateLabelsKeeporigvalCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/isolate_labels_keeporigval.csh" as const,
         "vol": vol,
@@ -76,7 +76,7 @@ function isolate_labels_keeporigval_csh_params(
  * @returns Command-line arguments.
  */
 function isolate_labels_keeporigval_csh_cargs(
-    params: IsolateLabelsKeeporigvalCshParameters,
+    params: IsolateLabelsKeeporigvalCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function isolate_labels_keeporigval_csh_cargs(
  * @returns Outputs object.
  */
 function isolate_labels_keeporigval_csh_outputs(
-    params: IsolateLabelsKeeporigvalCshParameters,
+    params: IsolateLabelsKeeporigvalCshParamsDict,
     execution: Execution,
 ): IsolateLabelsKeeporigvalCshOutputs {
     const ret: IsolateLabelsKeeporigvalCshOutputs = {
@@ -139,7 +139,7 @@ function isolate_labels_keeporigval_csh_outputs(
  * @returns NamedTuple of outputs (described in `IsolateLabelsKeeporigvalCshOutputs`).
  */
 function isolate_labels_keeporigval_csh_execute(
-    params: IsolateLabelsKeeporigvalCshParameters,
+    params: IsolateLabelsKeeporigvalCshParamsDict,
     runner: Runner | null = null,
 ): IsolateLabelsKeeporigvalCshOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function isolate_labels_keeporigval_csh(
 export {
       ISOLATE_LABELS_KEEPORIGVAL_CSH_METADATA,
       IsolateLabelsKeeporigvalCshOutputs,
+      IsolateLabelsKeeporigvalCshParamsDict,
+      IsolateLabelsKeeporigvalCshParamsDictTagged,
       isolate_labels_keeporigval_csh,
       isolate_labels_keeporigval_csh_execute,
       isolate_labels_keeporigval_csh_params,

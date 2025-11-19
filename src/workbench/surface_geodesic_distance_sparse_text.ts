@@ -10,7 +10,7 @@ const SURFACE_GEODESIC_DISTANCE_SPARSE_TEXT_METADATA: Metadata = {
 };
 
 
-interface SurfaceGeodesicDistanceSparseTextParameters {
+interface SurfaceGeodesicDistanceSparseTextParamsDict {
     "@type"?: "workbench/surface-geodesic-distance-sparse-text";
     "area-metric"?: InputPathType | null | undefined;
     "naive": boolean;
@@ -18,11 +18,11 @@ interface SurfaceGeodesicDistanceSparseTextParameters {
     "limit": number;
     "text-out": string;
 }
-type SurfaceGeodesicDistanceSparseTextParametersTagged = Required<Pick<SurfaceGeodesicDistanceSparseTextParameters, '@type'>> & SurfaceGeodesicDistanceSparseTextParameters;
+type SurfaceGeodesicDistanceSparseTextParamsDictTagged = Required<Pick<SurfaceGeodesicDistanceSparseTextParamsDict, '@type'>> & SurfaceGeodesicDistanceSparseTextParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceGeodesicDistanceSparseTextParameters(...)`.
+ * Output object returned when calling `SurfaceGeodesicDistanceSparseTextParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function surface_geodesic_distance_sparse_text_params(
     limit: number,
     text_out: string,
     naive: boolean = false,
-): SurfaceGeodesicDistanceSparseTextParametersTagged {
+): SurfaceGeodesicDistanceSparseTextParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-distance-sparse-text" as const,
         "naive": naive,
@@ -77,7 +77,7 @@ function surface_geodesic_distance_sparse_text_params(
  * @returns Command-line arguments.
  */
 function surface_geodesic_distance_sparse_text_cargs(
-    params: SurfaceGeodesicDistanceSparseTextParameters,
+    params: SurfaceGeodesicDistanceSparseTextParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function surface_geodesic_distance_sparse_text_cargs(
  * @returns Outputs object.
  */
 function surface_geodesic_distance_sparse_text_outputs(
-    params: SurfaceGeodesicDistanceSparseTextParameters,
+    params: SurfaceGeodesicDistanceSparseTextParamsDict,
     execution: Execution,
 ): SurfaceGeodesicDistanceSparseTextOutputs {
     const ret: SurfaceGeodesicDistanceSparseTextOutputs = {
@@ -131,7 +131,7 @@ function surface_geodesic_distance_sparse_text_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceSparseTextOutputs`).
  */
 function surface_geodesic_distance_sparse_text_execute(
-    params: SurfaceGeodesicDistanceSparseTextParameters,
+    params: SurfaceGeodesicDistanceSparseTextParamsDict,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceSparseTextOutputs {
     runner = runner || getGlobalRunner();
@@ -180,6 +180,8 @@ function surface_geodesic_distance_sparse_text(
 export {
       SURFACE_GEODESIC_DISTANCE_SPARSE_TEXT_METADATA,
       SurfaceGeodesicDistanceSparseTextOutputs,
+      SurfaceGeodesicDistanceSparseTextParamsDict,
+      SurfaceGeodesicDistanceSparseTextParamsDictTagged,
       surface_geodesic_distance_sparse_text,
       surface_geodesic_distance_sparse_text_execute,
       surface_geodesic_distance_sparse_text_params,

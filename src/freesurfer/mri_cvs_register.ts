@@ -11,7 +11,7 @@ const MRI_CVS_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MriCvsRegisterParameters {
+interface MriCvsRegisterParamsDict {
     "@type"?: "freesurfer/mri_cvs_register";
     "mov_subjid": string;
     "template_subjid"?: string | null | undefined;
@@ -41,11 +41,11 @@ interface MriCvsRegisterParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
-type MriCvsRegisterParametersTagged = Required<Pick<MriCvsRegisterParameters, '@type'>> & MriCvsRegisterParameters;
+type MriCvsRegisterParamsDictTagged = Required<Pick<MriCvsRegisterParamsDict, '@type'>> & MriCvsRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MriCvsRegisterParameters(...)`.
+ * Output object returned when calling `MriCvsRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -138,7 +138,7 @@ function mri_cvs_register_params(
     nolog_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MriCvsRegisterParametersTagged {
+): MriCvsRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_cvs_register" as const,
         "mov_subjid": mov_subjid,
@@ -194,7 +194,7 @@ function mri_cvs_register_params(
  * @returns Command-line arguments.
  */
 function mri_cvs_register_cargs(
-    params: MriCvsRegisterParameters,
+    params: MriCvsRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -312,7 +312,7 @@ function mri_cvs_register_cargs(
  * @returns Outputs object.
  */
 function mri_cvs_register_outputs(
-    params: MriCvsRegisterParameters,
+    params: MriCvsRegisterParamsDict,
     execution: Execution,
 ): MriCvsRegisterOutputs {
     const ret: MriCvsRegisterOutputs = {
@@ -342,7 +342,7 @@ function mri_cvs_register_outputs(
  * @returns NamedTuple of outputs (described in `MriCvsRegisterOutputs`).
  */
 function mri_cvs_register_execute(
-    params: MriCvsRegisterParameters,
+    params: MriCvsRegisterParamsDict,
     runner: Runner | null = null,
 ): MriCvsRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -433,6 +433,8 @@ function mri_cvs_register(
 export {
       MRI_CVS_REGISTER_METADATA,
       MriCvsRegisterOutputs,
+      MriCvsRegisterParamsDict,
+      MriCvsRegisterParamsDictTagged,
       mri_cvs_register,
       mri_cvs_register_execute,
       mri_cvs_register_params,

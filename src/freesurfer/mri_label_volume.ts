@@ -11,7 +11,7 @@ const MRI_LABEL_VOLUME_METADATA: Metadata = {
 };
 
 
-interface MriLabelVolumeParameters {
+interface MriLabelVolumeParamsDict {
     "@type"?: "freesurfer/mri_label_volume";
     "volume": InputPathType;
     "labels": Array<string>;
@@ -30,11 +30,11 @@ interface MriLabelVolumeParameters {
     "etiv_scalefactor"?: number | null | undefined;
     "etiv_subject"?: string | null | undefined;
 }
-type MriLabelVolumeParametersTagged = Required<Pick<MriLabelVolumeParameters, '@type'>> & MriLabelVolumeParameters;
+type MriLabelVolumeParamsDictTagged = Required<Pick<MriLabelVolumeParamsDict, '@type'>> & MriLabelVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `MriLabelVolumeParameters(...)`.
+ * Output object returned when calling `MriLabelVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -93,7 +93,7 @@ function mri_label_volume_params(
     etiv_transform_file: InputPathType | null = null,
     etiv_scalefactor: number | null = null,
     etiv_subject: string | null = null,
-): MriLabelVolumeParametersTagged {
+): MriLabelVolumeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_label_volume" as const,
         "volume": volume,
@@ -150,7 +150,7 @@ function mri_label_volume_params(
  * @returns Command-line arguments.
  */
 function mri_label_volume_cargs(
-    params: MriLabelVolumeParameters,
+    params: MriLabelVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -239,7 +239,7 @@ function mri_label_volume_cargs(
  * @returns Outputs object.
  */
 function mri_label_volume_outputs(
-    params: MriLabelVolumeParameters,
+    params: MriLabelVolumeParamsDict,
     execution: Execution,
 ): MriLabelVolumeOutputs {
     const ret: MriLabelVolumeOutputs = {
@@ -266,7 +266,7 @@ function mri_label_volume_outputs(
  * @returns NamedTuple of outputs (described in `MriLabelVolumeOutputs`).
  */
 function mri_label_volume_execute(
-    params: MriLabelVolumeParameters,
+    params: MriLabelVolumeParamsDict,
     runner: Runner | null = null,
 ): MriLabelVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -335,6 +335,8 @@ function mri_label_volume(
 export {
       MRI_LABEL_VOLUME_METADATA,
       MriLabelVolumeOutputs,
+      MriLabelVolumeParamsDict,
+      MriLabelVolumeParamsDictTagged,
       mri_label_volume,
       mri_label_volume_execute,
       mri_label_volume_params,

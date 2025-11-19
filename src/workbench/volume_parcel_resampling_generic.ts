@@ -10,7 +10,7 @@ const VOLUME_PARCEL_RESAMPLING_GENERIC_METADATA: Metadata = {
 };
 
 
-interface VolumeParcelResamplingGenericParameters {
+interface VolumeParcelResamplingGenericParamsDict {
     "@type"?: "workbench/volume-parcel-resampling-generic";
     "volume-out": string;
     "fwhm": boolean;
@@ -21,11 +21,11 @@ interface VolumeParcelResamplingGenericParameters {
     "new-parcels": InputPathType;
     "kernel": number;
 }
-type VolumeParcelResamplingGenericParametersTagged = Required<Pick<VolumeParcelResamplingGenericParameters, '@type'>> & VolumeParcelResamplingGenericParameters;
+type VolumeParcelResamplingGenericParamsDictTagged = Required<Pick<VolumeParcelResamplingGenericParamsDict, '@type'>> & VolumeParcelResamplingGenericParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeParcelResamplingGenericParameters(...)`.
+ * Output object returned when calling `VolumeParcelResamplingGenericParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function volume_parcel_resampling_generic_params(
     kernel: number,
     fwhm: boolean = false,
     fix_zeros: boolean = false,
-): VolumeParcelResamplingGenericParametersTagged {
+): VolumeParcelResamplingGenericParamsDictTagged {
     const params = {
         "@type": "workbench/volume-parcel-resampling-generic" as const,
         "volume-out": volume_out,
@@ -93,7 +93,7 @@ function volume_parcel_resampling_generic_params(
  * @returns Command-line arguments.
  */
 function volume_parcel_resampling_generic_cargs(
-    params: VolumeParcelResamplingGenericParameters,
+    params: VolumeParcelResamplingGenericParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function volume_parcel_resampling_generic_cargs(
  * @returns Outputs object.
  */
 function volume_parcel_resampling_generic_outputs(
-    params: VolumeParcelResamplingGenericParameters,
+    params: VolumeParcelResamplingGenericParamsDict,
     execution: Execution,
 ): VolumeParcelResamplingGenericOutputs {
     const ret: VolumeParcelResamplingGenericOutputs = {
@@ -147,7 +147,7 @@ function volume_parcel_resampling_generic_outputs(
  * @returns NamedTuple of outputs (described in `VolumeParcelResamplingGenericOutputs`).
  */
 function volume_parcel_resampling_generic_execute(
-    params: VolumeParcelResamplingGenericParameters,
+    params: VolumeParcelResamplingGenericParamsDict,
     runner: Runner | null = null,
 ): VolumeParcelResamplingGenericOutputs {
     runner = runner || getGlobalRunner();
@@ -198,6 +198,8 @@ function volume_parcel_resampling_generic(
 export {
       VOLUME_PARCEL_RESAMPLING_GENERIC_METADATA,
       VolumeParcelResamplingGenericOutputs,
+      VolumeParcelResamplingGenericParamsDict,
+      VolumeParcelResamplingGenericParamsDictTagged,
       volume_parcel_resampling_generic,
       volume_parcel_resampling_generic_execute,
       volume_parcel_resampling_generic_params,

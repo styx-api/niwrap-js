@@ -11,7 +11,7 @@ const MRI_VOLDIFF_METADATA: Metadata = {
 };
 
 
-interface MriVoldiffParameters {
+interface MriVoldiffParamsDict {
     "@type"?: "freesurfer/mri_voldiff";
     "volume1": InputPathType;
     "volume2": InputPathType;
@@ -23,11 +23,11 @@ interface MriVoldiffParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
-type MriVoldiffParametersTagged = Required<Pick<MriVoldiffParameters, '@type'>> & MriVoldiffParameters;
+type MriVoldiffParamsDictTagged = Required<Pick<MriVoldiffParamsDict, '@type'>> & MriVoldiffParamsDict;
 
 
 /**
- * Output object returned when calling `MriVoldiffParameters(...)`.
+ * Output object returned when calling `MriVoldiffParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function mri_voldiff_params(
     allow_vox2ras: boolean = false,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriVoldiffParametersTagged {
+): MriVoldiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_voldiff" as const,
         "volume1": volume1,
@@ -94,7 +94,7 @@ function mri_voldiff_params(
  * @returns Command-line arguments.
  */
 function mri_voldiff_cargs(
-    params: MriVoldiffParameters,
+    params: MriVoldiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function mri_voldiff_cargs(
  * @returns Outputs object.
  */
 function mri_voldiff_outputs(
-    params: MriVoldiffParameters,
+    params: MriVoldiffParamsDict,
     execution: Execution,
 ): MriVoldiffOutputs {
     const ret: MriVoldiffOutputs = {
@@ -172,7 +172,7 @@ function mri_voldiff_outputs(
  * @returns NamedTuple of outputs (described in `MriVoldiffOutputs`).
  */
 function mri_voldiff_execute(
-    params: MriVoldiffParameters,
+    params: MriVoldiffParamsDict,
     runner: Runner | null = null,
 ): MriVoldiffOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function mri_voldiff(
 export {
       MRI_VOLDIFF_METADATA,
       MriVoldiffOutputs,
+      MriVoldiffParamsDict,
+      MriVoldiffParamsDictTagged,
       mri_voldiff,
       mri_voldiff_execute,
       mri_voldiff_params,

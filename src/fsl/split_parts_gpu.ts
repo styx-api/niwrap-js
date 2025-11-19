@@ -11,7 +11,7 @@ const SPLIT_PARTS_GPU_METADATA: Metadata = {
 };
 
 
-interface SplitPartsGpuParameters {
+interface SplitPartsGpuParamsDict {
     "@type"?: "fsl/split_parts_gpu";
     "datafile": InputPathType;
     "maskfile": InputPathType;
@@ -22,11 +22,11 @@ interface SplitPartsGpuParameters {
     "total_num_parts": number;
     "output_directory": string;
 }
-type SplitPartsGpuParametersTagged = Required<Pick<SplitPartsGpuParameters, '@type'>> & SplitPartsGpuParameters;
+type SplitPartsGpuParamsDictTagged = Required<Pick<SplitPartsGpuParamsDict, '@type'>> & SplitPartsGpuParamsDict;
 
 
 /**
- * Output object returned when calling `SplitPartsGpuParameters(...)`.
+ * Output object returned when calling `SplitPartsGpuParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function split_parts_gpu_params(
     total_num_parts: number,
     output_directory: string,
     grad_file: string | null = null,
-): SplitPartsGpuParametersTagged {
+): SplitPartsGpuParamsDictTagged {
     const params = {
         "@type": "fsl/split_parts_gpu" as const,
         "datafile": datafile,
@@ -88,7 +88,7 @@ function split_parts_gpu_params(
  * @returns Command-line arguments.
  */
 function split_parts_gpu_cargs(
-    params: SplitPartsGpuParameters,
+    params: SplitPartsGpuParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function split_parts_gpu_cargs(
  * @returns Outputs object.
  */
 function split_parts_gpu_outputs(
-    params: SplitPartsGpuParameters,
+    params: SplitPartsGpuParamsDict,
     execution: Execution,
 ): SplitPartsGpuOutputs {
     const ret: SplitPartsGpuOutputs = {
@@ -141,7 +141,7 @@ function split_parts_gpu_outputs(
  * @returns NamedTuple of outputs (described in `SplitPartsGpuOutputs`).
  */
 function split_parts_gpu_execute(
-    params: SplitPartsGpuParameters,
+    params: SplitPartsGpuParamsDict,
     runner: Runner | null = null,
 ): SplitPartsGpuOutputs {
     runner = runner || getGlobalRunner();
@@ -194,6 +194,8 @@ function split_parts_gpu(
 export {
       SPLIT_PARTS_GPU_METADATA,
       SplitPartsGpuOutputs,
+      SplitPartsGpuParamsDict,
+      SplitPartsGpuParamsDictTagged,
       split_parts_gpu,
       split_parts_gpu_execute,
       split_parts_gpu_params,

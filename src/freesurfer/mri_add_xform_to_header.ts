@@ -11,7 +11,7 @@ const MRI_ADD_XFORM_TO_HEADER_METADATA: Metadata = {
 };
 
 
-interface MriAddXformToHeaderParameters {
+interface MriAddXformToHeaderParamsDict {
     "@type"?: "freesurfer/mri_add_xform_to_header";
     "xfm_file": InputPathType;
     "input_volume": InputPathType;
@@ -19,11 +19,11 @@ interface MriAddXformToHeaderParameters {
     "verbose": boolean;
     "copy_name": boolean;
 }
-type MriAddXformToHeaderParametersTagged = Required<Pick<MriAddXformToHeaderParameters, '@type'>> & MriAddXformToHeaderParameters;
+type MriAddXformToHeaderParamsDictTagged = Required<Pick<MriAddXformToHeaderParamsDict, '@type'>> & MriAddXformToHeaderParamsDict;
 
 
 /**
- * Output object returned when calling `MriAddXformToHeaderParameters(...)`.
+ * Output object returned when calling `MriAddXformToHeaderParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mri_add_xform_to_header_params(
     output_volume: string,
     verbose: boolean = false,
     copy_name: boolean = false,
-): MriAddXformToHeaderParametersTagged {
+): MriAddXformToHeaderParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_add_xform_to_header" as const,
         "xfm_file": xfm_file,
@@ -78,7 +78,7 @@ function mri_add_xform_to_header_params(
  * @returns Command-line arguments.
  */
 function mri_add_xform_to_header_cargs(
-    params: MriAddXformToHeaderParameters,
+    params: MriAddXformToHeaderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function mri_add_xform_to_header_cargs(
  * @returns Outputs object.
  */
 function mri_add_xform_to_header_outputs(
-    params: MriAddXformToHeaderParameters,
+    params: MriAddXformToHeaderParamsDict,
     execution: Execution,
 ): MriAddXformToHeaderOutputs {
     const ret: MriAddXformToHeaderOutputs = {
@@ -131,7 +131,7 @@ function mri_add_xform_to_header_outputs(
  * @returns NamedTuple of outputs (described in `MriAddXformToHeaderOutputs`).
  */
 function mri_add_xform_to_header_execute(
-    params: MriAddXformToHeaderParameters,
+    params: MriAddXformToHeaderParamsDict,
     runner: Runner | null = null,
 ): MriAddXformToHeaderOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function mri_add_xform_to_header(
 export {
       MRI_ADD_XFORM_TO_HEADER_METADATA,
       MriAddXformToHeaderOutputs,
+      MriAddXformToHeaderParamsDict,
+      MriAddXformToHeaderParamsDictTagged,
       mri_add_xform_to_header,
       mri_add_xform_to_header_execute,
       mri_add_xform_to_header_params,

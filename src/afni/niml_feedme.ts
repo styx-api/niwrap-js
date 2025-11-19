@@ -11,7 +11,7 @@ const NIML_FEEDME_METADATA: Metadata = {
 };
 
 
-interface NimlFeedmeParameters {
+interface NimlFeedmeParamsDict {
     "@type"?: "afni/niml_feedme";
     "host"?: string | null | undefined;
     "interval"?: number | null | undefined;
@@ -21,11 +21,11 @@ interface NimlFeedmeParameters {
     "drive_cmds"?: Array<string> | null | undefined;
     "dataset": InputPathType;
 }
-type NimlFeedmeParametersTagged = Required<Pick<NimlFeedmeParameters, '@type'>> & NimlFeedmeParameters;
+type NimlFeedmeParamsDictTagged = Required<Pick<NimlFeedmeParamsDict, '@type'>> & NimlFeedmeParamsDict;
 
 
 /**
- * Output object returned when calling `NimlFeedmeParameters(...)`.
+ * Output object returned when calling `NimlFeedmeParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function niml_feedme_params(
     accum: boolean = false,
     target_dataset: string | null = null,
     drive_cmds: Array<string> | null = null,
-): NimlFeedmeParametersTagged {
+): NimlFeedmeParamsDictTagged {
     const params = {
         "@type": "afni/niml_feedme" as const,
         "verbose": verbose,
@@ -90,7 +90,7 @@ function niml_feedme_params(
  * @returns Command-line arguments.
  */
 function niml_feedme_cargs(
-    params: NimlFeedmeParameters,
+    params: NimlFeedmeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function niml_feedme_cargs(
  * @returns Outputs object.
  */
 function niml_feedme_outputs(
-    params: NimlFeedmeParameters,
+    params: NimlFeedmeParamsDict,
     execution: Execution,
 ): NimlFeedmeOutputs {
     const ret: NimlFeedmeOutputs = {
@@ -164,7 +164,7 @@ function niml_feedme_outputs(
  * @returns NamedTuple of outputs (described in `NimlFeedmeOutputs`).
  */
 function niml_feedme_execute(
-    params: NimlFeedmeParameters,
+    params: NimlFeedmeParamsDict,
     runner: Runner | null = null,
 ): NimlFeedmeOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function niml_feedme(
 export {
       NIML_FEEDME_METADATA,
       NimlFeedmeOutputs,
+      NimlFeedmeParamsDict,
+      NimlFeedmeParamsDictTagged,
       niml_feedme,
       niml_feedme_execute,
       niml_feedme_params,

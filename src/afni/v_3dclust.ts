@@ -11,7 +11,7 @@ const V_3DCLUST_METADATA: Metadata = {
 };
 
 
-interface V3dclustParameters {
+interface V3dclustParamsDict {
     "@type"?: "afni/3dclust";
     "rmm"?: number | null | undefined;
     "vmul"?: number | null | undefined;
@@ -34,11 +34,11 @@ interface V3dclustParameters {
     "savemask"?: string | null | undefined;
     "binary": boolean;
 }
-type V3dclustParametersTagged = Required<Pick<V3dclustParameters, '@type'>> & V3dclustParameters;
+type V3dclustParamsDictTagged = Required<Pick<V3dclustParamsDict, '@type'>> & V3dclustParamsDict;
 
 
 /**
- * Output object returned when calling `V3dclustParameters(...)`.
+ * Output object returned when calling `V3dclustParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function v_3dclust_params(
     prefix: string | null = null,
     savemask: string | null = null,
     binary: boolean = false,
-): V3dclustParametersTagged {
+): V3dclustParamsDictTagged {
     const params = {
         "@type": "afni/3dclust" as const,
         "datasets": datasets,
@@ -150,7 +150,7 @@ function v_3dclust_params(
  * @returns Command-line arguments.
  */
 function v_3dclust_cargs(
-    params: V3dclustParameters,
+    params: V3dclustParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -232,7 +232,7 @@ function v_3dclust_cargs(
  * @returns Outputs object.
  */
 function v_3dclust_outputs(
-    params: V3dclustParameters,
+    params: V3dclustParamsDict,
     execution: Execution,
 ): V3dclustOutputs {
     const ret: V3dclustOutputs = {
@@ -259,7 +259,7 @@ function v_3dclust_outputs(
  * @returns NamedTuple of outputs (described in `V3dclustOutputs`).
  */
 function v_3dclust_execute(
-    params: V3dclustParameters,
+    params: V3dclustParamsDict,
     runner: Runner | null = null,
 ): V3dclustOutputs {
     runner = runner || getGlobalRunner();
@@ -335,6 +335,8 @@ function v_3dclust(
 
 export {
       V3dclustOutputs,
+      V3dclustParamsDict,
+      V3dclustParamsDictTagged,
       V_3DCLUST_METADATA,
       v_3dclust,
       v_3dclust_execute,

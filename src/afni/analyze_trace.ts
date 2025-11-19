@@ -11,7 +11,7 @@ const ANALYZE_TRACE_METADATA: Metadata = {
 };
 
 
-interface AnalyzeTraceParameters {
+interface AnalyzeTraceParamsDict {
     "@type"?: "afni/AnalyzeTrace";
     "tracefile": InputPathType;
     "max_func_lines"?: number | null | undefined;
@@ -25,11 +25,11 @@ interface AnalyzeTraceParameters {
     "nomall": boolean;
     "yesmall": boolean;
 }
-type AnalyzeTraceParametersTagged = Required<Pick<AnalyzeTraceParameters, '@type'>> & AnalyzeTraceParameters;
+type AnalyzeTraceParamsDictTagged = Required<Pick<AnalyzeTraceParamsDict, '@type'>> & AnalyzeTraceParamsDict;
 
 
 /**
- * Output object returned when calling `AnalyzeTraceParameters(...)`.
+ * Output object returned when calling `AnalyzeTraceParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function analyze_trace_params(
     extreme_trace: boolean = false,
     nomall: boolean = false,
     yesmall: boolean = false,
-): AnalyzeTraceParametersTagged {
+): AnalyzeTraceParamsDictTagged {
     const params = {
         "@type": "afni/AnalyzeTrace" as const,
         "tracefile": tracefile,
@@ -106,7 +106,7 @@ function analyze_trace_params(
  * @returns Command-line arguments.
  */
 function analyze_trace_cargs(
-    params: AnalyzeTraceParameters,
+    params: AnalyzeTraceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function analyze_trace_cargs(
  * @returns Outputs object.
  */
 function analyze_trace_outputs(
-    params: AnalyzeTraceParameters,
+    params: AnalyzeTraceParamsDict,
     execution: Execution,
 ): AnalyzeTraceOutputs {
     const ret: AnalyzeTraceOutputs = {
@@ -192,7 +192,7 @@ function analyze_trace_outputs(
  * @returns NamedTuple of outputs (described in `AnalyzeTraceOutputs`).
  */
 function analyze_trace_execute(
-    params: AnalyzeTraceParameters,
+    params: AnalyzeTraceParamsDict,
     runner: Runner | null = null,
 ): AnalyzeTraceOutputs {
     runner = runner || getGlobalRunner();
@@ -251,6 +251,8 @@ function analyze_trace(
 export {
       ANALYZE_TRACE_METADATA,
       AnalyzeTraceOutputs,
+      AnalyzeTraceParamsDict,
+      AnalyzeTraceParamsDictTagged,
       analyze_trace,
       analyze_trace_execute,
       analyze_trace_params,

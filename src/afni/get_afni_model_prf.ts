@@ -11,18 +11,18 @@ const GET_AFNI_MODEL_PRF_METADATA: Metadata = {
 };
 
 
-interface GetAfniModelPrfParameters {
+interface GetAfniModelPrfParamsDict {
     "@type"?: "afni/get_afni_model_PRF";
     "amplitude": number;
     "x_coord": number;
     "y_coord": number;
     "sigma": number;
 }
-type GetAfniModelPrfParametersTagged = Required<Pick<GetAfniModelPrfParameters, '@type'>> & GetAfniModelPrfParameters;
+type GetAfniModelPrfParamsDictTagged = Required<Pick<GetAfniModelPrfParamsDict, '@type'>> & GetAfniModelPrfParamsDict;
 
 
 /**
- * Output object returned when calling `GetAfniModelPrfParameters(...)`.
+ * Output object returned when calling `GetAfniModelPrfParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function get_afni_model_prf_params(
     x_coord: number,
     y_coord: number,
     sigma: number,
-): GetAfniModelPrfParametersTagged {
+): GetAfniModelPrfParamsDictTagged {
     const params = {
         "@type": "afni/get_afni_model_PRF" as const,
         "amplitude": amplitude,
@@ -70,7 +70,7 @@ function get_afni_model_prf_params(
  * @returns Command-line arguments.
  */
 function get_afni_model_prf_cargs(
-    params: GetAfniModelPrfParameters,
+    params: GetAfniModelPrfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function get_afni_model_prf_cargs(
  * @returns Outputs object.
  */
 function get_afni_model_prf_outputs(
-    params: GetAfniModelPrfParameters,
+    params: GetAfniModelPrfParamsDict,
     execution: Execution,
 ): GetAfniModelPrfOutputs {
     const ret: GetAfniModelPrfOutputs = {
@@ -117,7 +117,7 @@ function get_afni_model_prf_outputs(
  * @returns NamedTuple of outputs (described in `GetAfniModelPrfOutputs`).
  */
 function get_afni_model_prf_execute(
-    params: GetAfniModelPrfParameters,
+    params: GetAfniModelPrfParamsDict,
     runner: Runner | null = null,
 ): GetAfniModelPrfOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function get_afni_model_prf(
 export {
       GET_AFNI_MODEL_PRF_METADATA,
       GetAfniModelPrfOutputs,
+      GetAfniModelPrfParamsDict,
+      GetAfniModelPrfParamsDictTagged,
       get_afni_model_prf,
       get_afni_model_prf_execute,
       get_afni_model_prf_params,

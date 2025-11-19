@@ -11,7 +11,7 @@ const MRI_COMPUTE_VOLUME_FRACTIONS_METADATA: Metadata = {
 };
 
 
-interface MriComputeVolumeFractionsParameters {
+interface MriComputeVolumeFractionsParamsDict {
     "@type"?: "freesurfer/mri_compute_volume_fractions";
     "output_stem": string;
     "registration_file"?: InputPathType | null | undefined;
@@ -39,11 +39,11 @@ interface MriComputeVolumeFractionsParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
-type MriComputeVolumeFractionsParametersTagged = Required<Pick<MriComputeVolumeFractionsParameters, '@type'>> & MriComputeVolumeFractionsParameters;
+type MriComputeVolumeFractionsParamsDictTagged = Required<Pick<MriComputeVolumeFractionsParamsDict, '@type'>> & MriComputeVolumeFractionsParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeVolumeFractionsParameters(...)`.
+ * Output object returned when calling `MriComputeVolumeFractionsParamsDict(...)`.
  *
  * @interface
  */
@@ -128,7 +128,7 @@ function mri_compute_volume_fractions_params(
     vg_thresh: number | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriComputeVolumeFractionsParametersTagged {
+): MriComputeVolumeFractionsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_volume_fractions" as const,
         "output_stem": output_stem,
@@ -200,7 +200,7 @@ function mri_compute_volume_fractions_params(
  * @returns Command-line arguments.
  */
 function mri_compute_volume_fractions_cargs(
-    params: MriComputeVolumeFractionsParameters,
+    params: MriComputeVolumeFractionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -339,7 +339,7 @@ function mri_compute_volume_fractions_cargs(
  * @returns Outputs object.
  */
 function mri_compute_volume_fractions_outputs(
-    params: MriComputeVolumeFractionsParameters,
+    params: MriComputeVolumeFractionsParamsDict,
     execution: Execution,
 ): MriComputeVolumeFractionsOutputs {
     const ret: MriComputeVolumeFractionsOutputs = {
@@ -368,7 +368,7 @@ function mri_compute_volume_fractions_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeVolumeFractionsOutputs`).
  */
 function mri_compute_volume_fractions_execute(
-    params: MriComputeVolumeFractionsParameters,
+    params: MriComputeVolumeFractionsParamsDict,
     runner: Runner | null = null,
 ): MriComputeVolumeFractionsOutputs {
     runner = runner || getGlobalRunner();
@@ -455,6 +455,8 @@ function mri_compute_volume_fractions(
 export {
       MRI_COMPUTE_VOLUME_FRACTIONS_METADATA,
       MriComputeVolumeFractionsOutputs,
+      MriComputeVolumeFractionsParamsDict,
+      MriComputeVolumeFractionsParamsDictTagged,
       mri_compute_volume_fractions,
       mri_compute_volume_fractions_execute,
       mri_compute_volume_fractions_params,

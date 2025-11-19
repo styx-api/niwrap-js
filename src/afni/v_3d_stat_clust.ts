@@ -11,7 +11,7 @@ const V_3D_STAT_CLUST_METADATA: Metadata = {
 };
 
 
-interface V3dStatClustParameters {
+interface V3dStatClustParamsDict {
     "@type"?: "afni/3dStatClust";
     "prefix"?: string | null | undefined;
     "session_dir"?: string | null | undefined;
@@ -23,11 +23,11 @@ interface V3dStatClustParameters {
     "nclust": number;
     "datasets": Array<string>;
 }
-type V3dStatClustParametersTagged = Required<Pick<V3dStatClustParameters, '@type'>> & V3dStatClustParameters;
+type V3dStatClustParamsDictTagged = Required<Pick<V3dStatClustParamsDict, '@type'>> & V3dStatClustParamsDict;
 
 
 /**
- * Output object returned when calling `V3dStatClustParameters(...)`.
+ * Output object returned when calling `V3dStatClustParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_stat_clust_params(
     dist_euc: boolean = false,
     dist_ind: boolean = false,
     dist_cor: boolean = false,
-): V3dStatClustParametersTagged {
+): V3dStatClustParamsDictTagged {
     const params = {
         "@type": "afni/3dStatClust" as const,
         "verbose": verbose,
@@ -102,7 +102,7 @@ function v_3d_stat_clust_params(
  * @returns Command-line arguments.
  */
 function v_3d_stat_clust_cargs(
-    params: V3dStatClustParameters,
+    params: V3dStatClustParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function v_3d_stat_clust_cargs(
  * @returns Outputs object.
  */
 function v_3d_stat_clust_outputs(
-    params: V3dStatClustParameters,
+    params: V3dStatClustParamsDict,
     execution: Execution,
 ): V3dStatClustOutputs {
     const ret: V3dStatClustOutputs = {
@@ -180,7 +180,7 @@ function v_3d_stat_clust_outputs(
  * @returns NamedTuple of outputs (described in `V3dStatClustOutputs`).
  */
 function v_3d_stat_clust_execute(
-    params: V3dStatClustParameters,
+    params: V3dStatClustParamsDict,
     runner: Runner | null = null,
 ): V3dStatClustOutputs {
     runner = runner || getGlobalRunner();
@@ -234,6 +234,8 @@ function v_3d_stat_clust(
 
 export {
       V3dStatClustOutputs,
+      V3dStatClustParamsDict,
+      V3dStatClustParamsDictTagged,
       V_3D_STAT_CLUST_METADATA,
       v_3d_stat_clust,
       v_3d_stat_clust_execute,

@@ -10,7 +10,7 @@ const SURFACE_CORTEX_LAYER_METADATA: Metadata = {
 };
 
 
-interface SurfaceCortexLayerParameters {
+interface SurfaceCortexLayerParamsDict {
     "@type"?: "workbench/surface-cortex-layer";
     "out-surface": string;
     "placement-metric"?: string | null | undefined;
@@ -18,11 +18,11 @@ interface SurfaceCortexLayerParameters {
     "pial-surface": InputPathType;
     "location": number;
 }
-type SurfaceCortexLayerParametersTagged = Required<Pick<SurfaceCortexLayerParameters, '@type'>> & SurfaceCortexLayerParameters;
+type SurfaceCortexLayerParamsDictTagged = Required<Pick<SurfaceCortexLayerParamsDict, '@type'>> & SurfaceCortexLayerParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceCortexLayerParameters(...)`.
+ * Output object returned when calling `SurfaceCortexLayerParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function surface_cortex_layer_params(
     white_surface: InputPathType,
     pial_surface: InputPathType,
     location: number,
-): SurfaceCortexLayerParametersTagged {
+): SurfaceCortexLayerParamsDictTagged {
     const params = {
         "@type": "workbench/surface-cortex-layer" as const,
         "out-surface": out_surface,
@@ -81,7 +81,7 @@ function surface_cortex_layer_params(
  * @returns Command-line arguments.
  */
 function surface_cortex_layer_cargs(
-    params: SurfaceCortexLayerParameters,
+    params: SurfaceCortexLayerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function surface_cortex_layer_cargs(
  * @returns Outputs object.
  */
 function surface_cortex_layer_outputs(
-    params: SurfaceCortexLayerParameters,
+    params: SurfaceCortexLayerParamsDict,
     execution: Execution,
 ): SurfaceCortexLayerOutputs {
     const ret: SurfaceCortexLayerOutputs = {
@@ -132,7 +132,7 @@ function surface_cortex_layer_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceCortexLayerOutputs`).
  */
 function surface_cortex_layer_execute(
-    params: SurfaceCortexLayerParameters,
+    params: SurfaceCortexLayerParamsDict,
     runner: Runner | null = null,
 ): SurfaceCortexLayerOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function surface_cortex_layer(
 export {
       SURFACE_CORTEX_LAYER_METADATA,
       SurfaceCortexLayerOutputs,
+      SurfaceCortexLayerParamsDict,
+      SurfaceCortexLayerParamsDictTagged,
       surface_cortex_layer,
       surface_cortex_layer_execute,
       surface_cortex_layer_params,

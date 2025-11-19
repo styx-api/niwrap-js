@@ -11,7 +11,7 @@ const CREATE_TILED_MOSAIC_METADATA: Metadata = {
 };
 
 
-interface CreateTiledMosaicParameters {
+interface CreateTiledMosaicParamsDict {
     "@type"?: "ants/CreateTiledMosaic";
     "input_image": InputPathType;
     "rgb_image"?: InputPathType | null | undefined;
@@ -26,11 +26,11 @@ interface CreateTiledMosaicParameters {
     "flip_slice"?: string | null | undefined;
     "permute_axes"?: boolean | null | undefined;
 }
-type CreateTiledMosaicParametersTagged = Required<Pick<CreateTiledMosaicParameters, '@type'>> & CreateTiledMosaicParameters;
+type CreateTiledMosaicParamsDictTagged = Required<Pick<CreateTiledMosaicParamsDict, '@type'>> & CreateTiledMosaicParamsDict;
 
 
 /**
- * Output object returned when calling `CreateTiledMosaicParameters(...)`.
+ * Output object returned when calling `CreateTiledMosaicParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function create_tiled_mosaic_params(
     slices: string | null = null,
     flip_slice: string | null = null,
     permute_axes: boolean | null = null,
-): CreateTiledMosaicParametersTagged {
+): CreateTiledMosaicParamsDictTagged {
     const params = {
         "@type": "ants/CreateTiledMosaic" as const,
         "input_image": input_image,
@@ -126,7 +126,7 @@ function create_tiled_mosaic_params(
  * @returns Command-line arguments.
  */
 function create_tiled_mosaic_cargs(
-    params: CreateTiledMosaicParameters,
+    params: CreateTiledMosaicParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function create_tiled_mosaic_cargs(
  * @returns Outputs object.
  */
 function create_tiled_mosaic_outputs(
-    params: CreateTiledMosaicParameters,
+    params: CreateTiledMosaicParamsDict,
     execution: Execution,
 ): CreateTiledMosaicOutputs {
     const ret: CreateTiledMosaicOutputs = {
@@ -238,7 +238,7 @@ function create_tiled_mosaic_outputs(
  * @returns NamedTuple of outputs (described in `CreateTiledMosaicOutputs`).
  */
 function create_tiled_mosaic_execute(
-    params: CreateTiledMosaicParameters,
+    params: CreateTiledMosaicParamsDict,
     runner: Runner | null = null,
 ): CreateTiledMosaicOutputs {
     runner = runner || getGlobalRunner();
@@ -299,6 +299,8 @@ function create_tiled_mosaic(
 export {
       CREATE_TILED_MOSAIC_METADATA,
       CreateTiledMosaicOutputs,
+      CreateTiledMosaicParamsDict,
+      CreateTiledMosaicParamsDictTagged,
       create_tiled_mosaic,
       create_tiled_mosaic_execute,
       create_tiled_mosaic_params,

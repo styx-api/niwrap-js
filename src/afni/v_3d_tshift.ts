@@ -11,7 +11,7 @@ const V_3D_TSHIFT_METADATA: Metadata = {
 };
 
 
-interface V3dTshiftParameters {
+interface V3dTshiftParamsDict {
     "@type"?: "afni/3dTshift";
     "prefix"?: string | null | undefined;
     "ignore"?: number | null | undefined;
@@ -27,11 +27,11 @@ interface V3dTshiftParameters {
     "tslice"?: number | null | undefined;
     "tzero"?: number | null | undefined;
 }
-type V3dTshiftParametersTagged = Required<Pick<V3dTshiftParameters, '@type'>> & V3dTshiftParameters;
+type V3dTshiftParamsDictTagged = Required<Pick<V3dTshiftParamsDict, '@type'>> & V3dTshiftParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTshiftParameters(...)`.
+ * Output object returned when calling `V3dTshiftParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function v_3d_tshift_params(
     tr: number | null = null,
     tslice: number | null = null,
     tzero: number | null = null,
-): V3dTshiftParametersTagged {
+): V3dTshiftParamsDictTagged {
     const params = {
         "@type": "afni/3dTshift" as const,
         "in_file": in_file,
@@ -134,7 +134,7 @@ function v_3d_tshift_params(
  * @returns Command-line arguments.
  */
 function v_3d_tshift_cargs(
-    params: V3dTshiftParameters,
+    params: V3dTshiftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function v_3d_tshift_cargs(
  * @returns Outputs object.
  */
 function v_3d_tshift_outputs(
-    params: V3dTshiftParameters,
+    params: V3dTshiftParamsDict,
     execution: Execution,
 ): V3dTshiftOutputs {
     const ret: V3dTshiftOutputs = {
@@ -237,7 +237,7 @@ function v_3d_tshift_outputs(
  * @returns NamedTuple of outputs (described in `V3dTshiftOutputs`).
  */
 function v_3d_tshift_execute(
-    params: V3dTshiftParameters,
+    params: V3dTshiftParamsDict,
     runner: Runner | null = null,
 ): V3dTshiftOutputs {
     runner = runner || getGlobalRunner();
@@ -299,6 +299,8 @@ function v_3d_tshift(
 
 export {
       V3dTshiftOutputs,
+      V3dTshiftParamsDict,
+      V3dTshiftParamsDictTagged,
       V_3D_TSHIFT_METADATA,
       v_3d_tshift,
       v_3d_tshift_execute,

@@ -10,7 +10,7 @@ const VOLUME_LABEL_IMPORT_METADATA: Metadata = {
 };
 
 
-interface VolumeLabelImportParameters {
+interface VolumeLabelImportParamsDict {
     "@type"?: "workbench/volume-label-import";
     "output": string;
     "discard-others": boolean;
@@ -21,11 +21,11 @@ interface VolumeLabelImportParameters {
     "input": InputPathType;
     "label-list-file": string;
 }
-type VolumeLabelImportParametersTagged = Required<Pick<VolumeLabelImportParameters, '@type'>> & VolumeLabelImportParameters;
+type VolumeLabelImportParamsDictTagged = Required<Pick<VolumeLabelImportParamsDict, '@type'>> & VolumeLabelImportParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeLabelImportParameters(...)`.
+ * Output object returned when calling `VolumeLabelImportParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function volume_label_import_params(
     label_list_file: string,
     discard_others: boolean = false,
     drop_unused_labels: boolean = false,
-): VolumeLabelImportParametersTagged {
+): VolumeLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-import" as const,
         "output": output,
@@ -101,7 +101,7 @@ function volume_label_import_params(
  * @returns Command-line arguments.
  */
 function volume_label_import_cargs(
-    params: VolumeLabelImportParameters,
+    params: VolumeLabelImportParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function volume_label_import_cargs(
  * @returns Outputs object.
  */
 function volume_label_import_outputs(
-    params: VolumeLabelImportParameters,
+    params: VolumeLabelImportParamsDict,
     execution: Execution,
 ): VolumeLabelImportOutputs {
     const ret: VolumeLabelImportOutputs = {
@@ -165,7 +165,7 @@ function volume_label_import_outputs(
  * @returns NamedTuple of outputs (described in `VolumeLabelImportOutputs`).
  */
 function volume_label_import_execute(
-    params: VolumeLabelImportParameters,
+    params: VolumeLabelImportParamsDict,
     runner: Runner | null = null,
 ): VolumeLabelImportOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function volume_label_import(
 export {
       VOLUME_LABEL_IMPORT_METADATA,
       VolumeLabelImportOutputs,
+      VolumeLabelImportParamsDict,
+      VolumeLabelImportParamsDictTagged,
       volume_label_import,
       volume_label_import_execute,
       volume_label_import_params,

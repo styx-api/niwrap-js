@@ -11,7 +11,7 @@ const DMRI_STATS_AC_METADATA: Metadata = {
 };
 
 
-interface DmriStatsAcParameters {
+interface DmriStatsAcParamsDict {
     "@type"?: "freesurfer/dmri_stats_ac";
     "anatomicuts_folder": string;
     "num_clusters": number;
@@ -19,11 +19,11 @@ interface DmriStatsAcParameters {
     "measures": Array<string>;
     "output_file": string;
 }
-type DmriStatsAcParametersTagged = Required<Pick<DmriStatsAcParameters, '@type'>> & DmriStatsAcParameters;
+type DmriStatsAcParamsDictTagged = Required<Pick<DmriStatsAcParamsDict, '@type'>> & DmriStatsAcParamsDict;
 
 
 /**
- * Output object returned when calling `DmriStatsAcParameters(...)`.
+ * Output object returned when calling `DmriStatsAcParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function dmri_stats_ac_params(
     correspondence_file: string,
     measures: Array<string>,
     output_file: string,
-): DmriStatsAcParametersTagged {
+): DmriStatsAcParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_stats_ac" as const,
         "anatomicuts_folder": anatomicuts_folder,
@@ -78,7 +78,7 @@ function dmri_stats_ac_params(
  * @returns Command-line arguments.
  */
 function dmri_stats_ac_cargs(
-    params: DmriStatsAcParameters,
+    params: DmriStatsAcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function dmri_stats_ac_cargs(
  * @returns Outputs object.
  */
 function dmri_stats_ac_outputs(
-    params: DmriStatsAcParameters,
+    params: DmriStatsAcParamsDict,
     execution: Execution,
 ): DmriStatsAcOutputs {
     const ret: DmriStatsAcOutputs = {
@@ -142,7 +142,7 @@ function dmri_stats_ac_outputs(
  * @returns NamedTuple of outputs (described in `DmriStatsAcOutputs`).
  */
 function dmri_stats_ac_execute(
-    params: DmriStatsAcParameters,
+    params: DmriStatsAcParamsDict,
     runner: Runner | null = null,
 ): DmriStatsAcOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function dmri_stats_ac(
 export {
       DMRI_STATS_AC_METADATA,
       DmriStatsAcOutputs,
+      DmriStatsAcParamsDict,
+      DmriStatsAcParamsDictTagged,
       dmri_stats_ac,
       dmri_stats_ac_execute,
       dmri_stats_ac_params,

@@ -11,7 +11,7 @@ const MRI_MAPS2CSD_METADATA: Metadata = {
 };
 
 
-interface MriMaps2csdParameters {
+interface MriMaps2csdParamsDict {
     "@type"?: "freesurfer/mri_maps2csd";
     "input_files": Array<string>;
     "csd_file"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface MriMaps2csdParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
-type MriMaps2csdParametersTagged = Required<Pick<MriMaps2csdParameters, '@type'>> & MriMaps2csdParameters;
+type MriMaps2csdParamsDictTagged = Required<Pick<MriMaps2csdParamsDict, '@type'>> & MriMaps2csdParamsDict;
 
 
 /**
- * Output object returned when calling `MriMaps2csdParameters(...)`.
+ * Output object returned when calling `MriMaps2csdParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function mri_maps2csd_params(
     subjects_dir: string | null = null,
     debug: boolean = false,
     checkopts: boolean = false,
-): MriMaps2csdParametersTagged {
+): MriMaps2csdParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_maps2csd" as const,
         "input_files": input_files,
@@ -113,7 +113,7 @@ function mri_maps2csd_params(
  * @returns Command-line arguments.
  */
 function mri_maps2csd_cargs(
-    params: MriMaps2csdParameters,
+    params: MriMaps2csdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -186,7 +186,7 @@ function mri_maps2csd_cargs(
  * @returns Outputs object.
  */
 function mri_maps2csd_outputs(
-    params: MriMaps2csdParameters,
+    params: MriMaps2csdParamsDict,
     execution: Execution,
 ): MriMaps2csdOutputs {
     const ret: MriMaps2csdOutputs = {
@@ -211,7 +211,7 @@ function mri_maps2csd_outputs(
  * @returns NamedTuple of outputs (described in `MriMaps2csdOutputs`).
  */
 function mri_maps2csd_execute(
-    params: MriMaps2csdParameters,
+    params: MriMaps2csdParamsDict,
     runner: Runner | null = null,
 ): MriMaps2csdOutputs {
     runner = runner || getGlobalRunner();
@@ -269,6 +269,8 @@ function mri_maps2csd(
 export {
       MRI_MAPS2CSD_METADATA,
       MriMaps2csdOutputs,
+      MriMaps2csdParamsDict,
+      MriMaps2csdParamsDictTagged,
       mri_maps2csd,
       mri_maps2csd_execute,
       mri_maps2csd_params,

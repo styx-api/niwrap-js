@@ -11,15 +11,15 @@ const FIX_SUBJECT_CORRECTED_RH_METADATA: Metadata = {
 };
 
 
-interface FixSubjectCorrectedRhParameters {
+interface FixSubjectCorrectedRhParamsDict {
     "@type"?: "freesurfer/fix_subject_corrected-rh";
     "subject_dir": string;
 }
-type FixSubjectCorrectedRhParametersTagged = Required<Pick<FixSubjectCorrectedRhParameters, '@type'>> & FixSubjectCorrectedRhParameters;
+type FixSubjectCorrectedRhParamsDictTagged = Required<Pick<FixSubjectCorrectedRhParamsDict, '@type'>> & FixSubjectCorrectedRhParamsDict;
 
 
 /**
- * Output object returned when calling `FixSubjectCorrectedRhParameters(...)`.
+ * Output object returned when calling `FixSubjectCorrectedRhParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface FixSubjectCorrectedRhOutputs {
  */
 function fix_subject_corrected_rh_params(
     subject_dir: string,
-): FixSubjectCorrectedRhParametersTagged {
+): FixSubjectCorrectedRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/fix_subject_corrected-rh" as const,
         "subject_dir": subject_dir,
@@ -62,7 +62,7 @@ function fix_subject_corrected_rh_params(
  * @returns Command-line arguments.
  */
 function fix_subject_corrected_rh_cargs(
-    params: FixSubjectCorrectedRhParameters,
+    params: FixSubjectCorrectedRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function fix_subject_corrected_rh_cargs(
  * @returns Outputs object.
  */
 function fix_subject_corrected_rh_outputs(
-    params: FixSubjectCorrectedRhParameters,
+    params: FixSubjectCorrectedRhParamsDict,
     execution: Execution,
 ): FixSubjectCorrectedRhOutputs {
     const ret: FixSubjectCorrectedRhOutputs = {
@@ -110,7 +110,7 @@ function fix_subject_corrected_rh_outputs(
  * @returns NamedTuple of outputs (described in `FixSubjectCorrectedRhOutputs`).
  */
 function fix_subject_corrected_rh_execute(
-    params: FixSubjectCorrectedRhParameters,
+    params: FixSubjectCorrectedRhParamsDict,
     runner: Runner | null = null,
 ): FixSubjectCorrectedRhOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function fix_subject_corrected_rh(
 export {
       FIX_SUBJECT_CORRECTED_RH_METADATA,
       FixSubjectCorrectedRhOutputs,
+      FixSubjectCorrectedRhParamsDict,
+      FixSubjectCorrectedRhParamsDictTagged,
       fix_subject_corrected_rh,
       fix_subject_corrected_rh_execute,
       fix_subject_corrected_rh_params,

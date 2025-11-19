@@ -11,7 +11,7 @@ const V_3D_WINSOR_METADATA: Metadata = {
 };
 
 
-interface V3dWinsorParameters {
+interface V3dWinsorParamsDict {
     "@type"?: "afni/3dWinsor";
     "irad"?: number | null | undefined;
     "cbot"?: number | null | undefined;
@@ -23,11 +23,11 @@ interface V3dWinsorParameters {
     "mask"?: InputPathType | null | undefined;
     "dataset": InputPathType;
 }
-type V3dWinsorParametersTagged = Required<Pick<V3dWinsorParameters, '@type'>> & V3dWinsorParameters;
+type V3dWinsorParamsDictTagged = Required<Pick<V3dWinsorParamsDict, '@type'>> & V3dWinsorParamsDict;
 
 
 /**
- * Output object returned when calling `V3dWinsorParameters(...)`.
+ * Output object returned when calling `V3dWinsorParamsDict(...)`.
  *
  * @interface
  */
@@ -72,7 +72,7 @@ function v_3d_winsor_params(
     clip: number | null = null,
     prefix: string | null = null,
     mask: InputPathType | null = null,
-): V3dWinsorParametersTagged {
+): V3dWinsorParamsDictTagged {
     const params = {
         "@type": "afni/3dWinsor" as const,
         "keepzero": keepzero,
@@ -112,7 +112,7 @@ function v_3d_winsor_params(
  * @returns Command-line arguments.
  */
 function v_3d_winsor_cargs(
-    params: V3dWinsorParameters,
+    params: V3dWinsorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -176,7 +176,7 @@ function v_3d_winsor_cargs(
  * @returns Outputs object.
  */
 function v_3d_winsor_outputs(
-    params: V3dWinsorParameters,
+    params: V3dWinsorParamsDict,
     execution: Execution,
 ): V3dWinsorOutputs {
     const ret: V3dWinsorOutputs = {
@@ -203,7 +203,7 @@ function v_3d_winsor_outputs(
  * @returns NamedTuple of outputs (described in `V3dWinsorOutputs`).
  */
 function v_3d_winsor_execute(
-    params: V3dWinsorParameters,
+    params: V3dWinsorParamsDict,
     runner: Runner | null = null,
 ): V3dWinsorOutputs {
     runner = runner || getGlobalRunner();
@@ -257,6 +257,8 @@ function v_3d_winsor(
 
 export {
       V3dWinsorOutputs,
+      V3dWinsorParamsDict,
+      V3dWinsorParamsDictTagged,
       V_3D_WINSOR_METADATA,
       v_3d_winsor,
       v_3d_winsor_execute,

@@ -11,7 +11,7 @@ const V_3D_EIGS_TO_DT_METADATA: Metadata = {
 };
 
 
-interface V3dEigsToDtParameters {
+interface V3dEigsToDtParamsDict {
     "@type"?: "afni/3dEigsToDT";
     "eig_vals": string;
     "eig_vecs": string;
@@ -22,11 +22,11 @@ interface V3dEigsToDtParameters {
     "flip_z": boolean;
     "scale_eigs"?: number | null | undefined;
 }
-type V3dEigsToDtParametersTagged = Required<Pick<V3dEigsToDtParameters, '@type'>> & V3dEigsToDtParameters;
+type V3dEigsToDtParamsDictTagged = Required<Pick<V3dEigsToDtParamsDict, '@type'>> & V3dEigsToDtParamsDict;
 
 
 /**
- * Output object returned when calling `V3dEigsToDtParameters(...)`.
+ * Output object returned when calling `V3dEigsToDtParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v_3d_eigs_to_dt_params(
     flip_y: boolean = false,
     flip_z: boolean = false,
     scale_eigs: number | null = null,
-): V3dEigsToDtParametersTagged {
+): V3dEigsToDtParamsDictTagged {
     const params = {
         "@type": "afni/3dEigsToDT" as const,
         "eig_vals": eig_vals,
@@ -98,7 +98,7 @@ function v_3d_eigs_to_dt_params(
  * @returns Command-line arguments.
  */
 function v_3d_eigs_to_dt_cargs(
-    params: V3dEigsToDtParameters,
+    params: V3dEigsToDtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function v_3d_eigs_to_dt_cargs(
  * @returns Outputs object.
  */
 function v_3d_eigs_to_dt_outputs(
-    params: V3dEigsToDtParameters,
+    params: V3dEigsToDtParamsDict,
     execution: Execution,
 ): V3dEigsToDtOutputs {
     const ret: V3dEigsToDtOutputs = {
@@ -176,7 +176,7 @@ function v_3d_eigs_to_dt_outputs(
  * @returns NamedTuple of outputs (described in `V3dEigsToDtOutputs`).
  */
 function v_3d_eigs_to_dt_execute(
-    params: V3dEigsToDtParameters,
+    params: V3dEigsToDtParamsDict,
     runner: Runner | null = null,
 ): V3dEigsToDtOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function v_3d_eigs_to_dt(
 
 export {
       V3dEigsToDtOutputs,
+      V3dEigsToDtParamsDict,
+      V3dEigsToDtParamsDictTagged,
       V_3D_EIGS_TO_DT_METADATA,
       v_3d_eigs_to_dt,
       v_3d_eigs_to_dt_execute,

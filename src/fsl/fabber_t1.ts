@@ -11,7 +11,7 @@ const FABBER_T1_METADATA: Metadata = {
 };
 
 
-interface FabberT1Parameters {
+interface FabberT1ParamsDict {
     "@type"?: "fsl/fabber_t1";
     "output": string;
     "method": string;
@@ -44,11 +44,11 @@ interface FabberT1Parameters {
     "optfile"?: InputPathType | null | undefined;
     "debug": boolean;
 }
-type FabberT1ParametersTagged = Required<Pick<FabberT1Parameters, '@type'>> & FabberT1Parameters;
+type FabberT1ParamsDictTagged = Required<Pick<FabberT1ParamsDict, '@type'>> & FabberT1ParamsDict;
 
 
 /**
- * Output object returned when calling `FabberT1Parameters(...)`.
+ * Output object returned when calling `FabberT1ParamsDict(...)`.
  *
  * @interface
  */
@@ -175,7 +175,7 @@ function fabber_t1_params(
     save_free_energy: boolean = false,
     optfile: InputPathType | null = null,
     debug: boolean = false,
-): FabberT1ParametersTagged {
+): FabberT1ParamsDictTagged {
     const params = {
         "@type": "fsl/fabber_t1" as const,
         "output": output,
@@ -242,7 +242,7 @@ function fabber_t1_params(
  * @returns Command-line arguments.
  */
 function fabber_t1_cargs(
-    params: FabberT1Parameters,
+    params: FabberT1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -384,7 +384,7 @@ function fabber_t1_cargs(
  * @returns Outputs object.
  */
 function fabber_t1_outputs(
-    params: FabberT1Parameters,
+    params: FabberT1ParamsDict,
     execution: Execution,
 ): FabberT1Outputs {
     const ret: FabberT1Outputs = {
@@ -421,7 +421,7 @@ function fabber_t1_outputs(
  * @returns NamedTuple of outputs (described in `FabberT1Outputs`).
  */
 function fabber_t1_execute(
-    params: FabberT1Parameters,
+    params: FabberT1ParamsDict,
     runner: Runner | null = null,
 ): FabberT1Outputs {
     runner = runner || getGlobalRunner();
@@ -518,6 +518,8 @@ function fabber_t1(
 export {
       FABBER_T1_METADATA,
       FabberT1Outputs,
+      FabberT1ParamsDict,
+      FabberT1ParamsDictTagged,
       fabber_t1,
       fabber_t1_execute,
       fabber_t1_params,

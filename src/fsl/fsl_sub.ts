@@ -11,7 +11,7 @@ const FSL_SUB_METADATA: Metadata = {
 };
 
 
-interface FslSubParameters {
+interface FslSubParamsDict {
     "@type"?: "fsl/fsl_sub";
     "arch"?: string | null | undefined;
     "coprocessor"?: string | null | undefined;
@@ -48,11 +48,11 @@ interface FslSubParameters {
     "version": boolean;
     "fileisimage"?: InputPathType | null | undefined;
 }
-type FslSubParametersTagged = Required<Pick<FslSubParameters, '@type'>> & FslSubParameters;
+type FslSubParamsDictTagged = Required<Pick<FslSubParamsDict, '@type'>> & FslSubParamsDict;
 
 
 /**
- * Output object returned when calling `FslSubParameters(...)`.
+ * Output object returned when calling `FslSubParamsDict(...)`.
  *
  * @interface
  */
@@ -139,7 +139,7 @@ function fsl_sub_params(
     verbose: boolean = false,
     version: boolean = false,
     fileisimage: InputPathType | null = null,
-): FslSubParametersTagged {
+): FslSubParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_sub" as const,
         "coprocessor_class_strict": coprocessor_class_strict,
@@ -238,7 +238,7 @@ function fsl_sub_params(
  * @returns Command-line arguments.
  */
 function fsl_sub_cargs(
-    params: FslSubParameters,
+    params: FslSubParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -430,7 +430,7 @@ function fsl_sub_cargs(
  * @returns Outputs object.
  */
 function fsl_sub_outputs(
-    params: FslSubParameters,
+    params: FslSubParamsDict,
     execution: Execution,
 ): FslSubOutputs {
     const ret: FslSubOutputs = {
@@ -455,7 +455,7 @@ function fsl_sub_outputs(
  * @returns NamedTuple of outputs (described in `FslSubOutputs`).
  */
 function fsl_sub_execute(
-    params: FslSubParameters,
+    params: FslSubParamsDict,
     runner: Runner | null = null,
 ): FslSubOutputs {
     runner = runner || getGlobalRunner();
@@ -560,6 +560,8 @@ function fsl_sub(
 export {
       FSL_SUB_METADATA,
       FslSubOutputs,
+      FslSubParamsDict,
+      FslSubParamsDictTagged,
       fsl_sub,
       fsl_sub_execute,
       fsl_sub_params,

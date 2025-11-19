@@ -11,7 +11,7 @@ const V_3DHISTOG_METADATA: Metadata = {
 };
 
 
-interface V3dhistogParameters {
+interface V3dhistogParamsDict {
     "@type"?: "afni/3dhistog";
     "dataset": InputPathType;
     "nbin"?: number | null | undefined;
@@ -32,11 +32,11 @@ interface V3dhistogParameters {
     "unq"?: string | null | undefined;
     "prefix"?: string | null | undefined;
 }
-type V3dhistogParametersTagged = Required<Pick<V3dhistogParameters, '@type'>> & V3dhistogParameters;
+type V3dhistogParamsDictTagged = Required<Pick<V3dhistogParamsDict, '@type'>> & V3dhistogParamsDict;
 
 
 /**
- * Output object returned when calling `V3dhistogParameters(...)`.
+ * Output object returned when calling `V3dhistogParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function v_3dhistog_params(
     float: boolean = false,
     unq: string | null = null,
     prefix: string | null = null,
-): V3dhistogParametersTagged {
+): V3dhistogParamsDictTagged {
     const params = {
         "@type": "afni/3dhistog" as const,
         "dataset": dataset,
@@ -148,7 +148,7 @@ function v_3dhistog_params(
  * @returns Command-line arguments.
  */
 function v_3dhistog_cargs(
-    params: V3dhistogParameters,
+    params: V3dhistogParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -245,7 +245,7 @@ function v_3dhistog_cargs(
  * @returns Outputs object.
  */
 function v_3dhistog_outputs(
-    params: V3dhistogParameters,
+    params: V3dhistogParamsDict,
     execution: Execution,
 ): V3dhistogOutputs {
     const ret: V3dhistogOutputs = {
@@ -271,7 +271,7 @@ function v_3dhistog_outputs(
  * @returns NamedTuple of outputs (described in `V3dhistogOutputs`).
  */
 function v_3dhistog_execute(
-    params: V3dhistogParameters,
+    params: V3dhistogParamsDict,
     runner: Runner | null = null,
 ): V3dhistogOutputs {
     runner = runner || getGlobalRunner();
@@ -343,6 +343,8 @@ function v_3dhistog(
 
 export {
       V3dhistogOutputs,
+      V3dhistogParamsDict,
+      V3dhistogParamsDictTagged,
       V_3DHISTOG_METADATA,
       v_3dhistog,
       v_3dhistog_execute,

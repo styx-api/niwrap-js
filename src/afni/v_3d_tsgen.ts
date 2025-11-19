@@ -11,7 +11,7 @@ const V_3D_TSGEN_METADATA: Metadata = {
 };
 
 
-interface V3dTsgenParameters {
+interface V3dTsgenParamsDict {
     "@type"?: "afni/3dTSgen";
     "input_file": InputPathType;
     "in_tr_flag": boolean;
@@ -27,11 +27,11 @@ interface V3dTsgenParameters {
     "bucket_config"?: string | null | undefined;
     "brick_config"?: string | null | undefined;
 }
-type V3dTsgenParametersTagged = Required<Pick<V3dTsgenParameters, '@type'>> & V3dTsgenParameters;
+type V3dTsgenParamsDictTagged = Required<Pick<V3dTsgenParamsDict, '@type'>> & V3dTsgenParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTsgenParameters(...)`.
+ * Output object returned when calling `V3dTsgenParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function v_3d_tsgen_params(
     noise_coef: string | null = null,
     bucket_config: string | null = null,
     brick_config: string | null = null,
-): V3dTsgenParametersTagged {
+): V3dTsgenParamsDictTagged {
     const params = {
         "@type": "afni/3dTSgen" as const,
         "input_file": input_file,
@@ -120,7 +120,7 @@ function v_3d_tsgen_params(
  * @returns Command-line arguments.
  */
 function v_3d_tsgen_cargs(
-    params: V3dTsgenParameters,
+    params: V3dTsgenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function v_3d_tsgen_cargs(
  * @returns Outputs object.
  */
 function v_3d_tsgen_outputs(
-    params: V3dTsgenParameters,
+    params: V3dTsgenParamsDict,
     execution: Execution,
 ): V3dTsgenOutputs {
     const ret: V3dTsgenOutputs = {
@@ -225,7 +225,7 @@ function v_3d_tsgen_outputs(
  * @returns NamedTuple of outputs (described in `V3dTsgenOutputs`).
  */
 function v_3d_tsgen_execute(
-    params: V3dTsgenParameters,
+    params: V3dTsgenParamsDict,
     runner: Runner | null = null,
 ): V3dTsgenOutputs {
     runner = runner || getGlobalRunner();
@@ -287,6 +287,8 @@ function v_3d_tsgen(
 
 export {
       V3dTsgenOutputs,
+      V3dTsgenParamsDict,
+      V3dTsgenParamsDictTagged,
       V_3D_TSGEN_METADATA,
       v_3d_tsgen,
       v_3d_tsgen_execute,

@@ -10,30 +10,30 @@ const SPEC_FILE_MODIFY_METADATA: Metadata = {
 };
 
 
-interface SpecFileModifyAddParameters {
+interface SpecFileModifyAddParamsDict {
     "@type"?: "add";
     "structure": string;
     "file": string;
 }
-type SpecFileModifyAddParametersTagged = Required<Pick<SpecFileModifyAddParameters, '@type'>> & SpecFileModifyAddParameters;
+type SpecFileModifyAddParamsDictTagged = Required<Pick<SpecFileModifyAddParamsDict, '@type'>> & SpecFileModifyAddParamsDict;
 
 
-interface SpecFileModifyRemoveParameters {
+interface SpecFileModifyRemoveParamsDict {
     "@type"?: "remove";
     "filename": string;
     "recursive": boolean;
     "suffix": boolean;
 }
-type SpecFileModifyRemoveParametersTagged = Required<Pick<SpecFileModifyRemoveParameters, '@type'>> & SpecFileModifyRemoveParameters;
+type SpecFileModifyRemoveParamsDictTagged = Required<Pick<SpecFileModifyRemoveParamsDict, '@type'>> & SpecFileModifyRemoveParamsDict;
 
 
-interface SpecFileModifyParameters {
+interface SpecFileModifyParamsDict {
     "@type"?: "workbench/spec-file-modify";
-    "add"?: Array<SpecFileModifyAddParameters> | null | undefined;
-    "remove"?: Array<SpecFileModifyRemoveParameters> | null | undefined;
+    "add"?: Array<SpecFileModifyAddParamsDict> | null | undefined;
+    "remove"?: Array<SpecFileModifyRemoveParamsDict> | null | undefined;
     "spec-file": string;
 }
-type SpecFileModifyParametersTagged = Required<Pick<SpecFileModifyParameters, '@type'>> & SpecFileModifyParameters;
+type SpecFileModifyParamsDictTagged = Required<Pick<SpecFileModifyParamsDict, '@type'>> & SpecFileModifyParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type SpecFileModifyParametersTagged = Required<Pick<SpecFileModifyParameters, '@
  *
  * @returns Parameter dictionary
  */
-function spec_file_modify_add_params(
+function spec_file_modify_add(
     structure: string,
     file: string,
-): SpecFileModifyAddParametersTagged {
+): SpecFileModifyAddParamsDictTagged {
     const params = {
         "@type": "add" as const,
         "structure": structure,
@@ -66,7 +66,7 @@ function spec_file_modify_add_params(
  * @returns Command-line arguments.
  */
 function spec_file_modify_add_cargs(
-    params: SpecFileModifyAddParameters,
+    params: SpecFileModifyAddParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,11 +88,11 @@ function spec_file_modify_add_cargs(
  *
  * @returns Parameter dictionary
  */
-function spec_file_modify_remove_params(
+function spec_file_modify_remove(
     filename: string,
     recursive: boolean = false,
     suffix: boolean = false,
-): SpecFileModifyRemoveParametersTagged {
+): SpecFileModifyRemoveParamsDictTagged {
     const params = {
         "@type": "remove" as const,
         "filename": filename,
@@ -112,7 +112,7 @@ function spec_file_modify_remove_params(
  * @returns Command-line arguments.
  */
 function spec_file_modify_remove_cargs(
-    params: SpecFileModifyRemoveParameters,
+    params: SpecFileModifyRemoveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function spec_file_modify_remove_cargs(
 
 
 /**
- * Output object returned when calling `SpecFileModifyParameters(...)`.
+ * Output object returned when calling `SpecFileModifyParamsDict(...)`.
  *
  * @interface
  */
@@ -152,9 +152,9 @@ interface SpecFileModifyOutputs {
  */
 function spec_file_modify_params(
     spec_file: string,
-    add: Array<SpecFileModifyAddParameters> | null = null,
-    remove: Array<SpecFileModifyRemoveParameters> | null = null,
-): SpecFileModifyParametersTagged {
+    add: Array<SpecFileModifyAddParamsDict> | null = null,
+    remove: Array<SpecFileModifyRemoveParamsDict> | null = null,
+): SpecFileModifyParamsDictTagged {
     const params = {
         "@type": "workbench/spec-file-modify" as const,
         "spec-file": spec_file,
@@ -178,7 +178,7 @@ function spec_file_modify_params(
  * @returns Command-line arguments.
  */
 function spec_file_modify_cargs(
-    params: SpecFileModifyParameters,
+    params: SpecFileModifyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function spec_file_modify_cargs(
  * @returns Outputs object.
  */
 function spec_file_modify_outputs(
-    params: SpecFileModifyParameters,
+    params: SpecFileModifyParamsDict,
     execution: Execution,
 ): SpecFileModifyOutputs {
     const ret: SpecFileModifyOutputs = {
@@ -264,7 +264,7 @@ function spec_file_modify_outputs(
  * @returns NamedTuple of outputs (described in `SpecFileModifyOutputs`).
  */
 function spec_file_modify_execute(
-    params: SpecFileModifyParameters,
+    params: SpecFileModifyParamsDict,
     runner: Runner | null = null,
 ): SpecFileModifyOutputs {
     runner = runner || getGlobalRunner();
@@ -330,8 +330,8 @@ function spec_file_modify_execute(
  */
 function spec_file_modify(
     spec_file: string,
-    add: Array<SpecFileModifyAddParameters> | null = null,
-    remove: Array<SpecFileModifyRemoveParameters> | null = null,
+    add: Array<SpecFileModifyAddParamsDict> | null = null,
+    remove: Array<SpecFileModifyRemoveParamsDict> | null = null,
     runner: Runner | null = null,
 ): SpecFileModifyOutputs {
     const params = spec_file_modify_params(spec_file, add, remove)
@@ -341,10 +341,16 @@ function spec_file_modify(
 
 export {
       SPEC_FILE_MODIFY_METADATA,
+      SpecFileModifyAddParamsDict,
+      SpecFileModifyAddParamsDictTagged,
       SpecFileModifyOutputs,
+      SpecFileModifyParamsDict,
+      SpecFileModifyParamsDictTagged,
+      SpecFileModifyRemoveParamsDict,
+      SpecFileModifyRemoveParamsDictTagged,
       spec_file_modify,
-      spec_file_modify_add_params,
+      spec_file_modify_add,
       spec_file_modify_execute,
       spec_file_modify_params,
-      spec_file_modify_remove_params,
+      spec_file_modify_remove,
 };

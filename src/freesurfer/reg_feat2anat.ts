@@ -11,7 +11,7 @@ const REG_FEAT2ANAT_METADATA: Metadata = {
 };
 
 
-interface RegFeat2anatParameters {
+interface RegFeat2anatParamsDict {
     "@type"?: "freesurfer/reg-feat2anat";
     "feat_dir": string;
     "subject_id": string;
@@ -30,11 +30,11 @@ interface RegFeat2anatParameters {
     "fmov"?: string | null | undefined;
     "debug": boolean;
 }
-type RegFeat2anatParametersTagged = Required<Pick<RegFeat2anatParameters, '@type'>> & RegFeat2anatParameters;
+type RegFeat2anatParamsDictTagged = Required<Pick<RegFeat2anatParamsDict, '@type'>> & RegFeat2anatParamsDict;
 
 
 /**
- * Output object returned when calling `RegFeat2anatParameters(...)`.
+ * Output object returned when calling `RegFeat2anatParamsDict(...)`.
  *
  * @interface
  */
@@ -117,7 +117,7 @@ function reg_feat2anat_params(
     no_inorm: boolean = false,
     fmov: string | null = null,
     debug: boolean = false,
-): RegFeat2anatParametersTagged {
+): RegFeat2anatParamsDictTagged {
     const params = {
         "@type": "freesurfer/reg-feat2anat" as const,
         "feat_dir": feat_dir,
@@ -164,7 +164,7 @@ function reg_feat2anat_params(
  * @returns Command-line arguments.
  */
 function reg_feat2anat_cargs(
-    params: RegFeat2anatParameters,
+    params: RegFeat2anatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -253,7 +253,7 @@ function reg_feat2anat_cargs(
  * @returns Outputs object.
  */
 function reg_feat2anat_outputs(
-    params: RegFeat2anatParameters,
+    params: RegFeat2anatParamsDict,
     execution: Execution,
 ): RegFeat2anatOutputs {
     const ret: RegFeat2anatOutputs = {
@@ -286,7 +286,7 @@ function reg_feat2anat_outputs(
  * @returns NamedTuple of outputs (described in `RegFeat2anatOutputs`).
  */
 function reg_feat2anat_execute(
-    params: RegFeat2anatParameters,
+    params: RegFeat2anatParamsDict,
     runner: Runner | null = null,
 ): RegFeat2anatOutputs {
     runner = runner || getGlobalRunner();
@@ -355,6 +355,8 @@ function reg_feat2anat(
 export {
       REG_FEAT2ANAT_METADATA,
       RegFeat2anatOutputs,
+      RegFeat2anatParamsDict,
+      RegFeat2anatParamsDictTagged,
       reg_feat2anat,
       reg_feat2anat_execute,
       reg_feat2anat_params,

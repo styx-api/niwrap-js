@@ -10,18 +10,18 @@ const VOLUME_COPY_EXTENSIONS_METADATA: Metadata = {
 };
 
 
-interface VolumeCopyExtensionsParameters {
+interface VolumeCopyExtensionsParamsDict {
     "@type"?: "workbench/volume-copy-extensions";
     "volume-out": string;
     "drop-unknown": boolean;
     "data-volume": InputPathType;
     "extension-volume": InputPathType;
 }
-type VolumeCopyExtensionsParametersTagged = Required<Pick<VolumeCopyExtensionsParameters, '@type'>> & VolumeCopyExtensionsParameters;
+type VolumeCopyExtensionsParamsDictTagged = Required<Pick<VolumeCopyExtensionsParamsDict, '@type'>> & VolumeCopyExtensionsParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeCopyExtensionsParameters(...)`.
+ * Output object returned when calling `VolumeCopyExtensionsParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function volume_copy_extensions_params(
     data_volume: InputPathType,
     extension_volume: InputPathType,
     drop_unknown: boolean = false,
-): VolumeCopyExtensionsParametersTagged {
+): VolumeCopyExtensionsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-copy-extensions" as const,
         "volume-out": volume_out,
@@ -73,7 +73,7 @@ function volume_copy_extensions_params(
  * @returns Command-line arguments.
  */
 function volume_copy_extensions_cargs(
-    params: VolumeCopyExtensionsParameters,
+    params: VolumeCopyExtensionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function volume_copy_extensions_cargs(
  * @returns Outputs object.
  */
 function volume_copy_extensions_outputs(
-    params: VolumeCopyExtensionsParameters,
+    params: VolumeCopyExtensionsParamsDict,
     execution: Execution,
 ): VolumeCopyExtensionsOutputs {
     const ret: VolumeCopyExtensionsOutputs = {
@@ -122,7 +122,7 @@ function volume_copy_extensions_outputs(
  * @returns NamedTuple of outputs (described in `VolumeCopyExtensionsOutputs`).
  */
 function volume_copy_extensions_execute(
-    params: VolumeCopyExtensionsParameters,
+    params: VolumeCopyExtensionsParamsDict,
     runner: Runner | null = null,
 ): VolumeCopyExtensionsOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function volume_copy_extensions(
 export {
       VOLUME_COPY_EXTENSIONS_METADATA,
       VolumeCopyExtensionsOutputs,
+      VolumeCopyExtensionsParamsDict,
+      VolumeCopyExtensionsParamsDictTagged,
       volume_copy_extensions,
       volume_copy_extensions_execute,
       volume_copy_extensions_params,

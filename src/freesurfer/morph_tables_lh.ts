@@ -11,16 +11,16 @@ const MORPH_TABLES_LH_METADATA: Metadata = {
 };
 
 
-interface MorphTablesLhParameters {
+interface MorphTablesLhParamsDict {
     "@type"?: "freesurfer/morph_tables-lh";
     "input_file": InputPathType;
     "some_flag": boolean;
 }
-type MorphTablesLhParametersTagged = Required<Pick<MorphTablesLhParameters, '@type'>> & MorphTablesLhParameters;
+type MorphTablesLhParamsDictTagged = Required<Pick<MorphTablesLhParamsDict, '@type'>> & MorphTablesLhParamsDict;
 
 
 /**
- * Output object returned when calling `MorphTablesLhParameters(...)`.
+ * Output object returned when calling `MorphTablesLhParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MorphTablesLhOutputs {
 function morph_tables_lh_params(
     input_file: InputPathType,
     some_flag: boolean = false,
-): MorphTablesLhParametersTagged {
+): MorphTablesLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_tables-lh" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function morph_tables_lh_params(
  * @returns Command-line arguments.
  */
 function morph_tables_lh_cargs(
-    params: MorphTablesLhParameters,
+    params: MorphTablesLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function morph_tables_lh_cargs(
  * @returns Outputs object.
  */
 function morph_tables_lh_outputs(
-    params: MorphTablesLhParameters,
+    params: MorphTablesLhParamsDict,
     execution: Execution,
 ): MorphTablesLhOutputs {
     const ret: MorphTablesLhOutputs = {
@@ -117,7 +117,7 @@ function morph_tables_lh_outputs(
  * @returns NamedTuple of outputs (described in `MorphTablesLhOutputs`).
  */
 function morph_tables_lh_execute(
-    params: MorphTablesLhParameters,
+    params: MorphTablesLhParamsDict,
     runner: Runner | null = null,
 ): MorphTablesLhOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function morph_tables_lh(
 export {
       MORPH_TABLES_LH_METADATA,
       MorphTablesLhOutputs,
+      MorphTablesLhParamsDict,
+      MorphTablesLhParamsDictTagged,
       morph_tables_lh,
       morph_tables_lh_execute,
       morph_tables_lh_params,

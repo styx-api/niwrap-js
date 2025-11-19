@@ -11,17 +11,17 @@ const FSLREORIENT2STD_METADATA: Metadata = {
 };
 
 
-interface Fslreorient2stdParameters {
+interface Fslreorient2stdParamsDict {
     "@type"?: "fsl/fslreorient2std";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
     "matrix_file"?: string | null | undefined;
 }
-type Fslreorient2stdParametersTagged = Required<Pick<Fslreorient2stdParameters, '@type'>> & Fslreorient2stdParameters;
+type Fslreorient2stdParamsDictTagged = Required<Pick<Fslreorient2stdParamsDict, '@type'>> & Fslreorient2stdParamsDict;
 
 
 /**
- * Output object returned when calling `Fslreorient2stdParameters(...)`.
+ * Output object returned when calling `Fslreorient2stdParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function fslreorient2std_params(
     input_image: InputPathType,
     output_image: string | null = null,
     matrix_file: string | null = null,
-): Fslreorient2stdParametersTagged {
+): Fslreorient2stdParamsDictTagged {
     const params = {
         "@type": "fsl/fslreorient2std" as const,
         "input_image": input_image,
@@ -78,7 +78,7 @@ function fslreorient2std_params(
  * @returns Command-line arguments.
  */
 function fslreorient2std_cargs(
-    params: Fslreorient2stdParameters,
+    params: Fslreorient2stdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function fslreorient2std_cargs(
  * @returns Outputs object.
  */
 function fslreorient2std_outputs(
-    params: Fslreorient2stdParameters,
+    params: Fslreorient2stdParamsDict,
     execution: Execution,
 ): Fslreorient2stdOutputs {
     const ret: Fslreorient2stdOutputs = {
@@ -133,7 +133,7 @@ function fslreorient2std_outputs(
  * @returns NamedTuple of outputs (described in `Fslreorient2stdOutputs`).
  */
 function fslreorient2std_execute(
-    params: Fslreorient2stdParameters,
+    params: Fslreorient2stdParamsDict,
     runner: Runner | null = null,
 ): Fslreorient2stdOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function fslreorient2std(
 export {
       FSLREORIENT2STD_METADATA,
       Fslreorient2stdOutputs,
+      Fslreorient2stdParamsDict,
+      Fslreorient2stdParamsDictTagged,
       fslreorient2std,
       fslreorient2std_execute,
       fslreorient2std_params,

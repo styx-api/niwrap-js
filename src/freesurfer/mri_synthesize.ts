@@ -11,7 +11,7 @@ const MRI_SYNTHESIZE_METADATA: Metadata = {
 };
 
 
-interface MriSynthesizeParameters {
+interface MriSynthesizeParamsDict {
     "@type"?: "freesurfer/mri_synthesize";
     "tr": number;
     "alpha": number;
@@ -21,11 +21,11 @@ interface MriSynthesizeParameters {
     "output_volume": string;
     "fixed_weight": boolean;
 }
-type MriSynthesizeParametersTagged = Required<Pick<MriSynthesizeParameters, '@type'>> & MriSynthesizeParameters;
+type MriSynthesizeParamsDictTagged = Required<Pick<MriSynthesizeParamsDict, '@type'>> & MriSynthesizeParamsDict;
 
 
 /**
- * Output object returned when calling `MriSynthesizeParameters(...)`.
+ * Output object returned when calling `MriSynthesizeParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_synthesize_params(
     pd_volume: InputPathType,
     output_volume: string,
     fixed_weight: boolean = false,
-): MriSynthesizeParametersTagged {
+): MriSynthesizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_synthesize" as const,
         "tr": tr,
@@ -86,7 +86,7 @@ function mri_synthesize_params(
  * @returns Command-line arguments.
  */
 function mri_synthesize_cargs(
-    params: MriSynthesizeParameters,
+    params: MriSynthesizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function mri_synthesize_cargs(
  * @returns Outputs object.
  */
 function mri_synthesize_outputs(
-    params: MriSynthesizeParameters,
+    params: MriSynthesizeParamsDict,
     execution: Execution,
 ): MriSynthesizeOutputs {
     const ret: MriSynthesizeOutputs = {
@@ -139,7 +139,7 @@ function mri_synthesize_outputs(
  * @returns NamedTuple of outputs (described in `MriSynthesizeOutputs`).
  */
 function mri_synthesize_execute(
-    params: MriSynthesizeParameters,
+    params: MriSynthesizeParamsDict,
     runner: Runner | null = null,
 ): MriSynthesizeOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function mri_synthesize(
 export {
       MRI_SYNTHESIZE_METADATA,
       MriSynthesizeOutputs,
+      MriSynthesizeParamsDict,
+      MriSynthesizeParamsDictTagged,
       mri_synthesize,
       mri_synthesize_execute,
       mri_synthesize_params,

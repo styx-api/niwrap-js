@@ -11,7 +11,7 @@ const MRI_GTMSEG_METADATA: Metadata = {
 };
 
 
-interface MriGtmsegParameters {
+interface MriGtmsegParamsDict {
     "@type"?: "freesurfer/mri_gtmseg";
     "output_volume": string;
     "source_subject": string;
@@ -33,11 +33,11 @@ interface MriGtmsegParameters {
     "debug": boolean;
     "check_opts": boolean;
 }
-type MriGtmsegParametersTagged = Required<Pick<MriGtmsegParameters, '@type'>> & MriGtmsegParameters;
+type MriGtmsegParamsDictTagged = Required<Pick<MriGtmsegParamsDict, '@type'>> & MriGtmsegParamsDict;
 
 
 /**
- * Output object returned when calling `MriGtmsegParameters(...)`.
+ * Output object returned when calling `MriGtmsegParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function mri_gtmseg_params(
     threads_max_1: boolean = false,
     debug: boolean = false,
     check_opts: boolean = false,
-): MriGtmsegParametersTagged {
+): MriGtmsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gtmseg" as const,
         "output_volume": output_volume,
@@ -150,7 +150,7 @@ function mri_gtmseg_params(
  * @returns Command-line arguments.
  */
 function mri_gtmseg_cargs(
-    params: MriGtmsegParameters,
+    params: MriGtmsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -257,7 +257,7 @@ function mri_gtmseg_cargs(
  * @returns Outputs object.
  */
 function mri_gtmseg_outputs(
-    params: MriGtmsegParameters,
+    params: MriGtmsegParamsDict,
     execution: Execution,
 ): MriGtmsegOutputs {
     const ret: MriGtmsegOutputs = {
@@ -282,7 +282,7 @@ function mri_gtmseg_outputs(
  * @returns NamedTuple of outputs (described in `MriGtmsegOutputs`).
  */
 function mri_gtmseg_execute(
-    params: MriGtmsegParameters,
+    params: MriGtmsegParamsDict,
     runner: Runner | null = null,
 ): MriGtmsegOutputs {
     runner = runner || getGlobalRunner();
@@ -357,6 +357,8 @@ function mri_gtmseg(
 export {
       MRI_GTMSEG_METADATA,
       MriGtmsegOutputs,
+      MriGtmsegParamsDict,
+      MriGtmsegParamsDictTagged,
       mri_gtmseg,
       mri_gtmseg_execute,
       mri_gtmseg_params,

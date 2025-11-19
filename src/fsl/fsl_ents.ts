@@ -11,7 +11,7 @@ const FSL_ENTS_METADATA: Metadata = {
 };
 
 
-interface FslEntsParameters {
+interface FslEntsParamsDict {
     "@type"?: "fsl/fsl_ents";
     "icadir": string;
     "components": Array<string>;
@@ -19,11 +19,11 @@ interface FslEntsParameters {
     "overwrite": boolean;
     "conffile"?: Array<InputPathType> | null | undefined;
 }
-type FslEntsParametersTagged = Required<Pick<FslEntsParameters, '@type'>> & FslEntsParameters;
+type FslEntsParamsDictTagged = Required<Pick<FslEntsParamsDict, '@type'>> & FslEntsParamsDict;
 
 
 /**
- * Output object returned when calling `FslEntsParameters(...)`.
+ * Output object returned when calling `FslEntsParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function fsl_ents_params(
     outfile: InputPathType | null = null,
     overwrite: boolean = false,
     conffile: Array<InputPathType> | null = null,
-): FslEntsParametersTagged {
+): FslEntsParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_ents" as const,
         "icadir": icadir,
@@ -82,7 +82,7 @@ function fsl_ents_params(
  * @returns Command-line arguments.
  */
 function fsl_ents_cargs(
-    params: FslEntsParameters,
+    params: FslEntsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function fsl_ents_cargs(
  * @returns Outputs object.
  */
 function fsl_ents_outputs(
-    params: FslEntsParameters,
+    params: FslEntsParamsDict,
     execution: Execution,
 ): FslEntsOutputs {
     const ret: FslEntsOutputs = {
@@ -143,7 +143,7 @@ function fsl_ents_outputs(
  * @returns NamedTuple of outputs (described in `FslEntsOutputs`).
  */
 function fsl_ents_execute(
-    params: FslEntsParameters,
+    params: FslEntsParamsDict,
     runner: Runner | null = null,
 ): FslEntsOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function fsl_ents(
 export {
       FSL_ENTS_METADATA,
       FslEntsOutputs,
+      FslEntsParamsDict,
+      FslEntsParamsDictTagged,
       fsl_ents,
       fsl_ents_execute,
       fsl_ents_params,

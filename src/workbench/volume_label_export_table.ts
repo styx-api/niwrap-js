@@ -10,18 +10,18 @@ const VOLUME_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 };
 
 
-interface VolumeLabelExportTableParameters {
+interface VolumeLabelExportTableParamsDict {
     "@type"?: "workbench/volume-label-export-table";
     "json-out"?: string | null | undefined;
     "label-in": InputPathType;
     "map": string;
     "table-out": string;
 }
-type VolumeLabelExportTableParametersTagged = Required<Pick<VolumeLabelExportTableParameters, '@type'>> & VolumeLabelExportTableParameters;
+type VolumeLabelExportTableParamsDictTagged = Required<Pick<VolumeLabelExportTableParamsDict, '@type'>> & VolumeLabelExportTableParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeLabelExportTableParameters(...)`.
+ * Output object returned when calling `VolumeLabelExportTableParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function volume_label_export_table_params(
     label_in: InputPathType,
     map: string,
     table_out: string,
-): VolumeLabelExportTableParametersTagged {
+): VolumeLabelExportTableParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-export-table" as const,
         "label-in": label_in,
@@ -73,7 +73,7 @@ function volume_label_export_table_params(
  * @returns Command-line arguments.
  */
 function volume_label_export_table_cargs(
-    params: VolumeLabelExportTableParameters,
+    params: VolumeLabelExportTableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function volume_label_export_table_cargs(
  * @returns Outputs object.
  */
 function volume_label_export_table_outputs(
-    params: VolumeLabelExportTableParameters,
+    params: VolumeLabelExportTableParamsDict,
     execution: Execution,
 ): VolumeLabelExportTableOutputs {
     const ret: VolumeLabelExportTableOutputs = {
@@ -122,7 +122,7 @@ function volume_label_export_table_outputs(
  * @returns NamedTuple of outputs (described in `VolumeLabelExportTableOutputs`).
  */
 function volume_label_export_table_execute(
-    params: VolumeLabelExportTableParameters,
+    params: VolumeLabelExportTableParamsDict,
     runner: Runner | null = null,
 ): VolumeLabelExportTableOutputs {
     runner = runner || getGlobalRunner();
@@ -165,6 +165,8 @@ function volume_label_export_table(
 export {
       VOLUME_LABEL_EXPORT_TABLE_METADATA,
       VolumeLabelExportTableOutputs,
+      VolumeLabelExportTableParamsDict,
+      VolumeLabelExportTableParamsDictTagged,
       volume_label_export_table,
       volume_label_export_table_execute,
       volume_label_export_table_params,

@@ -11,26 +11,26 @@ const TCKGLOBAL_METADATA: Metadata = {
 };
 
 
-interface TckglobalRisoParameters {
+interface TckglobalRisoParamsDict {
     "@type"?: "riso";
     "response": InputPathType;
 }
-type TckglobalRisoParametersTagged = Required<Pick<TckglobalRisoParameters, '@type'>> & TckglobalRisoParameters;
+type TckglobalRisoParamsDictTagged = Required<Pick<TckglobalRisoParamsDict, '@type'>> & TckglobalRisoParamsDict;
 
 
-interface TckglobalConfigParameters {
+interface TckglobalConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckglobalConfigParametersTagged = Required<Pick<TckglobalConfigParameters, '@type'>> & TckglobalConfigParameters;
+type TckglobalConfigParamsDictTagged = Required<Pick<TckglobalConfigParamsDict, '@type'>> & TckglobalConfigParamsDict;
 
 
-interface TckglobalParameters {
+interface TckglobalParamsDict {
     "@type"?: "mrtrix/tckglobal";
     "grad"?: InputPathType | null | undefined;
     "mask"?: InputPathType | null | undefined;
-    "riso"?: Array<TckglobalRisoParameters> | null | undefined;
+    "riso"?: Array<TckglobalRisoParamsDict> | null | undefined;
     "lmax"?: number | null | undefined;
     "length"?: number | null | undefined;
     "weight"?: number | null | undefined;
@@ -54,14 +54,14 @@ interface TckglobalParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckglobalConfigParameters> | null | undefined;
+    "config"?: Array<TckglobalConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "source": InputPathType;
     "response": InputPathType;
     "tracks": string;
 }
-type TckglobalParametersTagged = Required<Pick<TckglobalParameters, '@type'>> & TckglobalParameters;
+type TckglobalParamsDictTagged = Required<Pick<TckglobalParamsDict, '@type'>> & TckglobalParamsDict;
 
 
 /**
@@ -71,9 +71,9 @@ type TckglobalParametersTagged = Required<Pick<TckglobalParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function tckglobal_riso_params(
+function tckglobal_riso(
     response: InputPathType,
-): TckglobalRisoParametersTagged {
+): TckglobalRisoParamsDictTagged {
     const params = {
         "@type": "riso" as const,
         "response": response,
@@ -91,7 +91,7 @@ function tckglobal_riso_params(
  * @returns Command-line arguments.
  */
 function tckglobal_riso_cargs(
-    params: TckglobalRisoParameters,
+    params: TckglobalRisoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,10 +109,10 @@ function tckglobal_riso_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckglobal_config_params(
+function tckglobal_config(
     key: string,
     value: string,
-): TckglobalConfigParametersTagged {
+): TckglobalConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -131,7 +131,7 @@ function tckglobal_config_params(
  * @returns Command-line arguments.
  */
 function tckglobal_config_cargs(
-    params: TckglobalConfigParameters,
+    params: TckglobalConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function tckglobal_config_cargs(
 
 
 /**
- * Output object returned when calling `TckglobalParameters(...)`.
+ * Output object returned when calling `TckglobalParamsDict(...)`.
  *
  * @interface
  */
@@ -224,7 +224,7 @@ function tckglobal_params(
     tracks: string,
     grad: InputPathType | null = null,
     mask: InputPathType | null = null,
-    riso: Array<TckglobalRisoParameters> | null = null,
+    riso: Array<TckglobalRisoParamsDict> | null = null,
     lmax: number | null = null,
     length: number | null = null,
     weight: number | null = null,
@@ -248,10 +248,10 @@ function tckglobal_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckglobalConfigParameters> | null = null,
+    config: Array<TckglobalConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckglobalParametersTagged {
+): TckglobalParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckglobal" as const,
         "noapo": noapo,
@@ -344,7 +344,7 @@ function tckglobal_params(
  * @returns Command-line arguments.
  */
 function tckglobal_cargs(
-    params: TckglobalParameters,
+    params: TckglobalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -512,7 +512,7 @@ function tckglobal_cargs(
  * @returns Outputs object.
  */
 function tckglobal_outputs(
-    params: TckglobalParameters,
+    params: TckglobalParamsDict,
     execution: Execution,
 ): TckglobalOutputs {
     const ret: TckglobalOutputs = {
@@ -555,7 +555,7 @@ function tckglobal_outputs(
  * @returns NamedTuple of outputs (described in `TckglobalOutputs`).
  */
 function tckglobal_execute(
-    params: TckglobalParameters,
+    params: TckglobalParamsDict,
     runner: Runner | null = null,
 ): TckglobalOutputs {
     runner = runner || getGlobalRunner();
@@ -636,7 +636,7 @@ function tckglobal(
     tracks: string,
     grad: InputPathType | null = null,
     mask: InputPathType | null = null,
-    riso: Array<TckglobalRisoParameters> | null = null,
+    riso: Array<TckglobalRisoParamsDict> | null = null,
     lmax: number | null = null,
     length: number | null = null,
     weight: number | null = null,
@@ -660,7 +660,7 @@ function tckglobal(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckglobalConfigParameters> | null = null,
+    config: Array<TckglobalConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -672,10 +672,16 @@ function tckglobal(
 
 export {
       TCKGLOBAL_METADATA,
+      TckglobalConfigParamsDict,
+      TckglobalConfigParamsDictTagged,
       TckglobalOutputs,
+      TckglobalParamsDict,
+      TckglobalParamsDictTagged,
+      TckglobalRisoParamsDict,
+      TckglobalRisoParamsDictTagged,
       tckglobal,
-      tckglobal_config_params,
+      tckglobal_config,
       tckglobal_execute,
       tckglobal_params,
-      tckglobal_riso_params,
+      tckglobal_riso,
 };

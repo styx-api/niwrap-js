@@ -11,29 +11,29 @@ const TRANSFORMCONVERT_METADATA: Metadata = {
 };
 
 
-interface TransformconvertConfigParameters {
+interface TransformconvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TransformconvertConfigParametersTagged = Required<Pick<TransformconvertConfigParameters, '@type'>> & TransformconvertConfigParameters;
+type TransformconvertConfigParamsDictTagged = Required<Pick<TransformconvertConfigParamsDict, '@type'>> & TransformconvertConfigParamsDict;
 
 
-interface TransformconvertParameters {
+interface TransformconvertParamsDict {
     "@type"?: "mrtrix/transformconvert";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TransformconvertConfigParameters> | null | undefined;
+    "config"?: Array<TransformconvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": Array<string>;
     "operation": string;
     "output": string;
 }
-type TransformconvertParametersTagged = Required<Pick<TransformconvertParameters, '@type'>> & TransformconvertParameters;
+type TransformconvertParamsDictTagged = Required<Pick<TransformconvertParamsDict, '@type'>> & TransformconvertParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type TransformconvertParametersTagged = Required<Pick<TransformconvertParameters
  *
  * @returns Parameter dictionary
  */
-function transformconvert_config_params(
+function transformconvert_config(
     key: string,
     value: string,
-): TransformconvertConfigParametersTagged {
+): TransformconvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function transformconvert_config_params(
  * @returns Command-line arguments.
  */
 function transformconvert_config_cargs(
-    params: TransformconvertConfigParameters,
+    params: TransformconvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function transformconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `TransformconvertParameters(...)`.
+ * Output object returned when calling `TransformconvertParamsDict(...)`.
  *
  * @interface
  */
@@ -121,10 +121,10 @@ function transformconvert_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TransformconvertConfigParameters> | null = null,
+    config: Array<TransformconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TransformconvertParametersTagged {
+): TransformconvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/transformconvert" as const,
         "info": info,
@@ -156,7 +156,7 @@ function transformconvert_params(
  * @returns Command-line arguments.
  */
 function transformconvert_cargs(
-    params: TransformconvertParameters,
+    params: TransformconvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function transformconvert_cargs(
  * @returns Outputs object.
  */
 function transformconvert_outputs(
-    params: TransformconvertParameters,
+    params: TransformconvertParamsDict,
     execution: Execution,
 ): TransformconvertOutputs {
     const ret: TransformconvertOutputs = {
@@ -236,7 +236,7 @@ function transformconvert_outputs(
  * @returns NamedTuple of outputs (described in `TransformconvertOutputs`).
  */
 function transformconvert_execute(
-    params: TransformconvertParameters,
+    params: TransformconvertParamsDict,
     runner: Runner | null = null,
 ): TransformconvertOutputs {
     runner = runner || getGlobalRunner();
@@ -289,7 +289,7 @@ function transformconvert(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TransformconvertConfigParameters> | null = null,
+    config: Array<TransformconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -301,9 +301,13 @@ function transformconvert(
 
 export {
       TRANSFORMCONVERT_METADATA,
+      TransformconvertConfigParamsDict,
+      TransformconvertConfigParamsDictTagged,
       TransformconvertOutputs,
+      TransformconvertParamsDict,
+      TransformconvertParamsDictTagged,
       transformconvert,
-      transformconvert_config_params,
+      transformconvert_config,
       transformconvert_execute,
       transformconvert_params,
 };

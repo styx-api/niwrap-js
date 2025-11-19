@@ -11,7 +11,7 @@ const SURFREG_METADATA: Metadata = {
 };
 
 
-interface SurfregParameters {
+interface SurfregParamsDict {
     "@type"?: "freesurfer/surfreg";
     "subject": string;
     "target": string;
@@ -30,11 +30,11 @@ interface SurfregParameters {
     "no_set_vol_geom": boolean;
     "threads"?: number | null | undefined;
 }
-type SurfregParametersTagged = Required<Pick<SurfregParameters, '@type'>> & SurfregParameters;
+type SurfregParamsDictTagged = Required<Pick<SurfregParamsDict, '@type'>> & SurfregParamsDict;
 
 
 /**
- * Output object returned when calling `SurfregParameters(...)`.
+ * Output object returned when calling `SurfregParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function surfreg_params(
     outsurf: string | null = null,
     no_set_vol_geom: boolean = false,
     threads: number | null = null,
-): SurfregParametersTagged {
+): SurfregParamsDictTagged {
     const params = {
         "@type": "freesurfer/surfreg" as const,
         "subject": subject,
@@ -132,7 +132,7 @@ function surfreg_params(
  * @returns Command-line arguments.
  */
 function surfreg_cargs(
-    params: SurfregParameters,
+    params: SurfregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -215,7 +215,7 @@ function surfreg_cargs(
  * @returns Outputs object.
  */
 function surfreg_outputs(
-    params: SurfregParameters,
+    params: SurfregParamsDict,
     execution: Execution,
 ): SurfregOutputs {
     const ret: SurfregOutputs = {
@@ -241,7 +241,7 @@ function surfreg_outputs(
  * @returns NamedTuple of outputs (described in `SurfregOutputs`).
  */
 function surfreg_execute(
-    params: SurfregParameters,
+    params: SurfregParamsDict,
     runner: Runner | null = null,
 ): SurfregOutputs {
     runner = runner || getGlobalRunner();
@@ -310,6 +310,8 @@ function surfreg(
 export {
       SURFREG_METADATA,
       SurfregOutputs,
+      SurfregParamsDict,
+      SurfregParamsDictTagged,
       surfreg,
       surfreg_execute,
       surfreg_params,

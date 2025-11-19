@@ -11,7 +11,7 @@ const DMRI_VOX2VOX_METADATA: Metadata = {
 };
 
 
-interface DmriVox2voxParameters {
+interface DmriVox2voxParamsDict {
     "@type"?: "freesurfer/dmri_vox2vox";
     "input_files": Array<InputPathType>;
     "input_directory"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface DmriVox2voxParameters {
     "help": boolean;
     "version": boolean;
 }
-type DmriVox2voxParametersTagged = Required<Pick<DmriVox2voxParameters, '@type'>> & DmriVox2voxParameters;
+type DmriVox2voxParamsDictTagged = Required<Pick<DmriVox2voxParamsDict, '@type'>> & DmriVox2voxParamsDict;
 
 
 /**
- * Output object returned when calling `DmriVox2voxParameters(...)`.
+ * Output object returned when calling `DmriVox2voxParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function dmri_vox2vox_params(
     check_options: boolean = false,
     help: boolean = false,
     version: boolean = false,
-): DmriVox2voxParametersTagged {
+): DmriVox2voxParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_vox2vox" as const,
         "input_files": input_files,
@@ -110,7 +110,7 @@ function dmri_vox2vox_params(
  * @returns Command-line arguments.
  */
 function dmri_vox2vox_cargs(
-    params: DmriVox2voxParameters,
+    params: DmriVox2voxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -179,7 +179,7 @@ function dmri_vox2vox_cargs(
  * @returns Outputs object.
  */
 function dmri_vox2vox_outputs(
-    params: DmriVox2voxParameters,
+    params: DmriVox2voxParamsDict,
     execution: Execution,
 ): DmriVox2voxOutputs {
     const ret: DmriVox2voxOutputs = {
@@ -204,7 +204,7 @@ function dmri_vox2vox_outputs(
  * @returns NamedTuple of outputs (described in `DmriVox2voxOutputs`).
  */
 function dmri_vox2vox_execute(
-    params: DmriVox2voxParameters,
+    params: DmriVox2voxParamsDict,
     runner: Runner | null = null,
 ): DmriVox2voxOutputs {
     runner = runner || getGlobalRunner();
@@ -267,6 +267,8 @@ function dmri_vox2vox(
 export {
       DMRI_VOX2VOX_METADATA,
       DmriVox2voxOutputs,
+      DmriVox2voxParamsDict,
+      DmriVox2voxParamsDictTagged,
       dmri_vox2vox,
       dmri_vox2vox_execute,
       dmri_vox2vox_params,

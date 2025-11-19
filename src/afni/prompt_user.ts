@@ -11,17 +11,17 @@ const PROMPT_USER_METADATA: Metadata = {
 };
 
 
-interface PromptUserParameters {
+interface PromptUserParamsDict {
     "@type"?: "afni/prompt_user";
     "pause_message": string;
     "timeout"?: number | null | undefined;
     "timeout_alias"?: number | null | undefined;
 }
-type PromptUserParametersTagged = Required<Pick<PromptUserParameters, '@type'>> & PromptUserParameters;
+type PromptUserParamsDictTagged = Required<Pick<PromptUserParamsDict, '@type'>> & PromptUserParamsDict;
 
 
 /**
- * Output object returned when calling `PromptUserParameters(...)`.
+ * Output object returned when calling `PromptUserParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function prompt_user_params(
     pause_message: string,
     timeout: number | null = null,
     timeout_alias: number | null = null,
-): PromptUserParametersTagged {
+): PromptUserParamsDictTagged {
     const params = {
         "@type": "afni/prompt_user" as const,
         "pause_message": pause_message,
@@ -70,7 +70,7 @@ function prompt_user_params(
  * @returns Command-line arguments.
  */
 function prompt_user_cargs(
-    params: PromptUserParameters,
+    params: PromptUserParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function prompt_user_cargs(
  * @returns Outputs object.
  */
 function prompt_user_outputs(
-    params: PromptUserParameters,
+    params: PromptUserParamsDict,
     execution: Execution,
 ): PromptUserOutputs {
     const ret: PromptUserOutputs = {
@@ -129,7 +129,7 @@ function prompt_user_outputs(
  * @returns NamedTuple of outputs (described in `PromptUserOutputs`).
  */
 function prompt_user_execute(
-    params: PromptUserParameters,
+    params: PromptUserParamsDict,
     runner: Runner | null = null,
 ): PromptUserOutputs {
     runner = runner || getGlobalRunner();
@@ -172,6 +172,8 @@ function prompt_user(
 export {
       PROMPT_USER_METADATA,
       PromptUserOutputs,
+      PromptUserParamsDict,
+      PromptUserParamsDictTagged,
       prompt_user,
       prompt_user_execute,
       prompt_user_params,

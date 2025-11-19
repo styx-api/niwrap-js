@@ -11,17 +11,17 @@ const FSL_5_0_2_XYZTRANS_SCH_METADATA: Metadata = {
 };
 
 
-interface Fsl502XyztransSchParameters {
+interface Fsl502XyztransSchParamsDict {
     "@type"?: "freesurfer/fsl.5.0.2.xyztrans.sch";
     "term_option"?: string | null | undefined;
     "version_flag": boolean;
     "no_scrollback_flag": boolean;
 }
-type Fsl502XyztransSchParametersTagged = Required<Pick<Fsl502XyztransSchParameters, '@type'>> & Fsl502XyztransSchParameters;
+type Fsl502XyztransSchParamsDictTagged = Required<Pick<Fsl502XyztransSchParamsDict, '@type'>> & Fsl502XyztransSchParamsDict;
 
 
 /**
- * Output object returned when calling `Fsl502XyztransSchParameters(...)`.
+ * Output object returned when calling `Fsl502XyztransSchParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function fsl_5_0_2_xyztrans_sch_params(
     term_option: string | null = null,
     version_flag: boolean = false,
     no_scrollback_flag: boolean = false,
-): Fsl502XyztransSchParametersTagged {
+): Fsl502XyztransSchParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsl.5.0.2.xyztrans.sch" as const,
         "version_flag": version_flag,
@@ -68,7 +68,7 @@ function fsl_5_0_2_xyztrans_sch_params(
  * @returns Command-line arguments.
  */
 function fsl_5_0_2_xyztrans_sch_cargs(
-    params: Fsl502XyztransSchParameters,
+    params: Fsl502XyztransSchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function fsl_5_0_2_xyztrans_sch_cargs(
  * @returns Outputs object.
  */
 function fsl_5_0_2_xyztrans_sch_outputs(
-    params: Fsl502XyztransSchParameters,
+    params: Fsl502XyztransSchParamsDict,
     execution: Execution,
 ): Fsl502XyztransSchOutputs {
     const ret: Fsl502XyztransSchOutputs = {
@@ -123,7 +123,7 @@ function fsl_5_0_2_xyztrans_sch_outputs(
  * @returns NamedTuple of outputs (described in `Fsl502XyztransSchOutputs`).
  */
 function fsl_5_0_2_xyztrans_sch_execute(
-    params: Fsl502XyztransSchParameters,
+    params: Fsl502XyztransSchParamsDict,
     runner: Runner | null = null,
 ): Fsl502XyztransSchOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function fsl_5_0_2_xyztrans_sch(
 export {
       FSL_5_0_2_XYZTRANS_SCH_METADATA,
       Fsl502XyztransSchOutputs,
+      Fsl502XyztransSchParamsDict,
+      Fsl502XyztransSchParamsDictTagged,
       fsl_5_0_2_xyztrans_sch,
       fsl_5_0_2_xyztrans_sch_execute,
       fsl_5_0_2_xyztrans_sch_params,

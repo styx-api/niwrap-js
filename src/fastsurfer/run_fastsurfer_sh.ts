@@ -11,7 +11,7 @@ const RUN_FASTSURFER_SH_METADATA: Metadata = {
 };
 
 
-interface RunFastsurferShParameters {
+interface RunFastsurferShParamsDict {
     "@type"?: "fastsurfer/run_fastsurfer.sh";
     "sid": string;
     "subjects_dir": string;
@@ -49,11 +49,11 @@ interface RunFastsurferShParameters {
     "allow_root": boolean;
     "version"?: string | null | undefined;
 }
-type RunFastsurferShParametersTagged = Required<Pick<RunFastsurferShParameters, '@type'>> & RunFastsurferShParameters;
+type RunFastsurferShParamsDictTagged = Required<Pick<RunFastsurferShParamsDict, '@type'>> & RunFastsurferShParamsDict;
 
 
 /**
- * Output object returned when calling `RunFastsurferShParameters(...)`.
+ * Output object returned when calling `RunFastsurferShParamsDict(...)`.
  *
  * @interface
  */
@@ -162,7 +162,7 @@ function run_fastsurfer_sh_params(
     no_surfreg: boolean = false,
     allow_root: boolean = false,
     version: string | null = null,
-): RunFastsurferShParametersTagged {
+): RunFastsurferShParamsDictTagged {
     const params = {
         "@type": "fastsurfer/run_fastsurfer.sh" as const,
         "sid": sid,
@@ -244,7 +244,7 @@ function run_fastsurfer_sh_params(
  * @returns Command-line arguments.
  */
 function run_fastsurfer_sh_cargs(
-    params: RunFastsurferShParameters,
+    params: RunFastsurferShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -415,7 +415,7 @@ function run_fastsurfer_sh_cargs(
  * @returns Outputs object.
  */
 function run_fastsurfer_sh_outputs(
-    params: RunFastsurferShParameters,
+    params: RunFastsurferShParamsDict,
     execution: Execution,
 ): RunFastsurferShOutputs {
     const ret: RunFastsurferShOutputs = {
@@ -441,7 +441,7 @@ function run_fastsurfer_sh_outputs(
  * @returns NamedTuple of outputs (described in `RunFastsurferShOutputs`).
  */
 function run_fastsurfer_sh_execute(
-    params: RunFastsurferShParameters,
+    params: RunFastsurferShParamsDict,
     runner: Runner | null = null,
 ): RunFastsurferShOutputs {
     runner = runner || getGlobalRunner();
@@ -544,6 +544,8 @@ function run_fastsurfer_sh(
 export {
       RUN_FASTSURFER_SH_METADATA,
       RunFastsurferShOutputs,
+      RunFastsurferShParamsDict,
+      RunFastsurferShParamsDictTagged,
       run_fastsurfer_sh,
       run_fastsurfer_sh_execute,
       run_fastsurfer_sh_params,

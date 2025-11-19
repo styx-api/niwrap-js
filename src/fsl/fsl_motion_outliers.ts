@@ -11,7 +11,7 @@ const FSL_MOTION_OUTLIERS_METADATA: Metadata = {
 };
 
 
-interface FslMotionOutliersParameters {
+interface FslMotionOutliersParamsDict {
     "@type"?: "fsl/fsl_motion_outliers";
     "input_4d_image": InputPathType;
     "output_confound_file": string;
@@ -29,11 +29,11 @@ interface FslMotionOutliersParameters {
     "dummy_scans"?: number | null | undefined;
     "verbose_flag": boolean;
 }
-type FslMotionOutliersParametersTagged = Required<Pick<FslMotionOutliersParameters, '@type'>> & FslMotionOutliersParameters;
+type FslMotionOutliersParamsDictTagged = Required<Pick<FslMotionOutliersParamsDict, '@type'>> & FslMotionOutliersParamsDict;
 
 
 /**
- * Output object returned when calling `FslMotionOutliersParameters(...)`.
+ * Output object returned when calling `FslMotionOutliersParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function fsl_motion_outliers_params(
     no_moco_flag: boolean = false,
     dummy_scans: number | null = null,
     verbose_flag: boolean = false,
-): FslMotionOutliersParametersTagged {
+): FslMotionOutliersParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_motion_outliers" as const,
         "input_4d_image": input_4d_image,
@@ -138,7 +138,7 @@ function fsl_motion_outliers_params(
  * @returns Command-line arguments.
  */
 function fsl_motion_outliers_cargs(
-    params: FslMotionOutliersParameters,
+    params: FslMotionOutliersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -221,7 +221,7 @@ function fsl_motion_outliers_cargs(
  * @returns Outputs object.
  */
 function fsl_motion_outliers_outputs(
-    params: FslMotionOutliersParameters,
+    params: FslMotionOutliersParamsDict,
     execution: Execution,
 ): FslMotionOutliersOutputs {
     const ret: FslMotionOutliersOutputs = {
@@ -249,7 +249,7 @@ function fsl_motion_outliers_outputs(
  * @returns NamedTuple of outputs (described in `FslMotionOutliersOutputs`).
  */
 function fsl_motion_outliers_execute(
-    params: FslMotionOutliersParameters,
+    params: FslMotionOutliersParamsDict,
     runner: Runner | null = null,
 ): FslMotionOutliersOutputs {
     runner = runner || getGlobalRunner();
@@ -316,6 +316,8 @@ function fsl_motion_outliers(
 export {
       FSL_MOTION_OUTLIERS_METADATA,
       FslMotionOutliersOutputs,
+      FslMotionOutliersParamsDict,
+      FslMotionOutliersParamsDictTagged,
       fsl_motion_outliers,
       fsl_motion_outliers_execute,
       fsl_motion_outliers_params,

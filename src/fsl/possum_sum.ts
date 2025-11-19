@@ -11,18 +11,18 @@ const POSSUM_SUM_METADATA: Metadata = {
 };
 
 
-interface PossumSumParameters {
+interface PossumSumParamsDict {
     "@type"?: "fsl/possum_sum";
     "input_signal": InputPathType;
     "output_signal": string;
     "num_processors"?: number | null | undefined;
     "verbose_flag": boolean;
 }
-type PossumSumParametersTagged = Required<Pick<PossumSumParameters, '@type'>> & PossumSumParameters;
+type PossumSumParamsDictTagged = Required<Pick<PossumSumParamsDict, '@type'>> & PossumSumParamsDict;
 
 
 /**
- * Output object returned when calling `PossumSumParameters(...)`.
+ * Output object returned when calling `PossumSumParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function possum_sum_params(
     output_signal: string,
     num_processors: number | null = null,
     verbose_flag: boolean = false,
-): PossumSumParametersTagged {
+): PossumSumParamsDictTagged {
     const params = {
         "@type": "fsl/possum_sum" as const,
         "input_signal": input_signal,
@@ -76,7 +76,7 @@ function possum_sum_params(
  * @returns Command-line arguments.
  */
 function possum_sum_cargs(
-    params: PossumSumParameters,
+    params: PossumSumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function possum_sum_cargs(
  * @returns Outputs object.
  */
 function possum_sum_outputs(
-    params: PossumSumParameters,
+    params: PossumSumParamsDict,
     execution: Execution,
 ): PossumSumOutputs {
     const ret: PossumSumOutputs = {
@@ -137,7 +137,7 @@ function possum_sum_outputs(
  * @returns NamedTuple of outputs (described in `PossumSumOutputs`).
  */
 function possum_sum_execute(
-    params: PossumSumParameters,
+    params: PossumSumParamsDict,
     runner: Runner | null = null,
 ): PossumSumOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function possum_sum(
 export {
       POSSUM_SUM_METADATA,
       PossumSumOutputs,
+      PossumSumParamsDict,
+      PossumSumParamsDictTagged,
       possum_sum,
       possum_sum_execute,
       possum_sum_params,

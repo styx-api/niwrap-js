@@ -11,7 +11,7 @@ const IMCAT_METADATA: Metadata = {
 };
 
 
-interface ImcatParameters {
+interface ImcatParamsDict {
     "@type"?: "afni/imcat";
     "input_files": Array<InputPathType>;
     "scale_image"?: InputPathType | null | undefined;
@@ -39,11 +39,11 @@ interface ImcatParameters {
     "gap"?: number | null | undefined;
     "gap_col"?: Array<number> | null | undefined;
 }
-type ImcatParametersTagged = Required<Pick<ImcatParameters, '@type'>> & ImcatParameters;
+type ImcatParamsDictTagged = Required<Pick<ImcatParamsDict, '@type'>> & ImcatParamsDict;
 
 
 /**
- * Output object returned when calling `ImcatParameters(...)`.
+ * Output object returned when calling `ImcatParamsDict(...)`.
  *
  * @interface
  */
@@ -116,7 +116,7 @@ function imcat_params(
     matrix_from_scale: boolean = false,
     gap: number | null = null,
     gap_col: Array<number> | null = null,
-): ImcatParametersTagged {
+): ImcatParamsDictTagged {
     const params = {
         "@type": "afni/imcat" as const,
         "input_files": input_files,
@@ -190,7 +190,7 @@ function imcat_params(
  * @returns Command-line arguments.
  */
 function imcat_cargs(
-    params: ImcatParameters,
+    params: ImcatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -329,7 +329,7 @@ function imcat_cargs(
  * @returns Outputs object.
  */
 function imcat_outputs(
-    params: ImcatParameters,
+    params: ImcatParamsDict,
     execution: Execution,
 ): ImcatOutputs {
     const ret: ImcatOutputs = {
@@ -355,7 +355,7 @@ function imcat_outputs(
  * @returns NamedTuple of outputs (described in `ImcatOutputs`).
  */
 function imcat_execute(
-    params: ImcatParameters,
+    params: ImcatParamsDict,
     runner: Runner | null = null,
 ): ImcatOutputs {
     runner = runner || getGlobalRunner();
@@ -442,6 +442,8 @@ function imcat(
 export {
       IMCAT_METADATA,
       ImcatOutputs,
+      ImcatParamsDict,
+      ImcatParamsDictTagged,
       imcat,
       imcat_execute,
       imcat_params,

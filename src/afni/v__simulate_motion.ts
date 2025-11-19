@@ -11,7 +11,7 @@ const V__SIMULATE_MOTION_METADATA: Metadata = {
 };
 
 
-interface VSimulateMotionParameters {
+interface VSimulateMotionParamsDict {
     "@type"?: "afni/@simulate_motion";
     "epi": InputPathType;
     "motion_file": InputPathType;
@@ -30,11 +30,11 @@ interface VSimulateMotionParameters {
     "todo": boolean;
     "ver": boolean;
 }
-type VSimulateMotionParametersTagged = Required<Pick<VSimulateMotionParameters, '@type'>> & VSimulateMotionParameters;
+type VSimulateMotionParamsDictTagged = Required<Pick<VSimulateMotionParamsDict, '@type'>> & VSimulateMotionParamsDict;
 
 
 /**
- * Output object returned when calling `VSimulateMotionParameters(...)`.
+ * Output object returned when calling `VSimulateMotionParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function v__simulate_motion_params(
     hist: boolean = false,
     todo: boolean = false,
     ver: boolean = false,
-): VSimulateMotionParametersTagged {
+): VSimulateMotionParamsDictTagged {
     const params = {
         "@type": "afni/@simulate_motion" as const,
         "epi": epi,
@@ -136,7 +136,7 @@ function v__simulate_motion_params(
  * @returns Command-line arguments.
  */
 function v__simulate_motion_cargs(
-    params: VSimulateMotionParameters,
+    params: VSimulateMotionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -225,7 +225,7 @@ function v__simulate_motion_cargs(
  * @returns Outputs object.
  */
 function v__simulate_motion_outputs(
-    params: VSimulateMotionParameters,
+    params: VSimulateMotionParamsDict,
     execution: Execution,
 ): VSimulateMotionOutputs {
     const ret: VSimulateMotionOutputs = {
@@ -251,7 +251,7 @@ function v__simulate_motion_outputs(
  * @returns NamedTuple of outputs (described in `VSimulateMotionOutputs`).
  */
 function v__simulate_motion_execute(
-    params: VSimulateMotionParameters,
+    params: VSimulateMotionParamsDict,
     runner: Runner | null = null,
 ): VSimulateMotionOutputs {
     runner = runner || getGlobalRunner();
@@ -319,6 +319,8 @@ function v__simulate_motion(
 
 export {
       VSimulateMotionOutputs,
+      VSimulateMotionParamsDict,
+      VSimulateMotionParamsDictTagged,
       V__SIMULATE_MOTION_METADATA,
       v__simulate_motion,
       v__simulate_motion_execute,

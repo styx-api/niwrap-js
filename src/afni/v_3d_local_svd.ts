@@ -11,7 +11,7 @@ const V_3D_LOCAL_SVD_METADATA: Metadata = {
 };
 
 
-interface V3dLocalSvdParameters {
+interface V3dLocalSvdParamsDict {
     "@type"?: "afni/3dLocalSVD";
     "auto_mask": boolean;
     "input_file": InputPathType;
@@ -22,11 +22,11 @@ interface V3dLocalSvdParameters {
     "vnorm": boolean;
     "vproj"?: number | null | undefined;
 }
-type V3dLocalSvdParametersTagged = Required<Pick<V3dLocalSvdParameters, '@type'>> & V3dLocalSvdParameters;
+type V3dLocalSvdParamsDictTagged = Required<Pick<V3dLocalSvdParamsDict, '@type'>> & V3dLocalSvdParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLocalSvdParameters(...)`.
+ * Output object returned when calling `V3dLocalSvdParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function v_3d_local_svd_params(
     polort: string | null = null,
     vnorm: boolean = false,
     vproj: number | null = null,
-): V3dLocalSvdParametersTagged {
+): V3dLocalSvdParamsDictTagged {
     const params = {
         "@type": "afni/3dLocalSVD" as const,
         "auto_mask": auto_mask,
@@ -94,7 +94,7 @@ function v_3d_local_svd_params(
  * @returns Command-line arguments.
  */
 function v_3d_local_svd_cargs(
-    params: V3dLocalSvdParameters,
+    params: V3dLocalSvdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function v_3d_local_svd_cargs(
  * @returns Outputs object.
  */
 function v_3d_local_svd_outputs(
-    params: V3dLocalSvdParameters,
+    params: V3dLocalSvdParamsDict,
     execution: Execution,
 ): V3dLocalSvdOutputs {
     const ret: V3dLocalSvdOutputs = {
@@ -175,7 +175,7 @@ function v_3d_local_svd_outputs(
  * @returns NamedTuple of outputs (described in `V3dLocalSvdOutputs`).
  */
 function v_3d_local_svd_execute(
-    params: V3dLocalSvdParameters,
+    params: V3dLocalSvdParamsDict,
     runner: Runner | null = null,
 ): V3dLocalSvdOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function v_3d_local_svd(
 
 export {
       V3dLocalSvdOutputs,
+      V3dLocalSvdParamsDict,
+      V3dLocalSvdParamsDictTagged,
       V_3D_LOCAL_SVD_METADATA,
       v_3d_local_svd,
       v_3d_local_svd_execute,

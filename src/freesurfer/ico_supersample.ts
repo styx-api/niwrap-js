@@ -11,17 +11,17 @@ const ICO_SUPERSAMPLE_METADATA: Metadata = {
 };
 
 
-interface IcoSupersampleParameters {
+interface IcoSupersampleParamsDict {
     "@type"?: "freesurfer/ico_supersample";
     "refine": boolean;
     "radius"?: number | null | undefined;
     "projection_point"?: Array<number> | null | undefined;
 }
-type IcoSupersampleParametersTagged = Required<Pick<IcoSupersampleParameters, '@type'>> & IcoSupersampleParameters;
+type IcoSupersampleParamsDictTagged = Required<Pick<IcoSupersampleParamsDict, '@type'>> & IcoSupersampleParamsDict;
 
 
 /**
- * Output object returned when calling `IcoSupersampleParameters(...)`.
+ * Output object returned when calling `IcoSupersampleParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function ico_supersample_params(
     refine: boolean = false,
     radius: number | null = null,
     projection_point: Array<number> | null = null,
-): IcoSupersampleParametersTagged {
+): IcoSupersampleParamsDictTagged {
     const params = {
         "@type": "freesurfer/ico_supersample" as const,
         "refine": refine,
@@ -74,7 +74,7 @@ function ico_supersample_params(
  * @returns Command-line arguments.
  */
 function ico_supersample_cargs(
-    params: IcoSupersampleParameters,
+    params: IcoSupersampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function ico_supersample_cargs(
  * @returns Outputs object.
  */
 function ico_supersample_outputs(
-    params: IcoSupersampleParameters,
+    params: IcoSupersampleParamsDict,
     execution: Execution,
 ): IcoSupersampleOutputs {
     const ret: IcoSupersampleOutputs = {
@@ -127,7 +127,7 @@ function ico_supersample_outputs(
  * @returns NamedTuple of outputs (described in `IcoSupersampleOutputs`).
  */
 function ico_supersample_execute(
-    params: IcoSupersampleParameters,
+    params: IcoSupersampleParamsDict,
     runner: Runner | null = null,
 ): IcoSupersampleOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function ico_supersample(
 export {
       ICO_SUPERSAMPLE_METADATA,
       IcoSupersampleOutputs,
+      IcoSupersampleParamsDict,
+      IcoSupersampleParamsDictTagged,
       ico_supersample,
       ico_supersample_execute,
       ico_supersample_params,

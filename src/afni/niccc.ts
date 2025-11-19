@@ -11,7 +11,7 @@ const NICCC_METADATA: Metadata = {
 };
 
 
-interface NicccParameters {
+interface NicccParamsDict {
     "@type"?: "afni/niccc";
     "streamspec": string;
     "duplicate": boolean;
@@ -26,11 +26,11 @@ interface NicccParameters {
     "find_attr"?: Array<string> | null | undefined;
     "skip_attr"?: Array<string> | null | undefined;
 }
-type NicccParametersTagged = Required<Pick<NicccParameters, '@type'>> & NicccParameters;
+type NicccParamsDictTagged = Required<Pick<NicccParamsDict, '@type'>> & NicccParamsDict;
 
 
 /**
- * Output object returned when calling `NicccParameters(...)`.
+ * Output object returned when calling `NicccParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function niccc_params(
     quiet: boolean = false,
     find_attr: Array<string> | null = null,
     skip_attr: Array<string> | null = null,
-): NicccParametersTagged {
+): NicccParamsDictTagged {
     const params = {
         "@type": "afni/niccc" as const,
         "streamspec": streamspec,
@@ -114,7 +114,7 @@ function niccc_params(
  * @returns Command-line arguments.
  */
 function niccc_cargs(
-    params: NicccParameters,
+    params: NicccParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -178,7 +178,7 @@ function niccc_cargs(
  * @returns Outputs object.
  */
 function niccc_outputs(
-    params: NicccParameters,
+    params: NicccParamsDict,
     execution: Execution,
 ): NicccOutputs {
     const ret: NicccOutputs = {
@@ -204,7 +204,7 @@ function niccc_outputs(
  * @returns NamedTuple of outputs (described in `NicccOutputs`).
  */
 function niccc_execute(
-    params: NicccParameters,
+    params: NicccParamsDict,
     runner: Runner | null = null,
 ): NicccOutputs {
     runner = runner || getGlobalRunner();
@@ -265,6 +265,8 @@ function niccc(
 export {
       NICCC_METADATA,
       NicccOutputs,
+      NicccParamsDict,
+      NicccParamsDictTagged,
       niccc,
       niccc_execute,
       niccc_params,

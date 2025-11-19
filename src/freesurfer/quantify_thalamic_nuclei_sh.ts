@@ -11,17 +11,17 @@ const QUANTIFY_THALAMIC_NUCLEI_SH_METADATA: Metadata = {
 };
 
 
-interface QuantifyThalamicNucleiShParameters {
+interface QuantifyThalamicNucleiShParamsDict {
     "@type"?: "freesurfer/quantifyThalamicNuclei.sh";
     "output_file": string;
     "analysis_id": string;
     "subjects_directory"?: string | null | undefined;
 }
-type QuantifyThalamicNucleiShParametersTagged = Required<Pick<QuantifyThalamicNucleiShParameters, '@type'>> & QuantifyThalamicNucleiShParameters;
+type QuantifyThalamicNucleiShParamsDictTagged = Required<Pick<QuantifyThalamicNucleiShParamsDict, '@type'>> & QuantifyThalamicNucleiShParamsDict;
 
 
 /**
- * Output object returned when calling `QuantifyThalamicNucleiShParameters(...)`.
+ * Output object returned when calling `QuantifyThalamicNucleiShParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function quantify_thalamic_nuclei_sh_params(
     output_file: string,
     analysis_id: string,
     subjects_directory: string | null = null,
-): QuantifyThalamicNucleiShParametersTagged {
+): QuantifyThalamicNucleiShParamsDictTagged {
     const params = {
         "@type": "freesurfer/quantifyThalamicNuclei.sh" as const,
         "output_file": output_file,
@@ -72,7 +72,7 @@ function quantify_thalamic_nuclei_sh_params(
  * @returns Command-line arguments.
  */
 function quantify_thalamic_nuclei_sh_cargs(
-    params: QuantifyThalamicNucleiShParameters,
+    params: QuantifyThalamicNucleiShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function quantify_thalamic_nuclei_sh_cargs(
  * @returns Outputs object.
  */
 function quantify_thalamic_nuclei_sh_outputs(
-    params: QuantifyThalamicNucleiShParameters,
+    params: QuantifyThalamicNucleiShParamsDict,
     execution: Execution,
 ): QuantifyThalamicNucleiShOutputs {
     const ret: QuantifyThalamicNucleiShOutputs = {
@@ -121,7 +121,7 @@ function quantify_thalamic_nuclei_sh_outputs(
  * @returns NamedTuple of outputs (described in `QuantifyThalamicNucleiShOutputs`).
  */
 function quantify_thalamic_nuclei_sh_execute(
-    params: QuantifyThalamicNucleiShParameters,
+    params: QuantifyThalamicNucleiShParamsDict,
     runner: Runner | null = null,
 ): QuantifyThalamicNucleiShOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function quantify_thalamic_nuclei_sh(
 export {
       QUANTIFY_THALAMIC_NUCLEI_SH_METADATA,
       QuantifyThalamicNucleiShOutputs,
+      QuantifyThalamicNucleiShParamsDict,
+      QuantifyThalamicNucleiShParamsDictTagged,
       quantify_thalamic_nuclei_sh,
       quantify_thalamic_nuclei_sh_execute,
       quantify_thalamic_nuclei_sh_params,

@@ -11,7 +11,7 @@ const MRIS_MAKE_SURFACES_METADATA: Metadata = {
 };
 
 
-interface MrisMakeSurfacesParameters {
+interface MrisMakeSurfacesParamsDict {
     "@type"?: "freesurfer/mris_make_surfaces";
     "subject_name": string;
     "hemisphere": string;
@@ -67,11 +67,11 @@ interface MrisMakeSurfacesParameters {
     "min_gray_csf_border"?: number | null | undefined;
     "max_csf"?: number | null | undefined;
 }
-type MrisMakeSurfacesParametersTagged = Required<Pick<MrisMakeSurfacesParameters, '@type'>> & MrisMakeSurfacesParameters;
+type MrisMakeSurfacesParamsDictTagged = Required<Pick<MrisMakeSurfacesParamsDict, '@type'>> & MrisMakeSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMakeSurfacesParameters(...)`.
+ * Output object returned when calling `MrisMakeSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -196,7 +196,7 @@ function mris_make_surfaces_params(
     max_gray_csf_border: number | null = null,
     min_gray_csf_border: number | null = null,
     max_csf: number | null = null,
-): MrisMakeSurfacesParametersTagged {
+): MrisMakeSurfacesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_make_surfaces" as const,
         "subject_name": subject_name,
@@ -346,7 +346,7 @@ function mris_make_surfaces_params(
  * @returns Command-line arguments.
  */
 function mris_make_surfaces_cargs(
-    params: MrisMakeSurfacesParameters,
+    params: MrisMakeSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -639,7 +639,7 @@ function mris_make_surfaces_cargs(
  * @returns Outputs object.
  */
 function mris_make_surfaces_outputs(
-    params: MrisMakeSurfacesParameters,
+    params: MrisMakeSurfacesParamsDict,
     execution: Execution,
 ): MrisMakeSurfacesOutputs {
     const ret: MrisMakeSurfacesOutputs = {
@@ -664,7 +664,7 @@ function mris_make_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `MrisMakeSurfacesOutputs`).
  */
 function mris_make_surfaces_execute(
-    params: MrisMakeSurfacesParameters,
+    params: MrisMakeSurfacesParamsDict,
     runner: Runner | null = null,
 ): MrisMakeSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -807,6 +807,8 @@ function mris_make_surfaces(
 export {
       MRIS_MAKE_SURFACES_METADATA,
       MrisMakeSurfacesOutputs,
+      MrisMakeSurfacesParamsDict,
+      MrisMakeSurfacesParamsDictTagged,
       mris_make_surfaces,
       mris_make_surfaces_execute,
       mris_make_surfaces_params,

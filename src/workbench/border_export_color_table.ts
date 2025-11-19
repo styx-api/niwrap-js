@@ -10,17 +10,17 @@ const BORDER_EXPORT_COLOR_TABLE_METADATA: Metadata = {
 };
 
 
-interface BorderExportColorTableParameters {
+interface BorderExportColorTableParamsDict {
     "@type"?: "workbench/border-export-color-table";
     "class-colors": boolean;
     "border-file": InputPathType;
     "table-out": string;
 }
-type BorderExportColorTableParametersTagged = Required<Pick<BorderExportColorTableParameters, '@type'>> & BorderExportColorTableParameters;
+type BorderExportColorTableParamsDictTagged = Required<Pick<BorderExportColorTableParamsDict, '@type'>> & BorderExportColorTableParamsDict;
 
 
 /**
- * Output object returned when calling `BorderExportColorTableParameters(...)`.
+ * Output object returned when calling `BorderExportColorTableParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function border_export_color_table_params(
     border_file: InputPathType,
     table_out: string,
     class_colors: boolean = false,
-): BorderExportColorTableParametersTagged {
+): BorderExportColorTableParamsDictTagged {
     const params = {
         "@type": "workbench/border-export-color-table" as const,
         "class-colors": class_colors,
@@ -65,7 +65,7 @@ function border_export_color_table_params(
  * @returns Command-line arguments.
  */
 function border_export_color_table_cargs(
-    params: BorderExportColorTableParameters,
+    params: BorderExportColorTableParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function border_export_color_table_cargs(
  * @returns Outputs object.
  */
 function border_export_color_table_outputs(
-    params: BorderExportColorTableParameters,
+    params: BorderExportColorTableParamsDict,
     execution: Execution,
 ): BorderExportColorTableOutputs {
     const ret: BorderExportColorTableOutputs = {
@@ -112,7 +112,7 @@ function border_export_color_table_outputs(
  * @returns NamedTuple of outputs (described in `BorderExportColorTableOutputs`).
  */
 function border_export_color_table_execute(
-    params: BorderExportColorTableParameters,
+    params: BorderExportColorTableParamsDict,
     runner: Runner | null = null,
 ): BorderExportColorTableOutputs {
     runner = runner || getGlobalRunner();
@@ -151,6 +151,8 @@ function border_export_color_table(
 export {
       BORDER_EXPORT_COLOR_TABLE_METADATA,
       BorderExportColorTableOutputs,
+      BorderExportColorTableParamsDict,
+      BorderExportColorTableParamsDictTagged,
       border_export_color_table,
       border_export_color_table_execute,
       border_export_color_table_params,

@@ -11,16 +11,16 @@ const V_4SWAP_METADATA: Metadata = {
 };
 
 
-interface V4swapParameters {
+interface V4swapParamsDict {
     "@type"?: "afni/4swap";
     "files": Array<InputPathType>;
     "quiet": boolean;
 }
-type V4swapParametersTagged = Required<Pick<V4swapParameters, '@type'>> & V4swapParameters;
+type V4swapParamsDictTagged = Required<Pick<V4swapParamsDict, '@type'>> & V4swapParamsDict;
 
 
 /**
- * Output object returned when calling `V4swapParameters(...)`.
+ * Output object returned when calling `V4swapParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface V4swapOutputs {
 function v_4swap_params(
     files: Array<InputPathType>,
     quiet: boolean = false,
-): V4swapParametersTagged {
+): V4swapParamsDictTagged {
     const params = {
         "@type": "afni/4swap" as const,
         "files": files,
@@ -62,7 +62,7 @@ function v_4swap_params(
  * @returns Command-line arguments.
  */
 function v_4swap_cargs(
-    params: V4swapParameters,
+    params: V4swapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function v_4swap_cargs(
  * @returns Outputs object.
  */
 function v_4swap_outputs(
-    params: V4swapParameters,
+    params: V4swapParamsDict,
     execution: Execution,
 ): V4swapOutputs {
     const ret: V4swapOutputs = {
@@ -109,7 +109,7 @@ function v_4swap_outputs(
  * @returns NamedTuple of outputs (described in `V4swapOutputs`).
  */
 function v_4swap_execute(
-    params: V4swapParameters,
+    params: V4swapParamsDict,
     runner: Runner | null = null,
 ): V4swapOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function v_4swap(
 
 export {
       V4swapOutputs,
+      V4swapParamsDict,
+      V4swapParamsDictTagged,
       V_4SWAP_METADATA,
       v_4swap,
       v_4swap_execute,

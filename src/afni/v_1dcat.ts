@@ -11,7 +11,7 @@ const V_1DCAT_METADATA: Metadata = {
 };
 
 
-interface V1dcatParameters {
+interface V1dcatParamsDict {
     "@type"?: "afni/1dcat";
     "input_files": Array<InputPathType>;
     "tsv_output": boolean;
@@ -23,11 +23,11 @@ interface V1dcatParameters {
     "column_row_selection"?: string | null | undefined;
     "ok_empty": boolean;
 }
-type V1dcatParametersTagged = Required<Pick<V1dcatParameters, '@type'>> & V1dcatParameters;
+type V1dcatParamsDictTagged = Required<Pick<V1dcatParamsDict, '@type'>> & V1dcatParamsDict;
 
 
 /**
- * Output object returned when calling `V1dcatParameters(...)`.
+ * Output object returned when calling `V1dcatParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_1dcat_params(
     stack_output: boolean = false,
     column_row_selection: string | null = null,
     ok_empty: boolean = false,
-): V1dcatParametersTagged {
+): V1dcatParamsDictTagged {
     const params = {
         "@type": "afni/1dcat" as const,
         "input_files": input_files,
@@ -98,7 +98,7 @@ function v_1dcat_params(
  * @returns Command-line arguments.
  */
 function v_1dcat_cargs(
-    params: V1dcatParameters,
+    params: V1dcatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function v_1dcat_cargs(
  * @returns Outputs object.
  */
 function v_1dcat_outputs(
-    params: V1dcatParameters,
+    params: V1dcatParamsDict,
     execution: Execution,
 ): V1dcatOutputs {
     const ret: V1dcatOutputs = {
@@ -173,7 +173,7 @@ function v_1dcat_outputs(
  * @returns NamedTuple of outputs (described in `V1dcatOutputs`).
  */
 function v_1dcat_execute(
-    params: V1dcatParameters,
+    params: V1dcatParamsDict,
     runner: Runner | null = null,
 ): V1dcatOutputs {
     runner = runner || getGlobalRunner();
@@ -227,6 +227,8 @@ function v_1dcat(
 
 export {
       V1dcatOutputs,
+      V1dcatParamsDict,
+      V1dcatParamsDictTagged,
       V_1DCAT_METADATA,
       v_1dcat,
       v_1dcat_execute,

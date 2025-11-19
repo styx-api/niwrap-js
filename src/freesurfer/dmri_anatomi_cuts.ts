@@ -11,7 +11,7 @@ const DMRI_ANATOMI_CUTS_METADATA: Metadata = {
 };
 
 
-interface DmriAnatomiCutsParameters {
+interface DmriAnatomiCutsParamsDict {
     "@type"?: "freesurfer/dmri_AnatomiCuts";
     "segmentation_file": InputPathType;
     "fiber_file": InputPathType;
@@ -21,11 +21,11 @@ interface DmriAnatomiCutsParameters {
     "output_folder": string;
     "direction_flag": "s" | "d" | "a" | "o";
 }
-type DmriAnatomiCutsParametersTagged = Required<Pick<DmriAnatomiCutsParameters, '@type'>> & DmriAnatomiCutsParameters;
+type DmriAnatomiCutsParamsDictTagged = Required<Pick<DmriAnatomiCutsParamsDict, '@type'>> & DmriAnatomiCutsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriAnatomiCutsParameters(...)`.
+ * Output object returned when calling `DmriAnatomiCutsParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function dmri_anatomi_cuts_params(
     fibers_eigen: number,
     output_folder: string,
     direction_flag: "s" | "d" | "a" | "o",
-): DmriAnatomiCutsParametersTagged {
+): DmriAnatomiCutsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_AnatomiCuts" as const,
         "segmentation_file": segmentation_file,
@@ -86,7 +86,7 @@ function dmri_anatomi_cuts_params(
  * @returns Command-line arguments.
  */
 function dmri_anatomi_cuts_cargs(
-    params: DmriAnatomiCutsParameters,
+    params: DmriAnatomiCutsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function dmri_anatomi_cuts_cargs(
  * @returns Outputs object.
  */
 function dmri_anatomi_cuts_outputs(
-    params: DmriAnatomiCutsParameters,
+    params: DmriAnatomiCutsParamsDict,
     execution: Execution,
 ): DmriAnatomiCutsOutputs {
     const ret: DmriAnatomiCutsOutputs = {
@@ -158,7 +158,7 @@ function dmri_anatomi_cuts_outputs(
  * @returns NamedTuple of outputs (described in `DmriAnatomiCutsOutputs`).
  */
 function dmri_anatomi_cuts_execute(
-    params: DmriAnatomiCutsParameters,
+    params: DmriAnatomiCutsParamsDict,
     runner: Runner | null = null,
 ): DmriAnatomiCutsOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function dmri_anatomi_cuts(
 export {
       DMRI_ANATOMI_CUTS_METADATA,
       DmriAnatomiCutsOutputs,
+      DmriAnatomiCutsParamsDict,
+      DmriAnatomiCutsParamsDictTagged,
       dmri_anatomi_cuts,
       dmri_anatomi_cuts_execute,
       dmri_anatomi_cuts_params,

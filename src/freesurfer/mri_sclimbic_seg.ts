@@ -11,7 +11,7 @@ const MRI_SCLIMBIC_SEG_METADATA: Metadata = {
 };
 
 
-interface MriSclimbicSegParameters {
+interface MriSclimbicSegParamsDict {
     "@type"?: "freesurfer/mri_sclimbic_seg";
     "input_file": string;
     "output_file": string;
@@ -39,11 +39,11 @@ interface MriSclimbicSegParameters {
     "no_cite": boolean;
     "nchannels"?: number | null | undefined;
 }
-type MriSclimbicSegParametersTagged = Required<Pick<MriSclimbicSegParameters, '@type'>> & MriSclimbicSegParameters;
+type MriSclimbicSegParamsDictTagged = Required<Pick<MriSclimbicSegParamsDict, '@type'>> & MriSclimbicSegParamsDict;
 
 
 /**
- * Output object returned when calling `MriSclimbicSegParameters(...)`.
+ * Output object returned when calling `MriSclimbicSegParamsDict(...)`.
  *
  * @interface
  */
@@ -116,7 +116,7 @@ function mri_sclimbic_seg_params(
     output_base: string | null = null,
     no_cite: boolean = false,
     nchannels: number | null = null,
-): MriSclimbicSegParametersTagged {
+): MriSclimbicSegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_sclimbic_seg" as const,
         "input_file": input_file,
@@ -182,7 +182,7 @@ function mri_sclimbic_seg_params(
  * @returns Command-line arguments.
  */
 function mri_sclimbic_seg_cargs(
-    params: MriSclimbicSegParameters,
+    params: MriSclimbicSegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -313,7 +313,7 @@ function mri_sclimbic_seg_cargs(
  * @returns Outputs object.
  */
 function mri_sclimbic_seg_outputs(
-    params: MriSclimbicSegParameters,
+    params: MriSclimbicSegParamsDict,
     execution: Execution,
 ): MriSclimbicSegOutputs {
     const ret: MriSclimbicSegOutputs = {
@@ -339,7 +339,7 @@ function mri_sclimbic_seg_outputs(
  * @returns NamedTuple of outputs (described in `MriSclimbicSegOutputs`).
  */
 function mri_sclimbic_seg_execute(
-    params: MriSclimbicSegParameters,
+    params: MriSclimbicSegParamsDict,
     runner: Runner | null = null,
 ): MriSclimbicSegOutputs {
     runner = runner || getGlobalRunner();
@@ -426,6 +426,8 @@ function mri_sclimbic_seg(
 export {
       MRI_SCLIMBIC_SEG_METADATA,
       MriSclimbicSegOutputs,
+      MriSclimbicSegParamsDict,
+      MriSclimbicSegParamsDictTagged,
       mri_sclimbic_seg,
       mri_sclimbic_seg_execute,
       mri_sclimbic_seg_params,

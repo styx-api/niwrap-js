@@ -11,15 +11,15 @@ const PEAKS2FIXEL_METADATA: Metadata = {
 };
 
 
-interface Peaks2fixelConfigParameters {
+interface Peaks2fixelConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Peaks2fixelConfigParametersTagged = Required<Pick<Peaks2fixelConfigParameters, '@type'>> & Peaks2fixelConfigParameters;
+type Peaks2fixelConfigParamsDictTagged = Required<Pick<Peaks2fixelConfigParamsDict, '@type'>> & Peaks2fixelConfigParamsDict;
 
 
-interface Peaks2fixelParameters {
+interface Peaks2fixelParamsDict {
     "@type"?: "mrtrix/peaks2fixel";
     "dataname"?: string | null | undefined;
     "info": boolean;
@@ -27,13 +27,13 @@ interface Peaks2fixelParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Peaks2fixelConfigParameters> | null | undefined;
+    "config"?: Array<Peaks2fixelConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "directions": InputPathType;
     "fixels": string;
 }
-type Peaks2fixelParametersTagged = Required<Pick<Peaks2fixelParameters, '@type'>> & Peaks2fixelParameters;
+type Peaks2fixelParamsDictTagged = Required<Pick<Peaks2fixelParamsDict, '@type'>> & Peaks2fixelParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type Peaks2fixelParametersTagged = Required<Pick<Peaks2fixelParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function peaks2fixel_config_params(
+function peaks2fixel_config(
     key: string,
     value: string,
-): Peaks2fixelConfigParametersTagged {
+): Peaks2fixelConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function peaks2fixel_config_params(
  * @returns Command-line arguments.
  */
 function peaks2fixel_config_cargs(
-    params: Peaks2fixelConfigParameters,
+    params: Peaks2fixelConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function peaks2fixel_config_cargs(
 
 
 /**
- * Output object returned when calling `Peaks2fixelParameters(...)`.
+ * Output object returned when calling `Peaks2fixelParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function peaks2fixel_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Peaks2fixelConfigParameters> | null = null,
+    config: Array<Peaks2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Peaks2fixelParametersTagged {
+): Peaks2fixelParamsDictTagged {
     const params = {
         "@type": "mrtrix/peaks2fixel" as const,
         "info": info,
@@ -157,7 +157,7 @@ function peaks2fixel_params(
  * @returns Command-line arguments.
  */
 function peaks2fixel_cargs(
-    params: Peaks2fixelParameters,
+    params: Peaks2fixelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function peaks2fixel_cargs(
  * @returns Outputs object.
  */
 function peaks2fixel_outputs(
-    params: Peaks2fixelParameters,
+    params: Peaks2fixelParamsDict,
     execution: Execution,
 ): Peaks2fixelOutputs {
     const ret: Peaks2fixelOutputs = {
@@ -242,7 +242,7 @@ function peaks2fixel_outputs(
  * @returns NamedTuple of outputs (described in `Peaks2fixelOutputs`).
  */
 function peaks2fixel_execute(
-    params: Peaks2fixelParameters,
+    params: Peaks2fixelParamsDict,
     runner: Runner | null = null,
 ): Peaks2fixelOutputs {
     runner = runner || getGlobalRunner();
@@ -294,7 +294,7 @@ function peaks2fixel(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Peaks2fixelConfigParameters> | null = null,
+    config: Array<Peaks2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -306,9 +306,13 @@ function peaks2fixel(
 
 export {
       PEAKS2FIXEL_METADATA,
+      Peaks2fixelConfigParamsDict,
+      Peaks2fixelConfigParamsDictTagged,
       Peaks2fixelOutputs,
+      Peaks2fixelParamsDict,
+      Peaks2fixelParamsDictTagged,
       peaks2fixel,
-      peaks2fixel_config_params,
+      peaks2fixel_config,
       peaks2fixel_execute,
       peaks2fixel_params,
 };

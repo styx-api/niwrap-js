@@ -11,7 +11,7 @@ const LONG_STATS_SLOPES_METADATA: Metadata = {
 };
 
 
-interface LongStatsSlopesParameters {
+interface LongStatsSlopesParamsDict {
     "@type"?: "freesurfer/long_stats_slopes";
     "qdec_table": InputPathType;
     "stats_file": InputPathType;
@@ -41,11 +41,11 @@ interface LongStatsSlopesParameters {
     "stack_spc"?: string | null | undefined;
     "stack_resid"?: string | null | undefined;
 }
-type LongStatsSlopesParametersTagged = Required<Pick<LongStatsSlopesParameters, '@type'>> & LongStatsSlopesParameters;
+type LongStatsSlopesParamsDictTagged = Required<Pick<LongStatsSlopesParamsDict, '@type'>> & LongStatsSlopesParamsDict;
 
 
 /**
- * Output object returned when calling `LongStatsSlopesParameters(...)`.
+ * Output object returned when calling `LongStatsSlopesParamsDict(...)`.
  *
  * @interface
  */
@@ -118,7 +118,7 @@ function long_stats_slopes_params(
     stack_pc1: string | null = null,
     stack_spc: string | null = null,
     stack_resid: string | null = null,
-): LongStatsSlopesParametersTagged {
+): LongStatsSlopesParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_stats_slopes" as const,
         "qdec_table": qdec_table,
@@ -192,7 +192,7 @@ function long_stats_slopes_params(
  * @returns Command-line arguments.
  */
 function long_stats_slopes_cargs(
-    params: LongStatsSlopesParameters,
+    params: LongStatsSlopesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -340,7 +340,7 @@ function long_stats_slopes_cargs(
  * @returns Outputs object.
  */
 function long_stats_slopes_outputs(
-    params: LongStatsSlopesParameters,
+    params: LongStatsSlopesParamsDict,
     execution: Execution,
 ): LongStatsSlopesOutputs {
     const ret: LongStatsSlopesOutputs = {
@@ -365,7 +365,7 @@ function long_stats_slopes_outputs(
  * @returns NamedTuple of outputs (described in `LongStatsSlopesOutputs`).
  */
 function long_stats_slopes_execute(
-    params: LongStatsSlopesParameters,
+    params: LongStatsSlopesParamsDict,
     runner: Runner | null = null,
 ): LongStatsSlopesOutputs {
     runner = runner || getGlobalRunner();
@@ -456,6 +456,8 @@ function long_stats_slopes(
 export {
       LONG_STATS_SLOPES_METADATA,
       LongStatsSlopesOutputs,
+      LongStatsSlopesParamsDict,
+      LongStatsSlopesParamsDictTagged,
       long_stats_slopes,
       long_stats_slopes_execute,
       long_stats_slopes_params,

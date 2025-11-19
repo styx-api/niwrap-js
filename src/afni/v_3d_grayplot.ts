@@ -11,7 +11,7 @@ const V_3D_GRAYPLOT_METADATA: Metadata = {
 };
 
 
-interface V3dGrayplotParameters {
+interface V3dGrayplotParamsDict {
     "@type"?: "afni/3dGrayplot";
     "input": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface V3dGrayplotParameters {
     "percent": boolean;
     "raw_with_bounds"?: Array<number> | null | undefined;
 }
-type V3dGrayplotParametersTagged = Required<Pick<V3dGrayplotParameters, '@type'>> & V3dGrayplotParameters;
+type V3dGrayplotParamsDictTagged = Required<Pick<V3dGrayplotParamsDict, '@type'>> & V3dGrayplotParamsDict;
 
 
 /**
- * Output object returned when calling `V3dGrayplotParameters(...)`.
+ * Output object returned when calling `V3dGrayplotParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function v_3d_grayplot_params(
     range: number | null = null,
     percent: boolean = false,
     raw_with_bounds: Array<number> | null = null,
-): V3dGrayplotParametersTagged {
+): V3dGrayplotParamsDictTagged {
     const params = {
         "@type": "afni/3dGrayplot" as const,
         "input": input,
@@ -128,7 +128,7 @@ function v_3d_grayplot_params(
  * @returns Command-line arguments.
  */
 function v_3d_grayplot_cargs(
-    params: V3dGrayplotParameters,
+    params: V3dGrayplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -207,7 +207,7 @@ function v_3d_grayplot_cargs(
  * @returns Outputs object.
  */
 function v_3d_grayplot_outputs(
-    params: V3dGrayplotParameters,
+    params: V3dGrayplotParamsDict,
     execution: Execution,
 ): V3dGrayplotOutputs {
     const ret: V3dGrayplotOutputs = {
@@ -233,7 +233,7 @@ function v_3d_grayplot_outputs(
  * @returns NamedTuple of outputs (described in `V3dGrayplotOutputs`).
  */
 function v_3d_grayplot_execute(
-    params: V3dGrayplotParameters,
+    params: V3dGrayplotParamsDict,
     runner: Runner | null = null,
 ): V3dGrayplotOutputs {
     runner = runner || getGlobalRunner();
@@ -297,6 +297,8 @@ function v_3d_grayplot(
 
 export {
       V3dGrayplotOutputs,
+      V3dGrayplotParamsDict,
+      V3dGrayplotParamsDictTagged,
       V_3D_GRAYPLOT_METADATA,
       v_3d_grayplot,
       v_3d_grayplot_execute,

@@ -10,7 +10,7 @@ const ESTIMATE_FIBER_BINGHAMS_METADATA: Metadata = {
 };
 
 
-interface EstimateFiberBinghamsParameters {
+interface EstimateFiberBinghamsParamsDict {
     "@type"?: "workbench/estimate-fiber-binghams";
     "cifti-out": string;
     "merged_f1samples": InputPathType;
@@ -24,11 +24,11 @@ interface EstimateFiberBinghamsParameters {
     "merged_ph3samples": InputPathType;
     "label-volume": InputPathType;
 }
-type EstimateFiberBinghamsParametersTagged = Required<Pick<EstimateFiberBinghamsParameters, '@type'>> & EstimateFiberBinghamsParameters;
+type EstimateFiberBinghamsParamsDictTagged = Required<Pick<EstimateFiberBinghamsParamsDict, '@type'>> & EstimateFiberBinghamsParamsDict;
 
 
 /**
- * Output object returned when calling `EstimateFiberBinghamsParameters(...)`.
+ * Output object returned when calling `EstimateFiberBinghamsParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function estimate_fiber_binghams_params(
     merged_th3samples: InputPathType,
     merged_ph3samples: InputPathType,
     label_volume: InputPathType,
-): EstimateFiberBinghamsParametersTagged {
+): EstimateFiberBinghamsParamsDictTagged {
     const params = {
         "@type": "workbench/estimate-fiber-binghams" as const,
         "cifti-out": cifti_out,
@@ -101,7 +101,7 @@ function estimate_fiber_binghams_params(
  * @returns Command-line arguments.
  */
 function estimate_fiber_binghams_cargs(
-    params: EstimateFiberBinghamsParameters,
+    params: EstimateFiberBinghamsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function estimate_fiber_binghams_cargs(
  * @returns Outputs object.
  */
 function estimate_fiber_binghams_outputs(
-    params: EstimateFiberBinghamsParameters,
+    params: EstimateFiberBinghamsParamsDict,
     execution: Execution,
 ): EstimateFiberBinghamsOutputs {
     const ret: EstimateFiberBinghamsOutputs = {
@@ -191,7 +191,7 @@ function estimate_fiber_binghams_outputs(
  * @returns NamedTuple of outputs (described in `EstimateFiberBinghamsOutputs`).
  */
 function estimate_fiber_binghams_execute(
-    params: EstimateFiberBinghamsParameters,
+    params: EstimateFiberBinghamsParamsDict,
     runner: Runner | null = null,
 ): EstimateFiberBinghamsOutputs {
     runner = runner || getGlobalRunner();
@@ -282,6 +282,8 @@ function estimate_fiber_binghams(
 export {
       ESTIMATE_FIBER_BINGHAMS_METADATA,
       EstimateFiberBinghamsOutputs,
+      EstimateFiberBinghamsParamsDict,
+      EstimateFiberBinghamsParamsDictTagged,
       estimate_fiber_binghams,
       estimate_fiber_binghams_execute,
       estimate_fiber_binghams_params,

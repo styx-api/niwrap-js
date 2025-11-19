@@ -11,16 +11,16 @@ const MKIMA_INDEX_TCL_METADATA: Metadata = {
 };
 
 
-interface MkimaIndexTclParameters {
+interface MkimaIndexTclParamsDict {
     "@type"?: "freesurfer/mkima_index.tcl";
     "input_file": InputPathType;
     "output_flag": boolean;
 }
-type MkimaIndexTclParametersTagged = Required<Pick<MkimaIndexTclParameters, '@type'>> & MkimaIndexTclParameters;
+type MkimaIndexTclParamsDictTagged = Required<Pick<MkimaIndexTclParamsDict, '@type'>> & MkimaIndexTclParamsDict;
 
 
 /**
- * Output object returned when calling `MkimaIndexTclParameters(...)`.
+ * Output object returned when calling `MkimaIndexTclParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MkimaIndexTclOutputs {
 function mkima_index_tcl_params(
     input_file: InputPathType,
     output_flag: boolean = false,
-): MkimaIndexTclParametersTagged {
+): MkimaIndexTclParamsDictTagged {
     const params = {
         "@type": "freesurfer/mkima_index.tcl" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function mkima_index_tcl_params(
  * @returns Command-line arguments.
  */
 function mkima_index_tcl_cargs(
-    params: MkimaIndexTclParameters,
+    params: MkimaIndexTclParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function mkima_index_tcl_cargs(
  * @returns Outputs object.
  */
 function mkima_index_tcl_outputs(
-    params: MkimaIndexTclParameters,
+    params: MkimaIndexTclParamsDict,
     execution: Execution,
 ): MkimaIndexTclOutputs {
     const ret: MkimaIndexTclOutputs = {
@@ -114,7 +114,7 @@ function mkima_index_tcl_outputs(
  * @returns NamedTuple of outputs (described in `MkimaIndexTclOutputs`).
  */
 function mkima_index_tcl_execute(
-    params: MkimaIndexTclParameters,
+    params: MkimaIndexTclParamsDict,
     runner: Runner | null = null,
 ): MkimaIndexTclOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function mkima_index_tcl(
 export {
       MKIMA_INDEX_TCL_METADATA,
       MkimaIndexTclOutputs,
+      MkimaIndexTclParamsDict,
+      MkimaIndexTclParamsDictTagged,
       mkima_index_tcl,
       mkima_index_tcl_execute,
       mkima_index_tcl_params,

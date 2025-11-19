@@ -11,7 +11,7 @@ const MRI_SYNTHSTRIP_METADATA: Metadata = {
 };
 
 
-interface MriSynthstripParameters {
+interface MriSynthstripParamsDict {
     "@type"?: "freesurfer/mri_synthstrip";
     "image": InputPathType;
     "output_image"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface MriSynthstripParameters {
     "exclude_csf": boolean;
     "model_weights"?: InputPathType | null | undefined;
 }
-type MriSynthstripParametersTagged = Required<Pick<MriSynthstripParameters, '@type'>> & MriSynthstripParameters;
+type MriSynthstripParamsDictTagged = Required<Pick<MriSynthstripParamsDict, '@type'>> & MriSynthstripParamsDict;
 
 
 /**
- * Output object returned when calling `MriSynthstripParameters(...)`.
+ * Output object returned when calling `MriSynthstripParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function mri_synthstrip_params(
     border: number | null = null,
     exclude_csf: boolean = false,
     model_weights: InputPathType | null = null,
-): MriSynthstripParametersTagged {
+): MriSynthstripParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_synthstrip" as const,
         "image": image,
@@ -98,7 +98,7 @@ function mri_synthstrip_params(
  * @returns Command-line arguments.
  */
 function mri_synthstrip_cargs(
-    params: MriSynthstripParameters,
+    params: MriSynthstripParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function mri_synthstrip_cargs(
  * @returns Outputs object.
  */
 function mri_synthstrip_outputs(
-    params: MriSynthstripParameters,
+    params: MriSynthstripParamsDict,
     execution: Execution,
 ): MriSynthstripOutputs {
     const ret: MriSynthstripOutputs = {
@@ -177,7 +177,7 @@ function mri_synthstrip_outputs(
  * @returns NamedTuple of outputs (described in `MriSynthstripOutputs`).
  */
 function mri_synthstrip_execute(
-    params: MriSynthstripParameters,
+    params: MriSynthstripParamsDict,
     runner: Runner | null = null,
 ): MriSynthstripOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function mri_synthstrip(
 export {
       MRI_SYNTHSTRIP_METADATA,
       MriSynthstripOutputs,
+      MriSynthstripParamsDict,
+      MriSynthstripParamsDictTagged,
       mri_synthstrip,
       mri_synthstrip_execute,
       mri_synthstrip_params,

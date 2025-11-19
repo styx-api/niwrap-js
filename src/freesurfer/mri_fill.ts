@@ -11,7 +11,7 @@ const MRI_FILL_METADATA: Metadata = {
 };
 
 
-interface MriFillParameters {
+interface MriFillParamsDict {
     "@type"?: "freesurfer/mri_fill";
     "input_mr_dir": string;
     "output_mr_dir": string;
@@ -31,11 +31,11 @@ interface MriFillParameters {
     "pointset_args"?: Array<string> | null | undefined;
     "ctab_file"?: InputPathType | null | undefined;
 }
-type MriFillParametersTagged = Required<Pick<MriFillParameters, '@type'>> & MriFillParameters;
+type MriFillParamsDictTagged = Required<Pick<MriFillParamsDict, '@type'>> & MriFillParamsDict;
 
 
 /**
- * Output object returned when calling `MriFillParameters(...)`.
+ * Output object returned when calling `MriFillParamsDict(...)`.
  *
  * @interface
  */
@@ -92,7 +92,7 @@ function mri_fill_params(
     no_auto_man: boolean = false,
     pointset_args: Array<string> | null = null,
     ctab_file: InputPathType | null = null,
-): MriFillParametersTagged {
+): MriFillParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fill" as const,
         "input_mr_dir": input_mr_dir,
@@ -152,7 +152,7 @@ function mri_fill_params(
  * @returns Command-line arguments.
  */
 function mri_fill_cargs(
-    params: MriFillParameters,
+    params: MriFillParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -256,7 +256,7 @@ function mri_fill_cargs(
  * @returns Outputs object.
  */
 function mri_fill_outputs(
-    params: MriFillParameters,
+    params: MriFillParamsDict,
     execution: Execution,
 ): MriFillOutputs {
     const ret: MriFillOutputs = {
@@ -282,7 +282,7 @@ function mri_fill_outputs(
  * @returns NamedTuple of outputs (described in `MriFillOutputs`).
  */
 function mri_fill_execute(
-    params: MriFillParameters,
+    params: MriFillParamsDict,
     runner: Runner | null = null,
 ): MriFillOutputs {
     runner = runner || getGlobalRunner();
@@ -353,6 +353,8 @@ function mri_fill(
 export {
       MRI_FILL_METADATA,
       MriFillOutputs,
+      MriFillParamsDict,
+      MriFillParamsDictTagged,
       mri_fill,
       mri_fill_execute,
       mri_fill_params,

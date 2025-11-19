@@ -11,15 +11,15 @@ const V_5TTEDIT_METADATA: Metadata = {
 };
 
 
-interface V5tteditConfigParameters {
+interface V5tteditConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type V5tteditConfigParametersTagged = Required<Pick<V5tteditConfigParameters, '@type'>> & V5tteditConfigParameters;
+type V5tteditConfigParamsDictTagged = Required<Pick<V5tteditConfigParamsDict, '@type'>> & V5tteditConfigParamsDict;
 
 
-interface V5tteditParameters {
+interface V5tteditParamsDict {
     "@type"?: "mrtrix/5ttedit";
     "cgm"?: InputPathType | null | undefined;
     "sgm"?: InputPathType | null | undefined;
@@ -32,13 +32,13 @@ interface V5tteditParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<V5tteditConfigParameters> | null | undefined;
+    "config"?: Array<V5tteditConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type V5tteditParametersTagged = Required<Pick<V5tteditParameters, '@type'>> & V5tteditParameters;
+type V5tteditParamsDictTagged = Required<Pick<V5tteditParamsDict, '@type'>> & V5tteditParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type V5tteditParametersTagged = Required<Pick<V5tteditParameters, '@type'>> & V5
  *
  * @returns Parameter dictionary
  */
-function v_5ttedit_config_params(
+function v_5ttedit_config(
     key: string,
     value: string,
-): V5tteditConfigParametersTagged {
+): V5tteditConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -71,7 +71,7 @@ function v_5ttedit_config_params(
  * @returns Command-line arguments.
  */
 function v_5ttedit_config_cargs(
-    params: V5tteditConfigParameters,
+    params: V5tteditConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -83,7 +83,7 @@ function v_5ttedit_config_cargs(
 
 
 /**
- * Output object returned when calling `V5tteditParameters(...)`.
+ * Output object returned when calling `V5tteditParamsDict(...)`.
  *
  * @interface
  */
@@ -135,10 +135,10 @@ function v_5ttedit_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5tteditConfigParameters> | null = null,
+    config: Array<V5tteditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5tteditParametersTagged {
+): V5tteditParamsDictTagged {
     const params = {
         "@type": "mrtrix/5ttedit" as const,
         "info": info,
@@ -187,7 +187,7 @@ function v_5ttedit_params(
  * @returns Command-line arguments.
  */
 function v_5ttedit_cargs(
-    params: V5tteditParameters,
+    params: V5tteditParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -270,7 +270,7 @@ function v_5ttedit_cargs(
  * @returns Outputs object.
  */
 function v_5ttedit_outputs(
-    params: V5tteditParameters,
+    params: V5tteditParamsDict,
     execution: Execution,
 ): V5tteditOutputs {
     const ret: V5tteditOutputs = {
@@ -302,7 +302,7 @@ function v_5ttedit_outputs(
  * @returns NamedTuple of outputs (described in `V5tteditOutputs`).
  */
 function v_5ttedit_execute(
-    params: V5tteditParameters,
+    params: V5tteditParamsDict,
     runner: Runner | null = null,
 ): V5tteditOutputs {
     runner = runner || getGlobalRunner();
@@ -364,7 +364,7 @@ function v_5ttedit(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5tteditConfigParameters> | null = null,
+    config: Array<V5tteditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -375,10 +375,14 @@ function v_5ttedit(
 
 
 export {
+      V5tteditConfigParamsDict,
+      V5tteditConfigParamsDictTagged,
       V5tteditOutputs,
+      V5tteditParamsDict,
+      V5tteditParamsDictTagged,
       V_5TTEDIT_METADATA,
       v_5ttedit,
-      v_5ttedit_config_params,
+      v_5ttedit_config,
       v_5ttedit_execute,
       v_5ttedit_params,
 };

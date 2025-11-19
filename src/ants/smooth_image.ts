@@ -11,7 +11,7 @@ const SMOOTH_IMAGE_METADATA: Metadata = {
 };
 
 
-interface SmoothImageParameters {
+interface SmoothImageParamsDict {
     "@type"?: "ants/SmoothImage";
     "image_dimension": number;
     "image_ext": InputPathType;
@@ -20,11 +20,11 @@ interface SmoothImageParameters {
     "sigma_units"?: boolean | null | undefined;
     "median_filter"?: boolean | null | undefined;
 }
-type SmoothImageParametersTagged = Required<Pick<SmoothImageParameters, '@type'>> & SmoothImageParameters;
+type SmoothImageParamsDictTagged = Required<Pick<SmoothImageParamsDict, '@type'>> & SmoothImageParamsDict;
 
 
 /**
- * Output object returned when calling `SmoothImageParameters(...)`.
+ * Output object returned when calling `SmoothImageParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function smooth_image_params(
     out_image_ext: string,
     sigma_units: boolean | null = null,
     median_filter: boolean | null = null,
-): SmoothImageParametersTagged {
+): SmoothImageParamsDictTagged {
     const params = {
         "@type": "ants/SmoothImage" as const,
         "image_dimension": image_dimension,
@@ -86,7 +86,7 @@ function smooth_image_params(
  * @returns Command-line arguments.
  */
 function smooth_image_cargs(
-    params: SmoothImageParameters,
+    params: SmoothImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function smooth_image_cargs(
  * @returns Outputs object.
  */
 function smooth_image_outputs(
-    params: SmoothImageParameters,
+    params: SmoothImageParamsDict,
     execution: Execution,
 ): SmoothImageOutputs {
     const ret: SmoothImageOutputs = {
@@ -140,7 +140,7 @@ function smooth_image_outputs(
  * @returns NamedTuple of outputs (described in `SmoothImageOutputs`).
  */
 function smooth_image_execute(
-    params: SmoothImageParameters,
+    params: SmoothImageParamsDict,
     runner: Runner | null = null,
 ): SmoothImageOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function smooth_image(
 export {
       SMOOTH_IMAGE_METADATA,
       SmoothImageOutputs,
+      SmoothImageParamsDict,
+      SmoothImageParamsDictTagged,
       smooth_image,
       smooth_image_execute,
       smooth_image_params,

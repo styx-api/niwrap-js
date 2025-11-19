@@ -11,7 +11,7 @@ const SIENA_DIFF_METADATA: Metadata = {
 };
 
 
-interface SienaDiffParameters {
+interface SienaDiffParamsDict {
     "@type"?: "fsl/siena_diff";
     "input1_basename": string;
     "input2_basename": string;
@@ -22,11 +22,11 @@ interface SienaDiffParameters {
     "apply_std_mask_flag": boolean;
     "segment_options"?: string | null | undefined;
 }
-type SienaDiffParametersTagged = Required<Pick<SienaDiffParameters, '@type'>> & SienaDiffParameters;
+type SienaDiffParamsDictTagged = Required<Pick<SienaDiffParamsDict, '@type'>> & SienaDiffParamsDict;
 
 
 /**
- * Output object returned when calling `SienaDiffParameters(...)`.
+ * Output object returned when calling `SienaDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function siena_diff_params(
     ignore_z_flow_flag: boolean = false,
     apply_std_mask_flag: boolean = false,
     segment_options: string | null = null,
-): SienaDiffParametersTagged {
+): SienaDiffParamsDictTagged {
     const params = {
         "@type": "fsl/siena_diff" as const,
         "input1_basename": input1_basename,
@@ -90,7 +90,7 @@ function siena_diff_params(
  * @returns Command-line arguments.
  */
 function siena_diff_cargs(
-    params: SienaDiffParameters,
+    params: SienaDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function siena_diff_cargs(
  * @returns Outputs object.
  */
 function siena_diff_outputs(
-    params: SienaDiffParameters,
+    params: SienaDiffParamsDict,
     execution: Execution,
 ): SienaDiffOutputs {
     const ret: SienaDiffOutputs = {
@@ -159,7 +159,7 @@ function siena_diff_outputs(
  * @returns NamedTuple of outputs (described in `SienaDiffOutputs`).
  */
 function siena_diff_execute(
-    params: SienaDiffParameters,
+    params: SienaDiffParamsDict,
     runner: Runner | null = null,
 ): SienaDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -212,6 +212,8 @@ function siena_diff(
 export {
       SIENA_DIFF_METADATA,
       SienaDiffOutputs,
+      SienaDiffParamsDict,
+      SienaDiffParamsDictTagged,
       siena_diff,
       siena_diff_execute,
       siena_diff_params,

@@ -11,15 +11,15 @@ const LABEL2COLOUR_METADATA: Metadata = {
 };
 
 
-interface Label2colourConfigParameters {
+interface Label2colourConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Label2colourConfigParametersTagged = Required<Pick<Label2colourConfigParameters, '@type'>> & Label2colourConfigParameters;
+type Label2colourConfigParamsDictTagged = Required<Pick<Label2colourConfigParamsDict, '@type'>> & Label2colourConfigParamsDict;
 
 
-interface Label2colourParameters {
+interface Label2colourParamsDict {
     "@type"?: "mrtrix/label2colour";
     "lut"?: InputPathType | null | undefined;
     "info": boolean;
@@ -27,13 +27,13 @@ interface Label2colourParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Label2colourConfigParameters> | null | undefined;
+    "config"?: Array<Label2colourConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "nodes_in": InputPathType;
     "colour_out": string;
 }
-type Label2colourParametersTagged = Required<Pick<Label2colourParameters, '@type'>> & Label2colourParameters;
+type Label2colourParamsDictTagged = Required<Pick<Label2colourParamsDict, '@type'>> & Label2colourParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type Label2colourParametersTagged = Required<Pick<Label2colourParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function label2colour_config_params(
+function label2colour_config(
     key: string,
     value: string,
-): Label2colourConfigParametersTagged {
+): Label2colourConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function label2colour_config_params(
  * @returns Command-line arguments.
  */
 function label2colour_config_cargs(
-    params: Label2colourConfigParameters,
+    params: Label2colourConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function label2colour_config_cargs(
 
 
 /**
- * Output object returned when calling `Label2colourParameters(...)`.
+ * Output object returned when calling `Label2colourParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function label2colour_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Label2colourConfigParameters> | null = null,
+    config: Array<Label2colourConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Label2colourParametersTagged {
+): Label2colourParamsDictTagged {
     const params = {
         "@type": "mrtrix/label2colour" as const,
         "info": info,
@@ -157,7 +157,7 @@ function label2colour_params(
  * @returns Command-line arguments.
  */
 function label2colour_cargs(
-    params: Label2colourParameters,
+    params: Label2colourParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function label2colour_cargs(
  * @returns Outputs object.
  */
 function label2colour_outputs(
-    params: Label2colourParameters,
+    params: Label2colourParamsDict,
     execution: Execution,
 ): Label2colourOutputs {
     const ret: Label2colourOutputs = {
@@ -242,7 +242,7 @@ function label2colour_outputs(
  * @returns NamedTuple of outputs (described in `Label2colourOutputs`).
  */
 function label2colour_execute(
-    params: Label2colourParameters,
+    params: Label2colourParamsDict,
     runner: Runner | null = null,
 ): Label2colourOutputs {
     runner = runner || getGlobalRunner();
@@ -294,7 +294,7 @@ function label2colour(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Label2colourConfigParameters> | null = null,
+    config: Array<Label2colourConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -306,9 +306,13 @@ function label2colour(
 
 export {
       LABEL2COLOUR_METADATA,
+      Label2colourConfigParamsDict,
+      Label2colourConfigParamsDictTagged,
       Label2colourOutputs,
+      Label2colourParamsDict,
+      Label2colourParamsDictTagged,
       label2colour,
-      label2colour_config_params,
+      label2colour_config,
       label2colour_execute,
       label2colour_params,
 };

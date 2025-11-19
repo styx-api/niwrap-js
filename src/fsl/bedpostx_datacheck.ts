@@ -11,15 +11,15 @@ const BEDPOSTX_DATACHECK_METADATA: Metadata = {
 };
 
 
-interface BedpostxDatacheckParameters {
+interface BedpostxDatacheckParamsDict {
     "@type"?: "fsl/bedpostx_datacheck";
     "data_dir": string;
 }
-type BedpostxDatacheckParametersTagged = Required<Pick<BedpostxDatacheckParameters, '@type'>> & BedpostxDatacheckParameters;
+type BedpostxDatacheckParamsDictTagged = Required<Pick<BedpostxDatacheckParamsDict, '@type'>> & BedpostxDatacheckParamsDict;
 
 
 /**
- * Output object returned when calling `BedpostxDatacheckParameters(...)`.
+ * Output object returned when calling `BedpostxDatacheckParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface BedpostxDatacheckOutputs {
  */
 function bedpostx_datacheck_params(
     data_dir: string,
-): BedpostxDatacheckParametersTagged {
+): BedpostxDatacheckParamsDictTagged {
     const params = {
         "@type": "fsl/bedpostx_datacheck" as const,
         "data_dir": data_dir,
@@ -58,7 +58,7 @@ function bedpostx_datacheck_params(
  * @returns Command-line arguments.
  */
 function bedpostx_datacheck_cargs(
-    params: BedpostxDatacheckParameters,
+    params: BedpostxDatacheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function bedpostx_datacheck_cargs(
  * @returns Outputs object.
  */
 function bedpostx_datacheck_outputs(
-    params: BedpostxDatacheckParameters,
+    params: BedpostxDatacheckParamsDict,
     execution: Execution,
 ): BedpostxDatacheckOutputs {
     const ret: BedpostxDatacheckOutputs = {
@@ -102,7 +102,7 @@ function bedpostx_datacheck_outputs(
  * @returns NamedTuple of outputs (described in `BedpostxDatacheckOutputs`).
  */
 function bedpostx_datacheck_execute(
-    params: BedpostxDatacheckParameters,
+    params: BedpostxDatacheckParamsDict,
     runner: Runner | null = null,
 ): BedpostxDatacheckOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function bedpostx_datacheck(
 export {
       BEDPOSTX_DATACHECK_METADATA,
       BedpostxDatacheckOutputs,
+      BedpostxDatacheckParamsDict,
+      BedpostxDatacheckParamsDictTagged,
       bedpostx_datacheck,
       bedpostx_datacheck_execute,
       bedpostx_datacheck_params,

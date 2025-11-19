@@ -10,7 +10,7 @@ const CIFTI_LABEL_TO_ROI_METADATA: Metadata = {
 };
 
 
-interface CiftiLabelToRoiParameters {
+interface CiftiLabelToRoiParamsDict {
     "@type"?: "workbench/cifti-label-to-roi";
     "scalar-out": string;
     "label-name"?: string | null | undefined;
@@ -18,11 +18,11 @@ interface CiftiLabelToRoiParameters {
     "map"?: string | null | undefined;
     "label-in": InputPathType;
 }
-type CiftiLabelToRoiParametersTagged = Required<Pick<CiftiLabelToRoiParameters, '@type'>> & CiftiLabelToRoiParameters;
+type CiftiLabelToRoiParamsDictTagged = Required<Pick<CiftiLabelToRoiParamsDict, '@type'>> & CiftiLabelToRoiParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiLabelToRoiParameters(...)`.
+ * Output object returned when calling `CiftiLabelToRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function cifti_label_to_roi_params(
     label_key: number | null,
     map: string | null,
     label_in: InputPathType,
-): CiftiLabelToRoiParametersTagged {
+): CiftiLabelToRoiParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-to-roi" as const,
         "scalar-out": scalar_out,
@@ -89,7 +89,7 @@ function cifti_label_to_roi_params(
  * @returns Command-line arguments.
  */
 function cifti_label_to_roi_cargs(
-    params: CiftiLabelToRoiParameters,
+    params: CiftiLabelToRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function cifti_label_to_roi_cargs(
  * @returns Outputs object.
  */
 function cifti_label_to_roi_outputs(
-    params: CiftiLabelToRoiParameters,
+    params: CiftiLabelToRoiParamsDict,
     execution: Execution,
 ): CiftiLabelToRoiOutputs {
     const ret: CiftiLabelToRoiOutputs = {
@@ -142,7 +142,7 @@ function cifti_label_to_roi_outputs(
  * @returns NamedTuple of outputs (described in `CiftiLabelToRoiOutputs`).
  */
 function cifti_label_to_roi_execute(
-    params: CiftiLabelToRoiParameters,
+    params: CiftiLabelToRoiParamsDict,
     runner: Runner | null = null,
 ): CiftiLabelToRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function cifti_label_to_roi(
 export {
       CIFTI_LABEL_TO_ROI_METADATA,
       CiftiLabelToRoiOutputs,
+      CiftiLabelToRoiParamsDict,
+      CiftiLabelToRoiParamsDictTagged,
       cifti_label_to_roi,
       cifti_label_to_roi_execute,
       cifti_label_to_roi_params,

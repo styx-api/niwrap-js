@@ -11,7 +11,7 @@ const MRI_HEAD_METADATA: Metadata = {
 };
 
 
-interface MriHeadParameters {
+interface MriHeadParamsDict {
     "@type"?: "freesurfer/mri_head";
     "identify": boolean;
     "read": boolean;
@@ -20,11 +20,11 @@ interface MriHeadParameters {
     "usage": boolean;
     "question_mark_help": boolean;
 }
-type MriHeadParametersTagged = Required<Pick<MriHeadParameters, '@type'>> & MriHeadParameters;
+type MriHeadParamsDictTagged = Required<Pick<MriHeadParamsDict, '@type'>> & MriHeadParamsDict;
 
 
 /**
- * Output object returned when calling `MriHeadParameters(...)`.
+ * Output object returned when calling `MriHeadParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function mri_head_params(
     help: boolean = false,
     usage: boolean = false,
     question_mark_help: boolean = false,
-): MriHeadParametersTagged {
+): MriHeadParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_head" as const,
         "identify": identify,
@@ -80,7 +80,7 @@ function mri_head_params(
  * @returns Command-line arguments.
  */
 function mri_head_cargs(
-    params: MriHeadParameters,
+    params: MriHeadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function mri_head_cargs(
  * @returns Outputs object.
  */
 function mri_head_outputs(
-    params: MriHeadParameters,
+    params: MriHeadParamsDict,
     execution: Execution,
 ): MriHeadOutputs {
     const ret: MriHeadOutputs = {
@@ -141,7 +141,7 @@ function mri_head_outputs(
  * @returns NamedTuple of outputs (described in `MriHeadOutputs`).
  */
 function mri_head_execute(
-    params: MriHeadParameters,
+    params: MriHeadParamsDict,
     runner: Runner | null = null,
 ): MriHeadOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function mri_head(
 export {
       MRI_HEAD_METADATA,
       MriHeadOutputs,
+      MriHeadParamsDict,
+      MriHeadParamsDictTagged,
       mri_head,
       mri_head_execute,
       mri_head_params,

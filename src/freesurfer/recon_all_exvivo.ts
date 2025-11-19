@@ -11,17 +11,17 @@ const RECON_ALL_EXVIVO_METADATA: Metadata = {
 };
 
 
-interface ReconAllExvivoParameters {
+interface ReconAllExvivoParamsDict {
     "@type"?: "freesurfer/recon-all-exvivo";
     "subject_id": string;
     "hemisphere"?: string | null | undefined;
     "nocerebellum": boolean;
 }
-type ReconAllExvivoParametersTagged = Required<Pick<ReconAllExvivoParameters, '@type'>> & ReconAllExvivoParameters;
+type ReconAllExvivoParamsDictTagged = Required<Pick<ReconAllExvivoParamsDict, '@type'>> & ReconAllExvivoParamsDict;
 
 
 /**
- * Output object returned when calling `ReconAllExvivoParameters(...)`.
+ * Output object returned when calling `ReconAllExvivoParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function recon_all_exvivo_params(
     subject_id: string,
     hemisphere: string | null = null,
     nocerebellum: boolean = false,
-): ReconAllExvivoParametersTagged {
+): ReconAllExvivoParamsDictTagged {
     const params = {
         "@type": "freesurfer/recon-all-exvivo" as const,
         "subject_id": subject_id,
@@ -68,7 +68,7 @@ function recon_all_exvivo_params(
  * @returns Command-line arguments.
  */
 function recon_all_exvivo_cargs(
-    params: ReconAllExvivoParameters,
+    params: ReconAllExvivoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function recon_all_exvivo_cargs(
  * @returns Outputs object.
  */
 function recon_all_exvivo_outputs(
-    params: ReconAllExvivoParameters,
+    params: ReconAllExvivoParamsDict,
     execution: Execution,
 ): ReconAllExvivoOutputs {
     const ret: ReconAllExvivoOutputs = {
@@ -124,7 +124,7 @@ function recon_all_exvivo_outputs(
  * @returns NamedTuple of outputs (described in `ReconAllExvivoOutputs`).
  */
 function recon_all_exvivo_execute(
-    params: ReconAllExvivoParameters,
+    params: ReconAllExvivoParamsDict,
     runner: Runner | null = null,
 ): ReconAllExvivoOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function recon_all_exvivo(
 export {
       RECON_ALL_EXVIVO_METADATA,
       ReconAllExvivoOutputs,
+      ReconAllExvivoParamsDict,
+      ReconAllExvivoParamsDictTagged,
       recon_all_exvivo,
       recon_all_exvivo_execute,
       recon_all_exvivo_params,

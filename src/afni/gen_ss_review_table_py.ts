@@ -11,7 +11,7 @@ const GEN_SS_REVIEW_TABLE_PY_METADATA: Metadata = {
 };
 
 
-interface GenSsReviewTablePyParameters {
+interface GenSsReviewTablePyParamsDict {
     "@type"?: "afni/gen_ss_review_table.py";
     "infiles": Array<InputPathType>;
     "write_table"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface GenSsReviewTablePyParameters {
     "show_missing": boolean;
     "verbosity"?: number | null | undefined;
 }
-type GenSsReviewTablePyParametersTagged = Required<Pick<GenSsReviewTablePyParameters, '@type'>> & GenSsReviewTablePyParameters;
+type GenSsReviewTablePyParamsDictTagged = Required<Pick<GenSsReviewTablePyParamsDict, '@type'>> & GenSsReviewTablePyParamsDict;
 
 
 /**
- * Output object returned when calling `GenSsReviewTablePyParameters(...)`.
+ * Output object returned when calling `GenSsReviewTablePyParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function gen_ss_review_table_py_params(
     report_outliers_fill_style: string | null = null,
     show_missing: boolean = false,
     verbosity: number | null = null,
-): GenSsReviewTablePyParametersTagged {
+): GenSsReviewTablePyParamsDictTagged {
     const params = {
         "@type": "afni/gen_ss_review_table.py" as const,
         "infiles": infiles,
@@ -132,7 +132,7 @@ function gen_ss_review_table_py_params(
  * @returns Command-line arguments.
  */
 function gen_ss_review_table_py_cargs(
-    params: GenSsReviewTablePyParameters,
+    params: GenSsReviewTablePyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -211,7 +211,7 @@ function gen_ss_review_table_py_cargs(
  * @returns Outputs object.
  */
 function gen_ss_review_table_py_outputs(
-    params: GenSsReviewTablePyParameters,
+    params: GenSsReviewTablePyParamsDict,
     execution: Execution,
 ): GenSsReviewTablePyOutputs {
     const ret: GenSsReviewTablePyOutputs = {
@@ -238,7 +238,7 @@ function gen_ss_review_table_py_outputs(
  * @returns NamedTuple of outputs (described in `GenSsReviewTablePyOutputs`).
  */
 function gen_ss_review_table_py_execute(
-    params: GenSsReviewTablePyParameters,
+    params: GenSsReviewTablePyParamsDict,
     runner: Runner | null = null,
 ): GenSsReviewTablePyOutputs {
     runner = runner || getGlobalRunner();
@@ -303,6 +303,8 @@ function gen_ss_review_table_py(
 export {
       GEN_SS_REVIEW_TABLE_PY_METADATA,
       GenSsReviewTablePyOutputs,
+      GenSsReviewTablePyParamsDict,
+      GenSsReviewTablePyParamsDictTagged,
       gen_ss_review_table_py,
       gen_ss_review_table_py_execute,
       gen_ss_review_table_py_params,

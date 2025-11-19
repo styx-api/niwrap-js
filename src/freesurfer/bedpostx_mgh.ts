@@ -11,7 +11,7 @@ const BEDPOSTX_MGH_METADATA: Metadata = {
 };
 
 
-interface BedpostxMghParameters {
+interface BedpostxMghParamsDict {
     "@type"?: "freesurfer/bedpostx_mgh";
     "subject_directory": string;
     "fibres"?: number | null | undefined;
@@ -22,11 +22,11 @@ interface BedpostxMghParameters {
     "deconv_model"?: number | null | undefined;
     "gradient_nonlin": boolean;
 }
-type BedpostxMghParametersTagged = Required<Pick<BedpostxMghParameters, '@type'>> & BedpostxMghParameters;
+type BedpostxMghParamsDictTagged = Required<Pick<BedpostxMghParamsDict, '@type'>> & BedpostxMghParamsDict;
 
 
 /**
- * Output object returned when calling `BedpostxMghParameters(...)`.
+ * Output object returned when calling `BedpostxMghParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function bedpostx_mgh_params(
     sample_every: number | null = null,
     deconv_model: number | null = null,
     gradient_nonlin: boolean = false,
-): BedpostxMghParametersTagged {
+): BedpostxMghParamsDictTagged {
     const params = {
         "@type": "freesurfer/bedpostx_mgh" as const,
         "subject_directory": subject_directory,
@@ -98,7 +98,7 @@ function bedpostx_mgh_params(
  * @returns Command-line arguments.
  */
 function bedpostx_mgh_cargs(
-    params: BedpostxMghParameters,
+    params: BedpostxMghParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,7 +156,7 @@ function bedpostx_mgh_cargs(
  * @returns Outputs object.
  */
 function bedpostx_mgh_outputs(
-    params: BedpostxMghParameters,
+    params: BedpostxMghParamsDict,
     execution: Execution,
 ): BedpostxMghOutputs {
     const ret: BedpostxMghOutputs = {
@@ -181,7 +181,7 @@ function bedpostx_mgh_outputs(
  * @returns NamedTuple of outputs (described in `BedpostxMghOutputs`).
  */
 function bedpostx_mgh_execute(
-    params: BedpostxMghParameters,
+    params: BedpostxMghParamsDict,
     runner: Runner | null = null,
 ): BedpostxMghOutputs {
     runner = runner || getGlobalRunner();
@@ -234,6 +234,8 @@ function bedpostx_mgh(
 export {
       BEDPOSTX_MGH_METADATA,
       BedpostxMghOutputs,
+      BedpostxMghParamsDict,
+      BedpostxMghParamsDictTagged,
       bedpostx_mgh,
       bedpostx_mgh_execute,
       bedpostx_mgh_params,

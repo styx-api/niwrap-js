@@ -11,15 +11,15 @@ const GETFULLPATH_METADATA: Metadata = {
 };
 
 
-interface GetfullpathParameters {
+interface GetfullpathParamsDict {
     "@type"?: "freesurfer/getfullpath";
     "filename": string;
 }
-type GetfullpathParametersTagged = Required<Pick<GetfullpathParameters, '@type'>> & GetfullpathParameters;
+type GetfullpathParamsDictTagged = Required<Pick<GetfullpathParamsDict, '@type'>> & GetfullpathParamsDict;
 
 
 /**
- * Output object returned when calling `GetfullpathParameters(...)`.
+ * Output object returned when calling `GetfullpathParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface GetfullpathOutputs {
  */
 function getfullpath_params(
     filename: string,
-): GetfullpathParametersTagged {
+): GetfullpathParamsDictTagged {
     const params = {
         "@type": "freesurfer/getfullpath" as const,
         "filename": filename,
@@ -58,7 +58,7 @@ function getfullpath_params(
  * @returns Command-line arguments.
  */
 function getfullpath_cargs(
-    params: GetfullpathParameters,
+    params: GetfullpathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function getfullpath_cargs(
  * @returns Outputs object.
  */
 function getfullpath_outputs(
-    params: GetfullpathParameters,
+    params: GetfullpathParamsDict,
     execution: Execution,
 ): GetfullpathOutputs {
     const ret: GetfullpathOutputs = {
@@ -102,7 +102,7 @@ function getfullpath_outputs(
  * @returns NamedTuple of outputs (described in `GetfullpathOutputs`).
  */
 function getfullpath_execute(
-    params: GetfullpathParameters,
+    params: GetfullpathParamsDict,
     runner: Runner | null = null,
 ): GetfullpathOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function getfullpath(
 export {
       GETFULLPATH_METADATA,
       GetfullpathOutputs,
+      GetfullpathParamsDict,
+      GetfullpathParamsDictTagged,
       getfullpath,
       getfullpath_execute,
       getfullpath_params,

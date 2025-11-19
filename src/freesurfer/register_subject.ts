@@ -11,7 +11,7 @@ const REGISTER_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface RegisterSubjectParameters {
+interface RegisterSubjectParamsDict {
     "@type"?: "freesurfer/register_subject";
     "input_volume"?: InputPathType | null | undefined;
     "mask_volume"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface RegisterSubjectParameters {
     "log_file"?: InputPathType | null | undefined;
     "gca_file"?: InputPathType | null | undefined;
 }
-type RegisterSubjectParametersTagged = Required<Pick<RegisterSubjectParameters, '@type'>> & RegisterSubjectParameters;
+type RegisterSubjectParamsDictTagged = Required<Pick<RegisterSubjectParamsDict, '@type'>> & RegisterSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `RegisterSubjectParameters(...)`.
+ * Output object returned when calling `RegisterSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function register_subject_params(
     output_directory: string | null = null,
     log_file: InputPathType | null = null,
     gca_file: InputPathType | null = null,
-): RegisterSubjectParametersTagged {
+): RegisterSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/register_subject" as const,
     };
@@ -98,7 +98,7 @@ function register_subject_params(
  * @returns Command-line arguments.
  */
 function register_subject_cargs(
-    params: RegisterSubjectParameters,
+    params: RegisterSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function register_subject_cargs(
  * @returns Outputs object.
  */
 function register_subject_outputs(
-    params: RegisterSubjectParameters,
+    params: RegisterSubjectParamsDict,
     execution: Execution,
 ): RegisterSubjectOutputs {
     const ret: RegisterSubjectOutputs = {
@@ -161,7 +161,7 @@ function register_subject_outputs(
  * @returns NamedTuple of outputs (described in `RegisterSubjectOutputs`).
  */
 function register_subject_execute(
-    params: RegisterSubjectParameters,
+    params: RegisterSubjectParamsDict,
     runner: Runner | null = null,
 ): RegisterSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -210,6 +210,8 @@ function register_subject(
 export {
       REGISTER_SUBJECT_METADATA,
       RegisterSubjectOutputs,
+      RegisterSubjectParamsDict,
+      RegisterSubjectParamsDictTagged,
       register_subject,
       register_subject_execute,
       register_subject_params,

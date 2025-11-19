@@ -11,15 +11,15 @@ const FS_TUTORIAL_DATA_METADATA: Metadata = {
 };
 
 
-interface FsTutorialDataParameters {
+interface FsTutorialDataParamsDict {
     "@type"?: "freesurfer/fs_tutorial_data";
     "rsync_options"?: Array<string> | null | undefined;
 }
-type FsTutorialDataParametersTagged = Required<Pick<FsTutorialDataParameters, '@type'>> & FsTutorialDataParameters;
+type FsTutorialDataParamsDictTagged = Required<Pick<FsTutorialDataParamsDict, '@type'>> & FsTutorialDataParamsDict;
 
 
 /**
- * Output object returned when calling `FsTutorialDataParameters(...)`.
+ * Output object returned when calling `FsTutorialDataParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface FsTutorialDataOutputs {
  */
 function fs_tutorial_data_params(
     rsync_options: Array<string> | null = null,
-): FsTutorialDataParametersTagged {
+): FsTutorialDataParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_tutorial_data" as const,
     };
@@ -64,7 +64,7 @@ function fs_tutorial_data_params(
  * @returns Command-line arguments.
  */
 function fs_tutorial_data_cargs(
-    params: FsTutorialDataParameters,
+    params: FsTutorialDataParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function fs_tutorial_data_cargs(
  * @returns Outputs object.
  */
 function fs_tutorial_data_outputs(
-    params: FsTutorialDataParameters,
+    params: FsTutorialDataParamsDict,
     execution: Execution,
 ): FsTutorialDataOutputs {
     const ret: FsTutorialDataOutputs = {
@@ -111,7 +111,7 @@ function fs_tutorial_data_outputs(
  * @returns NamedTuple of outputs (described in `FsTutorialDataOutputs`).
  */
 function fs_tutorial_data_execute(
-    params: FsTutorialDataParameters,
+    params: FsTutorialDataParamsDict,
     runner: Runner | null = null,
 ): FsTutorialDataOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function fs_tutorial_data(
 export {
       FS_TUTORIAL_DATA_METADATA,
       FsTutorialDataOutputs,
+      FsTutorialDataParamsDict,
+      FsTutorialDataParamsDictTagged,
       fs_tutorial_data,
       fs_tutorial_data_execute,
       fs_tutorial_data_params,

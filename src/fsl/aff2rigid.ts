@@ -11,16 +11,16 @@ const AFF2RIGID_METADATA: Metadata = {
 };
 
 
-interface Aff2rigidParameters {
+interface Aff2rigidParamsDict {
     "@type"?: "fsl/aff2rigid";
     "input_transform": InputPathType;
     "output_transform": string;
 }
-type Aff2rigidParametersTagged = Required<Pick<Aff2rigidParameters, '@type'>> & Aff2rigidParameters;
+type Aff2rigidParamsDictTagged = Required<Pick<Aff2rigidParamsDict, '@type'>> & Aff2rigidParamsDict;
 
 
 /**
- * Output object returned when calling `Aff2rigidParameters(...)`.
+ * Output object returned when calling `Aff2rigidParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface Aff2rigidOutputs {
 function aff2rigid_params(
     input_transform: InputPathType,
     output_transform: string,
-): Aff2rigidParametersTagged {
+): Aff2rigidParamsDictTagged {
     const params = {
         "@type": "fsl/aff2rigid" as const,
         "input_transform": input_transform,
@@ -62,7 +62,7 @@ function aff2rigid_params(
  * @returns Command-line arguments.
  */
 function aff2rigid_cargs(
-    params: Aff2rigidParameters,
+    params: Aff2rigidParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function aff2rigid_cargs(
  * @returns Outputs object.
  */
 function aff2rigid_outputs(
-    params: Aff2rigidParameters,
+    params: Aff2rigidParamsDict,
     execution: Execution,
 ): Aff2rigidOutputs {
     const ret: Aff2rigidOutputs = {
@@ -107,7 +107,7 @@ function aff2rigid_outputs(
  * @returns NamedTuple of outputs (described in `Aff2rigidOutputs`).
  */
 function aff2rigid_execute(
-    params: Aff2rigidParameters,
+    params: Aff2rigidParamsDict,
     runner: Runner | null = null,
 ): Aff2rigidOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function aff2rigid(
 export {
       AFF2RIGID_METADATA,
       Aff2rigidOutputs,
+      Aff2rigidParamsDict,
+      Aff2rigidParamsDictTagged,
       aff2rigid,
       aff2rigid_execute,
       aff2rigid_params,

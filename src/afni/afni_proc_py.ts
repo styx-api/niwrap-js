@@ -11,7 +11,7 @@ const AFNI_PROC_PY_METADATA: Metadata = {
 };
 
 
-interface AfniProcPyParameters {
+interface AfniProcPyParamsDict {
     "@type"?: "afni/afni_proc.py";
     "dsets": Array<InputPathType>;
     "subj_id": string;
@@ -25,11 +25,11 @@ interface AfniProcPyParameters {
     "copy_anat"?: InputPathType | null | undefined;
     "regress_params"?: Array<string> | null | undefined;
 }
-type AfniProcPyParametersTagged = Required<Pick<AfniProcPyParameters, '@type'>> & AfniProcPyParameters;
+type AfniProcPyParamsDictTagged = Required<Pick<AfniProcPyParamsDict, '@type'>> & AfniProcPyParamsDict;
 
 
 /**
- * Output object returned when calling `AfniProcPyParameters(...)`.
+ * Output object returned when calling `AfniProcPyParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function afni_proc_py_params(
     copy_files: Array<InputPathType> | null = null,
     copy_anat: InputPathType | null = null,
     regress_params: Array<string> | null = null,
-): AfniProcPyParametersTagged {
+): AfniProcPyParamsDictTagged {
     const params = {
         "@type": "afni/afni_proc.py" as const,
         "dsets": dsets,
@@ -118,7 +118,7 @@ function afni_proc_py_params(
  * @returns Command-line arguments.
  */
 function afni_proc_py_cargs(
-    params: AfniProcPyParameters,
+    params: AfniProcPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -166,7 +166,7 @@ function afni_proc_py_cargs(
  * @returns Outputs object.
  */
 function afni_proc_py_outputs(
-    params: AfniProcPyParameters,
+    params: AfniProcPyParamsDict,
     execution: Execution,
 ): AfniProcPyOutputs {
     const ret: AfniProcPyOutputs = {
@@ -192,7 +192,7 @@ function afni_proc_py_outputs(
  * @returns NamedTuple of outputs (described in `AfniProcPyOutputs`).
  */
 function afni_proc_py_execute(
-    params: AfniProcPyParameters,
+    params: AfniProcPyParamsDict,
     runner: Runner | null = null,
 ): AfniProcPyOutputs {
     runner = runner || getGlobalRunner();
@@ -251,6 +251,8 @@ function afni_proc_py(
 export {
       AFNI_PROC_PY_METADATA,
       AfniProcPyOutputs,
+      AfniProcPyParamsDict,
+      AfniProcPyParamsDictTagged,
       afni_proc_py,
       afni_proc_py_execute,
       afni_proc_py_params,

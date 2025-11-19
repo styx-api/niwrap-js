@@ -11,7 +11,7 @@ const V_3D_MANN_WHITNEY_METADATA: Metadata = {
 };
 
 
-interface V3dMannWhitneyParameters {
+interface V3dMannWhitneyParamsDict {
     "@type"?: "afni/3dMannWhitney";
     "dset1_x": Array<string>;
     "dset2_y": Array<string>;
@@ -19,11 +19,11 @@ interface V3dMannWhitneyParameters {
     "workmem"?: number | null | undefined;
     "voxel_num"?: number | null | undefined;
 }
-type V3dMannWhitneyParametersTagged = Required<Pick<V3dMannWhitneyParameters, '@type'>> & V3dMannWhitneyParameters;
+type V3dMannWhitneyParamsDictTagged = Required<Pick<V3dMannWhitneyParamsDict, '@type'>> & V3dMannWhitneyParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMannWhitneyParameters(...)`.
+ * Output object returned when calling `V3dMannWhitneyParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function v_3d_mann_whitney_params(
     output_prefix: string,
     workmem: number | null = null,
     voxel_num: number | null = null,
-): V3dMannWhitneyParametersTagged {
+): V3dMannWhitneyParamsDictTagged {
     const params = {
         "@type": "afni/3dMannWhitney" as const,
         "dset1_x": dset1_x,
@@ -78,7 +78,7 @@ function v_3d_mann_whitney_params(
  * @returns Command-line arguments.
  */
 function v_3d_mann_whitney_cargs(
-    params: V3dMannWhitneyParameters,
+    params: V3dMannWhitneyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function v_3d_mann_whitney_cargs(
  * @returns Outputs object.
  */
 function v_3d_mann_whitney_outputs(
-    params: V3dMannWhitneyParameters,
+    params: V3dMannWhitneyParamsDict,
     execution: Execution,
 ): V3dMannWhitneyOutputs {
     const ret: V3dMannWhitneyOutputs = {
@@ -145,7 +145,7 @@ function v_3d_mann_whitney_outputs(
  * @returns NamedTuple of outputs (described in `V3dMannWhitneyOutputs`).
  */
 function v_3d_mann_whitney_execute(
-    params: V3dMannWhitneyParameters,
+    params: V3dMannWhitneyParamsDict,
     runner: Runner | null = null,
 ): V3dMannWhitneyOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function v_3d_mann_whitney(
 
 export {
       V3dMannWhitneyOutputs,
+      V3dMannWhitneyParamsDict,
+      V3dMannWhitneyParamsDictTagged,
       V_3D_MANN_WHITNEY_METADATA,
       v_3d_mann_whitney,
       v_3d_mann_whitney_execute,

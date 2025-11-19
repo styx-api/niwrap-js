@@ -11,7 +11,7 @@ const MRIS_COMPUTE_OVERLAP_METADATA: Metadata = {
 };
 
 
-interface MrisComputeOverlapParameters {
+interface MrisComputeOverlapParamsDict {
     "@type"?: "freesurfer/mris_compute_overlap";
     "subject": string;
     "hemi": string;
@@ -22,11 +22,11 @@ interface MrisComputeOverlapParameters {
     "log_file"?: string | null | undefined;
     "brain_volume"?: InputPathType | null | undefined;
 }
-type MrisComputeOverlapParametersTagged = Required<Pick<MrisComputeOverlapParameters, '@type'>> & MrisComputeOverlapParameters;
+type MrisComputeOverlapParamsDictTagged = Required<Pick<MrisComputeOverlapParamsDict, '@type'>> & MrisComputeOverlapParamsDict;
 
 
 /**
- * Output object returned when calling `MrisComputeOverlapParameters(...)`.
+ * Output object returned when calling `MrisComputeOverlapParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function mris_compute_overlap_params(
     percentage: boolean = false,
     log_file: string | null = null,
     brain_volume: InputPathType | null = null,
-): MrisComputeOverlapParametersTagged {
+): MrisComputeOverlapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_compute_overlap" as const,
         "subject": subject,
@@ -90,7 +90,7 @@ function mris_compute_overlap_params(
  * @returns Command-line arguments.
  */
 function mris_compute_overlap_cargs(
-    params: MrisComputeOverlapParameters,
+    params: MrisComputeOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function mris_compute_overlap_cargs(
  * @returns Outputs object.
  */
 function mris_compute_overlap_outputs(
-    params: MrisComputeOverlapParameters,
+    params: MrisComputeOverlapParamsDict,
     execution: Execution,
 ): MrisComputeOverlapOutputs {
     const ret: MrisComputeOverlapOutputs = {
@@ -153,7 +153,7 @@ function mris_compute_overlap_outputs(
  * @returns NamedTuple of outputs (described in `MrisComputeOverlapOutputs`).
  */
 function mris_compute_overlap_execute(
-    params: MrisComputeOverlapParameters,
+    params: MrisComputeOverlapParamsDict,
     runner: Runner | null = null,
 ): MrisComputeOverlapOutputs {
     runner = runner || getGlobalRunner();
@@ -206,6 +206,8 @@ function mris_compute_overlap(
 export {
       MRIS_COMPUTE_OVERLAP_METADATA,
       MrisComputeOverlapOutputs,
+      MrisComputeOverlapParamsDict,
+      MrisComputeOverlapParamsDictTagged,
       mris_compute_overlap,
       mris_compute_overlap_execute,
       mris_compute_overlap_params,

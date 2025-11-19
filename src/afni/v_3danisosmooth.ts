@@ -11,7 +11,7 @@ const V_3DANISOSMOOTH_METADATA: Metadata = {
 };
 
 
-interface V3danisosmoothParameters {
+interface V3danisosmoothParamsDict {
     "@type"?: "afni/3danisosmooth";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
@@ -36,11 +36,11 @@ interface V3danisosmoothParameters {
     "matchorig_flag": boolean;
     "help_flag": boolean;
 }
-type V3danisosmoothParametersTagged = Required<Pick<V3danisosmoothParameters, '@type'>> & V3danisosmoothParameters;
+type V3danisosmoothParamsDictTagged = Required<Pick<V3danisosmoothParamsDict, '@type'>> & V3danisosmoothParamsDict;
 
 
 /**
- * Output object returned when calling `V3danisosmoothParameters(...)`.
+ * Output object returned when calling `V3danisosmoothParamsDict(...)`.
  *
  * @interface
  */
@@ -139,7 +139,7 @@ function v_3danisosmooth_params(
     datum_type: string | null = null,
     matchorig_flag: boolean = false,
     help_flag: boolean = false,
-): V3danisosmoothParametersTagged {
+): V3danisosmoothParamsDictTagged {
     const params = {
         "@type": "afni/3danisosmooth" as const,
         "input_dataset": input_dataset,
@@ -196,7 +196,7 @@ function v_3danisosmooth_params(
  * @returns Command-line arguments.
  */
 function v_3danisosmooth_cargs(
-    params: V3danisosmoothParameters,
+    params: V3danisosmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -305,7 +305,7 @@ function v_3danisosmooth_cargs(
  * @returns Outputs object.
  */
 function v_3danisosmooth_outputs(
-    params: V3danisosmoothParameters,
+    params: V3danisosmoothParamsDict,
     execution: Execution,
 ): V3danisosmoothOutputs {
     const ret: V3danisosmoothOutputs = {
@@ -339,7 +339,7 @@ function v_3danisosmooth_outputs(
  * @returns NamedTuple of outputs (described in `V3danisosmoothOutputs`).
  */
 function v_3danisosmooth_execute(
-    params: V3danisosmoothParameters,
+    params: V3danisosmoothParamsDict,
     runner: Runner | null = null,
 ): V3danisosmoothOutputs {
     runner = runner || getGlobalRunner();
@@ -419,6 +419,8 @@ function v_3danisosmooth(
 
 export {
       V3danisosmoothOutputs,
+      V3danisosmoothParamsDict,
+      V3danisosmoothParamsDictTagged,
       V_3DANISOSMOOTH_METADATA,
       v_3danisosmooth,
       v_3danisosmooth_execute,

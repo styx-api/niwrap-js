@@ -11,16 +11,16 @@ const DMRI_COLORED_FA_METADATA: Metadata = {
 };
 
 
-interface DmriColoredFaParameters {
+interface DmriColoredFaParamsDict {
     "@type"?: "freesurfer/dmri_coloredFA";
     "input_volume": InputPathType;
     "output_volume": string;
 }
-type DmriColoredFaParametersTagged = Required<Pick<DmriColoredFaParameters, '@type'>> & DmriColoredFaParameters;
+type DmriColoredFaParamsDictTagged = Required<Pick<DmriColoredFaParamsDict, '@type'>> & DmriColoredFaParamsDict;
 
 
 /**
- * Output object returned when calling `DmriColoredFaParameters(...)`.
+ * Output object returned when calling `DmriColoredFaParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface DmriColoredFaOutputs {
 function dmri_colored_fa_params(
     input_volume: InputPathType,
     output_volume: string = "colored_FA",
-): DmriColoredFaParametersTagged {
+): DmriColoredFaParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_coloredFA" as const,
         "input_volume": input_volume,
@@ -66,7 +66,7 @@ function dmri_colored_fa_params(
  * @returns Command-line arguments.
  */
 function dmri_colored_fa_cargs(
-    params: DmriColoredFaParameters,
+    params: DmriColoredFaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function dmri_colored_fa_cargs(
  * @returns Outputs object.
  */
 function dmri_colored_fa_outputs(
-    params: DmriColoredFaParameters,
+    params: DmriColoredFaParamsDict,
     execution: Execution,
 ): DmriColoredFaOutputs {
     const ret: DmriColoredFaOutputs = {
@@ -112,7 +112,7 @@ function dmri_colored_fa_outputs(
  * @returns NamedTuple of outputs (described in `DmriColoredFaOutputs`).
  */
 function dmri_colored_fa_execute(
-    params: DmriColoredFaParameters,
+    params: DmriColoredFaParamsDict,
     runner: Runner | null = null,
 ): DmriColoredFaOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function dmri_colored_fa(
 export {
       DMRI_COLORED_FA_METADATA,
       DmriColoredFaOutputs,
+      DmriColoredFaParamsDict,
+      DmriColoredFaParamsDictTagged,
       dmri_colored_fa,
       dmri_colored_fa_execute,
       dmri_colored_fa_params,

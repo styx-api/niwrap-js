@@ -11,7 +11,7 @@ const V_3D_LOCAL_PV_METADATA: Metadata = {
 };
 
 
-interface V3dLocalPvParameters {
+interface V3dLocalPvParamsDict {
     "@type"?: "afni/3dLocalPV";
     "input_dataset": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -25,11 +25,11 @@ interface V3dLocalPvParameters {
     "vnorm": boolean;
     "vproj"?: string | null | undefined;
 }
-type V3dLocalPvParametersTagged = Required<Pick<V3dLocalPvParameters, '@type'>> & V3dLocalPvParameters;
+type V3dLocalPvParamsDictTagged = Required<Pick<V3dLocalPvParamsDict, '@type'>> & V3dLocalPvParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLocalPvParameters(...)`.
+ * Output object returned when calling `V3dLocalPvParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function v_3d_local_pv_params(
     polort: number | null = null,
     vnorm: boolean = false,
     vproj: string | null = null,
-): V3dLocalPvParametersTagged {
+): V3dLocalPvParamsDictTagged {
     const params = {
         "@type": "afni/3dLocalPV" as const,
         "input_dataset": input_dataset,
@@ -124,7 +124,7 @@ function v_3d_local_pv_params(
  * @returns Command-line arguments.
  */
 function v_3d_local_pv_cargs(
-    params: V3dLocalPvParameters,
+    params: V3dLocalPvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -194,7 +194,7 @@ function v_3d_local_pv_cargs(
  * @returns Outputs object.
  */
 function v_3d_local_pv_outputs(
-    params: V3dLocalPvParameters,
+    params: V3dLocalPvParamsDict,
     execution: Execution,
 ): V3dLocalPvOutputs {
     const ret: V3dLocalPvOutputs = {
@@ -222,7 +222,7 @@ function v_3d_local_pv_outputs(
  * @returns NamedTuple of outputs (described in `V3dLocalPvOutputs`).
  */
 function v_3d_local_pv_execute(
-    params: V3dLocalPvParameters,
+    params: V3dLocalPvParamsDict,
     runner: Runner | null = null,
 ): V3dLocalPvOutputs {
     runner = runner || getGlobalRunner();
@@ -280,6 +280,8 @@ function v_3d_local_pv(
 
 export {
       V3dLocalPvOutputs,
+      V3dLocalPvParamsDict,
+      V3dLocalPvParamsDictTagged,
       V_3D_LOCAL_PV_METADATA,
       v_3d_local_pv,
       v_3d_local_pv_execute,

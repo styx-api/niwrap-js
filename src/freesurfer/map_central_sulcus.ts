@@ -11,7 +11,7 @@ const MAP_CENTRAL_SULCUS_METADATA: Metadata = {
 };
 
 
-interface MapCentralSulcusParameters {
+interface MapCentralSulcusParamsDict {
     "@type"?: "freesurfer/map_central_sulcus";
     "subjid": string;
     "process_directive": string;
@@ -50,11 +50,11 @@ interface MapCentralSulcusParameters {
     "mail_username"?: string | null | undefined;
     "threads"?: number | null | undefined;
 }
-type MapCentralSulcusParametersTagged = Required<Pick<MapCentralSulcusParameters, '@type'>> & MapCentralSulcusParameters;
+type MapCentralSulcusParamsDictTagged = Required<Pick<MapCentralSulcusParamsDict, '@type'>> & MapCentralSulcusParamsDict;
 
 
 /**
- * Output object returned when calling `MapCentralSulcusParameters(...)`.
+ * Output object returned when calling `MapCentralSulcusParamsDict(...)`.
  *
  * @interface
  */
@@ -153,7 +153,7 @@ function map_central_sulcus_params(
     schwartzya3t_atlas: boolean = false,
     mail_username: string | null = null,
     threads: number | null = null,
-): MapCentralSulcusParametersTagged {
+): MapCentralSulcusParamsDictTagged {
     const params = {
         "@type": "freesurfer/map_central_sulcus" as const,
         "subjid": subjid,
@@ -238,7 +238,7 @@ function map_central_sulcus_params(
  * @returns Command-line arguments.
  */
 function map_central_sulcus_cargs(
-    params: MapCentralSulcusParameters,
+    params: MapCentralSulcusParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -411,7 +411,7 @@ function map_central_sulcus_cargs(
  * @returns Outputs object.
  */
 function map_central_sulcus_outputs(
-    params: MapCentralSulcusParameters,
+    params: MapCentralSulcusParamsDict,
     execution: Execution,
 ): MapCentralSulcusOutputs {
     const ret: MapCentralSulcusOutputs = {
@@ -438,7 +438,7 @@ function map_central_sulcus_outputs(
  * @returns NamedTuple of outputs (described in `MapCentralSulcusOutputs`).
  */
 function map_central_sulcus_execute(
-    params: MapCentralSulcusParameters,
+    params: MapCentralSulcusParamsDict,
     runner: Runner | null = null,
 ): MapCentralSulcusOutputs {
     runner = runner || getGlobalRunner();
@@ -547,6 +547,8 @@ function map_central_sulcus(
 export {
       MAP_CENTRAL_SULCUS_METADATA,
       MapCentralSulcusOutputs,
+      MapCentralSulcusParamsDict,
+      MapCentralSulcusParamsDictTagged,
       map_central_sulcus,
       map_central_sulcus_execute,
       map_central_sulcus_params,

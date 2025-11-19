@@ -11,7 +11,7 @@ const DMRI_PROJECT_END_POINTS_METADATA: Metadata = {
 };
 
 
-interface DmriProjectEndPointsParameters {
+interface DmriProjectEndPointsParamsDict {
     "@type"?: "freesurfer/dmri_projectEndPoints";
     "streamline_file": InputPathType;
     "left_surface_file": InputPathType;
@@ -20,11 +20,11 @@ interface DmriProjectEndPointsParameters {
     "right_overlay_file": string;
     "reference_image": InputPathType;
 }
-type DmriProjectEndPointsParametersTagged = Required<Pick<DmriProjectEndPointsParameters, '@type'>> & DmriProjectEndPointsParameters;
+type DmriProjectEndPointsParamsDictTagged = Required<Pick<DmriProjectEndPointsParamsDict, '@type'>> & DmriProjectEndPointsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriProjectEndPointsParameters(...)`.
+ * Output object returned when calling `DmriProjectEndPointsParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function dmri_project_end_points_params(
     left_overlay_file: string,
     right_overlay_file: string,
     reference_image: InputPathType,
-): DmriProjectEndPointsParametersTagged {
+): DmriProjectEndPointsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_projectEndPoints" as const,
         "streamline_file": streamline_file,
@@ -86,7 +86,7 @@ function dmri_project_end_points_params(
  * @returns Command-line arguments.
  */
 function dmri_project_end_points_cargs(
-    params: DmriProjectEndPointsParameters,
+    params: DmriProjectEndPointsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function dmri_project_end_points_cargs(
  * @returns Outputs object.
  */
 function dmri_project_end_points_outputs(
-    params: DmriProjectEndPointsParameters,
+    params: DmriProjectEndPointsParamsDict,
     execution: Execution,
 ): DmriProjectEndPointsOutputs {
     const ret: DmriProjectEndPointsOutputs = {
@@ -155,7 +155,7 @@ function dmri_project_end_points_outputs(
  * @returns NamedTuple of outputs (described in `DmriProjectEndPointsOutputs`).
  */
 function dmri_project_end_points_execute(
-    params: DmriProjectEndPointsParameters,
+    params: DmriProjectEndPointsParamsDict,
     runner: Runner | null = null,
 ): DmriProjectEndPointsOutputs {
     runner = runner || getGlobalRunner();
@@ -204,6 +204,8 @@ function dmri_project_end_points(
 export {
       DMRI_PROJECT_END_POINTS_METADATA,
       DmriProjectEndPointsOutputs,
+      DmriProjectEndPointsParamsDict,
+      DmriProjectEndPointsParamsDictTagged,
       dmri_project_end_points,
       dmri_project_end_points_execute,
       dmri_project_end_points_params,

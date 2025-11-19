@@ -11,7 +11,7 @@ const MAP_ALL_LABELS_METADATA: Metadata = {
 };
 
 
-interface MapAllLabelsParameters {
+interface MapAllLabelsParamsDict {
     "@type"?: "freesurfer/map_all_labels";
     "which": string;
     "fname": string;
@@ -20,11 +20,11 @@ interface MapAllLabelsParameters {
     "subjects": Array<string>;
     "output": string;
 }
-type MapAllLabelsParametersTagged = Required<Pick<MapAllLabelsParameters, '@type'>> & MapAllLabelsParameters;
+type MapAllLabelsParamsDictTagged = Required<Pick<MapAllLabelsParamsDict, '@type'>> & MapAllLabelsParamsDict;
 
 
 /**
- * Output object returned when calling `MapAllLabelsParameters(...)`.
+ * Output object returned when calling `MapAllLabelsParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function map_all_labels_params(
     spherical_surf: string,
     subjects: Array<string>,
     output: string,
-): MapAllLabelsParametersTagged {
+): MapAllLabelsParamsDictTagged {
     const params = {
         "@type": "freesurfer/map_all_labels" as const,
         "which": which,
@@ -82,7 +82,7 @@ function map_all_labels_params(
  * @returns Command-line arguments.
  */
 function map_all_labels_cargs(
-    params: MapAllLabelsParameters,
+    params: MapAllLabelsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function map_all_labels_cargs(
  * @returns Outputs object.
  */
 function map_all_labels_outputs(
-    params: MapAllLabelsParameters,
+    params: MapAllLabelsParamsDict,
     execution: Execution,
 ): MapAllLabelsOutputs {
     const ret: MapAllLabelsOutputs = {
@@ -132,7 +132,7 @@ function map_all_labels_outputs(
  * @returns NamedTuple of outputs (described in `MapAllLabelsOutputs`).
  */
 function map_all_labels_execute(
-    params: MapAllLabelsParameters,
+    params: MapAllLabelsParamsDict,
     runner: Runner | null = null,
 ): MapAllLabelsOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function map_all_labels(
 export {
       MAP_ALL_LABELS_METADATA,
       MapAllLabelsOutputs,
+      MapAllLabelsParamsDict,
+      MapAllLabelsParamsDictTagged,
       map_all_labels,
       map_all_labels_execute,
       map_all_labels_params,

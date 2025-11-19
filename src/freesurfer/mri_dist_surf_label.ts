@@ -11,17 +11,17 @@ const MRI_DIST_SURF_LABEL_METADATA: Metadata = {
 };
 
 
-interface MriDistSurfLabelParameters {
+interface MriDistSurfLabelParamsDict {
     "@type"?: "freesurfer/mri_dist_surf_label";
     "surface": InputPathType;
     "label_file": InputPathType;
     "output": string;
 }
-type MriDistSurfLabelParametersTagged = Required<Pick<MriDistSurfLabelParameters, '@type'>> & MriDistSurfLabelParameters;
+type MriDistSurfLabelParamsDictTagged = Required<Pick<MriDistSurfLabelParamsDict, '@type'>> & MriDistSurfLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MriDistSurfLabelParameters(...)`.
+ * Output object returned when calling `MriDistSurfLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_dist_surf_label_params(
     surface: InputPathType,
     label_file: InputPathType,
     output: string,
-): MriDistSurfLabelParametersTagged {
+): MriDistSurfLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_dist_surf_label" as const,
         "surface": surface,
@@ -70,7 +70,7 @@ function mri_dist_surf_label_params(
  * @returns Command-line arguments.
  */
 function mri_dist_surf_label_cargs(
-    params: MriDistSurfLabelParameters,
+    params: MriDistSurfLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_dist_surf_label_cargs(
  * @returns Outputs object.
  */
 function mri_dist_surf_label_outputs(
-    params: MriDistSurfLabelParameters,
+    params: MriDistSurfLabelParamsDict,
     execution: Execution,
 ): MriDistSurfLabelOutputs {
     const ret: MriDistSurfLabelOutputs = {
@@ -117,7 +117,7 @@ function mri_dist_surf_label_outputs(
  * @returns NamedTuple of outputs (described in `MriDistSurfLabelOutputs`).
  */
 function mri_dist_surf_label_execute(
-    params: MriDistSurfLabelParameters,
+    params: MriDistSurfLabelParamsDict,
     runner: Runner | null = null,
 ): MriDistSurfLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_dist_surf_label(
 export {
       MRI_DIST_SURF_LABEL_METADATA,
       MriDistSurfLabelOutputs,
+      MriDistSurfLabelParamsDict,
+      MriDistSurfLabelParamsDictTagged,
       mri_dist_surf_label,
       mri_dist_surf_label_execute,
       mri_dist_surf_label_params,

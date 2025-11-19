@@ -11,7 +11,7 @@ const GCATRAIN_METADATA: Metadata = {
 };
 
 
-interface GcatrainParameters {
+interface GcatrainParamsDict {
     "@type"?: "freesurfer/gcatrain";
     "gcadir": string;
     "subjectlistfile": InputPathType;
@@ -33,11 +33,11 @@ interface GcatrainParameters {
     "nu12_flag": boolean;
     "no_emreg": boolean;
 }
-type GcatrainParametersTagged = Required<Pick<GcatrainParameters, '@type'>> & GcatrainParameters;
+type GcatrainParamsDictTagged = Required<Pick<GcatrainParamsDict, '@type'>> & GcatrainParamsDict;
 
 
 /**
- * Output object returned when calling `GcatrainParameters(...)`.
+ * Output object returned when calling `GcatrainParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function gcatrain_params(
     nu10_flag: boolean = false,
     nu12_flag: boolean = false,
     no_emreg: boolean = false,
-): GcatrainParametersTagged {
+): GcatrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/gcatrain" as const,
         "gcadir": gcadir,
@@ -140,7 +140,7 @@ function gcatrain_params(
  * @returns Command-line arguments.
  */
 function gcatrain_cargs(
-    params: GcatrainParameters,
+    params: GcatrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -235,7 +235,7 @@ function gcatrain_cargs(
  * @returns Outputs object.
  */
 function gcatrain_outputs(
-    params: GcatrainParameters,
+    params: GcatrainParamsDict,
     execution: Execution,
 ): GcatrainOutputs {
     const ret: GcatrainOutputs = {
@@ -260,7 +260,7 @@ function gcatrain_outputs(
  * @returns NamedTuple of outputs (described in `GcatrainOutputs`).
  */
 function gcatrain_execute(
-    params: GcatrainParameters,
+    params: GcatrainParamsDict,
     runner: Runner | null = null,
 ): GcatrainOutputs {
     runner = runner || getGlobalRunner();
@@ -335,6 +335,8 @@ function gcatrain(
 export {
       GCATRAIN_METADATA,
       GcatrainOutputs,
+      GcatrainParamsDict,
+      GcatrainParamsDictTagged,
       gcatrain,
       gcatrain_execute,
       gcatrain_params,

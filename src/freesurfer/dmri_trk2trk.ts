@@ -11,7 +11,7 @@ const DMRI_TRK2TRK_METADATA: Metadata = {
 };
 
 
-interface DmriTrk2trkParameters {
+interface DmriTrk2trkParamsDict {
     "@type"?: "freesurfer/dmri_trk2trk";
     "in_trk": Array<InputPathType>;
     "in_asc"?: Array<InputPathType> | null | undefined;
@@ -41,11 +41,11 @@ interface DmriTrk2trkParameters {
     "debug_flag": boolean;
     "check_opts": boolean;
 }
-type DmriTrk2trkParametersTagged = Required<Pick<DmriTrk2trkParameters, '@type'>> & DmriTrk2trkParameters;
+type DmriTrk2trkParamsDictTagged = Required<Pick<DmriTrk2trkParamsDict, '@type'>> & DmriTrk2trkParamsDict;
 
 
 /**
- * Output object returned when calling `DmriTrk2trkParameters(...)`.
+ * Output object returned when calling `DmriTrk2trkParamsDict(...)`.
  *
  * @interface
  */
@@ -130,7 +130,7 @@ function dmri_trk2trk_params(
     smooth_flag: boolean = false,
     debug_flag: boolean = false,
     check_opts: boolean = false,
-): DmriTrk2trkParametersTagged {
+): DmriTrk2trkParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_trk2trk" as const,
         "in_trk": in_trk,
@@ -212,7 +212,7 @@ function dmri_trk2trk_params(
  * @returns Command-line arguments.
  */
 function dmri_trk2trk_cargs(
-    params: DmriTrk2trkParameters,
+    params: DmriTrk2trkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -369,7 +369,7 @@ function dmri_trk2trk_cargs(
  * @returns Outputs object.
  */
 function dmri_trk2trk_outputs(
-    params: DmriTrk2trkParameters,
+    params: DmriTrk2trkParamsDict,
     execution: Execution,
 ): DmriTrk2trkOutputs {
     const ret: DmriTrk2trkOutputs = {
@@ -397,7 +397,7 @@ function dmri_trk2trk_outputs(
  * @returns NamedTuple of outputs (described in `DmriTrk2trkOutputs`).
  */
 function dmri_trk2trk_execute(
-    params: DmriTrk2trkParameters,
+    params: DmriTrk2trkParamsDict,
     runner: Runner | null = null,
 ): DmriTrk2trkOutputs {
     runner = runner || getGlobalRunner();
@@ -488,6 +488,8 @@ function dmri_trk2trk(
 export {
       DMRI_TRK2TRK_METADATA,
       DmriTrk2trkOutputs,
+      DmriTrk2trkParamsDict,
+      DmriTrk2trkParamsDictTagged,
       dmri_trk2trk,
       dmri_trk2trk_execute,
       dmri_trk2trk_params,

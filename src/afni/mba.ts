@@ -11,7 +11,7 @@ const MBA_METADATA: Metadata = {
 };
 
 
-interface MbaParameters {
+interface MbaParamsDict {
     "@type"?: "afni/MBA";
     "prefix": string;
     "chains"?: number | null | undefined;
@@ -29,11 +29,11 @@ interface MbaParameters {
     "dbgArgs": boolean;
     "help": boolean;
 }
-type MbaParametersTagged = Required<Pick<MbaParameters, '@type'>> & MbaParameters;
+type MbaParamsDictTagged = Required<Pick<MbaParamsDict, '@type'>> & MbaParamsDict;
 
 
 /**
- * Output object returned when calling `MbaParameters(...)`.
+ * Output object returned when calling `MbaParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function mba_params(
     se: string | null = null,
     dbg_args: boolean = false,
     help: boolean = false,
-): MbaParametersTagged {
+): MbaParamsDictTagged {
     const params = {
         "@type": "afni/MBA" as const,
         "prefix": prefix,
@@ -148,7 +148,7 @@ function mba_params(
  * @returns Command-line arguments.
  */
 function mba_cargs(
-    params: MbaParameters,
+    params: MbaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function mba_cargs(
  * @returns Outputs object.
  */
 function mba_outputs(
-    params: MbaParameters,
+    params: MbaParamsDict,
     execution: Execution,
 ): MbaOutputs {
     const ret: MbaOutputs = {
@@ -271,7 +271,7 @@ function mba_outputs(
  * @returns NamedTuple of outputs (described in `MbaOutputs`).
  */
 function mba_execute(
-    params: MbaParameters,
+    params: MbaParamsDict,
     runner: Runner | null = null,
 ): MbaOutputs {
     runner = runner || getGlobalRunner();
@@ -338,6 +338,8 @@ function mba(
 export {
       MBA_METADATA,
       MbaOutputs,
+      MbaParamsDict,
+      MbaParamsDictTagged,
       mba,
       mba_execute,
       mba_params,

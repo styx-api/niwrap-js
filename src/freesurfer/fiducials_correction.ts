@@ -11,16 +11,16 @@ const FIDUCIALS_CORRECTION_METADATA: Metadata = {
 };
 
 
-interface FiducialsCorrectionParameters {
+interface FiducialsCorrectionParamsDict {
     "@type"?: "freesurfer/fiducials_correction";
     "input_file": InputPathType;
     "output_file": string;
 }
-type FiducialsCorrectionParametersTagged = Required<Pick<FiducialsCorrectionParameters, '@type'>> & FiducialsCorrectionParameters;
+type FiducialsCorrectionParamsDictTagged = Required<Pick<FiducialsCorrectionParamsDict, '@type'>> & FiducialsCorrectionParamsDict;
 
 
 /**
- * Output object returned when calling `FiducialsCorrectionParameters(...)`.
+ * Output object returned when calling `FiducialsCorrectionParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FiducialsCorrectionOutputs {
 function fiducials_correction_params(
     input_file: InputPathType,
     output_file: string,
-): FiducialsCorrectionParametersTagged {
+): FiducialsCorrectionParamsDictTagged {
     const params = {
         "@type": "freesurfer/fiducials_correction" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function fiducials_correction_params(
  * @returns Command-line arguments.
  */
 function fiducials_correction_cargs(
-    params: FiducialsCorrectionParameters,
+    params: FiducialsCorrectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function fiducials_correction_cargs(
  * @returns Outputs object.
  */
 function fiducials_correction_outputs(
-    params: FiducialsCorrectionParameters,
+    params: FiducialsCorrectionParamsDict,
     execution: Execution,
 ): FiducialsCorrectionOutputs {
     const ret: FiducialsCorrectionOutputs = {
@@ -112,7 +112,7 @@ function fiducials_correction_outputs(
  * @returns NamedTuple of outputs (described in `FiducialsCorrectionOutputs`).
  */
 function fiducials_correction_execute(
-    params: FiducialsCorrectionParameters,
+    params: FiducialsCorrectionParamsDict,
     runner: Runner | null = null,
 ): FiducialsCorrectionOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function fiducials_correction(
 export {
       FIDUCIALS_CORRECTION_METADATA,
       FiducialsCorrectionOutputs,
+      FiducialsCorrectionParamsDict,
+      FiducialsCorrectionParamsDictTagged,
       fiducials_correction,
       fiducials_correction_execute,
       fiducials_correction_params,

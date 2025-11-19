@@ -11,7 +11,7 @@ const MSM_METADATA: Metadata = {
 };
 
 
-interface MsmParameters {
+interface MsmParamsDict {
     "@type"?: "fsl/msm";
     "inmesh": InputPathType;
     "out": string;
@@ -30,11 +30,11 @@ interface MsmParameters {
     "verbose": boolean;
     "printoptions": boolean;
 }
-type MsmParametersTagged = Required<Pick<MsmParameters, '@type'>> & MsmParameters;
+type MsmParamsDictTagged = Required<Pick<MsmParamsDict, '@type'>> & MsmParamsDict;
 
 
 /**
- * Output object returned when calling `MsmParameters(...)`.
+ * Output object returned when calling `MsmParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function msm_params(
     help: boolean = false,
     verbose: boolean = false,
     printoptions: boolean = false,
-): MsmParametersTagged {
+): MsmParamsDictTagged {
     const params = {
         "@type": "fsl/msm" as const,
         "inmesh": inmesh,
@@ -144,7 +144,7 @@ function msm_params(
  * @returns Command-line arguments.
  */
 function msm_cargs(
-    params: MsmParameters,
+    params: MsmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -239,7 +239,7 @@ function msm_cargs(
  * @returns Outputs object.
  */
 function msm_outputs(
-    params: MsmParameters,
+    params: MsmParamsDict,
     execution: Execution,
 ): MsmOutputs {
     const ret: MsmOutputs = {
@@ -265,7 +265,7 @@ function msm_outputs(
  * @returns NamedTuple of outputs (described in `MsmOutputs`).
  */
 function msm_execute(
-    params: MsmParameters,
+    params: MsmParamsDict,
     runner: Runner | null = null,
 ): MsmOutputs {
     runner = runner || getGlobalRunner();
@@ -334,6 +334,8 @@ function msm(
 export {
       MSM_METADATA,
       MsmOutputs,
+      MsmParamsDict,
+      MsmParamsDictTagged,
       msm,
       msm_execute,
       msm_params,

@@ -11,16 +11,16 @@ const MRIS_VOLUME_METADATA: Metadata = {
 };
 
 
-interface MrisVolumeParameters {
+interface MrisVolumeParamsDict {
     "@type"?: "freesurfer/mris_volume";
     "surface_file": InputPathType;
     "verbose_flag": boolean;
 }
-type MrisVolumeParametersTagged = Required<Pick<MrisVolumeParameters, '@type'>> & MrisVolumeParameters;
+type MrisVolumeParamsDictTagged = Required<Pick<MrisVolumeParamsDict, '@type'>> & MrisVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `MrisVolumeParameters(...)`.
+ * Output object returned when calling `MrisVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MrisVolumeOutputs {
 function mris_volume_params(
     surface_file: InputPathType,
     verbose_flag: boolean = false,
-): MrisVolumeParametersTagged {
+): MrisVolumeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_volume" as const,
         "surface_file": surface_file,
@@ -62,7 +62,7 @@ function mris_volume_params(
  * @returns Command-line arguments.
  */
 function mris_volume_cargs(
-    params: MrisVolumeParameters,
+    params: MrisVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function mris_volume_cargs(
  * @returns Outputs object.
  */
 function mris_volume_outputs(
-    params: MrisVolumeParameters,
+    params: MrisVolumeParamsDict,
     execution: Execution,
 ): MrisVolumeOutputs {
     const ret: MrisVolumeOutputs = {
@@ -109,7 +109,7 @@ function mris_volume_outputs(
  * @returns NamedTuple of outputs (described in `MrisVolumeOutputs`).
  */
 function mris_volume_execute(
-    params: MrisVolumeParameters,
+    params: MrisVolumeParamsDict,
     runner: Runner | null = null,
 ): MrisVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function mris_volume(
 export {
       MRIS_VOLUME_METADATA,
       MrisVolumeOutputs,
+      MrisVolumeParamsDict,
+      MrisVolumeParamsDictTagged,
       mris_volume,
       mris_volume_execute,
       mris_volume_params,

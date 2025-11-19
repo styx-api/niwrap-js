@@ -11,7 +11,7 @@ const FSCALC_METADATA: Metadata = {
 };
 
 
-interface FscalcParameters {
+interface FscalcParamsDict {
     "@type"?: "freesurfer/fscalc";
     "input1": string;
     "operation": string;
@@ -23,11 +23,11 @@ interface FscalcParameters {
     "nocleanup": boolean;
     "log_file"?: string | null | undefined;
 }
-type FscalcParametersTagged = Required<Pick<FscalcParameters, '@type'>> & FscalcParameters;
+type FscalcParamsDictTagged = Required<Pick<FscalcParamsDict, '@type'>> & FscalcParamsDict;
 
 
 /**
- * Output object returned when calling `FscalcParameters(...)`.
+ * Output object returned when calling `FscalcParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function fscalc_params(
     tmpdir: string | null = null,
     nocleanup: boolean = false,
     log_file: string | null = null,
-): FscalcParametersTagged {
+): FscalcParamsDictTagged {
     const params = {
         "@type": "freesurfer/fscalc" as const,
         "input1": input1,
@@ -102,7 +102,7 @@ function fscalc_params(
  * @returns Command-line arguments.
  */
 function fscalc_cargs(
-    params: FscalcParameters,
+    params: FscalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function fscalc_cargs(
  * @returns Outputs object.
  */
 function fscalc_outputs(
-    params: FscalcParameters,
+    params: FscalcParamsDict,
     execution: Execution,
 ): FscalcOutputs {
     const ret: FscalcOutputs = {
@@ -179,7 +179,7 @@ function fscalc_outputs(
  * @returns NamedTuple of outputs (described in `FscalcOutputs`).
  */
 function fscalc_execute(
-    params: FscalcParameters,
+    params: FscalcParamsDict,
     runner: Runner | null = null,
 ): FscalcOutputs {
     runner = runner || getGlobalRunner();
@@ -234,6 +234,8 @@ function fscalc(
 export {
       FSCALC_METADATA,
       FscalcOutputs,
+      FscalcParamsDict,
+      FscalcParamsDictTagged,
       fscalc,
       fscalc_execute,
       fscalc_params,

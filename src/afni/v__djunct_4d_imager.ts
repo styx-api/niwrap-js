@@ -11,18 +11,18 @@ const V__DJUNCT_4D_IMAGER_METADATA: Metadata = {
 };
 
 
-interface VDjunct4dImagerParameters {
+interface VDjunct4dImagerParamsDict {
     "@type"?: "afni/@djunct_4d_imager";
     "inset": InputPathType;
     "prefix": string;
     "do_movie"?: "MPEG" | "AGIF" | null | undefined;
     "no_clean": boolean;
 }
-type VDjunct4dImagerParametersTagged = Required<Pick<VDjunct4dImagerParameters, '@type'>> & VDjunct4dImagerParameters;
+type VDjunct4dImagerParamsDictTagged = Required<Pick<VDjunct4dImagerParamsDict, '@type'>> & VDjunct4dImagerParamsDict;
 
 
 /**
- * Output object returned when calling `VDjunct4dImagerParameters(...)`.
+ * Output object returned when calling `VDjunct4dImagerParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function v__djunct_4d_imager_params(
     prefix: string,
     do_movie: "MPEG" | "AGIF" | null = null,
     no_clean: boolean = false,
-): VDjunct4dImagerParametersTagged {
+): VDjunct4dImagerParamsDictTagged {
     const params = {
         "@type": "afni/@djunct_4d_imager" as const,
         "inset": inset,
@@ -96,7 +96,7 @@ function v__djunct_4d_imager_params(
  * @returns Command-line arguments.
  */
 function v__djunct_4d_imager_cargs(
-    params: VDjunct4dImagerParameters,
+    params: VDjunct4dImagerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function v__djunct_4d_imager_cargs(
  * @returns Outputs object.
  */
 function v__djunct_4d_imager_outputs(
-    params: VDjunct4dImagerParameters,
+    params: VDjunct4dImagerParamsDict,
     execution: Execution,
 ): VDjunct4dImagerOutputs {
     const ret: VDjunct4dImagerOutputs = {
@@ -156,7 +156,7 @@ function v__djunct_4d_imager_outputs(
  * @returns NamedTuple of outputs (described in `VDjunct4dImagerOutputs`).
  */
 function v__djunct_4d_imager_execute(
-    params: VDjunct4dImagerParameters,
+    params: VDjunct4dImagerParamsDict,
     runner: Runner | null = null,
 ): VDjunct4dImagerOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function v__djunct_4d_imager(
 
 export {
       VDjunct4dImagerOutputs,
+      VDjunct4dImagerParamsDict,
+      VDjunct4dImagerParamsDictTagged,
       V__DJUNCT_4D_IMAGER_METADATA,
       v__djunct_4d_imager,
       v__djunct_4d_imager_execute,

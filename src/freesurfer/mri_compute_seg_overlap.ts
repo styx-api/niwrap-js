@@ -11,7 +11,7 @@ const MRI_COMPUTE_SEG_OVERLAP_METADATA: Metadata = {
 };
 
 
-interface MriComputeSegOverlapParameters {
+interface MriComputeSegOverlapParamsDict {
     "@type"?: "freesurfer/mri_compute_seg_overlap";
     "segvol1": InputPathType;
     "segvol2": InputPathType;
@@ -24,11 +24,11 @@ interface MriComputeSegOverlapParameters {
     "all_labels_flag": boolean;
     "dice_params"?: string | null | undefined;
 }
-type MriComputeSegOverlapParametersTagged = Required<Pick<MriComputeSegOverlapParameters, '@type'>> & MriComputeSegOverlapParameters;
+type MriComputeSegOverlapParamsDictTagged = Required<Pick<MriComputeSegOverlapParamsDict, '@type'>> & MriComputeSegOverlapParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeSegOverlapParameters(...)`.
+ * Output object returned when calling `MriComputeSegOverlapParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function mri_compute_seg_overlap_params(
     exclude_wm_flag: boolean = false,
     all_labels_flag: boolean = false,
     dice_params: string | null = null,
-): MriComputeSegOverlapParametersTagged {
+): MriComputeSegOverlapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_seg_overlap" as const,
         "segvol1": segvol1,
@@ -102,7 +102,7 @@ function mri_compute_seg_overlap_params(
  * @returns Command-line arguments.
  */
 function mri_compute_seg_overlap_cargs(
-    params: MriComputeSegOverlapParameters,
+    params: MriComputeSegOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function mri_compute_seg_overlap_cargs(
  * @returns Outputs object.
  */
 function mri_compute_seg_overlap_outputs(
-    params: MriComputeSegOverlapParameters,
+    params: MriComputeSegOverlapParamsDict,
     execution: Execution,
 ): MriComputeSegOverlapOutputs {
     const ret: MriComputeSegOverlapOutputs = {
@@ -183,7 +183,7 @@ function mri_compute_seg_overlap_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeSegOverlapOutputs`).
  */
 function mri_compute_seg_overlap_execute(
-    params: MriComputeSegOverlapParameters,
+    params: MriComputeSegOverlapParamsDict,
     runner: Runner | null = null,
 ): MriComputeSegOverlapOutputs {
     runner = runner || getGlobalRunner();
@@ -240,6 +240,8 @@ function mri_compute_seg_overlap(
 export {
       MRI_COMPUTE_SEG_OVERLAP_METADATA,
       MriComputeSegOverlapOutputs,
+      MriComputeSegOverlapParamsDict,
+      MriComputeSegOverlapParamsDictTagged,
       mri_compute_seg_overlap,
       mri_compute_seg_overlap_execute,
       mri_compute_seg_overlap_params,

@@ -11,7 +11,7 @@ const V__MAKE_PLUG_DIFF_METADATA: Metadata = {
 };
 
 
-interface VMakePlugDiffParameters {
+interface VMakePlugDiffParamsDict {
     "@type"?: "afni/@make_plug_diff";
     "vtk_dir": string;
     "xm_dir": string;
@@ -21,11 +21,11 @@ interface VMakePlugDiffParameters {
     "linux": boolean;
     "diff_dir": string;
 }
-type VMakePlugDiffParametersTagged = Required<Pick<VMakePlugDiffParameters, '@type'>> & VMakePlugDiffParameters;
+type VMakePlugDiffParamsDictTagged = Required<Pick<VMakePlugDiffParamsDict, '@type'>> & VMakePlugDiffParamsDict;
 
 
 /**
- * Output object returned when calling `VMakePlugDiffParameters(...)`.
+ * Output object returned when calling `VMakePlugDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function v__make_plug_diff_params(
     diff_dir: string,
     comments: boolean = false,
     linux: boolean = false,
-): VMakePlugDiffParametersTagged {
+): VMakePlugDiffParamsDictTagged {
     const params = {
         "@type": "afni/@make_plug_diff" as const,
         "vtk_dir": vtk_dir,
@@ -82,7 +82,7 @@ function v__make_plug_diff_params(
  * @returns Command-line arguments.
  */
 function v__make_plug_diff_cargs(
-    params: VMakePlugDiffParameters,
+    params: VMakePlugDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function v__make_plug_diff_cargs(
  * @returns Outputs object.
  */
 function v__make_plug_diff_outputs(
-    params: VMakePlugDiffParameters,
+    params: VMakePlugDiffParamsDict,
     execution: Execution,
 ): VMakePlugDiffOutputs {
     const ret: VMakePlugDiffOutputs = {
@@ -151,7 +151,7 @@ function v__make_plug_diff_outputs(
  * @returns NamedTuple of outputs (described in `VMakePlugDiffOutputs`).
  */
 function v__make_plug_diff_execute(
-    params: VMakePlugDiffParameters,
+    params: VMakePlugDiffParamsDict,
     runner: Runner | null = null,
 ): VMakePlugDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function v__make_plug_diff(
 
 export {
       VMakePlugDiffOutputs,
+      VMakePlugDiffParamsDict,
+      VMakePlugDiffParamsDictTagged,
       V__MAKE_PLUG_DIFF_METADATA,
       v__make_plug_diff,
       v__make_plug_diff_execute,

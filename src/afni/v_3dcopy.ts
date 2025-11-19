@@ -11,7 +11,7 @@ const V_3DCOPY_METADATA: Metadata = {
 };
 
 
-interface V3dcopyParameters {
+interface V3dcopyParamsDict {
     "@type"?: "afni/3dcopy";
     "verbose": boolean;
     "denote": boolean;
@@ -19,11 +19,11 @@ interface V3dcopyParameters {
     "view"?: string | null | undefined;
     "new_prefix": string;
 }
-type V3dcopyParametersTagged = Required<Pick<V3dcopyParameters, '@type'>> & V3dcopyParameters;
+type V3dcopyParamsDictTagged = Required<Pick<V3dcopyParamsDict, '@type'>> & V3dcopyParamsDict;
 
 
 /**
- * Output object returned when calling `V3dcopyParameters(...)`.
+ * Output object returned when calling `V3dcopyParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function v_3dcopy_params(
     verbose: boolean = false,
     denote: boolean = false,
     view: string | null = null,
-): V3dcopyParametersTagged {
+): V3dcopyParamsDictTagged {
     const params = {
         "@type": "afni/3dcopy" as const,
         "verbose": verbose,
@@ -76,7 +76,7 @@ function v_3dcopy_params(
  * @returns Command-line arguments.
  */
 function v_3dcopy_cargs(
-    params: V3dcopyParameters,
+    params: V3dcopyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function v_3dcopy_cargs(
  * @returns Outputs object.
  */
 function v_3dcopy_outputs(
-    params: V3dcopyParameters,
+    params: V3dcopyParamsDict,
     execution: Execution,
 ): V3dcopyOutputs {
     const ret: V3dcopyOutputs = {
@@ -132,7 +132,7 @@ function v_3dcopy_outputs(
  * @returns NamedTuple of outputs (described in `V3dcopyOutputs`).
  */
 function v_3dcopy_execute(
-    params: V3dcopyParameters,
+    params: V3dcopyParamsDict,
     runner: Runner | null = null,
 ): V3dcopyOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function v_3dcopy(
 
 export {
       V3dcopyOutputs,
+      V3dcopyParamsDict,
+      V3dcopyParamsDictTagged,
       V_3DCOPY_METADATA,
       v_3dcopy,
       v_3dcopy_execute,

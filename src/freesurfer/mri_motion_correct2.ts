@@ -11,7 +11,7 @@ const MRI_MOTION_CORRECT2_METADATA: Metadata = {
 };
 
 
-interface MriMotionCorrect2Parameters {
+interface MriMotionCorrect2ParamsDict {
     "@type"?: "freesurfer/mri_motion_correct2";
     "output_spec": string;
     "input_files": Array<InputPathType>;
@@ -24,11 +24,11 @@ interface MriMotionCorrect2Parameters {
     "version": boolean;
     "debug": boolean;
 }
-type MriMotionCorrect2ParametersTagged = Required<Pick<MriMotionCorrect2Parameters, '@type'>> & MriMotionCorrect2Parameters;
+type MriMotionCorrect2ParamsDictTagged = Required<Pick<MriMotionCorrect2ParamsDict, '@type'>> & MriMotionCorrect2ParamsDict;
 
 
 /**
- * Output object returned when calling `MriMotionCorrect2Parameters(...)`.
+ * Output object returned when calling `MriMotionCorrect2ParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function mri_motion_correct2_params(
     cm: boolean = false,
     version: boolean = false,
     debug: boolean = false,
-): MriMotionCorrect2ParametersTagged {
+): MriMotionCorrect2ParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_motion_correct2" as const,
         "output_spec": output_spec,
@@ -104,7 +104,7 @@ function mri_motion_correct2_params(
  * @returns Command-line arguments.
  */
 function mri_motion_correct2_cargs(
-    params: MriMotionCorrect2Parameters,
+    params: MriMotionCorrect2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,7 +163,7 @@ function mri_motion_correct2_cargs(
  * @returns Outputs object.
  */
 function mri_motion_correct2_outputs(
-    params: MriMotionCorrect2Parameters,
+    params: MriMotionCorrect2ParamsDict,
     execution: Execution,
 ): MriMotionCorrect2Outputs {
     const ret: MriMotionCorrect2Outputs = {
@@ -189,7 +189,7 @@ function mri_motion_correct2_outputs(
  * @returns NamedTuple of outputs (described in `MriMotionCorrect2Outputs`).
  */
 function mri_motion_correct2_execute(
-    params: MriMotionCorrect2Parameters,
+    params: MriMotionCorrect2ParamsDict,
     runner: Runner | null = null,
 ): MriMotionCorrect2Outputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function mri_motion_correct2(
 export {
       MRI_MOTION_CORRECT2_METADATA,
       MriMotionCorrect2Outputs,
+      MriMotionCorrect2ParamsDict,
+      MriMotionCorrect2ParamsDictTagged,
       mri_motion_correct2,
       mri_motion_correct2_execute,
       mri_motion_correct2_params,

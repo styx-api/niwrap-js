@@ -11,7 +11,7 @@ const ADD_NOISE_TO_IMAGE_METADATA: Metadata = {
 };
 
 
-interface AddNoiseToImageParameters {
+interface AddNoiseToImageParamsDict {
     "@type"?: "ants/AddNoiseToImage";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "input_image": InputPathType;
@@ -19,11 +19,11 @@ interface AddNoiseToImageParameters {
     "output": string;
     "verbose"?: boolean | null | undefined;
 }
-type AddNoiseToImageParametersTagged = Required<Pick<AddNoiseToImageParameters, '@type'>> & AddNoiseToImageParameters;
+type AddNoiseToImageParamsDictTagged = Required<Pick<AddNoiseToImageParamsDict, '@type'>> & AddNoiseToImageParamsDict;
 
 
 /**
- * Output object returned when calling `AddNoiseToImageParameters(...)`.
+ * Output object returned when calling `AddNoiseToImageParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function add_noise_to_image_params(
     output: string,
     image_dimensionality: 2 | 3 | 4 | null = null,
     verbose: boolean | null = null,
-): AddNoiseToImageParametersTagged {
+): AddNoiseToImageParamsDictTagged {
     const params = {
         "@type": "ants/AddNoiseToImage" as const,
         "input_image": input_image,
@@ -82,7 +82,7 @@ function add_noise_to_image_params(
  * @returns Command-line arguments.
  */
 function add_noise_to_image_cargs(
-    params: AddNoiseToImageParameters,
+    params: AddNoiseToImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function add_noise_to_image_cargs(
  * @returns Outputs object.
  */
 function add_noise_to_image_outputs(
-    params: AddNoiseToImageParameters,
+    params: AddNoiseToImageParamsDict,
     execution: Execution,
 ): AddNoiseToImageOutputs {
     const ret: AddNoiseToImageOutputs = {
@@ -150,7 +150,7 @@ function add_noise_to_image_outputs(
  * @returns NamedTuple of outputs (described in `AddNoiseToImageOutputs`).
  */
 function add_noise_to_image_execute(
-    params: AddNoiseToImageParameters,
+    params: AddNoiseToImageParamsDict,
     runner: Runner | null = null,
 ): AddNoiseToImageOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function add_noise_to_image(
 export {
       ADD_NOISE_TO_IMAGE_METADATA,
       AddNoiseToImageOutputs,
+      AddNoiseToImageParamsDict,
+      AddNoiseToImageParamsDictTagged,
       add_noise_to_image,
       add_noise_to_image_execute,
       add_noise_to_image_params,

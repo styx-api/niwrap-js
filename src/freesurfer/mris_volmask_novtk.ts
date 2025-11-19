@@ -11,7 +11,7 @@ const MRIS_VOLMASK_NOVTK_METADATA: Metadata = {
 };
 
 
-interface MrisVolmaskNovtkParameters {
+interface MrisVolmaskNovtkParamsDict {
     "@type"?: "freesurfer/mris_volmask_novtk";
     "io": string;
     "cap_distance"?: number | null | undefined;
@@ -32,11 +32,11 @@ interface MrisVolmaskNovtkParameters {
     "edit_aseg": boolean;
     "save_ribbon": boolean;
 }
-type MrisVolmaskNovtkParametersTagged = Required<Pick<MrisVolmaskNovtkParameters, '@type'>> & MrisVolmaskNovtkParameters;
+type MrisVolmaskNovtkParamsDictTagged = Required<Pick<MrisVolmaskNovtkParamsDict, '@type'>> & MrisVolmaskNovtkParamsDict;
 
 
 /**
- * Output object returned when calling `MrisVolmaskNovtkParameters(...)`.
+ * Output object returned when calling `MrisVolmaskNovtkParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function mris_volmask_novtk_params(
     parallel: boolean = false,
     edit_aseg: boolean = false,
     save_ribbon: boolean = false,
-): MrisVolmaskNovtkParametersTagged {
+): MrisVolmaskNovtkParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_volmask_novtk" as const,
         "io": io,
@@ -148,7 +148,7 @@ function mris_volmask_novtk_params(
  * @returns Command-line arguments.
  */
 function mris_volmask_novtk_cargs(
-    params: MrisVolmaskNovtkParameters,
+    params: MrisVolmaskNovtkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -251,7 +251,7 @@ function mris_volmask_novtk_cargs(
  * @returns Outputs object.
  */
 function mris_volmask_novtk_outputs(
-    params: MrisVolmaskNovtkParameters,
+    params: MrisVolmaskNovtkParamsDict,
     execution: Execution,
 ): MrisVolmaskNovtkOutputs {
     const ret: MrisVolmaskNovtkOutputs = {
@@ -276,7 +276,7 @@ function mris_volmask_novtk_outputs(
  * @returns NamedTuple of outputs (described in `MrisVolmaskNovtkOutputs`).
  */
 function mris_volmask_novtk_execute(
-    params: MrisVolmaskNovtkParameters,
+    params: MrisVolmaskNovtkParamsDict,
     runner: Runner | null = null,
 ): MrisVolmaskNovtkOutputs {
     runner = runner || getGlobalRunner();
@@ -349,6 +349,8 @@ function mris_volmask_novtk(
 export {
       MRIS_VOLMASK_NOVTK_METADATA,
       MrisVolmaskNovtkOutputs,
+      MrisVolmaskNovtkParamsDict,
+      MrisVolmaskNovtkParamsDictTagged,
       mris_volmask_novtk,
       mris_volmask_novtk_execute,
       mris_volmask_novtk_params,

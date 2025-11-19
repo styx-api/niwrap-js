@@ -11,7 +11,7 @@ const LONG_STATS_TPS_METADATA: Metadata = {
 };
 
 
-interface LongStatsTpsParameters {
+interface LongStatsTpsParamsDict {
     "@type"?: "freesurfer/long_stats_tps";
     "qdec_table": InputPathType;
     "stats_file": string;
@@ -22,11 +22,11 @@ interface LongStatsTpsParameters {
     "qcolumn"?: string | null | undefined;
     "cross_sectional": boolean;
 }
-type LongStatsTpsParametersTagged = Required<Pick<LongStatsTpsParameters, '@type'>> & LongStatsTpsParameters;
+type LongStatsTpsParamsDictTagged = Required<Pick<LongStatsTpsParamsDict, '@type'>> & LongStatsTpsParamsDict;
 
 
 /**
- * Output object returned when calling `LongStatsTpsParameters(...)`.
+ * Output object returned when calling `LongStatsTpsParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function long_stats_tps_params(
     output_file: string,
     qcolumn: string | null = null,
     cross_sectional: boolean = false,
-): LongStatsTpsParametersTagged {
+): LongStatsTpsParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_stats_tps" as const,
         "qdec_table": qdec_table,
@@ -92,7 +92,7 @@ function long_stats_tps_params(
  * @returns Command-line arguments.
  */
 function long_stats_tps_cargs(
-    params: LongStatsTpsParameters,
+    params: LongStatsTpsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function long_stats_tps_cargs(
  * @returns Outputs object.
  */
 function long_stats_tps_outputs(
-    params: LongStatsTpsParameters,
+    params: LongStatsTpsParamsDict,
     execution: Execution,
 ): LongStatsTpsOutputs {
     const ret: LongStatsTpsOutputs = {
@@ -169,7 +169,7 @@ function long_stats_tps_outputs(
  * @returns NamedTuple of outputs (described in `LongStatsTpsOutputs`).
  */
 function long_stats_tps_execute(
-    params: LongStatsTpsParameters,
+    params: LongStatsTpsParamsDict,
     runner: Runner | null = null,
 ): LongStatsTpsOutputs {
     runner = runner || getGlobalRunner();
@@ -222,6 +222,8 @@ function long_stats_tps(
 export {
       LONG_STATS_TPS_METADATA,
       LongStatsTpsOutputs,
+      LongStatsTpsParamsDict,
+      LongStatsTpsParamsDictTagged,
       long_stats_tps,
       long_stats_tps_execute,
       long_stats_tps_params,

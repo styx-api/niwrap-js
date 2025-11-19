@@ -11,7 +11,7 @@ const SIENA_METADATA: Metadata = {
 };
 
 
-interface SienaParameters {
+interface SienaParamsDict {
     "@type"?: "fsl/siena";
     "input1": InputPathType;
     "input2": InputPathType;
@@ -27,11 +27,11 @@ interface SienaParameters {
     "ventricle_analysis_flag": boolean;
     "ventricle_mask"?: InputPathType | null | undefined;
 }
-type SienaParametersTagged = Required<Pick<SienaParameters, '@type'>> & SienaParameters;
+type SienaParamsDictTagged = Required<Pick<SienaParamsDict, '@type'>> & SienaParamsDict;
 
 
 /**
- * Output object returned when calling `SienaParameters(...)`.
+ * Output object returned when calling `SienaParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function siena_params(
     sienadiff_options: string | null = null,
     ventricle_analysis_flag: boolean = false,
     ventricle_mask: InputPathType | null = null,
-): SienaParametersTagged {
+): SienaParamsDictTagged {
     const params = {
         "@type": "fsl/siena" as const,
         "input1": input1,
@@ -126,7 +126,7 @@ function siena_params(
  * @returns Command-line arguments.
  */
 function siena_cargs(
-    params: SienaParameters,
+    params: SienaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -197,7 +197,7 @@ function siena_cargs(
  * @returns Outputs object.
  */
 function siena_outputs(
-    params: SienaParameters,
+    params: SienaParamsDict,
     execution: Execution,
 ): SienaOutputs {
     const ret: SienaOutputs = {
@@ -224,7 +224,7 @@ function siena_outputs(
  * @returns NamedTuple of outputs (described in `SienaOutputs`).
  */
 function siena_execute(
-    params: SienaParameters,
+    params: SienaParamsDict,
     runner: Runner | null = null,
 ): SienaOutputs {
     runner = runner || getGlobalRunner();
@@ -287,6 +287,8 @@ function siena(
 export {
       SIENA_METADATA,
       SienaOutputs,
+      SienaParamsDict,
+      SienaParamsDictTagged,
       siena,
       siena_execute,
       siena_params,

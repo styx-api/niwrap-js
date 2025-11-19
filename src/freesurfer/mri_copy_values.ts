@@ -11,17 +11,17 @@ const MRI_COPY_VALUES_METADATA: Metadata = {
 };
 
 
-interface MriCopyValuesParameters {
+interface MriCopyValuesParamsDict {
     "@type"?: "freesurfer/mri_copy_values";
     "source_volume": InputPathType;
     "target_volume": InputPathType;
     "output_volume": string;
 }
-type MriCopyValuesParametersTagged = Required<Pick<MriCopyValuesParameters, '@type'>> & MriCopyValuesParameters;
+type MriCopyValuesParamsDictTagged = Required<Pick<MriCopyValuesParamsDict, '@type'>> & MriCopyValuesParamsDict;
 
 
 /**
- * Output object returned when calling `MriCopyValuesParameters(...)`.
+ * Output object returned when calling `MriCopyValuesParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_copy_values_params(
     source_volume: InputPathType,
     target_volume: InputPathType,
     output_volume: string,
-): MriCopyValuesParametersTagged {
+): MriCopyValuesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_copy_values" as const,
         "source_volume": source_volume,
@@ -70,7 +70,7 @@ function mri_copy_values_params(
  * @returns Command-line arguments.
  */
 function mri_copy_values_cargs(
-    params: MriCopyValuesParameters,
+    params: MriCopyValuesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_copy_values_cargs(
  * @returns Outputs object.
  */
 function mri_copy_values_outputs(
-    params: MriCopyValuesParameters,
+    params: MriCopyValuesParamsDict,
     execution: Execution,
 ): MriCopyValuesOutputs {
     const ret: MriCopyValuesOutputs = {
@@ -117,7 +117,7 @@ function mri_copy_values_outputs(
  * @returns NamedTuple of outputs (described in `MriCopyValuesOutputs`).
  */
 function mri_copy_values_execute(
-    params: MriCopyValuesParameters,
+    params: MriCopyValuesParamsDict,
     runner: Runner | null = null,
 ): MriCopyValuesOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_copy_values(
 export {
       MRI_COPY_VALUES_METADATA,
       MriCopyValuesOutputs,
+      MriCopyValuesParamsDict,
+      MriCopyValuesParamsDictTagged,
       mri_copy_values,
       mri_copy_values_execute,
       mri_copy_values_params,

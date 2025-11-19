@@ -11,7 +11,7 @@ const MRIS_COMPUTE_LGI_METADATA: Metadata = {
 };
 
 
-interface MrisComputeLgiParameters {
+interface MrisComputeLgiParamsDict {
     "@type"?: "freesurfer/mris_compute_lgi";
     "input_surface": InputPathType;
     "close_sphere_size"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface MrisComputeLgiParameters {
     "echo": boolean;
     "dontrun": boolean;
 }
-type MrisComputeLgiParametersTagged = Required<Pick<MrisComputeLgiParameters, '@type'>> & MrisComputeLgiParameters;
+type MrisComputeLgiParamsDictTagged = Required<Pick<MrisComputeLgiParamsDict, '@type'>> & MrisComputeLgiParamsDict;
 
 
 /**
- * Output object returned when calling `MrisComputeLgiParameters(...)`.
+ * Output object returned when calling `MrisComputeLgiParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_compute_lgi_params(
     step_size: number | null = null,
     echo: boolean = false,
     dontrun: boolean = false,
-): MrisComputeLgiParametersTagged {
+): MrisComputeLgiParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_compute_lgi" as const,
         "input_surface": input_surface,
@@ -88,7 +88,7 @@ function mris_compute_lgi_params(
  * @returns Command-line arguments.
  */
 function mris_compute_lgi_cargs(
-    params: MrisComputeLgiParameters,
+    params: MrisComputeLgiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function mris_compute_lgi_cargs(
  * @returns Outputs object.
  */
 function mris_compute_lgi_outputs(
-    params: MrisComputeLgiParameters,
+    params: MrisComputeLgiParamsDict,
     execution: Execution,
 ): MrisComputeLgiOutputs {
     const ret: MrisComputeLgiOutputs = {
@@ -160,7 +160,7 @@ function mris_compute_lgi_outputs(
  * @returns NamedTuple of outputs (described in `MrisComputeLgiOutputs`).
  */
 function mris_compute_lgi_execute(
-    params: MrisComputeLgiParameters,
+    params: MrisComputeLgiParamsDict,
     runner: Runner | null = null,
 ): MrisComputeLgiOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function mris_compute_lgi(
 export {
       MRIS_COMPUTE_LGI_METADATA,
       MrisComputeLgiOutputs,
+      MrisComputeLgiParamsDict,
+      MrisComputeLgiParamsDictTagged,
       mris_compute_lgi,
       mris_compute_lgi_execute,
       mris_compute_lgi_params,

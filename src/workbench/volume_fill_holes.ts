@@ -10,16 +10,16 @@ const VOLUME_FILL_HOLES_METADATA: Metadata = {
 };
 
 
-interface VolumeFillHolesParameters {
+interface VolumeFillHolesParamsDict {
     "@type"?: "workbench/volume-fill-holes";
     "volume-out": string;
     "volume-in": InputPathType;
 }
-type VolumeFillHolesParametersTagged = Required<Pick<VolumeFillHolesParameters, '@type'>> & VolumeFillHolesParameters;
+type VolumeFillHolesParamsDictTagged = Required<Pick<VolumeFillHolesParamsDict, '@type'>> & VolumeFillHolesParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeFillHolesParameters(...)`.
+ * Output object returned when calling `VolumeFillHolesParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface VolumeFillHolesOutputs {
 function volume_fill_holes_params(
     volume_out: string,
     volume_in: InputPathType,
-): VolumeFillHolesParametersTagged {
+): VolumeFillHolesParamsDictTagged {
     const params = {
         "@type": "workbench/volume-fill-holes" as const,
         "volume-out": volume_out,
@@ -65,7 +65,7 @@ function volume_fill_holes_params(
  * @returns Command-line arguments.
  */
 function volume_fill_holes_cargs(
-    params: VolumeFillHolesParameters,
+    params: VolumeFillHolesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function volume_fill_holes_cargs(
  * @returns Outputs object.
  */
 function volume_fill_holes_outputs(
-    params: VolumeFillHolesParameters,
+    params: VolumeFillHolesParamsDict,
     execution: Execution,
 ): VolumeFillHolesOutputs {
     const ret: VolumeFillHolesOutputs = {
@@ -110,7 +110,7 @@ function volume_fill_holes_outputs(
  * @returns NamedTuple of outputs (described in `VolumeFillHolesOutputs`).
  */
 function volume_fill_holes_execute(
-    params: VolumeFillHolesParameters,
+    params: VolumeFillHolesParamsDict,
     runner: Runner | null = null,
 ): VolumeFillHolesOutputs {
     runner = runner || getGlobalRunner();
@@ -147,6 +147,8 @@ function volume_fill_holes(
 export {
       VOLUME_FILL_HOLES_METADATA,
       VolumeFillHolesOutputs,
+      VolumeFillHolesParamsDict,
+      VolumeFillHolesParamsDictTagged,
       volume_fill_holes,
       volume_fill_holes_execute,
       volume_fill_holes_params,

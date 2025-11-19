@@ -11,7 +11,7 @@ const MRI_MODIFY_METADATA: Metadata = {
 };
 
 
-interface MriModifyParameters {
+interface MriModifyParamsDict {
     "@type"?: "freesurfer/mri_modify";
     "x_ras": Array<number>;
     "y_ras": Array<number>;
@@ -28,11 +28,11 @@ interface MriModifyParameters {
     "input_volume": InputPathType;
     "output_volume": string;
 }
-type MriModifyParametersTagged = Required<Pick<MriModifyParameters, '@type'>> & MriModifyParameters;
+type MriModifyParamsDictTagged = Required<Pick<MriModifyParamsDict, '@type'>> & MriModifyParamsDict;
 
 
 /**
- * Output object returned when calling `MriModifyParameters(...)`.
+ * Output object returned when calling `MriModifyParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function mri_modify_params(
     xform: string,
     input_volume: InputPathType,
     output_volume: string,
-): MriModifyParametersTagged {
+): MriModifyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_modify" as const,
         "x_ras": x_ras,
@@ -110,7 +110,7 @@ function mri_modify_params(
  * @returns Command-line arguments.
  */
 function mri_modify_cargs(
-    params: MriModifyParameters,
+    params: MriModifyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -178,7 +178,7 @@ function mri_modify_cargs(
  * @returns Outputs object.
  */
 function mri_modify_outputs(
-    params: MriModifyParameters,
+    params: MriModifyParamsDict,
     execution: Execution,
 ): MriModifyOutputs {
     const ret: MriModifyOutputs = {
@@ -203,7 +203,7 @@ function mri_modify_outputs(
  * @returns NamedTuple of outputs (described in `MriModifyOutputs`).
  */
 function mri_modify_execute(
-    params: MriModifyParameters,
+    params: MriModifyParamsDict,
     runner: Runner | null = null,
 ): MriModifyOutputs {
     runner = runner || getGlobalRunner();
@@ -268,6 +268,8 @@ function mri_modify(
 export {
       MRI_MODIFY_METADATA,
       MriModifyOutputs,
+      MriModifyParamsDict,
+      MriModifyParamsDictTagged,
       mri_modify,
       mri_modify_execute,
       mri_modify_params,

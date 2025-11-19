@@ -11,7 +11,7 @@ const BIANCA_METADATA: Metadata = {
 };
 
 
-interface BiancaParameters {
+interface BiancaParamsDict {
     "@type"?: "fsl/bianca";
     "master_file": InputPathType;
     "label_feature_num": number;
@@ -31,11 +31,11 @@ interface BiancaParameters {
     "verbose_flag": boolean;
     "out_name"?: string | null | undefined;
 }
-type BiancaParametersTagged = Required<Pick<BiancaParameters, '@type'>> & BiancaParameters;
+type BiancaParamsDictTagged = Required<Pick<BiancaParamsDict, '@type'>> & BiancaParamsDict;
 
 
 /**
- * Output object returned when calling `BiancaParameters(...)`.
+ * Output object returned when calling `BiancaParamsDict(...)`.
  *
  * @interface
  */
@@ -92,7 +92,7 @@ function bianca_params(
     save_classifier_data: string | null = null,
     verbose_flag: boolean = false,
     out_name: string | null = null,
-): BiancaParametersTagged {
+): BiancaParamsDictTagged {
     const params = {
         "@type": "fsl/bianca" as const,
         "master_file": master_file,
@@ -148,7 +148,7 @@ function bianca_params(
  * @returns Command-line arguments.
  */
 function bianca_cargs(
-    params: BiancaParameters,
+    params: BiancaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function bianca_cargs(
  * @returns Outputs object.
  */
 function bianca_outputs(
-    params: BiancaParameters,
+    params: BiancaParamsDict,
     execution: Execution,
 ): BiancaOutputs {
     const ret: BiancaOutputs = {
@@ -238,7 +238,7 @@ function bianca_outputs(
  * @returns NamedTuple of outputs (described in `BiancaOutputs`).
  */
 function bianca_execute(
-    params: BiancaParameters,
+    params: BiancaParamsDict,
     runner: Runner | null = null,
 ): BiancaOutputs {
     runner = runner || getGlobalRunner();
@@ -309,6 +309,8 @@ function bianca(
 export {
       BIANCA_METADATA,
       BiancaOutputs,
+      BiancaParamsDict,
+      BiancaParamsDictTagged,
       bianca,
       bianca_execute,
       bianca_params,

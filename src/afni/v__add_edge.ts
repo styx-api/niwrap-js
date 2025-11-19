@@ -11,7 +11,7 @@ const V__ADD_EDGE_METADATA: Metadata = {
 };
 
 
-interface VAddEdgeParameters {
+interface VAddEdgeParamsDict {
     "@type"?: "afni/@AddEdge";
     "input_files": Array<InputPathType>;
     "examine_list"?: string | null | undefined;
@@ -29,11 +29,11 @@ interface VAddEdgeParameters {
     "auto": boolean;
     "no_auto": boolean;
 }
-type VAddEdgeParametersTagged = Required<Pick<VAddEdgeParameters, '@type'>> & VAddEdgeParameters;
+type VAddEdgeParamsDictTagged = Required<Pick<VAddEdgeParamsDict, '@type'>> & VAddEdgeParamsDict;
 
 
 /**
- * Output object returned when calling `VAddEdgeParameters(...)`.
+ * Output object returned when calling `VAddEdgeParamsDict(...)`.
  *
  * @interface
  */
@@ -98,7 +98,7 @@ function v__add_edge_params(
     auto_record: boolean = false,
     auto: boolean = false,
     no_auto: boolean = false,
-): VAddEdgeParametersTagged {
+): VAddEdgeParamsDictTagged {
     const params = {
         "@type": "afni/@AddEdge" as const,
         "input_files": input_files,
@@ -144,7 +144,7 @@ function v__add_edge_params(
  * @returns Command-line arguments.
  */
 function v__add_edge_cargs(
-    params: VAddEdgeParameters,
+    params: VAddEdgeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -226,7 +226,7 @@ function v__add_edge_cargs(
  * @returns Outputs object.
  */
 function v__add_edge_outputs(
-    params: VAddEdgeParameters,
+    params: VAddEdgeParamsDict,
     execution: Execution,
 ): VAddEdgeOutputs {
     const ret: VAddEdgeOutputs = {
@@ -255,7 +255,7 @@ function v__add_edge_outputs(
  * @returns NamedTuple of outputs (described in `VAddEdgeOutputs`).
  */
 function v__add_edge_execute(
-    params: VAddEdgeParameters,
+    params: VAddEdgeParamsDict,
     runner: Runner | null = null,
 ): VAddEdgeOutputs {
     runner = runner || getGlobalRunner();
@@ -321,6 +321,8 @@ function v__add_edge(
 
 export {
       VAddEdgeOutputs,
+      VAddEdgeParamsDict,
+      VAddEdgeParamsDictTagged,
       V__ADD_EDGE_METADATA,
       v__add_edge,
       v__add_edge_execute,

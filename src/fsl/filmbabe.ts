@@ -11,7 +11,7 @@ const FILMBABE_METADATA: Metadata = {
 };
 
 
-interface FilmbabeParameters {
+interface FilmbabeParamsDict {
     "@type"?: "fsl/filmbabe";
     "datafile": InputPathType;
     "datafile_alias": InputPathType;
@@ -47,11 +47,11 @@ interface FilmbabeParameters {
     "num_trace_samples_alias"?: number | null | undefined;
     "temporal_ar_order"?: number | null | undefined;
 }
-type FilmbabeParametersTagged = Required<Pick<FilmbabeParameters, '@type'>> & FilmbabeParameters;
+type FilmbabeParamsDictTagged = Required<Pick<FilmbabeParamsDict, '@type'>> & FilmbabeParamsDict;
 
 
 /**
- * Output object returned when calling `FilmbabeParameters(...)`.
+ * Output object returned when calling `FilmbabeParamsDict(...)`.
  *
  * @interface
  */
@@ -136,7 +136,7 @@ function filmbabe_params(
     num_trace_samples: number | null = null,
     num_trace_samples_alias: number | null = null,
     temporal_ar_order: number | null = null,
-): FilmbabeParametersTagged {
+): FilmbabeParamsDictTagged {
     const params = {
         "@type": "fsl/filmbabe" as const,
         "datafile": datafile,
@@ -220,7 +220,7 @@ function filmbabe_params(
  * @returns Command-line arguments.
  */
 function filmbabe_cargs(
-    params: FilmbabeParameters,
+    params: FilmbabeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -396,7 +396,7 @@ function filmbabe_cargs(
  * @returns Outputs object.
  */
 function filmbabe_outputs(
-    params: FilmbabeParameters,
+    params: FilmbabeParamsDict,
     execution: Execution,
 ): FilmbabeOutputs {
     const ret: FilmbabeOutputs = {
@@ -421,7 +421,7 @@ function filmbabe_outputs(
  * @returns NamedTuple of outputs (described in `FilmbabeOutputs`).
  */
 function filmbabe_execute(
-    params: FilmbabeParameters,
+    params: FilmbabeParamsDict,
     runner: Runner | null = null,
 ): FilmbabeOutputs {
     runner = runner || getGlobalRunner();
@@ -524,6 +524,8 @@ function filmbabe(
 export {
       FILMBABE_METADATA,
       FilmbabeOutputs,
+      FilmbabeParamsDict,
+      FilmbabeParamsDictTagged,
       filmbabe,
       filmbabe_execute,
       filmbabe_params,

@@ -10,17 +10,17 @@ const SPEC_FILE_MERGE_METADATA: Metadata = {
 };
 
 
-interface SpecFileMergeParameters {
+interface SpecFileMergeParamsDict {
     "@type"?: "workbench/spec-file-merge";
     "spec-1": string;
     "spec-2": string;
     "out-spec": string;
 }
-type SpecFileMergeParametersTagged = Required<Pick<SpecFileMergeParameters, '@type'>> & SpecFileMergeParameters;
+type SpecFileMergeParamsDictTagged = Required<Pick<SpecFileMergeParamsDict, '@type'>> & SpecFileMergeParamsDict;
 
 
 /**
- * Output object returned when calling `SpecFileMergeParameters(...)`.
+ * Output object returned when calling `SpecFileMergeParamsDict(...)`.
  *
  * @interface
  */
@@ -45,7 +45,7 @@ function spec_file_merge_params(
     spec_1: string,
     spec_2: string,
     out_spec: string,
-): SpecFileMergeParametersTagged {
+): SpecFileMergeParamsDictTagged {
     const params = {
         "@type": "workbench/spec-file-merge" as const,
         "spec-1": spec_1,
@@ -65,7 +65,7 @@ function spec_file_merge_params(
  * @returns Command-line arguments.
  */
 function spec_file_merge_cargs(
-    params: SpecFileMergeParameters,
+    params: SpecFileMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function spec_file_merge_cargs(
  * @returns Outputs object.
  */
 function spec_file_merge_outputs(
-    params: SpecFileMergeParameters,
+    params: SpecFileMergeParamsDict,
     execution: Execution,
 ): SpecFileMergeOutputs {
     const ret: SpecFileMergeOutputs = {
@@ -110,7 +110,7 @@ function spec_file_merge_outputs(
  * @returns NamedTuple of outputs (described in `SpecFileMergeOutputs`).
  */
 function spec_file_merge_execute(
-    params: SpecFileMergeParameters,
+    params: SpecFileMergeParamsDict,
     runner: Runner | null = null,
 ): SpecFileMergeOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function spec_file_merge(
 export {
       SPEC_FILE_MERGE_METADATA,
       SpecFileMergeOutputs,
+      SpecFileMergeParamsDict,
+      SpecFileMergeParamsDictTagged,
       spec_file_merge,
       spec_file_merge_execute,
       spec_file_merge_params,

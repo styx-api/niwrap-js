@@ -11,7 +11,7 @@ const ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA: Metadata = {
 };
 
 
-interface AntsMultivariateTemplateConstruction2ShParameters {
+interface AntsMultivariateTemplateConstruction2ShParamsDict {
     "@type"?: "ants/antsMultivariateTemplateConstruction2.sh";
     "dimension": 2 | 3 | 4;
     "output_prefix"?: string | null | undefined;
@@ -41,11 +41,11 @@ interface AntsMultivariateTemplateConstruction2ShParameters {
     "target_volume"?: Array<InputPathType> | null | undefined;
     "input_images": Array<InputPathType>;
 }
-type AntsMultivariateTemplateConstruction2ShParametersTagged = Required<Pick<AntsMultivariateTemplateConstruction2ShParameters, '@type'>> & AntsMultivariateTemplateConstruction2ShParameters;
+type AntsMultivariateTemplateConstruction2ShParamsDictTagged = Required<Pick<AntsMultivariateTemplateConstruction2ShParamsDict, '@type'>> & AntsMultivariateTemplateConstruction2ShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsMultivariateTemplateConstruction2ShParameters(...)`.
+ * Output object returned when calling `AntsMultivariateTemplateConstruction2ShParamsDict(...)`.
  *
  * @interface
  */
@@ -122,7 +122,7 @@ function ants_multivariate_template_construction2_sh_params(
     xgrid_args: string | null = null,
     update_template: boolean | null = null,
     target_volume: Array<InputPathType> | null = null,
-): AntsMultivariateTemplateConstruction2ShParametersTagged {
+): AntsMultivariateTemplateConstruction2ShParamsDictTagged {
     const params = {
         "@type": "ants/antsMultivariateTemplateConstruction2.sh" as const,
         "dimension": dimension,
@@ -216,7 +216,7 @@ function ants_multivariate_template_construction2_sh_params(
  * @returns Command-line arguments.
  */
 function ants_multivariate_template_construction2_sh_cargs(
-    params: AntsMultivariateTemplateConstruction2ShParameters,
+    params: AntsMultivariateTemplateConstruction2ShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -389,7 +389,7 @@ function ants_multivariate_template_construction2_sh_cargs(
  * @returns Outputs object.
  */
 function ants_multivariate_template_construction2_sh_outputs(
-    params: AntsMultivariateTemplateConstruction2ShParameters,
+    params: AntsMultivariateTemplateConstruction2ShParamsDict,
     execution: Execution,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
     const ret: AntsMultivariateTemplateConstruction2ShOutputs = {
@@ -415,7 +415,7 @@ function ants_multivariate_template_construction2_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsMultivariateTemplateConstruction2ShOutputs`).
  */
 function ants_multivariate_template_construction2_sh_execute(
-    params: AntsMultivariateTemplateConstruction2ShParameters,
+    params: AntsMultivariateTemplateConstruction2ShParamsDict,
     runner: Runner | null = null,
 ): AntsMultivariateTemplateConstruction2ShOutputs {
     runner = runner || getGlobalRunner();
@@ -506,6 +506,8 @@ function ants_multivariate_template_construction2_sh(
 export {
       ANTS_MULTIVARIATE_TEMPLATE_CONSTRUCTION2_SH_METADATA,
       AntsMultivariateTemplateConstruction2ShOutputs,
+      AntsMultivariateTemplateConstruction2ShParamsDict,
+      AntsMultivariateTemplateConstruction2ShParamsDictTagged,
       ants_multivariate_template_construction2_sh,
       ants_multivariate_template_construction2_sh_execute,
       ants_multivariate_template_construction2_sh_params,

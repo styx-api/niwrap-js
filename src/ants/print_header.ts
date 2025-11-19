@@ -11,16 +11,16 @@ const PRINT_HEADER_METADATA: Metadata = {
 };
 
 
-interface PrintHeaderParameters {
+interface PrintHeaderParamsDict {
     "@type"?: "ants/PrintHeader";
     "image": InputPathType;
     "what_information"?: 0 | 1 | 2 | 3 | 4 | null | undefined;
 }
-type PrintHeaderParametersTagged = Required<Pick<PrintHeaderParameters, '@type'>> & PrintHeaderParameters;
+type PrintHeaderParamsDictTagged = Required<Pick<PrintHeaderParamsDict, '@type'>> & PrintHeaderParamsDict;
 
 
 /**
- * Output object returned when calling `PrintHeaderParameters(...)`.
+ * Output object returned when calling `PrintHeaderParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface PrintHeaderOutputs {
 function print_header_params(
     image: InputPathType,
     what_information: 0 | 1 | 2 | 3 | 4 | null = null,
-): PrintHeaderParametersTagged {
+): PrintHeaderParamsDictTagged {
     const params = {
         "@type": "ants/PrintHeader" as const,
         "image": image,
@@ -68,7 +68,7 @@ function print_header_params(
  * @returns Command-line arguments.
  */
 function print_header_cargs(
-    params: PrintHeaderParameters,
+    params: PrintHeaderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function print_header_cargs(
  * @returns Outputs object.
  */
 function print_header_outputs(
-    params: PrintHeaderParameters,
+    params: PrintHeaderParamsDict,
     execution: Execution,
 ): PrintHeaderOutputs {
     const ret: PrintHeaderOutputs = {
@@ -116,7 +116,7 @@ function print_header_outputs(
  * @returns NamedTuple of outputs (described in `PrintHeaderOutputs`).
  */
 function print_header_execute(
-    params: PrintHeaderParameters,
+    params: PrintHeaderParamsDict,
     runner: Runner | null = null,
 ): PrintHeaderOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function print_header(
 export {
       PRINT_HEADER_METADATA,
       PrintHeaderOutputs,
+      PrintHeaderParamsDict,
+      PrintHeaderParamsDictTagged,
       print_header,
       print_header_execute,
       print_header_params,

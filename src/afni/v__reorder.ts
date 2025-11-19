@@ -11,7 +11,7 @@ const V__REORDER_METADATA: Metadata = {
 };
 
 
-interface VReorderParameters {
+interface VReorderParamsDict {
     "@type"?: "afni/@Reorder";
     "input_dataset": InputPathType;
     "mapfile": InputPathType;
@@ -21,11 +21,11 @@ interface VReorderParameters {
     "test": boolean;
     "help": boolean;
 }
-type VReorderParametersTagged = Required<Pick<VReorderParameters, '@type'>> & VReorderParameters;
+type VReorderParamsDictTagged = Required<Pick<VReorderParamsDict, '@type'>> & VReorderParamsDict;
 
 
 /**
- * Output object returned when calling `VReorderParameters(...)`.
+ * Output object returned when calling `VReorderParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v__reorder_params(
     save_work: boolean = false,
     test: boolean = false,
     help: boolean = false,
-): VReorderParametersTagged {
+): VReorderParamsDictTagged {
     const params = {
         "@type": "afni/@Reorder" as const,
         "input_dataset": input_dataset,
@@ -88,7 +88,7 @@ function v__reorder_params(
  * @returns Command-line arguments.
  */
 function v__reorder_cargs(
-    params: VReorderParameters,
+    params: VReorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function v__reorder_cargs(
  * @returns Outputs object.
  */
 function v__reorder_outputs(
-    params: VReorderParameters,
+    params: VReorderParamsDict,
     execution: Execution,
 ): VReorderOutputs {
     const ret: VReorderOutputs = {
@@ -150,7 +150,7 @@ function v__reorder_outputs(
  * @returns NamedTuple of outputs (described in `VReorderOutputs`).
  */
 function v__reorder_execute(
-    params: VReorderParameters,
+    params: VReorderParamsDict,
     runner: Runner | null = null,
 ): VReorderOutputs {
     runner = runner || getGlobalRunner();
@@ -200,6 +200,8 @@ function v__reorder(
 
 export {
       VReorderOutputs,
+      VReorderParamsDict,
+      VReorderParamsDictTagged,
       V__REORDER_METADATA,
       v__reorder,
       v__reorder_execute,

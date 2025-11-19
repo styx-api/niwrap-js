@@ -11,7 +11,7 @@ const MRIS_SAMPLE_PARC_METADATA: Metadata = {
 };
 
 
-interface MrisSampleParcParameters {
+interface MrisSampleParcParamsDict {
     "@type"?: "freesurfer/mris_sample_parc";
     "subject_name": string;
     "hemisphere": string;
@@ -37,11 +37,11 @@ interface MrisSampleParcParameters {
     "help": boolean;
     "version": boolean;
 }
-type MrisSampleParcParametersTagged = Required<Pick<MrisSampleParcParameters, '@type'>> & MrisSampleParcParameters;
+type MrisSampleParcParamsDictTagged = Required<Pick<MrisSampleParcParamsDict, '@type'>> & MrisSampleParcParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSampleParcParameters(...)`.
+ * Output object returned when calling `MrisSampleParcParamsDict(...)`.
  *
  * @interface
  */
@@ -110,7 +110,7 @@ function mris_sample_parc_params(
     change_unknown: number | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrisSampleParcParametersTagged {
+): MrisSampleParcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_sample_parc" as const,
         "subject_name": subject_name,
@@ -184,7 +184,7 @@ function mris_sample_parc_params(
  * @returns Command-line arguments.
  */
 function mris_sample_parc_cargs(
-    params: MrisSampleParcParameters,
+    params: MrisSampleParcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -314,7 +314,7 @@ function mris_sample_parc_cargs(
  * @returns Outputs object.
  */
 function mris_sample_parc_outputs(
-    params: MrisSampleParcParameters,
+    params: MrisSampleParcParamsDict,
     execution: Execution,
 ): MrisSampleParcOutputs {
     const ret: MrisSampleParcOutputs = {
@@ -340,7 +340,7 @@ function mris_sample_parc_outputs(
  * @returns NamedTuple of outputs (described in `MrisSampleParcOutputs`).
  */
 function mris_sample_parc_execute(
-    params: MrisSampleParcParameters,
+    params: MrisSampleParcParamsDict,
     runner: Runner | null = null,
 ): MrisSampleParcOutputs {
     runner = runner || getGlobalRunner();
@@ -423,6 +423,8 @@ function mris_sample_parc(
 export {
       MRIS_SAMPLE_PARC_METADATA,
       MrisSampleParcOutputs,
+      MrisSampleParcParamsDict,
+      MrisSampleParcParamsDictTagged,
       mris_sample_parc,
       mris_sample_parc_execute,
       mris_sample_parc_params,

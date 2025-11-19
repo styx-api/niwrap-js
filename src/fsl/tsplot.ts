@@ -11,7 +11,7 @@ const TSPLOT_METADATA: Metadata = {
 };
 
 
-interface TsplotParameters {
+interface TsplotParamsDict {
     "@type"?: "fsl/tsplot";
     "input_directory": string;
     "main_filtered_data"?: InputPathType | null | undefined;
@@ -23,11 +23,11 @@ interface TsplotParameters {
     "prewhiten_flag": boolean;
     "no_raw_flag": boolean;
 }
-type TsplotParametersTagged = Required<Pick<TsplotParameters, '@type'>> & TsplotParameters;
+type TsplotParamsDictTagged = Required<Pick<TsplotParamsDict, '@type'>> & TsplotParamsDict;
 
 
 /**
- * Output object returned when calling `TsplotParameters(...)`.
+ * Output object returned when calling `TsplotParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function tsplot_params(
     no_weight_flag: boolean = false,
     prewhiten_flag: boolean = false,
     no_raw_flag: boolean = false,
-): TsplotParametersTagged {
+): TsplotParamsDictTagged {
     const params = {
         "@type": "fsl/tsplot" as const,
         "input_directory": input_directory,
@@ -104,7 +104,7 @@ function tsplot_params(
  * @returns Command-line arguments.
  */
 function tsplot_cargs(
-    params: TsplotParameters,
+    params: TsplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,7 +162,7 @@ function tsplot_cargs(
  * @returns Outputs object.
  */
 function tsplot_outputs(
-    params: TsplotParameters,
+    params: TsplotParamsDict,
     execution: Execution,
 ): TsplotOutputs {
     const ret: TsplotOutputs = {
@@ -188,7 +188,7 @@ function tsplot_outputs(
  * @returns NamedTuple of outputs (described in `TsplotOutputs`).
  */
 function tsplot_execute(
-    params: TsplotParameters,
+    params: TsplotParamsDict,
     runner: Runner | null = null,
 ): TsplotOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function tsplot(
 export {
       TSPLOT_METADATA,
       TsplotOutputs,
+      TsplotParamsDict,
+      TsplotParamsDictTagged,
       tsplot,
       tsplot_execute,
       tsplot_params,

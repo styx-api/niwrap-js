@@ -11,17 +11,17 @@ const V_1D_FLAG_MOTION_METADATA: Metadata = {
 };
 
 
-interface V1dFlagMotionParameters {
+interface V1dFlagMotionParamsDict {
     "@type"?: "afni/1dFlagMotion";
     "input_motion_file": InputPathType;
     "max_translation"?: number | null | undefined;
     "max_rotation"?: number | null | undefined;
 }
-type V1dFlagMotionParametersTagged = Required<Pick<V1dFlagMotionParameters, '@type'>> & V1dFlagMotionParameters;
+type V1dFlagMotionParamsDictTagged = Required<Pick<V1dFlagMotionParamsDict, '@type'>> & V1dFlagMotionParamsDict;
 
 
 /**
- * Output object returned when calling `V1dFlagMotionParameters(...)`.
+ * Output object returned when calling `V1dFlagMotionParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_1d_flag_motion_params(
     input_motion_file: InputPathType,
     max_translation: number | null = null,
     max_rotation: number | null = null,
-): V1dFlagMotionParametersTagged {
+): V1dFlagMotionParamsDictTagged {
     const params = {
         "@type": "afni/1dFlagMotion" as const,
         "input_motion_file": input_motion_file,
@@ -74,7 +74,7 @@ function v_1d_flag_motion_params(
  * @returns Command-line arguments.
  */
 function v_1d_flag_motion_cargs(
-    params: V1dFlagMotionParameters,
+    params: V1dFlagMotionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function v_1d_flag_motion_cargs(
  * @returns Outputs object.
  */
 function v_1d_flag_motion_outputs(
-    params: V1dFlagMotionParameters,
+    params: V1dFlagMotionParamsDict,
     execution: Execution,
 ): V1dFlagMotionOutputs {
     const ret: V1dFlagMotionOutputs = {
@@ -131,7 +131,7 @@ function v_1d_flag_motion_outputs(
  * @returns NamedTuple of outputs (described in `V1dFlagMotionOutputs`).
  */
 function v_1d_flag_motion_execute(
-    params: V1dFlagMotionParameters,
+    params: V1dFlagMotionParamsDict,
     runner: Runner | null = null,
 ): V1dFlagMotionOutputs {
     runner = runner || getGlobalRunner();
@@ -173,6 +173,8 @@ function v_1d_flag_motion(
 
 export {
       V1dFlagMotionOutputs,
+      V1dFlagMotionParamsDict,
+      V1dFlagMotionParamsDictTagged,
       V_1D_FLAG_MOTION_METADATA,
       v_1d_flag_motion,
       v_1d_flag_motion_execute,

@@ -11,7 +11,7 @@ const EDDY_OPENMP_METADATA: Metadata = {
 };
 
 
-interface EddyOpenmpParameters {
+interface EddyOpenmpParamsDict {
     "@type"?: "fsl/eddy_openmp";
     "imain": InputPathType;
     "mask": InputPathType;
@@ -58,11 +58,11 @@ interface EddyOpenmpParameters {
     "data_is_shelled": boolean;
     "verbose": boolean;
 }
-type EddyOpenmpParametersTagged = Required<Pick<EddyOpenmpParameters, '@type'>> & EddyOpenmpParameters;
+type EddyOpenmpParamsDictTagged = Required<Pick<EddyOpenmpParamsDict, '@type'>> & EddyOpenmpParamsDict;
 
 
 /**
- * Output object returned when calling `EddyOpenmpParameters(...)`.
+ * Output object returned when calling `EddyOpenmpParamsDict(...)`.
  *
  * @interface
  */
@@ -245,7 +245,7 @@ function eddy_openmp_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyOpenmpParametersTagged {
+): EddyOpenmpParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_openmp" as const,
         "imain": imain,
@@ -358,7 +358,7 @@ function eddy_openmp_params(
  * @returns Command-line arguments.
  */
 function eddy_openmp_cargs(
-    params: EddyOpenmpParameters,
+    params: EddyOpenmpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -494,7 +494,7 @@ function eddy_openmp_cargs(
  * @returns Outputs object.
  */
 function eddy_openmp_outputs(
-    params: EddyOpenmpParameters,
+    params: EddyOpenmpParamsDict,
     execution: Execution,
 ): EddyOpenmpOutputs {
     const ret: EddyOpenmpOutputs = {
@@ -538,7 +538,7 @@ function eddy_openmp_outputs(
  * @returns NamedTuple of outputs (described in `EddyOpenmpOutputs`).
  */
 function eddy_openmp_execute(
-    params: EddyOpenmpParameters,
+    params: EddyOpenmpParamsDict,
     runner: Runner | null = null,
 ): EddyOpenmpOutputs {
     runner = runner || getGlobalRunner();
@@ -663,6 +663,8 @@ function eddy_openmp(
 export {
       EDDY_OPENMP_METADATA,
       EddyOpenmpOutputs,
+      EddyOpenmpParamsDict,
+      EddyOpenmpParamsDictTagged,
       eddy_openmp,
       eddy_openmp_execute,
       eddy_openmp_params,

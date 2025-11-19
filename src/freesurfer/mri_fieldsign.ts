@@ -11,7 +11,7 @@ const MRI_FIELDSIGN_METADATA: Metadata = {
 };
 
 
-interface MriFieldsignParameters {
+interface MriFieldsignParamsDict {
     "@type"?: "freesurfer/mri_fieldsign";
     "fieldsign_file": string;
     "eccen_values": Array<number>;
@@ -38,11 +38,11 @@ interface MriFieldsignParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
-type MriFieldsignParametersTagged = Required<Pick<MriFieldsignParameters, '@type'>> & MriFieldsignParameters;
+type MriFieldsignParamsDictTagged = Required<Pick<MriFieldsignParamsDict, '@type'>> & MriFieldsignParamsDict;
 
 
 /**
- * Output object returned when calling `MriFieldsignParameters(...)`.
+ * Output object returned when calling `MriFieldsignParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function mri_fieldsign_params(
     checkopts_flag: boolean = false,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): MriFieldsignParametersTagged {
+): MriFieldsignParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fieldsign" as const,
         "fieldsign_file": fieldsign_file,
@@ -170,7 +170,7 @@ function mri_fieldsign_params(
  * @returns Command-line arguments.
  */
 function mri_fieldsign_cargs(
-    params: MriFieldsignParameters,
+    params: MriFieldsignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -295,7 +295,7 @@ function mri_fieldsign_cargs(
  * @returns Outputs object.
  */
 function mri_fieldsign_outputs(
-    params: MriFieldsignParameters,
+    params: MriFieldsignParamsDict,
     execution: Execution,
 ): MriFieldsignOutputs {
     const ret: MriFieldsignOutputs = {
@@ -320,7 +320,7 @@ function mri_fieldsign_outputs(
  * @returns NamedTuple of outputs (described in `MriFieldsignOutputs`).
  */
 function mri_fieldsign_execute(
-    params: MriFieldsignParameters,
+    params: MriFieldsignParamsDict,
     runner: Runner | null = null,
 ): MriFieldsignOutputs {
     runner = runner || getGlobalRunner();
@@ -405,6 +405,8 @@ function mri_fieldsign(
 export {
       MRI_FIELDSIGN_METADATA,
       MriFieldsignOutputs,
+      MriFieldsignParamsDict,
+      MriFieldsignParamsDictTagged,
       mri_fieldsign,
       mri_fieldsign_execute,
       mri_fieldsign_params,

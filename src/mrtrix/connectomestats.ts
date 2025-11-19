@@ -11,22 +11,22 @@ const CONNECTOMESTATS_METADATA: Metadata = {
 };
 
 
-interface ConnectomestatsColumnParameters {
+interface ConnectomestatsColumnParamsDict {
     "@type"?: "column";
     "path": InputPathType;
 }
-type ConnectomestatsColumnParametersTagged = Required<Pick<ConnectomestatsColumnParameters, '@type'>> & ConnectomestatsColumnParameters;
+type ConnectomestatsColumnParamsDictTagged = Required<Pick<ConnectomestatsColumnParamsDict, '@type'>> & ConnectomestatsColumnParamsDict;
 
 
-interface ConnectomestatsConfigParameters {
+interface ConnectomestatsConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type ConnectomestatsConfigParametersTagged = Required<Pick<ConnectomestatsConfigParameters, '@type'>> & ConnectomestatsConfigParameters;
+type ConnectomestatsConfigParamsDictTagged = Required<Pick<ConnectomestatsConfigParamsDict, '@type'>> & ConnectomestatsConfigParamsDict;
 
 
-interface ConnectomestatsParameters {
+interface ConnectomestatsParamsDict {
     "@type"?: "mrtrix/connectomestats";
     "notest": boolean;
     "errors"?: string | null | undefined;
@@ -45,14 +45,14 @@ interface ConnectomestatsParameters {
     "variance"?: InputPathType | null | undefined;
     "ftests"?: InputPathType | null | undefined;
     "fonly": boolean;
-    "column"?: Array<ConnectomestatsColumnParameters> | null | undefined;
+    "column"?: Array<ConnectomestatsColumnParamsDict> | null | undefined;
     "threshold"?: number | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<ConnectomestatsConfigParameters> | null | undefined;
+    "config"?: Array<ConnectomestatsConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
@@ -61,7 +61,7 @@ interface ConnectomestatsParameters {
     "contrast": InputPathType;
     "output": string;
 }
-type ConnectomestatsParametersTagged = Required<Pick<ConnectomestatsParameters, '@type'>> & ConnectomestatsParameters;
+type ConnectomestatsParamsDictTagged = Required<Pick<ConnectomestatsParamsDict, '@type'>> & ConnectomestatsParamsDict;
 
 
 /**
@@ -71,9 +71,9 @@ type ConnectomestatsParametersTagged = Required<Pick<ConnectomestatsParameters, 
  *
  * @returns Parameter dictionary
  */
-function connectomestats_column_params(
+function connectomestats_column(
     path: InputPathType,
-): ConnectomestatsColumnParametersTagged {
+): ConnectomestatsColumnParamsDictTagged {
     const params = {
         "@type": "column" as const,
         "path": path,
@@ -91,7 +91,7 @@ function connectomestats_column_params(
  * @returns Command-line arguments.
  */
 function connectomestats_column_cargs(
-    params: ConnectomestatsColumnParameters,
+    params: ConnectomestatsColumnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,10 +109,10 @@ function connectomestats_column_cargs(
  *
  * @returns Parameter dictionary
  */
-function connectomestats_config_params(
+function connectomestats_config(
     key: string,
     value: string,
-): ConnectomestatsConfigParametersTagged {
+): ConnectomestatsConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -131,7 +131,7 @@ function connectomestats_config_params(
  * @returns Command-line arguments.
  */
 function connectomestats_config_cargs(
-    params: ConnectomestatsConfigParameters,
+    params: ConnectomestatsConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function connectomestats_config_cargs(
 
 
 /**
- * Output object returned when calling `ConnectomestatsParameters(...)`.
+ * Output object returned when calling `ConnectomestatsParamsDict(...)`.
  *
  * @interface
  */
@@ -216,17 +216,17 @@ function connectomestats_params(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<ConnectomestatsColumnParameters> | null = null,
+    column: Array<ConnectomestatsColumnParamsDict> | null = null,
     threshold: number | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<ConnectomestatsConfigParameters> | null = null,
+    config: Array<ConnectomestatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): ConnectomestatsParametersTagged {
+): ConnectomestatsParamsDictTagged {
     const params = {
         "@type": "mrtrix/connectomestats" as const,
         "notest": notest,
@@ -309,7 +309,7 @@ function connectomestats_params(
  * @returns Command-line arguments.
  */
 function connectomestats_cargs(
-    params: ConnectomestatsParameters,
+    params: ConnectomestatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -458,7 +458,7 @@ function connectomestats_cargs(
  * @returns Outputs object.
  */
 function connectomestats_outputs(
-    params: ConnectomestatsParameters,
+    params: ConnectomestatsParamsDict,
     execution: Execution,
 ): ConnectomestatsOutputs {
     const ret: ConnectomestatsOutputs = {
@@ -504,7 +504,7 @@ function connectomestats_outputs(
  * @returns NamedTuple of outputs (described in `ConnectomestatsOutputs`).
  */
 function connectomestats_execute(
-    params: ConnectomestatsParameters,
+    params: ConnectomestatsParamsDict,
     runner: Runner | null = null,
 ): ConnectomestatsOutputs {
     runner = runner || getGlobalRunner();
@@ -606,14 +606,14 @@ function connectomestats(
     variance: InputPathType | null = null,
     ftests: InputPathType | null = null,
     fonly: boolean = false,
-    column: Array<ConnectomestatsColumnParameters> | null = null,
+    column: Array<ConnectomestatsColumnParamsDict> | null = null,
     threshold: number | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<ConnectomestatsConfigParameters> | null = null,
+    config: Array<ConnectomestatsConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -625,10 +625,16 @@ function connectomestats(
 
 export {
       CONNECTOMESTATS_METADATA,
+      ConnectomestatsColumnParamsDict,
+      ConnectomestatsColumnParamsDictTagged,
+      ConnectomestatsConfigParamsDict,
+      ConnectomestatsConfigParamsDictTagged,
       ConnectomestatsOutputs,
+      ConnectomestatsParamsDict,
+      ConnectomestatsParamsDictTagged,
       connectomestats,
-      connectomestats_column_params,
-      connectomestats_config_params,
+      connectomestats_column,
+      connectomestats_config,
       connectomestats_execute,
       connectomestats_params,
 };

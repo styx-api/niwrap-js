@@ -11,15 +11,15 @@ const MRIS2RGB_METADATA: Metadata = {
 };
 
 
-interface Mris2rgbParameters {
+interface Mris2rgbParamsDict {
     "@type"?: "freesurfer/mris2rgb";
     "library_path": string;
 }
-type Mris2rgbParametersTagged = Required<Pick<Mris2rgbParameters, '@type'>> & Mris2rgbParameters;
+type Mris2rgbParamsDictTagged = Required<Pick<Mris2rgbParamsDict, '@type'>> & Mris2rgbParamsDict;
 
 
 /**
- * Output object returned when calling `Mris2rgbParameters(...)`.
+ * Output object returned when calling `Mris2rgbParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface Mris2rgbOutputs {
  */
 function mris2rgb_params(
     library_path: string,
-): Mris2rgbParametersTagged {
+): Mris2rgbParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris2rgb" as const,
         "library_path": library_path,
@@ -58,7 +58,7 @@ function mris2rgb_params(
  * @returns Command-line arguments.
  */
 function mris2rgb_cargs(
-    params: Mris2rgbParameters,
+    params: Mris2rgbParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function mris2rgb_cargs(
  * @returns Outputs object.
  */
 function mris2rgb_outputs(
-    params: Mris2rgbParameters,
+    params: Mris2rgbParamsDict,
     execution: Execution,
 ): Mris2rgbOutputs {
     const ret: Mris2rgbOutputs = {
@@ -105,7 +105,7 @@ function mris2rgb_outputs(
  * @returns NamedTuple of outputs (described in `Mris2rgbOutputs`).
  */
 function mris2rgb_execute(
-    params: Mris2rgbParameters,
+    params: Mris2rgbParamsDict,
     runner: Runner | null = null,
 ): Mris2rgbOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function mris2rgb(
 export {
       MRIS2RGB_METADATA,
       Mris2rgbOutputs,
+      Mris2rgbParamsDict,
+      Mris2rgbParamsDictTagged,
       mris2rgb,
       mris2rgb_execute,
       mris2rgb_params,

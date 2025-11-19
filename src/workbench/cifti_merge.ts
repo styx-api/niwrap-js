@@ -10,38 +10,38 @@ const CIFTI_MERGE_METADATA: Metadata = {
 };
 
 
-interface CiftiMergeUpToParameters {
+interface CiftiMergeUpToParamsDict {
     "@type"?: "up-to";
     "last-index": string;
     "reverse": boolean;
 }
-type CiftiMergeUpToParametersTagged = Required<Pick<CiftiMergeUpToParameters, '@type'>> & CiftiMergeUpToParameters;
+type CiftiMergeUpToParamsDictTagged = Required<Pick<CiftiMergeUpToParamsDict, '@type'>> & CiftiMergeUpToParamsDict;
 
 
-interface CiftiMergeIndexParameters {
+interface CiftiMergeIndexParamsDict {
     "@type"?: "index";
     "index": string;
-    "up-to"?: CiftiMergeUpToParameters | null | undefined;
+    "up-to"?: CiftiMergeUpToParamsDict | null | undefined;
 }
-type CiftiMergeIndexParametersTagged = Required<Pick<CiftiMergeIndexParameters, '@type'>> & CiftiMergeIndexParameters;
+type CiftiMergeIndexParamsDictTagged = Required<Pick<CiftiMergeIndexParamsDict, '@type'>> & CiftiMergeIndexParamsDict;
 
 
-interface CiftiMergeCiftiParameters {
+interface CiftiMergeCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
-    "index"?: Array<CiftiMergeIndexParameters> | null | undefined;
+    "index"?: Array<CiftiMergeIndexParamsDict> | null | undefined;
 }
-type CiftiMergeCiftiParametersTagged = Required<Pick<CiftiMergeCiftiParameters, '@type'>> & CiftiMergeCiftiParameters;
+type CiftiMergeCiftiParamsDictTagged = Required<Pick<CiftiMergeCiftiParamsDict, '@type'>> & CiftiMergeCiftiParamsDict;
 
 
-interface CiftiMergeParameters {
+interface CiftiMergeParamsDict {
     "@type"?: "workbench/cifti-merge";
     "cifti-out": string;
     "direction"?: string | null | undefined;
     "limit-GB"?: number | null | undefined;
-    "cifti"?: Array<CiftiMergeCiftiParameters> | null | undefined;
+    "cifti"?: Array<CiftiMergeCiftiParamsDict> | null | undefined;
 }
-type CiftiMergeParametersTagged = Required<Pick<CiftiMergeParameters, '@type'>> & CiftiMergeParameters;
+type CiftiMergeParamsDictTagged = Required<Pick<CiftiMergeParamsDict, '@type'>> & CiftiMergeParamsDict;
 
 
 /**
@@ -52,10 +52,10 @@ type CiftiMergeParametersTagged = Required<Pick<CiftiMergeParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function cifti_merge_up_to_params(
+function cifti_merge_up_to(
     last_index: string,
     reverse: boolean = false,
-): CiftiMergeUpToParametersTagged {
+): CiftiMergeUpToParamsDictTagged {
     const params = {
         "@type": "up-to" as const,
         "last-index": last_index,
@@ -74,7 +74,7 @@ function cifti_merge_up_to_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_up_to_cargs(
-    params: CiftiMergeUpToParameters,
+    params: CiftiMergeUpToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -97,10 +97,10 @@ function cifti_merge_up_to_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_merge_index_params(
+function cifti_merge_index(
     index: string,
-    up_to: CiftiMergeUpToParameters | null = null,
-): CiftiMergeIndexParametersTagged {
+    up_to: CiftiMergeUpToParamsDict | null = null,
+): CiftiMergeIndexParamsDictTagged {
     const params = {
         "@type": "index" as const,
         "index": index,
@@ -121,7 +121,7 @@ function cifti_merge_index_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_index_cargs(
-    params: CiftiMergeIndexParameters,
+    params: CiftiMergeIndexParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,10 +144,10 @@ function cifti_merge_index_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_merge_cifti_params(
+function cifti_merge_cifti(
     cifti_in: InputPathType,
-    index: Array<CiftiMergeIndexParameters> | null = null,
-): CiftiMergeCiftiParametersTagged {
+    index: Array<CiftiMergeIndexParamsDict> | null = null,
+): CiftiMergeCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -168,7 +168,7 @@ function cifti_merge_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_cifti_cargs(
-    params: CiftiMergeCiftiParameters,
+    params: CiftiMergeCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -184,7 +184,7 @@ function cifti_merge_cifti_cargs(
 
 
 /**
- * Output object returned when calling `CiftiMergeParameters(...)`.
+ * Output object returned when calling `CiftiMergeParamsDict(...)`.
  *
  * @interface
  */
@@ -218,8 +218,8 @@ function cifti_merge_params(
     cifti_out: string,
     direction: string | null,
     limit_gb: number | null,
-    cifti: Array<CiftiMergeCiftiParameters> | null = null,
-): CiftiMergeParametersTagged {
+    cifti: Array<CiftiMergeCiftiParamsDict> | null = null,
+): CiftiMergeParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-merge" as const,
         "cifti-out": cifti_out,
@@ -246,7 +246,7 @@ function cifti_merge_params(
  * @returns Command-line arguments.
  */
 function cifti_merge_cargs(
-    params: CiftiMergeParameters,
+    params: CiftiMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -275,7 +275,7 @@ function cifti_merge_cargs(
  * @returns Outputs object.
  */
 function cifti_merge_outputs(
-    params: CiftiMergeParameters,
+    params: CiftiMergeParamsDict,
     execution: Execution,
 ): CiftiMergeOutputs {
     const ret: CiftiMergeOutputs = {
@@ -301,7 +301,7 @@ function cifti_merge_outputs(
  * @returns NamedTuple of outputs (described in `CiftiMergeOutputs`).
  */
 function cifti_merge_execute(
-    params: CiftiMergeParameters,
+    params: CiftiMergeParamsDict,
     runner: Runner | null = null,
 ): CiftiMergeOutputs {
     runner = runner || getGlobalRunner();
@@ -339,7 +339,7 @@ function cifti_merge(
     cifti_out: string,
     direction: string | null,
     limit_gb: number | null,
-    cifti: Array<CiftiMergeCiftiParameters> | null = null,
+    cifti: Array<CiftiMergeCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMergeOutputs {
     const params = cifti_merge_params(cifti_out, direction, limit_gb, cifti)
@@ -349,11 +349,19 @@ function cifti_merge(
 
 export {
       CIFTI_MERGE_METADATA,
+      CiftiMergeCiftiParamsDict,
+      CiftiMergeCiftiParamsDictTagged,
+      CiftiMergeIndexParamsDict,
+      CiftiMergeIndexParamsDictTagged,
       CiftiMergeOutputs,
+      CiftiMergeParamsDict,
+      CiftiMergeParamsDictTagged,
+      CiftiMergeUpToParamsDict,
+      CiftiMergeUpToParamsDictTagged,
       cifti_merge,
-      cifti_merge_cifti_params,
+      cifti_merge_cifti,
       cifti_merge_execute,
-      cifti_merge_index_params,
+      cifti_merge_index,
       cifti_merge_params,
-      cifti_merge_up_to_params,
+      cifti_merge_up_to,
 };

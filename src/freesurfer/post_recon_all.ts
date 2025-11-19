@@ -11,7 +11,7 @@ const POST_RECON_ALL_METADATA: Metadata = {
 };
 
 
-interface PostReconAllParameters {
+interface PostReconAllParamsDict {
     "@type"?: "freesurfer/post-recon-all";
     "subject": string;
     "subfields": boolean;
@@ -34,11 +34,11 @@ interface PostReconAllParameters {
     "force": boolean;
     "exit_on_error": boolean;
 }
-type PostReconAllParametersTagged = Required<Pick<PostReconAllParameters, '@type'>> & PostReconAllParameters;
+type PostReconAllParamsDictTagged = Required<Pick<PostReconAllParamsDict, '@type'>> & PostReconAllParamsDict;
 
 
 /**
- * Output object returned when calling `PostReconAllParameters(...)`.
+ * Output object returned when calling `PostReconAllParamsDict(...)`.
  *
  * @interface
  */
@@ -97,7 +97,7 @@ function post_recon_all_params(
     threads: number | null = null,
     force: boolean = false,
     exit_on_error: boolean = false,
-): PostReconAllParametersTagged {
+): PostReconAllParamsDictTagged {
     const params = {
         "@type": "freesurfer/post-recon-all" as const,
         "subject": subject,
@@ -136,7 +136,7 @@ function post_recon_all_params(
  * @returns Command-line arguments.
  */
 function post_recon_all_cargs(
-    params: PostReconAllParameters,
+    params: PostReconAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -218,7 +218,7 @@ function post_recon_all_cargs(
  * @returns Outputs object.
  */
 function post_recon_all_outputs(
-    params: PostReconAllParameters,
+    params: PostReconAllParamsDict,
     execution: Execution,
 ): PostReconAllOutputs {
     const ret: PostReconAllOutputs = {
@@ -243,7 +243,7 @@ function post_recon_all_outputs(
  * @returns NamedTuple of outputs (described in `PostReconAllOutputs`).
  */
 function post_recon_all_execute(
-    params: PostReconAllParameters,
+    params: PostReconAllParamsDict,
     runner: Runner | null = null,
 ): PostReconAllOutputs {
     runner = runner || getGlobalRunner();
@@ -320,6 +320,8 @@ function post_recon_all(
 export {
       POST_RECON_ALL_METADATA,
       PostReconAllOutputs,
+      PostReconAllParamsDict,
+      PostReconAllParamsDictTagged,
       post_recon_all,
       post_recon_all_execute,
       post_recon_all_params,

@@ -11,7 +11,7 @@ const REG_TOOLS_METADATA: Metadata = {
 };
 
 
-interface RegToolsParameters {
+interface RegToolsParamsDict {
     "@type"?: "niftyreg/reg_tools";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
@@ -26,11 +26,11 @@ interface RegToolsParameters {
     "threshold_value"?: number | null | undefined;
     "nan_mask_image"?: InputPathType | null | undefined;
 }
-type RegToolsParametersTagged = Required<Pick<RegToolsParameters, '@type'>> & RegToolsParameters;
+type RegToolsParamsDictTagged = Required<Pick<RegToolsParamsDict, '@type'>> & RegToolsParamsDict;
 
 
 /**
- * Output object returned when calling `RegToolsParameters(...)`.
+ * Output object returned when calling `RegToolsParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function reg_tools_params(
     binarize: boolean = false,
     threshold_value: number | null = null,
     nan_mask_image: InputPathType | null = null,
-): RegToolsParametersTagged {
+): RegToolsParamsDictTagged {
     const params = {
         "@type": "niftyreg/reg_tools" as const,
         "input_image": input_image,
@@ -126,7 +126,7 @@ function reg_tools_params(
  * @returns Command-line arguments.
  */
 function reg_tools_cargs(
-    params: RegToolsParameters,
+    params: RegToolsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -211,7 +211,7 @@ function reg_tools_cargs(
  * @returns Outputs object.
  */
 function reg_tools_outputs(
-    params: RegToolsParameters,
+    params: RegToolsParamsDict,
     execution: Execution,
 ): RegToolsOutputs {
     const ret: RegToolsOutputs = {
@@ -237,7 +237,7 @@ function reg_tools_outputs(
  * @returns NamedTuple of outputs (described in `RegToolsOutputs`).
  */
 function reg_tools_execute(
-    params: RegToolsParameters,
+    params: RegToolsParamsDict,
     runner: Runner | null = null,
 ): RegToolsOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function reg_tools(
 export {
       REG_TOOLS_METADATA,
       RegToolsOutputs,
+      RegToolsParamsDict,
+      RegToolsParamsDictTagged,
       reg_tools,
       reg_tools_execute,
       reg_tools_params,

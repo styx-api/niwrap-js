@@ -11,7 +11,7 @@ const DMRI_SPLINE_METADATA: Metadata = {
 };
 
 
-interface DmriSplineParameters {
+interface DmriSplineParamsDict {
     "@type"?: "freesurfer/dmri_spline";
     "control_points_file": InputPathType;
     "mask_volume": InputPathType;
@@ -22,11 +22,11 @@ interface DmriSplineParameters {
     "debug": boolean;
     "check_options": boolean;
 }
-type DmriSplineParametersTagged = Required<Pick<DmriSplineParameters, '@type'>> & DmriSplineParameters;
+type DmriSplineParamsDictTagged = Required<Pick<DmriSplineParamsDict, '@type'>> & DmriSplineParamsDict;
 
 
 /**
- * Output object returned when calling `DmriSplineParameters(...)`.
+ * Output object returned when calling `DmriSplineParamsDict(...)`.
  *
  * @interface
  */
@@ -81,7 +81,7 @@ function dmri_spline_params(
     output_vectors_base: string | null = null,
     debug: boolean = false,
     check_options: boolean = false,
-): DmriSplineParametersTagged {
+): DmriSplineParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_spline" as const,
         "control_points_file": control_points_file,
@@ -112,7 +112,7 @@ function dmri_spline_params(
  * @returns Command-line arguments.
  */
 function dmri_spline_cargs(
-    params: DmriSplineParameters,
+    params: DmriSplineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -165,7 +165,7 @@ function dmri_spline_cargs(
  * @returns Outputs object.
  */
 function dmri_spline_outputs(
-    params: DmriSplineParameters,
+    params: DmriSplineParamsDict,
     execution: Execution,
 ): DmriSplineOutputs {
     const ret: DmriSplineOutputs = {
@@ -195,7 +195,7 @@ function dmri_spline_outputs(
  * @returns NamedTuple of outputs (described in `DmriSplineOutputs`).
  */
 function dmri_spline_execute(
-    params: DmriSplineParameters,
+    params: DmriSplineParamsDict,
     runner: Runner | null = null,
 ): DmriSplineOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function dmri_spline(
 export {
       DMRI_SPLINE_METADATA,
       DmriSplineOutputs,
+      DmriSplineParamsDict,
+      DmriSplineParamsDictTagged,
       dmri_spline,
       dmri_spline_execute,
       dmri_spline_params,

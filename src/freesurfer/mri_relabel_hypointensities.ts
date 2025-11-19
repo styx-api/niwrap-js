@@ -11,17 +11,17 @@ const MRI_RELABEL_HYPOINTENSITIES_METADATA: Metadata = {
 };
 
 
-interface MriRelabelHypointensitiesParameters {
+interface MriRelabelHypointensitiesParamsDict {
     "@type"?: "freesurfer/mri_relabel_hypointensities";
     "input_aseg": InputPathType;
     "surface_directory": string;
     "output_aseg": string;
 }
-type MriRelabelHypointensitiesParametersTagged = Required<Pick<MriRelabelHypointensitiesParameters, '@type'>> & MriRelabelHypointensitiesParameters;
+type MriRelabelHypointensitiesParamsDictTagged = Required<Pick<MriRelabelHypointensitiesParamsDict, '@type'>> & MriRelabelHypointensitiesParamsDict;
 
 
 /**
- * Output object returned when calling `MriRelabelHypointensitiesParameters(...)`.
+ * Output object returned when calling `MriRelabelHypointensitiesParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_relabel_hypointensities_params(
     input_aseg: InputPathType,
     surface_directory: string,
     output_aseg: string,
-): MriRelabelHypointensitiesParametersTagged {
+): MriRelabelHypointensitiesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_relabel_hypointensities" as const,
         "input_aseg": input_aseg,
@@ -70,7 +70,7 @@ function mri_relabel_hypointensities_params(
  * @returns Command-line arguments.
  */
 function mri_relabel_hypointensities_cargs(
-    params: MriRelabelHypointensitiesParameters,
+    params: MriRelabelHypointensitiesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_relabel_hypointensities_cargs(
  * @returns Outputs object.
  */
 function mri_relabel_hypointensities_outputs(
-    params: MriRelabelHypointensitiesParameters,
+    params: MriRelabelHypointensitiesParamsDict,
     execution: Execution,
 ): MriRelabelHypointensitiesOutputs {
     const ret: MriRelabelHypointensitiesOutputs = {
@@ -117,7 +117,7 @@ function mri_relabel_hypointensities_outputs(
  * @returns NamedTuple of outputs (described in `MriRelabelHypointensitiesOutputs`).
  */
 function mri_relabel_hypointensities_execute(
-    params: MriRelabelHypointensitiesParameters,
+    params: MriRelabelHypointensitiesParamsDict,
     runner: Runner | null = null,
 ): MriRelabelHypointensitiesOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_relabel_hypointensities(
 export {
       MRI_RELABEL_HYPOINTENSITIES_METADATA,
       MriRelabelHypointensitiesOutputs,
+      MriRelabelHypointensitiesParamsDict,
+      MriRelabelHypointensitiesParamsDictTagged,
       mri_relabel_hypointensities,
       mri_relabel_hypointensities_execute,
       mri_relabel_hypointensities_params,

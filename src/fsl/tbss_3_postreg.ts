@@ -11,16 +11,16 @@ const TBSS_3_POSTREG_METADATA: Metadata = {
 };
 
 
-interface Tbss3PostregParameters {
+interface Tbss3PostregParamsDict {
     "@type"?: "fsl/tbss_3_postreg";
     "derive_mean_from_study": boolean;
     "use_fmrib58": boolean;
 }
-type Tbss3PostregParametersTagged = Required<Pick<Tbss3PostregParameters, '@type'>> & Tbss3PostregParameters;
+type Tbss3PostregParamsDictTagged = Required<Pick<Tbss3PostregParamsDict, '@type'>> & Tbss3PostregParamsDict;
 
 
 /**
- * Output object returned when calling `Tbss3PostregParameters(...)`.
+ * Output object returned when calling `Tbss3PostregParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface Tbss3PostregOutputs {
 function tbss_3_postreg_params(
     derive_mean_from_study: boolean = false,
     use_fmrib58: boolean = false,
-): Tbss3PostregParametersTagged {
+): Tbss3PostregParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_3_postreg" as const,
         "derive_mean_from_study": derive_mean_from_study,
@@ -62,7 +62,7 @@ function tbss_3_postreg_params(
  * @returns Command-line arguments.
  */
 function tbss_3_postreg_cargs(
-    params: Tbss3PostregParameters,
+    params: Tbss3PostregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function tbss_3_postreg_cargs(
  * @returns Outputs object.
  */
 function tbss_3_postreg_outputs(
-    params: Tbss3PostregParameters,
+    params: Tbss3PostregParamsDict,
     execution: Execution,
 ): Tbss3PostregOutputs {
     const ret: Tbss3PostregOutputs = {
@@ -111,7 +111,7 @@ function tbss_3_postreg_outputs(
  * @returns NamedTuple of outputs (described in `Tbss3PostregOutputs`).
  */
 function tbss_3_postreg_execute(
-    params: Tbss3PostregParameters,
+    params: Tbss3PostregParamsDict,
     runner: Runner | null = null,
 ): Tbss3PostregOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function tbss_3_postreg(
 export {
       TBSS_3_POSTREG_METADATA,
       Tbss3PostregOutputs,
+      Tbss3PostregParamsDict,
+      Tbss3PostregParamsDictTagged,
       tbss_3_postreg,
       tbss_3_postreg_execute,
       tbss_3_postreg_params,

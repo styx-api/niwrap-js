@@ -11,7 +11,7 @@ const LABEL2SURF_METADATA: Metadata = {
 };
 
 
-interface Label2surfParameters {
+interface Label2surfParamsDict {
     "@type"?: "fsl/label2surf";
     "input_surface": InputPathType;
     "output_surface": string;
@@ -19,11 +19,11 @@ interface Label2surfParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type Label2surfParametersTagged = Required<Pick<Label2surfParameters, '@type'>> & Label2surfParameters;
+type Label2surfParamsDictTagged = Required<Pick<Label2surfParamsDict, '@type'>> & Label2surfParamsDict;
 
 
 /**
- * Output object returned when calling `Label2surfParameters(...)`.
+ * Output object returned when calling `Label2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function label2surf_params(
     labels: InputPathType,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): Label2surfParametersTagged {
+): Label2surfParamsDictTagged {
     const params = {
         "@type": "fsl/label2surf" as const,
         "input_surface": input_surface,
@@ -78,7 +78,7 @@ function label2surf_params(
  * @returns Command-line arguments.
  */
 function label2surf_cargs(
-    params: Label2surfParameters,
+    params: Label2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function label2surf_cargs(
  * @returns Outputs object.
  */
 function label2surf_outputs(
-    params: Label2surfParameters,
+    params: Label2surfParamsDict,
     execution: Execution,
 ): Label2surfOutputs {
     const ret: Label2surfOutputs = {
@@ -140,7 +140,7 @@ function label2surf_outputs(
  * @returns NamedTuple of outputs (described in `Label2surfOutputs`).
  */
 function label2surf_execute(
-    params: Label2surfParameters,
+    params: Label2surfParamsDict,
     runner: Runner | null = null,
 ): Label2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function label2surf(
 export {
       LABEL2SURF_METADATA,
       Label2surfOutputs,
+      Label2surfParamsDict,
+      Label2surfParamsDictTagged,
       label2surf,
       label2surf_execute,
       label2surf_params,

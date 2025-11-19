@@ -11,7 +11,7 @@ const SLICES_METADATA: Metadata = {
 };
 
 
-interface SlicesParameters {
+interface SlicesParamsDict {
     "@type"?: "fsl/slices";
     "primary_input": InputPathType;
     "secondary_input"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface SlicesParameters {
     "intensity_range"?: Array<number> | null | undefined;
     "output_gif"?: string | null | undefined;
 }
-type SlicesParametersTagged = Required<Pick<SlicesParameters, '@type'>> & SlicesParameters;
+type SlicesParamsDictTagged = Required<Pick<SlicesParamsDict, '@type'>> & SlicesParamsDict;
 
 
 /**
- * Output object returned when calling `SlicesParameters(...)`.
+ * Output object returned when calling `SlicesParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function slices_params(
     scale_factor: number | null = null,
     intensity_range: Array<number> | null = null,
     output_gif: string | null = null,
-): SlicesParametersTagged {
+): SlicesParamsDictTagged {
     const params = {
         "@type": "fsl/slices" as const,
         "primary_input": primary_input,
@@ -82,7 +82,7 @@ function slices_params(
  * @returns Command-line arguments.
  */
 function slices_cargs(
-    params: SlicesParameters,
+    params: SlicesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function slices_cargs(
  * @returns Outputs object.
  */
 function slices_outputs(
-    params: SlicesParameters,
+    params: SlicesParamsDict,
     execution: Execution,
 ): SlicesOutputs {
     const ret: SlicesOutputs = {
@@ -147,7 +147,7 @@ function slices_outputs(
  * @returns NamedTuple of outputs (described in `SlicesOutputs`).
  */
 function slices_execute(
-    params: SlicesParameters,
+    params: SlicesParamsDict,
     runner: Runner | null = null,
 ): SlicesOutputs {
     runner = runner || getGlobalRunner();
@@ -194,6 +194,8 @@ function slices(
 export {
       SLICES_METADATA,
       SlicesOutputs,
+      SlicesParamsDict,
+      SlicesParamsDictTagged,
       slices,
       slices_execute,
       slices_params,

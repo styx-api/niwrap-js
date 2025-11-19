@@ -11,7 +11,7 @@ const STD2IMGCOORD_METADATA: Metadata = {
 };
 
 
-interface Std2imgcoordParameters {
+interface Std2imgcoordParamsDict {
     "@type"?: "fsl/std2imgcoord";
     "filename_coordinates": InputPathType;
     "standard_image"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface Std2imgcoordParameters {
     "verbose": boolean;
     "more_verbose": boolean;
 }
-type Std2imgcoordParametersTagged = Required<Pick<Std2imgcoordParameters, '@type'>> & Std2imgcoordParameters;
+type Std2imgcoordParamsDictTagged = Required<Pick<Std2imgcoordParamsDict, '@type'>> & Std2imgcoordParamsDict;
 
 
 /**
- * Output object returned when calling `Std2imgcoordParameters(...)`.
+ * Output object returned when calling `Std2imgcoordParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function std2imgcoord_params(
     output_vox: boolean = false,
     verbose: boolean = false,
     more_verbose: boolean = false,
-): Std2imgcoordParametersTagged {
+): Std2imgcoordParamsDictTagged {
     const params = {
         "@type": "fsl/std2imgcoord" as const,
         "filename_coordinates": filename_coordinates,
@@ -102,7 +102,7 @@ function std2imgcoord_params(
  * @returns Command-line arguments.
  */
 function std2imgcoord_cargs(
-    params: Std2imgcoordParameters,
+    params: Std2imgcoordParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function std2imgcoord_cargs(
  * @returns Outputs object.
  */
 function std2imgcoord_outputs(
-    params: Std2imgcoordParameters,
+    params: Std2imgcoordParamsDict,
     execution: Execution,
 ): Std2imgcoordOutputs {
     const ret: Std2imgcoordOutputs = {
@@ -186,7 +186,7 @@ function std2imgcoord_outputs(
  * @returns NamedTuple of outputs (described in `Std2imgcoordOutputs`).
  */
 function std2imgcoord_execute(
-    params: Std2imgcoordParameters,
+    params: Std2imgcoordParamsDict,
     runner: Runner | null = null,
 ): Std2imgcoordOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function std2imgcoord(
 export {
       STD2IMGCOORD_METADATA,
       Std2imgcoordOutputs,
+      Std2imgcoordParamsDict,
+      Std2imgcoordParamsDictTagged,
       std2imgcoord,
       std2imgcoord_execute,
       std2imgcoord_params,

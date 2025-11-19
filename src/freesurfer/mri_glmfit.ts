@@ -11,7 +11,7 @@ const MRI_GLMFIT_METADATA: Metadata = {
 };
 
 
-interface MriGlmfitParameters {
+interface MriGlmfitParamsDict {
     "@type"?: "freesurfer/mri_glmfit";
     "glmdir"?: string | null | undefined;
     "y_input": InputPathType;
@@ -86,11 +86,11 @@ interface MriGlmfitParameters {
     "sim_done_file"?: InputPathType | null | undefined;
     "no_sig_double_flag": boolean;
 }
-type MriGlmfitParametersTagged = Required<Pick<MriGlmfitParameters, '@type'>> & MriGlmfitParameters;
+type MriGlmfitParamsDictTagged = Required<Pick<MriGlmfitParamsDict, '@type'>> & MriGlmfitParamsDict;
 
 
 /**
- * Output object returned when calling `MriGlmfitParameters(...)`.
+ * Output object returned when calling `MriGlmfitParamsDict(...)`.
  *
  * @interface
  */
@@ -293,7 +293,7 @@ function mri_glmfit_params(
     illcond_flag: boolean = false,
     sim_done_file: InputPathType | null = null,
     no_sig_double_flag: boolean = false,
-): MriGlmfitParametersTagged {
+): MriGlmfitParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_glmfit" as const,
         "y_input": y_input,
@@ -448,7 +448,7 @@ function mri_glmfit_params(
  * @returns Command-line arguments.
  */
 function mri_glmfit_cargs(
-    params: MriGlmfitParameters,
+    params: MriGlmfitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -782,7 +782,7 @@ function mri_glmfit_cargs(
  * @returns Outputs object.
  */
 function mri_glmfit_outputs(
-    params: MriGlmfitParameters,
+    params: MriGlmfitParamsDict,
     execution: Execution,
 ): MriGlmfitOutputs {
     const ret: MriGlmfitOutputs = {
@@ -817,7 +817,7 @@ function mri_glmfit_outputs(
  * @returns NamedTuple of outputs (described in `MriGlmfitOutputs`).
  */
 function mri_glmfit_execute(
-    params: MriGlmfitParameters,
+    params: MriGlmfitParamsDict,
     runner: Runner | null = null,
 ): MriGlmfitOutputs {
     runner = runner || getGlobalRunner();
@@ -998,6 +998,8 @@ function mri_glmfit(
 export {
       MRI_GLMFIT_METADATA,
       MriGlmfitOutputs,
+      MriGlmfitParamsDict,
+      MriGlmfitParamsDictTagged,
       mri_glmfit,
       mri_glmfit_execute,
       mri_glmfit_params,

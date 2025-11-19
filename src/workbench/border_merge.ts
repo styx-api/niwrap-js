@@ -10,36 +10,36 @@ const BORDER_MERGE_METADATA: Metadata = {
 };
 
 
-interface BorderMergeUpToParameters {
+interface BorderMergeUpToParamsDict {
     "@type"?: "up-to";
     "last-border": string;
     "reverse": boolean;
 }
-type BorderMergeUpToParametersTagged = Required<Pick<BorderMergeUpToParameters, '@type'>> & BorderMergeUpToParameters;
+type BorderMergeUpToParamsDictTagged = Required<Pick<BorderMergeUpToParamsDict, '@type'>> & BorderMergeUpToParamsDict;
 
 
-interface BorderMergeSelectParameters {
+interface BorderMergeSelectParamsDict {
     "@type"?: "select";
     "border": string;
-    "up-to"?: BorderMergeUpToParameters | null | undefined;
+    "up-to"?: BorderMergeUpToParamsDict | null | undefined;
 }
-type BorderMergeSelectParametersTagged = Required<Pick<BorderMergeSelectParameters, '@type'>> & BorderMergeSelectParameters;
+type BorderMergeSelectParamsDictTagged = Required<Pick<BorderMergeSelectParamsDict, '@type'>> & BorderMergeSelectParamsDict;
 
 
-interface BorderMergeBorderParameters {
+interface BorderMergeBorderParamsDict {
     "@type"?: "border";
     "border-file-in": InputPathType;
-    "select"?: Array<BorderMergeSelectParameters> | null | undefined;
+    "select"?: Array<BorderMergeSelectParamsDict> | null | undefined;
 }
-type BorderMergeBorderParametersTagged = Required<Pick<BorderMergeBorderParameters, '@type'>> & BorderMergeBorderParameters;
+type BorderMergeBorderParamsDictTagged = Required<Pick<BorderMergeBorderParamsDict, '@type'>> & BorderMergeBorderParamsDict;
 
 
-interface BorderMergeParameters {
+interface BorderMergeParamsDict {
     "@type"?: "workbench/border-merge";
     "border-file-out": string;
-    "border"?: Array<BorderMergeBorderParameters> | null | undefined;
+    "border"?: Array<BorderMergeBorderParamsDict> | null | undefined;
 }
-type BorderMergeParametersTagged = Required<Pick<BorderMergeParameters, '@type'>> & BorderMergeParameters;
+type BorderMergeParamsDictTagged = Required<Pick<BorderMergeParamsDict, '@type'>> & BorderMergeParamsDict;
 
 
 /**
@@ -50,10 +50,10 @@ type BorderMergeParametersTagged = Required<Pick<BorderMergeParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function border_merge_up_to_params(
+function border_merge_up_to(
     last_border: string,
     reverse: boolean = false,
-): BorderMergeUpToParametersTagged {
+): BorderMergeUpToParamsDictTagged {
     const params = {
         "@type": "up-to" as const,
         "last-border": last_border,
@@ -72,7 +72,7 @@ function border_merge_up_to_params(
  * @returns Command-line arguments.
  */
 function border_merge_up_to_cargs(
-    params: BorderMergeUpToParameters,
+    params: BorderMergeUpToParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,10 +95,10 @@ function border_merge_up_to_cargs(
  *
  * @returns Parameter dictionary
  */
-function border_merge_select_params(
+function border_merge_select(
     border: string,
-    up_to: BorderMergeUpToParameters | null = null,
-): BorderMergeSelectParametersTagged {
+    up_to: BorderMergeUpToParamsDict | null = null,
+): BorderMergeSelectParamsDictTagged {
     const params = {
         "@type": "select" as const,
         "border": border,
@@ -119,7 +119,7 @@ function border_merge_select_params(
  * @returns Command-line arguments.
  */
 function border_merge_select_cargs(
-    params: BorderMergeSelectParameters,
+    params: BorderMergeSelectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,10 +142,10 @@ function border_merge_select_cargs(
  *
  * @returns Parameter dictionary
  */
-function border_merge_border_params(
+function border_merge_border(
     border_file_in: InputPathType,
-    select: Array<BorderMergeSelectParameters> | null = null,
-): BorderMergeBorderParametersTagged {
+    select: Array<BorderMergeSelectParamsDict> | null = null,
+): BorderMergeBorderParamsDictTagged {
     const params = {
         "@type": "border" as const,
         "border-file-in": border_file_in,
@@ -166,7 +166,7 @@ function border_merge_border_params(
  * @returns Command-line arguments.
  */
 function border_merge_border_cargs(
-    params: BorderMergeBorderParameters,
+    params: BorderMergeBorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function border_merge_border_cargs(
 
 
 /**
- * Output object returned when calling `BorderMergeParameters(...)`.
+ * Output object returned when calling `BorderMergeParamsDict(...)`.
  *
  * @interface
  */
@@ -208,8 +208,8 @@ interface BorderMergeOutputs {
  */
 function border_merge_params(
     border_file_out: string,
-    border: Array<BorderMergeBorderParameters> | null = null,
-): BorderMergeParametersTagged {
+    border: Array<BorderMergeBorderParamsDict> | null = null,
+): BorderMergeParamsDictTagged {
     const params = {
         "@type": "workbench/border-merge" as const,
         "border-file-out": border_file_out,
@@ -230,7 +230,7 @@ function border_merge_params(
  * @returns Command-line arguments.
  */
 function border_merge_cargs(
-    params: BorderMergeParameters,
+    params: BorderMergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,7 +255,7 @@ function border_merge_cargs(
  * @returns Outputs object.
  */
 function border_merge_outputs(
-    params: BorderMergeParameters,
+    params: BorderMergeParamsDict,
     execution: Execution,
 ): BorderMergeOutputs {
     const ret: BorderMergeOutputs = {
@@ -281,7 +281,7 @@ function border_merge_outputs(
  * @returns NamedTuple of outputs (described in `BorderMergeOutputs`).
  */
 function border_merge_execute(
-    params: BorderMergeParameters,
+    params: BorderMergeParamsDict,
     runner: Runner | null = null,
 ): BorderMergeOutputs {
     runner = runner || getGlobalRunner();
@@ -311,7 +311,7 @@ function border_merge_execute(
  */
 function border_merge(
     border_file_out: string,
-    border: Array<BorderMergeBorderParameters> | null = null,
+    border: Array<BorderMergeBorderParamsDict> | null = null,
     runner: Runner | null = null,
 ): BorderMergeOutputs {
     const params = border_merge_params(border_file_out, border)
@@ -321,11 +321,19 @@ function border_merge(
 
 export {
       BORDER_MERGE_METADATA,
+      BorderMergeBorderParamsDict,
+      BorderMergeBorderParamsDictTagged,
       BorderMergeOutputs,
+      BorderMergeParamsDict,
+      BorderMergeParamsDictTagged,
+      BorderMergeSelectParamsDict,
+      BorderMergeSelectParamsDictTagged,
+      BorderMergeUpToParamsDict,
+      BorderMergeUpToParamsDictTagged,
       border_merge,
-      border_merge_border_params,
+      border_merge_border,
       border_merge_execute,
       border_merge_params,
-      border_merge_select_params,
-      border_merge_up_to_params,
+      border_merge_select,
+      border_merge_up_to,
 };

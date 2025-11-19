@@ -11,7 +11,7 @@ const THRESHOLD_IMAGE_METADATA: Metadata = {
 };
 
 
-interface ThresholdImageParameters {
+interface ThresholdImageParamsDict {
     "@type"?: "ants/ThresholdImage";
     "image_dimension": number;
     "image_in": InputPathType;
@@ -24,11 +24,11 @@ interface ThresholdImageParameters {
     "kmeans_number_of_thresholds"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
 }
-type ThresholdImageParametersTagged = Required<Pick<ThresholdImageParameters, '@type'>> & ThresholdImageParameters;
+type ThresholdImageParamsDictTagged = Required<Pick<ThresholdImageParamsDict, '@type'>> & ThresholdImageParamsDict;
 
 
 /**
- * Output object returned when calling `ThresholdImageParameters(...)`.
+ * Output object returned when calling `ThresholdImageParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function threshold_image_params(
     otsu_number_of_thresholds: number | null = null,
     kmeans_number_of_thresholds: number | null = null,
     mask_image: InputPathType | null = null,
-): ThresholdImageParametersTagged {
+): ThresholdImageParamsDictTagged {
     const params = {
         "@type": "ants/ThresholdImage" as const,
         "image_dimension": image_dimension,
@@ -112,7 +112,7 @@ function threshold_image_params(
  * @returns Command-line arguments.
  */
 function threshold_image_cargs(
-    params: ThresholdImageParameters,
+    params: ThresholdImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -154,7 +154,7 @@ function threshold_image_cargs(
  * @returns Outputs object.
  */
 function threshold_image_outputs(
-    params: ThresholdImageParameters,
+    params: ThresholdImageParamsDict,
     execution: Execution,
 ): ThresholdImageOutputs {
     const ret: ThresholdImageOutputs = {
@@ -180,7 +180,7 @@ function threshold_image_outputs(
  * @returns NamedTuple of outputs (described in `ThresholdImageOutputs`).
  */
 function threshold_image_execute(
-    params: ThresholdImageParameters,
+    params: ThresholdImageParamsDict,
     runner: Runner | null = null,
 ): ThresholdImageOutputs {
     runner = runner || getGlobalRunner();
@@ -237,6 +237,8 @@ function threshold_image(
 export {
       THRESHOLD_IMAGE_METADATA,
       ThresholdImageOutputs,
+      ThresholdImageParamsDict,
+      ThresholdImageParamsDictTagged,
       threshold_image,
       threshold_image_execute,
       threshold_image_params,

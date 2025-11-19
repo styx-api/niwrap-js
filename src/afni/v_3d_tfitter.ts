@@ -11,7 +11,7 @@ const V_3D_TFITTER_METADATA: Metadata = {
 };
 
 
-interface V3dTfitterParameters {
+interface V3dTfitterParamsDict {
     "@type"?: "afni/3dTfitter";
     "RHS": string;
     "LHS"?: Array<string> | null | undefined;
@@ -32,11 +32,11 @@ interface V3dTfitterParameters {
     "mask"?: string | null | undefined;
     "quiet": boolean;
 }
-type V3dTfitterParametersTagged = Required<Pick<V3dTfitterParameters, '@type'>> & V3dTfitterParameters;
+type V3dTfitterParamsDictTagged = Required<Pick<V3dTfitterParamsDict, '@type'>> & V3dTfitterParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTfitterParameters(...)`.
+ * Output object returned when calling `V3dTfitterParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function v_3d_tfitter_params(
     errsum: string | null = null,
     mask: string | null = null,
     quiet: boolean = false,
-): V3dTfitterParametersTagged {
+): V3dTfitterParamsDictTagged {
     const params = {
         "@type": "afni/3dTfitter" as const,
         "RHS": rhs,
@@ -166,7 +166,7 @@ function v_3d_tfitter_params(
  * @returns Command-line arguments.
  */
 function v_3d_tfitter_cargs(
-    params: V3dTfitterParameters,
+    params: V3dTfitterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -281,7 +281,7 @@ function v_3d_tfitter_cargs(
  * @returns Outputs object.
  */
 function v_3d_tfitter_outputs(
-    params: V3dTfitterParameters,
+    params: V3dTfitterParamsDict,
     execution: Execution,
 ): V3dTfitterOutputs {
     const ret: V3dTfitterOutputs = {
@@ -315,7 +315,7 @@ function v_3d_tfitter_outputs(
  * @returns NamedTuple of outputs (described in `V3dTfitterOutputs`).
  */
 function v_3d_tfitter_execute(
-    params: V3dTfitterParameters,
+    params: V3dTfitterParamsDict,
     runner: Runner | null = null,
 ): V3dTfitterOutputs {
     runner = runner || getGlobalRunner();
@@ -393,6 +393,8 @@ function v_3d_tfitter(
 
 export {
       V3dTfitterOutputs,
+      V3dTfitterParamsDict,
+      V3dTfitterParamsDictTagged,
       V_3D_TFITTER_METADATA,
       v_3d_tfitter,
       v_3d_tfitter_execute,

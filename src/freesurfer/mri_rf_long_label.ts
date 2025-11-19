@@ -11,15 +11,15 @@ const MRI_RF_LONG_LABEL_METADATA: Metadata = {
 };
 
 
-interface MriRfLongLabelParameters {
+interface MriRfLongLabelParamsDict {
     "@type"?: "freesurfer/mri_rf_long_label";
     "help_flag"?: string | null | undefined;
 }
-type MriRfLongLabelParametersTagged = Required<Pick<MriRfLongLabelParameters, '@type'>> & MriRfLongLabelParameters;
+type MriRfLongLabelParamsDictTagged = Required<Pick<MriRfLongLabelParamsDict, '@type'>> & MriRfLongLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MriRfLongLabelParameters(...)`.
+ * Output object returned when calling `MriRfLongLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MriRfLongLabelOutputs {
  */
 function mri_rf_long_label_params(
     help_flag: string | null = null,
-): MriRfLongLabelParametersTagged {
+): MriRfLongLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_rf_long_label" as const,
     };
@@ -60,7 +60,7 @@ function mri_rf_long_label_params(
  * @returns Command-line arguments.
  */
 function mri_rf_long_label_cargs(
-    params: MriRfLongLabelParameters,
+    params: MriRfLongLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function mri_rf_long_label_cargs(
  * @returns Outputs object.
  */
 function mri_rf_long_label_outputs(
-    params: MriRfLongLabelParameters,
+    params: MriRfLongLabelParamsDict,
     execution: Execution,
 ): MriRfLongLabelOutputs {
     const ret: MriRfLongLabelOutputs = {
@@ -106,7 +106,7 @@ function mri_rf_long_label_outputs(
  * @returns NamedTuple of outputs (described in `MriRfLongLabelOutputs`).
  */
 function mri_rf_long_label_execute(
-    params: MriRfLongLabelParameters,
+    params: MriRfLongLabelParamsDict,
     runner: Runner | null = null,
 ): MriRfLongLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function mri_rf_long_label(
 export {
       MRI_RF_LONG_LABEL_METADATA,
       MriRfLongLabelOutputs,
+      MriRfLongLabelParamsDict,
+      MriRfLongLabelParamsDictTagged,
       mri_rf_long_label,
       mri_rf_long_label_execute,
       mri_rf_long_label_params,

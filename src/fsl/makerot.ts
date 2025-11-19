@@ -11,7 +11,7 @@ const MAKEROT_METADATA: Metadata = {
 };
 
 
-interface MakerotParameters {
+interface MakerotParamsDict {
     "@type"?: "fsl/makerot";
     "axis"?: string | null | undefined;
     "cov"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface MakerotParameters {
     "help_flag": boolean;
     "theta": number;
 }
-type MakerotParametersTagged = Required<Pick<MakerotParameters, '@type'>> & MakerotParameters;
+type MakerotParamsDictTagged = Required<Pick<MakerotParamsDict, '@type'>> & MakerotParamsDict;
 
 
 /**
- * Output object returned when calling `MakerotParameters(...)`.
+ * Output object returned when calling `MakerotParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function makerot_params(
     output_file: string | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): MakerotParametersTagged {
+): MakerotParamsDictTagged {
     const params = {
         "@type": "fsl/makerot" as const,
         "verbose_flag": verbose_flag,
@@ -94,7 +94,7 @@ function makerot_params(
  * @returns Command-line arguments.
  */
 function makerot_cargs(
-    params: MakerotParameters,
+    params: MakerotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -146,7 +146,7 @@ function makerot_cargs(
  * @returns Outputs object.
  */
 function makerot_outputs(
-    params: MakerotParameters,
+    params: MakerotParamsDict,
     execution: Execution,
 ): MakerotOutputs {
     const ret: MakerotOutputs = {
@@ -172,7 +172,7 @@ function makerot_outputs(
  * @returns NamedTuple of outputs (described in `MakerotOutputs`).
  */
 function makerot_execute(
-    params: MakerotParameters,
+    params: MakerotParamsDict,
     runner: Runner | null = null,
 ): MakerotOutputs {
     runner = runner || getGlobalRunner();
@@ -223,6 +223,8 @@ function makerot(
 export {
       MAKEROT_METADATA,
       MakerotOutputs,
+      MakerotParamsDict,
+      MakerotParamsDictTagged,
       makerot,
       makerot_execute,
       makerot_params,

@@ -11,7 +11,7 @@ const MRI_COMPUTE_CHANGE_MAP_METADATA: Metadata = {
 };
 
 
-interface MriComputeChangeMapParameters {
+interface MriComputeChangeMapParamsDict {
     "@type"?: "freesurfer/mri_compute_change_map";
     "mean_filter": boolean;
     "gaussian_sigma"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface MriComputeChangeMapParameters {
     "transform": InputPathType;
     "outvolume": string;
 }
-type MriComputeChangeMapParametersTagged = Required<Pick<MriComputeChangeMapParameters, '@type'>> & MriComputeChangeMapParameters;
+type MriComputeChangeMapParamsDictTagged = Required<Pick<MriComputeChangeMapParamsDict, '@type'>> & MriComputeChangeMapParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeChangeMapParameters(...)`.
+ * Output object returned when calling `MriComputeChangeMapParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mri_compute_change_map_params(
     outvolume: string,
     mean_filter: boolean = false,
     gaussian_sigma: number | null = null,
-): MriComputeChangeMapParametersTagged {
+): MriComputeChangeMapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_change_map" as const,
         "mean_filter": mean_filter,
@@ -84,7 +84,7 @@ function mri_compute_change_map_params(
  * @returns Command-line arguments.
  */
 function mri_compute_change_map_cargs(
-    params: MriComputeChangeMapParameters,
+    params: MriComputeChangeMapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function mri_compute_change_map_cargs(
  * @returns Outputs object.
  */
 function mri_compute_change_map_outputs(
-    params: MriComputeChangeMapParameters,
+    params: MriComputeChangeMapParamsDict,
     execution: Execution,
 ): MriComputeChangeMapOutputs {
     const ret: MriComputeChangeMapOutputs = {
@@ -141,7 +141,7 @@ function mri_compute_change_map_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeChangeMapOutputs`).
  */
 function mri_compute_change_map_execute(
-    params: MriComputeChangeMapParameters,
+    params: MriComputeChangeMapParamsDict,
     runner: Runner | null = null,
 ): MriComputeChangeMapOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function mri_compute_change_map(
 export {
       MRI_COMPUTE_CHANGE_MAP_METADATA,
       MriComputeChangeMapOutputs,
+      MriComputeChangeMapParamsDict,
+      MriComputeChangeMapParamsDictTagged,
       mri_compute_change_map,
       mri_compute_change_map_execute,
       mri_compute_change_map_params,

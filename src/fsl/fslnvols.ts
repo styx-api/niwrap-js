@@ -11,15 +11,15 @@ const FSLNVOLS_METADATA: Metadata = {
 };
 
 
-interface FslnvolsParameters {
+interface FslnvolsParamsDict {
     "@type"?: "fsl/fslnvols";
     "infile": InputPathType;
 }
-type FslnvolsParametersTagged = Required<Pick<FslnvolsParameters, '@type'>> & FslnvolsParameters;
+type FslnvolsParamsDictTagged = Required<Pick<FslnvolsParamsDict, '@type'>> & FslnvolsParamsDict;
 
 
 /**
- * Output object returned when calling `FslnvolsParameters(...)`.
+ * Output object returned when calling `FslnvolsParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FslnvolsOutputs {
  */
 function fslnvols_params(
     infile: InputPathType,
-): FslnvolsParametersTagged {
+): FslnvolsParamsDictTagged {
     const params = {
         "@type": "fsl/fslnvols" as const,
         "infile": infile,
@@ -58,7 +58,7 @@ function fslnvols_params(
  * @returns Command-line arguments.
  */
 function fslnvols_cargs(
-    params: FslnvolsParameters,
+    params: FslnvolsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function fslnvols_cargs(
  * @returns Outputs object.
  */
 function fslnvols_outputs(
-    params: FslnvolsParameters,
+    params: FslnvolsParamsDict,
     execution: Execution,
 ): FslnvolsOutputs {
     const ret: FslnvolsOutputs = {
@@ -102,7 +102,7 @@ function fslnvols_outputs(
  * @returns NamedTuple of outputs (described in `FslnvolsOutputs`).
  */
 function fslnvols_execute(
-    params: FslnvolsParameters,
+    params: FslnvolsParamsDict,
     runner: Runner | null = null,
 ): FslnvolsOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function fslnvols(
 export {
       FSLNVOLS_METADATA,
       FslnvolsOutputs,
+      FslnvolsParamsDict,
+      FslnvolsParamsDictTagged,
       fslnvols,
       fslnvols_execute,
       fslnvols_params,

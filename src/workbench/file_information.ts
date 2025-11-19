@@ -10,27 +10,27 @@ const FILE_INFORMATION_METADATA: Metadata = {
 };
 
 
-interface FileInformationOnlyMetadataParameters {
+interface FileInformationOnlyMetadataParamsDict {
     "@type"?: "only-metadata";
     "key"?: string | null | undefined;
 }
-type FileInformationOnlyMetadataParametersTagged = Required<Pick<FileInformationOnlyMetadataParameters, '@type'>> & FileInformationOnlyMetadataParameters;
+type FileInformationOnlyMetadataParamsDictTagged = Required<Pick<FileInformationOnlyMetadataParamsDict, '@type'>> & FileInformationOnlyMetadataParamsDict;
 
 
-interface FileInformationParameters {
+interface FileInformationParamsDict {
     "@type"?: "workbench/file-information";
     "no-map-info": boolean;
     "only-step-interval": boolean;
     "only-number-of-maps": boolean;
     "only-map-names": boolean;
-    "only-metadata"?: FileInformationOnlyMetadataParameters | null | undefined;
+    "only-metadata"?: FileInformationOnlyMetadataParamsDict | null | undefined;
     "only-cifti-xml": boolean;
     "czi": boolean;
     "czi-all-sub-blocks": boolean;
     "czi-xml": boolean;
     "data-file": string;
 }
-type FileInformationParametersTagged = Required<Pick<FileInformationParameters, '@type'>> & FileInformationParameters;
+type FileInformationParamsDictTagged = Required<Pick<FileInformationParamsDict, '@type'>> & FileInformationParamsDict;
 
 
 /**
@@ -42,9 +42,9 @@ the metadata key
  *
  * @returns Parameter dictionary
  */
-function file_information_only_metadata_params(
+function file_information_only_metadata(
     key: string | null,
-): FileInformationOnlyMetadataParametersTagged {
+): FileInformationOnlyMetadataParamsDictTagged {
     const params = {
         "@type": "only-metadata" as const,
     };
@@ -64,7 +64,7 @@ function file_information_only_metadata_params(
  * @returns Command-line arguments.
  */
 function file_information_only_metadata_cargs(
-    params: FileInformationOnlyMetadataParameters,
+    params: FileInformationOnlyMetadataParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function file_information_only_metadata_cargs(
 
 
 /**
- * Output object returned when calling `FileInformationParameters(...)`.
+ * Output object returned when calling `FileInformationParamsDict(...)`.
  *
  * @interface
  */
@@ -114,12 +114,12 @@ function file_information_params(
     only_step_interval: boolean = false,
     only_number_of_maps: boolean = false,
     only_map_names: boolean = false,
-    only_metadata: FileInformationOnlyMetadataParameters | null = null,
+    only_metadata: FileInformationOnlyMetadataParamsDict | null = null,
     only_cifti_xml: boolean = false,
     czi: boolean = false,
     czi_all_sub_blocks: boolean = false,
     czi_xml: boolean = false,
-): FileInformationParametersTagged {
+): FileInformationParamsDictTagged {
     const params = {
         "@type": "workbench/file-information" as const,
         "no-map-info": no_map_info,
@@ -148,7 +148,7 @@ function file_information_params(
  * @returns Command-line arguments.
  */
 function file_information_cargs(
-    params: FileInformationParameters,
+    params: FileInformationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -181,7 +181,7 @@ function file_information_cargs(
  * @returns Outputs object.
  */
 function file_information_outputs(
-    params: FileInformationParameters,
+    params: FileInformationParamsDict,
     execution: Execution,
 ): FileInformationOutputs {
     const ret: FileInformationOutputs = {
@@ -242,7 +242,7 @@ function file_information_outputs(
  * @returns NamedTuple of outputs (described in `FileInformationOutputs`).
  */
 function file_information_execute(
-    params: FileInformationParameters,
+    params: FileInformationParamsDict,
     runner: Runner | null = null,
 ): FileInformationOutputs {
     runner = runner || getGlobalRunner();
@@ -320,7 +320,7 @@ function file_information(
     only_step_interval: boolean = false,
     only_number_of_maps: boolean = false,
     only_map_names: boolean = false,
-    only_metadata: FileInformationOnlyMetadataParameters | null = null,
+    only_metadata: FileInformationOnlyMetadataParamsDict | null = null,
     only_cifti_xml: boolean = false,
     czi: boolean = false,
     czi_all_sub_blocks: boolean = false,
@@ -334,9 +334,13 @@ function file_information(
 
 export {
       FILE_INFORMATION_METADATA,
+      FileInformationOnlyMetadataParamsDict,
+      FileInformationOnlyMetadataParamsDictTagged,
       FileInformationOutputs,
+      FileInformationParamsDict,
+      FileInformationParamsDictTagged,
       file_information,
       file_information_execute,
-      file_information_only_metadata_params,
+      file_information_only_metadata,
       file_information_params,
 };

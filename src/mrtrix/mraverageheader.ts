@@ -11,15 +11,15 @@ const MRAVERAGEHEADER_METADATA: Metadata = {
 };
 
 
-interface MraverageheaderConfigParameters {
+interface MraverageheaderConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MraverageheaderConfigParametersTagged = Required<Pick<MraverageheaderConfigParameters, '@type'>> & MraverageheaderConfigParameters;
+type MraverageheaderConfigParamsDictTagged = Required<Pick<MraverageheaderConfigParamsDict, '@type'>> & MraverageheaderConfigParamsDict;
 
 
-interface MraverageheaderParameters {
+interface MraverageheaderParamsDict {
     "@type"?: "mrtrix/mraverageheader";
     "padding"?: number | null | undefined;
     "resolution"?: string | null | undefined;
@@ -30,13 +30,13 @@ interface MraverageheaderParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MraverageheaderConfigParameters> | null | undefined;
+    "config"?: Array<MraverageheaderConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": Array<InputPathType>;
     "output": string;
 }
-type MraverageheaderParametersTagged = Required<Pick<MraverageheaderParameters, '@type'>> & MraverageheaderParameters;
+type MraverageheaderParamsDictTagged = Required<Pick<MraverageheaderParamsDict, '@type'>> & MraverageheaderParamsDict;
 
 
 /**
@@ -47,10 +47,10 @@ type MraverageheaderParametersTagged = Required<Pick<MraverageheaderParameters, 
  *
  * @returns Parameter dictionary
  */
-function mraverageheader_config_params(
+function mraverageheader_config(
     key: string,
     value: string,
-): MraverageheaderConfigParametersTagged {
+): MraverageheaderConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -69,7 +69,7 @@ function mraverageheader_config_params(
  * @returns Command-line arguments.
  */
 function mraverageheader_config_cargs(
-    params: MraverageheaderConfigParameters,
+    params: MraverageheaderConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function mraverageheader_config_cargs(
 
 
 /**
- * Output object returned when calling `MraverageheaderParameters(...)`.
+ * Output object returned when calling `MraverageheaderParamsDict(...)`.
  *
  * @interface
  */
@@ -129,10 +129,10 @@ function mraverageheader_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MraverageheaderConfigParameters> | null = null,
+    config: Array<MraverageheaderConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MraverageheaderParametersTagged {
+): MraverageheaderParamsDictTagged {
     const params = {
         "@type": "mrtrix/mraverageheader" as const,
         "fill": fill,
@@ -173,7 +173,7 @@ function mraverageheader_params(
  * @returns Command-line arguments.
  */
 function mraverageheader_cargs(
-    params: MraverageheaderParameters,
+    params: MraverageheaderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -241,7 +241,7 @@ function mraverageheader_cargs(
  * @returns Outputs object.
  */
 function mraverageheader_outputs(
-    params: MraverageheaderParameters,
+    params: MraverageheaderParamsDict,
     execution: Execution,
 ): MraverageheaderOutputs {
     const ret: MraverageheaderOutputs = {
@@ -273,7 +273,7 @@ function mraverageheader_outputs(
  * @returns NamedTuple of outputs (described in `MraverageheaderOutputs`).
  */
 function mraverageheader_execute(
-    params: MraverageheaderParameters,
+    params: MraverageheaderParamsDict,
     runner: Runner | null = null,
 ): MraverageheaderOutputs {
     runner = runner || getGlobalRunner();
@@ -331,7 +331,7 @@ function mraverageheader(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MraverageheaderConfigParameters> | null = null,
+    config: Array<MraverageheaderConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -343,9 +343,13 @@ function mraverageheader(
 
 export {
       MRAVERAGEHEADER_METADATA,
+      MraverageheaderConfigParamsDict,
+      MraverageheaderConfigParamsDictTagged,
       MraverageheaderOutputs,
+      MraverageheaderParamsDict,
+      MraverageheaderParamsDictTagged,
       mraverageheader,
-      mraverageheader_config_params,
+      mraverageheader_config,
       mraverageheader_execute,
       mraverageheader_params,
 };

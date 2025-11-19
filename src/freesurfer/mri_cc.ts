@@ -11,7 +11,7 @@ const MRI_CC_METADATA: Metadata = {
 };
 
 
-interface MriCcParameters {
+interface MriCcParamsDict {
     "@type"?: "freesurfer/mri_cc";
     "subject_name": string;
     "output_file"?: string | null | undefined;
@@ -26,11 +26,11 @@ interface MriCcParameters {
     "skip_voxels"?: number | null | undefined;
     "max_rotation"?: number | null | undefined;
 }
-type MriCcParametersTagged = Required<Pick<MriCcParameters, '@type'>> & MriCcParameters;
+type MriCcParamsDictTagged = Required<Pick<MriCcParamsDict, '@type'>> & MriCcParamsDict;
 
 
 /**
- * Output object returned when calling `MriCcParameters(...)`.
+ * Output object returned when calling `MriCcParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function mri_cc_params(
     thickness: number | null = null,
     skip_voxels: number | null = null,
     max_rotation: number | null = null,
-): MriCcParametersTagged {
+): MriCcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_cc" as const,
         "subject_name": subject_name,
@@ -124,7 +124,7 @@ function mri_cc_params(
  * @returns Command-line arguments.
  */
 function mri_cc_cargs(
-    params: MriCcParameters,
+    params: MriCcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function mri_cc_cargs(
  * @returns Outputs object.
  */
 function mri_cc_outputs(
-    params: MriCcParameters,
+    params: MriCcParamsDict,
     execution: Execution,
 ): MriCcOutputs {
     const ret: MriCcOutputs = {
@@ -229,7 +229,7 @@ function mri_cc_outputs(
  * @returns NamedTuple of outputs (described in `MriCcOutputs`).
  */
 function mri_cc_execute(
-    params: MriCcParameters,
+    params: MriCcParamsDict,
     runner: Runner | null = null,
 ): MriCcOutputs {
     runner = runner || getGlobalRunner();
@@ -290,6 +290,8 @@ function mri_cc(
 export {
       MRI_CC_METADATA,
       MriCcOutputs,
+      MriCcParamsDict,
+      MriCcParamsDictTagged,
       mri_cc,
       mri_cc_execute,
       mri_cc_params,

@@ -11,7 +11,7 @@ const FSL_GLM_METADATA: Metadata = {
 };
 
 
-interface FslGlmParameters {
+interface FslGlmParamsDict {
     "@type"?: "fsl/fsl_glm";
     "input_file": InputPathType;
     "design_matrix": InputPathType;
@@ -38,11 +38,11 @@ interface FslGlmParameters {
     "vx_images"?: Array<InputPathType> | null | undefined;
     "help_flag": boolean;
 }
-type FslGlmParametersTagged = Required<Pick<FslGlmParameters, '@type'>> & FslGlmParameters;
+type FslGlmParamsDictTagged = Required<Pick<FslGlmParamsDict, '@type'>> & FslGlmParamsDict;
 
 
 /**
- * Output object returned when calling `FslGlmParameters(...)`.
+ * Output object returned when calling `FslGlmParamsDict(...)`.
  *
  * @interface
  */
@@ -157,7 +157,7 @@ function fsl_glm_params(
     vx_text: Array<string> | null = null,
     vx_images: Array<InputPathType> | null = null,
     help_flag: boolean = false,
-): FslGlmParametersTagged {
+): FslGlmParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_glm" as const,
         "input_file": input_file,
@@ -232,7 +232,7 @@ function fsl_glm_params(
  * @returns Command-line arguments.
  */
 function fsl_glm_cargs(
-    params: FslGlmParameters,
+    params: FslGlmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -375,7 +375,7 @@ function fsl_glm_cargs(
  * @returns Outputs object.
  */
 function fsl_glm_outputs(
-    params: FslGlmParameters,
+    params: FslGlmParamsDict,
     execution: Execution,
 ): FslGlmOutputs {
     const ret: FslGlmOutputs = {
@@ -412,7 +412,7 @@ function fsl_glm_outputs(
  * @returns NamedTuple of outputs (described in `FslGlmOutputs`).
  */
 function fsl_glm_execute(
-    params: FslGlmParameters,
+    params: FslGlmParamsDict,
     runner: Runner | null = null,
 ): FslGlmOutputs {
     runner = runner || getGlobalRunner();
@@ -497,6 +497,8 @@ function fsl_glm(
 export {
       FSL_GLM_METADATA,
       FslGlmOutputs,
+      FslGlmParamsDict,
+      FslGlmParamsDictTagged,
       fsl_glm,
       fsl_glm_execute,
       fsl_glm_params,

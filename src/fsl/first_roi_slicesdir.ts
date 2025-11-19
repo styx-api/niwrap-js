@@ -11,16 +11,16 @@ const FIRST_ROI_SLICESDIR_METADATA: Metadata = {
 };
 
 
-interface FirstRoiSlicesdirParameters {
+interface FirstRoiSlicesdirParamsDict {
     "@type"?: "fsl/first_roi_slicesdir";
     "input_t1_images": string;
     "input_label_images": string;
 }
-type FirstRoiSlicesdirParametersTagged = Required<Pick<FirstRoiSlicesdirParameters, '@type'>> & FirstRoiSlicesdirParameters;
+type FirstRoiSlicesdirParamsDictTagged = Required<Pick<FirstRoiSlicesdirParamsDict, '@type'>> & FirstRoiSlicesdirParamsDict;
 
 
 /**
- * Output object returned when calling `FirstRoiSlicesdirParameters(...)`.
+ * Output object returned when calling `FirstRoiSlicesdirParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface FirstRoiSlicesdirOutputs {
 function first_roi_slicesdir_params(
     input_t1_images: string,
     input_label_images: string,
-): FirstRoiSlicesdirParametersTagged {
+): FirstRoiSlicesdirParamsDictTagged {
     const params = {
         "@type": "fsl/first_roi_slicesdir" as const,
         "input_t1_images": input_t1_images,
@@ -70,7 +70,7 @@ function first_roi_slicesdir_params(
  * @returns Command-line arguments.
  */
 function first_roi_slicesdir_cargs(
-    params: FirstRoiSlicesdirParameters,
+    params: FirstRoiSlicesdirParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function first_roi_slicesdir_cargs(
  * @returns Outputs object.
  */
 function first_roi_slicesdir_outputs(
-    params: FirstRoiSlicesdirParameters,
+    params: FirstRoiSlicesdirParamsDict,
     execution: Execution,
 ): FirstRoiSlicesdirOutputs {
     const ret: FirstRoiSlicesdirOutputs = {
@@ -117,7 +117,7 @@ function first_roi_slicesdir_outputs(
  * @returns NamedTuple of outputs (described in `FirstRoiSlicesdirOutputs`).
  */
 function first_roi_slicesdir_execute(
-    params: FirstRoiSlicesdirParameters,
+    params: FirstRoiSlicesdirParamsDict,
     runner: Runner | null = null,
 ): FirstRoiSlicesdirOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function first_roi_slicesdir(
 export {
       FIRST_ROI_SLICESDIR_METADATA,
       FirstRoiSlicesdirOutputs,
+      FirstRoiSlicesdirParamsDict,
+      FirstRoiSlicesdirParamsDictTagged,
       first_roi_slicesdir,
       first_roi_slicesdir_execute,
       first_roi_slicesdir_params,

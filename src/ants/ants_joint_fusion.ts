@@ -11,7 +11,7 @@ const ANTS_JOINT_FUSION_METADATA: Metadata = {
 };
 
 
-interface AntsJointFusionParameters {
+interface AntsJointFusionParamsDict {
     "@type"?: "ants/antsJointFusion";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "target_image": Array<InputPathType>;
@@ -28,11 +28,11 @@ interface AntsJointFusionParameters {
     "output": string;
     "verbose"?: boolean | null | undefined;
 }
-type AntsJointFusionParametersTagged = Required<Pick<AntsJointFusionParameters, '@type'>> & AntsJointFusionParameters;
+type AntsJointFusionParamsDictTagged = Required<Pick<AntsJointFusionParamsDict, '@type'>> & AntsJointFusionParamsDict;
 
 
 /**
- * Output object returned when calling `AntsJointFusionParameters(...)`.
+ * Output object returned when calling `AntsJointFusionParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function ants_joint_fusion_params(
     exclusion_image: InputPathType | null = null,
     mask_image: InputPathType | null = null,
     verbose: boolean | null = null,
-): AntsJointFusionParametersTagged {
+): AntsJointFusionParamsDictTagged {
     const params = {
         "@type": "ants/antsJointFusion" as const,
         "target_image": target_image,
@@ -146,7 +146,7 @@ function ants_joint_fusion_params(
  * @returns Command-line arguments.
  */
 function ants_joint_fusion_cargs(
-    params: AntsJointFusionParameters,
+    params: AntsJointFusionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -240,7 +240,7 @@ function ants_joint_fusion_cargs(
  * @returns Outputs object.
  */
 function ants_joint_fusion_outputs(
-    params: AntsJointFusionParameters,
+    params: AntsJointFusionParamsDict,
     execution: Execution,
 ): AntsJointFusionOutputs {
     const ret: AntsJointFusionOutputs = {
@@ -269,7 +269,7 @@ function ants_joint_fusion_outputs(
  * @returns NamedTuple of outputs (described in `AntsJointFusionOutputs`).
  */
 function ants_joint_fusion_execute(
-    params: AntsJointFusionParameters,
+    params: AntsJointFusionParamsDict,
     runner: Runner | null = null,
 ): AntsJointFusionOutputs {
     runner = runner || getGlobalRunner();
@@ -334,6 +334,8 @@ function ants_joint_fusion(
 export {
       ANTS_JOINT_FUSION_METADATA,
       AntsJointFusionOutputs,
+      AntsJointFusionParamsDict,
+      AntsJointFusionParamsDictTagged,
       ants_joint_fusion,
       ants_joint_fusion_execute,
       ants_joint_fusion_params,

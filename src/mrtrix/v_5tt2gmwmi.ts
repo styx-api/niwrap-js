@@ -11,15 +11,15 @@ const V_5TT2GMWMI_METADATA: Metadata = {
 };
 
 
-interface V5tt2gmwmiConfigParameters {
+interface V5tt2gmwmiConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type V5tt2gmwmiConfigParametersTagged = Required<Pick<V5tt2gmwmiConfigParameters, '@type'>> & V5tt2gmwmiConfigParameters;
+type V5tt2gmwmiConfigParamsDictTagged = Required<Pick<V5tt2gmwmiConfigParamsDict, '@type'>> & V5tt2gmwmiConfigParamsDict;
 
 
-interface V5tt2gmwmiParameters {
+interface V5tt2gmwmiParamsDict {
     "@type"?: "mrtrix/5tt2gmwmi";
     "mask_in"?: InputPathType | null | undefined;
     "info": boolean;
@@ -27,13 +27,13 @@ interface V5tt2gmwmiParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<V5tt2gmwmiConfigParameters> | null | undefined;
+    "config"?: Array<V5tt2gmwmiConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "5tt_in": InputPathType;
     "mask_out": string;
 }
-type V5tt2gmwmiParametersTagged = Required<Pick<V5tt2gmwmiParameters, '@type'>> & V5tt2gmwmiParameters;
+type V5tt2gmwmiParamsDictTagged = Required<Pick<V5tt2gmwmiParamsDict, '@type'>> & V5tt2gmwmiParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type V5tt2gmwmiParametersTagged = Required<Pick<V5tt2gmwmiParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function v_5tt2gmwmi_config_params(
+function v_5tt2gmwmi_config(
     key: string,
     value: string,
-): V5tt2gmwmiConfigParametersTagged {
+): V5tt2gmwmiConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function v_5tt2gmwmi_config_params(
  * @returns Command-line arguments.
  */
 function v_5tt2gmwmi_config_cargs(
-    params: V5tt2gmwmiConfigParameters,
+    params: V5tt2gmwmiConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function v_5tt2gmwmi_config_cargs(
 
 
 /**
- * Output object returned when calling `V5tt2gmwmiParameters(...)`.
+ * Output object returned when calling `V5tt2gmwmiParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function v_5tt2gmwmi_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5tt2gmwmiConfigParameters> | null = null,
+    config: Array<V5tt2gmwmiConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5tt2gmwmiParametersTagged {
+): V5tt2gmwmiParamsDictTagged {
     const params = {
         "@type": "mrtrix/5tt2gmwmi" as const,
         "info": info,
@@ -157,7 +157,7 @@ function v_5tt2gmwmi_params(
  * @returns Command-line arguments.
  */
 function v_5tt2gmwmi_cargs(
-    params: V5tt2gmwmiParameters,
+    params: V5tt2gmwmiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function v_5tt2gmwmi_cargs(
  * @returns Outputs object.
  */
 function v_5tt2gmwmi_outputs(
-    params: V5tt2gmwmiParameters,
+    params: V5tt2gmwmiParamsDict,
     execution: Execution,
 ): V5tt2gmwmiOutputs {
     const ret: V5tt2gmwmiOutputs = {
@@ -242,7 +242,7 @@ function v_5tt2gmwmi_outputs(
  * @returns NamedTuple of outputs (described in `V5tt2gmwmiOutputs`).
  */
 function v_5tt2gmwmi_execute(
-    params: V5tt2gmwmiParameters,
+    params: V5tt2gmwmiParamsDict,
     runner: Runner | null = null,
 ): V5tt2gmwmiOutputs {
     runner = runner || getGlobalRunner();
@@ -294,7 +294,7 @@ function v_5tt2gmwmi(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5tt2gmwmiConfigParameters> | null = null,
+    config: Array<V5tt2gmwmiConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -305,10 +305,14 @@ function v_5tt2gmwmi(
 
 
 export {
+      V5tt2gmwmiConfigParamsDict,
+      V5tt2gmwmiConfigParamsDictTagged,
       V5tt2gmwmiOutputs,
+      V5tt2gmwmiParamsDict,
+      V5tt2gmwmiParamsDictTagged,
       V_5TT2GMWMI_METADATA,
       v_5tt2gmwmi,
-      v_5tt2gmwmi_config_params,
+      v_5tt2gmwmi_config,
       v_5tt2gmwmi_execute,
       v_5tt2gmwmi_params,
 };

@@ -11,18 +11,18 @@ const DICOM_RENAME_METADATA: Metadata = {
 };
 
 
-interface DicomRenameParameters {
+interface DicomRenameParamsDict {
     "@type"?: "freesurfer/dicom-rename";
     "input_files": Array<InputPathType>;
     "output_base": string;
     "version": boolean;
     "help": boolean;
 }
-type DicomRenameParametersTagged = Required<Pick<DicomRenameParameters, '@type'>> & DicomRenameParameters;
+type DicomRenameParamsDictTagged = Required<Pick<DicomRenameParamsDict, '@type'>> & DicomRenameParamsDict;
 
 
 /**
- * Output object returned when calling `DicomRenameParameters(...)`.
+ * Output object returned when calling `DicomRenameParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function dicom_rename_params(
     output_base: string,
     version: boolean = false,
     help: boolean = false,
-): DicomRenameParametersTagged {
+): DicomRenameParamsDictTagged {
     const params = {
         "@type": "freesurfer/dicom-rename" as const,
         "input_files": input_files,
@@ -74,7 +74,7 @@ function dicom_rename_params(
  * @returns Command-line arguments.
  */
 function dicom_rename_cargs(
-    params: DicomRenameParameters,
+    params: DicomRenameParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function dicom_rename_cargs(
  * @returns Outputs object.
  */
 function dicom_rename_outputs(
-    params: DicomRenameParameters,
+    params: DicomRenameParamsDict,
     execution: Execution,
 ): DicomRenameOutputs {
     const ret: DicomRenameOutputs = {
@@ -132,7 +132,7 @@ function dicom_rename_outputs(
  * @returns NamedTuple of outputs (described in `DicomRenameOutputs`).
  */
 function dicom_rename_execute(
-    params: DicomRenameParameters,
+    params: DicomRenameParamsDict,
     runner: Runner | null = null,
 ): DicomRenameOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function dicom_rename(
 export {
       DICOM_RENAME_METADATA,
       DicomRenameOutputs,
+      DicomRenameParamsDict,
+      DicomRenameParamsDictTagged,
       dicom_rename,
       dicom_rename_execute,
       dicom_rename_params,

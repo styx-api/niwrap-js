@@ -11,17 +11,17 @@ const LABELS_UNION_METADATA: Metadata = {
 };
 
 
-interface LabelsUnionParameters {
+interface LabelsUnionParamsDict {
     "@type"?: "freesurfer/labels_union";
     "label1": InputPathType;
     "label2": InputPathType;
     "outputname": string;
 }
-type LabelsUnionParametersTagged = Required<Pick<LabelsUnionParameters, '@type'>> & LabelsUnionParameters;
+type LabelsUnionParamsDictTagged = Required<Pick<LabelsUnionParamsDict, '@type'>> & LabelsUnionParamsDict;
 
 
 /**
- * Output object returned when calling `LabelsUnionParameters(...)`.
+ * Output object returned when calling `LabelsUnionParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function labels_union_params(
     label1: InputPathType,
     label2: InputPathType,
     outputname: string,
-): LabelsUnionParametersTagged {
+): LabelsUnionParamsDictTagged {
     const params = {
         "@type": "freesurfer/labels_union" as const,
         "label1": label1,
@@ -70,7 +70,7 @@ function labels_union_params(
  * @returns Command-line arguments.
  */
 function labels_union_cargs(
-    params: LabelsUnionParameters,
+    params: LabelsUnionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function labels_union_cargs(
  * @returns Outputs object.
  */
 function labels_union_outputs(
-    params: LabelsUnionParameters,
+    params: LabelsUnionParamsDict,
     execution: Execution,
 ): LabelsUnionOutputs {
     const ret: LabelsUnionOutputs = {
@@ -117,7 +117,7 @@ function labels_union_outputs(
  * @returns NamedTuple of outputs (described in `LabelsUnionOutputs`).
  */
 function labels_union_execute(
-    params: LabelsUnionParameters,
+    params: LabelsUnionParamsDict,
     runner: Runner | null = null,
 ): LabelsUnionOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function labels_union(
 export {
       LABELS_UNION_METADATA,
       LabelsUnionOutputs,
+      LabelsUnionParamsDict,
+      LabelsUnionParamsDictTagged,
       labels_union,
       labels_union_execute,
       labels_union_params,

@@ -10,23 +10,23 @@ const METRIC_REDUCE_METADATA: Metadata = {
 };
 
 
-interface MetricReduceExcludeOutliersParameters {
+interface MetricReduceExcludeOutliersParamsDict {
     "@type"?: "exclude-outliers";
     "sigma-below": number;
     "sigma-above": number;
 }
-type MetricReduceExcludeOutliersParametersTagged = Required<Pick<MetricReduceExcludeOutliersParameters, '@type'>> & MetricReduceExcludeOutliersParameters;
+type MetricReduceExcludeOutliersParamsDictTagged = Required<Pick<MetricReduceExcludeOutliersParamsDict, '@type'>> & MetricReduceExcludeOutliersParamsDict;
 
 
-interface MetricReduceParameters {
+interface MetricReduceParamsDict {
     "@type"?: "workbench/metric-reduce";
     "metric-out": string;
-    "exclude-outliers"?: MetricReduceExcludeOutliersParameters | null | undefined;
+    "exclude-outliers"?: MetricReduceExcludeOutliersParamsDict | null | undefined;
     "only-numeric": boolean;
     "metric-in": InputPathType;
     "operation": string;
 }
-type MetricReduceParametersTagged = Required<Pick<MetricReduceParameters, '@type'>> & MetricReduceParameters;
+type MetricReduceParamsDictTagged = Required<Pick<MetricReduceParamsDict, '@type'>> & MetricReduceParamsDict;
 
 
 /**
@@ -37,10 +37,10 @@ type MetricReduceParametersTagged = Required<Pick<MetricReduceParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function metric_reduce_exclude_outliers_params(
+function metric_reduce_exclude_outliers(
     sigma_below: number,
     sigma_above: number,
-): MetricReduceExcludeOutliersParametersTagged {
+): MetricReduceExcludeOutliersParamsDictTagged {
     const params = {
         "@type": "exclude-outliers" as const,
         "sigma-below": sigma_below,
@@ -59,7 +59,7 @@ function metric_reduce_exclude_outliers_params(
  * @returns Command-line arguments.
  */
 function metric_reduce_exclude_outliers_cargs(
-    params: MetricReduceExcludeOutliersParameters,
+    params: MetricReduceExcludeOutliersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -73,7 +73,7 @@ function metric_reduce_exclude_outliers_cargs(
 
 
 /**
- * Output object returned when calling `MetricReduceParameters(...)`.
+ * Output object returned when calling `MetricReduceParamsDict(...)`.
  *
  * @interface
  */
@@ -104,9 +104,9 @@ function metric_reduce_params(
     metric_out: string,
     metric_in: InputPathType,
     operation: string,
-    exclude_outliers: MetricReduceExcludeOutliersParameters | null = null,
+    exclude_outliers: MetricReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
-): MetricReduceParametersTagged {
+): MetricReduceParamsDictTagged {
     const params = {
         "@type": "workbench/metric-reduce" as const,
         "metric-out": metric_out,
@@ -130,7 +130,7 @@ function metric_reduce_params(
  * @returns Command-line arguments.
  */
 function metric_reduce_cargs(
-    params: MetricReduceParameters,
+    params: MetricReduceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function metric_reduce_cargs(
  * @returns Outputs object.
  */
 function metric_reduce_outputs(
-    params: MetricReduceParameters,
+    params: MetricReduceParamsDict,
     execution: Execution,
 ): MetricReduceOutputs {
     const ret: MetricReduceOutputs = {
@@ -198,7 +198,7 @@ function metric_reduce_outputs(
  * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
  */
 function metric_reduce_execute(
-    params: MetricReduceParameters,
+    params: MetricReduceParamsDict,
     runner: Runner | null = null,
 ): MetricReduceOutputs {
     runner = runner || getGlobalRunner();
@@ -247,7 +247,7 @@ function metric_reduce(
     metric_out: string,
     metric_in: InputPathType,
     operation: string,
-    exclude_outliers: MetricReduceExcludeOutliersParameters | null = null,
+    exclude_outliers: MetricReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): MetricReduceOutputs {
@@ -258,9 +258,13 @@ function metric_reduce(
 
 export {
       METRIC_REDUCE_METADATA,
+      MetricReduceExcludeOutliersParamsDict,
+      MetricReduceExcludeOutliersParamsDictTagged,
       MetricReduceOutputs,
+      MetricReduceParamsDict,
+      MetricReduceParamsDictTagged,
       metric_reduce,
-      metric_reduce_exclude_outliers_params,
+      metric_reduce_exclude_outliers,
       metric_reduce_execute,
       metric_reduce_params,
 };

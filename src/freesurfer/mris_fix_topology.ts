@@ -11,7 +11,7 @@ const MRIS_FIX_TOPOLOGY_METADATA: Metadata = {
 };
 
 
-interface MrisFixTopologyParameters {
+interface MrisFixTopologyParamsDict {
     "@type"?: "freesurfer/mris_fix_topology";
     "subject_name": string;
     "hemisphere": string;
@@ -40,11 +40,11 @@ interface MrisFixTopologyParameters {
     "diagnostic_level"?: number | null | undefined;
     "threads"?: number | null | undefined;
 }
-type MrisFixTopologyParametersTagged = Required<Pick<MrisFixTopologyParameters, '@type'>> & MrisFixTopologyParameters;
+type MrisFixTopologyParamsDictTagged = Required<Pick<MrisFixTopologyParamsDict, '@type'>> & MrisFixTopologyParamsDict;
 
 
 /**
- * Output object returned when calling `MrisFixTopologyParameters(...)`.
+ * Output object returned when calling `MrisFixTopologyParamsDict(...)`.
  *
  * @interface
  */
@@ -115,7 +115,7 @@ function mris_fix_topology_params(
     smooth: number | null = null,
     diagnostic_level: number | null = null,
     threads: number | null = null,
-): MrisFixTopologyParametersTagged {
+): MrisFixTopologyParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_fix_topology" as const,
         "subject_name": subject_name,
@@ -182,7 +182,7 @@ function mris_fix_topology_params(
  * @returns Command-line arguments.
  */
 function mris_fix_topology_cargs(
-    params: MrisFixTopologyParameters,
+    params: MrisFixTopologyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -310,7 +310,7 @@ function mris_fix_topology_cargs(
  * @returns Outputs object.
  */
 function mris_fix_topology_outputs(
-    params: MrisFixTopologyParameters,
+    params: MrisFixTopologyParamsDict,
     execution: Execution,
 ): MrisFixTopologyOutputs {
     const ret: MrisFixTopologyOutputs = {
@@ -335,7 +335,7 @@ function mris_fix_topology_outputs(
  * @returns NamedTuple of outputs (described in `MrisFixTopologyOutputs`).
  */
 function mris_fix_topology_execute(
-    params: MrisFixTopologyParameters,
+    params: MrisFixTopologyParamsDict,
     runner: Runner | null = null,
 ): MrisFixTopologyOutputs {
     runner = runner || getGlobalRunner();
@@ -424,6 +424,8 @@ function mris_fix_topology(
 export {
       MRIS_FIX_TOPOLOGY_METADATA,
       MrisFixTopologyOutputs,
+      MrisFixTopologyParamsDict,
+      MrisFixTopologyParamsDictTagged,
       mris_fix_topology,
       mris_fix_topology_execute,
       mris_fix_topology_params,

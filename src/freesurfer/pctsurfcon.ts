@@ -11,7 +11,7 @@ const PCTSURFCON_METADATA: Metadata = {
 };
 
 
-interface PctsurfconParameters {
+interface PctsurfconParamsDict {
     "@type"?: "freesurfer/pctsurfcon";
     "subject": string;
     "fsvol"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface PctsurfconParameters {
     "tmp"?: string | null | undefined;
     "nocleanup": boolean;
 }
-type PctsurfconParametersTagged = Required<Pick<PctsurfconParameters, '@type'>> & PctsurfconParameters;
+type PctsurfconParamsDictTagged = Required<Pick<PctsurfconParamsDict, '@type'>> & PctsurfconParamsDict;
 
 
 /**
- * Output object returned when calling `PctsurfconParameters(...)`.
+ * Output object returned when calling `PctsurfconParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function pctsurfcon_params(
     pial: boolean = false,
     tmp: string | null = null,
     nocleanup: boolean = false,
-): PctsurfconParametersTagged {
+): PctsurfconParamsDictTagged {
     const params = {
         "@type": "freesurfer/pctsurfcon" as const,
         "subject": subject,
@@ -118,7 +118,7 @@ function pctsurfcon_params(
  * @returns Command-line arguments.
  */
 function pctsurfcon_cargs(
-    params: PctsurfconParameters,
+    params: PctsurfconParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -194,7 +194,7 @@ function pctsurfcon_cargs(
  * @returns Outputs object.
  */
 function pctsurfcon_outputs(
-    params: PctsurfconParameters,
+    params: PctsurfconParamsDict,
     execution: Execution,
 ): PctsurfconOutputs {
     const ret: PctsurfconOutputs = {
@@ -219,7 +219,7 @@ function pctsurfcon_outputs(
  * @returns NamedTuple of outputs (described in `PctsurfconOutputs`).
  */
 function pctsurfcon_execute(
-    params: PctsurfconParameters,
+    params: PctsurfconParamsDict,
     runner: Runner | null = null,
 ): PctsurfconOutputs {
     runner = runner || getGlobalRunner();
@@ -282,6 +282,8 @@ function pctsurfcon(
 export {
       PCTSURFCON_METADATA,
       PctsurfconOutputs,
+      PctsurfconParamsDict,
+      PctsurfconParamsDictTagged,
       pctsurfcon,
       pctsurfcon_execute,
       pctsurfcon_params,

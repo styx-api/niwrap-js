@@ -11,15 +11,15 @@ const ADJUNCT_CALC_MONT_DIMS_PY_METADATA: Metadata = {
 };
 
 
-interface AdjunctCalcMontDimsPyParameters {
+interface AdjunctCalcMontDimsPyParamsDict {
     "@type"?: "afni/adjunct_calc_mont_dims.py";
     "help": boolean;
 }
-type AdjunctCalcMontDimsPyParametersTagged = Required<Pick<AdjunctCalcMontDimsPyParameters, '@type'>> & AdjunctCalcMontDimsPyParameters;
+type AdjunctCalcMontDimsPyParamsDictTagged = Required<Pick<AdjunctCalcMontDimsPyParamsDict, '@type'>> & AdjunctCalcMontDimsPyParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctCalcMontDimsPyParameters(...)`.
+ * Output object returned when calling `AdjunctCalcMontDimsPyParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface AdjunctCalcMontDimsPyOutputs {
  */
 function adjunct_calc_mont_dims_py_params(
     help: boolean = false,
-): AdjunctCalcMontDimsPyParametersTagged {
+): AdjunctCalcMontDimsPyParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_calc_mont_dims.py" as const,
         "help": help,
@@ -58,7 +58,7 @@ function adjunct_calc_mont_dims_py_params(
  * @returns Command-line arguments.
  */
 function adjunct_calc_mont_dims_py_cargs(
-    params: AdjunctCalcMontDimsPyParameters,
+    params: AdjunctCalcMontDimsPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function adjunct_calc_mont_dims_py_cargs(
  * @returns Outputs object.
  */
 function adjunct_calc_mont_dims_py_outputs(
-    params: AdjunctCalcMontDimsPyParameters,
+    params: AdjunctCalcMontDimsPyParamsDict,
     execution: Execution,
 ): AdjunctCalcMontDimsPyOutputs {
     const ret: AdjunctCalcMontDimsPyOutputs = {
@@ -104,7 +104,7 @@ function adjunct_calc_mont_dims_py_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctCalcMontDimsPyOutputs`).
  */
 function adjunct_calc_mont_dims_py_execute(
-    params: AdjunctCalcMontDimsPyParameters,
+    params: AdjunctCalcMontDimsPyParamsDict,
     runner: Runner | null = null,
 ): AdjunctCalcMontDimsPyOutputs {
     runner = runner || getGlobalRunner();
@@ -143,6 +143,8 @@ function adjunct_calc_mont_dims_py(
 export {
       ADJUNCT_CALC_MONT_DIMS_PY_METADATA,
       AdjunctCalcMontDimsPyOutputs,
+      AdjunctCalcMontDimsPyParamsDict,
+      AdjunctCalcMontDimsPyParamsDictTagged,
       adjunct_calc_mont_dims_py,
       adjunct_calc_mont_dims_py_execute,
       adjunct_calc_mont_dims_py_params,

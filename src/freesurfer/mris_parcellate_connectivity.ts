@@ -11,18 +11,18 @@ const MRIS_PARCELLATE_CONNECTIVITY_METADATA: Metadata = {
 };
 
 
-interface MrisParcellateConnectivityParameters {
+interface MrisParcellateConnectivityParamsDict {
     "@type"?: "freesurfer/mris_parcellate_connectivity";
     "smooth_iterations"?: number | null | undefined;
     "input_surface": InputPathType;
     "input_correlations": InputPathType;
     "output_parcellation": string;
 }
-type MrisParcellateConnectivityParametersTagged = Required<Pick<MrisParcellateConnectivityParameters, '@type'>> & MrisParcellateConnectivityParameters;
+type MrisParcellateConnectivityParamsDictTagged = Required<Pick<MrisParcellateConnectivityParamsDict, '@type'>> & MrisParcellateConnectivityParamsDict;
 
 
 /**
- * Output object returned when calling `MrisParcellateConnectivityParameters(...)`.
+ * Output object returned when calling `MrisParcellateConnectivityParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_parcellate_connectivity_params(
     input_correlations: InputPathType,
     output_parcellation: string,
     smooth_iterations: number | null = null,
-): MrisParcellateConnectivityParametersTagged {
+): MrisParcellateConnectivityParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_parcellate_connectivity" as const,
         "input_surface": input_surface,
@@ -76,7 +76,7 @@ function mris_parcellate_connectivity_params(
  * @returns Command-line arguments.
  */
 function mris_parcellate_connectivity_cargs(
-    params: MrisParcellateConnectivityParameters,
+    params: MrisParcellateConnectivityParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function mris_parcellate_connectivity_cargs(
  * @returns Outputs object.
  */
 function mris_parcellate_connectivity_outputs(
-    params: MrisParcellateConnectivityParameters,
+    params: MrisParcellateConnectivityParamsDict,
     execution: Execution,
 ): MrisParcellateConnectivityOutputs {
     const ret: MrisParcellateConnectivityOutputs = {
@@ -129,7 +129,7 @@ function mris_parcellate_connectivity_outputs(
  * @returns NamedTuple of outputs (described in `MrisParcellateConnectivityOutputs`).
  */
 function mris_parcellate_connectivity_execute(
-    params: MrisParcellateConnectivityParameters,
+    params: MrisParcellateConnectivityParamsDict,
     runner: Runner | null = null,
 ): MrisParcellateConnectivityOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mris_parcellate_connectivity(
 export {
       MRIS_PARCELLATE_CONNECTIVITY_METADATA,
       MrisParcellateConnectivityOutputs,
+      MrisParcellateConnectivityParamsDict,
+      MrisParcellateConnectivityParamsDictTagged,
       mris_parcellate_connectivity,
       mris_parcellate_connectivity_execute,
       mris_parcellate_connectivity_params,

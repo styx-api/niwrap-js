@@ -11,17 +11,17 @@ const V_3DTO_XDATASET_METADATA: Metadata = {
 };
 
 
-interface V3dtoXdatasetParameters {
+interface V3dtoXdatasetParamsDict {
     "@type"?: "afni/3dtoXdataset";
     "prefix": string;
     "mask": InputPathType;
     "input_files": Array<InputPathType>;
 }
-type V3dtoXdatasetParametersTagged = Required<Pick<V3dtoXdatasetParameters, '@type'>> & V3dtoXdatasetParameters;
+type V3dtoXdatasetParamsDictTagged = Required<Pick<V3dtoXdatasetParamsDict, '@type'>> & V3dtoXdatasetParamsDict;
 
 
 /**
- * Output object returned when calling `V3dtoXdatasetParameters(...)`.
+ * Output object returned when calling `V3dtoXdatasetParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3dto_xdataset_params(
     prefix: string,
     mask: InputPathType,
     input_files: Array<InputPathType>,
-): V3dtoXdatasetParametersTagged {
+): V3dtoXdatasetParamsDictTagged {
     const params = {
         "@type": "afni/3dtoXdataset" as const,
         "prefix": prefix,
@@ -70,7 +70,7 @@ function v_3dto_xdataset_params(
  * @returns Command-line arguments.
  */
 function v_3dto_xdataset_cargs(
-    params: V3dtoXdatasetParameters,
+    params: V3dtoXdatasetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function v_3dto_xdataset_cargs(
  * @returns Outputs object.
  */
 function v_3dto_xdataset_outputs(
-    params: V3dtoXdatasetParameters,
+    params: V3dtoXdatasetParamsDict,
     execution: Execution,
 ): V3dtoXdatasetOutputs {
     const ret: V3dtoXdatasetOutputs = {
@@ -120,7 +120,7 @@ function v_3dto_xdataset_outputs(
  * @returns NamedTuple of outputs (described in `V3dtoXdatasetOutputs`).
  */
 function v_3dto_xdataset_execute(
-    params: V3dtoXdatasetParameters,
+    params: V3dtoXdatasetParamsDict,
     runner: Runner | null = null,
 ): V3dtoXdatasetOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function v_3dto_xdataset(
 
 export {
       V3dtoXdatasetOutputs,
+      V3dtoXdatasetParamsDict,
+      V3dtoXdatasetParamsDictTagged,
       V_3DTO_XDATASET_METADATA,
       v_3dto_xdataset,
       v_3dto_xdataset_execute,

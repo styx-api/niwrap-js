@@ -11,7 +11,7 @@ const XCORR_METADATA: Metadata = {
 };
 
 
-interface XcorrParameters {
+interface XcorrParamsDict {
     "@type"?: "freesurfer/xcorr";
     "input1": InputPathType;
     "input2": InputPathType;
@@ -20,11 +20,11 @@ interface XcorrParameters {
     "tmp_dir"?: string | null | undefined;
     "no_cleanup": boolean;
 }
-type XcorrParametersTagged = Required<Pick<XcorrParameters, '@type'>> & XcorrParameters;
+type XcorrParamsDictTagged = Required<Pick<XcorrParamsDict, '@type'>> & XcorrParamsDict;
 
 
 /**
- * Output object returned when calling `XcorrParameters(...)`.
+ * Output object returned when calling `XcorrParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function xcorr_params(
     log_file: string | null = null,
     tmp_dir: string | null = null,
     no_cleanup: boolean = false,
-): XcorrParametersTagged {
+): XcorrParamsDictTagged {
     const params = {
         "@type": "freesurfer/xcorr" as const,
         "input1": input1,
@@ -90,7 +90,7 @@ function xcorr_params(
  * @returns Command-line arguments.
  */
 function xcorr_cargs(
-    params: XcorrParameters,
+    params: XcorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function xcorr_cargs(
  * @returns Outputs object.
  */
 function xcorr_outputs(
-    params: XcorrParameters,
+    params: XcorrParamsDict,
     execution: Execution,
 ): XcorrOutputs {
     const ret: XcorrOutputs = {
@@ -162,7 +162,7 @@ function xcorr_outputs(
  * @returns NamedTuple of outputs (described in `XcorrOutputs`).
  */
 function xcorr_execute(
-    params: XcorrParameters,
+    params: XcorrParamsDict,
     runner: Runner | null = null,
 ): XcorrOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function xcorr(
 export {
       XCORR_METADATA,
       XcorrOutputs,
+      XcorrParamsDict,
+      XcorrParamsDictTagged,
       xcorr,
       xcorr_execute,
       xcorr_params,

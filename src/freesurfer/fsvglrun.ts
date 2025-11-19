@@ -11,7 +11,7 @@ const FSVGLRUN_METADATA: Metadata = {
 };
 
 
-interface FsvglrunParameters {
+interface FsvglrunParamsDict {
     "@type"?: "freesurfer/fsvglrun";
     "zeroth_arg_name"?: string | null | undefined;
     "empty_env": boolean;
@@ -19,11 +19,11 @@ interface FsvglrunParameters {
     "command": string;
     "command_args"?: Array<string> | null | undefined;
 }
-type FsvglrunParametersTagged = Required<Pick<FsvglrunParameters, '@type'>> & FsvglrunParameters;
+type FsvglrunParamsDictTagged = Required<Pick<FsvglrunParamsDict, '@type'>> & FsvglrunParamsDict;
 
 
 /**
- * Output object returned when calling `FsvglrunParameters(...)`.
+ * Output object returned when calling `FsvglrunParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function fsvglrun_params(
     empty_env: boolean = false,
     dashed_arg: boolean = false,
     command_args: Array<string> | null = null,
-): FsvglrunParametersTagged {
+): FsvglrunParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsvglrun" as const,
         "empty_env": empty_env,
@@ -78,7 +78,7 @@ function fsvglrun_params(
  * @returns Command-line arguments.
  */
 function fsvglrun_cargs(
-    params: FsvglrunParameters,
+    params: FsvglrunParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function fsvglrun_cargs(
  * @returns Outputs object.
  */
 function fsvglrun_outputs(
-    params: FsvglrunParameters,
+    params: FsvglrunParamsDict,
     execution: Execution,
 ): FsvglrunOutputs {
     const ret: FsvglrunOutputs = {
@@ -137,7 +137,7 @@ function fsvglrun_outputs(
  * @returns NamedTuple of outputs (described in `FsvglrunOutputs`).
  */
 function fsvglrun_execute(
-    params: FsvglrunParameters,
+    params: FsvglrunParamsDict,
     runner: Runner | null = null,
 ): FsvglrunOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function fsvglrun(
 export {
       FSVGLRUN_METADATA,
       FsvglrunOutputs,
+      FsvglrunParamsDict,
+      FsvglrunParamsDictTagged,
       fsvglrun,
       fsvglrun_execute,
       fsvglrun_params,

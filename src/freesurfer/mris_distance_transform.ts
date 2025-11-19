@@ -11,7 +11,7 @@ const MRIS_DISTANCE_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface MrisDistanceTransformParameters {
+interface MrisDistanceTransformParamsDict {
     "@type"?: "freesurfer/mris_distance_transform";
     "surface": InputPathType;
     "label": InputPathType;
@@ -22,11 +22,11 @@ interface MrisDistanceTransformParameters {
     "divide"?: number | null | undefined;
     "olabel": boolean;
 }
-type MrisDistanceTransformParametersTagged = Required<Pick<MrisDistanceTransformParameters, '@type'>> & MrisDistanceTransformParameters;
+type MrisDistanceTransformParamsDictTagged = Required<Pick<MrisDistanceTransformParamsDict, '@type'>> & MrisDistanceTransformParamsDict;
 
 
 /**
- * Output object returned when calling `MrisDistanceTransformParameters(...)`.
+ * Output object returned when calling `MrisDistanceTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function mris_distance_transform_params(
     posterior: number | null = null,
     divide: number | null = null,
     olabel: boolean = false,
-): MrisDistanceTransformParametersTagged {
+): MrisDistanceTransformParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_distance_transform" as const,
         "surface": surface,
@@ -96,7 +96,7 @@ function mris_distance_transform_params(
  * @returns Command-line arguments.
  */
 function mris_distance_transform_cargs(
-    params: MrisDistanceTransformParameters,
+    params: MrisDistanceTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function mris_distance_transform_cargs(
  * @returns Outputs object.
  */
 function mris_distance_transform_outputs(
-    params: MrisDistanceTransformParameters,
+    params: MrisDistanceTransformParamsDict,
     execution: Execution,
 ): MrisDistanceTransformOutputs {
     const ret: MrisDistanceTransformOutputs = {
@@ -165,7 +165,7 @@ function mris_distance_transform_outputs(
  * @returns NamedTuple of outputs (described in `MrisDistanceTransformOutputs`).
  */
 function mris_distance_transform_execute(
-    params: MrisDistanceTransformParameters,
+    params: MrisDistanceTransformParamsDict,
     runner: Runner | null = null,
 ): MrisDistanceTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function mris_distance_transform(
 export {
       MRIS_DISTANCE_TRANSFORM_METADATA,
       MrisDistanceTransformOutputs,
+      MrisDistanceTransformParamsDict,
+      MrisDistanceTransformParamsDictTagged,
       mris_distance_transform,
       mris_distance_transform_execute,
       mris_distance_transform_params,

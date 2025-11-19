@@ -11,23 +11,23 @@ const MTNORMALISE_METADATA: Metadata = {
 };
 
 
-interface MtnormaliseConfigParameters {
+interface MtnormaliseConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MtnormaliseConfigParametersTagged = Required<Pick<MtnormaliseConfigParameters, '@type'>> & MtnormaliseConfigParameters;
+type MtnormaliseConfigParamsDictTagged = Required<Pick<MtnormaliseConfigParamsDict, '@type'>> & MtnormaliseConfigParamsDict;
 
 
-interface MtnormaliseInputOutputParameters {
+interface MtnormaliseInputOutputParamsDict {
     "@type"?: "input_output";
     "input": InputPathType;
     "output": string;
 }
-type MtnormaliseInputOutputParametersTagged = Required<Pick<MtnormaliseInputOutputParameters, '@type'>> & MtnormaliseInputOutputParameters;
+type MtnormaliseInputOutputParamsDictTagged = Required<Pick<MtnormaliseInputOutputParamsDict, '@type'>> & MtnormaliseInputOutputParamsDict;
 
 
-interface MtnormaliseParameters {
+interface MtnormaliseParamsDict {
     "@type"?: "mrtrix/mtnormalise";
     "mask": InputPathType;
     "order"?: string | null | undefined;
@@ -42,12 +42,12 @@ interface MtnormaliseParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MtnormaliseConfigParameters> | null | undefined;
+    "config"?: Array<MtnormaliseConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
-    "input_output": Array<MtnormaliseInputOutputParameters>;
+    "input_output": Array<MtnormaliseInputOutputParamsDict>;
 }
-type MtnormaliseParametersTagged = Required<Pick<MtnormaliseParameters, '@type'>> & MtnormaliseParameters;
+type MtnormaliseParamsDictTagged = Required<Pick<MtnormaliseParamsDict, '@type'>> & MtnormaliseParamsDict;
 
 
 /**
@@ -58,10 +58,10 @@ type MtnormaliseParametersTagged = Required<Pick<MtnormaliseParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function mtnormalise_config_params(
+function mtnormalise_config(
     key: string,
     value: string,
-): MtnormaliseConfigParametersTagged {
+): MtnormaliseConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -80,7 +80,7 @@ function mtnormalise_config_params(
  * @returns Command-line arguments.
  */
 function mtnormalise_config_cargs(
-    params: MtnormaliseConfigParameters,
+    params: MtnormaliseConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -92,7 +92,7 @@ function mtnormalise_config_cargs(
 
 
 /**
- * Output object returned when calling `Array<MtnormaliseInputOutputParameters>(...)`.
+ * Output object returned when calling `Array<MtnormaliseInputOutputParamsDict>(...)`.
  *
  * @interface
  */
@@ -116,10 +116,10 @@ interface MtnormaliseInputOutputOutputs {
  *
  * @returns Parameter dictionary
  */
-function mtnormalise_input_output_params(
+function mtnormalise_input_output(
     input: InputPathType,
     output: string,
-): MtnormaliseInputOutputParametersTagged {
+): MtnormaliseInputOutputParamsDictTagged {
     const params = {
         "@type": "input_output" as const,
         "input": input,
@@ -138,7 +138,7 @@ function mtnormalise_input_output_params(
  * @returns Command-line arguments.
  */
 function mtnormalise_input_output_cargs(
-    params: MtnormaliseInputOutputParameters,
+    params: MtnormaliseInputOutputParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -157,7 +157,7 @@ function mtnormalise_input_output_cargs(
  * @returns Outputs object.
  */
 function mtnormalise_input_output_outputs(
-    params: MtnormaliseInputOutputParameters,
+    params: MtnormaliseInputOutputParamsDict,
     execution: Execution,
 ): MtnormaliseInputOutputOutputs {
     const ret: MtnormaliseInputOutputOutputs = {
@@ -169,7 +169,7 @@ function mtnormalise_input_output_outputs(
 
 
 /**
- * Output object returned when calling `MtnormaliseParameters(...)`.
+ * Output object returned when calling `MtnormaliseParamsDict(...)`.
  *
  * @interface
  */
@@ -222,7 +222,7 @@ interface MtnormaliseOutputs {
  */
 function mtnormalise_params(
     mask: InputPathType,
-    input_output: Array<MtnormaliseInputOutputParameters>,
+    input_output: Array<MtnormaliseInputOutputParamsDict>,
     order: string | null = null,
     niter: Array<number> | null = null,
     reference: number | null = null,
@@ -235,10 +235,10 @@ function mtnormalise_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MtnormaliseConfigParameters> | null = null,
+    config: Array<MtnormaliseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MtnormaliseParametersTagged {
+): MtnormaliseParamsDictTagged {
     const params = {
         "@type": "mrtrix/mtnormalise" as const,
         "mask": mask,
@@ -288,7 +288,7 @@ function mtnormalise_params(
  * @returns Command-line arguments.
  */
 function mtnormalise_cargs(
-    params: MtnormaliseParameters,
+    params: MtnormaliseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -377,7 +377,7 @@ function mtnormalise_cargs(
  * @returns Outputs object.
  */
 function mtnormalise_outputs(
-    params: MtnormaliseParameters,
+    params: MtnormaliseParamsDict,
     execution: Execution,
 ): MtnormaliseOutputs {
     const ret: MtnormaliseOutputs = {
@@ -416,7 +416,7 @@ function mtnormalise_outputs(
  * @returns NamedTuple of outputs (described in `MtnormaliseOutputs`).
  */
 function mtnormalise_execute(
-    params: MtnormaliseParameters,
+    params: MtnormaliseParamsDict,
     runner: Runner | null = null,
 ): MtnormaliseOutputs {
     runner = runner || getGlobalRunner();
@@ -471,7 +471,7 @@ function mtnormalise_execute(
  */
 function mtnormalise(
     mask: InputPathType,
-    input_output: Array<MtnormaliseInputOutputParameters>,
+    input_output: Array<MtnormaliseInputOutputParamsDict>,
     order: string | null = null,
     niter: Array<number> | null = null,
     reference: number | null = null,
@@ -484,7 +484,7 @@ function mtnormalise(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MtnormaliseConfigParameters> | null = null,
+    config: Array<MtnormaliseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -496,11 +496,17 @@ function mtnormalise(
 
 export {
       MTNORMALISE_METADATA,
+      MtnormaliseConfigParamsDict,
+      MtnormaliseConfigParamsDictTagged,
       MtnormaliseInputOutputOutputs,
+      MtnormaliseInputOutputParamsDict,
+      MtnormaliseInputOutputParamsDictTagged,
       MtnormaliseOutputs,
+      MtnormaliseParamsDict,
+      MtnormaliseParamsDictTagged,
       mtnormalise,
-      mtnormalise_config_params,
+      mtnormalise_config,
       mtnormalise_execute,
-      mtnormalise_input_output_params,
+      mtnormalise_input_output,
       mtnormalise_params,
 };

@@ -11,7 +11,7 @@ const SPHARM_RECO_METADATA: Metadata = {
 };
 
 
-interface SpharmRecoParameters {
+interface SpharmRecoParamsDict {
     "@type"?: "afni/SpharmReco";
     "input_surface": string;
     "decomposition_order": number;
@@ -22,11 +22,11 @@ interface SpharmRecoParameters {
     "debug"?: number | null | undefined;
     "smoothing"?: number | null | undefined;
 }
-type SpharmRecoParametersTagged = Required<Pick<SpharmRecoParameters, '@type'>> & SpharmRecoParameters;
+type SpharmRecoParamsDictTagged = Required<Pick<SpharmRecoParamsDict, '@type'>> & SpharmRecoParamsDict;
 
 
 /**
- * Output object returned when calling `SpharmRecoParameters(...)`.
+ * Output object returned when calling `SpharmRecoParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function spharm_reco_params(
     output_surface: Array<string> | null = null,
     debug: number | null = null,
     smoothing: number | null = null,
-): SpharmRecoParametersTagged {
+): SpharmRecoParamsDictTagged {
     const params = {
         "@type": "afni/SpharmReco" as const,
         "input_surface": input_surface,
@@ -94,7 +94,7 @@ function spharm_reco_params(
  * @returns Command-line arguments.
  */
 function spharm_reco_cargs(
-    params: SpharmRecoParameters,
+    params: SpharmRecoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,7 +152,7 @@ function spharm_reco_cargs(
  * @returns Outputs object.
  */
 function spharm_reco_outputs(
-    params: SpharmRecoParameters,
+    params: SpharmRecoParamsDict,
     execution: Execution,
 ): SpharmRecoOutputs {
     const ret: SpharmRecoOutputs = {
@@ -177,7 +177,7 @@ function spharm_reco_outputs(
  * @returns NamedTuple of outputs (described in `SpharmRecoOutputs`).
  */
 function spharm_reco_execute(
-    params: SpharmRecoParameters,
+    params: SpharmRecoParamsDict,
     runner: Runner | null = null,
 ): SpharmRecoOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function spharm_reco(
 export {
       SPHARM_RECO_METADATA,
       SpharmRecoOutputs,
+      SpharmRecoParamsDict,
+      SpharmRecoParamsDictTagged,
       spharm_reco,
       spharm_reco_execute,
       spharm_reco_params,

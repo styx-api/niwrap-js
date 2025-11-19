@@ -11,7 +11,7 @@ const MKXSUBJREG_METADATA: Metadata = {
 };
 
 
-interface MkxsubjregParameters {
+interface MkxsubjregParamsDict {
     "@type"?: "freesurfer/mkxsubjreg";
     "srcreg": InputPathType;
     "targreg": InputPathType;
@@ -22,11 +22,11 @@ interface MkxsubjregParameters {
     "help": boolean;
     "version": boolean;
 }
-type MkxsubjregParametersTagged = Required<Pick<MkxsubjregParameters, '@type'>> & MkxsubjregParameters;
+type MkxsubjregParamsDictTagged = Required<Pick<MkxsubjregParamsDict, '@type'>> & MkxsubjregParamsDict;
 
 
 /**
- * Output object returned when calling `MkxsubjregParameters(...)`.
+ * Output object returned when calling `MkxsubjregParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function mkxsubjreg_params(
     fvol: InputPathType | null = null,
     help: boolean = false,
     version: boolean = false,
-): MkxsubjregParametersTagged {
+): MkxsubjregParamsDictTagged {
     const params = {
         "@type": "freesurfer/mkxsubjreg" as const,
         "srcreg": srcreg,
@@ -94,7 +94,7 @@ function mkxsubjreg_params(
  * @returns Command-line arguments.
  */
 function mkxsubjreg_cargs(
-    params: MkxsubjregParameters,
+    params: MkxsubjregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -150,7 +150,7 @@ function mkxsubjreg_cargs(
  * @returns Outputs object.
  */
 function mkxsubjreg_outputs(
-    params: MkxsubjregParameters,
+    params: MkxsubjregParamsDict,
     execution: Execution,
 ): MkxsubjregOutputs {
     const ret: MkxsubjregOutputs = {
@@ -175,7 +175,7 @@ function mkxsubjreg_outputs(
  * @returns NamedTuple of outputs (described in `MkxsubjregOutputs`).
  */
 function mkxsubjreg_execute(
-    params: MkxsubjregParameters,
+    params: MkxsubjregParamsDict,
     runner: Runner | null = null,
 ): MkxsubjregOutputs {
     runner = runner || getGlobalRunner();
@@ -228,6 +228,8 @@ function mkxsubjreg(
 export {
       MKXSUBJREG_METADATA,
       MkxsubjregOutputs,
+      MkxsubjregParamsDict,
+      MkxsubjregParamsDictTagged,
       mkxsubjreg,
       mkxsubjreg_execute,
       mkxsubjreg_params,

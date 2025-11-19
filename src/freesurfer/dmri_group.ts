@@ -11,7 +11,7 @@ const DMRI_GROUP_METADATA: Metadata = {
 };
 
 
-interface DmriGroupParameters {
+interface DmriGroupParamsDict {
     "@type"?: "freesurfer/dmri_group";
     "input_list": InputPathType;
     "reference_volume": InputPathType;
@@ -21,11 +21,11 @@ interface DmriGroupParameters {
     "debug_mode": boolean;
     "check_options": boolean;
 }
-type DmriGroupParametersTagged = Required<Pick<DmriGroupParameters, '@type'>> & DmriGroupParameters;
+type DmriGroupParamsDictTagged = Required<Pick<DmriGroupParamsDict, '@type'>> & DmriGroupParamsDict;
 
 
 /**
- * Output object returned when calling `DmriGroupParameters(...)`.
+ * Output object returned when calling `DmriGroupParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function dmri_group_params(
     sections_num: number | null = null,
     debug_mode: boolean = false,
     check_options: boolean = false,
-): DmriGroupParametersTagged {
+): DmriGroupParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_group" as const,
         "input_list": input_list,
@@ -84,7 +84,7 @@ function dmri_group_params(
  * @returns Command-line arguments.
  */
 function dmri_group_cargs(
-    params: DmriGroupParameters,
+    params: DmriGroupParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function dmri_group_cargs(
  * @returns Outputs object.
  */
 function dmri_group_outputs(
-    params: DmriGroupParameters,
+    params: DmriGroupParamsDict,
     execution: Execution,
 ): DmriGroupOutputs {
     const ret: DmriGroupOutputs = {
@@ -154,7 +154,7 @@ function dmri_group_outputs(
  * @returns NamedTuple of outputs (described in `DmriGroupOutputs`).
  */
 function dmri_group_execute(
-    params: DmriGroupParameters,
+    params: DmriGroupParamsDict,
     runner: Runner | null = null,
 ): DmriGroupOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function dmri_group(
 export {
       DMRI_GROUP_METADATA,
       DmriGroupOutputs,
+      DmriGroupParamsDict,
+      DmriGroupParamsDictTagged,
       dmri_group,
       dmri_group_execute,
       dmri_group_params,

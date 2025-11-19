@@ -11,7 +11,7 @@ const MRI_PAINT_METADATA: Metadata = {
 };
 
 
-interface MriPaintParameters {
+interface MriPaintParamsDict {
     "@type"?: "freesurfer/mri_paint";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
@@ -20,11 +20,11 @@ interface MriPaintParameters {
     "image_offset"?: number | null | undefined;
     "paint_surf_coords": boolean;
 }
-type MriPaintParametersTagged = Required<Pick<MriPaintParameters, '@type'>> & MriPaintParameters;
+type MriPaintParamsDictTagged = Required<Pick<MriPaintParamsDict, '@type'>> & MriPaintParamsDict;
 
 
 /**
- * Output object returned when calling `MriPaintParameters(...)`.
+ * Output object returned when calling `MriPaintParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mri_paint_params(
     output_float_file: string,
     image_offset: number | null = null,
     paint_surf_coords: boolean = false,
-): MriPaintParametersTagged {
+): MriPaintParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_paint" as const,
         "input_volume": input_volume,
@@ -84,7 +84,7 @@ function mri_paint_params(
  * @returns Command-line arguments.
  */
 function mri_paint_cargs(
-    params: MriPaintParameters,
+    params: MriPaintParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function mri_paint_cargs(
  * @returns Outputs object.
  */
 function mri_paint_outputs(
-    params: MriPaintParameters,
+    params: MriPaintParamsDict,
     execution: Execution,
 ): MriPaintOutputs {
     const ret: MriPaintOutputs = {
@@ -141,7 +141,7 @@ function mri_paint_outputs(
  * @returns NamedTuple of outputs (described in `MriPaintOutputs`).
  */
 function mri_paint_execute(
-    params: MriPaintParameters,
+    params: MriPaintParamsDict,
     runner: Runner | null = null,
 ): MriPaintOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function mri_paint(
 export {
       MRI_PAINT_METADATA,
       MriPaintOutputs,
+      MriPaintParamsDict,
+      MriPaintParamsDictTagged,
       mri_paint,
       mri_paint_execute,
       mri_paint_params,

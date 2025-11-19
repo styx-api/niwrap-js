@@ -11,15 +11,15 @@ const INFLATE_SUBJECT_NEW_LH_METADATA: Metadata = {
 };
 
 
-interface InflateSubjectNewLhParameters {
+interface InflateSubjectNewLhParamsDict {
     "@type"?: "freesurfer/inflate_subject_new-lh";
     "subject_dir": string;
 }
-type InflateSubjectNewLhParametersTagged = Required<Pick<InflateSubjectNewLhParameters, '@type'>> & InflateSubjectNewLhParameters;
+type InflateSubjectNewLhParamsDictTagged = Required<Pick<InflateSubjectNewLhParamsDict, '@type'>> & InflateSubjectNewLhParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubjectNewLhParameters(...)`.
+ * Output object returned when calling `InflateSubjectNewLhParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface InflateSubjectNewLhOutputs {
  */
 function inflate_subject_new_lh_params(
     subject_dir: string,
-): InflateSubjectNewLhParametersTagged {
+): InflateSubjectNewLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject_new-lh" as const,
         "subject_dir": subject_dir,
@@ -62,7 +62,7 @@ function inflate_subject_new_lh_params(
  * @returns Command-line arguments.
  */
 function inflate_subject_new_lh_cargs(
-    params: InflateSubjectNewLhParameters,
+    params: InflateSubjectNewLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function inflate_subject_new_lh_cargs(
  * @returns Outputs object.
  */
 function inflate_subject_new_lh_outputs(
-    params: InflateSubjectNewLhParameters,
+    params: InflateSubjectNewLhParamsDict,
     execution: Execution,
 ): InflateSubjectNewLhOutputs {
     const ret: InflateSubjectNewLhOutputs = {
@@ -110,7 +110,7 @@ function inflate_subject_new_lh_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubjectNewLhOutputs`).
  */
 function inflate_subject_new_lh_execute(
-    params: InflateSubjectNewLhParameters,
+    params: InflateSubjectNewLhParamsDict,
     runner: Runner | null = null,
 ): InflateSubjectNewLhOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function inflate_subject_new_lh(
 export {
       INFLATE_SUBJECT_NEW_LH_METADATA,
       InflateSubjectNewLhOutputs,
+      InflateSubjectNewLhParamsDict,
+      InflateSubjectNewLhParamsDictTagged,
       inflate_subject_new_lh,
       inflate_subject_new_lh_execute,
       inflate_subject_new_lh_params,

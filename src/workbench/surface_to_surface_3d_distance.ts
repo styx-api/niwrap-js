@@ -10,18 +10,18 @@ const SURFACE_TO_SURFACE_3D_DISTANCE_METADATA: Metadata = {
 };
 
 
-interface SurfaceToSurface3dDistanceParameters {
+interface SurfaceToSurface3dDistanceParamsDict {
     "@type"?: "workbench/surface-to-surface-3d-distance";
     "dists-out": string;
     "vectors-out"?: string | null | undefined;
     "surface-comp": InputPathType;
     "surface-ref": InputPathType;
 }
-type SurfaceToSurface3dDistanceParametersTagged = Required<Pick<SurfaceToSurface3dDistanceParameters, '@type'>> & SurfaceToSurface3dDistanceParameters;
+type SurfaceToSurface3dDistanceParamsDictTagged = Required<Pick<SurfaceToSurface3dDistanceParamsDict, '@type'>> & SurfaceToSurface3dDistanceParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceToSurface3dDistanceParameters(...)`.
+ * Output object returned when calling `SurfaceToSurface3dDistanceParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function surface_to_surface_3d_distance_params(
     vectors_out: string | null,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
-): SurfaceToSurface3dDistanceParametersTagged {
+): SurfaceToSurface3dDistanceParamsDictTagged {
     const params = {
         "@type": "workbench/surface-to-surface-3d-distance" as const,
         "dists-out": dists_out,
@@ -77,7 +77,7 @@ function surface_to_surface_3d_distance_params(
  * @returns Command-line arguments.
  */
 function surface_to_surface_3d_distance_cargs(
-    params: SurfaceToSurface3dDistanceParameters,
+    params: SurfaceToSurface3dDistanceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function surface_to_surface_3d_distance_cargs(
  * @returns Outputs object.
  */
 function surface_to_surface_3d_distance_outputs(
-    params: SurfaceToSurface3dDistanceParameters,
+    params: SurfaceToSurface3dDistanceParamsDict,
     execution: Execution,
 ): SurfaceToSurface3dDistanceOutputs {
     const ret: SurfaceToSurface3dDistanceOutputs = {
@@ -127,7 +127,7 @@ function surface_to_surface_3d_distance_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceToSurface3dDistanceOutputs`).
  */
 function surface_to_surface_3d_distance_execute(
-    params: SurfaceToSurface3dDistanceParameters,
+    params: SurfaceToSurface3dDistanceParamsDict,
     runner: Runner | null = null,
 ): SurfaceToSurface3dDistanceOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function surface_to_surface_3d_distance(
 export {
       SURFACE_TO_SURFACE_3D_DISTANCE_METADATA,
       SurfaceToSurface3dDistanceOutputs,
+      SurfaceToSurface3dDistanceParamsDict,
+      SurfaceToSurface3dDistanceParamsDictTagged,
       surface_to_surface_3d_distance,
       surface_to_surface_3d_distance_execute,
       surface_to_surface_3d_distance_params,

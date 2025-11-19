@@ -11,15 +11,15 @@ const V__AFNI_REFACER_MAKE_MASTER_METADATA: Metadata = {
 };
 
 
-interface VAfniRefacerMakeMasterParameters {
+interface VAfniRefacerMakeMasterParamsDict {
     "@type"?: "afni/@afni_refacer_make_master";
     "input_datasets": Array<InputPathType>;
 }
-type VAfniRefacerMakeMasterParametersTagged = Required<Pick<VAfniRefacerMakeMasterParameters, '@type'>> & VAfniRefacerMakeMasterParameters;
+type VAfniRefacerMakeMasterParamsDictTagged = Required<Pick<VAfniRefacerMakeMasterParamsDict, '@type'>> & VAfniRefacerMakeMasterParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniRefacerMakeMasterParameters(...)`.
+ * Output object returned when calling `VAfniRefacerMakeMasterParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VAfniRefacerMakeMasterOutputs {
  */
 function v__afni_refacer_make_master_params(
     input_datasets: Array<InputPathType>,
-): VAfniRefacerMakeMasterParametersTagged {
+): VAfniRefacerMakeMasterParamsDictTagged {
     const params = {
         "@type": "afni/@afni_refacer_make_master" as const,
         "input_datasets": input_datasets,
@@ -62,7 +62,7 @@ function v__afni_refacer_make_master_params(
  * @returns Command-line arguments.
  */
 function v__afni_refacer_make_master_cargs(
-    params: VAfniRefacerMakeMasterParameters,
+    params: VAfniRefacerMakeMasterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__afni_refacer_make_master_cargs(
  * @returns Outputs object.
  */
 function v__afni_refacer_make_master_outputs(
-    params: VAfniRefacerMakeMasterParameters,
+    params: VAfniRefacerMakeMasterParamsDict,
     execution: Execution,
 ): VAfniRefacerMakeMasterOutputs {
     const ret: VAfniRefacerMakeMasterOutputs = {
@@ -107,7 +107,7 @@ function v__afni_refacer_make_master_outputs(
  * @returns NamedTuple of outputs (described in `VAfniRefacerMakeMasterOutputs`).
  */
 function v__afni_refacer_make_master_execute(
-    params: VAfniRefacerMakeMasterParameters,
+    params: VAfniRefacerMakeMasterParamsDict,
     runner: Runner | null = null,
 ): VAfniRefacerMakeMasterOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__afni_refacer_make_master(
 
 export {
       VAfniRefacerMakeMasterOutputs,
+      VAfniRefacerMakeMasterParamsDict,
+      VAfniRefacerMakeMasterParamsDictTagged,
       V__AFNI_REFACER_MAKE_MASTER_METADATA,
       v__afni_refacer_make_master,
       v__afni_refacer_make_master_execute,

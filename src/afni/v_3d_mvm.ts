@@ -11,7 +11,7 @@ const V_3D_MVM_METADATA: Metadata = {
 };
 
 
-interface V3dMvmParameters {
+interface V3dMvmParamsDict {
     "@type"?: "afni/3dMVM";
     "dbgArgs"?: string | null | undefined;
     "prefix": string;
@@ -29,11 +29,11 @@ interface V3dMvmParameters {
     "glfCode"?: string | null | undefined;
     "dataTable": string;
 }
-type V3dMvmParametersTagged = Required<Pick<V3dMvmParameters, '@type'>> & V3dMvmParameters;
+type V3dMvmParamsDictTagged = Required<Pick<V3dMvmParamsDict, '@type'>> & V3dMvmParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMvmParameters(...)`.
+ * Output object returned when calling `V3dMvmParamsDict(...)`.
  *
  * @interface
  */
@@ -90,7 +90,7 @@ function v_3d_mvm_params(
     num_glf: number | null = null,
     glf_label: string | null = null,
     glf_code: string | null = null,
-): V3dMvmParametersTagged {
+): V3dMvmParamsDictTagged {
     const params = {
         "@type": "afni/3dMVM" as const,
         "prefix": prefix,
@@ -146,7 +146,7 @@ function v_3d_mvm_params(
  * @returns Command-line arguments.
  */
 function v_3d_mvm_cargs(
-    params: V3dMvmParameters,
+    params: V3dMvmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -245,7 +245,7 @@ function v_3d_mvm_cargs(
  * @returns Outputs object.
  */
 function v_3d_mvm_outputs(
-    params: V3dMvmParameters,
+    params: V3dMvmParamsDict,
     execution: Execution,
 ): V3dMvmOutputs {
     const ret: V3dMvmOutputs = {
@@ -272,7 +272,7 @@ function v_3d_mvm_outputs(
  * @returns NamedTuple of outputs (described in `V3dMvmOutputs`).
  */
 function v_3d_mvm_execute(
-    params: V3dMvmParameters,
+    params: V3dMvmParamsDict,
     runner: Runner | null = null,
 ): V3dMvmOutputs {
     runner = runner || getGlobalRunner();
@@ -338,6 +338,8 @@ function v_3d_mvm(
 
 export {
       V3dMvmOutputs,
+      V3dMvmParamsDict,
+      V3dMvmParamsDictTagged,
       V_3D_MVM_METADATA,
       v_3d_mvm,
       v_3d_mvm_execute,

@@ -11,23 +11,23 @@ const DWI2TENSOR_METADATA: Metadata = {
 };
 
 
-interface Dwi2tensorFslgradParameters {
+interface Dwi2tensorFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type Dwi2tensorFslgradParametersTagged = Required<Pick<Dwi2tensorFslgradParameters, '@type'>> & Dwi2tensorFslgradParameters;
+type Dwi2tensorFslgradParamsDictTagged = Required<Pick<Dwi2tensorFslgradParamsDict, '@type'>> & Dwi2tensorFslgradParamsDict;
 
 
-interface Dwi2tensorConfigParameters {
+interface Dwi2tensorConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Dwi2tensorConfigParametersTagged = Required<Pick<Dwi2tensorConfigParameters, '@type'>> & Dwi2tensorConfigParameters;
+type Dwi2tensorConfigParamsDictTagged = Required<Pick<Dwi2tensorConfigParamsDict, '@type'>> & Dwi2tensorConfigParamsDict;
 
 
-interface Dwi2tensorParameters {
+interface Dwi2tensorParamsDict {
     "@type"?: "mrtrix/dwi2tensor";
     "ols": boolean;
     "mask"?: InputPathType | null | undefined;
@@ -36,19 +36,19 @@ interface Dwi2tensorParameters {
     "iter"?: number | null | undefined;
     "predicted_signal"?: string | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: Dwi2tensorFslgradParameters | null | undefined;
+    "fslgrad"?: Dwi2tensorFslgradParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Dwi2tensorConfigParameters> | null | undefined;
+    "config"?: Array<Dwi2tensorConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "dwi": InputPathType;
     "dt": string;
 }
-type Dwi2tensorParametersTagged = Required<Pick<Dwi2tensorParameters, '@type'>> & Dwi2tensorParameters;
+type Dwi2tensorParamsDictTagged = Required<Pick<Dwi2tensorParamsDict, '@type'>> & Dwi2tensorParamsDict;
 
 
 /**
@@ -59,10 +59,10 @@ type Dwi2tensorParametersTagged = Required<Pick<Dwi2tensorParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function dwi2tensor_fslgrad_params(
+function dwi2tensor_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2tensorFslgradParametersTagged {
+): Dwi2tensorFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -81,7 +81,7 @@ function dwi2tensor_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dwi2tensor_fslgrad_cargs(
-    params: Dwi2tensorFslgradParameters,
+    params: Dwi2tensorFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,10 +100,10 @@ function dwi2tensor_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwi2tensor_config_params(
+function dwi2tensor_config(
     key: string,
     value: string,
-): Dwi2tensorConfigParametersTagged {
+): Dwi2tensorConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -122,7 +122,7 @@ function dwi2tensor_config_params(
  * @returns Command-line arguments.
  */
 function dwi2tensor_config_cargs(
-    params: Dwi2tensorConfigParameters,
+    params: Dwi2tensorConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function dwi2tensor_config_cargs(
 
 
 /**
- * Output object returned when calling `Dwi2tensorParameters(...)`.
+ * Output object returned when calling `Dwi2tensorParamsDict(...)`.
  *
  * @interface
  */
@@ -196,16 +196,16 @@ function dwi2tensor_params(
     iter: number | null = null,
     predicted_signal: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2tensorFslgradParameters | null = null,
+    fslgrad: Dwi2tensorFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2tensorConfigParameters> | null = null,
+    config: Array<Dwi2tensorConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2tensorParametersTagged {
+): Dwi2tensorParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwi2tensor" as const,
         "ols": ols,
@@ -258,7 +258,7 @@ function dwi2tensor_params(
  * @returns Command-line arguments.
  */
 function dwi2tensor_cargs(
-    params: Dwi2tensorParameters,
+    params: Dwi2tensorParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -347,7 +347,7 @@ function dwi2tensor_cargs(
  * @returns Outputs object.
  */
 function dwi2tensor_outputs(
-    params: Dwi2tensorParameters,
+    params: Dwi2tensorParamsDict,
     execution: Execution,
 ): Dwi2tensorOutputs {
     const ret: Dwi2tensorOutputs = {
@@ -401,7 +401,7 @@ function dwi2tensor_outputs(
  * @returns NamedTuple of outputs (described in `Dwi2tensorOutputs`).
  */
 function dwi2tensor_execute(
-    params: Dwi2tensorParameters,
+    params: Dwi2tensorParamsDict,
     runner: Runner | null = null,
 ): Dwi2tensorOutputs {
     runner = runner || getGlobalRunner();
@@ -480,13 +480,13 @@ function dwi2tensor(
     iter: number | null = null,
     predicted_signal: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2tensorFslgradParameters | null = null,
+    fslgrad: Dwi2tensorFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2tensorConfigParameters> | null = null,
+    config: Array<Dwi2tensorConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -498,10 +498,16 @@ function dwi2tensor(
 
 export {
       DWI2TENSOR_METADATA,
+      Dwi2tensorConfigParamsDict,
+      Dwi2tensorConfigParamsDictTagged,
+      Dwi2tensorFslgradParamsDict,
+      Dwi2tensorFslgradParamsDictTagged,
       Dwi2tensorOutputs,
+      Dwi2tensorParamsDict,
+      Dwi2tensorParamsDictTagged,
       dwi2tensor,
-      dwi2tensor_config_params,
+      dwi2tensor_config,
       dwi2tensor_execute,
-      dwi2tensor_fslgrad_params,
+      dwi2tensor_fslgrad,
       dwi2tensor_params,
 };

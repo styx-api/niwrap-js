@@ -11,18 +11,18 @@ const V_3D_EMPTY_METADATA: Metadata = {
 };
 
 
-interface V3dEmptyParameters {
+interface V3dEmptyParamsDict {
     "@type"?: "afni/3dEmpty";
     "prefix"?: string | null | undefined;
     "geometry"?: string | null | undefined;
     "nxyz"?: Array<number> | null | undefined;
     "nt"?: number | null | undefined;
 }
-type V3dEmptyParametersTagged = Required<Pick<V3dEmptyParameters, '@type'>> & V3dEmptyParameters;
+type V3dEmptyParamsDictTagged = Required<Pick<V3dEmptyParamsDict, '@type'>> & V3dEmptyParamsDict;
 
 
 /**
- * Output object returned when calling `V3dEmptyParameters(...)`.
+ * Output object returned when calling `V3dEmptyParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function v_3d_empty_params(
     geometry: string | null = null,
     nxyz: Array<number> | null = null,
     nt: number | null = null,
-): V3dEmptyParametersTagged {
+): V3dEmptyParamsDictTagged {
     const params = {
         "@type": "afni/3dEmpty" as const,
     };
@@ -82,7 +82,7 @@ function v_3d_empty_params(
  * @returns Command-line arguments.
  */
 function v_3d_empty_cargs(
-    params: V3dEmptyParameters,
+    params: V3dEmptyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,7 +124,7 @@ function v_3d_empty_cargs(
  * @returns Outputs object.
  */
 function v_3d_empty_outputs(
-    params: V3dEmptyParameters,
+    params: V3dEmptyParamsDict,
     execution: Execution,
 ): V3dEmptyOutputs {
     const ret: V3dEmptyOutputs = {
@@ -150,7 +150,7 @@ function v_3d_empty_outputs(
  * @returns NamedTuple of outputs (described in `V3dEmptyOutputs`).
  */
 function v_3d_empty_execute(
-    params: V3dEmptyParameters,
+    params: V3dEmptyParamsDict,
     runner: Runner | null = null,
 ): V3dEmptyOutputs {
     runner = runner || getGlobalRunner();
@@ -194,6 +194,8 @@ function v_3d_empty(
 
 export {
       V3dEmptyOutputs,
+      V3dEmptyParamsDict,
+      V3dEmptyParamsDictTagged,
       V_3D_EMPTY_METADATA,
       v_3d_empty,
       v_3d_empty_execute,

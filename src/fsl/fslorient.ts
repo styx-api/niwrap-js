@@ -11,7 +11,7 @@ const FSLORIENT_METADATA: Metadata = {
 };
 
 
-interface FslorientParameters {
+interface FslorientParamsDict {
     "@type"?: "fsl/fslorient";
     "get_orient": boolean;
     "get_sform": boolean;
@@ -30,11 +30,11 @@ interface FslorientParameters {
     "swap_orient": boolean;
     "filename": InputPathType;
 }
-type FslorientParametersTagged = Required<Pick<FslorientParameters, '@type'>> & FslorientParameters;
+type FslorientParamsDictTagged = Required<Pick<FslorientParamsDict, '@type'>> & FslorientParamsDict;
 
 
 /**
- * Output object returned when calling `FslorientParameters(...)`.
+ * Output object returned when calling `FslorientParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function fslorient_params(
     force_neurological: boolean = false,
     force_radiological: boolean = false,
     swap_orient: boolean = false,
-): FslorientParametersTagged {
+): FslorientParamsDictTagged {
     const params = {
         "@type": "fsl/fslorient" as const,
         "get_orient": get_orient,
@@ -126,7 +126,7 @@ function fslorient_params(
  * @returns Command-line arguments.
  */
 function fslorient_cargs(
-    params: FslorientParameters,
+    params: FslorientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,7 +199,7 @@ function fslorient_cargs(
  * @returns Outputs object.
  */
 function fslorient_outputs(
-    params: FslorientParameters,
+    params: FslorientParamsDict,
     execution: Execution,
 ): FslorientOutputs {
     const ret: FslorientOutputs = {
@@ -224,7 +224,7 @@ function fslorient_outputs(
  * @returns NamedTuple of outputs (described in `FslorientOutputs`).
  */
 function fslorient_execute(
-    params: FslorientParameters,
+    params: FslorientParamsDict,
     runner: Runner | null = null,
 ): FslorientOutputs {
     runner = runner || getGlobalRunner();
@@ -293,6 +293,8 @@ function fslorient(
 export {
       FSLORIENT_METADATA,
       FslorientOutputs,
+      FslorientParamsDict,
+      FslorientParamsDictTagged,
       fslorient,
       fslorient_execute,
       fslorient_params,

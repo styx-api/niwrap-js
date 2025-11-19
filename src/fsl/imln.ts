@@ -11,16 +11,16 @@ const IMLN_METADATA: Metadata = {
 };
 
 
-interface ImlnParameters {
+interface ImlnParamsDict {
     "@type"?: "fsl/imln";
     "input_file": InputPathType;
     "link_name": string;
 }
-type ImlnParametersTagged = Required<Pick<ImlnParameters, '@type'>> & ImlnParameters;
+type ImlnParamsDictTagged = Required<Pick<ImlnParamsDict, '@type'>> & ImlnParamsDict;
 
 
 /**
- * Output object returned when calling `ImlnParameters(...)`.
+ * Output object returned when calling `ImlnParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface ImlnOutputs {
 function imln_params(
     input_file: InputPathType,
     link_name: string,
-): ImlnParametersTagged {
+): ImlnParamsDictTagged {
     const params = {
         "@type": "fsl/imln" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function imln_params(
  * @returns Command-line arguments.
  */
 function imln_cargs(
-    params: ImlnParameters,
+    params: ImlnParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function imln_cargs(
  * @returns Outputs object.
  */
 function imln_outputs(
-    params: ImlnParameters,
+    params: ImlnParamsDict,
     execution: Execution,
 ): ImlnOutputs {
     const ret: ImlnOutputs = {
@@ -112,7 +112,7 @@ function imln_outputs(
  * @returns NamedTuple of outputs (described in `ImlnOutputs`).
  */
 function imln_execute(
-    params: ImlnParameters,
+    params: ImlnParamsDict,
     runner: Runner | null = null,
 ): ImlnOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function imln(
 export {
       IMLN_METADATA,
       ImlnOutputs,
+      ImlnParamsDict,
+      ImlnParamsDictTagged,
       imln,
       imln_execute,
       imln_params,

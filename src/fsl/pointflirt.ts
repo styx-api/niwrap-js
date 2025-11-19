@@ -11,7 +11,7 @@ const POINTFLIRT_METADATA: Metadata = {
 };
 
 
-interface PointflirtParameters {
+interface PointflirtParamsDict {
     "@type"?: "fsl/pointflirt";
     "invol_coords": InputPathType;
     "refvol_coords": InputPathType;
@@ -21,11 +21,11 @@ interface PointflirtParameters {
     "vol_ref"?: InputPathType | null | undefined;
     "verbose_flag": boolean;
 }
-type PointflirtParametersTagged = Required<Pick<PointflirtParameters, '@type'>> & PointflirtParameters;
+type PointflirtParamsDictTagged = Required<Pick<PointflirtParamsDict, '@type'>> & PointflirtParamsDict;
 
 
 /**
- * Output object returned when calling `PointflirtParameters(...)`.
+ * Output object returned when calling `PointflirtParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function pointflirt_params(
     vol_input: InputPathType | null = null,
     vol_ref: InputPathType | null = null,
     verbose_flag: boolean = false,
-): PointflirtParametersTagged {
+): PointflirtParamsDictTagged {
     const params = {
         "@type": "fsl/pointflirt" as const,
         "invol_coords": invol_coords,
@@ -92,7 +92,7 @@ function pointflirt_params(
  * @returns Command-line arguments.
  */
 function pointflirt_cargs(
-    params: PointflirtParameters,
+    params: PointflirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,7 +142,7 @@ function pointflirt_cargs(
  * @returns Outputs object.
  */
 function pointflirt_outputs(
-    params: PointflirtParameters,
+    params: PointflirtParamsDict,
     execution: Execution,
 ): PointflirtOutputs {
     const ret: PointflirtOutputs = {
@@ -168,7 +168,7 @@ function pointflirt_outputs(
  * @returns NamedTuple of outputs (described in `PointflirtOutputs`).
  */
 function pointflirt_execute(
-    params: PointflirtParameters,
+    params: PointflirtParamsDict,
     runner: Runner | null = null,
 ): PointflirtOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function pointflirt(
 export {
       POINTFLIRT_METADATA,
       PointflirtOutputs,
+      PointflirtParamsDict,
+      PointflirtParamsDictTagged,
       pointflirt,
       pointflirt_execute,
       pointflirt_params,

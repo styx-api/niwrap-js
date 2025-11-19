@@ -11,15 +11,15 @@ const MRIS_TALAIRACH_METADATA: Metadata = {
 };
 
 
-interface MrisTalairachParameters {
+interface MrisTalairachParamsDict {
     "@type"?: "freesurfer/mris_talairach";
     "input_image": InputPathType;
 }
-type MrisTalairachParametersTagged = Required<Pick<MrisTalairachParameters, '@type'>> & MrisTalairachParameters;
+type MrisTalairachParamsDictTagged = Required<Pick<MrisTalairachParamsDict, '@type'>> & MrisTalairachParamsDict;
 
 
 /**
- * Output object returned when calling `MrisTalairachParameters(...)`.
+ * Output object returned when calling `MrisTalairachParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MrisTalairachOutputs {
  */
 function mris_talairach_params(
     input_image: InputPathType,
-): MrisTalairachParametersTagged {
+): MrisTalairachParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_talairach" as const,
         "input_image": input_image,
@@ -58,7 +58,7 @@ function mris_talairach_params(
  * @returns Command-line arguments.
  */
 function mris_talairach_cargs(
-    params: MrisTalairachParameters,
+    params: MrisTalairachParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function mris_talairach_cargs(
  * @returns Outputs object.
  */
 function mris_talairach_outputs(
-    params: MrisTalairachParameters,
+    params: MrisTalairachParamsDict,
     execution: Execution,
 ): MrisTalairachOutputs {
     const ret: MrisTalairachOutputs = {
@@ -102,7 +102,7 @@ function mris_talairach_outputs(
  * @returns NamedTuple of outputs (described in `MrisTalairachOutputs`).
  */
 function mris_talairach_execute(
-    params: MrisTalairachParameters,
+    params: MrisTalairachParamsDict,
     runner: Runner | null = null,
 ): MrisTalairachOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function mris_talairach(
 export {
       MRIS_TALAIRACH_METADATA,
       MrisTalairachOutputs,
+      MrisTalairachParamsDict,
+      MrisTalairachParamsDictTagged,
       mris_talairach,
       mris_talairach_execute,
       mris_talairach_params,

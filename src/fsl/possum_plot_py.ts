@@ -11,16 +11,16 @@ const POSSUM_PLOT_PY_METADATA: Metadata = {
 };
 
 
-interface PossumPlotPyParameters {
+interface PossumPlotPyParamsDict {
     "@type"?: "fsl/possum_plot.py";
     "input_file": InputPathType;
     "output_basename": string;
 }
-type PossumPlotPyParametersTagged = Required<Pick<PossumPlotPyParameters, '@type'>> & PossumPlotPyParameters;
+type PossumPlotPyParamsDictTagged = Required<Pick<PossumPlotPyParamsDict, '@type'>> & PossumPlotPyParamsDict;
 
 
 /**
- * Output object returned when calling `PossumPlotPyParameters(...)`.
+ * Output object returned when calling `PossumPlotPyParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface PossumPlotPyOutputs {
 function possum_plot_py_params(
     input_file: InputPathType,
     output_basename: string,
-): PossumPlotPyParametersTagged {
+): PossumPlotPyParamsDictTagged {
     const params = {
         "@type": "fsl/possum_plot.py" as const,
         "input_file": input_file,
@@ -62,7 +62,7 @@ function possum_plot_py_params(
  * @returns Command-line arguments.
  */
 function possum_plot_py_cargs(
-    params: PossumPlotPyParameters,
+    params: PossumPlotPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function possum_plot_py_cargs(
  * @returns Outputs object.
  */
 function possum_plot_py_outputs(
-    params: PossumPlotPyParameters,
+    params: PossumPlotPyParamsDict,
     execution: Execution,
 ): PossumPlotPyOutputs {
     const ret: PossumPlotPyOutputs = {
@@ -107,7 +107,7 @@ function possum_plot_py_outputs(
  * @returns NamedTuple of outputs (described in `PossumPlotPyOutputs`).
  */
 function possum_plot_py_execute(
-    params: PossumPlotPyParameters,
+    params: PossumPlotPyParamsDict,
     runner: Runner | null = null,
 ): PossumPlotPyOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function possum_plot_py(
 export {
       POSSUM_PLOT_PY_METADATA,
       PossumPlotPyOutputs,
+      PossumPlotPyParamsDict,
+      PossumPlotPyParamsDictTagged,
       possum_plot_py,
       possum_plot_py_execute,
       possum_plot_py_params,

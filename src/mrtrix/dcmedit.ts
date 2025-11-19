@@ -11,39 +11,39 @@ const DCMEDIT_METADATA: Metadata = {
 };
 
 
-interface DcmeditTagParameters {
+interface DcmeditTagParamsDict {
     "@type"?: "tag";
     "group": string;
     "element": string;
     "newvalue": string;
 }
-type DcmeditTagParametersTagged = Required<Pick<DcmeditTagParameters, '@type'>> & DcmeditTagParameters;
+type DcmeditTagParamsDictTagged = Required<Pick<DcmeditTagParamsDict, '@type'>> & DcmeditTagParamsDict;
 
 
-interface DcmeditConfigParameters {
+interface DcmeditConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DcmeditConfigParametersTagged = Required<Pick<DcmeditConfigParameters, '@type'>> & DcmeditConfigParameters;
+type DcmeditConfigParamsDictTagged = Required<Pick<DcmeditConfigParamsDict, '@type'>> & DcmeditConfigParamsDict;
 
 
-interface DcmeditParameters {
+interface DcmeditParamsDict {
     "@type"?: "mrtrix/dcmedit";
     "anonymise": boolean;
     "id"?: string | null | undefined;
-    "tag"?: Array<DcmeditTagParameters> | null | undefined;
+    "tag"?: Array<DcmeditTagParamsDict> | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DcmeditConfigParameters> | null | undefined;
+    "config"?: Array<DcmeditConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "file": InputPathType;
 }
-type DcmeditParametersTagged = Required<Pick<DcmeditParameters, '@type'>> & DcmeditParameters;
+type DcmeditParamsDictTagged = Required<Pick<DcmeditParamsDict, '@type'>> & DcmeditParamsDict;
 
 
 /**
@@ -55,11 +55,11 @@ type DcmeditParametersTagged = Required<Pick<DcmeditParameters, '@type'>> & Dcme
  *
  * @returns Parameter dictionary
  */
-function dcmedit_tag_params(
+function dcmedit_tag(
     group: string,
     element: string,
     newvalue: string,
-): DcmeditTagParametersTagged {
+): DcmeditTagParamsDictTagged {
     const params = {
         "@type": "tag" as const,
         "group": group,
@@ -79,7 +79,7 @@ function dcmedit_tag_params(
  * @returns Command-line arguments.
  */
 function dcmedit_tag_cargs(
-    params: DcmeditTagParameters,
+    params: DcmeditTagParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,10 +99,10 @@ function dcmedit_tag_cargs(
  *
  * @returns Parameter dictionary
  */
-function dcmedit_config_params(
+function dcmedit_config(
     key: string,
     value: string,
-): DcmeditConfigParametersTagged {
+): DcmeditConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -121,7 +121,7 @@ function dcmedit_config_params(
  * @returns Command-line arguments.
  */
 function dcmedit_config_cargs(
-    params: DcmeditConfigParameters,
+    params: DcmeditConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -133,7 +133,7 @@ function dcmedit_config_cargs(
 
 
 /**
- * Output object returned when calling `DcmeditParameters(...)`.
+ * Output object returned when calling `DcmeditParamsDict(...)`.
  *
  * @interface
  */
@@ -170,16 +170,16 @@ function dcmedit_params(
     file: InputPathType,
     anonymise: boolean = false,
     id: string | null = null,
-    tag: Array<DcmeditTagParameters> | null = null,
+    tag: Array<DcmeditTagParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DcmeditConfigParameters> | null = null,
+    config: Array<DcmeditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DcmeditParametersTagged {
+): DcmeditParamsDictTagged {
     const params = {
         "@type": "mrtrix/dcmedit" as const,
         "anonymise": anonymise,
@@ -216,7 +216,7 @@ function dcmedit_params(
  * @returns Command-line arguments.
  */
 function dcmedit_cargs(
-    params: DcmeditParameters,
+    params: DcmeditParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -274,7 +274,7 @@ function dcmedit_cargs(
  * @returns Outputs object.
  */
 function dcmedit_outputs(
-    params: DcmeditParameters,
+    params: DcmeditParamsDict,
     execution: Execution,
 ): DcmeditOutputs {
     const ret: DcmeditOutputs = {
@@ -307,7 +307,7 @@ function dcmedit_outputs(
  * @returns NamedTuple of outputs (described in `DcmeditOutputs`).
  */
 function dcmedit_execute(
-    params: DcmeditParameters,
+    params: DcmeditParamsDict,
     runner: Runner | null = null,
 ): DcmeditOutputs {
     runner = runner || getGlobalRunner();
@@ -360,13 +360,13 @@ function dcmedit(
     file: InputPathType,
     anonymise: boolean = false,
     id: string | null = null,
-    tag: Array<DcmeditTagParameters> | null = null,
+    tag: Array<DcmeditTagParamsDict> | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DcmeditConfigParameters> | null = null,
+    config: Array<DcmeditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -378,10 +378,16 @@ function dcmedit(
 
 export {
       DCMEDIT_METADATA,
+      DcmeditConfigParamsDict,
+      DcmeditConfigParamsDictTagged,
       DcmeditOutputs,
+      DcmeditParamsDict,
+      DcmeditParamsDictTagged,
+      DcmeditTagParamsDict,
+      DcmeditTagParamsDictTagged,
       dcmedit,
-      dcmedit_config_params,
+      dcmedit_config,
       dcmedit_execute,
       dcmedit_params,
-      dcmedit_tag_params,
+      dcmedit_tag,
 };

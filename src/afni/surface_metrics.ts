@@ -11,7 +11,7 @@ const SURFACE_METRICS_METADATA: Metadata = {
 };
 
 
-interface SurfaceMetricsParameters {
+interface SurfaceMetricsParamsDict {
     "@type"?: "afni/SurfaceMetrics";
     "volume": boolean;
     "convexity": boolean;
@@ -37,11 +37,11 @@ interface SurfaceMetricsParameters {
     "tlrc": boolean;
     "prefix"?: string | null | undefined;
 }
-type SurfaceMetricsParametersTagged = Required<Pick<SurfaceMetricsParameters, '@type'>> & SurfaceMetricsParameters;
+type SurfaceMetricsParamsDictTagged = Required<Pick<SurfaceMetricsParamsDict, '@type'>> & SurfaceMetricsParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceMetricsParameters(...)`.
+ * Output object returned when calling `SurfaceMetricsParamsDict(...)`.
  *
  * @interface
  */
@@ -106,7 +106,7 @@ function surface_metrics_params(
     internal_nodes: boolean = false,
     tlrc: boolean = false,
     prefix: string | null = null,
-): SurfaceMetricsParametersTagged {
+): SurfaceMetricsParamsDictTagged {
     const params = {
         "@type": "afni/SurfaceMetrics" as const,
         "volume": volume,
@@ -154,7 +154,7 @@ function surface_metrics_params(
  * @returns Command-line arguments.
  */
 function surface_metrics_cargs(
-    params: SurfaceMetricsParameters,
+    params: SurfaceMetricsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -254,7 +254,7 @@ function surface_metrics_cargs(
  * @returns Outputs object.
  */
 function surface_metrics_outputs(
-    params: SurfaceMetricsParameters,
+    params: SurfaceMetricsParamsDict,
     execution: Execution,
 ): SurfaceMetricsOutputs {
     const ret: SurfaceMetricsOutputs = {
@@ -279,7 +279,7 @@ function surface_metrics_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceMetricsOutputs`).
  */
 function surface_metrics_execute(
-    params: SurfaceMetricsParameters,
+    params: SurfaceMetricsParamsDict,
     runner: Runner | null = null,
 ): SurfaceMetricsOutputs {
     runner = runner || getGlobalRunner();
@@ -362,6 +362,8 @@ function surface_metrics(
 export {
       SURFACE_METRICS_METADATA,
       SurfaceMetricsOutputs,
+      SurfaceMetricsParamsDict,
+      SurfaceMetricsParamsDictTagged,
       surface_metrics,
       surface_metrics_execute,
       surface_metrics_params,

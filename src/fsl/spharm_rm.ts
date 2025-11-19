@@ -11,7 +11,7 @@ const SPHARM_RM_METADATA: Metadata = {
 };
 
 
-interface SpharmRmParameters {
+interface SpharmRmParamsDict {
     "@type"?: "fsl/spharm_rm";
     "input_file": InputPathType;
     "output_file": string;
@@ -19,11 +19,11 @@ interface SpharmRmParameters {
     "number_of_terms"?: number | null | undefined;
     "verbose_flag": boolean;
 }
-type SpharmRmParametersTagged = Required<Pick<SpharmRmParameters, '@type'>> & SpharmRmParameters;
+type SpharmRmParamsDictTagged = Required<Pick<SpharmRmParamsDict, '@type'>> & SpharmRmParamsDict;
 
 
 /**
- * Output object returned when calling `SpharmRmParameters(...)`.
+ * Output object returned when calling `SpharmRmParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function spharm_rm_params(
     mask_file: InputPathType | null = null,
     number_of_terms: number | null = null,
     verbose_flag: boolean = false,
-): SpharmRmParametersTagged {
+): SpharmRmParamsDictTagged {
     const params = {
         "@type": "fsl/spharm_rm" as const,
         "input_file": input_file,
@@ -82,7 +82,7 @@ function spharm_rm_params(
  * @returns Command-line arguments.
  */
 function spharm_rm_cargs(
-    params: SpharmRmParameters,
+    params: SpharmRmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function spharm_rm_cargs(
  * @returns Outputs object.
  */
 function spharm_rm_outputs(
-    params: SpharmRmParameters,
+    params: SpharmRmParamsDict,
     execution: Execution,
 ): SpharmRmOutputs {
     const ret: SpharmRmOutputs = {
@@ -149,7 +149,7 @@ function spharm_rm_outputs(
  * @returns NamedTuple of outputs (described in `SpharmRmOutputs`).
  */
 function spharm_rm_execute(
-    params: SpharmRmParameters,
+    params: SpharmRmParamsDict,
     runner: Runner | null = null,
 ): SpharmRmOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function spharm_rm(
 export {
       SPHARM_RM_METADATA,
       SpharmRmOutputs,
+      SpharmRmParamsDict,
+      SpharmRmParamsDictTagged,
       spharm_rm,
       spharm_rm_execute,
       spharm_rm_params,

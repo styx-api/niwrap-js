@@ -11,7 +11,7 @@ const ISO_SURFACE_METADATA: Metadata = {
 };
 
 
-interface IsoSurfaceParameters {
+interface IsoSurfaceParamsDict {
     "@type"?: "afni/IsoSurface";
     "input_vol"?: InputPathType | null | undefined;
     "shape_spec"?: Array<string> | null | undefined;
@@ -28,11 +28,11 @@ interface IsoSurfaceParameters {
     "novolreg": boolean;
     "noxform": boolean;
 }
-type IsoSurfaceParametersTagged = Required<Pick<IsoSurfaceParameters, '@type'>> & IsoSurfaceParameters;
+type IsoSurfaceParamsDictTagged = Required<Pick<IsoSurfaceParamsDict, '@type'>> & IsoSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `IsoSurfaceParameters(...)`.
+ * Output object returned when calling `IsoSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function iso_surface_params(
     xform: string | null = null,
     novolreg: boolean = false,
     noxform: boolean = false,
-): IsoSurfaceParametersTagged {
+): IsoSurfaceParamsDictTagged {
     const params = {
         "@type": "afni/IsoSurface" as const,
         "isorois": isorois,
@@ -142,7 +142,7 @@ function iso_surface_params(
  * @returns Command-line arguments.
  */
 function iso_surface_cargs(
-    params: IsoSurfaceParameters,
+    params: IsoSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -232,7 +232,7 @@ function iso_surface_cargs(
  * @returns Outputs object.
  */
 function iso_surface_outputs(
-    params: IsoSurfaceParameters,
+    params: IsoSurfaceParamsDict,
     execution: Execution,
 ): IsoSurfaceOutputs {
     const ret: IsoSurfaceOutputs = {
@@ -260,7 +260,7 @@ function iso_surface_outputs(
  * @returns NamedTuple of outputs (described in `IsoSurfaceOutputs`).
  */
 function iso_surface_execute(
-    params: IsoSurfaceParameters,
+    params: IsoSurfaceParamsDict,
     runner: Runner | null = null,
 ): IsoSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -325,6 +325,8 @@ function iso_surface(
 export {
       ISO_SURFACE_METADATA,
       IsoSurfaceOutputs,
+      IsoSurfaceParamsDict,
+      IsoSurfaceParamsDictTagged,
       iso_surface,
       iso_surface_execute,
       iso_surface_params,

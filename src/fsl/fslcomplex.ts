@@ -11,7 +11,7 @@ const FSLCOMPLEX_METADATA: Metadata = {
 };
 
 
-interface FslcomplexParameters {
+interface FslcomplexParamsDict {
     "@type"?: "fsl/fslcomplex";
     "input_file": InputPathType;
     "output_file": string;
@@ -19,11 +19,11 @@ interface FslcomplexParameters {
     "start_vol"?: number | null | undefined;
     "end_vol"?: number | null | undefined;
 }
-type FslcomplexParametersTagged = Required<Pick<FslcomplexParameters, '@type'>> & FslcomplexParameters;
+type FslcomplexParamsDictTagged = Required<Pick<FslcomplexParamsDict, '@type'>> & FslcomplexParamsDict;
 
 
 /**
- * Output object returned when calling `FslcomplexParameters(...)`.
+ * Output object returned when calling `FslcomplexParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function fslcomplex_params(
     output_type: "-realabs" | "-realphase" | "-realpolar" | "-realcartesian" | "-complex" | "-complexpolar" | "-complexsplit" | "-complexmerge" | "-copyonly",
     start_vol: number | null = null,
     end_vol: number | null = null,
-): FslcomplexParametersTagged {
+): FslcomplexParamsDictTagged {
     const params = {
         "@type": "fsl/fslcomplex" as const,
         "input_file": input_file,
@@ -82,7 +82,7 @@ function fslcomplex_params(
  * @returns Command-line arguments.
  */
 function fslcomplex_cargs(
-    params: FslcomplexParameters,
+    params: FslcomplexParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -109,7 +109,7 @@ function fslcomplex_cargs(
  * @returns Outputs object.
  */
 function fslcomplex_outputs(
-    params: FslcomplexParameters,
+    params: FslcomplexParamsDict,
     execution: Execution,
 ): FslcomplexOutputs {
     const ret: FslcomplexOutputs = {
@@ -135,7 +135,7 @@ function fslcomplex_outputs(
  * @returns NamedTuple of outputs (described in `FslcomplexOutputs`).
  */
 function fslcomplex_execute(
-    params: FslcomplexParameters,
+    params: FslcomplexParamsDict,
     runner: Runner | null = null,
 ): FslcomplexOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function fslcomplex(
 export {
       FSLCOMPLEX_METADATA,
       FslcomplexOutputs,
+      FslcomplexParamsDict,
+      FslcomplexParamsDictTagged,
       fslcomplex,
       fslcomplex_execute,
       fslcomplex_params,

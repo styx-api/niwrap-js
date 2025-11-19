@@ -11,7 +11,7 @@ const FABBER_CEST_METADATA: Metadata = {
 };
 
 
-interface FabberCestParameters {
+interface FabberCestParamsDict {
     "@type"?: "fsl/fabber_cest";
     "output": string;
     "method": string;
@@ -50,11 +50,11 @@ interface FabberCestParameters {
     "optfile"?: InputPathType | null | undefined;
     "debug": boolean;
 }
-type FabberCestParametersTagged = Required<Pick<FabberCestParameters, '@type'>> & FabberCestParameters;
+type FabberCestParamsDictTagged = Required<Pick<FabberCestParamsDict, '@type'>> & FabberCestParamsDict;
 
 
 /**
- * Output object returned when calling `FabberCestParameters(...)`.
+ * Output object returned when calling `FabberCestParamsDict(...)`.
  *
  * @interface
  */
@@ -193,7 +193,7 @@ function fabber_cest_params(
     save_free_energy: boolean = false,
     optfile: InputPathType | null = null,
     debug: boolean = false,
-): FabberCestParametersTagged {
+): FabberCestParamsDictTagged {
     const params = {
         "@type": "fsl/fabber_cest" as const,
         "output": output,
@@ -266,7 +266,7 @@ function fabber_cest_params(
  * @returns Command-line arguments.
  */
 function fabber_cest_cargs(
-    params: FabberCestParameters,
+    params: FabberCestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -426,7 +426,7 @@ function fabber_cest_cargs(
  * @returns Outputs object.
  */
 function fabber_cest_outputs(
-    params: FabberCestParameters,
+    params: FabberCestParamsDict,
     execution: Execution,
 ): FabberCestOutputs {
     const ret: FabberCestOutputs = {
@@ -463,7 +463,7 @@ function fabber_cest_outputs(
  * @returns NamedTuple of outputs (described in `FabberCestOutputs`).
  */
 function fabber_cest_execute(
-    params: FabberCestParameters,
+    params: FabberCestParamsDict,
     runner: Runner | null = null,
 ): FabberCestOutputs {
     runner = runner || getGlobalRunner();
@@ -572,6 +572,8 @@ function fabber_cest(
 export {
       FABBER_CEST_METADATA,
       FabberCestOutputs,
+      FabberCestParamsDict,
+      FabberCestParamsDictTagged,
       fabber_cest,
       fabber_cest_execute,
       fabber_cest_params,

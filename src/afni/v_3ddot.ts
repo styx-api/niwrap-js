@@ -11,7 +11,7 @@ const V_3DDOT_METADATA: Metadata = {
 };
 
 
-interface V3ddotParameters {
+interface V3ddotParamsDict {
     "@type"?: "afni/3ddot";
     "input_datasets": Array<InputPathType>;
     "mask"?: InputPathType | null | undefined;
@@ -29,11 +29,11 @@ interface V3ddotParameters {
     "1D": boolean;
     "NIML": boolean;
 }
-type V3ddotParametersTagged = Required<Pick<V3ddotParameters, '@type'>> & V3ddotParameters;
+type V3ddotParamsDictTagged = Required<Pick<V3ddotParamsDict, '@type'>> & V3ddotParamsDict;
 
 
 /**
- * Output object returned when calling `V3ddotParameters(...)`.
+ * Output object returned when calling `V3ddotParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function v_3ddot_params(
     full: boolean = false,
     v_1_d: boolean = false,
     niml: boolean = false,
-): V3ddotParametersTagged {
+): V3ddotParamsDictTagged {
     const params = {
         "@type": "afni/3ddot" as const,
         "input_datasets": input_datasets,
@@ -122,7 +122,7 @@ function v_3ddot_params(
  * @returns Command-line arguments.
  */
 function v_3ddot_cargs(
-    params: V3ddotParameters,
+    params: V3ddotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -189,7 +189,7 @@ function v_3ddot_cargs(
  * @returns Outputs object.
  */
 function v_3ddot_outputs(
-    params: V3ddotParameters,
+    params: V3ddotParamsDict,
     execution: Execution,
 ): V3ddotOutputs {
     const ret: V3ddotOutputs = {
@@ -215,7 +215,7 @@ function v_3ddot_outputs(
  * @returns NamedTuple of outputs (described in `V3ddotOutputs`).
  */
 function v_3ddot_execute(
-    params: V3ddotParameters,
+    params: V3ddotParamsDict,
     runner: Runner | null = null,
 ): V3ddotOutputs {
     runner = runner || getGlobalRunner();
@@ -281,6 +281,8 @@ function v_3ddot(
 
 export {
       V3ddotOutputs,
+      V3ddotParamsDict,
+      V3ddotParamsDictTagged,
       V_3DDOT_METADATA,
       v_3ddot,
       v_3ddot_execute,

@@ -11,7 +11,7 @@ const EXTRACT_SEG_WAVEFORM_METADATA: Metadata = {
 };
 
 
-interface ExtractSegWaveformParameters {
+interface ExtractSegWaveformParamsDict {
     "@type"?: "freesurfer/extract_seg_waveform";
     "seg_file": InputPathType;
     "seg_indices": Array<number>;
@@ -22,11 +22,11 @@ interface ExtractSegWaveformParameters {
     "demean_flag": boolean;
     "output_file": string;
 }
-type ExtractSegWaveformParametersTagged = Required<Pick<ExtractSegWaveformParameters, '@type'>> & ExtractSegWaveformParameters;
+type ExtractSegWaveformParamsDictTagged = Required<Pick<ExtractSegWaveformParamsDict, '@type'>> & ExtractSegWaveformParamsDict;
 
 
 /**
- * Output object returned when calling `ExtractSegWaveformParameters(...)`.
+ * Output object returned when calling `ExtractSegWaveformParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function extract_seg_waveform_params(
     vsm_file: InputPathType | null = null,
     regheader_flag: boolean = false,
     demean_flag: boolean = false,
-): ExtractSegWaveformParametersTagged {
+): ExtractSegWaveformParamsDictTagged {
     const params = {
         "@type": "freesurfer/extract_seg_waveform" as const,
         "seg_file": seg_file,
@@ -88,7 +88,7 @@ function extract_seg_waveform_params(
  * @returns Command-line arguments.
  */
 function extract_seg_waveform_cargs(
-    params: ExtractSegWaveformParameters,
+    params: ExtractSegWaveformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function extract_seg_waveform_cargs(
  * @returns Outputs object.
  */
 function extract_seg_waveform_outputs(
-    params: ExtractSegWaveformParameters,
+    params: ExtractSegWaveformParamsDict,
     execution: Execution,
 ): ExtractSegWaveformOutputs {
     const ret: ExtractSegWaveformOutputs = {
@@ -163,7 +163,7 @@ function extract_seg_waveform_outputs(
  * @returns NamedTuple of outputs (described in `ExtractSegWaveformOutputs`).
  */
 function extract_seg_waveform_execute(
-    params: ExtractSegWaveformParameters,
+    params: ExtractSegWaveformParamsDict,
     runner: Runner | null = null,
 ): ExtractSegWaveformOutputs {
     runner = runner || getGlobalRunner();
@@ -216,6 +216,8 @@ function extract_seg_waveform(
 export {
       EXTRACT_SEG_WAVEFORM_METADATA,
       ExtractSegWaveformOutputs,
+      ExtractSegWaveformParamsDict,
+      ExtractSegWaveformParamsDictTagged,
       extract_seg_waveform,
       extract_seg_waveform_execute,
       extract_seg_waveform_params,

@@ -10,24 +10,24 @@ const CIFTI_STATS_METADATA: Metadata = {
 };
 
 
-interface CiftiStatsRoiParameters {
+interface CiftiStatsRoiParamsDict {
     "@type"?: "roi";
     "roi-cifti": InputPathType;
     "match-maps": boolean;
 }
-type CiftiStatsRoiParametersTagged = Required<Pick<CiftiStatsRoiParameters, '@type'>> & CiftiStatsRoiParameters;
+type CiftiStatsRoiParamsDictTagged = Required<Pick<CiftiStatsRoiParamsDict, '@type'>> & CiftiStatsRoiParamsDict;
 
 
-interface CiftiStatsParameters {
+interface CiftiStatsParamsDict {
     "@type"?: "workbench/cifti-stats";
     "operation"?: string | null | undefined;
     "percent"?: number | null | undefined;
     "column"?: number | null | undefined;
-    "roi"?: CiftiStatsRoiParameters | null | undefined;
+    "roi"?: CiftiStatsRoiParamsDict | null | undefined;
     "show-map-name": boolean;
     "cifti-in": InputPathType;
 }
-type CiftiStatsParametersTagged = Required<Pick<CiftiStatsParameters, '@type'>> & CiftiStatsParameters;
+type CiftiStatsParamsDictTagged = Required<Pick<CiftiStatsParamsDict, '@type'>> & CiftiStatsParamsDict;
 
 
 /**
@@ -38,10 +38,10 @@ type CiftiStatsParametersTagged = Required<Pick<CiftiStatsParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function cifti_stats_roi_params(
+function cifti_stats_roi(
     roi_cifti: InputPathType,
     match_maps: boolean = false,
-): CiftiStatsRoiParametersTagged {
+): CiftiStatsRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-cifti": roi_cifti,
@@ -60,7 +60,7 @@ function cifti_stats_roi_params(
  * @returns Command-line arguments.
  */
 function cifti_stats_roi_cargs(
-    params: CiftiStatsRoiParameters,
+    params: CiftiStatsRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -76,7 +76,7 @@ function cifti_stats_roi_cargs(
 
 
 /**
- * Output object returned when calling `CiftiStatsParameters(...)`.
+ * Output object returned when calling `CiftiStatsParamsDict(...)`.
  *
  * @interface
  */
@@ -111,9 +111,9 @@ function cifti_stats_params(
     percent: number | null,
     column: number | null,
     cifti_in: InputPathType,
-    roi: CiftiStatsRoiParameters | null = null,
+    roi: CiftiStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
-): CiftiStatsParametersTagged {
+): CiftiStatsParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-stats" as const,
         "show-map-name": show_map_name,
@@ -144,7 +144,7 @@ function cifti_stats_params(
  * @returns Command-line arguments.
  */
 function cifti_stats_cargs(
-    params: CiftiStatsParameters,
+    params: CiftiStatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -176,7 +176,7 @@ function cifti_stats_cargs(
  * @returns Outputs object.
  */
 function cifti_stats_outputs(
-    params: CiftiStatsParameters,
+    params: CiftiStatsParamsDict,
     execution: Execution,
 ): CiftiStatsOutputs {
     const ret: CiftiStatsOutputs = {
@@ -217,7 +217,7 @@ function cifti_stats_outputs(
  * @returns NamedTuple of outputs (described in `CiftiStatsOutputs`).
  */
 function cifti_stats_execute(
-    params: CiftiStatsParameters,
+    params: CiftiStatsParamsDict,
     runner: Runner | null = null,
 ): CiftiStatsOutputs {
     runner = runner || getGlobalRunner();
@@ -276,7 +276,7 @@ function cifti_stats(
     percent: number | null,
     column: number | null,
     cifti_in: InputPathType,
-    roi: CiftiStatsRoiParameters | null = null,
+    roi: CiftiStatsRoiParamsDict | null = null,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): CiftiStatsOutputs {
@@ -288,8 +288,12 @@ function cifti_stats(
 export {
       CIFTI_STATS_METADATA,
       CiftiStatsOutputs,
+      CiftiStatsParamsDict,
+      CiftiStatsParamsDictTagged,
+      CiftiStatsRoiParamsDict,
+      CiftiStatsRoiParamsDictTagged,
       cifti_stats,
       cifti_stats_execute,
       cifti_stats_params,
-      cifti_stats_roi_params,
+      cifti_stats_roi,
 };

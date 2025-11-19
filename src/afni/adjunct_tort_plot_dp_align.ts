@@ -11,7 +11,7 @@ const ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA: Metadata = {
 };
 
 
-interface AdjunctTortPlotDpAlignParameters {
+interface AdjunctTortPlotDpAlignParamsDict {
     "@type"?: "afni/adjunct_tort_plot_dp_align";
     "input_file": InputPathType;
     "output_prefix": string;
@@ -19,11 +19,11 @@ interface AdjunctTortPlotDpAlignParameters {
     "enorm_hline"?: number | null | undefined;
     "no_svg": boolean;
 }
-type AdjunctTortPlotDpAlignParametersTagged = Required<Pick<AdjunctTortPlotDpAlignParameters, '@type'>> & AdjunctTortPlotDpAlignParameters;
+type AdjunctTortPlotDpAlignParamsDictTagged = Required<Pick<AdjunctTortPlotDpAlignParamsDict, '@type'>> & AdjunctTortPlotDpAlignParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctTortPlotDpAlignParameters(...)`.
+ * Output object returned when calling `AdjunctTortPlotDpAlignParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function adjunct_tort_plot_dp_align_params(
     enorm_max: number | null = null,
     enorm_hline: number | null = null,
     no_svg: boolean = false,
-): AdjunctTortPlotDpAlignParametersTagged {
+): AdjunctTortPlotDpAlignParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_tort_plot_dp_align" as const,
         "input_file": input_file,
@@ -94,7 +94,7 @@ function adjunct_tort_plot_dp_align_params(
  * @returns Command-line arguments.
  */
 function adjunct_tort_plot_dp_align_cargs(
-    params: AdjunctTortPlotDpAlignParameters,
+    params: AdjunctTortPlotDpAlignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function adjunct_tort_plot_dp_align_cargs(
  * @returns Outputs object.
  */
 function adjunct_tort_plot_dp_align_outputs(
-    params: AdjunctTortPlotDpAlignParameters,
+    params: AdjunctTortPlotDpAlignParamsDict,
     execution: Execution,
 ): AdjunctTortPlotDpAlignOutputs {
     const ret: AdjunctTortPlotDpAlignOutputs = {
@@ -164,7 +164,7 @@ function adjunct_tort_plot_dp_align_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctTortPlotDpAlignOutputs`).
  */
 function adjunct_tort_plot_dp_align_execute(
-    params: AdjunctTortPlotDpAlignParameters,
+    params: AdjunctTortPlotDpAlignParamsDict,
     runner: Runner | null = null,
 ): AdjunctTortPlotDpAlignOutputs {
     runner = runner || getGlobalRunner();
@@ -211,6 +211,8 @@ function adjunct_tort_plot_dp_align(
 export {
       ADJUNCT_TORT_PLOT_DP_ALIGN_METADATA,
       AdjunctTortPlotDpAlignOutputs,
+      AdjunctTortPlotDpAlignParamsDict,
+      AdjunctTortPlotDpAlignParamsDictTagged,
       adjunct_tort_plot_dp_align,
       adjunct_tort_plot_dp_align_execute,
       adjunct_tort_plot_dp_align_params,

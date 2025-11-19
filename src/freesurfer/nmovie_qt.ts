@@ -11,15 +11,15 @@ const NMOVIE_QT_METADATA: Metadata = {
 };
 
 
-interface NmovieQtParameters {
+interface NmovieQtParamsDict {
     "@type"?: "freesurfer/nmovie_qt";
     "images": Array<InputPathType>;
 }
-type NmovieQtParametersTagged = Required<Pick<NmovieQtParameters, '@type'>> & NmovieQtParameters;
+type NmovieQtParamsDictTagged = Required<Pick<NmovieQtParamsDict, '@type'>> & NmovieQtParamsDict;
 
 
 /**
- * Output object returned when calling `NmovieQtParameters(...)`.
+ * Output object returned when calling `NmovieQtParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface NmovieQtOutputs {
  */
 function nmovie_qt_params(
     images: Array<InputPathType>,
-): NmovieQtParametersTagged {
+): NmovieQtParamsDictTagged {
     const params = {
         "@type": "freesurfer/nmovie_qt" as const,
         "images": images,
@@ -58,7 +58,7 @@ function nmovie_qt_params(
  * @returns Command-line arguments.
  */
 function nmovie_qt_cargs(
-    params: NmovieQtParameters,
+    params: NmovieQtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function nmovie_qt_cargs(
  * @returns Outputs object.
  */
 function nmovie_qt_outputs(
-    params: NmovieQtParameters,
+    params: NmovieQtParamsDict,
     execution: Execution,
 ): NmovieQtOutputs {
     const ret: NmovieQtOutputs = {
@@ -102,7 +102,7 @@ function nmovie_qt_outputs(
  * @returns NamedTuple of outputs (described in `NmovieQtOutputs`).
  */
 function nmovie_qt_execute(
-    params: NmovieQtParameters,
+    params: NmovieQtParamsDict,
     runner: Runner | null = null,
 ): NmovieQtOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function nmovie_qt(
 export {
       NMOVIE_QT_METADATA,
       NmovieQtOutputs,
+      NmovieQtParamsDict,
+      NmovieQtParamsDictTagged,
       nmovie_qt,
       nmovie_qt_execute,
       nmovie_qt_params,

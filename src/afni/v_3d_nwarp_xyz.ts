@@ -11,18 +11,18 @@ const V_3D_NWARP_XYZ_METADATA: Metadata = {
 };
 
 
-interface V3dNwarpXyzParameters {
+interface V3dNwarpXyzParamsDict {
     "@type"?: "afni/3dNwarpXYZ";
     "xyzfile": InputPathType;
     "warp_spec": string;
     "iwarp": boolean;
     "output_file": string;
 }
-type V3dNwarpXyzParametersTagged = Required<Pick<V3dNwarpXyzParameters, '@type'>> & V3dNwarpXyzParameters;
+type V3dNwarpXyzParamsDictTagged = Required<Pick<V3dNwarpXyzParamsDict, '@type'>> & V3dNwarpXyzParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNwarpXyzParameters(...)`.
+ * Output object returned when calling `V3dNwarpXyzParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function v_3d_nwarp_xyz_params(
     warp_spec: string,
     output_file: string,
     iwarp: boolean = false,
-): V3dNwarpXyzParametersTagged {
+): V3dNwarpXyzParamsDictTagged {
     const params = {
         "@type": "afni/3dNwarpXYZ" as const,
         "xyzfile": xyzfile,
@@ -74,7 +74,7 @@ function v_3d_nwarp_xyz_params(
  * @returns Command-line arguments.
  */
 function v_3d_nwarp_xyz_cargs(
-    params: V3dNwarpXyzParameters,
+    params: V3dNwarpXyzParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function v_3d_nwarp_xyz_cargs(
  * @returns Outputs object.
  */
 function v_3d_nwarp_xyz_outputs(
-    params: V3dNwarpXyzParameters,
+    params: V3dNwarpXyzParamsDict,
     execution: Execution,
 ): V3dNwarpXyzOutputs {
     const ret: V3dNwarpXyzOutputs = {
@@ -127,7 +127,7 @@ function v_3d_nwarp_xyz_outputs(
  * @returns NamedTuple of outputs (described in `V3dNwarpXyzOutputs`).
  */
 function v_3d_nwarp_xyz_execute(
-    params: V3dNwarpXyzParameters,
+    params: V3dNwarpXyzParamsDict,
     runner: Runner | null = null,
 ): V3dNwarpXyzOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function v_3d_nwarp_xyz(
 
 export {
       V3dNwarpXyzOutputs,
+      V3dNwarpXyzParamsDict,
+      V3dNwarpXyzParamsDictTagged,
       V_3D_NWARP_XYZ_METADATA,
       v_3d_nwarp_xyz,
       v_3d_nwarp_xyz_execute,

@@ -11,7 +11,7 @@ const MRI_EDIT_WM_WITH_ASEG_METADATA: Metadata = {
 };
 
 
-interface MriEditWmWithAsegParameters {
+interface MriEditWmWithAsegParamsDict {
     "@type"?: "freesurfer/mri_edit_wm_with_aseg";
     "input_wm": InputPathType;
     "input_t1_brain": InputPathType;
@@ -28,11 +28,11 @@ interface MriEditWmWithAsegParameters {
     "sa_fix_ento_wm"?: string | null | undefined;
     "debug_voxel"?: Array<number> | null | undefined;
 }
-type MriEditWmWithAsegParametersTagged = Required<Pick<MriEditWmWithAsegParameters, '@type'>> & MriEditWmWithAsegParameters;
+type MriEditWmWithAsegParamsDictTagged = Required<Pick<MriEditWmWithAsegParamsDict, '@type'>> & MriEditWmWithAsegParamsDict;
 
 
 /**
- * Output object returned when calling `MriEditWmWithAsegParameters(...)`.
+ * Output object returned when calling `MriEditWmWithAsegParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function mri_edit_wm_with_aseg_params(
     fix_ento_wm: string | null = null,
     sa_fix_ento_wm: string | null = null,
     debug_voxel: Array<number> | null = null,
-): MriEditWmWithAsegParametersTagged {
+): MriEditWmWithAsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_edit_wm_with_aseg" as const,
         "input_wm": input_wm,
@@ -124,7 +124,7 @@ function mri_edit_wm_with_aseg_params(
  * @returns Command-line arguments.
  */
 function mri_edit_wm_with_aseg_cargs(
-    params: MriEditWmWithAsegParameters,
+    params: MriEditWmWithAsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -191,7 +191,7 @@ function mri_edit_wm_with_aseg_cargs(
  * @returns Outputs object.
  */
 function mri_edit_wm_with_aseg_outputs(
-    params: MriEditWmWithAsegParameters,
+    params: MriEditWmWithAsegParamsDict,
     execution: Execution,
 ): MriEditWmWithAsegOutputs {
     const ret: MriEditWmWithAsegOutputs = {
@@ -217,7 +217,7 @@ function mri_edit_wm_with_aseg_outputs(
  * @returns NamedTuple of outputs (described in `MriEditWmWithAsegOutputs`).
  */
 function mri_edit_wm_with_aseg_execute(
-    params: MriEditWmWithAsegParameters,
+    params: MriEditWmWithAsegParamsDict,
     runner: Runner | null = null,
 ): MriEditWmWithAsegOutputs {
     runner = runner || getGlobalRunner();
@@ -282,6 +282,8 @@ function mri_edit_wm_with_aseg(
 export {
       MRI_EDIT_WM_WITH_ASEG_METADATA,
       MriEditWmWithAsegOutputs,
+      MriEditWmWithAsegParamsDict,
+      MriEditWmWithAsegParamsDictTagged,
       mri_edit_wm_with_aseg,
       mri_edit_wm_with_aseg_execute,
       mri_edit_wm_with_aseg_params,

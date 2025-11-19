@@ -11,7 +11,7 @@ const SURF_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface SurfExtremaParameters {
+interface SurfExtremaParamsDict {
     "@type"?: "afni/SurfExtrema";
     "input"?: InputPathType | null | undefined;
     "hood"?: number | null | undefined;
@@ -22,11 +22,11 @@ interface SurfExtremaParameters {
     "prefix": string;
     "table"?: string | null | undefined;
 }
-type SurfExtremaParametersTagged = Required<Pick<SurfExtremaParameters, '@type'>> & SurfExtremaParameters;
+type SurfExtremaParamsDictTagged = Required<Pick<SurfExtremaParamsDict, '@type'>> & SurfExtremaParamsDict;
 
 
 /**
- * Output object returned when calling `SurfExtremaParameters(...)`.
+ * Output object returned when calling `SurfExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function surf_extrema_params(
     gscale: "NONE" | "LMEAN" | "GMEAN" | null = null,
     extype: "MAX" | "MIN" | "ABS" | null = null,
     table: string | null = null,
-): SurfExtremaParametersTagged {
+): SurfExtremaParamsDictTagged {
     const params = {
         "@type": "afni/SurfExtrema" as const,
         "prefix": prefix,
@@ -108,7 +108,7 @@ function surf_extrema_params(
  * @returns Command-line arguments.
  */
 function surf_extrema_cargs(
-    params: SurfExtremaParameters,
+    params: SurfExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -172,7 +172,7 @@ function surf_extrema_cargs(
  * @returns Outputs object.
  */
 function surf_extrema_outputs(
-    params: SurfExtremaParameters,
+    params: SurfExtremaParamsDict,
     execution: Execution,
 ): SurfExtremaOutputs {
     const ret: SurfExtremaOutputs = {
@@ -199,7 +199,7 @@ function surf_extrema_outputs(
  * @returns NamedTuple of outputs (described in `SurfExtremaOutputs`).
  */
 function surf_extrema_execute(
-    params: SurfExtremaParameters,
+    params: SurfExtremaParamsDict,
     runner: Runner | null = null,
 ): SurfExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -252,6 +252,8 @@ function surf_extrema(
 export {
       SURF_EXTREMA_METADATA,
       SurfExtremaOutputs,
+      SurfExtremaParamsDict,
+      SurfExtremaParamsDictTagged,
       surf_extrema,
       surf_extrema_execute,
       surf_extrema_params,

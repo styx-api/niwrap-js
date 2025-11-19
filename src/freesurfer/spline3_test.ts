@@ -11,17 +11,17 @@ const SPLINE3_TEST_METADATA: Metadata = {
 };
 
 
-interface Spline3TestParameters {
+interface Spline3TestParamsDict {
     "@type"?: "freesurfer/Spline3_test";
     "x_values": Array<number>;
     "y_values": Array<number>;
     "x_new_values": Array<number>;
 }
-type Spline3TestParametersTagged = Required<Pick<Spline3TestParameters, '@type'>> & Spline3TestParameters;
+type Spline3TestParamsDictTagged = Required<Pick<Spline3TestParamsDict, '@type'>> & Spline3TestParamsDict;
 
 
 /**
- * Output object returned when calling `Spline3TestParameters(...)`.
+ * Output object returned when calling `Spline3TestParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function spline3_test_params(
     x_values: Array<number>,
     y_values: Array<number>,
     x_new_values: Array<number>,
-): Spline3TestParametersTagged {
+): Spline3TestParamsDictTagged {
     const params = {
         "@type": "freesurfer/Spline3_test" as const,
         "x_values": x_values,
@@ -74,7 +74,7 @@ function spline3_test_params(
  * @returns Command-line arguments.
  */
 function spline3_test_cargs(
-    params: Spline3TestParameters,
+    params: Spline3TestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function spline3_test_cargs(
  * @returns Outputs object.
  */
 function spline3_test_outputs(
-    params: Spline3TestParameters,
+    params: Spline3TestParamsDict,
     execution: Execution,
 ): Spline3TestOutputs {
     const ret: Spline3TestOutputs = {
@@ -122,7 +122,7 @@ function spline3_test_outputs(
  * @returns NamedTuple of outputs (described in `Spline3TestOutputs`).
  */
 function spline3_test_execute(
-    params: Spline3TestParameters,
+    params: Spline3TestParamsDict,
     runner: Runner | null = null,
 ): Spline3TestOutputs {
     runner = runner || getGlobalRunner();
@@ -165,6 +165,8 @@ function spline3_test(
 export {
       SPLINE3_TEST_METADATA,
       Spline3TestOutputs,
+      Spline3TestParamsDict,
+      Spline3TestParamsDictTagged,
       spline3_test,
       spline3_test_execute,
       spline3_test_params,

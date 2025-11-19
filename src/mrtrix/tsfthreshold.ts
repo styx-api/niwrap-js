@@ -11,15 +11,15 @@ const TSFTHRESHOLD_METADATA: Metadata = {
 };
 
 
-interface TsfthresholdConfigParameters {
+interface TsfthresholdConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TsfthresholdConfigParametersTagged = Required<Pick<TsfthresholdConfigParameters, '@type'>> & TsfthresholdConfigParameters;
+type TsfthresholdConfigParamsDictTagged = Required<Pick<TsfthresholdConfigParamsDict, '@type'>> & TsfthresholdConfigParamsDict;
 
 
-interface TsfthresholdParameters {
+interface TsfthresholdParamsDict {
     "@type"?: "mrtrix/tsfthreshold";
     "invert": boolean;
     "info": boolean;
@@ -27,14 +27,14 @@ interface TsfthresholdParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TsfthresholdConfigParameters> | null | undefined;
+    "config"?: Array<TsfthresholdConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "T": number;
     "output": string;
 }
-type TsfthresholdParametersTagged = Required<Pick<TsfthresholdParameters, '@type'>> & TsfthresholdParameters;
+type TsfthresholdParamsDictTagged = Required<Pick<TsfthresholdParamsDict, '@type'>> & TsfthresholdParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type TsfthresholdParametersTagged = Required<Pick<TsfthresholdParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function tsfthreshold_config_params(
+function tsfthreshold_config(
     key: string,
     value: string,
-): TsfthresholdConfigParametersTagged {
+): TsfthresholdConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function tsfthreshold_config_params(
  * @returns Command-line arguments.
  */
 function tsfthreshold_config_cargs(
-    params: TsfthresholdConfigParameters,
+    params: TsfthresholdConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function tsfthreshold_config_cargs(
 
 
 /**
- * Output object returned when calling `TsfthresholdParameters(...)`.
+ * Output object returned when calling `TsfthresholdParamsDict(...)`.
  *
  * @interface
  */
@@ -123,10 +123,10 @@ function tsfthreshold_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfthresholdConfigParameters> | null = null,
+    config: Array<TsfthresholdConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TsfthresholdParametersTagged {
+): TsfthresholdParamsDictTagged {
     const params = {
         "@type": "mrtrix/tsfthreshold" as const,
         "invert": invert,
@@ -159,7 +159,7 @@ function tsfthreshold_params(
  * @returns Command-line arguments.
  */
 function tsfthreshold_cargs(
-    params: TsfthresholdParameters,
+    params: TsfthresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function tsfthreshold_cargs(
  * @returns Outputs object.
  */
 function tsfthreshold_outputs(
-    params: TsfthresholdParameters,
+    params: TsfthresholdParamsDict,
     execution: Execution,
 ): TsfthresholdOutputs {
     const ret: TsfthresholdOutputs = {
@@ -242,7 +242,7 @@ function tsfthreshold_outputs(
  * @returns NamedTuple of outputs (described in `TsfthresholdOutputs`).
  */
 function tsfthreshold_execute(
-    params: TsfthresholdParameters,
+    params: TsfthresholdParamsDict,
     runner: Runner | null = null,
 ): TsfthresholdOutputs {
     runner = runner || getGlobalRunner();
@@ -296,7 +296,7 @@ function tsfthreshold(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TsfthresholdConfigParameters> | null = null,
+    config: Array<TsfthresholdConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -308,9 +308,13 @@ function tsfthreshold(
 
 export {
       TSFTHRESHOLD_METADATA,
+      TsfthresholdConfigParamsDict,
+      TsfthresholdConfigParamsDictTagged,
       TsfthresholdOutputs,
+      TsfthresholdParamsDict,
+      TsfthresholdParamsDictTagged,
       tsfthreshold,
-      tsfthreshold_config_params,
+      tsfthreshold_config,
       tsfthreshold_execute,
       tsfthreshold_params,
 };

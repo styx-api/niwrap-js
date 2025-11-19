@@ -11,15 +11,15 @@ const REGISTER_SUBJECT_FLASH_METADATA: Metadata = {
 };
 
 
-interface RegisterSubjectFlashParameters {
+interface RegisterSubjectFlashParamsDict {
     "@type"?: "freesurfer/register_subject_flash";
     "input_volumes": Array<InputPathType>;
 }
-type RegisterSubjectFlashParametersTagged = Required<Pick<RegisterSubjectFlashParameters, '@type'>> & RegisterSubjectFlashParameters;
+type RegisterSubjectFlashParamsDictTagged = Required<Pick<RegisterSubjectFlashParamsDict, '@type'>> & RegisterSubjectFlashParamsDict;
 
 
 /**
- * Output object returned when calling `RegisterSubjectFlashParameters(...)`.
+ * Output object returned when calling `RegisterSubjectFlashParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface RegisterSubjectFlashOutputs {
  */
 function register_subject_flash_params(
     input_volumes: Array<InputPathType>,
-): RegisterSubjectFlashParametersTagged {
+): RegisterSubjectFlashParamsDictTagged {
     const params = {
         "@type": "freesurfer/register_subject_flash" as const,
         "input_volumes": input_volumes,
@@ -62,7 +62,7 @@ function register_subject_flash_params(
  * @returns Command-line arguments.
  */
 function register_subject_flash_cargs(
-    params: RegisterSubjectFlashParameters,
+    params: RegisterSubjectFlashParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function register_subject_flash_cargs(
  * @returns Outputs object.
  */
 function register_subject_flash_outputs(
-    params: RegisterSubjectFlashParameters,
+    params: RegisterSubjectFlashParamsDict,
     execution: Execution,
 ): RegisterSubjectFlashOutputs {
     const ret: RegisterSubjectFlashOutputs = {
@@ -107,7 +107,7 @@ function register_subject_flash_outputs(
  * @returns NamedTuple of outputs (described in `RegisterSubjectFlashOutputs`).
  */
 function register_subject_flash_execute(
-    params: RegisterSubjectFlashParameters,
+    params: RegisterSubjectFlashParamsDict,
     runner: Runner | null = null,
 ): RegisterSubjectFlashOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function register_subject_flash(
 export {
       REGISTER_SUBJECT_FLASH_METADATA,
       RegisterSubjectFlashOutputs,
+      RegisterSubjectFlashParamsDict,
+      RegisterSubjectFlashParamsDictTagged,
       register_subject_flash,
       register_subject_flash_execute,
       register_subject_flash_params,

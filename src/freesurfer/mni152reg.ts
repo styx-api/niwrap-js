@@ -11,7 +11,7 @@ const MNI152REG_METADATA: Metadata = {
 };
 
 
-interface Mni152regParameters {
+interface Mni152regParamsDict {
     "@type"?: "freesurfer/mni152reg";
     "subject": string;
     "register_1mm": boolean;
@@ -19,11 +19,11 @@ interface Mni152regParameters {
     "symmetric": boolean;
     "save_volume": boolean;
 }
-type Mni152regParametersTagged = Required<Pick<Mni152regParameters, '@type'>> & Mni152regParameters;
+type Mni152regParamsDictTagged = Required<Pick<Mni152regParamsDict, '@type'>> & Mni152regParamsDict;
 
 
 /**
- * Output object returned when calling `Mni152regParameters(...)`.
+ * Output object returned when calling `Mni152regParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function mni152reg_params(
     output: string | null = null,
     symmetric: boolean = false,
     save_volume: boolean = false,
-): Mni152regParametersTagged {
+): Mni152regParamsDictTagged {
     const params = {
         "@type": "freesurfer/mni152reg" as const,
         "subject": subject,
@@ -84,7 +84,7 @@ function mni152reg_params(
  * @returns Command-line arguments.
  */
 function mni152reg_cargs(
-    params: Mni152regParameters,
+    params: Mni152regParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function mni152reg_cargs(
  * @returns Outputs object.
  */
 function mni152reg_outputs(
-    params: Mni152regParameters,
+    params: Mni152regParamsDict,
     execution: Execution,
 ): Mni152regOutputs {
     const ret: Mni152regOutputs = {
@@ -148,7 +148,7 @@ function mni152reg_outputs(
  * @returns NamedTuple of outputs (described in `Mni152regOutputs`).
  */
 function mni152reg_execute(
-    params: Mni152regParameters,
+    params: Mni152regParamsDict,
     runner: Runner | null = null,
 ): Mni152regOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function mni152reg(
 export {
       MNI152REG_METADATA,
       Mni152regOutputs,
+      Mni152regParamsDict,
+      Mni152regParamsDictTagged,
       mni152reg,
       mni152reg_execute,
       mni152reg_params,

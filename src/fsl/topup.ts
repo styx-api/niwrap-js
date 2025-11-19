@@ -11,7 +11,7 @@ const TOPUP_METADATA: Metadata = {
 };
 
 
-interface TopupParameters {
+interface TopupParamsDict {
     "@type"?: "fsl/topup";
     "imain": InputPathType;
     "datain": InputPathType;
@@ -37,11 +37,11 @@ interface TopupParameters {
     "nthr"?: number | null | undefined;
     "verbose": boolean;
 }
-type TopupParametersTagged = Required<Pick<TopupParameters, '@type'>> & TopupParameters;
+type TopupParamsDictTagged = Required<Pick<TopupParamsDict, '@type'>> & TopupParamsDict;
 
 
 /**
- * Output object returned when calling `TopupParameters(...)`.
+ * Output object returned when calling `TopupParamsDict(...)`.
  *
  * @interface
  */
@@ -126,7 +126,7 @@ function topup_params(
     regrid: boolean = false,
     nthr: number | null = null,
     verbose: boolean = false,
-): TopupParametersTagged {
+): TopupParamsDictTagged {
     const params = {
         "@type": "fsl/topup" as const,
         "imain": imain,
@@ -198,7 +198,7 @@ function topup_params(
  * @returns Command-line arguments.
  */
 function topup_cargs(
-    params: TopupParameters,
+    params: TopupParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -281,7 +281,7 @@ function topup_cargs(
  * @returns Outputs object.
  */
 function topup_outputs(
-    params: TopupParameters,
+    params: TopupParamsDict,
     execution: Execution,
 ): TopupOutputs {
     const ret: TopupOutputs = {
@@ -311,7 +311,7 @@ function topup_outputs(
  * @returns NamedTuple of outputs (described in `TopupOutputs`).
  */
 function topup_execute(
-    params: TopupParameters,
+    params: TopupParamsDict,
     runner: Runner | null = null,
 ): TopupOutputs {
     runner = runner || getGlobalRunner();
@@ -394,6 +394,8 @@ function topup(
 export {
       TOPUP_METADATA,
       TopupOutputs,
+      TopupParamsDict,
+      TopupParamsDictTagged,
       topup,
       topup_execute,
       topup_params,

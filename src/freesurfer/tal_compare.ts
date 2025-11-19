@@ -11,18 +11,18 @@ const TAL_COMPARE_METADATA: Metadata = {
 };
 
 
-interface TalCompareParameters {
+interface TalCompareParamsDict {
     "@type"?: "freesurfer/tal_compare";
     "ref_file": InputPathType;
     "moving_file": InputPathType;
     "output_file": string;
     "verbose": boolean;
 }
-type TalCompareParametersTagged = Required<Pick<TalCompareParameters, '@type'>> & TalCompareParameters;
+type TalCompareParamsDictTagged = Required<Pick<TalCompareParamsDict, '@type'>> & TalCompareParamsDict;
 
 
 /**
- * Output object returned when calling `TalCompareParameters(...)`.
+ * Output object returned when calling `TalCompareParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function tal_compare_params(
     moving_file: InputPathType,
     output_file: string,
     verbose: boolean = false,
-): TalCompareParametersTagged {
+): TalCompareParamsDictTagged {
     const params = {
         "@type": "freesurfer/tal_compare" as const,
         "ref_file": ref_file,
@@ -74,7 +74,7 @@ function tal_compare_params(
  * @returns Command-line arguments.
  */
 function tal_compare_cargs(
-    params: TalCompareParameters,
+    params: TalCompareParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function tal_compare_cargs(
  * @returns Outputs object.
  */
 function tal_compare_outputs(
-    params: TalCompareParameters,
+    params: TalCompareParamsDict,
     execution: Execution,
 ): TalCompareOutputs {
     const ret: TalCompareOutputs = {
@@ -124,7 +124,7 @@ function tal_compare_outputs(
  * @returns NamedTuple of outputs (described in `TalCompareOutputs`).
  */
 function tal_compare_execute(
-    params: TalCompareParameters,
+    params: TalCompareParamsDict,
     runner: Runner | null = null,
 ): TalCompareOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function tal_compare(
 export {
       TAL_COMPARE_METADATA,
       TalCompareOutputs,
+      TalCompareParamsDict,
+      TalCompareParamsDictTagged,
       tal_compare,
       tal_compare_execute,
       tal_compare_params,

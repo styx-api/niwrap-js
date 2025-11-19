@@ -11,7 +11,7 @@ const V_3D_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface V3dExtremaParameters {
+interface V3dExtremaParamsDict {
     "@type"?: "afni/3dExtrema";
     "input_dataset": InputPathType;
     "output_prefix"?: string | null | undefined;
@@ -34,11 +34,11 @@ interface V3dExtremaParameters {
     "average": boolean;
     "weight": boolean;
 }
-type V3dExtremaParametersTagged = Required<Pick<V3dExtremaParameters, '@type'>> & V3dExtremaParameters;
+type V3dExtremaParamsDictTagged = Required<Pick<V3dExtremaParamsDict, '@type'>> & V3dExtremaParamsDict;
 
 
 /**
- * Output object returned when calling `V3dExtremaParameters(...)`.
+ * Output object returned when calling `V3dExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -105,7 +105,7 @@ function v_3d_extrema_params(
     remove: boolean = false,
     average: boolean = false,
     weight: boolean = false,
-): V3dExtremaParametersTagged {
+): V3dExtremaParamsDictTagged {
     const params = {
         "@type": "afni/3dExtrema" as const,
         "input_dataset": input_dataset,
@@ -156,7 +156,7 @@ function v_3d_extrema_params(
  * @returns Command-line arguments.
  */
 function v_3d_extrema_cargs(
-    params: V3dExtremaParameters,
+    params: V3dExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -253,7 +253,7 @@ function v_3d_extrema_cargs(
  * @returns Outputs object.
  */
 function v_3d_extrema_outputs(
-    params: V3dExtremaParameters,
+    params: V3dExtremaParamsDict,
     execution: Execution,
 ): V3dExtremaOutputs {
     const ret: V3dExtremaOutputs = {
@@ -280,7 +280,7 @@ function v_3d_extrema_outputs(
  * @returns NamedTuple of outputs (described in `V3dExtremaOutputs`).
  */
 function v_3d_extrema_execute(
-    params: V3dExtremaParameters,
+    params: V3dExtremaParamsDict,
     runner: Runner | null = null,
 ): V3dExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -356,6 +356,8 @@ function v_3d_extrema(
 
 export {
       V3dExtremaOutputs,
+      V3dExtremaParamsDict,
+      V3dExtremaParamsDictTagged,
       V_3D_EXTREMA_METADATA,
       v_3d_extrema,
       v_3d_extrema_execute,

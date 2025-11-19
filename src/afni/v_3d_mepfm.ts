@@ -11,7 +11,7 @@ const V_3D_MEPFM_METADATA: Metadata = {
 };
 
 
-interface V3dMepfmParameters {
+interface V3dMepfmParamsDict {
     "@type"?: "afni/3dMEPFM";
     "input_files": Array<string>;
     "dbgArgs": boolean;
@@ -19,11 +19,11 @@ interface V3dMepfmParameters {
     "hrf_model"?: string | null | undefined;
     "verbosity"?: number | null | undefined;
 }
-type V3dMepfmParametersTagged = Required<Pick<V3dMepfmParameters, '@type'>> & V3dMepfmParameters;
+type V3dMepfmParamsDictTagged = Required<Pick<V3dMepfmParamsDict, '@type'>> & V3dMepfmParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMepfmParameters(...)`.
+ * Output object returned when calling `V3dMepfmParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function v_3d_mepfm_params(
     mask: InputPathType | null = null,
     hrf_model: string | null = null,
     verbosity: number | null = null,
-): V3dMepfmParametersTagged {
+): V3dMepfmParamsDictTagged {
     const params = {
         "@type": "afni/3dMEPFM" as const,
         "input_files": input_files,
@@ -104,7 +104,7 @@ function v_3d_mepfm_params(
  * @returns Command-line arguments.
  */
 function v_3d_mepfm_cargs(
-    params: V3dMepfmParameters,
+    params: V3dMepfmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function v_3d_mepfm_cargs(
  * @returns Outputs object.
  */
 function v_3d_mepfm_outputs(
-    params: V3dMepfmParameters,
+    params: V3dMepfmParamsDict,
     execution: Execution,
 ): V3dMepfmOutputs {
     const ret: V3dMepfmOutputs = {
@@ -178,7 +178,7 @@ function v_3d_mepfm_outputs(
  * @returns NamedTuple of outputs (described in `V3dMepfmOutputs`).
  */
 function v_3d_mepfm_execute(
-    params: V3dMepfmParameters,
+    params: V3dMepfmParamsDict,
     runner: Runner | null = null,
 ): V3dMepfmOutputs {
     runner = runner || getGlobalRunner();
@@ -224,6 +224,8 @@ function v_3d_mepfm(
 
 export {
       V3dMepfmOutputs,
+      V3dMepfmParamsDict,
+      V3dMepfmParamsDictTagged,
       V_3D_MEPFM_METADATA,
       v_3d_mepfm,
       v_3d_mepfm_execute,

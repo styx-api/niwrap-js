@@ -11,15 +11,15 @@ const WARPCORRECT_METADATA: Metadata = {
 };
 
 
-interface WarpcorrectConfigParameters {
+interface WarpcorrectConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type WarpcorrectConfigParametersTagged = Required<Pick<WarpcorrectConfigParameters, '@type'>> & WarpcorrectConfigParameters;
+type WarpcorrectConfigParamsDictTagged = Required<Pick<WarpcorrectConfigParamsDict, '@type'>> & WarpcorrectConfigParamsDict;
 
 
-interface WarpcorrectParameters {
+interface WarpcorrectParamsDict {
     "@type"?: "mrtrix/warpcorrect";
     "marker"?: Array<number> | null | undefined;
     "tolerance"?: number | null | undefined;
@@ -28,13 +28,13 @@ interface WarpcorrectParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<WarpcorrectConfigParameters> | null | undefined;
+    "config"?: Array<WarpcorrectConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in": InputPathType;
     "out": string;
 }
-type WarpcorrectParametersTagged = Required<Pick<WarpcorrectParameters, '@type'>> & WarpcorrectParameters;
+type WarpcorrectParamsDictTagged = Required<Pick<WarpcorrectParamsDict, '@type'>> & WarpcorrectParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type WarpcorrectParametersTagged = Required<Pick<WarpcorrectParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function warpcorrect_config_params(
+function warpcorrect_config(
     key: string,
     value: string,
-): WarpcorrectConfigParametersTagged {
+): WarpcorrectConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function warpcorrect_config_params(
  * @returns Command-line arguments.
  */
 function warpcorrect_config_cargs(
-    params: WarpcorrectConfigParameters,
+    params: WarpcorrectConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function warpcorrect_config_cargs(
 
 
 /**
- * Output object returned when calling `WarpcorrectParameters(...)`.
+ * Output object returned when calling `WarpcorrectParamsDict(...)`.
  *
  * @interface
  */
@@ -123,10 +123,10 @@ function warpcorrect_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpcorrectConfigParameters> | null = null,
+    config: Array<WarpcorrectConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): WarpcorrectParametersTagged {
+): WarpcorrectParamsDictTagged {
     const params = {
         "@type": "mrtrix/warpcorrect" as const,
         "info": info,
@@ -163,7 +163,7 @@ function warpcorrect_params(
  * @returns Command-line arguments.
  */
 function warpcorrect_cargs(
-    params: WarpcorrectParameters,
+    params: WarpcorrectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,7 +222,7 @@ function warpcorrect_cargs(
  * @returns Outputs object.
  */
 function warpcorrect_outputs(
-    params: WarpcorrectParameters,
+    params: WarpcorrectParamsDict,
     execution: Execution,
 ): WarpcorrectOutputs {
     const ret: WarpcorrectOutputs = {
@@ -254,7 +254,7 @@ function warpcorrect_outputs(
  * @returns NamedTuple of outputs (described in `WarpcorrectOutputs`).
  */
 function warpcorrect_execute(
-    params: WarpcorrectParameters,
+    params: WarpcorrectParamsDict,
     runner: Runner | null = null,
 ): WarpcorrectOutputs {
     runner = runner || getGlobalRunner();
@@ -308,7 +308,7 @@ function warpcorrect(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpcorrectConfigParameters> | null = null,
+    config: Array<WarpcorrectConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -320,9 +320,13 @@ function warpcorrect(
 
 export {
       WARPCORRECT_METADATA,
+      WarpcorrectConfigParamsDict,
+      WarpcorrectConfigParamsDictTagged,
       WarpcorrectOutputs,
+      WarpcorrectParamsDict,
+      WarpcorrectParamsDictTagged,
       warpcorrect,
-      warpcorrect_config_params,
+      warpcorrect_config,
       warpcorrect_execute,
       warpcorrect_params,
 };

@@ -11,18 +11,18 @@ const V__SNAPSHOT_VOLREG_METADATA: Metadata = {
 };
 
 
-interface VSnapshotVolregParameters {
+interface VSnapshotVolregParamsDict {
     "@type"?: "afni/@snapshot_volreg";
     "anatdataset": InputPathType;
     "epidataset": InputPathType;
     "jname"?: string | null | undefined;
     "xdisplay"?: string | null | undefined;
 }
-type VSnapshotVolregParametersTagged = Required<Pick<VSnapshotVolregParameters, '@type'>> & VSnapshotVolregParameters;
+type VSnapshotVolregParamsDictTagged = Required<Pick<VSnapshotVolregParamsDict, '@type'>> & VSnapshotVolregParamsDict;
 
 
 /**
- * Output object returned when calling `VSnapshotVolregParameters(...)`.
+ * Output object returned when calling `VSnapshotVolregParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function v__snapshot_volreg_params(
     epidataset: InputPathType,
     jname: string | null = null,
     xdisplay: string | null = null,
-): VSnapshotVolregParametersTagged {
+): VSnapshotVolregParamsDictTagged {
     const params = {
         "@type": "afni/@snapshot_volreg" as const,
         "anatdataset": anatdataset,
@@ -78,7 +78,7 @@ function v__snapshot_volreg_params(
  * @returns Command-line arguments.
  */
 function v__snapshot_volreg_cargs(
-    params: VSnapshotVolregParameters,
+    params: VSnapshotVolregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function v__snapshot_volreg_cargs(
  * @returns Outputs object.
  */
 function v__snapshot_volreg_outputs(
-    params: VSnapshotVolregParameters,
+    params: VSnapshotVolregParamsDict,
     execution: Execution,
 ): VSnapshotVolregOutputs {
     const ret: VSnapshotVolregOutputs = {
@@ -130,7 +130,7 @@ function v__snapshot_volreg_outputs(
  * @returns NamedTuple of outputs (described in `VSnapshotVolregOutputs`).
  */
 function v__snapshot_volreg_execute(
-    params: VSnapshotVolregParameters,
+    params: VSnapshotVolregParamsDict,
     runner: Runner | null = null,
 ): VSnapshotVolregOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function v__snapshot_volreg(
 
 export {
       VSnapshotVolregOutputs,
+      VSnapshotVolregParamsDict,
+      VSnapshotVolregParamsDictTagged,
       V__SNAPSHOT_VOLREG_METADATA,
       v__snapshot_volreg,
       v__snapshot_volreg_execute,

@@ -11,7 +11,7 @@ const V_3D_SPACE_TIME_CORR_METADATA: Metadata = {
 };
 
 
-interface V3dSpaceTimeCorrParameters {
+interface V3dSpaceTimeCorrParamsDict {
     "@type"?: "afni/3dSpaceTimeCorr";
     "insetA": InputPathType;
     "insetB": InputPathType;
@@ -21,11 +21,11 @@ interface V3dSpaceTimeCorrParameters {
     "freeze_insetA_ijk"?: Array<number> | null | undefined;
     "freeze_insetA_xyz"?: Array<number> | null | undefined;
 }
-type V3dSpaceTimeCorrParametersTagged = Required<Pick<V3dSpaceTimeCorrParameters, '@type'>> & V3dSpaceTimeCorrParameters;
+type V3dSpaceTimeCorrParamsDictTagged = Required<Pick<V3dSpaceTimeCorrParamsDict, '@type'>> & V3dSpaceTimeCorrParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSpaceTimeCorrParameters(...)`.
+ * Output object returned when calling `V3dSpaceTimeCorrParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v_3d_space_time_corr_params(
     out_zcorr: boolean = false,
     freeze_inset_a_ijk: Array<number> | null = null,
     freeze_inset_a_xyz: Array<number> | null = null,
-): V3dSpaceTimeCorrParametersTagged {
+): V3dSpaceTimeCorrParamsDictTagged {
     const params = {
         "@type": "afni/3dSpaceTimeCorr" as const,
         "insetA": inset_a,
@@ -92,7 +92,7 @@ function v_3d_space_time_corr_params(
  * @returns Command-line arguments.
  */
 function v_3d_space_time_corr_cargs(
-    params: V3dSpaceTimeCorrParameters,
+    params: V3dSpaceTimeCorrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function v_3d_space_time_corr_cargs(
  * @returns Outputs object.
  */
 function v_3d_space_time_corr_outputs(
-    params: V3dSpaceTimeCorrParameters,
+    params: V3dSpaceTimeCorrParamsDict,
     execution: Execution,
 ): V3dSpaceTimeCorrOutputs {
     const ret: V3dSpaceTimeCorrOutputs = {
@@ -169,7 +169,7 @@ function v_3d_space_time_corr_outputs(
  * @returns NamedTuple of outputs (described in `V3dSpaceTimeCorrOutputs`).
  */
 function v_3d_space_time_corr_execute(
-    params: V3dSpaceTimeCorrParameters,
+    params: V3dSpaceTimeCorrParamsDict,
     runner: Runner | null = null,
 ): V3dSpaceTimeCorrOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function v_3d_space_time_corr(
 
 export {
       V3dSpaceTimeCorrOutputs,
+      V3dSpaceTimeCorrParamsDict,
+      V3dSpaceTimeCorrParamsDictTagged,
       V_3D_SPACE_TIME_CORR_METADATA,
       v_3d_space_time_corr,
       v_3d_space_time_corr_execute,

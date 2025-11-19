@@ -10,7 +10,7 @@ const LABEL_TO_VOLUME_MAPPING_METADATA: Metadata = {
 };
 
 
-interface LabelToVolumeMappingRibbonConstrainedParameters {
+interface LabelToVolumeMappingRibbonConstrainedParamsDict {
     "@type"?: "ribbon-constrained";
     "inner-surf": InputPathType;
     "outer-surf": InputPathType;
@@ -18,19 +18,19 @@ interface LabelToVolumeMappingRibbonConstrainedParameters {
     "greedy": boolean;
     "thick-columns": boolean;
 }
-type LabelToVolumeMappingRibbonConstrainedParametersTagged = Required<Pick<LabelToVolumeMappingRibbonConstrainedParameters, '@type'>> & LabelToVolumeMappingRibbonConstrainedParameters;
+type LabelToVolumeMappingRibbonConstrainedParamsDictTagged = Required<Pick<LabelToVolumeMappingRibbonConstrainedParamsDict, '@type'>> & LabelToVolumeMappingRibbonConstrainedParamsDict;
 
 
-interface LabelToVolumeMappingParameters {
+interface LabelToVolumeMappingParamsDict {
     "@type"?: "workbench/label-to-volume-mapping";
     "volume-out": string;
     "distance"?: number | null | undefined;
-    "ribbon-constrained"?: LabelToVolumeMappingRibbonConstrainedParameters | null | undefined;
+    "ribbon-constrained"?: LabelToVolumeMappingRibbonConstrainedParamsDict | null | undefined;
     "label": InputPathType;
     "surface": InputPathType;
     "volume-space": InputPathType;
 }
-type LabelToVolumeMappingParametersTagged = Required<Pick<LabelToVolumeMappingParameters, '@type'>> & LabelToVolumeMappingParameters;
+type LabelToVolumeMappingParamsDictTagged = Required<Pick<LabelToVolumeMappingParamsDict, '@type'>> & LabelToVolumeMappingParamsDict;
 
 
 /**
@@ -46,13 +46,13 @@ number of subdivisions, default 3
  *
  * @returns Parameter dictionary
  */
-function label_to_volume_mapping_ribbon_constrained_params(
+function label_to_volume_mapping_ribbon_constrained(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
     subdiv_num: number | null,
     greedy: boolean = false,
     thick_columns: boolean = false,
-): LabelToVolumeMappingRibbonConstrainedParametersTagged {
+): LabelToVolumeMappingRibbonConstrainedParamsDictTagged {
     const params = {
         "@type": "ribbon-constrained" as const,
         "inner-surf": inner_surf,
@@ -76,7 +76,7 @@ function label_to_volume_mapping_ribbon_constrained_params(
  * @returns Command-line arguments.
  */
 function label_to_volume_mapping_ribbon_constrained_cargs(
-    params: LabelToVolumeMappingRibbonConstrainedParameters,
+    params: LabelToVolumeMappingRibbonConstrainedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function label_to_volume_mapping_ribbon_constrained_cargs(
 
 
 /**
- * Output object returned when calling `LabelToVolumeMappingParameters(...)`.
+ * Output object returned when calling `LabelToVolumeMappingParamsDict(...)`.
  *
  * @interface
  */
@@ -132,8 +132,8 @@ function label_to_volume_mapping_params(
     label: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
-    ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParameters | null = null,
-): LabelToVolumeMappingParametersTagged {
+    ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParamsDict | null = null,
+): LabelToVolumeMappingParamsDictTagged {
     const params = {
         "@type": "workbench/label-to-volume-mapping" as const,
         "volume-out": volume_out,
@@ -160,7 +160,7 @@ function label_to_volume_mapping_params(
  * @returns Command-line arguments.
  */
 function label_to_volume_mapping_cargs(
-    params: LabelToVolumeMappingParameters,
+    params: LabelToVolumeMappingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -190,7 +190,7 @@ function label_to_volume_mapping_cargs(
  * @returns Outputs object.
  */
 function label_to_volume_mapping_outputs(
-    params: LabelToVolumeMappingParameters,
+    params: LabelToVolumeMappingParamsDict,
     execution: Execution,
 ): LabelToVolumeMappingOutputs {
     const ret: LabelToVolumeMappingOutputs = {
@@ -212,7 +212,7 @@ function label_to_volume_mapping_outputs(
  * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
  */
 function label_to_volume_mapping_execute(
-    params: LabelToVolumeMappingParameters,
+    params: LabelToVolumeMappingParamsDict,
     runner: Runner | null = null,
 ): LabelToVolumeMappingOutputs {
     runner = runner || getGlobalRunner();
@@ -248,7 +248,7 @@ function label_to_volume_mapping(
     label: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
-    ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParameters | null = null,
+    ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParamsDict | null = null,
     runner: Runner | null = null,
 ): LabelToVolumeMappingOutputs {
     const params = label_to_volume_mapping_params(volume_out, distance, label, surface, volume_space, ribbon_constrained)
@@ -259,8 +259,12 @@ function label_to_volume_mapping(
 export {
       LABEL_TO_VOLUME_MAPPING_METADATA,
       LabelToVolumeMappingOutputs,
+      LabelToVolumeMappingParamsDict,
+      LabelToVolumeMappingParamsDictTagged,
+      LabelToVolumeMappingRibbonConstrainedParamsDict,
+      LabelToVolumeMappingRibbonConstrainedParamsDictTagged,
       label_to_volume_mapping,
       label_to_volume_mapping_execute,
       label_to_volume_mapping_params,
-      label_to_volume_mapping_ribbon_constrained_params,
+      label_to_volume_mapping_ribbon_constrained,
 };

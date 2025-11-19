@@ -11,7 +11,7 @@ const V_3D_NLFIM_METADATA: Metadata = {
 };
 
 
-interface V3dNlfimParameters {
+interface V3dNlfimParamsDict {
     "@type"?: "afni/3dNLfim";
     "input_file": InputPathType;
     "signal_model": string;
@@ -51,11 +51,11 @@ interface V3dNlfimParameters {
     "snfit"?: string | null | undefined;
     "jobs"?: number | null | undefined;
 }
-type V3dNlfimParametersTagged = Required<Pick<V3dNlfimParameters, '@type'>> & V3dNlfimParameters;
+type V3dNlfimParamsDictTagged = Required<Pick<V3dNlfimParamsDict, '@type'>> & V3dNlfimParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNlfimParameters(...)`.
+ * Output object returned when calling `V3dNlfimParamsDict(...)`.
  *
  * @interface
  */
@@ -204,7 +204,7 @@ function v_3d_nlfim_params(
     sfit: string | null = null,
     snfit: string | null = null,
     jobs: number | null = null,
-): V3dNlfimParametersTagged {
+): V3dNlfimParamsDictTagged {
     const params = {
         "@type": "afni/3dNLfim" as const,
         "input_file": input_file,
@@ -314,7 +314,7 @@ function v_3d_nlfim_params(
  * @returns Command-line arguments.
  */
 function v_3d_nlfim_cargs(
-    params: V3dNlfimParameters,
+    params: V3dNlfimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -530,7 +530,7 @@ function v_3d_nlfim_cargs(
  * @returns Outputs object.
  */
 function v_3d_nlfim_outputs(
-    params: V3dNlfimParameters,
+    params: V3dNlfimParamsDict,
     execution: Execution,
 ): V3dNlfimOutputs {
     const ret: V3dNlfimOutputs = {
@@ -569,7 +569,7 @@ function v_3d_nlfim_outputs(
  * @returns NamedTuple of outputs (described in `V3dNlfimOutputs`).
  */
 function v_3d_nlfim_execute(
-    params: V3dNlfimParameters,
+    params: V3dNlfimParamsDict,
     runner: Runner | null = null,
 ): V3dNlfimOutputs {
     runner = runner || getGlobalRunner();
@@ -679,6 +679,8 @@ function v_3d_nlfim(
 
 export {
       V3dNlfimOutputs,
+      V3dNlfimParamsDict,
+      V3dNlfimParamsDictTagged,
       V_3D_NLFIM_METADATA,
       v_3d_nlfim,
       v_3d_nlfim_execute,

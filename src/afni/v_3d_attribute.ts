@@ -11,7 +11,7 @@ const V_3D_ATTRIBUTE_METADATA: Metadata = {
 };
 
 
-interface V3dAttributeParameters {
+interface V3dAttributeParamsDict {
     "@type"?: "afni/3dAttribute";
     "all": boolean;
     "name": boolean;
@@ -22,11 +22,11 @@ interface V3dAttributeParameters {
     "aname": string;
     "dset": InputPathType;
 }
-type V3dAttributeParametersTagged = Required<Pick<V3dAttributeParameters, '@type'>> & V3dAttributeParameters;
+type V3dAttributeParamsDictTagged = Required<Pick<V3dAttributeParamsDict, '@type'>> & V3dAttributeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAttributeParameters(...)`.
+ * Output object returned when calling `V3dAttributeParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_attribute_params(
     ssep: string | null = null,
     sprep: string | null = null,
     quote: boolean = false,
-): V3dAttributeParametersTagged {
+): V3dAttributeParamsDictTagged {
     const params = {
         "@type": "afni/3dAttribute" as const,
         "all": all,
@@ -94,7 +94,7 @@ function v_3d_attribute_params(
  * @returns Command-line arguments.
  */
 function v_3d_attribute_cargs(
-    params: V3dAttributeParameters,
+    params: V3dAttributeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function v_3d_attribute_cargs(
  * @returns Outputs object.
  */
 function v_3d_attribute_outputs(
-    params: V3dAttributeParameters,
+    params: V3dAttributeParamsDict,
     execution: Execution,
 ): V3dAttributeOutputs {
     const ret: V3dAttributeOutputs = {
@@ -164,7 +164,7 @@ function v_3d_attribute_outputs(
  * @returns NamedTuple of outputs (described in `V3dAttributeOutputs`).
  */
 function v_3d_attribute_execute(
-    params: V3dAttributeParameters,
+    params: V3dAttributeParamsDict,
     runner: Runner | null = null,
 ): V3dAttributeOutputs {
     runner = runner || getGlobalRunner();
@@ -216,6 +216,8 @@ function v_3d_attribute(
 
 export {
       V3dAttributeOutputs,
+      V3dAttributeParamsDict,
+      V3dAttributeParamsDictTagged,
       V_3D_ATTRIBUTE_METADATA,
       v_3d_attribute,
       v_3d_attribute_execute,

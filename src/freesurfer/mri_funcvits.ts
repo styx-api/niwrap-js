@@ -11,7 +11,7 @@ const MRI_FUNCVITS_METADATA: Metadata = {
 };
 
 
-interface MriFuncvitsParameters {
+interface MriFuncvitsParamsDict {
     "@type"?: "freesurfer/mri-funcvits";
     "stem": string;
     "outdir": string;
@@ -26,11 +26,11 @@ interface MriFuncvitsParameters {
     "mail"?: string | null | undefined;
     "noforce": boolean;
 }
-type MriFuncvitsParametersTagged = Required<Pick<MriFuncvitsParameters, '@type'>> & MriFuncvitsParameters;
+type MriFuncvitsParamsDictTagged = Required<Pick<MriFuncvitsParamsDict, '@type'>> & MriFuncvitsParamsDict;
 
 
 /**
- * Output object returned when calling `MriFuncvitsParameters(...)`.
+ * Output object returned when calling `MriFuncvitsParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function mri_funcvits_params(
     umask: string | null = null,
     mail: string | null = null,
     noforce: boolean = false,
-): MriFuncvitsParametersTagged {
+): MriFuncvitsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri-funcvits" as const,
         "stem": stem,
@@ -120,7 +120,7 @@ function mri_funcvits_params(
  * @returns Command-line arguments.
  */
 function mri_funcvits_cargs(
-    params: MriFuncvitsParameters,
+    params: MriFuncvitsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function mri_funcvits_cargs(
  * @returns Outputs object.
  */
 function mri_funcvits_outputs(
-    params: MriFuncvitsParameters,
+    params: MriFuncvitsParamsDict,
     execution: Execution,
 ): MriFuncvitsOutputs {
     const ret: MriFuncvitsOutputs = {
@@ -228,7 +228,7 @@ function mri_funcvits_outputs(
  * @returns NamedTuple of outputs (described in `MriFuncvitsOutputs`).
  */
 function mri_funcvits_execute(
-    params: MriFuncvitsParameters,
+    params: MriFuncvitsParamsDict,
     runner: Runner | null = null,
 ): MriFuncvitsOutputs {
     runner = runner || getGlobalRunner();
@@ -289,6 +289,8 @@ function mri_funcvits(
 export {
       MRI_FUNCVITS_METADATA,
       MriFuncvitsOutputs,
+      MriFuncvitsParamsDict,
+      MriFuncvitsParamsDictTagged,
       mri_funcvits,
       mri_funcvits_execute,
       mri_funcvits_params,

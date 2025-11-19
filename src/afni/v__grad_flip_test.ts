@@ -11,7 +11,7 @@ const V__GRAD_FLIP_TEST_METADATA: Metadata = {
 };
 
 
-interface VGradFlipTestParameters {
+interface VGradFlipTestParamsDict {
     "@type"?: "afni/@GradFlipTest";
     "dwi": InputPathType;
     "grad_row_vec"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface VGradFlipTestParameters {
     "wdir"?: string | null | undefined;
     "do_clean": boolean;
 }
-type VGradFlipTestParametersTagged = Required<Pick<VGradFlipTestParameters, '@type'>> & VGradFlipTestParameters;
+type VGradFlipTestParamsDictTagged = Required<Pick<VGradFlipTestParamsDict, '@type'>> & VGradFlipTestParamsDict;
 
 
 /**
- * Output object returned when calling `VGradFlipTestParameters(...)`.
+ * Output object returned when calling `VGradFlipTestParamsDict(...)`.
  *
  * @interface
  */
@@ -87,7 +87,7 @@ function v__grad_flip_test_params(
     scale_out_1000: boolean = false,
     wdir: string | null = null,
     do_clean: boolean = false,
-): VGradFlipTestParametersTagged {
+): VGradFlipTestParamsDictTagged {
     const params = {
         "@type": "afni/@GradFlipTest" as const,
         "dwi": dwi,
@@ -140,7 +140,7 @@ function v__grad_flip_test_params(
  * @returns Command-line arguments.
  */
 function v__grad_flip_test_cargs(
-    params: VGradFlipTestParameters,
+    params: VGradFlipTestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -234,7 +234,7 @@ function v__grad_flip_test_cargs(
  * @returns Outputs object.
  */
 function v__grad_flip_test_outputs(
-    params: VGradFlipTestParameters,
+    params: VGradFlipTestParamsDict,
     execution: Execution,
 ): VGradFlipTestOutputs {
     const ret: VGradFlipTestOutputs = {
@@ -261,7 +261,7 @@ function v__grad_flip_test_outputs(
  * @returns NamedTuple of outputs (described in `VGradFlipTestOutputs`).
  */
 function v__grad_flip_test_execute(
-    params: VGradFlipTestParameters,
+    params: VGradFlipTestParamsDict,
     runner: Runner | null = null,
 ): VGradFlipTestOutputs {
     runner = runner || getGlobalRunner();
@@ -325,6 +325,8 @@ function v__grad_flip_test(
 
 export {
       VGradFlipTestOutputs,
+      VGradFlipTestParamsDict,
+      VGradFlipTestParamsDictTagged,
       V__GRAD_FLIP_TEST_METADATA,
       v__grad_flip_test,
       v__grad_flip_test_execute,

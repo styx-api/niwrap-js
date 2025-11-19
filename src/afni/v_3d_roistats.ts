@@ -11,7 +11,7 @@ const V_3D_ROISTATS_METADATA: Metadata = {
 };
 
 
-interface V3dRoistatsParameters {
+interface V3dRoistatsParamsDict {
     "@type"?: "afni/3dROIstats";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -28,11 +28,11 @@ interface V3dRoistatsParameters {
     "stat"?: Array<InputPathType> | null | undefined;
     "zerofill"?: string | null | undefined;
 }
-type V3dRoistatsParametersTagged = Required<Pick<V3dRoistatsParameters, '@type'>> & V3dRoistatsParameters;
+type V3dRoistatsParamsDictTagged = Required<Pick<V3dRoistatsParamsDict, '@type'>> & V3dRoistatsParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRoistatsParameters(...)`.
+ * Output object returned when calling `V3dRoistatsParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function v_3d_roistats_params(
     roisel: InputPathType | null = null,
     stat: Array<InputPathType> | null = null,
     zerofill: string | null = null,
-): V3dRoistatsParametersTagged {
+): V3dRoistatsParamsDictTagged {
     const params = {
         "@type": "afni/3dROIstats" as const,
         "in_file": in_file,
@@ -126,7 +126,7 @@ function v_3d_roistats_params(
  * @returns Command-line arguments.
  */
 function v_3d_roistats_cargs(
-    params: V3dRoistatsParameters,
+    params: V3dRoistatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,7 +199,7 @@ function v_3d_roistats_cargs(
  * @returns Outputs object.
  */
 function v_3d_roistats_outputs(
-    params: V3dRoistatsParameters,
+    params: V3dRoistatsParamsDict,
     execution: Execution,
 ): V3dRoistatsOutputs {
     const ret: V3dRoistatsOutputs = {
@@ -225,7 +225,7 @@ function v_3d_roistats_outputs(
  * @returns NamedTuple of outputs (described in `V3dRoistatsOutputs`).
  */
 function v_3d_roistats_execute(
-    params: V3dRoistatsParameters,
+    params: V3dRoistatsParamsDict,
     runner: Runner | null = null,
 ): V3dRoistatsOutputs {
     runner = runner || getGlobalRunner();
@@ -289,6 +289,8 @@ function v_3d_roistats(
 
 export {
       V3dRoistatsOutputs,
+      V3dRoistatsParamsDict,
+      V3dRoistatsParamsDictTagged,
       V_3D_ROISTATS_METADATA,
       v_3d_roistats,
       v_3d_roistats_execute,

@@ -11,7 +11,7 @@ const WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface WarpTensorImageMultiTransformParameters {
+interface WarpTensorImageMultiTransformParamsDict {
     "@type"?: "ants/WarpTensorImageMultiTransform";
     "image_dimension": number;
     "moving_image": InputPathType;
@@ -24,11 +24,11 @@ interface WarpTensorImageMultiTransformParameters {
     "ants_prefix"?: string | null | undefined;
     "ants_prefix_invert"?: string | null | undefined;
 }
-type WarpTensorImageMultiTransformParametersTagged = Required<Pick<WarpTensorImageMultiTransformParameters, '@type'>> & WarpTensorImageMultiTransformParameters;
+type WarpTensorImageMultiTransformParamsDictTagged = Required<Pick<WarpTensorImageMultiTransformParamsDict, '@type'>> & WarpTensorImageMultiTransformParamsDict;
 
 
 /**
- * Output object returned when calling `WarpTensorImageMultiTransformParameters(...)`.
+ * Output object returned when calling `WarpTensorImageMultiTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function warp_tensor_image_multi_transform_params(
     use_nearest_neighbor: boolean = false,
     ants_prefix: string | null = null,
     ants_prefix_invert: string | null = null,
-): WarpTensorImageMultiTransformParametersTagged {
+): WarpTensorImageMultiTransformParamsDictTagged {
     const params = {
         "@type": "ants/WarpTensorImageMultiTransform" as const,
         "image_dimension": image_dimension,
@@ -104,7 +104,7 @@ function warp_tensor_image_multi_transform_params(
  * @returns Command-line arguments.
  */
 function warp_tensor_image_multi_transform_cargs(
-    params: WarpTensorImageMultiTransformParameters,
+    params: WarpTensorImageMultiTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function warp_tensor_image_multi_transform_cargs(
  * @returns Outputs object.
  */
 function warp_tensor_image_multi_transform_outputs(
-    params: WarpTensorImageMultiTransformParameters,
+    params: WarpTensorImageMultiTransformParamsDict,
     execution: Execution,
 ): WarpTensorImageMultiTransformOutputs {
     const ret: WarpTensorImageMultiTransformOutputs = {
@@ -179,7 +179,7 @@ function warp_tensor_image_multi_transform_outputs(
  * @returns NamedTuple of outputs (described in `WarpTensorImageMultiTransformOutputs`).
  */
 function warp_tensor_image_multi_transform_execute(
-    params: WarpTensorImageMultiTransformParameters,
+    params: WarpTensorImageMultiTransformParamsDict,
     runner: Runner | null = null,
 ): WarpTensorImageMultiTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -236,6 +236,8 @@ function warp_tensor_image_multi_transform(
 export {
       WARP_TENSOR_IMAGE_MULTI_TRANSFORM_METADATA,
       WarpTensorImageMultiTransformOutputs,
+      WarpTensorImageMultiTransformParamsDict,
+      WarpTensorImageMultiTransformParamsDictTagged,
       warp_tensor_image_multi_transform,
       warp_tensor_image_multi_transform_execute,
       warp_tensor_image_multi_transform_params,

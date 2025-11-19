@@ -11,16 +11,16 @@ const V_3D_DESPIKE_METADATA: Metadata = {
 };
 
 
-interface V3dDespikeParameters {
+interface V3dDespikeParamsDict {
     "@type"?: "afni/3dDespike";
     "prefix"?: string | null | undefined;
     "in_file": InputPathType;
 }
-type V3dDespikeParametersTagged = Required<Pick<V3dDespikeParameters, '@type'>> & V3dDespikeParameters;
+type V3dDespikeParamsDictTagged = Required<Pick<V3dDespikeParamsDict, '@type'>> & V3dDespikeParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDespikeParameters(...)`.
+ * Output object returned when calling `V3dDespikeParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface V3dDespikeOutputs {
 function v_3d_despike_params(
     in_file: InputPathType,
     prefix: string | null = null,
-): V3dDespikeParametersTagged {
+): V3dDespikeParamsDictTagged {
     const params = {
         "@type": "afni/3dDespike" as const,
         "in_file": in_file,
@@ -68,7 +68,7 @@ function v_3d_despike_params(
  * @returns Command-line arguments.
  */
 function v_3d_despike_cargs(
-    params: V3dDespikeParameters,
+    params: V3dDespikeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function v_3d_despike_cargs(
  * @returns Outputs object.
  */
 function v_3d_despike_outputs(
-    params: V3dDespikeParameters,
+    params: V3dDespikeParamsDict,
     execution: Execution,
 ): V3dDespikeOutputs {
     const ret: V3dDespikeOutputs = {
@@ -119,7 +119,7 @@ function v_3d_despike_outputs(
  * @returns NamedTuple of outputs (described in `V3dDespikeOutputs`).
  */
 function v_3d_despike_execute(
-    params: V3dDespikeParameters,
+    params: V3dDespikeParamsDict,
     runner: Runner | null = null,
 ): V3dDespikeOutputs {
     runner = runner || getGlobalRunner();
@@ -159,6 +159,8 @@ function v_3d_despike(
 
 export {
       V3dDespikeOutputs,
+      V3dDespikeParamsDict,
+      V3dDespikeParamsDictTagged,
       V_3D_DESPIKE_METADATA,
       v_3d_despike,
       v_3d_despike_execute,

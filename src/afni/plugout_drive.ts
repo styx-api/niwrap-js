@@ -11,7 +11,7 @@ const PLUGOUT_DRIVE_METADATA: Metadata = {
 };
 
 
-interface PlugoutDriveParameters {
+interface PlugoutDriveParamsDict {
     "@type"?: "afni/plugout_drive";
     "host"?: string | null | undefined;
     "shm": boolean;
@@ -29,11 +29,11 @@ interface PlugoutDriveParameters {
     "num_assigned_ports": boolean;
     "num_assigned_ports_quiet": boolean;
 }
-type PlugoutDriveParametersTagged = Required<Pick<PlugoutDriveParameters, '@type'>> & PlugoutDriveParameters;
+type PlugoutDriveParamsDictTagged = Required<Pick<PlugoutDriveParamsDict, '@type'>> & PlugoutDriveParamsDict;
 
 
 /**
- * Output object returned when calling `PlugoutDriveParameters(...)`.
+ * Output object returned when calling `PlugoutDriveParamsDict(...)`.
  *
  * @interface
  */
@@ -82,7 +82,7 @@ function plugout_drive_params(
     max_port_bloc_quiet: boolean = false,
     num_assigned_ports: boolean = false,
     num_assigned_ports_quiet: boolean = false,
-): PlugoutDriveParametersTagged {
+): PlugoutDriveParamsDictTagged {
     const params = {
         "@type": "afni/plugout_drive" as const,
         "shm": shm,
@@ -130,7 +130,7 @@ function plugout_drive_params(
  * @returns Command-line arguments.
  */
 function plugout_drive_cargs(
-    params: PlugoutDriveParameters,
+    params: PlugoutDriveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -217,7 +217,7 @@ function plugout_drive_cargs(
  * @returns Outputs object.
  */
 function plugout_drive_outputs(
-    params: PlugoutDriveParameters,
+    params: PlugoutDriveParamsDict,
     execution: Execution,
 ): PlugoutDriveOutputs {
     const ret: PlugoutDriveOutputs = {
@@ -242,7 +242,7 @@ function plugout_drive_outputs(
  * @returns NamedTuple of outputs (described in `PlugoutDriveOutputs`).
  */
 function plugout_drive_execute(
-    params: PlugoutDriveParameters,
+    params: PlugoutDriveParamsDict,
     runner: Runner | null = null,
 ): PlugoutDriveOutputs {
     runner = runner || getGlobalRunner();
@@ -309,6 +309,8 @@ function plugout_drive(
 export {
       PLUGOUT_DRIVE_METADATA,
       PlugoutDriveOutputs,
+      PlugoutDriveParamsDict,
+      PlugoutDriveParamsDictTagged,
       plugout_drive,
       plugout_drive_execute,
       plugout_drive_params,

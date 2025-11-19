@@ -11,15 +11,15 @@ const MRI_GCAB_TRAIN_METADATA: Metadata = {
 };
 
 
-interface MriGcabTrainParameters {
+interface MriGcabTrainParamsDict {
     "@type"?: "freesurfer/mri_gcab_train";
     "removed_info"?: string | null | undefined;
 }
-type MriGcabTrainParametersTagged = Required<Pick<MriGcabTrainParameters, '@type'>> & MriGcabTrainParameters;
+type MriGcabTrainParamsDictTagged = Required<Pick<MriGcabTrainParamsDict, '@type'>> & MriGcabTrainParamsDict;
 
 
 /**
- * Output object returned when calling `MriGcabTrainParameters(...)`.
+ * Output object returned when calling `MriGcabTrainParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MriGcabTrainOutputs {
  */
 function mri_gcab_train_params(
     removed_info: string | null = null,
-): MriGcabTrainParametersTagged {
+): MriGcabTrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_gcab_train" as const,
     };
@@ -60,7 +60,7 @@ function mri_gcab_train_params(
  * @returns Command-line arguments.
  */
 function mri_gcab_train_cargs(
-    params: MriGcabTrainParameters,
+    params: MriGcabTrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function mri_gcab_train_cargs(
  * @returns Outputs object.
  */
 function mri_gcab_train_outputs(
-    params: MriGcabTrainParameters,
+    params: MriGcabTrainParamsDict,
     execution: Execution,
 ): MriGcabTrainOutputs {
     const ret: MriGcabTrainOutputs = {
@@ -106,7 +106,7 @@ function mri_gcab_train_outputs(
  * @returns NamedTuple of outputs (described in `MriGcabTrainOutputs`).
  */
 function mri_gcab_train_execute(
-    params: MriGcabTrainParameters,
+    params: MriGcabTrainParamsDict,
     runner: Runner | null = null,
 ): MriGcabTrainOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function mri_gcab_train(
 export {
       MRI_GCAB_TRAIN_METADATA,
       MriGcabTrainOutputs,
+      MriGcabTrainParamsDict,
+      MriGcabTrainParamsDictTagged,
       mri_gcab_train,
       mri_gcab_train_execute,
       mri_gcab_train_params,

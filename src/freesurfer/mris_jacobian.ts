@@ -11,7 +11,7 @@ const MRIS_JACOBIAN_METADATA: Metadata = {
 };
 
 
-interface MrisJacobianParameters {
+interface MrisJacobianParamsDict {
     "@type"?: "freesurfer/mris_jacobian";
     "original_surface": InputPathType;
     "mapped_surface": InputPathType;
@@ -20,11 +20,11 @@ interface MrisJacobianParameters {
     "noscale": boolean;
     "invert": boolean;
 }
-type MrisJacobianParametersTagged = Required<Pick<MrisJacobianParameters, '@type'>> & MrisJacobianParameters;
+type MrisJacobianParamsDictTagged = Required<Pick<MrisJacobianParamsDict, '@type'>> & MrisJacobianParamsDict;
 
 
 /**
- * Output object returned when calling `MrisJacobianParameters(...)`.
+ * Output object returned when calling `MrisJacobianParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_jacobian_params(
     log: boolean = false,
     noscale: boolean = false,
     invert: boolean = false,
-): MrisJacobianParametersTagged {
+): MrisJacobianParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_jacobian" as const,
         "original_surface": original_surface,
@@ -82,7 +82,7 @@ function mris_jacobian_params(
  * @returns Command-line arguments.
  */
 function mris_jacobian_cargs(
-    params: MrisJacobianParameters,
+    params: MrisJacobianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function mris_jacobian_cargs(
  * @returns Outputs object.
  */
 function mris_jacobian_outputs(
-    params: MrisJacobianParameters,
+    params: MrisJacobianParamsDict,
     execution: Execution,
 ): MrisJacobianOutputs {
     const ret: MrisJacobianOutputs = {
@@ -138,7 +138,7 @@ function mris_jacobian_outputs(
  * @returns NamedTuple of outputs (described in `MrisJacobianOutputs`).
  */
 function mris_jacobian_execute(
-    params: MrisJacobianParameters,
+    params: MrisJacobianParamsDict,
     runner: Runner | null = null,
 ): MrisJacobianOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function mris_jacobian(
 export {
       MRIS_JACOBIAN_METADATA,
       MrisJacobianOutputs,
+      MrisJacobianParamsDict,
+      MrisJacobianParamsDictTagged,
       mris_jacobian,
       mris_jacobian_execute,
       mris_jacobian_params,

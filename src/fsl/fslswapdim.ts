@@ -11,7 +11,7 @@ const FSLSWAPDIM_METADATA: Metadata = {
 };
 
 
-interface FslswapdimParameters {
+interface FslswapdimParamsDict {
     "@type"?: "fsl/fslswapdim";
     "input_file": InputPathType;
     "axis_a": string;
@@ -19,11 +19,11 @@ interface FslswapdimParameters {
     "axis_c": string;
     "output_file"?: string | null | undefined;
 }
-type FslswapdimParametersTagged = Required<Pick<FslswapdimParameters, '@type'>> & FslswapdimParameters;
+type FslswapdimParamsDictTagged = Required<Pick<FslswapdimParamsDict, '@type'>> & FslswapdimParamsDict;
 
 
 /**
- * Output object returned when calling `FslswapdimParameters(...)`.
+ * Output object returned when calling `FslswapdimParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function fslswapdim_params(
     axis_b: string,
     axis_c: string,
     output_file: string | null = null,
-): FslswapdimParametersTagged {
+): FslswapdimParamsDictTagged {
     const params = {
         "@type": "fsl/fslswapdim" as const,
         "input_file": input_file,
@@ -80,7 +80,7 @@ function fslswapdim_params(
  * @returns Command-line arguments.
  */
 function fslswapdim_cargs(
-    params: FslswapdimParameters,
+    params: FslswapdimParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function fslswapdim_cargs(
  * @returns Outputs object.
  */
 function fslswapdim_outputs(
-    params: FslswapdimParameters,
+    params: FslswapdimParamsDict,
     execution: Execution,
 ): FslswapdimOutputs {
     const ret: FslswapdimOutputs = {
@@ -131,7 +131,7 @@ function fslswapdim_outputs(
  * @returns NamedTuple of outputs (described in `FslswapdimOutputs`).
  */
 function fslswapdim_execute(
-    params: FslswapdimParameters,
+    params: FslswapdimParamsDict,
     runner: Runner | null = null,
 ): FslswapdimOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function fslswapdim(
 export {
       FSLSWAPDIM_METADATA,
       FslswapdimOutputs,
+      FslswapdimParamsDict,
+      FslswapdimParamsDictTagged,
       fslswapdim,
       fslswapdim_execute,
       fslswapdim_params,

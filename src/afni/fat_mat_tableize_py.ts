@@ -11,7 +11,7 @@ const FAT_MAT_TABLEIZE_PY_METADATA: Metadata = {
 };
 
 
-interface FatMatTableizePyParameters {
+interface FatMatTableizePyParamsDict {
     "@type"?: "afni/fat_mat_tableize.py";
     "input_matrices": Array<string>;
     "input_csv"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface FatMatTableizePyParameters {
     "help_short": boolean;
     "help_view": boolean;
 }
-type FatMatTableizePyParametersTagged = Required<Pick<FatMatTableizePyParameters, '@type'>> & FatMatTableizePyParameters;
+type FatMatTableizePyParamsDictTagged = Required<Pick<FatMatTableizePyParamsDict, '@type'>> & FatMatTableizePyParamsDict;
 
 
 /**
- * Output object returned when calling `FatMatTableizePyParameters(...)`.
+ * Output object returned when calling `FatMatTableizePyParamsDict(...)`.
  *
  * @interface
  */
@@ -75,7 +75,7 @@ function fat_mat_tableize_py_params(
     help: boolean = false,
     help_short: boolean = false,
     help_view: boolean = false,
-): FatMatTableizePyParametersTagged {
+): FatMatTableizePyParamsDictTagged {
     const params = {
         "@type": "afni/fat_mat_tableize.py" as const,
         "input_matrices": input_matrices,
@@ -108,7 +108,7 @@ function fat_mat_tableize_py_params(
  * @returns Command-line arguments.
  */
 function fat_mat_tableize_py_cargs(
-    params: FatMatTableizePyParameters,
+    params: FatMatTableizePyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function fat_mat_tableize_py_cargs(
  * @returns Outputs object.
  */
 function fat_mat_tableize_py_outputs(
-    params: FatMatTableizePyParameters,
+    params: FatMatTableizePyParamsDict,
     execution: Execution,
 ): FatMatTableizePyOutputs {
     const ret: FatMatTableizePyOutputs = {
@@ -194,7 +194,7 @@ function fat_mat_tableize_py_outputs(
  * @returns NamedTuple of outputs (described in `FatMatTableizePyOutputs`).
  */
 function fat_mat_tableize_py_execute(
-    params: FatMatTableizePyParameters,
+    params: FatMatTableizePyParamsDict,
     runner: Runner | null = null,
 ): FatMatTableizePyOutputs {
     runner = runner || getGlobalRunner();
@@ -251,6 +251,8 @@ function fat_mat_tableize_py(
 export {
       FAT_MAT_TABLEIZE_PY_METADATA,
       FatMatTableizePyOutputs,
+      FatMatTableizePyParamsDict,
+      FatMatTableizePyParamsDictTagged,
       fat_mat_tableize_py,
       fat_mat_tableize_py_execute,
       fat_mat_tableize_py_params,

@@ -11,7 +11,7 @@ const MKHEADSURF_METADATA: Metadata = {
 };
 
 
-interface MkheadsurfParameters {
+interface MkheadsurfParamsDict {
     "@type"?: "freesurfer/mkheadsurf";
     "input_vol": InputPathType;
     "output_vol": string;
@@ -41,11 +41,11 @@ interface MkheadsurfParameters {
     "umask"?: number | null | undefined;
     "logfile"?: string | null | undefined;
 }
-type MkheadsurfParametersTagged = Required<Pick<MkheadsurfParameters, '@type'>> & MkheadsurfParameters;
+type MkheadsurfParamsDictTagged = Required<Pick<MkheadsurfParamsDict, '@type'>> & MkheadsurfParamsDict;
 
 
 /**
- * Output object returned when calling `MkheadsurfParameters(...)`.
+ * Output object returned when calling `MkheadsurfParamsDict(...)`.
  *
  * @interface
  */
@@ -118,7 +118,7 @@ function mkheadsurf_params(
     subjects_dir: string | null = null,
     umask: number | null = null,
     logfile: string | null = null,
-): MkheadsurfParametersTagged {
+): MkheadsurfParamsDictTagged {
     const params = {
         "@type": "freesurfer/mkheadsurf" as const,
         "input_vol": input_vol,
@@ -198,7 +198,7 @@ function mkheadsurf_params(
  * @returns Command-line arguments.
  */
 function mkheadsurf_cargs(
-    params: MkheadsurfParameters,
+    params: MkheadsurfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -355,7 +355,7 @@ function mkheadsurf_cargs(
  * @returns Outputs object.
  */
 function mkheadsurf_outputs(
-    params: MkheadsurfParameters,
+    params: MkheadsurfParamsDict,
     execution: Execution,
 ): MkheadsurfOutputs {
     const ret: MkheadsurfOutputs = {
@@ -380,7 +380,7 @@ function mkheadsurf_outputs(
  * @returns NamedTuple of outputs (described in `MkheadsurfOutputs`).
  */
 function mkheadsurf_execute(
-    params: MkheadsurfParameters,
+    params: MkheadsurfParamsDict,
     runner: Runner | null = null,
 ): MkheadsurfOutputs {
     runner = runner || getGlobalRunner();
@@ -471,6 +471,8 @@ function mkheadsurf(
 export {
       MKHEADSURF_METADATA,
       MkheadsurfOutputs,
+      MkheadsurfParamsDict,
+      MkheadsurfParamsDictTagged,
       mkheadsurf,
       mkheadsurf_execute,
       mkheadsurf_params,

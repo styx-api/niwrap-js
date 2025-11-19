@@ -11,7 +11,7 @@ const ANTS_CORTICAL_THICKNESS_SH_METADATA: Metadata = {
 };
 
 
-interface AntsCorticalThicknessShParameters {
+interface AntsCorticalThicknessShParamsDict {
     "@type"?: "ants/antsCorticalThickness.sh";
     "image_dimension": 2 | 3;
     "anatomical_image": InputPathType;
@@ -39,11 +39,11 @@ interface AntsCorticalThicknessShParameters {
     "script_stage_to_run"?: number | null | undefined;
     "test_debug_mode"?: number | null | undefined;
 }
-type AntsCorticalThicknessShParametersTagged = Required<Pick<AntsCorticalThicknessShParameters, '@type'>> & AntsCorticalThicknessShParameters;
+type AntsCorticalThicknessShParamsDictTagged = Required<Pick<AntsCorticalThicknessShParamsDict, '@type'>> & AntsCorticalThicknessShParamsDict;
 
 
 /**
- * Output object returned when calling `AntsCorticalThicknessShParameters(...)`.
+ * Output object returned when calling `AntsCorticalThicknessShParamsDict(...)`.
  *
  * @interface
  */
@@ -128,7 +128,7 @@ function ants_cortical_thickness_sh_params(
     atropos_iterations: number | null = null,
     script_stage_to_run: number | null = null,
     test_debug_mode: number | null = null,
-): AntsCorticalThicknessShParametersTagged {
+): AntsCorticalThicknessShParamsDictTagged {
     const params = {
         "@type": "ants/antsCorticalThickness.sh" as const,
         "image_dimension": image_dimension,
@@ -208,7 +208,7 @@ function ants_cortical_thickness_sh_params(
  * @returns Command-line arguments.
  */
 function ants_cortical_thickness_sh_cargs(
-    params: AntsCorticalThicknessShParameters,
+    params: AntsCorticalThicknessShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -364,7 +364,7 @@ function ants_cortical_thickness_sh_cargs(
  * @returns Outputs object.
  */
 function ants_cortical_thickness_sh_outputs(
-    params: AntsCorticalThicknessShParameters,
+    params: AntsCorticalThicknessShParamsDict,
     execution: Execution,
 ): AntsCorticalThicknessShOutputs {
     const ret: AntsCorticalThicknessShOutputs = {
@@ -393,7 +393,7 @@ function ants_cortical_thickness_sh_outputs(
  * @returns NamedTuple of outputs (described in `AntsCorticalThicknessShOutputs`).
  */
 function ants_cortical_thickness_sh_execute(
-    params: AntsCorticalThicknessShParameters,
+    params: AntsCorticalThicknessShParamsDict,
     runner: Runner | null = null,
 ): AntsCorticalThicknessShOutputs {
     runner = runner || getGlobalRunner();
@@ -480,6 +480,8 @@ function ants_cortical_thickness_sh(
 export {
       ANTS_CORTICAL_THICKNESS_SH_METADATA,
       AntsCorticalThicknessShOutputs,
+      AntsCorticalThicknessShParamsDict,
+      AntsCorticalThicknessShParamsDictTagged,
       ants_cortical_thickness_sh,
       ants_cortical_thickness_sh_execute,
       ants_cortical_thickness_sh_params,

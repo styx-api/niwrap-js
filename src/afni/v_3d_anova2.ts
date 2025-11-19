@@ -11,7 +11,7 @@ const V_3D_ANOVA2_METADATA: Metadata = {
 };
 
 
-interface V3dAnova2Parameters {
+interface V3dAnova2ParamsDict {
     "@type"?: "afni/3dANOVA2";
     "type": number;
     "alevels": number;
@@ -38,11 +38,11 @@ interface V3dAnova2Parameters {
     "ok": boolean;
     "assume_sph": boolean;
 }
-type V3dAnova2ParametersTagged = Required<Pick<V3dAnova2Parameters, '@type'>> & V3dAnova2Parameters;
+type V3dAnova2ParamsDictTagged = Required<Pick<V3dAnova2ParamsDict, '@type'>> & V3dAnova2ParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAnova2Parameters(...)`.
+ * Output object returned when calling `V3dAnova2ParamsDict(...)`.
  *
  * @interface
  */
@@ -165,7 +165,7 @@ function v_3d_anova2_params(
     old_method: boolean = false,
     ok: boolean = false,
     assume_sph: boolean = false,
-): V3dAnova2ParametersTagged {
+): V3dAnova2ParamsDictTagged {
     const params = {
         "@type": "afni/3dANOVA2" as const,
         "type": type_,
@@ -240,7 +240,7 @@ function v_3d_anova2_params(
  * @returns Command-line arguments.
  */
 function v_3d_anova2_cargs(
-    params: V3dAnova2Parameters,
+    params: V3dAnova2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -384,7 +384,7 @@ function v_3d_anova2_cargs(
  * @returns Outputs object.
  */
 function v_3d_anova2_outputs(
-    params: V3dAnova2Parameters,
+    params: V3dAnova2ParamsDict,
     execution: Execution,
 ): V3dAnova2Outputs {
     const ret: V3dAnova2Outputs = {
@@ -423,7 +423,7 @@ function v_3d_anova2_outputs(
  * @returns NamedTuple of outputs (described in `V3dAnova2Outputs`).
  */
 function v_3d_anova2_execute(
-    params: V3dAnova2Parameters,
+    params: V3dAnova2ParamsDict,
     runner: Runner | null = null,
 ): V3dAnova2Outputs {
     runner = runner || getGlobalRunner();
@@ -507,6 +507,8 @@ function v_3d_anova2(
 
 export {
       V3dAnova2Outputs,
+      V3dAnova2ParamsDict,
+      V3dAnova2ParamsDictTagged,
       V_3D_ANOVA2_METADATA,
       v_3d_anova2,
       v_3d_anova2_execute,

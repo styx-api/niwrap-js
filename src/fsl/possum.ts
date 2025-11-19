@@ -11,7 +11,7 @@ const POSSUM_METADATA: Metadata = {
 };
 
 
-interface PossumParameters {
+interface PossumParamsDict {
     "@type"?: "fsl/possum";
     "input_volume": InputPathType;
     "mr_parameters": InputPathType;
@@ -38,11 +38,11 @@ interface PossumParameters {
     "no_speedup": boolean;
     "rf_average": boolean;
 }
-type PossumParametersTagged = Required<Pick<PossumParameters, '@type'>> & PossumParameters;
+type PossumParamsDictTagged = Required<Pick<PossumParamsDict, '@type'>> & PossumParamsDict;
 
 
 /**
- * Output object returned when calling `PossumParameters(...)`.
+ * Output object returned when calling `PossumParamsDict(...)`.
  *
  * @interface
  */
@@ -113,7 +113,7 @@ function possum_params(
     proc_id: number | null = null,
     no_speedup: boolean = false,
     rf_average: boolean = false,
-): PossumParametersTagged {
+): PossumParamsDictTagged {
     const params = {
         "@type": "fsl/possum" as const,
         "input_volume": input_volume,
@@ -178,7 +178,7 @@ function possum_params(
  * @returns Command-line arguments.
  */
 function possum_cargs(
-    params: PossumParameters,
+    params: PossumParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -311,7 +311,7 @@ function possum_cargs(
  * @returns Outputs object.
  */
 function possum_outputs(
-    params: PossumParameters,
+    params: PossumParamsDict,
     execution: Execution,
 ): PossumOutputs {
     const ret: PossumOutputs = {
@@ -337,7 +337,7 @@ function possum_outputs(
  * @returns NamedTuple of outputs (described in `PossumOutputs`).
  */
 function possum_execute(
-    params: PossumParameters,
+    params: PossumParamsDict,
     runner: Runner | null = null,
 ): PossumOutputs {
     runner = runner || getGlobalRunner();
@@ -422,6 +422,8 @@ function possum(
 export {
       POSSUM_METADATA,
       PossumOutputs,
+      PossumParamsDict,
+      PossumParamsDictTagged,
       possum,
       possum_execute,
       possum_params,

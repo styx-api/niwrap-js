@@ -11,7 +11,7 @@ const V_3D_RSFC_METADATA: Metadata = {
 };
 
 
-interface V3dRsfcParameters {
+interface V3dRsfcParamsDict {
     "@type"?: "afni/3dRSFC";
     "fbot": number;
     "ftop": number;
@@ -38,11 +38,11 @@ interface V3dRsfcParameters {
     "notrans": boolean;
     "nosat": boolean;
 }
-type V3dRsfcParametersTagged = Required<Pick<V3dRsfcParameters, '@type'>> & V3dRsfcParameters;
+type V3dRsfcParamsDictTagged = Required<Pick<V3dRsfcParamsDict, '@type'>> & V3dRsfcParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRsfcParameters(...)`.
+ * Output object returned when calling `V3dRsfcParamsDict(...)`.
  *
  * @interface
  */
@@ -117,7 +117,7 @@ function v_3d_rsfc_params(
     bp_at_end: boolean = false,
     notrans: boolean = false,
     nosat: boolean = false,
-): V3dRsfcParametersTagged {
+): V3dRsfcParamsDictTagged {
     const params = {
         "@type": "afni/3dRSFC" as const,
         "fbot": fbot,
@@ -178,7 +178,7 @@ function v_3d_rsfc_params(
  * @returns Command-line arguments.
  */
 function v_3d_rsfc_cargs(
-    params: V3dRsfcParameters,
+    params: V3dRsfcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -292,7 +292,7 @@ function v_3d_rsfc_cargs(
  * @returns Outputs object.
  */
 function v_3d_rsfc_outputs(
-    params: V3dRsfcParameters,
+    params: V3dRsfcParamsDict,
     execution: Execution,
 ): V3dRsfcOutputs {
     const ret: V3dRsfcOutputs = {
@@ -319,7 +319,7 @@ function v_3d_rsfc_outputs(
  * @returns NamedTuple of outputs (described in `V3dRsfcOutputs`).
  */
 function v_3d_rsfc_execute(
-    params: V3dRsfcParameters,
+    params: V3dRsfcParamsDict,
     runner: Runner | null = null,
 ): V3dRsfcOutputs {
     runner = runner || getGlobalRunner();
@@ -403,6 +403,8 @@ function v_3d_rsfc(
 
 export {
       V3dRsfcOutputs,
+      V3dRsfcParamsDict,
+      V3dRsfcParamsDictTagged,
       V_3D_RSFC_METADATA,
       v_3d_rsfc,
       v_3d_rsfc_execute,

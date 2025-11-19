@@ -11,15 +11,15 @@ const FNAME2EXT_METADATA: Metadata = {
 };
 
 
-interface Fname2extParameters {
+interface Fname2extParamsDict {
     "@type"?: "freesurfer/fname2ext";
     "filename": string;
 }
-type Fname2extParametersTagged = Required<Pick<Fname2extParameters, '@type'>> & Fname2extParameters;
+type Fname2extParamsDictTagged = Required<Pick<Fname2extParamsDict, '@type'>> & Fname2extParamsDict;
 
 
 /**
- * Output object returned when calling `Fname2extParameters(...)`.
+ * Output object returned when calling `Fname2extParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface Fname2extOutputs {
  */
 function fname2ext_params(
     filename: string,
-): Fname2extParametersTagged {
+): Fname2extParamsDictTagged {
     const params = {
         "@type": "freesurfer/fname2ext" as const,
         "filename": filename,
@@ -62,7 +62,7 @@ function fname2ext_params(
  * @returns Command-line arguments.
  */
 function fname2ext_cargs(
-    params: Fname2extParameters,
+    params: Fname2extParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function fname2ext_cargs(
  * @returns Outputs object.
  */
 function fname2ext_outputs(
-    params: Fname2extParameters,
+    params: Fname2extParamsDict,
     execution: Execution,
 ): Fname2extOutputs {
     const ret: Fname2extOutputs = {
@@ -107,7 +107,7 @@ function fname2ext_outputs(
  * @returns NamedTuple of outputs (described in `Fname2extOutputs`).
  */
 function fname2ext_execute(
-    params: Fname2extParameters,
+    params: Fname2extParamsDict,
     runner: Runner | null = null,
 ): Fname2extOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function fname2ext(
 export {
       FNAME2EXT_METADATA,
       Fname2extOutputs,
+      Fname2extParamsDict,
+      Fname2extParamsDictTagged,
       fname2ext,
       fname2ext_execute,
       fname2ext_params,

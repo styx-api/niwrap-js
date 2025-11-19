@@ -11,7 +11,7 @@ const ABIDS_TOOL_PY_METADATA: Metadata = {
 };
 
 
-interface AbidsToolPyParameters {
+interface AbidsToolPyParamsDict {
     "@type"?: "afni/abids_tool.py";
     "input_files": Array<InputPathType>;
     "tr_match": boolean;
@@ -20,11 +20,11 @@ interface AbidsToolPyParameters {
     "copy_prefix"?: Array<string> | null | undefined;
     "help_flag": boolean;
 }
-type AbidsToolPyParametersTagged = Required<Pick<AbidsToolPyParameters, '@type'>> & AbidsToolPyParameters;
+type AbidsToolPyParamsDictTagged = Required<Pick<AbidsToolPyParamsDict, '@type'>> & AbidsToolPyParamsDict;
 
 
 /**
- * Output object returned when calling `AbidsToolPyParameters(...)`.
+ * Output object returned when calling `AbidsToolPyParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function abids_tool_py_params(
     add_slice_times: boolean = false,
     copy_prefix: Array<string> | null = null,
     help_flag: boolean = false,
-): AbidsToolPyParametersTagged {
+): AbidsToolPyParamsDictTagged {
     const params = {
         "@type": "afni/abids_tool.py" as const,
         "input_files": input_files,
@@ -80,7 +80,7 @@ function abids_tool_py_params(
  * @returns Command-line arguments.
  */
 function abids_tool_py_cargs(
-    params: AbidsToolPyParameters,
+    params: AbidsToolPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function abids_tool_py_cargs(
  * @returns Outputs object.
  */
 function abids_tool_py_outputs(
-    params: AbidsToolPyParameters,
+    params: AbidsToolPyParamsDict,
     execution: Execution,
 ): AbidsToolPyOutputs {
     const ret: AbidsToolPyOutputs = {
@@ -142,7 +142,7 @@ function abids_tool_py_outputs(
  * @returns NamedTuple of outputs (described in `AbidsToolPyOutputs`).
  */
 function abids_tool_py_execute(
-    params: AbidsToolPyParameters,
+    params: AbidsToolPyParamsDict,
     runner: Runner | null = null,
 ): AbidsToolPyOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function abids_tool_py(
 export {
       ABIDS_TOOL_PY_METADATA,
       AbidsToolPyOutputs,
+      AbidsToolPyParamsDict,
+      AbidsToolPyParamsDictTagged,
       abids_tool_py,
       abids_tool_py_execute,
       abids_tool_py_params,

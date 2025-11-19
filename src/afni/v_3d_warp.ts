@@ -11,7 +11,7 @@ const V_3D_WARP_METADATA: Metadata = {
 };
 
 
-interface V3dWarpParameters {
+interface V3dWarpParamsDict {
     "@type"?: "afni/3dWarp";
     "matvec_in2out"?: InputPathType | null | undefined;
     "matvec_out2in"?: InputPathType | null | undefined;
@@ -36,11 +36,11 @@ interface V3dWarpParameters {
     "prefix"?: string | null | undefined;
     "dataset": string;
 }
-type V3dWarpParametersTagged = Required<Pick<V3dWarpParameters, '@type'>> & V3dWarpParameters;
+type V3dWarpParamsDictTagged = Required<Pick<V3dWarpParamsDict, '@type'>> & V3dWarpParamsDict;
 
 
 /**
- * Output object returned when calling `V3dWarpParameters(...)`.
+ * Output object returned when calling `V3dWarpParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function v_3d_warp_params(
     zpad: number | null = null,
     verb: boolean = false,
     prefix: string | null = null,
-): V3dWarpParametersTagged {
+): V3dWarpParamsDictTagged {
     const params = {
         "@type": "afni/3dWarp" as const,
         "tta2mni": tta2mni,
@@ -160,7 +160,7 @@ function v_3d_warp_params(
  * @returns Command-line arguments.
  */
 function v_3d_warp_cargs(
-    params: V3dWarpParameters,
+    params: V3dWarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -269,7 +269,7 @@ function v_3d_warp_cargs(
  * @returns Outputs object.
  */
 function v_3d_warp_outputs(
-    params: V3dWarpParameters,
+    params: V3dWarpParamsDict,
     execution: Execution,
 ): V3dWarpOutputs {
     const ret: V3dWarpOutputs = {
@@ -294,7 +294,7 @@ function v_3d_warp_outputs(
  * @returns NamedTuple of outputs (described in `V3dWarpOutputs`).
  */
 function v_3d_warp_execute(
-    params: V3dWarpParameters,
+    params: V3dWarpParamsDict,
     runner: Runner | null = null,
 ): V3dWarpOutputs {
     runner = runner || getGlobalRunner();
@@ -374,6 +374,8 @@ function v_3d_warp(
 
 export {
       V3dWarpOutputs,
+      V3dWarpParamsDict,
+      V3dWarpParamsDictTagged,
       V_3D_WARP_METADATA,
       v_3d_warp,
       v_3d_warp_execute,

@@ -11,7 +11,7 @@ const ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA: Metada
 };
 
 
-interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
+interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict {
     "@type"?: "ants/ANTSUseLandmarkImagesToGetBSplineDisplacementField";
     "fixed_image_with_labeled_landmarks": InputPathType;
     "moving_image_with_labeled_landmarks": InputPathType;
@@ -22,11 +22,11 @@ interface AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters {
     "enforce_stationary_boundaries"?: number | null | undefined;
     "landmark_weights"?: InputPathType | null | undefined;
 }
-type AntsuseLandmarkImagesToGetBsplineDisplacementFieldParametersTagged = Required<Pick<AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters, '@type'>> & AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters;
+type AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDictTagged = Required<Pick<AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict, '@type'>> & AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict;
 
 
 /**
- * Output object returned when calling `AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters(...)`.
+ * Output object returned when calling `AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_params(
     order: number | null = null,
     enforce_stationary_boundaries: number | null = null,
     landmark_weights: InputPathType | null = null,
-): AntsuseLandmarkImagesToGetBsplineDisplacementFieldParametersTagged {
+): AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDictTagged {
     const params = {
         "@type": "ants/ANTSUseLandmarkImagesToGetBSplineDisplacementField" as const,
         "fixed_image_with_labeled_landmarks": fixed_image_with_labeled_landmarks,
@@ -96,7 +96,7 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_params(
  * @returns Command-line arguments.
  */
 function antsuse_landmark_images_to_get_bspline_displacement_field_cargs(
-    params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
+    params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_cargs(
  * @returns Outputs object.
  */
 function antsuse_landmark_images_to_get_bspline_displacement_field_outputs(
-    params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
+    params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict,
     execution: Execution,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
     const ret: AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs = {
@@ -154,7 +154,7 @@ function antsuse_landmark_images_to_get_bspline_displacement_field_outputs(
  * @returns NamedTuple of outputs (described in `AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs`).
  */
 function antsuse_landmark_images_to_get_bspline_displacement_field_execute(
-    params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParameters,
+    params: AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict,
     runner: Runner | null = null,
 ): AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs {
     runner = runner || getGlobalRunner();
@@ -207,6 +207,8 @@ function antsuse_landmark_images_to_get_bspline_displacement_field(
 export {
       ANTSUSE_LANDMARK_IMAGES_TO_GET_BSPLINE_DISPLACEMENT_FIELD_METADATA,
       AntsuseLandmarkImagesToGetBsplineDisplacementFieldOutputs,
+      AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDict,
+      AntsuseLandmarkImagesToGetBsplineDisplacementFieldParamsDictTagged,
       antsuse_landmark_images_to_get_bspline_displacement_field,
       antsuse_landmark_images_to_get_bspline_displacement_field_execute,
       antsuse_landmark_images_to_get_bspline_displacement_field_params,

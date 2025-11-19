@@ -11,18 +11,18 @@ const MRIS_FILL_METADATA: Metadata = {
 };
 
 
-interface MrisFillParameters {
+interface MrisFillParamsDict {
     "@type"?: "freesurfer/mris_fill";
     "resolution"?: number | null | undefined;
     "conform": boolean;
     "input_surface": InputPathType;
     "output_volume": string;
 }
-type MrisFillParametersTagged = Required<Pick<MrisFillParameters, '@type'>> & MrisFillParameters;
+type MrisFillParamsDictTagged = Required<Pick<MrisFillParamsDict, '@type'>> & MrisFillParamsDict;
 
 
 /**
- * Output object returned when calling `MrisFillParameters(...)`.
+ * Output object returned when calling `MrisFillParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_fill_params(
     output_volume: string,
     resolution: number | null = null,
     conform: boolean = false,
-): MrisFillParametersTagged {
+): MrisFillParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_fill" as const,
         "conform": conform,
@@ -76,7 +76,7 @@ function mris_fill_params(
  * @returns Command-line arguments.
  */
 function mris_fill_cargs(
-    params: MrisFillParameters,
+    params: MrisFillParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function mris_fill_cargs(
  * @returns Outputs object.
  */
 function mris_fill_outputs(
-    params: MrisFillParameters,
+    params: MrisFillParamsDict,
     execution: Execution,
 ): MrisFillOutputs {
     const ret: MrisFillOutputs = {
@@ -131,7 +131,7 @@ function mris_fill_outputs(
  * @returns NamedTuple of outputs (described in `MrisFillOutputs`).
  */
 function mris_fill_execute(
-    params: MrisFillParameters,
+    params: MrisFillParamsDict,
     runner: Runner | null = null,
 ): MrisFillOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function mris_fill(
 export {
       MRIS_FILL_METADATA,
       MrisFillOutputs,
+      MrisFillParamsDict,
+      MrisFillParamsDictTagged,
       mris_fill,
       mris_fill_execute,
       mris_fill_params,

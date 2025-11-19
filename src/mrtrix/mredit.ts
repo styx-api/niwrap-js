@@ -11,58 +11,58 @@ const MREDIT_METADATA: Metadata = {
 };
 
 
-interface MreditPlaneParameters {
+interface MreditPlaneParamsDict {
     "@type"?: "plane";
     "axis": number;
     "coord": Array<number>;
     "value": number;
 }
-type MreditPlaneParametersTagged = Required<Pick<MreditPlaneParameters, '@type'>> & MreditPlaneParameters;
+type MreditPlaneParamsDictTagged = Required<Pick<MreditPlaneParamsDict, '@type'>> & MreditPlaneParamsDict;
 
 
-interface MreditSphereParameters {
+interface MreditSphereParamsDict {
     "@type"?: "sphere";
     "position": Array<number>;
     "radius": number;
     "value": number;
 }
-type MreditSphereParametersTagged = Required<Pick<MreditSphereParameters, '@type'>> & MreditSphereParameters;
+type MreditSphereParamsDictTagged = Required<Pick<MreditSphereParamsDict, '@type'>> & MreditSphereParamsDict;
 
 
-interface MreditVoxelParameters {
+interface MreditVoxelParamsDict {
     "@type"?: "voxel";
     "position": Array<number>;
     "value": number;
 }
-type MreditVoxelParametersTagged = Required<Pick<MreditVoxelParameters, '@type'>> & MreditVoxelParameters;
+type MreditVoxelParamsDictTagged = Required<Pick<MreditVoxelParamsDict, '@type'>> & MreditVoxelParamsDict;
 
 
-interface MreditConfigParameters {
+interface MreditConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MreditConfigParametersTagged = Required<Pick<MreditConfigParameters, '@type'>> & MreditConfigParameters;
+type MreditConfigParamsDictTagged = Required<Pick<MreditConfigParamsDict, '@type'>> & MreditConfigParamsDict;
 
 
-interface MreditParameters {
+interface MreditParamsDict {
     "@type"?: "mrtrix/mredit";
-    "plane"?: Array<MreditPlaneParameters> | null | undefined;
-    "sphere"?: Array<MreditSphereParameters> | null | undefined;
-    "voxel"?: Array<MreditVoxelParameters> | null | undefined;
+    "plane"?: Array<MreditPlaneParamsDict> | null | undefined;
+    "sphere"?: Array<MreditSphereParamsDict> | null | undefined;
+    "voxel"?: Array<MreditVoxelParamsDict> | null | undefined;
     "scanner": boolean;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MreditConfigParameters> | null | undefined;
+    "config"?: Array<MreditConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-type MreditParametersTagged = Required<Pick<MreditParameters, '@type'>> & MreditParameters;
+type MreditParamsDictTagged = Required<Pick<MreditParamsDict, '@type'>> & MreditParamsDict;
 
 
 /**
@@ -74,11 +74,11 @@ type MreditParametersTagged = Required<Pick<MreditParameters, '@type'>> & Mredit
  *
  * @returns Parameter dictionary
  */
-function mredit_plane_params(
+function mredit_plane(
     axis: number,
     coord: Array<number>,
     value: number,
-): MreditPlaneParametersTagged {
+): MreditPlaneParamsDictTagged {
     const params = {
         "@type": "plane" as const,
         "axis": axis,
@@ -98,7 +98,7 @@ function mredit_plane_params(
  * @returns Command-line arguments.
  */
 function mredit_plane_cargs(
-    params: MreditPlaneParameters,
+    params: MreditPlaneParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,11 +119,11 @@ function mredit_plane_cargs(
  *
  * @returns Parameter dictionary
  */
-function mredit_sphere_params(
+function mredit_sphere(
     position: Array<number>,
     radius: number,
     value: number,
-): MreditSphereParametersTagged {
+): MreditSphereParamsDictTagged {
     const params = {
         "@type": "sphere" as const,
         "position": position,
@@ -143,7 +143,7 @@ function mredit_sphere_params(
  * @returns Command-line arguments.
  */
 function mredit_sphere_cargs(
-    params: MreditSphereParameters,
+    params: MreditSphereParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -163,10 +163,10 @@ function mredit_sphere_cargs(
  *
  * @returns Parameter dictionary
  */
-function mredit_voxel_params(
+function mredit_voxel(
     position: Array<number>,
     value: number,
-): MreditVoxelParametersTagged {
+): MreditVoxelParamsDictTagged {
     const params = {
         "@type": "voxel" as const,
         "position": position,
@@ -185,7 +185,7 @@ function mredit_voxel_params(
  * @returns Command-line arguments.
  */
 function mredit_voxel_cargs(
-    params: MreditVoxelParameters,
+    params: MreditVoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,10 +204,10 @@ function mredit_voxel_cargs(
  *
  * @returns Parameter dictionary
  */
-function mredit_config_params(
+function mredit_config(
     key: string,
     value: string,
-): MreditConfigParametersTagged {
+): MreditConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -226,7 +226,7 @@ function mredit_config_params(
  * @returns Command-line arguments.
  */
 function mredit_config_cargs(
-    params: MreditConfigParameters,
+    params: MreditConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -238,7 +238,7 @@ function mredit_config_cargs(
 
 
 /**
- * Output object returned when calling `MreditParameters(...)`.
+ * Output object returned when calling `MreditParamsDict(...)`.
  *
  * @interface
  */
@@ -276,20 +276,20 @@ interface MreditOutputs {
  */
 function mredit_params(
     input: InputPathType,
-    plane: Array<MreditPlaneParameters> | null = null,
-    sphere: Array<MreditSphereParameters> | null = null,
-    voxel: Array<MreditVoxelParameters> | null = null,
+    plane: Array<MreditPlaneParamsDict> | null = null,
+    sphere: Array<MreditSphereParamsDict> | null = null,
+    voxel: Array<MreditVoxelParamsDict> | null = null,
     scanner: boolean = false,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MreditConfigParameters> | null = null,
+    config: Array<MreditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MreditParametersTagged {
+): MreditParamsDictTagged {
     const params = {
         "@type": "mrtrix/mredit" as const,
         "scanner": scanner,
@@ -332,7 +332,7 @@ function mredit_params(
  * @returns Command-line arguments.
  */
 function mredit_cargs(
-    params: MreditParameters,
+    params: MreditParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -393,7 +393,7 @@ function mredit_cargs(
  * @returns Outputs object.
  */
 function mredit_outputs(
-    params: MreditParameters,
+    params: MreditParamsDict,
     execution: Execution,
 ): MreditOutputs {
     const ret: MreditOutputs = {
@@ -425,7 +425,7 @@ function mredit_outputs(
  * @returns NamedTuple of outputs (described in `MreditOutputs`).
  */
 function mredit_execute(
-    params: MreditParameters,
+    params: MreditParamsDict,
     runner: Runner | null = null,
 ): MreditOutputs {
     runner = runner || getGlobalRunner();
@@ -473,16 +473,16 @@ function mredit_execute(
  */
 function mredit(
     input: InputPathType,
-    plane: Array<MreditPlaneParameters> | null = null,
-    sphere: Array<MreditSphereParameters> | null = null,
-    voxel: Array<MreditVoxelParameters> | null = null,
+    plane: Array<MreditPlaneParamsDict> | null = null,
+    sphere: Array<MreditSphereParamsDict> | null = null,
+    voxel: Array<MreditVoxelParamsDict> | null = null,
     scanner: boolean = false,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MreditConfigParameters> | null = null,
+    config: Array<MreditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
@@ -495,12 +495,22 @@ function mredit(
 
 export {
       MREDIT_METADATA,
+      MreditConfigParamsDict,
+      MreditConfigParamsDictTagged,
       MreditOutputs,
+      MreditParamsDict,
+      MreditParamsDictTagged,
+      MreditPlaneParamsDict,
+      MreditPlaneParamsDictTagged,
+      MreditSphereParamsDict,
+      MreditSphereParamsDictTagged,
+      MreditVoxelParamsDict,
+      MreditVoxelParamsDictTagged,
       mredit,
-      mredit_config_params,
+      mredit_config,
       mredit_execute,
       mredit_params,
-      mredit_plane_params,
-      mredit_sphere_params,
-      mredit_voxel_params,
+      mredit_plane,
+      mredit_sphere,
+      mredit_voxel,
 };

@@ -11,7 +11,7 @@ const FS_TIME_METADATA: Metadata = {
 };
 
 
-interface FsTimeParameters {
+interface FsTimeParamsDict {
     "@type"?: "freesurfer/fs_time";
     "output_file"?: string | null | undefined;
     "key"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface FsTimeParameters {
     "command": string;
     "args"?: Array<string> | null | undefined;
 }
-type FsTimeParametersTagged = Required<Pick<FsTimeParameters, '@type'>> & FsTimeParameters;
+type FsTimeParamsDictTagged = Required<Pick<FsTimeParamsDict, '@type'>> & FsTimeParamsDict;
 
 
 /**
- * Output object returned when calling `FsTimeParameters(...)`.
+ * Output object returned when calling `FsTimeParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function fs_time_params(
     key: string | null = null,
     load_avg: boolean = false,
     args: Array<string> | null = null,
-): FsTimeParametersTagged {
+): FsTimeParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_time" as const,
         "load_avg": load_avg,
@@ -84,7 +84,7 @@ function fs_time_params(
  * @returns Command-line arguments.
  */
 function fs_time_cargs(
-    params: FsTimeParameters,
+    params: FsTimeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function fs_time_cargs(
  * @returns Outputs object.
  */
 function fs_time_outputs(
-    params: FsTimeParameters,
+    params: FsTimeParamsDict,
     execution: Execution,
 ): FsTimeOutputs {
     const ret: FsTimeOutputs = {
@@ -147,7 +147,7 @@ function fs_time_outputs(
  * @returns NamedTuple of outputs (described in `FsTimeOutputs`).
  */
 function fs_time_execute(
-    params: FsTimeParameters,
+    params: FsTimeParamsDict,
     runner: Runner | null = null,
 ): FsTimeOutputs {
     runner = runner || getGlobalRunner();
@@ -194,6 +194,8 @@ function fs_time(
 export {
       FS_TIME_METADATA,
       FsTimeOutputs,
+      FsTimeParamsDict,
+      FsTimeParamsDictTagged,
       fs_time,
       fs_time_execute,
       fs_time_params,

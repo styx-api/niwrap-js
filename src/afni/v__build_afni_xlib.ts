@@ -11,7 +11,7 @@ const V__BUILD_AFNI_XLIB_METADATA: Metadata = {
 };
 
 
-interface VBuildAfniXlibParameters {
+interface VBuildAfniXlibParamsDict {
     "@type"?: "afni/@build_afni_Xlib";
     "afniX": boolean;
     "localinstall": boolean;
@@ -20,11 +20,11 @@ interface VBuildAfniXlibParameters {
     "lib64": boolean;
     "packages": Array<string>;
 }
-type VBuildAfniXlibParametersTagged = Required<Pick<VBuildAfniXlibParameters, '@type'>> & VBuildAfniXlibParameters;
+type VBuildAfniXlibParamsDictTagged = Required<Pick<VBuildAfniXlibParamsDict, '@type'>> & VBuildAfniXlibParamsDict;
 
 
 /**
- * Output object returned when calling `VBuildAfniXlibParameters(...)`.
+ * Output object returned when calling `VBuildAfniXlibParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function v__build_afni_xlib_params(
     debug_symbols: boolean = false,
     lib32: boolean = false,
     lib64: boolean = false,
-): VBuildAfniXlibParametersTagged {
+): VBuildAfniXlibParamsDictTagged {
     const params = {
         "@type": "afni/@build_afni_Xlib" as const,
         "afniX": afni_x,
@@ -78,7 +78,7 @@ function v__build_afni_xlib_params(
  * @returns Command-line arguments.
  */
 function v__build_afni_xlib_cargs(
-    params: VBuildAfniXlibParameters,
+    params: VBuildAfniXlibParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function v__build_afni_xlib_cargs(
  * @returns Outputs object.
  */
 function v__build_afni_xlib_outputs(
-    params: VBuildAfniXlibParameters,
+    params: VBuildAfniXlibParamsDict,
     execution: Execution,
 ): VBuildAfniXlibOutputs {
     const ret: VBuildAfniXlibOutputs = {
@@ -137,7 +137,7 @@ function v__build_afni_xlib_outputs(
  * @returns NamedTuple of outputs (described in `VBuildAfniXlibOutputs`).
  */
 function v__build_afni_xlib_execute(
-    params: VBuildAfniXlibParameters,
+    params: VBuildAfniXlibParamsDict,
     runner: Runner | null = null,
 ): VBuildAfniXlibOutputs {
     runner = runner || getGlobalRunner();
@@ -185,6 +185,8 @@ function v__build_afni_xlib(
 
 export {
       VBuildAfniXlibOutputs,
+      VBuildAfniXlibParamsDict,
+      VBuildAfniXlibParamsDictTagged,
       V__BUILD_AFNI_XLIB_METADATA,
       v__build_afni_xlib,
       v__build_afni_xlib_execute,

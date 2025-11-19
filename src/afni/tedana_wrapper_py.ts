@@ -11,7 +11,7 @@ const TEDANA_WRAPPER_PY_METADATA: Metadata = {
 };
 
 
-interface TedanaWrapperPyParameters {
+interface TedanaWrapperPyParamsDict {
     "@type"?: "afni/tedana_wrapper.py";
     "input_files": Array<InputPathType>;
     "echo_times": Array<number>;
@@ -27,11 +27,11 @@ interface TedanaWrapperPyParameters {
     "help": boolean;
     "detailed_help": boolean;
 }
-type TedanaWrapperPyParametersTagged = Required<Pick<TedanaWrapperPyParameters, '@type'>> & TedanaWrapperPyParameters;
+type TedanaWrapperPyParamsDictTagged = Required<Pick<TedanaWrapperPyParamsDict, '@type'>> & TedanaWrapperPyParamsDict;
 
 
 /**
- * Output object returned when calling `TedanaWrapperPyParameters(...)`.
+ * Output object returned when calling `TedanaWrapperPyParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function tedana_wrapper_py_params(
     tedana_opts: string | null = null,
     help: boolean = false,
     detailed_help: boolean = false,
-): TedanaWrapperPyParametersTagged {
+): TedanaWrapperPyParamsDictTagged {
     const params = {
         "@type": "afni/tedana_wrapper.py" as const,
         "input_files": input_files,
@@ -124,7 +124,7 @@ function tedana_wrapper_py_params(
  * @returns Command-line arguments.
  */
 function tedana_wrapper_py_cargs(
-    params: TedanaWrapperPyParameters,
+    params: TedanaWrapperPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,7 +199,7 @@ function tedana_wrapper_py_cargs(
  * @returns Outputs object.
  */
 function tedana_wrapper_py_outputs(
-    params: TedanaWrapperPyParameters,
+    params: TedanaWrapperPyParamsDict,
     execution: Execution,
 ): TedanaWrapperPyOutputs {
     const ret: TedanaWrapperPyOutputs = {
@@ -226,7 +226,7 @@ function tedana_wrapper_py_outputs(
  * @returns NamedTuple of outputs (described in `TedanaWrapperPyOutputs`).
  */
 function tedana_wrapper_py_execute(
-    params: TedanaWrapperPyParameters,
+    params: TedanaWrapperPyParamsDict,
     runner: Runner | null = null,
 ): TedanaWrapperPyOutputs {
     runner = runner || getGlobalRunner();
@@ -289,6 +289,8 @@ function tedana_wrapper_py(
 export {
       TEDANA_WRAPPER_PY_METADATA,
       TedanaWrapperPyOutputs,
+      TedanaWrapperPyParamsDict,
+      TedanaWrapperPyParamsDictTagged,
       tedana_wrapper_py,
       tedana_wrapper_py_execute,
       tedana_wrapper_py_params,

@@ -11,7 +11,7 @@ const V_3D_POLYFIT_METADATA: Metadata = {
 };
 
 
-interface V3dPolyfitParameters {
+interface V3dPolyfitParamsDict {
     "@type"?: "afni/3dPolyfit";
     "input_dataset": InputPathType;
     "poly_order"?: number | null | undefined;
@@ -28,11 +28,11 @@ interface V3dPolyfitParameters {
     "base_dataset"?: InputPathType | null | undefined;
     "verbose": boolean;
 }
-type V3dPolyfitParametersTagged = Required<Pick<V3dPolyfitParameters, '@type'>> & V3dPolyfitParameters;
+type V3dPolyfitParamsDictTagged = Required<Pick<V3dPolyfitParamsDict, '@type'>> & V3dPolyfitParamsDict;
 
 
 /**
- * Output object returned when calling `V3dPolyfitParameters(...)`.
+ * Output object returned when calling `V3dPolyfitParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function v_3d_polyfit_params(
     fit_method: number | null = null,
     base_dataset: InputPathType | null = null,
     verbose: boolean = false,
-): V3dPolyfitParametersTagged {
+): V3dPolyfitParamsDictTagged {
     const params = {
         "@type": "afni/3dPolyfit" as const,
         "input_dataset": input_dataset,
@@ -140,7 +140,7 @@ function v_3d_polyfit_params(
  * @returns Command-line arguments.
  */
 function v_3d_polyfit_cargs(
-    params: V3dPolyfitParameters,
+    params: V3dPolyfitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -225,7 +225,7 @@ function v_3d_polyfit_cargs(
  * @returns Outputs object.
  */
 function v_3d_polyfit_outputs(
-    params: V3dPolyfitParameters,
+    params: V3dPolyfitParamsDict,
     execution: Execution,
 ): V3dPolyfitOutputs {
     const ret: V3dPolyfitOutputs = {
@@ -253,7 +253,7 @@ function v_3d_polyfit_outputs(
  * @returns NamedTuple of outputs (described in `V3dPolyfitOutputs`).
  */
 function v_3d_polyfit_execute(
-    params: V3dPolyfitParameters,
+    params: V3dPolyfitParamsDict,
     runner: Runner | null = null,
 ): V3dPolyfitOutputs {
     runner = runner || getGlobalRunner();
@@ -317,6 +317,8 @@ function v_3d_polyfit(
 
 export {
       V3dPolyfitOutputs,
+      V3dPolyfitParamsDict,
+      V3dPolyfitParamsDictTagged,
       V_3D_POLYFIT_METADATA,
       v_3d_polyfit,
       v_3d_polyfit_execute,

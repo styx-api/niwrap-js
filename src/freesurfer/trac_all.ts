@@ -11,7 +11,7 @@ const TRAC_ALL_METADATA: Metadata = {
 };
 
 
-interface TracAllParameters {
+interface TracAllParamsDict {
     "@type"?: "freesurfer/trac-all";
     "config_file"?: InputPathType | null | undefined;
     "subject_name"?: string | null | undefined;
@@ -48,11 +48,11 @@ interface TracAllParameters {
     "version_info": boolean;
     "help": boolean;
 }
-type TracAllParametersTagged = Required<Pick<TracAllParameters, '@type'>> & TracAllParameters;
+type TracAllParamsDictTagged = Required<Pick<TracAllParamsDict, '@type'>> & TracAllParamsDict;
 
 
 /**
- * Output object returned when calling `TracAllParameters(...)`.
+ * Output object returned when calling `TracAllParamsDict(...)`.
  *
  * @interface
  */
@@ -147,7 +147,7 @@ function trac_all_params(
     only_versions: boolean = false,
     version_info: boolean = false,
     help: boolean = false,
-): TracAllParametersTagged {
+): TracAllParamsDictTagged {
     const params = {
         "@type": "freesurfer/trac-all" as const,
         "pre_processing": pre_processing,
@@ -216,7 +216,7 @@ function trac_all_params(
  * @returns Command-line arguments.
  */
 function trac_all_cargs(
-    params: TracAllParameters,
+    params: TracAllParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -363,7 +363,7 @@ function trac_all_cargs(
  * @returns Outputs object.
  */
 function trac_all_outputs(
-    params: TracAllParameters,
+    params: TracAllParamsDict,
     execution: Execution,
 ): TracAllOutputs {
     const ret: TracAllOutputs = {
@@ -390,7 +390,7 @@ function trac_all_outputs(
  * @returns NamedTuple of outputs (described in `TracAllOutputs`).
  */
 function trac_all_execute(
-    params: TracAllParameters,
+    params: TracAllParamsDict,
     runner: Runner | null = null,
 ): TracAllOutputs {
     runner = runner || getGlobalRunner();
@@ -495,6 +495,8 @@ function trac_all(
 export {
       TRAC_ALL_METADATA,
       TracAllOutputs,
+      TracAllParamsDict,
+      TracAllParamsDictTagged,
       trac_all,
       trac_all_execute,
       trac_all_params,

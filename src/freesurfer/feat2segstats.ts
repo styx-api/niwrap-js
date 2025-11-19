@@ -11,7 +11,7 @@ const FEAT2SEGSTATS_METADATA: Metadata = {
 };
 
 
-interface Feat2segstatsParameters {
+interface Feat2segstatsParamsDict {
     "@type"?: "freesurfer/feat2segstats";
     "feat_dir": string;
     "featdirfile"?: InputPathType | null | undefined;
@@ -34,11 +34,11 @@ interface Feat2segstatsParameters {
     "debug_flag": boolean;
     "nolog_flag": boolean;
 }
-type Feat2segstatsParametersTagged = Required<Pick<Feat2segstatsParameters, '@type'>> & Feat2segstatsParameters;
+type Feat2segstatsParamsDictTagged = Required<Pick<Feat2segstatsParamsDict, '@type'>> & Feat2segstatsParamsDict;
 
 
 /**
- * Output object returned when calling `Feat2segstatsParameters(...)`.
+ * Output object returned when calling `Feat2segstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -101,7 +101,7 @@ function feat2segstats_params(
     help_flag: boolean = false,
     debug_flag: boolean = false,
     nolog_flag: boolean = false,
-): Feat2segstatsParametersTagged {
+): Feat2segstatsParamsDictTagged {
     const params = {
         "@type": "freesurfer/feat2segstats" as const,
         "feat_dir": feat_dir,
@@ -152,7 +152,7 @@ function feat2segstats_params(
  * @returns Command-line arguments.
  */
 function feat2segstats_cargs(
-    params: Feat2segstatsParameters,
+    params: Feat2segstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -253,7 +253,7 @@ function feat2segstats_cargs(
  * @returns Outputs object.
  */
 function feat2segstats_outputs(
-    params: Feat2segstatsParameters,
+    params: Feat2segstatsParamsDict,
     execution: Execution,
 ): Feat2segstatsOutputs {
     const ret: Feat2segstatsOutputs = {
@@ -279,7 +279,7 @@ function feat2segstats_outputs(
  * @returns NamedTuple of outputs (described in `Feat2segstatsOutputs`).
  */
 function feat2segstats_execute(
-    params: Feat2segstatsParameters,
+    params: Feat2segstatsParamsDict,
     runner: Runner | null = null,
 ): Feat2segstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -356,6 +356,8 @@ function feat2segstats(
 export {
       FEAT2SEGSTATS_METADATA,
       Feat2segstatsOutputs,
+      Feat2segstatsParamsDict,
+      Feat2segstatsParamsDictTagged,
       feat2segstats,
       feat2segstats_execute,
       feat2segstats_params,

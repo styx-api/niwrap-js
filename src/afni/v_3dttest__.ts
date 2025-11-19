@@ -11,7 +11,7 @@ const V_3DTTEST___METADATA: Metadata = {
 };
 
 
-interface V3dttestParameters {
+interface V3dttestParamsDict {
     "@type"?: "afni/3dttest++";
     "setA": Array<string>;
     "setB"?: Array<string> | null | undefined;
@@ -35,11 +35,11 @@ interface V3dttestParameters {
     "ETAC_opt"?: Array<string> | null | undefined;
     "seed"?: number | null | undefined;
 }
-type V3dttestParametersTagged = Required<Pick<V3dttestParameters, '@type'>> & V3dttestParameters;
+type V3dttestParamsDictTagged = Required<Pick<V3dttestParamsDict, '@type'>> & V3dttestParamsDict;
 
 
 /**
- * Output object returned when calling `V3dttestParameters(...)`.
+ * Output object returned when calling `V3dttestParamsDict(...)`.
  *
  * @interface
  */
@@ -108,7 +108,7 @@ function v_3dttest___params(
     etac_blur: Array<number> | null = null,
     etac_opt: Array<string> | null = null,
     seed: number | null = null,
-): V3dttestParametersTagged {
+): V3dttestParamsDictTagged {
     const params = {
         "@type": "afni/3dttest++" as const,
         "setA": set_a,
@@ -176,7 +176,7 @@ function v_3dttest___params(
  * @returns Command-line arguments.
  */
 function v_3dttest___cargs(
-    params: V3dttestParameters,
+    params: V3dttestParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -303,7 +303,7 @@ function v_3dttest___cargs(
  * @returns Outputs object.
  */
 function v_3dttest___outputs(
-    params: V3dttestParameters,
+    params: V3dttestParamsDict,
     execution: Execution,
 ): V3dttestOutputs {
     const ret: V3dttestOutputs = {
@@ -330,7 +330,7 @@ function v_3dttest___outputs(
  * @returns NamedTuple of outputs (described in `V3dttestOutputs`).
  */
 function v_3dttest___execute(
-    params: V3dttestParameters,
+    params: V3dttestParamsDict,
     runner: Runner | null = null,
 ): V3dttestOutputs {
     runner = runner || getGlobalRunner();
@@ -408,6 +408,8 @@ function v_3dttest__(
 
 export {
       V3dttestOutputs,
+      V3dttestParamsDict,
+      V3dttestParamsDictTagged,
       V_3DTTEST___METADATA,
       v_3dttest__,
       v_3dttest___execute,

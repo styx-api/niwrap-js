@@ -10,7 +10,7 @@ const LABEL_TO_BORDER_METADATA: Metadata = {
 };
 
 
-interface LabelToBorderParameters {
+interface LabelToBorderParamsDict {
     "@type"?: "workbench/label-to-border";
     "border-out": string;
     "fraction"?: number | null | undefined;
@@ -18,11 +18,11 @@ interface LabelToBorderParameters {
     "surface": InputPathType;
     "label-in": InputPathType;
 }
-type LabelToBorderParametersTagged = Required<Pick<LabelToBorderParameters, '@type'>> & LabelToBorderParameters;
+type LabelToBorderParamsDictTagged = Required<Pick<LabelToBorderParamsDict, '@type'>> & LabelToBorderParamsDict;
 
 
 /**
- * Output object returned when calling `LabelToBorderParameters(...)`.
+ * Output object returned when calling `LabelToBorderParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function label_to_border_params(
     column: string | null,
     surface: InputPathType,
     label_in: InputPathType,
-): LabelToBorderParametersTagged {
+): LabelToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/label-to-border" as const,
         "border-out": border_out,
@@ -85,7 +85,7 @@ function label_to_border_params(
  * @returns Command-line arguments.
  */
 function label_to_border_cargs(
-    params: LabelToBorderParameters,
+    params: LabelToBorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function label_to_border_cargs(
  * @returns Outputs object.
  */
 function label_to_border_outputs(
-    params: LabelToBorderParameters,
+    params: LabelToBorderParamsDict,
     execution: Execution,
 ): LabelToBorderOutputs {
     const ret: LabelToBorderOutputs = {
@@ -137,7 +137,7 @@ function label_to_border_outputs(
  * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
  */
 function label_to_border_execute(
-    params: LabelToBorderParameters,
+    params: LabelToBorderParamsDict,
     runner: Runner | null = null,
 ): LabelToBorderOutputs {
     runner = runner || getGlobalRunner();
@@ -184,6 +184,8 @@ function label_to_border(
 export {
       LABEL_TO_BORDER_METADATA,
       LabelToBorderOutputs,
+      LabelToBorderParamsDict,
+      LabelToBorderParamsDictTagged,
       label_to_border,
       label_to_border_execute,
       label_to_border_params,

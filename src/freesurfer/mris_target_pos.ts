@@ -11,7 +11,7 @@ const MRIS_TARGET_POS_METADATA: Metadata = {
 };
 
 
-interface MrisTargetPosParameters {
+interface MrisTargetPosParamsDict {
     "@type"?: "freesurfer/mris_target_pos";
     "input_volume": InputPathType;
     "input_surface": InputPathType;
@@ -27,11 +27,11 @@ interface MrisTargetPosParameters {
     "help_flag": boolean;
     "version_flag": boolean;
 }
-type MrisTargetPosParametersTagged = Required<Pick<MrisTargetPosParameters, '@type'>> & MrisTargetPosParameters;
+type MrisTargetPosParamsDictTagged = Required<Pick<MrisTargetPosParamsDict, '@type'>> & MrisTargetPosParamsDict;
 
 
 /**
- * Output object returned when calling `MrisTargetPosParameters(...)`.
+ * Output object returned when calling `MrisTargetPosParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function mris_target_pos_params(
     check_options: boolean = false,
     help_flag: boolean = false,
     version_flag: boolean = false,
-): MrisTargetPosParametersTagged {
+): MrisTargetPosParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_target_pos" as const,
         "input_volume": input_volume,
@@ -114,7 +114,7 @@ function mris_target_pos_params(
  * @returns Command-line arguments.
  */
 function mris_target_pos_cargs(
-    params: MrisTargetPosParameters,
+    params: MrisTargetPosParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -187,7 +187,7 @@ function mris_target_pos_cargs(
  * @returns Outputs object.
  */
 function mris_target_pos_outputs(
-    params: MrisTargetPosParameters,
+    params: MrisTargetPosParamsDict,
     execution: Execution,
 ): MrisTargetPosOutputs {
     const ret: MrisTargetPosOutputs = {
@@ -212,7 +212,7 @@ function mris_target_pos_outputs(
  * @returns NamedTuple of outputs (described in `MrisTargetPosOutputs`).
  */
 function mris_target_pos_execute(
-    params: MrisTargetPosParameters,
+    params: MrisTargetPosParamsDict,
     runner: Runner | null = null,
 ): MrisTargetPosOutputs {
     runner = runner || getGlobalRunner();
@@ -275,6 +275,8 @@ function mris_target_pos(
 export {
       MRIS_TARGET_POS_METADATA,
       MrisTargetPosOutputs,
+      MrisTargetPosParamsDict,
+      MrisTargetPosParamsDictTagged,
       mris_target_pos,
       mris_target_pos_execute,
       mris_target_pos_params,

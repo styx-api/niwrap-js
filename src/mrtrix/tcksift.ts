@@ -11,15 +11,15 @@ const TCKSIFT_METADATA: Metadata = {
 };
 
 
-interface TcksiftConfigParameters {
+interface TcksiftConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TcksiftConfigParametersTagged = Required<Pick<TcksiftConfigParameters, '@type'>> & TcksiftConfigParameters;
+type TcksiftConfigParamsDictTagged = Required<Pick<TcksiftConfigParamsDict, '@type'>> & TcksiftConfigParamsDict;
 
 
-interface TcksiftParameters {
+interface TcksiftParamsDict {
     "@type"?: "mrtrix/tcksift";
     "nofilter": boolean;
     "output_at_counts"?: Array<number> | null | undefined;
@@ -42,14 +42,14 @@ interface TcksiftParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TcksiftConfigParameters> | null | undefined;
+    "config"?: Array<TcksiftConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "in_tracks": InputPathType;
     "in_fod": InputPathType;
     "out_tracks": string;
 }
-type TcksiftParametersTagged = Required<Pick<TcksiftParameters, '@type'>> & TcksiftParameters;
+type TcksiftParamsDictTagged = Required<Pick<TcksiftParamsDict, '@type'>> & TcksiftParamsDict;
 
 
 /**
@@ -60,10 +60,10 @@ type TcksiftParametersTagged = Required<Pick<TcksiftParameters, '@type'>> & Tcks
  *
  * @returns Parameter dictionary
  */
-function tcksift_config_params(
+function tcksift_config(
     key: string,
     value: string,
-): TcksiftConfigParametersTagged {
+): TcksiftConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -82,7 +82,7 @@ function tcksift_config_params(
  * @returns Command-line arguments.
  */
 function tcksift_config_cargs(
-    params: TcksiftConfigParameters,
+    params: TcksiftConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function tcksift_config_cargs(
 
 
 /**
- * Output object returned when calling `TcksiftParameters(...)`.
+ * Output object returned when calling `TcksiftParamsDict(...)`.
  *
  * @interface
  */
@@ -181,10 +181,10 @@ function tcksift_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TcksiftConfigParameters> | null = null,
+    config: Array<TcksiftConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TcksiftParametersTagged {
+): TcksiftParamsDictTagged {
     const params = {
         "@type": "mrtrix/tcksift" as const,
         "nofilter": nofilter,
@@ -252,7 +252,7 @@ function tcksift_params(
  * @returns Command-line arguments.
  */
 function tcksift_cargs(
-    params: TcksiftParameters,
+    params: TcksiftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -378,7 +378,7 @@ function tcksift_cargs(
  * @returns Outputs object.
  */
 function tcksift_outputs(
-    params: TcksiftParameters,
+    params: TcksiftParamsDict,
     execution: Execution,
 ): TcksiftOutputs {
     const ret: TcksiftOutputs = {
@@ -413,7 +413,7 @@ function tcksift_outputs(
  * @returns NamedTuple of outputs (described in `TcksiftOutputs`).
  */
 function tcksift_execute(
-    params: TcksiftParameters,
+    params: TcksiftParamsDict,
     runner: Runner | null = null,
 ): TcksiftOutputs {
     runner = runner || getGlobalRunner();
@@ -498,7 +498,7 @@ function tcksift(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TcksiftConfigParameters> | null = null,
+    config: Array<TcksiftConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -510,9 +510,13 @@ function tcksift(
 
 export {
       TCKSIFT_METADATA,
+      TcksiftConfigParamsDict,
+      TcksiftConfigParamsDictTagged,
       TcksiftOutputs,
+      TcksiftParamsDict,
+      TcksiftParamsDictTagged,
       tcksift,
-      tcksift_config_params,
+      tcksift_config,
       tcksift_execute,
       tcksift_params,
 };

@@ -11,7 +11,7 @@ const MRI_BINARIZE_METADATA: Metadata = {
 };
 
 
-interface MriBinarizeParameters {
+interface MriBinarizeParamsDict {
     "@type"?: "freesurfer/mri_binarize";
     "input_volume": InputPathType;
     "output_volume": string;
@@ -48,11 +48,11 @@ interface MriBinarizeParameters {
     "noverbose_flag": boolean;
     "debug_flag": boolean;
 }
-type MriBinarizeParametersTagged = Required<Pick<MriBinarizeParameters, '@type'>> & MriBinarizeParameters;
+type MriBinarizeParamsDictTagged = Required<Pick<MriBinarizeParamsDict, '@type'>> & MriBinarizeParamsDict;
 
 
 /**
- * Output object returned when calling `MriBinarizeParameters(...)`.
+ * Output object returned when calling `MriBinarizeParamsDict(...)`.
  *
  * @interface
  */
@@ -143,7 +143,7 @@ function mri_binarize_params(
     fill_holes_flag: boolean = false,
     noverbose_flag: boolean = false,
     debug_flag: boolean = false,
-): MriBinarizeParametersTagged {
+): MriBinarizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_binarize" as const,
         "input_volume": input_volume,
@@ -230,7 +230,7 @@ function mri_binarize_params(
  * @returns Command-line arguments.
  */
 function mri_binarize_cargs(
-    params: MriBinarizeParameters,
+    params: MriBinarizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -406,7 +406,7 @@ function mri_binarize_cargs(
  * @returns Outputs object.
  */
 function mri_binarize_outputs(
-    params: MriBinarizeParameters,
+    params: MriBinarizeParamsDict,
     execution: Execution,
 ): MriBinarizeOutputs {
     const ret: MriBinarizeOutputs = {
@@ -432,7 +432,7 @@ function mri_binarize_outputs(
  * @returns NamedTuple of outputs (described in `MriBinarizeOutputs`).
  */
 function mri_binarize_execute(
-    params: MriBinarizeParameters,
+    params: MriBinarizeParamsDict,
     runner: Runner | null = null,
 ): MriBinarizeOutputs {
     runner = runner || getGlobalRunner();
@@ -537,6 +537,8 @@ function mri_binarize(
 export {
       MRI_BINARIZE_METADATA,
       MriBinarizeOutputs,
+      MriBinarizeParamsDict,
+      MriBinarizeParamsDictTagged,
       mri_binarize,
       mri_binarize_execute,
       mri_binarize_params,

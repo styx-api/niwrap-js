@@ -11,7 +11,7 @@ const SIGNAL2IMAGE_METADATA: Metadata = {
 };
 
 
-interface Signal2imageParameters {
+interface Signal2imageParamsDict {
     "@type"?: "fsl/signal2image";
     "pulse_sequence": InputPathType;
     "input_signal"?: InputPathType | null | undefined;
@@ -27,11 +27,11 @@ interface Signal2imageParameters {
     "save_flag": boolean;
     "help_flag": boolean;
 }
-type Signal2imageParametersTagged = Required<Pick<Signal2imageParameters, '@type'>> & Signal2imageParameters;
+type Signal2imageParamsDictTagged = Required<Pick<Signal2imageParamsDict, '@type'>> & Signal2imageParamsDict;
 
 
 /**
- * Output object returned when calling `Signal2imageParameters(...)`.
+ * Output object returned when calling `Signal2imageParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function signal2image_params(
     rolloff: number | null = null,
     save_flag: boolean = false,
     help_flag: boolean = false,
-): Signal2imageParametersTagged {
+): Signal2imageParamsDictTagged {
     const params = {
         "@type": "fsl/signal2image" as const,
         "pulse_sequence": pulse_sequence,
@@ -126,7 +126,7 @@ function signal2image_params(
  * @returns Command-line arguments.
  */
 function signal2image_cargs(
-    params: Signal2imageParameters,
+    params: Signal2imageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -202,7 +202,7 @@ function signal2image_cargs(
  * @returns Outputs object.
  */
 function signal2image_outputs(
-    params: Signal2imageParameters,
+    params: Signal2imageParamsDict,
     execution: Execution,
 ): Signal2imageOutputs {
     const ret: Signal2imageOutputs = {
@@ -229,7 +229,7 @@ function signal2image_outputs(
  * @returns NamedTuple of outputs (described in `Signal2imageOutputs`).
  */
 function signal2image_execute(
-    params: Signal2imageParameters,
+    params: Signal2imageParamsDict,
     runner: Runner | null = null,
 ): Signal2imageOutputs {
     runner = runner || getGlobalRunner();
@@ -292,6 +292,8 @@ function signal2image(
 export {
       SIGNAL2IMAGE_METADATA,
       Signal2imageOutputs,
+      Signal2imageParamsDict,
+      Signal2imageParamsDictTagged,
       signal2image,
       signal2image_execute,
       signal2image_params,

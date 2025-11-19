@@ -11,15 +11,15 @@ const V__STATAUXCODE_METADATA: Metadata = {
 };
 
 
-interface VStatauxcodeParameters {
+interface VStatauxcodeParamsDict {
     "@type"?: "afni/@statauxcode";
     "code": string;
 }
-type VStatauxcodeParametersTagged = Required<Pick<VStatauxcodeParameters, '@type'>> & VStatauxcodeParameters;
+type VStatauxcodeParamsDictTagged = Required<Pick<VStatauxcodeParamsDict, '@type'>> & VStatauxcodeParamsDict;
 
 
 /**
- * Output object returned when calling `VStatauxcodeParameters(...)`.
+ * Output object returned when calling `VStatauxcodeParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VStatauxcodeOutputs {
  */
 function v__statauxcode_params(
     code: string,
-): VStatauxcodeParametersTagged {
+): VStatauxcodeParamsDictTagged {
     const params = {
         "@type": "afni/@statauxcode" as const,
         "code": code,
@@ -62,7 +62,7 @@ function v__statauxcode_params(
  * @returns Command-line arguments.
  */
 function v__statauxcode_cargs(
-    params: VStatauxcodeParameters,
+    params: VStatauxcodeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__statauxcode_cargs(
  * @returns Outputs object.
  */
 function v__statauxcode_outputs(
-    params: VStatauxcodeParameters,
+    params: VStatauxcodeParamsDict,
     execution: Execution,
 ): VStatauxcodeOutputs {
     const ret: VStatauxcodeOutputs = {
@@ -107,7 +107,7 @@ function v__statauxcode_outputs(
  * @returns NamedTuple of outputs (described in `VStatauxcodeOutputs`).
  */
 function v__statauxcode_execute(
-    params: VStatauxcodeParameters,
+    params: VStatauxcodeParamsDict,
     runner: Runner | null = null,
 ): VStatauxcodeOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__statauxcode(
 
 export {
       VStatauxcodeOutputs,
+      VStatauxcodeParamsDict,
+      VStatauxcodeParamsDictTagged,
       V__STATAUXCODE_METADATA,
       v__statauxcode,
       v__statauxcode_execute,

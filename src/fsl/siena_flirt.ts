@@ -11,16 +11,16 @@ const SIENA_FLIRT_METADATA: Metadata = {
 };
 
 
-interface SienaFlirtParameters {
+interface SienaFlirtParamsDict {
     "@type"?: "fsl/siena_flirt";
     "input1_fileroot": string;
     "input2_fileroot": string;
 }
-type SienaFlirtParametersTagged = Required<Pick<SienaFlirtParameters, '@type'>> & SienaFlirtParameters;
+type SienaFlirtParamsDictTagged = Required<Pick<SienaFlirtParamsDict, '@type'>> & SienaFlirtParamsDict;
 
 
 /**
- * Output object returned when calling `SienaFlirtParameters(...)`.
+ * Output object returned when calling `SienaFlirtParamsDict(...)`.
  *
  * @interface
  */
@@ -51,7 +51,7 @@ interface SienaFlirtOutputs {
 function siena_flirt_params(
     input1_fileroot: string,
     input2_fileroot: string,
-): SienaFlirtParametersTagged {
+): SienaFlirtParamsDictTagged {
     const params = {
         "@type": "fsl/siena_flirt" as const,
         "input1_fileroot": input1_fileroot,
@@ -70,7 +70,7 @@ function siena_flirt_params(
  * @returns Command-line arguments.
  */
 function siena_flirt_cargs(
-    params: SienaFlirtParameters,
+    params: SienaFlirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function siena_flirt_cargs(
  * @returns Outputs object.
  */
 function siena_flirt_outputs(
-    params: SienaFlirtParameters,
+    params: SienaFlirtParamsDict,
     execution: Execution,
 ): SienaFlirtOutputs {
     const ret: SienaFlirtOutputs = {
@@ -117,7 +117,7 @@ function siena_flirt_outputs(
  * @returns NamedTuple of outputs (described in `SienaFlirtOutputs`).
  */
 function siena_flirt_execute(
-    params: SienaFlirtParameters,
+    params: SienaFlirtParamsDict,
     runner: Runner | null = null,
 ): SienaFlirtOutputs {
     runner = runner || getGlobalRunner();
@@ -158,6 +158,8 @@ function siena_flirt(
 export {
       SIENA_FLIRT_METADATA,
       SienaFlirtOutputs,
+      SienaFlirtParamsDict,
+      SienaFlirtParamsDictTagged,
       siena_flirt,
       siena_flirt_execute,
       siena_flirt_params,

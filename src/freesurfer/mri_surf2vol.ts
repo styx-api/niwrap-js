@@ -11,7 +11,7 @@ const MRI_SURF2VOL_METADATA: Metadata = {
 };
 
 
-interface MriSurf2volParameters {
+interface MriSurf2volParamsDict {
     "@type"?: "freesurfer/mri_surf2vol";
     "surface_overlay"?: Array<string> | null | undefined;
     "ltafile"?: InputPathType | null | undefined;
@@ -43,11 +43,11 @@ interface MriSurf2volParameters {
     "version": boolean;
     "help": boolean;
 }
-type MriSurf2volParametersTagged = Required<Pick<MriSurf2volParameters, '@type'>> & MriSurf2volParameters;
+type MriSurf2volParamsDictTagged = Required<Pick<MriSurf2volParamsDict, '@type'>> & MriSurf2volParamsDict;
 
 
 /**
- * Output object returned when calling `MriSurf2volParameters(...)`.
+ * Output object returned when calling `MriSurf2volParamsDict(...)`.
  *
  * @interface
  */
@@ -132,7 +132,7 @@ function mri_surf2vol_params(
     gdiagno: number | null = null,
     version: boolean = false,
     help: boolean = false,
-): MriSurf2volParametersTagged {
+): MriSurf2volParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_surf2vol" as const,
         "outfile": outfile,
@@ -222,7 +222,7 @@ function mri_surf2vol_params(
  * @returns Command-line arguments.
  */
 function mri_surf2vol_cargs(
-    params: MriSurf2volParameters,
+    params: MriSurf2volParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -394,7 +394,7 @@ function mri_surf2vol_cargs(
  * @returns Outputs object.
  */
 function mri_surf2vol_outputs(
-    params: MriSurf2volParameters,
+    params: MriSurf2volParamsDict,
     execution: Execution,
 ): MriSurf2volOutputs {
     const ret: MriSurf2volOutputs = {
@@ -421,7 +421,7 @@ function mri_surf2vol_outputs(
  * @returns NamedTuple of outputs (described in `MriSurf2volOutputs`).
  */
 function mri_surf2vol_execute(
-    params: MriSurf2volParameters,
+    params: MriSurf2volParamsDict,
     runner: Runner | null = null,
 ): MriSurf2volOutputs {
     runner = runner || getGlobalRunner();
@@ -516,6 +516,8 @@ function mri_surf2vol(
 export {
       MRI_SURF2VOL_METADATA,
       MriSurf2volOutputs,
+      MriSurf2volParamsDict,
+      MriSurf2volParamsDictTagged,
       mri_surf2vol,
       mri_surf2vol_execute,
       mri_surf2vol_params,

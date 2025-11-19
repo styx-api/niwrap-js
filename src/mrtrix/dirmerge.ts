@@ -11,15 +11,15 @@ const DIRMERGE_METADATA: Metadata = {
 };
 
 
-interface DirmergeConfigParameters {
+interface DirmergeConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type DirmergeConfigParametersTagged = Required<Pick<DirmergeConfigParameters, '@type'>> & DirmergeConfigParameters;
+type DirmergeConfigParamsDictTagged = Required<Pick<DirmergeConfigParamsDict, '@type'>> & DirmergeConfigParamsDict;
 
 
-interface DirmergeParameters {
+interface DirmergeParamsDict {
     "@type"?: "mrtrix/dirmerge";
     "unipolar_weight"?: number | null | undefined;
     "info": boolean;
@@ -27,14 +27,14 @@ interface DirmergeParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<DirmergeConfigParameters> | null | undefined;
+    "config"?: Array<DirmergeConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "subsets": number;
     "bvalue_files": Array<string>;
     "out": string;
 }
-type DirmergeParametersTagged = Required<Pick<DirmergeParameters, '@type'>> & DirmergeParameters;
+type DirmergeParamsDictTagged = Required<Pick<DirmergeParamsDict, '@type'>> & DirmergeParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type DirmergeParametersTagged = Required<Pick<DirmergeParameters, '@type'>> & Di
  *
  * @returns Parameter dictionary
  */
-function dirmerge_config_params(
+function dirmerge_config(
     key: string,
     value: string,
-): DirmergeConfigParametersTagged {
+): DirmergeConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function dirmerge_config_params(
  * @returns Command-line arguments.
  */
 function dirmerge_config_cargs(
-    params: DirmergeConfigParameters,
+    params: DirmergeConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function dirmerge_config_cargs(
 
 
 /**
- * Output object returned when calling `DirmergeParameters(...)`.
+ * Output object returned when calling `DirmergeParamsDict(...)`.
  *
  * @interface
  */
@@ -123,10 +123,10 @@ function dirmerge_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirmergeConfigParameters> | null = null,
+    config: Array<DirmergeConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): DirmergeParametersTagged {
+): DirmergeParamsDictTagged {
     const params = {
         "@type": "mrtrix/dirmerge" as const,
         "info": info,
@@ -161,7 +161,7 @@ function dirmerge_params(
  * @returns Command-line arguments.
  */
 function dirmerge_cargs(
-    params: DirmergeParameters,
+    params: DirmergeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -215,7 +215,7 @@ function dirmerge_cargs(
  * @returns Outputs object.
  */
 function dirmerge_outputs(
-    params: DirmergeParameters,
+    params: DirmergeParamsDict,
     execution: Execution,
 ): DirmergeOutputs {
     const ret: DirmergeOutputs = {
@@ -247,7 +247,7 @@ function dirmerge_outputs(
  * @returns NamedTuple of outputs (described in `DirmergeOutputs`).
  */
 function dirmerge_execute(
-    params: DirmergeParameters,
+    params: DirmergeParamsDict,
     runner: Runner | null = null,
 ): DirmergeOutputs {
     runner = runner || getGlobalRunner();
@@ -301,7 +301,7 @@ function dirmerge(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<DirmergeConfigParameters> | null = null,
+    config: Array<DirmergeConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -313,9 +313,13 @@ function dirmerge(
 
 export {
       DIRMERGE_METADATA,
+      DirmergeConfigParamsDict,
+      DirmergeConfigParamsDictTagged,
       DirmergeOutputs,
+      DirmergeParamsDict,
+      DirmergeParamsDictTagged,
       dirmerge,
-      dirmerge_config_params,
+      dirmerge_config,
       dirmerge_execute,
       dirmerge_params,
 };

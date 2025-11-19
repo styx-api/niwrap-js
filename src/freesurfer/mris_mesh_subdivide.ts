@@ -11,18 +11,18 @@ const MRIS_MESH_SUBDIVIDE_METADATA: Metadata = {
 };
 
 
-interface MrisMeshSubdivideParameters {
+interface MrisMeshSubdivideParamsDict {
     "@type"?: "freesurfer/mris_mesh_subdivide";
     "input_surface": InputPathType;
     "output_surface": string;
     "subdivision_method"?: "butterfly" | "loop" | "linear" | null | undefined;
     "iterations"?: number | null | undefined;
 }
-type MrisMeshSubdivideParametersTagged = Required<Pick<MrisMeshSubdivideParameters, '@type'>> & MrisMeshSubdivideParameters;
+type MrisMeshSubdivideParamsDictTagged = Required<Pick<MrisMeshSubdivideParamsDict, '@type'>> & MrisMeshSubdivideParamsDict;
 
 
 /**
- * Output object returned when calling `MrisMeshSubdivideParameters(...)`.
+ * Output object returned when calling `MrisMeshSubdivideParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_mesh_subdivide_params(
     output_surface: string,
     subdivision_method: "butterfly" | "loop" | "linear" | null = null,
     iterations: number | null = null,
-): MrisMeshSubdivideParametersTagged {
+): MrisMeshSubdivideParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_mesh_subdivide" as const,
         "input_surface": input_surface,
@@ -78,7 +78,7 @@ function mris_mesh_subdivide_params(
  * @returns Command-line arguments.
  */
 function mris_mesh_subdivide_cargs(
-    params: MrisMeshSubdivideParameters,
+    params: MrisMeshSubdivideParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -116,7 +116,7 @@ function mris_mesh_subdivide_cargs(
  * @returns Outputs object.
  */
 function mris_mesh_subdivide_outputs(
-    params: MrisMeshSubdivideParameters,
+    params: MrisMeshSubdivideParamsDict,
     execution: Execution,
 ): MrisMeshSubdivideOutputs {
     const ret: MrisMeshSubdivideOutputs = {
@@ -142,7 +142,7 @@ function mris_mesh_subdivide_outputs(
  * @returns NamedTuple of outputs (described in `MrisMeshSubdivideOutputs`).
  */
 function mris_mesh_subdivide_execute(
-    params: MrisMeshSubdivideParameters,
+    params: MrisMeshSubdivideParamsDict,
     runner: Runner | null = null,
 ): MrisMeshSubdivideOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function mris_mesh_subdivide(
 export {
       MRIS_MESH_SUBDIVIDE_METADATA,
       MrisMeshSubdivideOutputs,
+      MrisMeshSubdivideParamsDict,
+      MrisMeshSubdivideParamsDictTagged,
       mris_mesh_subdivide,
       mris_mesh_subdivide_execute,
       mris_mesh_subdivide_params,

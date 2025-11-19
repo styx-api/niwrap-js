@@ -10,7 +10,7 @@ const METRIC_DILATE_METADATA: Metadata = {
 };
 
 
-interface MetricDilateParameters {
+interface MetricDilateParamsDict {
     "@type"?: "workbench/metric-dilate";
     "metric-out": string;
     "roi-metric"?: InputPathType | null | undefined;
@@ -25,11 +25,11 @@ interface MetricDilateParameters {
     "surface": InputPathType;
     "distance": number;
 }
-type MetricDilateParametersTagged = Required<Pick<MetricDilateParameters, '@type'>> & MetricDilateParameters;
+type MetricDilateParamsDictTagged = Required<Pick<MetricDilateParamsDict, '@type'>> & MetricDilateParamsDict;
 
 
 /**
- * Output object returned when calling `MetricDilateParameters(...)`.
+ * Output object returned when calling `MetricDilateParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function metric_dilate_params(
     nearest: boolean = false,
     linear: boolean = false,
     legacy_cutoff: boolean = false,
-): MetricDilateParametersTagged {
+): MetricDilateParamsDictTagged {
     const params = {
         "@type": "workbench/metric-dilate" as const,
         "metric-out": metric_out,
@@ -125,7 +125,7 @@ function metric_dilate_params(
  * @returns Command-line arguments.
  */
 function metric_dilate_cargs(
-    params: MetricDilateParameters,
+    params: MetricDilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -165,7 +165,7 @@ function metric_dilate_cargs(
  * @returns Outputs object.
  */
 function metric_dilate_outputs(
-    params: MetricDilateParameters,
+    params: MetricDilateParamsDict,
     execution: Execution,
 ): MetricDilateOutputs {
     const ret: MetricDilateOutputs = {
@@ -193,7 +193,7 @@ function metric_dilate_outputs(
  * @returns NamedTuple of outputs (described in `MetricDilateOutputs`).
  */
 function metric_dilate_execute(
-    params: MetricDilateParameters,
+    params: MetricDilateParamsDict,
     runner: Runner | null = null,
 ): MetricDilateOutputs {
     runner = runner || getGlobalRunner();
@@ -266,6 +266,8 @@ function metric_dilate(
 export {
       METRIC_DILATE_METADATA,
       MetricDilateOutputs,
+      MetricDilateParamsDict,
+      MetricDilateParamsDictTagged,
       metric_dilate,
       metric_dilate_execute,
       metric_dilate_params,

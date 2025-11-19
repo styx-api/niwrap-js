@@ -11,15 +11,15 @@ const MRCHECKERBOARDMASK_METADATA: Metadata = {
 };
 
 
-interface MrcheckerboardmaskConfigParameters {
+interface MrcheckerboardmaskConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrcheckerboardmaskConfigParametersTagged = Required<Pick<MrcheckerboardmaskConfigParameters, '@type'>> & MrcheckerboardmaskConfigParameters;
+type MrcheckerboardmaskConfigParamsDictTagged = Required<Pick<MrcheckerboardmaskConfigParamsDict, '@type'>> & MrcheckerboardmaskConfigParamsDict;
 
 
-interface MrcheckerboardmaskParameters {
+interface MrcheckerboardmaskParamsDict {
     "@type"?: "mrtrix/mrcheckerboardmask";
     "tiles"?: number | null | undefined;
     "invert": boolean;
@@ -29,13 +29,13 @@ interface MrcheckerboardmaskParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrcheckerboardmaskConfigParameters> | null | undefined;
+    "config"?: Array<MrcheckerboardmaskConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type MrcheckerboardmaskParametersTagged = Required<Pick<MrcheckerboardmaskParameters, '@type'>> & MrcheckerboardmaskParameters;
+type MrcheckerboardmaskParamsDictTagged = Required<Pick<MrcheckerboardmaskParamsDict, '@type'>> & MrcheckerboardmaskParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type MrcheckerboardmaskParametersTagged = Required<Pick<MrcheckerboardmaskParame
  *
  * @returns Parameter dictionary
  */
-function mrcheckerboardmask_config_params(
+function mrcheckerboardmask_config(
     key: string,
     value: string,
-): MrcheckerboardmaskConfigParametersTagged {
+): MrcheckerboardmaskConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -68,7 +68,7 @@ function mrcheckerboardmask_config_params(
  * @returns Command-line arguments.
  */
 function mrcheckerboardmask_config_cargs(
-    params: MrcheckerboardmaskConfigParameters,
+    params: MrcheckerboardmaskConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function mrcheckerboardmask_config_cargs(
 
 
 /**
- * Output object returned when calling `MrcheckerboardmaskParameters(...)`.
+ * Output object returned when calling `MrcheckerboardmaskParamsDict(...)`.
  *
  * @interface
  */
@@ -126,10 +126,10 @@ function mrcheckerboardmask_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcheckerboardmaskConfigParameters> | null = null,
+    config: Array<MrcheckerboardmaskConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcheckerboardmaskParametersTagged {
+): MrcheckerboardmaskParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrcheckerboardmask" as const,
         "invert": invert,
@@ -165,7 +165,7 @@ function mrcheckerboardmask_params(
  * @returns Command-line arguments.
  */
 function mrcheckerboardmask_cargs(
-    params: MrcheckerboardmaskParameters,
+    params: MrcheckerboardmaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -224,7 +224,7 @@ function mrcheckerboardmask_cargs(
  * @returns Outputs object.
  */
 function mrcheckerboardmask_outputs(
-    params: MrcheckerboardmaskParameters,
+    params: MrcheckerboardmaskParamsDict,
     execution: Execution,
 ): MrcheckerboardmaskOutputs {
     const ret: MrcheckerboardmaskOutputs = {
@@ -256,7 +256,7 @@ function mrcheckerboardmask_outputs(
  * @returns NamedTuple of outputs (described in `MrcheckerboardmaskOutputs`).
  */
 function mrcheckerboardmask_execute(
-    params: MrcheckerboardmaskParameters,
+    params: MrcheckerboardmaskParamsDict,
     runner: Runner | null = null,
 ): MrcheckerboardmaskOutputs {
     runner = runner || getGlobalRunner();
@@ -312,7 +312,7 @@ function mrcheckerboardmask(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcheckerboardmaskConfigParameters> | null = null,
+    config: Array<MrcheckerboardmaskConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -324,9 +324,13 @@ function mrcheckerboardmask(
 
 export {
       MRCHECKERBOARDMASK_METADATA,
+      MrcheckerboardmaskConfigParamsDict,
+      MrcheckerboardmaskConfigParamsDictTagged,
       MrcheckerboardmaskOutputs,
+      MrcheckerboardmaskParamsDict,
+      MrcheckerboardmaskParamsDictTagged,
       mrcheckerboardmask,
-      mrcheckerboardmask_config_params,
+      mrcheckerboardmask_config,
       mrcheckerboardmask_execute,
       mrcheckerboardmask_params,
 };

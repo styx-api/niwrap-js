@@ -11,7 +11,7 @@ const READ_MATLAB_FILES_PY_METADATA: Metadata = {
 };
 
 
-interface ReadMatlabFilesPyParameters {
+interface ReadMatlabFilesPyParamsDict {
     "@type"?: "afni/read_matlab_files.py";
     "infiles": Array<string>;
     "prefix"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface ReadMatlabFilesPyParameters {
     "history": boolean;
     "version": boolean;
 }
-type ReadMatlabFilesPyParametersTagged = Required<Pick<ReadMatlabFilesPyParameters, '@type'>> & ReadMatlabFilesPyParameters;
+type ReadMatlabFilesPyParamsDictTagged = Required<Pick<ReadMatlabFilesPyParamsDict, '@type'>> & ReadMatlabFilesPyParamsDict;
 
 
 /**
- * Output object returned when calling `ReadMatlabFilesPyParameters(...)`.
+ * Output object returned when calling `ReadMatlabFilesPyParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function read_matlab_files_py_params(
     help: boolean = false,
     history: boolean = false,
     version: boolean = false,
-): ReadMatlabFilesPyParametersTagged {
+): ReadMatlabFilesPyParamsDictTagged {
     const params = {
         "@type": "afni/read_matlab_files.py" as const,
         "infiles": infiles,
@@ -84,7 +84,7 @@ function read_matlab_files_py_params(
  * @returns Command-line arguments.
  */
 function read_matlab_files_py_cargs(
-    params: ReadMatlabFilesPyParameters,
+    params: ReadMatlabFilesPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,7 +121,7 @@ function read_matlab_files_py_cargs(
  * @returns Outputs object.
  */
 function read_matlab_files_py_outputs(
-    params: ReadMatlabFilesPyParameters,
+    params: ReadMatlabFilesPyParamsDict,
     execution: Execution,
 ): ReadMatlabFilesPyOutputs {
     const ret: ReadMatlabFilesPyOutputs = {
@@ -147,7 +147,7 @@ function read_matlab_files_py_outputs(
  * @returns NamedTuple of outputs (described in `ReadMatlabFilesPyOutputs`).
  */
 function read_matlab_files_py_execute(
-    params: ReadMatlabFilesPyParameters,
+    params: ReadMatlabFilesPyParamsDict,
     runner: Runner | null = null,
 ): ReadMatlabFilesPyOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function read_matlab_files_py(
 export {
       READ_MATLAB_FILES_PY_METADATA,
       ReadMatlabFilesPyOutputs,
+      ReadMatlabFilesPyParamsDict,
+      ReadMatlabFilesPyParamsDictTagged,
       read_matlab_files_py,
       read_matlab_files_py_execute,
       read_matlab_files_py_params,

@@ -11,18 +11,18 @@ const MRIS_SURFACE_TO_VOL_DISTANCES_METADATA: Metadata = {
 };
 
 
-interface MrisSurfaceToVolDistancesParameters {
+interface MrisSurfaceToVolDistancesParamsDict {
     "@type"?: "freesurfer/mris_surface_to_vol_distances";
     "average_subject": string;
     "hemisphere": string;
     "subjects": Array<string>;
     "output_prefix": string;
 }
-type MrisSurfaceToVolDistancesParametersTagged = Required<Pick<MrisSurfaceToVolDistancesParameters, '@type'>> & MrisSurfaceToVolDistancesParameters;
+type MrisSurfaceToVolDistancesParamsDictTagged = Required<Pick<MrisSurfaceToVolDistancesParamsDict, '@type'>> & MrisSurfaceToVolDistancesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSurfaceToVolDistancesParameters(...)`.
+ * Output object returned when calling `MrisSurfaceToVolDistancesParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mris_surface_to_vol_distances_params(
     hemisphere: string,
     subjects: Array<string>,
     output_prefix: string,
-): MrisSurfaceToVolDistancesParametersTagged {
+): MrisSurfaceToVolDistancesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_surface_to_vol_distances" as const,
         "average_subject": average_subject,
@@ -74,7 +74,7 @@ function mris_surface_to_vol_distances_params(
  * @returns Command-line arguments.
  */
 function mris_surface_to_vol_distances_cargs(
-    params: MrisSurfaceToVolDistancesParameters,
+    params: MrisSurfaceToVolDistancesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_surface_to_vol_distances_cargs(
  * @returns Outputs object.
  */
 function mris_surface_to_vol_distances_outputs(
-    params: MrisSurfaceToVolDistancesParameters,
+    params: MrisSurfaceToVolDistancesParamsDict,
     execution: Execution,
 ): MrisSurfaceToVolDistancesOutputs {
     const ret: MrisSurfaceToVolDistancesOutputs = {
@@ -122,7 +122,7 @@ function mris_surface_to_vol_distances_outputs(
  * @returns NamedTuple of outputs (described in `MrisSurfaceToVolDistancesOutputs`).
  */
 function mris_surface_to_vol_distances_execute(
-    params: MrisSurfaceToVolDistancesParameters,
+    params: MrisSurfaceToVolDistancesParamsDict,
     runner: Runner | null = null,
 ): MrisSurfaceToVolDistancesOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mris_surface_to_vol_distances(
 export {
       MRIS_SURFACE_TO_VOL_DISTANCES_METADATA,
       MrisSurfaceToVolDistancesOutputs,
+      MrisSurfaceToVolDistancesParamsDict,
+      MrisSurfaceToVolDistancesParamsDictTagged,
       mris_surface_to_vol_distances,
       mris_surface_to_vol_distances_execute,
       mris_surface_to_vol_distances_params,

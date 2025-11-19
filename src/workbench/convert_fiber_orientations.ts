@@ -10,7 +10,7 @@ const CONVERT_FIBER_ORIENTATIONS_METADATA: Metadata = {
 };
 
 
-interface ConvertFiberOrientationsFiberParameters {
+interface ConvertFiberOrientationsFiberParamsDict {
     "@type"?: "fiber";
     "mean-f": InputPathType;
     "stdev-f": InputPathType;
@@ -20,16 +20,16 @@ interface ConvertFiberOrientationsFiberParameters {
     "ka": InputPathType;
     "kb": InputPathType;
 }
-type ConvertFiberOrientationsFiberParametersTagged = Required<Pick<ConvertFiberOrientationsFiberParameters, '@type'>> & ConvertFiberOrientationsFiberParameters;
+type ConvertFiberOrientationsFiberParamsDictTagged = Required<Pick<ConvertFiberOrientationsFiberParamsDict, '@type'>> & ConvertFiberOrientationsFiberParamsDict;
 
 
-interface ConvertFiberOrientationsParameters {
+interface ConvertFiberOrientationsParamsDict {
     "@type"?: "workbench/convert-fiber-orientations";
     "fiber-out": string;
-    "fiber"?: Array<ConvertFiberOrientationsFiberParameters> | null | undefined;
+    "fiber"?: Array<ConvertFiberOrientationsFiberParamsDict> | null | undefined;
     "label-volume": InputPathType;
 }
-type ConvertFiberOrientationsParametersTagged = Required<Pick<ConvertFiberOrientationsParameters, '@type'>> & ConvertFiberOrientationsParameters;
+type ConvertFiberOrientationsParamsDictTagged = Required<Pick<ConvertFiberOrientationsParamsDict, '@type'>> & ConvertFiberOrientationsParamsDict;
 
 
 /**
@@ -45,7 +45,7 @@ type ConvertFiberOrientationsParametersTagged = Required<Pick<ConvertFiberOrient
  *
  * @returns Parameter dictionary
  */
-function convert_fiber_orientations_fiber_params(
+function convert_fiber_orientations_fiber(
     mean_f: InputPathType,
     stdev_f: InputPathType,
     theta: InputPathType,
@@ -53,7 +53,7 @@ function convert_fiber_orientations_fiber_params(
     psi: InputPathType,
     ka: InputPathType,
     kb: InputPathType,
-): ConvertFiberOrientationsFiberParametersTagged {
+): ConvertFiberOrientationsFiberParamsDictTagged {
     const params = {
         "@type": "fiber" as const,
         "mean-f": mean_f,
@@ -77,7 +77,7 @@ function convert_fiber_orientations_fiber_params(
  * @returns Command-line arguments.
  */
 function convert_fiber_orientations_fiber_cargs(
-    params: ConvertFiberOrientationsFiberParameters,
+    params: ConvertFiberOrientationsFiberParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function convert_fiber_orientations_fiber_cargs(
 
 
 /**
- * Output object returned when calling `ConvertFiberOrientationsParameters(...)`.
+ * Output object returned when calling `ConvertFiberOrientationsParamsDict(...)`.
  *
  * @interface
  */
@@ -124,8 +124,8 @@ interface ConvertFiberOrientationsOutputs {
 function convert_fiber_orientations_params(
     fiber_out: string,
     label_volume: InputPathType,
-    fiber: Array<ConvertFiberOrientationsFiberParameters> | null = null,
-): ConvertFiberOrientationsParametersTagged {
+    fiber: Array<ConvertFiberOrientationsFiberParamsDict> | null = null,
+): ConvertFiberOrientationsParamsDictTagged {
     const params = {
         "@type": "workbench/convert-fiber-orientations" as const,
         "fiber-out": fiber_out,
@@ -147,7 +147,7 @@ function convert_fiber_orientations_params(
  * @returns Command-line arguments.
  */
 function convert_fiber_orientations_cargs(
-    params: ConvertFiberOrientationsParameters,
+    params: ConvertFiberOrientationsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -173,7 +173,7 @@ function convert_fiber_orientations_cargs(
  * @returns Outputs object.
  */
 function convert_fiber_orientations_outputs(
-    params: ConvertFiberOrientationsParameters,
+    params: ConvertFiberOrientationsParamsDict,
     execution: Execution,
 ): ConvertFiberOrientationsOutputs {
     const ret: ConvertFiberOrientationsOutputs = {
@@ -232,7 +232,7 @@ function convert_fiber_orientations_outputs(
  * @returns NamedTuple of outputs (described in `ConvertFiberOrientationsOutputs`).
  */
 function convert_fiber_orientations_execute(
-    params: ConvertFiberOrientationsParameters,
+    params: ConvertFiberOrientationsParamsDict,
     runner: Runner | null = null,
 ): ConvertFiberOrientationsOutputs {
     runner = runner || getGlobalRunner();
@@ -297,7 +297,7 @@ function convert_fiber_orientations_execute(
 function convert_fiber_orientations(
     fiber_out: string,
     label_volume: InputPathType,
-    fiber: Array<ConvertFiberOrientationsFiberParameters> | null = null,
+    fiber: Array<ConvertFiberOrientationsFiberParamsDict> | null = null,
     runner: Runner | null = null,
 ): ConvertFiberOrientationsOutputs {
     const params = convert_fiber_orientations_params(fiber_out, label_volume, fiber)
@@ -307,9 +307,13 @@ function convert_fiber_orientations(
 
 export {
       CONVERT_FIBER_ORIENTATIONS_METADATA,
+      ConvertFiberOrientationsFiberParamsDict,
+      ConvertFiberOrientationsFiberParamsDictTagged,
       ConvertFiberOrientationsOutputs,
+      ConvertFiberOrientationsParamsDict,
+      ConvertFiberOrientationsParamsDictTagged,
       convert_fiber_orientations,
       convert_fiber_orientations_execute,
-      convert_fiber_orientations_fiber_params,
+      convert_fiber_orientations_fiber,
       convert_fiber_orientations_params,
 };

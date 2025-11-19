@@ -11,140 +11,140 @@ const MRCONVERT_METADATA: Metadata = {
 };
 
 
-interface MrconvertCoordParameters {
+interface MrconvertCoordParamsDict {
     "@type"?: "coord";
     "axis": number;
     "selection": Array<number>;
 }
-type MrconvertCoordParametersTagged = Required<Pick<MrconvertCoordParameters, '@type'>> & MrconvertCoordParameters;
+type MrconvertCoordParamsDictTagged = Required<Pick<MrconvertCoordParamsDict, '@type'>> & MrconvertCoordParamsDict;
 
 
-interface MrconvertClearPropertyParameters {
+interface MrconvertClearPropertyParamsDict {
     "@type"?: "clear_property";
     "key": string;
 }
-type MrconvertClearPropertyParametersTagged = Required<Pick<MrconvertClearPropertyParameters, '@type'>> & MrconvertClearPropertyParameters;
+type MrconvertClearPropertyParamsDictTagged = Required<Pick<MrconvertClearPropertyParamsDict, '@type'>> & MrconvertClearPropertyParamsDict;
 
 
-interface MrconvertSetPropertyParameters {
+interface MrconvertSetPropertyParamsDict {
     "@type"?: "set_property";
     "key": string;
     "value": string;
 }
-type MrconvertSetPropertyParametersTagged = Required<Pick<MrconvertSetPropertyParameters, '@type'>> & MrconvertSetPropertyParameters;
+type MrconvertSetPropertyParamsDictTagged = Required<Pick<MrconvertSetPropertyParamsDict, '@type'>> & MrconvertSetPropertyParamsDict;
 
 
-interface MrconvertAppendPropertyParameters {
+interface MrconvertAppendPropertyParamsDict {
     "@type"?: "append_property";
     "key": string;
     "value": string;
 }
-type MrconvertAppendPropertyParametersTagged = Required<Pick<MrconvertAppendPropertyParameters, '@type'>> & MrconvertAppendPropertyParameters;
+type MrconvertAppendPropertyParamsDictTagged = Required<Pick<MrconvertAppendPropertyParamsDict, '@type'>> & MrconvertAppendPropertyParamsDict;
 
 
-interface MrconvertVariousStringParameters {
+interface MrconvertVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type MrconvertVariousStringParametersTagged = Required<Pick<MrconvertVariousStringParameters, '@type'>> & MrconvertVariousStringParameters;
+type MrconvertVariousStringParamsDictTagged = Required<Pick<MrconvertVariousStringParamsDict, '@type'>> & MrconvertVariousStringParamsDict;
 
 
-interface MrconvertVariousFileParameters {
+interface MrconvertVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type MrconvertVariousFileParametersTagged = Required<Pick<MrconvertVariousFileParameters, '@type'>> & MrconvertVariousFileParameters;
+type MrconvertVariousFileParamsDictTagged = Required<Pick<MrconvertVariousFileParamsDict, '@type'>> & MrconvertVariousFileParamsDict;
 
 
-interface MrconvertVariousString1Parameters {
+interface MrconvertVariousString1ParamsDict {
     "@type"?: "VariousString_1";
     "obj": string;
 }
-type MrconvertVariousString1ParametersTagged = Required<Pick<MrconvertVariousString1Parameters, '@type'>> & MrconvertVariousString1Parameters;
+type MrconvertVariousString1ParamsDictTagged = Required<Pick<MrconvertVariousString1ParamsDict, '@type'>> & MrconvertVariousString1ParamsDict;
 
 
-interface MrconvertVariousFile1Parameters {
+interface MrconvertVariousFile1ParamsDict {
     "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
-type MrconvertVariousFile1ParametersTagged = Required<Pick<MrconvertVariousFile1Parameters, '@type'>> & MrconvertVariousFile1Parameters;
+type MrconvertVariousFile1ParamsDictTagged = Required<Pick<MrconvertVariousFile1ParamsDict, '@type'>> & MrconvertVariousFile1ParamsDict;
 
 
-interface MrconvertFslgradParameters {
+interface MrconvertFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type MrconvertFslgradParametersTagged = Required<Pick<MrconvertFslgradParameters, '@type'>> & MrconvertFslgradParameters;
+type MrconvertFslgradParamsDictTagged = Required<Pick<MrconvertFslgradParamsDict, '@type'>> & MrconvertFslgradParamsDict;
 
 
-interface MrconvertExportGradFslParameters {
+interface MrconvertExportGradFslParamsDict {
     "@type"?: "export_grad_fsl";
     "bvecs_path": string;
     "bvals_path": string;
 }
-type MrconvertExportGradFslParametersTagged = Required<Pick<MrconvertExportGradFslParameters, '@type'>> & MrconvertExportGradFslParameters;
+type MrconvertExportGradFslParamsDictTagged = Required<Pick<MrconvertExportGradFslParamsDict, '@type'>> & MrconvertExportGradFslParamsDict;
 
 
-interface MrconvertImportPeEddyParameters {
+interface MrconvertImportPeEddyParamsDict {
     "@type"?: "import_pe_eddy";
     "config": InputPathType;
     "indices": InputPathType;
 }
-type MrconvertImportPeEddyParametersTagged = Required<Pick<MrconvertImportPeEddyParameters, '@type'>> & MrconvertImportPeEddyParameters;
+type MrconvertImportPeEddyParamsDictTagged = Required<Pick<MrconvertImportPeEddyParamsDict, '@type'>> & MrconvertImportPeEddyParamsDict;
 
 
-interface MrconvertExportPeEddyParameters {
+interface MrconvertExportPeEddyParamsDict {
     "@type"?: "export_pe_eddy";
     "config": string;
     "indices": string;
 }
-type MrconvertExportPeEddyParametersTagged = Required<Pick<MrconvertExportPeEddyParameters, '@type'>> & MrconvertExportPeEddyParameters;
+type MrconvertExportPeEddyParamsDictTagged = Required<Pick<MrconvertExportPeEddyParamsDict, '@type'>> & MrconvertExportPeEddyParamsDict;
 
 
-interface MrconvertConfigParameters {
+interface MrconvertConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrconvertConfigParametersTagged = Required<Pick<MrconvertConfigParameters, '@type'>> & MrconvertConfigParameters;
+type MrconvertConfigParamsDictTagged = Required<Pick<MrconvertConfigParamsDict, '@type'>> & MrconvertConfigParamsDict;
 
 
-interface MrconvertParameters {
+interface MrconvertParamsDict {
     "@type"?: "mrtrix/mrconvert";
-    "coord"?: Array<MrconvertCoordParameters> | null | undefined;
+    "coord"?: Array<MrconvertCoordParamsDict> | null | undefined;
     "vox"?: Array<number> | null | undefined;
     "axes"?: Array<number> | null | undefined;
     "scaling"?: Array<number> | null | undefined;
     "json_import"?: InputPathType | null | undefined;
     "json_export"?: string | null | undefined;
-    "clear_property"?: Array<MrconvertClearPropertyParameters> | null | undefined;
-    "set_property"?: Array<MrconvertSetPropertyParameters> | null | undefined;
-    "append_property"?: Array<MrconvertAppendPropertyParameters> | null | undefined;
-    "copy_properties"?: MrconvertVariousStringParametersTagged | MrconvertVariousFileParametersTagged | null | undefined;
-    "strides"?: MrconvertVariousString1ParametersTagged | MrconvertVariousFile1ParametersTagged | null | undefined;
+    "clear_property"?: Array<MrconvertClearPropertyParamsDict> | null | undefined;
+    "set_property"?: Array<MrconvertSetPropertyParamsDict> | null | undefined;
+    "append_property"?: Array<MrconvertAppendPropertyParamsDict> | null | undefined;
+    "copy_properties"?: MrconvertVariousStringParamsDictTagged | MrconvertVariousFileParamsDictTagged | null | undefined;
+    "strides"?: MrconvertVariousString1ParamsDictTagged | MrconvertVariousFile1ParamsDictTagged | null | undefined;
     "datatype"?: string | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: MrconvertFslgradParameters | null | undefined;
+    "fslgrad"?: MrconvertFslgradParamsDict | null | undefined;
     "bvalue_scaling"?: string | null | undefined;
     "export_grad_mrtrix"?: string | null | undefined;
-    "export_grad_fsl"?: MrconvertExportGradFslParameters | null | undefined;
+    "export_grad_fsl"?: MrconvertExportGradFslParamsDict | null | undefined;
     "import_pe_table"?: InputPathType | null | undefined;
-    "import_pe_eddy"?: MrconvertImportPeEddyParameters | null | undefined;
+    "import_pe_eddy"?: MrconvertImportPeEddyParamsDict | null | undefined;
     "export_pe_table"?: string | null | undefined;
-    "export_pe_eddy"?: MrconvertExportPeEddyParameters | null | undefined;
+    "export_pe_eddy"?: MrconvertExportPeEddyParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrconvertConfigParameters> | null | undefined;
+    "config"?: Array<MrconvertConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type MrconvertParametersTagged = Required<Pick<MrconvertParameters, '@type'>> & MrconvertParameters;
+type MrconvertParamsDictTagged = Required<Pick<MrconvertParamsDict, '@type'>> & MrconvertParamsDict;
 
 
 /**
@@ -223,10 +223,10 @@ function mrconvert_strides_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_coord_params(
+function mrconvert_coord(
     axis: number,
     selection: Array<number>,
-): MrconvertCoordParametersTagged {
+): MrconvertCoordParamsDictTagged {
     const params = {
         "@type": "coord" as const,
         "axis": axis,
@@ -245,7 +245,7 @@ function mrconvert_coord_params(
  * @returns Command-line arguments.
  */
 function mrconvert_coord_cargs(
-    params: MrconvertCoordParameters,
+    params: MrconvertCoordParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -263,9 +263,9 @@ function mrconvert_coord_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_clear_property_params(
+function mrconvert_clear_property(
     key: string,
-): MrconvertClearPropertyParametersTagged {
+): MrconvertClearPropertyParamsDictTagged {
     const params = {
         "@type": "clear_property" as const,
         "key": key,
@@ -283,7 +283,7 @@ function mrconvert_clear_property_params(
  * @returns Command-line arguments.
  */
 function mrconvert_clear_property_cargs(
-    params: MrconvertClearPropertyParameters,
+    params: MrconvertClearPropertyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -301,10 +301,10 @@ function mrconvert_clear_property_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_set_property_params(
+function mrconvert_set_property(
     key: string,
     value: string,
-): MrconvertSetPropertyParametersTagged {
+): MrconvertSetPropertyParamsDictTagged {
     const params = {
         "@type": "set_property" as const,
         "key": key,
@@ -323,7 +323,7 @@ function mrconvert_set_property_params(
  * @returns Command-line arguments.
  */
 function mrconvert_set_property_cargs(
-    params: MrconvertSetPropertyParameters,
+    params: MrconvertSetPropertyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -342,10 +342,10 @@ function mrconvert_set_property_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_append_property_params(
+function mrconvert_append_property(
     key: string,
     value: string,
-): MrconvertAppendPropertyParametersTagged {
+): MrconvertAppendPropertyParamsDictTagged {
     const params = {
         "@type": "append_property" as const,
         "key": key,
@@ -364,7 +364,7 @@ function mrconvert_append_property_params(
  * @returns Command-line arguments.
  */
 function mrconvert_append_property_cargs(
-    params: MrconvertAppendPropertyParameters,
+    params: MrconvertAppendPropertyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -382,9 +382,9 @@ function mrconvert_append_property_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_various_string_params(
+function mrconvert_various_string(
     obj: string,
-): MrconvertVariousStringParametersTagged {
+): MrconvertVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -402,7 +402,7 @@ function mrconvert_various_string_params(
  * @returns Command-line arguments.
  */
 function mrconvert_various_string_cargs(
-    params: MrconvertVariousStringParameters,
+    params: MrconvertVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -418,9 +418,9 @@ function mrconvert_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_various_file_params(
+function mrconvert_various_file(
     obj: InputPathType,
-): MrconvertVariousFileParametersTagged {
+): MrconvertVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -438,7 +438,7 @@ function mrconvert_various_file_params(
  * @returns Command-line arguments.
  */
 function mrconvert_various_file_cargs(
-    params: MrconvertVariousFileParameters,
+    params: MrconvertVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -454,9 +454,9 @@ function mrconvert_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_various_string_1_params(
+function mrconvert_various_string_1(
     obj: string,
-): MrconvertVariousString1ParametersTagged {
+): MrconvertVariousString1ParamsDictTagged {
     const params = {
         "@type": "VariousString_1" as const,
         "obj": obj,
@@ -474,7 +474,7 @@ function mrconvert_various_string_1_params(
  * @returns Command-line arguments.
  */
 function mrconvert_various_string_1_cargs(
-    params: MrconvertVariousString1Parameters,
+    params: MrconvertVariousString1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -490,9 +490,9 @@ function mrconvert_various_string_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_various_file_1_params(
+function mrconvert_various_file_1(
     obj: InputPathType,
-): MrconvertVariousFile1ParametersTagged {
+): MrconvertVariousFile1ParamsDictTagged {
     const params = {
         "@type": "VariousFile_1" as const,
         "obj": obj,
@@ -510,7 +510,7 @@ function mrconvert_various_file_1_params(
  * @returns Command-line arguments.
  */
 function mrconvert_various_file_1_cargs(
-    params: MrconvertVariousFile1Parameters,
+    params: MrconvertVariousFile1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -527,10 +527,10 @@ function mrconvert_various_file_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_fslgrad_params(
+function mrconvert_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): MrconvertFslgradParametersTagged {
+): MrconvertFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -549,7 +549,7 @@ function mrconvert_fslgrad_params(
  * @returns Command-line arguments.
  */
 function mrconvert_fslgrad_cargs(
-    params: MrconvertFslgradParameters,
+    params: MrconvertFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -561,7 +561,7 @@ function mrconvert_fslgrad_cargs(
 
 
 /**
- * Output object returned when calling `MrconvertExportGradFslParameters | null(...)`.
+ * Output object returned when calling `MrconvertExportGradFslParamsDict | null(...)`.
  *
  * @interface
  */
@@ -589,10 +589,10 @@ interface MrconvertExportGradFslOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrconvert_export_grad_fsl_params(
+function mrconvert_export_grad_fsl(
     bvecs_path: string,
     bvals_path: string,
-): MrconvertExportGradFslParametersTagged {
+): MrconvertExportGradFslParamsDictTagged {
     const params = {
         "@type": "export_grad_fsl" as const,
         "bvecs_path": bvecs_path,
@@ -611,7 +611,7 @@ function mrconvert_export_grad_fsl_params(
  * @returns Command-line arguments.
  */
 function mrconvert_export_grad_fsl_cargs(
-    params: MrconvertExportGradFslParameters,
+    params: MrconvertExportGradFslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -631,7 +631,7 @@ function mrconvert_export_grad_fsl_cargs(
  * @returns Outputs object.
  */
 function mrconvert_export_grad_fsl_outputs(
-    params: MrconvertExportGradFslParameters,
+    params: MrconvertExportGradFslParamsDict,
     execution: Execution,
 ): MrconvertExportGradFslOutputs {
     const ret: MrconvertExportGradFslOutputs = {
@@ -651,10 +651,10 @@ function mrconvert_export_grad_fsl_outputs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_import_pe_eddy_params(
+function mrconvert_import_pe_eddy(
     config: InputPathType,
     indices: InputPathType,
-): MrconvertImportPeEddyParametersTagged {
+): MrconvertImportPeEddyParamsDictTagged {
     const params = {
         "@type": "import_pe_eddy" as const,
         "config": config,
@@ -673,7 +673,7 @@ function mrconvert_import_pe_eddy_params(
  * @returns Command-line arguments.
  */
 function mrconvert_import_pe_eddy_cargs(
-    params: MrconvertImportPeEddyParameters,
+    params: MrconvertImportPeEddyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -685,7 +685,7 @@ function mrconvert_import_pe_eddy_cargs(
 
 
 /**
- * Output object returned when calling `MrconvertExportPeEddyParameters | null(...)`.
+ * Output object returned when calling `MrconvertExportPeEddyParamsDict | null(...)`.
  *
  * @interface
  */
@@ -713,10 +713,10 @@ interface MrconvertExportPeEddyOutputs {
  *
  * @returns Parameter dictionary
  */
-function mrconvert_export_pe_eddy_params(
+function mrconvert_export_pe_eddy(
     config: string,
     indices: string,
-): MrconvertExportPeEddyParametersTagged {
+): MrconvertExportPeEddyParamsDictTagged {
     const params = {
         "@type": "export_pe_eddy" as const,
         "config": config,
@@ -735,7 +735,7 @@ function mrconvert_export_pe_eddy_params(
  * @returns Command-line arguments.
  */
 function mrconvert_export_pe_eddy_cargs(
-    params: MrconvertExportPeEddyParameters,
+    params: MrconvertExportPeEddyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -755,7 +755,7 @@ function mrconvert_export_pe_eddy_cargs(
  * @returns Outputs object.
  */
 function mrconvert_export_pe_eddy_outputs(
-    params: MrconvertExportPeEddyParameters,
+    params: MrconvertExportPeEddyParamsDict,
     execution: Execution,
 ): MrconvertExportPeEddyOutputs {
     const ret: MrconvertExportPeEddyOutputs = {
@@ -775,10 +775,10 @@ function mrconvert_export_pe_eddy_outputs(
  *
  * @returns Parameter dictionary
  */
-function mrconvert_config_params(
+function mrconvert_config(
     key: string,
     value: string,
-): MrconvertConfigParametersTagged {
+): MrconvertConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -797,7 +797,7 @@ function mrconvert_config_params(
  * @returns Command-line arguments.
  */
 function mrconvert_config_cargs(
-    params: MrconvertConfigParameters,
+    params: MrconvertConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -809,7 +809,7 @@ function mrconvert_config_cargs(
 
 
 /**
- * Output object returned when calling `MrconvertParameters(...)`.
+ * Output object returned when calling `MrconvertParamsDict(...)`.
  *
  * @interface
  */
@@ -885,36 +885,36 @@ interface MrconvertOutputs {
 function mrconvert_params(
     input: InputPathType,
     output: string,
-    coord: Array<MrconvertCoordParameters> | null = null,
+    coord: Array<MrconvertCoordParamsDict> | null = null,
     vox: Array<number> | null = null,
     axes: Array<number> | null = null,
     scaling: Array<number> | null = null,
     json_import: InputPathType | null = null,
     json_export: string | null = null,
-    clear_property: Array<MrconvertClearPropertyParameters> | null = null,
-    set_property: Array<MrconvertSetPropertyParameters> | null = null,
-    append_property: Array<MrconvertAppendPropertyParameters> | null = null,
-    copy_properties: MrconvertVariousStringParametersTagged | MrconvertVariousFileParametersTagged | null = null,
-    strides: MrconvertVariousString1ParametersTagged | MrconvertVariousFile1ParametersTagged | null = null,
+    clear_property: Array<MrconvertClearPropertyParamsDict> | null = null,
+    set_property: Array<MrconvertSetPropertyParamsDict> | null = null,
+    append_property: Array<MrconvertAppendPropertyParamsDict> | null = null,
+    copy_properties: MrconvertVariousStringParamsDictTagged | MrconvertVariousFileParamsDictTagged | null = null,
+    strides: MrconvertVariousString1ParamsDictTagged | MrconvertVariousFile1ParamsDictTagged | null = null,
     datatype: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: MrconvertFslgradParameters | null = null,
+    fslgrad: MrconvertFslgradParamsDict | null = null,
     bvalue_scaling: string | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: MrconvertExportGradFslParameters | null = null,
+    export_grad_fsl: MrconvertExportGradFslParamsDict | null = null,
     import_pe_table: InputPathType | null = null,
-    import_pe_eddy: MrconvertImportPeEddyParameters | null = null,
+    import_pe_eddy: MrconvertImportPeEddyParamsDict | null = null,
     export_pe_table: string | null = null,
-    export_pe_eddy: MrconvertExportPeEddyParameters | null = null,
+    export_pe_eddy: MrconvertExportPeEddyParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrconvertConfigParameters> | null = null,
+    config: Array<MrconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrconvertParametersTagged {
+): MrconvertParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrconvert" as const,
         "info": info,
@@ -1008,7 +1008,7 @@ function mrconvert_params(
  * @returns Command-line arguments.
  */
 function mrconvert_cargs(
-    params: MrconvertParameters,
+    params: MrconvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1157,7 +1157,7 @@ function mrconvert_cargs(
  * @returns Outputs object.
  */
 function mrconvert_outputs(
-    params: MrconvertParameters,
+    params: MrconvertParamsDict,
     execution: Execution,
 ): MrconvertOutputs {
     const ret: MrconvertOutputs = {
@@ -1206,7 +1206,7 @@ function mrconvert_outputs(
  * @returns NamedTuple of outputs (described in `MrconvertOutputs`).
  */
 function mrconvert_execute(
-    params: MrconvertParameters,
+    params: MrconvertParamsDict,
     runner: Runner | null = null,
 ): MrconvertOutputs {
     runner = runner || getGlobalRunner();
@@ -1284,33 +1284,33 @@ function mrconvert_execute(
 function mrconvert(
     input: InputPathType,
     output: string,
-    coord: Array<MrconvertCoordParameters> | null = null,
+    coord: Array<MrconvertCoordParamsDict> | null = null,
     vox: Array<number> | null = null,
     axes: Array<number> | null = null,
     scaling: Array<number> | null = null,
     json_import: InputPathType | null = null,
     json_export: string | null = null,
-    clear_property: Array<MrconvertClearPropertyParameters> | null = null,
-    set_property: Array<MrconvertSetPropertyParameters> | null = null,
-    append_property: Array<MrconvertAppendPropertyParameters> | null = null,
-    copy_properties: MrconvertVariousStringParametersTagged | MrconvertVariousFileParametersTagged | null = null,
-    strides: MrconvertVariousString1ParametersTagged | MrconvertVariousFile1ParametersTagged | null = null,
+    clear_property: Array<MrconvertClearPropertyParamsDict> | null = null,
+    set_property: Array<MrconvertSetPropertyParamsDict> | null = null,
+    append_property: Array<MrconvertAppendPropertyParamsDict> | null = null,
+    copy_properties: MrconvertVariousStringParamsDictTagged | MrconvertVariousFileParamsDictTagged | null = null,
+    strides: MrconvertVariousString1ParamsDictTagged | MrconvertVariousFile1ParamsDictTagged | null = null,
     datatype: string | null = null,
     grad: InputPathType | null = null,
-    fslgrad: MrconvertFslgradParameters | null = null,
+    fslgrad: MrconvertFslgradParamsDict | null = null,
     bvalue_scaling: string | null = null,
     export_grad_mrtrix: string | null = null,
-    export_grad_fsl: MrconvertExportGradFslParameters | null = null,
+    export_grad_fsl: MrconvertExportGradFslParamsDict | null = null,
     import_pe_table: InputPathType | null = null,
-    import_pe_eddy: MrconvertImportPeEddyParameters | null = null,
+    import_pe_eddy: MrconvertImportPeEddyParamsDict | null = null,
     export_pe_table: string | null = null,
-    export_pe_eddy: MrconvertExportPeEddyParameters | null = null,
+    export_pe_eddy: MrconvertExportPeEddyParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrconvertConfigParameters> | null = null,
+    config: Array<MrconvertConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -1322,23 +1322,51 @@ function mrconvert(
 
 export {
       MRCONVERT_METADATA,
+      MrconvertAppendPropertyParamsDict,
+      MrconvertAppendPropertyParamsDictTagged,
+      MrconvertClearPropertyParamsDict,
+      MrconvertClearPropertyParamsDictTagged,
+      MrconvertConfigParamsDict,
+      MrconvertConfigParamsDictTagged,
+      MrconvertCoordParamsDict,
+      MrconvertCoordParamsDictTagged,
       MrconvertExportGradFslOutputs,
+      MrconvertExportGradFslParamsDict,
+      MrconvertExportGradFslParamsDictTagged,
       MrconvertExportPeEddyOutputs,
+      MrconvertExportPeEddyParamsDict,
+      MrconvertExportPeEddyParamsDictTagged,
+      MrconvertFslgradParamsDict,
+      MrconvertFslgradParamsDictTagged,
+      MrconvertImportPeEddyParamsDict,
+      MrconvertImportPeEddyParamsDictTagged,
       MrconvertOutputs,
+      MrconvertParamsDict,
+      MrconvertParamsDictTagged,
+      MrconvertSetPropertyParamsDict,
+      MrconvertSetPropertyParamsDictTagged,
+      MrconvertVariousFile1ParamsDict,
+      MrconvertVariousFile1ParamsDictTagged,
+      MrconvertVariousFileParamsDict,
+      MrconvertVariousFileParamsDictTagged,
+      MrconvertVariousString1ParamsDict,
+      MrconvertVariousString1ParamsDictTagged,
+      MrconvertVariousStringParamsDict,
+      MrconvertVariousStringParamsDictTagged,
       mrconvert,
-      mrconvert_append_property_params,
-      mrconvert_clear_property_params,
-      mrconvert_config_params,
-      mrconvert_coord_params,
+      mrconvert_append_property,
+      mrconvert_clear_property,
+      mrconvert_config,
+      mrconvert_coord,
       mrconvert_execute,
-      mrconvert_export_grad_fsl_params,
-      mrconvert_export_pe_eddy_params,
-      mrconvert_fslgrad_params,
-      mrconvert_import_pe_eddy_params,
+      mrconvert_export_grad_fsl,
+      mrconvert_export_pe_eddy,
+      mrconvert_fslgrad,
+      mrconvert_import_pe_eddy,
       mrconvert_params,
-      mrconvert_set_property_params,
-      mrconvert_various_file_1_params,
-      mrconvert_various_file_params,
-      mrconvert_various_string_1_params,
-      mrconvert_various_string_params,
+      mrconvert_set_property,
+      mrconvert_various_file,
+      mrconvert_various_file_1,
+      mrconvert_various_string,
+      mrconvert_various_string_1,
 };

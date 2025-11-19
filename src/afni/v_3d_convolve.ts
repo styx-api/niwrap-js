@@ -11,17 +11,17 @@ const V_3D_CONVOLVE_METADATA: Metadata = {
 };
 
 
-interface V3dConvolveParameters {
+interface V3dConvolveParamsDict {
     "@type"?: "afni/3dConvolve";
     "infile": InputPathType;
     "outfile": string;
     "options"?: string | null | undefined;
 }
-type V3dConvolveParametersTagged = Required<Pick<V3dConvolveParameters, '@type'>> & V3dConvolveParameters;
+type V3dConvolveParamsDictTagged = Required<Pick<V3dConvolveParamsDict, '@type'>> & V3dConvolveParamsDict;
 
 
 /**
- * Output object returned when calling `V3dConvolveParameters(...)`.
+ * Output object returned when calling `V3dConvolveParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3d_convolve_params(
     infile: InputPathType,
     outfile: string,
     options: string | null = null,
-): V3dConvolveParametersTagged {
+): V3dConvolveParamsDictTagged {
     const params = {
         "@type": "afni/3dConvolve" as const,
         "infile": infile,
@@ -72,7 +72,7 @@ function v_3d_convolve_params(
  * @returns Command-line arguments.
  */
 function v_3d_convolve_cargs(
-    params: V3dConvolveParameters,
+    params: V3dConvolveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function v_3d_convolve_cargs(
  * @returns Outputs object.
  */
 function v_3d_convolve_outputs(
-    params: V3dConvolveParameters,
+    params: V3dConvolveParamsDict,
     execution: Execution,
 ): V3dConvolveOutputs {
     const ret: V3dConvolveOutputs = {
@@ -124,7 +124,7 @@ function v_3d_convolve_outputs(
  * @returns NamedTuple of outputs (described in `V3dConvolveOutputs`).
  */
 function v_3d_convolve_execute(
-    params: V3dConvolveParameters,
+    params: V3dConvolveParamsDict,
     runner: Runner | null = null,
 ): V3dConvolveOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function v_3d_convolve(
 
 export {
       V3dConvolveOutputs,
+      V3dConvolveParamsDict,
+      V3dConvolveParamsDictTagged,
       V_3D_CONVOLVE_METADATA,
       v_3d_convolve,
       v_3d_convolve_execute,

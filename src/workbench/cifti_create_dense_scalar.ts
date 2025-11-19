@@ -10,58 +10,58 @@ const CIFTI_CREATE_DENSE_SCALAR_METADATA: Metadata = {
 };
 
 
-interface CiftiCreateDenseScalarVolumeParameters {
+interface CiftiCreateDenseScalarVolumeParamsDict {
     "@type"?: "volume";
     "volume-data": InputPathType;
     "structure-label-volume": InputPathType;
 }
-type CiftiCreateDenseScalarVolumeParametersTagged = Required<Pick<CiftiCreateDenseScalarVolumeParameters, '@type'>> & CiftiCreateDenseScalarVolumeParameters;
+type CiftiCreateDenseScalarVolumeParamsDictTagged = Required<Pick<CiftiCreateDenseScalarVolumeParamsDict, '@type'>> & CiftiCreateDenseScalarVolumeParamsDict;
 
 
-interface CiftiCreateDenseScalarLeftMetricParameters {
+interface CiftiCreateDenseScalarLeftMetricParamsDict {
     "@type"?: "left-metric";
     "metric": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateDenseScalarLeftMetricParametersTagged = Required<Pick<CiftiCreateDenseScalarLeftMetricParameters, '@type'>> & CiftiCreateDenseScalarLeftMetricParameters;
+type CiftiCreateDenseScalarLeftMetricParamsDictTagged = Required<Pick<CiftiCreateDenseScalarLeftMetricParamsDict, '@type'>> & CiftiCreateDenseScalarLeftMetricParamsDict;
 
 
-interface CiftiCreateDenseScalarRightMetricParameters {
+interface CiftiCreateDenseScalarRightMetricParamsDict {
     "@type"?: "right-metric";
     "metric": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateDenseScalarRightMetricParametersTagged = Required<Pick<CiftiCreateDenseScalarRightMetricParameters, '@type'>> & CiftiCreateDenseScalarRightMetricParameters;
+type CiftiCreateDenseScalarRightMetricParamsDictTagged = Required<Pick<CiftiCreateDenseScalarRightMetricParamsDict, '@type'>> & CiftiCreateDenseScalarRightMetricParamsDict;
 
 
-interface CiftiCreateDenseScalarCerebellumMetricParameters {
+interface CiftiCreateDenseScalarCerebellumMetricParamsDict {
     "@type"?: "cerebellum-metric";
     "metric": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateDenseScalarCerebellumMetricParametersTagged = Required<Pick<CiftiCreateDenseScalarCerebellumMetricParameters, '@type'>> & CiftiCreateDenseScalarCerebellumMetricParameters;
+type CiftiCreateDenseScalarCerebellumMetricParamsDictTagged = Required<Pick<CiftiCreateDenseScalarCerebellumMetricParamsDict, '@type'>> & CiftiCreateDenseScalarCerebellumMetricParamsDict;
 
 
-interface CiftiCreateDenseScalarMetricParameters {
+interface CiftiCreateDenseScalarMetricParamsDict {
     "@type"?: "metric";
     "structure": string;
     "metric": InputPathType;
     "roi-metric"?: InputPathType | null | undefined;
 }
-type CiftiCreateDenseScalarMetricParametersTagged = Required<Pick<CiftiCreateDenseScalarMetricParameters, '@type'>> & CiftiCreateDenseScalarMetricParameters;
+type CiftiCreateDenseScalarMetricParamsDictTagged = Required<Pick<CiftiCreateDenseScalarMetricParamsDict, '@type'>> & CiftiCreateDenseScalarMetricParamsDict;
 
 
-interface CiftiCreateDenseScalarParameters {
+interface CiftiCreateDenseScalarParamsDict {
     "@type"?: "workbench/cifti-create-dense-scalar";
     "cifti-out": string;
-    "volume"?: CiftiCreateDenseScalarVolumeParameters | null | undefined;
-    "left-metric"?: CiftiCreateDenseScalarLeftMetricParameters | null | undefined;
-    "right-metric"?: CiftiCreateDenseScalarRightMetricParameters | null | undefined;
-    "cerebellum-metric"?: CiftiCreateDenseScalarCerebellumMetricParameters | null | undefined;
+    "volume"?: CiftiCreateDenseScalarVolumeParamsDict | null | undefined;
+    "left-metric"?: CiftiCreateDenseScalarLeftMetricParamsDict | null | undefined;
+    "right-metric"?: CiftiCreateDenseScalarRightMetricParamsDict | null | undefined;
+    "cerebellum-metric"?: CiftiCreateDenseScalarCerebellumMetricParamsDict | null | undefined;
     "file"?: string | null | undefined;
-    "metric"?: Array<CiftiCreateDenseScalarMetricParameters> | null | undefined;
+    "metric"?: Array<CiftiCreateDenseScalarMetricParamsDict> | null | undefined;
 }
-type CiftiCreateDenseScalarParametersTagged = Required<Pick<CiftiCreateDenseScalarParameters, '@type'>> & CiftiCreateDenseScalarParameters;
+type CiftiCreateDenseScalarParamsDictTagged = Required<Pick<CiftiCreateDenseScalarParamsDict, '@type'>> & CiftiCreateDenseScalarParamsDict;
 
 
 /**
@@ -72,10 +72,10 @@ type CiftiCreateDenseScalarParametersTagged = Required<Pick<CiftiCreateDenseScal
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_scalar_volume_params(
+function cifti_create_dense_scalar_volume(
     volume_data: InputPathType,
     structure_label_volume: InputPathType,
-): CiftiCreateDenseScalarVolumeParametersTagged {
+): CiftiCreateDenseScalarVolumeParamsDictTagged {
     const params = {
         "@type": "volume" as const,
         "volume-data": volume_data,
@@ -94,7 +94,7 @@ function cifti_create_dense_scalar_volume_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_scalar_volume_cargs(
-    params: CiftiCreateDenseScalarVolumeParameters,
+    params: CiftiCreateDenseScalarVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,10 +117,10 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_scalar_left_metric_params(
+function cifti_create_dense_scalar_left_metric(
     metric: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateDenseScalarLeftMetricParametersTagged {
+): CiftiCreateDenseScalarLeftMetricParamsDictTagged {
     const params = {
         "@type": "left-metric" as const,
         "metric": metric,
@@ -141,7 +141,7 @@ function cifti_create_dense_scalar_left_metric_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_scalar_left_metric_cargs(
-    params: CiftiCreateDenseScalarLeftMetricParameters,
+    params: CiftiCreateDenseScalarLeftMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,10 +167,10 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_scalar_right_metric_params(
+function cifti_create_dense_scalar_right_metric(
     metric: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateDenseScalarRightMetricParametersTagged {
+): CiftiCreateDenseScalarRightMetricParamsDictTagged {
     const params = {
         "@type": "right-metric" as const,
         "metric": metric,
@@ -191,7 +191,7 @@ function cifti_create_dense_scalar_right_metric_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_scalar_right_metric_cargs(
-    params: CiftiCreateDenseScalarRightMetricParameters,
+    params: CiftiCreateDenseScalarRightMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -217,10 +217,10 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_scalar_cerebellum_metric_params(
+function cifti_create_dense_scalar_cerebellum_metric(
     metric: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateDenseScalarCerebellumMetricParametersTagged {
+): CiftiCreateDenseScalarCerebellumMetricParamsDictTagged {
     const params = {
         "@type": "cerebellum-metric" as const,
         "metric": metric,
@@ -241,7 +241,7 @@ function cifti_create_dense_scalar_cerebellum_metric_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_scalar_cerebellum_metric_cargs(
-    params: CiftiCreateDenseScalarCerebellumMetricParameters,
+    params: CiftiCreateDenseScalarCerebellumMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,11 +268,11 @@ the ROI as a metric file
  *
  * @returns Parameter dictionary
  */
-function cifti_create_dense_scalar_metric_params(
+function cifti_create_dense_scalar_metric(
     structure: string,
     metric: InputPathType,
     roi_metric: InputPathType | null,
-): CiftiCreateDenseScalarMetricParametersTagged {
+): CiftiCreateDenseScalarMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
         "structure": structure,
@@ -294,7 +294,7 @@ function cifti_create_dense_scalar_metric_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_scalar_metric_cargs(
-    params: CiftiCreateDenseScalarMetricParameters,
+    params: CiftiCreateDenseScalarMetricParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -312,7 +312,7 @@ function cifti_create_dense_scalar_metric_cargs(
 
 
 /**
- * Output object returned when calling `CiftiCreateDenseScalarParameters(...)`.
+ * Output object returned when calling `CiftiCreateDenseScalarParamsDict(...)`.
  *
  * @interface
  */
@@ -346,12 +346,12 @@ text file containing map names, one per line
 function cifti_create_dense_scalar_params(
     cifti_out: string,
     file: string | null,
-    volume: CiftiCreateDenseScalarVolumeParameters | null = null,
-    left_metric: CiftiCreateDenseScalarLeftMetricParameters | null = null,
-    right_metric: CiftiCreateDenseScalarRightMetricParameters | null = null,
-    cerebellum_metric: CiftiCreateDenseScalarCerebellumMetricParameters | null = null,
-    metric: Array<CiftiCreateDenseScalarMetricParameters> | null = null,
-): CiftiCreateDenseScalarParametersTagged {
+    volume: CiftiCreateDenseScalarVolumeParamsDict | null = null,
+    left_metric: CiftiCreateDenseScalarLeftMetricParamsDict | null = null,
+    right_metric: CiftiCreateDenseScalarRightMetricParamsDict | null = null,
+    cerebellum_metric: CiftiCreateDenseScalarCerebellumMetricParamsDict | null = null,
+    metric: Array<CiftiCreateDenseScalarMetricParamsDict> | null = null,
+): CiftiCreateDenseScalarParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-dense-scalar" as const,
         "cifti-out": cifti_out,
@@ -387,7 +387,7 @@ function cifti_create_dense_scalar_params(
  * @returns Command-line arguments.
  */
 function cifti_create_dense_scalar_cargs(
-    params: CiftiCreateDenseScalarParameters,
+    params: CiftiCreateDenseScalarParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -418,7 +418,7 @@ function cifti_create_dense_scalar_cargs(
  * @returns Outputs object.
  */
 function cifti_create_dense_scalar_outputs(
-    params: CiftiCreateDenseScalarParameters,
+    params: CiftiCreateDenseScalarParamsDict,
     execution: Execution,
 ): CiftiCreateDenseScalarOutputs {
     const ret: CiftiCreateDenseScalarOutputs = {
@@ -478,7 +478,7 @@ function cifti_create_dense_scalar_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCreateDenseScalarOutputs`).
  */
 function cifti_create_dense_scalar_execute(
-    params: CiftiCreateDenseScalarParameters,
+    params: CiftiCreateDenseScalarParamsDict,
     runner: Runner | null = null,
 ): CiftiCreateDenseScalarOutputs {
     runner = runner || getGlobalRunner();
@@ -550,11 +550,11 @@ text file containing map names, one per line
 function cifti_create_dense_scalar(
     cifti_out: string,
     file: string | null,
-    volume: CiftiCreateDenseScalarVolumeParameters | null = null,
-    left_metric: CiftiCreateDenseScalarLeftMetricParameters | null = null,
-    right_metric: CiftiCreateDenseScalarRightMetricParameters | null = null,
-    cerebellum_metric: CiftiCreateDenseScalarCerebellumMetricParameters | null = null,
-    metric: Array<CiftiCreateDenseScalarMetricParameters> | null = null,
+    volume: CiftiCreateDenseScalarVolumeParamsDict | null = null,
+    left_metric: CiftiCreateDenseScalarLeftMetricParamsDict | null = null,
+    right_metric: CiftiCreateDenseScalarRightMetricParamsDict | null = null,
+    cerebellum_metric: CiftiCreateDenseScalarCerebellumMetricParamsDict | null = null,
+    metric: Array<CiftiCreateDenseScalarMetricParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseScalarOutputs {
     const params = cifti_create_dense_scalar_params(cifti_out, file, volume, left_metric, right_metric, cerebellum_metric, metric)
@@ -564,13 +564,25 @@ function cifti_create_dense_scalar(
 
 export {
       CIFTI_CREATE_DENSE_SCALAR_METADATA,
+      CiftiCreateDenseScalarCerebellumMetricParamsDict,
+      CiftiCreateDenseScalarCerebellumMetricParamsDictTagged,
+      CiftiCreateDenseScalarLeftMetricParamsDict,
+      CiftiCreateDenseScalarLeftMetricParamsDictTagged,
+      CiftiCreateDenseScalarMetricParamsDict,
+      CiftiCreateDenseScalarMetricParamsDictTagged,
       CiftiCreateDenseScalarOutputs,
+      CiftiCreateDenseScalarParamsDict,
+      CiftiCreateDenseScalarParamsDictTagged,
+      CiftiCreateDenseScalarRightMetricParamsDict,
+      CiftiCreateDenseScalarRightMetricParamsDictTagged,
+      CiftiCreateDenseScalarVolumeParamsDict,
+      CiftiCreateDenseScalarVolumeParamsDictTagged,
       cifti_create_dense_scalar,
-      cifti_create_dense_scalar_cerebellum_metric_params,
+      cifti_create_dense_scalar_cerebellum_metric,
       cifti_create_dense_scalar_execute,
-      cifti_create_dense_scalar_left_metric_params,
-      cifti_create_dense_scalar_metric_params,
+      cifti_create_dense_scalar_left_metric,
+      cifti_create_dense_scalar_metric,
       cifti_create_dense_scalar_params,
-      cifti_create_dense_scalar_right_metric_params,
-      cifti_create_dense_scalar_volume_params,
+      cifti_create_dense_scalar_right_metric,
+      cifti_create_dense_scalar_volume,
 };

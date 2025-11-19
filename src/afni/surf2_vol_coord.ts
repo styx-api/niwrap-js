@@ -11,7 +11,7 @@ const SURF2_VOL_COORD_METADATA: Metadata = {
 };
 
 
-interface Surf2VolCoordParameters {
+interface Surf2VolCoordParamsDict {
     "@type"?: "afni/Surf2VolCoord";
     "surface": string;
     "grid_vol": InputPathType;
@@ -25,11 +25,11 @@ interface Surf2VolCoordParameters {
     "verb_level"?: number | null | undefined;
     "prefix": string;
 }
-type Surf2VolCoordParametersTagged = Required<Pick<Surf2VolCoordParameters, '@type'>> & Surf2VolCoordParameters;
+type Surf2VolCoordParamsDictTagged = Required<Pick<Surf2VolCoordParamsDict, '@type'>> & Surf2VolCoordParamsDict;
 
 
 /**
- * Output object returned when calling `Surf2VolCoordParameters(...)`.
+ * Output object returned when calling `Surf2VolCoordParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function surf2_vol_coord_params(
     lpi: boolean = false,
     rai: boolean = false,
     verb_level: number | null = null,
-): Surf2VolCoordParametersTagged {
+): Surf2VolCoordParamsDictTagged {
     const params = {
         "@type": "afni/Surf2VolCoord" as const,
         "surface": surface,
@@ -112,7 +112,7 @@ function surf2_vol_coord_params(
  * @returns Command-line arguments.
  */
 function surf2_vol_coord_cargs(
-    params: Surf2VolCoordParameters,
+    params: Surf2VolCoordParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function surf2_vol_coord_cargs(
  * @returns Outputs object.
  */
 function surf2_vol_coord_outputs(
-    params: Surf2VolCoordParameters,
+    params: Surf2VolCoordParamsDict,
     execution: Execution,
 ): Surf2VolCoordOutputs {
     const ret: Surf2VolCoordOutputs = {
@@ -208,7 +208,7 @@ function surf2_vol_coord_outputs(
  * @returns NamedTuple of outputs (described in `Surf2VolCoordOutputs`).
  */
 function surf2_vol_coord_execute(
-    params: Surf2VolCoordParameters,
+    params: Surf2VolCoordParamsDict,
     runner: Runner | null = null,
 ): Surf2VolCoordOutputs {
     runner = runner || getGlobalRunner();
@@ -267,6 +267,8 @@ function surf2_vol_coord(
 export {
       SURF2_VOL_COORD_METADATA,
       Surf2VolCoordOutputs,
+      Surf2VolCoordParamsDict,
+      Surf2VolCoordParamsDictTagged,
       surf2_vol_coord,
       surf2_vol_coord_execute,
       surf2_vol_coord_params,

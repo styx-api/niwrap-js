@@ -11,7 +11,7 @@ const TALSEGPROB_METADATA: Metadata = {
 };
 
 
-interface TalsegprobParameters {
+interface TalsegprobParamsDict {
     "@type"?: "freesurfer/talsegprob";
     "subjects_list"?: Array<string> | null | undefined;
     "fsgd_file"?: InputPathType | null | undefined;
@@ -31,11 +31,11 @@ interface TalsegprobParameters {
     "version_flag": boolean;
     "echo_flag": boolean;
 }
-type TalsegprobParametersTagged = Required<Pick<TalsegprobParameters, '@type'>> & TalsegprobParameters;
+type TalsegprobParamsDictTagged = Required<Pick<TalsegprobParamsDict, '@type'>> & TalsegprobParamsDict;
 
 
 /**
- * Output object returned when calling `TalsegprobParameters(...)`.
+ * Output object returned when calling `TalsegprobParamsDict(...)`.
  *
  * @interface
  */
@@ -100,7 +100,7 @@ function talsegprob_params(
     nocleanup_flag: boolean = false,
     version_flag: boolean = false,
     echo_flag: boolean = false,
-): TalsegprobParametersTagged {
+): TalsegprobParamsDictTagged {
     const params = {
         "@type": "freesurfer/talsegprob" as const,
         "hippo_flag": hippo_flag,
@@ -156,7 +156,7 @@ function talsegprob_params(
  * @returns Command-line arguments.
  */
 function talsegprob_cargs(
-    params: TalsegprobParameters,
+    params: TalsegprobParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -258,7 +258,7 @@ function talsegprob_cargs(
  * @returns Outputs object.
  */
 function talsegprob_outputs(
-    params: TalsegprobParameters,
+    params: TalsegprobParamsDict,
     execution: Execution,
 ): TalsegprobOutputs {
     const ret: TalsegprobOutputs = {
@@ -286,7 +286,7 @@ function talsegprob_outputs(
  * @returns NamedTuple of outputs (described in `TalsegprobOutputs`).
  */
 function talsegprob_execute(
-    params: TalsegprobParameters,
+    params: TalsegprobParamsDict,
     runner: Runner | null = null,
 ): TalsegprobOutputs {
     runner = runner || getGlobalRunner();
@@ -357,6 +357,8 @@ function talsegprob(
 export {
       TALSEGPROB_METADATA,
       TalsegprobOutputs,
+      TalsegprobParamsDict,
+      TalsegprobParamsDictTagged,
       talsegprob,
       talsegprob_execute,
       talsegprob_params,

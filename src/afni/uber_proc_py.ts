@@ -11,15 +11,15 @@ const UBER_PROC_PY_METADATA: Metadata = {
 };
 
 
-interface UberProcPyParameters {
+interface UberProcPyParamsDict {
     "@type"?: "afni/uber_proc.py";
     "results_dir"?: string | null | undefined;
 }
-type UberProcPyParametersTagged = Required<Pick<UberProcPyParameters, '@type'>> & UberProcPyParameters;
+type UberProcPyParamsDictTagged = Required<Pick<UberProcPyParamsDict, '@type'>> & UberProcPyParamsDict;
 
 
 /**
- * Output object returned when calling `UberProcPyParameters(...)`.
+ * Output object returned when calling `UberProcPyParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface UberProcPyOutputs {
  */
 function uber_proc_py_params(
     results_dir: string | null = null,
-): UberProcPyParametersTagged {
+): UberProcPyParamsDictTagged {
     const params = {
         "@type": "afni/uber_proc.py" as const,
     };
@@ -60,7 +60,7 @@ function uber_proc_py_params(
  * @returns Command-line arguments.
  */
 function uber_proc_py_cargs(
-    params: UberProcPyParameters,
+    params: UberProcPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function uber_proc_py_cargs(
  * @returns Outputs object.
  */
 function uber_proc_py_outputs(
-    params: UberProcPyParameters,
+    params: UberProcPyParamsDict,
     execution: Execution,
 ): UberProcPyOutputs {
     const ret: UberProcPyOutputs = {
@@ -106,7 +106,7 @@ function uber_proc_py_outputs(
  * @returns NamedTuple of outputs (described in `UberProcPyOutputs`).
  */
 function uber_proc_py_execute(
-    params: UberProcPyParameters,
+    params: UberProcPyParamsDict,
     runner: Runner | null = null,
 ): UberProcPyOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function uber_proc_py(
 export {
       UBER_PROC_PY_METADATA,
       UberProcPyOutputs,
+      UberProcPyParamsDict,
+      UberProcPyParamsDictTagged,
       uber_proc_py,
       uber_proc_py_execute,
       uber_proc_py_params,

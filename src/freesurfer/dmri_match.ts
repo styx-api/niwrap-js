@@ -11,7 +11,7 @@ const DMRI_MATCH_METADATA: Metadata = {
 };
 
 
-interface DmriMatchParameters {
+interface DmriMatchParamsDict {
     "@type"?: "freesurfer/dmri_match";
     "parcellation1": InputPathType;
     "parcellation2": InputPathType;
@@ -25,11 +25,11 @@ interface DmriMatchParameters {
     "inter_hemi_ratio_removal"?: string | null | undefined;
     "output": string;
 }
-type DmriMatchParametersTagged = Required<Pick<DmriMatchParameters, '@type'>> & DmriMatchParameters;
+type DmriMatchParamsDictTagged = Required<Pick<DmriMatchParamsDict, '@type'>> & DmriMatchParamsDict;
 
 
 /**
- * Output object returned when calling `DmriMatchParameters(...)`.
+ * Output object returned when calling `DmriMatchParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function dmri_match_params(
     bounding_box: boolean = false,
     symmetry: boolean = false,
     inter_hemi_ratio_removal: string | null = null,
-): DmriMatchParametersTagged {
+): DmriMatchParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_match" as const,
         "parcellation1": parcellation1,
@@ -104,7 +104,7 @@ function dmri_match_params(
  * @returns Command-line arguments.
  */
 function dmri_match_cargs(
-    params: DmriMatchParameters,
+    params: DmriMatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function dmri_match_cargs(
  * @returns Outputs object.
  */
 function dmri_match_outputs(
-    params: DmriMatchParameters,
+    params: DmriMatchParamsDict,
     execution: Execution,
 ): DmriMatchOutputs {
     const ret: DmriMatchOutputs = {
@@ -187,7 +187,7 @@ function dmri_match_outputs(
  * @returns NamedTuple of outputs (described in `DmriMatchOutputs`).
  */
 function dmri_match_execute(
-    params: DmriMatchParameters,
+    params: DmriMatchParamsDict,
     runner: Runner | null = null,
 ): DmriMatchOutputs {
     runner = runner || getGlobalRunner();
@@ -246,6 +246,8 @@ function dmri_match(
 export {
       DMRI_MATCH_METADATA,
       DmriMatchOutputs,
+      DmriMatchParamsDict,
+      DmriMatchParamsDictTagged,
       dmri_match,
       dmri_match_execute,
       dmri_match_params,

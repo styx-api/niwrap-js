@@ -11,7 +11,7 @@ const MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA: Metadata = {
 };
 
 
-interface MriEditSegmentationWithSurfacesParameters {
+interface MriEditSegmentationWithSurfacesParamsDict {
     "@type"?: "freesurfer/mri_edit_segmentation_with_surfaces";
     "aseg_name": InputPathType;
     "surface_dir": string;
@@ -23,11 +23,11 @@ interface MriEditSegmentationWithSurfacesParameters {
     "cortex_flag"?: boolean | null | undefined;
     "annotation_file"?: InputPathType | null | undefined;
 }
-type MriEditSegmentationWithSurfacesParametersTagged = Required<Pick<MriEditSegmentationWithSurfacesParameters, '@type'>> & MriEditSegmentationWithSurfacesParameters;
+type MriEditSegmentationWithSurfacesParamsDictTagged = Required<Pick<MriEditSegmentationWithSurfacesParamsDict, '@type'>> & MriEditSegmentationWithSurfacesParamsDict;
 
 
 /**
- * Output object returned when calling `MriEditSegmentationWithSurfacesParameters(...)`.
+ * Output object returned when calling `MriEditSegmentationWithSurfacesParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function mri_edit_segmentation_with_surfaces_params(
     cerebellum_flag: boolean | null = null,
     cortex_flag: boolean | null = null,
     annotation_file: InputPathType | null = null,
-): MriEditSegmentationWithSurfacesParametersTagged {
+): MriEditSegmentationWithSurfacesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_edit_segmentation_with_surfaces" as const,
         "aseg_name": aseg_name,
@@ -104,7 +104,7 @@ function mri_edit_segmentation_with_surfaces_params(
  * @returns Command-line arguments.
  */
 function mri_edit_segmentation_with_surfaces_cargs(
-    params: MriEditSegmentationWithSurfacesParameters,
+    params: MriEditSegmentationWithSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,7 +156,7 @@ function mri_edit_segmentation_with_surfaces_cargs(
  * @returns Outputs object.
  */
 function mri_edit_segmentation_with_surfaces_outputs(
-    params: MriEditSegmentationWithSurfacesParameters,
+    params: MriEditSegmentationWithSurfacesParamsDict,
     execution: Execution,
 ): MriEditSegmentationWithSurfacesOutputs {
     const ret: MriEditSegmentationWithSurfacesOutputs = {
@@ -182,7 +182,7 @@ function mri_edit_segmentation_with_surfaces_outputs(
  * @returns NamedTuple of outputs (described in `MriEditSegmentationWithSurfacesOutputs`).
  */
 function mri_edit_segmentation_with_surfaces_execute(
-    params: MriEditSegmentationWithSurfacesParameters,
+    params: MriEditSegmentationWithSurfacesParamsDict,
     runner: Runner | null = null,
 ): MriEditSegmentationWithSurfacesOutputs {
     runner = runner || getGlobalRunner();
@@ -237,6 +237,8 @@ function mri_edit_segmentation_with_surfaces(
 export {
       MRI_EDIT_SEGMENTATION_WITH_SURFACES_METADATA,
       MriEditSegmentationWithSurfacesOutputs,
+      MriEditSegmentationWithSurfacesParamsDict,
+      MriEditSegmentationWithSurfacesParamsDictTagged,
       mri_edit_segmentation_with_surfaces,
       mri_edit_segmentation_with_surfaces_execute,
       mri_edit_segmentation_with_surfaces_params,

@@ -11,7 +11,7 @@ const TRAC_PATHS_METADATA: Metadata = {
 };
 
 
-interface TracPathsParameters {
+interface TracPathsParamsDict {
     "@type"?: "freesurfer/trac-paths";
     "dmrirc_file": InputPathType;
     "log_file"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface TracPathsParameters {
     "version": boolean;
     "help": boolean;
 }
-type TracPathsParametersTagged = Required<Pick<TracPathsParameters, '@type'>> & TracPathsParameters;
+type TracPathsParamsDictTagged = Required<Pick<TracPathsParamsDict, '@type'>> & TracPathsParamsDict;
 
 
 /**
- * Output object returned when calling `TracPathsParameters(...)`.
+ * Output object returned when calling `TracPathsParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function trac_paths_params(
     dontrun: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): TracPathsParametersTagged {
+): TracPathsParamsDictTagged {
     const params = {
         "@type": "freesurfer/trac-paths" as const,
         "dmrirc_file": dmrirc_file,
@@ -114,7 +114,7 @@ function trac_paths_params(
  * @returns Command-line arguments.
  */
 function trac_paths_cargs(
-    params: TracPathsParameters,
+    params: TracPathsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -184,7 +184,7 @@ function trac_paths_cargs(
  * @returns Outputs object.
  */
 function trac_paths_outputs(
-    params: TracPathsParameters,
+    params: TracPathsParamsDict,
     execution: Execution,
 ): TracPathsOutputs {
     const ret: TracPathsOutputs = {
@@ -209,7 +209,7 @@ function trac_paths_outputs(
  * @returns NamedTuple of outputs (described in `TracPathsOutputs`).
  */
 function trac_paths_execute(
-    params: TracPathsParameters,
+    params: TracPathsParamsDict,
     runner: Runner | null = null,
 ): TracPathsOutputs {
     runner = runner || getGlobalRunner();
@@ -272,6 +272,8 @@ function trac_paths(
 export {
       TRAC_PATHS_METADATA,
       TracPathsOutputs,
+      TracPathsParamsDict,
+      TracPathsParamsDictTagged,
       trac_paths,
       trac_paths_execute,
       trac_paths_params,

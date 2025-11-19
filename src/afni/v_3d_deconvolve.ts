@@ -11,7 +11,7 @@ const V_3D_DECONVOLVE_METADATA: Metadata = {
 };
 
 
-interface V3dDeconvolveParameters {
+interface V3dDeconvolveParamsDict {
     "@type"?: "afni/3dDeconvolve";
     "input_dataset": InputPathType;
     "mask_dataset"?: InputPathType | null | undefined;
@@ -29,11 +29,11 @@ interface V3dDeconvolveParameters {
     "x1D"?: string | null | undefined;
     "jobs"?: number | null | undefined;
 }
-type V3dDeconvolveParametersTagged = Required<Pick<V3dDeconvolveParameters, '@type'>> & V3dDeconvolveParameters;
+type V3dDeconvolveParamsDictTagged = Required<Pick<V3dDeconvolveParamsDict, '@type'>> & V3dDeconvolveParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDeconvolveParameters(...)`.
+ * Output object returned when calling `V3dDeconvolveParamsDict(...)`.
  *
  * @interface
  */
@@ -102,7 +102,7 @@ function v_3d_deconvolve_params(
     cbucket: string | null = null,
     x1_d: string | null = null,
     jobs: number | null = null,
-): V3dDeconvolveParametersTagged {
+): V3dDeconvolveParamsDictTagged {
     const params = {
         "@type": "afni/3dDeconvolve" as const,
         "input_dataset": input_dataset,
@@ -156,7 +156,7 @@ function v_3d_deconvolve_params(
  * @returns Command-line arguments.
  */
 function v_3d_deconvolve_cargs(
-    params: V3dDeconvolveParameters,
+    params: V3dDeconvolveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -253,7 +253,7 @@ function v_3d_deconvolve_cargs(
  * @returns Outputs object.
  */
 function v_3d_deconvolve_outputs(
-    params: V3dDeconvolveParameters,
+    params: V3dDeconvolveParamsDict,
     execution: Execution,
 ): V3dDeconvolveOutputs {
     const ret: V3dDeconvolveOutputs = {
@@ -283,7 +283,7 @@ function v_3d_deconvolve_outputs(
  * @returns NamedTuple of outputs (described in `V3dDeconvolveOutputs`).
  */
 function v_3d_deconvolve_execute(
-    params: V3dDeconvolveParameters,
+    params: V3dDeconvolveParamsDict,
     runner: Runner | null = null,
 ): V3dDeconvolveOutputs {
     runner = runner || getGlobalRunner();
@@ -349,6 +349,8 @@ function v_3d_deconvolve(
 
 export {
       V3dDeconvolveOutputs,
+      V3dDeconvolveParamsDict,
+      V3dDeconvolveParamsDictTagged,
       V_3D_DECONVOLVE_METADATA,
       v_3d_deconvolve,
       v_3d_deconvolve_execute,

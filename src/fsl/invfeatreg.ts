@@ -11,15 +11,15 @@ const INVFEATREG_METADATA: Metadata = {
 };
 
 
-interface InvfeatregParameters {
+interface InvfeatregParamsDict {
     "@type"?: "fsl/invfeatreg";
     "feat_directory": string;
 }
-type InvfeatregParametersTagged = Required<Pick<InvfeatregParameters, '@type'>> & InvfeatregParameters;
+type InvfeatregParamsDictTagged = Required<Pick<InvfeatregParamsDict, '@type'>> & InvfeatregParamsDict;
 
 
 /**
- * Output object returned when calling `InvfeatregParameters(...)`.
+ * Output object returned when calling `InvfeatregParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface InvfeatregOutputs {
  */
 function invfeatreg_params(
     feat_directory: string,
-): InvfeatregParametersTagged {
+): InvfeatregParamsDictTagged {
     const params = {
         "@type": "fsl/invfeatreg" as const,
         "feat_directory": feat_directory,
@@ -58,7 +58,7 @@ function invfeatreg_params(
  * @returns Command-line arguments.
  */
 function invfeatreg_cargs(
-    params: InvfeatregParameters,
+    params: InvfeatregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function invfeatreg_cargs(
  * @returns Outputs object.
  */
 function invfeatreg_outputs(
-    params: InvfeatregParameters,
+    params: InvfeatregParamsDict,
     execution: Execution,
 ): InvfeatregOutputs {
     const ret: InvfeatregOutputs = {
@@ -102,7 +102,7 @@ function invfeatreg_outputs(
  * @returns NamedTuple of outputs (described in `InvfeatregOutputs`).
  */
 function invfeatreg_execute(
-    params: InvfeatregParameters,
+    params: InvfeatregParamsDict,
     runner: Runner | null = null,
 ): InvfeatregOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function invfeatreg(
 export {
       INVFEATREG_METADATA,
       InvfeatregOutputs,
+      InvfeatregParamsDict,
+      InvfeatregParamsDictTagged,
       invfeatreg,
       invfeatreg_execute,
       invfeatreg_params,

@@ -11,7 +11,7 @@ const V_3D_TRFIX_METADATA: Metadata = {
 };
 
 
-interface V3dTrfixParameters {
+interface V3dTrfixParamsDict {
     "@type"?: "afni/3dTRfix";
     "input_file": InputPathType;
     "tr_list"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface V3dTrfixParameters {
     "prefix": string;
     "output_tr"?: number | null | undefined;
 }
-type V3dTrfixParametersTagged = Required<Pick<V3dTrfixParameters, '@type'>> & V3dTrfixParameters;
+type V3dTrfixParamsDictTagged = Required<Pick<V3dTrfixParamsDict, '@type'>> & V3dTrfixParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTrfixParameters(...)`.
+ * Output object returned when calling `V3dTrfixParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function v_3d_trfix_params(
     tr_list: InputPathType | null = null,
     time_list: InputPathType | null = null,
     output_tr: number | null = null,
-): V3dTrfixParametersTagged {
+): V3dTrfixParamsDictTagged {
     const params = {
         "@type": "afni/3dTRfix" as const,
         "input_file": input_file,
@@ -88,7 +88,7 @@ function v_3d_trfix_params(
  * @returns Command-line arguments.
  */
 function v_3d_trfix_cargs(
-    params: V3dTrfixParameters,
+    params: V3dTrfixParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function v_3d_trfix_cargs(
  * @returns Outputs object.
  */
 function v_3d_trfix_outputs(
-    params: V3dTrfixParameters,
+    params: V3dTrfixParamsDict,
     execution: Execution,
 ): V3dTrfixOutputs {
     const ret: V3dTrfixOutputs = {
@@ -159,7 +159,7 @@ function v_3d_trfix_outputs(
  * @returns NamedTuple of outputs (described in `V3dTrfixOutputs`).
  */
 function v_3d_trfix_execute(
-    params: V3dTrfixParameters,
+    params: V3dTrfixParamsDict,
     runner: Runner | null = null,
 ): V3dTrfixOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function v_3d_trfix(
 
 export {
       V3dTrfixOutputs,
+      V3dTrfixParamsDict,
+      V3dTrfixParamsDictTagged,
       V_3D_TRFIX_METADATA,
       v_3d_trfix,
       v_3d_trfix_execute,

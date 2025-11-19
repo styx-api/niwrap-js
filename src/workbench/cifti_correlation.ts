@@ -10,7 +10,7 @@ const CIFTI_CORRELATION_METADATA: Metadata = {
 };
 
 
-interface CiftiCorrelationRoiOverrideParameters {
+interface CiftiCorrelationRoiOverrideParamsDict {
     "@type"?: "roi-override";
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
@@ -18,13 +18,13 @@ interface CiftiCorrelationRoiOverrideParameters {
     "roi-vol"?: InputPathType | null | undefined;
     "roi-cifti"?: InputPathType | null | undefined;
 }
-type CiftiCorrelationRoiOverrideParametersTagged = Required<Pick<CiftiCorrelationRoiOverrideParameters, '@type'>> & CiftiCorrelationRoiOverrideParameters;
+type CiftiCorrelationRoiOverrideParamsDictTagged = Required<Pick<CiftiCorrelationRoiOverrideParamsDict, '@type'>> & CiftiCorrelationRoiOverrideParamsDict;
 
 
-interface CiftiCorrelationParameters {
+interface CiftiCorrelationParamsDict {
     "@type"?: "workbench/cifti-correlation";
     "cifti-out": string;
-    "roi-override"?: CiftiCorrelationRoiOverrideParameters | null | undefined;
+    "roi-override"?: CiftiCorrelationRoiOverrideParamsDict | null | undefined;
     "weight-file"?: string | null | undefined;
     "fisher-z": boolean;
     "no-demean": boolean;
@@ -32,7 +32,7 @@ interface CiftiCorrelationParameters {
     "limit-GB"?: number | null | undefined;
     "cifti": InputPathType;
 }
-type CiftiCorrelationParametersTagged = Required<Pick<CiftiCorrelationParameters, '@type'>> & CiftiCorrelationParameters;
+type CiftiCorrelationParamsDictTagged = Required<Pick<CiftiCorrelationParamsDict, '@type'>> & CiftiCorrelationParamsDict;
 
 
 /**
@@ -56,13 +56,13 @@ the cifti roi file
  *
  * @returns Parameter dictionary
  */
-function cifti_correlation_roi_override_params(
+function cifti_correlation_roi_override(
     roi_metric: InputPathType | null,
     roi_metric_: InputPathType | null,
     roi_metric_2: InputPathType | null,
     roi_vol: InputPathType | null,
     roi_cifti: InputPathType | null,
-): CiftiCorrelationRoiOverrideParametersTagged {
+): CiftiCorrelationRoiOverrideParamsDictTagged {
     const params = {
         "@type": "roi-override" as const,
     };
@@ -94,7 +94,7 @@ function cifti_correlation_roi_override_params(
  * @returns Command-line arguments.
  */
 function cifti_correlation_roi_override_cargs(
-    params: CiftiCorrelationRoiOverrideParameters,
+    params: CiftiCorrelationRoiOverrideParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function cifti_correlation_roi_override_cargs(
 
 
 /**
- * Output object returned when calling `CiftiCorrelationParameters(...)`.
+ * Output object returned when calling `CiftiCorrelationParamsDict(...)`.
  *
  * @interface
  */
@@ -157,11 +157,11 @@ function cifti_correlation_params(
     weight_file: string | null,
     limit_gb: number | null,
     cifti: InputPathType,
-    roi_override: CiftiCorrelationRoiOverrideParameters | null = null,
+    roi_override: CiftiCorrelationRoiOverrideParamsDict | null = null,
     fisher_z: boolean = false,
     no_demean: boolean = false,
     covariance: boolean = false,
-): CiftiCorrelationParametersTagged {
+): CiftiCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-correlation" as const,
         "cifti-out": cifti_out,
@@ -192,7 +192,7 @@ function cifti_correlation_params(
  * @returns Command-line arguments.
  */
 function cifti_correlation_cargs(
-    params: CiftiCorrelationParameters,
+    params: CiftiCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -225,7 +225,7 @@ function cifti_correlation_cargs(
  * @returns Outputs object.
  */
 function cifti_correlation_outputs(
-    params: CiftiCorrelationParameters,
+    params: CiftiCorrelationParamsDict,
     execution: Execution,
 ): CiftiCorrelationOutputs {
     const ret: CiftiCorrelationOutputs = {
@@ -251,7 +251,7 @@ function cifti_correlation_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
  */
 function cifti_correlation_execute(
-    params: CiftiCorrelationParameters,
+    params: CiftiCorrelationParamsDict,
     runner: Runner | null = null,
 ): CiftiCorrelationOutputs {
     runner = runner || getGlobalRunner();
@@ -294,7 +294,7 @@ function cifti_correlation(
     weight_file: string | null,
     limit_gb: number | null,
     cifti: InputPathType,
-    roi_override: CiftiCorrelationRoiOverrideParameters | null = null,
+    roi_override: CiftiCorrelationRoiOverrideParamsDict | null = null,
     fisher_z: boolean = false,
     no_demean: boolean = false,
     covariance: boolean = false,
@@ -308,8 +308,12 @@ function cifti_correlation(
 export {
       CIFTI_CORRELATION_METADATA,
       CiftiCorrelationOutputs,
+      CiftiCorrelationParamsDict,
+      CiftiCorrelationParamsDictTagged,
+      CiftiCorrelationRoiOverrideParamsDict,
+      CiftiCorrelationRoiOverrideParamsDictTagged,
       cifti_correlation,
       cifti_correlation_execute,
       cifti_correlation_params,
-      cifti_correlation_roi_override_params,
+      cifti_correlation_roi_override,
 };

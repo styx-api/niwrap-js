@@ -10,23 +10,23 @@ const CIFTI_ESTIMATE_FWHM_METADATA: Metadata = {
 };
 
 
-interface CiftiEstimateFwhmSurfaceParameters {
+interface CiftiEstimateFwhmSurfaceParamsDict {
     "@type"?: "surface";
     "structure": string;
     "surface": InputPathType;
 }
-type CiftiEstimateFwhmSurfaceParametersTagged = Required<Pick<CiftiEstimateFwhmSurfaceParameters, '@type'>> & CiftiEstimateFwhmSurfaceParameters;
+type CiftiEstimateFwhmSurfaceParamsDictTagged = Required<Pick<CiftiEstimateFwhmSurfaceParamsDict, '@type'>> & CiftiEstimateFwhmSurfaceParamsDict;
 
 
-interface CiftiEstimateFwhmParameters {
+interface CiftiEstimateFwhmParamsDict {
     "@type"?: "workbench/cifti-estimate-fwhm";
     "merged-volume": boolean;
     "column"?: number | null | undefined;
     "demean"?: boolean | null | undefined;
-    "surface"?: Array<CiftiEstimateFwhmSurfaceParameters> | null | undefined;
+    "surface"?: Array<CiftiEstimateFwhmSurfaceParamsDict> | null | undefined;
     "cifti": InputPathType;
 }
-type CiftiEstimateFwhmParametersTagged = Required<Pick<CiftiEstimateFwhmParameters, '@type'>> & CiftiEstimateFwhmParameters;
+type CiftiEstimateFwhmParamsDictTagged = Required<Pick<CiftiEstimateFwhmParamsDict, '@type'>> & CiftiEstimateFwhmParamsDict;
 
 
 /**
@@ -37,10 +37,10 @@ type CiftiEstimateFwhmParametersTagged = Required<Pick<CiftiEstimateFwhmParamete
  *
  * @returns Parameter dictionary
  */
-function cifti_estimate_fwhm_surface_params(
+function cifti_estimate_fwhm_surface(
     structure: string,
     surface: InputPathType,
-): CiftiEstimateFwhmSurfaceParametersTagged {
+): CiftiEstimateFwhmSurfaceParamsDictTagged {
     const params = {
         "@type": "surface" as const,
         "structure": structure,
@@ -59,7 +59,7 @@ function cifti_estimate_fwhm_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_estimate_fwhm_surface_cargs(
-    params: CiftiEstimateFwhmSurfaceParameters,
+    params: CiftiEstimateFwhmSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -73,7 +73,7 @@ function cifti_estimate_fwhm_surface_cargs(
 
 
 /**
- * Output object returned when calling `CiftiEstimateFwhmParameters(...)`.
+ * Output object returned when calling `CiftiEstimateFwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -105,8 +105,8 @@ function cifti_estimate_fwhm_params(
     cifti: InputPathType,
     merged_volume: boolean = false,
     demean: boolean | null = false,
-    surface: Array<CiftiEstimateFwhmSurfaceParameters> | null = null,
-): CiftiEstimateFwhmParametersTagged {
+    surface: Array<CiftiEstimateFwhmSurfaceParamsDict> | null = null,
+): CiftiEstimateFwhmParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-estimate-fwhm" as const,
         "merged-volume": merged_volume,
@@ -134,7 +134,7 @@ function cifti_estimate_fwhm_params(
  * @returns Command-line arguments.
  */
 function cifti_estimate_fwhm_cargs(
-    params: CiftiEstimateFwhmParameters,
+    params: CiftiEstimateFwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -164,7 +164,7 @@ function cifti_estimate_fwhm_cargs(
  * @returns Outputs object.
  */
 function cifti_estimate_fwhm_outputs(
-    params: CiftiEstimateFwhmParameters,
+    params: CiftiEstimateFwhmParamsDict,
     execution: Execution,
 ): CiftiEstimateFwhmOutputs {
     const ret: CiftiEstimateFwhmOutputs = {
@@ -223,7 +223,7 @@ function cifti_estimate_fwhm_outputs(
  * @returns NamedTuple of outputs (described in `CiftiEstimateFwhmOutputs`).
  */
 function cifti_estimate_fwhm_execute(
-    params: CiftiEstimateFwhmParameters,
+    params: CiftiEstimateFwhmParamsDict,
     runner: Runner | null = null,
 ): CiftiEstimateFwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -297,7 +297,7 @@ function cifti_estimate_fwhm(
     cifti: InputPathType,
     merged_volume: boolean = false,
     demean: boolean | null = false,
-    surface: Array<CiftiEstimateFwhmSurfaceParameters> | null = null,
+    surface: Array<CiftiEstimateFwhmSurfaceParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiEstimateFwhmOutputs {
     const params = cifti_estimate_fwhm_params(column, cifti, merged_volume, demean, surface)
@@ -308,8 +308,12 @@ function cifti_estimate_fwhm(
 export {
       CIFTI_ESTIMATE_FWHM_METADATA,
       CiftiEstimateFwhmOutputs,
+      CiftiEstimateFwhmParamsDict,
+      CiftiEstimateFwhmParamsDictTagged,
+      CiftiEstimateFwhmSurfaceParamsDict,
+      CiftiEstimateFwhmSurfaceParamsDictTagged,
       cifti_estimate_fwhm,
       cifti_estimate_fwhm_execute,
       cifti_estimate_fwhm_params,
-      cifti_estimate_fwhm_surface_params,
+      cifti_estimate_fwhm_surface,
 };

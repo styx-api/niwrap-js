@@ -11,7 +11,7 @@ const V_1D_SEM_METADATA: Metadata = {
 };
 
 
-interface V1dSemParameters {
+interface V1dSemParamsDict {
     "@type"?: "afni/1dSEM";
     "theta": InputPathType;
     "correlation_matrix": InputPathType;
@@ -30,11 +30,11 @@ interface V1dSemParameters {
     "grow_all": boolean;
     "leafpicker": boolean;
 }
-type V1dSemParametersTagged = Required<Pick<V1dSemParameters, '@type'>> & V1dSemParameters;
+type V1dSemParamsDictTagged = Required<Pick<V1dSemParamsDict, '@type'>> & V1dSemParamsDict;
 
 
 /**
- * Output object returned when calling `V1dSemParameters(...)`.
+ * Output object returned when calling `V1dSemParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function v_1d_sem_params(
     forest_growth: boolean = false,
     grow_all: boolean = false,
     leafpicker: boolean = false,
-): V1dSemParametersTagged {
+): V1dSemParamsDictTagged {
     const params = {
         "@type": "afni/1dSEM" as const,
         "theta": theta,
@@ -134,7 +134,7 @@ function v_1d_sem_params(
  * @returns Command-line arguments.
  */
 function v_1d_sem_cargs(
-    params: V1dSemParameters,
+    params: V1dSemParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,7 +222,7 @@ function v_1d_sem_cargs(
  * @returns Outputs object.
  */
 function v_1d_sem_outputs(
-    params: V1dSemParameters,
+    params: V1dSemParamsDict,
     execution: Execution,
 ): V1dSemOutputs {
     const ret: V1dSemOutputs = {
@@ -248,7 +248,7 @@ function v_1d_sem_outputs(
  * @returns NamedTuple of outputs (described in `V1dSemOutputs`).
  */
 function v_1d_sem_execute(
-    params: V1dSemParameters,
+    params: V1dSemParamsDict,
     runner: Runner | null = null,
 ): V1dSemOutputs {
     runner = runner || getGlobalRunner();
@@ -316,6 +316,8 @@ function v_1d_sem(
 
 export {
       V1dSemOutputs,
+      V1dSemParamsDict,
+      V1dSemParamsDictTagged,
       V_1D_SEM_METADATA,
       v_1d_sem,
       v_1d_sem_execute,

@@ -11,7 +11,7 @@ const TBSS_FILL_METADATA: Metadata = {
 };
 
 
-interface TbssFillParameters {
+interface TbssFillParamsDict {
     "@type"?: "fsl/tbss_fill";
     "stats_image": InputPathType;
     "threshold": number;
@@ -19,11 +19,11 @@ interface TbssFillParameters {
     "output": string;
     "include_negative_flag": boolean;
 }
-type TbssFillParametersTagged = Required<Pick<TbssFillParameters, '@type'>> & TbssFillParameters;
+type TbssFillParamsDictTagged = Required<Pick<TbssFillParamsDict, '@type'>> & TbssFillParamsDict;
 
 
 /**
- * Output object returned when calling `TbssFillParameters(...)`.
+ * Output object returned when calling `TbssFillParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function tbss_fill_params(
     mean_fa: InputPathType,
     output: string,
     include_negative_flag: boolean = false,
-): TbssFillParametersTagged {
+): TbssFillParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_fill" as const,
         "stats_image": stats_image,
@@ -78,7 +78,7 @@ function tbss_fill_params(
  * @returns Command-line arguments.
  */
 function tbss_fill_cargs(
-    params: TbssFillParameters,
+    params: TbssFillParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function tbss_fill_cargs(
  * @returns Outputs object.
  */
 function tbss_fill_outputs(
-    params: TbssFillParameters,
+    params: TbssFillParamsDict,
     execution: Execution,
 ): TbssFillOutputs {
     const ret: TbssFillOutputs = {
@@ -129,7 +129,7 @@ function tbss_fill_outputs(
  * @returns NamedTuple of outputs (described in `TbssFillOutputs`).
  */
 function tbss_fill_execute(
-    params: TbssFillParameters,
+    params: TbssFillParamsDict,
     runner: Runner | null = null,
 ): TbssFillOutputs {
     runner = runner || getGlobalRunner();
@@ -176,6 +176,8 @@ function tbss_fill(
 export {
       TBSS_FILL_METADATA,
       TbssFillOutputs,
+      TbssFillParamsDict,
+      TbssFillParamsDictTagged,
       tbss_fill,
       tbss_fill_execute,
       tbss_fill_params,

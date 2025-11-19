@@ -11,17 +11,17 @@ const MRI_VALIDATE_SKULL_STRIPPED_METADATA: Metadata = {
 };
 
 
-interface MriValidateSkullStrippedParameters {
+interface MriValidateSkullStrippedParamsDict {
     "@type"?: "freesurfer/mri_validate_skull_stripped";
     "mri_reference": InputPathType;
     "mri_test": InputPathType;
     "weight": number;
 }
-type MriValidateSkullStrippedParametersTagged = Required<Pick<MriValidateSkullStrippedParameters, '@type'>> & MriValidateSkullStrippedParameters;
+type MriValidateSkullStrippedParamsDictTagged = Required<Pick<MriValidateSkullStrippedParamsDict, '@type'>> & MriValidateSkullStrippedParamsDict;
 
 
 /**
- * Output object returned when calling `MriValidateSkullStrippedParameters(...)`.
+ * Output object returned when calling `MriValidateSkullStrippedParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function mri_validate_skull_stripped_params(
     mri_reference: InputPathType,
     mri_test: InputPathType,
     weight: number,
-): MriValidateSkullStrippedParametersTagged {
+): MriValidateSkullStrippedParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_validate_skull_stripped" as const,
         "mri_reference": mri_reference,
@@ -66,7 +66,7 @@ function mri_validate_skull_stripped_params(
  * @returns Command-line arguments.
  */
 function mri_validate_skull_stripped_cargs(
-    params: MriValidateSkullStrippedParameters,
+    params: MriValidateSkullStrippedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function mri_validate_skull_stripped_cargs(
  * @returns Outputs object.
  */
 function mri_validate_skull_stripped_outputs(
-    params: MriValidateSkullStrippedParameters,
+    params: MriValidateSkullStrippedParamsDict,
     execution: Execution,
 ): MriValidateSkullStrippedOutputs {
     const ret: MriValidateSkullStrippedOutputs = {
@@ -112,7 +112,7 @@ function mri_validate_skull_stripped_outputs(
  * @returns NamedTuple of outputs (described in `MriValidateSkullStrippedOutputs`).
  */
 function mri_validate_skull_stripped_execute(
-    params: MriValidateSkullStrippedParameters,
+    params: MriValidateSkullStrippedParamsDict,
     runner: Runner | null = null,
 ): MriValidateSkullStrippedOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function mri_validate_skull_stripped(
 export {
       MRI_VALIDATE_SKULL_STRIPPED_METADATA,
       MriValidateSkullStrippedOutputs,
+      MriValidateSkullStrippedParamsDict,
+      MriValidateSkullStrippedParamsDictTagged,
       mri_validate_skull_stripped,
       mri_validate_skull_stripped_execute,
       mri_validate_skull_stripped_params,

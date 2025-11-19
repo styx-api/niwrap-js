@@ -11,17 +11,17 @@ const UNCONFOUND_METADATA: Metadata = {
 };
 
 
-interface UnconfoundParameters {
+interface UnconfoundParamsDict {
     "@type"?: "fsl/unconfound";
     "in4d": InputPathType;
     "out4d": string;
     "confound_mat": InputPathType;
 }
-type UnconfoundParametersTagged = Required<Pick<UnconfoundParameters, '@type'>> & UnconfoundParameters;
+type UnconfoundParamsDictTagged = Required<Pick<UnconfoundParamsDict, '@type'>> & UnconfoundParamsDict;
 
 
 /**
- * Output object returned when calling `UnconfoundParameters(...)`.
+ * Output object returned when calling `UnconfoundParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function unconfound_params(
     in4d: InputPathType,
     out4d: string,
     confound_mat: InputPathType,
-): UnconfoundParametersTagged {
+): UnconfoundParamsDictTagged {
     const params = {
         "@type": "fsl/unconfound" as const,
         "in4d": in4d,
@@ -70,7 +70,7 @@ function unconfound_params(
  * @returns Command-line arguments.
  */
 function unconfound_cargs(
-    params: UnconfoundParameters,
+    params: UnconfoundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function unconfound_cargs(
  * @returns Outputs object.
  */
 function unconfound_outputs(
-    params: UnconfoundParameters,
+    params: UnconfoundParamsDict,
     execution: Execution,
 ): UnconfoundOutputs {
     const ret: UnconfoundOutputs = {
@@ -117,7 +117,7 @@ function unconfound_outputs(
  * @returns NamedTuple of outputs (described in `UnconfoundOutputs`).
  */
 function unconfound_execute(
-    params: UnconfoundParameters,
+    params: UnconfoundParamsDict,
     runner: Runner | null = null,
 ): UnconfoundOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function unconfound(
 export {
       UNCONFOUND_METADATA,
       UnconfoundOutputs,
+      UnconfoundParamsDict,
+      UnconfoundParamsDictTagged,
       unconfound,
       unconfound_execute,
       unconfound_params,

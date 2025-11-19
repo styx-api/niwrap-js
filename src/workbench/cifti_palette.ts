@@ -10,68 +10,68 @@ const CIFTI_PALETTE_METADATA: Metadata = {
 };
 
 
-interface CiftiPalettePosPercentParameters {
+interface CiftiPalettePosPercentParamsDict {
     "@type"?: "pos-percent";
     "pos-min-%": number;
     "pos-max-%": number;
 }
-type CiftiPalettePosPercentParametersTagged = Required<Pick<CiftiPalettePosPercentParameters, '@type'>> & CiftiPalettePosPercentParameters;
+type CiftiPalettePosPercentParamsDictTagged = Required<Pick<CiftiPalettePosPercentParamsDict, '@type'>> & CiftiPalettePosPercentParamsDict;
 
 
-interface CiftiPaletteNegPercentParameters {
+interface CiftiPaletteNegPercentParamsDict {
     "@type"?: "neg-percent";
     "neg-min-%": number;
     "neg-max-%": number;
 }
-type CiftiPaletteNegPercentParametersTagged = Required<Pick<CiftiPaletteNegPercentParameters, '@type'>> & CiftiPaletteNegPercentParameters;
+type CiftiPaletteNegPercentParamsDictTagged = Required<Pick<CiftiPaletteNegPercentParamsDict, '@type'>> & CiftiPaletteNegPercentParamsDict;
 
 
-interface CiftiPalettePosUserParameters {
+interface CiftiPalettePosUserParamsDict {
     "@type"?: "pos-user";
     "pos-min-user": number;
     "pos-max-user": number;
 }
-type CiftiPalettePosUserParametersTagged = Required<Pick<CiftiPalettePosUserParameters, '@type'>> & CiftiPalettePosUserParameters;
+type CiftiPalettePosUserParamsDictTagged = Required<Pick<CiftiPalettePosUserParamsDict, '@type'>> & CiftiPalettePosUserParamsDict;
 
 
-interface CiftiPaletteNegUserParameters {
+interface CiftiPaletteNegUserParamsDict {
     "@type"?: "neg-user";
     "neg-min-user": number;
     "neg-max-user": number;
 }
-type CiftiPaletteNegUserParametersTagged = Required<Pick<CiftiPaletteNegUserParameters, '@type'>> & CiftiPaletteNegUserParameters;
+type CiftiPaletteNegUserParamsDictTagged = Required<Pick<CiftiPaletteNegUserParamsDict, '@type'>> & CiftiPaletteNegUserParamsDict;
 
 
-interface CiftiPaletteThresholdingParameters {
+interface CiftiPaletteThresholdingParamsDict {
     "@type"?: "thresholding";
     "type": string;
     "test": string;
     "min": number;
     "max": number;
 }
-type CiftiPaletteThresholdingParametersTagged = Required<Pick<CiftiPaletteThresholdingParameters, '@type'>> & CiftiPaletteThresholdingParameters;
+type CiftiPaletteThresholdingParamsDictTagged = Required<Pick<CiftiPaletteThresholdingParamsDict, '@type'>> & CiftiPaletteThresholdingParamsDict;
 
 
-interface CiftiPaletteParameters {
+interface CiftiPaletteParamsDict {
     "@type"?: "workbench/cifti-palette";
     "cifti-out": string;
     "column"?: string | null | undefined;
-    "pos-percent"?: CiftiPalettePosPercentParameters | null | undefined;
-    "neg-percent"?: CiftiPaletteNegPercentParameters | null | undefined;
-    "pos-user"?: CiftiPalettePosUserParameters | null | undefined;
-    "neg-user"?: CiftiPaletteNegUserParameters | null | undefined;
+    "pos-percent"?: CiftiPalettePosPercentParamsDict | null | undefined;
+    "neg-percent"?: CiftiPaletteNegPercentParamsDict | null | undefined;
+    "pos-user"?: CiftiPalettePosUserParamsDict | null | undefined;
+    "neg-user"?: CiftiPaletteNegUserParamsDict | null | undefined;
     "interpolate"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "display"?: boolean | null | undefined;
     "name"?: string | null | undefined;
-    "thresholding"?: CiftiPaletteThresholdingParameters | null | undefined;
+    "thresholding"?: CiftiPaletteThresholdingParamsDict | null | undefined;
     "type"?: string | null | undefined;
     "type"?: string | null | undefined;
     "cifti-in": InputPathType;
     "mode": string;
 }
-type CiftiPaletteParametersTagged = Required<Pick<CiftiPaletteParameters, '@type'>> & CiftiPaletteParameters;
+type CiftiPaletteParamsDictTagged = Required<Pick<CiftiPaletteParamsDict, '@type'>> & CiftiPaletteParamsDict;
 
 
 /**
@@ -82,10 +82,10 @@ type CiftiPaletteParametersTagged = Required<Pick<CiftiPaletteParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function cifti_palette_pos_percent_params(
+function cifti_palette_pos_percent(
     pos_min__: number,
     pos_max__: number,
-): CiftiPalettePosPercentParametersTagged {
+): CiftiPalettePosPercentParamsDictTagged {
     const params = {
         "@type": "pos-percent" as const,
         "pos-min-%": pos_min__,
@@ -104,7 +104,7 @@ function cifti_palette_pos_percent_params(
  * @returns Command-line arguments.
  */
 function cifti_palette_pos_percent_cargs(
-    params: CiftiPalettePosPercentParameters,
+    params: CiftiPalettePosPercentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,10 +125,10 @@ function cifti_palette_pos_percent_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_palette_neg_percent_params(
+function cifti_palette_neg_percent(
     neg_min__: number,
     neg_max__: number,
-): CiftiPaletteNegPercentParametersTagged {
+): CiftiPaletteNegPercentParamsDictTagged {
     const params = {
         "@type": "neg-percent" as const,
         "neg-min-%": neg_min__,
@@ -147,7 +147,7 @@ function cifti_palette_neg_percent_params(
  * @returns Command-line arguments.
  */
 function cifti_palette_neg_percent_cargs(
-    params: CiftiPaletteNegPercentParameters,
+    params: CiftiPaletteNegPercentParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,10 +168,10 @@ function cifti_palette_neg_percent_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_palette_pos_user_params(
+function cifti_palette_pos_user(
     pos_min_user: number,
     pos_max_user: number,
-): CiftiPalettePosUserParametersTagged {
+): CiftiPalettePosUserParamsDictTagged {
     const params = {
         "@type": "pos-user" as const,
         "pos-min-user": pos_min_user,
@@ -190,7 +190,7 @@ function cifti_palette_pos_user_params(
  * @returns Command-line arguments.
  */
 function cifti_palette_pos_user_cargs(
-    params: CiftiPalettePosUserParameters,
+    params: CiftiPalettePosUserParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -211,10 +211,10 @@ function cifti_palette_pos_user_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_palette_neg_user_params(
+function cifti_palette_neg_user(
     neg_min_user: number,
     neg_max_user: number,
-): CiftiPaletteNegUserParametersTagged {
+): CiftiPaletteNegUserParamsDictTagged {
     const params = {
         "@type": "neg-user" as const,
         "neg-min-user": neg_min_user,
@@ -233,7 +233,7 @@ function cifti_palette_neg_user_params(
  * @returns Command-line arguments.
  */
 function cifti_palette_neg_user_cargs(
-    params: CiftiPaletteNegUserParameters,
+    params: CiftiPaletteNegUserParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -256,12 +256,12 @@ function cifti_palette_neg_user_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_palette_thresholding_params(
+function cifti_palette_thresholding(
     type_: string,
     test: string,
     min: number,
     max: number,
-): CiftiPaletteThresholdingParametersTagged {
+): CiftiPaletteThresholdingParamsDictTagged {
     const params = {
         "@type": "thresholding" as const,
         "type": type_,
@@ -282,7 +282,7 @@ function cifti_palette_thresholding_params(
  * @returns Command-line arguments.
  */
 function cifti_palette_thresholding_cargs(
-    params: CiftiPaletteThresholdingParameters,
+    params: CiftiPaletteThresholdingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -298,7 +298,7 @@ function cifti_palette_thresholding_cargs(
 
 
 /**
- * Output object returned when calling `CiftiPaletteParameters(...)`.
+ * Output object returned when calling `CiftiPaletteParamsDict(...)`.
  *
  * @interface
  */
@@ -364,12 +364,12 @@ function cifti_palette_params(
     type_2: string | null,
     cifti_in: InputPathType,
     mode: string,
-    pos_percent: CiftiPalettePosPercentParameters | null = null,
-    neg_percent: CiftiPaletteNegPercentParameters | null = null,
-    pos_user: CiftiPalettePosUserParameters | null = null,
-    neg_user: CiftiPaletteNegUserParameters | null = null,
-    thresholding: CiftiPaletteThresholdingParameters | null = null,
-): CiftiPaletteParametersTagged {
+    pos_percent: CiftiPalettePosPercentParamsDict | null = null,
+    neg_percent: CiftiPaletteNegPercentParamsDict | null = null,
+    pos_user: CiftiPalettePosUserParamsDict | null = null,
+    neg_user: CiftiPaletteNegUserParamsDict | null = null,
+    thresholding: CiftiPaletteThresholdingParamsDict | null = null,
+): CiftiPaletteParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-palette" as const,
         "cifti-out": cifti_out,
@@ -428,7 +428,7 @@ function cifti_palette_params(
  * @returns Command-line arguments.
  */
 function cifti_palette_cargs(
-    params: CiftiPaletteParameters,
+    params: CiftiPaletteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -475,7 +475,7 @@ function cifti_palette_cargs(
  * @returns Outputs object.
  */
 function cifti_palette_outputs(
-    params: CiftiPaletteParameters,
+    params: CiftiPaletteParamsDict,
     execution: Execution,
 ): CiftiPaletteOutputs {
     const ret: CiftiPaletteOutputs = {
@@ -574,7 +574,7 @@ function cifti_palette_outputs(
  * @returns NamedTuple of outputs (described in `CiftiPaletteOutputs`).
  */
 function cifti_palette_execute(
-    params: CiftiPaletteParameters,
+    params: CiftiPaletteParamsDict,
     runner: Runner | null = null,
 ): CiftiPaletteOutputs {
     runner = runner || getGlobalRunner();
@@ -717,11 +717,11 @@ function cifti_palette(
     type_2: string | null,
     cifti_in: InputPathType,
     mode: string,
-    pos_percent: CiftiPalettePosPercentParameters | null = null,
-    neg_percent: CiftiPaletteNegPercentParameters | null = null,
-    pos_user: CiftiPalettePosUserParameters | null = null,
-    neg_user: CiftiPaletteNegUserParameters | null = null,
-    thresholding: CiftiPaletteThresholdingParameters | null = null,
+    pos_percent: CiftiPalettePosPercentParamsDict | null = null,
+    neg_percent: CiftiPaletteNegPercentParamsDict | null = null,
+    pos_user: CiftiPalettePosUserParamsDict | null = null,
+    neg_user: CiftiPaletteNegUserParamsDict | null = null,
+    thresholding: CiftiPaletteThresholdingParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiPaletteOutputs {
     const params = cifti_palette_params(cifti_out, column, interpolate, display, display_, display_2, name, type_, type_2, cifti_in, mode, pos_percent, neg_percent, pos_user, neg_user, thresholding)
@@ -731,13 +731,25 @@ function cifti_palette(
 
 export {
       CIFTI_PALETTE_METADATA,
+      CiftiPaletteNegPercentParamsDict,
+      CiftiPaletteNegPercentParamsDictTagged,
+      CiftiPaletteNegUserParamsDict,
+      CiftiPaletteNegUserParamsDictTagged,
       CiftiPaletteOutputs,
+      CiftiPaletteParamsDict,
+      CiftiPaletteParamsDictTagged,
+      CiftiPalettePosPercentParamsDict,
+      CiftiPalettePosPercentParamsDictTagged,
+      CiftiPalettePosUserParamsDict,
+      CiftiPalettePosUserParamsDictTagged,
+      CiftiPaletteThresholdingParamsDict,
+      CiftiPaletteThresholdingParamsDictTagged,
       cifti_palette,
       cifti_palette_execute,
-      cifti_palette_neg_percent_params,
-      cifti_palette_neg_user_params,
+      cifti_palette_neg_percent,
+      cifti_palette_neg_user,
       cifti_palette_params,
-      cifti_palette_pos_percent_params,
-      cifti_palette_pos_user_params,
-      cifti_palette_thresholding_params,
+      cifti_palette_pos_percent,
+      cifti_palette_pos_user,
+      cifti_palette_thresholding,
 };

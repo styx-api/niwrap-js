@@ -10,22 +10,22 @@ const CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA: Metadata = {
 };
 
 
-interface CiftiCreateParcellatedFromTemplateCiftiParameters {
+interface CiftiCreateParcellatedFromTemplateCiftiParamsDict {
     "@type"?: "cifti";
     "cifti-in": InputPathType;
 }
-type CiftiCreateParcellatedFromTemplateCiftiParametersTagged = Required<Pick<CiftiCreateParcellatedFromTemplateCiftiParameters, '@type'>> & CiftiCreateParcellatedFromTemplateCiftiParameters;
+type CiftiCreateParcellatedFromTemplateCiftiParamsDictTagged = Required<Pick<CiftiCreateParcellatedFromTemplateCiftiParamsDict, '@type'>> & CiftiCreateParcellatedFromTemplateCiftiParamsDict;
 
 
-interface CiftiCreateParcellatedFromTemplateParameters {
+interface CiftiCreateParcellatedFromTemplateParamsDict {
     "@type"?: "workbench/cifti-create-parcellated-from-template";
     "cifti-out": string;
     "value"?: number | null | undefined;
-    "cifti"?: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null | undefined;
+    "cifti"?: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null | undefined;
     "cifti-template": InputPathType;
     "modify-direction": string;
 }
-type CiftiCreateParcellatedFromTemplateParametersTagged = Required<Pick<CiftiCreateParcellatedFromTemplateParameters, '@type'>> & CiftiCreateParcellatedFromTemplateParameters;
+type CiftiCreateParcellatedFromTemplateParamsDictTagged = Required<Pick<CiftiCreateParcellatedFromTemplateParamsDict, '@type'>> & CiftiCreateParcellatedFromTemplateParamsDict;
 
 
 /**
@@ -35,9 +35,9 @@ type CiftiCreateParcellatedFromTemplateParametersTagged = Required<Pick<CiftiCre
  *
  * @returns Parameter dictionary
  */
-function cifti_create_parcellated_from_template_cifti_params(
+function cifti_create_parcellated_from_template_cifti(
     cifti_in: InputPathType,
-): CiftiCreateParcellatedFromTemplateCiftiParametersTagged {
+): CiftiCreateParcellatedFromTemplateCiftiParamsDictTagged {
     const params = {
         "@type": "cifti" as const,
         "cifti-in": cifti_in,
@@ -55,7 +55,7 @@ function cifti_create_parcellated_from_template_cifti_params(
  * @returns Command-line arguments.
  */
 function cifti_create_parcellated_from_template_cifti_cargs(
-    params: CiftiCreateParcellatedFromTemplateCiftiParameters,
+    params: CiftiCreateParcellatedFromTemplateCiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -68,7 +68,7 @@ function cifti_create_parcellated_from_template_cifti_cargs(
 
 
 /**
- * Output object returned when calling `CiftiCreateParcellatedFromTemplateParameters(...)`.
+ * Output object returned when calling `CiftiCreateParcellatedFromTemplateParamsDict(...)`.
  *
  * @interface
  */
@@ -102,8 +102,8 @@ function cifti_create_parcellated_from_template_params(
     value: number | null,
     cifti_template: InputPathType,
     modify_direction: string,
-    cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null = null,
-): CiftiCreateParcellatedFromTemplateParametersTagged {
+    cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null = null,
+): CiftiCreateParcellatedFromTemplateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-parcellated-from-template" as const,
         "cifti-out": cifti_out,
@@ -129,7 +129,7 @@ function cifti_create_parcellated_from_template_params(
  * @returns Command-line arguments.
  */
 function cifti_create_parcellated_from_template_cargs(
-    params: CiftiCreateParcellatedFromTemplateParameters,
+    params: CiftiCreateParcellatedFromTemplateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function cifti_create_parcellated_from_template_cargs(
  * @returns Outputs object.
  */
 function cifti_create_parcellated_from_template_outputs(
-    params: CiftiCreateParcellatedFromTemplateParameters,
+    params: CiftiCreateParcellatedFromTemplateParamsDict,
     execution: Execution,
 ): CiftiCreateParcellatedFromTemplateOutputs {
     const ret: CiftiCreateParcellatedFromTemplateOutputs = {
@@ -180,7 +180,7 @@ function cifti_create_parcellated_from_template_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCreateParcellatedFromTemplateOutputs`).
  */
 function cifti_create_parcellated_from_template_execute(
-    params: CiftiCreateParcellatedFromTemplateParameters,
+    params: CiftiCreateParcellatedFromTemplateParamsDict,
     runner: Runner | null = null,
 ): CiftiCreateParcellatedFromTemplateOutputs {
     runner = runner || getGlobalRunner();
@@ -214,7 +214,7 @@ function cifti_create_parcellated_from_template(
     value: number | null,
     cifti_template: InputPathType,
     modify_direction: string,
-    cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParameters> | null = null,
+    cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiCreateParcellatedFromTemplateOutputs {
     const params = cifti_create_parcellated_from_template_params(cifti_out, value, cifti_template, modify_direction, cifti)
@@ -224,9 +224,13 @@ function cifti_create_parcellated_from_template(
 
 export {
       CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA,
+      CiftiCreateParcellatedFromTemplateCiftiParamsDict,
+      CiftiCreateParcellatedFromTemplateCiftiParamsDictTagged,
       CiftiCreateParcellatedFromTemplateOutputs,
+      CiftiCreateParcellatedFromTemplateParamsDict,
+      CiftiCreateParcellatedFromTemplateParamsDictTagged,
       cifti_create_parcellated_from_template,
-      cifti_create_parcellated_from_template_cifti_params,
+      cifti_create_parcellated_from_template_cifti,
       cifti_create_parcellated_from_template_execute,
       cifti_create_parcellated_from_template_params,
 };

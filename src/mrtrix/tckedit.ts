@@ -11,90 +11,90 @@ const TCKEDIT_METADATA: Metadata = {
 };
 
 
-interface TckeditVariousStringParameters {
+interface TckeditVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type TckeditVariousStringParametersTagged = Required<Pick<TckeditVariousStringParameters, '@type'>> & TckeditVariousStringParameters;
+type TckeditVariousStringParamsDictTagged = Required<Pick<TckeditVariousStringParamsDict, '@type'>> & TckeditVariousStringParamsDict;
 
 
-interface TckeditVariousFileParameters {
+interface TckeditVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type TckeditVariousFileParametersTagged = Required<Pick<TckeditVariousFileParameters, '@type'>> & TckeditVariousFileParameters;
+type TckeditVariousFileParamsDictTagged = Required<Pick<TckeditVariousFileParamsDict, '@type'>> & TckeditVariousFileParamsDict;
 
 
-interface TckeditIncludeParameters {
+interface TckeditIncludeParamsDict {
     "@type"?: "include";
-    "spec": TckeditVariousStringParametersTagged | TckeditVariousFileParametersTagged;
+    "spec": TckeditVariousStringParamsDictTagged | TckeditVariousFileParamsDictTagged;
 }
-type TckeditIncludeParametersTagged = Required<Pick<TckeditIncludeParameters, '@type'>> & TckeditIncludeParameters;
+type TckeditIncludeParamsDictTagged = Required<Pick<TckeditIncludeParamsDict, '@type'>> & TckeditIncludeParamsDict;
 
 
-interface TckeditIncludeOrderedParameters {
+interface TckeditIncludeOrderedParamsDict {
     "@type"?: "include_ordered";
     "image": string;
 }
-type TckeditIncludeOrderedParametersTagged = Required<Pick<TckeditIncludeOrderedParameters, '@type'>> & TckeditIncludeOrderedParameters;
+type TckeditIncludeOrderedParamsDictTagged = Required<Pick<TckeditIncludeOrderedParamsDict, '@type'>> & TckeditIncludeOrderedParamsDict;
 
 
-interface TckeditVariousString1Parameters {
+interface TckeditVariousString1ParamsDict {
     "@type"?: "VariousString_1";
     "obj": string;
 }
-type TckeditVariousString1ParametersTagged = Required<Pick<TckeditVariousString1Parameters, '@type'>> & TckeditVariousString1Parameters;
+type TckeditVariousString1ParamsDictTagged = Required<Pick<TckeditVariousString1ParamsDict, '@type'>> & TckeditVariousString1ParamsDict;
 
 
-interface TckeditVariousFile1Parameters {
+interface TckeditVariousFile1ParamsDict {
     "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
-type TckeditVariousFile1ParametersTagged = Required<Pick<TckeditVariousFile1Parameters, '@type'>> & TckeditVariousFile1Parameters;
+type TckeditVariousFile1ParamsDictTagged = Required<Pick<TckeditVariousFile1ParamsDict, '@type'>> & TckeditVariousFile1ParamsDict;
 
 
-interface TckeditExcludeParameters {
+interface TckeditExcludeParamsDict {
     "@type"?: "exclude";
-    "spec": TckeditVariousString1ParametersTagged | TckeditVariousFile1ParametersTagged;
+    "spec": TckeditVariousString1ParamsDictTagged | TckeditVariousFile1ParamsDictTagged;
 }
-type TckeditExcludeParametersTagged = Required<Pick<TckeditExcludeParameters, '@type'>> & TckeditExcludeParameters;
+type TckeditExcludeParamsDictTagged = Required<Pick<TckeditExcludeParamsDict, '@type'>> & TckeditExcludeParamsDict;
 
 
-interface TckeditVariousString2Parameters {
+interface TckeditVariousString2ParamsDict {
     "@type"?: "VariousString_2";
     "obj": string;
 }
-type TckeditVariousString2ParametersTagged = Required<Pick<TckeditVariousString2Parameters, '@type'>> & TckeditVariousString2Parameters;
+type TckeditVariousString2ParamsDictTagged = Required<Pick<TckeditVariousString2ParamsDict, '@type'>> & TckeditVariousString2ParamsDict;
 
 
-interface TckeditVariousFile2Parameters {
+interface TckeditVariousFile2ParamsDict {
     "@type"?: "VariousFile_2";
     "obj": InputPathType;
 }
-type TckeditVariousFile2ParametersTagged = Required<Pick<TckeditVariousFile2Parameters, '@type'>> & TckeditVariousFile2Parameters;
+type TckeditVariousFile2ParamsDictTagged = Required<Pick<TckeditVariousFile2ParamsDict, '@type'>> & TckeditVariousFile2ParamsDict;
 
 
-interface TckeditMaskParameters {
+interface TckeditMaskParamsDict {
     "@type"?: "mask";
-    "spec": TckeditVariousString2ParametersTagged | TckeditVariousFile2ParametersTagged;
+    "spec": TckeditVariousString2ParamsDictTagged | TckeditVariousFile2ParamsDictTagged;
 }
-type TckeditMaskParametersTagged = Required<Pick<TckeditMaskParameters, '@type'>> & TckeditMaskParameters;
+type TckeditMaskParamsDictTagged = Required<Pick<TckeditMaskParamsDict, '@type'>> & TckeditMaskParamsDict;
 
 
-interface TckeditConfigParameters {
+interface TckeditConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckeditConfigParametersTagged = Required<Pick<TckeditConfigParameters, '@type'>> & TckeditConfigParameters;
+type TckeditConfigParamsDictTagged = Required<Pick<TckeditConfigParamsDict, '@type'>> & TckeditConfigParamsDict;
 
 
-interface TckeditParameters {
+interface TckeditParamsDict {
     "@type"?: "mrtrix/tckedit";
-    "include"?: Array<TckeditIncludeParameters> | null | undefined;
-    "include_ordered"?: Array<TckeditIncludeOrderedParameters> | null | undefined;
-    "exclude"?: Array<TckeditExcludeParameters> | null | undefined;
-    "mask"?: Array<TckeditMaskParameters> | null | undefined;
+    "include"?: Array<TckeditIncludeParamsDict> | null | undefined;
+    "include_ordered"?: Array<TckeditIncludeOrderedParamsDict> | null | undefined;
+    "exclude"?: Array<TckeditExcludeParamsDict> | null | undefined;
+    "mask"?: Array<TckeditMaskParamsDict> | null | undefined;
     "maxlength"?: number | null | undefined;
     "minlength"?: number | null | undefined;
     "number"?: number | null | undefined;
@@ -110,13 +110,13 @@ interface TckeditParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckeditConfigParameters> | null | undefined;
+    "config"?: Array<TckeditConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "tracks_in": Array<InputPathType>;
     "tracks_out": string;
 }
-type TckeditParametersTagged = Required<Pick<TckeditParameters, '@type'>> & TckeditParameters;
+type TckeditParamsDictTagged = Required<Pick<TckeditParamsDict, '@type'>> & TckeditParamsDict;
 
 
 /**
@@ -228,9 +228,9 @@ function tckedit_spec_outputs_dyn_fn_2(
  *
  * @returns Parameter dictionary
  */
-function tckedit_various_string_params(
+function tckedit_various_string(
     obj: string,
-): TckeditVariousStringParametersTagged {
+): TckeditVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -248,7 +248,7 @@ function tckedit_various_string_params(
  * @returns Command-line arguments.
  */
 function tckedit_various_string_cargs(
-    params: TckeditVariousStringParameters,
+    params: TckeditVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -264,9 +264,9 @@ function tckedit_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_various_file_params(
+function tckedit_various_file(
     obj: InputPathType,
-): TckeditVariousFileParametersTagged {
+): TckeditVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -284,7 +284,7 @@ function tckedit_various_file_params(
  * @returns Command-line arguments.
  */
 function tckedit_various_file_cargs(
-    params: TckeditVariousFileParameters,
+    params: TckeditVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -300,9 +300,9 @@ function tckedit_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_include_params(
-    spec: TckeditVariousStringParametersTagged | TckeditVariousFileParametersTagged,
-): TckeditIncludeParametersTagged {
+function tckedit_include(
+    spec: TckeditVariousStringParamsDictTagged | TckeditVariousFileParamsDictTagged,
+): TckeditIncludeParamsDictTagged {
     const params = {
         "@type": "include" as const,
         "spec": spec,
@@ -320,7 +320,7 @@ function tckedit_include_params(
  * @returns Command-line arguments.
  */
 function tckedit_include_cargs(
-    params: TckeditIncludeParameters,
+    params: TckeditIncludeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -337,9 +337,9 @@ function tckedit_include_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_include_ordered_params(
+function tckedit_include_ordered(
     image: string,
-): TckeditIncludeOrderedParametersTagged {
+): TckeditIncludeOrderedParamsDictTagged {
     const params = {
         "@type": "include_ordered" as const,
         "image": image,
@@ -357,7 +357,7 @@ function tckedit_include_ordered_params(
  * @returns Command-line arguments.
  */
 function tckedit_include_ordered_cargs(
-    params: TckeditIncludeOrderedParameters,
+    params: TckeditIncludeOrderedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -374,9 +374,9 @@ function tckedit_include_ordered_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_various_string_1_params(
+function tckedit_various_string_1(
     obj: string,
-): TckeditVariousString1ParametersTagged {
+): TckeditVariousString1ParamsDictTagged {
     const params = {
         "@type": "VariousString_1" as const,
         "obj": obj,
@@ -394,7 +394,7 @@ function tckedit_various_string_1_params(
  * @returns Command-line arguments.
  */
 function tckedit_various_string_1_cargs(
-    params: TckeditVariousString1Parameters,
+    params: TckeditVariousString1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -410,9 +410,9 @@ function tckedit_various_string_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_various_file_1_params(
+function tckedit_various_file_1(
     obj: InputPathType,
-): TckeditVariousFile1ParametersTagged {
+): TckeditVariousFile1ParamsDictTagged {
     const params = {
         "@type": "VariousFile_1" as const,
         "obj": obj,
@@ -430,7 +430,7 @@ function tckedit_various_file_1_params(
  * @returns Command-line arguments.
  */
 function tckedit_various_file_1_cargs(
-    params: TckeditVariousFile1Parameters,
+    params: TckeditVariousFile1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -446,9 +446,9 @@ function tckedit_various_file_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_exclude_params(
-    spec: TckeditVariousString1ParametersTagged | TckeditVariousFile1ParametersTagged,
-): TckeditExcludeParametersTagged {
+function tckedit_exclude(
+    spec: TckeditVariousString1ParamsDictTagged | TckeditVariousFile1ParamsDictTagged,
+): TckeditExcludeParamsDictTagged {
     const params = {
         "@type": "exclude" as const,
         "spec": spec,
@@ -466,7 +466,7 @@ function tckedit_exclude_params(
  * @returns Command-line arguments.
  */
 function tckedit_exclude_cargs(
-    params: TckeditExcludeParameters,
+    params: TckeditExcludeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -483,9 +483,9 @@ function tckedit_exclude_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_various_string_2_params(
+function tckedit_various_string_2(
     obj: string,
-): TckeditVariousString2ParametersTagged {
+): TckeditVariousString2ParamsDictTagged {
     const params = {
         "@type": "VariousString_2" as const,
         "obj": obj,
@@ -503,7 +503,7 @@ function tckedit_various_string_2_params(
  * @returns Command-line arguments.
  */
 function tckedit_various_string_2_cargs(
-    params: TckeditVariousString2Parameters,
+    params: TckeditVariousString2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -519,9 +519,9 @@ function tckedit_various_string_2_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_various_file_2_params(
+function tckedit_various_file_2(
     obj: InputPathType,
-): TckeditVariousFile2ParametersTagged {
+): TckeditVariousFile2ParamsDictTagged {
     const params = {
         "@type": "VariousFile_2" as const,
         "obj": obj,
@@ -539,7 +539,7 @@ function tckedit_various_file_2_params(
  * @returns Command-line arguments.
  */
 function tckedit_various_file_2_cargs(
-    params: TckeditVariousFile2Parameters,
+    params: TckeditVariousFile2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -555,9 +555,9 @@ function tckedit_various_file_2_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_mask_params(
-    spec: TckeditVariousString2ParametersTagged | TckeditVariousFile2ParametersTagged,
-): TckeditMaskParametersTagged {
+function tckedit_mask(
+    spec: TckeditVariousString2ParamsDictTagged | TckeditVariousFile2ParamsDictTagged,
+): TckeditMaskParamsDictTagged {
     const params = {
         "@type": "mask" as const,
         "spec": spec,
@@ -575,7 +575,7 @@ function tckedit_mask_params(
  * @returns Command-line arguments.
  */
 function tckedit_mask_cargs(
-    params: TckeditMaskParameters,
+    params: TckeditMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -593,10 +593,10 @@ function tckedit_mask_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckedit_config_params(
+function tckedit_config(
     key: string,
     value: string,
-): TckeditConfigParametersTagged {
+): TckeditConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -615,7 +615,7 @@ function tckedit_config_params(
  * @returns Command-line arguments.
  */
 function tckedit_config_cargs(
-    params: TckeditConfigParameters,
+    params: TckeditConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -627,7 +627,7 @@ function tckedit_config_cargs(
 
 
 /**
- * Output object returned when calling `TckeditParameters(...)`.
+ * Output object returned when calling `TckeditParamsDict(...)`.
  *
  * @interface
  */
@@ -680,10 +680,10 @@ interface TckeditOutputs {
 function tckedit_params(
     tracks_in: Array<InputPathType>,
     tracks_out: string,
-    include: Array<TckeditIncludeParameters> | null = null,
-    include_ordered: Array<TckeditIncludeOrderedParameters> | null = null,
-    exclude: Array<TckeditExcludeParameters> | null = null,
-    mask: Array<TckeditMaskParameters> | null = null,
+    include: Array<TckeditIncludeParamsDict> | null = null,
+    include_ordered: Array<TckeditIncludeOrderedParamsDict> | null = null,
+    exclude: Array<TckeditExcludeParamsDict> | null = null,
+    mask: Array<TckeditMaskParamsDict> | null = null,
     maxlength: number | null = null,
     minlength: number | null = null,
     number_: number | null = null,
@@ -699,10 +699,10 @@ function tckedit_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckeditConfigParameters> | null = null,
+    config: Array<TckeditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckeditParametersTagged {
+): TckeditParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckedit" as const,
         "inverse": inverse,
@@ -771,7 +771,7 @@ function tckedit_params(
  * @returns Command-line arguments.
  */
 function tckedit_cargs(
-    params: TckeditParameters,
+    params: TckeditParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -884,7 +884,7 @@ function tckedit_cargs(
  * @returns Outputs object.
  */
 function tckedit_outputs(
-    params: TckeditParameters,
+    params: TckeditParamsDict,
     execution: Execution,
 ): TckeditOutputs {
     const ret: TckeditOutputs = {
@@ -917,7 +917,7 @@ function tckedit_outputs(
  * @returns NamedTuple of outputs (described in `TckeditOutputs`).
  */
 function tckedit_execute(
-    params: TckeditParameters,
+    params: TckeditParamsDict,
     runner: Runner | null = null,
 ): TckeditOutputs {
     runner = runner || getGlobalRunner();
@@ -976,10 +976,10 @@ function tckedit_execute(
 function tckedit(
     tracks_in: Array<InputPathType>,
     tracks_out: string,
-    include: Array<TckeditIncludeParameters> | null = null,
-    include_ordered: Array<TckeditIncludeOrderedParameters> | null = null,
-    exclude: Array<TckeditExcludeParameters> | null = null,
-    mask: Array<TckeditMaskParameters> | null = null,
+    include: Array<TckeditIncludeParamsDict> | null = null,
+    include_ordered: Array<TckeditIncludeOrderedParamsDict> | null = null,
+    exclude: Array<TckeditExcludeParamsDict> | null = null,
+    mask: Array<TckeditMaskParamsDict> | null = null,
     maxlength: number | null = null,
     minlength: number | null = null,
     number_: number | null = null,
@@ -995,7 +995,7 @@ function tckedit(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckeditConfigParameters> | null = null,
+    config: Array<TckeditConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -1007,19 +1007,43 @@ function tckedit(
 
 export {
       TCKEDIT_METADATA,
+      TckeditConfigParamsDict,
+      TckeditConfigParamsDictTagged,
+      TckeditExcludeParamsDict,
+      TckeditExcludeParamsDictTagged,
+      TckeditIncludeOrderedParamsDict,
+      TckeditIncludeOrderedParamsDictTagged,
+      TckeditIncludeParamsDict,
+      TckeditIncludeParamsDictTagged,
+      TckeditMaskParamsDict,
+      TckeditMaskParamsDictTagged,
       TckeditOutputs,
+      TckeditParamsDict,
+      TckeditParamsDictTagged,
+      TckeditVariousFile1ParamsDict,
+      TckeditVariousFile1ParamsDictTagged,
+      TckeditVariousFile2ParamsDict,
+      TckeditVariousFile2ParamsDictTagged,
+      TckeditVariousFileParamsDict,
+      TckeditVariousFileParamsDictTagged,
+      TckeditVariousString1ParamsDict,
+      TckeditVariousString1ParamsDictTagged,
+      TckeditVariousString2ParamsDict,
+      TckeditVariousString2ParamsDictTagged,
+      TckeditVariousStringParamsDict,
+      TckeditVariousStringParamsDictTagged,
       tckedit,
-      tckedit_config_params,
-      tckedit_exclude_params,
+      tckedit_config,
+      tckedit_exclude,
       tckedit_execute,
-      tckedit_include_ordered_params,
-      tckedit_include_params,
-      tckedit_mask_params,
+      tckedit_include,
+      tckedit_include_ordered,
+      tckedit_mask,
       tckedit_params,
-      tckedit_various_file_1_params,
-      tckedit_various_file_2_params,
-      tckedit_various_file_params,
-      tckedit_various_string_1_params,
-      tckedit_various_string_2_params,
-      tckedit_various_string_params,
+      tckedit_various_file,
+      tckedit_various_file_1,
+      tckedit_various_file_2,
+      tckedit_various_string,
+      tckedit_various_string_1,
+      tckedit_various_string_2,
 };

@@ -11,18 +11,18 @@ const MRI_XVOLAVG_METADATA: Metadata = {
 };
 
 
-interface MriXvolavgParameters {
+interface MriXvolavgParamsDict {
     "@type"?: "freesurfer/mri_xvolavg";
     "input_volumes": Array<InputPathType>;
     "vol_type": string;
     "output_volume": string;
     "output_type"?: string | null | undefined;
 }
-type MriXvolavgParametersTagged = Required<Pick<MriXvolavgParameters, '@type'>> & MriXvolavgParameters;
+type MriXvolavgParamsDictTagged = Required<Pick<MriXvolavgParamsDict, '@type'>> & MriXvolavgParamsDict;
 
 
 /**
- * Output object returned when calling `MriXvolavgParameters(...)`.
+ * Output object returned when calling `MriXvolavgParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_xvolavg_params(
     vol_type: string,
     output_volume: string,
     output_type: string | null = null,
-): MriXvolavgParametersTagged {
+): MriXvolavgParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_xvolavg" as const,
         "input_volumes": input_volumes,
@@ -76,7 +76,7 @@ function mri_xvolavg_params(
  * @returns Command-line arguments.
  */
 function mri_xvolavg_cargs(
-    params: MriXvolavgParameters,
+    params: MriXvolavgParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function mri_xvolavg_cargs(
  * @returns Outputs object.
  */
 function mri_xvolavg_outputs(
-    params: MriXvolavgParameters,
+    params: MriXvolavgParamsDict,
     execution: Execution,
 ): MriXvolavgOutputs {
     const ret: MriXvolavgOutputs = {
@@ -138,7 +138,7 @@ function mri_xvolavg_outputs(
  * @returns NamedTuple of outputs (described in `MriXvolavgOutputs`).
  */
 function mri_xvolavg_execute(
-    params: MriXvolavgParameters,
+    params: MriXvolavgParamsDict,
     runner: Runner | null = null,
 ): MriXvolavgOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function mri_xvolavg(
 export {
       MRI_XVOLAVG_METADATA,
       MriXvolavgOutputs,
+      MriXvolavgParamsDict,
+      MriXvolavgParamsDictTagged,
       mri_xvolavg,
       mri_xvolavg_execute,
       mri_xvolavg_params,

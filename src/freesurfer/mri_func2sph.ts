@@ -11,7 +11,7 @@ const MRI_FUNC2SPH_METADATA: Metadata = {
 };
 
 
-interface MriFunc2sphParameters {
+interface MriFunc2sphParamsDict {
     "@type"?: "freesurfer/mri-func2sph";
     "instem": string;
     "outstem": string;
@@ -22,11 +22,11 @@ interface MriFunc2sphParameters {
     "input_type"?: string | null | undefined;
     "umask"?: string | null | undefined;
 }
-type MriFunc2sphParametersTagged = Required<Pick<MriFunc2sphParameters, '@type'>> & MriFunc2sphParameters;
+type MriFunc2sphParamsDictTagged = Required<Pick<MriFunc2sphParamsDict, '@type'>> & MriFunc2sphParamsDict;
 
 
 /**
- * Output object returned when calling `MriFunc2sphParameters(...)`.
+ * Output object returned when calling `MriFunc2sphParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function mri_func2sph_params(
     icosahedron_size: number | null = null,
     input_type: string | null = null,
     umask: string | null = null,
-): MriFunc2sphParametersTagged {
+): MriFunc2sphParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri-func2sph" as const,
         "instem": instem,
@@ -94,7 +94,7 @@ function mri_func2sph_params(
  * @returns Command-line arguments.
  */
 function mri_func2sph_cargs(
-    params: MriFunc2sphParameters,
+    params: MriFunc2sphParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,7 +152,7 @@ function mri_func2sph_cargs(
  * @returns Outputs object.
  */
 function mri_func2sph_outputs(
-    params: MriFunc2sphParameters,
+    params: MriFunc2sphParamsDict,
     execution: Execution,
 ): MriFunc2sphOutputs {
     const ret: MriFunc2sphOutputs = {
@@ -177,7 +177,7 @@ function mri_func2sph_outputs(
  * @returns NamedTuple of outputs (described in `MriFunc2sphOutputs`).
  */
 function mri_func2sph_execute(
-    params: MriFunc2sphParameters,
+    params: MriFunc2sphParamsDict,
     runner: Runner | null = null,
 ): MriFunc2sphOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function mri_func2sph(
 export {
       MRI_FUNC2SPH_METADATA,
       MriFunc2sphOutputs,
+      MriFunc2sphParamsDict,
+      MriFunc2sphParamsDictTagged,
       mri_func2sph,
       mri_func2sph_execute,
       mri_func2sph_params,

@@ -11,7 +11,7 @@ const FSLSMOOTHFILL_METADATA: Metadata = {
 };
 
 
-interface FslsmoothfillParameters {
+interface FslsmoothfillParamsDict {
     "@type"?: "fsl/fslsmoothfill";
     "input_image": InputPathType;
     "mask_image": InputPathType;
@@ -20,11 +20,11 @@ interface FslsmoothfillParameters {
     "debug_flag": boolean;
     "verbose_flag": boolean;
 }
-type FslsmoothfillParametersTagged = Required<Pick<FslsmoothfillParameters, '@type'>> & FslsmoothfillParameters;
+type FslsmoothfillParamsDictTagged = Required<Pick<FslsmoothfillParamsDict, '@type'>> & FslsmoothfillParamsDict;
 
 
 /**
- * Output object returned when calling `FslsmoothfillParameters(...)`.
+ * Output object returned when calling `FslsmoothfillParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function fslsmoothfill_params(
     number_of_iterations: number | null = null,
     debug_flag: boolean = false,
     verbose_flag: boolean = false,
-): FslsmoothfillParametersTagged {
+): FslsmoothfillParamsDictTagged {
     const params = {
         "@type": "fsl/fslsmoothfill" as const,
         "input_image": input_image,
@@ -80,7 +80,7 @@ function fslsmoothfill_params(
  * @returns Command-line arguments.
  */
 function fslsmoothfill_cargs(
-    params: FslsmoothfillParameters,
+    params: FslsmoothfillParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function fslsmoothfill_cargs(
  * @returns Outputs object.
  */
 function fslsmoothfill_outputs(
-    params: FslsmoothfillParameters,
+    params: FslsmoothfillParamsDict,
     execution: Execution,
 ): FslsmoothfillOutputs {
     const ret: FslsmoothfillOutputs = {
@@ -138,7 +138,7 @@ function fslsmoothfill_outputs(
  * @returns NamedTuple of outputs (described in `FslsmoothfillOutputs`).
  */
 function fslsmoothfill_execute(
-    params: FslsmoothfillParameters,
+    params: FslsmoothfillParamsDict,
     runner: Runner | null = null,
 ): FslsmoothfillOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function fslsmoothfill(
 export {
       FSLSMOOTHFILL_METADATA,
       FslsmoothfillOutputs,
+      FslsmoothfillParamsDict,
+      FslsmoothfillParamsDictTagged,
       fslsmoothfill,
       fslsmoothfill_execute,
       fslsmoothfill_params,

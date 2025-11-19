@@ -11,16 +11,16 @@ const LABEL_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface LabelSubjectParameters {
+interface LabelSubjectParamsDict {
     "@type"?: "freesurfer/label_subject";
     "nu_file"?: InputPathType | null | undefined;
     "orig_dir"?: string | null | undefined;
 }
-type LabelSubjectParametersTagged = Required<Pick<LabelSubjectParameters, '@type'>> & LabelSubjectParameters;
+type LabelSubjectParamsDictTagged = Required<Pick<LabelSubjectParamsDict, '@type'>> & LabelSubjectParamsDict;
 
 
 /**
- * Output object returned when calling `LabelSubjectParameters(...)`.
+ * Output object returned when calling `LabelSubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface LabelSubjectOutputs {
 function label_subject_params(
     nu_file: InputPathType | null = null,
     orig_dir: string | null = null,
-): LabelSubjectParametersTagged {
+): LabelSubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/label_subject" as const,
     };
@@ -70,7 +70,7 @@ function label_subject_params(
  * @returns Command-line arguments.
  */
 function label_subject_cargs(
-    params: LabelSubjectParameters,
+    params: LabelSubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function label_subject_cargs(
  * @returns Outputs object.
  */
 function label_subject_outputs(
-    params: LabelSubjectParameters,
+    params: LabelSubjectParamsDict,
     execution: Execution,
 ): LabelSubjectOutputs {
     const ret: LabelSubjectOutputs = {
@@ -120,7 +120,7 @@ function label_subject_outputs(
  * @returns NamedTuple of outputs (described in `LabelSubjectOutputs`).
  */
 function label_subject_execute(
-    params: LabelSubjectParameters,
+    params: LabelSubjectParamsDict,
     runner: Runner | null = null,
 ): LabelSubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -161,6 +161,8 @@ function label_subject(
 export {
       LABEL_SUBJECT_METADATA,
       LabelSubjectOutputs,
+      LabelSubjectParamsDict,
+      LabelSubjectParamsDictTagged,
       label_subject,
       label_subject_execute,
       label_subject_params,

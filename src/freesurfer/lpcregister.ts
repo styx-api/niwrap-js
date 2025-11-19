@@ -11,7 +11,7 @@ const LPCREGISTER_METADATA: Metadata = {
 };
 
 
-interface LpcregisterParameters {
+interface LpcregisterParamsDict {
     "@type"?: "freesurfer/lpcregister";
     "subject_id": string;
     "mov_volume": string;
@@ -27,11 +27,11 @@ interface LpcregisterParameters {
     "version": boolean;
     "help": boolean;
 }
-type LpcregisterParametersTagged = Required<Pick<LpcregisterParameters, '@type'>> & LpcregisterParameters;
+type LpcregisterParamsDictTagged = Required<Pick<LpcregisterParamsDict, '@type'>> & LpcregisterParamsDict;
 
 
 /**
- * Output object returned when calling `LpcregisterParameters(...)`.
+ * Output object returned when calling `LpcregisterParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function lpcregister_params(
     no_cleanup: boolean = false,
     version: boolean = false,
     help: boolean = false,
-): LpcregisterParametersTagged {
+): LpcregisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/lpcregister" as const,
         "subject_id": subject_id,
@@ -122,7 +122,7 @@ function lpcregister_params(
  * @returns Command-line arguments.
  */
 function lpcregister_cargs(
-    params: LpcregisterParameters,
+    params: LpcregisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -194,7 +194,7 @@ function lpcregister_cargs(
  * @returns Outputs object.
  */
 function lpcregister_outputs(
-    params: LpcregisterParameters,
+    params: LpcregisterParamsDict,
     execution: Execution,
 ): LpcregisterOutputs {
     const ret: LpcregisterOutputs = {
@@ -221,7 +221,7 @@ function lpcregister_outputs(
  * @returns NamedTuple of outputs (described in `LpcregisterOutputs`).
  */
 function lpcregister_execute(
-    params: LpcregisterParameters,
+    params: LpcregisterParamsDict,
     runner: Runner | null = null,
 ): LpcregisterOutputs {
     runner = runner || getGlobalRunner();
@@ -284,6 +284,8 @@ function lpcregister(
 export {
       LPCREGISTER_METADATA,
       LpcregisterOutputs,
+      LpcregisterParamsDict,
+      LpcregisterParamsDictTagged,
       lpcregister,
       lpcregister_execute,
       lpcregister_params,

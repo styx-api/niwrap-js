@@ -11,7 +11,7 @@ const R_PKGS_INSTALL_METADATA: Metadata = {
 };
 
 
-interface RPkgsInstallParameters {
+interface RPkgsInstallParamsDict {
     "@type"?: "afni/rPkgsInstall";
     "packages": string;
     "download_site"?: string | null | undefined;
@@ -19,11 +19,11 @@ interface RPkgsInstallParameters {
     "update": boolean;
     "remove": boolean;
 }
-type RPkgsInstallParametersTagged = Required<Pick<RPkgsInstallParameters, '@type'>> & RPkgsInstallParameters;
+type RPkgsInstallParamsDictTagged = Required<Pick<RPkgsInstallParamsDict, '@type'>> & RPkgsInstallParamsDict;
 
 
 /**
- * Output object returned when calling `RPkgsInstallParameters(...)`.
+ * Output object returned when calling `RPkgsInstallParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function r_pkgs_install_params(
     check: boolean = false,
     update: boolean = false,
     remove: boolean = false,
-): RPkgsInstallParametersTagged {
+): RPkgsInstallParamsDictTagged {
     const params = {
         "@type": "afni/rPkgsInstall" as const,
         "packages": packages,
@@ -80,7 +80,7 @@ function r_pkgs_install_params(
  * @returns Command-line arguments.
  */
 function r_pkgs_install_cargs(
-    params: RPkgsInstallParameters,
+    params: RPkgsInstallParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function r_pkgs_install_cargs(
  * @returns Outputs object.
  */
 function r_pkgs_install_outputs(
-    params: RPkgsInstallParameters,
+    params: RPkgsInstallParamsDict,
     execution: Execution,
 ): RPkgsInstallOutputs {
     const ret: RPkgsInstallOutputs = {
@@ -143,7 +143,7 @@ function r_pkgs_install_outputs(
  * @returns NamedTuple of outputs (described in `RPkgsInstallOutputs`).
  */
 function r_pkgs_install_execute(
-    params: RPkgsInstallParameters,
+    params: RPkgsInstallParamsDict,
     runner: Runner | null = null,
 ): RPkgsInstallOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function r_pkgs_install(
 
 export {
       RPkgsInstallOutputs,
+      RPkgsInstallParamsDict,
+      RPkgsInstallParamsDictTagged,
       R_PKGS_INSTALL_METADATA,
       r_pkgs_install,
       r_pkgs_install_execute,

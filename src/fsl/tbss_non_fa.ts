@@ -11,7 +11,7 @@ const TBSS_NON_FA_METADATA: Metadata = {
 };
 
 
-interface TbssNonFaParameters {
+interface TbssNonFaParamsDict {
     "@type"?: "fsl/tbss_non_FA";
     "concat_auto": boolean;
     "output_file": string;
@@ -23,11 +23,11 @@ interface TbssNonFaParameters {
     "concat_tr"?: number | null | undefined;
     "volume_number"?: number | null | undefined;
 }
-type TbssNonFaParametersTagged = Required<Pick<TbssNonFaParameters, '@type'>> & TbssNonFaParameters;
+type TbssNonFaParamsDictTagged = Required<Pick<TbssNonFaParamsDict, '@type'>> & TbssNonFaParamsDict;
 
 
 /**
- * Output object returned when calling `TbssNonFaParameters(...)`.
+ * Output object returned when calling `TbssNonFaParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function tbss_non_fa_params(
     concat_t: boolean = false,
     concat_tr: number | null = null,
     volume_number: number | null = null,
-): TbssNonFaParametersTagged {
+): TbssNonFaParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_non_FA" as const,
         "concat_auto": concat_auto,
@@ -98,7 +98,7 @@ function tbss_non_fa_params(
  * @returns Command-line arguments.
  */
 function tbss_non_fa_cargs(
-    params: TbssNonFaParameters,
+    params: TbssNonFaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function tbss_non_fa_cargs(
  * @returns Outputs object.
  */
 function tbss_non_fa_outputs(
-    params: TbssNonFaParameters,
+    params: TbssNonFaParamsDict,
     execution: Execution,
 ): TbssNonFaOutputs {
     const ret: TbssNonFaOutputs = {
@@ -171,7 +171,7 @@ function tbss_non_fa_outputs(
  * @returns NamedTuple of outputs (described in `TbssNonFaOutputs`).
  */
 function tbss_non_fa_execute(
-    params: TbssNonFaParameters,
+    params: TbssNonFaParamsDict,
     runner: Runner | null = null,
 ): TbssNonFaOutputs {
     runner = runner || getGlobalRunner();
@@ -226,6 +226,8 @@ function tbss_non_fa(
 export {
       TBSS_NON_FA_METADATA,
       TbssNonFaOutputs,
+      TbssNonFaParamsDict,
+      TbssNonFaParamsDictTagged,
       tbss_non_fa,
       tbss_non_fa_execute,
       tbss_non_fa_params,

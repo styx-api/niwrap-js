@@ -11,7 +11,7 @@ const V_3D_DFT_METADATA: Metadata = {
 };
 
 
-interface V3dDftParameters {
+interface V3dDftParamsDict {
     "@type"?: "afni/3dDFT";
     "infile": InputPathType;
     "prefix": string;
@@ -21,11 +21,11 @@ interface V3dDftParameters {
     "taper"?: number | null | undefined;
     "inverse": boolean;
 }
-type V3dDftParametersTagged = Required<Pick<V3dDftParameters, '@type'>> & V3dDftParameters;
+type V3dDftParamsDictTagged = Required<Pick<V3dDftParamsDict, '@type'>> & V3dDftParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDftParameters(...)`.
+ * Output object returned when calling `V3dDftParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function v_3d_dft_params(
     detrend: boolean = false,
     taper: number | null = null,
     inverse: boolean = false,
-): V3dDftParametersTagged {
+): V3dDftParamsDictTagged {
     const params = {
         "@type": "afni/3dDFT" as const,
         "infile": infile,
@@ -94,7 +94,7 @@ function v_3d_dft_params(
  * @returns Command-line arguments.
  */
 function v_3d_dft_cargs(
-    params: V3dDftParameters,
+    params: V3dDftParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function v_3d_dft_cargs(
  * @returns Outputs object.
  */
 function v_3d_dft_outputs(
-    params: V3dDftParameters,
+    params: V3dDftParamsDict,
     execution: Execution,
 ): V3dDftOutputs {
     const ret: V3dDftOutputs = {
@@ -165,7 +165,7 @@ function v_3d_dft_outputs(
  * @returns NamedTuple of outputs (described in `V3dDftOutputs`).
  */
 function v_3d_dft_execute(
-    params: V3dDftParameters,
+    params: V3dDftParamsDict,
     runner: Runner | null = null,
 ): V3dDftOutputs {
     runner = runner || getGlobalRunner();
@@ -215,6 +215,8 @@ function v_3d_dft(
 
 export {
       V3dDftOutputs,
+      V3dDftParamsDict,
+      V3dDftParamsDictTagged,
       V_3D_DFT_METADATA,
       v_3d_dft,
       v_3d_dft_execute,

@@ -11,7 +11,7 @@ const V_2DCAT_METADATA: Metadata = {
 };
 
 
-interface V2dcatParameters {
+interface V2dcatParamsDict {
     "@type"?: "afni/2dcat";
     "filenames": Array<InputPathType>;
     "scale_image"?: InputPathType | null | undefined;
@@ -39,11 +39,11 @@ interface V2dcatParameters {
     "gap"?: number | null | undefined;
     "gap_col"?: Array<number> | null | undefined;
 }
-type V2dcatParametersTagged = Required<Pick<V2dcatParameters, '@type'>> & V2dcatParameters;
+type V2dcatParamsDictTagged = Required<Pick<V2dcatParamsDict, '@type'>> & V2dcatParamsDict;
 
 
 /**
- * Output object returned when calling `V2dcatParameters(...)`.
+ * Output object returned when calling `V2dcatParamsDict(...)`.
  *
  * @interface
  */
@@ -120,7 +120,7 @@ function v_2dcat_params(
     matrix_from_scale: boolean = false,
     gap: number | null = null,
     gap_col: Array<number> | null = null,
-): V2dcatParametersTagged {
+): V2dcatParamsDictTagged {
     const params = {
         "@type": "afni/2dcat" as const,
         "filenames": filenames,
@@ -194,7 +194,7 @@ function v_2dcat_params(
  * @returns Command-line arguments.
  */
 function v_2dcat_cargs(
-    params: V2dcatParameters,
+    params: V2dcatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -333,7 +333,7 @@ function v_2dcat_cargs(
  * @returns Outputs object.
  */
 function v_2dcat_outputs(
-    params: V2dcatParameters,
+    params: V2dcatParamsDict,
     execution: Execution,
 ): V2dcatOutputs {
     const ret: V2dcatOutputs = {
@@ -360,7 +360,7 @@ function v_2dcat_outputs(
  * @returns NamedTuple of outputs (described in `V2dcatOutputs`).
  */
 function v_2dcat_execute(
-    params: V2dcatParameters,
+    params: V2dcatParamsDict,
     runner: Runner | null = null,
 ): V2dcatOutputs {
     runner = runner || getGlobalRunner();
@@ -446,6 +446,8 @@ function v_2dcat(
 
 export {
       V2dcatOutputs,
+      V2dcatParamsDict,
+      V2dcatParamsDictTagged,
       V_2DCAT_METADATA,
       v_2dcat,
       v_2dcat_execute,

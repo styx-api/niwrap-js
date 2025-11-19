@@ -11,18 +11,18 @@ const MRI_MARK_TEMPORAL_LOBE_METADATA: Metadata = {
 };
 
 
-interface MriMarkTemporalLobeParameters {
+interface MriMarkTemporalLobeParamsDict {
     "@type"?: "freesurfer/mri_mark_temporal_lobe";
     "spacing"?: string | null | undefined;
     "use_gradient": boolean;
     "subjects": Array<InputPathType>;
     "output_file": string;
 }
-type MriMarkTemporalLobeParametersTagged = Required<Pick<MriMarkTemporalLobeParameters, '@type'>> & MriMarkTemporalLobeParameters;
+type MriMarkTemporalLobeParamsDictTagged = Required<Pick<MriMarkTemporalLobeParamsDict, '@type'>> & MriMarkTemporalLobeParamsDict;
 
 
 /**
- * Output object returned when calling `MriMarkTemporalLobeParameters(...)`.
+ * Output object returned when calling `MriMarkTemporalLobeParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_mark_temporal_lobe_params(
     output_file: string,
     spacing: string | null = null,
     use_gradient: boolean = false,
-): MriMarkTemporalLobeParametersTagged {
+): MriMarkTemporalLobeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_mark_temporal_lobe" as const,
         "use_gradient": use_gradient,
@@ -76,7 +76,7 @@ function mri_mark_temporal_lobe_params(
  * @returns Command-line arguments.
  */
 function mri_mark_temporal_lobe_cargs(
-    params: MriMarkTemporalLobeParameters,
+    params: MriMarkTemporalLobeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function mri_mark_temporal_lobe_cargs(
  * @returns Outputs object.
  */
 function mri_mark_temporal_lobe_outputs(
-    params: MriMarkTemporalLobeParameters,
+    params: MriMarkTemporalLobeParamsDict,
     execution: Execution,
 ): MriMarkTemporalLobeOutputs {
     const ret: MriMarkTemporalLobeOutputs = {
@@ -129,7 +129,7 @@ function mri_mark_temporal_lobe_outputs(
  * @returns NamedTuple of outputs (described in `MriMarkTemporalLobeOutputs`).
  */
 function mri_mark_temporal_lobe_execute(
-    params: MriMarkTemporalLobeParameters,
+    params: MriMarkTemporalLobeParamsDict,
     runner: Runner | null = null,
 ): MriMarkTemporalLobeOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function mri_mark_temporal_lobe(
 export {
       MRI_MARK_TEMPORAL_LOBE_METADATA,
       MriMarkTemporalLobeOutputs,
+      MriMarkTemporalLobeParamsDict,
+      MriMarkTemporalLobeParamsDictTagged,
       mri_mark_temporal_lobe,
       mri_mark_temporal_lobe_execute,
       mri_mark_temporal_lobe_params,

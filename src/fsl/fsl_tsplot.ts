@@ -11,7 +11,7 @@ const FSL_TSPLOT_METADATA: Metadata = {
 };
 
 
-interface FslTsplotParameters {
+interface FslTsplotParamsDict {
     "@type"?: "fsl/fsl_tsplot";
     "input_files": string;
     "output_file": string;
@@ -30,11 +30,11 @@ interface FslTsplotParameters {
     "start_col"?: number | null | undefined;
     "end_col"?: number | null | undefined;
 }
-type FslTsplotParametersTagged = Required<Pick<FslTsplotParameters, '@type'>> & FslTsplotParameters;
+type FslTsplotParamsDictTagged = Required<Pick<FslTsplotParamsDict, '@type'>> & FslTsplotParamsDict;
 
 
 /**
- * Output object returned when calling `FslTsplotParameters(...)`.
+ * Output object returned when calling `FslTsplotParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function fsl_tsplot_params(
     sci_flag: boolean = false,
     start_col: number | null = null,
     end_col: number | null = null,
-): FslTsplotParametersTagged {
+): FslTsplotParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_tsplot" as const,
         "input_files": input_files,
@@ -148,7 +148,7 @@ function fsl_tsplot_params(
  * @returns Command-line arguments.
  */
 function fsl_tsplot_cargs(
-    params: FslTsplotParameters,
+    params: FslTsplotParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -255,7 +255,7 @@ function fsl_tsplot_cargs(
  * @returns Outputs object.
  */
 function fsl_tsplot_outputs(
-    params: FslTsplotParameters,
+    params: FslTsplotParamsDict,
     execution: Execution,
 ): FslTsplotOutputs {
     const ret: FslTsplotOutputs = {
@@ -281,7 +281,7 @@ function fsl_tsplot_outputs(
  * @returns NamedTuple of outputs (described in `FslTsplotOutputs`).
  */
 function fsl_tsplot_execute(
-    params: FslTsplotParameters,
+    params: FslTsplotParamsDict,
     runner: Runner | null = null,
 ): FslTsplotOutputs {
     runner = runner || getGlobalRunner();
@@ -350,6 +350,8 @@ function fsl_tsplot(
 export {
       FSL_TSPLOT_METADATA,
       FslTsplotOutputs,
+      FslTsplotParamsDict,
+      FslTsplotParamsDictTagged,
       fsl_tsplot,
       fsl_tsplot_execute,
       fsl_tsplot_params,

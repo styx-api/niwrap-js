@@ -11,16 +11,16 @@ const LONG_CREATE_ORIG_METADATA: Metadata = {
 };
 
 
-interface LongCreateOrigParameters {
+interface LongCreateOrigParamsDict {
     "@type"?: "freesurfer/long_create_orig";
     "base_id": string;
     "tp_id"?: string | null | undefined;
 }
-type LongCreateOrigParametersTagged = Required<Pick<LongCreateOrigParameters, '@type'>> & LongCreateOrigParameters;
+type LongCreateOrigParamsDictTagged = Required<Pick<LongCreateOrigParamsDict, '@type'>> & LongCreateOrigParamsDict;
 
 
 /**
- * Output object returned when calling `LongCreateOrigParameters(...)`.
+ * Output object returned when calling `LongCreateOrigParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface LongCreateOrigOutputs {
 function long_create_orig_params(
     base_id: string,
     tp_id: string | null = null,
-): LongCreateOrigParametersTagged {
+): LongCreateOrigParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_create_orig" as const,
         "base_id": base_id,
@@ -68,7 +68,7 @@ function long_create_orig_params(
  * @returns Command-line arguments.
  */
 function long_create_orig_cargs(
-    params: LongCreateOrigParameters,
+    params: LongCreateOrigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function long_create_orig_cargs(
  * @returns Outputs object.
  */
 function long_create_orig_outputs(
-    params: LongCreateOrigParameters,
+    params: LongCreateOrigParamsDict,
     execution: Execution,
 ): LongCreateOrigOutputs {
     const ret: LongCreateOrigOutputs = {
@@ -116,7 +116,7 @@ function long_create_orig_outputs(
  * @returns NamedTuple of outputs (described in `LongCreateOrigOutputs`).
  */
 function long_create_orig_execute(
-    params: LongCreateOrigParameters,
+    params: LongCreateOrigParamsDict,
     runner: Runner | null = null,
 ): LongCreateOrigOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function long_create_orig(
 export {
       LONG_CREATE_ORIG_METADATA,
       LongCreateOrigOutputs,
+      LongCreateOrigParamsDict,
+      LongCreateOrigParamsDictTagged,
       long_create_orig,
       long_create_orig_execute,
       long_create_orig_params,

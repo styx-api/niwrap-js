@@ -10,18 +10,18 @@ const BORDER_TO_VERTICES_METADATA: Metadata = {
 };
 
 
-interface BorderToVerticesParameters {
+interface BorderToVerticesParamsDict {
     "@type"?: "workbench/border-to-vertices";
     "metric-out": string;
     "name"?: string | null | undefined;
     "surface": InputPathType;
     "border-file": InputPathType;
 }
-type BorderToVerticesParametersTagged = Required<Pick<BorderToVerticesParameters, '@type'>> & BorderToVerticesParameters;
+type BorderToVerticesParamsDictTagged = Required<Pick<BorderToVerticesParamsDict, '@type'>> & BorderToVerticesParamsDict;
 
 
 /**
- * Output object returned when calling `BorderToVerticesParameters(...)`.
+ * Output object returned when calling `BorderToVerticesParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function border_to_vertices_params(
     name: string | null,
     surface: InputPathType,
     border_file: InputPathType,
-): BorderToVerticesParametersTagged {
+): BorderToVerticesParamsDictTagged {
     const params = {
         "@type": "workbench/border-to-vertices" as const,
         "metric-out": metric_out,
@@ -77,7 +77,7 @@ function border_to_vertices_params(
  * @returns Command-line arguments.
  */
 function border_to_vertices_cargs(
-    params: BorderToVerticesParameters,
+    params: BorderToVerticesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function border_to_vertices_cargs(
  * @returns Outputs object.
  */
 function border_to_vertices_outputs(
-    params: BorderToVerticesParameters,
+    params: BorderToVerticesParamsDict,
     execution: Execution,
 ): BorderToVerticesOutputs {
     const ret: BorderToVerticesOutputs = {
@@ -127,7 +127,7 @@ function border_to_vertices_outputs(
  * @returns NamedTuple of outputs (described in `BorderToVerticesOutputs`).
  */
 function border_to_vertices_execute(
-    params: BorderToVerticesParameters,
+    params: BorderToVerticesParamsDict,
     runner: Runner | null = null,
 ): BorderToVerticesOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function border_to_vertices(
 export {
       BORDER_TO_VERTICES_METADATA,
       BorderToVerticesOutputs,
+      BorderToVerticesParamsDict,
+      BorderToVerticesParamsDictTagged,
       border_to_vertices,
       border_to_vertices_execute,
       border_to_vertices_params,

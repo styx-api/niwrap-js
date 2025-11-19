@@ -11,7 +11,7 @@ const FSLASCII2IMG_METADATA: Metadata = {
 };
 
 
-interface Fslascii2imgParameters {
+interface Fslascii2imgParamsDict {
     "@type"?: "fsl/fslascii2img";
     "infile": InputPathType;
     "xsize": number;
@@ -24,11 +24,11 @@ interface Fslascii2imgParameters {
     "tr": number;
     "outfile": string;
 }
-type Fslascii2imgParametersTagged = Required<Pick<Fslascii2imgParameters, '@type'>> & Fslascii2imgParameters;
+type Fslascii2imgParamsDictTagged = Required<Pick<Fslascii2imgParamsDict, '@type'>> & Fslascii2imgParamsDict;
 
 
 /**
- * Output object returned when calling `Fslascii2imgParameters(...)`.
+ * Output object returned when calling `Fslascii2imgParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function fslascii2img_params(
     zdim: number,
     tr: number,
     outfile: string = "output",
-): Fslascii2imgParametersTagged {
+): Fslascii2imgParamsDictTagged {
     const params = {
         "@type": "fsl/fslascii2img" as const,
         "infile": infile,
@@ -98,7 +98,7 @@ function fslascii2img_params(
  * @returns Command-line arguments.
  */
 function fslascii2img_cargs(
-    params: Fslascii2imgParameters,
+    params: Fslascii2imgParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function fslascii2img_cargs(
  * @returns Outputs object.
  */
 function fslascii2img_outputs(
-    params: Fslascii2imgParameters,
+    params: Fslascii2imgParamsDict,
     execution: Execution,
 ): Fslascii2imgOutputs {
     const ret: Fslascii2imgOutputs = {
@@ -152,7 +152,7 @@ function fslascii2img_outputs(
  * @returns NamedTuple of outputs (described in `Fslascii2imgOutputs`).
  */
 function fslascii2img_execute(
-    params: Fslascii2imgParameters,
+    params: Fslascii2imgParamsDict,
     runner: Runner | null = null,
 ): Fslascii2imgOutputs {
     runner = runner || getGlobalRunner();
@@ -209,6 +209,8 @@ function fslascii2img(
 export {
       FSLASCII2IMG_METADATA,
       Fslascii2imgOutputs,
+      Fslascii2imgParamsDict,
+      Fslascii2imgParamsDictTagged,
       fslascii2img,
       fslascii2img_execute,
       fslascii2img_params,

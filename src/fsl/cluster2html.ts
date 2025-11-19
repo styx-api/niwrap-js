@@ -11,17 +11,17 @@ const CLUSTER2HTML_METADATA: Metadata = {
 };
 
 
-interface Cluster2htmlParameters {
+interface Cluster2htmlParamsDict {
     "@type"?: "fsl/cluster2html";
     "featdir": string;
     "inroot": string;
     "std_flag": boolean;
 }
-type Cluster2htmlParametersTagged = Required<Pick<Cluster2htmlParameters, '@type'>> & Cluster2htmlParameters;
+type Cluster2htmlParamsDictTagged = Required<Pick<Cluster2htmlParamsDict, '@type'>> & Cluster2htmlParamsDict;
 
 
 /**
- * Output object returned when calling `Cluster2htmlParameters(...)`.
+ * Output object returned when calling `Cluster2htmlParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function cluster2html_params(
     featdir: string,
     inroot: string,
     std_flag: boolean = false,
-): Cluster2htmlParametersTagged {
+): Cluster2htmlParamsDictTagged {
     const params = {
         "@type": "fsl/cluster2html" as const,
         "featdir": featdir,
@@ -66,7 +66,7 @@ function cluster2html_params(
  * @returns Command-line arguments.
  */
 function cluster2html_cargs(
-    params: Cluster2htmlParameters,
+    params: Cluster2htmlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -89,7 +89,7 @@ function cluster2html_cargs(
  * @returns Outputs object.
  */
 function cluster2html_outputs(
-    params: Cluster2htmlParameters,
+    params: Cluster2htmlParamsDict,
     execution: Execution,
 ): Cluster2htmlOutputs {
     const ret: Cluster2htmlOutputs = {
@@ -114,7 +114,7 @@ function cluster2html_outputs(
  * @returns NamedTuple of outputs (described in `Cluster2htmlOutputs`).
  */
 function cluster2html_execute(
-    params: Cluster2htmlParameters,
+    params: Cluster2htmlParamsDict,
     runner: Runner | null = null,
 ): Cluster2htmlOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function cluster2html(
 export {
       CLUSTER2HTML_METADATA,
       Cluster2htmlOutputs,
+      Cluster2htmlParamsDict,
+      Cluster2htmlParamsDictTagged,
       cluster2html,
       cluster2html_execute,
       cluster2html_params,

@@ -11,7 +11,7 @@ const RCBF_PREP_METADATA: Metadata = {
 };
 
 
-interface RcbfPrepParameters {
+interface RcbfPrepParamsDict {
     "@type"?: "freesurfer/rcbf-prep";
     "outdir": string;
     "rcbfvol": InputPathType;
@@ -20,11 +20,11 @@ interface RcbfPrepParameters {
     "register"?: InputPathType | null | undefined;
     "template"?: InputPathType | null | undefined;
 }
-type RcbfPrepParametersTagged = Required<Pick<RcbfPrepParameters, '@type'>> & RcbfPrepParameters;
+type RcbfPrepParamsDictTagged = Required<Pick<RcbfPrepParamsDict, '@type'>> & RcbfPrepParamsDict;
 
 
 /**
- * Output object returned when calling `RcbfPrepParameters(...)`.
+ * Output object returned when calling `RcbfPrepParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function rcbf_prep_params(
     roitab: InputPathType | null = null,
     register: InputPathType | null = null,
     template: InputPathType | null = null,
-): RcbfPrepParametersTagged {
+): RcbfPrepParamsDictTagged {
     const params = {
         "@type": "freesurfer/rcbf-prep" as const,
         "outdir": outdir,
@@ -102,7 +102,7 @@ function rcbf_prep_params(
  * @returns Command-line arguments.
  */
 function rcbf_prep_cargs(
-    params: RcbfPrepParameters,
+    params: RcbfPrepParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -152,7 +152,7 @@ function rcbf_prep_cargs(
  * @returns Outputs object.
  */
 function rcbf_prep_outputs(
-    params: RcbfPrepParameters,
+    params: RcbfPrepParamsDict,
     execution: Execution,
 ): RcbfPrepOutputs {
     const ret: RcbfPrepOutputs = {
@@ -181,7 +181,7 @@ function rcbf_prep_outputs(
  * @returns NamedTuple of outputs (described in `RcbfPrepOutputs`).
  */
 function rcbf_prep_execute(
-    params: RcbfPrepParameters,
+    params: RcbfPrepParamsDict,
     runner: Runner | null = null,
 ): RcbfPrepOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function rcbf_prep(
 export {
       RCBF_PREP_METADATA,
       RcbfPrepOutputs,
+      RcbfPrepParamsDict,
+      RcbfPrepParamsDictTagged,
       rcbf_prep,
       rcbf_prep_execute,
       rcbf_prep_params,

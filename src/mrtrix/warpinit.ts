@@ -11,28 +11,28 @@ const WARPINIT_METADATA: Metadata = {
 };
 
 
-interface WarpinitConfigParameters {
+interface WarpinitConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type WarpinitConfigParametersTagged = Required<Pick<WarpinitConfigParameters, '@type'>> & WarpinitConfigParameters;
+type WarpinitConfigParamsDictTagged = Required<Pick<WarpinitConfigParamsDict, '@type'>> & WarpinitConfigParamsDict;
 
 
-interface WarpinitParameters {
+interface WarpinitParamsDict {
     "@type"?: "mrtrix/warpinit";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<WarpinitConfigParameters> | null | undefined;
+    "config"?: Array<WarpinitConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "template": InputPathType;
     "warp": string;
 }
-type WarpinitParametersTagged = Required<Pick<WarpinitParameters, '@type'>> & WarpinitParameters;
+type WarpinitParamsDictTagged = Required<Pick<WarpinitParamsDict, '@type'>> & WarpinitParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type WarpinitParametersTagged = Required<Pick<WarpinitParameters, '@type'>> & Wa
  *
  * @returns Parameter dictionary
  */
-function warpinit_config_params(
+function warpinit_config(
     key: string,
     value: string,
-): WarpinitConfigParametersTagged {
+): WarpinitConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -65,7 +65,7 @@ function warpinit_config_params(
  * @returns Command-line arguments.
  */
 function warpinit_config_cargs(
-    params: WarpinitConfigParameters,
+    params: WarpinitConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function warpinit_config_cargs(
 
 
 /**
- * Output object returned when calling `WarpinitParameters(...)`.
+ * Output object returned when calling `WarpinitParamsDict(...)`.
  *
  * @interface
  */
@@ -117,10 +117,10 @@ function warpinit_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpinitConfigParameters> | null = null,
+    config: Array<WarpinitConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): WarpinitParametersTagged {
+): WarpinitParamsDictTagged {
     const params = {
         "@type": "mrtrix/warpinit" as const,
         "info": info,
@@ -151,7 +151,7 @@ function warpinit_params(
  * @returns Command-line arguments.
  */
 function warpinit_cargs(
-    params: WarpinitParameters,
+    params: WarpinitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -198,7 +198,7 @@ function warpinit_cargs(
  * @returns Outputs object.
  */
 function warpinit_outputs(
-    params: WarpinitParameters,
+    params: WarpinitParamsDict,
     execution: Execution,
 ): WarpinitOutputs {
     const ret: WarpinitOutputs = {
@@ -236,7 +236,7 @@ function warpinit_outputs(
  * @returns NamedTuple of outputs (described in `WarpinitOutputs`).
  */
 function warpinit_execute(
-    params: WarpinitParameters,
+    params: WarpinitParamsDict,
     runner: Runner | null = null,
 ): WarpinitOutputs {
     runner = runner || getGlobalRunner();
@@ -292,7 +292,7 @@ function warpinit(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<WarpinitConfigParameters> | null = null,
+    config: Array<WarpinitConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -304,9 +304,13 @@ function warpinit(
 
 export {
       WARPINIT_METADATA,
+      WarpinitConfigParamsDict,
+      WarpinitConfigParamsDictTagged,
       WarpinitOutputs,
+      WarpinitParamsDict,
+      WarpinitParamsDictTagged,
       warpinit,
-      warpinit_config_params,
+      warpinit_config,
       warpinit_execute,
       warpinit_params,
 };

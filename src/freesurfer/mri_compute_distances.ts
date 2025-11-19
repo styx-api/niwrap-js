@@ -11,17 +11,17 @@ const MRI_COMPUTE_DISTANCES_METADATA: Metadata = {
 };
 
 
-interface MriComputeDistancesParameters {
+interface MriComputeDistancesParamsDict {
     "@type"?: "freesurfer/mri_compute_distances";
     "source": InputPathType;
     "target": InputPathType;
     "output_xform": string;
 }
-type MriComputeDistancesParametersTagged = Required<Pick<MriComputeDistancesParameters, '@type'>> & MriComputeDistancesParameters;
+type MriComputeDistancesParamsDictTagged = Required<Pick<MriComputeDistancesParamsDict, '@type'>> & MriComputeDistancesParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeDistancesParameters(...)`.
+ * Output object returned when calling `MriComputeDistancesParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_compute_distances_params(
     source: InputPathType,
     target: InputPathType,
     output_xform: string,
-): MriComputeDistancesParametersTagged {
+): MriComputeDistancesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_distances" as const,
         "source": source,
@@ -70,7 +70,7 @@ function mri_compute_distances_params(
  * @returns Command-line arguments.
  */
 function mri_compute_distances_cargs(
-    params: MriComputeDistancesParameters,
+    params: MriComputeDistancesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_compute_distances_cargs(
  * @returns Outputs object.
  */
 function mri_compute_distances_outputs(
-    params: MriComputeDistancesParameters,
+    params: MriComputeDistancesParamsDict,
     execution: Execution,
 ): MriComputeDistancesOutputs {
     const ret: MriComputeDistancesOutputs = {
@@ -117,7 +117,7 @@ function mri_compute_distances_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeDistancesOutputs`).
  */
 function mri_compute_distances_execute(
-    params: MriComputeDistancesParameters,
+    params: MriComputeDistancesParamsDict,
     runner: Runner | null = null,
 ): MriComputeDistancesOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_compute_distances(
 export {
       MRI_COMPUTE_DISTANCES_METADATA,
       MriComputeDistancesOutputs,
+      MriComputeDistancesParamsDict,
+      MriComputeDistancesParamsDictTagged,
       mri_compute_distances,
       mri_compute_distances_execute,
       mri_compute_distances_params,

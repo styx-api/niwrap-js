@@ -11,7 +11,7 @@ const SURF_PATCH_METADATA: Metadata = {
 };
 
 
-interface SurfPatchParameters {
+interface SurfPatchParamsDict {
     "@type"?: "afni/SurfPatch";
     "spec_file": InputPathType;
     "surf_A": InputPathType;
@@ -35,11 +35,11 @@ interface SurfPatchParameters {
     "flip_orientation": boolean;
     "verbosity"?: number | null | undefined;
 }
-type SurfPatchParametersTagged = Required<Pick<SurfPatchParameters, '@type'>> & SurfPatchParameters;
+type SurfPatchParamsDictTagged = Required<Pick<SurfPatchParamsDict, '@type'>> & SurfPatchParamsDict;
 
 
 /**
- * Output object returned when calling `SurfPatchParameters(...)`.
+ * Output object returned when calling `SurfPatchParamsDict(...)`.
  *
  * @interface
  */
@@ -112,7 +112,7 @@ function surf_patch_params(
     stitched_surface: InputPathType | null = null,
     flip_orientation: boolean = false,
     verbosity: number | null = null,
-): SurfPatchParametersTagged {
+): SurfPatchParamsDictTagged {
     const params = {
         "@type": "afni/SurfPatch" as const,
         "spec_file": spec_file,
@@ -160,7 +160,7 @@ function surf_patch_params(
  * @returns Command-line arguments.
  */
 function surf_patch_cargs(
-    params: SurfPatchParameters,
+    params: SurfPatchParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -254,7 +254,7 @@ function surf_patch_cargs(
  * @returns Outputs object.
  */
 function surf_patch_outputs(
-    params: SurfPatchParameters,
+    params: SurfPatchParamsDict,
     execution: Execution,
 ): SurfPatchOutputs {
     const ret: SurfPatchOutputs = {
@@ -282,7 +282,7 @@ function surf_patch_outputs(
  * @returns NamedTuple of outputs (described in `SurfPatchOutputs`).
  */
 function surf_patch_execute(
-    params: SurfPatchParameters,
+    params: SurfPatchParamsDict,
     runner: Runner | null = null,
 ): SurfPatchOutputs {
     runner = runner || getGlobalRunner();
@@ -361,6 +361,8 @@ function surf_patch(
 export {
       SURF_PATCH_METADATA,
       SurfPatchOutputs,
+      SurfPatchParamsDict,
+      SurfPatchParamsDictTagged,
       surf_patch,
       surf_patch_execute,
       surf_patch_params,

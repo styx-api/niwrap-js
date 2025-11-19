@@ -11,7 +11,7 @@ const RESAMPLE_IMAGE_METADATA: Metadata = {
 };
 
 
-interface ResampleImageParameters {
+interface ResampleImageParamsDict {
     "@type"?: "ants/ResampleImage";
     "image_dimension": number;
     "input_image": InputPathType;
@@ -20,11 +20,11 @@ interface ResampleImageParameters {
     "interpolate_type"?: "0" | "1" | "2" | "3" | "4" | null | undefined;
     "pixeltype"?: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | null | undefined;
 }
-type ResampleImageParametersTagged = Required<Pick<ResampleImageParameters, '@type'>> & ResampleImageParameters;
+type ResampleImageParamsDictTagged = Required<Pick<ResampleImageParamsDict, '@type'>> & ResampleImageParamsDict;
 
 
 /**
- * Output object returned when calling `ResampleImageParameters(...)`.
+ * Output object returned when calling `ResampleImageParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function resample_image_params(
     size_spacing: string,
     interpolate_type: "0" | "1" | "2" | "3" | "4" | null = null,
     pixeltype: "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | null = null,
-): ResampleImageParametersTagged {
+): ResampleImageParamsDictTagged {
     const params = {
         "@type": "ants/ResampleImage" as const,
         "image_dimension": image_dimension,
@@ -86,7 +86,7 @@ function resample_image_params(
  * @returns Command-line arguments.
  */
 function resample_image_cargs(
-    params: ResampleImageParameters,
+    params: ResampleImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function resample_image_cargs(
  * @returns Outputs object.
  */
 function resample_image_outputs(
-    params: ResampleImageParameters,
+    params: ResampleImageParamsDict,
     execution: Execution,
 ): ResampleImageOutputs {
     const ret: ResampleImageOutputs = {
@@ -140,7 +140,7 @@ function resample_image_outputs(
  * @returns NamedTuple of outputs (described in `ResampleImageOutputs`).
  */
 function resample_image_execute(
-    params: ResampleImageParameters,
+    params: ResampleImageParamsDict,
     runner: Runner | null = null,
 ): ResampleImageOutputs {
     runner = runner || getGlobalRunner();
@@ -189,6 +189,8 @@ function resample_image(
 export {
       RESAMPLE_IMAGE_METADATA,
       ResampleImageOutputs,
+      ResampleImageParamsDict,
+      ResampleImageParamsDictTagged,
       resample_image,
       resample_image_execute,
       resample_image_params,

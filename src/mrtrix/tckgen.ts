@@ -11,137 +11,137 @@ const TCKGEN_METADATA: Metadata = {
 };
 
 
-interface TckgenSeedImageParameters {
+interface TckgenSeedImageParamsDict {
     "@type"?: "seed_image";
     "image": InputPathType;
 }
-type TckgenSeedImageParametersTagged = Required<Pick<TckgenSeedImageParameters, '@type'>> & TckgenSeedImageParameters;
+type TckgenSeedImageParamsDictTagged = Required<Pick<TckgenSeedImageParamsDict, '@type'>> & TckgenSeedImageParamsDict;
 
 
-interface TckgenSeedSphereParameters {
+interface TckgenSeedSphereParamsDict {
     "@type"?: "seed_sphere";
     "spec": Array<number>;
 }
-type TckgenSeedSphereParametersTagged = Required<Pick<TckgenSeedSphereParameters, '@type'>> & TckgenSeedSphereParameters;
+type TckgenSeedSphereParamsDictTagged = Required<Pick<TckgenSeedSphereParamsDict, '@type'>> & TckgenSeedSphereParamsDict;
 
 
-interface TckgenSeedRandomPerVoxelParameters {
+interface TckgenSeedRandomPerVoxelParamsDict {
     "@type"?: "seed_random_per_voxel";
     "image": InputPathType;
     "num_per_voxel": number;
 }
-type TckgenSeedRandomPerVoxelParametersTagged = Required<Pick<TckgenSeedRandomPerVoxelParameters, '@type'>> & TckgenSeedRandomPerVoxelParameters;
+type TckgenSeedRandomPerVoxelParamsDictTagged = Required<Pick<TckgenSeedRandomPerVoxelParamsDict, '@type'>> & TckgenSeedRandomPerVoxelParamsDict;
 
 
-interface TckgenSeedGridPerVoxelParameters {
+interface TckgenSeedGridPerVoxelParamsDict {
     "@type"?: "seed_grid_per_voxel";
     "image": InputPathType;
     "grid_size": number;
 }
-type TckgenSeedGridPerVoxelParametersTagged = Required<Pick<TckgenSeedGridPerVoxelParameters, '@type'>> & TckgenSeedGridPerVoxelParameters;
+type TckgenSeedGridPerVoxelParamsDictTagged = Required<Pick<TckgenSeedGridPerVoxelParamsDict, '@type'>> & TckgenSeedGridPerVoxelParamsDict;
 
 
-interface TckgenSeedRejectionParameters {
+interface TckgenSeedRejectionParamsDict {
     "@type"?: "seed_rejection";
     "image": InputPathType;
 }
-type TckgenSeedRejectionParametersTagged = Required<Pick<TckgenSeedRejectionParameters, '@type'>> & TckgenSeedRejectionParameters;
+type TckgenSeedRejectionParamsDictTagged = Required<Pick<TckgenSeedRejectionParamsDict, '@type'>> & TckgenSeedRejectionParamsDict;
 
 
-interface TckgenSeedGmwmiParameters {
+interface TckgenSeedGmwmiParamsDict {
     "@type"?: "seed_gmwmi";
     "image": InputPathType;
 }
-type TckgenSeedGmwmiParametersTagged = Required<Pick<TckgenSeedGmwmiParameters, '@type'>> & TckgenSeedGmwmiParameters;
+type TckgenSeedGmwmiParamsDictTagged = Required<Pick<TckgenSeedGmwmiParamsDict, '@type'>> & TckgenSeedGmwmiParamsDict;
 
 
-interface TckgenVariousStringParameters {
+interface TckgenVariousStringParamsDict {
     "@type"?: "VariousString";
     "obj": string;
 }
-type TckgenVariousStringParametersTagged = Required<Pick<TckgenVariousStringParameters, '@type'>> & TckgenVariousStringParameters;
+type TckgenVariousStringParamsDictTagged = Required<Pick<TckgenVariousStringParamsDict, '@type'>> & TckgenVariousStringParamsDict;
 
 
-interface TckgenVariousFileParameters {
+interface TckgenVariousFileParamsDict {
     "@type"?: "VariousFile";
     "obj": InputPathType;
 }
-type TckgenVariousFileParametersTagged = Required<Pick<TckgenVariousFileParameters, '@type'>> & TckgenVariousFileParameters;
+type TckgenVariousFileParamsDictTagged = Required<Pick<TckgenVariousFileParamsDict, '@type'>> & TckgenVariousFileParamsDict;
 
 
-interface TckgenIncludeParameters {
+interface TckgenIncludeParamsDict {
     "@type"?: "include";
-    "spec": TckgenVariousStringParametersTagged | TckgenVariousFileParametersTagged;
+    "spec": TckgenVariousStringParamsDictTagged | TckgenVariousFileParamsDictTagged;
 }
-type TckgenIncludeParametersTagged = Required<Pick<TckgenIncludeParameters, '@type'>> & TckgenIncludeParameters;
+type TckgenIncludeParamsDictTagged = Required<Pick<TckgenIncludeParamsDict, '@type'>> & TckgenIncludeParamsDict;
 
 
-interface TckgenIncludeOrderedParameters {
+interface TckgenIncludeOrderedParamsDict {
     "@type"?: "include_ordered";
     "image": string;
 }
-type TckgenIncludeOrderedParametersTagged = Required<Pick<TckgenIncludeOrderedParameters, '@type'>> & TckgenIncludeOrderedParameters;
+type TckgenIncludeOrderedParamsDictTagged = Required<Pick<TckgenIncludeOrderedParamsDict, '@type'>> & TckgenIncludeOrderedParamsDict;
 
 
-interface TckgenVariousString1Parameters {
+interface TckgenVariousString1ParamsDict {
     "@type"?: "VariousString_1";
     "obj": string;
 }
-type TckgenVariousString1ParametersTagged = Required<Pick<TckgenVariousString1Parameters, '@type'>> & TckgenVariousString1Parameters;
+type TckgenVariousString1ParamsDictTagged = Required<Pick<TckgenVariousString1ParamsDict, '@type'>> & TckgenVariousString1ParamsDict;
 
 
-interface TckgenVariousFile1Parameters {
+interface TckgenVariousFile1ParamsDict {
     "@type"?: "VariousFile_1";
     "obj": InputPathType;
 }
-type TckgenVariousFile1ParametersTagged = Required<Pick<TckgenVariousFile1Parameters, '@type'>> & TckgenVariousFile1Parameters;
+type TckgenVariousFile1ParamsDictTagged = Required<Pick<TckgenVariousFile1ParamsDict, '@type'>> & TckgenVariousFile1ParamsDict;
 
 
-interface TckgenExcludeParameters {
+interface TckgenExcludeParamsDict {
     "@type"?: "exclude";
-    "spec": TckgenVariousString1ParametersTagged | TckgenVariousFile1ParametersTagged;
+    "spec": TckgenVariousString1ParamsDictTagged | TckgenVariousFile1ParamsDictTagged;
 }
-type TckgenExcludeParametersTagged = Required<Pick<TckgenExcludeParameters, '@type'>> & TckgenExcludeParameters;
+type TckgenExcludeParamsDictTagged = Required<Pick<TckgenExcludeParamsDict, '@type'>> & TckgenExcludeParamsDict;
 
 
-interface TckgenVariousString2Parameters {
+interface TckgenVariousString2ParamsDict {
     "@type"?: "VariousString_2";
     "obj": string;
 }
-type TckgenVariousString2ParametersTagged = Required<Pick<TckgenVariousString2Parameters, '@type'>> & TckgenVariousString2Parameters;
+type TckgenVariousString2ParamsDictTagged = Required<Pick<TckgenVariousString2ParamsDict, '@type'>> & TckgenVariousString2ParamsDict;
 
 
-interface TckgenVariousFile2Parameters {
+interface TckgenVariousFile2ParamsDict {
     "@type"?: "VariousFile_2";
     "obj": InputPathType;
 }
-type TckgenVariousFile2ParametersTagged = Required<Pick<TckgenVariousFile2Parameters, '@type'>> & TckgenVariousFile2Parameters;
+type TckgenVariousFile2ParamsDictTagged = Required<Pick<TckgenVariousFile2ParamsDict, '@type'>> & TckgenVariousFile2ParamsDict;
 
 
-interface TckgenMaskParameters {
+interface TckgenMaskParamsDict {
     "@type"?: "mask";
-    "spec": TckgenVariousString2ParametersTagged | TckgenVariousFile2ParametersTagged;
+    "spec": TckgenVariousString2ParamsDictTagged | TckgenVariousFile2ParamsDictTagged;
 }
-type TckgenMaskParametersTagged = Required<Pick<TckgenMaskParameters, '@type'>> & TckgenMaskParameters;
+type TckgenMaskParamsDictTagged = Required<Pick<TckgenMaskParamsDict, '@type'>> & TckgenMaskParamsDict;
 
 
-interface TckgenFslgradParameters {
+interface TckgenFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type TckgenFslgradParametersTagged = Required<Pick<TckgenFslgradParameters, '@type'>> & TckgenFslgradParameters;
+type TckgenFslgradParamsDictTagged = Required<Pick<TckgenFslgradParamsDict, '@type'>> & TckgenFslgradParamsDict;
 
 
-interface TckgenConfigParameters {
+interface TckgenConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type TckgenConfigParametersTagged = Required<Pick<TckgenConfigParameters, '@type'>> & TckgenConfigParameters;
+type TckgenConfigParamsDictTagged = Required<Pick<TckgenConfigParamsDict, '@type'>> & TckgenConfigParamsDict;
 
 
-interface TckgenParameters {
+interface TckgenParamsDict {
     "@type"?: "mrtrix/tckgen";
     "algorithm"?: string | null | undefined;
     "select"?: number | null | undefined;
@@ -155,12 +155,12 @@ interface TckgenParameters {
     "rk4": boolean;
     "stop": boolean;
     "downsample"?: number | null | undefined;
-    "seed_image"?: Array<TckgenSeedImageParameters> | null | undefined;
-    "seed_sphere"?: Array<TckgenSeedSphereParameters> | null | undefined;
-    "seed_random_per_voxel"?: Array<TckgenSeedRandomPerVoxelParameters> | null | undefined;
-    "seed_grid_per_voxel"?: Array<TckgenSeedGridPerVoxelParameters> | null | undefined;
-    "seed_rejection"?: Array<TckgenSeedRejectionParameters> | null | undefined;
-    "seed_gmwmi"?: Array<TckgenSeedGmwmiParameters> | null | undefined;
+    "seed_image"?: Array<TckgenSeedImageParamsDict> | null | undefined;
+    "seed_sphere"?: Array<TckgenSeedSphereParamsDict> | null | undefined;
+    "seed_random_per_voxel"?: Array<TckgenSeedRandomPerVoxelParamsDict> | null | undefined;
+    "seed_grid_per_voxel"?: Array<TckgenSeedGridPerVoxelParamsDict> | null | undefined;
+    "seed_rejection"?: Array<TckgenSeedRejectionParamsDict> | null | undefined;
+    "seed_gmwmi"?: Array<TckgenSeedGmwmiParamsDict> | null | undefined;
     "seed_dynamic"?: InputPathType | null | undefined;
     "seeds"?: number | null | undefined;
     "max_attempts_per_seed"?: number | null | undefined;
@@ -168,29 +168,29 @@ interface TckgenParameters {
     "seed_unidirectional": boolean;
     "seed_direction"?: Array<number> | null | undefined;
     "output_seeds"?: string | null | undefined;
-    "include"?: Array<TckgenIncludeParameters> | null | undefined;
-    "include_ordered"?: Array<TckgenIncludeOrderedParameters> | null | undefined;
-    "exclude"?: Array<TckgenExcludeParameters> | null | undefined;
-    "mask"?: Array<TckgenMaskParameters> | null | undefined;
+    "include"?: Array<TckgenIncludeParamsDict> | null | undefined;
+    "include_ordered"?: Array<TckgenIncludeOrderedParamsDict> | null | undefined;
+    "exclude"?: Array<TckgenExcludeParamsDict> | null | undefined;
+    "mask"?: Array<TckgenMaskParamsDict> | null | undefined;
     "act"?: InputPathType | null | undefined;
     "backtrack": boolean;
     "crop_at_gmwmi": boolean;
     "power"?: number | null | undefined;
     "samples"?: number | null | undefined;
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: TckgenFslgradParameters | null | undefined;
+    "fslgrad"?: TckgenFslgradParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<TckgenConfigParameters> | null | undefined;
+    "config"?: Array<TckgenConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "source": InputPathType;
     "tracks": string;
 }
-type TckgenParametersTagged = Required<Pick<TckgenParameters, '@type'>> & TckgenParameters;
+type TckgenParamsDictTagged = Required<Pick<TckgenParamsDict, '@type'>> & TckgenParamsDict;
 
 
 /**
@@ -302,9 +302,9 @@ function tckgen_spec_outputs_dyn_fn_2(
  *
  * @returns Parameter dictionary
  */
-function tckgen_seed_image_params(
+function tckgen_seed_image(
     image: InputPathType,
-): TckgenSeedImageParametersTagged {
+): TckgenSeedImageParamsDictTagged {
     const params = {
         "@type": "seed_image" as const,
         "image": image,
@@ -322,7 +322,7 @@ function tckgen_seed_image_params(
  * @returns Command-line arguments.
  */
 function tckgen_seed_image_cargs(
-    params: TckgenSeedImageParameters,
+    params: TckgenSeedImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -339,9 +339,9 @@ function tckgen_seed_image_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_seed_sphere_params(
+function tckgen_seed_sphere(
     spec: Array<number>,
-): TckgenSeedSphereParametersTagged {
+): TckgenSeedSphereParamsDictTagged {
     const params = {
         "@type": "seed_sphere" as const,
         "spec": spec,
@@ -359,7 +359,7 @@ function tckgen_seed_sphere_params(
  * @returns Command-line arguments.
  */
 function tckgen_seed_sphere_cargs(
-    params: TckgenSeedSphereParameters,
+    params: TckgenSeedSphereParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -377,10 +377,10 @@ function tckgen_seed_sphere_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_seed_random_per_voxel_params(
+function tckgen_seed_random_per_voxel(
     image: InputPathType,
     num_per_voxel: number,
-): TckgenSeedRandomPerVoxelParametersTagged {
+): TckgenSeedRandomPerVoxelParamsDictTagged {
     const params = {
         "@type": "seed_random_per_voxel" as const,
         "image": image,
@@ -399,7 +399,7 @@ function tckgen_seed_random_per_voxel_params(
  * @returns Command-line arguments.
  */
 function tckgen_seed_random_per_voxel_cargs(
-    params: TckgenSeedRandomPerVoxelParameters,
+    params: TckgenSeedRandomPerVoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -418,10 +418,10 @@ function tckgen_seed_random_per_voxel_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_seed_grid_per_voxel_params(
+function tckgen_seed_grid_per_voxel(
     image: InputPathType,
     grid_size: number,
-): TckgenSeedGridPerVoxelParametersTagged {
+): TckgenSeedGridPerVoxelParamsDictTagged {
     const params = {
         "@type": "seed_grid_per_voxel" as const,
         "image": image,
@@ -440,7 +440,7 @@ function tckgen_seed_grid_per_voxel_params(
  * @returns Command-line arguments.
  */
 function tckgen_seed_grid_per_voxel_cargs(
-    params: TckgenSeedGridPerVoxelParameters,
+    params: TckgenSeedGridPerVoxelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -458,9 +458,9 @@ function tckgen_seed_grid_per_voxel_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_seed_rejection_params(
+function tckgen_seed_rejection(
     image: InputPathType,
-): TckgenSeedRejectionParametersTagged {
+): TckgenSeedRejectionParamsDictTagged {
     const params = {
         "@type": "seed_rejection" as const,
         "image": image,
@@ -478,7 +478,7 @@ function tckgen_seed_rejection_params(
  * @returns Command-line arguments.
  */
 function tckgen_seed_rejection_cargs(
-    params: TckgenSeedRejectionParameters,
+    params: TckgenSeedRejectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -495,9 +495,9 @@ function tckgen_seed_rejection_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_seed_gmwmi_params(
+function tckgen_seed_gmwmi(
     image: InputPathType,
-): TckgenSeedGmwmiParametersTagged {
+): TckgenSeedGmwmiParamsDictTagged {
     const params = {
         "@type": "seed_gmwmi" as const,
         "image": image,
@@ -515,7 +515,7 @@ function tckgen_seed_gmwmi_params(
  * @returns Command-line arguments.
  */
 function tckgen_seed_gmwmi_cargs(
-    params: TckgenSeedGmwmiParameters,
+    params: TckgenSeedGmwmiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -532,9 +532,9 @@ function tckgen_seed_gmwmi_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_various_string_params(
+function tckgen_various_string(
     obj: string,
-): TckgenVariousStringParametersTagged {
+): TckgenVariousStringParamsDictTagged {
     const params = {
         "@type": "VariousString" as const,
         "obj": obj,
@@ -552,7 +552,7 @@ function tckgen_various_string_params(
  * @returns Command-line arguments.
  */
 function tckgen_various_string_cargs(
-    params: TckgenVariousStringParameters,
+    params: TckgenVariousStringParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -568,9 +568,9 @@ function tckgen_various_string_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_various_file_params(
+function tckgen_various_file(
     obj: InputPathType,
-): TckgenVariousFileParametersTagged {
+): TckgenVariousFileParamsDictTagged {
     const params = {
         "@type": "VariousFile" as const,
         "obj": obj,
@@ -588,7 +588,7 @@ function tckgen_various_file_params(
  * @returns Command-line arguments.
  */
 function tckgen_various_file_cargs(
-    params: TckgenVariousFileParameters,
+    params: TckgenVariousFileParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -604,9 +604,9 @@ function tckgen_various_file_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_include_params(
-    spec: TckgenVariousStringParametersTagged | TckgenVariousFileParametersTagged,
-): TckgenIncludeParametersTagged {
+function tckgen_include(
+    spec: TckgenVariousStringParamsDictTagged | TckgenVariousFileParamsDictTagged,
+): TckgenIncludeParamsDictTagged {
     const params = {
         "@type": "include" as const,
         "spec": spec,
@@ -624,7 +624,7 @@ function tckgen_include_params(
  * @returns Command-line arguments.
  */
 function tckgen_include_cargs(
-    params: TckgenIncludeParameters,
+    params: TckgenIncludeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -641,9 +641,9 @@ function tckgen_include_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_include_ordered_params(
+function tckgen_include_ordered(
     image: string,
-): TckgenIncludeOrderedParametersTagged {
+): TckgenIncludeOrderedParamsDictTagged {
     const params = {
         "@type": "include_ordered" as const,
         "image": image,
@@ -661,7 +661,7 @@ function tckgen_include_ordered_params(
  * @returns Command-line arguments.
  */
 function tckgen_include_ordered_cargs(
-    params: TckgenIncludeOrderedParameters,
+    params: TckgenIncludeOrderedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -678,9 +678,9 @@ function tckgen_include_ordered_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_various_string_1_params(
+function tckgen_various_string_1(
     obj: string,
-): TckgenVariousString1ParametersTagged {
+): TckgenVariousString1ParamsDictTagged {
     const params = {
         "@type": "VariousString_1" as const,
         "obj": obj,
@@ -698,7 +698,7 @@ function tckgen_various_string_1_params(
  * @returns Command-line arguments.
  */
 function tckgen_various_string_1_cargs(
-    params: TckgenVariousString1Parameters,
+    params: TckgenVariousString1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -714,9 +714,9 @@ function tckgen_various_string_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_various_file_1_params(
+function tckgen_various_file_1(
     obj: InputPathType,
-): TckgenVariousFile1ParametersTagged {
+): TckgenVariousFile1ParamsDictTagged {
     const params = {
         "@type": "VariousFile_1" as const,
         "obj": obj,
@@ -734,7 +734,7 @@ function tckgen_various_file_1_params(
  * @returns Command-line arguments.
  */
 function tckgen_various_file_1_cargs(
-    params: TckgenVariousFile1Parameters,
+    params: TckgenVariousFile1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -750,9 +750,9 @@ function tckgen_various_file_1_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_exclude_params(
-    spec: TckgenVariousString1ParametersTagged | TckgenVariousFile1ParametersTagged,
-): TckgenExcludeParametersTagged {
+function tckgen_exclude(
+    spec: TckgenVariousString1ParamsDictTagged | TckgenVariousFile1ParamsDictTagged,
+): TckgenExcludeParamsDictTagged {
     const params = {
         "@type": "exclude" as const,
         "spec": spec,
@@ -770,7 +770,7 @@ function tckgen_exclude_params(
  * @returns Command-line arguments.
  */
 function tckgen_exclude_cargs(
-    params: TckgenExcludeParameters,
+    params: TckgenExcludeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -787,9 +787,9 @@ function tckgen_exclude_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_various_string_2_params(
+function tckgen_various_string_2(
     obj: string,
-): TckgenVariousString2ParametersTagged {
+): TckgenVariousString2ParamsDictTagged {
     const params = {
         "@type": "VariousString_2" as const,
         "obj": obj,
@@ -807,7 +807,7 @@ function tckgen_various_string_2_params(
  * @returns Command-line arguments.
  */
 function tckgen_various_string_2_cargs(
-    params: TckgenVariousString2Parameters,
+    params: TckgenVariousString2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -823,9 +823,9 @@ function tckgen_various_string_2_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_various_file_2_params(
+function tckgen_various_file_2(
     obj: InputPathType,
-): TckgenVariousFile2ParametersTagged {
+): TckgenVariousFile2ParamsDictTagged {
     const params = {
         "@type": "VariousFile_2" as const,
         "obj": obj,
@@ -843,7 +843,7 @@ function tckgen_various_file_2_params(
  * @returns Command-line arguments.
  */
 function tckgen_various_file_2_cargs(
-    params: TckgenVariousFile2Parameters,
+    params: TckgenVariousFile2ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -859,9 +859,9 @@ function tckgen_various_file_2_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_mask_params(
-    spec: TckgenVariousString2ParametersTagged | TckgenVariousFile2ParametersTagged,
-): TckgenMaskParametersTagged {
+function tckgen_mask(
+    spec: TckgenVariousString2ParamsDictTagged | TckgenVariousFile2ParamsDictTagged,
+): TckgenMaskParamsDictTagged {
     const params = {
         "@type": "mask" as const,
         "spec": spec,
@@ -879,7 +879,7 @@ function tckgen_mask_params(
  * @returns Command-line arguments.
  */
 function tckgen_mask_cargs(
-    params: TckgenMaskParameters,
+    params: TckgenMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -897,10 +897,10 @@ function tckgen_mask_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_fslgrad_params(
+function tckgen_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): TckgenFslgradParametersTagged {
+): TckgenFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -919,7 +919,7 @@ function tckgen_fslgrad_params(
  * @returns Command-line arguments.
  */
 function tckgen_fslgrad_cargs(
-    params: TckgenFslgradParameters,
+    params: TckgenFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -938,10 +938,10 @@ function tckgen_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function tckgen_config_params(
+function tckgen_config(
     key: string,
     value: string,
-): TckgenConfigParametersTagged {
+): TckgenConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -960,7 +960,7 @@ function tckgen_config_params(
  * @returns Command-line arguments.
  */
 function tckgen_config_cargs(
-    params: TckgenConfigParameters,
+    params: TckgenConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -972,7 +972,7 @@ function tckgen_config_cargs(
 
 
 /**
- * Output object returned when calling `TckgenParameters(...)`.
+ * Output object returned when calling `TckgenParamsDict(...)`.
  *
  * @interface
  */
@@ -1059,12 +1059,12 @@ function tckgen_params(
     rk4: boolean = false,
     stop: boolean = false,
     downsample: number | null = null,
-    seed_image: Array<TckgenSeedImageParameters> | null = null,
-    seed_sphere: Array<TckgenSeedSphereParameters> | null = null,
-    seed_random_per_voxel: Array<TckgenSeedRandomPerVoxelParameters> | null = null,
-    seed_grid_per_voxel: Array<TckgenSeedGridPerVoxelParameters> | null = null,
-    seed_rejection: Array<TckgenSeedRejectionParameters> | null = null,
-    seed_gmwmi: Array<TckgenSeedGmwmiParameters> | null = null,
+    seed_image: Array<TckgenSeedImageParamsDict> | null = null,
+    seed_sphere: Array<TckgenSeedSphereParamsDict> | null = null,
+    seed_random_per_voxel: Array<TckgenSeedRandomPerVoxelParamsDict> | null = null,
+    seed_grid_per_voxel: Array<TckgenSeedGridPerVoxelParamsDict> | null = null,
+    seed_rejection: Array<TckgenSeedRejectionParamsDict> | null = null,
+    seed_gmwmi: Array<TckgenSeedGmwmiParamsDict> | null = null,
     seed_dynamic: InputPathType | null = null,
     seeds: number | null = null,
     max_attempts_per_seed: number | null = null,
@@ -1072,26 +1072,26 @@ function tckgen_params(
     seed_unidirectional: boolean = false,
     seed_direction: Array<number> | null = null,
     output_seeds: string | null = null,
-    include: Array<TckgenIncludeParameters> | null = null,
-    include_ordered: Array<TckgenIncludeOrderedParameters> | null = null,
-    exclude: Array<TckgenExcludeParameters> | null = null,
-    mask: Array<TckgenMaskParameters> | null = null,
+    include: Array<TckgenIncludeParamsDict> | null = null,
+    include_ordered: Array<TckgenIncludeOrderedParamsDict> | null = null,
+    exclude: Array<TckgenExcludeParamsDict> | null = null,
+    mask: Array<TckgenMaskParamsDict> | null = null,
     act: InputPathType | null = null,
     backtrack: boolean = false,
     crop_at_gmwmi: boolean = false,
     power: number | null = null,
     samples: number | null = null,
     grad: InputPathType | null = null,
-    fslgrad: TckgenFslgradParameters | null = null,
+    fslgrad: TckgenFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckgenConfigParameters> | null = null,
+    config: Array<TckgenConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): TckgenParametersTagged {
+): TckgenParamsDictTagged {
     const params = {
         "@type": "mrtrix/tckgen" as const,
         "noprecomputed": noprecomputed,
@@ -1218,7 +1218,7 @@ function tckgen_params(
  * @returns Command-line arguments.
  */
 function tckgen_cargs(
-    params: TckgenParameters,
+    params: TckgenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -1430,7 +1430,7 @@ function tckgen_cargs(
  * @returns Outputs object.
  */
 function tckgen_outputs(
-    params: TckgenParameters,
+    params: TckgenParamsDict,
     execution: Execution,
 ): TckgenOutputs {
     const ret: TckgenOutputs = {
@@ -1512,7 +1512,7 @@ function tckgen_outputs(
  * @returns NamedTuple of outputs (described in `TckgenOutputs`).
  */
 function tckgen_execute(
-    params: TckgenParameters,
+    params: TckgenParamsDict,
     runner: Runner | null = null,
 ): TckgenOutputs {
     runner = runner || getGlobalRunner();
@@ -1654,12 +1654,12 @@ function tckgen(
     rk4: boolean = false,
     stop: boolean = false,
     downsample: number | null = null,
-    seed_image: Array<TckgenSeedImageParameters> | null = null,
-    seed_sphere: Array<TckgenSeedSphereParameters> | null = null,
-    seed_random_per_voxel: Array<TckgenSeedRandomPerVoxelParameters> | null = null,
-    seed_grid_per_voxel: Array<TckgenSeedGridPerVoxelParameters> | null = null,
-    seed_rejection: Array<TckgenSeedRejectionParameters> | null = null,
-    seed_gmwmi: Array<TckgenSeedGmwmiParameters> | null = null,
+    seed_image: Array<TckgenSeedImageParamsDict> | null = null,
+    seed_sphere: Array<TckgenSeedSphereParamsDict> | null = null,
+    seed_random_per_voxel: Array<TckgenSeedRandomPerVoxelParamsDict> | null = null,
+    seed_grid_per_voxel: Array<TckgenSeedGridPerVoxelParamsDict> | null = null,
+    seed_rejection: Array<TckgenSeedRejectionParamsDict> | null = null,
+    seed_gmwmi: Array<TckgenSeedGmwmiParamsDict> | null = null,
     seed_dynamic: InputPathType | null = null,
     seeds: number | null = null,
     max_attempts_per_seed: number | null = null,
@@ -1667,23 +1667,23 @@ function tckgen(
     seed_unidirectional: boolean = false,
     seed_direction: Array<number> | null = null,
     output_seeds: string | null = null,
-    include: Array<TckgenIncludeParameters> | null = null,
-    include_ordered: Array<TckgenIncludeOrderedParameters> | null = null,
-    exclude: Array<TckgenExcludeParameters> | null = null,
-    mask: Array<TckgenMaskParameters> | null = null,
+    include: Array<TckgenIncludeParamsDict> | null = null,
+    include_ordered: Array<TckgenIncludeOrderedParamsDict> | null = null,
+    exclude: Array<TckgenExcludeParamsDict> | null = null,
+    mask: Array<TckgenMaskParamsDict> | null = null,
     act: InputPathType | null = null,
     backtrack: boolean = false,
     crop_at_gmwmi: boolean = false,
     power: number | null = null,
     samples: number | null = null,
     grad: InputPathType | null = null,
-    fslgrad: TckgenFslgradParameters | null = null,
+    fslgrad: TckgenFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<TckgenConfigParameters> | null = null,
+    config: Array<TckgenConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -1695,26 +1695,64 @@ function tckgen(
 
 export {
       TCKGEN_METADATA,
+      TckgenConfigParamsDict,
+      TckgenConfigParamsDictTagged,
+      TckgenExcludeParamsDict,
+      TckgenExcludeParamsDictTagged,
+      TckgenFslgradParamsDict,
+      TckgenFslgradParamsDictTagged,
+      TckgenIncludeOrderedParamsDict,
+      TckgenIncludeOrderedParamsDictTagged,
+      TckgenIncludeParamsDict,
+      TckgenIncludeParamsDictTagged,
+      TckgenMaskParamsDict,
+      TckgenMaskParamsDictTagged,
       TckgenOutputs,
+      TckgenParamsDict,
+      TckgenParamsDictTagged,
+      TckgenSeedGmwmiParamsDict,
+      TckgenSeedGmwmiParamsDictTagged,
+      TckgenSeedGridPerVoxelParamsDict,
+      TckgenSeedGridPerVoxelParamsDictTagged,
+      TckgenSeedImageParamsDict,
+      TckgenSeedImageParamsDictTagged,
+      TckgenSeedRandomPerVoxelParamsDict,
+      TckgenSeedRandomPerVoxelParamsDictTagged,
+      TckgenSeedRejectionParamsDict,
+      TckgenSeedRejectionParamsDictTagged,
+      TckgenSeedSphereParamsDict,
+      TckgenSeedSphereParamsDictTagged,
+      TckgenVariousFile1ParamsDict,
+      TckgenVariousFile1ParamsDictTagged,
+      TckgenVariousFile2ParamsDict,
+      TckgenVariousFile2ParamsDictTagged,
+      TckgenVariousFileParamsDict,
+      TckgenVariousFileParamsDictTagged,
+      TckgenVariousString1ParamsDict,
+      TckgenVariousString1ParamsDictTagged,
+      TckgenVariousString2ParamsDict,
+      TckgenVariousString2ParamsDictTagged,
+      TckgenVariousStringParamsDict,
+      TckgenVariousStringParamsDictTagged,
       tckgen,
-      tckgen_config_params,
-      tckgen_exclude_params,
+      tckgen_config,
+      tckgen_exclude,
       tckgen_execute,
-      tckgen_fslgrad_params,
-      tckgen_include_ordered_params,
-      tckgen_include_params,
-      tckgen_mask_params,
+      tckgen_fslgrad,
+      tckgen_include,
+      tckgen_include_ordered,
+      tckgen_mask,
       tckgen_params,
-      tckgen_seed_gmwmi_params,
-      tckgen_seed_grid_per_voxel_params,
-      tckgen_seed_image_params,
-      tckgen_seed_random_per_voxel_params,
-      tckgen_seed_rejection_params,
-      tckgen_seed_sphere_params,
-      tckgen_various_file_1_params,
-      tckgen_various_file_2_params,
-      tckgen_various_file_params,
-      tckgen_various_string_1_params,
-      tckgen_various_string_2_params,
-      tckgen_various_string_params,
+      tckgen_seed_gmwmi,
+      tckgen_seed_grid_per_voxel,
+      tckgen_seed_image,
+      tckgen_seed_random_per_voxel,
+      tckgen_seed_rejection,
+      tckgen_seed_sphere,
+      tckgen_various_file,
+      tckgen_various_file_1,
+      tckgen_various_file_2,
+      tckgen_various_string,
+      tckgen_various_string_1,
+      tckgen_various_string_2,
 };

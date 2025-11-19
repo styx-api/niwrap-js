@@ -11,18 +11,18 @@ const LABEL_ELDERLY_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface LabelElderlySubjectParameters {
+interface LabelElderlySubjectParamsDict {
     "@type"?: "freesurfer/label_elderly_subject";
     "norm_volume": InputPathType;
     "transform_lta": InputPathType;
     "classifier_array"?: InputPathType | null | undefined;
     "aseg_volume": InputPathType;
 }
-type LabelElderlySubjectParametersTagged = Required<Pick<LabelElderlySubjectParameters, '@type'>> & LabelElderlySubjectParameters;
+type LabelElderlySubjectParamsDictTagged = Required<Pick<LabelElderlySubjectParamsDict, '@type'>> & LabelElderlySubjectParamsDict;
 
 
 /**
- * Output object returned when calling `LabelElderlySubjectParameters(...)`.
+ * Output object returned when calling `LabelElderlySubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function label_elderly_subject_params(
     transform_lta: InputPathType,
     aseg_volume: InputPathType,
     classifier_array: InputPathType | null = null,
-): LabelElderlySubjectParametersTagged {
+): LabelElderlySubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/label_elderly_subject" as const,
         "norm_volume": norm_volume,
@@ -76,7 +76,7 @@ function label_elderly_subject_params(
  * @returns Command-line arguments.
  */
 function label_elderly_subject_cargs(
-    params: LabelElderlySubjectParameters,
+    params: LabelElderlySubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function label_elderly_subject_cargs(
  * @returns Outputs object.
  */
 function label_elderly_subject_outputs(
-    params: LabelElderlySubjectParameters,
+    params: LabelElderlySubjectParamsDict,
     execution: Execution,
 ): LabelElderlySubjectOutputs {
     const ret: LabelElderlySubjectOutputs = {
@@ -126,7 +126,7 @@ function label_elderly_subject_outputs(
  * @returns NamedTuple of outputs (described in `LabelElderlySubjectOutputs`).
  */
 function label_elderly_subject_execute(
-    params: LabelElderlySubjectParameters,
+    params: LabelElderlySubjectParamsDict,
     runner: Runner | null = null,
 ): LabelElderlySubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -171,6 +171,8 @@ function label_elderly_subject(
 export {
       LABEL_ELDERLY_SUBJECT_METADATA,
       LabelElderlySubjectOutputs,
+      LabelElderlySubjectParamsDict,
+      LabelElderlySubjectParamsDictTagged,
       label_elderly_subject,
       label_elderly_subject_execute,
       label_elderly_subject_params,

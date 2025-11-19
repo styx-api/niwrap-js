@@ -11,15 +11,15 @@ const APQC_MAKE_HTML_PY_METADATA: Metadata = {
 };
 
 
-interface ApqcMakeHtmlPyParameters {
+interface ApqcMakeHtmlPyParamsDict {
     "@type"?: "afni/apqc_make_html.py";
     "qc_dir": string;
 }
-type ApqcMakeHtmlPyParametersTagged = Required<Pick<ApqcMakeHtmlPyParameters, '@type'>> & ApqcMakeHtmlPyParameters;
+type ApqcMakeHtmlPyParamsDictTagged = Required<Pick<ApqcMakeHtmlPyParamsDict, '@type'>> & ApqcMakeHtmlPyParamsDict;
 
 
 /**
- * Output object returned when calling `ApqcMakeHtmlPyParameters(...)`.
+ * Output object returned when calling `ApqcMakeHtmlPyParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface ApqcMakeHtmlPyOutputs {
  */
 function apqc_make_html_py_params(
     qc_dir: string,
-): ApqcMakeHtmlPyParametersTagged {
+): ApqcMakeHtmlPyParamsDictTagged {
     const params = {
         "@type": "afni/apqc_make_html.py" as const,
         "qc_dir": qc_dir,
@@ -58,7 +58,7 @@ function apqc_make_html_py_params(
  * @returns Command-line arguments.
  */
 function apqc_make_html_py_cargs(
-    params: ApqcMakeHtmlPyParameters,
+    params: ApqcMakeHtmlPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function apqc_make_html_py_cargs(
  * @returns Outputs object.
  */
 function apqc_make_html_py_outputs(
-    params: ApqcMakeHtmlPyParameters,
+    params: ApqcMakeHtmlPyParamsDict,
     execution: Execution,
 ): ApqcMakeHtmlPyOutputs {
     const ret: ApqcMakeHtmlPyOutputs = {
@@ -105,7 +105,7 @@ function apqc_make_html_py_outputs(
  * @returns NamedTuple of outputs (described in `ApqcMakeHtmlPyOutputs`).
  */
 function apqc_make_html_py_execute(
-    params: ApqcMakeHtmlPyParameters,
+    params: ApqcMakeHtmlPyParamsDict,
     runner: Runner | null = null,
 ): ApqcMakeHtmlPyOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function apqc_make_html_py(
 export {
       APQC_MAKE_HTML_PY_METADATA,
       ApqcMakeHtmlPyOutputs,
+      ApqcMakeHtmlPyParamsDict,
+      ApqcMakeHtmlPyParamsDictTagged,
       apqc_make_html_py,
       apqc_make_html_py_execute,
       apqc_make_html_py_params,

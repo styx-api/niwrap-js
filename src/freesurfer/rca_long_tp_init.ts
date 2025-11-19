@@ -11,7 +11,7 @@ const RCA_LONG_TP_INIT_METADATA: Metadata = {
 };
 
 
-interface RcaLongTpInitParameters {
+interface RcaLongTpInitParamsDict {
     "@type"?: "freesurfer/rca-long-tp-init";
     "timepoint": string;
     "base": string;
@@ -20,11 +20,11 @@ interface RcaLongTpInitParameters {
     "expert_opts"?: InputPathType | null | undefined;
     "subject"?: string | null | undefined;
 }
-type RcaLongTpInitParametersTagged = Required<Pick<RcaLongTpInitParameters, '@type'>> & RcaLongTpInitParameters;
+type RcaLongTpInitParamsDictTagged = Required<Pick<RcaLongTpInitParamsDict, '@type'>> & RcaLongTpInitParamsDict;
 
 
 /**
- * Output object returned when calling `RcaLongTpInitParameters(...)`.
+ * Output object returned when calling `RcaLongTpInitParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function rca_long_tp_init_params(
     hemisphere: "lh" | "rh" | null = null,
     expert_opts: InputPathType | null = null,
     subject: string | null = null,
-): RcaLongTpInitParametersTagged {
+): RcaLongTpInitParamsDictTagged {
     const params = {
         "@type": "freesurfer/rca-long-tp-init" as const,
         "timepoint": timepoint,
@@ -84,7 +84,7 @@ function rca_long_tp_init_params(
  * @returns Command-line arguments.
  */
 function rca_long_tp_init_cargs(
-    params: RcaLongTpInitParameters,
+    params: RcaLongTpInitParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function rca_long_tp_init_cargs(
  * @returns Outputs object.
  */
 function rca_long_tp_init_outputs(
-    params: RcaLongTpInitParameters,
+    params: RcaLongTpInitParamsDict,
     execution: Execution,
 ): RcaLongTpInitOutputs {
     const ret: RcaLongTpInitOutputs = {
@@ -153,7 +153,7 @@ function rca_long_tp_init_outputs(
  * @returns NamedTuple of outputs (described in `RcaLongTpInitOutputs`).
  */
 function rca_long_tp_init_execute(
-    params: RcaLongTpInitParameters,
+    params: RcaLongTpInitParamsDict,
     runner: Runner | null = null,
 ): RcaLongTpInitOutputs {
     runner = runner || getGlobalRunner();
@@ -202,6 +202,8 @@ function rca_long_tp_init(
 export {
       RCA_LONG_TP_INIT_METADATA,
       RcaLongTpInitOutputs,
+      RcaLongTpInitParamsDict,
+      RcaLongTpInitParamsDictTagged,
       rca_long_tp_init,
       rca_long_tp_init_execute,
       rca_long_tp_init_params,

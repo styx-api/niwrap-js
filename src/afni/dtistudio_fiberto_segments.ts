@@ -11,17 +11,17 @@ const DTISTUDIO_FIBERTO_SEGMENTS_METADATA: Metadata = {
 };
 
 
-interface DtistudioFibertoSegmentsParameters {
+interface DtistudioFibertoSegmentsParamsDict {
     "@type"?: "afni/DTIStudioFibertoSegments";
     "dataset": InputPathType;
     "output_file"?: string | null | undefined;
     "swap_flag": boolean;
 }
-type DtistudioFibertoSegmentsParametersTagged = Required<Pick<DtistudioFibertoSegmentsParameters, '@type'>> & DtistudioFibertoSegmentsParameters;
+type DtistudioFibertoSegmentsParamsDictTagged = Required<Pick<DtistudioFibertoSegmentsParamsDict, '@type'>> & DtistudioFibertoSegmentsParamsDict;
 
 
 /**
- * Output object returned when calling `DtistudioFibertoSegmentsParameters(...)`.
+ * Output object returned when calling `DtistudioFibertoSegmentsParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function dtistudio_fiberto_segments_params(
     dataset: InputPathType,
     output_file: string | null = null,
     swap_flag: boolean = false,
-): DtistudioFibertoSegmentsParametersTagged {
+): DtistudioFibertoSegmentsParamsDictTagged {
     const params = {
         "@type": "afni/DTIStudioFibertoSegments" as const,
         "dataset": dataset,
@@ -72,7 +72,7 @@ function dtistudio_fiberto_segments_params(
  * @returns Command-line arguments.
  */
 function dtistudio_fiberto_segments_cargs(
-    params: DtistudioFibertoSegmentsParameters,
+    params: DtistudioFibertoSegmentsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -100,7 +100,7 @@ function dtistudio_fiberto_segments_cargs(
  * @returns Outputs object.
  */
 function dtistudio_fiberto_segments_outputs(
-    params: DtistudioFibertoSegmentsParameters,
+    params: DtistudioFibertoSegmentsParamsDict,
     execution: Execution,
 ): DtistudioFibertoSegmentsOutputs {
     const ret: DtistudioFibertoSegmentsOutputs = {
@@ -126,7 +126,7 @@ function dtistudio_fiberto_segments_outputs(
  * @returns NamedTuple of outputs (described in `DtistudioFibertoSegmentsOutputs`).
  */
 function dtistudio_fiberto_segments_execute(
-    params: DtistudioFibertoSegmentsParameters,
+    params: DtistudioFibertoSegmentsParamsDict,
     runner: Runner | null = null,
 ): DtistudioFibertoSegmentsOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function dtistudio_fiberto_segments(
 export {
       DTISTUDIO_FIBERTO_SEGMENTS_METADATA,
       DtistudioFibertoSegmentsOutputs,
+      DtistudioFibertoSegmentsParamsDict,
+      DtistudioFibertoSegmentsParamsDictTagged,
       dtistudio_fiberto_segments,
       dtistudio_fiberto_segments_execute,
       dtistudio_fiberto_segments_params,

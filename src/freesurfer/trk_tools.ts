@@ -11,7 +11,7 @@ const TRK_TOOLS_METADATA: Metadata = {
 };
 
 
-interface TrkToolsParameters {
+interface TrkToolsParamsDict {
     "@type"?: "freesurfer/trk_tools";
     "reference_image": InputPathType;
     "input_trk": InputPathType;
@@ -20,11 +20,11 @@ interface TrkToolsParameters {
     "update_header": boolean;
     "output_vtk"?: string | null | undefined;
 }
-type TrkToolsParametersTagged = Required<Pick<TrkToolsParameters, '@type'>> & TrkToolsParameters;
+type TrkToolsParamsDictTagged = Required<Pick<TrkToolsParamsDict, '@type'>> & TrkToolsParamsDict;
 
 
 /**
- * Output object returned when calling `TrkToolsParameters(...)`.
+ * Output object returned when calling `TrkToolsParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function trk_tools_params(
     output_image: string | null = null,
     update_header: boolean = false,
     output_vtk: string | null = null,
-): TrkToolsParametersTagged {
+): TrkToolsParamsDictTagged {
     const params = {
         "@type": "freesurfer/trk_tools" as const,
         "reference_image": reference_image,
@@ -96,7 +96,7 @@ function trk_tools_params(
  * @returns Command-line arguments.
  */
 function trk_tools_cargs(
-    params: TrkToolsParameters,
+    params: TrkToolsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function trk_tools_cargs(
  * @returns Outputs object.
  */
 function trk_tools_outputs(
-    params: TrkToolsParameters,
+    params: TrkToolsParamsDict,
     execution: Execution,
 ): TrkToolsOutputs {
     const ret: TrkToolsOutputs = {
@@ -171,7 +171,7 @@ function trk_tools_outputs(
  * @returns NamedTuple of outputs (described in `TrkToolsOutputs`).
  */
 function trk_tools_execute(
-    params: TrkToolsParameters,
+    params: TrkToolsParamsDict,
     runner: Runner | null = null,
 ): TrkToolsOutputs {
     runner = runner || getGlobalRunner();
@@ -220,6 +220,8 @@ function trk_tools(
 export {
       TRK_TOOLS_METADATA,
       TrkToolsOutputs,
+      TrkToolsParamsDict,
+      TrkToolsParamsDictTagged,
       trk_tools,
       trk_tools_execute,
       trk_tools_params,

@@ -11,7 +11,7 @@ const MAKEVOL_METADATA: Metadata = {
 };
 
 
-interface MakevolParameters {
+interface MakevolParamsDict {
     "@type"?: "freesurfer/makevol";
     "filename"?: string | null | undefined;
     "width"?: number | null | undefined;
@@ -22,11 +22,11 @@ interface MakevolParameters {
     "sizez"?: number | null | undefined;
     "set_method"?: string | null | undefined;
 }
-type MakevolParametersTagged = Required<Pick<MakevolParameters, '@type'>> & MakevolParameters;
+type MakevolParamsDictTagged = Required<Pick<MakevolParamsDict, '@type'>> & MakevolParamsDict;
 
 
 /**
- * Output object returned when calling `MakevolParameters(...)`.
+ * Output object returned when calling `MakevolParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function makevol_params(
     sizey: number | null = null,
     sizez: number | null = null,
     set_method: string | null = null,
-): MakevolParametersTagged {
+): MakevolParamsDictTagged {
     const params = {
         "@type": "freesurfer/makevol" as const,
     };
@@ -106,7 +106,7 @@ function makevol_params(
  * @returns Command-line arguments.
  */
 function makevol_cargs(
-    params: MakevolParameters,
+    params: MakevolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -172,7 +172,7 @@ function makevol_cargs(
  * @returns Outputs object.
  */
 function makevol_outputs(
-    params: MakevolParameters,
+    params: MakevolParamsDict,
     execution: Execution,
 ): MakevolOutputs {
     const ret: MakevolOutputs = {
@@ -198,7 +198,7 @@ function makevol_outputs(
  * @returns NamedTuple of outputs (described in `MakevolOutputs`).
  */
 function makevol_execute(
-    params: MakevolParameters,
+    params: MakevolParamsDict,
     runner: Runner | null = null,
 ): MakevolOutputs {
     runner = runner || getGlobalRunner();
@@ -251,6 +251,8 @@ function makevol(
 export {
       MAKEVOL_METADATA,
       MakevolOutputs,
+      MakevolParamsDict,
+      MakevolParamsDictTagged,
       makevol,
       makevol_execute,
       makevol_params,

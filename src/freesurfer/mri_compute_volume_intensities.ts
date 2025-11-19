@@ -11,17 +11,17 @@ const MRI_COMPUTE_VOLUME_INTENSITIES_METADATA: Metadata = {
 };
 
 
-interface MriComputeVolumeIntensitiesParameters {
+interface MriComputeVolumeIntensitiesParamsDict {
     "@type"?: "freesurfer/mri_compute_volume_intensities";
     "input_intensity": InputPathType;
     "volume_fraction_stem": string;
     "output_volume": string;
 }
-type MriComputeVolumeIntensitiesParametersTagged = Required<Pick<MriComputeVolumeIntensitiesParameters, '@type'>> & MriComputeVolumeIntensitiesParameters;
+type MriComputeVolumeIntensitiesParamsDictTagged = Required<Pick<MriComputeVolumeIntensitiesParamsDict, '@type'>> & MriComputeVolumeIntensitiesParamsDict;
 
 
 /**
- * Output object returned when calling `MriComputeVolumeIntensitiesParameters(...)`.
+ * Output object returned when calling `MriComputeVolumeIntensitiesParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_compute_volume_intensities_params(
     input_intensity: InputPathType,
     volume_fraction_stem: string,
     output_volume: string,
-): MriComputeVolumeIntensitiesParametersTagged {
+): MriComputeVolumeIntensitiesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_compute_volume_intensities" as const,
         "input_intensity": input_intensity,
@@ -70,7 +70,7 @@ function mri_compute_volume_intensities_params(
  * @returns Command-line arguments.
  */
 function mri_compute_volume_intensities_cargs(
-    params: MriComputeVolumeIntensitiesParameters,
+    params: MriComputeVolumeIntensitiesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_compute_volume_intensities_cargs(
  * @returns Outputs object.
  */
 function mri_compute_volume_intensities_outputs(
-    params: MriComputeVolumeIntensitiesParameters,
+    params: MriComputeVolumeIntensitiesParamsDict,
     execution: Execution,
 ): MriComputeVolumeIntensitiesOutputs {
     const ret: MriComputeVolumeIntensitiesOutputs = {
@@ -117,7 +117,7 @@ function mri_compute_volume_intensities_outputs(
  * @returns NamedTuple of outputs (described in `MriComputeVolumeIntensitiesOutputs`).
  */
 function mri_compute_volume_intensities_execute(
-    params: MriComputeVolumeIntensitiesParameters,
+    params: MriComputeVolumeIntensitiesParamsDict,
     runner: Runner | null = null,
 ): MriComputeVolumeIntensitiesOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_compute_volume_intensities(
 export {
       MRI_COMPUTE_VOLUME_INTENSITIES_METADATA,
       MriComputeVolumeIntensitiesOutputs,
+      MriComputeVolumeIntensitiesParamsDict,
+      MriComputeVolumeIntensitiesParamsDictTagged,
       mri_compute_volume_intensities,
       mri_compute_volume_intensities_execute,
       mri_compute_volume_intensities_params,

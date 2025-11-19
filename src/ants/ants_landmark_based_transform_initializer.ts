@@ -11,7 +11,7 @@ const ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA: Metadata = {
 };
 
 
-interface AntsLandmarkBasedTransformInitializerParameters {
+interface AntsLandmarkBasedTransformInitializerParamsDict {
     "@type"?: "ants/antsLandmarkBasedTransformInitializer";
     "dimension": number;
     "fixed_image": InputPathType;
@@ -24,11 +24,11 @@ interface AntsLandmarkBasedTransformInitializerParameters {
     "enforce_stationary_boundaries"?: boolean | null | undefined;
     "landmark_weights"?: InputPathType | null | undefined;
 }
-type AntsLandmarkBasedTransformInitializerParametersTagged = Required<Pick<AntsLandmarkBasedTransformInitializerParameters, '@type'>> & AntsLandmarkBasedTransformInitializerParameters;
+type AntsLandmarkBasedTransformInitializerParamsDictTagged = Required<Pick<AntsLandmarkBasedTransformInitializerParamsDict, '@type'>> & AntsLandmarkBasedTransformInitializerParamsDict;
 
 
 /**
- * Output object returned when calling `AntsLandmarkBasedTransformInitializerParameters(...)`.
+ * Output object returned when calling `AntsLandmarkBasedTransformInitializerParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function ants_landmark_based_transform_initializer_params(
     order: number | null = null,
     enforce_stationary_boundaries: boolean | null = null,
     landmark_weights: InputPathType | null = null,
-): AntsLandmarkBasedTransformInitializerParametersTagged {
+): AntsLandmarkBasedTransformInitializerParamsDictTagged {
     const params = {
         "@type": "ants/antsLandmarkBasedTransformInitializer" as const,
         "dimension": dimension,
@@ -108,7 +108,7 @@ function ants_landmark_based_transform_initializer_params(
  * @returns Command-line arguments.
  */
 function ants_landmark_based_transform_initializer_cargs(
-    params: AntsLandmarkBasedTransformInitializerParameters,
+    params: AntsLandmarkBasedTransformInitializerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -146,7 +146,7 @@ function ants_landmark_based_transform_initializer_cargs(
  * @returns Outputs object.
  */
 function ants_landmark_based_transform_initializer_outputs(
-    params: AntsLandmarkBasedTransformInitializerParameters,
+    params: AntsLandmarkBasedTransformInitializerParamsDict,
     execution: Execution,
 ): AntsLandmarkBasedTransformInitializerOutputs {
     const ret: AntsLandmarkBasedTransformInitializerOutputs = {
@@ -172,7 +172,7 @@ function ants_landmark_based_transform_initializer_outputs(
  * @returns NamedTuple of outputs (described in `AntsLandmarkBasedTransformInitializerOutputs`).
  */
 function ants_landmark_based_transform_initializer_execute(
-    params: AntsLandmarkBasedTransformInitializerParameters,
+    params: AntsLandmarkBasedTransformInitializerParamsDict,
     runner: Runner | null = null,
 ): AntsLandmarkBasedTransformInitializerOutputs {
     runner = runner || getGlobalRunner();
@@ -229,6 +229,8 @@ function ants_landmark_based_transform_initializer(
 export {
       ANTS_LANDMARK_BASED_TRANSFORM_INITIALIZER_METADATA,
       AntsLandmarkBasedTransformInitializerOutputs,
+      AntsLandmarkBasedTransformInitializerParamsDict,
+      AntsLandmarkBasedTransformInitializerParamsDictTagged,
       ants_landmark_based_transform_initializer,
       ants_landmark_based_transform_initializer_execute,
       ants_landmark_based_transform_initializer_params,

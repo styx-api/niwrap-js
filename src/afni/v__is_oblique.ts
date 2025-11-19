@@ -11,15 +11,15 @@ const V__IS_OBLIQUE_METADATA: Metadata = {
 };
 
 
-interface VIsObliqueParameters {
+interface VIsObliqueParamsDict {
     "@type"?: "afni/@isOblique";
     "infile": InputPathType;
 }
-type VIsObliqueParametersTagged = Required<Pick<VIsObliqueParameters, '@type'>> & VIsObliqueParameters;
+type VIsObliqueParamsDictTagged = Required<Pick<VIsObliqueParamsDict, '@type'>> & VIsObliqueParamsDict;
 
 
 /**
- * Output object returned when calling `VIsObliqueParameters(...)`.
+ * Output object returned when calling `VIsObliqueParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VIsObliqueOutputs {
  */
 function v__is_oblique_params(
     infile: InputPathType,
-): VIsObliqueParametersTagged {
+): VIsObliqueParamsDictTagged {
     const params = {
         "@type": "afni/@isOblique" as const,
         "infile": infile,
@@ -62,7 +62,7 @@ function v__is_oblique_params(
  * @returns Command-line arguments.
  */
 function v__is_oblique_cargs(
-    params: VIsObliqueParameters,
+    params: VIsObliqueParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__is_oblique_cargs(
  * @returns Outputs object.
  */
 function v__is_oblique_outputs(
-    params: VIsObliqueParameters,
+    params: VIsObliqueParamsDict,
     execution: Execution,
 ): VIsObliqueOutputs {
     const ret: VIsObliqueOutputs = {
@@ -107,7 +107,7 @@ function v__is_oblique_outputs(
  * @returns NamedTuple of outputs (described in `VIsObliqueOutputs`).
  */
 function v__is_oblique_execute(
-    params: VIsObliqueParameters,
+    params: VIsObliqueParamsDict,
     runner: Runner | null = null,
 ): VIsObliqueOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__is_oblique(
 
 export {
       VIsObliqueOutputs,
+      VIsObliqueParamsDict,
+      VIsObliqueParamsDictTagged,
       V__IS_OBLIQUE_METADATA,
       v__is_oblique,
       v__is_oblique_execute,

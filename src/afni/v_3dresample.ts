@@ -11,7 +11,7 @@ const V_3DRESAMPLE_METADATA: Metadata = {
 };
 
 
-interface V3dresampleParameters {
+interface V3dresampleParamsDict {
     "@type"?: "afni/3dresample";
     "in_file": InputPathType;
     "master"?: InputPathType | null | undefined;
@@ -21,11 +21,11 @@ interface V3dresampleParameters {
     "resample_mode"?: "NN" | "Li" | "Cu" | "Bk" | null | undefined;
     "voxel_size"?: Array<number> | null | undefined;
 }
-type V3dresampleParametersTagged = Required<Pick<V3dresampleParameters, '@type'>> & V3dresampleParameters;
+type V3dresampleParamsDictTagged = Required<Pick<V3dresampleParamsDict, '@type'>> & V3dresampleParamsDict;
 
 
 /**
- * Output object returned when calling `V3dresampleParameters(...)`.
+ * Output object returned when calling `V3dresampleParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function v_3dresample_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     resample_mode: "NN" | "Li" | "Cu" | "Bk" | null = null,
     voxel_size: Array<number> | null = null,
-): V3dresampleParametersTagged {
+): V3dresampleParamsDictTagged {
     const params = {
         "@type": "afni/3dresample" as const,
         "in_file": in_file,
@@ -96,7 +96,7 @@ function v_3dresample_params(
  * @returns Command-line arguments.
  */
 function v_3dresample_cargs(
-    params: V3dresampleParameters,
+    params: V3dresampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -149,7 +149,7 @@ function v_3dresample_cargs(
  * @returns Outputs object.
  */
 function v_3dresample_outputs(
-    params: V3dresampleParameters,
+    params: V3dresampleParamsDict,
     execution: Execution,
 ): V3dresampleOutputs {
     const ret: V3dresampleOutputs = {
@@ -175,7 +175,7 @@ function v_3dresample_outputs(
  * @returns NamedTuple of outputs (described in `V3dresampleOutputs`).
  */
 function v_3dresample_execute(
-    params: V3dresampleParameters,
+    params: V3dresampleParamsDict,
     runner: Runner | null = null,
 ): V3dresampleOutputs {
     runner = runner || getGlobalRunner();
@@ -225,6 +225,8 @@ function v_3dresample(
 
 export {
       V3dresampleOutputs,
+      V3dresampleParamsDict,
+      V3dresampleParamsDictTagged,
       V_3DRESAMPLE_METADATA,
       v_3dresample,
       v_3dresample_execute,

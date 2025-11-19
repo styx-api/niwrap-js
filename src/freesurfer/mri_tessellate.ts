@@ -11,7 +11,7 @@ const MRI_TESSELLATE_METADATA: Metadata = {
 };
 
 
-interface MriTessellateParameters {
+interface MriTessellateParamsDict {
     "@type"?: "freesurfer/mri_tessellate";
     "input_volume": InputPathType;
     "label_value": number;
@@ -20,11 +20,11 @@ interface MriTessellateParameters {
     "max_vertices"?: number | null | undefined;
     "real_ras": boolean;
 }
-type MriTessellateParametersTagged = Required<Pick<MriTessellateParameters, '@type'>> & MriTessellateParameters;
+type MriTessellateParamsDictTagged = Required<Pick<MriTessellateParamsDict, '@type'>> & MriTessellateParamsDict;
 
 
 /**
- * Output object returned when calling `MriTessellateParameters(...)`.
+ * Output object returned when calling `MriTessellateParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mri_tessellate_params(
     different_labels: boolean = false,
     max_vertices: number | null = null,
     real_ras: boolean = false,
-): MriTessellateParametersTagged {
+): MriTessellateParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_tessellate" as const,
         "input_volume": input_volume,
@@ -84,7 +84,7 @@ function mri_tessellate_params(
  * @returns Command-line arguments.
  */
 function mri_tessellate_cargs(
-    params: MriTessellateParameters,
+    params: MriTessellateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -117,7 +117,7 @@ function mri_tessellate_cargs(
  * @returns Outputs object.
  */
 function mri_tessellate_outputs(
-    params: MriTessellateParameters,
+    params: MriTessellateParamsDict,
     execution: Execution,
 ): MriTessellateOutputs {
     const ret: MriTessellateOutputs = {
@@ -143,7 +143,7 @@ function mri_tessellate_outputs(
  * @returns NamedTuple of outputs (described in `MriTessellateOutputs`).
  */
 function mri_tessellate_execute(
-    params: MriTessellateParameters,
+    params: MriTessellateParamsDict,
     runner: Runner | null = null,
 ): MriTessellateOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function mri_tessellate(
 export {
       MRI_TESSELLATE_METADATA,
       MriTessellateOutputs,
+      MriTessellateParamsDict,
+      MriTessellateParamsDictTagged,
       mri_tessellate,
       mri_tessellate_execute,
       mri_tessellate_params,

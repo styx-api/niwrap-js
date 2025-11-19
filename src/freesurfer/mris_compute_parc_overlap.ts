@@ -11,7 +11,7 @@ const MRIS_COMPUTE_PARC_OVERLAP_METADATA: Metadata = {
 };
 
 
-interface MrisComputeParcOverlapParameters {
+interface MrisComputeParcOverlapParamsDict {
     "@type"?: "freesurfer/mris_compute_parc_overlap";
     "subject": string;
     "hemi": string;
@@ -30,11 +30,11 @@ interface MrisComputeParcOverlapParameters {
     "use_label_xyz": boolean;
     "debug_overlap": boolean;
 }
-type MrisComputeParcOverlapParametersTagged = Required<Pick<MrisComputeParcOverlapParameters, '@type'>> & MrisComputeParcOverlapParameters;
+type MrisComputeParcOverlapParamsDictTagged = Required<Pick<MrisComputeParcOverlapParamsDict, '@type'>> & MrisComputeParcOverlapParamsDict;
 
 
 /**
- * Output object returned when calling `MrisComputeParcOverlapParameters(...)`.
+ * Output object returned when calling `MrisComputeParcOverlapParamsDict(...)`.
  *
  * @interface
  */
@@ -85,7 +85,7 @@ function mris_compute_parc_overlap_params(
     use_label2_xyz: boolean = false,
     use_label_xyz: boolean = false,
     debug_overlap: boolean = false,
-): MrisComputeParcOverlapParametersTagged {
+): MrisComputeParcOverlapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_compute_parc_overlap" as const,
         "subject": subject,
@@ -132,7 +132,7 @@ function mris_compute_parc_overlap_params(
  * @returns Command-line arguments.
  */
 function mris_compute_parc_overlap_cargs(
-    params: MrisComputeParcOverlapParameters,
+    params: MrisComputeParcOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -221,7 +221,7 @@ function mris_compute_parc_overlap_cargs(
  * @returns Outputs object.
  */
 function mris_compute_parc_overlap_outputs(
-    params: MrisComputeParcOverlapParameters,
+    params: MrisComputeParcOverlapParamsDict,
     execution: Execution,
 ): MrisComputeParcOverlapOutputs {
     const ret: MrisComputeParcOverlapOutputs = {
@@ -246,7 +246,7 @@ function mris_compute_parc_overlap_outputs(
  * @returns NamedTuple of outputs (described in `MrisComputeParcOverlapOutputs`).
  */
 function mris_compute_parc_overlap_execute(
-    params: MrisComputeParcOverlapParameters,
+    params: MrisComputeParcOverlapParamsDict,
     runner: Runner | null = null,
 ): MrisComputeParcOverlapOutputs {
     runner = runner || getGlobalRunner();
@@ -315,6 +315,8 @@ function mris_compute_parc_overlap(
 export {
       MRIS_COMPUTE_PARC_OVERLAP_METADATA,
       MrisComputeParcOverlapOutputs,
+      MrisComputeParcOverlapParamsDict,
+      MrisComputeParcOverlapParamsDictTagged,
       mris_compute_parc_overlap,
       mris_compute_parc_overlap_execute,
       mris_compute_parc_overlap_params,

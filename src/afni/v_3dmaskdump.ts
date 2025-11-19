@@ -11,7 +11,7 @@ const V_3DMASKDUMP_METADATA: Metadata = {
 };
 
 
-interface V3dmaskdumpParameters {
+interface V3dmaskdumpParamsDict {
     "@type"?: "afni/3dmaskdump";
     "input_files": Array<InputPathType>;
     "mask_dataset"?: InputPathType | null | undefined;
@@ -34,11 +34,11 @@ interface V3dmaskdumpParameters {
     "output_niml"?: string | null | undefined;
     "quiet_mode": boolean;
 }
-type V3dmaskdumpParametersTagged = Required<Pick<V3dmaskdumpParameters, '@type'>> & V3dmaskdumpParameters;
+type V3dmaskdumpParamsDictTagged = Required<Pick<V3dmaskdumpParamsDict, '@type'>> & V3dmaskdumpParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmaskdumpParameters(...)`.
+ * Output object returned when calling `V3dmaskdumpParamsDict(...)`.
  *
  * @interface
  */
@@ -101,7 +101,7 @@ function v_3dmaskdump_params(
     random_seed: number | null = null,
     output_niml: string | null = null,
     quiet_mode: boolean = false,
-): V3dmaskdumpParametersTagged {
+): V3dmaskdumpParamsDictTagged {
     const params = {
         "@type": "afni/3dmaskdump" as const,
         "input_files": input_files,
@@ -166,7 +166,7 @@ function v_3dmaskdump_params(
  * @returns Command-line arguments.
  */
 function v_3dmaskdump_cargs(
-    params: V3dmaskdumpParameters,
+    params: V3dmaskdumpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -284,7 +284,7 @@ function v_3dmaskdump_cargs(
  * @returns Outputs object.
  */
 function v_3dmaskdump_outputs(
-    params: V3dmaskdumpParameters,
+    params: V3dmaskdumpParamsDict,
     execution: Execution,
 ): V3dmaskdumpOutputs {
     const ret: V3dmaskdumpOutputs = {
@@ -310,7 +310,7 @@ function v_3dmaskdump_outputs(
  * @returns NamedTuple of outputs (described in `V3dmaskdumpOutputs`).
  */
 function v_3dmaskdump_execute(
-    params: V3dmaskdumpParameters,
+    params: V3dmaskdumpParamsDict,
     runner: Runner | null = null,
 ): V3dmaskdumpOutputs {
     runner = runner || getGlobalRunner();
@@ -386,6 +386,8 @@ function v_3dmaskdump(
 
 export {
       V3dmaskdumpOutputs,
+      V3dmaskdumpParamsDict,
+      V3dmaskdumpParamsDictTagged,
       V_3DMASKDUMP_METADATA,
       v_3dmaskdump,
       v_3dmaskdump_execute,

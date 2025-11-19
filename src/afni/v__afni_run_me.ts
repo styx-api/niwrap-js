@@ -11,17 +11,17 @@ const V__AFNI_RUN_ME_METADATA: Metadata = {
 };
 
 
-interface VAfniRunMeParameters {
+interface VAfniRunMeParamsDict {
     "@type"?: "afni/@afni.run.me";
     "go": boolean;
     "curl": boolean;
     "help": boolean;
 }
-type VAfniRunMeParametersTagged = Required<Pick<VAfniRunMeParameters, '@type'>> & VAfniRunMeParameters;
+type VAfniRunMeParamsDictTagged = Required<Pick<VAfniRunMeParamsDict, '@type'>> & VAfniRunMeParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniRunMeParameters(...)`.
+ * Output object returned when calling `VAfniRunMeParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function v__afni_run_me_params(
     go: boolean = false,
     curl: boolean = false,
     help: boolean = false,
-): VAfniRunMeParametersTagged {
+): VAfniRunMeParamsDictTagged {
     const params = {
         "@type": "afni/@afni.run.me" as const,
         "go": go,
@@ -66,7 +66,7 @@ function v__afni_run_me_params(
  * @returns Command-line arguments.
  */
 function v__afni_run_me_cargs(
-    params: VAfniRunMeParameters,
+    params: VAfniRunMeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function v__afni_run_me_cargs(
  * @returns Outputs object.
  */
 function v__afni_run_me_outputs(
-    params: VAfniRunMeParameters,
+    params: VAfniRunMeParamsDict,
     execution: Execution,
 ): VAfniRunMeOutputs {
     const ret: VAfniRunMeOutputs = {
@@ -118,7 +118,7 @@ function v__afni_run_me_outputs(
  * @returns NamedTuple of outputs (described in `VAfniRunMeOutputs`).
  */
 function v__afni_run_me_execute(
-    params: VAfniRunMeParameters,
+    params: VAfniRunMeParamsDict,
     runner: Runner | null = null,
 ): VAfniRunMeOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function v__afni_run_me(
 
 export {
       VAfniRunMeOutputs,
+      VAfniRunMeParamsDict,
+      VAfniRunMeParamsDictTagged,
       V__AFNI_RUN_ME_METADATA,
       v__afni_run_me,
       v__afni_run_me_execute,

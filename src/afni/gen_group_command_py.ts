@@ -11,7 +11,7 @@ const GEN_GROUP_COMMAND_PY_METADATA: Metadata = {
 };
 
 
-interface GenGroupCommandPyParameters {
+interface GenGroupCommandPyParamsDict {
     "@type"?: "afni/gen_group_command.py";
     "command_name": string;
     "datasets": Array<string>;
@@ -26,11 +26,11 @@ interface GenGroupCommandPyParameters {
     "write_script"?: string | null | undefined;
     "other_options"?: Array<string> | null | undefined;
 }
-type GenGroupCommandPyParametersTagged = Required<Pick<GenGroupCommandPyParameters, '@type'>> & GenGroupCommandPyParameters;
+type GenGroupCommandPyParamsDictTagged = Required<Pick<GenGroupCommandPyParamsDict, '@type'>> & GenGroupCommandPyParamsDict;
 
 
 /**
- * Output object returned when calling `GenGroupCommandPyParameters(...)`.
+ * Output object returned when calling `GenGroupCommandPyParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function gen_group_command_py_params(
     verb: string | null = null,
     write_script: string | null = null,
     other_options: Array<string> | null = null,
-): GenGroupCommandPyParametersTagged {
+): GenGroupCommandPyParamsDictTagged {
     const params = {
         "@type": "afni/gen_group_command.py" as const,
         "command_name": command_name,
@@ -126,7 +126,7 @@ function gen_group_command_py_params(
  * @returns Command-line arguments.
  */
 function gen_group_command_py_cargs(
-    params: GenGroupCommandPyParameters,
+    params: GenGroupCommandPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -212,7 +212,7 @@ function gen_group_command_py_cargs(
  * @returns Outputs object.
  */
 function gen_group_command_py_outputs(
-    params: GenGroupCommandPyParameters,
+    params: GenGroupCommandPyParamsDict,
     execution: Execution,
 ): GenGroupCommandPyOutputs {
     const ret: GenGroupCommandPyOutputs = {
@@ -238,7 +238,7 @@ function gen_group_command_py_outputs(
  * @returns NamedTuple of outputs (described in `GenGroupCommandPyOutputs`).
  */
 function gen_group_command_py_execute(
-    params: GenGroupCommandPyParameters,
+    params: GenGroupCommandPyParamsDict,
     runner: Runner | null = null,
 ): GenGroupCommandPyOutputs {
     runner = runner || getGlobalRunner();
@@ -299,6 +299,8 @@ function gen_group_command_py(
 export {
       GEN_GROUP_COMMAND_PY_METADATA,
       GenGroupCommandPyOutputs,
+      GenGroupCommandPyParamsDict,
+      GenGroupCommandPyParamsDictTagged,
       gen_group_command_py,
       gen_group_command_py_execute,
       gen_group_command_py_params,

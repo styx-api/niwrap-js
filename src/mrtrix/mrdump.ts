@@ -11,15 +11,15 @@ const MRDUMP_METADATA: Metadata = {
 };
 
 
-interface MrdumpConfigParameters {
+interface MrdumpConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrdumpConfigParametersTagged = Required<Pick<MrdumpConfigParameters, '@type'>> & MrdumpConfigParameters;
+type MrdumpConfigParamsDictTagged = Required<Pick<MrdumpConfigParamsDict, '@type'>> & MrdumpConfigParamsDict;
 
 
-interface MrdumpParameters {
+interface MrdumpParamsDict {
     "@type"?: "mrtrix/mrdump";
     "mask"?: InputPathType | null | undefined;
     "info": boolean;
@@ -27,13 +27,13 @@ interface MrdumpParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrdumpConfigParameters> | null | undefined;
+    "config"?: Array<MrdumpConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output"?: string | null | undefined;
 }
-type MrdumpParametersTagged = Required<Pick<MrdumpParameters, '@type'>> & MrdumpParameters;
+type MrdumpParamsDictTagged = Required<Pick<MrdumpParamsDict, '@type'>> & MrdumpParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type MrdumpParametersTagged = Required<Pick<MrdumpParameters, '@type'>> & Mrdump
  *
  * @returns Parameter dictionary
  */
-function mrdump_config_params(
+function mrdump_config(
     key: string,
     value: string,
-): MrdumpConfigParametersTagged {
+): MrdumpConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function mrdump_config_params(
  * @returns Command-line arguments.
  */
 function mrdump_config_cargs(
-    params: MrdumpConfigParameters,
+    params: MrdumpConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function mrdump_config_cargs(
 
 
 /**
- * Output object returned when calling `MrdumpParameters(...)`.
+ * Output object returned when calling `MrdumpParamsDict(...)`.
  *
  * @interface
  */
@@ -119,11 +119,11 @@ function mrdump_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrdumpConfigParameters> | null = null,
+    config: Array<MrdumpConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
-): MrdumpParametersTagged {
+): MrdumpParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrdump" as const,
         "info": info,
@@ -159,7 +159,7 @@ function mrdump_params(
  * @returns Command-line arguments.
  */
 function mrdump_cargs(
-    params: MrdumpParameters,
+    params: MrdumpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -214,7 +214,7 @@ function mrdump_cargs(
  * @returns Outputs object.
  */
 function mrdump_outputs(
-    params: MrdumpParameters,
+    params: MrdumpParamsDict,
     execution: Execution,
 ): MrdumpOutputs {
     const ret: MrdumpOutputs = {
@@ -246,7 +246,7 @@ function mrdump_outputs(
  * @returns NamedTuple of outputs (described in `MrdumpOutputs`).
  */
 function mrdump_execute(
-    params: MrdumpParameters,
+    params: MrdumpParamsDict,
     runner: Runner | null = null,
 ): MrdumpOutputs {
     runner = runner || getGlobalRunner();
@@ -297,7 +297,7 @@ function mrdump(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrdumpConfigParameters> | null = null,
+    config: Array<MrdumpConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     output: string | null = null,
@@ -310,9 +310,13 @@ function mrdump(
 
 export {
       MRDUMP_METADATA,
+      MrdumpConfigParamsDict,
+      MrdumpConfigParamsDictTagged,
       MrdumpOutputs,
+      MrdumpParamsDict,
+      MrdumpParamsDictTagged,
       mrdump,
-      mrdump_config_params,
+      mrdump_config,
       mrdump_execute,
       mrdump_params,
 };

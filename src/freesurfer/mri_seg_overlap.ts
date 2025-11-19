@@ -11,7 +11,7 @@ const MRI_SEG_OVERLAP_METADATA: Metadata = {
 };
 
 
-interface MriSegOverlapParameters {
+interface MriSegOverlapParamsDict {
     "@type"?: "freesurfer/mri_seg_overlap";
     "vol1": InputPathType;
     "vol2": InputPathType;
@@ -24,11 +24,11 @@ interface MriSegOverlapParameters {
     "seg_flag": boolean;
     "quiet_flag": boolean;
 }
-type MriSegOverlapParametersTagged = Required<Pick<MriSegOverlapParameters, '@type'>> & MriSegOverlapParameters;
+type MriSegOverlapParamsDictTagged = Required<Pick<MriSegOverlapParamsDict, '@type'>> & MriSegOverlapParamsDict;
 
 
 /**
- * Output object returned when calling `MriSegOverlapParameters(...)`.
+ * Output object returned when calling `MriSegOverlapParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function mri_seg_overlap_params(
     no_names_flag: boolean = false,
     seg_flag: boolean = false,
     quiet_flag: boolean = false,
-): MriSegOverlapParametersTagged {
+): MriSegOverlapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_seg_overlap" as const,
         "vol1": vol1,
@@ -108,7 +108,7 @@ function mri_seg_overlap_params(
  * @returns Command-line arguments.
  */
 function mri_seg_overlap_cargs(
-    params: MriSegOverlapParameters,
+    params: MriSegOverlapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function mri_seg_overlap_cargs(
  * @returns Outputs object.
  */
 function mri_seg_overlap_outputs(
-    params: MriSegOverlapParameters,
+    params: MriSegOverlapParamsDict,
     execution: Execution,
 ): MriSegOverlapOutputs {
     const ret: MriSegOverlapOutputs = {
@@ -193,7 +193,7 @@ function mri_seg_overlap_outputs(
  * @returns NamedTuple of outputs (described in `MriSegOverlapOutputs`).
  */
 function mri_seg_overlap_execute(
-    params: MriSegOverlapParameters,
+    params: MriSegOverlapParamsDict,
     runner: Runner | null = null,
 ): MriSegOverlapOutputs {
     runner = runner || getGlobalRunner();
@@ -250,6 +250,8 @@ function mri_seg_overlap(
 export {
       MRI_SEG_OVERLAP_METADATA,
       MriSegOverlapOutputs,
+      MriSegOverlapParamsDict,
+      MriSegOverlapParamsDictTagged,
       mri_seg_overlap,
       mri_seg_overlap_execute,
       mri_seg_overlap_params,

@@ -11,17 +11,17 @@ const V__PURIFY_1_D_METADATA: Metadata = {
 };
 
 
-interface VPurify1DParameters {
+interface VPurify1DParamsDict {
     "@type"?: "afni/@Purify_1D";
     "sub_brick"?: string | null | undefined;
     "suffix"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
-type VPurify1DParametersTagged = Required<Pick<VPurify1DParameters, '@type'>> & VPurify1DParameters;
+type VPurify1DParamsDictTagged = Required<Pick<VPurify1DParamsDict, '@type'>> & VPurify1DParamsDict;
 
 
 /**
- * Output object returned when calling `VPurify1DParameters(...)`.
+ * Output object returned when calling `VPurify1DParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function v__purify_1_d_params(
     input_files: Array<InputPathType>,
     sub_brick: string | null = null,
     suffix: string | null = null,
-): VPurify1DParametersTagged {
+): VPurify1DParamsDictTagged {
     const params = {
         "@type": "afni/@Purify_1D" as const,
         "input_files": input_files,
@@ -70,7 +70,7 @@ function v__purify_1_d_params(
  * @returns Command-line arguments.
  */
 function v__purify_1_d_cargs(
-    params: VPurify1DParameters,
+    params: VPurify1DParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -101,7 +101,7 @@ function v__purify_1_d_cargs(
  * @returns Outputs object.
  */
 function v__purify_1_d_outputs(
-    params: VPurify1DParameters,
+    params: VPurify1DParamsDict,
     execution: Execution,
 ): VPurify1DOutputs {
     const ret: VPurify1DOutputs = {
@@ -126,7 +126,7 @@ function v__purify_1_d_outputs(
  * @returns NamedTuple of outputs (described in `VPurify1DOutputs`).
  */
 function v__purify_1_d_execute(
-    params: VPurify1DParameters,
+    params: VPurify1DParamsDict,
     runner: Runner | null = null,
 ): VPurify1DOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function v__purify_1_d(
 
 export {
       VPurify1DOutputs,
+      VPurify1DParamsDict,
+      VPurify1DParamsDictTagged,
       V__PURIFY_1_D_METADATA,
       v__purify_1_d,
       v__purify_1_d_execute,

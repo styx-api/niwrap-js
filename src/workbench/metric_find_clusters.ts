@@ -10,7 +10,7 @@ const METRIC_FIND_CLUSTERS_METADATA: Metadata = {
 };
 
 
-interface MetricFindClustersParameters {
+interface MetricFindClustersParamsDict {
     "@type"?: "workbench/metric-find-clusters";
     "metric-out": string;
     "less-than": boolean;
@@ -25,11 +25,11 @@ interface MetricFindClustersParameters {
     "value-threshold": number;
     "minimum-area": number;
 }
-type MetricFindClustersParametersTagged = Required<Pick<MetricFindClustersParameters, '@type'>> & MetricFindClustersParameters;
+type MetricFindClustersParamsDictTagged = Required<Pick<MetricFindClustersParamsDict, '@type'>> & MetricFindClustersParamsDict;
 
 
 /**
- * Output object returned when calling `MetricFindClustersParameters(...)`.
+ * Output object returned when calling `MetricFindClustersParamsDict(...)`.
  *
  * @interface
  */
@@ -88,7 +88,7 @@ function metric_find_clusters_params(
     value_threshold: number,
     minimum_area: number,
     less_than: boolean = false,
-): MetricFindClustersParametersTagged {
+): MetricFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/metric-find-clusters" as const,
         "metric-out": metric_out,
@@ -129,7 +129,7 @@ function metric_find_clusters_params(
  * @returns Command-line arguments.
  */
 function metric_find_clusters_cargs(
-    params: MetricFindClustersParameters,
+    params: MetricFindClustersParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -170,7 +170,7 @@ function metric_find_clusters_cargs(
  * @returns Outputs object.
  */
 function metric_find_clusters_outputs(
-    params: MetricFindClustersParameters,
+    params: MetricFindClustersParamsDict,
     execution: Execution,
 ): MetricFindClustersOutputs {
     const ret: MetricFindClustersOutputs = {
@@ -192,7 +192,7 @@ function metric_find_clusters_outputs(
  * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
  */
 function metric_find_clusters_execute(
-    params: MetricFindClustersParameters,
+    params: MetricFindClustersParamsDict,
     runner: Runner | null = null,
 ): MetricFindClustersOutputs {
     runner = runner || getGlobalRunner();
@@ -261,6 +261,8 @@ function metric_find_clusters(
 export {
       METRIC_FIND_CLUSTERS_METADATA,
       MetricFindClustersOutputs,
+      MetricFindClustersParamsDict,
+      MetricFindClustersParamsDictTagged,
       metric_find_clusters,
       metric_find_clusters_execute,
       metric_find_clusters_params,

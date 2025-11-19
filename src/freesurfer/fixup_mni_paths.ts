@@ -11,15 +11,15 @@ const FIXUP_MNI_PATHS_METADATA: Metadata = {
 };
 
 
-interface FixupMniPathsParameters {
+interface FixupMniPathsParamsDict {
     "@type"?: "freesurfer/fixup_mni_paths";
     "verbose": boolean;
 }
-type FixupMniPathsParametersTagged = Required<Pick<FixupMniPathsParameters, '@type'>> & FixupMniPathsParameters;
+type FixupMniPathsParamsDictTagged = Required<Pick<FixupMniPathsParamsDict, '@type'>> & FixupMniPathsParamsDict;
 
 
 /**
- * Output object returned when calling `FixupMniPathsParameters(...)`.
+ * Output object returned when calling `FixupMniPathsParamsDict(...)`.
  *
  * @interface
  */
@@ -92,7 +92,7 @@ interface FixupMniPathsOutputs {
  */
 function fixup_mni_paths_params(
     verbose: boolean = false,
-): FixupMniPathsParametersTagged {
+): FixupMniPathsParamsDictTagged {
     const params = {
         "@type": "freesurfer/fixup_mni_paths" as const,
         "verbose": verbose,
@@ -110,7 +110,7 @@ function fixup_mni_paths_params(
  * @returns Command-line arguments.
  */
 function fixup_mni_paths_cargs(
-    params: FixupMniPathsParameters,
+    params: FixupMniPathsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -131,7 +131,7 @@ function fixup_mni_paths_cargs(
  * @returns Outputs object.
  */
 function fixup_mni_paths_outputs(
-    params: FixupMniPathsParameters,
+    params: FixupMniPathsParamsDict,
     execution: Execution,
 ): FixupMniPathsOutputs {
     const ret: FixupMniPathsOutputs = {
@@ -169,7 +169,7 @@ function fixup_mni_paths_outputs(
  * @returns NamedTuple of outputs (described in `FixupMniPathsOutputs`).
  */
 function fixup_mni_paths_execute(
-    params: FixupMniPathsParameters,
+    params: FixupMniPathsParamsDict,
     runner: Runner | null = null,
 ): FixupMniPathsOutputs {
     runner = runner || getGlobalRunner();
@@ -208,6 +208,8 @@ function fixup_mni_paths(
 export {
       FIXUP_MNI_PATHS_METADATA,
       FixupMniPathsOutputs,
+      FixupMniPathsParamsDict,
+      FixupMniPathsParamsDictTagged,
       fixup_mni_paths,
       fixup_mni_paths_execute,
       fixup_mni_paths_params,

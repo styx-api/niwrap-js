@@ -11,7 +11,7 @@ const MRIS_PMAKE_METADATA: Metadata = {
 };
 
 
-interface MrisPmakeParameters {
+interface MrisPmakeParamsDict {
     "@type"?: "freesurfer/mris_pmake";
     "options_file"?: string | null | undefined;
     "working_dir"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface MrisPmakeParameters {
     "mpm_prog"?: string | null | undefined;
     "mpm_args"?: string | null | undefined;
 }
-type MrisPmakeParametersTagged = Required<Pick<MrisPmakeParameters, '@type'>> & MrisPmakeParameters;
+type MrisPmakeParamsDictTagged = Required<Pick<MrisPmakeParamsDict, '@type'>> & MrisPmakeParamsDict;
 
 
 /**
- * Output object returned when calling `MrisPmakeParameters(...)`.
+ * Output object returned when calling `MrisPmakeParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function mris_pmake_params(
     use_abs_curvs: boolean = false,
     mpm_prog: string | null = null,
     mpm_args: string | null = null,
-): MrisPmakeParametersTagged {
+): MrisPmakeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_pmake" as const,
         "listen_mode": listen_mode,
@@ -124,7 +124,7 @@ function mris_pmake_params(
  * @returns Command-line arguments.
  */
 function mris_pmake_cargs(
-    params: MrisPmakeParameters,
+    params: MrisPmakeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -210,7 +210,7 @@ function mris_pmake_cargs(
  * @returns Outputs object.
  */
 function mris_pmake_outputs(
-    params: MrisPmakeParameters,
+    params: MrisPmakeParamsDict,
     execution: Execution,
 ): MrisPmakeOutputs {
     const ret: MrisPmakeOutputs = {
@@ -235,7 +235,7 @@ function mris_pmake_outputs(
  * @returns NamedTuple of outputs (described in `MrisPmakeOutputs`).
  */
 function mris_pmake_execute(
-    params: MrisPmakeParameters,
+    params: MrisPmakeParamsDict,
     runner: Runner | null = null,
 ): MrisPmakeOutputs {
     runner = runner || getGlobalRunner();
@@ -298,6 +298,8 @@ function mris_pmake(
 export {
       MRIS_PMAKE_METADATA,
       MrisPmakeOutputs,
+      MrisPmakeParamsDict,
+      MrisPmakeParamsDictTagged,
       mris_pmake,
       mris_pmake_execute,
       mris_pmake_params,

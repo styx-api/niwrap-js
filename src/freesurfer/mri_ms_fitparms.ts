@@ -11,7 +11,7 @@ const MRI_MS_FITPARMS_METADATA: Metadata = {
 };
 
 
-interface MriMsFitparmsParameters {
+interface MriMsFitparmsParamsDict {
     "@type"?: "freesurfer/mri_ms_fitparms";
     "volumes": Array<InputPathType>;
     "output_dir": string;
@@ -50,11 +50,11 @@ interface MriMsFitparmsParameters {
     "extract_subimage"?: Array<number> | null | undefined;
     "window_flag": boolean;
 }
-type MriMsFitparmsParametersTagged = Required<Pick<MriMsFitparmsParameters, '@type'>> & MriMsFitparmsParameters;
+type MriMsFitparmsParamsDictTagged = Required<Pick<MriMsFitparmsParamsDict, '@type'>> & MriMsFitparmsParamsDict;
 
 
 /**
- * Output object returned when calling `MriMsFitparmsParameters(...)`.
+ * Output object returned when calling `MriMsFitparmsParamsDict(...)`.
  *
  * @interface
  */
@@ -169,7 +169,7 @@ function mri_ms_fitparms_params(
     write_intermediate: number | null = null,
     extract_subimage: Array<number> | null = null,
     window_flag: boolean = false,
-): MriMsFitparmsParametersTagged {
+): MriMsFitparmsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_ms_fitparms" as const,
         "volumes": volumes,
@@ -254,7 +254,7 @@ function mri_ms_fitparms_params(
  * @returns Command-line arguments.
  */
 function mri_ms_fitparms_cargs(
-    params: MriMsFitparmsParameters,
+    params: MriMsFitparmsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -424,7 +424,7 @@ function mri_ms_fitparms_cargs(
  * @returns Outputs object.
  */
 function mri_ms_fitparms_outputs(
-    params: MriMsFitparmsParameters,
+    params: MriMsFitparmsParamsDict,
     execution: Execution,
 ): MriMsFitparmsOutputs {
     const ret: MriMsFitparmsOutputs = {
@@ -455,7 +455,7 @@ function mri_ms_fitparms_outputs(
  * @returns NamedTuple of outputs (described in `MriMsFitparmsOutputs`).
  */
 function mri_ms_fitparms_execute(
-    params: MriMsFitparmsParameters,
+    params: MriMsFitparmsParamsDict,
     runner: Runner | null = null,
 ): MriMsFitparmsOutputs {
     runner = runner || getGlobalRunner();
@@ -564,6 +564,8 @@ function mri_ms_fitparms(
 export {
       MRI_MS_FITPARMS_METADATA,
       MriMsFitparmsOutputs,
+      MriMsFitparmsParamsDict,
+      MriMsFitparmsParamsDictTagged,
       mri_ms_fitparms,
       mri_ms_fitparms_execute,
       mri_ms_fitparms_params,

@@ -11,7 +11,7 @@ const FSR_IMPORT_METADATA: Metadata = {
 };
 
 
-interface FsrImportParameters {
+interface FsrImportParamsDict {
     "@type"?: "freesurfer/fsr-import";
     "outdir": string;
     "t1w_input"?: Array<InputPathType> | null | undefined;
@@ -22,11 +22,11 @@ interface FsrImportParameters {
     "no_conform": boolean;
     "hires": boolean;
 }
-type FsrImportParametersTagged = Required<Pick<FsrImportParameters, '@type'>> & FsrImportParameters;
+type FsrImportParamsDictTagged = Required<Pick<FsrImportParamsDict, '@type'>> & FsrImportParamsDict;
 
 
 /**
- * Output object returned when calling `FsrImportParameters(...)`.
+ * Output object returned when calling `FsrImportParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function fsr_import_params(
     force_update: boolean = false,
     no_conform: boolean = false,
     hires: boolean = false,
-): FsrImportParametersTagged {
+): FsrImportParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsr-import" as const,
         "outdir": outdir,
@@ -106,7 +106,7 @@ function fsr_import_params(
  * @returns Command-line arguments.
  */
 function fsr_import_cargs(
-    params: FsrImportParameters,
+    params: FsrImportParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function fsr_import_cargs(
  * @returns Outputs object.
  */
 function fsr_import_outputs(
-    params: FsrImportParameters,
+    params: FsrImportParamsDict,
     execution: Execution,
 ): FsrImportOutputs {
     const ret: FsrImportOutputs = {
@@ -189,7 +189,7 @@ function fsr_import_outputs(
  * @returns NamedTuple of outputs (described in `FsrImportOutputs`).
  */
 function fsr_import_execute(
-    params: FsrImportParameters,
+    params: FsrImportParamsDict,
     runner: Runner | null = null,
 ): FsrImportOutputs {
     runner = runner || getGlobalRunner();
@@ -242,6 +242,8 @@ function fsr_import(
 export {
       FSR_IMPORT_METADATA,
       FsrImportOutputs,
+      FsrImportParamsDict,
+      FsrImportParamsDictTagged,
       fsr_import,
       fsr_import_execute,
       fsr_import_params,

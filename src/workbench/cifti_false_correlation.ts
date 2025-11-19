@@ -10,42 +10,42 @@ const CIFTI_FALSE_CORRELATION_METADATA: Metadata = {
 };
 
 
-interface CiftiFalseCorrelationLeftSurfaceParameters {
+interface CiftiFalseCorrelationLeftSurfaceParamsDict {
     "@type"?: "left-surface";
     "surface": InputPathType;
     "text-out"?: string | null | undefined;
 }
-type CiftiFalseCorrelationLeftSurfaceParametersTagged = Required<Pick<CiftiFalseCorrelationLeftSurfaceParameters, '@type'>> & CiftiFalseCorrelationLeftSurfaceParameters;
+type CiftiFalseCorrelationLeftSurfaceParamsDictTagged = Required<Pick<CiftiFalseCorrelationLeftSurfaceParamsDict, '@type'>> & CiftiFalseCorrelationLeftSurfaceParamsDict;
 
 
-interface CiftiFalseCorrelationRightSurfaceParameters {
+interface CiftiFalseCorrelationRightSurfaceParamsDict {
     "@type"?: "right-surface";
     "surface": InputPathType;
     "text-out"?: string | null | undefined;
 }
-type CiftiFalseCorrelationRightSurfaceParametersTagged = Required<Pick<CiftiFalseCorrelationRightSurfaceParameters, '@type'>> & CiftiFalseCorrelationRightSurfaceParameters;
+type CiftiFalseCorrelationRightSurfaceParamsDictTagged = Required<Pick<CiftiFalseCorrelationRightSurfaceParamsDict, '@type'>> & CiftiFalseCorrelationRightSurfaceParamsDict;
 
 
-interface CiftiFalseCorrelationCerebellumSurfaceParameters {
+interface CiftiFalseCorrelationCerebellumSurfaceParamsDict {
     "@type"?: "cerebellum-surface";
     "surface": InputPathType;
     "text-out"?: string | null | undefined;
 }
-type CiftiFalseCorrelationCerebellumSurfaceParametersTagged = Required<Pick<CiftiFalseCorrelationCerebellumSurfaceParameters, '@type'>> & CiftiFalseCorrelationCerebellumSurfaceParameters;
+type CiftiFalseCorrelationCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiFalseCorrelationCerebellumSurfaceParamsDict, '@type'>> & CiftiFalseCorrelationCerebellumSurfaceParamsDict;
 
 
-interface CiftiFalseCorrelationParameters {
+interface CiftiFalseCorrelationParamsDict {
     "@type"?: "workbench/cifti-false-correlation";
     "cifti-out": string;
-    "left-surface"?: CiftiFalseCorrelationLeftSurfaceParameters | null | undefined;
-    "right-surface"?: CiftiFalseCorrelationRightSurfaceParameters | null | undefined;
-    "cerebellum-surface"?: CiftiFalseCorrelationCerebellumSurfaceParameters | null | undefined;
+    "left-surface"?: CiftiFalseCorrelationLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiFalseCorrelationRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiFalseCorrelationCerebellumSurfaceParamsDict | null | undefined;
     "cifti-in": InputPathType;
     "3D-dist": number;
     "geo-outer": number;
     "geo-inner": number;
 }
-type CiftiFalseCorrelationParametersTagged = Required<Pick<CiftiFalseCorrelationParameters, '@type'>> & CiftiFalseCorrelationParameters;
+type CiftiFalseCorrelationParamsDictTagged = Required<Pick<CiftiFalseCorrelationParamsDict, '@type'>> & CiftiFalseCorrelationParamsDict;
 
 
 /**
@@ -58,10 +58,10 @@ the output text file
  *
  * @returns Parameter dictionary
  */
-function cifti_false_correlation_left_surface_params(
+function cifti_false_correlation_left_surface(
     surface: InputPathType,
     text_out: string | null,
-): CiftiFalseCorrelationLeftSurfaceParametersTagged {
+): CiftiFalseCorrelationLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
         "surface": surface,
@@ -82,7 +82,7 @@ function cifti_false_correlation_left_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_false_correlation_left_surface_cargs(
-    params: CiftiFalseCorrelationLeftSurfaceParameters,
+    params: CiftiFalseCorrelationLeftSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,10 +108,10 @@ the output text file
  *
  * @returns Parameter dictionary
  */
-function cifti_false_correlation_right_surface_params(
+function cifti_false_correlation_right_surface(
     surface: InputPathType,
     text_out: string | null,
-): CiftiFalseCorrelationRightSurfaceParametersTagged {
+): CiftiFalseCorrelationRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
         "surface": surface,
@@ -132,7 +132,7 @@ function cifti_false_correlation_right_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_false_correlation_right_surface_cargs(
-    params: CiftiFalseCorrelationRightSurfaceParameters,
+    params: CiftiFalseCorrelationRightSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,10 +158,10 @@ the output text file
  *
  * @returns Parameter dictionary
  */
-function cifti_false_correlation_cerebellum_surface_params(
+function cifti_false_correlation_cerebellum_surface(
     surface: InputPathType,
     text_out: string | null,
-): CiftiFalseCorrelationCerebellumSurfaceParametersTagged {
+): CiftiFalseCorrelationCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
         "surface": surface,
@@ -182,7 +182,7 @@ function cifti_false_correlation_cerebellum_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_false_correlation_cerebellum_surface_cargs(
-    params: CiftiFalseCorrelationCerebellumSurfaceParameters,
+    params: CiftiFalseCorrelationCerebellumSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -199,7 +199,7 @@ function cifti_false_correlation_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `CiftiFalseCorrelationParameters(...)`.
+ * Output object returned when calling `CiftiFalseCorrelationParamsDict(...)`.
  *
  * @interface
  */
@@ -235,10 +235,10 @@ function cifti_false_correlation_params(
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
-    left_surface: CiftiFalseCorrelationLeftSurfaceParameters | null = null,
-    right_surface: CiftiFalseCorrelationRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParameters | null = null,
-): CiftiFalseCorrelationParametersTagged {
+    left_surface: CiftiFalseCorrelationLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiFalseCorrelationRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParamsDict | null = null,
+): CiftiFalseCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-false-correlation" as const,
         "cifti-out": cifti_out,
@@ -269,7 +269,7 @@ function cifti_false_correlation_params(
  * @returns Command-line arguments.
  */
 function cifti_false_correlation_cargs(
-    params: CiftiFalseCorrelationParameters,
+    params: CiftiFalseCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -300,7 +300,7 @@ function cifti_false_correlation_cargs(
  * @returns Outputs object.
  */
 function cifti_false_correlation_outputs(
-    params: CiftiFalseCorrelationParameters,
+    params: CiftiFalseCorrelationParamsDict,
     execution: Execution,
 ): CiftiFalseCorrelationOutputs {
     const ret: CiftiFalseCorrelationOutputs = {
@@ -322,7 +322,7 @@ function cifti_false_correlation_outputs(
  * @returns NamedTuple of outputs (described in `CiftiFalseCorrelationOutputs`).
  */
 function cifti_false_correlation_execute(
-    params: CiftiFalseCorrelationParameters,
+    params: CiftiFalseCorrelationParamsDict,
     runner: Runner | null = null,
 ): CiftiFalseCorrelationOutputs {
     runner = runner || getGlobalRunner();
@@ -358,9 +358,9 @@ function cifti_false_correlation(
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
-    left_surface: CiftiFalseCorrelationLeftSurfaceParameters | null = null,
-    right_surface: CiftiFalseCorrelationRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiFalseCorrelationLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiFalseCorrelationRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiFalseCorrelationOutputs {
     const params = cifti_false_correlation_params(cifti_out, cifti_in, v_3_d_dist, geo_outer, geo_inner, left_surface, right_surface, cerebellum_surface)
@@ -370,11 +370,19 @@ function cifti_false_correlation(
 
 export {
       CIFTI_FALSE_CORRELATION_METADATA,
+      CiftiFalseCorrelationCerebellumSurfaceParamsDict,
+      CiftiFalseCorrelationCerebellumSurfaceParamsDictTagged,
+      CiftiFalseCorrelationLeftSurfaceParamsDict,
+      CiftiFalseCorrelationLeftSurfaceParamsDictTagged,
       CiftiFalseCorrelationOutputs,
+      CiftiFalseCorrelationParamsDict,
+      CiftiFalseCorrelationParamsDictTagged,
+      CiftiFalseCorrelationRightSurfaceParamsDict,
+      CiftiFalseCorrelationRightSurfaceParamsDictTagged,
       cifti_false_correlation,
-      cifti_false_correlation_cerebellum_surface_params,
+      cifti_false_correlation_cerebellum_surface,
       cifti_false_correlation_execute,
-      cifti_false_correlation_left_surface_params,
+      cifti_false_correlation_left_surface,
       cifti_false_correlation_params,
-      cifti_false_correlation_right_surface_params,
+      cifti_false_correlation_right_surface,
 };

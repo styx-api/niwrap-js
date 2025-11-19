@@ -11,15 +11,15 @@ const V__NO_POUND_METADATA: Metadata = {
 };
 
 
-interface VNoPoundParameters {
+interface VNoPoundParamsDict {
     "@type"?: "afni/@NoPound";
     "afni_files": Array<string>;
 }
-type VNoPoundParametersTagged = Required<Pick<VNoPoundParameters, '@type'>> & VNoPoundParameters;
+type VNoPoundParamsDictTagged = Required<Pick<VNoPoundParamsDict, '@type'>> & VNoPoundParamsDict;
 
 
 /**
- * Output object returned when calling `VNoPoundParameters(...)`.
+ * Output object returned when calling `VNoPoundParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface VNoPoundOutputs {
  */
 function v__no_pound_params(
     afni_files: Array<string>,
-): VNoPoundParametersTagged {
+): VNoPoundParamsDictTagged {
     const params = {
         "@type": "afni/@NoPound" as const,
         "afni_files": afni_files,
@@ -58,7 +58,7 @@ function v__no_pound_params(
  * @returns Command-line arguments.
  */
 function v__no_pound_cargs(
-    params: VNoPoundParameters,
+    params: VNoPoundParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function v__no_pound_cargs(
  * @returns Outputs object.
  */
 function v__no_pound_outputs(
-    params: VNoPoundParameters,
+    params: VNoPoundParamsDict,
     execution: Execution,
 ): VNoPoundOutputs {
     const ret: VNoPoundOutputs = {
@@ -102,7 +102,7 @@ function v__no_pound_outputs(
  * @returns NamedTuple of outputs (described in `VNoPoundOutputs`).
  */
 function v__no_pound_execute(
-    params: VNoPoundParameters,
+    params: VNoPoundParamsDict,
     runner: Runner | null = null,
 ): VNoPoundOutputs {
     runner = runner || getGlobalRunner();
@@ -140,6 +140,8 @@ function v__no_pound(
 
 export {
       VNoPoundOutputs,
+      VNoPoundParamsDict,
+      VNoPoundParamsDictTagged,
       V__NO_POUND_METADATA,
       v__no_pound,
       v__no_pound_execute,

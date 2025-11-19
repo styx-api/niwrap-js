@@ -11,7 +11,7 @@ const FSL_SUB_MGH_METADATA: Metadata = {
 };
 
 
-interface FslSubMghParameters {
+interface FslSubMghParamsDict {
     "@type"?: "freesurfer/fsl_sub_mgh";
     "estimated_time"?: number | null | undefined;
     "queue_name"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface FslSubMghParameters {
     "verbose": boolean;
     "shell_path"?: string | null | undefined;
 }
-type FslSubMghParametersTagged = Required<Pick<FslSubMghParameters, '@type'>> & FslSubMghParameters;
+type FslSubMghParamsDictTagged = Required<Pick<FslSubMghParamsDict, '@type'>> & FslSubMghParamsDict;
 
 
 /**
- * Output object returned when calling `FslSubMghParameters(...)`.
+ * Output object returned when calling `FslSubMghParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function fsl_sub_mgh_params(
     flags_in_scripts: boolean = false,
     verbose: boolean = false,
     shell_path: string | null = null,
-): FslSubMghParametersTagged {
+): FslSubMghParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsl_sub_mgh" as const,
         "flags_in_scripts": flags_in_scripts,
@@ -128,7 +128,7 @@ function fsl_sub_mgh_params(
  * @returns Command-line arguments.
  */
 function fsl_sub_mgh_cargs(
-    params: FslSubMghParameters,
+    params: FslSubMghParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -218,7 +218,7 @@ function fsl_sub_mgh_cargs(
  * @returns Outputs object.
  */
 function fsl_sub_mgh_outputs(
-    params: FslSubMghParameters,
+    params: FslSubMghParamsDict,
     execution: Execution,
 ): FslSubMghOutputs {
     const ret: FslSubMghOutputs = {
@@ -243,7 +243,7 @@ function fsl_sub_mgh_outputs(
  * @returns NamedTuple of outputs (described in `FslSubMghOutputs`).
  */
 function fsl_sub_mgh_execute(
-    params: FslSubMghParameters,
+    params: FslSubMghParamsDict,
     runner: Runner | null = null,
 ): FslSubMghOutputs {
     runner = runner || getGlobalRunner();
@@ -306,6 +306,8 @@ function fsl_sub_mgh(
 export {
       FSL_SUB_MGH_METADATA,
       FslSubMghOutputs,
+      FslSubMghParamsDict,
+      FslSubMghParamsDictTagged,
       fsl_sub_mgh,
       fsl_sub_mgh_execute,
       fsl_sub_mgh_params,

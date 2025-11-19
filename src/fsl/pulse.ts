@@ -11,7 +11,7 @@ const PULSE_METADATA: Metadata = {
 };
 
 
-interface PulseParameters {
+interface PulseParamsDict {
     "@type"?: "fsl/pulse";
     "input_file": InputPathType;
     "output_base": string;
@@ -39,11 +39,11 @@ interface PulseParameters {
     "kcoord_flag": boolean;
     "cover"?: number | null | undefined;
 }
-type PulseParametersTagged = Required<Pick<PulseParameters, '@type'>> & PulseParameters;
+type PulseParamsDictTagged = Required<Pick<PulseParamsDict, '@type'>> & PulseParamsDict;
 
 
 /**
- * Output object returned when calling `PulseParameters(...)`.
+ * Output object returned when calling `PulseParamsDict(...)`.
  *
  * @interface
  */
@@ -116,7 +116,7 @@ function pulse_params(
     verbose_flag: boolean = false,
     kcoord_flag: boolean = false,
     cover: number | null = null,
-): PulseParametersTagged {
+): PulseParamsDictTagged {
     const params = {
         "@type": "fsl/pulse" as const,
         "input_file": input_file,
@@ -200,7 +200,7 @@ function pulse_params(
  * @returns Command-line arguments.
  */
 function pulse_cargs(
-    params: PulseParameters,
+    params: PulseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -358,7 +358,7 @@ function pulse_cargs(
  * @returns Outputs object.
  */
 function pulse_outputs(
-    params: PulseParameters,
+    params: PulseParamsDict,
     execution: Execution,
 ): PulseOutputs {
     const ret: PulseOutputs = {
@@ -384,7 +384,7 @@ function pulse_outputs(
  * @returns NamedTuple of outputs (described in `PulseOutputs`).
  */
 function pulse_execute(
-    params: PulseParameters,
+    params: PulseParamsDict,
     runner: Runner | null = null,
 ): PulseOutputs {
     runner = runner || getGlobalRunner();
@@ -471,6 +471,8 @@ function pulse(
 export {
       PULSE_METADATA,
       PulseOutputs,
+      PulseParamsDict,
+      PulseParamsDictTagged,
       pulse,
       pulse_execute,
       pulse_params,

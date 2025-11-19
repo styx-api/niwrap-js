@@ -11,7 +11,7 @@ const XHEMIREG_METADATA: Metadata = {
 };
 
 
-interface XhemiregParameters {
+interface XhemiregParamsDict {
     "@type"?: "freesurfer/xhemireg";
     "subject": string;
     "output_dir"?: string | null | undefined;
@@ -27,11 +27,11 @@ interface XhemiregParameters {
     "version": boolean;
     "help": boolean;
 }
-type XhemiregParametersTagged = Required<Pick<XhemiregParameters, '@type'>> & XhemiregParameters;
+type XhemiregParamsDictTagged = Required<Pick<XhemiregParamsDict, '@type'>> & XhemiregParamsDict;
 
 
 /**
- * Output object returned when calling `XhemiregParameters(...)`.
+ * Output object returned when calling `XhemiregParamsDict(...)`.
  *
  * @interface
  */
@@ -76,7 +76,7 @@ function xhemireg_params(
     threads: number | null = null,
     version: boolean = false,
     help: boolean = false,
-): XhemiregParametersTagged {
+): XhemiregParamsDictTagged {
     const params = {
         "@type": "freesurfer/xhemireg" as const,
         "subject": subject,
@@ -112,7 +112,7 @@ function xhemireg_params(
  * @returns Command-line arguments.
  */
 function xhemireg_cargs(
-    params: XhemiregParameters,
+    params: XhemiregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -179,7 +179,7 @@ function xhemireg_cargs(
  * @returns Outputs object.
  */
 function xhemireg_outputs(
-    params: XhemiregParameters,
+    params: XhemiregParamsDict,
     execution: Execution,
 ): XhemiregOutputs {
     const ret: XhemiregOutputs = {
@@ -204,7 +204,7 @@ function xhemireg_outputs(
  * @returns NamedTuple of outputs (described in `XhemiregOutputs`).
  */
 function xhemireg_execute(
-    params: XhemiregParameters,
+    params: XhemiregParamsDict,
     runner: Runner | null = null,
 ): XhemiregOutputs {
     runner = runner || getGlobalRunner();
@@ -267,6 +267,8 @@ function xhemireg(
 export {
       XHEMIREG_METADATA,
       XhemiregOutputs,
+      XhemiregParamsDict,
+      XhemiregParamsDictTagged,
       xhemireg,
       xhemireg_execute,
       xhemireg_params,

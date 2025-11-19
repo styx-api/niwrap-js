@@ -11,15 +11,15 @@ const V__SHOW_DYNAMIC_RANGE_METADATA: Metadata = {
 };
 
 
-interface VShowDynamicRangeParameters {
+interface VShowDynamicRangeParamsDict {
     "@type"?: "afni/@ShowDynamicRange";
     "infile": InputPathType;
 }
-type VShowDynamicRangeParametersTagged = Required<Pick<VShowDynamicRangeParameters, '@type'>> & VShowDynamicRangeParameters;
+type VShowDynamicRangeParamsDictTagged = Required<Pick<VShowDynamicRangeParamsDict, '@type'>> & VShowDynamicRangeParamsDict;
 
 
 /**
- * Output object returned when calling `VShowDynamicRangeParameters(...)`.
+ * Output object returned when calling `VShowDynamicRangeParamsDict(...)`.
  *
  * @interface
  */
@@ -48,7 +48,7 @@ interface VShowDynamicRangeOutputs {
  */
 function v__show_dynamic_range_params(
     infile: InputPathType,
-): VShowDynamicRangeParametersTagged {
+): VShowDynamicRangeParamsDictTagged {
     const params = {
         "@type": "afni/@ShowDynamicRange" as const,
         "infile": infile,
@@ -66,7 +66,7 @@ function v__show_dynamic_range_params(
  * @returns Command-line arguments.
  */
 function v__show_dynamic_range_cargs(
-    params: VShowDynamicRangeParameters,
+    params: VShowDynamicRangeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -85,7 +85,7 @@ function v__show_dynamic_range_cargs(
  * @returns Outputs object.
  */
 function v__show_dynamic_range_outputs(
-    params: VShowDynamicRangeParameters,
+    params: VShowDynamicRangeParamsDict,
     execution: Execution,
 ): VShowDynamicRangeOutputs {
     const ret: VShowDynamicRangeOutputs = {
@@ -112,7 +112,7 @@ function v__show_dynamic_range_outputs(
  * @returns NamedTuple of outputs (described in `VShowDynamicRangeOutputs`).
  */
 function v__show_dynamic_range_execute(
-    params: VShowDynamicRangeParameters,
+    params: VShowDynamicRangeParamsDict,
     runner: Runner | null = null,
 ): VShowDynamicRangeOutputs {
     runner = runner || getGlobalRunner();
@@ -150,6 +150,8 @@ function v__show_dynamic_range(
 
 export {
       VShowDynamicRangeOutputs,
+      VShowDynamicRangeParamsDict,
+      VShowDynamicRangeParamsDictTagged,
       V__SHOW_DYNAMIC_RANGE_METADATA,
       v__show_dynamic_range,
       v__show_dynamic_range_execute,

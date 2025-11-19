@@ -11,7 +11,7 @@ const V_3D_ICC_METADATA: Metadata = {
 };
 
 
-interface V3dIccParameters {
+interface V3dIccParamsDict {
     "@type"?: "afni/3dICC";
     "model": string;
     "prefix": string;
@@ -28,11 +28,11 @@ interface V3dIccParameters {
     "cio": boolean;
     "rio": boolean;
 }
-type V3dIccParametersTagged = Required<Pick<V3dIccParameters, '@type'>> & V3dIccParameters;
+type V3dIccParamsDictTagged = Required<Pick<V3dIccParamsDict, '@type'>> & V3dIccParamsDict;
 
 
 /**
- * Output object returned when calling `V3dIccParameters(...)`.
+ * Output object returned when calling `V3dIccParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function v_3d_icc_params(
     dbg_args: boolean = false,
     cio: boolean = false,
     rio: boolean = false,
-): V3dIccParametersTagged {
+): V3dIccParamsDictTagged {
     const params = {
         "@type": "afni/3dICC" as const,
         "model": model,
@@ -130,7 +130,7 @@ function v_3d_icc_params(
  * @returns Command-line arguments.
  */
 function v_3d_icc_cargs(
-    params: V3dIccParameters,
+    params: V3dIccParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -214,7 +214,7 @@ function v_3d_icc_cargs(
  * @returns Outputs object.
  */
 function v_3d_icc_outputs(
-    params: V3dIccParameters,
+    params: V3dIccParamsDict,
     execution: Execution,
 ): V3dIccOutputs {
     const ret: V3dIccOutputs = {
@@ -240,7 +240,7 @@ function v_3d_icc_outputs(
  * @returns NamedTuple of outputs (described in `V3dIccOutputs`).
  */
 function v_3d_icc_execute(
-    params: V3dIccParameters,
+    params: V3dIccParamsDict,
     runner: Runner | null = null,
 ): V3dIccOutputs {
     runner = runner || getGlobalRunner();
@@ -304,6 +304,8 @@ function v_3d_icc(
 
 export {
       V3dIccOutputs,
+      V3dIccParamsDict,
+      V3dIccParamsDictTagged,
       V_3D_ICC_METADATA,
       v_3d_icc,
       v_3d_icc_execute,

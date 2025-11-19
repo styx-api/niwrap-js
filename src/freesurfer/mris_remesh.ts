@@ -11,7 +11,7 @@ const MRIS_REMESH_METADATA: Metadata = {
 };
 
 
-interface MrisRemeshParameters {
+interface MrisRemeshParamsDict {
     "@type"?: "freesurfer/mris_remesh";
     "input": InputPathType;
     "output": string;
@@ -21,11 +21,11 @@ interface MrisRemeshParameters {
     "remesh": boolean;
     "iterations"?: number | null | undefined;
 }
-type MrisRemeshParametersTagged = Required<Pick<MrisRemeshParameters, '@type'>> & MrisRemeshParameters;
+type MrisRemeshParamsDictTagged = Required<Pick<MrisRemeshParamsDict, '@type'>> & MrisRemeshParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRemeshParameters(...)`.
+ * Output object returned when calling `MrisRemeshParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mris_remesh_params(
     face_area: number | null = null,
     remesh: boolean = false,
     iterations: number | null = null,
-): MrisRemeshParametersTagged {
+): MrisRemeshParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_remesh" as const,
         "input": input,
@@ -94,7 +94,7 @@ function mris_remesh_params(
  * @returns Command-line arguments.
  */
 function mris_remesh_cargs(
-    params: MrisRemeshParameters,
+    params: MrisRemeshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function mris_remesh_cargs(
  * @returns Outputs object.
  */
 function mris_remesh_outputs(
-    params: MrisRemeshParameters,
+    params: MrisRemeshParamsDict,
     execution: Execution,
 ): MrisRemeshOutputs {
     const ret: MrisRemeshOutputs = {
@@ -173,7 +173,7 @@ function mris_remesh_outputs(
  * @returns NamedTuple of outputs (described in `MrisRemeshOutputs`).
  */
 function mris_remesh_execute(
-    params: MrisRemeshParameters,
+    params: MrisRemeshParamsDict,
     runner: Runner | null = null,
 ): MrisRemeshOutputs {
     runner = runner || getGlobalRunner();
@@ -224,6 +224,8 @@ function mris_remesh(
 export {
       MRIS_REMESH_METADATA,
       MrisRemeshOutputs,
+      MrisRemeshParamsDict,
+      MrisRemeshParamsDictTagged,
       mris_remesh,
       mris_remesh_execute,
       mris_remesh_params,

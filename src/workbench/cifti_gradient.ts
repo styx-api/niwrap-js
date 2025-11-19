@@ -10,55 +10,55 @@ const CIFTI_GRADIENT_METADATA: Metadata = {
 };
 
 
-interface CiftiGradientLeftSurfaceParameters {
+interface CiftiGradientLeftSurfaceParamsDict {
     "@type"?: "left-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiGradientLeftSurfaceParametersTagged = Required<Pick<CiftiGradientLeftSurfaceParameters, '@type'>> & CiftiGradientLeftSurfaceParameters;
+type CiftiGradientLeftSurfaceParamsDictTagged = Required<Pick<CiftiGradientLeftSurfaceParamsDict, '@type'>> & CiftiGradientLeftSurfaceParamsDict;
 
 
-interface CiftiGradientRightSurfaceParameters {
+interface CiftiGradientRightSurfaceParamsDict {
     "@type"?: "right-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiGradientRightSurfaceParametersTagged = Required<Pick<CiftiGradientRightSurfaceParameters, '@type'>> & CiftiGradientRightSurfaceParameters;
+type CiftiGradientRightSurfaceParamsDictTagged = Required<Pick<CiftiGradientRightSurfaceParamsDict, '@type'>> & CiftiGradientRightSurfaceParamsDict;
 
 
-interface CiftiGradientCerebellumSurfaceParameters {
+interface CiftiGradientCerebellumSurfaceParamsDict {
     "@type"?: "cerebellum-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiGradientCerebellumSurfaceParametersTagged = Required<Pick<CiftiGradientCerebellumSurfaceParameters, '@type'>> & CiftiGradientCerebellumSurfaceParameters;
+type CiftiGradientCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiGradientCerebellumSurfaceParamsDict, '@type'>> & CiftiGradientCerebellumSurfaceParamsDict;
 
 
-interface CiftiGradientSurfaceParameters {
+interface CiftiGradientSurfaceParamsDict {
     "@type"?: "surface";
     "structure": string;
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiGradientSurfaceParametersTagged = Required<Pick<CiftiGradientSurfaceParameters, '@type'>> & CiftiGradientSurfaceParameters;
+type CiftiGradientSurfaceParamsDictTagged = Required<Pick<CiftiGradientSurfaceParamsDict, '@type'>> & CiftiGradientSurfaceParamsDict;
 
 
-interface CiftiGradientParameters {
+interface CiftiGradientParamsDict {
     "@type"?: "workbench/cifti-gradient";
     "cifti-out": string;
-    "left-surface"?: CiftiGradientLeftSurfaceParameters | null | undefined;
-    "right-surface"?: CiftiGradientRightSurfaceParameters | null | undefined;
-    "cerebellum-surface"?: CiftiGradientCerebellumSurfaceParameters | null | undefined;
+    "left-surface"?: CiftiGradientLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiGradientRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiGradientCerebellumSurfaceParamsDict | null | undefined;
     "surface-kernel"?: number | null | undefined;
     "volume-kernel"?: number | null | undefined;
     "presmooth-fwhm": boolean;
     "average-output": boolean;
     "vectors-out"?: string | null | undefined;
-    "surface"?: Array<CiftiGradientSurfaceParameters> | null | undefined;
+    "surface"?: Array<CiftiGradientSurfaceParamsDict> | null | undefined;
     "cifti": InputPathType;
     "direction": string;
 }
-type CiftiGradientParametersTagged = Required<Pick<CiftiGradientParameters, '@type'>> & CiftiGradientParameters;
+type CiftiGradientParamsDictTagged = Required<Pick<CiftiGradientParamsDict, '@type'>> & CiftiGradientParamsDict;
 
 
 /**
@@ -71,10 +71,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_gradient_left_surface_params(
+function cifti_gradient_left_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiGradientLeftSurfaceParametersTagged {
+): CiftiGradientLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
         "surface": surface,
@@ -95,7 +95,7 @@ function cifti_gradient_left_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_gradient_left_surface_cargs(
-    params: CiftiGradientLeftSurfaceParameters,
+    params: CiftiGradientLeftSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -121,10 +121,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_gradient_right_surface_params(
+function cifti_gradient_right_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiGradientRightSurfaceParametersTagged {
+): CiftiGradientRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
         "surface": surface,
@@ -145,7 +145,7 @@ function cifti_gradient_right_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_gradient_right_surface_cargs(
-    params: CiftiGradientRightSurfaceParameters,
+    params: CiftiGradientRightSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,10 +171,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_gradient_cerebellum_surface_params(
+function cifti_gradient_cerebellum_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiGradientCerebellumSurfaceParametersTagged {
+): CiftiGradientCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
         "surface": surface,
@@ -195,7 +195,7 @@ function cifti_gradient_cerebellum_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_gradient_cerebellum_surface_cargs(
-    params: CiftiGradientCerebellumSurfaceParameters,
+    params: CiftiGradientCerebellumSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -222,11 +222,11 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_gradient_surface_params(
+function cifti_gradient_surface(
     structure: string,
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiGradientSurfaceParametersTagged {
+): CiftiGradientSurfaceParamsDictTagged {
     const params = {
         "@type": "surface" as const,
         "structure": structure,
@@ -248,7 +248,7 @@ function cifti_gradient_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_gradient_surface_cargs(
-    params: CiftiGradientSurfaceParameters,
+    params: CiftiGradientSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -266,7 +266,7 @@ function cifti_gradient_surface_cargs(
 
 
 /**
- * Output object returned when calling `CiftiGradientParameters(...)`.
+ * Output object returned when calling `CiftiGradientParamsDict(...)`.
  *
  * @interface
  */
@@ -313,13 +313,13 @@ function cifti_gradient_params(
     vectors_out: string | null,
     cifti: InputPathType,
     direction: string,
-    left_surface: CiftiGradientLeftSurfaceParameters | null = null,
-    right_surface: CiftiGradientRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiGradientCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiGradientLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiGradientRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiGradientCerebellumSurfaceParamsDict | null = null,
     presmooth_fwhm: boolean = false,
     average_output: boolean = false,
-    surface: Array<CiftiGradientSurfaceParameters> | null = null,
-): CiftiGradientParametersTagged {
+    surface: Array<CiftiGradientSurfaceParamsDict> | null = null,
+): CiftiGradientParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-gradient" as const,
         "cifti-out": cifti_out,
@@ -362,7 +362,7 @@ function cifti_gradient_params(
  * @returns Command-line arguments.
  */
 function cifti_gradient_cargs(
-    params: CiftiGradientParameters,
+    params: CiftiGradientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -400,7 +400,7 @@ function cifti_gradient_cargs(
  * @returns Outputs object.
  */
 function cifti_gradient_outputs(
-    params: CiftiGradientParameters,
+    params: CiftiGradientParamsDict,
     execution: Execution,
 ): CiftiGradientOutputs {
     const ret: CiftiGradientOutputs = {
@@ -460,7 +460,7 @@ function cifti_gradient_outputs(
  * @returns NamedTuple of outputs (described in `CiftiGradientOutputs`).
  */
 function cifti_gradient_execute(
-    params: CiftiGradientParameters,
+    params: CiftiGradientParamsDict,
     runner: Runner | null = null,
 ): CiftiGradientOutputs {
     runner = runner || getGlobalRunner();
@@ -545,12 +545,12 @@ function cifti_gradient(
     vectors_out: string | null,
     cifti: InputPathType,
     direction: string,
-    left_surface: CiftiGradientLeftSurfaceParameters | null = null,
-    right_surface: CiftiGradientRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiGradientCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiGradientLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiGradientRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiGradientCerebellumSurfaceParamsDict | null = null,
     presmooth_fwhm: boolean = false,
     average_output: boolean = false,
-    surface: Array<CiftiGradientSurfaceParameters> | null = null,
+    surface: Array<CiftiGradientSurfaceParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiGradientOutputs {
     const params = cifti_gradient_params(cifti_out, surface_kernel, volume_kernel, vectors_out, cifti, direction, left_surface, right_surface, cerebellum_surface, presmooth_fwhm, average_output, surface)
@@ -560,12 +560,22 @@ function cifti_gradient(
 
 export {
       CIFTI_GRADIENT_METADATA,
+      CiftiGradientCerebellumSurfaceParamsDict,
+      CiftiGradientCerebellumSurfaceParamsDictTagged,
+      CiftiGradientLeftSurfaceParamsDict,
+      CiftiGradientLeftSurfaceParamsDictTagged,
       CiftiGradientOutputs,
+      CiftiGradientParamsDict,
+      CiftiGradientParamsDictTagged,
+      CiftiGradientRightSurfaceParamsDict,
+      CiftiGradientRightSurfaceParamsDictTagged,
+      CiftiGradientSurfaceParamsDict,
+      CiftiGradientSurfaceParamsDictTagged,
       cifti_gradient,
-      cifti_gradient_cerebellum_surface_params,
+      cifti_gradient_cerebellum_surface,
       cifti_gradient_execute,
-      cifti_gradient_left_surface_params,
+      cifti_gradient_left_surface,
       cifti_gradient_params,
-      cifti_gradient_right_surface_params,
-      cifti_gradient_surface_params,
+      cifti_gradient_right_surface,
+      cifti_gradient_surface,
 };

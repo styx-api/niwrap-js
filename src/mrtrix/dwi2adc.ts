@@ -11,38 +11,38 @@ const DWI2ADC_METADATA: Metadata = {
 };
 
 
-interface Dwi2adcFslgradParameters {
+interface Dwi2adcFslgradParamsDict {
     "@type"?: "fslgrad";
     "bvecs": InputPathType;
     "bvals": InputPathType;
 }
-type Dwi2adcFslgradParametersTagged = Required<Pick<Dwi2adcFslgradParameters, '@type'>> & Dwi2adcFslgradParameters;
+type Dwi2adcFslgradParamsDictTagged = Required<Pick<Dwi2adcFslgradParamsDict, '@type'>> & Dwi2adcFslgradParamsDict;
 
 
-interface Dwi2adcConfigParameters {
+interface Dwi2adcConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Dwi2adcConfigParametersTagged = Required<Pick<Dwi2adcConfigParameters, '@type'>> & Dwi2adcConfigParameters;
+type Dwi2adcConfigParamsDictTagged = Required<Pick<Dwi2adcConfigParamsDict, '@type'>> & Dwi2adcConfigParamsDict;
 
 
-interface Dwi2adcParameters {
+interface Dwi2adcParamsDict {
     "@type"?: "mrtrix/dwi2adc";
     "grad"?: InputPathType | null | undefined;
-    "fslgrad"?: Dwi2adcFslgradParameters | null | undefined;
+    "fslgrad"?: Dwi2adcFslgradParamsDict | null | undefined;
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Dwi2adcConfigParameters> | null | undefined;
+    "config"?: Array<Dwi2adcConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "output": string;
 }
-type Dwi2adcParametersTagged = Required<Pick<Dwi2adcParameters, '@type'>> & Dwi2adcParameters;
+type Dwi2adcParamsDictTagged = Required<Pick<Dwi2adcParamsDict, '@type'>> & Dwi2adcParamsDict;
 
 
 /**
@@ -53,10 +53,10 @@ type Dwi2adcParametersTagged = Required<Pick<Dwi2adcParameters, '@type'>> & Dwi2
  *
  * @returns Parameter dictionary
  */
-function dwi2adc_fslgrad_params(
+function dwi2adc_fslgrad(
     bvecs: InputPathType,
     bvals: InputPathType,
-): Dwi2adcFslgradParametersTagged {
+): Dwi2adcFslgradParamsDictTagged {
     const params = {
         "@type": "fslgrad" as const,
         "bvecs": bvecs,
@@ -75,7 +75,7 @@ function dwi2adc_fslgrad_params(
  * @returns Command-line arguments.
  */
 function dwi2adc_fslgrad_cargs(
-    params: Dwi2adcFslgradParameters,
+    params: Dwi2adcFslgradParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,10 +94,10 @@ function dwi2adc_fslgrad_cargs(
  *
  * @returns Parameter dictionary
  */
-function dwi2adc_config_params(
+function dwi2adc_config(
     key: string,
     value: string,
-): Dwi2adcConfigParametersTagged {
+): Dwi2adcConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -116,7 +116,7 @@ function dwi2adc_config_params(
  * @returns Command-line arguments.
  */
 function dwi2adc_config_cargs(
-    params: Dwi2adcConfigParameters,
+    params: Dwi2adcConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function dwi2adc_config_cargs(
 
 
 /**
- * Output object returned when calling `Dwi2adcParameters(...)`.
+ * Output object returned when calling `Dwi2adcParamsDict(...)`.
  *
  * @interface
  */
@@ -166,16 +166,16 @@ function dwi2adc_params(
     input: InputPathType,
     output: string,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2adcFslgradParameters | null = null,
+    fslgrad: Dwi2adcFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2adcConfigParameters> | null = null,
+    config: Array<Dwi2adcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Dwi2adcParametersTagged {
+): Dwi2adcParamsDictTagged {
     const params = {
         "@type": "mrtrix/dwi2adc" as const,
         "info": info,
@@ -212,7 +212,7 @@ function dwi2adc_params(
  * @returns Command-line arguments.
  */
 function dwi2adc_cargs(
-    params: Dwi2adcParameters,
+    params: Dwi2adcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function dwi2adc_cargs(
  * @returns Outputs object.
  */
 function dwi2adc_outputs(
-    params: Dwi2adcParameters,
+    params: Dwi2adcParamsDict,
     execution: Execution,
 ): Dwi2adcOutputs {
     const ret: Dwi2adcOutputs = {
@@ -300,7 +300,7 @@ function dwi2adc_outputs(
  * @returns NamedTuple of outputs (described in `Dwi2adcOutputs`).
  */
 function dwi2adc_execute(
-    params: Dwi2adcParameters,
+    params: Dwi2adcParamsDict,
     runner: Runner | null = null,
 ): Dwi2adcOutputs {
     runner = runner || getGlobalRunner();
@@ -348,13 +348,13 @@ function dwi2adc(
     input: InputPathType,
     output: string,
     grad: InputPathType | null = null,
-    fslgrad: Dwi2adcFslgradParameters | null = null,
+    fslgrad: Dwi2adcFslgradParamsDict | null = null,
     info: boolean = false,
     quiet: boolean = false,
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Dwi2adcConfigParameters> | null = null,
+    config: Array<Dwi2adcConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -366,10 +366,16 @@ function dwi2adc(
 
 export {
       DWI2ADC_METADATA,
+      Dwi2adcConfigParamsDict,
+      Dwi2adcConfigParamsDictTagged,
+      Dwi2adcFslgradParamsDict,
+      Dwi2adcFslgradParamsDictTagged,
       Dwi2adcOutputs,
+      Dwi2adcParamsDict,
+      Dwi2adcParamsDictTagged,
       dwi2adc,
-      dwi2adc_config_params,
+      dwi2adc_config,
       dwi2adc_execute,
-      dwi2adc_fslgrad_params,
+      dwi2adc_fslgrad,
       dwi2adc_params,
 };

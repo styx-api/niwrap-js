@@ -11,7 +11,7 @@ const REG_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface RegTransformParameters {
+interface RegTransformParamsDict {
     "@type"?: "niftyreg/reg_transform";
     "reference_image": InputPathType;
     "cpp2def_input"?: InputPathType | null | undefined;
@@ -42,11 +42,11 @@ interface RegTransformParameters {
     "comp_aff_2nd"?: InputPathType | null | undefined;
     "comp_aff_output"?: string | null | undefined;
 }
-type RegTransformParametersTagged = Required<Pick<RegTransformParameters, '@type'>> & RegTransformParameters;
+type RegTransformParamsDictTagged = Required<Pick<RegTransformParamsDict, '@type'>> & RegTransformParamsDict;
 
 
 /**
- * Output object returned when calling `RegTransformParameters(...)`.
+ * Output object returned when calling `RegTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -161,7 +161,7 @@ function reg_transform_params(
     comp_aff_1st: InputPathType | null = null,
     comp_aff_2nd: InputPathType | null = null,
     comp_aff_output: string | null = null,
-): RegTransformParametersTagged {
+): RegTransformParamsDictTagged {
     const params = {
         "@type": "niftyreg/reg_transform" as const,
         "reference_image": reference_image,
@@ -260,7 +260,7 @@ function reg_transform_params(
  * @returns Command-line arguments.
  */
 function reg_transform_cargs(
-    params: RegTransformParameters,
+    params: RegTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -393,7 +393,7 @@ function reg_transform_cargs(
  * @returns Outputs object.
  */
 function reg_transform_outputs(
-    params: RegTransformParameters,
+    params: RegTransformParamsDict,
     execution: Execution,
 ): RegTransformOutputs {
     const ret: RegTransformOutputs = {
@@ -428,7 +428,7 @@ function reg_transform_outputs(
  * @returns NamedTuple of outputs (described in `RegTransformOutputs`).
  */
 function reg_transform_execute(
-    params: RegTransformParameters,
+    params: RegTransformParamsDict,
     runner: Runner | null = null,
 ): RegTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -521,6 +521,8 @@ function reg_transform(
 export {
       REG_TRANSFORM_METADATA,
       RegTransformOutputs,
+      RegTransformParamsDict,
+      RegTransformParamsDictTagged,
       reg_transform,
       reg_transform_execute,
       reg_transform_params,

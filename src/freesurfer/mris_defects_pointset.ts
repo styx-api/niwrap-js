@@ -11,7 +11,7 @@ const MRIS_DEFECTS_POINTSET_METADATA: Metadata = {
 };
 
 
-interface MrisDefectsPointsetParameters {
+interface MrisDefectsPointsetParamsDict {
     "@type"?: "freesurfer/mris_defects_pointset";
     "surface": InputPathType;
     "defects": InputPathType;
@@ -19,11 +19,11 @@ interface MrisDefectsPointsetParameters {
     "label"?: InputPathType | null | undefined;
     "control": boolean;
 }
-type MrisDefectsPointsetParametersTagged = Required<Pick<MrisDefectsPointsetParameters, '@type'>> & MrisDefectsPointsetParameters;
+type MrisDefectsPointsetParamsDictTagged = Required<Pick<MrisDefectsPointsetParamsDict, '@type'>> & MrisDefectsPointsetParamsDict;
 
 
 /**
- * Output object returned when calling `MrisDefectsPointsetParameters(...)`.
+ * Output object returned when calling `MrisDefectsPointsetParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mris_defects_pointset_params(
     out: string,
     label: InputPathType | null = null,
     control: boolean = false,
-): MrisDefectsPointsetParametersTagged {
+): MrisDefectsPointsetParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_defects_pointset" as const,
         "surface": surface,
@@ -80,7 +80,7 @@ function mris_defects_pointset_params(
  * @returns Command-line arguments.
  */
 function mris_defects_pointset_cargs(
-    params: MrisDefectsPointsetParameters,
+    params: MrisDefectsPointsetParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function mris_defects_pointset_cargs(
  * @returns Outputs object.
  */
 function mris_defects_pointset_outputs(
-    params: MrisDefectsPointsetParameters,
+    params: MrisDefectsPointsetParamsDict,
     execution: Execution,
 ): MrisDefectsPointsetOutputs {
     const ret: MrisDefectsPointsetOutputs = {
@@ -145,7 +145,7 @@ function mris_defects_pointset_outputs(
  * @returns NamedTuple of outputs (described in `MrisDefectsPointsetOutputs`).
  */
 function mris_defects_pointset_execute(
-    params: MrisDefectsPointsetParameters,
+    params: MrisDefectsPointsetParamsDict,
     runner: Runner | null = null,
 ): MrisDefectsPointsetOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function mris_defects_pointset(
 export {
       MRIS_DEFECTS_POINTSET_METADATA,
       MrisDefectsPointsetOutputs,
+      MrisDefectsPointsetParamsDict,
+      MrisDefectsPointsetParamsDictTagged,
       mris_defects_pointset,
       mris_defects_pointset_execute,
       mris_defects_pointset_params,

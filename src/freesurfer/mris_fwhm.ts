@@ -11,7 +11,7 @@ const MRIS_FWHM_METADATA: Metadata = {
 };
 
 
-interface MrisFwhmParameters {
+interface MrisFwhmParamsDict {
     "@type"?: "freesurfer/mris_fwhm";
     "input_file": InputPathType;
     "subject": string;
@@ -45,11 +45,11 @@ interface MrisFwhmParameters {
     "checkopts_flag": boolean;
     "version_flag": boolean;
 }
-type MrisFwhmParametersTagged = Required<Pick<MrisFwhmParameters, '@type'>> & MrisFwhmParameters;
+type MrisFwhmParamsDictTagged = Required<Pick<MrisFwhmParamsDict, '@type'>> & MrisFwhmParamsDict;
 
 
 /**
- * Output object returned when calling `MrisFwhmParameters(...)`.
+ * Output object returned when calling `MrisFwhmParamsDict(...)`.
  *
  * @interface
  */
@@ -130,7 +130,7 @@ function mris_fwhm_params(
     debug_flag: boolean = false,
     checkopts_flag: boolean = false,
     version_flag: boolean = false,
-): MrisFwhmParametersTagged {
+): MrisFwhmParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_fwhm" as const,
         "input_file": input_file,
@@ -210,7 +210,7 @@ function mris_fwhm_params(
  * @returns Command-line arguments.
  */
 function mris_fwhm_cargs(
-    params: MrisFwhmParameters,
+    params: MrisFwhmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -373,7 +373,7 @@ function mris_fwhm_cargs(
  * @returns Outputs object.
  */
 function mris_fwhm_outputs(
-    params: MrisFwhmParameters,
+    params: MrisFwhmParamsDict,
     execution: Execution,
 ): MrisFwhmOutputs {
     const ret: MrisFwhmOutputs = {
@@ -398,7 +398,7 @@ function mris_fwhm_outputs(
  * @returns NamedTuple of outputs (described in `MrisFwhmOutputs`).
  */
 function mris_fwhm_execute(
-    params: MrisFwhmParameters,
+    params: MrisFwhmParamsDict,
     runner: Runner | null = null,
 ): MrisFwhmOutputs {
     runner = runner || getGlobalRunner();
@@ -497,6 +497,8 @@ function mris_fwhm(
 export {
       MRIS_FWHM_METADATA,
       MrisFwhmOutputs,
+      MrisFwhmParamsDict,
+      MrisFwhmParamsDictTagged,
       mris_fwhm,
       mris_fwhm_execute,
       mris_fwhm_params,

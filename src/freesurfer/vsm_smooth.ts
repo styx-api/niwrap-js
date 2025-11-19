@@ -11,18 +11,18 @@ const VSM_SMOOTH_METADATA: Metadata = {
 };
 
 
-interface VsmSmoothParameters {
+interface VsmSmoothParamsDict {
     "@type"?: "freesurfer/vsm-smooth";
     "input_file": InputPathType;
     "output_file": string;
     "fwhm_value": number;
     "temp_dir": string;
 }
-type VsmSmoothParametersTagged = Required<Pick<VsmSmoothParameters, '@type'>> & VsmSmoothParameters;
+type VsmSmoothParamsDictTagged = Required<Pick<VsmSmoothParamsDict, '@type'>> & VsmSmoothParamsDict;
 
 
 /**
- * Output object returned when calling `VsmSmoothParameters(...)`.
+ * Output object returned when calling `VsmSmoothParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function vsm_smooth_params(
     output_file: string,
     fwhm_value: number,
     temp_dir: string,
-): VsmSmoothParametersTagged {
+): VsmSmoothParamsDictTagged {
     const params = {
         "@type": "freesurfer/vsm-smooth" as const,
         "input_file": input_file,
@@ -74,7 +74,7 @@ function vsm_smooth_params(
  * @returns Command-line arguments.
  */
 function vsm_smooth_cargs(
-    params: VsmSmoothParameters,
+    params: VsmSmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function vsm_smooth_cargs(
  * @returns Outputs object.
  */
 function vsm_smooth_outputs(
-    params: VsmSmoothParameters,
+    params: VsmSmoothParamsDict,
     execution: Execution,
 ): VsmSmoothOutputs {
     const ret: VsmSmoothOutputs = {
@@ -134,7 +134,7 @@ function vsm_smooth_outputs(
  * @returns NamedTuple of outputs (described in `VsmSmoothOutputs`).
  */
 function vsm_smooth_execute(
-    params: VsmSmoothParameters,
+    params: VsmSmoothParamsDict,
     runner: Runner | null = null,
 ): VsmSmoothOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function vsm_smooth(
 export {
       VSM_SMOOTH_METADATA,
       VsmSmoothOutputs,
+      VsmSmoothParamsDict,
+      VsmSmoothParamsDictTagged,
       vsm_smooth,
       vsm_smooth_execute,
       vsm_smooth_params,

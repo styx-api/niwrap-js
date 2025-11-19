@@ -11,7 +11,7 @@ const V_1D_CORRELATE_METADATA: Metadata = {
 };
 
 
-interface V1dCorrelateParameters {
+interface V1dCorrelateParamsDict {
     "@type"?: "afni/1dCorrelate";
     "ktaub": boolean;
     "nboot"?: number | null | undefined;
@@ -23,11 +23,11 @@ interface V1dCorrelateParameters {
     "quadrant": boolean;
     "input_files": Array<InputPathType>;
 }
-type V1dCorrelateParametersTagged = Required<Pick<V1dCorrelateParameters, '@type'>> & V1dCorrelateParameters;
+type V1dCorrelateParamsDictTagged = Required<Pick<V1dCorrelateParamsDict, '@type'>> & V1dCorrelateParamsDict;
 
 
 /**
- * Output object returned when calling `V1dCorrelateParameters(...)`.
+ * Output object returned when calling `V1dCorrelateParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function v_1d_correlate_params(
     pearson: boolean = false,
     spearman: boolean = false,
     quadrant: boolean = false,
-): V1dCorrelateParametersTagged {
+): V1dCorrelateParamsDictTagged {
     const params = {
         "@type": "afni/1dCorrelate" as const,
         "ktaub": ktaub,
@@ -94,7 +94,7 @@ function v_1d_correlate_params(
  * @returns Command-line arguments.
  */
 function v_1d_correlate_cargs(
-    params: V1dCorrelateParameters,
+    params: V1dCorrelateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function v_1d_correlate_cargs(
  * @returns Outputs object.
  */
 function v_1d_correlate_outputs(
-    params: V1dCorrelateParameters,
+    params: V1dCorrelateParamsDict,
     execution: Execution,
 ): V1dCorrelateOutputs {
     const ret: V1dCorrelateOutputs = {
@@ -168,7 +168,7 @@ function v_1d_correlate_outputs(
  * @returns NamedTuple of outputs (described in `V1dCorrelateOutputs`).
  */
 function v_1d_correlate_execute(
-    params: V1dCorrelateParameters,
+    params: V1dCorrelateParamsDict,
     runner: Runner | null = null,
 ): V1dCorrelateOutputs {
     runner = runner || getGlobalRunner();
@@ -222,6 +222,8 @@ function v_1d_correlate(
 
 export {
       V1dCorrelateOutputs,
+      V1dCorrelateParamsDict,
+      V1dCorrelateParamsDictTagged,
       V_1D_CORRELATE_METADATA,
       v_1d_correlate,
       v_1d_correlate_execute,

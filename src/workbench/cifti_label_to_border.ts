@@ -10,26 +10,26 @@ const CIFTI_LABEL_TO_BORDER_METADATA: Metadata = {
 };
 
 
-interface CiftiLabelToBorderBorderParameters {
+interface CiftiLabelToBorderBorderParamsDict {
     "@type"?: "border";
     "surface": InputPathType;
     "border-out": string;
 }
-type CiftiLabelToBorderBorderParametersTagged = Required<Pick<CiftiLabelToBorderBorderParameters, '@type'>> & CiftiLabelToBorderBorderParameters;
+type CiftiLabelToBorderBorderParamsDictTagged = Required<Pick<CiftiLabelToBorderBorderParamsDict, '@type'>> & CiftiLabelToBorderBorderParamsDict;
 
 
-interface CiftiLabelToBorderParameters {
+interface CiftiLabelToBorderParamsDict {
     "@type"?: "workbench/cifti-label-to-border";
     "fraction"?: number | null | undefined;
     "column"?: string | null | undefined;
-    "border"?: Array<CiftiLabelToBorderBorderParameters> | null | undefined;
+    "border"?: Array<CiftiLabelToBorderBorderParamsDict> | null | undefined;
     "cifti-in": InputPathType;
 }
-type CiftiLabelToBorderParametersTagged = Required<Pick<CiftiLabelToBorderParameters, '@type'>> & CiftiLabelToBorderParameters;
+type CiftiLabelToBorderParamsDictTagged = Required<Pick<CiftiLabelToBorderParamsDict, '@type'>> & CiftiLabelToBorderParamsDict;
 
 
 /**
- * Output object returned when calling `Array<CiftiLabelToBorderBorderParameters> | null(...)`.
+ * Output object returned when calling `Array<CiftiLabelToBorderBorderParamsDict> | null(...)`.
  *
  * @interface
  */
@@ -53,10 +53,10 @@ interface CiftiLabelToBorderBorderOutputs {
  *
  * @returns Parameter dictionary
  */
-function cifti_label_to_border_border_params(
+function cifti_label_to_border_border(
     surface: InputPathType,
     border_out: string,
-): CiftiLabelToBorderBorderParametersTagged {
+): CiftiLabelToBorderBorderParamsDictTagged {
     const params = {
         "@type": "border" as const,
         "surface": surface,
@@ -75,7 +75,7 @@ function cifti_label_to_border_border_params(
  * @returns Command-line arguments.
  */
 function cifti_label_to_border_border_cargs(
-    params: CiftiLabelToBorderBorderParameters,
+    params: CiftiLabelToBorderBorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -97,7 +97,7 @@ function cifti_label_to_border_border_cargs(
  * @returns Outputs object.
  */
 function cifti_label_to_border_border_outputs(
-    params: CiftiLabelToBorderBorderParameters,
+    params: CiftiLabelToBorderBorderParamsDict,
     execution: Execution,
 ): CiftiLabelToBorderBorderOutputs {
     const ret: CiftiLabelToBorderBorderOutputs = {
@@ -109,7 +109,7 @@ function cifti_label_to_border_border_outputs(
 
 
 /**
- * Output object returned when calling `CiftiLabelToBorderParameters(...)`.
+ * Output object returned when calling `CiftiLabelToBorderParamsDict(...)`.
  *
  * @interface
  */
@@ -143,8 +143,8 @@ function cifti_label_to_border_params(
     fraction: number | null,
     column: string | null,
     cifti_in: InputPathType,
-    border: Array<CiftiLabelToBorderBorderParameters> | null = null,
-): CiftiLabelToBorderParametersTagged {
+    border: Array<CiftiLabelToBorderBorderParamsDict> | null = null,
+): CiftiLabelToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-to-border" as const,
         "cifti-in": cifti_in,
@@ -171,7 +171,7 @@ function cifti_label_to_border_params(
  * @returns Command-line arguments.
  */
 function cifti_label_to_border_cargs(
-    params: CiftiLabelToBorderParameters,
+    params: CiftiLabelToBorderParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -200,7 +200,7 @@ function cifti_label_to_border_cargs(
  * @returns Outputs object.
  */
 function cifti_label_to_border_outputs(
-    params: CiftiLabelToBorderParameters,
+    params: CiftiLabelToBorderParamsDict,
     execution: Execution,
 ): CiftiLabelToBorderOutputs {
     const ret: CiftiLabelToBorderOutputs = {
@@ -222,7 +222,7 @@ function cifti_label_to_border_outputs(
  * @returns NamedTuple of outputs (described in `CiftiLabelToBorderOutputs`).
  */
 function cifti_label_to_border_execute(
-    params: CiftiLabelToBorderParameters,
+    params: CiftiLabelToBorderParamsDict,
     runner: Runner | null = null,
 ): CiftiLabelToBorderOutputs {
     runner = runner || getGlobalRunner();
@@ -256,7 +256,7 @@ function cifti_label_to_border(
     fraction: number | null,
     column: string | null,
     cifti_in: InputPathType,
-    border: Array<CiftiLabelToBorderBorderParameters> | null = null,
+    border: Array<CiftiLabelToBorderBorderParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiLabelToBorderOutputs {
     const params = cifti_label_to_border_params(fraction, column, cifti_in, border)
@@ -267,9 +267,13 @@ function cifti_label_to_border(
 export {
       CIFTI_LABEL_TO_BORDER_METADATA,
       CiftiLabelToBorderBorderOutputs,
+      CiftiLabelToBorderBorderParamsDict,
+      CiftiLabelToBorderBorderParamsDictTagged,
       CiftiLabelToBorderOutputs,
+      CiftiLabelToBorderParamsDict,
+      CiftiLabelToBorderParamsDictTagged,
       cifti_label_to_border,
-      cifti_label_to_border_border_params,
+      cifti_label_to_border_border,
       cifti_label_to_border_execute,
       cifti_label_to_border_params,
 };

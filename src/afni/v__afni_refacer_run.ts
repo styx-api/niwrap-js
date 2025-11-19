@@ -11,7 +11,7 @@ const V__AFNI_REFACER_RUN_METADATA: Metadata = {
 };
 
 
-interface VAfniRefacerRunParameters {
+interface VAfniRefacerRunParamsDict {
     "@type"?: "afni/@afni_refacer_run";
     "input_file": InputPathType;
     "mode_deface": boolean;
@@ -27,11 +27,11 @@ interface VAfniRefacerRunParameters {
     "overwrite": boolean;
     "verbose": boolean;
 }
-type VAfniRefacerRunParametersTagged = Required<Pick<VAfniRefacerRunParameters, '@type'>> & VAfniRefacerRunParameters;
+type VAfniRefacerRunParamsDictTagged = Required<Pick<VAfniRefacerRunParamsDict, '@type'>> & VAfniRefacerRunParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniRefacerRunParameters(...)`.
+ * Output object returned when calling `VAfniRefacerRunParamsDict(...)`.
  *
  * @interface
  */
@@ -96,7 +96,7 @@ function v__afni_refacer_run_params(
     no_images: boolean = false,
     overwrite: boolean = false,
     verbose: boolean = false,
-): VAfniRefacerRunParametersTagged {
+): VAfniRefacerRunParamsDictTagged {
     const params = {
         "@type": "afni/@afni_refacer_run" as const,
         "input_file": input_file,
@@ -130,7 +130,7 @@ function v__afni_refacer_run_params(
  * @returns Command-line arguments.
  */
 function v__afni_refacer_run_cargs(
-    params: VAfniRefacerRunParameters,
+    params: VAfniRefacerRunParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -195,7 +195,7 @@ function v__afni_refacer_run_cargs(
  * @returns Outputs object.
  */
 function v__afni_refacer_run_outputs(
-    params: VAfniRefacerRunParameters,
+    params: VAfniRefacerRunParamsDict,
     execution: Execution,
 ): VAfniRefacerRunOutputs {
     const ret: VAfniRefacerRunOutputs = {
@@ -225,7 +225,7 @@ function v__afni_refacer_run_outputs(
  * @returns NamedTuple of outputs (described in `VAfniRefacerRunOutputs`).
  */
 function v__afni_refacer_run_execute(
-    params: VAfniRefacerRunParameters,
+    params: VAfniRefacerRunParamsDict,
     runner: Runner | null = null,
 ): VAfniRefacerRunOutputs {
     runner = runner || getGlobalRunner();
@@ -287,6 +287,8 @@ function v__afni_refacer_run(
 
 export {
       VAfniRefacerRunOutputs,
+      VAfniRefacerRunParamsDict,
+      VAfniRefacerRunParamsDictTagged,
       V__AFNI_REFACER_RUN_METADATA,
       v__afni_refacer_run,
       v__afni_refacer_run_execute,

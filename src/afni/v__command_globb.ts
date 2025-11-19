@@ -11,18 +11,18 @@ const V__COMMAND_GLOBB_METADATA: Metadata = {
 };
 
 
-interface VCommandGlobbParameters {
+interface VCommandGlobbParamsDict {
     "@type"?: "afni/@CommandGlobb";
     "program_command": string;
     "output_dir": string;
     "extension"?: string | null | undefined;
     "brick_list": Array<string>;
 }
-type VCommandGlobbParametersTagged = Required<Pick<VCommandGlobbParameters, '@type'>> & VCommandGlobbParameters;
+type VCommandGlobbParamsDictTagged = Required<Pick<VCommandGlobbParamsDict, '@type'>> & VCommandGlobbParamsDict;
 
 
 /**
- * Output object returned when calling `VCommandGlobbParameters(...)`.
+ * Output object returned when calling `VCommandGlobbParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function v__command_globb_params(
     output_dir: string,
     brick_list: Array<string>,
     extension: string | null = null,
-): VCommandGlobbParametersTagged {
+): VCommandGlobbParamsDictTagged {
     const params = {
         "@type": "afni/@CommandGlobb" as const,
         "program_command": program_command,
@@ -72,7 +72,7 @@ function v__command_globb_params(
  * @returns Command-line arguments.
  */
 function v__command_globb_cargs(
-    params: VCommandGlobbParameters,
+    params: VCommandGlobbParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function v__command_globb_cargs(
  * @returns Outputs object.
  */
 function v__command_globb_outputs(
-    params: VCommandGlobbParameters,
+    params: VCommandGlobbParamsDict,
     execution: Execution,
 ): VCommandGlobbOutputs {
     const ret: VCommandGlobbOutputs = {
@@ -133,7 +133,7 @@ function v__command_globb_outputs(
  * @returns NamedTuple of outputs (described in `VCommandGlobbOutputs`).
  */
 function v__command_globb_execute(
-    params: VCommandGlobbParameters,
+    params: VCommandGlobbParamsDict,
     runner: Runner | null = null,
 ): VCommandGlobbOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function v__command_globb(
 
 export {
       VCommandGlobbOutputs,
+      VCommandGlobbParamsDict,
+      VCommandGlobbParamsDictTagged,
       V__COMMAND_GLOBB_METADATA,
       v__command_globb,
       v__command_globb_execute,

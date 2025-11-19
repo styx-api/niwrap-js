@@ -11,7 +11,7 @@ const TIMING_TOOL_PY_METADATA: Metadata = {
 };
 
 
-interface TimingToolPyParameters {
+interface TimingToolPyParamsDict {
     "@type"?: "afni/timing_tool.py";
     "timing_file"?: InputPathType | null | undefined;
     "output_file"?: string | null | undefined;
@@ -33,11 +33,11 @@ interface TimingToolPyParameters {
     "truncate_times": boolean;
     "multi_timing_event_list"?: string | null | undefined;
 }
-type TimingToolPyParametersTagged = Required<Pick<TimingToolPyParameters, '@type'>> & TimingToolPyParameters;
+type TimingToolPyParamsDictTagged = Required<Pick<TimingToolPyParamsDict, '@type'>> & TimingToolPyParamsDict;
 
 
 /**
- * Output object returned when calling `TimingToolPyParameters(...)`.
+ * Output object returned when calling `TimingToolPyParamsDict(...)`.
  *
  * @interface
  */
@@ -102,7 +102,7 @@ function timing_tool_py_params(
     round_times_frac: number | null = null,
     truncate_times: boolean = false,
     multi_timing_event_list: string | null = null,
-): TimingToolPyParametersTagged {
+): TimingToolPyParamsDictTagged {
     const params = {
         "@type": "afni/timing_tool.py" as const,
         "sort": sort,
@@ -166,7 +166,7 @@ function timing_tool_py_params(
  * @returns Command-line arguments.
  */
 function timing_tool_py_cargs(
-    params: TimingToolPyParameters,
+    params: TimingToolPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -283,7 +283,7 @@ function timing_tool_py_cargs(
  * @returns Outputs object.
  */
 function timing_tool_py_outputs(
-    params: TimingToolPyParameters,
+    params: TimingToolPyParamsDict,
     execution: Execution,
 ): TimingToolPyOutputs {
     const ret: TimingToolPyOutputs = {
@@ -310,7 +310,7 @@ function timing_tool_py_outputs(
  * @returns NamedTuple of outputs (described in `TimingToolPyOutputs`).
  */
 function timing_tool_py_execute(
-    params: TimingToolPyParameters,
+    params: TimingToolPyParamsDict,
     runner: Runner | null = null,
 ): TimingToolPyOutputs {
     runner = runner || getGlobalRunner();
@@ -385,6 +385,8 @@ function timing_tool_py(
 export {
       TIMING_TOOL_PY_METADATA,
       TimingToolPyOutputs,
+      TimingToolPyParamsDict,
+      TimingToolPyParamsDictTagged,
       timing_tool_py,
       timing_tool_py_execute,
       timing_tool_py_params,

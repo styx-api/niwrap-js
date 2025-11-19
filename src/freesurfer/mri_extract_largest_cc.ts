@@ -11,7 +11,7 @@ const MRI_EXTRACT_LARGEST_CC_METADATA: Metadata = {
 };
 
 
-interface MriExtractLargestCcParameters {
+interface MriExtractLargestCcParamsDict {
     "@type"?: "freesurfer/mri_extract_largest_CC";
     "input_volume": InputPathType;
     "output_volume": string;
@@ -21,11 +21,11 @@ interface MriExtractLargestCcParameters {
     "original_volume"?: InputPathType | null | undefined;
     "label_value"?: number | null | undefined;
 }
-type MriExtractLargestCcParametersTagged = Required<Pick<MriExtractLargestCcParameters, '@type'>> & MriExtractLargestCcParameters;
+type MriExtractLargestCcParamsDictTagged = Required<Pick<MriExtractLargestCcParamsDict, '@type'>> & MriExtractLargestCcParamsDict;
 
 
 /**
- * Output object returned when calling `MriExtractLargestCcParameters(...)`.
+ * Output object returned when calling `MriExtractLargestCcParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_extract_largest_cc_params(
     largest_cc_in_bg: boolean = false,
     original_volume: InputPathType | null = null,
     label_value: number | null = null,
-): MriExtractLargestCcParametersTagged {
+): MriExtractLargestCcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_extract_largest_CC" as const,
         "input_volume": input_volume,
@@ -94,7 +94,7 @@ function mri_extract_largest_cc_params(
  * @returns Command-line arguments.
  */
 function mri_extract_largest_cc_cargs(
-    params: MriExtractLargestCcParameters,
+    params: MriExtractLargestCcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,7 +141,7 @@ function mri_extract_largest_cc_cargs(
  * @returns Outputs object.
  */
 function mri_extract_largest_cc_outputs(
-    params: MriExtractLargestCcParameters,
+    params: MriExtractLargestCcParamsDict,
     execution: Execution,
 ): MriExtractLargestCcOutputs {
     const ret: MriExtractLargestCcOutputs = {
@@ -167,7 +167,7 @@ function mri_extract_largest_cc_outputs(
  * @returns NamedTuple of outputs (described in `MriExtractLargestCcOutputs`).
  */
 function mri_extract_largest_cc_execute(
-    params: MriExtractLargestCcParameters,
+    params: MriExtractLargestCcParamsDict,
     runner: Runner | null = null,
 ): MriExtractLargestCcOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function mri_extract_largest_cc(
 export {
       MRI_EXTRACT_LARGEST_CC_METADATA,
       MriExtractLargestCcOutputs,
+      MriExtractLargestCcParamsDict,
+      MriExtractLargestCcParamsDictTagged,
       mri_extract_largest_cc,
       mri_extract_largest_cc_execute,
       mri_extract_largest_cc_params,

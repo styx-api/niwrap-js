@@ -11,7 +11,7 @@ const SIGLOSS_METADATA: Metadata = {
 };
 
 
-interface SiglossParameters {
+interface SiglossParamsDict {
     "@type"?: "fsl/sigloss";
     "input_b0map": InputPathType;
     "output_sigloss": string;
@@ -21,11 +21,11 @@ interface SiglossParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type SiglossParametersTagged = Required<Pick<SiglossParameters, '@type'>> & SiglossParameters;
+type SiglossParamsDictTagged = Required<Pick<SiglossParamsDict, '@type'>> & SiglossParamsDict;
 
 
 /**
- * Output object returned when calling `SiglossParameters(...)`.
+ * Output object returned when calling `SiglossParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function sigloss_params(
     slice_direction: "x" | "y" | "z" | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): SiglossParametersTagged {
+): SiglossParamsDictTagged {
     const params = {
         "@type": "fsl/sigloss" as const,
         "input_b0map": input_b0map,
@@ -88,7 +88,7 @@ function sigloss_params(
  * @returns Command-line arguments.
  */
 function sigloss_cargs(
-    params: SiglossParameters,
+    params: SiglossParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function sigloss_cargs(
  * @returns Outputs object.
  */
 function sigloss_outputs(
-    params: SiglossParameters,
+    params: SiglossParamsDict,
     execution: Execution,
 ): SiglossOutputs {
     const ret: SiglossOutputs = {
@@ -163,7 +163,7 @@ function sigloss_outputs(
  * @returns NamedTuple of outputs (described in `SiglossOutputs`).
  */
 function sigloss_execute(
-    params: SiglossParameters,
+    params: SiglossParamsDict,
     runner: Runner | null = null,
 ): SiglossOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function sigloss(
 export {
       SIGLOSS_METADATA,
       SiglossOutputs,
+      SiglossParamsDict,
+      SiglossParamsDictTagged,
       sigloss,
       sigloss_execute,
       sigloss_params,

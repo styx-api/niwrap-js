@@ -11,18 +11,18 @@ const SLICEDELAY_METADATA: Metadata = {
 };
 
 
-interface SlicedelayParameters {
+interface SlicedelayParamsDict {
     "@type"?: "freesurfer/slicedelay";
     "slicedelayfile": string;
     "nslices": number;
     "order": "up" | "down" | "odd" | "even" | "siemens";
     "ngroups": number;
 }
-type SlicedelayParametersTagged = Required<Pick<SlicedelayParameters, '@type'>> & SlicedelayParameters;
+type SlicedelayParamsDictTagged = Required<Pick<SlicedelayParamsDict, '@type'>> & SlicedelayParamsDict;
 
 
 /**
- * Output object returned when calling `SlicedelayParameters(...)`.
+ * Output object returned when calling `SlicedelayParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function slicedelay_params(
     nslices: number,
     order: "up" | "down" | "odd" | "even" | "siemens",
     ngroups: number,
-): SlicedelayParametersTagged {
+): SlicedelayParamsDictTagged {
     const params = {
         "@type": "freesurfer/slicedelay" as const,
         "slicedelayfile": slicedelayfile,
@@ -74,7 +74,7 @@ function slicedelay_params(
  * @returns Command-line arguments.
  */
 function slicedelay_cargs(
-    params: SlicedelayParameters,
+    params: SlicedelayParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function slicedelay_cargs(
  * @returns Outputs object.
  */
 function slicedelay_outputs(
-    params: SlicedelayParameters,
+    params: SlicedelayParamsDict,
     execution: Execution,
 ): SlicedelayOutputs {
     const ret: SlicedelayOutputs = {
@@ -134,7 +134,7 @@ function slicedelay_outputs(
  * @returns NamedTuple of outputs (described in `SlicedelayOutputs`).
  */
 function slicedelay_execute(
-    params: SlicedelayParameters,
+    params: SlicedelayParamsDict,
     runner: Runner | null = null,
 ): SlicedelayOutputs {
     runner = runner || getGlobalRunner();
@@ -179,6 +179,8 @@ function slicedelay(
 export {
       SLICEDELAY_METADATA,
       SlicedelayOutputs,
+      SlicedelayParamsDict,
+      SlicedelayParamsDictTagged,
       slicedelay,
       slicedelay_execute,
       slicedelay_params,

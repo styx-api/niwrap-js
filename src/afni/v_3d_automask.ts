@@ -11,7 +11,7 @@ const V_3D_AUTOMASK_METADATA: Metadata = {
 };
 
 
-interface V3dAutomaskParameters {
+interface V3dAutomaskParamsDict {
     "@type"?: "afni/3dAutomask";
     "prefix"?: string | null | undefined;
     "apply_prefix"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface V3dAutomaskParameters {
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "in_file": InputPathType;
 }
-type V3dAutomaskParametersTagged = Required<Pick<V3dAutomaskParameters, '@type'>> & V3dAutomaskParameters;
+type V3dAutomaskParamsDictTagged = Required<Pick<V3dAutomaskParamsDict, '@type'>> & V3dAutomaskParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAutomaskParameters(...)`.
+ * Output object returned when calling `V3dAutomaskParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function v_3d_automask_params(
     dilate: number | null = null,
     erode: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
-): V3dAutomaskParametersTagged {
+): V3dAutomaskParamsDictTagged {
     const params = {
         "@type": "afni/3dAutomask" as const,
         "in_file": in_file,
@@ -102,7 +102,7 @@ function v_3d_automask_params(
  * @returns Command-line arguments.
  */
 function v_3d_automask_cargs(
-    params: V3dAutomaskParameters,
+    params: V3dAutomaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -154,7 +154,7 @@ function v_3d_automask_cargs(
  * @returns Outputs object.
  */
 function v_3d_automask_outputs(
-    params: V3dAutomaskParameters,
+    params: V3dAutomaskParamsDict,
     execution: Execution,
 ): V3dAutomaskOutputs {
     const ret: V3dAutomaskOutputs = {
@@ -181,7 +181,7 @@ function v_3d_automask_outputs(
  * @returns NamedTuple of outputs (described in `V3dAutomaskOutputs`).
  */
 function v_3d_automask_execute(
-    params: V3dAutomaskParameters,
+    params: V3dAutomaskParamsDict,
     runner: Runner | null = null,
 ): V3dAutomaskOutputs {
     runner = runner || getGlobalRunner();
@@ -231,6 +231,8 @@ function v_3d_automask(
 
 export {
       V3dAutomaskOutputs,
+      V3dAutomaskParamsDict,
+      V3dAutomaskParamsDictTagged,
       V_3D_AUTOMASK_METADATA,
       v_3d_automask,
       v_3d_automask_execute,

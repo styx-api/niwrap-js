@@ -11,7 +11,7 @@ const MRIS_LABEL_CALC_METADATA: Metadata = {
 };
 
 
-interface MrisLabelCalcParameters {
+interface MrisLabelCalcParamsDict {
     "@type"?: "freesurfer/mris_label_calc";
     "command": "union" | "intersect" | "invert" | "erode" | "dilate";
     "input1": InputPathType;
@@ -19,11 +19,11 @@ interface MrisLabelCalcParameters {
     "output": string;
     "iterations"?: number | null | undefined;
 }
-type MrisLabelCalcParametersTagged = Required<Pick<MrisLabelCalcParameters, '@type'>> & MrisLabelCalcParameters;
+type MrisLabelCalcParamsDictTagged = Required<Pick<MrisLabelCalcParamsDict, '@type'>> & MrisLabelCalcParamsDict;
 
 
 /**
- * Output object returned when calling `MrisLabelCalcParameters(...)`.
+ * Output object returned when calling `MrisLabelCalcParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mris_label_calc_params(
     input2: InputPathType,
     output: string,
     iterations: number | null = null,
-): MrisLabelCalcParametersTagged {
+): MrisLabelCalcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_label_calc" as const,
         "command": command,
@@ -80,7 +80,7 @@ function mris_label_calc_params(
  * @returns Command-line arguments.
  */
 function mris_label_calc_cargs(
-    params: MrisLabelCalcParameters,
+    params: MrisLabelCalcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function mris_label_calc_cargs(
  * @returns Outputs object.
  */
 function mris_label_calc_outputs(
-    params: MrisLabelCalcParameters,
+    params: MrisLabelCalcParamsDict,
     execution: Execution,
 ): MrisLabelCalcOutputs {
     const ret: MrisLabelCalcOutputs = {
@@ -134,7 +134,7 @@ function mris_label_calc_outputs(
  * @returns NamedTuple of outputs (described in `MrisLabelCalcOutputs`).
  */
 function mris_label_calc_execute(
-    params: MrisLabelCalcParameters,
+    params: MrisLabelCalcParamsDict,
     runner: Runner | null = null,
 ): MrisLabelCalcOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function mris_label_calc(
 export {
       MRIS_LABEL_CALC_METADATA,
       MrisLabelCalcOutputs,
+      MrisLabelCalcParamsDict,
+      MrisLabelCalcParamsDictTagged,
       mris_label_calc,
       mris_label_calc_execute,
       mris_label_calc_params,

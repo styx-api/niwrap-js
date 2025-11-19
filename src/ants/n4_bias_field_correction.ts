@@ -11,61 +11,61 @@ const N4_BIAS_FIELD_CORRECTION_METADATA: Metadata = {
 };
 
 
-interface N4BiasFieldCorrectionConvergenceParameters {
+interface N4BiasFieldCorrectionConvergenceParamsDict {
     "@type"?: "convergence";
     "convergence": Array<number>;
     "convergence_threshold"?: number | null | undefined;
 }
-type N4BiasFieldCorrectionConvergenceParametersTagged = Required<Pick<N4BiasFieldCorrectionConvergenceParameters, '@type'>> & N4BiasFieldCorrectionConvergenceParameters;
+type N4BiasFieldCorrectionConvergenceParamsDictTagged = Required<Pick<N4BiasFieldCorrectionConvergenceParamsDict, '@type'>> & N4BiasFieldCorrectionConvergenceParamsDict;
 
 
-interface N4BiasFieldCorrectionBsplineFittingParameters {
+interface N4BiasFieldCorrectionBsplineFittingParamsDict {
     "@type"?: "bspline_fitting";
     "spline_distance": Array<number>;
     "spline_order"?: number | null | undefined;
 }
-type N4BiasFieldCorrectionBsplineFittingParametersTagged = Required<Pick<N4BiasFieldCorrectionBsplineFittingParameters, '@type'>> & N4BiasFieldCorrectionBsplineFittingParameters;
+type N4BiasFieldCorrectionBsplineFittingParamsDictTagged = Required<Pick<N4BiasFieldCorrectionBsplineFittingParamsDict, '@type'>> & N4BiasFieldCorrectionBsplineFittingParamsDict;
 
 
-interface N4BiasFieldCorrectionHistogramSharpeningParameters {
+interface N4BiasFieldCorrectionHistogramSharpeningParamsDict {
     "@type"?: "histogram_sharpening";
     "fwhm"?: number | null | undefined;
     "wiener_noise"?: number | null | undefined;
     "number_of_histogram_bins"?: number | null | undefined;
 }
-type N4BiasFieldCorrectionHistogramSharpeningParametersTagged = Required<Pick<N4BiasFieldCorrectionHistogramSharpeningParameters, '@type'>> & N4BiasFieldCorrectionHistogramSharpeningParameters;
+type N4BiasFieldCorrectionHistogramSharpeningParamsDictTagged = Required<Pick<N4BiasFieldCorrectionHistogramSharpeningParamsDict, '@type'>> & N4BiasFieldCorrectionHistogramSharpeningParamsDict;
 
 
-interface N4BiasFieldCorrectionCorrectedOutputParameters {
+interface N4BiasFieldCorrectionCorrectedOutputParamsDict {
     "@type"?: "correctedOutput";
     "correctedOutputFileName": string;
 }
-type N4BiasFieldCorrectionCorrectedOutputParametersTagged = Required<Pick<N4BiasFieldCorrectionCorrectedOutputParameters, '@type'>> & N4BiasFieldCorrectionCorrectedOutputParameters;
+type N4BiasFieldCorrectionCorrectedOutputParamsDictTagged = Required<Pick<N4BiasFieldCorrectionCorrectedOutputParamsDict, '@type'>> & N4BiasFieldCorrectionCorrectedOutputParamsDict;
 
 
-interface N4BiasFieldCorrectionCorrectedOutputNoiseParameters {
+interface N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict {
     "@type"?: "correctedOutputNoise";
     "correctedOutputFileName": string;
     "biasFile"?: string | null | undefined;
 }
-type N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged = Required<Pick<N4BiasFieldCorrectionCorrectedOutputNoiseParameters, '@type'>> & N4BiasFieldCorrectionCorrectedOutputNoiseParameters;
+type N4BiasFieldCorrectionCorrectedOutputNoiseParamsDictTagged = Required<Pick<N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict, '@type'>> & N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict;
 
 
-interface N4BiasFieldCorrectionParameters {
+interface N4BiasFieldCorrectionParamsDict {
     "@type"?: "ants/N4BiasFieldCorrection";
     "image_dimensionality"?: 2 | 3 | 4 | null | undefined;
     "shrink_factor"?: number | null | undefined;
     "mask_image"?: InputPathType | null | undefined;
     "rescale_intensities"?: boolean | null | undefined;
     "weight_image"?: InputPathType | null | undefined;
-    "convergence"?: N4BiasFieldCorrectionConvergenceParameters | null | undefined;
-    "bspline_fitting"?: N4BiasFieldCorrectionBsplineFittingParameters | null | undefined;
-    "histogram_sharpening"?: N4BiasFieldCorrectionHistogramSharpeningParameters | null | undefined;
+    "convergence"?: N4BiasFieldCorrectionConvergenceParamsDict | null | undefined;
+    "bspline_fitting"?: N4BiasFieldCorrectionBsplineFittingParamsDict | null | undefined;
+    "histogram_sharpening"?: N4BiasFieldCorrectionHistogramSharpeningParamsDict | null | undefined;
     "verbose"?: boolean | null | undefined;
     "input_image": InputPathType;
-    "output": N4BiasFieldCorrectionCorrectedOutputParametersTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged;
+    "output": N4BiasFieldCorrectionCorrectedOutputParamsDictTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParamsDictTagged;
 }
-type N4BiasFieldCorrectionParametersTagged = Required<Pick<N4BiasFieldCorrectionParameters, '@type'>> & N4BiasFieldCorrectionParameters;
+type N4BiasFieldCorrectionParamsDictTagged = Required<Pick<N4BiasFieldCorrectionParamsDict, '@type'>> & N4BiasFieldCorrectionParamsDict;
 
 
 /**
@@ -110,10 +110,10 @@ function n4_bias_field_correction_output_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function n4_bias_field_correction_convergence_params(
+function n4_bias_field_correction_convergence(
     convergence: Array<number>,
     convergence_threshold: number | null = null,
-): N4BiasFieldCorrectionConvergenceParametersTagged {
+): N4BiasFieldCorrectionConvergenceParamsDictTagged {
     const params = {
         "@type": "convergence" as const,
         "convergence": convergence,
@@ -134,7 +134,7 @@ function n4_bias_field_correction_convergence_params(
  * @returns Command-line arguments.
  */
 function n4_bias_field_correction_convergence_cargs(
-    params: N4BiasFieldCorrectionConvergenceParameters,
+    params: N4BiasFieldCorrectionConvergenceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -151,10 +151,10 @@ function n4_bias_field_correction_convergence_cargs(
  *
  * @returns Parameter dictionary
  */
-function n4_bias_field_correction_bspline_fitting_params(
+function n4_bias_field_correction_bspline_fitting(
     spline_distance: Array<number>,
     spline_order: number | null = null,
-): N4BiasFieldCorrectionBsplineFittingParametersTagged {
+): N4BiasFieldCorrectionBsplineFittingParamsDictTagged {
     const params = {
         "@type": "bspline_fitting" as const,
         "spline_distance": spline_distance,
@@ -175,7 +175,7 @@ function n4_bias_field_correction_bspline_fitting_params(
  * @returns Command-line arguments.
  */
 function n4_bias_field_correction_bspline_fitting_cargs(
-    params: N4BiasFieldCorrectionBsplineFittingParameters,
+    params: N4BiasFieldCorrectionBsplineFittingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -192,11 +192,11 @@ function n4_bias_field_correction_bspline_fitting_cargs(
  *
  * @returns Parameter dictionary
  */
-function n4_bias_field_correction_histogram_sharpening_params(
+function n4_bias_field_correction_histogram_sharpening(
     fwhm: number | null = null,
     wiener_noise: number | null = null,
     number_of_histogram_bins: number | null = null,
-): N4BiasFieldCorrectionHistogramSharpeningParametersTagged {
+): N4BiasFieldCorrectionHistogramSharpeningParamsDictTagged {
     const params = {
         "@type": "histogram_sharpening" as const,
     };
@@ -222,7 +222,7 @@ function n4_bias_field_correction_histogram_sharpening_params(
  * @returns Command-line arguments.
  */
 function n4_bias_field_correction_histogram_sharpening_cargs(
-    params: N4BiasFieldCorrectionHistogramSharpeningParameters,
+    params: N4BiasFieldCorrectionHistogramSharpeningParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -234,7 +234,7 @@ function n4_bias_field_correction_histogram_sharpening_cargs(
 
 
 /**
- * Output object returned when calling `N4BiasFieldCorrectionCorrectedOutputParameters(...)`.
+ * Output object returned when calling `N4BiasFieldCorrectionCorrectedOutputParamsDict(...)`.
  *
  * @interface
  */
@@ -257,9 +257,9 @@ interface N4BiasFieldCorrectionCorrectedOutputOutputs {
  *
  * @returns Parameter dictionary
  */
-function n4_bias_field_correction_corrected_output_params(
+function n4_bias_field_correction_corrected_output(
     corrected_output_file_name: string,
-): N4BiasFieldCorrectionCorrectedOutputParametersTagged {
+): N4BiasFieldCorrectionCorrectedOutputParamsDictTagged {
     const params = {
         "@type": "correctedOutput" as const,
         "correctedOutputFileName": corrected_output_file_name,
@@ -277,7 +277,7 @@ function n4_bias_field_correction_corrected_output_params(
  * @returns Command-line arguments.
  */
 function n4_bias_field_correction_corrected_output_cargs(
-    params: N4BiasFieldCorrectionCorrectedOutputParameters,
+    params: N4BiasFieldCorrectionCorrectedOutputParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -295,7 +295,7 @@ function n4_bias_field_correction_corrected_output_cargs(
  * @returns Outputs object.
  */
 function n4_bias_field_correction_corrected_output_outputs(
-    params: N4BiasFieldCorrectionCorrectedOutputParameters,
+    params: N4BiasFieldCorrectionCorrectedOutputParamsDict,
     execution: Execution,
 ): N4BiasFieldCorrectionCorrectedOutputOutputs {
     const ret: N4BiasFieldCorrectionCorrectedOutputOutputs = {
@@ -307,7 +307,7 @@ function n4_bias_field_correction_corrected_output_outputs(
 
 
 /**
- * Output object returned when calling `N4BiasFieldCorrectionCorrectedOutputNoiseParameters(...)`.
+ * Output object returned when calling `N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict(...)`.
  *
  * @interface
  */
@@ -335,10 +335,10 @@ interface N4BiasFieldCorrectionCorrectedOutputNoiseOutputs {
  *
  * @returns Parameter dictionary
  */
-function n4_bias_field_correction_corrected_output_noise_params(
+function n4_bias_field_correction_corrected_output_noise(
     corrected_output_file_name: string,
     bias_file: string | null = null,
-): N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged {
+): N4BiasFieldCorrectionCorrectedOutputNoiseParamsDictTagged {
     const params = {
         "@type": "correctedOutputNoise" as const,
         "correctedOutputFileName": corrected_output_file_name,
@@ -359,7 +359,7 @@ function n4_bias_field_correction_corrected_output_noise_params(
  * @returns Command-line arguments.
  */
 function n4_bias_field_correction_corrected_output_noise_cargs(
-    params: N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
+    params: N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -379,7 +379,7 @@ function n4_bias_field_correction_corrected_output_noise_cargs(
  * @returns Outputs object.
  */
 function n4_bias_field_correction_corrected_output_noise_outputs(
-    params: N4BiasFieldCorrectionCorrectedOutputNoiseParameters,
+    params: N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict,
     execution: Execution,
 ): N4BiasFieldCorrectionCorrectedOutputNoiseOutputs {
     const ret: N4BiasFieldCorrectionCorrectedOutputNoiseOutputs = {
@@ -392,7 +392,7 @@ function n4_bias_field_correction_corrected_output_noise_outputs(
 
 
 /**
- * Output object returned when calling `N4BiasFieldCorrectionParameters(...)`.
+ * Output object returned when calling `N4BiasFieldCorrectionParamsDict(...)`.
  *
  * @interface
  */
@@ -402,7 +402,7 @@ interface N4BiasFieldCorrectionOutputs {
      */
     root: OutputPathType;
     /**
-     * Outputs from `N4BiasFieldCorrectionCorrectedOutputParameters` or `N4BiasFieldCorrectionCorrectedOutputNoiseParameters`.
+     * Outputs from `N4BiasFieldCorrectionCorrectedOutputParamsDict` or `N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict`.
      */
     output: N4BiasFieldCorrectionCorrectedOutputOutputs | N4BiasFieldCorrectionCorrectedOutputNoiseOutputs;
 }
@@ -427,17 +427,17 @@ interface N4BiasFieldCorrectionOutputs {
  */
 function n4_bias_field_correction_params(
     input_image: InputPathType,
-    output: N4BiasFieldCorrectionCorrectedOutputParametersTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged,
+    output: N4BiasFieldCorrectionCorrectedOutputParamsDictTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParamsDictTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
     rescale_intensities: boolean | null = null,
     weight_image: InputPathType | null = null,
-    convergence: N4BiasFieldCorrectionConvergenceParameters | null = null,
-    bspline_fitting: N4BiasFieldCorrectionBsplineFittingParameters | null = null,
-    histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParameters | null = null,
+    convergence: N4BiasFieldCorrectionConvergenceParamsDict | null = null,
+    bspline_fitting: N4BiasFieldCorrectionBsplineFittingParamsDict | null = null,
+    histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParamsDict | null = null,
     verbose: boolean | null = null,
-): N4BiasFieldCorrectionParametersTagged {
+): N4BiasFieldCorrectionParamsDictTagged {
     const params = {
         "@type": "ants/N4BiasFieldCorrection" as const,
         "input_image": input_image,
@@ -483,7 +483,7 @@ function n4_bias_field_correction_params(
  * @returns Command-line arguments.
  */
 function n4_bias_field_correction_cargs(
-    params: N4BiasFieldCorrectionParameters,
+    params: N4BiasFieldCorrectionParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -563,7 +563,7 @@ function n4_bias_field_correction_cargs(
  * @returns Outputs object.
  */
 function n4_bias_field_correction_outputs(
-    params: N4BiasFieldCorrectionParameters,
+    params: N4BiasFieldCorrectionParamsDict,
     execution: Execution,
 ): N4BiasFieldCorrectionOutputs {
     const ret: N4BiasFieldCorrectionOutputs = {
@@ -589,7 +589,7 @@ function n4_bias_field_correction_outputs(
  * @returns NamedTuple of outputs (described in `N4BiasFieldCorrectionOutputs`).
  */
 function n4_bias_field_correction_execute(
-    params: N4BiasFieldCorrectionParameters,
+    params: N4BiasFieldCorrectionParamsDict,
     runner: Runner | null = null,
 ): N4BiasFieldCorrectionOutputs {
     runner = runner || getGlobalRunner();
@@ -628,15 +628,15 @@ function n4_bias_field_correction_execute(
  */
 function n4_bias_field_correction(
     input_image: InputPathType,
-    output: N4BiasFieldCorrectionCorrectedOutputParametersTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParametersTagged,
+    output: N4BiasFieldCorrectionCorrectedOutputParamsDictTagged | N4BiasFieldCorrectionCorrectedOutputNoiseParamsDictTagged,
     image_dimensionality: 2 | 3 | 4 | null = null,
     shrink_factor: number | null = null,
     mask_image: InputPathType | null = null,
     rescale_intensities: boolean | null = null,
     weight_image: InputPathType | null = null,
-    convergence: N4BiasFieldCorrectionConvergenceParameters | null = null,
-    bspline_fitting: N4BiasFieldCorrectionBsplineFittingParameters | null = null,
-    histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParameters | null = null,
+    convergence: N4BiasFieldCorrectionConvergenceParamsDict | null = null,
+    bspline_fitting: N4BiasFieldCorrectionBsplineFittingParamsDict | null = null,
+    histogram_sharpening: N4BiasFieldCorrectionHistogramSharpeningParamsDict | null = null,
     verbose: boolean | null = null,
     runner: Runner | null = null,
 ): N4BiasFieldCorrectionOutputs {
@@ -646,16 +646,28 @@ function n4_bias_field_correction(
 
 
 export {
+      N4BiasFieldCorrectionBsplineFittingParamsDict,
+      N4BiasFieldCorrectionBsplineFittingParamsDictTagged,
+      N4BiasFieldCorrectionConvergenceParamsDict,
+      N4BiasFieldCorrectionConvergenceParamsDictTagged,
       N4BiasFieldCorrectionCorrectedOutputNoiseOutputs,
+      N4BiasFieldCorrectionCorrectedOutputNoiseParamsDict,
+      N4BiasFieldCorrectionCorrectedOutputNoiseParamsDictTagged,
       N4BiasFieldCorrectionCorrectedOutputOutputs,
+      N4BiasFieldCorrectionCorrectedOutputParamsDict,
+      N4BiasFieldCorrectionCorrectedOutputParamsDictTagged,
+      N4BiasFieldCorrectionHistogramSharpeningParamsDict,
+      N4BiasFieldCorrectionHistogramSharpeningParamsDictTagged,
       N4BiasFieldCorrectionOutputs,
+      N4BiasFieldCorrectionParamsDict,
+      N4BiasFieldCorrectionParamsDictTagged,
       N4_BIAS_FIELD_CORRECTION_METADATA,
       n4_bias_field_correction,
-      n4_bias_field_correction_bspline_fitting_params,
-      n4_bias_field_correction_convergence_params,
-      n4_bias_field_correction_corrected_output_noise_params,
-      n4_bias_field_correction_corrected_output_params,
+      n4_bias_field_correction_bspline_fitting,
+      n4_bias_field_correction_convergence,
+      n4_bias_field_correction_corrected_output,
+      n4_bias_field_correction_corrected_output_noise,
       n4_bias_field_correction_execute,
-      n4_bias_field_correction_histogram_sharpening_params,
+      n4_bias_field_correction_histogram_sharpening,
       n4_bias_field_correction_params,
 };

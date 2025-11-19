@@ -11,7 +11,7 @@ const MRIS_SEGMENT_VALS_METADATA: Metadata = {
 };
 
 
-interface MrisSegmentValsParameters {
+interface MrisSegmentValsParamsDict {
     "@type"?: "freesurfer/mris_segment_vals";
     "input_surface": InputPathType;
     "input_curv_file": InputPathType;
@@ -19,11 +19,11 @@ interface MrisSegmentValsParameters {
     "threshold"?: number | null | undefined;
     "area_thresh"?: number | null | undefined;
 }
-type MrisSegmentValsParametersTagged = Required<Pick<MrisSegmentValsParameters, '@type'>> & MrisSegmentValsParameters;
+type MrisSegmentValsParamsDictTagged = Required<Pick<MrisSegmentValsParamsDict, '@type'>> & MrisSegmentValsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisSegmentValsParameters(...)`.
+ * Output object returned when calling `MrisSegmentValsParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function mris_segment_vals_params(
     output_curv_file: string,
     threshold: number | null = null,
     area_thresh: number | null = null,
-): MrisSegmentValsParametersTagged {
+): MrisSegmentValsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_segment_vals" as const,
         "input_surface": input_surface,
@@ -82,7 +82,7 @@ function mris_segment_vals_params(
  * @returns Command-line arguments.
  */
 function mris_segment_vals_cargs(
-    params: MrisSegmentValsParameters,
+    params: MrisSegmentValsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function mris_segment_vals_cargs(
  * @returns Outputs object.
  */
 function mris_segment_vals_outputs(
-    params: MrisSegmentValsParameters,
+    params: MrisSegmentValsParamsDict,
     execution: Execution,
 ): MrisSegmentValsOutputs {
     const ret: MrisSegmentValsOutputs = {
@@ -141,7 +141,7 @@ function mris_segment_vals_outputs(
  * @returns NamedTuple of outputs (described in `MrisSegmentValsOutputs`).
  */
 function mris_segment_vals_execute(
-    params: MrisSegmentValsParameters,
+    params: MrisSegmentValsParamsDict,
     runner: Runner | null = null,
 ): MrisSegmentValsOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function mris_segment_vals(
 export {
       MRIS_SEGMENT_VALS_METADATA,
       MrisSegmentValsOutputs,
+      MrisSegmentValsParamsDict,
+      MrisSegmentValsParamsDictTagged,
       mris_segment_vals,
       mris_segment_vals_execute,
       mris_segment_vals_params,

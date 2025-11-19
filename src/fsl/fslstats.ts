@@ -11,7 +11,7 @@ const FSLSTATS_METADATA: Metadata = {
 };
 
 
-interface FslstatsParameters {
+interface FslstatsParamsDict {
     "@type"?: "fsl/fslstats";
     "input_file": InputPathType;
     "index_mask"?: InputPathType | null | undefined;
@@ -42,11 +42,11 @@ interface FslstatsParameters {
     "mean_entropy_flag": boolean;
     "nonzero_mean_entropy_flag": boolean;
 }
-type FslstatsParametersTagged = Required<Pick<FslstatsParameters, '@type'>> & FslstatsParameters;
+type FslstatsParamsDictTagged = Required<Pick<FslstatsParamsDict, '@type'>> & FslstatsParamsDict;
 
 
 /**
- * Output object returned when calling `FslstatsParameters(...)`.
+ * Output object returned when calling `FslstatsParamsDict(...)`.
  *
  * @interface
  */
@@ -125,7 +125,7 @@ function fslstats_params(
     timeseries_flag: boolean = false,
     mean_entropy_flag: boolean = false,
     nonzero_mean_entropy_flag: boolean = false,
-): FslstatsParametersTagged {
+): FslstatsParamsDictTagged {
     const params = {
         "@type": "fsl/fslstats" as const,
         "input_file": input_file,
@@ -188,7 +188,7 @@ function fslstats_params(
  * @returns Command-line arguments.
  */
 function fslstats_cargs(
-    params: FslstatsParameters,
+    params: FslstatsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -315,7 +315,7 @@ function fslstats_cargs(
  * @returns Outputs object.
  */
 function fslstats_outputs(
-    params: FslstatsParameters,
+    params: FslstatsParamsDict,
     execution: Execution,
 ): FslstatsOutputs {
     const ret: FslstatsOutputs = {
@@ -341,7 +341,7 @@ function fslstats_outputs(
  * @returns NamedTuple of outputs (described in `FslstatsOutputs`).
  */
 function fslstats_execute(
-    params: FslstatsParameters,
+    params: FslstatsParamsDict,
     runner: Runner | null = null,
 ): FslstatsOutputs {
     runner = runner || getGlobalRunner();
@@ -434,6 +434,8 @@ function fslstats(
 export {
       FSLSTATS_METADATA,
       FslstatsOutputs,
+      FslstatsParamsDict,
+      FslstatsParamsDictTagged,
       fslstats,
       fslstats_execute,
       fslstats_params,

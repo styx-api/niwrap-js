@@ -11,7 +11,7 @@ const TALAIRACH_AVI_METADATA: Metadata = {
 };
 
 
-interface TalairachAviParameters {
+interface TalairachAviParamsDict {
     "@type"?: "freesurfer/talairach_avi";
     "input_file": InputPathType;
     "output_xfm": string;
@@ -19,11 +19,11 @@ interface TalairachAviParameters {
     "log"?: string | null | undefined;
     "debug": boolean;
 }
-type TalairachAviParametersTagged = Required<Pick<TalairachAviParameters, '@type'>> & TalairachAviParameters;
+type TalairachAviParamsDictTagged = Required<Pick<TalairachAviParamsDict, '@type'>> & TalairachAviParamsDict;
 
 
 /**
- * Output object returned when calling `TalairachAviParameters(...)`.
+ * Output object returned when calling `TalairachAviParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function talairach_avi_params(
     atlas: string | null = null,
     log: string | null = null,
     debug: boolean = false,
-): TalairachAviParametersTagged {
+): TalairachAviParamsDictTagged {
     const params = {
         "@type": "freesurfer/talairach_avi" as const,
         "input_file": input_file,
@@ -82,7 +82,7 @@ function talairach_avi_params(
  * @returns Command-line arguments.
  */
 function talairach_avi_cargs(
-    params: TalairachAviParameters,
+    params: TalairachAviParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -123,7 +123,7 @@ function talairach_avi_cargs(
  * @returns Outputs object.
  */
 function talairach_avi_outputs(
-    params: TalairachAviParameters,
+    params: TalairachAviParamsDict,
     execution: Execution,
 ): TalairachAviOutputs {
     const ret: TalairachAviOutputs = {
@@ -149,7 +149,7 @@ function talairach_avi_outputs(
  * @returns NamedTuple of outputs (described in `TalairachAviOutputs`).
  */
 function talairach_avi_execute(
-    params: TalairachAviParameters,
+    params: TalairachAviParamsDict,
     runner: Runner | null = null,
 ): TalairachAviOutputs {
     runner = runner || getGlobalRunner();
@@ -196,6 +196,8 @@ function talairach_avi(
 export {
       TALAIRACH_AVI_METADATA,
       TalairachAviOutputs,
+      TalairachAviParamsDict,
+      TalairachAviParamsDictTagged,
       talairach_avi,
       talairach_avi_execute,
       talairach_avi_params,

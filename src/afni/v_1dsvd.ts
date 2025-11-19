@@ -11,7 +11,7 @@ const V_1DSVD_METADATA: Metadata = {
 };
 
 
-interface V1dsvdParameters {
+interface V1dsvdParamsDict {
     "@type"?: "afni/1dsvd";
     "one": boolean;
     "vmean": boolean;
@@ -25,11 +25,11 @@ interface V1dsvdParameters {
     "num_eigenvectors"?: string | null | undefined;
     "input_files": Array<InputPathType>;
 }
-type V1dsvdParametersTagged = Required<Pick<V1dsvdParameters, '@type'>> & V1dsvdParameters;
+type V1dsvdParamsDictTagged = Required<Pick<V1dsvdParamsDict, '@type'>> & V1dsvdParamsDict;
 
 
 /**
- * Output object returned when calling `V1dsvdParameters(...)`.
+ * Output object returned when calling `V1dsvdParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function v_1dsvd_params(
     asort: boolean = false,
     left_eigenvectors: boolean = false,
     num_eigenvectors: string | null = null,
-): V1dsvdParametersTagged {
+): V1dsvdParamsDictTagged {
     const params = {
         "@type": "afni/1dsvd" as const,
         "one": one,
@@ -104,7 +104,7 @@ function v_1dsvd_params(
  * @returns Command-line arguments.
  */
 function v_1dsvd_cargs(
-    params: V1dsvdParameters,
+    params: V1dsvdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,7 +156,7 @@ function v_1dsvd_cargs(
  * @returns Outputs object.
  */
 function v_1dsvd_outputs(
-    params: V1dsvdParameters,
+    params: V1dsvdParamsDict,
     execution: Execution,
 ): V1dsvdOutputs {
     const ret: V1dsvdOutputs = {
@@ -182,7 +182,7 @@ function v_1dsvd_outputs(
  * @returns NamedTuple of outputs (described in `V1dsvdOutputs`).
  */
 function v_1dsvd_execute(
-    params: V1dsvdParameters,
+    params: V1dsvdParamsDict,
     runner: Runner | null = null,
 ): V1dsvdOutputs {
     runner = runner || getGlobalRunner();
@@ -240,6 +240,8 @@ function v_1dsvd(
 
 export {
       V1dsvdOutputs,
+      V1dsvdParamsDict,
+      V1dsvdParamsDictTagged,
       V_1DSVD_METADATA,
       v_1dsvd,
       v_1dsvd_execute,

@@ -11,7 +11,7 @@ const CREATE_ICOSAHEDRON_METADATA: Metadata = {
 };
 
 
-interface CreateIcosahedronParameters {
+interface CreateIcosahedronParamsDict {
     "@type"?: "afni/CreateIcosahedron";
     "rad"?: number | null | undefined;
     "rec_depth"?: number | null | undefined;
@@ -24,11 +24,11 @@ interface CreateIcosahedronParameters {
     "output_prefix"?: string | null | undefined;
     "help": boolean;
 }
-type CreateIcosahedronParametersTagged = Required<Pick<CreateIcosahedronParameters, '@type'>> & CreateIcosahedronParameters;
+type CreateIcosahedronParamsDictTagged = Required<Pick<CreateIcosahedronParamsDict, '@type'>> & CreateIcosahedronParamsDict;
 
 
 /**
- * Output object returned when calling `CreateIcosahedronParameters(...)`.
+ * Output object returned when calling `CreateIcosahedronParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function create_icosahedron_params(
     to_sphere: boolean = false,
     output_prefix: string | null = null,
     help: boolean = false,
-): CreateIcosahedronParametersTagged {
+): CreateIcosahedronParamsDictTagged {
     const params = {
         "@type": "afni/CreateIcosahedron" as const,
         "nums": nums,
@@ -106,7 +106,7 @@ function create_icosahedron_params(
  * @returns Command-line arguments.
  */
 function create_icosahedron_cargs(
-    params: CreateIcosahedronParameters,
+    params: CreateIcosahedronParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -172,7 +172,7 @@ function create_icosahedron_cargs(
  * @returns Outputs object.
  */
 function create_icosahedron_outputs(
-    params: CreateIcosahedronParameters,
+    params: CreateIcosahedronParamsDict,
     execution: Execution,
 ): CreateIcosahedronOutputs {
     const ret: CreateIcosahedronOutputs = {
@@ -197,7 +197,7 @@ function create_icosahedron_outputs(
  * @returns NamedTuple of outputs (described in `CreateIcosahedronOutputs`).
  */
 function create_icosahedron_execute(
-    params: CreateIcosahedronParameters,
+    params: CreateIcosahedronParamsDict,
     runner: Runner | null = null,
 ): CreateIcosahedronOutputs {
     runner = runner || getGlobalRunner();
@@ -254,6 +254,8 @@ function create_icosahedron(
 export {
       CREATE_ICOSAHEDRON_METADATA,
       CreateIcosahedronOutputs,
+      CreateIcosahedronParamsDict,
+      CreateIcosahedronParamsDictTagged,
       create_icosahedron,
       create_icosahedron_execute,
       create_icosahedron_params,

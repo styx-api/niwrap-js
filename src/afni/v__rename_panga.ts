@@ -11,7 +11,7 @@ const V__RENAME_PANGA_METADATA: Metadata = {
 };
 
 
-interface VRenamePangaParameters {
+interface VRenamePangaParamsDict {
     "@type"?: "afni/@RenamePanga";
     "dir_number": string;
     "first_image_number": string;
@@ -24,11 +24,11 @@ interface VRenamePangaParameters {
     "slice_pattern"?: string | null | undefined;
     "output_directory"?: string | null | undefined;
 }
-type VRenamePangaParametersTagged = Required<Pick<VRenamePangaParameters, '@type'>> & VRenamePangaParameters;
+type VRenamePangaParamsDictTagged = Required<Pick<VRenamePangaParamsDict, '@type'>> & VRenamePangaParamsDict;
 
 
 /**
- * Output object returned when calling `VRenamePangaParameters(...)`.
+ * Output object returned when calling `VRenamePangaParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function v__rename_panga_params(
     outliers_check: boolean = false,
     slice_pattern: string | null = null,
     output_directory: string | null = null,
-): VRenamePangaParametersTagged {
+): VRenamePangaParamsDictTagged {
     const params = {
         "@type": "afni/@RenamePanga" as const,
         "dir_number": dir_number,
@@ -110,7 +110,7 @@ function v__rename_panga_params(
  * @returns Command-line arguments.
  */
 function v__rename_panga_cargs(
-    params: VRenamePangaParameters,
+    params: VRenamePangaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -154,7 +154,7 @@ function v__rename_panga_cargs(
  * @returns Outputs object.
  */
 function v__rename_panga_outputs(
-    params: VRenamePangaParameters,
+    params: VRenamePangaParamsDict,
     execution: Execution,
 ): VRenamePangaOutputs {
     const ret: VRenamePangaOutputs = {
@@ -182,7 +182,7 @@ function v__rename_panga_outputs(
  * @returns NamedTuple of outputs (described in `VRenamePangaOutputs`).
  */
 function v__rename_panga_execute(
-    params: VRenamePangaParameters,
+    params: VRenamePangaParamsDict,
     runner: Runner | null = null,
 ): VRenamePangaOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function v__rename_panga(
 
 export {
       VRenamePangaOutputs,
+      VRenamePangaParamsDict,
+      VRenamePangaParamsDictTagged,
       V__RENAME_PANGA_METADATA,
       v__rename_panga,
       v__rename_panga_execute,

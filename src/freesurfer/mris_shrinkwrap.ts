@@ -11,17 +11,17 @@ const MRIS_SHRINKWRAP_METADATA: Metadata = {
 };
 
 
-interface MrisShrinkwrapParameters {
+interface MrisShrinkwrapParamsDict {
     "@type"?: "freesurfer/mris_shrinkwrap";
     "volume": InputPathType;
     "output_name": string;
     "threshold"?: number | null | undefined;
 }
-type MrisShrinkwrapParametersTagged = Required<Pick<MrisShrinkwrapParameters, '@type'>> & MrisShrinkwrapParameters;
+type MrisShrinkwrapParamsDictTagged = Required<Pick<MrisShrinkwrapParamsDict, '@type'>> & MrisShrinkwrapParamsDict;
 
 
 /**
- * Output object returned when calling `MrisShrinkwrapParameters(...)`.
+ * Output object returned when calling `MrisShrinkwrapParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function mris_shrinkwrap_params(
     volume: InputPathType,
     output_name: string,
     threshold: number | null = null,
-): MrisShrinkwrapParametersTagged {
+): MrisShrinkwrapParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_shrinkwrap" as const,
         "volume": volume,
@@ -80,7 +80,7 @@ function mris_shrinkwrap_params(
  * @returns Command-line arguments.
  */
 function mris_shrinkwrap_cargs(
-    params: MrisShrinkwrapParameters,
+    params: MrisShrinkwrapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function mris_shrinkwrap_cargs(
  * @returns Outputs object.
  */
 function mris_shrinkwrap_outputs(
-    params: MrisShrinkwrapParameters,
+    params: MrisShrinkwrapParamsDict,
     execution: Execution,
 ): MrisShrinkwrapOutputs {
     const ret: MrisShrinkwrapOutputs = {
@@ -134,7 +134,7 @@ function mris_shrinkwrap_outputs(
  * @returns NamedTuple of outputs (described in `MrisShrinkwrapOutputs`).
  */
 function mris_shrinkwrap_execute(
-    params: MrisShrinkwrapParameters,
+    params: MrisShrinkwrapParamsDict,
     runner: Runner | null = null,
 ): MrisShrinkwrapOutputs {
     runner = runner || getGlobalRunner();
@@ -177,6 +177,8 @@ function mris_shrinkwrap(
 export {
       MRIS_SHRINKWRAP_METADATA,
       MrisShrinkwrapOutputs,
+      MrisShrinkwrapParamsDict,
+      MrisShrinkwrapParamsDictTagged,
       mris_shrinkwrap,
       mris_shrinkwrap_execute,
       mris_shrinkwrap_params,

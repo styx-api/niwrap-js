@@ -10,7 +10,7 @@ const CIFTI_LABEL_IMPORT_METADATA: Metadata = {
 };
 
 
-interface CiftiLabelImportParameters {
+interface CiftiLabelImportParamsDict {
     "@type"?: "workbench/cifti-label-import";
     "output": string;
     "discard-others": boolean;
@@ -20,11 +20,11 @@ interface CiftiLabelImportParameters {
     "input": InputPathType;
     "label-list-file": string;
 }
-type CiftiLabelImportParametersTagged = Required<Pick<CiftiLabelImportParameters, '@type'>> & CiftiLabelImportParameters;
+type CiftiLabelImportParamsDictTagged = Required<Pick<CiftiLabelImportParamsDict, '@type'>> & CiftiLabelImportParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiLabelImportParameters(...)`.
+ * Output object returned when calling `CiftiLabelImportParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function cifti_label_import_params(
     label_list_file: string,
     discard_others: boolean = false,
     drop_unused_labels: boolean = false,
-): CiftiLabelImportParametersTagged {
+): CiftiLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-import" as const,
         "output": output,
@@ -93,7 +93,7 @@ function cifti_label_import_params(
  * @returns Command-line arguments.
  */
 function cifti_label_import_cargs(
-    params: CiftiLabelImportParameters,
+    params: CiftiLabelImportParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function cifti_label_import_cargs(
  * @returns Outputs object.
  */
 function cifti_label_import_outputs(
-    params: CiftiLabelImportParameters,
+    params: CiftiLabelImportParamsDict,
     execution: Execution,
 ): CiftiLabelImportOutputs {
     const ret: CiftiLabelImportOutputs = {
@@ -155,7 +155,7 @@ function cifti_label_import_outputs(
  * @returns NamedTuple of outputs (described in `CiftiLabelImportOutputs`).
  */
 function cifti_label_import_execute(
-    params: CiftiLabelImportParameters,
+    params: CiftiLabelImportParamsDict,
     runner: Runner | null = null,
 ): CiftiLabelImportOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function cifti_label_import(
 export {
       CIFTI_LABEL_IMPORT_METADATA,
       CiftiLabelImportOutputs,
+      CiftiLabelImportParamsDict,
+      CiftiLabelImportParamsDictTagged,
       cifti_label_import,
       cifti_label_import_execute,
       cifti_label_import_params,

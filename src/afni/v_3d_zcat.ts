@@ -11,7 +11,7 @@ const V_3D_ZCAT_METADATA: Metadata = {
 };
 
 
-interface V3dZcatParameters {
+interface V3dZcatParamsDict {
     "@type"?: "afni/3dZcat";
     "prefix"?: string | null | undefined;
     "datum"?: "byte" | "short" | "float" | null | undefined;
@@ -21,11 +21,11 @@ interface V3dZcatParameters {
     "frugal": boolean;
     "input_files": Array<InputPathType>;
 }
-type V3dZcatParametersTagged = Required<Pick<V3dZcatParameters, '@type'>> & V3dZcatParameters;
+type V3dZcatParamsDictTagged = Required<Pick<V3dZcatParamsDict, '@type'>> & V3dZcatParamsDict;
 
 
 /**
- * Output object returned when calling `V3dZcatParameters(...)`.
+ * Output object returned when calling `V3dZcatParamsDict(...)`.
  *
  * @interface
  */
@@ -66,7 +66,7 @@ function v_3d_zcat_params(
     nscale: boolean = false,
     verb: boolean = false,
     frugal: boolean = false,
-): V3dZcatParametersTagged {
+): V3dZcatParamsDictTagged {
     const params = {
         "@type": "afni/3dZcat" as const,
         "fscale": fscale,
@@ -94,7 +94,7 @@ function v_3d_zcat_params(
  * @returns Command-line arguments.
  */
 function v_3d_zcat_cargs(
-    params: V3dZcatParameters,
+    params: V3dZcatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -137,7 +137,7 @@ function v_3d_zcat_cargs(
  * @returns Outputs object.
  */
 function v_3d_zcat_outputs(
-    params: V3dZcatParameters,
+    params: V3dZcatParamsDict,
     execution: Execution,
 ): V3dZcatOutputs {
     const ret: V3dZcatOutputs = {
@@ -164,7 +164,7 @@ function v_3d_zcat_outputs(
  * @returns NamedTuple of outputs (described in `V3dZcatOutputs`).
  */
 function v_3d_zcat_execute(
-    params: V3dZcatParameters,
+    params: V3dZcatParamsDict,
     runner: Runner | null = null,
 ): V3dZcatOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function v_3d_zcat(
 
 export {
       V3dZcatOutputs,
+      V3dZcatParamsDict,
+      V3dZcatParamsDictTagged,
       V_3D_ZCAT_METADATA,
       v_3d_zcat,
       v_3d_zcat_execute,

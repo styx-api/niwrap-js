@@ -11,18 +11,18 @@ const HIST2PROB_METADATA: Metadata = {
 };
 
 
-interface Hist2probParameters {
+interface Hist2probParamsDict {
     "@type"?: "fsl/hist2prob";
     "image": InputPathType;
     "size": number;
     "low_threshold": number;
     "high_threshold": number;
 }
-type Hist2probParametersTagged = Required<Pick<Hist2probParameters, '@type'>> & Hist2probParameters;
+type Hist2probParamsDictTagged = Required<Pick<Hist2probParamsDict, '@type'>> & Hist2probParamsDict;
 
 
 /**
- * Output object returned when calling `Hist2probParameters(...)`.
+ * Output object returned when calling `Hist2probParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function hist2prob_params(
     size: number,
     low_threshold: number,
     high_threshold: number,
-): Hist2probParametersTagged {
+): Hist2probParamsDictTagged {
     const params = {
         "@type": "fsl/hist2prob" as const,
         "image": image,
@@ -74,7 +74,7 @@ function hist2prob_params(
  * @returns Command-line arguments.
  */
 function hist2prob_cargs(
-    params: Hist2probParameters,
+    params: Hist2probParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function hist2prob_cargs(
  * @returns Outputs object.
  */
 function hist2prob_outputs(
-    params: Hist2probParameters,
+    params: Hist2probParamsDict,
     execution: Execution,
 ): Hist2probOutputs {
     const ret: Hist2probOutputs = {
@@ -122,7 +122,7 @@ function hist2prob_outputs(
  * @returns NamedTuple of outputs (described in `Hist2probOutputs`).
  */
 function hist2prob_execute(
-    params: Hist2probParameters,
+    params: Hist2probParamsDict,
     runner: Runner | null = null,
 ): Hist2probOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function hist2prob(
 export {
       HIST2PROB_METADATA,
       Hist2probOutputs,
+      Hist2probParamsDict,
+      Hist2probParamsDictTagged,
       hist2prob,
       hist2prob_execute,
       hist2prob_params,

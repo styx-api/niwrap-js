@@ -11,7 +11,7 @@ const FAT_PROC_IMIT2W_FROM_T1W_METADATA: Metadata = {
 };
 
 
-interface FatProcImit2wFromT1wParameters {
+interface FatProcImit2wFromT1wParamsDict {
     "@type"?: "afni/fat_proc_imit2w_from_t1w";
     "t1_file": InputPathType;
     "prefix": string;
@@ -22,11 +22,11 @@ interface FatProcImit2wFromT1wParameters {
     "no_qc_view": boolean;
     "qc_prefix"?: string | null | undefined;
 }
-type FatProcImit2wFromT1wParametersTagged = Required<Pick<FatProcImit2wFromT1wParameters, '@type'>> & FatProcImit2wFromT1wParameters;
+type FatProcImit2wFromT1wParamsDictTagged = Required<Pick<FatProcImit2wFromT1wParamsDict, '@type'>> & FatProcImit2wFromT1wParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcImit2wFromT1wParameters(...)`.
+ * Output object returned when calling `FatProcImit2wFromT1wParamsDict(...)`.
  *
  * @interface
  */
@@ -73,7 +73,7 @@ function fat_proc_imit2w_from_t1w_params(
     no_clean: boolean = false,
     no_qc_view: boolean = false,
     qc_prefix: string | null = null,
-): FatProcImit2wFromT1wParametersTagged {
+): FatProcImit2wFromT1wParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_imit2w_from_t1w" as const,
         "t1_file": t1_file,
@@ -106,7 +106,7 @@ function fat_proc_imit2w_from_t1w_params(
  * @returns Command-line arguments.
  */
 function fat_proc_imit2w_from_t1w_cargs(
-    params: FatProcImit2wFromT1wParameters,
+    params: FatProcImit2wFromT1wParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,7 +162,7 @@ function fat_proc_imit2w_from_t1w_cargs(
  * @returns Outputs object.
  */
 function fat_proc_imit2w_from_t1w_outputs(
-    params: FatProcImit2wFromT1wParameters,
+    params: FatProcImit2wFromT1wParamsDict,
     execution: Execution,
 ): FatProcImit2wFromT1wOutputs {
     const ret: FatProcImit2wFromT1wOutputs = {
@@ -190,7 +190,7 @@ function fat_proc_imit2w_from_t1w_outputs(
  * @returns NamedTuple of outputs (described in `FatProcImit2wFromT1wOutputs`).
  */
 function fat_proc_imit2w_from_t1w_execute(
-    params: FatProcImit2wFromT1wParameters,
+    params: FatProcImit2wFromT1wParamsDict,
     runner: Runner | null = null,
 ): FatProcImit2wFromT1wOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function fat_proc_imit2w_from_t1w(
 export {
       FAT_PROC_IMIT2W_FROM_T1W_METADATA,
       FatProcImit2wFromT1wOutputs,
+      FatProcImit2wFromT1wParamsDict,
+      FatProcImit2wFromT1wParamsDictTagged,
       fat_proc_imit2w_from_t1w,
       fat_proc_imit2w_from_t1w_execute,
       fat_proc_imit2w_from_t1w_params,

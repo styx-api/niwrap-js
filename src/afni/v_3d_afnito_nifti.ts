@@ -11,7 +11,7 @@ const V_3D_AFNITO_NIFTI_METADATA: Metadata = {
 };
 
 
-interface V3dAfnitoNiftiParameters {
+interface V3dAfnitoNiftiParamsDict {
     "@type"?: "afni/3dAFNItoNIFTI";
     "input_dataset": InputPathType;
     "prefix"?: string | null | undefined;
@@ -22,11 +22,11 @@ interface V3dAfnitoNiftiParameters {
     "oldid": boolean;
     "newid": boolean;
 }
-type V3dAfnitoNiftiParametersTagged = Required<Pick<V3dAfnitoNiftiParameters, '@type'>> & V3dAfnitoNiftiParameters;
+type V3dAfnitoNiftiParamsDictTagged = Required<Pick<V3dAfnitoNiftiParamsDict, '@type'>> & V3dAfnitoNiftiParamsDict;
 
 
 /**
- * Output object returned when calling `V3dAfnitoNiftiParameters(...)`.
+ * Output object returned when calling `V3dAfnitoNiftiParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3d_afnito_nifti_params(
     denote: boolean = false,
     oldid: boolean = false,
     newid: boolean = false,
-): V3dAfnitoNiftiParametersTagged {
+): V3dAfnitoNiftiParamsDictTagged {
     const params = {
         "@type": "afni/3dAFNItoNIFTI" as const,
         "input_dataset": input_dataset,
@@ -92,7 +92,7 @@ function v_3d_afnito_nifti_params(
  * @returns Command-line arguments.
  */
 function v_3d_afnito_nifti_cargs(
-    params: V3dAfnitoNiftiParameters,
+    params: V3dAfnitoNiftiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -135,7 +135,7 @@ function v_3d_afnito_nifti_cargs(
  * @returns Outputs object.
  */
 function v_3d_afnito_nifti_outputs(
-    params: V3dAfnitoNiftiParameters,
+    params: V3dAfnitoNiftiParamsDict,
     execution: Execution,
 ): V3dAfnitoNiftiOutputs {
     const ret: V3dAfnitoNiftiOutputs = {
@@ -161,7 +161,7 @@ function v_3d_afnito_nifti_outputs(
  * @returns NamedTuple of outputs (described in `V3dAfnitoNiftiOutputs`).
  */
 function v_3d_afnito_nifti_execute(
-    params: V3dAfnitoNiftiParameters,
+    params: V3dAfnitoNiftiParamsDict,
     runner: Runner | null = null,
 ): V3dAfnitoNiftiOutputs {
     runner = runner || getGlobalRunner();
@@ -213,6 +213,8 @@ function v_3d_afnito_nifti(
 
 export {
       V3dAfnitoNiftiOutputs,
+      V3dAfnitoNiftiParamsDict,
+      V3dAfnitoNiftiParamsDictTagged,
       V_3D_AFNITO_NIFTI_METADATA,
       v_3d_afnito_nifti,
       v_3d_afnito_nifti_execute,

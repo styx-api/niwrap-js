@@ -11,16 +11,16 @@ const CONCAT_BVARS_METADATA: Metadata = {
 };
 
 
-interface ConcatBvarsParameters {
+interface ConcatBvarsParamsDict {
     "@type"?: "fsl/concat_bvars";
     "output_bvars": string;
     "input_bvars": Array<InputPathType>;
 }
-type ConcatBvarsParametersTagged = Required<Pick<ConcatBvarsParameters, '@type'>> & ConcatBvarsParameters;
+type ConcatBvarsParamsDictTagged = Required<Pick<ConcatBvarsParamsDict, '@type'>> & ConcatBvarsParamsDict;
 
 
 /**
- * Output object returned when calling `ConcatBvarsParameters(...)`.
+ * Output object returned when calling `ConcatBvarsParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface ConcatBvarsOutputs {
 function concat_bvars_params(
     output_bvars: string,
     input_bvars: Array<InputPathType>,
-): ConcatBvarsParametersTagged {
+): ConcatBvarsParamsDictTagged {
     const params = {
         "@type": "fsl/concat_bvars" as const,
         "output_bvars": output_bvars,
@@ -66,7 +66,7 @@ function concat_bvars_params(
  * @returns Command-line arguments.
  */
 function concat_bvars_cargs(
-    params: ConcatBvarsParameters,
+    params: ConcatBvarsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function concat_bvars_cargs(
  * @returns Outputs object.
  */
 function concat_bvars_outputs(
-    params: ConcatBvarsParameters,
+    params: ConcatBvarsParamsDict,
     execution: Execution,
 ): ConcatBvarsOutputs {
     const ret: ConcatBvarsOutputs = {
@@ -112,7 +112,7 @@ function concat_bvars_outputs(
  * @returns NamedTuple of outputs (described in `ConcatBvarsOutputs`).
  */
 function concat_bvars_execute(
-    params: ConcatBvarsParameters,
+    params: ConcatBvarsParamsDict,
     runner: Runner | null = null,
 ): ConcatBvarsOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function concat_bvars(
 export {
       CONCAT_BVARS_METADATA,
       ConcatBvarsOutputs,
+      ConcatBvarsParamsDict,
+      ConcatBvarsParamsDictTagged,
       concat_bvars,
       concat_bvars_execute,
       concat_bvars_params,

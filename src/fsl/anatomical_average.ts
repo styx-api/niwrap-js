@@ -11,7 +11,7 @@ const ANATOMICAL_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface AnatomicalAverageParameters {
+interface AnatomicalAverageParamsDict {
     "@type"?: "fsl/AnatomicalAverage";
     "output_basename": string;
     "input_images": Array<InputPathType>;
@@ -23,11 +23,11 @@ interface AnatomicalAverageParameters {
     "noclean_flag": boolean;
     "verbose_flag": boolean;
 }
-type AnatomicalAverageParametersTagged = Required<Pick<AnatomicalAverageParameters, '@type'>> & AnatomicalAverageParameters;
+type AnatomicalAverageParamsDictTagged = Required<Pick<AnatomicalAverageParamsDict, '@type'>> & AnatomicalAverageParamsDict;
 
 
 /**
- * Output object returned when calling `AnatomicalAverageParameters(...)`.
+ * Output object returned when calling `AnatomicalAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function anatomical_average_params(
     brainsize: number | null = null,
     noclean_flag: boolean = false,
     verbose_flag: boolean = false,
-): AnatomicalAverageParametersTagged {
+): AnatomicalAverageParamsDictTagged {
     const params = {
         "@type": "fsl/AnatomicalAverage" as const,
         "output_basename": output_basename,
@@ -102,7 +102,7 @@ function anatomical_average_params(
  * @returns Command-line arguments.
  */
 function anatomical_average_cargs(
-    params: AnatomicalAverageParameters,
+    params: AnatomicalAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function anatomical_average_cargs(
  * @returns Outputs object.
  */
 function anatomical_average_outputs(
-    params: AnatomicalAverageParameters,
+    params: AnatomicalAverageParamsDict,
     execution: Execution,
 ): AnatomicalAverageOutputs {
     const ret: AnatomicalAverageOutputs = {
@@ -184,7 +184,7 @@ function anatomical_average_outputs(
  * @returns NamedTuple of outputs (described in `AnatomicalAverageOutputs`).
  */
 function anatomical_average_execute(
-    params: AnatomicalAverageParameters,
+    params: AnatomicalAverageParamsDict,
     runner: Runner | null = null,
 ): AnatomicalAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -239,6 +239,8 @@ function anatomical_average(
 export {
       ANATOMICAL_AVERAGE_METADATA,
       AnatomicalAverageOutputs,
+      AnatomicalAverageParamsDict,
+      AnatomicalAverageParamsDictTagged,
       anatomical_average,
       anatomical_average_execute,
       anatomical_average_params,

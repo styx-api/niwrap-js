@@ -11,7 +11,7 @@ const NIFTI_TOOL_METADATA: Metadata = {
 };
 
 
-interface NiftiToolParameters {
+interface NiftiToolParamsDict {
     "@type"?: "afni/nifti_tool";
     "action": string;
     "input_files"?: Array<InputPathType> | null | undefined;
@@ -26,11 +26,11 @@ interface NiftiToolParameters {
     "add_comment_ext"?: string | null | undefined;
     "rm_ext"?: string | null | undefined;
 }
-type NiftiToolParametersTagged = Required<Pick<NiftiToolParameters, '@type'>> & NiftiToolParameters;
+type NiftiToolParamsDictTagged = Required<Pick<NiftiToolParamsDict, '@type'>> & NiftiToolParamsDict;
 
 
 /**
- * Output object returned when calling `NiftiToolParameters(...)`.
+ * Output object returned when calling `NiftiToolParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function nifti_tool_params(
     convert_verify: boolean = false,
     add_comment_ext: string | null = null,
     rm_ext: string | null = null,
-): NiftiToolParametersTagged {
+): NiftiToolParamsDictTagged {
     const params = {
         "@type": "afni/nifti_tool" as const,
         "action": action,
@@ -124,7 +124,7 @@ function nifti_tool_params(
  * @returns Command-line arguments.
  */
 function nifti_tool_cargs(
-    params: NiftiToolParameters,
+    params: NiftiToolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function nifti_tool_cargs(
  * @returns Outputs object.
  */
 function nifti_tool_outputs(
-    params: NiftiToolParameters,
+    params: NiftiToolParamsDict,
     execution: Execution,
 ): NiftiToolOutputs {
     const ret: NiftiToolOutputs = {
@@ -229,7 +229,7 @@ function nifti_tool_outputs(
  * @returns NamedTuple of outputs (described in `NiftiToolOutputs`).
  */
 function nifti_tool_execute(
-    params: NiftiToolParameters,
+    params: NiftiToolParamsDict,
     runner: Runner | null = null,
 ): NiftiToolOutputs {
     runner = runner || getGlobalRunner();
@@ -290,6 +290,8 @@ function nifti_tool(
 export {
       NIFTI_TOOL_METADATA,
       NiftiToolOutputs,
+      NiftiToolParamsDict,
+      NiftiToolParamsDictTagged,
       nifti_tool,
       nifti_tool_execute,
       nifti_tool_params,

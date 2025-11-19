@@ -10,41 +10,41 @@ const FOCI_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface FociResampleLeftSurfacesParameters {
+interface FociResampleLeftSurfacesParamsDict {
     "@type"?: "left-surfaces";
     "current-surf": InputPathType;
     "new-surf": InputPathType;
 }
-type FociResampleLeftSurfacesParametersTagged = Required<Pick<FociResampleLeftSurfacesParameters, '@type'>> & FociResampleLeftSurfacesParameters;
+type FociResampleLeftSurfacesParamsDictTagged = Required<Pick<FociResampleLeftSurfacesParamsDict, '@type'>> & FociResampleLeftSurfacesParamsDict;
 
 
-interface FociResampleRightSurfacesParameters {
+interface FociResampleRightSurfacesParamsDict {
     "@type"?: "right-surfaces";
     "current-surf": InputPathType;
     "new-surf": InputPathType;
 }
-type FociResampleRightSurfacesParametersTagged = Required<Pick<FociResampleRightSurfacesParameters, '@type'>> & FociResampleRightSurfacesParameters;
+type FociResampleRightSurfacesParamsDictTagged = Required<Pick<FociResampleRightSurfacesParamsDict, '@type'>> & FociResampleRightSurfacesParamsDict;
 
 
-interface FociResampleCerebellumSurfacesParameters {
+interface FociResampleCerebellumSurfacesParamsDict {
     "@type"?: "cerebellum-surfaces";
     "current-surf": InputPathType;
     "new-surf": InputPathType;
 }
-type FociResampleCerebellumSurfacesParametersTagged = Required<Pick<FociResampleCerebellumSurfacesParameters, '@type'>> & FociResampleCerebellumSurfacesParameters;
+type FociResampleCerebellumSurfacesParamsDictTagged = Required<Pick<FociResampleCerebellumSurfacesParamsDict, '@type'>> & FociResampleCerebellumSurfacesParamsDict;
 
 
-interface FociResampleParameters {
+interface FociResampleParamsDict {
     "@type"?: "workbench/foci-resample";
     "foci-out": string;
-    "left-surfaces"?: FociResampleLeftSurfacesParameters | null | undefined;
-    "right-surfaces"?: FociResampleRightSurfacesParameters | null | undefined;
-    "cerebellum-surfaces"?: FociResampleCerebellumSurfacesParameters | null | undefined;
+    "left-surfaces"?: FociResampleLeftSurfacesParamsDict | null | undefined;
+    "right-surfaces"?: FociResampleRightSurfacesParamsDict | null | undefined;
+    "cerebellum-surfaces"?: FociResampleCerebellumSurfacesParamsDict | null | undefined;
     "discard-distance-from-surface": boolean;
     "restore-xyz": boolean;
     "foci-in": InputPathType;
 }
-type FociResampleParametersTagged = Required<Pick<FociResampleParameters, '@type'>> & FociResampleParameters;
+type FociResampleParamsDictTagged = Required<Pick<FociResampleParamsDict, '@type'>> & FociResampleParamsDict;
 
 
 /**
@@ -55,10 +55,10 @@ type FociResampleParametersTagged = Required<Pick<FociResampleParameters, '@type
  *
  * @returns Parameter dictionary
  */
-function foci_resample_left_surfaces_params(
+function foci_resample_left_surfaces(
     current_surf: InputPathType,
     new_surf: InputPathType,
-): FociResampleLeftSurfacesParametersTagged {
+): FociResampleLeftSurfacesParamsDictTagged {
     const params = {
         "@type": "left-surfaces" as const,
         "current-surf": current_surf,
@@ -77,7 +77,7 @@ function foci_resample_left_surfaces_params(
  * @returns Command-line arguments.
  */
 function foci_resample_left_surfaces_cargs(
-    params: FociResampleLeftSurfacesParameters,
+    params: FociResampleLeftSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,10 +98,10 @@ function foci_resample_left_surfaces_cargs(
  *
  * @returns Parameter dictionary
  */
-function foci_resample_right_surfaces_params(
+function foci_resample_right_surfaces(
     current_surf: InputPathType,
     new_surf: InputPathType,
-): FociResampleRightSurfacesParametersTagged {
+): FociResampleRightSurfacesParamsDictTagged {
     const params = {
         "@type": "right-surfaces" as const,
         "current-surf": current_surf,
@@ -120,7 +120,7 @@ function foci_resample_right_surfaces_params(
  * @returns Command-line arguments.
  */
 function foci_resample_right_surfaces_cargs(
-    params: FociResampleRightSurfacesParameters,
+    params: FociResampleRightSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -141,10 +141,10 @@ function foci_resample_right_surfaces_cargs(
  *
  * @returns Parameter dictionary
  */
-function foci_resample_cerebellum_surfaces_params(
+function foci_resample_cerebellum_surfaces(
     current_surf: InputPathType,
     new_surf: InputPathType,
-): FociResampleCerebellumSurfacesParametersTagged {
+): FociResampleCerebellumSurfacesParamsDictTagged {
     const params = {
         "@type": "cerebellum-surfaces" as const,
         "current-surf": current_surf,
@@ -163,7 +163,7 @@ function foci_resample_cerebellum_surfaces_params(
  * @returns Command-line arguments.
  */
 function foci_resample_cerebellum_surfaces_cargs(
-    params: FociResampleCerebellumSurfacesParameters,
+    params: FociResampleCerebellumSurfacesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function foci_resample_cerebellum_surfaces_cargs(
 
 
 /**
- * Output object returned when calling `FociResampleParameters(...)`.
+ * Output object returned when calling `FociResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -209,12 +209,12 @@ interface FociResampleOutputs {
 function foci_resample_params(
     foci_out: string,
     foci_in: InputPathType,
-    left_surfaces: FociResampleLeftSurfacesParameters | null = null,
-    right_surfaces: FociResampleRightSurfacesParameters | null = null,
-    cerebellum_surfaces: FociResampleCerebellumSurfacesParameters | null = null,
+    left_surfaces: FociResampleLeftSurfacesParamsDict | null = null,
+    right_surfaces: FociResampleRightSurfacesParamsDict | null = null,
+    cerebellum_surfaces: FociResampleCerebellumSurfacesParamsDict | null = null,
     discard_distance_from_surface: boolean = false,
     restore_xyz: boolean = false,
-): FociResampleParametersTagged {
+): FociResampleParamsDictTagged {
     const params = {
         "@type": "workbench/foci-resample" as const,
         "foci-out": foci_out,
@@ -244,7 +244,7 @@ function foci_resample_params(
  * @returns Command-line arguments.
  */
 function foci_resample_cargs(
-    params: FociResampleParameters,
+    params: FociResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -274,7 +274,7 @@ function foci_resample_cargs(
  * @returns Outputs object.
  */
 function foci_resample_outputs(
-    params: FociResampleParameters,
+    params: FociResampleParamsDict,
     execution: Execution,
 ): FociResampleOutputs {
     const ret: FociResampleOutputs = {
@@ -296,7 +296,7 @@ function foci_resample_outputs(
  * @returns NamedTuple of outputs (described in `FociResampleOutputs`).
  */
 function foci_resample_execute(
-    params: FociResampleParameters,
+    params: FociResampleParamsDict,
     runner: Runner | null = null,
 ): FociResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -328,9 +328,9 @@ function foci_resample_execute(
 function foci_resample(
     foci_out: string,
     foci_in: InputPathType,
-    left_surfaces: FociResampleLeftSurfacesParameters | null = null,
-    right_surfaces: FociResampleRightSurfacesParameters | null = null,
-    cerebellum_surfaces: FociResampleCerebellumSurfacesParameters | null = null,
+    left_surfaces: FociResampleLeftSurfacesParamsDict | null = null,
+    right_surfaces: FociResampleRightSurfacesParamsDict | null = null,
+    cerebellum_surfaces: FociResampleCerebellumSurfacesParamsDict | null = null,
     discard_distance_from_surface: boolean = false,
     restore_xyz: boolean = false,
     runner: Runner | null = null,
@@ -342,11 +342,19 @@ function foci_resample(
 
 export {
       FOCI_RESAMPLE_METADATA,
+      FociResampleCerebellumSurfacesParamsDict,
+      FociResampleCerebellumSurfacesParamsDictTagged,
+      FociResampleLeftSurfacesParamsDict,
+      FociResampleLeftSurfacesParamsDictTagged,
       FociResampleOutputs,
+      FociResampleParamsDict,
+      FociResampleParamsDictTagged,
+      FociResampleRightSurfacesParamsDict,
+      FociResampleRightSurfacesParamsDictTagged,
       foci_resample,
-      foci_resample_cerebellum_surfaces_params,
+      foci_resample_cerebellum_surfaces,
       foci_resample_execute,
-      foci_resample_left_surfaces_params,
+      foci_resample_left_surfaces,
       foci_resample_params,
-      foci_resample_right_surfaces_params,
+      foci_resample_right_surfaces,
 };

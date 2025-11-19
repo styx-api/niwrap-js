@@ -11,17 +11,17 @@ const IMAGES_EQUAL_METADATA: Metadata = {
 };
 
 
-interface ImagesEqualParameters {
+interface ImagesEqualParamsDict {
     "@type"?: "afni/images_equal";
     "file_a": InputPathType;
     "file_b": InputPathType;
     "all_flag": boolean;
 }
-type ImagesEqualParametersTagged = Required<Pick<ImagesEqualParameters, '@type'>> & ImagesEqualParameters;
+type ImagesEqualParamsDictTagged = Required<Pick<ImagesEqualParamsDict, '@type'>> & ImagesEqualParamsDict;
 
 
 /**
- * Output object returned when calling `ImagesEqualParameters(...)`.
+ * Output object returned when calling `ImagesEqualParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function images_equal_params(
     file_a: InputPathType,
     file_b: InputPathType,
     all_flag: boolean = false,
-): ImagesEqualParametersTagged {
+): ImagesEqualParamsDictTagged {
     const params = {
         "@type": "afni/images_equal" as const,
         "file_a": file_a,
@@ -70,7 +70,7 @@ function images_equal_params(
  * @returns Command-line arguments.
  */
 function images_equal_cargs(
-    params: ImagesEqualParameters,
+    params: ImagesEqualParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function images_equal_cargs(
  * @returns Outputs object.
  */
 function images_equal_outputs(
-    params: ImagesEqualParameters,
+    params: ImagesEqualParamsDict,
     execution: Execution,
 ): ImagesEqualOutputs {
     const ret: ImagesEqualOutputs = {
@@ -119,7 +119,7 @@ function images_equal_outputs(
  * @returns NamedTuple of outputs (described in `ImagesEqualOutputs`).
  */
 function images_equal_execute(
-    params: ImagesEqualParameters,
+    params: ImagesEqualParamsDict,
     runner: Runner | null = null,
 ): ImagesEqualOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function images_equal(
 export {
       IMAGES_EQUAL_METADATA,
       ImagesEqualOutputs,
+      ImagesEqualParamsDict,
+      ImagesEqualParamsDictTagged,
       images_equal,
       images_equal_execute,
       images_equal_params,

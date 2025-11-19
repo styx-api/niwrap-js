@@ -11,7 +11,7 @@ const PARSE_FS_LT_LOG_PY_METADATA: Metadata = {
 };
 
 
-interface ParseFsLtLogPyParameters {
+interface ParseFsLtLogPyParamsDict {
     "@type"?: "afni/parse_fs_lt_log.py";
     "logfile": InputPathType;
     "labels": Array<string>;
@@ -19,11 +19,11 @@ interface ParseFsLtLogPyParameters {
     "show_all_orig": boolean;
     "verbosity"?: number | null | undefined;
 }
-type ParseFsLtLogPyParametersTagged = Required<Pick<ParseFsLtLogPyParameters, '@type'>> & ParseFsLtLogPyParameters;
+type ParseFsLtLogPyParamsDictTagged = Required<Pick<ParseFsLtLogPyParamsDict, '@type'>> & ParseFsLtLogPyParamsDict;
 
 
 /**
- * Output object returned when calling `ParseFsLtLogPyParameters(...)`.
+ * Output object returned when calling `ParseFsLtLogPyParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function parse_fs_lt_log_py_params(
     show_orig: boolean = false,
     show_all_orig: boolean = false,
     verbosity: number | null = null,
-): ParseFsLtLogPyParametersTagged {
+): ParseFsLtLogPyParamsDictTagged {
     const params = {
         "@type": "afni/parse_fs_lt_log.py" as const,
         "logfile": logfile,
@@ -76,7 +76,7 @@ function parse_fs_lt_log_py_params(
  * @returns Command-line arguments.
  */
 function parse_fs_lt_log_py_cargs(
-    params: ParseFsLtLogPyParameters,
+    params: ParseFsLtLogPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -114,7 +114,7 @@ function parse_fs_lt_log_py_cargs(
  * @returns Outputs object.
  */
 function parse_fs_lt_log_py_outputs(
-    params: ParseFsLtLogPyParameters,
+    params: ParseFsLtLogPyParamsDict,
     execution: Execution,
 ): ParseFsLtLogPyOutputs {
     const ret: ParseFsLtLogPyOutputs = {
@@ -139,7 +139,7 @@ function parse_fs_lt_log_py_outputs(
  * @returns NamedTuple of outputs (described in `ParseFsLtLogPyOutputs`).
  */
 function parse_fs_lt_log_py_execute(
-    params: ParseFsLtLogPyParameters,
+    params: ParseFsLtLogPyParamsDict,
     runner: Runner | null = null,
 ): ParseFsLtLogPyOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function parse_fs_lt_log_py(
 export {
       PARSE_FS_LT_LOG_PY_METADATA,
       ParseFsLtLogPyOutputs,
+      ParseFsLtLogPyParamsDict,
+      ParseFsLtLogPyParamsDictTagged,
       parse_fs_lt_log_py,
       parse_fs_lt_log_py_execute,
       parse_fs_lt_log_py_params,

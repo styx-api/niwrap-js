@@ -11,16 +11,16 @@ const V_5TTGEN_METADATA: Metadata = {
 };
 
 
-interface V5ttgenFreesurferParameters {
+interface V5ttgenFreesurferParamsDict {
     "@type"?: "freesurfer";
     "input": InputPathType;
     "output": string;
     "lut"?: InputPathType | null | undefined;
 }
-type V5ttgenFreesurferParametersTagged = Required<Pick<V5ttgenFreesurferParameters, '@type'>> & V5ttgenFreesurferParameters;
+type V5ttgenFreesurferParamsDictTagged = Required<Pick<V5ttgenFreesurferParamsDict, '@type'>> & V5ttgenFreesurferParamsDict;
 
 
-interface V5ttgenFslParameters {
+interface V5ttgenFslParamsDict {
     "@type"?: "fsl";
     "input": InputPathType;
     "output": string;
@@ -28,18 +28,18 @@ interface V5ttgenFslParameters {
     "mask"?: InputPathType | null | undefined;
     "premasked": boolean;
 }
-type V5ttgenFslParametersTagged = Required<Pick<V5ttgenFslParameters, '@type'>> & V5ttgenFslParameters;
+type V5ttgenFslParamsDictTagged = Required<Pick<V5ttgenFslParamsDict, '@type'>> & V5ttgenFslParamsDict;
 
 
-interface V5ttgenGifParameters {
+interface V5ttgenGifParamsDict {
     "@type"?: "gif";
     "input": InputPathType;
     "output": string;
 }
-type V5ttgenGifParametersTagged = Required<Pick<V5ttgenGifParameters, '@type'>> & V5ttgenGifParameters;
+type V5ttgenGifParamsDictTagged = Required<Pick<V5ttgenGifParamsDict, '@type'>> & V5ttgenGifParamsDict;
 
 
-interface V5ttgenHsvsParameters {
+interface V5ttgenHsvsParamsDict {
     "@type"?: "hsvs";
     "input": InputPathType;
     "output": string;
@@ -48,20 +48,20 @@ interface V5ttgenHsvsParameters {
     "thalami"?: "nuclei" | "first" | "aseg" | null | undefined;
     "white_stem": boolean;
 }
-type V5ttgenHsvsParametersTagged = Required<Pick<V5ttgenHsvsParameters, '@type'>> & V5ttgenHsvsParameters;
+type V5ttgenHsvsParamsDictTagged = Required<Pick<V5ttgenHsvsParamsDict, '@type'>> & V5ttgenHsvsParamsDict;
 
 
-interface V5ttgenConfigParameters {
+interface V5ttgenConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type V5ttgenConfigParametersTagged = Required<Pick<V5ttgenConfigParameters, '@type'>> & V5ttgenConfigParameters;
+type V5ttgenConfigParamsDictTagged = Required<Pick<V5ttgenConfigParamsDict, '@type'>> & V5ttgenConfigParamsDict;
 
 
-interface V5ttgenParameters {
+interface V5ttgenParamsDict {
     "@type"?: "mrtrix/5ttgen";
-    "algorithm": V5ttgenFreesurferParametersTagged | V5ttgenFslParametersTagged | V5ttgenGifParametersTagged | V5ttgenHsvsParametersTagged;
+    "algorithm": V5ttgenFreesurferParamsDictTagged | V5ttgenFslParamsDictTagged | V5ttgenGifParamsDictTagged | V5ttgenHsvsParamsDictTagged;
     "nocrop": boolean;
     "sgm_amyg_hipp": boolean;
     "nocleanup": boolean;
@@ -72,11 +72,11 @@ interface V5ttgenParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<V5ttgenConfigParameters> | null | undefined;
+    "config"?: Array<V5ttgenConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
 }
-type V5ttgenParametersTagged = Required<Pick<V5ttgenParameters, '@type'>> & V5ttgenParameters;
+type V5ttgenParamsDictTagged = Required<Pick<V5ttgenParamsDict, '@type'>> & V5ttgenParamsDict;
 
 
 /**
@@ -120,7 +120,7 @@ function v_5ttgen_algorithm_outputs_dyn_fn(
 
 
 /**
- * Output object returned when calling `V5ttgenFreesurferParameters(...)`.
+ * Output object returned when calling `V5ttgenFreesurferParamsDict(...)`.
  *
  * @interface
  */
@@ -145,11 +145,11 @@ interface V5ttgenFreesurferOutputs {
  *
  * @returns Parameter dictionary
  */
-function v_5ttgen_freesurfer_params(
+function v_5ttgen_freesurfer(
     input: InputPathType,
     output: string,
     lut: InputPathType | null = null,
-): V5ttgenFreesurferParametersTagged {
+): V5ttgenFreesurferParamsDictTagged {
     const params = {
         "@type": "freesurfer" as const,
         "input": input,
@@ -171,7 +171,7 @@ function v_5ttgen_freesurfer_params(
  * @returns Command-line arguments.
  */
 function v_5ttgen_freesurfer_cargs(
-    params: V5ttgenFreesurferParameters,
+    params: V5ttgenFreesurferParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -197,7 +197,7 @@ function v_5ttgen_freesurfer_cargs(
  * @returns Outputs object.
  */
 function v_5ttgen_freesurfer_outputs(
-    params: V5ttgenFreesurferParameters,
+    params: V5ttgenFreesurferParamsDict,
     execution: Execution,
 ): V5ttgenFreesurferOutputs {
     const ret: V5ttgenFreesurferOutputs = {
@@ -209,7 +209,7 @@ function v_5ttgen_freesurfer_outputs(
 
 
 /**
- * Output object returned when calling `V5ttgenFslParameters(...)`.
+ * Output object returned when calling `V5ttgenFslParamsDict(...)`.
  *
  * @interface
  */
@@ -236,13 +236,13 @@ interface V5ttgenFslOutputs {
  *
  * @returns Parameter dictionary
  */
-function v_5ttgen_fsl_params(
+function v_5ttgen_fsl(
     input: InputPathType,
     output: string,
     t2: InputPathType | null = null,
     mask: InputPathType | null = null,
     premasked: boolean = false,
-): V5ttgenFslParametersTagged {
+): V5ttgenFslParamsDictTagged {
     const params = {
         "@type": "fsl" as const,
         "input": input,
@@ -268,7 +268,7 @@ function v_5ttgen_fsl_params(
  * @returns Command-line arguments.
  */
 function v_5ttgen_fsl_cargs(
-    params: V5ttgenFslParameters,
+    params: V5ttgenFslParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -303,7 +303,7 @@ function v_5ttgen_fsl_cargs(
  * @returns Outputs object.
  */
 function v_5ttgen_fsl_outputs(
-    params: V5ttgenFslParameters,
+    params: V5ttgenFslParamsDict,
     execution: Execution,
 ): V5ttgenFslOutputs {
     const ret: V5ttgenFslOutputs = {
@@ -315,7 +315,7 @@ function v_5ttgen_fsl_outputs(
 
 
 /**
- * Output object returned when calling `V5ttgenGifParameters(...)`.
+ * Output object returned when calling `V5ttgenGifParamsDict(...)`.
  *
  * @interface
  */
@@ -339,10 +339,10 @@ interface V5ttgenGifOutputs {
  *
  * @returns Parameter dictionary
  */
-function v_5ttgen_gif_params(
+function v_5ttgen_gif(
     input: InputPathType,
     output: string,
-): V5ttgenGifParametersTagged {
+): V5ttgenGifParamsDictTagged {
     const params = {
         "@type": "gif" as const,
         "input": input,
@@ -361,7 +361,7 @@ function v_5ttgen_gif_params(
  * @returns Command-line arguments.
  */
 function v_5ttgen_gif_cargs(
-    params: V5ttgenGifParameters,
+    params: V5ttgenGifParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -381,7 +381,7 @@ function v_5ttgen_gif_cargs(
  * @returns Outputs object.
  */
 function v_5ttgen_gif_outputs(
-    params: V5ttgenGifParameters,
+    params: V5ttgenGifParamsDict,
     execution: Execution,
 ): V5ttgenGifOutputs {
     const ret: V5ttgenGifOutputs = {
@@ -393,7 +393,7 @@ function v_5ttgen_gif_outputs(
 
 
 /**
- * Output object returned when calling `V5ttgenHsvsParameters(...)`.
+ * Output object returned when calling `V5ttgenHsvsParamsDict(...)`.
  *
  * @interface
  */
@@ -421,14 +421,14 @@ interface V5ttgenHsvsOutputs {
  *
  * @returns Parameter dictionary
  */
-function v_5ttgen_hsvs_params(
+function v_5ttgen_hsvs(
     input: InputPathType,
     output: string,
     template: InputPathType | null = null,
     hippocampi: "subfields" | "first" | "aseg" | null = null,
     thalami: "nuclei" | "first" | "aseg" | null = null,
     white_stem: boolean = false,
-): V5ttgenHsvsParametersTagged {
+): V5ttgenHsvsParamsDictTagged {
     const params = {
         "@type": "hsvs" as const,
         "input": input,
@@ -457,7 +457,7 @@ function v_5ttgen_hsvs_params(
  * @returns Command-line arguments.
  */
 function v_5ttgen_hsvs_cargs(
-    params: V5ttgenHsvsParameters,
+    params: V5ttgenHsvsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -498,7 +498,7 @@ function v_5ttgen_hsvs_cargs(
  * @returns Outputs object.
  */
 function v_5ttgen_hsvs_outputs(
-    params: V5ttgenHsvsParameters,
+    params: V5ttgenHsvsParamsDict,
     execution: Execution,
 ): V5ttgenHsvsOutputs {
     const ret: V5ttgenHsvsOutputs = {
@@ -517,10 +517,10 @@ function v_5ttgen_hsvs_outputs(
  *
  * @returns Parameter dictionary
  */
-function v_5ttgen_config_params(
+function v_5ttgen_config(
     key: string,
     value: string,
-): V5ttgenConfigParametersTagged {
+): V5ttgenConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -539,7 +539,7 @@ function v_5ttgen_config_params(
  * @returns Command-line arguments.
  */
 function v_5ttgen_config_cargs(
-    params: V5ttgenConfigParameters,
+    params: V5ttgenConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -551,7 +551,7 @@ function v_5ttgen_config_cargs(
 
 
 /**
- * Output object returned when calling `V5ttgenParameters(...)`.
+ * Output object returned when calling `V5ttgenParamsDict(...)`.
  *
  * @interface
  */
@@ -561,7 +561,7 @@ interface V5ttgenOutputs {
      */
     root: OutputPathType;
     /**
-     * Outputs from `V5ttgenFreesurferParameters` or `V5ttgenFslParameters` or `V5ttgenGifParameters` or `V5ttgenHsvsParameters`.
+     * Outputs from `V5ttgenFreesurferParamsDict` or `V5ttgenFslParamsDict` or `V5ttgenGifParamsDict` or `V5ttgenHsvsParamsDict`.
      */
     algorithm: V5ttgenFreesurferOutputs | V5ttgenFslOutputs | V5ttgenGifOutputs | V5ttgenHsvsOutputs;
 }
@@ -588,7 +588,7 @@ interface V5ttgenOutputs {
  * @returns Parameter dictionary
  */
 function v_5ttgen_params(
-    algorithm: V5ttgenFreesurferParametersTagged | V5ttgenFslParametersTagged | V5ttgenGifParametersTagged | V5ttgenHsvsParametersTagged,
+    algorithm: V5ttgenFreesurferParamsDictTagged | V5ttgenFslParamsDictTagged | V5ttgenGifParamsDictTagged | V5ttgenHsvsParamsDictTagged,
     nocrop: boolean = false,
     sgm_amyg_hipp: boolean = false,
     nocleanup: boolean = false,
@@ -599,10 +599,10 @@ function v_5ttgen_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5ttgenConfigParameters> | null = null,
+    config: Array<V5ttgenConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): V5ttgenParametersTagged {
+): V5ttgenParamsDictTagged {
     const params = {
         "@type": "mrtrix/5ttgen" as const,
         "algorithm": algorithm,
@@ -641,7 +641,7 @@ function v_5ttgen_params(
  * @returns Command-line arguments.
  */
 function v_5ttgen_cargs(
-    params: V5ttgenParameters,
+    params: V5ttgenParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -708,7 +708,7 @@ function v_5ttgen_cargs(
  * @returns Outputs object.
  */
 function v_5ttgen_outputs(
-    params: V5ttgenParameters,
+    params: V5ttgenParamsDict,
     execution: Execution,
 ): V5ttgenOutputs {
     const ret: V5ttgenOutputs = {
@@ -737,7 +737,7 @@ function v_5ttgen_outputs(
  * @returns NamedTuple of outputs (described in `V5ttgenOutputs`).
  */
 function v_5ttgen_execute(
-    params: V5ttgenParameters,
+    params: V5ttgenParamsDict,
     runner: Runner | null = null,
 ): V5ttgenOutputs {
     runner = runner || getGlobalRunner();
@@ -781,7 +781,7 @@ function v_5ttgen_execute(
  * @returns NamedTuple of outputs (described in `V5ttgenOutputs`).
  */
 function v_5ttgen(
-    algorithm: V5ttgenFreesurferParametersTagged | V5ttgenFslParametersTagged | V5ttgenGifParametersTagged | V5ttgenHsvsParametersTagged,
+    algorithm: V5ttgenFreesurferParamsDictTagged | V5ttgenFslParamsDictTagged | V5ttgenGifParamsDictTagged | V5ttgenHsvsParamsDictTagged,
     nocrop: boolean = false,
     sgm_amyg_hipp: boolean = false,
     nocleanup: boolean = false,
@@ -792,7 +792,7 @@ function v_5ttgen(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<V5ttgenConfigParameters> | null = null,
+    config: Array<V5ttgenConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -803,18 +803,30 @@ function v_5ttgen(
 
 
 export {
+      V5ttgenConfigParamsDict,
+      V5ttgenConfigParamsDictTagged,
       V5ttgenFreesurferOutputs,
+      V5ttgenFreesurferParamsDict,
+      V5ttgenFreesurferParamsDictTagged,
       V5ttgenFslOutputs,
+      V5ttgenFslParamsDict,
+      V5ttgenFslParamsDictTagged,
       V5ttgenGifOutputs,
+      V5ttgenGifParamsDict,
+      V5ttgenGifParamsDictTagged,
       V5ttgenHsvsOutputs,
+      V5ttgenHsvsParamsDict,
+      V5ttgenHsvsParamsDictTagged,
       V5ttgenOutputs,
+      V5ttgenParamsDict,
+      V5ttgenParamsDictTagged,
       V_5TTGEN_METADATA,
       v_5ttgen,
-      v_5ttgen_config_params,
+      v_5ttgen_config,
       v_5ttgen_execute,
-      v_5ttgen_freesurfer_params,
-      v_5ttgen_fsl_params,
-      v_5ttgen_gif_params,
-      v_5ttgen_hsvs_params,
+      v_5ttgen_freesurfer,
+      v_5ttgen_fsl,
+      v_5ttgen_gif,
+      v_5ttgen_hsvs,
       v_5ttgen_params,
 };

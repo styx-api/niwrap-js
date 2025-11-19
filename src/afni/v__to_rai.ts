@@ -11,16 +11,16 @@ const V__TO_RAI_METADATA: Metadata = {
 };
 
 
-interface VToRaiParameters {
+interface VToRaiParamsDict {
     "@type"?: "afni/@ToRAI";
     "coordinates": Array<number>;
     "orientation": string;
 }
-type VToRaiParametersTagged = Required<Pick<VToRaiParameters, '@type'>> & VToRaiParameters;
+type VToRaiParamsDictTagged = Required<Pick<VToRaiParamsDict, '@type'>> & VToRaiParamsDict;
 
 
 /**
- * Output object returned when calling `VToRaiParameters(...)`.
+ * Output object returned when calling `VToRaiParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface VToRaiOutputs {
 function v__to_rai_params(
     coordinates: Array<number>,
     orientation: string,
-): VToRaiParametersTagged {
+): VToRaiParamsDictTagged {
     const params = {
         "@type": "afni/@ToRAI" as const,
         "coordinates": coordinates,
@@ -62,7 +62,7 @@ function v__to_rai_params(
  * @returns Command-line arguments.
  */
 function v__to_rai_cargs(
-    params: VToRaiParameters,
+    params: VToRaiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function v__to_rai_cargs(
  * @returns Outputs object.
  */
 function v__to_rai_outputs(
-    params: VToRaiParameters,
+    params: VToRaiParamsDict,
     execution: Execution,
 ): VToRaiOutputs {
     const ret: VToRaiOutputs = {
@@ -113,7 +113,7 @@ function v__to_rai_outputs(
  * @returns NamedTuple of outputs (described in `VToRaiOutputs`).
  */
 function v__to_rai_execute(
-    params: VToRaiParameters,
+    params: VToRaiParamsDict,
     runner: Runner | null = null,
 ): VToRaiOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function v__to_rai(
 
 export {
       VToRaiOutputs,
+      VToRaiParamsDict,
+      VToRaiParamsDictTagged,
       V__TO_RAI_METADATA,
       v__to_rai,
       v__to_rai_execute,

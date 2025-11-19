@@ -11,7 +11,7 @@ const DCMUNPACK_METADATA: Metadata = {
 };
 
 
-interface DcmunpackParameters {
+interface DcmunpackParamsDict {
     "@type"?: "freesurfer/dcmunpack";
     "src": string;
     "targ"?: string | null | undefined;
@@ -52,11 +52,11 @@ interface DcmunpackParameters {
     "log"?: string | null | undefined;
     "debug": boolean;
 }
-type DcmunpackParametersTagged = Required<Pick<DcmunpackParameters, '@type'>> & DcmunpackParameters;
+type DcmunpackParamsDictTagged = Required<Pick<DcmunpackParamsDict, '@type'>> & DcmunpackParamsDict;
 
 
 /**
- * Output object returned when calling `DcmunpackParameters(...)`.
+ * Output object returned when calling `DcmunpackParamsDict(...)`.
  *
  * @interface
  */
@@ -151,7 +151,7 @@ function dcmunpack_params(
     xml_only: boolean = false,
     log: string | null = null,
     debug: boolean = false,
-): DcmunpackParametersTagged {
+): DcmunpackParamsDictTagged {
     const params = {
         "@type": "freesurfer/dcmunpack" as const,
         "src": src,
@@ -240,7 +240,7 @@ function dcmunpack_params(
  * @returns Command-line arguments.
  */
 function dcmunpack_cargs(
-    params: DcmunpackParameters,
+    params: DcmunpackParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -424,7 +424,7 @@ function dcmunpack_cargs(
  * @returns Outputs object.
  */
 function dcmunpack_outputs(
-    params: DcmunpackParameters,
+    params: DcmunpackParamsDict,
     execution: Execution,
 ): DcmunpackOutputs {
     const ret: DcmunpackOutputs = {
@@ -449,7 +449,7 @@ function dcmunpack_outputs(
  * @returns NamedTuple of outputs (described in `DcmunpackOutputs`).
  */
 function dcmunpack_execute(
-    params: DcmunpackParameters,
+    params: DcmunpackParamsDict,
     runner: Runner | null = null,
 ): DcmunpackOutputs {
     runner = runner || getGlobalRunner();
@@ -562,6 +562,8 @@ function dcmunpack(
 export {
       DCMUNPACK_METADATA,
       DcmunpackOutputs,
+      DcmunpackParamsDict,
+      DcmunpackParamsDictTagged,
       dcmunpack,
       dcmunpack_execute,
       dcmunpack_params,

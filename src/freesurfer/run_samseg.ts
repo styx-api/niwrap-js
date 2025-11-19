@@ -11,7 +11,7 @@ const RUN_SAMSEG_METADATA: Metadata = {
 };
 
 
-interface RunSamsegParameters {
+interface RunSamsegParamsDict {
     "@type"?: "freesurfer/run_samseg";
     "output_dir": string;
     "input_files": Array<InputPathType>;
@@ -46,11 +46,11 @@ interface RunSamsegParameters {
     "save_warp": boolean;
     "movie": boolean;
 }
-type RunSamsegParametersTagged = Required<Pick<RunSamsegParameters, '@type'>> & RunSamsegParameters;
+type RunSamsegParamsDictTagged = Required<Pick<RunSamsegParamsDict, '@type'>> & RunSamsegParamsDict;
 
 
 /**
- * Output object returned when calling `RunSamsegParameters(...)`.
+ * Output object returned when calling `RunSamsegParamsDict(...)`.
  *
  * @interface
  */
@@ -133,7 +133,7 @@ function run_samseg_params(
     save_mesh: boolean = false,
     save_warp: boolean = false,
     movie: boolean = false,
-): RunSamsegParametersTagged {
+): RunSamsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/run_samseg" as const,
         "output_dir": output_dir,
@@ -222,7 +222,7 @@ function run_samseg_params(
  * @returns Command-line arguments.
  */
 function run_samseg_cargs(
-    params: RunSamsegParameters,
+    params: RunSamsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -398,7 +398,7 @@ function run_samseg_cargs(
  * @returns Outputs object.
  */
 function run_samseg_outputs(
-    params: RunSamsegParameters,
+    params: RunSamsegParamsDict,
     execution: Execution,
 ): RunSamsegOutputs {
     const ret: RunSamsegOutputs = {
@@ -423,7 +423,7 @@ function run_samseg_outputs(
  * @returns NamedTuple of outputs (described in `RunSamsegOutputs`).
  */
 function run_samseg_execute(
-    params: RunSamsegParameters,
+    params: RunSamsegParamsDict,
     runner: Runner | null = null,
 ): RunSamsegOutputs {
     runner = runner || getGlobalRunner();
@@ -524,6 +524,8 @@ function run_samseg(
 export {
       RUN_SAMSEG_METADATA,
       RunSamsegOutputs,
+      RunSamsegParamsDict,
+      RunSamsegParamsDictTagged,
       run_samseg,
       run_samseg_execute,
       run_samseg_params,

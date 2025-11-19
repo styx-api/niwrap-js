@@ -11,7 +11,7 @@ const V_3D_FWHMX_METADATA: Metadata = {
 };
 
 
-interface V3dFwhmxParameters {
+interface V3dFwhmxParamsDict {
     "@type"?: "afni/3dFWHMx";
     "mask"?: InputPathType | null | undefined;
     "automask": boolean;
@@ -27,11 +27,11 @@ interface V3dFwhmxParameters {
     "acf"?: string | null | undefined;
     "infile": InputPathType;
 }
-type V3dFwhmxParametersTagged = Required<Pick<V3dFwhmxParameters, '@type'>> & V3dFwhmxParameters;
+type V3dFwhmxParamsDictTagged = Required<Pick<V3dFwhmxParamsDict, '@type'>> & V3dFwhmxParamsDict;
 
 
 /**
- * Output object returned when calling `V3dFwhmxParameters(...)`.
+ * Output object returned when calling `V3dFwhmxParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function v_3d_fwhmx_params(
     out: string | null = null,
     compat: boolean = false,
     acf: string | null = null,
-): V3dFwhmxParametersTagged {
+): V3dFwhmxParamsDictTagged {
     const params = {
         "@type": "afni/3dFWHMx" as const,
         "automask": automask,
@@ -124,7 +124,7 @@ function v_3d_fwhmx_params(
  * @returns Command-line arguments.
  */
 function v_3d_fwhmx_cargs(
-    params: V3dFwhmxParameters,
+    params: V3dFwhmxParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -194,7 +194,7 @@ function v_3d_fwhmx_cargs(
  * @returns Outputs object.
  */
 function v_3d_fwhmx_outputs(
-    params: V3dFwhmxParameters,
+    params: V3dFwhmxParamsDict,
     execution: Execution,
 ): V3dFwhmxOutputs {
     const ret: V3dFwhmxOutputs = {
@@ -221,7 +221,7 @@ function v_3d_fwhmx_outputs(
  * @returns NamedTuple of outputs (described in `V3dFwhmxOutputs`).
  */
 function v_3d_fwhmx_execute(
-    params: V3dFwhmxParameters,
+    params: V3dFwhmxParamsDict,
     runner: Runner | null = null,
 ): V3dFwhmxOutputs {
     runner = runner || getGlobalRunner();
@@ -283,6 +283,8 @@ function v_3d_fwhmx(
 
 export {
       V3dFwhmxOutputs,
+      V3dFwhmxParamsDict,
+      V3dFwhmxParamsDictTagged,
       V_3D_FWHMX_METADATA,
       v_3d_fwhmx,
       v_3d_fwhmx_execute,

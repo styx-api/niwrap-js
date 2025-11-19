@@ -10,36 +10,36 @@ const CIFTI_DILATE_METADATA: Metadata = {
 };
 
 
-interface CiftiDilateLeftSurfaceParameters {
+interface CiftiDilateLeftSurfaceParamsDict {
     "@type"?: "left-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiDilateLeftSurfaceParametersTagged = Required<Pick<CiftiDilateLeftSurfaceParameters, '@type'>> & CiftiDilateLeftSurfaceParameters;
+type CiftiDilateLeftSurfaceParamsDictTagged = Required<Pick<CiftiDilateLeftSurfaceParamsDict, '@type'>> & CiftiDilateLeftSurfaceParamsDict;
 
 
-interface CiftiDilateRightSurfaceParameters {
+interface CiftiDilateRightSurfaceParamsDict {
     "@type"?: "right-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiDilateRightSurfaceParametersTagged = Required<Pick<CiftiDilateRightSurfaceParameters, '@type'>> & CiftiDilateRightSurfaceParameters;
+type CiftiDilateRightSurfaceParamsDictTagged = Required<Pick<CiftiDilateRightSurfaceParamsDict, '@type'>> & CiftiDilateRightSurfaceParamsDict;
 
 
-interface CiftiDilateCerebellumSurfaceParameters {
+interface CiftiDilateCerebellumSurfaceParamsDict {
     "@type"?: "cerebellum-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiDilateCerebellumSurfaceParametersTagged = Required<Pick<CiftiDilateCerebellumSurfaceParameters, '@type'>> & CiftiDilateCerebellumSurfaceParameters;
+type CiftiDilateCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiDilateCerebellumSurfaceParamsDict, '@type'>> & CiftiDilateCerebellumSurfaceParamsDict;
 
 
-interface CiftiDilateParameters {
+interface CiftiDilateParamsDict {
     "@type"?: "workbench/cifti-dilate";
     "cifti-out": string;
-    "left-surface"?: CiftiDilateLeftSurfaceParameters | null | undefined;
-    "right-surface"?: CiftiDilateRightSurfaceParameters | null | undefined;
-    "cerebellum-surface"?: CiftiDilateCerebellumSurfaceParameters | null | undefined;
+    "left-surface"?: CiftiDilateLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiDilateRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiDilateCerebellumSurfaceParamsDict | null | undefined;
     "roi-cifti"?: InputPathType | null | undefined;
     "nearest": boolean;
     "merged-volume": boolean;
@@ -49,7 +49,7 @@ interface CiftiDilateParameters {
     "surface-distance": number;
     "volume-distance": number;
 }
-type CiftiDilateParametersTagged = Required<Pick<CiftiDilateParameters, '@type'>> & CiftiDilateParameters;
+type CiftiDilateParamsDictTagged = Required<Pick<CiftiDilateParamsDict, '@type'>> & CiftiDilateParamsDict;
 
 
 /**
@@ -62,10 +62,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_dilate_left_surface_params(
+function cifti_dilate_left_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiDilateLeftSurfaceParametersTagged {
+): CiftiDilateLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
         "surface": surface,
@@ -86,7 +86,7 @@ function cifti_dilate_left_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_dilate_left_surface_cargs(
-    params: CiftiDilateLeftSurfaceParameters,
+    params: CiftiDilateLeftSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,10 +112,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_dilate_right_surface_params(
+function cifti_dilate_right_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiDilateRightSurfaceParametersTagged {
+): CiftiDilateRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
         "surface": surface,
@@ -136,7 +136,7 @@ function cifti_dilate_right_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_dilate_right_surface_cargs(
-    params: CiftiDilateRightSurfaceParameters,
+    params: CiftiDilateRightSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,10 +162,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_dilate_cerebellum_surface_params(
+function cifti_dilate_cerebellum_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiDilateCerebellumSurfaceParametersTagged {
+): CiftiDilateCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
         "surface": surface,
@@ -186,7 +186,7 @@ function cifti_dilate_cerebellum_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_dilate_cerebellum_surface_cargs(
-    params: CiftiDilateCerebellumSurfaceParameters,
+    params: CiftiDilateCerebellumSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function cifti_dilate_cerebellum_surface_cargs(
 
 
 /**
- * Output object returned when calling `CiftiDilateParameters(...)`.
+ * Output object returned when calling `CiftiDilateParamsDict(...)`.
  *
  * @interface
  */
@@ -246,13 +246,13 @@ function cifti_dilate_params(
     direction: string,
     surface_distance: number,
     volume_distance: number,
-    left_surface: CiftiDilateLeftSurfaceParameters | null = null,
-    right_surface: CiftiDilateRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiDilateCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiDilateLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
     nearest: boolean = false,
     merged_volume: boolean = false,
     legacy_mode: boolean = false,
-): CiftiDilateParametersTagged {
+): CiftiDilateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-dilate" as const,
         "cifti-out": cifti_out,
@@ -289,7 +289,7 @@ function cifti_dilate_params(
  * @returns Command-line arguments.
  */
 function cifti_dilate_cargs(
-    params: CiftiDilateParameters,
+    params: CiftiDilateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -325,7 +325,7 @@ function cifti_dilate_cargs(
  * @returns Outputs object.
  */
 function cifti_dilate_outputs(
-    params: CiftiDilateParameters,
+    params: CiftiDilateParamsDict,
     execution: Execution,
 ): CiftiDilateOutputs {
     const ret: CiftiDilateOutputs = {
@@ -351,7 +351,7 @@ function cifti_dilate_outputs(
  * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
  */
 function cifti_dilate_execute(
-    params: CiftiDilateParameters,
+    params: CiftiDilateParamsDict,
     runner: Runner | null = null,
 ): CiftiDilateOutputs {
     runner = runner || getGlobalRunner();
@@ -398,9 +398,9 @@ function cifti_dilate(
     direction: string,
     surface_distance: number,
     volume_distance: number,
-    left_surface: CiftiDilateLeftSurfaceParameters | null = null,
-    right_surface: CiftiDilateRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiDilateCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiDilateLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
     nearest: boolean = false,
     merged_volume: boolean = false,
     legacy_mode: boolean = false,
@@ -413,11 +413,19 @@ function cifti_dilate(
 
 export {
       CIFTI_DILATE_METADATA,
+      CiftiDilateCerebellumSurfaceParamsDict,
+      CiftiDilateCerebellumSurfaceParamsDictTagged,
+      CiftiDilateLeftSurfaceParamsDict,
+      CiftiDilateLeftSurfaceParamsDictTagged,
       CiftiDilateOutputs,
+      CiftiDilateParamsDict,
+      CiftiDilateParamsDictTagged,
+      CiftiDilateRightSurfaceParamsDict,
+      CiftiDilateRightSurfaceParamsDictTagged,
       cifti_dilate,
-      cifti_dilate_cerebellum_surface_params,
+      cifti_dilate_cerebellum_surface,
       cifti_dilate_execute,
-      cifti_dilate_left_surface_params,
+      cifti_dilate_left_surface,
       cifti_dilate_params,
-      cifti_dilate_right_surface_params,
+      cifti_dilate_right_surface,
 };

@@ -11,7 +11,7 @@ const TRAIN_GCS_ATLAS_METADATA: Metadata = {
 };
 
 
-interface TrainGcsAtlasParameters {
+interface TrainGcsAtlasParamsDict {
     "@type"?: "freesurfer/train-gcs-atlas";
     "manual_parcellation"?: string | null | undefined;
     "subjlist_file"?: InputPathType | null | undefined;
@@ -26,11 +26,11 @@ interface TrainGcsAtlasParameters {
     "aseg_filename"?: string | null | undefined;
     "threads"?: number | null | undefined;
 }
-type TrainGcsAtlasParametersTagged = Required<Pick<TrainGcsAtlasParameters, '@type'>> & TrainGcsAtlasParameters;
+type TrainGcsAtlasParamsDictTagged = Required<Pick<TrainGcsAtlasParamsDict, '@type'>> & TrainGcsAtlasParamsDict;
 
 
 /**
- * Output object returned when calling `TrainGcsAtlasParameters(...)`.
+ * Output object returned when calling `TrainGcsAtlasParamsDict(...)`.
  *
  * @interface
  */
@@ -77,7 +77,7 @@ function train_gcs_atlas_params(
     jackknife_flag: boolean = false,
     aseg_filename: string | null = null,
     threads: number | null = null,
-): TrainGcsAtlasParametersTagged {
+): TrainGcsAtlasParamsDictTagged {
     const params = {
         "@type": "freesurfer/train-gcs-atlas" as const,
         "left_hemi": left_hemi,
@@ -122,7 +122,7 @@ function train_gcs_atlas_params(
  * @returns Command-line arguments.
  */
 function train_gcs_atlas_cargs(
-    params: TrainGcsAtlasParameters,
+    params: TrainGcsAtlasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -201,7 +201,7 @@ function train_gcs_atlas_cargs(
  * @returns Outputs object.
  */
 function train_gcs_atlas_outputs(
-    params: TrainGcsAtlasParameters,
+    params: TrainGcsAtlasParamsDict,
     execution: Execution,
 ): TrainGcsAtlasOutputs {
     const ret: TrainGcsAtlasOutputs = {
@@ -227,7 +227,7 @@ function train_gcs_atlas_outputs(
  * @returns NamedTuple of outputs (described in `TrainGcsAtlasOutputs`).
  */
 function train_gcs_atlas_execute(
-    params: TrainGcsAtlasParameters,
+    params: TrainGcsAtlasParamsDict,
     runner: Runner | null = null,
 ): TrainGcsAtlasOutputs {
     runner = runner || getGlobalRunner();
@@ -288,6 +288,8 @@ function train_gcs_atlas(
 export {
       TRAIN_GCS_ATLAS_METADATA,
       TrainGcsAtlasOutputs,
+      TrainGcsAtlasParamsDict,
+      TrainGcsAtlasParamsDictTagged,
       train_gcs_atlas,
       train_gcs_atlas_execute,
       train_gcs_atlas_params,

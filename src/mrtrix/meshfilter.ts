@@ -11,15 +11,15 @@ const MESHFILTER_METADATA: Metadata = {
 };
 
 
-interface MeshfilterConfigParameters {
+interface MeshfilterConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MeshfilterConfigParametersTagged = Required<Pick<MeshfilterConfigParameters, '@type'>> & MeshfilterConfigParameters;
+type MeshfilterConfigParamsDictTagged = Required<Pick<MeshfilterConfigParamsDict, '@type'>> & MeshfilterConfigParamsDict;
 
 
-interface MeshfilterParameters {
+interface MeshfilterParamsDict {
     "@type"?: "mrtrix/meshfilter";
     "smooth_spatial"?: number | null | undefined;
     "smooth_influence"?: number | null | undefined;
@@ -28,14 +28,14 @@ interface MeshfilterParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MeshfilterConfigParameters> | null | undefined;
+    "config"?: Array<MeshfilterConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
     "filter": string;
     "output": string;
 }
-type MeshfilterParametersTagged = Required<Pick<MeshfilterParameters, '@type'>> & MeshfilterParameters;
+type MeshfilterParamsDictTagged = Required<Pick<MeshfilterParamsDict, '@type'>> & MeshfilterParamsDict;
 
 
 /**
@@ -46,10 +46,10 @@ type MeshfilterParametersTagged = Required<Pick<MeshfilterParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function meshfilter_config_params(
+function meshfilter_config(
     key: string,
     value: string,
-): MeshfilterConfigParametersTagged {
+): MeshfilterConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -68,7 +68,7 @@ function meshfilter_config_params(
  * @returns Command-line arguments.
  */
 function meshfilter_config_cargs(
-    params: MeshfilterConfigParameters,
+    params: MeshfilterConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function meshfilter_config_cargs(
 
 
 /**
- * Output object returned when calling `MeshfilterParameters(...)`.
+ * Output object returned when calling `MeshfilterParamsDict(...)`.
  *
  * @interface
  */
@@ -126,10 +126,10 @@ function meshfilter_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MeshfilterConfigParameters> | null = null,
+    config: Array<MeshfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MeshfilterParametersTagged {
+): MeshfilterParamsDictTagged {
     const params = {
         "@type": "mrtrix/meshfilter" as const,
         "info": info,
@@ -167,7 +167,7 @@ function meshfilter_params(
  * @returns Command-line arguments.
  */
 function meshfilter_cargs(
-    params: MeshfilterParameters,
+    params: MeshfilterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -227,7 +227,7 @@ function meshfilter_cargs(
  * @returns Outputs object.
  */
 function meshfilter_outputs(
-    params: MeshfilterParameters,
+    params: MeshfilterParamsDict,
     execution: Execution,
 ): MeshfilterOutputs {
     const ret: MeshfilterOutputs = {
@@ -259,7 +259,7 @@ function meshfilter_outputs(
  * @returns NamedTuple of outputs (described in `MeshfilterOutputs`).
  */
 function meshfilter_execute(
-    params: MeshfilterParameters,
+    params: MeshfilterParamsDict,
     runner: Runner | null = null,
 ): MeshfilterOutputs {
     runner = runner || getGlobalRunner();
@@ -315,7 +315,7 @@ function meshfilter(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MeshfilterConfigParameters> | null = null,
+    config: Array<MeshfilterConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -327,9 +327,13 @@ function meshfilter(
 
 export {
       MESHFILTER_METADATA,
+      MeshfilterConfigParamsDict,
+      MeshfilterConfigParamsDictTagged,
       MeshfilterOutputs,
+      MeshfilterParamsDict,
+      MeshfilterParamsDictTagged,
       meshfilter,
-      meshfilter_config_params,
+      meshfilter_config,
       meshfilter_execute,
       meshfilter_params,
 };

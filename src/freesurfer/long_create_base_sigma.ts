@@ -11,16 +11,16 @@ const LONG_CREATE_BASE_SIGMA_METADATA: Metadata = {
 };
 
 
-interface LongCreateBaseSigmaParameters {
+interface LongCreateBaseSigmaParamsDict {
     "@type"?: "freesurfer/long_create_base_sigma";
     "base_id": string;
     "sigma": number;
 }
-type LongCreateBaseSigmaParametersTagged = Required<Pick<LongCreateBaseSigmaParameters, '@type'>> & LongCreateBaseSigmaParameters;
+type LongCreateBaseSigmaParamsDictTagged = Required<Pick<LongCreateBaseSigmaParamsDict, '@type'>> & LongCreateBaseSigmaParamsDict;
 
 
 /**
- * Output object returned when calling `LongCreateBaseSigmaParameters(...)`.
+ * Output object returned when calling `LongCreateBaseSigmaParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface LongCreateBaseSigmaOutputs {
 function long_create_base_sigma_params(
     base_id: string,
     sigma: number,
-): LongCreateBaseSigmaParametersTagged {
+): LongCreateBaseSigmaParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_create_base_sigma" as const,
         "base_id": base_id,
@@ -62,7 +62,7 @@ function long_create_base_sigma_params(
  * @returns Command-line arguments.
  */
 function long_create_base_sigma_cargs(
-    params: LongCreateBaseSigmaParameters,
+    params: LongCreateBaseSigmaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function long_create_base_sigma_cargs(
  * @returns Outputs object.
  */
 function long_create_base_sigma_outputs(
-    params: LongCreateBaseSigmaParameters,
+    params: LongCreateBaseSigmaParamsDict,
     execution: Execution,
 ): LongCreateBaseSigmaOutputs {
     const ret: LongCreateBaseSigmaOutputs = {
@@ -107,7 +107,7 @@ function long_create_base_sigma_outputs(
  * @returns NamedTuple of outputs (described in `LongCreateBaseSigmaOutputs`).
  */
 function long_create_base_sigma_execute(
-    params: LongCreateBaseSigmaParameters,
+    params: LongCreateBaseSigmaParamsDict,
     runner: Runner | null = null,
 ): LongCreateBaseSigmaOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function long_create_base_sigma(
 export {
       LONG_CREATE_BASE_SIGMA_METADATA,
       LongCreateBaseSigmaOutputs,
+      LongCreateBaseSigmaParamsDict,
+      LongCreateBaseSigmaParamsDictTagged,
       long_create_base_sigma,
       long_create_base_sigma_execute,
       long_create_base_sigma_params,

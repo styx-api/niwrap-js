@@ -11,15 +11,15 @@ const V__AFNI_ORIENT_SIGN_METADATA: Metadata = {
 };
 
 
-interface VAfniOrientSignParameters {
+interface VAfniOrientSignParamsDict {
     "@type"?: "afni/@AfniOrientSign";
     "infile": InputPathType;
 }
-type VAfniOrientSignParametersTagged = Required<Pick<VAfniOrientSignParameters, '@type'>> & VAfniOrientSignParameters;
+type VAfniOrientSignParamsDictTagged = Required<Pick<VAfniOrientSignParamsDict, '@type'>> & VAfniOrientSignParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniOrientSignParameters(...)`.
+ * Output object returned when calling `VAfniOrientSignParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VAfniOrientSignOutputs {
  */
 function v__afni_orient_sign_params(
     infile: InputPathType,
-): VAfniOrientSignParametersTagged {
+): VAfniOrientSignParamsDictTagged {
     const params = {
         "@type": "afni/@AfniOrientSign" as const,
         "infile": infile,
@@ -62,7 +62,7 @@ function v__afni_orient_sign_params(
  * @returns Command-line arguments.
  */
 function v__afni_orient_sign_cargs(
-    params: VAfniOrientSignParameters,
+    params: VAfniOrientSignParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function v__afni_orient_sign_cargs(
  * @returns Outputs object.
  */
 function v__afni_orient_sign_outputs(
-    params: VAfniOrientSignParameters,
+    params: VAfniOrientSignParamsDict,
     execution: Execution,
 ): VAfniOrientSignOutputs {
     const ret: VAfniOrientSignOutputs = {
@@ -110,7 +110,7 @@ function v__afni_orient_sign_outputs(
  * @returns NamedTuple of outputs (described in `VAfniOrientSignOutputs`).
  */
 function v__afni_orient_sign_execute(
-    params: VAfniOrientSignParameters,
+    params: VAfniOrientSignParamsDict,
     runner: Runner | null = null,
 ): VAfniOrientSignOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function v__afni_orient_sign(
 
 export {
       VAfniOrientSignOutputs,
+      VAfniOrientSignParamsDict,
+      VAfniOrientSignParamsDictTagged,
       V__AFNI_ORIENT_SIGN_METADATA,
       v__afni_orient_sign,
       v__afni_orient_sign_execute,

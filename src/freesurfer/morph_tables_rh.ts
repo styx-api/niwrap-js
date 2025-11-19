@@ -11,15 +11,15 @@ const MORPH_TABLES_RH_METADATA: Metadata = {
 };
 
 
-interface MorphTablesRhParameters {
+interface MorphTablesRhParamsDict {
     "@type"?: "freesurfer/morph_tables-rh";
     "options"?: string | null | undefined;
 }
-type MorphTablesRhParametersTagged = Required<Pick<MorphTablesRhParameters, '@type'>> & MorphTablesRhParameters;
+type MorphTablesRhParamsDictTagged = Required<Pick<MorphTablesRhParamsDict, '@type'>> & MorphTablesRhParamsDict;
 
 
 /**
- * Output object returned when calling `MorphTablesRhParameters(...)`.
+ * Output object returned when calling `MorphTablesRhParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MorphTablesRhOutputs {
  */
 function morph_tables_rh_params(
     options: string | null = null,
-): MorphTablesRhParametersTagged {
+): MorphTablesRhParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_tables-rh" as const,
     };
@@ -60,7 +60,7 @@ function morph_tables_rh_params(
  * @returns Command-line arguments.
  */
 function morph_tables_rh_cargs(
-    params: MorphTablesRhParameters,
+    params: MorphTablesRhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function morph_tables_rh_cargs(
  * @returns Outputs object.
  */
 function morph_tables_rh_outputs(
-    params: MorphTablesRhParameters,
+    params: MorphTablesRhParamsDict,
     execution: Execution,
 ): MorphTablesRhOutputs {
     const ret: MorphTablesRhOutputs = {
@@ -109,7 +109,7 @@ function morph_tables_rh_outputs(
  * @returns NamedTuple of outputs (described in `MorphTablesRhOutputs`).
  */
 function morph_tables_rh_execute(
-    params: MorphTablesRhParameters,
+    params: MorphTablesRhParamsDict,
     runner: Runner | null = null,
 ): MorphTablesRhOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function morph_tables_rh(
 export {
       MORPH_TABLES_RH_METADATA,
       MorphTablesRhOutputs,
+      MorphTablesRhParamsDict,
+      MorphTablesRhParamsDictTagged,
       morph_tables_rh,
       morph_tables_rh_execute,
       morph_tables_rh_params,

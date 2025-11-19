@@ -11,7 +11,7 @@ const WARP_TIME_SERIES_IMAGE_MULTI_TRANSFORM_METADATA: Metadata = {
 };
 
 
-interface WarpTimeSeriesImageMultiTransformParameters {
+interface WarpTimeSeriesImageMultiTransformParamsDict {
     "@type"?: "ants/WarpTimeSeriesImageMultiTransform";
     "image_dimension": 3 | 4;
     "moving_image": InputPathType;
@@ -20,11 +20,11 @@ interface WarpTimeSeriesImageMultiTransformParameters {
     "transforms": Array<string>;
     "interpolation"?: "NearestNeighbor" | "BSpline" | null | undefined;
 }
-type WarpTimeSeriesImageMultiTransformParametersTagged = Required<Pick<WarpTimeSeriesImageMultiTransformParameters, '@type'>> & WarpTimeSeriesImageMultiTransformParameters;
+type WarpTimeSeriesImageMultiTransformParamsDictTagged = Required<Pick<WarpTimeSeriesImageMultiTransformParamsDict, '@type'>> & WarpTimeSeriesImageMultiTransformParamsDict;
 
 
 /**
- * Output object returned when calling `WarpTimeSeriesImageMultiTransformParameters(...)`.
+ * Output object returned when calling `WarpTimeSeriesImageMultiTransformParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function warp_time_series_image_multi_transform_params(
     reference_image: InputPathType,
     transforms: Array<string>,
     interpolation: "NearestNeighbor" | "BSpline" | null = null,
-): WarpTimeSeriesImageMultiTransformParametersTagged {
+): WarpTimeSeriesImageMultiTransformParamsDictTagged {
     const params = {
         "@type": "ants/WarpTimeSeriesImageMultiTransform" as const,
         "image_dimension": image_dimension,
@@ -84,7 +84,7 @@ function warp_time_series_image_multi_transform_params(
  * @returns Command-line arguments.
  */
 function warp_time_series_image_multi_transform_cargs(
-    params: WarpTimeSeriesImageMultiTransformParameters,
+    params: WarpTimeSeriesImageMultiTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -113,7 +113,7 @@ function warp_time_series_image_multi_transform_cargs(
  * @returns Outputs object.
  */
 function warp_time_series_image_multi_transform_outputs(
-    params: WarpTimeSeriesImageMultiTransformParameters,
+    params: WarpTimeSeriesImageMultiTransformParamsDict,
     execution: Execution,
 ): WarpTimeSeriesImageMultiTransformOutputs {
     const ret: WarpTimeSeriesImageMultiTransformOutputs = {
@@ -139,7 +139,7 @@ function warp_time_series_image_multi_transform_outputs(
  * @returns NamedTuple of outputs (described in `WarpTimeSeriesImageMultiTransformOutputs`).
  */
 function warp_time_series_image_multi_transform_execute(
-    params: WarpTimeSeriesImageMultiTransformParameters,
+    params: WarpTimeSeriesImageMultiTransformParamsDict,
     runner: Runner | null = null,
 ): WarpTimeSeriesImageMultiTransformOutputs {
     runner = runner || getGlobalRunner();
@@ -188,6 +188,8 @@ function warp_time_series_image_multi_transform(
 export {
       WARP_TIME_SERIES_IMAGE_MULTI_TRANSFORM_METADATA,
       WarpTimeSeriesImageMultiTransformOutputs,
+      WarpTimeSeriesImageMultiTransformParamsDict,
+      WarpTimeSeriesImageMultiTransformParamsDictTagged,
       warp_time_series_image_multi_transform,
       warp_time_series_image_multi_transform_execute,
       warp_time_series_image_multi_transform_params,

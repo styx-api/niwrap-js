@@ -11,7 +11,7 @@ const FSL_PREPARE_FIELDMAP_METADATA: Metadata = {
 };
 
 
-interface FslPrepareFieldmapParameters {
+interface FslPrepareFieldmapParamsDict {
     "@type"?: "fsl/fsl_prepare_fieldmap";
     "scanner": string;
     "phase_image": InputPathType;
@@ -20,11 +20,11 @@ interface FslPrepareFieldmapParameters {
     "delta_te": number;
     "nocheck_flag": boolean;
 }
-type FslPrepareFieldmapParametersTagged = Required<Pick<FslPrepareFieldmapParameters, '@type'>> & FslPrepareFieldmapParameters;
+type FslPrepareFieldmapParamsDictTagged = Required<Pick<FslPrepareFieldmapParamsDict, '@type'>> & FslPrepareFieldmapParamsDict;
 
 
 /**
- * Output object returned when calling `FslPrepareFieldmapParameters(...)`.
+ * Output object returned when calling `FslPrepareFieldmapParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function fsl_prepare_fieldmap_params(
     out_image: string,
     delta_te: number,
     nocheck_flag: boolean = false,
-): FslPrepareFieldmapParametersTagged {
+): FslPrepareFieldmapParamsDictTagged {
     const params = {
         "@type": "fsl/fsl_prepare_fieldmap" as const,
         "scanner": scanner,
@@ -82,7 +82,7 @@ function fsl_prepare_fieldmap_params(
  * @returns Command-line arguments.
  */
 function fsl_prepare_fieldmap_cargs(
-    params: FslPrepareFieldmapParameters,
+    params: FslPrepareFieldmapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function fsl_prepare_fieldmap_cargs(
  * @returns Outputs object.
  */
 function fsl_prepare_fieldmap_outputs(
-    params: FslPrepareFieldmapParameters,
+    params: FslPrepareFieldmapParamsDict,
     execution: Execution,
 ): FslPrepareFieldmapOutputs {
     const ret: FslPrepareFieldmapOutputs = {
@@ -134,7 +134,7 @@ function fsl_prepare_fieldmap_outputs(
  * @returns NamedTuple of outputs (described in `FslPrepareFieldmapOutputs`).
  */
 function fsl_prepare_fieldmap_execute(
-    params: FslPrepareFieldmapParameters,
+    params: FslPrepareFieldmapParamsDict,
     runner: Runner | null = null,
 ): FslPrepareFieldmapOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function fsl_prepare_fieldmap(
 export {
       FSL_PREPARE_FIELDMAP_METADATA,
       FslPrepareFieldmapOutputs,
+      FslPrepareFieldmapParamsDict,
+      FslPrepareFieldmapParamsDictTagged,
       fsl_prepare_fieldmap,
       fsl_prepare_fieldmap_execute,
       fsl_prepare_fieldmap_params,

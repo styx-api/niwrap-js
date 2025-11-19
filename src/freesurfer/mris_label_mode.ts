@@ -11,7 +11,7 @@ const MRIS_LABEL_MODE_METADATA: Metadata = {
 };
 
 
-interface MrisLabelModeParameters {
+interface MrisLabelModeParamsDict {
     "@type"?: "freesurfer/mris_label_mode";
     "input_curv_file": InputPathType;
     "hemi": string;
@@ -22,11 +22,11 @@ interface MrisLabelModeParameters {
     "statistics_cond"?: string | null | undefined;
     "output_directory"?: string | null | undefined;
 }
-type MrisLabelModeParametersTagged = Required<Pick<MrisLabelModeParameters, '@type'>> & MrisLabelModeParameters;
+type MrisLabelModeParamsDictTagged = Required<Pick<MrisLabelModeParamsDict, '@type'>> & MrisLabelModeParamsDict;
 
 
 /**
- * Output object returned when calling `MrisLabelModeParameters(...)`.
+ * Output object returned when calling `MrisLabelModeParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function mris_label_mode_params(
     summary_statistics: boolean = false,
     statistics_cond: string | null = null,
     output_directory: string | null = null,
-): MrisLabelModeParametersTagged {
+): MrisLabelModeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_label_mode" as const,
         "input_curv_file": input_curv_file,
@@ -90,7 +90,7 @@ function mris_label_mode_params(
  * @returns Command-line arguments.
  */
 function mris_label_mode_cargs(
-    params: MrisLabelModeParameters,
+    params: MrisLabelModeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function mris_label_mode_cargs(
  * @returns Outputs object.
  */
 function mris_label_mode_outputs(
-    params: MrisLabelModeParameters,
+    params: MrisLabelModeParamsDict,
     execution: Execution,
 ): MrisLabelModeOutputs {
     const ret: MrisLabelModeOutputs = {
@@ -150,7 +150,7 @@ function mris_label_mode_outputs(
  * @returns NamedTuple of outputs (described in `MrisLabelModeOutputs`).
  */
 function mris_label_mode_execute(
-    params: MrisLabelModeParameters,
+    params: MrisLabelModeParamsDict,
     runner: Runner | null = null,
 ): MrisLabelModeOutputs {
     runner = runner || getGlobalRunner();
@@ -203,6 +203,8 @@ function mris_label_mode(
 export {
       MRIS_LABEL_MODE_METADATA,
       MrisLabelModeOutputs,
+      MrisLabelModeParamsDict,
+      MrisLabelModeParamsDictTagged,
       mris_label_mode,
       mris_label_mode_execute,
       mris_label_mode_params,

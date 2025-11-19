@@ -11,16 +11,16 @@ const FSLSLICE_METADATA: Metadata = {
 };
 
 
-interface FslsliceParameters {
+interface FslsliceParamsDict {
     "@type"?: "fsl/fslslice";
     "volume": InputPathType;
     "output_basename"?: string | null | undefined;
 }
-type FslsliceParametersTagged = Required<Pick<FslsliceParameters, '@type'>> & FslsliceParameters;
+type FslsliceParamsDictTagged = Required<Pick<FslsliceParamsDict, '@type'>> & FslsliceParamsDict;
 
 
 /**
- * Output object returned when calling `FslsliceParameters(...)`.
+ * Output object returned when calling `FslsliceParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FslsliceOutputs {
 function fslslice_params(
     volume: InputPathType,
     output_basename: string | null = null,
-): FslsliceParametersTagged {
+): FslsliceParamsDictTagged {
     const params = {
         "@type": "fsl/fslslice" as const,
         "volume": volume,
@@ -64,7 +64,7 @@ function fslslice_params(
  * @returns Command-line arguments.
  */
 function fslslice_cargs(
-    params: FslsliceParameters,
+    params: FslsliceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function fslslice_cargs(
  * @returns Outputs object.
  */
 function fslslice_outputs(
-    params: FslsliceParameters,
+    params: FslsliceParamsDict,
     execution: Execution,
 ): FslsliceOutputs {
     const ret: FslsliceOutputs = {
@@ -111,7 +111,7 @@ function fslslice_outputs(
  * @returns NamedTuple of outputs (described in `FslsliceOutputs`).
  */
 function fslslice_execute(
-    params: FslsliceParameters,
+    params: FslsliceParamsDict,
     runner: Runner | null = null,
 ): FslsliceOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function fslslice(
 export {
       FSLSLICE_METADATA,
       FslsliceOutputs,
+      FslsliceParamsDict,
+      FslsliceParamsDictTagged,
       fslslice,
       fslslice_execute,
       fslslice_params,

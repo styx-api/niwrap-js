@@ -11,18 +11,18 @@ const CLUST_EXP_HIST_TABLE_PY_METADATA: Metadata = {
 };
 
 
-interface ClustExpHistTablePyParameters {
+interface ClustExpHistTablePyParamsDict {
     "@type"?: "afni/ClustExp_HistTable.py";
     "stat_dset": InputPathType;
     "prefix"?: string | null | undefined;
     "session"?: string | null | undefined;
     "overwrite": boolean;
 }
-type ClustExpHistTablePyParametersTagged = Required<Pick<ClustExpHistTablePyParameters, '@type'>> & ClustExpHistTablePyParameters;
+type ClustExpHistTablePyParamsDictTagged = Required<Pick<ClustExpHistTablePyParamsDict, '@type'>> & ClustExpHistTablePyParamsDict;
 
 
 /**
- * Output object returned when calling `ClustExpHistTablePyParameters(...)`.
+ * Output object returned when calling `ClustExpHistTablePyParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function clust_exp_hist_table_py_params(
     prefix: string | null = null,
     session: string | null = null,
     overwrite: boolean = false,
-): ClustExpHistTablePyParametersTagged {
+): ClustExpHistTablePyParamsDictTagged {
     const params = {
         "@type": "afni/ClustExp_HistTable.py" as const,
         "stat_dset": stat_dset,
@@ -78,7 +78,7 @@ function clust_exp_hist_table_py_params(
  * @returns Command-line arguments.
  */
 function clust_exp_hist_table_py_cargs(
-    params: ClustExpHistTablePyParameters,
+    params: ClustExpHistTablePyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function clust_exp_hist_table_py_cargs(
  * @returns Outputs object.
  */
 function clust_exp_hist_table_py_outputs(
-    params: ClustExpHistTablePyParameters,
+    params: ClustExpHistTablePyParamsDict,
     execution: Execution,
 ): ClustExpHistTablePyOutputs {
     const ret: ClustExpHistTablePyOutputs = {
@@ -141,7 +141,7 @@ function clust_exp_hist_table_py_outputs(
  * @returns NamedTuple of outputs (described in `ClustExpHistTablePyOutputs`).
  */
 function clust_exp_hist_table_py_execute(
-    params: ClustExpHistTablePyParameters,
+    params: ClustExpHistTablePyParamsDict,
     runner: Runner | null = null,
 ): ClustExpHistTablePyOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function clust_exp_hist_table_py(
 export {
       CLUST_EXP_HIST_TABLE_PY_METADATA,
       ClustExpHistTablePyOutputs,
+      ClustExpHistTablePyParamsDict,
+      ClustExpHistTablePyParamsDictTagged,
       clust_exp_hist_table_py,
       clust_exp_hist_table_py_execute,
       clust_exp_hist_table_py_params,

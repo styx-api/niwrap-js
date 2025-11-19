@@ -11,23 +11,23 @@ const SS3T_CSD_BETA1_METADATA: Metadata = {
 };
 
 
-interface Ss3tCsdBeta1ConfigParameters {
+interface Ss3tCsdBeta1ConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Ss3tCsdBeta1ConfigParametersTagged = Required<Pick<Ss3tCsdBeta1ConfigParameters, '@type'>> & Ss3tCsdBeta1ConfigParameters;
+type Ss3tCsdBeta1ConfigParamsDictTagged = Required<Pick<Ss3tCsdBeta1ConfigParamsDict, '@type'>> & Ss3tCsdBeta1ConfigParamsDict;
 
 
-interface Ss3tCsdBeta1ResponseOdfParameters {
+interface Ss3tCsdBeta1ResponseOdfParamsDict {
     "@type"?: "response_odf";
     "response": InputPathType;
     "odf": string;
 }
-type Ss3tCsdBeta1ResponseOdfParametersTagged = Required<Pick<Ss3tCsdBeta1ResponseOdfParameters, '@type'>> & Ss3tCsdBeta1ResponseOdfParameters;
+type Ss3tCsdBeta1ResponseOdfParamsDictTagged = Required<Pick<Ss3tCsdBeta1ResponseOdfParamsDict, '@type'>> & Ss3tCsdBeta1ResponseOdfParamsDict;
 
 
-interface Ss3tCsdBeta1Parameters {
+interface Ss3tCsdBeta1ParamsDict {
     "@type"?: "mrtrix3tissue/ss3t_csd_beta1";
     "mask"?: InputPathType | null | undefined;
     "bzero_pct"?: number | null | undefined;
@@ -37,13 +37,13 @@ interface Ss3tCsdBeta1Parameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Ss3tCsdBeta1ConfigParameters> | null | undefined;
+    "config"?: Array<Ss3tCsdBeta1ConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "dwi": InputPathType;
-    "response_odf": Array<Ss3tCsdBeta1ResponseOdfParameters>;
+    "response_odf": Array<Ss3tCsdBeta1ResponseOdfParamsDict>;
 }
-type Ss3tCsdBeta1ParametersTagged = Required<Pick<Ss3tCsdBeta1Parameters, '@type'>> & Ss3tCsdBeta1Parameters;
+type Ss3tCsdBeta1ParamsDictTagged = Required<Pick<Ss3tCsdBeta1ParamsDict, '@type'>> & Ss3tCsdBeta1ParamsDict;
 
 
 /**
@@ -54,10 +54,10 @@ type Ss3tCsdBeta1ParametersTagged = Required<Pick<Ss3tCsdBeta1Parameters, '@type
  *
  * @returns Parameter dictionary
  */
-function ss3t_csd_beta1_config_params(
+function ss3t_csd_beta1_config(
     key: string,
     value: string,
-): Ss3tCsdBeta1ConfigParametersTagged {
+): Ss3tCsdBeta1ConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -76,7 +76,7 @@ function ss3t_csd_beta1_config_params(
  * @returns Command-line arguments.
  */
 function ss3t_csd_beta1_config_cargs(
-    params: Ss3tCsdBeta1ConfigParameters,
+    params: Ss3tCsdBeta1ConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function ss3t_csd_beta1_config_cargs(
 
 
 /**
- * Output object returned when calling `Array<Ss3tCsdBeta1ResponseOdfParameters>(...)`.
+ * Output object returned when calling `Array<Ss3tCsdBeta1ResponseOdfParamsDict>(...)`.
  *
  * @interface
  */
@@ -112,10 +112,10 @@ interface Ss3tCsdBeta1ResponseOdfOutputs {
  *
  * @returns Parameter dictionary
  */
-function ss3t_csd_beta1_response_odf_params(
+function ss3t_csd_beta1_response_odf(
     response: InputPathType,
     odf: string,
-): Ss3tCsdBeta1ResponseOdfParametersTagged {
+): Ss3tCsdBeta1ResponseOdfParamsDictTagged {
     const params = {
         "@type": "response_odf" as const,
         "response": response,
@@ -134,7 +134,7 @@ function ss3t_csd_beta1_response_odf_params(
  * @returns Command-line arguments.
  */
 function ss3t_csd_beta1_response_odf_cargs(
-    params: Ss3tCsdBeta1ResponseOdfParameters,
+    params: Ss3tCsdBeta1ResponseOdfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -153,7 +153,7 @@ function ss3t_csd_beta1_response_odf_cargs(
  * @returns Outputs object.
  */
 function ss3t_csd_beta1_response_odf_outputs(
-    params: Ss3tCsdBeta1ResponseOdfParameters,
+    params: Ss3tCsdBeta1ResponseOdfParamsDict,
     execution: Execution,
 ): Ss3tCsdBeta1ResponseOdfOutputs {
     const ret: Ss3tCsdBeta1ResponseOdfOutputs = {
@@ -165,7 +165,7 @@ function ss3t_csd_beta1_response_odf_outputs(
 
 
 /**
- * Output object returned when calling `Ss3tCsdBeta1Parameters(...)`.
+ * Output object returned when calling `Ss3tCsdBeta1ParamsDict(...)`.
  *
  * @interface
  */
@@ -202,7 +202,7 @@ interface Ss3tCsdBeta1Outputs {
  */
 function ss3t_csd_beta1_params(
     dwi: InputPathType,
-    response_odf: Array<Ss3tCsdBeta1ResponseOdfParameters>,
+    response_odf: Array<Ss3tCsdBeta1ResponseOdfParamsDict>,
     mask: InputPathType | null = null,
     bzero_pct: number | null = null,
     niter: number | null = null,
@@ -211,10 +211,10 @@ function ss3t_csd_beta1_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Ss3tCsdBeta1ConfigParameters> | null = null,
+    config: Array<Ss3tCsdBeta1ConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Ss3tCsdBeta1ParametersTagged {
+): Ss3tCsdBeta1ParamsDictTagged {
     const params = {
         "@type": "mrtrix3tissue/ss3t_csd_beta1" as const,
         "info": info,
@@ -254,7 +254,7 @@ function ss3t_csd_beta1_params(
  * @returns Command-line arguments.
  */
 function ss3t_csd_beta1_cargs(
-    params: Ss3tCsdBeta1Parameters,
+    params: Ss3tCsdBeta1ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -319,7 +319,7 @@ function ss3t_csd_beta1_cargs(
  * @returns Outputs object.
  */
 function ss3t_csd_beta1_outputs(
-    params: Ss3tCsdBeta1Parameters,
+    params: Ss3tCsdBeta1ParamsDict,
     execution: Execution,
 ): Ss3tCsdBeta1Outputs {
     const ret: Ss3tCsdBeta1Outputs = {
@@ -347,7 +347,7 @@ function ss3t_csd_beta1_outputs(
  * @returns NamedTuple of outputs (described in `Ss3tCsdBeta1Outputs`).
  */
 function ss3t_csd_beta1_execute(
-    params: Ss3tCsdBeta1Parameters,
+    params: Ss3tCsdBeta1ParamsDict,
     runner: Runner | null = null,
 ): Ss3tCsdBeta1Outputs {
     runner = runner || getGlobalRunner();
@@ -390,7 +390,7 @@ function ss3t_csd_beta1_execute(
  */
 function ss3t_csd_beta1(
     dwi: InputPathType,
-    response_odf: Array<Ss3tCsdBeta1ResponseOdfParameters>,
+    response_odf: Array<Ss3tCsdBeta1ResponseOdfParamsDict>,
     mask: InputPathType | null = null,
     bzero_pct: number | null = null,
     niter: number | null = null,
@@ -399,7 +399,7 @@ function ss3t_csd_beta1(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Ss3tCsdBeta1ConfigParameters> | null = null,
+    config: Array<Ss3tCsdBeta1ConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -411,11 +411,17 @@ function ss3t_csd_beta1(
 
 export {
       SS3T_CSD_BETA1_METADATA,
+      Ss3tCsdBeta1ConfigParamsDict,
+      Ss3tCsdBeta1ConfigParamsDictTagged,
       Ss3tCsdBeta1Outputs,
+      Ss3tCsdBeta1ParamsDict,
+      Ss3tCsdBeta1ParamsDictTagged,
       Ss3tCsdBeta1ResponseOdfOutputs,
+      Ss3tCsdBeta1ResponseOdfParamsDict,
+      Ss3tCsdBeta1ResponseOdfParamsDictTagged,
       ss3t_csd_beta1,
-      ss3t_csd_beta1_config_params,
+      ss3t_csd_beta1_config,
       ss3t_csd_beta1_execute,
       ss3t_csd_beta1_params,
-      ss3t_csd_beta1_response_odf_params,
+      ss3t_csd_beta1_response_odf,
 };

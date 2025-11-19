@@ -11,7 +11,7 @@ const MRI_EM_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MriEmRegisterParameters {
+interface MriEmRegisterParamsDict {
     "@type"?: "freesurfer/mri_em_register";
     "input_volume": InputPathType;
     "template_gca": InputPathType;
@@ -70,11 +70,11 @@ interface MriEmRegisterParameters {
     "momentum"?: number | null | undefined;
     "threads"?: number | null | undefined;
 }
-type MriEmRegisterParametersTagged = Required<Pick<MriEmRegisterParameters, '@type'>> & MriEmRegisterParameters;
+type MriEmRegisterParamsDictTagged = Required<Pick<MriEmRegisterParamsDict, '@type'>> & MriEmRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MriEmRegisterParameters(...)`.
+ * Output object returned when calling `MriEmRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -209,7 +209,7 @@ function mri_em_register_params(
     ctl_point_pct: number | null = null,
     momentum: number | null = null,
     threads: number | null = null,
-): MriEmRegisterParametersTagged {
+): MriEmRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_em_register" as const,
         "input_volume": input_volume,
@@ -368,7 +368,7 @@ function mri_em_register_params(
  * @returns Command-line arguments.
  */
 function mri_em_register_cargs(
-    params: MriEmRegisterParameters,
+    params: MriEmRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -677,7 +677,7 @@ function mri_em_register_cargs(
  * @returns Outputs object.
  */
 function mri_em_register_outputs(
-    params: MriEmRegisterParameters,
+    params: MriEmRegisterParamsDict,
     execution: Execution,
 ): MriEmRegisterOutputs {
     const ret: MriEmRegisterOutputs = {
@@ -703,7 +703,7 @@ function mri_em_register_outputs(
  * @returns NamedTuple of outputs (described in `MriEmRegisterOutputs`).
  */
 function mri_em_register_execute(
-    params: MriEmRegisterParameters,
+    params: MriEmRegisterParamsDict,
     runner: Runner | null = null,
 ): MriEmRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -852,6 +852,8 @@ function mri_em_register(
 export {
       MRI_EM_REGISTER_METADATA,
       MriEmRegisterOutputs,
+      MriEmRegisterParamsDict,
+      MriEmRegisterParamsDictTagged,
       mri_em_register,
       mri_em_register_execute,
       mri_em_register_params,

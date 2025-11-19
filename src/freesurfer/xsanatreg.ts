@@ -11,7 +11,7 @@ const XSANATREG_METADATA: Metadata = {
 };
 
 
-interface XsanatregParameters {
+interface XsanatregParamsDict {
     "@type"?: "freesurfer/xsanatreg";
     "src_cordir": string;
     "targ_cordir": string;
@@ -23,11 +23,11 @@ interface XsanatregParameters {
     "version": boolean;
     "umask"?: string | null | undefined;
 }
-type XsanatregParametersTagged = Required<Pick<XsanatregParameters, '@type'>> & XsanatregParameters;
+type XsanatregParamsDictTagged = Required<Pick<XsanatregParamsDict, '@type'>> & XsanatregParamsDict;
 
 
 /**
- * Output object returned when calling `XsanatregParameters(...)`.
+ * Output object returned when calling `XsanatregParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function xsanatreg_params(
     no_cleanup: boolean = false,
     version: boolean = false,
     umask: string | null = null,
-): XsanatregParametersTagged {
+): XsanatregParamsDictTagged {
     const params = {
         "@type": "freesurfer/xsanatreg" as const,
         "src_cordir": src_cordir,
@@ -98,7 +98,7 @@ function xsanatreg_params(
  * @returns Command-line arguments.
  */
 function xsanatreg_cargs(
-    params: XsanatregParameters,
+    params: XsanatregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function xsanatreg_cargs(
  * @returns Outputs object.
  */
 function xsanatreg_outputs(
-    params: XsanatregParameters,
+    params: XsanatregParamsDict,
     execution: Execution,
 ): XsanatregOutputs {
     const ret: XsanatregOutputs = {
@@ -183,7 +183,7 @@ function xsanatreg_outputs(
  * @returns NamedTuple of outputs (described in `XsanatregOutputs`).
  */
 function xsanatreg_execute(
-    params: XsanatregParameters,
+    params: XsanatregParamsDict,
     runner: Runner | null = null,
 ): XsanatregOutputs {
     runner = runner || getGlobalRunner();
@@ -238,6 +238,8 @@ function xsanatreg(
 export {
       XSANATREG_METADATA,
       XsanatregOutputs,
+      XsanatregParamsDict,
+      XsanatregParamsDictTagged,
       xsanatreg,
       xsanatreg_execute,
       xsanatreg_params,

@@ -11,7 +11,7 @@ const MULTIPLY_IMAGES_METADATA: Metadata = {
 };
 
 
-interface MultiplyImagesParameters {
+interface MultiplyImagesParamsDict {
     "@type"?: "ants/MultiplyImages";
     "dimension": 3 | 2;
     "first_input": InputPathType;
@@ -20,11 +20,11 @@ interface MultiplyImagesParameters {
     "output_product_image": string;
     "num_threads"?: number | null | undefined;
 }
-type MultiplyImagesParametersTagged = Required<Pick<MultiplyImagesParameters, '@type'>> & MultiplyImagesParameters;
+type MultiplyImagesParamsDictTagged = Required<Pick<MultiplyImagesParamsDict, '@type'>> & MultiplyImagesParamsDict;
 
 
 /**
- * Output object returned when calling `MultiplyImagesParameters(...)`.
+ * Output object returned when calling `MultiplyImagesParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function multiply_images_params(
     second_input: InputPathType | null = null,
     second_input_2: number | null = null,
     num_threads: number | null = null,
-): MultiplyImagesParametersTagged {
+): MultiplyImagesParamsDictTagged {
     const params = {
         "@type": "ants/MultiplyImages" as const,
         "dimension": dimension,
@@ -88,7 +88,7 @@ function multiply_images_params(
  * @returns Command-line arguments.
  */
 function multiply_images_cargs(
-    params: MultiplyImagesParameters,
+    params: MultiplyImagesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function multiply_images_cargs(
  * @returns Outputs object.
  */
 function multiply_images_outputs(
-    params: MultiplyImagesParameters,
+    params: MultiplyImagesParamsDict,
     execution: Execution,
 ): MultiplyImagesOutputs {
     const ret: MultiplyImagesOutputs = {
@@ -144,7 +144,7 @@ function multiply_images_outputs(
  * @returns NamedTuple of outputs (described in `MultiplyImagesOutputs`).
  */
 function multiply_images_execute(
-    params: MultiplyImagesParameters,
+    params: MultiplyImagesParamsDict,
     runner: Runner | null = null,
 ): MultiplyImagesOutputs {
     runner = runner || getGlobalRunner();
@@ -193,6 +193,8 @@ function multiply_images(
 export {
       MULTIPLY_IMAGES_METADATA,
       MultiplyImagesOutputs,
+      MultiplyImagesParamsDict,
+      MultiplyImagesParamsDictTagged,
       multiply_images,
       multiply_images_execute,
       multiply_images_params,

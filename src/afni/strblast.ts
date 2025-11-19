@@ -11,7 +11,7 @@ const STRBLAST_METADATA: Metadata = {
 };
 
 
-interface StrblastParameters {
+interface StrblastParamsDict {
     "@type"?: "afni/strblast";
     "targetstring": string;
     "input_files": Array<InputPathType>;
@@ -21,11 +21,11 @@ interface StrblastParameters {
     "quiet": boolean;
     "help": boolean;
 }
-type StrblastParametersTagged = Required<Pick<StrblastParameters, '@type'>> & StrblastParameters;
+type StrblastParamsDictTagged = Required<Pick<StrblastParamsDict, '@type'>> & StrblastParamsDict;
 
 
 /**
- * Output object returned when calling `StrblastParameters(...)`.
+ * Output object returned when calling `StrblastParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function strblast_params(
     unescape: boolean = false,
     quiet: boolean = false,
     help: boolean = false,
-): StrblastParametersTagged {
+): StrblastParamsDictTagged {
     const params = {
         "@type": "afni/strblast" as const,
         "targetstring": targetstring,
@@ -86,7 +86,7 @@ function strblast_params(
  * @returns Command-line arguments.
  */
 function strblast_cargs(
-    params: StrblastParameters,
+    params: StrblastParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function strblast_cargs(
  * @returns Outputs object.
  */
 function strblast_outputs(
-    params: StrblastParameters,
+    params: StrblastParamsDict,
     execution: Execution,
 ): StrblastOutputs {
     const ret: StrblastOutputs = {
@@ -152,7 +152,7 @@ function strblast_outputs(
  * @returns NamedTuple of outputs (described in `StrblastOutputs`).
  */
 function strblast_execute(
-    params: StrblastParameters,
+    params: StrblastParamsDict,
     runner: Runner | null = null,
 ): StrblastOutputs {
     runner = runner || getGlobalRunner();
@@ -203,6 +203,8 @@ function strblast(
 export {
       STRBLAST_METADATA,
       StrblastOutputs,
+      StrblastParamsDict,
+      StrblastParamsDictTagged,
       strblast,
       strblast_execute,
       strblast_params,

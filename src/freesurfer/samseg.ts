@@ -11,7 +11,7 @@ const SAMSEG_METADATA: Metadata = {
 };
 
 
-interface SamsegParameters {
+interface SamsegParamsDict {
     "@type"?: "freesurfer/samseg";
     "input_files": Array<InputPathType>;
     "t1w_files"?: Array<InputPathType> | null | undefined;
@@ -58,11 +58,11 @@ interface SamsegParameters {
     "smooth_wm_cortex"?: number | null | undefined;
     "profile_file"?: InputPathType | null | undefined;
 }
-type SamsegParametersTagged = Required<Pick<SamsegParameters, '@type'>> & SamsegParameters;
+type SamsegParamsDictTagged = Required<Pick<SamsegParamsDict, '@type'>> & SamsegParamsDict;
 
 
 /**
- * Output object returned when calling `SamsegParameters(...)`.
+ * Output object returned when calling `SamsegParamsDict(...)`.
  *
  * @interface
  */
@@ -185,7 +185,7 @@ function samseg_params(
     ignore_unknown: boolean = false,
     smooth_wm_cortex: number | null = null,
     profile_file: InputPathType | null = null,
-): SamsegParametersTagged {
+): SamsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/samseg" as const,
         "input_files": input_files,
@@ -290,7 +290,7 @@ function samseg_params(
  * @returns Command-line arguments.
  */
 function samseg_cargs(
-    params: SamsegParameters,
+    params: SamsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -508,7 +508,7 @@ function samseg_cargs(
  * @returns Outputs object.
  */
 function samseg_outputs(
-    params: SamsegParameters,
+    params: SamsegParamsDict,
     execution: Execution,
 ): SamsegOutputs {
     const ret: SamsegOutputs = {
@@ -537,7 +537,7 @@ function samseg_outputs(
  * @returns NamedTuple of outputs (described in `SamsegOutputs`).
  */
 function samseg_execute(
-    params: SamsegParameters,
+    params: SamsegParamsDict,
     runner: Runner | null = null,
 ): SamsegOutputs {
     runner = runner || getGlobalRunner();
@@ -662,6 +662,8 @@ function samseg(
 export {
       SAMSEG_METADATA,
       SamsegOutputs,
+      SamsegParamsDict,
+      SamsegParamsDictTagged,
       samseg,
       samseg_execute,
       samseg_params,

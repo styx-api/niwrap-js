@@ -11,7 +11,7 @@ const DISTANCEMAP_METADATA: Metadata = {
 };
 
 
-interface DistancemapParameters {
+interface DistancemapParamsDict {
     "@type"?: "fsl/distancemap";
     "input_image": InputPathType;
     "output_image": string;
@@ -24,11 +24,11 @@ interface DistancemapParameters {
     "verbose_flag": boolean;
     "help_flag": boolean;
 }
-type DistancemapParametersTagged = Required<Pick<DistancemapParameters, '@type'>> & DistancemapParameters;
+type DistancemapParamsDictTagged = Required<Pick<DistancemapParamsDict, '@type'>> & DistancemapParamsDict;
 
 
 /**
- * Output object returned when calling `DistancemapParameters(...)`.
+ * Output object returned when calling `DistancemapParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function distancemap_params(
     interpolate_values: InputPathType | null = null,
     verbose_flag: boolean = false,
     help_flag: boolean = false,
-): DistancemapParametersTagged {
+): DistancemapParamsDictTagged {
     const params = {
         "@type": "fsl/distancemap" as const,
         "input_image": input_image,
@@ -116,7 +116,7 @@ function distancemap_params(
  * @returns Command-line arguments.
  */
 function distancemap_cargs(
-    params: DistancemapParameters,
+    params: DistancemapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -181,7 +181,7 @@ function distancemap_cargs(
  * @returns Outputs object.
  */
 function distancemap_outputs(
-    params: DistancemapParameters,
+    params: DistancemapParamsDict,
     execution: Execution,
 ): DistancemapOutputs {
     const ret: DistancemapOutputs = {
@@ -209,7 +209,7 @@ function distancemap_outputs(
  * @returns NamedTuple of outputs (described in `DistancemapOutputs`).
  */
 function distancemap_execute(
-    params: DistancemapParameters,
+    params: DistancemapParamsDict,
     runner: Runner | null = null,
 ): DistancemapOutputs {
     runner = runner || getGlobalRunner();
@@ -266,6 +266,8 @@ function distancemap(
 export {
       DISTANCEMAP_METADATA,
       DistancemapOutputs,
+      DistancemapParamsDict,
+      DistancemapParamsDictTagged,
       distancemap,
       distancemap_execute,
       distancemap_params,

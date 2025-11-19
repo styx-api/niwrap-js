@@ -11,18 +11,18 @@ const TRIDEC_METADATA: Metadata = {
 };
 
 
-interface TridecParameters {
+interface TridecParamsDict {
     "@type"?: "freesurfer/tridec";
     "subject_name": string;
     "fine_file": InputPathType;
     "ico_file": InputPathType;
     "out_file": string;
 }
-type TridecParametersTagged = Required<Pick<TridecParameters, '@type'>> & TridecParameters;
+type TridecParamsDictTagged = Required<Pick<TridecParamsDict, '@type'>> & TridecParamsDict;
 
 
 /**
- * Output object returned when calling `TridecParameters(...)`.
+ * Output object returned when calling `TridecParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function tridec_params(
     fine_file: InputPathType,
     ico_file: InputPathType,
     out_file: string,
-): TridecParametersTagged {
+): TridecParamsDictTagged {
     const params = {
         "@type": "freesurfer/tridec" as const,
         "subject_name": subject_name,
@@ -74,7 +74,7 @@ function tridec_params(
  * @returns Command-line arguments.
  */
 function tridec_cargs(
-    params: TridecParameters,
+    params: TridecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function tridec_cargs(
  * @returns Outputs object.
  */
 function tridec_outputs(
-    params: TridecParameters,
+    params: TridecParamsDict,
     execution: Execution,
 ): TridecOutputs {
     const ret: TridecOutputs = {
@@ -122,7 +122,7 @@ function tridec_outputs(
  * @returns NamedTuple of outputs (described in `TridecOutputs`).
  */
 function tridec_execute(
-    params: TridecParameters,
+    params: TridecParamsDict,
     runner: Runner | null = null,
 ): TridecOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function tridec(
 export {
       TRIDEC_METADATA,
       TridecOutputs,
+      TridecParamsDict,
+      TridecParamsDictTagged,
       tridec,
       tridec_execute,
       tridec_params,

@@ -11,15 +11,15 @@ const XHEMI_TAL_METADATA: Metadata = {
 };
 
 
-interface XhemiTalParameters {
+interface XhemiTalParamsDict {
     "@type"?: "freesurfer/xhemi-tal";
     "subject": string;
 }
-type XhemiTalParametersTagged = Required<Pick<XhemiTalParameters, '@type'>> & XhemiTalParameters;
+type XhemiTalParamsDictTagged = Required<Pick<XhemiTalParamsDict, '@type'>> & XhemiTalParamsDict;
 
 
 /**
- * Output object returned when calling `XhemiTalParameters(...)`.
+ * Output object returned when calling `XhemiTalParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface XhemiTalOutputs {
  */
 function xhemi_tal_params(
     subject: string,
-): XhemiTalParametersTagged {
+): XhemiTalParamsDictTagged {
     const params = {
         "@type": "freesurfer/xhemi-tal" as const,
         "subject": subject,
@@ -58,7 +58,7 @@ function xhemi_tal_params(
  * @returns Command-line arguments.
  */
 function xhemi_tal_cargs(
-    params: XhemiTalParameters,
+    params: XhemiTalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function xhemi_tal_cargs(
  * @returns Outputs object.
  */
 function xhemi_tal_outputs(
-    params: XhemiTalParameters,
+    params: XhemiTalParamsDict,
     execution: Execution,
 ): XhemiTalOutputs {
     const ret: XhemiTalOutputs = {
@@ -105,7 +105,7 @@ function xhemi_tal_outputs(
  * @returns NamedTuple of outputs (described in `XhemiTalOutputs`).
  */
 function xhemi_tal_execute(
-    params: XhemiTalParameters,
+    params: XhemiTalParamsDict,
     runner: Runner | null = null,
 ): XhemiTalOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function xhemi_tal(
 export {
       XHEMI_TAL_METADATA,
       XhemiTalOutputs,
+      XhemiTalParamsDict,
+      XhemiTalParamsDictTagged,
       xhemi_tal,
       xhemi_tal_execute,
       xhemi_tal_params,

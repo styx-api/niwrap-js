@@ -11,7 +11,7 @@ const V_3D_NOTES_METADATA: Metadata = {
 };
 
 
-interface V3dNotesParameters {
+interface V3dNotesParamsDict {
     "@type"?: "afni/3dNotes";
     "add_note"?: string | null | undefined;
     "append_history"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface V3dNotesParameters {
     "help": boolean;
     "dataset": InputPathType;
 }
-type V3dNotesParametersTagged = Required<Pick<V3dNotesParameters, '@type'>> & V3dNotesParameters;
+type V3dNotesParamsDictTagged = Required<Pick<V3dNotesParamsDict, '@type'>> & V3dNotesParamsDict;
 
 
 /**
- * Output object returned when calling `V3dNotesParameters(...)`.
+ * Output object returned when calling `V3dNotesParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function v_3d_notes_params(
     delete_note: number | null = null,
     print_notes: boolean = false,
     help: boolean = false,
-): V3dNotesParametersTagged {
+): V3dNotesParamsDictTagged {
     const params = {
         "@type": "afni/3dNotes" as const,
         "print_notes": print_notes,
@@ -90,7 +90,7 @@ function v_3d_notes_params(
  * @returns Command-line arguments.
  */
 function v_3d_notes_cargs(
-    params: V3dNotesParameters,
+    params: V3dNotesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function v_3d_notes_cargs(
  * @returns Outputs object.
  */
 function v_3d_notes_outputs(
-    params: V3dNotesParameters,
+    params: V3dNotesParamsDict,
     execution: Execution,
 ): V3dNotesOutputs {
     const ret: V3dNotesOutputs = {
@@ -164,7 +164,7 @@ function v_3d_notes_outputs(
  * @returns NamedTuple of outputs (described in `V3dNotesOutputs`).
  */
 function v_3d_notes_execute(
-    params: V3dNotesParameters,
+    params: V3dNotesParamsDict,
     runner: Runner | null = null,
 ): V3dNotesOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function v_3d_notes(
 
 export {
       V3dNotesOutputs,
+      V3dNotesParamsDict,
+      V3dNotesParamsDictTagged,
       V_3D_NOTES_METADATA,
       v_3d_notes,
       v_3d_notes_execute,

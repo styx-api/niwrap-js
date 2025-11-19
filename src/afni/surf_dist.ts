@@ -11,7 +11,7 @@ const SURF_DIST_METADATA: Metadata = {
 };
 
 
-interface SurfDistParameters {
+interface SurfDistParamsDict {
     "@type"?: "afni/SurfDist";
     "surface": InputPathType;
     "nodepairs": InputPathType;
@@ -22,11 +22,11 @@ interface SurfDistParameters {
     "from_node"?: string | null | undefined;
     "to_nodes"?: InputPathType | null | undefined;
 }
-type SurfDistParametersTagged = Required<Pick<SurfDistParameters, '@type'>> & SurfDistParameters;
+type SurfDistParamsDictTagged = Required<Pick<SurfDistParamsDict, '@type'>> & SurfDistParamsDict;
 
 
 /**
- * Output object returned when calling `SurfDistParameters(...)`.
+ * Output object returned when calling `SurfDistParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function surf_dist_params(
     graph: boolean = false,
     from_node: string | null = null,
     to_nodes: InputPathType | null = null,
-): SurfDistParametersTagged {
+): SurfDistParamsDictTagged {
     const params = {
         "@type": "afni/SurfDist" as const,
         "surface": surface,
@@ -96,7 +96,7 @@ function surf_dist_params(
  * @returns Command-line arguments.
  */
 function surf_dist_cargs(
-    params: SurfDistParameters,
+    params: SurfDistParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function surf_dist_cargs(
  * @returns Outputs object.
  */
 function surf_dist_outputs(
-    params: SurfDistParameters,
+    params: SurfDistParamsDict,
     execution: Execution,
 ): SurfDistOutputs {
     const ret: SurfDistOutputs = {
@@ -169,7 +169,7 @@ function surf_dist_outputs(
  * @returns NamedTuple of outputs (described in `SurfDistOutputs`).
  */
 function surf_dist_execute(
-    params: SurfDistParameters,
+    params: SurfDistParamsDict,
     runner: Runner | null = null,
 ): SurfDistOutputs {
     runner = runner || getGlobalRunner();
@@ -222,6 +222,8 @@ function surf_dist(
 export {
       SURF_DIST_METADATA,
       SurfDistOutputs,
+      SurfDistParamsDict,
+      SurfDistParamsDictTagged,
       surf_dist,
       surf_dist_execute,
       surf_dist_params,

@@ -11,7 +11,7 @@ const V_3D_RANKIZER_METADATA: Metadata = {
 };
 
 
-interface V3dRankizerParameters {
+interface V3dRankizerParamsDict {
     "@type"?: "afni/3dRankizer";
     "dataset": InputPathType;
     "base_rank"?: number | null | undefined;
@@ -20,11 +20,11 @@ interface V3dRankizerParameters {
     "percentize": boolean;
     "percentize_mask": boolean;
 }
-type V3dRankizerParametersTagged = Required<Pick<V3dRankizerParameters, '@type'>> & V3dRankizerParameters;
+type V3dRankizerParamsDictTagged = Required<Pick<V3dRankizerParamsDict, '@type'>> & V3dRankizerParamsDict;
 
 
 /**
- * Output object returned when calling `V3dRankizerParameters(...)`.
+ * Output object returned when calling `V3dRankizerParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v_3d_rankizer_params(
     mask: InputPathType | null = null,
     percentize: boolean = false,
     percentize_mask: boolean = false,
-): V3dRankizerParametersTagged {
+): V3dRankizerParamsDictTagged {
     const params = {
         "@type": "afni/3dRankizer" as const,
         "dataset": dataset,
@@ -86,7 +86,7 @@ function v_3d_rankizer_params(
  * @returns Command-line arguments.
  */
 function v_3d_rankizer_cargs(
-    params: V3dRankizerParameters,
+    params: V3dRankizerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function v_3d_rankizer_cargs(
  * @returns Outputs object.
  */
 function v_3d_rankizer_outputs(
-    params: V3dRankizerParameters,
+    params: V3dRankizerParamsDict,
     execution: Execution,
 ): V3dRankizerOutputs {
     const ret: V3dRankizerOutputs = {
@@ -153,7 +153,7 @@ function v_3d_rankizer_outputs(
  * @returns NamedTuple of outputs (described in `V3dRankizerOutputs`).
  */
 function v_3d_rankizer_execute(
-    params: V3dRankizerParameters,
+    params: V3dRankizerParamsDict,
     runner: Runner | null = null,
 ): V3dRankizerOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function v_3d_rankizer(
 
 export {
       V3dRankizerOutputs,
+      V3dRankizerParamsDict,
+      V3dRankizerParamsDictTagged,
       V_3D_RANKIZER_METADATA,
       v_3d_rankizer,
       v_3d_rankizer_execute,

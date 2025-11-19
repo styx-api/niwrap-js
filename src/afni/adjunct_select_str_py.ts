@@ -11,17 +11,17 @@ const ADJUNCT_SELECT_STR_PY_METADATA: Metadata = {
 };
 
 
-interface AdjunctSelectStrPyParameters {
+interface AdjunctSelectStrPyParamsDict {
     "@type"?: "afni/adjunct_select_str.py";
     "input_file": InputPathType;
     "num_bricks": number;
     "output_file": string;
 }
-type AdjunctSelectStrPyParametersTagged = Required<Pick<AdjunctSelectStrPyParameters, '@type'>> & AdjunctSelectStrPyParameters;
+type AdjunctSelectStrPyParamsDictTagged = Required<Pick<AdjunctSelectStrPyParamsDict, '@type'>> & AdjunctSelectStrPyParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctSelectStrPyParameters(...)`.
+ * Output object returned when calling `AdjunctSelectStrPyParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function adjunct_select_str_py_params(
     input_file: InputPathType,
     num_bricks: number,
     output_file: string,
-): AdjunctSelectStrPyParametersTagged {
+): AdjunctSelectStrPyParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_select_str.py" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function adjunct_select_str_py_params(
  * @returns Command-line arguments.
  */
 function adjunct_select_str_py_cargs(
-    params: AdjunctSelectStrPyParameters,
+    params: AdjunctSelectStrPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function adjunct_select_str_py_cargs(
  * @returns Outputs object.
  */
 function adjunct_select_str_py_outputs(
-    params: AdjunctSelectStrPyParameters,
+    params: AdjunctSelectStrPyParamsDict,
     execution: Execution,
 ): AdjunctSelectStrPyOutputs {
     const ret: AdjunctSelectStrPyOutputs = {
@@ -112,7 +112,7 @@ function adjunct_select_str_py_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctSelectStrPyOutputs`).
  */
 function adjunct_select_str_py_execute(
-    params: AdjunctSelectStrPyParameters,
+    params: AdjunctSelectStrPyParamsDict,
     runner: Runner | null = null,
 ): AdjunctSelectStrPyOutputs {
     runner = runner || getGlobalRunner();
@@ -155,6 +155,8 @@ function adjunct_select_str_py(
 export {
       ADJUNCT_SELECT_STR_PY_METADATA,
       AdjunctSelectStrPyOutputs,
+      AdjunctSelectStrPyParamsDict,
+      AdjunctSelectStrPyParamsDictTagged,
       adjunct_select_str_py,
       adjunct_select_str_py_execute,
       adjunct_select_str_py_params,

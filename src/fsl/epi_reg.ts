@@ -11,7 +11,7 @@ const EPI_REG_METADATA: Metadata = {
 };
 
 
-interface EpiRegParameters {
+interface EpiRegParamsDict {
     "@type"?: "fsl/epi_reg";
     "epi": InputPathType;
     "t1_head": InputPathType;
@@ -27,11 +27,11 @@ interface EpiRegParameters {
     "weight_image"?: InputPathType | null | undefined;
     "wmseg"?: InputPathType | null | undefined;
 }
-type EpiRegParametersTagged = Required<Pick<EpiRegParameters, '@type'>> & EpiRegParameters;
+type EpiRegParamsDictTagged = Required<Pick<EpiRegParamsDict, '@type'>> & EpiRegParamsDict;
 
 
 /**
- * Output object returned when calling `EpiRegParameters(...)`.
+ * Output object returned when calling `EpiRegParamsDict(...)`.
  *
  * @interface
  */
@@ -132,7 +132,7 @@ function epi_reg_params(
     pedir: "x" | "y" | "z" | "-x" | "-y" | "-z" | null = null,
     weight_image: InputPathType | null = null,
     wmseg: InputPathType | null = null,
-): EpiRegParametersTagged {
+): EpiRegParamsDictTagged {
     const params = {
         "@type": "fsl/epi_reg" as const,
         "epi": epi,
@@ -176,7 +176,7 @@ function epi_reg_params(
  * @returns Command-line arguments.
  */
 function epi_reg_cargs(
-    params: EpiRegParameters,
+    params: EpiRegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -225,7 +225,7 @@ function epi_reg_cargs(
  * @returns Outputs object.
  */
 function epi_reg_outputs(
-    params: EpiRegParameters,
+    params: EpiRegParamsDict,
     execution: Execution,
 ): EpiRegOutputs {
     const ret: EpiRegOutputs = {
@@ -264,7 +264,7 @@ function epi_reg_outputs(
  * @returns NamedTuple of outputs (described in `EpiRegOutputs`).
  */
 function epi_reg_execute(
-    params: EpiRegParameters,
+    params: EpiRegParamsDict,
     runner: Runner | null = null,
 ): EpiRegOutputs {
     runner = runner || getGlobalRunner();
@@ -327,6 +327,8 @@ function epi_reg(
 export {
       EPI_REG_METADATA,
       EpiRegOutputs,
+      EpiRegParamsDict,
+      EpiRegParamsDictTagged,
       epi_reg,
       epi_reg_execute,
       epi_reg_params,

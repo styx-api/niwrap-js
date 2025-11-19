@@ -11,16 +11,16 @@ const MP_DIFFPOW_SH_METADATA: Metadata = {
 };
 
 
-interface MpDiffpowShParameters {
+interface MpDiffpowShParamsDict {
     "@type"?: "fsl/mp_diffpow.sh";
     "reg_file": InputPathType;
     "diff_reg_file": string;
 }
-type MpDiffpowShParametersTagged = Required<Pick<MpDiffpowShParameters, '@type'>> & MpDiffpowShParameters;
+type MpDiffpowShParamsDictTagged = Required<Pick<MpDiffpowShParamsDict, '@type'>> & MpDiffpowShParamsDict;
 
 
 /**
- * Output object returned when calling `MpDiffpowShParameters(...)`.
+ * Output object returned when calling `MpDiffpowShParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface MpDiffpowShOutputs {
 function mp_diffpow_sh_params(
     reg_file: InputPathType,
     diff_reg_file: string,
-): MpDiffpowShParametersTagged {
+): MpDiffpowShParamsDictTagged {
     const params = {
         "@type": "fsl/mp_diffpow.sh" as const,
         "reg_file": reg_file,
@@ -66,7 +66,7 @@ function mp_diffpow_sh_params(
  * @returns Command-line arguments.
  */
 function mp_diffpow_sh_cargs(
-    params: MpDiffpowShParameters,
+    params: MpDiffpowShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function mp_diffpow_sh_cargs(
  * @returns Outputs object.
  */
 function mp_diffpow_sh_outputs(
-    params: MpDiffpowShParameters,
+    params: MpDiffpowShParamsDict,
     execution: Execution,
 ): MpDiffpowShOutputs {
     const ret: MpDiffpowShOutputs = {
@@ -112,7 +112,7 @@ function mp_diffpow_sh_outputs(
  * @returns NamedTuple of outputs (described in `MpDiffpowShOutputs`).
  */
 function mp_diffpow_sh_execute(
-    params: MpDiffpowShParameters,
+    params: MpDiffpowShParamsDict,
     runner: Runner | null = null,
 ): MpDiffpowShOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function mp_diffpow_sh(
 export {
       MP_DIFFPOW_SH_METADATA,
       MpDiffpowShOutputs,
+      MpDiffpowShParamsDict,
+      MpDiffpowShParamsDictTagged,
       mp_diffpow_sh,
       mp_diffpow_sh_execute,
       mp_diffpow_sh_params,

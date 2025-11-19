@@ -11,7 +11,7 @@ const MRI_DEFACER_METADATA: Metadata = {
 };
 
 
-interface MriDefacerParameters {
+interface MriDefacerParamsDict {
     "@type"?: "freesurfer/mri_defacer";
     "input_volume": InputPathType;
     "headmask": InputPathType;
@@ -38,11 +38,11 @@ interface MriDefacerParameters {
     "checkopts": boolean;
     "version": boolean;
 }
-type MriDefacerParametersTagged = Required<Pick<MriDefacerParameters, '@type'>> & MriDefacerParameters;
+type MriDefacerParamsDictTagged = Required<Pick<MriDefacerParamsDict, '@type'>> & MriDefacerParamsDict;
 
 
 /**
- * Output object returned when calling `MriDefacerParameters(...)`.
+ * Output object returned when calling `MriDefacerParamsDict(...)`.
  *
  * @interface
  */
@@ -109,7 +109,7 @@ function mri_defacer_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriDefacerParametersTagged {
+): MriDefacerParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_defacer" as const,
         "input_volume": input_volume,
@@ -184,7 +184,7 @@ function mri_defacer_params(
  * @returns Command-line arguments.
  */
 function mri_defacer_cargs(
-    params: MriDefacerParameters,
+    params: MriDefacerParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -329,7 +329,7 @@ function mri_defacer_cargs(
  * @returns Outputs object.
  */
 function mri_defacer_outputs(
-    params: MriDefacerParameters,
+    params: MriDefacerParamsDict,
     execution: Execution,
 ): MriDefacerOutputs {
     const ret: MriDefacerOutputs = {
@@ -354,7 +354,7 @@ function mri_defacer_outputs(
  * @returns NamedTuple of outputs (described in `MriDefacerOutputs`).
  */
 function mri_defacer_execute(
-    params: MriDefacerParameters,
+    params: MriDefacerParamsDict,
     runner: Runner | null = null,
 ): MriDefacerOutputs {
     runner = runner || getGlobalRunner();
@@ -439,6 +439,8 @@ function mri_defacer(
 export {
       MRI_DEFACER_METADATA,
       MriDefacerOutputs,
+      MriDefacerParamsDict,
+      MriDefacerParamsDictTagged,
       mri_defacer,
       mri_defacer_execute,
       mri_defacer_params,

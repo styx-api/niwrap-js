@@ -11,7 +11,7 @@ const CONVERT_SURFACE_METADATA: Metadata = {
 };
 
 
-interface ConvertSurfaceParameters {
+interface ConvertSurfaceParamsDict {
     "@type"?: "afni/ConvertSurface";
     "input_surface": string;
     "output_surface": string;
@@ -24,11 +24,11 @@ interface ConvertSurfaceParameters {
     "seed"?: string | null | undefined;
     "native": boolean;
 }
-type ConvertSurfaceParametersTagged = Required<Pick<ConvertSurfaceParameters, '@type'>> & ConvertSurfaceParameters;
+type ConvertSurfaceParamsDictTagged = Required<Pick<ConvertSurfaceParamsDict, '@type'>> & ConvertSurfaceParamsDict;
 
 
 /**
- * Output object returned when calling `ConvertSurfaceParameters(...)`.
+ * Output object returned when calling `ConvertSurfaceParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function convert_surface_params(
     ixmat_1_d: string | null = null,
     seed: string | null = null,
     native: boolean = false,
-): ConvertSurfaceParametersTagged {
+): ConvertSurfaceParamsDictTagged {
     const params = {
         "@type": "afni/ConvertSurface" as const,
         "input_surface": input_surface,
@@ -106,7 +106,7 @@ function convert_surface_params(
  * @returns Command-line arguments.
  */
 function convert_surface_cargs(
-    params: ConvertSurfaceParameters,
+    params: ConvertSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -168,7 +168,7 @@ function convert_surface_cargs(
  * @returns Outputs object.
  */
 function convert_surface_outputs(
-    params: ConvertSurfaceParameters,
+    params: ConvertSurfaceParamsDict,
     execution: Execution,
 ): ConvertSurfaceOutputs {
     const ret: ConvertSurfaceOutputs = {
@@ -194,7 +194,7 @@ function convert_surface_outputs(
  * @returns NamedTuple of outputs (described in `ConvertSurfaceOutputs`).
  */
 function convert_surface_execute(
-    params: ConvertSurfaceParameters,
+    params: ConvertSurfaceParamsDict,
     runner: Runner | null = null,
 ): ConvertSurfaceOutputs {
     runner = runner || getGlobalRunner();
@@ -251,6 +251,8 @@ function convert_surface(
 export {
       CONVERT_SURFACE_METADATA,
       ConvertSurfaceOutputs,
+      ConvertSurfaceParamsDict,
+      ConvertSurfaceParamsDictTagged,
       convert_surface,
       convert_surface_execute,
       convert_surface_params,

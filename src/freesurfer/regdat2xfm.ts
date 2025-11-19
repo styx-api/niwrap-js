@@ -11,16 +11,16 @@ const REGDAT2XFM_METADATA: Metadata = {
 };
 
 
-interface Regdat2xfmParameters {
+interface Regdat2xfmParamsDict {
     "@type"?: "freesurfer/regdat2xfm";
     "input_file": InputPathType;
     "output_file": string;
 }
-type Regdat2xfmParametersTagged = Required<Pick<Regdat2xfmParameters, '@type'>> & Regdat2xfmParameters;
+type Regdat2xfmParamsDictTagged = Required<Pick<Regdat2xfmParamsDict, '@type'>> & Regdat2xfmParamsDict;
 
 
 /**
- * Output object returned when calling `Regdat2xfmParameters(...)`.
+ * Output object returned when calling `Regdat2xfmParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface Regdat2xfmOutputs {
 function regdat2xfm_params(
     input_file: InputPathType,
     output_file: string,
-): Regdat2xfmParametersTagged {
+): Regdat2xfmParamsDictTagged {
     const params = {
         "@type": "freesurfer/regdat2xfm" as const,
         "input_file": input_file,
@@ -62,7 +62,7 @@ function regdat2xfm_params(
  * @returns Command-line arguments.
  */
 function regdat2xfm_cargs(
-    params: Regdat2xfmParameters,
+    params: Regdat2xfmParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function regdat2xfm_cargs(
  * @returns Outputs object.
  */
 function regdat2xfm_outputs(
-    params: Regdat2xfmParameters,
+    params: Regdat2xfmParamsDict,
     execution: Execution,
 ): Regdat2xfmOutputs {
     const ret: Regdat2xfmOutputs = {
@@ -107,7 +107,7 @@ function regdat2xfm_outputs(
  * @returns NamedTuple of outputs (described in `Regdat2xfmOutputs`).
  */
 function regdat2xfm_execute(
-    params: Regdat2xfmParameters,
+    params: Regdat2xfmParamsDict,
     runner: Runner | null = null,
 ): Regdat2xfmOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function regdat2xfm(
 export {
       REGDAT2XFM_METADATA,
       Regdat2xfmOutputs,
+      Regdat2xfmParamsDict,
+      Regdat2xfmParamsDictTagged,
       regdat2xfm,
       regdat2xfm_execute,
       regdat2xfm_params,

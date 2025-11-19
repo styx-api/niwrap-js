@@ -11,18 +11,18 @@ const IMSTAT_METADATA: Metadata = {
 };
 
 
-interface ImstatParameters {
+interface ImstatParamsDict {
     "@type"?: "afni/imstat";
     "no_label": boolean;
     "quiet": boolean;
     "pixstat_prefix"?: string | null | undefined;
     "image_files": Array<InputPathType>;
 }
-type ImstatParametersTagged = Required<Pick<ImstatParameters, '@type'>> & ImstatParameters;
+type ImstatParamsDictTagged = Required<Pick<ImstatParamsDict, '@type'>> & ImstatParamsDict;
 
 
 /**
- * Output object returned when calling `ImstatParameters(...)`.
+ * Output object returned when calling `ImstatParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function imstat_params(
     no_label: boolean = false,
     quiet: boolean = false,
     pixstat_prefix: string | null = null,
-): ImstatParametersTagged {
+): ImstatParamsDictTagged {
     const params = {
         "@type": "afni/imstat" as const,
         "no_label": no_label,
@@ -80,7 +80,7 @@ function imstat_params(
  * @returns Command-line arguments.
  */
 function imstat_cargs(
-    params: ImstatParameters,
+    params: ImstatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -111,7 +111,7 @@ function imstat_cargs(
  * @returns Outputs object.
  */
 function imstat_outputs(
-    params: ImstatParameters,
+    params: ImstatParamsDict,
     execution: Execution,
 ): ImstatOutputs {
     const ret: ImstatOutputs = {
@@ -138,7 +138,7 @@ function imstat_outputs(
  * @returns NamedTuple of outputs (described in `ImstatOutputs`).
  */
 function imstat_execute(
-    params: ImstatParameters,
+    params: ImstatParamsDict,
     runner: Runner | null = null,
 ): ImstatOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function imstat(
 export {
       IMSTAT_METADATA,
       ImstatOutputs,
+      ImstatParamsDict,
+      ImstatParamsDictTagged,
       imstat,
       imstat_execute,
       imstat_params,

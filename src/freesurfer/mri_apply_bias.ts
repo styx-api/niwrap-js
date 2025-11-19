@@ -11,17 +11,17 @@ const MRI_APPLY_BIAS_METADATA: Metadata = {
 };
 
 
-interface MriApplyBiasParameters {
+interface MriApplyBiasParamsDict {
     "@type"?: "freesurfer/mri_apply_bias";
     "input_volume": InputPathType;
     "bias_volume": InputPathType;
     "output_volume": string;
 }
-type MriApplyBiasParametersTagged = Required<Pick<MriApplyBiasParameters, '@type'>> & MriApplyBiasParameters;
+type MriApplyBiasParamsDictTagged = Required<Pick<MriApplyBiasParamsDict, '@type'>> & MriApplyBiasParamsDict;
 
 
 /**
- * Output object returned when calling `MriApplyBiasParameters(...)`.
+ * Output object returned when calling `MriApplyBiasParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mri_apply_bias_params(
     input_volume: InputPathType,
     bias_volume: InputPathType,
     output_volume: string,
-): MriApplyBiasParametersTagged {
+): MriApplyBiasParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_apply_bias" as const,
         "input_volume": input_volume,
@@ -70,7 +70,7 @@ function mri_apply_bias_params(
  * @returns Command-line arguments.
  */
 function mri_apply_bias_cargs(
-    params: MriApplyBiasParameters,
+    params: MriApplyBiasParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mri_apply_bias_cargs(
  * @returns Outputs object.
  */
 function mri_apply_bias_outputs(
-    params: MriApplyBiasParameters,
+    params: MriApplyBiasParamsDict,
     execution: Execution,
 ): MriApplyBiasOutputs {
     const ret: MriApplyBiasOutputs = {
@@ -117,7 +117,7 @@ function mri_apply_bias_outputs(
  * @returns NamedTuple of outputs (described in `MriApplyBiasOutputs`).
  */
 function mri_apply_bias_execute(
-    params: MriApplyBiasParameters,
+    params: MriApplyBiasParamsDict,
     runner: Runner | null = null,
 ): MriApplyBiasOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mri_apply_bias(
 export {
       MRI_APPLY_BIAS_METADATA,
       MriApplyBiasOutputs,
+      MriApplyBiasParamsDict,
+      MriApplyBiasParamsDictTagged,
       mri_apply_bias,
       mri_apply_bias_execute,
       mri_apply_bias_params,

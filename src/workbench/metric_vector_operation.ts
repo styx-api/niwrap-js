@@ -10,7 +10,7 @@ const METRIC_VECTOR_OPERATION_METADATA: Metadata = {
 };
 
 
-interface MetricVectorOperationParameters {
+interface MetricVectorOperationParamsDict {
     "@type"?: "workbench/metric-vector-operation";
     "metric-out": string;
     "normalize-a": boolean;
@@ -21,11 +21,11 @@ interface MetricVectorOperationParameters {
     "vectors-b": InputPathType;
     "operation": string;
 }
-type MetricVectorOperationParametersTagged = Required<Pick<MetricVectorOperationParameters, '@type'>> & MetricVectorOperationParameters;
+type MetricVectorOperationParamsDictTagged = Required<Pick<MetricVectorOperationParamsDict, '@type'>> & MetricVectorOperationParamsDict;
 
 
 /**
- * Output object returned when calling `MetricVectorOperationParameters(...)`.
+ * Output object returned when calling `MetricVectorOperationParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function metric_vector_operation_params(
     normalize_b: boolean = false,
     normalize_output: boolean = false,
     magnitude: boolean = false,
-): MetricVectorOperationParametersTagged {
+): MetricVectorOperationParamsDictTagged {
     const params = {
         "@type": "workbench/metric-vector-operation" as const,
         "metric-out": metric_out,
@@ -89,7 +89,7 @@ function metric_vector_operation_params(
  * @returns Command-line arguments.
  */
 function metric_vector_operation_cargs(
-    params: MetricVectorOperationParameters,
+    params: MetricVectorOperationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function metric_vector_operation_cargs(
  * @returns Outputs object.
  */
 function metric_vector_operation_outputs(
-    params: MetricVectorOperationParameters,
+    params: MetricVectorOperationParamsDict,
     execution: Execution,
 ): MetricVectorOperationOutputs {
     const ret: MetricVectorOperationOutputs = {
@@ -147,7 +147,7 @@ function metric_vector_operation_outputs(
  * @returns NamedTuple of outputs (described in `MetricVectorOperationOutputs`).
  */
 function metric_vector_operation_execute(
-    params: MetricVectorOperationParameters,
+    params: MetricVectorOperationParamsDict,
     runner: Runner | null = null,
 ): MetricVectorOperationOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function metric_vector_operation(
 export {
       METRIC_VECTOR_OPERATION_METADATA,
       MetricVectorOperationOutputs,
+      MetricVectorOperationParamsDict,
+      MetricVectorOperationParamsDictTagged,
       metric_vector_operation,
       metric_vector_operation_execute,
       metric_vector_operation_params,

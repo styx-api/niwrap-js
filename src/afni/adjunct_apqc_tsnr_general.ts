@@ -11,7 +11,7 @@ const ADJUNCT_APQC_TSNR_GENERAL_METADATA: Metadata = {
 };
 
 
-interface AdjunctApqcTsnrGeneralParameters {
+interface AdjunctApqcTsnrGeneralParamsDict {
     "@type"?: "afni/adjunct_apqc_tsnr_general";
     "montgap"?: string | null | undefined;
     "montcolor"?: string | null | undefined;
@@ -37,11 +37,11 @@ interface AdjunctApqcTsnrGeneralParameters {
     "no_axi": boolean;
     "echo": boolean;
 }
-type AdjunctApqcTsnrGeneralParametersTagged = Required<Pick<AdjunctApqcTsnrGeneralParameters, '@type'>> & AdjunctApqcTsnrGeneralParameters;
+type AdjunctApqcTsnrGeneralParamsDictTagged = Required<Pick<AdjunctApqcTsnrGeneralParamsDict, '@type'>> & AdjunctApqcTsnrGeneralParamsDict;
 
 
 /**
- * Output object returned when calling `AdjunctApqcTsnrGeneralParameters(...)`.
+ * Output object returned when calling `AdjunctApqcTsnrGeneralParamsDict(...)`.
  *
  * @interface
  */
@@ -106,7 +106,7 @@ function adjunct_apqc_tsnr_general_params(
     no_sag: boolean = false,
     no_axi: boolean = false,
     echo: boolean = false,
-): AdjunctApqcTsnrGeneralParametersTagged {
+): AdjunctApqcTsnrGeneralParamsDictTagged {
     const params = {
         "@type": "afni/adjunct_apqc_tsnr_general" as const,
         "no_cor": no_cor,
@@ -184,7 +184,7 @@ function adjunct_apqc_tsnr_general_params(
  * @returns Command-line arguments.
  */
 function adjunct_apqc_tsnr_general_cargs(
-    params: AdjunctApqcTsnrGeneralParameters,
+    params: AdjunctApqcTsnrGeneralParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -328,7 +328,7 @@ function adjunct_apqc_tsnr_general_cargs(
  * @returns Outputs object.
  */
 function adjunct_apqc_tsnr_general_outputs(
-    params: AdjunctApqcTsnrGeneralParameters,
+    params: AdjunctApqcTsnrGeneralParamsDict,
     execution: Execution,
 ): AdjunctApqcTsnrGeneralOutputs {
     const ret: AdjunctApqcTsnrGeneralOutputs = {
@@ -353,7 +353,7 @@ function adjunct_apqc_tsnr_general_outputs(
  * @returns NamedTuple of outputs (described in `AdjunctApqcTsnrGeneralOutputs`).
  */
 function adjunct_apqc_tsnr_general_execute(
-    params: AdjunctApqcTsnrGeneralParameters,
+    params: AdjunctApqcTsnrGeneralParamsDict,
     runner: Runner | null = null,
 ): AdjunctApqcTsnrGeneralOutputs {
     runner = runner || getGlobalRunner();
@@ -436,6 +436,8 @@ function adjunct_apqc_tsnr_general(
 export {
       ADJUNCT_APQC_TSNR_GENERAL_METADATA,
       AdjunctApqcTsnrGeneralOutputs,
+      AdjunctApqcTsnrGeneralParamsDict,
+      AdjunctApqcTsnrGeneralParamsDictTagged,
       adjunct_apqc_tsnr_general,
       adjunct_apqc_tsnr_general_execute,
       adjunct_apqc_tsnr_general_params,

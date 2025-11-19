@@ -11,7 +11,7 @@ const MRI_SPH2SURF_METADATA: Metadata = {
 };
 
 
-interface MriSph2surfParameters {
+interface MriSph2surfParamsDict {
     "@type"?: "freesurfer/mri-sph2surf";
     "instem": string;
     "outstem": string;
@@ -23,11 +23,11 @@ interface MriSph2surfParameters {
     "verbose": boolean;
     "version": boolean;
 }
-type MriSph2surfParametersTagged = Required<Pick<MriSph2surfParameters, '@type'>> & MriSph2surfParameters;
+type MriSph2surfParamsDictTagged = Required<Pick<MriSph2surfParamsDict, '@type'>> & MriSph2surfParamsDict;
 
 
 /**
- * Output object returned when calling `MriSph2surfParameters(...)`.
+ * Output object returned when calling `MriSph2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function mri_sph2surf_params(
     umask: string | null = null,
     verbose: boolean = false,
     version: boolean = false,
-): MriSph2surfParametersTagged {
+): MriSph2surfParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri-sph2surf" as const,
         "instem": instem,
@@ -100,7 +100,7 @@ function mri_sph2surf_params(
  * @returns Command-line arguments.
  */
 function mri_sph2surf_cargs(
-    params: MriSph2surfParameters,
+    params: MriSph2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -158,7 +158,7 @@ function mri_sph2surf_cargs(
  * @returns Outputs object.
  */
 function mri_sph2surf_outputs(
-    params: MriSph2surfParameters,
+    params: MriSph2surfParamsDict,
     execution: Execution,
 ): MriSph2surfOutputs {
     const ret: MriSph2surfOutputs = {
@@ -184,7 +184,7 @@ function mri_sph2surf_outputs(
  * @returns NamedTuple of outputs (described in `MriSph2surfOutputs`).
  */
 function mri_sph2surf_execute(
-    params: MriSph2surfParameters,
+    params: MriSph2surfParamsDict,
     runner: Runner | null = null,
 ): MriSph2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -239,6 +239,8 @@ function mri_sph2surf(
 export {
       MRI_SPH2SURF_METADATA,
       MriSph2surfOutputs,
+      MriSph2surfParamsDict,
+      MriSph2surfParamsDictTagged,
       mri_sph2surf,
       mri_sph2surf_execute,
       mri_sph2surf_params,

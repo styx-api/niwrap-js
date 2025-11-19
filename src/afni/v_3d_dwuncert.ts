@@ -11,7 +11,7 @@ const V_3D_DWUNCERT_METADATA: Metadata = {
 };
 
 
-interface V3dDwuncertParameters {
+interface V3dDwuncertParamsDict {
     "@type"?: "afni/3dDWUncert";
     "input_file": InputPathType;
     "input_prefix": string;
@@ -23,11 +23,11 @@ interface V3dDwuncertParameters {
     "calc_thr_fa"?: number | null | undefined;
     "csf_fa"?: number | null | undefined;
 }
-type V3dDwuncertParametersTagged = Required<Pick<V3dDwuncertParameters, '@type'>> & V3dDwuncertParameters;
+type V3dDwuncertParamsDictTagged = Required<Pick<V3dDwuncertParamsDict, '@type'>> & V3dDwuncertParamsDict;
 
 
 /**
- * Output object returned when calling `V3dDwuncertParameters(...)`.
+ * Output object returned when calling `V3dDwuncertParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function v_3d_dwuncert_params(
     mask_file: InputPathType | null = null,
     calc_thr_fa: number | null = null,
     csf_fa: number | null = null,
-): V3dDwuncertParametersTagged {
+): V3dDwuncertParamsDictTagged {
     const params = {
         "@type": "afni/3dDWUncert" as const,
         "input_file": input_file,
@@ -106,7 +106,7 @@ function v_3d_dwuncert_params(
  * @returns Command-line arguments.
  */
 function v_3d_dwuncert_cargs(
-    params: V3dDwuncertParameters,
+    params: V3dDwuncertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -172,7 +172,7 @@ function v_3d_dwuncert_cargs(
  * @returns Outputs object.
  */
 function v_3d_dwuncert_outputs(
-    params: V3dDwuncertParameters,
+    params: V3dDwuncertParamsDict,
     execution: Execution,
 ): V3dDwuncertOutputs {
     const ret: V3dDwuncertOutputs = {
@@ -198,7 +198,7 @@ function v_3d_dwuncert_outputs(
  * @returns NamedTuple of outputs (described in `V3dDwuncertOutputs`).
  */
 function v_3d_dwuncert_execute(
-    params: V3dDwuncertParameters,
+    params: V3dDwuncertParamsDict,
     runner: Runner | null = null,
 ): V3dDwuncertOutputs {
     runner = runner || getGlobalRunner();
@@ -252,6 +252,8 @@ function v_3d_dwuncert(
 
 export {
       V3dDwuncertOutputs,
+      V3dDwuncertParamsDict,
+      V3dDwuncertParamsDictTagged,
       V_3D_DWUNCERT_METADATA,
       v_3d_dwuncert,
       v_3d_dwuncert_execute,

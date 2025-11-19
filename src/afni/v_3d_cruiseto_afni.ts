@@ -11,27 +11,27 @@ const V_3D_CRUISETO_AFNI_METADATA: Metadata = {
 };
 
 
-interface V3dCruisetoAfniTraceParameters {
+interface V3dCruisetoAfniTraceParamsDict {
     "@type"?: "trace";
     "trace": boolean;
     "TRACE": boolean;
 }
-type V3dCruisetoAfniTraceParametersTagged = Required<Pick<V3dCruisetoAfniTraceParameters, '@type'>> & V3dCruisetoAfniTraceParameters;
+type V3dCruisetoAfniTraceParamsDictTagged = Required<Pick<V3dCruisetoAfniTraceParamsDict, '@type'>> & V3dCruisetoAfniTraceParamsDict;
 
 
-interface V3dCruisetoAfniParameters {
+interface V3dCruisetoAfniParamsDict {
     "@type"?: "afni/3dCRUISEtoAFNI";
     "input": InputPathType;
     "novolreg": boolean;
     "noxform": boolean;
     "setenv"?: string | null | undefined;
-    "trace"?: V3dCruisetoAfniTraceParameters | null | undefined;
+    "trace"?: V3dCruisetoAfniTraceParamsDict | null | undefined;
     "nomall": boolean;
     "yesmall": boolean;
     "help": boolean;
     "h": boolean;
 }
-type V3dCruisetoAfniParametersTagged = Required<Pick<V3dCruisetoAfniParameters, '@type'>> & V3dCruisetoAfniParameters;
+type V3dCruisetoAfniParamsDictTagged = Required<Pick<V3dCruisetoAfniParamsDict, '@type'>> & V3dCruisetoAfniParamsDict;
 
 
 /**
@@ -42,10 +42,10 @@ type V3dCruisetoAfniParametersTagged = Required<Pick<V3dCruisetoAfniParameters, 
  *
  * @returns Parameter dictionary
  */
-function v_3d_cruiseto_afni_trace_params(
+function v_3d_cruiseto_afni_trace(
     trace: boolean = false,
     trace_: boolean = false,
-): V3dCruisetoAfniTraceParametersTagged {
+): V3dCruisetoAfniTraceParamsDictTagged {
     const params = {
         "@type": "trace" as const,
         "trace": trace,
@@ -64,7 +64,7 @@ function v_3d_cruiseto_afni_trace_params(
  * @returns Command-line arguments.
  */
 function v_3d_cruiseto_afni_trace_cargs(
-    params: V3dCruisetoAfniTraceParameters,
+    params: V3dCruisetoAfniTraceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function v_3d_cruiseto_afni_trace_cargs(
 
 
 /**
- * Output object returned when calling `V3dCruisetoAfniParameters(...)`.
+ * Output object returned when calling `V3dCruisetoAfniParamsDict(...)`.
  *
  * @interface
  */
@@ -111,12 +111,12 @@ function v_3d_cruiseto_afni_params(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: V3dCruisetoAfniTraceParameters | null = null,
+    trace: V3dCruisetoAfniTraceParamsDict | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
     help: boolean = false,
     h: boolean = false,
-): V3dCruisetoAfniParametersTagged {
+): V3dCruisetoAfniParamsDictTagged {
     const params = {
         "@type": "afni/3dCRUISEtoAFNI" as const,
         "input": input,
@@ -146,7 +146,7 @@ function v_3d_cruiseto_afni_params(
  * @returns Command-line arguments.
  */
 function v_3d_cruiseto_afni_cargs(
-    params: V3dCruisetoAfniParameters,
+    params: V3dCruisetoAfniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -195,7 +195,7 @@ function v_3d_cruiseto_afni_cargs(
  * @returns Outputs object.
  */
 function v_3d_cruiseto_afni_outputs(
-    params: V3dCruisetoAfniParameters,
+    params: V3dCruisetoAfniParamsDict,
     execution: Execution,
 ): V3dCruisetoAfniOutputs {
     const ret: V3dCruisetoAfniOutputs = {
@@ -220,7 +220,7 @@ function v_3d_cruiseto_afni_outputs(
  * @returns NamedTuple of outputs (described in `V3dCruisetoAfniOutputs`).
  */
 function v_3d_cruiseto_afni_execute(
-    params: V3dCruisetoAfniParameters,
+    params: V3dCruisetoAfniParamsDict,
     runner: Runner | null = null,
 ): V3dCruisetoAfniOutputs {
     runner = runner || getGlobalRunner();
@@ -260,7 +260,7 @@ function v_3d_cruiseto_afni(
     novolreg: boolean = false,
     noxform: boolean = false,
     setenv: string | null = null,
-    trace: V3dCruisetoAfniTraceParameters | null = null,
+    trace: V3dCruisetoAfniTraceParamsDict | null = null,
     nomall: boolean = false,
     yesmall: boolean = false,
     help: boolean = false,
@@ -274,9 +274,13 @@ function v_3d_cruiseto_afni(
 
 export {
       V3dCruisetoAfniOutputs,
+      V3dCruisetoAfniParamsDict,
+      V3dCruisetoAfniParamsDictTagged,
+      V3dCruisetoAfniTraceParamsDict,
+      V3dCruisetoAfniTraceParamsDictTagged,
       V_3D_CRUISETO_AFNI_METADATA,
       v_3d_cruiseto_afni,
       v_3d_cruiseto_afni_execute,
       v_3d_cruiseto_afni_params,
-      v_3d_cruiseto_afni_trace_params,
+      v_3d_cruiseto_afni_trace,
 };

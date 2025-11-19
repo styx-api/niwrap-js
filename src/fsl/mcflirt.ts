@@ -11,7 +11,7 @@ const MCFLIRT_METADATA: Metadata = {
 };
 
 
-interface McflirtParameters {
+interface McflirtParamsDict {
     "@type"?: "fsl/mcflirt";
     "in_file": InputPathType;
     "bins"?: number | null | undefined;
@@ -35,11 +35,11 @@ interface McflirtParameters {
     "use_contour": boolean;
     "use_gradient": boolean;
 }
-type McflirtParametersTagged = Required<Pick<McflirtParameters, '@type'>> & McflirtParameters;
+type McflirtParamsDictTagged = Required<Pick<McflirtParamsDict, '@type'>> & McflirtParamsDict;
 
 
 /**
- * Output object returned when calling `McflirtParameters(...)`.
+ * Output object returned when calling `McflirtParamsDict(...)`.
  *
  * @interface
  */
@@ -128,7 +128,7 @@ function mcflirt_params(
     stats_imgs: boolean = false,
     use_contour: boolean = false,
     use_gradient: boolean = false,
-): McflirtParametersTagged {
+): McflirtParamsDictTagged {
     const params = {
         "@type": "fsl/mcflirt" as const,
         "in_file": in_file,
@@ -190,7 +190,7 @@ function mcflirt_params(
  * @returns Command-line arguments.
  */
 function mcflirt_cargs(
-    params: McflirtParameters,
+    params: McflirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -305,7 +305,7 @@ function mcflirt_cargs(
  * @returns Outputs object.
  */
 function mcflirt_outputs(
-    params: McflirtParameters,
+    params: McflirtParamsDict,
     execution: Execution,
 ): McflirtOutputs {
     const ret: McflirtOutputs = {
@@ -337,7 +337,7 @@ function mcflirt_outputs(
  * @returns NamedTuple of outputs (described in `McflirtOutputs`).
  */
 function mcflirt_execute(
-    params: McflirtParameters,
+    params: McflirtParamsDict,
     runner: Runner | null = null,
 ): McflirtOutputs {
     runner = runner || getGlobalRunner();
@@ -416,6 +416,8 @@ function mcflirt(
 export {
       MCFLIRT_METADATA,
       McflirtOutputs,
+      McflirtParamsDict,
+      McflirtParamsDictTagged,
       mcflirt,
       mcflirt_execute,
       mcflirt_params,

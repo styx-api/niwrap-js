@@ -11,7 +11,7 @@ const V_2PERM_METADATA: Metadata = {
 };
 
 
-interface V2permParameters {
+interface V2permParamsDict {
     "@type"?: "afni/2perm";
     "prefix"?: string | null | undefined;
     "comma": boolean;
@@ -20,11 +20,11 @@ interface V2permParameters {
     "subset1_size"?: number | null | undefined;
     "subset2_size"?: number | null | undefined;
 }
-type V2permParametersTagged = Required<Pick<V2permParameters, '@type'>> & V2permParameters;
+type V2permParamsDictTagged = Required<Pick<V2permParamsDict, '@type'>> & V2permParamsDict;
 
 
 /**
- * Output object returned when calling `V2permParameters(...)`.
+ * Output object returned when calling `V2permParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function v_2perm_params(
     comma: boolean = false,
     subset1_size: number | null = null,
     subset2_size: number | null = null,
-): V2permParametersTagged {
+): V2permParamsDictTagged {
     const params = {
         "@type": "afni/2perm" as const,
         "comma": comma,
@@ -92,7 +92,7 @@ function v_2perm_params(
  * @returns Command-line arguments.
  */
 function v_2perm_cargs(
-    params: V2permParameters,
+    params: V2permParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function v_2perm_cargs(
  * @returns Outputs object.
  */
 function v_2perm_outputs(
-    params: V2permParameters,
+    params: V2permParamsDict,
     execution: Execution,
 ): V2permOutputs {
     const ret: V2permOutputs = {
@@ -154,7 +154,7 @@ function v_2perm_outputs(
  * @returns NamedTuple of outputs (described in `V2permOutputs`).
  */
 function v_2perm_execute(
-    params: V2permParameters,
+    params: V2permParamsDict,
     runner: Runner | null = null,
 ): V2permOutputs {
     runner = runner || getGlobalRunner();
@@ -202,6 +202,8 @@ function v_2perm(
 
 export {
       V2permOutputs,
+      V2permParamsDict,
+      V2permParamsDictTagged,
       V_2PERM_METADATA,
       v_2perm,
       v_2perm_execute,

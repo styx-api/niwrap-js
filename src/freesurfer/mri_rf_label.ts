@@ -11,7 +11,7 @@ const MRI_RF_LABEL_METADATA: Metadata = {
 };
 
 
-interface MriRfLabelParameters {
+interface MriRfLabelParamsDict {
     "@type"?: "freesurfer/mri_rf_label";
     "input_volumes": Array<InputPathType>;
     "transform_file": InputPathType;
@@ -54,11 +54,11 @@ interface MriRfLabelParameters {
     "longitudinal_lta"?: InputPathType | null | undefined;
     "relabel_unlikely_flag"?: Array<number> | null | undefined;
 }
-type MriRfLabelParametersTagged = Required<Pick<MriRfLabelParameters, '@type'>> & MriRfLabelParameters;
+type MriRfLabelParamsDictTagged = Required<Pick<MriRfLabelParamsDict, '@type'>> & MriRfLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MriRfLabelParameters(...)`.
+ * Output object returned when calling `MriRfLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -161,7 +161,7 @@ function mri_rf_label_params(
     longitudinal_vol: InputPathType | null = null,
     longitudinal_lta: InputPathType | null = null,
     relabel_unlikely_flag: Array<number> | null = null,
-): MriRfLabelParametersTagged {
+): MriRfLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_rf_label" as const,
         "input_volumes": input_volumes,
@@ -274,7 +274,7 @@ function mri_rf_label_params(
  * @returns Command-line arguments.
  */
 function mri_rf_label_cargs(
-    params: MriRfLabelParameters,
+    params: MriRfLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -485,7 +485,7 @@ function mri_rf_label_cargs(
  * @returns Outputs object.
  */
 function mri_rf_label_outputs(
-    params: MriRfLabelParameters,
+    params: MriRfLabelParamsDict,
     execution: Execution,
 ): MriRfLabelOutputs {
     const ret: MriRfLabelOutputs = {
@@ -511,7 +511,7 @@ function mri_rf_label_outputs(
  * @returns NamedTuple of outputs (described in `MriRfLabelOutputs`).
  */
 function mri_rf_label_execute(
-    params: MriRfLabelParameters,
+    params: MriRfLabelParamsDict,
     runner: Runner | null = null,
 ): MriRfLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -628,6 +628,8 @@ function mri_rf_label(
 export {
       MRI_RF_LABEL_METADATA,
       MriRfLabelOutputs,
+      MriRfLabelParamsDict,
+      MriRfLabelParamsDictTagged,
       mri_rf_label,
       mri_rf_label_execute,
       mri_rf_label_params,

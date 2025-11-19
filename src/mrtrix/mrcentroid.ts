@@ -11,15 +11,15 @@ const MRCENTROID_METADATA: Metadata = {
 };
 
 
-interface MrcentroidConfigParameters {
+interface MrcentroidConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type MrcentroidConfigParametersTagged = Required<Pick<MrcentroidConfigParameters, '@type'>> & MrcentroidConfigParameters;
+type MrcentroidConfigParamsDictTagged = Required<Pick<MrcentroidConfigParamsDict, '@type'>> & MrcentroidConfigParamsDict;
 
 
-interface MrcentroidParameters {
+interface MrcentroidParamsDict {
     "@type"?: "mrtrix/mrcentroid";
     "mask"?: InputPathType | null | undefined;
     "voxelspace": boolean;
@@ -28,12 +28,12 @@ interface MrcentroidParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<MrcentroidConfigParameters> | null | undefined;
+    "config"?: Array<MrcentroidConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input": InputPathType;
 }
-type MrcentroidParametersTagged = Required<Pick<MrcentroidParameters, '@type'>> & MrcentroidParameters;
+type MrcentroidParamsDictTagged = Required<Pick<MrcentroidParamsDict, '@type'>> & MrcentroidParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type MrcentroidParametersTagged = Required<Pick<MrcentroidParameters, '@type'>> 
  *
  * @returns Parameter dictionary
  */
-function mrcentroid_config_params(
+function mrcentroid_config(
     key: string,
     value: string,
-): MrcentroidConfigParametersTagged {
+): MrcentroidConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function mrcentroid_config_params(
  * @returns Command-line arguments.
  */
 function mrcentroid_config_cargs(
-    params: MrcentroidConfigParameters,
+    params: MrcentroidConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function mrcentroid_config_cargs(
 
 
 /**
- * Output object returned when calling `MrcentroidParameters(...)`.
+ * Output object returned when calling `MrcentroidParamsDict(...)`.
  *
  * @interface
  */
@@ -116,10 +116,10 @@ function mrcentroid_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcentroidConfigParameters> | null = null,
+    config: Array<MrcentroidConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): MrcentroidParametersTagged {
+): MrcentroidParamsDictTagged {
     const params = {
         "@type": "mrtrix/mrcentroid" as const,
         "voxelspace": voxelspace,
@@ -153,7 +153,7 @@ function mrcentroid_params(
  * @returns Command-line arguments.
  */
 function mrcentroid_cargs(
-    params: MrcentroidParameters,
+    params: MrcentroidParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function mrcentroid_cargs(
  * @returns Outputs object.
  */
 function mrcentroid_outputs(
-    params: MrcentroidParameters,
+    params: MrcentroidParamsDict,
     execution: Execution,
 ): MrcentroidOutputs {
     const ret: MrcentroidOutputs = {
@@ -239,7 +239,7 @@ function mrcentroid_outputs(
  * @returns NamedTuple of outputs (described in `MrcentroidOutputs`).
  */
 function mrcentroid_execute(
-    params: MrcentroidParameters,
+    params: MrcentroidParamsDict,
     runner: Runner | null = null,
 ): MrcentroidOutputs {
     runner = runner || getGlobalRunner();
@@ -291,7 +291,7 @@ function mrcentroid(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<MrcentroidConfigParameters> | null = null,
+    config: Array<MrcentroidConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -303,9 +303,13 @@ function mrcentroid(
 
 export {
       MRCENTROID_METADATA,
+      MrcentroidConfigParamsDict,
+      MrcentroidConfigParamsDictTagged,
       MrcentroidOutputs,
+      MrcentroidParamsDict,
+      MrcentroidParamsDictTagged,
       mrcentroid,
-      mrcentroid_config_params,
+      mrcentroid_config,
       mrcentroid_execute,
       mrcentroid_params,
 };

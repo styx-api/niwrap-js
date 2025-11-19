@@ -11,16 +11,16 @@ const FILMBABESCRIPT_METADATA: Metadata = {
 };
 
 
-interface FilmbabescriptParameters {
+interface FilmbabescriptParamsDict {
     "@type"?: "fsl/filmbabescript";
     "feat_dir": string;
     "flobs_dir": string;
 }
-type FilmbabescriptParametersTagged = Required<Pick<FilmbabescriptParameters, '@type'>> & FilmbabescriptParameters;
+type FilmbabescriptParamsDictTagged = Required<Pick<FilmbabescriptParamsDict, '@type'>> & FilmbabescriptParamsDict;
 
 
 /**
- * Output object returned when calling `FilmbabescriptParameters(...)`.
+ * Output object returned when calling `FilmbabescriptParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FilmbabescriptOutputs {
 function filmbabescript_params(
     feat_dir: string,
     flobs_dir: string,
-): FilmbabescriptParametersTagged {
+): FilmbabescriptParamsDictTagged {
     const params = {
         "@type": "fsl/filmbabescript" as const,
         "feat_dir": feat_dir,
@@ -62,7 +62,7 @@ function filmbabescript_params(
  * @returns Command-line arguments.
  */
 function filmbabescript_cargs(
-    params: FilmbabescriptParameters,
+    params: FilmbabescriptParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function filmbabescript_cargs(
  * @returns Outputs object.
  */
 function filmbabescript_outputs(
-    params: FilmbabescriptParameters,
+    params: FilmbabescriptParamsDict,
     execution: Execution,
 ): FilmbabescriptOutputs {
     const ret: FilmbabescriptOutputs = {
@@ -107,7 +107,7 @@ function filmbabescript_outputs(
  * @returns NamedTuple of outputs (described in `FilmbabescriptOutputs`).
  */
 function filmbabescript_execute(
-    params: FilmbabescriptParameters,
+    params: FilmbabescriptParamsDict,
     runner: Runner | null = null,
 ): FilmbabescriptOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function filmbabescript(
 export {
       FILMBABESCRIPT_METADATA,
       FilmbabescriptOutputs,
+      FilmbabescriptParamsDict,
+      FilmbabescriptParamsDictTagged,
       filmbabescript,
       filmbabescript_execute,
       filmbabescript_params,

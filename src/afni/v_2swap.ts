@@ -11,16 +11,16 @@ const V_2SWAP_METADATA: Metadata = {
 };
 
 
-interface V2swapParameters {
+interface V2swapParamsDict {
     "@type"?: "afni/2swap";
     "quiet": boolean;
     "input_files": Array<InputPathType>;
 }
-type V2swapParametersTagged = Required<Pick<V2swapParameters, '@type'>> & V2swapParameters;
+type V2swapParamsDictTagged = Required<Pick<V2swapParamsDict, '@type'>> & V2swapParamsDict;
 
 
 /**
- * Output object returned when calling `V2swapParameters(...)`.
+ * Output object returned when calling `V2swapParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface V2swapOutputs {
 function v_2swap_params(
     input_files: Array<InputPathType>,
     quiet: boolean = false,
-): V2swapParametersTagged {
+): V2swapParamsDictTagged {
     const params = {
         "@type": "afni/2swap" as const,
         "quiet": quiet,
@@ -62,7 +62,7 @@ function v_2swap_params(
  * @returns Command-line arguments.
  */
 function v_2swap_cargs(
-    params: V2swapParameters,
+    params: V2swapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function v_2swap_cargs(
  * @returns Outputs object.
  */
 function v_2swap_outputs(
-    params: V2swapParameters,
+    params: V2swapParamsDict,
     execution: Execution,
 ): V2swapOutputs {
     const ret: V2swapOutputs = {
@@ -109,7 +109,7 @@ function v_2swap_outputs(
  * @returns NamedTuple of outputs (described in `V2swapOutputs`).
  */
 function v_2swap_execute(
-    params: V2swapParameters,
+    params: V2swapParamsDict,
     runner: Runner | null = null,
 ): V2swapOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function v_2swap(
 
 export {
       V2swapOutputs,
+      V2swapParamsDict,
+      V2swapParamsDictTagged,
       V_2SWAP_METADATA,
       v_2swap,
       v_2swap_execute,

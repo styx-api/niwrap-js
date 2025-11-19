@@ -11,17 +11,17 @@ const TBSS_2_REG_METADATA: Metadata = {
 };
 
 
-interface Tbss2RegParameters {
+interface Tbss2RegParamsDict {
     "@type"?: "fsl/tbss_2_reg";
     "use_fmrib58_fa_1mm": boolean;
     "target_image"?: InputPathType | null | undefined;
     "find_best_target": boolean;
 }
-type Tbss2RegParametersTagged = Required<Pick<Tbss2RegParameters, '@type'>> & Tbss2RegParameters;
+type Tbss2RegParamsDictTagged = Required<Pick<Tbss2RegParamsDict, '@type'>> & Tbss2RegParamsDict;
 
 
 /**
- * Output object returned when calling `Tbss2RegParameters(...)`.
+ * Output object returned when calling `Tbss2RegParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function tbss_2_reg_params(
     use_fmrib58_fa_1mm: boolean = false,
     target_image: InputPathType | null = null,
     find_best_target: boolean = false,
-): Tbss2RegParametersTagged {
+): Tbss2RegParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_2_reg" as const,
         "use_fmrib58_fa_1mm": use_fmrib58_fa_1mm,
@@ -68,7 +68,7 @@ function tbss_2_reg_params(
  * @returns Command-line arguments.
  */
 function tbss_2_reg_cargs(
-    params: Tbss2RegParameters,
+    params: Tbss2RegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function tbss_2_reg_cargs(
  * @returns Outputs object.
  */
 function tbss_2_reg_outputs(
-    params: Tbss2RegParameters,
+    params: Tbss2RegParamsDict,
     execution: Execution,
 ): Tbss2RegOutputs {
     const ret: Tbss2RegOutputs = {
@@ -123,7 +123,7 @@ function tbss_2_reg_outputs(
  * @returns NamedTuple of outputs (described in `Tbss2RegOutputs`).
  */
 function tbss_2_reg_execute(
-    params: Tbss2RegParameters,
+    params: Tbss2RegParamsDict,
     runner: Runner | null = null,
 ): Tbss2RegOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function tbss_2_reg(
 export {
       TBSS_2_REG_METADATA,
       Tbss2RegOutputs,
+      Tbss2RegParamsDict,
+      Tbss2RegParamsDictTagged,
       tbss_2_reg,
       tbss_2_reg_execute,
       tbss_2_reg_params,

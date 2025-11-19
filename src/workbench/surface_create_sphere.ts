@@ -10,16 +10,16 @@ const SURFACE_CREATE_SPHERE_METADATA: Metadata = {
 };
 
 
-interface SurfaceCreateSphereParameters {
+interface SurfaceCreateSphereParamsDict {
     "@type"?: "workbench/surface-create-sphere";
     "sphere-out": string;
     "num-vertices": number;
 }
-type SurfaceCreateSphereParametersTagged = Required<Pick<SurfaceCreateSphereParameters, '@type'>> & SurfaceCreateSphereParameters;
+type SurfaceCreateSphereParamsDictTagged = Required<Pick<SurfaceCreateSphereParamsDict, '@type'>> & SurfaceCreateSphereParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceCreateSphereParameters(...)`.
+ * Output object returned when calling `SurfaceCreateSphereParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ interface SurfaceCreateSphereOutputs {
 function surface_create_sphere_params(
     sphere_out: string,
     num_vertices: number,
-): SurfaceCreateSphereParametersTagged {
+): SurfaceCreateSphereParamsDictTagged {
     const params = {
         "@type": "workbench/surface-create-sphere" as const,
         "sphere-out": sphere_out,
@@ -65,7 +65,7 @@ function surface_create_sphere_params(
  * @returns Command-line arguments.
  */
 function surface_create_sphere_cargs(
-    params: SurfaceCreateSphereParameters,
+    params: SurfaceCreateSphereParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -88,7 +88,7 @@ function surface_create_sphere_cargs(
  * @returns Outputs object.
  */
 function surface_create_sphere_outputs(
-    params: SurfaceCreateSphereParameters,
+    params: SurfaceCreateSphereParamsDict,
     execution: Execution,
 ): SurfaceCreateSphereOutputs {
     const ret: SurfaceCreateSphereOutputs = {
@@ -115,7 +115,7 @@ function surface_create_sphere_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceCreateSphereOutputs`).
  */
 function surface_create_sphere_execute(
-    params: SurfaceCreateSphereParameters,
+    params: SurfaceCreateSphereParamsDict,
     runner: Runner | null = null,
 ): SurfaceCreateSphereOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function surface_create_sphere(
 export {
       SURFACE_CREATE_SPHERE_METADATA,
       SurfaceCreateSphereOutputs,
+      SurfaceCreateSphereParamsDict,
+      SurfaceCreateSphereParamsDictTagged,
       surface_create_sphere,
       surface_create_sphere_execute,
       surface_create_sphere_params,

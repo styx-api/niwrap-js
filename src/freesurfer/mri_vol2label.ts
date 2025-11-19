@@ -11,7 +11,7 @@ const MRI_VOL2LABEL_METADATA: Metadata = {
 };
 
 
-interface MriVol2labelParameters {
+interface MriVol2labelParamsDict {
     "@type"?: "freesurfer/mri_vol2label";
     "input": InputPathType;
     "label_id"?: number | null | undefined;
@@ -26,11 +26,11 @@ interface MriVol2labelParameters {
     "erosions"?: number | null | undefined;
     "help": boolean;
 }
-type MriVol2labelParametersTagged = Required<Pick<MriVol2labelParameters, '@type'>> & MriVol2labelParameters;
+type MriVol2labelParamsDictTagged = Required<Pick<MriVol2labelParamsDict, '@type'>> & MriVol2labelParamsDict;
 
 
 /**
- * Output object returned when calling `MriVol2labelParameters(...)`.
+ * Output object returned when calling `MriVol2labelParamsDict(...)`.
  *
  * @interface
  */
@@ -81,7 +81,7 @@ function mri_vol2label_params(
     dilations: number | null = null,
     erosions: number | null = null,
     help: boolean = false,
-): MriVol2labelParametersTagged {
+): MriVol2labelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_vol2label" as const,
         "input": input,
@@ -126,7 +126,7 @@ function mri_vol2label_params(
  * @returns Command-line arguments.
  */
 function mri_vol2label_cargs(
-    params: MriVol2labelParameters,
+    params: MriVol2labelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -206,7 +206,7 @@ function mri_vol2label_cargs(
  * @returns Outputs object.
  */
 function mri_vol2label_outputs(
-    params: MriVol2labelParameters,
+    params: MriVol2labelParamsDict,
     execution: Execution,
 ): MriVol2labelOutputs {
     const ret: MriVol2labelOutputs = {
@@ -233,7 +233,7 @@ function mri_vol2label_outputs(
  * @returns NamedTuple of outputs (described in `MriVol2labelOutputs`).
  */
 function mri_vol2label_execute(
-    params: MriVol2labelParameters,
+    params: MriVol2labelParamsDict,
     runner: Runner | null = null,
 ): MriVol2labelOutputs {
     runner = runner || getGlobalRunner();
@@ -294,6 +294,8 @@ function mri_vol2label(
 export {
       MRI_VOL2LABEL_METADATA,
       MriVol2labelOutputs,
+      MriVol2labelParamsDict,
+      MriVol2labelParamsDictTagged,
       mri_vol2label,
       mri_vol2label_execute,
       mri_vol2label_params,

@@ -11,7 +11,7 @@ const MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA: Metadata = {
 };
 
 
-interface MrisComputeVolumeFractionsParameters {
+interface MrisComputeVolumeFractionsParamsDict {
     "@type"?: "freesurfer/mris_compute_volume_fractions";
     "volume_file": InputPathType;
     "surface_file": InputPathType;
@@ -20,11 +20,11 @@ interface MrisComputeVolumeFractionsParameters {
     "debug": boolean;
     "checkopts": boolean;
 }
-type MrisComputeVolumeFractionsParametersTagged = Required<Pick<MrisComputeVolumeFractionsParameters, '@type'>> & MrisComputeVolumeFractionsParameters;
+type MrisComputeVolumeFractionsParamsDictTagged = Required<Pick<MrisComputeVolumeFractionsParamsDict, '@type'>> & MrisComputeVolumeFractionsParamsDict;
 
 
 /**
- * Output object returned when calling `MrisComputeVolumeFractionsParameters(...)`.
+ * Output object returned when calling `MrisComputeVolumeFractionsParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_compute_volume_fractions_params(
     output_file: string,
     debug: boolean = false,
     checkopts: boolean = false,
-): MrisComputeVolumeFractionsParametersTagged {
+): MrisComputeVolumeFractionsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_compute_volume_fractions" as const,
         "volume_file": volume_file,
@@ -82,7 +82,7 @@ function mris_compute_volume_fractions_params(
  * @returns Command-line arguments.
  */
 function mris_compute_volume_fractions_cargs(
-    params: MrisComputeVolumeFractionsParameters,
+    params: MrisComputeVolumeFractionsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function mris_compute_volume_fractions_cargs(
  * @returns Outputs object.
  */
 function mris_compute_volume_fractions_outputs(
-    params: MrisComputeVolumeFractionsParameters,
+    params: MrisComputeVolumeFractionsParamsDict,
     execution: Execution,
 ): MrisComputeVolumeFractionsOutputs {
     const ret: MrisComputeVolumeFractionsOutputs = {
@@ -148,7 +148,7 @@ function mris_compute_volume_fractions_outputs(
  * @returns NamedTuple of outputs (described in `MrisComputeVolumeFractionsOutputs`).
  */
 function mris_compute_volume_fractions_execute(
-    params: MrisComputeVolumeFractionsParameters,
+    params: MrisComputeVolumeFractionsParamsDict,
     runner: Runner | null = null,
 ): MrisComputeVolumeFractionsOutputs {
     runner = runner || getGlobalRunner();
@@ -197,6 +197,8 @@ function mris_compute_volume_fractions(
 export {
       MRIS_COMPUTE_VOLUME_FRACTIONS_METADATA,
       MrisComputeVolumeFractionsOutputs,
+      MrisComputeVolumeFractionsParamsDict,
+      MrisComputeVolumeFractionsParamsDictTagged,
       mris_compute_volume_fractions,
       mris_compute_volume_fractions_execute,
       mris_compute_volume_fractions_params,

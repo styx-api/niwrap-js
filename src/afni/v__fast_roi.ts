@@ -11,7 +11,7 @@ const V__FAST_ROI_METADATA: Metadata = {
 };
 
 
-interface VFastRoiParameters {
+interface VFastRoiParamsDict {
     "@type"?: "afni/@fast_roi";
     "region": Array<string>;
     "drawn_roi"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface VFastRoiParameters {
     "twopass": boolean;
     "help": boolean;
 }
-type VFastRoiParametersTagged = Required<Pick<VFastRoiParameters, '@type'>> & VFastRoiParameters;
+type VFastRoiParamsDictTagged = Required<Pick<VFastRoiParamsDict, '@type'>> & VFastRoiParamsDict;
 
 
 /**
- * Output object returned when calling `VFastRoiParameters(...)`.
+ * Output object returned when calling `VFastRoiParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function v__fast_roi_params(
     time: boolean = false,
     twopass: boolean = false,
     help: boolean = false,
-): VFastRoiParametersTagged {
+): VFastRoiParamsDictTagged {
     const params = {
         "@type": "afni/@fast_roi" as const,
         "region": region,
@@ -102,7 +102,7 @@ function v__fast_roi_params(
  * @returns Command-line arguments.
  */
 function v__fast_roi_cargs(
-    params: VFastRoiParameters,
+    params: VFastRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -161,7 +161,7 @@ function v__fast_roi_cargs(
  * @returns Outputs object.
  */
 function v__fast_roi_outputs(
-    params: VFastRoiParameters,
+    params: VFastRoiParamsDict,
     execution: Execution,
 ): VFastRoiOutputs {
     const ret: VFastRoiOutputs = {
@@ -187,7 +187,7 @@ function v__fast_roi_outputs(
  * @returns NamedTuple of outputs (described in `VFastRoiOutputs`).
  */
 function v__fast_roi_execute(
-    params: VFastRoiParameters,
+    params: VFastRoiParamsDict,
     runner: Runner | null = null,
 ): VFastRoiOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function v__fast_roi(
 
 export {
       VFastRoiOutputs,
+      VFastRoiParamsDict,
+      VFastRoiParamsDictTagged,
       V__FAST_ROI_METADATA,
       v__fast_roi,
       v__fast_roi_execute,

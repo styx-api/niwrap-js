@@ -11,16 +11,16 @@ const RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA: Metadata = {
 };
 
 
-interface RunSegmentSubfieldsT1LongitudinalShParameters {
+interface RunSegmentSubfieldsT1LongitudinalShParamsDict {
     "@type"?: "freesurfer/run_SegmentSubfieldsT1Longitudinal.sh";
     "deployed_mcr_root": string;
     "additional_args"?: string | null | undefined;
 }
-type RunSegmentSubfieldsT1LongitudinalShParametersTagged = Required<Pick<RunSegmentSubfieldsT1LongitudinalShParameters, '@type'>> & RunSegmentSubfieldsT1LongitudinalShParameters;
+type RunSegmentSubfieldsT1LongitudinalShParamsDictTagged = Required<Pick<RunSegmentSubfieldsT1LongitudinalShParamsDict, '@type'>> & RunSegmentSubfieldsT1LongitudinalShParamsDict;
 
 
 /**
- * Output object returned when calling `RunSegmentSubfieldsT1LongitudinalShParameters(...)`.
+ * Output object returned when calling `RunSegmentSubfieldsT1LongitudinalShParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface RunSegmentSubfieldsT1LongitudinalShOutputs {
 function run_segment_subfields_t1_longitudinal_sh_params(
     deployed_mcr_root: string,
     additional_args: string | null = null,
-): RunSegmentSubfieldsT1LongitudinalShParametersTagged {
+): RunSegmentSubfieldsT1LongitudinalShParamsDictTagged {
     const params = {
         "@type": "freesurfer/run_SegmentSubfieldsT1Longitudinal.sh" as const,
         "deployed_mcr_root": deployed_mcr_root,
@@ -64,7 +64,7 @@ function run_segment_subfields_t1_longitudinal_sh_params(
  * @returns Command-line arguments.
  */
 function run_segment_subfields_t1_longitudinal_sh_cargs(
-    params: RunSegmentSubfieldsT1LongitudinalShParameters,
+    params: RunSegmentSubfieldsT1LongitudinalShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function run_segment_subfields_t1_longitudinal_sh_cargs(
  * @returns Outputs object.
  */
 function run_segment_subfields_t1_longitudinal_sh_outputs(
-    params: RunSegmentSubfieldsT1LongitudinalShParameters,
+    params: RunSegmentSubfieldsT1LongitudinalShParamsDict,
     execution: Execution,
 ): RunSegmentSubfieldsT1LongitudinalShOutputs {
     const ret: RunSegmentSubfieldsT1LongitudinalShOutputs = {
@@ -111,7 +111,7 @@ function run_segment_subfields_t1_longitudinal_sh_outputs(
  * @returns NamedTuple of outputs (described in `RunSegmentSubfieldsT1LongitudinalShOutputs`).
  */
 function run_segment_subfields_t1_longitudinal_sh_execute(
-    params: RunSegmentSubfieldsT1LongitudinalShParameters,
+    params: RunSegmentSubfieldsT1LongitudinalShParamsDict,
     runner: Runner | null = null,
 ): RunSegmentSubfieldsT1LongitudinalShOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function run_segment_subfields_t1_longitudinal_sh(
 export {
       RUN_SEGMENT_SUBFIELDS_T1_LONGITUDINAL_SH_METADATA,
       RunSegmentSubfieldsT1LongitudinalShOutputs,
+      RunSegmentSubfieldsT1LongitudinalShParamsDict,
+      RunSegmentSubfieldsT1LongitudinalShParamsDictTagged,
       run_segment_subfields_t1_longitudinal_sh,
       run_segment_subfields_t1_longitudinal_sh_execute,
       run_segment_subfields_t1_longitudinal_sh_params,

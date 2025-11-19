@@ -11,15 +11,15 @@ const BROWSE_MINC_HEADER_TCL_METADATA: Metadata = {
 };
 
 
-interface BrowseMincHeaderTclParameters {
+interface BrowseMincHeaderTclParamsDict {
     "@type"?: "freesurfer/browse-minc-header.tcl";
     "infile": InputPathType;
 }
-type BrowseMincHeaderTclParametersTagged = Required<Pick<BrowseMincHeaderTclParameters, '@type'>> & BrowseMincHeaderTclParameters;
+type BrowseMincHeaderTclParamsDictTagged = Required<Pick<BrowseMincHeaderTclParamsDict, '@type'>> & BrowseMincHeaderTclParamsDict;
 
 
 /**
- * Output object returned when calling `BrowseMincHeaderTclParameters(...)`.
+ * Output object returned when calling `BrowseMincHeaderTclParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface BrowseMincHeaderTclOutputs {
  */
 function browse_minc_header_tcl_params(
     infile: InputPathType,
-): BrowseMincHeaderTclParametersTagged {
+): BrowseMincHeaderTclParamsDictTagged {
     const params = {
         "@type": "freesurfer/browse-minc-header.tcl" as const,
         "infile": infile,
@@ -58,7 +58,7 @@ function browse_minc_header_tcl_params(
  * @returns Command-line arguments.
  */
 function browse_minc_header_tcl_cargs(
-    params: BrowseMincHeaderTclParameters,
+    params: BrowseMincHeaderTclParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function browse_minc_header_tcl_cargs(
  * @returns Outputs object.
  */
 function browse_minc_header_tcl_outputs(
-    params: BrowseMincHeaderTclParameters,
+    params: BrowseMincHeaderTclParamsDict,
     execution: Execution,
 ): BrowseMincHeaderTclOutputs {
     const ret: BrowseMincHeaderTclOutputs = {
@@ -102,7 +102,7 @@ function browse_minc_header_tcl_outputs(
  * @returns NamedTuple of outputs (described in `BrowseMincHeaderTclOutputs`).
  */
 function browse_minc_header_tcl_execute(
-    params: BrowseMincHeaderTclParameters,
+    params: BrowseMincHeaderTclParamsDict,
     runner: Runner | null = null,
 ): BrowseMincHeaderTclOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function browse_minc_header_tcl(
 export {
       BROWSE_MINC_HEADER_TCL_METADATA,
       BrowseMincHeaderTclOutputs,
+      BrowseMincHeaderTclParamsDict,
+      BrowseMincHeaderTclParamsDictTagged,
       browse_minc_header_tcl,
       browse_minc_header_tcl_execute,
       browse_minc_header_tcl_params,

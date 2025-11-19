@@ -10,18 +10,18 @@ const LABEL_MODIFY_KEYS_METADATA: Metadata = {
 };
 
 
-interface LabelModifyKeysParameters {
+interface LabelModifyKeysParamsDict {
     "@type"?: "workbench/label-modify-keys";
     "label-out": string;
     "column"?: string | null | undefined;
     "label-in": InputPathType;
     "remap-file": string;
 }
-type LabelModifyKeysParametersTagged = Required<Pick<LabelModifyKeysParameters, '@type'>> & LabelModifyKeysParameters;
+type LabelModifyKeysParamsDictTagged = Required<Pick<LabelModifyKeysParamsDict, '@type'>> & LabelModifyKeysParamsDict;
 
 
 /**
- * Output object returned when calling `LabelModifyKeysParameters(...)`.
+ * Output object returned when calling `LabelModifyKeysParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function label_modify_keys_params(
     column: string | null,
     label_in: InputPathType,
     remap_file: string,
-): LabelModifyKeysParametersTagged {
+): LabelModifyKeysParamsDictTagged {
     const params = {
         "@type": "workbench/label-modify-keys" as const,
         "label-out": label_out,
@@ -77,7 +77,7 @@ function label_modify_keys_params(
  * @returns Command-line arguments.
  */
 function label_modify_keys_cargs(
-    params: LabelModifyKeysParameters,
+    params: LabelModifyKeysParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function label_modify_keys_cargs(
  * @returns Outputs object.
  */
 function label_modify_keys_outputs(
-    params: LabelModifyKeysParameters,
+    params: LabelModifyKeysParamsDict,
     execution: Execution,
 ): LabelModifyKeysOutputs {
     const ret: LabelModifyKeysOutputs = {
@@ -133,7 +133,7 @@ function label_modify_keys_outputs(
  * @returns NamedTuple of outputs (described in `LabelModifyKeysOutputs`).
  */
 function label_modify_keys_execute(
-    params: LabelModifyKeysParameters,
+    params: LabelModifyKeysParamsDict,
     runner: Runner | null = null,
 ): LabelModifyKeysOutputs {
     runner = runner || getGlobalRunner();
@@ -182,6 +182,8 @@ function label_modify_keys(
 export {
       LABEL_MODIFY_KEYS_METADATA,
       LabelModifyKeysOutputs,
+      LabelModifyKeysParamsDict,
+      LabelModifyKeysParamsDictTagged,
       label_modify_keys,
       label_modify_keys_execute,
       label_modify_keys_params,

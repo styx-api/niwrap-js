@@ -11,16 +11,16 @@ const TALAIRACH_MGH_METADATA: Metadata = {
 };
 
 
-interface TalairachMghParameters {
+interface TalairachMghParamsDict {
     "@type"?: "freesurfer/talairach_mgh";
     "input_volume": InputPathType;
     "output_volume": string;
 }
-type TalairachMghParametersTagged = Required<Pick<TalairachMghParameters, '@type'>> & TalairachMghParameters;
+type TalairachMghParamsDictTagged = Required<Pick<TalairachMghParamsDict, '@type'>> & TalairachMghParamsDict;
 
 
 /**
- * Output object returned when calling `TalairachMghParameters(...)`.
+ * Output object returned when calling `TalairachMghParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface TalairachMghOutputs {
 function talairach_mgh_params(
     input_volume: InputPathType,
     output_volume: string,
-): TalairachMghParametersTagged {
+): TalairachMghParamsDictTagged {
     const params = {
         "@type": "freesurfer/talairach_mgh" as const,
         "input_volume": input_volume,
@@ -66,7 +66,7 @@ function talairach_mgh_params(
  * @returns Command-line arguments.
  */
 function talairach_mgh_cargs(
-    params: TalairachMghParameters,
+    params: TalairachMghParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function talairach_mgh_cargs(
  * @returns Outputs object.
  */
 function talairach_mgh_outputs(
-    params: TalairachMghParameters,
+    params: TalairachMghParamsDict,
     execution: Execution,
 ): TalairachMghOutputs {
     const ret: TalairachMghOutputs = {
@@ -112,7 +112,7 @@ function talairach_mgh_outputs(
  * @returns NamedTuple of outputs (described in `TalairachMghOutputs`).
  */
 function talairach_mgh_execute(
-    params: TalairachMghParameters,
+    params: TalairachMghParamsDict,
     runner: Runner | null = null,
 ): TalairachMghOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function talairach_mgh(
 export {
       TALAIRACH_MGH_METADATA,
       TalairachMghOutputs,
+      TalairachMghParamsDict,
+      TalairachMghParamsDictTagged,
       talairach_mgh,
       talairach_mgh_execute,
       talairach_mgh_params,

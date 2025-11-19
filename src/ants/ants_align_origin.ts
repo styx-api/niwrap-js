@@ -11,18 +11,18 @@ const ANTS_ALIGN_ORIGIN_METADATA: Metadata = {
 };
 
 
-interface AntsAlignOriginParameters {
+interface AntsAlignOriginParamsDict {
     "@type"?: "ants/antsAlignOrigin";
     "dimensionality"?: 2 | 3 | null | undefined;
     "input": InputPathType;
     "reference_image": InputPathType;
     "output": string;
 }
-type AntsAlignOriginParametersTagged = Required<Pick<AntsAlignOriginParameters, '@type'>> & AntsAlignOriginParameters;
+type AntsAlignOriginParamsDictTagged = Required<Pick<AntsAlignOriginParamsDict, '@type'>> & AntsAlignOriginParamsDict;
 
 
 /**
- * Output object returned when calling `AntsAlignOriginParameters(...)`.
+ * Output object returned when calling `AntsAlignOriginParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function ants_align_origin_params(
     reference_image: InputPathType,
     output: string,
     dimensionality: 2 | 3 | null = null,
-): AntsAlignOriginParametersTagged {
+): AntsAlignOriginParamsDictTagged {
     const params = {
         "@type": "ants/antsAlignOrigin" as const,
         "input": input,
@@ -76,7 +76,7 @@ function ants_align_origin_params(
  * @returns Command-line arguments.
  */
 function ants_align_origin_cargs(
-    params: AntsAlignOriginParameters,
+    params: AntsAlignOriginParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function ants_align_origin_cargs(
  * @returns Outputs object.
  */
 function ants_align_origin_outputs(
-    params: AntsAlignOriginParameters,
+    params: AntsAlignOriginParamsDict,
     execution: Execution,
 ): AntsAlignOriginOutputs {
     const ret: AntsAlignOriginOutputs = {
@@ -138,7 +138,7 @@ function ants_align_origin_outputs(
  * @returns NamedTuple of outputs (described in `AntsAlignOriginOutputs`).
  */
 function ants_align_origin_execute(
-    params: AntsAlignOriginParameters,
+    params: AntsAlignOriginParamsDict,
     runner: Runner | null = null,
 ): AntsAlignOriginOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function ants_align_origin(
 export {
       ANTS_ALIGN_ORIGIN_METADATA,
       AntsAlignOriginOutputs,
+      AntsAlignOriginParamsDict,
+      AntsAlignOriginParamsDictTagged,
       ants_align_origin,
       ants_align_origin_execute,
       ants_align_origin_params,

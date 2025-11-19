@@ -11,7 +11,7 @@ const MRI_CA_NORMALIZE_METADATA: Metadata = {
 };
 
 
-interface MriCaNormalizeParameters {
+interface MriCaNormalizeParamsDict {
     "@type"?: "freesurfer/mri_ca_normalize";
     "input_brain_volumes": Array<InputPathType>;
     "atlas_file": InputPathType;
@@ -41,11 +41,11 @@ interface MriCaNormalizeParameters {
     "renorm_file"?: InputPathType | null | undefined;
     "flash_flag": boolean;
 }
-type MriCaNormalizeParametersTagged = Required<Pick<MriCaNormalizeParameters, '@type'>> & MriCaNormalizeParameters;
+type MriCaNormalizeParamsDictTagged = Required<Pick<MriCaNormalizeParamsDict, '@type'>> & MriCaNormalizeParamsDict;
 
 
 /**
- * Output object returned when calling `MriCaNormalizeParameters(...)`.
+ * Output object returned when calling `MriCaNormalizeParamsDict(...)`.
  *
  * @interface
  */
@@ -122,7 +122,7 @@ function mri_ca_normalize_params(
     novar_flag: boolean = false,
     renorm_file: InputPathType | null = null,
     flash_flag: boolean = false,
-): MriCaNormalizeParametersTagged {
+): MriCaNormalizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_ca_normalize" as const,
         "input_brain_volumes": input_brain_volumes,
@@ -208,7 +208,7 @@ function mri_ca_normalize_params(
  * @returns Command-line arguments.
  */
 function mri_ca_normalize_cargs(
-    params: MriCaNormalizeParameters,
+    params: MriCaNormalizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -362,7 +362,7 @@ function mri_ca_normalize_cargs(
  * @returns Outputs object.
  */
 function mri_ca_normalize_outputs(
-    params: MriCaNormalizeParameters,
+    params: MriCaNormalizeParamsDict,
     execution: Execution,
 ): MriCaNormalizeOutputs {
     const ret: MriCaNormalizeOutputs = {
@@ -388,7 +388,7 @@ function mri_ca_normalize_outputs(
  * @returns NamedTuple of outputs (described in `MriCaNormalizeOutputs`).
  */
 function mri_ca_normalize_execute(
-    params: MriCaNormalizeParameters,
+    params: MriCaNormalizeParamsDict,
     runner: Runner | null = null,
 ): MriCaNormalizeOutputs {
     runner = runner || getGlobalRunner();
@@ -479,6 +479,8 @@ function mri_ca_normalize(
 export {
       MRI_CA_NORMALIZE_METADATA,
       MriCaNormalizeOutputs,
+      MriCaNormalizeParamsDict,
+      MriCaNormalizeParamsDictTagged,
       mri_ca_normalize,
       mri_ca_normalize_execute,
       mri_ca_normalize_params,

@@ -11,7 +11,7 @@ const UN_WARP_EPI_PY_METADATA: Metadata = {
 };
 
 
-interface UnWarpEpiPyParameters {
+interface UnWarpEpiPyParamsDict {
     "@type"?: "afni/unWarpEPI.py";
     "forward": InputPathType;
     "reverse": InputPathType;
@@ -20,11 +20,11 @@ interface UnWarpEpiPyParameters {
     "subjID": string;
     "giant_move": boolean;
 }
-type UnWarpEpiPyParametersTagged = Required<Pick<UnWarpEpiPyParameters, '@type'>> & UnWarpEpiPyParameters;
+type UnWarpEpiPyParamsDictTagged = Required<Pick<UnWarpEpiPyParamsDict, '@type'>> & UnWarpEpiPyParamsDict;
 
 
 /**
- * Output object returned when calling `UnWarpEpiPyParameters(...)`.
+ * Output object returned when calling `UnWarpEpiPyParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function un_warp_epi_py_params(
     data: string,
     subj_id: string,
     giant_move: boolean = false,
-): UnWarpEpiPyParametersTagged {
+): UnWarpEpiPyParamsDictTagged {
     const params = {
         "@type": "afni/unWarpEPI.py" as const,
         "forward": forward,
@@ -78,7 +78,7 @@ function un_warp_epi_py_params(
  * @returns Command-line arguments.
  */
 function un_warp_epi_py_cargs(
-    params: UnWarpEpiPyParameters,
+    params: UnWarpEpiPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function un_warp_epi_py_cargs(
  * @returns Outputs object.
  */
 function un_warp_epi_py_outputs(
-    params: UnWarpEpiPyParameters,
+    params: UnWarpEpiPyParamsDict,
     execution: Execution,
 ): UnWarpEpiPyOutputs {
     const ret: UnWarpEpiPyOutputs = {
@@ -144,7 +144,7 @@ function un_warp_epi_py_outputs(
  * @returns NamedTuple of outputs (described in `UnWarpEpiPyOutputs`).
  */
 function un_warp_epi_py_execute(
-    params: UnWarpEpiPyParameters,
+    params: UnWarpEpiPyParamsDict,
     runner: Runner | null = null,
 ): UnWarpEpiPyOutputs {
     runner = runner || getGlobalRunner();
@@ -193,6 +193,8 @@ function un_warp_epi_py(
 export {
       UN_WARP_EPI_PY_METADATA,
       UnWarpEpiPyOutputs,
+      UnWarpEpiPyParamsDict,
+      UnWarpEpiPyParamsDictTagged,
       un_warp_epi_py,
       un_warp_epi_py_execute,
       un_warp_epi_py_params,

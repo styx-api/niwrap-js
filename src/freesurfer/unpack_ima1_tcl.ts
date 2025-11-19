@@ -11,16 +11,16 @@ const UNPACK_IMA1_TCL_METADATA: Metadata = {
 };
 
 
-interface UnpackIma1TclParameters {
+interface UnpackIma1TclParamsDict {
     "@type"?: "freesurfer/unpack_ima1.tcl";
     "input_directory": string;
     "output_directory": string;
 }
-type UnpackIma1TclParametersTagged = Required<Pick<UnpackIma1TclParameters, '@type'>> & UnpackIma1TclParameters;
+type UnpackIma1TclParamsDictTagged = Required<Pick<UnpackIma1TclParamsDict, '@type'>> & UnpackIma1TclParamsDict;
 
 
 /**
- * Output object returned when calling `UnpackIma1TclParameters(...)`.
+ * Output object returned when calling `UnpackIma1TclParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface UnpackIma1TclOutputs {
 function unpack_ima1_tcl_params(
     input_directory: string,
     output_directory: string,
-): UnpackIma1TclParametersTagged {
+): UnpackIma1TclParamsDictTagged {
     const params = {
         "@type": "freesurfer/unpack_ima1.tcl" as const,
         "input_directory": input_directory,
@@ -66,7 +66,7 @@ function unpack_ima1_tcl_params(
  * @returns Command-line arguments.
  */
 function unpack_ima1_tcl_cargs(
-    params: UnpackIma1TclParameters,
+    params: UnpackIma1TclParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function unpack_ima1_tcl_cargs(
  * @returns Outputs object.
  */
 function unpack_ima1_tcl_outputs(
-    params: UnpackIma1TclParameters,
+    params: UnpackIma1TclParamsDict,
     execution: Execution,
 ): UnpackIma1TclOutputs {
     const ret: UnpackIma1TclOutputs = {
@@ -112,7 +112,7 @@ function unpack_ima1_tcl_outputs(
  * @returns NamedTuple of outputs (described in `UnpackIma1TclOutputs`).
  */
 function unpack_ima1_tcl_execute(
-    params: UnpackIma1TclParameters,
+    params: UnpackIma1TclParamsDict,
     runner: Runner | null = null,
 ): UnpackIma1TclOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function unpack_ima1_tcl(
 export {
       UNPACK_IMA1_TCL_METADATA,
       UnpackIma1TclOutputs,
+      UnpackIma1TclParamsDict,
+      UnpackIma1TclParamsDictTagged,
       unpack_ima1_tcl,
       unpack_ima1_tcl_execute,
       unpack_ima1_tcl_params,

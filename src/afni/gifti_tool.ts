@@ -11,7 +11,7 @@ const GIFTI_TOOL_METADATA: Metadata = {
 };
 
 
-interface GiftiToolParameters {
+interface GiftiToolParamsDict {
     "@type"?: "afni/gifti_tool";
     "infile": InputPathType;
     "new_numda"?: number | null | undefined;
@@ -36,11 +36,11 @@ interface GiftiToolParameters {
     "compare_verb"?: number | null | undefined;
     "approx_gifti": boolean;
 }
-type GiftiToolParametersTagged = Required<Pick<GiftiToolParameters, '@type'>> & GiftiToolParameters;
+type GiftiToolParamsDictTagged = Required<Pick<GiftiToolParamsDict, '@type'>> & GiftiToolParamsDict;
 
 
 /**
- * Output object returned when calling `GiftiToolParameters(...)`.
+ * Output object returned when calling `GiftiToolParamsDict(...)`.
  *
  * @interface
  */
@@ -107,7 +107,7 @@ function gifti_tool_params(
     compare_data: boolean = false,
     compare_verb: number | null = null,
     approx_gifti: boolean = false,
-): GiftiToolParametersTagged {
+): GiftiToolParamsDictTagged {
     const params = {
         "@type": "afni/gifti_tool" as const,
         "infile": infile,
@@ -174,7 +174,7 @@ function gifti_tool_params(
  * @returns Command-line arguments.
  */
 function gifti_tool_cargs(
-    params: GiftiToolParameters,
+    params: GiftiToolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -302,7 +302,7 @@ function gifti_tool_cargs(
  * @returns Outputs object.
  */
 function gifti_tool_outputs(
-    params: GiftiToolParameters,
+    params: GiftiToolParamsDict,
     execution: Execution,
 ): GiftiToolOutputs {
     const ret: GiftiToolOutputs = {
@@ -328,7 +328,7 @@ function gifti_tool_outputs(
  * @returns NamedTuple of outputs (described in `GiftiToolOutputs`).
  */
 function gifti_tool_execute(
-    params: GiftiToolParameters,
+    params: GiftiToolParamsDict,
     runner: Runner | null = null,
 ): GiftiToolOutputs {
     runner = runner || getGlobalRunner();
@@ -409,6 +409,8 @@ function gifti_tool(
 export {
       GIFTI_TOOL_METADATA,
       GiftiToolOutputs,
+      GiftiToolParamsDict,
+      GiftiToolParamsDictTagged,
       gifti_tool,
       gifti_tool_execute,
       gifti_tool_params,

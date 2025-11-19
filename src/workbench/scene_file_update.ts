@@ -10,41 +10,41 @@ const SCENE_FILE_UPDATE_METADATA: Metadata = {
 };
 
 
-interface SceneFileUpdateCopyMapOnePaletteParameters {
+interface SceneFileUpdateCopyMapOnePaletteParamsDict {
     "@type"?: "copy-map-one-palette";
     "Data File Name Suffix": string;
 }
-type SceneFileUpdateCopyMapOnePaletteParametersTagged = Required<Pick<SceneFileUpdateCopyMapOnePaletteParameters, '@type'>> & SceneFileUpdateCopyMapOnePaletteParameters;
+type SceneFileUpdateCopyMapOnePaletteParamsDictTagged = Required<Pick<SceneFileUpdateCopyMapOnePaletteParamsDict, '@type'>> & SceneFileUpdateCopyMapOnePaletteParamsDict;
 
 
-interface SceneFileUpdateDataFileAddParameters {
+interface SceneFileUpdateDataFileAddParamsDict {
     "@type"?: "data-file-add";
     "Name of data file": string;
 }
-type SceneFileUpdateDataFileAddParametersTagged = Required<Pick<SceneFileUpdateDataFileAddParameters, '@type'>> & SceneFileUpdateDataFileAddParameters;
+type SceneFileUpdateDataFileAddParamsDictTagged = Required<Pick<SceneFileUpdateDataFileAddParamsDict, '@type'>> & SceneFileUpdateDataFileAddParamsDict;
 
 
-interface SceneFileUpdateDataFileRemoveParameters {
+interface SceneFileUpdateDataFileRemoveParamsDict {
     "@type"?: "data-file-remove";
     "Name of data file": string;
 }
-type SceneFileUpdateDataFileRemoveParametersTagged = Required<Pick<SceneFileUpdateDataFileRemoveParameters, '@type'>> & SceneFileUpdateDataFileRemoveParameters;
+type SceneFileUpdateDataFileRemoveParamsDictTagged = Required<Pick<SceneFileUpdateDataFileRemoveParamsDict, '@type'>> & SceneFileUpdateDataFileRemoveParamsDict;
 
 
-interface SceneFileUpdateParameters {
+interface SceneFileUpdateParamsDict {
     "@type"?: "workbench/scene-file-update";
     "fix-map-palette-settings": boolean;
     "remove-missing-files": boolean;
     "error": boolean;
     "verbose": boolean;
-    "copy-map-one-palette"?: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null | undefined;
-    "data-file-add"?: Array<SceneFileUpdateDataFileAddParameters> | null | undefined;
-    "data-file-remove"?: Array<SceneFileUpdateDataFileRemoveParameters> | null | undefined;
+    "copy-map-one-palette"?: Array<SceneFileUpdateCopyMapOnePaletteParamsDict> | null | undefined;
+    "data-file-add"?: Array<SceneFileUpdateDataFileAddParamsDict> | null | undefined;
+    "data-file-remove"?: Array<SceneFileUpdateDataFileRemoveParamsDict> | null | undefined;
     "input-scene-file": string;
     "output-scene-file": string;
     "scene-name-or-number": string;
 }
-type SceneFileUpdateParametersTagged = Required<Pick<SceneFileUpdateParameters, '@type'>> & SceneFileUpdateParameters;
+type SceneFileUpdateParamsDictTagged = Required<Pick<SceneFileUpdateParamsDict, '@type'>> & SceneFileUpdateParamsDict;
 
 
 /**
@@ -54,9 +54,9 @@ type SceneFileUpdateParametersTagged = Required<Pick<SceneFileUpdateParameters, 
  *
  * @returns Parameter dictionary
  */
-function scene_file_update_copy_map_one_palette_params(
+function scene_file_update_copy_map_one_palette(
     data_file_name_suffix: string,
-): SceneFileUpdateCopyMapOnePaletteParametersTagged {
+): SceneFileUpdateCopyMapOnePaletteParamsDictTagged {
     const params = {
         "@type": "copy-map-one-palette" as const,
         "Data File Name Suffix": data_file_name_suffix,
@@ -74,7 +74,7 @@ function scene_file_update_copy_map_one_palette_params(
  * @returns Command-line arguments.
  */
 function scene_file_update_copy_map_one_palette_cargs(
-    params: SceneFileUpdateCopyMapOnePaletteParameters,
+    params: SceneFileUpdateCopyMapOnePaletteParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,9 +95,9 @@ Example on UNIX to create a text file containing all CIFTI scalar files in the c
  *
  * @returns Parameter dictionary
  */
-function scene_file_update_data_file_add_params(
+function scene_file_update_data_file_add(
     name_of_data_file: string,
-): SceneFileUpdateDataFileAddParametersTagged {
+): SceneFileUpdateDataFileAddParamsDictTagged {
     const params = {
         "@type": "data-file-add" as const,
         "Name of data file": name_of_data_file,
@@ -115,7 +115,7 @@ function scene_file_update_data_file_add_params(
  * @returns Command-line arguments.
  */
 function scene_file_update_data_file_add_cargs(
-    params: SceneFileUpdateDataFileAddParameters,
+    params: SceneFileUpdateDataFileAddParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -136,9 +136,9 @@ Example on UNIX to create a text file containing all CIFTI scalar files in the c
  *
  * @returns Parameter dictionary
  */
-function scene_file_update_data_file_remove_params(
+function scene_file_update_data_file_remove(
     name_of_data_file: string,
-): SceneFileUpdateDataFileRemoveParametersTagged {
+): SceneFileUpdateDataFileRemoveParamsDictTagged {
     const params = {
         "@type": "data-file-remove" as const,
         "Name of data file": name_of_data_file,
@@ -156,7 +156,7 @@ function scene_file_update_data_file_remove_params(
  * @returns Command-line arguments.
  */
 function scene_file_update_data_file_remove_cargs(
-    params: SceneFileUpdateDataFileRemoveParameters,
+    params: SceneFileUpdateDataFileRemoveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -169,7 +169,7 @@ function scene_file_update_data_file_remove_cargs(
 
 
 /**
- * Output object returned when calling `SceneFileUpdateParameters(...)`.
+ * Output object returned when calling `SceneFileUpdateParamsDict(...)`.
  *
  * @interface
  */
@@ -205,10 +205,10 @@ function scene_file_update_params(
     remove_missing_files: boolean = false,
     error: boolean = false,
     verbose: boolean = false,
-    copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null = null,
-    data_file_add: Array<SceneFileUpdateDataFileAddParameters> | null = null,
-    data_file_remove: Array<SceneFileUpdateDataFileRemoveParameters> | null = null,
-): SceneFileUpdateParametersTagged {
+    copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParamsDict> | null = null,
+    data_file_add: Array<SceneFileUpdateDataFileAddParamsDict> | null = null,
+    data_file_remove: Array<SceneFileUpdateDataFileRemoveParamsDict> | null = null,
+): SceneFileUpdateParamsDictTagged {
     const params = {
         "@type": "workbench/scene-file-update" as const,
         "fix-map-palette-settings": fix_map_palette_settings,
@@ -241,7 +241,7 @@ function scene_file_update_params(
  * @returns Command-line arguments.
  */
 function scene_file_update_cargs(
-    params: SceneFileUpdateParameters,
+    params: SceneFileUpdateParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -274,7 +274,7 @@ function scene_file_update_cargs(
  * @returns Outputs object.
  */
 function scene_file_update_outputs(
-    params: SceneFileUpdateParameters,
+    params: SceneFileUpdateParamsDict,
     execution: Execution,
 ): SceneFileUpdateOutputs {
     const ret: SceneFileUpdateOutputs = {
@@ -304,7 +304,7 @@ function scene_file_update_outputs(
  * @returns NamedTuple of outputs (described in `SceneFileUpdateOutputs`).
  */
 function scene_file_update_execute(
-    params: SceneFileUpdateParameters,
+    params: SceneFileUpdateParamsDict,
     runner: Runner | null = null,
 ): SceneFileUpdateOutputs {
     runner = runner || getGlobalRunner();
@@ -353,9 +353,9 @@ function scene_file_update(
     remove_missing_files: boolean = false,
     error: boolean = false,
     verbose: boolean = false,
-    copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParameters> | null = null,
-    data_file_add: Array<SceneFileUpdateDataFileAddParameters> | null = null,
-    data_file_remove: Array<SceneFileUpdateDataFileRemoveParameters> | null = null,
+    copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParamsDict> | null = null,
+    data_file_add: Array<SceneFileUpdateDataFileAddParamsDict> | null = null,
+    data_file_remove: Array<SceneFileUpdateDataFileRemoveParamsDict> | null = null,
     runner: Runner | null = null,
 ): SceneFileUpdateOutputs {
     const params = scene_file_update_params(input_scene_file, output_scene_file, scene_name_or_number, fix_map_palette_settings, remove_missing_files, error, verbose, copy_map_one_palette, data_file_add, data_file_remove)
@@ -365,11 +365,19 @@ function scene_file_update(
 
 export {
       SCENE_FILE_UPDATE_METADATA,
+      SceneFileUpdateCopyMapOnePaletteParamsDict,
+      SceneFileUpdateCopyMapOnePaletteParamsDictTagged,
+      SceneFileUpdateDataFileAddParamsDict,
+      SceneFileUpdateDataFileAddParamsDictTagged,
+      SceneFileUpdateDataFileRemoveParamsDict,
+      SceneFileUpdateDataFileRemoveParamsDictTagged,
       SceneFileUpdateOutputs,
+      SceneFileUpdateParamsDict,
+      SceneFileUpdateParamsDictTagged,
       scene_file_update,
-      scene_file_update_copy_map_one_palette_params,
-      scene_file_update_data_file_add_params,
-      scene_file_update_data_file_remove_params,
+      scene_file_update_copy_map_one_palette,
+      scene_file_update_data_file_add,
+      scene_file_update_data_file_remove,
       scene_file_update_execute,
       scene_file_update_params,
 };

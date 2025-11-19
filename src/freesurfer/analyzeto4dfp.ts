@@ -11,7 +11,7 @@ const ANALYZETO4DFP_METADATA: Metadata = {
 };
 
 
-interface Analyzeto4dfpParameters {
+interface Analyzeto4dfpParamsDict {
     "@type"?: "freesurfer/analyzeto4dfp";
     "analyze_image": InputPathType;
     "rois_scale": boolean;
@@ -21,11 +21,11 @@ interface Analyzeto4dfpParameters {
     "endian"?: string | null | undefined;
     "orientation"?: number | null | undefined;
 }
-type Analyzeto4dfpParametersTagged = Required<Pick<Analyzeto4dfpParameters, '@type'>> & Analyzeto4dfpParameters;
+type Analyzeto4dfpParamsDictTagged = Required<Pick<Analyzeto4dfpParamsDict, '@type'>> & Analyzeto4dfpParamsDict;
 
 
 /**
- * Output object returned when calling `Analyzeto4dfpParameters(...)`.
+ * Output object returned when calling `Analyzeto4dfpParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function analyzeto4dfp_params(
     flip_z: boolean = false,
     endian: string | null = null,
     orientation: number | null = null,
-): Analyzeto4dfpParametersTagged {
+): Analyzeto4dfpParamsDictTagged {
     const params = {
         "@type": "freesurfer/analyzeto4dfp" as const,
         "analyze_image": analyze_image,
@@ -86,7 +86,7 @@ function analyzeto4dfp_params(
  * @returns Command-line arguments.
  */
 function analyzeto4dfp_cargs(
-    params: Analyzeto4dfpParameters,
+    params: Analyzeto4dfpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -129,7 +129,7 @@ function analyzeto4dfp_cargs(
  * @returns Outputs object.
  */
 function analyzeto4dfp_outputs(
-    params: Analyzeto4dfpParameters,
+    params: Analyzeto4dfpParamsDict,
     execution: Execution,
 ): Analyzeto4dfpOutputs {
     const ret: Analyzeto4dfpOutputs = {
@@ -154,7 +154,7 @@ function analyzeto4dfp_outputs(
  * @returns NamedTuple of outputs (described in `Analyzeto4dfpOutputs`).
  */
 function analyzeto4dfp_execute(
-    params: Analyzeto4dfpParameters,
+    params: Analyzeto4dfpParamsDict,
     runner: Runner | null = null,
 ): Analyzeto4dfpOutputs {
     runner = runner || getGlobalRunner();
@@ -205,6 +205,8 @@ function analyzeto4dfp(
 export {
       ANALYZETO4DFP_METADATA,
       Analyzeto4dfpOutputs,
+      Analyzeto4dfpParamsDict,
+      Analyzeto4dfpParamsDictTagged,
       analyzeto4dfp,
       analyzeto4dfp_execute,
       analyzeto4dfp_params,

@@ -11,16 +11,16 @@ const QUICK_ALPHA_VALS_PY_METADATA: Metadata = {
 };
 
 
-interface QuickAlphaValsPyParameters {
+interface QuickAlphaValsPyParamsDict {
     "@type"?: "afni/quick.alpha.vals.py";
     "niter"?: number | null | undefined;
     "max_file": InputPathType;
 }
-type QuickAlphaValsPyParametersTagged = Required<Pick<QuickAlphaValsPyParameters, '@type'>> & QuickAlphaValsPyParameters;
+type QuickAlphaValsPyParamsDictTagged = Required<Pick<QuickAlphaValsPyParamsDict, '@type'>> & QuickAlphaValsPyParamsDict;
 
 
 /**
- * Output object returned when calling `QuickAlphaValsPyParameters(...)`.
+ * Output object returned when calling `QuickAlphaValsPyParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface QuickAlphaValsPyOutputs {
 function quick_alpha_vals_py_params(
     max_file: InputPathType,
     niter: number | null = null,
-): QuickAlphaValsPyParametersTagged {
+): QuickAlphaValsPyParamsDictTagged {
     const params = {
         "@type": "afni/quick.alpha.vals.py" as const,
         "max_file": max_file,
@@ -68,7 +68,7 @@ function quick_alpha_vals_py_params(
  * @returns Command-line arguments.
  */
 function quick_alpha_vals_py_cargs(
-    params: QuickAlphaValsPyParameters,
+    params: QuickAlphaValsPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -93,7 +93,7 @@ function quick_alpha_vals_py_cargs(
  * @returns Outputs object.
  */
 function quick_alpha_vals_py_outputs(
-    params: QuickAlphaValsPyParameters,
+    params: QuickAlphaValsPyParamsDict,
     execution: Execution,
 ): QuickAlphaValsPyOutputs {
     const ret: QuickAlphaValsPyOutputs = {
@@ -119,7 +119,7 @@ function quick_alpha_vals_py_outputs(
  * @returns NamedTuple of outputs (described in `QuickAlphaValsPyOutputs`).
  */
 function quick_alpha_vals_py_execute(
-    params: QuickAlphaValsPyParameters,
+    params: QuickAlphaValsPyParamsDict,
     runner: Runner | null = null,
 ): QuickAlphaValsPyOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function quick_alpha_vals_py(
 export {
       QUICK_ALPHA_VALS_PY_METADATA,
       QuickAlphaValsPyOutputs,
+      QuickAlphaValsPyParamsDict,
+      QuickAlphaValsPyParamsDictTagged,
       quick_alpha_vals_py,
       quick_alpha_vals_py_execute,
       quick_alpha_vals_py_params,

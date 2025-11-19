@@ -11,7 +11,7 @@ const EDDY_CUDA10_2_METADATA: Metadata = {
 };
 
 
-interface EddyCuda102Parameters {
+interface EddyCuda102ParamsDict {
     "@type"?: "fsl/eddy_cuda10.2";
     "imain": InputPathType;
     "mask": InputPathType;
@@ -58,11 +58,11 @@ interface EddyCuda102Parameters {
     "data_is_shelled": boolean;
     "verbose": boolean;
 }
-type EddyCuda102ParametersTagged = Required<Pick<EddyCuda102Parameters, '@type'>> & EddyCuda102Parameters;
+type EddyCuda102ParamsDictTagged = Required<Pick<EddyCuda102ParamsDict, '@type'>> & EddyCuda102ParamsDict;
 
 
 /**
- * Output object returned when calling `EddyCuda102Parameters(...)`.
+ * Output object returned when calling `EddyCuda102ParamsDict(...)`.
  *
  * @interface
  */
@@ -245,7 +245,7 @@ function eddy_cuda10_2_params(
     dont_peas: boolean = false,
     data_is_shelled: boolean = false,
     verbose: boolean = false,
-): EddyCuda102ParametersTagged {
+): EddyCuda102ParamsDictTagged {
     const params = {
         "@type": "fsl/eddy_cuda10.2" as const,
         "imain": imain,
@@ -358,7 +358,7 @@ function eddy_cuda10_2_params(
  * @returns Command-line arguments.
  */
 function eddy_cuda10_2_cargs(
-    params: EddyCuda102Parameters,
+    params: EddyCuda102ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -494,7 +494,7 @@ function eddy_cuda10_2_cargs(
  * @returns Outputs object.
  */
 function eddy_cuda10_2_outputs(
-    params: EddyCuda102Parameters,
+    params: EddyCuda102ParamsDict,
     execution: Execution,
 ): EddyCuda102Outputs {
     const ret: EddyCuda102Outputs = {
@@ -538,7 +538,7 @@ function eddy_cuda10_2_outputs(
  * @returns NamedTuple of outputs (described in `EddyCuda102Outputs`).
  */
 function eddy_cuda10_2_execute(
-    params: EddyCuda102Parameters,
+    params: EddyCuda102ParamsDict,
     runner: Runner | null = null,
 ): EddyCuda102Outputs {
     runner = runner || getGlobalRunner();
@@ -663,6 +663,8 @@ function eddy_cuda10_2(
 export {
       EDDY_CUDA10_2_METADATA,
       EddyCuda102Outputs,
+      EddyCuda102ParamsDict,
+      EddyCuda102ParamsDictTagged,
       eddy_cuda10_2,
       eddy_cuda10_2_execute,
       eddy_cuda10_2_params,

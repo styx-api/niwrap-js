@@ -11,29 +11,29 @@ const FIXELCROP_METADATA: Metadata = {
 };
 
 
-interface FixelcropConfigParameters {
+interface FixelcropConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type FixelcropConfigParametersTagged = Required<Pick<FixelcropConfigParameters, '@type'>> & FixelcropConfigParameters;
+type FixelcropConfigParamsDictTagged = Required<Pick<FixelcropConfigParamsDict, '@type'>> & FixelcropConfigParamsDict;
 
 
-interface FixelcropParameters {
+interface FixelcropParamsDict {
     "@type"?: "mrtrix/fixelcrop";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<FixelcropConfigParameters> | null | undefined;
+    "config"?: Array<FixelcropConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "input_fixel_directory": InputPathType;
     "input_fixel_mask": InputPathType;
     "output_fixel_directory": string;
 }
-type FixelcropParametersTagged = Required<Pick<FixelcropParameters, '@type'>> & FixelcropParameters;
+type FixelcropParamsDictTagged = Required<Pick<FixelcropParamsDict, '@type'>> & FixelcropParamsDict;
 
 
 /**
@@ -44,10 +44,10 @@ type FixelcropParametersTagged = Required<Pick<FixelcropParameters, '@type'>> & 
  *
  * @returns Parameter dictionary
  */
-function fixelcrop_config_params(
+function fixelcrop_config(
     key: string,
     value: string,
-): FixelcropConfigParametersTagged {
+): FixelcropConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -66,7 +66,7 @@ function fixelcrop_config_params(
  * @returns Command-line arguments.
  */
 function fixelcrop_config_cargs(
-    params: FixelcropConfigParameters,
+    params: FixelcropConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -78,7 +78,7 @@ function fixelcrop_config_cargs(
 
 
 /**
- * Output object returned when calling `FixelcropParameters(...)`.
+ * Output object returned when calling `FixelcropParamsDict(...)`.
  *
  * @interface
  */
@@ -120,10 +120,10 @@ function fixelcrop_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelcropConfigParameters> | null = null,
+    config: Array<FixelcropConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): FixelcropParametersTagged {
+): FixelcropParamsDictTagged {
     const params = {
         "@type": "mrtrix/fixelcrop" as const,
         "info": info,
@@ -155,7 +155,7 @@ function fixelcrop_params(
  * @returns Command-line arguments.
  */
 function fixelcrop_cargs(
-    params: FixelcropParameters,
+    params: FixelcropParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -203,7 +203,7 @@ function fixelcrop_cargs(
  * @returns Outputs object.
  */
 function fixelcrop_outputs(
-    params: FixelcropParameters,
+    params: FixelcropParamsDict,
     execution: Execution,
 ): FixelcropOutputs {
     const ret: FixelcropOutputs = {
@@ -235,7 +235,7 @@ function fixelcrop_outputs(
  * @returns NamedTuple of outputs (described in `FixelcropOutputs`).
  */
 function fixelcrop_execute(
-    params: FixelcropParameters,
+    params: FixelcropParamsDict,
     runner: Runner | null = null,
 ): FixelcropOutputs {
     runner = runner || getGlobalRunner();
@@ -287,7 +287,7 @@ function fixelcrop(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<FixelcropConfigParameters> | null = null,
+    config: Array<FixelcropConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -299,9 +299,13 @@ function fixelcrop(
 
 export {
       FIXELCROP_METADATA,
+      FixelcropConfigParamsDict,
+      FixelcropConfigParamsDictTagged,
       FixelcropOutputs,
+      FixelcropParamsDict,
+      FixelcropParamsDictTagged,
       fixelcrop,
-      fixelcrop_config_params,
+      fixelcrop_config,
       fixelcrop_execute,
       fixelcrop_params,
 };

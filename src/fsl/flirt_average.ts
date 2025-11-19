@@ -11,7 +11,7 @@ const FLIRT_AVERAGE_METADATA: Metadata = {
 };
 
 
-interface FlirtAverageParameters {
+interface FlirtAverageParamsDict {
     "@type"?: "fsl/flirt_average";
     "ninputs": number;
     "input1": InputPathType;
@@ -21,11 +21,11 @@ interface FlirtAverageParameters {
     "reference_image"?: InputPathType | null | undefined;
     "flirt_options"?: string | null | undefined;
 }
-type FlirtAverageParametersTagged = Required<Pick<FlirtAverageParameters, '@type'>> & FlirtAverageParameters;
+type FlirtAverageParamsDictTagged = Required<Pick<FlirtAverageParamsDict, '@type'>> & FlirtAverageParamsDict;
 
 
 /**
- * Output object returned when calling `FlirtAverageParameters(...)`.
+ * Output object returned when calling `FlirtAverageParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function flirt_average_params(
     input3: InputPathType | null = null,
     reference_image: InputPathType | null = null,
     flirt_options: string | null = null,
-): FlirtAverageParametersTagged {
+): FlirtAverageParamsDictTagged {
     const params = {
         "@type": "fsl/flirt_average" as const,
         "ninputs": ninputs,
@@ -92,7 +92,7 @@ function flirt_average_params(
  * @returns Command-line arguments.
  */
 function flirt_average_cargs(
-    params: FlirtAverageParameters,
+    params: FlirtAverageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -126,7 +126,7 @@ function flirt_average_cargs(
  * @returns Outputs object.
  */
 function flirt_average_outputs(
-    params: FlirtAverageParameters,
+    params: FlirtAverageParamsDict,
     execution: Execution,
 ): FlirtAverageOutputs {
     const ret: FlirtAverageOutputs = {
@@ -152,7 +152,7 @@ function flirt_average_outputs(
  * @returns NamedTuple of outputs (described in `FlirtAverageOutputs`).
  */
 function flirt_average_execute(
-    params: FlirtAverageParameters,
+    params: FlirtAverageParamsDict,
     runner: Runner | null = null,
 ): FlirtAverageOutputs {
     runner = runner || getGlobalRunner();
@@ -203,6 +203,8 @@ function flirt_average(
 export {
       FLIRT_AVERAGE_METADATA,
       FlirtAverageOutputs,
+      FlirtAverageParamsDict,
+      FlirtAverageParamsDictTagged,
       flirt_average,
       flirt_average_execute,
       flirt_average_params,

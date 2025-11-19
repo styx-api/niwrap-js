@@ -11,7 +11,7 @@ const FILM_GLS_METADATA: Metadata = {
 };
 
 
-interface FilmGlsParameters {
+interface FilmGlsParamsDict {
     "@type"?: "fsl/film_gls";
     "infile": InputPathType;
     "ac_flag": boolean;
@@ -37,11 +37,11 @@ interface FilmGlsParameters {
     "ven"?: Array<string> | null | undefined;
     "vef"?: Array<InputPathType> | null | undefined;
 }
-type FilmGlsParametersTagged = Required<Pick<FilmGlsParameters, '@type'>> & FilmGlsParameters;
+type FilmGlsParamsDictTagged = Required<Pick<FilmGlsParamsDict, '@type'>> & FilmGlsParamsDict;
 
 
 /**
- * Output object returned when calling `FilmGlsParameters(...)`.
+ * Output object returned when calling `FilmGlsParamsDict(...)`.
  *
  * @interface
  */
@@ -118,7 +118,7 @@ function film_gls_params(
     mt: number | null = null,
     ven: Array<string> | null = null,
     vef: Array<InputPathType> | null = null,
-): FilmGlsParametersTagged {
+): FilmGlsParamsDictTagged {
     const params = {
         "@type": "fsl/film_gls" as const,
         "infile": infile,
@@ -188,7 +188,7 @@ function film_gls_params(
  * @returns Command-line arguments.
  */
 function film_gls_cargs(
-    params: FilmGlsParameters,
+    params: FilmGlsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -318,7 +318,7 @@ function film_gls_cargs(
  * @returns Outputs object.
  */
 function film_gls_outputs(
-    params: FilmGlsParameters,
+    params: FilmGlsParamsDict,
     execution: Execution,
 ): FilmGlsOutputs {
     const ret: FilmGlsOutputs = {
@@ -346,7 +346,7 @@ function film_gls_outputs(
  * @returns NamedTuple of outputs (described in `FilmGlsOutputs`).
  */
 function film_gls_execute(
-    params: FilmGlsParameters,
+    params: FilmGlsParamsDict,
     runner: Runner | null = null,
 ): FilmGlsOutputs {
     runner = runner || getGlobalRunner();
@@ -429,6 +429,8 @@ function film_gls(
 export {
       FILM_GLS_METADATA,
       FilmGlsOutputs,
+      FilmGlsParamsDict,
+      FilmGlsParamsDictTagged,
       film_gls,
       film_gls_execute,
       film_gls_params,

@@ -11,16 +11,16 @@ const IREPIFITVOL_GLNX64_METADATA: Metadata = {
 };
 
 
-interface IrepifitvolGlnx64Parameters {
+interface IrepifitvolGlnx64ParamsDict {
     "@type"?: "freesurfer/irepifitvol.glnx64";
     "input_file": InputPathType;
     "output_file": string;
 }
-type IrepifitvolGlnx64ParametersTagged = Required<Pick<IrepifitvolGlnx64Parameters, '@type'>> & IrepifitvolGlnx64Parameters;
+type IrepifitvolGlnx64ParamsDictTagged = Required<Pick<IrepifitvolGlnx64ParamsDict, '@type'>> & IrepifitvolGlnx64ParamsDict;
 
 
 /**
- * Output object returned when calling `IrepifitvolGlnx64Parameters(...)`.
+ * Output object returned when calling `IrepifitvolGlnx64ParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface IrepifitvolGlnx64Outputs {
 function irepifitvol_glnx64_params(
     input_file: InputPathType,
     output_file: string,
-): IrepifitvolGlnx64ParametersTagged {
+): IrepifitvolGlnx64ParamsDictTagged {
     const params = {
         "@type": "freesurfer/irepifitvol.glnx64" as const,
         "input_file": input_file,
@@ -66,7 +66,7 @@ function irepifitvol_glnx64_params(
  * @returns Command-line arguments.
  */
 function irepifitvol_glnx64_cargs(
-    params: IrepifitvolGlnx64Parameters,
+    params: IrepifitvolGlnx64ParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function irepifitvol_glnx64_cargs(
  * @returns Outputs object.
  */
 function irepifitvol_glnx64_outputs(
-    params: IrepifitvolGlnx64Parameters,
+    params: IrepifitvolGlnx64ParamsDict,
     execution: Execution,
 ): IrepifitvolGlnx64Outputs {
     const ret: IrepifitvolGlnx64Outputs = {
@@ -112,7 +112,7 @@ function irepifitvol_glnx64_outputs(
  * @returns NamedTuple of outputs (described in `IrepifitvolGlnx64Outputs`).
  */
 function irepifitvol_glnx64_execute(
-    params: IrepifitvolGlnx64Parameters,
+    params: IrepifitvolGlnx64ParamsDict,
     runner: Runner | null = null,
 ): IrepifitvolGlnx64Outputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function irepifitvol_glnx64(
 export {
       IREPIFITVOL_GLNX64_METADATA,
       IrepifitvolGlnx64Outputs,
+      IrepifitvolGlnx64ParamsDict,
+      IrepifitvolGlnx64ParamsDictTagged,
       irepifitvol_glnx64,
       irepifitvol_glnx64_execute,
       irepifitvol_glnx64_params,

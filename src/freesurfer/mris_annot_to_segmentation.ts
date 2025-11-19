@@ -11,7 +11,7 @@ const MRIS_ANNOT_TO_SEGMENTATION_METADATA: Metadata = {
 };
 
 
-interface MrisAnnotToSegmentationParameters {
+interface MrisAnnotToSegmentationParamsDict {
     "@type"?: "freesurfer/mris_annot_to_segmentation";
     "subject_name": string;
     "hemi": string;
@@ -20,11 +20,11 @@ interface MrisAnnotToSegmentationParameters {
     "color_table": InputPathType;
     "output_volume": string;
 }
-type MrisAnnotToSegmentationParametersTagged = Required<Pick<MrisAnnotToSegmentationParameters, '@type'>> & MrisAnnotToSegmentationParameters;
+type MrisAnnotToSegmentationParamsDictTagged = Required<Pick<MrisAnnotToSegmentationParamsDict, '@type'>> & MrisAnnotToSegmentationParamsDict;
 
 
 /**
- * Output object returned when calling `MrisAnnotToSegmentationParameters(...)`.
+ * Output object returned when calling `MrisAnnotToSegmentationParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function mris_annot_to_segmentation_params(
     annot_file: InputPathType,
     color_table: InputPathType,
     output_volume: string,
-): MrisAnnotToSegmentationParametersTagged {
+): MrisAnnotToSegmentationParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_annot_to_segmentation" as const,
         "subject_name": subject_name,
@@ -82,7 +82,7 @@ function mris_annot_to_segmentation_params(
  * @returns Command-line arguments.
  */
 function mris_annot_to_segmentation_cargs(
-    params: MrisAnnotToSegmentationParameters,
+    params: MrisAnnotToSegmentationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -106,7 +106,7 @@ function mris_annot_to_segmentation_cargs(
  * @returns Outputs object.
  */
 function mris_annot_to_segmentation_outputs(
-    params: MrisAnnotToSegmentationParameters,
+    params: MrisAnnotToSegmentationParamsDict,
     execution: Execution,
 ): MrisAnnotToSegmentationOutputs {
     const ret: MrisAnnotToSegmentationOutputs = {
@@ -132,7 +132,7 @@ function mris_annot_to_segmentation_outputs(
  * @returns NamedTuple of outputs (described in `MrisAnnotToSegmentationOutputs`).
  */
 function mris_annot_to_segmentation_execute(
-    params: MrisAnnotToSegmentationParameters,
+    params: MrisAnnotToSegmentationParamsDict,
     runner: Runner | null = null,
 ): MrisAnnotToSegmentationOutputs {
     runner = runner || getGlobalRunner();
@@ -181,6 +181,8 @@ function mris_annot_to_segmentation(
 export {
       MRIS_ANNOT_TO_SEGMENTATION_METADATA,
       MrisAnnotToSegmentationOutputs,
+      MrisAnnotToSegmentationParamsDict,
+      MrisAnnotToSegmentationParamsDictTagged,
       mris_annot_to_segmentation,
       mris_annot_to_segmentation_execute,
       mris_annot_to_segmentation_params,

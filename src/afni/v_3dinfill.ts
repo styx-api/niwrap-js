@@ -11,7 +11,7 @@ const V_3DINFILL_METADATA: Metadata = {
 };
 
 
-interface V3dinfillParameters {
+interface V3dinfillParamsDict {
     "@type"?: "afni/3dinfill";
     "input": InputPathType;
     "prefix"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface V3dinfillParameters {
     "mrange"?: Array<number> | null | undefined;
     "cmask"?: string | null | undefined;
 }
-type V3dinfillParametersTagged = Required<Pick<V3dinfillParameters, '@type'>> & V3dinfillParameters;
+type V3dinfillParamsDictTagged = Required<Pick<V3dinfillParamsDict, '@type'>> & V3dinfillParamsDict;
 
 
 /**
- * Output object returned when calling `V3dinfillParameters(...)`.
+ * Output object returned when calling `V3dinfillParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function v_3dinfill_params(
     mask_range: Array<number> | null = null,
     mrange: Array<number> | null = null,
     cmask: string | null = null,
-): V3dinfillParametersTagged {
+): V3dinfillParamsDictTagged {
     const params = {
         "@type": "afni/3dinfill" as const,
         "input": input,
@@ -116,7 +116,7 @@ function v_3dinfill_params(
  * @returns Command-line arguments.
  */
 function v_3dinfill_cargs(
-    params: V3dinfillParameters,
+    params: V3dinfillParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -192,7 +192,7 @@ function v_3dinfill_cargs(
  * @returns Outputs object.
  */
 function v_3dinfill_outputs(
-    params: V3dinfillParameters,
+    params: V3dinfillParamsDict,
     execution: Execution,
 ): V3dinfillOutputs {
     const ret: V3dinfillOutputs = {
@@ -218,7 +218,7 @@ function v_3dinfill_outputs(
  * @returns NamedTuple of outputs (described in `V3dinfillOutputs`).
  */
 function v_3dinfill_execute(
-    params: V3dinfillParameters,
+    params: V3dinfillParamsDict,
     runner: Runner | null = null,
 ): V3dinfillOutputs {
     runner = runner || getGlobalRunner();
@@ -274,6 +274,8 @@ function v_3dinfill(
 
 export {
       V3dinfillOutputs,
+      V3dinfillParamsDict,
+      V3dinfillParamsDictTagged,
       V_3DINFILL_METADATA,
       v_3dinfill,
       v_3dinfill_execute,

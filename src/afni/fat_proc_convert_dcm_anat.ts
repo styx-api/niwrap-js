@@ -11,7 +11,7 @@ const FAT_PROC_CONVERT_DCM_ANAT_METADATA: Metadata = {
 };
 
 
-interface FatProcConvertDcmAnatParameters {
+interface FatProcConvertDcmAnatParamsDict {
     "@type"?: "afni/fat_proc_convert_dcm_anat";
     "dicom_directory"?: string | null | undefined;
     "nifti_input"?: InputPathType | null | undefined;
@@ -24,11 +24,11 @@ interface FatProcConvertDcmAnatParameters {
     "no_cmd_out": boolean;
     "no_qc_view": boolean;
 }
-type FatProcConvertDcmAnatParametersTagged = Required<Pick<FatProcConvertDcmAnatParameters, '@type'>> & FatProcConvertDcmAnatParameters;
+type FatProcConvertDcmAnatParamsDictTagged = Required<Pick<FatProcConvertDcmAnatParamsDict, '@type'>> & FatProcConvertDcmAnatParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcConvertDcmAnatParameters(...)`.
+ * Output object returned when calling `FatProcConvertDcmAnatParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function fat_proc_convert_dcm_anat_params(
     qc_prefix: string | null = null,
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
-): FatProcConvertDcmAnatParametersTagged {
+): FatProcConvertDcmAnatParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_convert_dcm_anat" as const,
         "prefix": prefix,
@@ -108,7 +108,7 @@ function fat_proc_convert_dcm_anat_params(
  * @returns Command-line arguments.
  */
 function fat_proc_convert_dcm_anat_cargs(
-    params: FatProcConvertDcmAnatParameters,
+    params: FatProcConvertDcmAnatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -172,7 +172,7 @@ function fat_proc_convert_dcm_anat_cargs(
  * @returns Outputs object.
  */
 function fat_proc_convert_dcm_anat_outputs(
-    params: FatProcConvertDcmAnatParameters,
+    params: FatProcConvertDcmAnatParamsDict,
     execution: Execution,
 ): FatProcConvertDcmAnatOutputs {
     const ret: FatProcConvertDcmAnatOutputs = {
@@ -198,7 +198,7 @@ function fat_proc_convert_dcm_anat_outputs(
  * @returns NamedTuple of outputs (described in `FatProcConvertDcmAnatOutputs`).
  */
 function fat_proc_convert_dcm_anat_execute(
-    params: FatProcConvertDcmAnatParameters,
+    params: FatProcConvertDcmAnatParamsDict,
     runner: Runner | null = null,
 ): FatProcConvertDcmAnatOutputs {
     runner = runner || getGlobalRunner();
@@ -255,6 +255,8 @@ function fat_proc_convert_dcm_anat(
 export {
       FAT_PROC_CONVERT_DCM_ANAT_METADATA,
       FatProcConvertDcmAnatOutputs,
+      FatProcConvertDcmAnatParamsDict,
+      FatProcConvertDcmAnatParamsDictTagged,
       fat_proc_convert_dcm_anat,
       fat_proc_convert_dcm_anat_execute,
       fat_proc_convert_dcm_anat_params,

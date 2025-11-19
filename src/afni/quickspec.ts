@@ -11,7 +11,7 @@ const QUICKSPEC_METADATA: Metadata = {
 };
 
 
-interface QuickspecParameters {
+interface QuickspecParamsDict {
     "@type"?: "afni/quickspec";
     "tn": Array<string>;
     "tsn": Array<string>;
@@ -21,11 +21,11 @@ interface QuickspecParameters {
     "spec"?: string | null | undefined;
     "help": boolean;
 }
-type QuickspecParametersTagged = Required<Pick<QuickspecParameters, '@type'>> & QuickspecParameters;
+type QuickspecParamsDictTagged = Required<Pick<QuickspecParamsDict, '@type'>> & QuickspecParamsDict;
 
 
 /**
- * Output object returned when calling `QuickspecParameters(...)`.
+ * Output object returned when calling `QuickspecParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function quickspec_params(
     tsnadl: Array<string> | null = null,
     spec: string | null = null,
     help: boolean = false,
-): QuickspecParametersTagged {
+): QuickspecParamsDictTagged {
     const params = {
         "@type": "afni/quickspec" as const,
         "tn": tn,
@@ -94,7 +94,7 @@ function quickspec_params(
  * @returns Command-line arguments.
  */
 function quickspec_cargs(
-    params: QuickspecParameters,
+    params: QuickspecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -147,7 +147,7 @@ function quickspec_cargs(
  * @returns Outputs object.
  */
 function quickspec_outputs(
-    params: QuickspecParameters,
+    params: QuickspecParamsDict,
     execution: Execution,
 ): QuickspecOutputs {
     const ret: QuickspecOutputs = {
@@ -173,7 +173,7 @@ function quickspec_outputs(
  * @returns NamedTuple of outputs (described in `QuickspecOutputs`).
  */
 function quickspec_execute(
-    params: QuickspecParameters,
+    params: QuickspecParamsDict,
     runner: Runner | null = null,
 ): QuickspecOutputs {
     runner = runner || getGlobalRunner();
@@ -224,6 +224,8 @@ function quickspec(
 export {
       QUICKSPEC_METADATA,
       QuickspecOutputs,
+      QuickspecParamsDict,
+      QuickspecParamsDictTagged,
       quickspec,
       quickspec_execute,
       quickspec_params,

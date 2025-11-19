@@ -11,17 +11,17 @@ const DMRI_GROUP_BY_ENDPOINTS_METADATA: Metadata = {
 };
 
 
-interface DmriGroupByEndpointsParameters {
+interface DmriGroupByEndpointsParamsDict {
     "@type"?: "freesurfer/dmri_groupByEndpoints";
     "streamline_file": InputPathType;
     "image_file": InputPathType;
     "output_directory": string;
 }
-type DmriGroupByEndpointsParametersTagged = Required<Pick<DmriGroupByEndpointsParameters, '@type'>> & DmriGroupByEndpointsParameters;
+type DmriGroupByEndpointsParamsDictTagged = Required<Pick<DmriGroupByEndpointsParamsDict, '@type'>> & DmriGroupByEndpointsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriGroupByEndpointsParameters(...)`.
+ * Output object returned when calling `DmriGroupByEndpointsParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function dmri_group_by_endpoints_params(
     streamline_file: InputPathType,
     image_file: InputPathType,
     output_directory: string,
-): DmriGroupByEndpointsParametersTagged {
+): DmriGroupByEndpointsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_groupByEndpoints" as const,
         "streamline_file": streamline_file,
@@ -66,7 +66,7 @@ function dmri_group_by_endpoints_params(
  * @returns Command-line arguments.
  */
 function dmri_group_by_endpoints_cargs(
-    params: DmriGroupByEndpointsParameters,
+    params: DmriGroupByEndpointsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function dmri_group_by_endpoints_cargs(
  * @returns Outputs object.
  */
 function dmri_group_by_endpoints_outputs(
-    params: DmriGroupByEndpointsParameters,
+    params: DmriGroupByEndpointsParamsDict,
     execution: Execution,
 ): DmriGroupByEndpointsOutputs {
     const ret: DmriGroupByEndpointsOutputs = {
@@ -121,7 +121,7 @@ function dmri_group_by_endpoints_outputs(
  * @returns NamedTuple of outputs (described in `DmriGroupByEndpointsOutputs`).
  */
 function dmri_group_by_endpoints_execute(
-    params: DmriGroupByEndpointsParameters,
+    params: DmriGroupByEndpointsParamsDict,
     runner: Runner | null = null,
 ): DmriGroupByEndpointsOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function dmri_group_by_endpoints(
 export {
       DMRI_GROUP_BY_ENDPOINTS_METADATA,
       DmriGroupByEndpointsOutputs,
+      DmriGroupByEndpointsParamsDict,
+      DmriGroupByEndpointsParamsDictTagged,
       dmri_group_by_endpoints,
       dmri_group_by_endpoints_execute,
       dmri_group_by_endpoints_params,

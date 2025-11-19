@@ -11,7 +11,7 @@ const SURF_MESH_METADATA: Metadata = {
 };
 
 
-interface SurfMeshParameters {
+interface SurfMeshParamsDict {
     "@type"?: "afni/SurfMesh";
     "input_surface": string;
     "output_surface": string;
@@ -22,11 +22,11 @@ interface SurfMeshParameters {
     "no_volume_registration": boolean;
     "set_env"?: string | null | undefined;
 }
-type SurfMeshParametersTagged = Required<Pick<SurfMeshParameters, '@type'>> & SurfMeshParameters;
+type SurfMeshParamsDictTagged = Required<Pick<SurfMeshParamsDict, '@type'>> & SurfMeshParamsDict;
 
 
 /**
- * Output object returned when calling `SurfMeshParameters(...)`.
+ * Output object returned when calling `SurfMeshParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function surf_mesh_params(
     anatomical_label: boolean = false,
     no_volume_registration: boolean = false,
     set_env: string | null = null,
-): SurfMeshParametersTagged {
+): SurfMeshParamsDictTagged {
     const params = {
         "@type": "afni/SurfMesh" as const,
         "input_surface": input_surface,
@@ -94,7 +94,7 @@ function surf_mesh_params(
  * @returns Command-line arguments.
  */
 function surf_mesh_cargs(
-    params: SurfMeshParameters,
+    params: SurfMeshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -145,7 +145,7 @@ function surf_mesh_cargs(
  * @returns Outputs object.
  */
 function surf_mesh_outputs(
-    params: SurfMeshParameters,
+    params: SurfMeshParamsDict,
     execution: Execution,
 ): SurfMeshOutputs {
     const ret: SurfMeshOutputs = {
@@ -171,7 +171,7 @@ function surf_mesh_outputs(
  * @returns NamedTuple of outputs (described in `SurfMeshOutputs`).
  */
 function surf_mesh_execute(
-    params: SurfMeshParameters,
+    params: SurfMeshParamsDict,
     runner: Runner | null = null,
 ): SurfMeshOutputs {
     runner = runner || getGlobalRunner();
@@ -224,6 +224,8 @@ function surf_mesh(
 export {
       SURF_MESH_METADATA,
       SurfMeshOutputs,
+      SurfMeshParamsDict,
+      SurfMeshParamsDictTagged,
       surf_mesh,
       surf_mesh_execute,
       surf_mesh_params,

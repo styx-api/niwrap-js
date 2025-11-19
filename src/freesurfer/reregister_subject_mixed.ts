@@ -11,17 +11,17 @@ const REREGISTER_SUBJECT_MIXED_METADATA: Metadata = {
 };
 
 
-interface ReregisterSubjectMixedParameters {
+interface ReregisterSubjectMixedParamsDict {
     "@type"?: "freesurfer/reregister_subject_mixed";
     "input_volume": InputPathType;
     "output_directory": string;
     "threads"?: number | null | undefined;
 }
-type ReregisterSubjectMixedParametersTagged = Required<Pick<ReregisterSubjectMixedParameters, '@type'>> & ReregisterSubjectMixedParameters;
+type ReregisterSubjectMixedParamsDictTagged = Required<Pick<ReregisterSubjectMixedParamsDict, '@type'>> & ReregisterSubjectMixedParamsDict;
 
 
 /**
- * Output object returned when calling `ReregisterSubjectMixedParameters(...)`.
+ * Output object returned when calling `ReregisterSubjectMixedParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function reregister_subject_mixed_params(
     input_volume: InputPathType,
     output_directory: string,
     threads: number | null = null,
-): ReregisterSubjectMixedParametersTagged {
+): ReregisterSubjectMixedParamsDictTagged {
     const params = {
         "@type": "freesurfer/reregister_subject_mixed" as const,
         "input_volume": input_volume,
@@ -80,7 +80,7 @@ function reregister_subject_mixed_params(
  * @returns Command-line arguments.
  */
 function reregister_subject_mixed_cargs(
-    params: ReregisterSubjectMixedParameters,
+    params: ReregisterSubjectMixedParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -103,7 +103,7 @@ function reregister_subject_mixed_cargs(
  * @returns Outputs object.
  */
 function reregister_subject_mixed_outputs(
-    params: ReregisterSubjectMixedParameters,
+    params: ReregisterSubjectMixedParamsDict,
     execution: Execution,
 ): ReregisterSubjectMixedOutputs {
     const ret: ReregisterSubjectMixedOutputs = {
@@ -131,7 +131,7 @@ function reregister_subject_mixed_outputs(
  * @returns NamedTuple of outputs (described in `ReregisterSubjectMixedOutputs`).
  */
 function reregister_subject_mixed_execute(
-    params: ReregisterSubjectMixedParameters,
+    params: ReregisterSubjectMixedParamsDict,
     runner: Runner | null = null,
 ): ReregisterSubjectMixedOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function reregister_subject_mixed(
 export {
       REREGISTER_SUBJECT_MIXED_METADATA,
       ReregisterSubjectMixedOutputs,
+      ReregisterSubjectMixedParamsDict,
+      ReregisterSubjectMixedParamsDictTagged,
       reregister_subject_mixed,
       reregister_subject_mixed_execute,
       reregister_subject_mixed_params,

@@ -11,7 +11,7 @@ const MERGESEG_METADATA: Metadata = {
 };
 
 
-interface MergesegParameters {
+interface MergesegParamsDict {
     "@type"?: "freesurfer/mergeseg";
     "src_seg": InputPathType;
     "merge_seg": InputPathType;
@@ -21,11 +21,11 @@ interface MergesegParameters {
     "segid_erode"?: number | null | undefined;
     "ctab"?: InputPathType | null | undefined;
 }
-type MergesegParametersTagged = Required<Pick<MergesegParameters, '@type'>> & MergesegParameters;
+type MergesegParamsDictTagged = Required<Pick<MergesegParamsDict, '@type'>> & MergesegParamsDict;
 
 
 /**
- * Output object returned when calling `MergesegParameters(...)`.
+ * Output object returned when calling `MergesegParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mergeseg_params(
     segid_only: number | null = null,
     segid_erode: number | null = null,
     ctab: InputPathType | null = null,
-): MergesegParametersTagged {
+): MergesegParamsDictTagged {
     const params = {
         "@type": "freesurfer/mergeseg" as const,
         "src_seg": src_seg,
@@ -94,7 +94,7 @@ function mergeseg_params(
  * @returns Command-line arguments.
  */
 function mergeseg_cargs(
-    params: MergesegParameters,
+    params: MergesegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -142,7 +142,7 @@ function mergeseg_cargs(
  * @returns Outputs object.
  */
 function mergeseg_outputs(
-    params: MergesegParameters,
+    params: MergesegParamsDict,
     execution: Execution,
 ): MergesegOutputs {
     const ret: MergesegOutputs = {
@@ -168,7 +168,7 @@ function mergeseg_outputs(
  * @returns NamedTuple of outputs (described in `MergesegOutputs`).
  */
 function mergeseg_execute(
-    params: MergesegParameters,
+    params: MergesegParamsDict,
     runner: Runner | null = null,
 ): MergesegOutputs {
     runner = runner || getGlobalRunner();
@@ -219,6 +219,8 @@ function mergeseg(
 export {
       MERGESEG_METADATA,
       MergesegOutputs,
+      MergesegParamsDict,
+      MergesegParamsDictTagged,
       mergeseg,
       mergeseg_execute,
       mergeseg_params,

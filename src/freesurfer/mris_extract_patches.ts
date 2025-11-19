@@ -11,16 +11,16 @@ const MRIS_EXTRACT_PATCHES_METADATA: Metadata = {
 };
 
 
-interface MrisExtractPatchesParameters {
+interface MrisExtractPatchesParamsDict {
     "@type"?: "freesurfer/mris_extract_patches";
     "subject": string;
     "output_dir": string;
 }
-type MrisExtractPatchesParametersTagged = Required<Pick<MrisExtractPatchesParameters, '@type'>> & MrisExtractPatchesParameters;
+type MrisExtractPatchesParamsDictTagged = Required<Pick<MrisExtractPatchesParamsDict, '@type'>> & MrisExtractPatchesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisExtractPatchesParameters(...)`.
+ * Output object returned when calling `MrisExtractPatchesParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MrisExtractPatchesOutputs {
 function mris_extract_patches_params(
     subject: string,
     output_dir: string,
-): MrisExtractPatchesParametersTagged {
+): MrisExtractPatchesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_extract_patches" as const,
         "subject": subject,
@@ -62,7 +62,7 @@ function mris_extract_patches_params(
  * @returns Command-line arguments.
  */
 function mris_extract_patches_cargs(
-    params: MrisExtractPatchesParameters,
+    params: MrisExtractPatchesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mris_extract_patches_cargs(
  * @returns Outputs object.
  */
 function mris_extract_patches_outputs(
-    params: MrisExtractPatchesParameters,
+    params: MrisExtractPatchesParamsDict,
     execution: Execution,
 ): MrisExtractPatchesOutputs {
     const ret: MrisExtractPatchesOutputs = {
@@ -107,7 +107,7 @@ function mris_extract_patches_outputs(
  * @returns NamedTuple of outputs (described in `MrisExtractPatchesOutputs`).
  */
 function mris_extract_patches_execute(
-    params: MrisExtractPatchesParameters,
+    params: MrisExtractPatchesParamsDict,
     runner: Runner | null = null,
 ): MrisExtractPatchesOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function mris_extract_patches(
 export {
       MRIS_EXTRACT_PATCHES_METADATA,
       MrisExtractPatchesOutputs,
+      MrisExtractPatchesParamsDict,
+      MrisExtractPatchesParamsDictTagged,
       mris_extract_patches,
       mris_extract_patches_execute,
       mris_extract_patches_params,

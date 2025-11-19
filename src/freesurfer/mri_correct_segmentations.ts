@@ -11,16 +11,16 @@ const MRI_CORRECT_SEGMENTATIONS_METADATA: Metadata = {
 };
 
 
-interface MriCorrectSegmentationsParameters {
+interface MriCorrectSegmentationsParamsDict {
     "@type"?: "freesurfer/mri_correct_segmentations";
     "input_file_1": InputPathType;
     "input_file_2": InputPathType;
 }
-type MriCorrectSegmentationsParametersTagged = Required<Pick<MriCorrectSegmentationsParameters, '@type'>> & MriCorrectSegmentationsParameters;
+type MriCorrectSegmentationsParamsDictTagged = Required<Pick<MriCorrectSegmentationsParamsDict, '@type'>> & MriCorrectSegmentationsParamsDict;
 
 
 /**
- * Output object returned when calling `MriCorrectSegmentationsParameters(...)`.
+ * Output object returned when calling `MriCorrectSegmentationsParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface MriCorrectSegmentationsOutputs {
 function mri_correct_segmentations_params(
     input_file_1: InputPathType,
     input_file_2: InputPathType,
-): MriCorrectSegmentationsParametersTagged {
+): MriCorrectSegmentationsParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_correct_segmentations" as const,
         "input_file_1": input_file_1,
@@ -62,7 +62,7 @@ function mri_correct_segmentations_params(
  * @returns Command-line arguments.
  */
 function mri_correct_segmentations_cargs(
-    params: MriCorrectSegmentationsParameters,
+    params: MriCorrectSegmentationsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function mri_correct_segmentations_cargs(
  * @returns Outputs object.
  */
 function mri_correct_segmentations_outputs(
-    params: MriCorrectSegmentationsParameters,
+    params: MriCorrectSegmentationsParamsDict,
     execution: Execution,
 ): MriCorrectSegmentationsOutputs {
     const ret: MriCorrectSegmentationsOutputs = {
@@ -107,7 +107,7 @@ function mri_correct_segmentations_outputs(
  * @returns NamedTuple of outputs (described in `MriCorrectSegmentationsOutputs`).
  */
 function mri_correct_segmentations_execute(
-    params: MriCorrectSegmentationsParameters,
+    params: MriCorrectSegmentationsParamsDict,
     runner: Runner | null = null,
 ): MriCorrectSegmentationsOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function mri_correct_segmentations(
 export {
       MRI_CORRECT_SEGMENTATIONS_METADATA,
       MriCorrectSegmentationsOutputs,
+      MriCorrectSegmentationsParamsDict,
+      MriCorrectSegmentationsParamsDictTagged,
       mri_correct_segmentations,
       mri_correct_segmentations_execute,
       mri_correct_segmentations_params,

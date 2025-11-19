@@ -11,18 +11,18 @@ const IMUPSAM_METADATA: Metadata = {
 };
 
 
-interface ImupsamParameters {
+interface ImupsamParamsDict {
     "@type"?: "afni/imupsam";
     "ascii_flag": boolean;
     "factor": number;
     "input_image": InputPathType;
     "output_image": string;
 }
-type ImupsamParametersTagged = Required<Pick<ImupsamParameters, '@type'>> & ImupsamParameters;
+type ImupsamParamsDictTagged = Required<Pick<ImupsamParamsDict, '@type'>> & ImupsamParamsDict;
 
 
 /**
- * Output object returned when calling `ImupsamParameters(...)`.
+ * Output object returned when calling `ImupsamParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function imupsam_params(
     input_image: InputPathType,
     output_image: string,
     ascii_flag: boolean = false,
-): ImupsamParametersTagged {
+): ImupsamParamsDictTagged {
     const params = {
         "@type": "afni/imupsam" as const,
         "ascii_flag": ascii_flag,
@@ -74,7 +74,7 @@ function imupsam_params(
  * @returns Command-line arguments.
  */
 function imupsam_cargs(
-    params: ImupsamParameters,
+    params: ImupsamParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function imupsam_cargs(
  * @returns Outputs object.
  */
 function imupsam_outputs(
-    params: ImupsamParameters,
+    params: ImupsamParamsDict,
     execution: Execution,
 ): ImupsamOutputs {
     const ret: ImupsamOutputs = {
@@ -124,7 +124,7 @@ function imupsam_outputs(
  * @returns NamedTuple of outputs (described in `ImupsamOutputs`).
  */
 function imupsam_execute(
-    params: ImupsamParameters,
+    params: ImupsamParamsDict,
     runner: Runner | null = null,
 ): ImupsamOutputs {
     runner = runner || getGlobalRunner();
@@ -169,6 +169,8 @@ function imupsam(
 export {
       IMUPSAM_METADATA,
       ImupsamOutputs,
+      ImupsamParamsDict,
+      ImupsamParamsDictTagged,
       imupsam,
       imupsam_execute,
       imupsam_params,

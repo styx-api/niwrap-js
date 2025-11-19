@@ -10,18 +10,18 @@ const METRIC_MASK_METADATA: Metadata = {
 };
 
 
-interface MetricMaskParameters {
+interface MetricMaskParamsDict {
     "@type"?: "workbench/metric-mask";
     "metric-out": string;
     "column"?: string | null | undefined;
     "metric": InputPathType;
     "mask": InputPathType;
 }
-type MetricMaskParametersTagged = Required<Pick<MetricMaskParameters, '@type'>> & MetricMaskParameters;
+type MetricMaskParamsDictTagged = Required<Pick<MetricMaskParamsDict, '@type'>> & MetricMaskParamsDict;
 
 
 /**
- * Output object returned when calling `MetricMaskParameters(...)`.
+ * Output object returned when calling `MetricMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function metric_mask_params(
     column: string | null,
     metric: InputPathType,
     mask: InputPathType,
-): MetricMaskParametersTagged {
+): MetricMaskParamsDictTagged {
     const params = {
         "@type": "workbench/metric-mask" as const,
         "metric-out": metric_out,
@@ -77,7 +77,7 @@ function metric_mask_params(
  * @returns Command-line arguments.
  */
 function metric_mask_cargs(
-    params: MetricMaskParameters,
+    params: MetricMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function metric_mask_cargs(
  * @returns Outputs object.
  */
 function metric_mask_outputs(
-    params: MetricMaskParameters,
+    params: MetricMaskParamsDict,
     execution: Execution,
 ): MetricMaskOutputs {
     const ret: MetricMaskOutputs = {
@@ -127,7 +127,7 @@ function metric_mask_outputs(
  * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
  */
 function metric_mask_execute(
-    params: MetricMaskParameters,
+    params: MetricMaskParamsDict,
     runner: Runner | null = null,
 ): MetricMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function metric_mask(
 export {
       METRIC_MASK_METADATA,
       MetricMaskOutputs,
+      MetricMaskParamsDict,
+      MetricMaskParamsDictTagged,
       metric_mask,
       metric_mask_execute,
       metric_mask_params,

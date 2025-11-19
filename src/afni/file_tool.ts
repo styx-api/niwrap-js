@@ -11,7 +11,7 @@ const FILE_TOOL_METADATA: Metadata = {
 };
 
 
-interface FileToolParameters {
+interface FileToolParamsDict {
     "@type"?: "afni/file_tool";
     "help": boolean;
     "version": boolean;
@@ -56,11 +56,11 @@ interface FileToolParameters {
     "disp_real4": boolean;
     "swap_bytes": boolean;
 }
-type FileToolParametersTagged = Required<Pick<FileToolParameters, '@type'>> & FileToolParameters;
+type FileToolParamsDictTagged = Required<Pick<FileToolParamsDict, '@type'>> & FileToolParamsDict;
 
 
 /**
- * Output object returned when calling `FileToolParameters(...)`.
+ * Output object returned when calling `FileToolParamsDict(...)`.
  *
  * @interface
  */
@@ -167,7 +167,7 @@ function file_tool_params(
     disp_int4: boolean = false,
     disp_real4: boolean = false,
     swap_bytes: boolean = false,
-): FileToolParametersTagged {
+): FileToolParamsDictTagged {
     const params = {
         "@type": "afni/file_tool" as const,
         "help": help,
@@ -242,7 +242,7 @@ function file_tool_params(
  * @returns Command-line arguments.
  */
 function file_tool_cargs(
-    params: FileToolParameters,
+    params: FileToolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -411,7 +411,7 @@ function file_tool_cargs(
  * @returns Outputs object.
  */
 function file_tool_outputs(
-    params: FileToolParameters,
+    params: FileToolParamsDict,
     execution: Execution,
 ): FileToolOutputs {
     const ret: FileToolOutputs = {
@@ -437,7 +437,7 @@ function file_tool_outputs(
  * @returns NamedTuple of outputs (described in `FileToolOutputs`).
  */
 function file_tool_execute(
-    params: FileToolParameters,
+    params: FileToolParamsDict,
     runner: Runner | null = null,
 ): FileToolOutputs {
     runner = runner || getGlobalRunner();
@@ -558,6 +558,8 @@ function file_tool(
 export {
       FILE_TOOL_METADATA,
       FileToolOutputs,
+      FileToolParamsDict,
+      FileToolParamsDictTagged,
       file_tool,
       file_tool_execute,
       file_tool_params,

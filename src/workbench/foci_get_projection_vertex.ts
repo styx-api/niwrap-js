@@ -10,18 +10,18 @@ const FOCI_GET_PROJECTION_VERTEX_METADATA: Metadata = {
 };
 
 
-interface FociGetProjectionVertexParameters {
+interface FociGetProjectionVertexParamsDict {
     "@type"?: "workbench/foci-get-projection-vertex";
     "metric-out": string;
     "name"?: string | null | undefined;
     "foci": InputPathType;
     "surface": InputPathType;
 }
-type FociGetProjectionVertexParametersTagged = Required<Pick<FociGetProjectionVertexParameters, '@type'>> & FociGetProjectionVertexParameters;
+type FociGetProjectionVertexParamsDictTagged = Required<Pick<FociGetProjectionVertexParamsDict, '@type'>> & FociGetProjectionVertexParamsDict;
 
 
 /**
- * Output object returned when calling `FociGetProjectionVertexParameters(...)`.
+ * Output object returned when calling `FociGetProjectionVertexParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function foci_get_projection_vertex_params(
     name: string | null,
     foci: InputPathType,
     surface: InputPathType,
-): FociGetProjectionVertexParametersTagged {
+): FociGetProjectionVertexParamsDictTagged {
     const params = {
         "@type": "workbench/foci-get-projection-vertex" as const,
         "metric-out": metric_out,
@@ -77,7 +77,7 @@ function foci_get_projection_vertex_params(
  * @returns Command-line arguments.
  */
 function foci_get_projection_vertex_cargs(
-    params: FociGetProjectionVertexParameters,
+    params: FociGetProjectionVertexParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function foci_get_projection_vertex_cargs(
  * @returns Outputs object.
  */
 function foci_get_projection_vertex_outputs(
-    params: FociGetProjectionVertexParameters,
+    params: FociGetProjectionVertexParamsDict,
     execution: Execution,
 ): FociGetProjectionVertexOutputs {
     const ret: FociGetProjectionVertexOutputs = {
@@ -127,7 +127,7 @@ function foci_get_projection_vertex_outputs(
  * @returns NamedTuple of outputs (described in `FociGetProjectionVertexOutputs`).
  */
 function foci_get_projection_vertex_execute(
-    params: FociGetProjectionVertexParameters,
+    params: FociGetProjectionVertexParamsDict,
     runner: Runner | null = null,
 ): FociGetProjectionVertexOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function foci_get_projection_vertex(
 export {
       FOCI_GET_PROJECTION_VERTEX_METADATA,
       FociGetProjectionVertexOutputs,
+      FociGetProjectionVertexParamsDict,
+      FociGetProjectionVertexParamsDictTagged,
       foci_get_projection_vertex,
       foci_get_projection_vertex_execute,
       foci_get_projection_vertex_params,

@@ -11,7 +11,7 @@ const SWAP_SUBJECTWISE_METADATA: Metadata = {
 };
 
 
-interface SwapSubjectwiseParameters {
+interface SwapSubjectwiseParamsDict {
     "@type"?: "fsl/swap_subjectwise";
     "dyads": InputPathType;
     "fmean": InputPathType;
@@ -21,11 +21,11 @@ interface SwapSubjectwiseParameters {
     "averageonly_flag": boolean;
     "verbose_flag": boolean;
 }
-type SwapSubjectwiseParametersTagged = Required<Pick<SwapSubjectwiseParameters, '@type'>> & SwapSubjectwiseParameters;
+type SwapSubjectwiseParamsDictTagged = Required<Pick<SwapSubjectwiseParamsDict, '@type'>> & SwapSubjectwiseParamsDict;
 
 
 /**
- * Output object returned when calling `SwapSubjectwiseParameters(...)`.
+ * Output object returned when calling `SwapSubjectwiseParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function swap_subjectwise_params(
     xthresh: number | null = null,
     averageonly_flag: boolean = false,
     verbose_flag: boolean = false,
-): SwapSubjectwiseParametersTagged {
+): SwapSubjectwiseParamsDictTagged {
     const params = {
         "@type": "fsl/swap_subjectwise" as const,
         "dyads": dyads,
@@ -88,7 +88,7 @@ function swap_subjectwise_params(
  * @returns Command-line arguments.
  */
 function swap_subjectwise_cargs(
-    params: SwapSubjectwiseParameters,
+    params: SwapSubjectwiseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function swap_subjectwise_cargs(
  * @returns Outputs object.
  */
 function swap_subjectwise_outputs(
-    params: SwapSubjectwiseParameters,
+    params: SwapSubjectwiseParamsDict,
     execution: Execution,
 ): SwapSubjectwiseOutputs {
     const ret: SwapSubjectwiseOutputs = {
@@ -163,7 +163,7 @@ function swap_subjectwise_outputs(
  * @returns NamedTuple of outputs (described in `SwapSubjectwiseOutputs`).
  */
 function swap_subjectwise_execute(
-    params: SwapSubjectwiseParameters,
+    params: SwapSubjectwiseParamsDict,
     runner: Runner | null = null,
 ): SwapSubjectwiseOutputs {
     runner = runner || getGlobalRunner();
@@ -214,6 +214,8 @@ function swap_subjectwise(
 export {
       SWAP_SUBJECTWISE_METADATA,
       SwapSubjectwiseOutputs,
+      SwapSubjectwiseParamsDict,
+      SwapSubjectwiseParamsDictTagged,
       swap_subjectwise,
       swap_subjectwise_execute,
       swap_subjectwise_params,

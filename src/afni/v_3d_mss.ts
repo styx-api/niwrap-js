@@ -11,7 +11,7 @@ const V_3D_MSS_METADATA: Metadata = {
 };
 
 
-interface V3dMssParameters {
+interface V3dMssParamsDict {
     "@type"?: "afni/3dMSS";
     "prefix": string;
     "jobs"?: number | null | undefined;
@@ -32,11 +32,11 @@ interface V3dMssParameters {
     "sdiff_vars"?: string | null | undefined;
     "vt_formula"?: string | null | undefined;
 }
-type V3dMssParametersTagged = Required<Pick<V3dMssParameters, '@type'>> & V3dMssParameters;
+type V3dMssParamsDictTagged = Required<Pick<V3dMssParamsDict, '@type'>> & V3dMssParamsDict;
 
 
 /**
- * Output object returned when calling `V3dMssParameters(...)`.
+ * Output object returned when calling `V3dMssParamsDict(...)`.
  *
  * @interface
  */
@@ -95,7 +95,7 @@ function v_3d_mss_params(
     show_allowed_options_flag: boolean = false,
     sdiff_vars: string | null = null,
     vt_formula: string | null = null,
-): V3dMssParametersTagged {
+): V3dMssParamsDictTagged {
     const params = {
         "@type": "afni/3dMSS" as const,
         "prefix": prefix,
@@ -152,7 +152,7 @@ function v_3d_mss_params(
  * @returns Command-line arguments.
  */
 function v_3d_mss_cargs(
-    params: V3dMssParameters,
+    params: V3dMssParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -256,7 +256,7 @@ function v_3d_mss_cargs(
  * @returns Outputs object.
  */
 function v_3d_mss_outputs(
-    params: V3dMssParameters,
+    params: V3dMssParamsDict,
     execution: Execution,
 ): V3dMssOutputs {
     const ret: V3dMssOutputs = {
@@ -282,7 +282,7 @@ function v_3d_mss_outputs(
  * @returns NamedTuple of outputs (described in `V3dMssOutputs`).
  */
 function v_3d_mss_execute(
-    params: V3dMssParameters,
+    params: V3dMssParamsDict,
     runner: Runner | null = null,
 ): V3dMssOutputs {
     runner = runner || getGlobalRunner();
@@ -354,6 +354,8 @@ function v_3d_mss(
 
 export {
       V3dMssOutputs,
+      V3dMssParamsDict,
+      V3dMssParamsDictTagged,
       V_3D_MSS_METADATA,
       v_3d_mss,
       v_3d_mss_execute,

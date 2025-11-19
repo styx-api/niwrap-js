@@ -11,17 +11,17 @@ const HISTO_SYNTHESIZE_METADATA: Metadata = {
 };
 
 
-interface HistoSynthesizeParameters {
+interface HistoSynthesizeParamsDict {
     "@type"?: "freesurfer/histo_synthesize";
     "mri_volume": InputPathType;
     "histo_volume": InputPathType;
     "synthetic_histo": string;
 }
-type HistoSynthesizeParametersTagged = Required<Pick<HistoSynthesizeParameters, '@type'>> & HistoSynthesizeParameters;
+type HistoSynthesizeParamsDictTagged = Required<Pick<HistoSynthesizeParamsDict, '@type'>> & HistoSynthesizeParamsDict;
 
 
 /**
- * Output object returned when calling `HistoSynthesizeParameters(...)`.
+ * Output object returned when calling `HistoSynthesizeParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function histo_synthesize_params(
     mri_volume: InputPathType,
     histo_volume: InputPathType,
     synthetic_histo: string,
-): HistoSynthesizeParametersTagged {
+): HistoSynthesizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/histo_synthesize" as const,
         "mri_volume": mri_volume,
@@ -70,7 +70,7 @@ function histo_synthesize_params(
  * @returns Command-line arguments.
  */
 function histo_synthesize_cargs(
-    params: HistoSynthesizeParameters,
+    params: HistoSynthesizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function histo_synthesize_cargs(
  * @returns Outputs object.
  */
 function histo_synthesize_outputs(
-    params: HistoSynthesizeParameters,
+    params: HistoSynthesizeParamsDict,
     execution: Execution,
 ): HistoSynthesizeOutputs {
     const ret: HistoSynthesizeOutputs = {
@@ -117,7 +117,7 @@ function histo_synthesize_outputs(
  * @returns NamedTuple of outputs (described in `HistoSynthesizeOutputs`).
  */
 function histo_synthesize_execute(
-    params: HistoSynthesizeParameters,
+    params: HistoSynthesizeParamsDict,
     runner: Runner | null = null,
 ): HistoSynthesizeOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function histo_synthesize(
 export {
       HISTO_SYNTHESIZE_METADATA,
       HistoSynthesizeOutputs,
+      HistoSynthesizeParamsDict,
+      HistoSynthesizeParamsDictTagged,
       histo_synthesize,
       histo_synthesize_execute,
       histo_synthesize_params,

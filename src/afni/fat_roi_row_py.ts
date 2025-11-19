@@ -11,18 +11,18 @@ const FAT_ROI_ROW_PY_METADATA: Metadata = {
 };
 
 
-interface FatRoiRowPyParameters {
+interface FatRoiRowPyParamsDict {
     "@type"?: "afni/fat_roi_row.py";
     "roi": string;
     "matrix_files"?: string | null | undefined;
     "list_file"?: InputPathType | null | undefined;
     "extern_labs_no": boolean;
 }
-type FatRoiRowPyParametersTagged = Required<Pick<FatRoiRowPyParameters, '@type'>> & FatRoiRowPyParameters;
+type FatRoiRowPyParamsDictTagged = Required<Pick<FatRoiRowPyParamsDict, '@type'>> & FatRoiRowPyParamsDict;
 
 
 /**
- * Output object returned when calling `FatRoiRowPyParameters(...)`.
+ * Output object returned when calling `FatRoiRowPyParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function fat_roi_row_py_params(
     matrix_files: string | null = null,
     list_file: InputPathType | null = null,
     extern_labs_no: boolean = false,
-): FatRoiRowPyParametersTagged {
+): FatRoiRowPyParamsDictTagged {
     const params = {
         "@type": "afni/fat_roi_row.py" as const,
         "roi": roi,
@@ -78,7 +78,7 @@ function fat_roi_row_py_params(
  * @returns Command-line arguments.
  */
 function fat_roi_row_py_cargs(
-    params: FatRoiRowPyParameters,
+    params: FatRoiRowPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function fat_roi_row_py_cargs(
  * @returns Outputs object.
  */
 function fat_roi_row_py_outputs(
-    params: FatRoiRowPyParameters,
+    params: FatRoiRowPyParamsDict,
     execution: Execution,
 ): FatRoiRowPyOutputs {
     const ret: FatRoiRowPyOutputs = {
@@ -141,7 +141,7 @@ function fat_roi_row_py_outputs(
  * @returns NamedTuple of outputs (described in `FatRoiRowPyOutputs`).
  */
 function fat_roi_row_py_execute(
-    params: FatRoiRowPyParameters,
+    params: FatRoiRowPyParamsDict,
     runner: Runner | null = null,
 ): FatRoiRowPyOutputs {
     runner = runner || getGlobalRunner();
@@ -186,6 +186,8 @@ function fat_roi_row_py(
 export {
       FAT_ROI_ROW_PY_METADATA,
       FatRoiRowPyOutputs,
+      FatRoiRowPyParamsDict,
+      FatRoiRowPyParamsDictTagged,
       fat_roi_row_py,
       fat_roi_row_py_execute,
       fat_roi_row_py_params,

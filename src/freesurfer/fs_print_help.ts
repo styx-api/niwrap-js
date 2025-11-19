@@ -11,15 +11,15 @@ const FS_PRINT_HELP_METADATA: Metadata = {
 };
 
 
-interface FsPrintHelpParameters {
+interface FsPrintHelpParamsDict {
     "@type"?: "freesurfer/fsPrintHelp";
     "arguments"?: string | null | undefined;
 }
-type FsPrintHelpParametersTagged = Required<Pick<FsPrintHelpParameters, '@type'>> & FsPrintHelpParameters;
+type FsPrintHelpParamsDictTagged = Required<Pick<FsPrintHelpParamsDict, '@type'>> & FsPrintHelpParamsDict;
 
 
 /**
- * Output object returned when calling `FsPrintHelpParameters(...)`.
+ * Output object returned when calling `FsPrintHelpParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FsPrintHelpOutputs {
  */
 function fs_print_help_params(
     arguments_: string | null = null,
-): FsPrintHelpParametersTagged {
+): FsPrintHelpParamsDictTagged {
     const params = {
         "@type": "freesurfer/fsPrintHelp" as const,
     };
@@ -60,7 +60,7 @@ function fs_print_help_params(
  * @returns Command-line arguments.
  */
 function fs_print_help_cargs(
-    params: FsPrintHelpParameters,
+    params: FsPrintHelpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function fs_print_help_cargs(
  * @returns Outputs object.
  */
 function fs_print_help_outputs(
-    params: FsPrintHelpParameters,
+    params: FsPrintHelpParamsDict,
     execution: Execution,
 ): FsPrintHelpOutputs {
     const ret: FsPrintHelpOutputs = {
@@ -106,7 +106,7 @@ function fs_print_help_outputs(
  * @returns NamedTuple of outputs (described in `FsPrintHelpOutputs`).
  */
 function fs_print_help_execute(
-    params: FsPrintHelpParameters,
+    params: FsPrintHelpParamsDict,
     runner: Runner | null = null,
 ): FsPrintHelpOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function fs_print_help(
 export {
       FS_PRINT_HELP_METADATA,
       FsPrintHelpOutputs,
+      FsPrintHelpParamsDict,
+      FsPrintHelpParamsDictTagged,
       fs_print_help,
       fs_print_help_execute,
       fs_print_help_params,

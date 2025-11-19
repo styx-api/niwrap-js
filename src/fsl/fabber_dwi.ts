@@ -11,7 +11,7 @@ const FABBER_DWI_METADATA: Metadata = {
 };
 
 
-interface FabberDwiParameters {
+interface FabberDwiParamsDict {
     "@type"?: "fsl/fabber_dwi";
     "output_dir": string;
     "method": string;
@@ -50,11 +50,11 @@ interface FabberDwiParameters {
     "optfile"?: InputPathType | null | undefined;
     "debug_flag": boolean;
 }
-type FabberDwiParametersTagged = Required<Pick<FabberDwiParameters, '@type'>> & FabberDwiParameters;
+type FabberDwiParamsDictTagged = Required<Pick<FabberDwiParamsDict, '@type'>> & FabberDwiParamsDict;
 
 
 /**
- * Output object returned when calling `FabberDwiParameters(...)`.
+ * Output object returned when calling `FabberDwiParamsDict(...)`.
  *
  * @interface
  */
@@ -149,7 +149,7 @@ function fabber_dwi_params(
     save_free_energy_flag: boolean = false,
     optfile: InputPathType | null = null,
     debug_flag: boolean = false,
-): FabberDwiParametersTagged {
+): FabberDwiParamsDictTagged {
     const params = {
         "@type": "fsl/fabber_dwi" as const,
         "output_dir": output_dir,
@@ -222,7 +222,7 @@ function fabber_dwi_params(
  * @returns Command-line arguments.
  */
 function fabber_dwi_cargs(
-    params: FabberDwiParameters,
+    params: FabberDwiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -382,7 +382,7 @@ function fabber_dwi_cargs(
  * @returns Outputs object.
  */
 function fabber_dwi_outputs(
-    params: FabberDwiParameters,
+    params: FabberDwiParamsDict,
     execution: Execution,
 ): FabberDwiOutputs {
     const ret: FabberDwiOutputs = {
@@ -408,7 +408,7 @@ function fabber_dwi_outputs(
  * @returns NamedTuple of outputs (described in `FabberDwiOutputs`).
  */
 function fabber_dwi_execute(
-    params: FabberDwiParameters,
+    params: FabberDwiParamsDict,
     runner: Runner | null = null,
 ): FabberDwiOutputs {
     runner = runner || getGlobalRunner();
@@ -517,6 +517,8 @@ function fabber_dwi(
 export {
       FABBER_DWI_METADATA,
       FabberDwiOutputs,
+      FabberDwiParamsDict,
+      FabberDwiParamsDictTagged,
       fabber_dwi,
       fabber_dwi_execute,
       fabber_dwi_params,

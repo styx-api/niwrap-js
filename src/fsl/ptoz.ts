@@ -11,17 +11,17 @@ const PTOZ_METADATA: Metadata = {
 };
 
 
-interface PtozParameters {
+interface PtozParamsDict {
     "@type"?: "fsl/ptoz";
     "p_value": number;
     "tail_flag": boolean;
     "grf_flag"?: number | null | undefined;
 }
-type PtozParametersTagged = Required<Pick<PtozParameters, '@type'>> & PtozParameters;
+type PtozParamsDictTagged = Required<Pick<PtozParamsDict, '@type'>> & PtozParamsDict;
 
 
 /**
- * Output object returned when calling `PtozParameters(...)`.
+ * Output object returned when calling `PtozParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function ptoz_params(
     p_value: number,
     tail_flag: boolean = false,
     grf_flag: number | null = null,
-): PtozParametersTagged {
+): PtozParamsDictTagged {
     const params = {
         "@type": "fsl/ptoz" as const,
         "p_value": p_value,
@@ -68,7 +68,7 @@ function ptoz_params(
  * @returns Command-line arguments.
  */
 function ptoz_cargs(
-    params: PtozParameters,
+    params: PtozParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function ptoz_cargs(
  * @returns Outputs object.
  */
 function ptoz_outputs(
-    params: PtozParameters,
+    params: PtozParamsDict,
     execution: Execution,
 ): PtozOutputs {
     const ret: PtozOutputs = {
@@ -121,7 +121,7 @@ function ptoz_outputs(
  * @returns NamedTuple of outputs (described in `PtozOutputs`).
  */
 function ptoz_execute(
-    params: PtozParameters,
+    params: PtozParamsDict,
     runner: Runner | null = null,
 ): PtozOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function ptoz(
 export {
       PTOZ_METADATA,
       PtozOutputs,
+      PtozParamsDict,
+      PtozParamsDictTagged,
       ptoz,
       ptoz_execute,
       ptoz_params,

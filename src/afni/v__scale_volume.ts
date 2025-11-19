@@ -11,7 +11,7 @@ const V__SCALE_VOLUME_METADATA: Metadata = {
 };
 
 
-interface VScaleVolumeParameters {
+interface VScaleVolumeParamsDict {
     "@type"?: "afni/@ScaleVolume";
     "input_dset": InputPathType;
     "prefix": string;
@@ -22,11 +22,11 @@ interface VScaleVolumeParameters {
     "norm": boolean;
     "mask"?: InputPathType | null | undefined;
 }
-type VScaleVolumeParametersTagged = Required<Pick<VScaleVolumeParameters, '@type'>> & VScaleVolumeParameters;
+type VScaleVolumeParamsDictTagged = Required<Pick<VScaleVolumeParamsDict, '@type'>> & VScaleVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `VScaleVolumeParameters(...)`.
+ * Output object returned when calling `VScaleVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v__scale_volume_params(
     scale_by_median: boolean = false,
     norm: boolean = false,
     mask: InputPathType | null = null,
-): VScaleVolumeParametersTagged {
+): VScaleVolumeParamsDictTagged {
     const params = {
         "@type": "afni/@ScaleVolume" as const,
         "input_dset": input_dset,
@@ -96,7 +96,7 @@ function v__scale_volume_params(
  * @returns Command-line arguments.
  */
 function v__scale_volume_cargs(
-    params: VScaleVolumeParameters,
+    params: VScaleVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function v__scale_volume_cargs(
  * @returns Outputs object.
  */
 function v__scale_volume_outputs(
-    params: VScaleVolumeParameters,
+    params: VScaleVolumeParamsDict,
     execution: Execution,
 ): VScaleVolumeOutputs {
     const ret: VScaleVolumeOutputs = {
@@ -169,7 +169,7 @@ function v__scale_volume_outputs(
  * @returns NamedTuple of outputs (described in `VScaleVolumeOutputs`).
  */
 function v__scale_volume_execute(
-    params: VScaleVolumeParameters,
+    params: VScaleVolumeParamsDict,
     runner: Runner | null = null,
 ): VScaleVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -221,6 +221,8 @@ function v__scale_volume(
 
 export {
       VScaleVolumeOutputs,
+      VScaleVolumeParamsDict,
+      VScaleVolumeParamsDictTagged,
       V__SCALE_VOLUME_METADATA,
       v__scale_volume,
       v__scale_volume_execute,

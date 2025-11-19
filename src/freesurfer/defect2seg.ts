@@ -11,7 +11,7 @@ const DEFECT2SEG_METADATA: Metadata = {
 };
 
 
-interface Defect2segParameters {
+interface Defect2segParamsDict {
     "@type"?: "freesurfer/defect2seg";
     "output_seg": string;
     "template": InputPathType;
@@ -23,11 +23,11 @@ interface Defect2segParameters {
     "cortex": boolean;
     "no_cortex": boolean;
 }
-type Defect2segParametersTagged = Required<Pick<Defect2segParameters, '@type'>> & Defect2segParameters;
+type Defect2segParamsDictTagged = Required<Pick<Defect2segParamsDict, '@type'>> & Defect2segParamsDict;
 
 
 /**
- * Output object returned when calling `Defect2segParameters(...)`.
+ * Output object returned when calling `Defect2segParamsDict(...)`.
  *
  * @interface
  */
@@ -68,7 +68,7 @@ function defect2seg_params(
     rh_only: boolean = false,
     cortex: boolean = false,
     no_cortex: boolean = false,
-): Defect2segParametersTagged {
+): Defect2segParamsDictTagged {
     const params = {
         "@type": "freesurfer/defect2seg" as const,
         "output_seg": output_seg,
@@ -100,7 +100,7 @@ function defect2seg_params(
  * @returns Command-line arguments.
  */
 function defect2seg_cargs(
-    params: Defect2segParameters,
+    params: Defect2segParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -156,7 +156,7 @@ function defect2seg_cargs(
  * @returns Outputs object.
  */
 function defect2seg_outputs(
-    params: Defect2segParameters,
+    params: Defect2segParamsDict,
     execution: Execution,
 ): Defect2segOutputs {
     const ret: Defect2segOutputs = {
@@ -182,7 +182,7 @@ function defect2seg_outputs(
  * @returns NamedTuple of outputs (described in `Defect2segOutputs`).
  */
 function defect2seg_execute(
-    params: Defect2segParameters,
+    params: Defect2segParamsDict,
     runner: Runner | null = null,
 ): Defect2segOutputs {
     runner = runner || getGlobalRunner();
@@ -237,6 +237,8 @@ function defect2seg(
 export {
       DEFECT2SEG_METADATA,
       Defect2segOutputs,
+      Defect2segParamsDict,
+      Defect2segParamsDictTagged,
       defect2seg,
       defect2seg_execute,
       defect2seg_params,

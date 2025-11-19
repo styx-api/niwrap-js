@@ -11,17 +11,17 @@ const CONNECTEDCOMP_METADATA: Metadata = {
 };
 
 
-interface ConnectedcompParameters {
+interface ConnectedcompParamsDict {
     "@type"?: "fsl/connectedcomp";
     "in_volume": InputPathType;
     "output_volume"?: string | null | undefined;
     "num_connect"?: number | null | undefined;
 }
-type ConnectedcompParametersTagged = Required<Pick<ConnectedcompParameters, '@type'>> & ConnectedcompParameters;
+type ConnectedcompParamsDictTagged = Required<Pick<ConnectedcompParamsDict, '@type'>> & ConnectedcompParamsDict;
 
 
 /**
- * Output object returned when calling `ConnectedcompParameters(...)`.
+ * Output object returned when calling `ConnectedcompParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function connectedcomp_params(
     in_volume: InputPathType,
     output_volume: string | null = null,
     num_connect: number | null = null,
-): ConnectedcompParametersTagged {
+): ConnectedcompParamsDictTagged {
     const params = {
         "@type": "fsl/connectedcomp" as const,
         "in_volume": in_volume,
@@ -74,7 +74,7 @@ function connectedcomp_params(
  * @returns Command-line arguments.
  */
 function connectedcomp_cargs(
-    params: ConnectedcompParameters,
+    params: ConnectedcompParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function connectedcomp_cargs(
  * @returns Outputs object.
  */
 function connectedcomp_outputs(
-    params: ConnectedcompParameters,
+    params: ConnectedcompParamsDict,
     execution: Execution,
 ): ConnectedcompOutputs {
     const ret: ConnectedcompOutputs = {
@@ -125,7 +125,7 @@ function connectedcomp_outputs(
  * @returns NamedTuple of outputs (described in `ConnectedcompOutputs`).
  */
 function connectedcomp_execute(
-    params: ConnectedcompParameters,
+    params: ConnectedcompParamsDict,
     runner: Runner | null = null,
 ): ConnectedcompOutputs {
     runner = runner || getGlobalRunner();
@@ -168,6 +168,8 @@ function connectedcomp(
 export {
       CONNECTEDCOMP_METADATA,
       ConnectedcompOutputs,
+      ConnectedcompParamsDict,
+      ConnectedcompParamsDictTagged,
       connectedcomp,
       connectedcomp_execute,
       connectedcomp_params,

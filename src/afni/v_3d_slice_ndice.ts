@@ -11,7 +11,7 @@ const V_3D_SLICE_NDICE_METADATA: Metadata = {
 };
 
 
-interface V3dSliceNdiceParameters {
+interface V3dSliceNdiceParamsDict {
     "@type"?: "afni/3dSliceNDice";
     "infile_a": InputPathType;
     "infile_b": InputPathType;
@@ -19,11 +19,11 @@ interface V3dSliceNdiceParameters {
     "out_domain"?: "all" | "AorB" | "AandB" | "Amask" | "Bmask" | null | undefined;
     "no_cmd_echo": boolean;
 }
-type V3dSliceNdiceParametersTagged = Required<Pick<V3dSliceNdiceParameters, '@type'>> & V3dSliceNdiceParameters;
+type V3dSliceNdiceParamsDictTagged = Required<Pick<V3dSliceNdiceParamsDict, '@type'>> & V3dSliceNdiceParamsDict;
 
 
 /**
- * Output object returned when calling `V3dSliceNdiceParameters(...)`.
+ * Output object returned when calling `V3dSliceNdiceParamsDict(...)`.
  *
  * @interface
  */
@@ -64,7 +64,7 @@ function v_3d_slice_ndice_params(
     output_prefix: string,
     out_domain: "all" | "AorB" | "AandB" | "Amask" | "Bmask" | null = null,
     no_cmd_echo: boolean = false,
-): V3dSliceNdiceParametersTagged {
+): V3dSliceNdiceParamsDictTagged {
     const params = {
         "@type": "afni/3dSliceNDice" as const,
         "infile_a": infile_a,
@@ -88,7 +88,7 @@ function v_3d_slice_ndice_params(
  * @returns Command-line arguments.
  */
 function v_3d_slice_ndice_cargs(
-    params: V3dSliceNdiceParameters,
+    params: V3dSliceNdiceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function v_3d_slice_ndice_cargs(
  * @returns Outputs object.
  */
 function v_3d_slice_ndice_outputs(
-    params: V3dSliceNdiceParameters,
+    params: V3dSliceNdiceParamsDict,
     execution: Execution,
 ): V3dSliceNdiceOutputs {
     const ret: V3dSliceNdiceOutputs = {
@@ -155,7 +155,7 @@ function v_3d_slice_ndice_outputs(
  * @returns NamedTuple of outputs (described in `V3dSliceNdiceOutputs`).
  */
 function v_3d_slice_ndice_execute(
-    params: V3dSliceNdiceParameters,
+    params: V3dSliceNdiceParamsDict,
     runner: Runner | null = null,
 ): V3dSliceNdiceOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function v_3d_slice_ndice(
 
 export {
       V3dSliceNdiceOutputs,
+      V3dSliceNdiceParamsDict,
+      V3dSliceNdiceParamsDictTagged,
       V_3D_SLICE_NDICE_METADATA,
       v_3d_slice_ndice,
       v_3d_slice_ndice_execute,

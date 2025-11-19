@@ -11,7 +11,7 @@ const COUNT_METADATA: Metadata = {
 };
 
 
-interface CountParameters {
+interface CountParamsDict {
     "@type"?: "afni/count";
     "bot": string;
     "top": string;
@@ -28,11 +28,11 @@ interface CountParameters {
     "comma": boolean;
     "skipnmodm"?: string | null | undefined;
 }
-type CountParametersTagged = Required<Pick<CountParameters, '@type'>> & CountParameters;
+type CountParamsDictTagged = Required<Pick<CountParamsDict, '@type'>> & CountParamsDict;
 
 
 /**
- * Output object returned when calling `CountParameters(...)`.
+ * Output object returned when calling `CountParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function count_params(
     scale: number | null = null,
     comma: boolean = false,
     skipnmodm: string | null = null,
-): CountParametersTagged {
+): CountParamsDictTagged {
     const params = {
         "@type": "afni/count" as const,
         "bot": bot,
@@ -130,7 +130,7 @@ function count_params(
  * @returns Command-line arguments.
  */
 function count_cargs(
-    params: CountParameters,
+    params: CountParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -213,7 +213,7 @@ function count_cargs(
  * @returns Outputs object.
  */
 function count_outputs(
-    params: CountParameters,
+    params: CountParamsDict,
     execution: Execution,
 ): CountOutputs {
     const ret: CountOutputs = {
@@ -238,7 +238,7 @@ function count_outputs(
  * @returns NamedTuple of outputs (described in `CountOutputs`).
  */
 function count_execute(
-    params: CountParameters,
+    params: CountParamsDict,
     runner: Runner | null = null,
 ): CountOutputs {
     runner = runner || getGlobalRunner();
@@ -303,6 +303,8 @@ function count(
 export {
       COUNT_METADATA,
       CountOutputs,
+      CountParamsDict,
+      CountParamsDictTagged,
       count,
       count_execute,
       count_params,

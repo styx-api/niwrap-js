@@ -10,7 +10,7 @@ const SURFACE_GEODESIC_DISTANCE_METADATA: Metadata = {
 };
 
 
-interface SurfaceGeodesicDistanceParameters {
+interface SurfaceGeodesicDistanceParamsDict {
     "@type"?: "workbench/surface-geodesic-distance";
     "metric-out": string;
     "naive": boolean;
@@ -19,11 +19,11 @@ interface SurfaceGeodesicDistanceParameters {
     "surface": InputPathType;
     "vertex": number;
 }
-type SurfaceGeodesicDistanceParametersTagged = Required<Pick<SurfaceGeodesicDistanceParameters, '@type'>> & SurfaceGeodesicDistanceParameters;
+type SurfaceGeodesicDistanceParamsDictTagged = Required<Pick<SurfaceGeodesicDistanceParamsDict, '@type'>> & SurfaceGeodesicDistanceParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceGeodesicDistanceParameters(...)`.
+ * Output object returned when calling `SurfaceGeodesicDistanceParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function surface_geodesic_distance_params(
     surface: InputPathType,
     vertex: number,
     naive: boolean = false,
-): SurfaceGeodesicDistanceParametersTagged {
+): SurfaceGeodesicDistanceParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-distance" as const,
         "metric-out": metric_out,
@@ -89,7 +89,7 @@ function surface_geodesic_distance_params(
  * @returns Command-line arguments.
  */
 function surface_geodesic_distance_cargs(
-    params: SurfaceGeodesicDistanceParameters,
+    params: SurfaceGeodesicDistanceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function surface_geodesic_distance_cargs(
  * @returns Outputs object.
  */
 function surface_geodesic_distance_outputs(
-    params: SurfaceGeodesicDistanceParameters,
+    params: SurfaceGeodesicDistanceParamsDict,
     execution: Execution,
 ): SurfaceGeodesicDistanceOutputs {
     const ret: SurfaceGeodesicDistanceOutputs = {
@@ -146,7 +146,7 @@ function surface_geodesic_distance_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceOutputs`).
  */
 function surface_geodesic_distance_execute(
-    params: SurfaceGeodesicDistanceParameters,
+    params: SurfaceGeodesicDistanceParamsDict,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function surface_geodesic_distance(
 export {
       SURFACE_GEODESIC_DISTANCE_METADATA,
       SurfaceGeodesicDistanceOutputs,
+      SurfaceGeodesicDistanceParamsDict,
+      SurfaceGeodesicDistanceParamsDictTagged,
       surface_geodesic_distance,
       surface_geodesic_distance_execute,
       surface_geodesic_distance_params,

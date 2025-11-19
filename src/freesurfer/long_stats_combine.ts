@@ -11,7 +11,7 @@ const LONG_STATS_COMBINE_METADATA: Metadata = {
 };
 
 
-interface LongStatsCombineParameters {
+interface LongStatsCombineParamsDict {
     "@type"?: "freesurfer/long_stats_combine";
     "qdec": InputPathType;
     "stats": string;
@@ -22,11 +22,11 @@ interface LongStatsCombineParameters {
     "input_stats"?: InputPathType | null | undefined;
     "cross_sectional": boolean;
 }
-type LongStatsCombineParametersTagged = Required<Pick<LongStatsCombineParameters, '@type'>> & LongStatsCombineParameters;
+type LongStatsCombineParamsDictTagged = Required<Pick<LongStatsCombineParamsDict, '@type'>> & LongStatsCombineParamsDict;
 
 
 /**
- * Output object returned when calling `LongStatsCombineParameters(...)`.
+ * Output object returned when calling `LongStatsCombineParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function long_stats_combine_params(
     output_stats: string | null = null,
     input_stats: InputPathType | null = null,
     cross_sectional: boolean = false,
-): LongStatsCombineParametersTagged {
+): LongStatsCombineParamsDictTagged {
     const params = {
         "@type": "freesurfer/long_stats_combine" as const,
         "qdec": qdec,
@@ -98,7 +98,7 @@ function long_stats_combine_params(
  * @returns Command-line arguments.
  */
 function long_stats_combine_cargs(
-    params: LongStatsCombineParameters,
+    params: LongStatsCombineParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -151,7 +151,7 @@ function long_stats_combine_cargs(
  * @returns Outputs object.
  */
 function long_stats_combine_outputs(
-    params: LongStatsCombineParameters,
+    params: LongStatsCombineParamsDict,
     execution: Execution,
 ): LongStatsCombineOutputs {
     const ret: LongStatsCombineOutputs = {
@@ -178,7 +178,7 @@ function long_stats_combine_outputs(
  * @returns NamedTuple of outputs (described in `LongStatsCombineOutputs`).
  */
 function long_stats_combine_execute(
-    params: LongStatsCombineParameters,
+    params: LongStatsCombineParamsDict,
     runner: Runner | null = null,
 ): LongStatsCombineOutputs {
     runner = runner || getGlobalRunner();
@@ -231,6 +231,8 @@ function long_stats_combine(
 export {
       LONG_STATS_COMBINE_METADATA,
       LongStatsCombineOutputs,
+      LongStatsCombineParamsDict,
+      LongStatsCombineParamsDictTagged,
       long_stats_combine,
       long_stats_combine_execute,
       long_stats_combine_params,

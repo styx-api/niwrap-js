@@ -11,7 +11,7 @@ const RUN_SAMSEG_LONG_METADATA: Metadata = {
 };
 
 
-interface RunSamsegLongParameters {
+interface RunSamsegLongParamsDict {
     "@type"?: "freesurfer/run_samseg_long";
     "timepoint": Array<InputPathType>;
     "output": string;
@@ -36,11 +36,11 @@ interface RunSamsegLongParameters {
     "showfigs": boolean;
     "movie": boolean;
 }
-type RunSamsegLongParametersTagged = Required<Pick<RunSamsegLongParameters, '@type'>> & RunSamsegLongParameters;
+type RunSamsegLongParamsDictTagged = Required<Pick<RunSamsegLongParamsDict, '@type'>> & RunSamsegLongParamsDict;
 
 
 /**
- * Output object returned when calling `RunSamsegLongParameters(...)`.
+ * Output object returned when calling `RunSamsegLongParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function run_samseg_long_params(
     history: boolean = false,
     showfigs: boolean = false,
     movie: boolean = false,
-): RunSamsegLongParametersTagged {
+): RunSamsegLongParamsDictTagged {
     const params = {
         "@type": "freesurfer/run_samseg_long" as const,
         "timepoint": timepoint,
@@ -166,7 +166,7 @@ function run_samseg_long_params(
  * @returns Command-line arguments.
  */
 function run_samseg_long_cargs(
-    params: RunSamsegLongParameters,
+    params: RunSamsegLongParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -288,7 +288,7 @@ function run_samseg_long_cargs(
  * @returns Outputs object.
  */
 function run_samseg_long_outputs(
-    params: RunSamsegLongParameters,
+    params: RunSamsegLongParamsDict,
     execution: Execution,
 ): RunSamsegLongOutputs {
     const ret: RunSamsegLongOutputs = {
@@ -313,7 +313,7 @@ function run_samseg_long_outputs(
  * @returns NamedTuple of outputs (described in `RunSamsegLongOutputs`).
  */
 function run_samseg_long_execute(
-    params: RunSamsegLongParameters,
+    params: RunSamsegLongParamsDict,
     runner: Runner | null = null,
 ): RunSamsegLongOutputs {
     runner = runner || getGlobalRunner();
@@ -394,6 +394,8 @@ function run_samseg_long(
 export {
       RUN_SAMSEG_LONG_METADATA,
       RunSamsegLongOutputs,
+      RunSamsegLongParamsDict,
+      RunSamsegLongParamsDictTagged,
       run_samseg_long,
       run_samseg_long_execute,
       run_samseg_long_params,

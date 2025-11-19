@@ -11,17 +11,17 @@ const V_1D_MARRY_METADATA: Metadata = {
 };
 
 
-interface V1dMarryParameters {
+interface V1dMarryParamsDict {
     "@type"?: "afni/1dMarry";
     "sep"?: string | null | undefined;
     "divorce": boolean;
     "files": Array<InputPathType>;
 }
-type V1dMarryParametersTagged = Required<Pick<V1dMarryParameters, '@type'>> & V1dMarryParameters;
+type V1dMarryParamsDictTagged = Required<Pick<V1dMarryParamsDict, '@type'>> & V1dMarryParamsDict;
 
 
 /**
- * Output object returned when calling `V1dMarryParameters(...)`.
+ * Output object returned when calling `V1dMarryParamsDict(...)`.
  *
  * @interface
  */
@@ -58,7 +58,7 @@ function v_1d_marry_params(
     files: Array<InputPathType>,
     sep: string | null = null,
     divorce: boolean = false,
-): V1dMarryParametersTagged {
+): V1dMarryParamsDictTagged {
     const params = {
         "@type": "afni/1dMarry" as const,
         "divorce": divorce,
@@ -80,7 +80,7 @@ function v_1d_marry_params(
  * @returns Command-line arguments.
  */
 function v_1d_marry_cargs(
-    params: V1dMarryParameters,
+    params: V1dMarryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,7 +108,7 @@ function v_1d_marry_cargs(
  * @returns Outputs object.
  */
 function v_1d_marry_outputs(
-    params: V1dMarryParameters,
+    params: V1dMarryParamsDict,
     execution: Execution,
 ): V1dMarryOutputs {
     const ret: V1dMarryOutputs = {
@@ -136,7 +136,7 @@ function v_1d_marry_outputs(
  * @returns NamedTuple of outputs (described in `V1dMarryOutputs`).
  */
 function v_1d_marry_execute(
-    params: V1dMarryParameters,
+    params: V1dMarryParamsDict,
     runner: Runner | null = null,
 ): V1dMarryOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function v_1d_marry(
 
 export {
       V1dMarryOutputs,
+      V1dMarryParamsDict,
+      V1dMarryParamsDictTagged,
       V_1D_MARRY_METADATA,
       v_1d_marry,
       v_1d_marry_execute,

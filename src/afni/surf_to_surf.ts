@@ -11,7 +11,7 @@ const SURF_TO_SURF_METADATA: Metadata = {
 };
 
 
-interface SurfToSurfParameters {
+interface SurfToSurfParamsDict {
     "@type"?: "afni/SurfToSurf";
     "input_surface_1": InputPathType;
     "input_surface_2": InputPathType;
@@ -27,11 +27,11 @@ interface SurfToSurfParameters {
     "dset"?: InputPathType | null | undefined;
     "mapfile"?: InputPathType | null | undefined;
 }
-type SurfToSurfParametersTagged = Required<Pick<SurfToSurfParameters, '@type'>> & SurfToSurfParameters;
+type SurfToSurfParamsDictTagged = Required<Pick<SurfToSurfParamsDict, '@type'>> & SurfToSurfParamsDict;
 
 
 /**
- * Output object returned when calling `SurfToSurfParameters(...)`.
+ * Output object returned when calling `SurfToSurfParamsDict(...)`.
  *
  * @interface
  */
@@ -80,7 +80,7 @@ function surf_to_surf_params(
     make_consistent: boolean = false,
     dset: InputPathType | null = null,
     mapfile: InputPathType | null = null,
-): SurfToSurfParametersTagged {
+): SurfToSurfParamsDictTagged {
     const params = {
         "@type": "afni/SurfToSurf" as const,
         "input_surface_1": input_surface_1,
@@ -130,7 +130,7 @@ function surf_to_surf_params(
  * @returns Command-line arguments.
  */
 function surf_to_surf_cargs(
-    params: SurfToSurfParameters,
+    params: SurfToSurfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -213,7 +213,7 @@ function surf_to_surf_cargs(
  * @returns Outputs object.
  */
 function surf_to_surf_outputs(
-    params: SurfToSurfParameters,
+    params: SurfToSurfParamsDict,
     execution: Execution,
 ): SurfToSurfOutputs {
     const ret: SurfToSurfOutputs = {
@@ -239,7 +239,7 @@ function surf_to_surf_outputs(
  * @returns NamedTuple of outputs (described in `SurfToSurfOutputs`).
  */
 function surf_to_surf_execute(
-    params: SurfToSurfParameters,
+    params: SurfToSurfParamsDict,
     runner: Runner | null = null,
 ): SurfToSurfOutputs {
     runner = runner || getGlobalRunner();
@@ -302,6 +302,8 @@ function surf_to_surf(
 export {
       SURF_TO_SURF_METADATA,
       SurfToSurfOutputs,
+      SurfToSurfParamsDict,
+      SurfToSurfParamsDictTagged,
       surf_to_surf,
       surf_to_surf_execute,
       surf_to_surf_params,

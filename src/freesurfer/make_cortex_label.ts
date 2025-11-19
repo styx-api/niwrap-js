@@ -11,18 +11,18 @@ const MAKE_CORTEX_LABEL_METADATA: Metadata = {
 };
 
 
-interface MakeCortexLabelParameters {
+interface MakeCortexLabelParamsDict {
     "@type"?: "freesurfer/make_cortex_label";
     "subject": string;
     "hemi"?: string | null | undefined;
     "use_a2009s": boolean;
     "output_name"?: string | null | undefined;
 }
-type MakeCortexLabelParametersTagged = Required<Pick<MakeCortexLabelParameters, '@type'>> & MakeCortexLabelParameters;
+type MakeCortexLabelParamsDictTagged = Required<Pick<MakeCortexLabelParamsDict, '@type'>> & MakeCortexLabelParamsDict;
 
 
 /**
- * Output object returned when calling `MakeCortexLabelParameters(...)`.
+ * Output object returned when calling `MakeCortexLabelParamsDict(...)`.
  *
  * @interface
  */
@@ -57,7 +57,7 @@ function make_cortex_label_params(
     hemi: string | null = null,
     use_a2009s: boolean = false,
     output_name: string | null = null,
-): MakeCortexLabelParametersTagged {
+): MakeCortexLabelParamsDictTagged {
     const params = {
         "@type": "freesurfer/make_cortex_label" as const,
         "subject": subject,
@@ -82,7 +82,7 @@ function make_cortex_label_params(
  * @returns Command-line arguments.
  */
 function make_cortex_label_cargs(
-    params: MakeCortexLabelParameters,
+    params: MakeCortexLabelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -119,7 +119,7 @@ function make_cortex_label_cargs(
  * @returns Outputs object.
  */
 function make_cortex_label_outputs(
-    params: MakeCortexLabelParameters,
+    params: MakeCortexLabelParamsDict,
     execution: Execution,
 ): MakeCortexLabelOutputs {
     const ret: MakeCortexLabelOutputs = {
@@ -146,7 +146,7 @@ function make_cortex_label_outputs(
  * @returns NamedTuple of outputs (described in `MakeCortexLabelOutputs`).
  */
 function make_cortex_label_execute(
-    params: MakeCortexLabelParameters,
+    params: MakeCortexLabelParamsDict,
     runner: Runner | null = null,
 ): MakeCortexLabelOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function make_cortex_label(
 export {
       MAKE_CORTEX_LABEL_METADATA,
       MakeCortexLabelOutputs,
+      MakeCortexLabelParamsDict,
+      MakeCortexLabelParamsDictTagged,
       make_cortex_label,
       make_cortex_label_execute,
       make_cortex_label_params,

@@ -11,15 +11,15 @@ const SH2RESPONSE_METADATA: Metadata = {
 };
 
 
-interface Sh2responseConfigParameters {
+interface Sh2responseConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Sh2responseConfigParametersTagged = Required<Pick<Sh2responseConfigParameters, '@type'>> & Sh2responseConfigParameters;
+type Sh2responseConfigParamsDictTagged = Required<Pick<Sh2responseConfigParamsDict, '@type'>> & Sh2responseConfigParamsDict;
 
 
-interface Sh2responseParameters {
+interface Sh2responseParamsDict {
     "@type"?: "mrtrix/sh2response";
     "lmax"?: number | null | undefined;
     "dump"?: string | null | undefined;
@@ -28,7 +28,7 @@ interface Sh2responseParameters {
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Sh2responseConfigParameters> | null | undefined;
+    "config"?: Array<Sh2responseConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "SH": InputPathType;
@@ -36,7 +36,7 @@ interface Sh2responseParameters {
     "directions": InputPathType;
     "response": string;
 }
-type Sh2responseParametersTagged = Required<Pick<Sh2responseParameters, '@type'>> & Sh2responseParameters;
+type Sh2responseParamsDictTagged = Required<Pick<Sh2responseParamsDict, '@type'>> & Sh2responseParamsDict;
 
 
 /**
@@ -47,10 +47,10 @@ type Sh2responseParametersTagged = Required<Pick<Sh2responseParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function sh2response_config_params(
+function sh2response_config(
     key: string,
     value: string,
-): Sh2responseConfigParametersTagged {
+): Sh2responseConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -69,7 +69,7 @@ function sh2response_config_params(
  * @returns Command-line arguments.
  */
 function sh2response_config_cargs(
-    params: Sh2responseConfigParameters,
+    params: Sh2responseConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function sh2response_config_cargs(
 
 
 /**
- * Output object returned when calling `Sh2responseParameters(...)`.
+ * Output object returned when calling `Sh2responseParamsDict(...)`.
  *
  * @interface
  */
@@ -133,10 +133,10 @@ function sh2response_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2responseConfigParameters> | null = null,
+    config: Array<Sh2responseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Sh2responseParametersTagged {
+): Sh2responseParamsDictTagged {
     const params = {
         "@type": "mrtrix/sh2response" as const,
         "info": info,
@@ -175,7 +175,7 @@ function sh2response_params(
  * @returns Command-line arguments.
  */
 function sh2response_cargs(
-    params: Sh2responseParameters,
+    params: Sh2responseParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -236,7 +236,7 @@ function sh2response_cargs(
  * @returns Outputs object.
  */
 function sh2response_outputs(
-    params: Sh2responseParameters,
+    params: Sh2responseParamsDict,
     execution: Execution,
 ): Sh2responseOutputs {
     const ret: Sh2responseOutputs = {
@@ -270,7 +270,7 @@ function sh2response_outputs(
  * @returns NamedTuple of outputs (described in `Sh2responseOutputs`).
  */
 function sh2response_execute(
-    params: Sh2responseParameters,
+    params: Sh2responseParamsDict,
     runner: Runner | null = null,
 ): Sh2responseOutputs {
     runner = runner || getGlobalRunner();
@@ -329,7 +329,7 @@ function sh2response(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Sh2responseConfigParameters> | null = null,
+    config: Array<Sh2responseConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -341,9 +341,13 @@ function sh2response(
 
 export {
       SH2RESPONSE_METADATA,
+      Sh2responseConfigParamsDict,
+      Sh2responseConfigParamsDictTagged,
       Sh2responseOutputs,
+      Sh2responseParamsDict,
+      Sh2responseParamsDictTagged,
       sh2response,
-      sh2response_config_params,
+      sh2response_config,
       sh2response_execute,
       sh2response_params,
 };

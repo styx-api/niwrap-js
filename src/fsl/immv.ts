@@ -11,16 +11,16 @@ const IMMV_METADATA: Metadata = {
 };
 
 
-interface ImmvParameters {
+interface ImmvParamsDict {
     "@type"?: "fsl/immv";
     "source_files": Array<InputPathType>;
     "destination": string;
 }
-type ImmvParametersTagged = Required<Pick<ImmvParameters, '@type'>> & ImmvParameters;
+type ImmvParamsDictTagged = Required<Pick<ImmvParamsDict, '@type'>> & ImmvParamsDict;
 
 
 /**
- * Output object returned when calling `ImmvParameters(...)`.
+ * Output object returned when calling `ImmvParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface ImmvOutputs {
 function immv_params(
     source_files: Array<InputPathType>,
     destination: string,
-): ImmvParametersTagged {
+): ImmvParamsDictTagged {
     const params = {
         "@type": "fsl/immv" as const,
         "source_files": source_files,
@@ -62,7 +62,7 @@ function immv_params(
  * @returns Command-line arguments.
  */
 function immv_cargs(
-    params: ImmvParameters,
+    params: ImmvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -82,7 +82,7 @@ function immv_cargs(
  * @returns Outputs object.
  */
 function immv_outputs(
-    params: ImmvParameters,
+    params: ImmvParamsDict,
     execution: Execution,
 ): ImmvOutputs {
     const ret: ImmvOutputs = {
@@ -107,7 +107,7 @@ function immv_outputs(
  * @returns NamedTuple of outputs (described in `ImmvOutputs`).
  */
 function immv_execute(
-    params: ImmvParameters,
+    params: ImmvParamsDict,
     runner: Runner | null = null,
 ): ImmvOutputs {
     runner = runner || getGlobalRunner();
@@ -148,6 +148,8 @@ function immv(
 export {
       IMMV_METADATA,
       ImmvOutputs,
+      ImmvParamsDict,
+      ImmvParamsDictTagged,
       immv,
       immv_execute,
       immv_params,

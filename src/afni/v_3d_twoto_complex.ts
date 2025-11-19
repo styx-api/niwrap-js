@@ -11,7 +11,7 @@ const V_3D_TWOTO_COMPLEX_METADATA: Metadata = {
 };
 
 
-interface V3dTwotoComplexParameters {
+interface V3dTwotoComplexParamsDict {
     "@type"?: "afni/3dTwotoComplex";
     "dataset1": InputPathType;
     "dataset2"?: InputPathType | null | undefined;
@@ -20,11 +20,11 @@ interface V3dTwotoComplexParameters {
     "mp": boolean;
     "mask"?: InputPathType | null | undefined;
 }
-type V3dTwotoComplexParametersTagged = Required<Pick<V3dTwotoComplexParameters, '@type'>> & V3dTwotoComplexParameters;
+type V3dTwotoComplexParamsDictTagged = Required<Pick<V3dTwotoComplexParamsDict, '@type'>> & V3dTwotoComplexParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTwotoComplexParameters(...)`.
+ * Output object returned when calling `V3dTwotoComplexParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function v_3d_twoto_complex_params(
     ri: boolean = false,
     mp: boolean = false,
     mask: InputPathType | null = null,
-): V3dTwotoComplexParametersTagged {
+): V3dTwotoComplexParamsDictTagged {
     const params = {
         "@type": "afni/3dTwotoComplex" as const,
         "dataset1": dataset1,
@@ -92,7 +92,7 @@ function v_3d_twoto_complex_params(
  * @returns Command-line arguments.
  */
 function v_3d_twoto_complex_cargs(
-    params: V3dTwotoComplexParameters,
+    params: V3dTwotoComplexParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function v_3d_twoto_complex_cargs(
  * @returns Outputs object.
  */
 function v_3d_twoto_complex_outputs(
-    params: V3dTwotoComplexParameters,
+    params: V3dTwotoComplexParamsDict,
     execution: Execution,
 ): V3dTwotoComplexOutputs {
     const ret: V3dTwotoComplexOutputs = {
@@ -159,7 +159,7 @@ function v_3d_twoto_complex_outputs(
  * @returns NamedTuple of outputs (described in `V3dTwotoComplexOutputs`).
  */
 function v_3d_twoto_complex_execute(
-    params: V3dTwotoComplexParameters,
+    params: V3dTwotoComplexParamsDict,
     runner: Runner | null = null,
 ): V3dTwotoComplexOutputs {
     runner = runner || getGlobalRunner();
@@ -207,6 +207,8 @@ function v_3d_twoto_complex(
 
 export {
       V3dTwotoComplexOutputs,
+      V3dTwotoComplexParamsDict,
+      V3dTwotoComplexParamsDictTagged,
       V_3D_TWOTO_COMPLEX_METADATA,
       v_3d_twoto_complex,
       v_3d_twoto_complex_execute,

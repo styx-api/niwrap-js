@@ -11,7 +11,7 @@ const FEATQUERY_METADATA: Metadata = {
 };
 
 
-interface FeatqueryParameters {
+interface FeatqueryParamsDict {
     "@type"?: "fsl/featquery";
     "n_featdirs": number;
     "featdirs": Array<string>;
@@ -28,11 +28,11 @@ interface FeatqueryParameters {
     "mask_file": InputPathType;
     "coords"?: Array<number> | null | undefined;
 }
-type FeatqueryParametersTagged = Required<Pick<FeatqueryParameters, '@type'>> & FeatqueryParameters;
+type FeatqueryParamsDictTagged = Required<Pick<FeatqueryParamsDict, '@type'>> & FeatqueryParamsDict;
 
 
 /**
- * Output object returned when calling `FeatqueryParameters(...)`.
+ * Output object returned when calling `FeatqueryParamsDict(...)`.
  *
  * @interface
  */
@@ -83,7 +83,7 @@ function featquery_params(
     weight_flag: boolean = false,
     browser_flag: boolean = false,
     coords: Array<number> | null = null,
-): FeatqueryParametersTagged {
+): FeatqueryParamsDictTagged {
     const params = {
         "@type": "fsl/featquery" as const,
         "n_featdirs": n_featdirs,
@@ -120,7 +120,7 @@ function featquery_params(
  * @returns Command-line arguments.
  */
 function featquery_cargs(
-    params: FeatqueryParameters,
+    params: FeatqueryParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function featquery_cargs(
  * @returns Outputs object.
  */
 function featquery_outputs(
-    params: FeatqueryParameters,
+    params: FeatqueryParamsDict,
     execution: Execution,
 ): FeatqueryOutputs {
     const ret: FeatqueryOutputs = {
@@ -203,7 +203,7 @@ function featquery_outputs(
  * @returns NamedTuple of outputs (described in `FeatqueryOutputs`).
  */
 function featquery_execute(
-    params: FeatqueryParameters,
+    params: FeatqueryParamsDict,
     runner: Runner | null = null,
 ): FeatqueryOutputs {
     runner = runner || getGlobalRunner();
@@ -268,6 +268,8 @@ function featquery(
 export {
       FEATQUERY_METADATA,
       FeatqueryOutputs,
+      FeatqueryParamsDict,
+      FeatqueryParamsDictTagged,
       featquery,
       featquery_execute,
       featquery_params,

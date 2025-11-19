@@ -11,22 +11,22 @@ const VOXEL2FIXEL_METADATA: Metadata = {
 };
 
 
-interface Voxel2fixelConfigParameters {
+interface Voxel2fixelConfigParamsDict {
     "@type"?: "config";
     "key": string;
     "value": string;
 }
-type Voxel2fixelConfigParametersTagged = Required<Pick<Voxel2fixelConfigParameters, '@type'>> & Voxel2fixelConfigParameters;
+type Voxel2fixelConfigParamsDictTagged = Required<Pick<Voxel2fixelConfigParamsDict, '@type'>> & Voxel2fixelConfigParamsDict;
 
 
-interface Voxel2fixelParameters {
+interface Voxel2fixelParamsDict {
     "@type"?: "mrtrix/voxel2fixel";
     "info": boolean;
     "quiet": boolean;
     "debug": boolean;
     "force": boolean;
     "nthreads"?: number | null | undefined;
-    "config"?: Array<Voxel2fixelConfigParameters> | null | undefined;
+    "config"?: Array<Voxel2fixelConfigParamsDict> | null | undefined;
     "help": boolean;
     "version": boolean;
     "image_in": InputPathType;
@@ -34,7 +34,7 @@ interface Voxel2fixelParameters {
     "fixel_directory_out": string;
     "fixel_data_out": string;
 }
-type Voxel2fixelParametersTagged = Required<Pick<Voxel2fixelParameters, '@type'>> & Voxel2fixelParameters;
+type Voxel2fixelParamsDictTagged = Required<Pick<Voxel2fixelParamsDict, '@type'>> & Voxel2fixelParamsDict;
 
 
 /**
@@ -45,10 +45,10 @@ type Voxel2fixelParametersTagged = Required<Pick<Voxel2fixelParameters, '@type'>
  *
  * @returns Parameter dictionary
  */
-function voxel2fixel_config_params(
+function voxel2fixel_config(
     key: string,
     value: string,
-): Voxel2fixelConfigParametersTagged {
+): Voxel2fixelConfigParamsDictTagged {
     const params = {
         "@type": "config" as const,
         "key": key,
@@ -67,7 +67,7 @@ function voxel2fixel_config_params(
  * @returns Command-line arguments.
  */
 function voxel2fixel_config_cargs(
-    params: Voxel2fixelConfigParameters,
+    params: Voxel2fixelConfigParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function voxel2fixel_config_cargs(
 
 
 /**
- * Output object returned when calling `Voxel2fixelParameters(...)`.
+ * Output object returned when calling `Voxel2fixelParamsDict(...)`.
  *
  * @interface
  */
@@ -119,10 +119,10 @@ function voxel2fixel_params(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Voxel2fixelConfigParameters> | null = null,
+    config: Array<Voxel2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
-): Voxel2fixelParametersTagged {
+): Voxel2fixelParamsDictTagged {
     const params = {
         "@type": "mrtrix/voxel2fixel" as const,
         "info": info,
@@ -155,7 +155,7 @@ function voxel2fixel_params(
  * @returns Command-line arguments.
  */
 function voxel2fixel_cargs(
-    params: Voxel2fixelParameters,
+    params: Voxel2fixelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -204,7 +204,7 @@ function voxel2fixel_cargs(
  * @returns Outputs object.
  */
 function voxel2fixel_outputs(
-    params: Voxel2fixelParameters,
+    params: Voxel2fixelParamsDict,
     execution: Execution,
 ): Voxel2fixelOutputs {
     const ret: Voxel2fixelOutputs = {
@@ -235,7 +235,7 @@ function voxel2fixel_outputs(
  * @returns NamedTuple of outputs (described in `Voxel2fixelOutputs`).
  */
 function voxel2fixel_execute(
-    params: Voxel2fixelParameters,
+    params: Voxel2fixelParamsDict,
     runner: Runner | null = null,
 ): Voxel2fixelOutputs {
     runner = runner || getGlobalRunner();
@@ -289,7 +289,7 @@ function voxel2fixel(
     debug: boolean = false,
     force: boolean = false,
     nthreads: number | null = null,
-    config: Array<Voxel2fixelConfigParameters> | null = null,
+    config: Array<Voxel2fixelConfigParamsDict> | null = null,
     help: boolean = false,
     version: boolean = false,
     runner: Runner | null = null,
@@ -301,9 +301,13 @@ function voxel2fixel(
 
 export {
       VOXEL2FIXEL_METADATA,
+      Voxel2fixelConfigParamsDict,
+      Voxel2fixelConfigParamsDictTagged,
       Voxel2fixelOutputs,
+      Voxel2fixelParamsDict,
+      Voxel2fixelParamsDictTagged,
       voxel2fixel,
-      voxel2fixel_config_params,
+      voxel2fixel_config,
       voxel2fixel_execute,
       voxel2fixel_params,
 };

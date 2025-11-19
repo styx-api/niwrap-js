@@ -11,7 +11,7 @@ const V_3DMASKAVE_METADATA: Metadata = {
 };
 
 
-interface V3dmaskaveParameters {
+interface V3dmaskaveParamsDict {
     "@type"?: "afni/3dmaskave";
     "in_file": InputPathType;
     "mask"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface V3dmaskaveParameters {
     "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "quiet": boolean;
 }
-type V3dmaskaveParametersTagged = Required<Pick<V3dmaskaveParameters, '@type'>> & V3dmaskaveParameters;
+type V3dmaskaveParamsDictTagged = Required<Pick<V3dmaskaveParamsDict, '@type'>> & V3dmaskaveParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmaskaveParameters(...)`.
+ * Output object returned when calling `V3dmaskaveParamsDict(...)`.
  *
  * @interface
  */
@@ -60,7 +60,7 @@ function v_3dmaskave_params(
     num_threads: number | null = null,
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     quiet: boolean = false,
-): V3dmaskaveParametersTagged {
+): V3dmaskaveParamsDictTagged {
     const params = {
         "@type": "afni/3dmaskave" as const,
         "in_file": in_file,
@@ -88,7 +88,7 @@ function v_3dmaskave_params(
  * @returns Command-line arguments.
  */
 function v_3dmaskave_cargs(
-    params: V3dmaskaveParameters,
+    params: V3dmaskaveParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -122,7 +122,7 @@ function v_3dmaskave_cargs(
  * @returns Outputs object.
  */
 function v_3dmaskave_outputs(
-    params: V3dmaskaveParameters,
+    params: V3dmaskaveParamsDict,
     execution: Execution,
 ): V3dmaskaveOutputs {
     const ret: V3dmaskaveOutputs = {
@@ -149,7 +149,7 @@ function v_3dmaskave_outputs(
  * @returns NamedTuple of outputs (described in `V3dmaskaveOutputs`).
  */
 function v_3dmaskave_execute(
-    params: V3dmaskaveParameters,
+    params: V3dmaskaveParamsDict,
     runner: Runner | null = null,
 ): V3dmaskaveOutputs {
     runner = runner || getGlobalRunner();
@@ -195,6 +195,8 @@ function v_3dmaskave(
 
 export {
       V3dmaskaveOutputs,
+      V3dmaskaveParamsDict,
+      V3dmaskaveParamsDictTagged,
       V_3DMASKAVE_METADATA,
       v_3dmaskave,
       v_3dmaskave_execute,

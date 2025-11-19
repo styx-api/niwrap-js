@@ -11,17 +11,17 @@ const V__SCRIPT_CHECK_METADATA: Metadata = {
 };
 
 
-interface VScriptCheckParameters {
+interface VScriptCheckParamsDict {
     "@type"?: "afni/@ScriptCheck";
     "clean": boolean;
     "suffix"?: string | null | undefined;
     "scripts": Array<InputPathType>;
 }
-type VScriptCheckParametersTagged = Required<Pick<VScriptCheckParameters, '@type'>> & VScriptCheckParameters;
+type VScriptCheckParamsDictTagged = Required<Pick<VScriptCheckParamsDict, '@type'>> & VScriptCheckParamsDict;
 
 
 /**
- * Output object returned when calling `VScriptCheckParameters(...)`.
+ * Output object returned when calling `VScriptCheckParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function v__script_check_params(
     scripts: Array<InputPathType>,
     clean: boolean = false,
     suffix: string | null = null,
-): VScriptCheckParametersTagged {
+): VScriptCheckParamsDictTagged {
     const params = {
         "@type": "afni/@ScriptCheck" as const,
         "clean": clean,
@@ -76,7 +76,7 @@ function v__script_check_params(
  * @returns Command-line arguments.
  */
 function v__script_check_cargs(
-    params: VScriptCheckParameters,
+    params: VScriptCheckParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -104,7 +104,7 @@ function v__script_check_cargs(
  * @returns Outputs object.
  */
 function v__script_check_outputs(
-    params: VScriptCheckParameters,
+    params: VScriptCheckParamsDict,
     execution: Execution,
 ): VScriptCheckOutputs {
     const ret: VScriptCheckOutputs = {
@@ -131,7 +131,7 @@ function v__script_check_outputs(
  * @returns NamedTuple of outputs (described in `VScriptCheckOutputs`).
  */
 function v__script_check_execute(
-    params: VScriptCheckParameters,
+    params: VScriptCheckParamsDict,
     runner: Runner | null = null,
 ): VScriptCheckOutputs {
     runner = runner || getGlobalRunner();
@@ -173,6 +173,8 @@ function v__script_check(
 
 export {
       VScriptCheckOutputs,
+      VScriptCheckParamsDict,
+      VScriptCheckParamsDictTagged,
       V__SCRIPT_CHECK_METADATA,
       v__script_check,
       v__script_check_execute,

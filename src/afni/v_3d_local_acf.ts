@@ -11,7 +11,7 @@ const V_3D_LOCAL_ACF_METADATA: Metadata = {
 };
 
 
-interface V3dLocalAcfParameters {
+interface V3dLocalAcfParamsDict {
     "@type"?: "afni/3dLocalACF";
     "prefix": string;
     "input_file": InputPathType;
@@ -19,11 +19,11 @@ interface V3dLocalAcfParameters {
     "mask_file"?: InputPathType | null | undefined;
     "auto_mask": boolean;
 }
-type V3dLocalAcfParametersTagged = Required<Pick<V3dLocalAcfParameters, '@type'>> & V3dLocalAcfParameters;
+type V3dLocalAcfParamsDictTagged = Required<Pick<V3dLocalAcfParamsDict, '@type'>> & V3dLocalAcfParamsDict;
 
 
 /**
- * Output object returned when calling `V3dLocalAcfParameters(...)`.
+ * Output object returned when calling `V3dLocalAcfParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function v_3d_local_acf_params(
     neighborhood: string | null = null,
     mask_file: InputPathType | null = null,
     auto_mask: boolean = false,
-): V3dLocalAcfParametersTagged {
+): V3dLocalAcfParamsDictTagged {
     const params = {
         "@type": "afni/3dLocalACF" as const,
         "prefix": prefix,
@@ -82,7 +82,7 @@ function v_3d_local_acf_params(
  * @returns Command-line arguments.
  */
 function v_3d_local_acf_cargs(
-    params: V3dLocalAcfParameters,
+    params: V3dLocalAcfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function v_3d_local_acf_cargs(
  * @returns Outputs object.
  */
 function v_3d_local_acf_outputs(
-    params: V3dLocalAcfParameters,
+    params: V3dLocalAcfParamsDict,
     execution: Execution,
 ): V3dLocalAcfOutputs {
     const ret: V3dLocalAcfOutputs = {
@@ -146,7 +146,7 @@ function v_3d_local_acf_outputs(
  * @returns NamedTuple of outputs (described in `V3dLocalAcfOutputs`).
  */
 function v_3d_local_acf_execute(
-    params: V3dLocalAcfParameters,
+    params: V3dLocalAcfParamsDict,
     runner: Runner | null = null,
 ): V3dLocalAcfOutputs {
     runner = runner || getGlobalRunner();
@@ -192,6 +192,8 @@ function v_3d_local_acf(
 
 export {
       V3dLocalAcfOutputs,
+      V3dLocalAcfParamsDict,
+      V3dLocalAcfParamsDictTagged,
       V_3D_LOCAL_ACF_METADATA,
       v_3d_local_acf,
       v_3d_local_acf_execute,

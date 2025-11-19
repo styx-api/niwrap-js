@@ -10,7 +10,7 @@ const FIBER_DOT_PRODUCTS_METADATA: Metadata = {
 };
 
 
-interface FiberDotProductsParameters {
+interface FiberDotProductsParamsDict {
     "@type"?: "workbench/fiber-dot-products";
     "dot-metric": string;
     "f-metric": string;
@@ -19,11 +19,11 @@ interface FiberDotProductsParameters {
     "max-dist": number;
     "direction": string;
 }
-type FiberDotProductsParametersTagged = Required<Pick<FiberDotProductsParameters, '@type'>> & FiberDotProductsParameters;
+type FiberDotProductsParamsDictTagged = Required<Pick<FiberDotProductsParamsDict, '@type'>> & FiberDotProductsParamsDict;
 
 
 /**
- * Output object returned when calling `FiberDotProductsParameters(...)`.
+ * Output object returned when calling `FiberDotProductsParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function fiber_dot_products_params(
     fiber_file: InputPathType,
     max_dist: number,
     direction: string,
-): FiberDotProductsParametersTagged {
+): FiberDotProductsParamsDictTagged {
     const params = {
         "@type": "workbench/fiber-dot-products" as const,
         "dot-metric": dot_metric,
@@ -85,7 +85,7 @@ function fiber_dot_products_params(
  * @returns Command-line arguments.
  */
 function fiber_dot_products_cargs(
-    params: FiberDotProductsParameters,
+    params: FiberDotProductsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function fiber_dot_products_cargs(
  * @returns Outputs object.
  */
 function fiber_dot_products_outputs(
-    params: FiberDotProductsParameters,
+    params: FiberDotProductsParamsDict,
     execution: Execution,
 ): FiberDotProductsOutputs {
     const ret: FiberDotProductsOutputs = {
@@ -135,7 +135,7 @@ function fiber_dot_products_outputs(
  * @returns NamedTuple of outputs (described in `FiberDotProductsOutputs`).
  */
 function fiber_dot_products_execute(
-    params: FiberDotProductsParameters,
+    params: FiberDotProductsParamsDict,
     runner: Runner | null = null,
 ): FiberDotProductsOutputs {
     runner = runner || getGlobalRunner();
@@ -180,6 +180,8 @@ function fiber_dot_products(
 export {
       FIBER_DOT_PRODUCTS_METADATA,
       FiberDotProductsOutputs,
+      FiberDotProductsParamsDict,
+      FiberDotProductsParamsDictTagged,
       fiber_dot_products,
       fiber_dot_products_execute,
       fiber_dot_products_params,

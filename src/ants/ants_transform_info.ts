@@ -11,15 +11,15 @@ const ANTS_TRANSFORM_INFO_METADATA: Metadata = {
 };
 
 
-interface AntsTransformInfoParameters {
+interface AntsTransformInfoParamsDict {
     "@type"?: "ants/antsTransformInfo";
     "transform_file": InputPathType;
 }
-type AntsTransformInfoParametersTagged = Required<Pick<AntsTransformInfoParameters, '@type'>> & AntsTransformInfoParameters;
+type AntsTransformInfoParamsDictTagged = Required<Pick<AntsTransformInfoParamsDict, '@type'>> & AntsTransformInfoParamsDict;
 
 
 /**
- * Output object returned when calling `AntsTransformInfoParameters(...)`.
+ * Output object returned when calling `AntsTransformInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface AntsTransformInfoOutputs {
  */
 function ants_transform_info_params(
     transform_file: InputPathType,
-): AntsTransformInfoParametersTagged {
+): AntsTransformInfoParamsDictTagged {
     const params = {
         "@type": "ants/antsTransformInfo" as const,
         "transform_file": transform_file,
@@ -62,7 +62,7 @@ function ants_transform_info_params(
  * @returns Command-line arguments.
  */
 function ants_transform_info_cargs(
-    params: AntsTransformInfoParameters,
+    params: AntsTransformInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function ants_transform_info_cargs(
  * @returns Outputs object.
  */
 function ants_transform_info_outputs(
-    params: AntsTransformInfoParameters,
+    params: AntsTransformInfoParamsDict,
     execution: Execution,
 ): AntsTransformInfoOutputs {
     const ret: AntsTransformInfoOutputs = {
@@ -110,7 +110,7 @@ function ants_transform_info_outputs(
  * @returns NamedTuple of outputs (described in `AntsTransformInfoOutputs`).
  */
 function ants_transform_info_execute(
-    params: AntsTransformInfoParameters,
+    params: AntsTransformInfoParamsDict,
     runner: Runner | null = null,
 ): AntsTransformInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function ants_transform_info(
 export {
       ANTS_TRANSFORM_INFO_METADATA,
       AntsTransformInfoOutputs,
+      AntsTransformInfoParamsDict,
+      AntsTransformInfoParamsDictTagged,
       ants_transform_info,
       ants_transform_info_execute,
       ants_transform_info_params,

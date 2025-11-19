@@ -10,7 +10,7 @@ const VOLUME_SMOOTHING_METADATA: Metadata = {
 };
 
 
-interface VolumeSmoothingParameters {
+interface VolumeSmoothingParamsDict {
     "@type"?: "workbench/volume-smoothing";
     "volume-out": string;
     "fwhm": boolean;
@@ -20,11 +20,11 @@ interface VolumeSmoothingParameters {
     "volume-in": InputPathType;
     "kernel": number;
 }
-type VolumeSmoothingParametersTagged = Required<Pick<VolumeSmoothingParameters, '@type'>> & VolumeSmoothingParameters;
+type VolumeSmoothingParamsDictTagged = Required<Pick<VolumeSmoothingParamsDict, '@type'>> & VolumeSmoothingParamsDict;
 
 
 /**
- * Output object returned when calling `VolumeSmoothingParameters(...)`.
+ * Output object returned when calling `VolumeSmoothingParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function volume_smoothing_params(
     kernel: number,
     fwhm: boolean = false,
     fix_zeros: boolean = false,
-): VolumeSmoothingParametersTagged {
+): VolumeSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-smoothing" as const,
         "volume-out": volume_out,
@@ -93,7 +93,7 @@ function volume_smoothing_params(
  * @returns Command-line arguments.
  */
 function volume_smoothing_cargs(
-    params: VolumeSmoothingParameters,
+    params: VolumeSmoothingParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function volume_smoothing_cargs(
  * @returns Outputs object.
  */
 function volume_smoothing_outputs(
-    params: VolumeSmoothingParameters,
+    params: VolumeSmoothingParamsDict,
     execution: Execution,
 ): VolumeSmoothingOutputs {
     const ret: VolumeSmoothingOutputs = {
@@ -149,7 +149,7 @@ function volume_smoothing_outputs(
  * @returns NamedTuple of outputs (described in `VolumeSmoothingOutputs`).
  */
 function volume_smoothing_execute(
-    params: VolumeSmoothingParameters,
+    params: VolumeSmoothingParamsDict,
     runner: Runner | null = null,
 ): VolumeSmoothingOutputs {
     runner = runner || getGlobalRunner();
@@ -202,6 +202,8 @@ function volume_smoothing(
 export {
       VOLUME_SMOOTHING_METADATA,
       VolumeSmoothingOutputs,
+      VolumeSmoothingParamsDict,
+      VolumeSmoothingParamsDictTagged,
       volume_smoothing,
       volume_smoothing_execute,
       volume_smoothing_params,

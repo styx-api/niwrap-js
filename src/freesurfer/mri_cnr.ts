@@ -11,7 +11,7 @@ const MRI_CNR_METADATA: Metadata = {
 };
 
 
-interface MriCnrParameters {
+interface MriCnrParamsDict {
     "@type"?: "freesurfer/mri_cnr";
     "surf_dir": string;
     "volume_files": Array<InputPathType>;
@@ -22,11 +22,11 @@ interface MriCnrParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
-type MriCnrParametersTagged = Required<Pick<MriCnrParameters, '@type'>> & MriCnrParameters;
+type MriCnrParamsDictTagged = Required<Pick<MriCnrParamsDict, '@type'>> & MriCnrParamsDict;
 
 
 /**
- * Output object returned when calling `MriCnrParameters(...)`.
+ * Output object returned when calling `MriCnrParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function mri_cnr_params(
     print_total_cnr: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MriCnrParametersTagged {
+): MriCnrParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_cnr" as const,
         "surf_dir": surf_dir,
@@ -92,7 +92,7 @@ function mri_cnr_params(
  * @returns Command-line arguments.
  */
 function mri_cnr_cargs(
-    params: MriCnrParameters,
+    params: MriCnrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -139,7 +139,7 @@ function mri_cnr_cargs(
  * @returns Outputs object.
  */
 function mri_cnr_outputs(
-    params: MriCnrParameters,
+    params: MriCnrParamsDict,
     execution: Execution,
 ): MriCnrOutputs {
     const ret: MriCnrOutputs = {
@@ -164,7 +164,7 @@ function mri_cnr_outputs(
  * @returns NamedTuple of outputs (described in `MriCnrOutputs`).
  */
 function mri_cnr_execute(
-    params: MriCnrParameters,
+    params: MriCnrParamsDict,
     runner: Runner | null = null,
 ): MriCnrOutputs {
     runner = runner || getGlobalRunner();
@@ -217,6 +217,8 @@ function mri_cnr(
 export {
       MRI_CNR_METADATA,
       MriCnrOutputs,
+      MriCnrParamsDict,
+      MriCnrParamsDictTagged,
       mri_cnr,
       mri_cnr_execute,
       mri_cnr_params,

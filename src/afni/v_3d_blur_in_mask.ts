@@ -11,7 +11,7 @@ const V_3D_BLUR_IN_MASK_METADATA: Metadata = {
 };
 
 
-interface V3dBlurInMaskParameters {
+interface V3dBlurInMaskParamsDict {
     "@type"?: "afni/3dBlurInMask";
     "input_file": InputPathType;
     "output_prefix": string;
@@ -25,11 +25,11 @@ interface V3dBlurInMaskParameters {
     "float": boolean;
     "fwhm_xyz"?: Array<number> | null | undefined;
 }
-type V3dBlurInMaskParametersTagged = Required<Pick<V3dBlurInMaskParameters, '@type'>> & V3dBlurInMaskParameters;
+type V3dBlurInMaskParamsDictTagged = Required<Pick<V3dBlurInMaskParamsDict, '@type'>> & V3dBlurInMaskParamsDict;
 
 
 /**
- * Output object returned when calling `V3dBlurInMaskParameters(...)`.
+ * Output object returned when calling `V3dBlurInMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function v_3d_blur_in_mask_params(
     quiet: boolean = false,
     float: boolean = false,
     fwhm_xyz: Array<number> | null = null,
-): V3dBlurInMaskParametersTagged {
+): V3dBlurInMaskParamsDictTagged {
     const params = {
         "@type": "afni/3dBlurInMask" as const,
         "input_file": input_file,
@@ -110,7 +110,7 @@ function v_3d_blur_in_mask_params(
  * @returns Command-line arguments.
  */
 function v_3d_blur_in_mask_cargs(
-    params: V3dBlurInMaskParameters,
+    params: V3dBlurInMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -170,7 +170,7 @@ function v_3d_blur_in_mask_cargs(
  * @returns Outputs object.
  */
 function v_3d_blur_in_mask_outputs(
-    params: V3dBlurInMaskParameters,
+    params: V3dBlurInMaskParamsDict,
     execution: Execution,
 ): V3dBlurInMaskOutputs {
     const ret: V3dBlurInMaskOutputs = {
@@ -196,7 +196,7 @@ function v_3d_blur_in_mask_outputs(
  * @returns NamedTuple of outputs (described in `V3dBlurInMaskOutputs`).
  */
 function v_3d_blur_in_mask_execute(
-    params: V3dBlurInMaskParameters,
+    params: V3dBlurInMaskParamsDict,
     runner: Runner | null = null,
 ): V3dBlurInMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -254,6 +254,8 @@ function v_3d_blur_in_mask(
 
 export {
       V3dBlurInMaskOutputs,
+      V3dBlurInMaskParamsDict,
+      V3dBlurInMaskParamsDictTagged,
       V_3D_BLUR_IN_MASK_METADATA,
       v_3d_blur_in_mask,
       v_3d_blur_in_mask_execute,

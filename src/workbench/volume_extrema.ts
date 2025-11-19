@@ -10,28 +10,28 @@ const VOLUME_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface VolumeExtremaPresmoothParameters {
+interface VolumeExtremaPresmoothParamsDict {
     "@type"?: "presmooth";
     "kernel": number;
     "fwhm": boolean;
 }
-type VolumeExtremaPresmoothParametersTagged = Required<Pick<VolumeExtremaPresmoothParameters, '@type'>> & VolumeExtremaPresmoothParameters;
+type VolumeExtremaPresmoothParamsDictTagged = Required<Pick<VolumeExtremaPresmoothParamsDict, '@type'>> & VolumeExtremaPresmoothParamsDict;
 
 
-interface VolumeExtremaThresholdParameters {
+interface VolumeExtremaThresholdParamsDict {
     "@type"?: "threshold";
     "low": number;
     "high": number;
 }
-type VolumeExtremaThresholdParametersTagged = Required<Pick<VolumeExtremaThresholdParameters, '@type'>> & VolumeExtremaThresholdParameters;
+type VolumeExtremaThresholdParamsDictTagged = Required<Pick<VolumeExtremaThresholdParamsDict, '@type'>> & VolumeExtremaThresholdParamsDict;
 
 
-interface VolumeExtremaParameters {
+interface VolumeExtremaParamsDict {
     "@type"?: "workbench/volume-extrema";
     "volume-out": string;
-    "presmooth"?: VolumeExtremaPresmoothParameters | null | undefined;
+    "presmooth"?: VolumeExtremaPresmoothParamsDict | null | undefined;
     "roi-volume"?: InputPathType | null | undefined;
-    "threshold"?: VolumeExtremaThresholdParameters | null | undefined;
+    "threshold"?: VolumeExtremaThresholdParamsDict | null | undefined;
     "sum-subvols": boolean;
     "consolidate-mode": boolean;
     "only-maxima": boolean;
@@ -40,7 +40,7 @@ interface VolumeExtremaParameters {
     "volume-in": InputPathType;
     "distance": number;
 }
-type VolumeExtremaParametersTagged = Required<Pick<VolumeExtremaParameters, '@type'>> & VolumeExtremaParameters;
+type VolumeExtremaParamsDictTagged = Required<Pick<VolumeExtremaParamsDict, '@type'>> & VolumeExtremaParamsDict;
 
 
 /**
@@ -51,10 +51,10 @@ type VolumeExtremaParametersTagged = Required<Pick<VolumeExtremaParameters, '@ty
  *
  * @returns Parameter dictionary
  */
-function volume_extrema_presmooth_params(
+function volume_extrema_presmooth(
     kernel: number,
     fwhm: boolean = false,
-): VolumeExtremaPresmoothParametersTagged {
+): VolumeExtremaPresmoothParamsDictTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
@@ -73,7 +73,7 @@ function volume_extrema_presmooth_params(
  * @returns Command-line arguments.
  */
 function volume_extrema_presmooth_cargs(
-    params: VolumeExtremaPresmoothParameters,
+    params: VolumeExtremaPresmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,10 +96,10 @@ function volume_extrema_presmooth_cargs(
  *
  * @returns Parameter dictionary
  */
-function volume_extrema_threshold_params(
+function volume_extrema_threshold(
     low: number,
     high: number,
-): VolumeExtremaThresholdParametersTagged {
+): VolumeExtremaThresholdParamsDictTagged {
     const params = {
         "@type": "threshold" as const,
         "low": low,
@@ -118,7 +118,7 @@ function volume_extrema_threshold_params(
  * @returns Command-line arguments.
  */
 function volume_extrema_threshold_cargs(
-    params: VolumeExtremaThresholdParameters,
+    params: VolumeExtremaThresholdParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function volume_extrema_threshold_cargs(
 
 
 /**
- * Output object returned when calling `VolumeExtremaParameters(...)`.
+ * Output object returned when calling `VolumeExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -175,13 +175,13 @@ function volume_extrema_params(
     subvolume: string | null,
     volume_in: InputPathType,
     distance: number,
-    presmooth: VolumeExtremaPresmoothParameters | null = null,
-    threshold: VolumeExtremaThresholdParameters | null = null,
+    presmooth: VolumeExtremaPresmoothParamsDict | null = null,
+    threshold: VolumeExtremaThresholdParamsDict | null = null,
     sum_subvols: boolean = false,
     consolidate_mode: boolean = false,
     only_maxima: boolean = false,
     only_minima: boolean = false,
-): VolumeExtremaParametersTagged {
+): VolumeExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/volume-extrema" as const,
         "volume-out": volume_out,
@@ -217,7 +217,7 @@ function volume_extrema_params(
  * @returns Command-line arguments.
  */
 function volume_extrema_cargs(
-    params: VolumeExtremaParameters,
+    params: VolumeExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -253,7 +253,7 @@ function volume_extrema_cargs(
  * @returns Outputs object.
  */
 function volume_extrema_outputs(
-    params: VolumeExtremaParameters,
+    params: VolumeExtremaParamsDict,
     execution: Execution,
 ): VolumeExtremaOutputs {
     const ret: VolumeExtremaOutputs = {
@@ -281,7 +281,7 @@ function volume_extrema_outputs(
  * @returns NamedTuple of outputs (described in `VolumeExtremaOutputs`).
  */
 function volume_extrema_execute(
-    params: VolumeExtremaParameters,
+    params: VolumeExtremaParamsDict,
     runner: Runner | null = null,
 ): VolumeExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -330,8 +330,8 @@ function volume_extrema(
     subvolume: string | null,
     volume_in: InputPathType,
     distance: number,
-    presmooth: VolumeExtremaPresmoothParameters | null = null,
-    threshold: VolumeExtremaThresholdParameters | null = null,
+    presmooth: VolumeExtremaPresmoothParamsDict | null = null,
+    threshold: VolumeExtremaThresholdParamsDict | null = null,
     sum_subvols: boolean = false,
     consolidate_mode: boolean = false,
     only_maxima: boolean = false,
@@ -346,9 +346,15 @@ function volume_extrema(
 export {
       VOLUME_EXTREMA_METADATA,
       VolumeExtremaOutputs,
+      VolumeExtremaParamsDict,
+      VolumeExtremaParamsDictTagged,
+      VolumeExtremaPresmoothParamsDict,
+      VolumeExtremaPresmoothParamsDictTagged,
+      VolumeExtremaThresholdParamsDict,
+      VolumeExtremaThresholdParamsDictTagged,
       volume_extrema,
       volume_extrema_execute,
       volume_extrema_params,
-      volume_extrema_presmooth_params,
-      volume_extrema_threshold_params,
+      volume_extrema_presmooth,
+      volume_extrema_threshold,
 };

@@ -11,17 +11,17 @@ const V_3DVOLREG_AFNI_METADATA: Metadata = {
 };
 
 
-interface V3dvolregAfniParameters {
+interface V3dvolregAfniParamsDict {
     "@type"?: "freesurfer/3dvolreg.afni";
     "input_file": InputPathType;
     "output_file": string;
     "options"?: string | null | undefined;
 }
-type V3dvolregAfniParametersTagged = Required<Pick<V3dvolregAfniParameters, '@type'>> & V3dvolregAfniParameters;
+type V3dvolregAfniParamsDictTagged = Required<Pick<V3dvolregAfniParamsDict, '@type'>> & V3dvolregAfniParamsDict;
 
 
 /**
- * Output object returned when calling `V3dvolregAfniParameters(...)`.
+ * Output object returned when calling `V3dvolregAfniParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function v_3dvolreg_afni_params(
     input_file: InputPathType,
     output_file: string,
     options: string | null = null,
-): V3dvolregAfniParametersTagged {
+): V3dvolregAfniParamsDictTagged {
     const params = {
         "@type": "freesurfer/3dvolreg.afni" as const,
         "input_file": input_file,
@@ -72,7 +72,7 @@ function v_3dvolreg_afni_params(
  * @returns Command-line arguments.
  */
 function v_3dvolreg_afni_cargs(
-    params: V3dvolregAfniParameters,
+    params: V3dvolregAfniParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function v_3dvolreg_afni_cargs(
  * @returns Outputs object.
  */
 function v_3dvolreg_afni_outputs(
-    params: V3dvolregAfniParameters,
+    params: V3dvolregAfniParamsDict,
     execution: Execution,
 ): V3dvolregAfniOutputs {
     const ret: V3dvolregAfniOutputs = {
@@ -121,7 +121,7 @@ function v_3dvolreg_afni_outputs(
  * @returns NamedTuple of outputs (described in `V3dvolregAfniOutputs`).
  */
 function v_3dvolreg_afni_execute(
-    params: V3dvolregAfniParameters,
+    params: V3dvolregAfniParamsDict,
     runner: Runner | null = null,
 ): V3dvolregAfniOutputs {
     runner = runner || getGlobalRunner();
@@ -163,6 +163,8 @@ function v_3dvolreg_afni(
 
 export {
       V3dvolregAfniOutputs,
+      V3dvolregAfniParamsDict,
+      V3dvolregAfniParamsDictTagged,
       V_3DVOLREG_AFNI_METADATA,
       v_3dvolreg_afni,
       v_3dvolreg_afni_execute,

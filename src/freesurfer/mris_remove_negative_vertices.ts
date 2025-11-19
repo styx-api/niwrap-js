@@ -11,17 +11,17 @@ const MRIS_REMOVE_NEGATIVE_VERTICES_METADATA: Metadata = {
 };
 
 
-interface MrisRemoveNegativeVerticesParameters {
+interface MrisRemoveNegativeVerticesParamsDict {
     "@type"?: "freesurfer/mris_remove_negative_vertices";
     "surface_file": InputPathType;
     "patch_file": InputPathType;
     "output_patch": string;
 }
-type MrisRemoveNegativeVerticesParametersTagged = Required<Pick<MrisRemoveNegativeVerticesParameters, '@type'>> & MrisRemoveNegativeVerticesParameters;
+type MrisRemoveNegativeVerticesParamsDictTagged = Required<Pick<MrisRemoveNegativeVerticesParamsDict, '@type'>> & MrisRemoveNegativeVerticesParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRemoveNegativeVerticesParameters(...)`.
+ * Output object returned when calling `MrisRemoveNegativeVerticesParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function mris_remove_negative_vertices_params(
     surface_file: InputPathType,
     patch_file: InputPathType,
     output_patch: string,
-): MrisRemoveNegativeVerticesParametersTagged {
+): MrisRemoveNegativeVerticesParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_remove_negative_vertices" as const,
         "surface_file": surface_file,
@@ -70,7 +70,7 @@ function mris_remove_negative_vertices_params(
  * @returns Command-line arguments.
  */
 function mris_remove_negative_vertices_cargs(
-    params: MrisRemoveNegativeVerticesParameters,
+    params: MrisRemoveNegativeVerticesParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,7 +91,7 @@ function mris_remove_negative_vertices_cargs(
  * @returns Outputs object.
  */
 function mris_remove_negative_vertices_outputs(
-    params: MrisRemoveNegativeVerticesParameters,
+    params: MrisRemoveNegativeVerticesParamsDict,
     execution: Execution,
 ): MrisRemoveNegativeVerticesOutputs {
     const ret: MrisRemoveNegativeVerticesOutputs = {
@@ -117,7 +117,7 @@ function mris_remove_negative_vertices_outputs(
  * @returns NamedTuple of outputs (described in `MrisRemoveNegativeVerticesOutputs`).
  */
 function mris_remove_negative_vertices_execute(
-    params: MrisRemoveNegativeVerticesParameters,
+    params: MrisRemoveNegativeVerticesParamsDict,
     runner: Runner | null = null,
 ): MrisRemoveNegativeVerticesOutputs {
     runner = runner || getGlobalRunner();
@@ -160,6 +160,8 @@ function mris_remove_negative_vertices(
 export {
       MRIS_REMOVE_NEGATIVE_VERTICES_METADATA,
       MrisRemoveNegativeVerticesOutputs,
+      MrisRemoveNegativeVerticesParamsDict,
+      MrisRemoveNegativeVerticesParamsDictTagged,
       mris_remove_negative_vertices,
       mris_remove_negative_vertices_execute,
       mris_remove_negative_vertices_params,

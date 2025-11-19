@@ -11,15 +11,15 @@ const MORPH_ONLY_SUBJECT_LH_METADATA: Metadata = {
 };
 
 
-interface MorphOnlySubjectLhParameters {
+interface MorphOnlySubjectLhParamsDict {
     "@type"?: "freesurfer/morph_only_subject-lh";
     "subject_dir": string;
 }
-type MorphOnlySubjectLhParametersTagged = Required<Pick<MorphOnlySubjectLhParameters, '@type'>> & MorphOnlySubjectLhParameters;
+type MorphOnlySubjectLhParamsDictTagged = Required<Pick<MorphOnlySubjectLhParamsDict, '@type'>> & MorphOnlySubjectLhParamsDict;
 
 
 /**
- * Output object returned when calling `MorphOnlySubjectLhParameters(...)`.
+ * Output object returned when calling `MorphOnlySubjectLhParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface MorphOnlySubjectLhOutputs {
  */
 function morph_only_subject_lh_params(
     subject_dir: string,
-): MorphOnlySubjectLhParametersTagged {
+): MorphOnlySubjectLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_only_subject-lh" as const,
         "subject_dir": subject_dir,
@@ -62,7 +62,7 @@ function morph_only_subject_lh_params(
  * @returns Command-line arguments.
  */
 function morph_only_subject_lh_cargs(
-    params: MorphOnlySubjectLhParameters,
+    params: MorphOnlySubjectLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -84,7 +84,7 @@ function morph_only_subject_lh_cargs(
  * @returns Outputs object.
  */
 function morph_only_subject_lh_outputs(
-    params: MorphOnlySubjectLhParameters,
+    params: MorphOnlySubjectLhParamsDict,
     execution: Execution,
 ): MorphOnlySubjectLhOutputs {
     const ret: MorphOnlySubjectLhOutputs = {
@@ -110,7 +110,7 @@ function morph_only_subject_lh_outputs(
  * @returns NamedTuple of outputs (described in `MorphOnlySubjectLhOutputs`).
  */
 function morph_only_subject_lh_execute(
-    params: MorphOnlySubjectLhParameters,
+    params: MorphOnlySubjectLhParamsDict,
     runner: Runner | null = null,
 ): MorphOnlySubjectLhOutputs {
     runner = runner || getGlobalRunner();
@@ -149,6 +149,8 @@ function morph_only_subject_lh(
 export {
       MORPH_ONLY_SUBJECT_LH_METADATA,
       MorphOnlySubjectLhOutputs,
+      MorphOnlySubjectLhParamsDict,
+      MorphOnlySubjectLhParamsDictTagged,
       morph_only_subject_lh,
       morph_only_subject_lh_execute,
       morph_only_subject_lh_params,

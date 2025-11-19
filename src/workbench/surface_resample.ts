@@ -10,34 +10,34 @@ const SURFACE_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface SurfaceResampleAreaSurfsParameters {
+interface SurfaceResampleAreaSurfsParamsDict {
     "@type"?: "area-surfs";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type SurfaceResampleAreaSurfsParametersTagged = Required<Pick<SurfaceResampleAreaSurfsParameters, '@type'>> & SurfaceResampleAreaSurfsParameters;
+type SurfaceResampleAreaSurfsParamsDictTagged = Required<Pick<SurfaceResampleAreaSurfsParamsDict, '@type'>> & SurfaceResampleAreaSurfsParamsDict;
 
 
-interface SurfaceResampleAreaMetricsParameters {
+interface SurfaceResampleAreaMetricsParamsDict {
     "@type"?: "area-metrics";
     "current-area": InputPathType;
     "new-area": InputPathType;
 }
-type SurfaceResampleAreaMetricsParametersTagged = Required<Pick<SurfaceResampleAreaMetricsParameters, '@type'>> & SurfaceResampleAreaMetricsParameters;
+type SurfaceResampleAreaMetricsParamsDictTagged = Required<Pick<SurfaceResampleAreaMetricsParamsDict, '@type'>> & SurfaceResampleAreaMetricsParamsDict;
 
 
-interface SurfaceResampleParameters {
+interface SurfaceResampleParamsDict {
     "@type"?: "workbench/surface-resample";
     "surface-out": string;
-    "area-surfs"?: SurfaceResampleAreaSurfsParameters | null | undefined;
-    "area-metrics"?: SurfaceResampleAreaMetricsParameters | null | undefined;
+    "area-surfs"?: SurfaceResampleAreaSurfsParamsDict | null | undefined;
+    "area-metrics"?: SurfaceResampleAreaMetricsParamsDict | null | undefined;
     "bypass-sphere-check": boolean;
     "surface-in": InputPathType;
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
     "method": string;
 }
-type SurfaceResampleParametersTagged = Required<Pick<SurfaceResampleParameters, '@type'>> & SurfaceResampleParameters;
+type SurfaceResampleParamsDictTagged = Required<Pick<SurfaceResampleParamsDict, '@type'>> & SurfaceResampleParamsDict;
 
 
 /**
@@ -48,10 +48,10 @@ type SurfaceResampleParametersTagged = Required<Pick<SurfaceResampleParameters, 
  *
  * @returns Parameter dictionary
  */
-function surface_resample_area_surfs_params(
+function surface_resample_area_surfs(
     current_area: InputPathType,
     new_area: InputPathType,
-): SurfaceResampleAreaSurfsParametersTagged {
+): SurfaceResampleAreaSurfsParamsDictTagged {
     const params = {
         "@type": "area-surfs" as const,
         "current-area": current_area,
@@ -70,7 +70,7 @@ function surface_resample_area_surfs_params(
  * @returns Command-line arguments.
  */
 function surface_resample_area_surfs_cargs(
-    params: SurfaceResampleAreaSurfsParameters,
+    params: SurfaceResampleAreaSurfsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -91,10 +91,10 @@ function surface_resample_area_surfs_cargs(
  *
  * @returns Parameter dictionary
  */
-function surface_resample_area_metrics_params(
+function surface_resample_area_metrics(
     current_area: InputPathType,
     new_area: InputPathType,
-): SurfaceResampleAreaMetricsParametersTagged {
+): SurfaceResampleAreaMetricsParamsDictTagged {
     const params = {
         "@type": "area-metrics" as const,
         "current-area": current_area,
@@ -113,7 +113,7 @@ function surface_resample_area_metrics_params(
  * @returns Command-line arguments.
  */
 function surface_resample_area_metrics_cargs(
-    params: SurfaceResampleAreaMetricsParameters,
+    params: SurfaceResampleAreaMetricsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -127,7 +127,7 @@ function surface_resample_area_metrics_cargs(
 
 
 /**
- * Output object returned when calling `SurfaceResampleParameters(...)`.
+ * Output object returned when calling `SurfaceResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -163,10 +163,10 @@ function surface_resample_params(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    area_surfs: SurfaceResampleAreaSurfsParameters | null = null,
-    area_metrics: SurfaceResampleAreaMetricsParameters | null = null,
+    area_surfs: SurfaceResampleAreaSurfsParamsDict | null = null,
+    area_metrics: SurfaceResampleAreaMetricsParamsDict | null = null,
     bypass_sphere_check: boolean = false,
-): SurfaceResampleParametersTagged {
+): SurfaceResampleParamsDictTagged {
     const params = {
         "@type": "workbench/surface-resample" as const,
         "surface-out": surface_out,
@@ -195,7 +195,7 @@ function surface_resample_params(
  * @returns Command-line arguments.
  */
 function surface_resample_cargs(
-    params: SurfaceResampleParameters,
+    params: SurfaceResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -226,7 +226,7 @@ function surface_resample_cargs(
  * @returns Outputs object.
  */
 function surface_resample_outputs(
-    params: SurfaceResampleParameters,
+    params: SurfaceResampleParamsDict,
     execution: Execution,
 ): SurfaceResampleOutputs {
     const ret: SurfaceResampleOutputs = {
@@ -260,7 +260,7 @@ function surface_resample_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceResampleOutputs`).
  */
 function surface_resample_execute(
-    params: SurfaceResampleParameters,
+    params: SurfaceResampleParamsDict,
     runner: Runner | null = null,
 ): SurfaceResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -308,8 +308,8 @@ function surface_resample(
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
-    area_surfs: SurfaceResampleAreaSurfsParameters | null = null,
-    area_metrics: SurfaceResampleAreaMetricsParameters | null = null,
+    area_surfs: SurfaceResampleAreaSurfsParamsDict | null = null,
+    area_metrics: SurfaceResampleAreaMetricsParamsDict | null = null,
     bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): SurfaceResampleOutputs {
@@ -320,10 +320,16 @@ function surface_resample(
 
 export {
       SURFACE_RESAMPLE_METADATA,
+      SurfaceResampleAreaMetricsParamsDict,
+      SurfaceResampleAreaMetricsParamsDictTagged,
+      SurfaceResampleAreaSurfsParamsDict,
+      SurfaceResampleAreaSurfsParamsDictTagged,
       SurfaceResampleOutputs,
+      SurfaceResampleParamsDict,
+      SurfaceResampleParamsDictTagged,
       surface_resample,
-      surface_resample_area_metrics_params,
-      surface_resample_area_surfs_params,
+      surface_resample_area_metrics,
+      surface_resample_area_surfs,
       surface_resample_execute,
       surface_resample_params,
 };

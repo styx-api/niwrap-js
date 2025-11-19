@@ -10,7 +10,7 @@ const CREATE_SIGNED_DISTANCE_VOLUME_METADATA: Metadata = {
 };
 
 
-interface CreateSignedDistanceVolumeParameters {
+interface CreateSignedDistanceVolumeParamsDict {
     "@type"?: "workbench/create-signed-distance-volume";
     "outvol": string;
     "roi-vol"?: string | null | undefined;
@@ -22,11 +22,11 @@ interface CreateSignedDistanceVolumeParameters {
     "surface": InputPathType;
     "refspace": string;
 }
-type CreateSignedDistanceVolumeParametersTagged = Required<Pick<CreateSignedDistanceVolumeParameters, '@type'>> & CreateSignedDistanceVolumeParameters;
+type CreateSignedDistanceVolumeParamsDictTagged = Required<Pick<CreateSignedDistanceVolumeParamsDict, '@type'>> & CreateSignedDistanceVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `CreateSignedDistanceVolumeParameters(...)`.
+ * Output object returned when calling `CreateSignedDistanceVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -79,7 +79,7 @@ function create_signed_distance_volume_params(
     method: string | null,
     surface: InputPathType,
     refspace: string,
-): CreateSignedDistanceVolumeParametersTagged {
+): CreateSignedDistanceVolumeParamsDictTagged {
     const params = {
         "@type": "workbench/create-signed-distance-volume" as const,
         "outvol": outvol,
@@ -117,7 +117,7 @@ function create_signed_distance_volume_params(
  * @returns Command-line arguments.
  */
 function create_signed_distance_volume_cargs(
-    params: CreateSignedDistanceVolumeParameters,
+    params: CreateSignedDistanceVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -155,7 +155,7 @@ function create_signed_distance_volume_cargs(
  * @returns Outputs object.
  */
 function create_signed_distance_volume_outputs(
-    params: CreateSignedDistanceVolumeParameters,
+    params: CreateSignedDistanceVolumeParamsDict,
     execution: Execution,
 ): CreateSignedDistanceVolumeOutputs {
     const ret: CreateSignedDistanceVolumeOutputs = {
@@ -184,7 +184,7 @@ function create_signed_distance_volume_outputs(
  * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
  */
 function create_signed_distance_volume_execute(
-    params: CreateSignedDistanceVolumeParameters,
+    params: CreateSignedDistanceVolumeParamsDict,
     runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -254,6 +254,8 @@ function create_signed_distance_volume(
 export {
       CREATE_SIGNED_DISTANCE_VOLUME_METADATA,
       CreateSignedDistanceVolumeOutputs,
+      CreateSignedDistanceVolumeParamsDict,
+      CreateSignedDistanceVolumeParamsDictTagged,
       create_signed_distance_volume,
       create_signed_distance_volume_execute,
       create_signed_distance_volume_params,

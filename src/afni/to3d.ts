@@ -11,7 +11,7 @@ const TO3D_METADATA: Metadata = {
 };
 
 
-interface To3dParameters {
+interface To3dParamsDict {
     "@type"?: "afni/to3d";
     "input_files": Array<InputPathType>;
     "type"?: "spgr" | "fse" | "epan" | "anat" | "ct" | "spct" | "pet" | "mra" | "bmap" | "diff" | "omri" | "abuc" | "fim" | "fith" | "fico" | "fitt" | "fift" | "fizt" | "fict" | "fibt" | "fibn" | "figt" | "fipt" | "fbuc" | null | undefined;
@@ -54,11 +54,11 @@ interface To3dParameters {
     "xtwarns_flag": boolean;
     "quit_on_err_flag": boolean;
 }
-type To3dParametersTagged = Required<Pick<To3dParameters, '@type'>> & To3dParameters;
+type To3dParamsDictTagged = Required<Pick<To3dParamsDict, '@type'>> & To3dParamsDict;
 
 
 /**
- * Output object returned when calling `To3dParameters(...)`.
+ * Output object returned when calling `To3dParamsDict(...)`.
  *
  * @interface
  */
@@ -169,7 +169,7 @@ function to3d_params(
     ncolors: number | null = null,
     xtwarns_flag: boolean = false,
     quit_on_err_flag: boolean = false,
-): To3dParametersTagged {
+): To3dParamsDictTagged {
     const params = {
         "@type": "afni/to3d" as const,
         "input_files": input_files,
@@ -274,7 +274,7 @@ function to3d_params(
  * @returns Command-line arguments.
  */
 function to3d_cargs(
-    params: To3dParameters,
+    params: To3dParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -482,7 +482,7 @@ function to3d_cargs(
  * @returns Outputs object.
  */
 function to3d_outputs(
-    params: To3dParameters,
+    params: To3dParamsDict,
     execution: Execution,
 ): To3dOutputs {
     const ret: To3dOutputs = {
@@ -510,7 +510,7 @@ function to3d_outputs(
  * @returns NamedTuple of outputs (described in `To3dOutputs`).
  */
 function to3d_execute(
-    params: To3dParameters,
+    params: To3dParamsDict,
     runner: Runner | null = null,
 ): To3dOutputs {
     runner = runner || getGlobalRunner();
@@ -627,6 +627,8 @@ function to3d(
 export {
       TO3D_METADATA,
       To3dOutputs,
+      To3dParamsDict,
+      To3dParamsDictTagged,
       to3d,
       to3d_execute,
       to3d_params,

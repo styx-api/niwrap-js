@@ -11,7 +11,7 @@ const REG_F3D_METADATA: Metadata = {
 };
 
 
-interface RegF3dParameters {
+interface RegF3dParamsDict {
     "@type"?: "niftyreg/reg_f3d";
     "reference_image": InputPathType;
     "floating_image": InputPathType;
@@ -54,11 +54,11 @@ interface RegF3dParameters {
     "padding_value"?: number | null | undefined;
     "verbose_off": boolean;
 }
-type RegF3dParametersTagged = Required<Pick<RegF3dParameters, '@type'>> & RegF3dParameters;
+type RegF3dParamsDictTagged = Required<Pick<RegF3dParamsDict, '@type'>> & RegF3dParamsDict;
 
 
 /**
- * Output object returned when calling `RegF3dParameters(...)`.
+ * Output object returned when calling `RegF3dParamsDict(...)`.
  *
  * @interface
  */
@@ -165,7 +165,7 @@ function reg_f3d_params(
     smooth_gradient: number | null = null,
     padding_value: number | null = null,
     verbose_off: boolean = false,
-): RegF3dParametersTagged {
+): RegF3dParamsDictTagged {
     const params = {
         "@type": "niftyreg/reg_f3d" as const,
         "reference_image": reference_image,
@@ -280,7 +280,7 @@ function reg_f3d_params(
  * @returns Command-line arguments.
  */
 function reg_f3d_cargs(
-    params: RegF3dParameters,
+    params: RegF3dParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -507,7 +507,7 @@ function reg_f3d_cargs(
  * @returns Outputs object.
  */
 function reg_f3d_outputs(
-    params: RegF3dParameters,
+    params: RegF3dParamsDict,
     execution: Execution,
 ): RegF3dOutputs {
     const ret: RegF3dOutputs = {
@@ -534,7 +534,7 @@ function reg_f3d_outputs(
  * @returns NamedTuple of outputs (described in `RegF3dOutputs`).
  */
 function reg_f3d_execute(
-    params: RegF3dParameters,
+    params: RegF3dParamsDict,
     runner: Runner | null = null,
 ): RegF3dOutputs {
     runner = runner || getGlobalRunner();
@@ -651,6 +651,8 @@ function reg_f3d(
 export {
       REG_F3D_METADATA,
       RegF3dOutputs,
+      RegF3dParamsDict,
+      RegF3dParamsDictTagged,
       reg_f3d,
       reg_f3d_execute,
       reg_f3d_params,

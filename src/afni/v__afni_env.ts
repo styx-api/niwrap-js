@@ -11,7 +11,7 @@ const V__AFNI_ENV_METADATA: Metadata = {
 };
 
 
-interface VAfniEnvParameters {
+interface VAfniEnvParamsDict {
     "@type"?: "afni/@AfniEnv";
     "set_flag"?: Array<string> | null | undefined;
     "unset_flag"?: string | null | undefined;
@@ -24,11 +24,11 @@ interface VAfniEnvParameters {
     "all_opts_flag": boolean;
     "help_find_flag"?: string | null | undefined;
 }
-type VAfniEnvParametersTagged = Required<Pick<VAfniEnvParameters, '@type'>> & VAfniEnvParameters;
+type VAfniEnvParamsDictTagged = Required<Pick<VAfniEnvParamsDict, '@type'>> & VAfniEnvParamsDict;
 
 
 /**
- * Output object returned when calling `VAfniEnvParameters(...)`.
+ * Output object returned when calling `VAfniEnvParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function v__afni_env_params(
     help_view_flag_alias: boolean = false,
     all_opts_flag: boolean = false,
     help_find_flag: string | null = null,
-): VAfniEnvParametersTagged {
+): VAfniEnvParamsDictTagged {
     const params = {
         "@type": "afni/@AfniEnv" as const,
         "help_flag": help_flag,
@@ -102,7 +102,7 @@ function v__afni_env_params(
  * @returns Command-line arguments.
  */
 function v__afni_env_cargs(
-    params: VAfniEnvParameters,
+    params: VAfniEnvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -162,7 +162,7 @@ function v__afni_env_cargs(
  * @returns Outputs object.
  */
 function v__afni_env_outputs(
-    params: VAfniEnvParameters,
+    params: VAfniEnvParamsDict,
     execution: Execution,
 ): VAfniEnvOutputs {
     const ret: VAfniEnvOutputs = {
@@ -187,7 +187,7 @@ function v__afni_env_outputs(
  * @returns NamedTuple of outputs (described in `VAfniEnvOutputs`).
  */
 function v__afni_env_execute(
-    params: VAfniEnvParameters,
+    params: VAfniEnvParamsDict,
     runner: Runner | null = null,
 ): VAfniEnvOutputs {
     runner = runner || getGlobalRunner();
@@ -243,6 +243,8 @@ function v__afni_env(
 
 export {
       VAfniEnvOutputs,
+      VAfniEnvParamsDict,
+      VAfniEnvParamsDictTagged,
       V__AFNI_ENV_METADATA,
       v__afni_env,
       v__afni_env_execute,

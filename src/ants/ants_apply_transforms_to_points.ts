@@ -11,29 +11,29 @@ const ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA: Metadata = {
 };
 
 
-interface AntsApplyTransformsToPointsSingleTransformParameters {
+interface AntsApplyTransformsToPointsSingleTransformParamsDict {
     "@type"?: "single_transform";
 }
-type AntsApplyTransformsToPointsSingleTransformParametersTagged = Required<Pick<AntsApplyTransformsToPointsSingleTransformParameters, '@type'>> & AntsApplyTransformsToPointsSingleTransformParameters;
+type AntsApplyTransformsToPointsSingleTransformParamsDictTagged = Required<Pick<AntsApplyTransformsToPointsSingleTransformParamsDict, '@type'>> & AntsApplyTransformsToPointsSingleTransformParamsDict;
 
 
-interface AntsApplyTransformsToPointsInverseTransformParameters {
+interface AntsApplyTransformsToPointsInverseTransformParamsDict {
     "@type"?: "inverse_transform";
     "transform_file": InputPathType;
 }
-type AntsApplyTransformsToPointsInverseTransformParametersTagged = Required<Pick<AntsApplyTransformsToPointsInverseTransformParameters, '@type'>> & AntsApplyTransformsToPointsInverseTransformParameters;
+type AntsApplyTransformsToPointsInverseTransformParamsDictTagged = Required<Pick<AntsApplyTransformsToPointsInverseTransformParamsDict, '@type'>> & AntsApplyTransformsToPointsInverseTransformParamsDict;
 
 
-interface AntsApplyTransformsToPointsParameters {
+interface AntsApplyTransformsToPointsParamsDict {
     "@type"?: "ants/antsApplyTransformsToPoints";
     "dimensionality"?: 2 | 3 | null | undefined;
     "precision"?: boolean | null | undefined;
     "forantsr"?: boolean | null | undefined;
     "input": InputPathType;
     "output": string;
-    "transform"?: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null | undefined;
+    "transform"?: AntsApplyTransformsToPointsSingleTransformParamsDictTagged | AntsApplyTransformsToPointsInverseTransformParamsDictTagged | null | undefined;
 }
-type AntsApplyTransformsToPointsParametersTagged = Required<Pick<AntsApplyTransformsToPointsParameters, '@type'>> & AntsApplyTransformsToPointsParameters;
+type AntsApplyTransformsToPointsParamsDictTagged = Required<Pick<AntsApplyTransformsToPointsParamsDict, '@type'>> & AntsApplyTransformsToPointsParamsDict;
 
 
 /**
@@ -75,8 +75,8 @@ function ants_apply_transforms_to_points_transform_outputs_dyn_fn(
  *
  * @returns Parameter dictionary
  */
-function ants_apply_transforms_to_points_single_transform_params(
-): AntsApplyTransformsToPointsSingleTransformParametersTagged {
+function ants_apply_transforms_to_points_single_transform(
+): AntsApplyTransformsToPointsSingleTransformParamsDictTagged {
     const params = {
         "@type": "single_transform" as const,
     };
@@ -93,7 +93,7 @@ function ants_apply_transforms_to_points_single_transform_params(
  * @returns Command-line arguments.
  */
 function ants_apply_transforms_to_points_single_transform_cargs(
-    params: AntsApplyTransformsToPointsSingleTransformParameters,
+    params: AntsApplyTransformsToPointsSingleTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -108,9 +108,9 @@ function ants_apply_transforms_to_points_single_transform_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_apply_transforms_to_points_inverse_transform_params(
+function ants_apply_transforms_to_points_inverse_transform(
     transform_file: InputPathType,
-): AntsApplyTransformsToPointsInverseTransformParametersTagged {
+): AntsApplyTransformsToPointsInverseTransformParamsDictTagged {
     const params = {
         "@type": "inverse_transform" as const,
         "transform_file": transform_file,
@@ -128,7 +128,7 @@ function ants_apply_transforms_to_points_inverse_transform_params(
  * @returns Command-line arguments.
  */
 function ants_apply_transforms_to_points_inverse_transform_cargs(
-    params: AntsApplyTransformsToPointsInverseTransformParameters,
+    params: AntsApplyTransformsToPointsInverseTransformParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function ants_apply_transforms_to_points_inverse_transform_cargs(
 
 
 /**
- * Output object returned when calling `AntsApplyTransformsToPointsParameters(...)`.
+ * Output object returned when calling `AntsApplyTransformsToPointsParamsDict(...)`.
  *
  * @interface
  */
@@ -172,8 +172,8 @@ function ants_apply_transforms_to_points_params(
     dimensionality: 2 | 3 | null = null,
     precision: boolean | null = null,
     forantsr: boolean | null = null,
-    transform: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null = null,
-): AntsApplyTransformsToPointsParametersTagged {
+    transform: AntsApplyTransformsToPointsSingleTransformParamsDictTagged | AntsApplyTransformsToPointsInverseTransformParamsDictTagged | null = null,
+): AntsApplyTransformsToPointsParamsDictTagged {
     const params = {
         "@type": "ants/antsApplyTransformsToPoints" as const,
         "input": input,
@@ -204,7 +204,7 @@ function ants_apply_transforms_to_points_params(
  * @returns Command-line arguments.
  */
 function ants_apply_transforms_to_points_cargs(
-    params: AntsApplyTransformsToPointsParameters,
+    params: AntsApplyTransformsToPointsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -254,7 +254,7 @@ function ants_apply_transforms_to_points_cargs(
  * @returns Outputs object.
  */
 function ants_apply_transforms_to_points_outputs(
-    params: AntsApplyTransformsToPointsParameters,
+    params: AntsApplyTransformsToPointsParamsDict,
     execution: Execution,
 ): AntsApplyTransformsToPointsOutputs {
     const ret: AntsApplyTransformsToPointsOutputs = {
@@ -280,7 +280,7 @@ function ants_apply_transforms_to_points_outputs(
  * @returns NamedTuple of outputs (described in `AntsApplyTransformsToPointsOutputs`).
  */
 function ants_apply_transforms_to_points_execute(
-    params: AntsApplyTransformsToPointsParameters,
+    params: AntsApplyTransformsToPointsParamsDict,
     runner: Runner | null = null,
 ): AntsApplyTransformsToPointsOutputs {
     runner = runner || getGlobalRunner();
@@ -318,7 +318,7 @@ function ants_apply_transforms_to_points(
     dimensionality: 2 | 3 | null = null,
     precision: boolean | null = null,
     forantsr: boolean | null = null,
-    transform: AntsApplyTransformsToPointsSingleTransformParametersTagged | AntsApplyTransformsToPointsInverseTransformParametersTagged | null = null,
+    transform: AntsApplyTransformsToPointsSingleTransformParamsDictTagged | AntsApplyTransformsToPointsInverseTransformParamsDictTagged | null = null,
     runner: Runner | null = null,
 ): AntsApplyTransformsToPointsOutputs {
     const params = ants_apply_transforms_to_points_params(input, output, dimensionality, precision, forantsr, transform)
@@ -328,10 +328,16 @@ function ants_apply_transforms_to_points(
 
 export {
       ANTS_APPLY_TRANSFORMS_TO_POINTS_METADATA,
+      AntsApplyTransformsToPointsInverseTransformParamsDict,
+      AntsApplyTransformsToPointsInverseTransformParamsDictTagged,
       AntsApplyTransformsToPointsOutputs,
+      AntsApplyTransformsToPointsParamsDict,
+      AntsApplyTransformsToPointsParamsDictTagged,
+      AntsApplyTransformsToPointsSingleTransformParamsDict,
+      AntsApplyTransformsToPointsSingleTransformParamsDictTagged,
       ants_apply_transforms_to_points,
       ants_apply_transforms_to_points_execute,
-      ants_apply_transforms_to_points_inverse_transform_params,
+      ants_apply_transforms_to_points_inverse_transform,
       ants_apply_transforms_to_points_params,
-      ants_apply_transforms_to_points_single_transform_params,
+      ants_apply_transforms_to_points_single_transform,
 };

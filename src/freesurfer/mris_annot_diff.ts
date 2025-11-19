@@ -11,18 +11,18 @@ const MRIS_ANNOT_DIFF_METADATA: Metadata = {
 };
 
 
-interface MrisAnnotDiffParameters {
+interface MrisAnnotDiffParamsDict {
     "@type"?: "freesurfer/mris_annot_diff";
     "annot1": InputPathType;
     "annot2": InputPathType;
     "diff_ctab": boolean;
     "verbose": boolean;
 }
-type MrisAnnotDiffParametersTagged = Required<Pick<MrisAnnotDiffParameters, '@type'>> & MrisAnnotDiffParameters;
+type MrisAnnotDiffParamsDictTagged = Required<Pick<MrisAnnotDiffParamsDict, '@type'>> & MrisAnnotDiffParamsDict;
 
 
 /**
- * Output object returned when calling `MrisAnnotDiffParameters(...)`.
+ * Output object returned when calling `MrisAnnotDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function mris_annot_diff_params(
     annot2: InputPathType,
     diff_ctab: boolean = false,
     verbose: boolean = false,
-): MrisAnnotDiffParametersTagged {
+): MrisAnnotDiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_annot_diff" as const,
         "annot1": annot1,
@@ -70,7 +70,7 @@ function mris_annot_diff_params(
  * @returns Command-line arguments.
  */
 function mris_annot_diff_cargs(
-    params: MrisAnnotDiffParameters,
+    params: MrisAnnotDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mris_annot_diff_cargs(
  * @returns Outputs object.
  */
 function mris_annot_diff_outputs(
-    params: MrisAnnotDiffParameters,
+    params: MrisAnnotDiffParamsDict,
     execution: Execution,
 ): MrisAnnotDiffOutputs {
     const ret: MrisAnnotDiffOutputs = {
@@ -121,7 +121,7 @@ function mris_annot_diff_outputs(
  * @returns NamedTuple of outputs (described in `MrisAnnotDiffOutputs`).
  */
 function mris_annot_diff_execute(
-    params: MrisAnnotDiffParameters,
+    params: MrisAnnotDiffParamsDict,
     runner: Runner | null = null,
 ): MrisAnnotDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function mris_annot_diff(
 export {
       MRIS_ANNOT_DIFF_METADATA,
       MrisAnnotDiffOutputs,
+      MrisAnnotDiffParamsDict,
+      MrisAnnotDiffParamsDictTagged,
       mris_annot_diff,
       mris_annot_diff_execute,
       mris_annot_diff_params,

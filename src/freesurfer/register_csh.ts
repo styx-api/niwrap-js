@@ -11,17 +11,17 @@ const REGISTER_CSH_METADATA: Metadata = {
 };
 
 
-interface RegisterCshParameters {
+interface RegisterCshParamsDict {
     "@type"?: "freesurfer/register.csh";
     "base_image": InputPathType;
     "new_image": InputPathType;
     "options"?: string | null | undefined;
 }
-type RegisterCshParametersTagged = Required<Pick<RegisterCshParameters, '@type'>> & RegisterCshParameters;
+type RegisterCshParamsDictTagged = Required<Pick<RegisterCshParamsDict, '@type'>> & RegisterCshParamsDict;
 
 
 /**
- * Output object returned when calling `RegisterCshParameters(...)`.
+ * Output object returned when calling `RegisterCshParamsDict(...)`.
  *
  * @interface
  */
@@ -50,7 +50,7 @@ function register_csh_params(
     base_image: InputPathType,
     new_image: InputPathType,
     options: string | null = null,
-): RegisterCshParametersTagged {
+): RegisterCshParamsDictTagged {
     const params = {
         "@type": "freesurfer/register.csh" as const,
         "base_image": base_image,
@@ -72,7 +72,7 @@ function register_csh_params(
  * @returns Command-line arguments.
  */
 function register_csh_cargs(
-    params: RegisterCshParameters,
+    params: RegisterCshParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function register_csh_cargs(
  * @returns Outputs object.
  */
 function register_csh_outputs(
-    params: RegisterCshParameters,
+    params: RegisterCshParamsDict,
     execution: Execution,
 ): RegisterCshOutputs {
     const ret: RegisterCshOutputs = {
@@ -121,7 +121,7 @@ function register_csh_outputs(
  * @returns NamedTuple of outputs (described in `RegisterCshOutputs`).
  */
 function register_csh_execute(
-    params: RegisterCshParameters,
+    params: RegisterCshParamsDict,
     runner: Runner | null = null,
 ): RegisterCshOutputs {
     runner = runner || getGlobalRunner();
@@ -164,6 +164,8 @@ function register_csh(
 export {
       REGISTER_CSH_METADATA,
       RegisterCshOutputs,
+      RegisterCshParamsDict,
+      RegisterCshParamsDictTagged,
       register_csh,
       register_csh_execute,
       register_csh_params,

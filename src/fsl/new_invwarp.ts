@@ -11,7 +11,7 @@ const NEW_INVWARP_METADATA: Metadata = {
 };
 
 
-interface NewInvwarpParameters {
+interface NewInvwarpParamsDict {
     "@type"?: "fsl/new_invwarp";
     "warpvol": InputPathType;
     "outvol": string;
@@ -24,11 +24,11 @@ interface NewInvwarpParameters {
     "debugflag": boolean;
     "verboseflag": boolean;
 }
-type NewInvwarpParametersTagged = Required<Pick<NewInvwarpParameters, '@type'>> & NewInvwarpParameters;
+type NewInvwarpParamsDictTagged = Required<Pick<NewInvwarpParamsDict, '@type'>> & NewInvwarpParamsDict;
 
 
 /**
- * Output object returned when calling `NewInvwarpParameters(...)`.
+ * Output object returned when calling `NewInvwarpParamsDict(...)`.
  *
  * @interface
  */
@@ -71,7 +71,7 @@ function new_invwarp_params(
     jmax: number | null = null,
     debugflag: boolean = false,
     verboseflag: boolean = false,
-): NewInvwarpParametersTagged {
+): NewInvwarpParamsDictTagged {
     const params = {
         "@type": "fsl/new_invwarp" as const,
         "warpvol": warpvol,
@@ -102,7 +102,7 @@ function new_invwarp_params(
  * @returns Command-line arguments.
  */
 function new_invwarp_cargs(
-    params: NewInvwarpParameters,
+    params: NewInvwarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -159,7 +159,7 @@ function new_invwarp_cargs(
  * @returns Outputs object.
  */
 function new_invwarp_outputs(
-    params: NewInvwarpParameters,
+    params: NewInvwarpParamsDict,
     execution: Execution,
 ): NewInvwarpOutputs {
     const ret: NewInvwarpOutputs = {
@@ -185,7 +185,7 @@ function new_invwarp_outputs(
  * @returns NamedTuple of outputs (described in `NewInvwarpOutputs`).
  */
 function new_invwarp_execute(
-    params: NewInvwarpParameters,
+    params: NewInvwarpParamsDict,
     runner: Runner | null = null,
 ): NewInvwarpOutputs {
     runner = runner || getGlobalRunner();
@@ -242,6 +242,8 @@ function new_invwarp(
 export {
       NEW_INVWARP_METADATA,
       NewInvwarpOutputs,
+      NewInvwarpParamsDict,
+      NewInvwarpParamsDictTagged,
       new_invwarp,
       new_invwarp_execute,
       new_invwarp_params,

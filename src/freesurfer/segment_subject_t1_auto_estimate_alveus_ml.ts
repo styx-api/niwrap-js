@@ -11,16 +11,16 @@ const SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA: Metadata = {
 };
 
 
-interface SegmentSubjectT1AutoEstimateAlveusMlParameters {
+interface SegmentSubjectT1AutoEstimateAlveusMlParamsDict {
     "@type"?: "freesurfer/segmentSubjectT1_autoEstimateAlveusML";
     "t1_file": InputPathType;
     "output_folder": string;
 }
-type SegmentSubjectT1AutoEstimateAlveusMlParametersTagged = Required<Pick<SegmentSubjectT1AutoEstimateAlveusMlParameters, '@type'>> & SegmentSubjectT1AutoEstimateAlveusMlParameters;
+type SegmentSubjectT1AutoEstimateAlveusMlParamsDictTagged = Required<Pick<SegmentSubjectT1AutoEstimateAlveusMlParamsDict, '@type'>> & SegmentSubjectT1AutoEstimateAlveusMlParamsDict;
 
 
 /**
- * Output object returned when calling `SegmentSubjectT1AutoEstimateAlveusMlParameters(...)`.
+ * Output object returned when calling `SegmentSubjectT1AutoEstimateAlveusMlParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface SegmentSubjectT1AutoEstimateAlveusMlOutputs {
 function segment_subject_t1_auto_estimate_alveus_ml_params(
     t1_file: InputPathType,
     output_folder: string,
-): SegmentSubjectT1AutoEstimateAlveusMlParametersTagged {
+): SegmentSubjectT1AutoEstimateAlveusMlParamsDictTagged {
     const params = {
         "@type": "freesurfer/segmentSubjectT1_autoEstimateAlveusML" as const,
         "t1_file": t1_file,
@@ -66,7 +66,7 @@ function segment_subject_t1_auto_estimate_alveus_ml_params(
  * @returns Command-line arguments.
  */
 function segment_subject_t1_auto_estimate_alveus_ml_cargs(
-    params: SegmentSubjectT1AutoEstimateAlveusMlParameters,
+    params: SegmentSubjectT1AutoEstimateAlveusMlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function segment_subject_t1_auto_estimate_alveus_ml_cargs(
  * @returns Outputs object.
  */
 function segment_subject_t1_auto_estimate_alveus_ml_outputs(
-    params: SegmentSubjectT1AutoEstimateAlveusMlParameters,
+    params: SegmentSubjectT1AutoEstimateAlveusMlParamsDict,
     execution: Execution,
 ): SegmentSubjectT1AutoEstimateAlveusMlOutputs {
     const ret: SegmentSubjectT1AutoEstimateAlveusMlOutputs = {
@@ -112,7 +112,7 @@ function segment_subject_t1_auto_estimate_alveus_ml_outputs(
  * @returns NamedTuple of outputs (described in `SegmentSubjectT1AutoEstimateAlveusMlOutputs`).
  */
 function segment_subject_t1_auto_estimate_alveus_ml_execute(
-    params: SegmentSubjectT1AutoEstimateAlveusMlParameters,
+    params: SegmentSubjectT1AutoEstimateAlveusMlParamsDict,
     runner: Runner | null = null,
 ): SegmentSubjectT1AutoEstimateAlveusMlOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function segment_subject_t1_auto_estimate_alveus_ml(
 export {
       SEGMENT_SUBJECT_T1_AUTO_ESTIMATE_ALVEUS_ML_METADATA,
       SegmentSubjectT1AutoEstimateAlveusMlOutputs,
+      SegmentSubjectT1AutoEstimateAlveusMlParamsDict,
+      SegmentSubjectT1AutoEstimateAlveusMlParamsDictTagged,
       segment_subject_t1_auto_estimate_alveus_ml,
       segment_subject_t1_auto_estimate_alveus_ml_execute,
       segment_subject_t1_auto_estimate_alveus_ml_params,

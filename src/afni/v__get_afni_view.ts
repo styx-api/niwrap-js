@@ -11,15 +11,15 @@ const V__GET_AFNI_VIEW_METADATA: Metadata = {
 };
 
 
-interface VGetAfniViewParameters {
+interface VGetAfniViewParamsDict {
     "@type"?: "afni/@GetAfniView";
     "dataset_name": string;
 }
-type VGetAfniViewParametersTagged = Required<Pick<VGetAfniViewParameters, '@type'>> & VGetAfniViewParameters;
+type VGetAfniViewParamsDictTagged = Required<Pick<VGetAfniViewParamsDict, '@type'>> & VGetAfniViewParamsDict;
 
 
 /**
- * Output object returned when calling `VGetAfniViewParameters(...)`.
+ * Output object returned when calling `VGetAfniViewParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface VGetAfniViewOutputs {
  */
 function v__get_afni_view_params(
     dataset_name: string,
-): VGetAfniViewParametersTagged {
+): VGetAfniViewParamsDictTagged {
     const params = {
         "@type": "afni/@GetAfniView" as const,
         "dataset_name": dataset_name,
@@ -62,7 +62,7 @@ function v__get_afni_view_params(
  * @returns Command-line arguments.
  */
 function v__get_afni_view_cargs(
-    params: VGetAfniViewParameters,
+    params: VGetAfniViewParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function v__get_afni_view_cargs(
  * @returns Outputs object.
  */
 function v__get_afni_view_outputs(
-    params: VGetAfniViewParameters,
+    params: VGetAfniViewParamsDict,
     execution: Execution,
 ): VGetAfniViewOutputs {
     const ret: VGetAfniViewOutputs = {
@@ -107,7 +107,7 @@ function v__get_afni_view_outputs(
  * @returns NamedTuple of outputs (described in `VGetAfniViewOutputs`).
  */
 function v__get_afni_view_execute(
-    params: VGetAfniViewParameters,
+    params: VGetAfniViewParamsDict,
     runner: Runner | null = null,
 ): VGetAfniViewOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function v__get_afni_view(
 
 export {
       VGetAfniViewOutputs,
+      VGetAfniViewParamsDict,
+      VGetAfniViewParamsDictTagged,
       V__GET_AFNI_VIEW_METADATA,
       v__get_afni_view,
       v__get_afni_view_execute,

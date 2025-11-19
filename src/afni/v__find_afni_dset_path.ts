@@ -11,18 +11,18 @@ const V__FIND_AFNI_DSET_PATH_METADATA: Metadata = {
 };
 
 
-interface VFindAfniDsetPathParameters {
+interface VFindAfniDsetPathParamsDict {
     "@type"?: "afni/@FindAfniDsetPath";
     "dsetname": string;
     "append_file": boolean;
     "full_path": boolean;
     "help": boolean;
 }
-type VFindAfniDsetPathParametersTagged = Required<Pick<VFindAfniDsetPathParameters, '@type'>> & VFindAfniDsetPathParameters;
+type VFindAfniDsetPathParamsDictTagged = Required<Pick<VFindAfniDsetPathParamsDict, '@type'>> & VFindAfniDsetPathParamsDict;
 
 
 /**
- * Output object returned when calling `VFindAfniDsetPathParameters(...)`.
+ * Output object returned when calling `VFindAfniDsetPathParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function v__find_afni_dset_path_params(
     append_file: boolean = false,
     full_path: boolean = false,
     help: boolean = false,
-): VFindAfniDsetPathParametersTagged {
+): VFindAfniDsetPathParamsDictTagged {
     const params = {
         "@type": "afni/@FindAfniDsetPath" as const,
         "dsetname": dsetname,
@@ -70,7 +70,7 @@ function v__find_afni_dset_path_params(
  * @returns Command-line arguments.
  */
 function v__find_afni_dset_path_cargs(
-    params: VFindAfniDsetPathParameters,
+    params: VFindAfniDsetPathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -98,7 +98,7 @@ function v__find_afni_dset_path_cargs(
  * @returns Outputs object.
  */
 function v__find_afni_dset_path_outputs(
-    params: VFindAfniDsetPathParameters,
+    params: VFindAfniDsetPathParamsDict,
     execution: Execution,
 ): VFindAfniDsetPathOutputs {
     const ret: VFindAfniDsetPathOutputs = {
@@ -123,7 +123,7 @@ function v__find_afni_dset_path_outputs(
  * @returns NamedTuple of outputs (described in `VFindAfniDsetPathOutputs`).
  */
 function v__find_afni_dset_path_execute(
-    params: VFindAfniDsetPathParameters,
+    params: VFindAfniDsetPathParamsDict,
     runner: Runner | null = null,
 ): VFindAfniDsetPathOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function v__find_afni_dset_path(
 
 export {
       VFindAfniDsetPathOutputs,
+      VFindAfniDsetPathParamsDict,
+      VFindAfniDsetPathParamsDictTagged,
       V__FIND_AFNI_DSET_PATH_METADATA,
       v__find_afni_dset_path,
       v__find_afni_dset_path_execute,

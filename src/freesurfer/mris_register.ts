@@ -11,7 +11,7 @@ const MRIS_REGISTER_METADATA: Metadata = {
 };
 
 
-interface MrisRegisterParameters {
+interface MrisRegisterParamsDict {
     "@type"?: "freesurfer/mris_register";
     "surf_fname": InputPathType;
     "target": InputPathType;
@@ -77,11 +77,11 @@ interface MrisRegisterParameters {
     "threads"?: number | null | undefined;
     "version_flag": boolean;
 }
-type MrisRegisterParametersTagged = Required<Pick<MrisRegisterParameters, '@type'>> & MrisRegisterParameters;
+type MrisRegisterParamsDictTagged = Required<Pick<MrisRegisterParamsDict, '@type'>> & MrisRegisterParamsDict;
 
 
 /**
- * Output object returned when calling `MrisRegisterParameters(...)`.
+ * Output object returned when calling `MrisRegisterParamsDict(...)`.
  *
  * @interface
  */
@@ -234,7 +234,7 @@ function mris_register_params(
     vector_flag: boolean = false,
     threads: number | null = null,
     version_flag: boolean = false,
-): MrisRegisterParametersTagged {
+): MrisRegisterParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_register" as const,
         "surf_fname": surf_fname,
@@ -400,7 +400,7 @@ function mris_register_params(
  * @returns Command-line arguments.
  */
 function mris_register_cargs(
-    params: MrisRegisterParameters,
+    params: MrisRegisterParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -730,7 +730,7 @@ function mris_register_cargs(
  * @returns Outputs object.
  */
 function mris_register_outputs(
-    params: MrisRegisterParameters,
+    params: MrisRegisterParamsDict,
     execution: Execution,
 ): MrisRegisterOutputs {
     const ret: MrisRegisterOutputs = {
@@ -757,7 +757,7 @@ function mris_register_outputs(
  * @returns NamedTuple of outputs (described in `MrisRegisterOutputs`).
  */
 function mris_register_execute(
-    params: MrisRegisterParameters,
+    params: MrisRegisterParamsDict,
     runner: Runner | null = null,
 ): MrisRegisterOutputs {
     runner = runner || getGlobalRunner();
@@ -920,6 +920,8 @@ function mris_register(
 export {
       MRIS_REGISTER_METADATA,
       MrisRegisterOutputs,
+      MrisRegisterParamsDict,
+      MrisRegisterParamsDictTagged,
       mris_register,
       mris_register_execute,
       mris_register_params,

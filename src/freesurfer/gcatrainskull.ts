@@ -11,15 +11,15 @@ const GCATRAINSKULL_METADATA: Metadata = {
 };
 
 
-interface GcatrainskullParameters {
+interface GcatrainskullParamsDict {
     "@type"?: "freesurfer/gcatrainskull";
     "gcatrain_dir": string;
 }
-type GcatrainskullParametersTagged = Required<Pick<GcatrainskullParameters, '@type'>> & GcatrainskullParameters;
+type GcatrainskullParamsDictTagged = Required<Pick<GcatrainskullParamsDict, '@type'>> & GcatrainskullParamsDict;
 
 
 /**
- * Output object returned when calling `GcatrainskullParameters(...)`.
+ * Output object returned when calling `GcatrainskullParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface GcatrainskullOutputs {
  */
 function gcatrainskull_params(
     gcatrain_dir: string,
-): GcatrainskullParametersTagged {
+): GcatrainskullParamsDictTagged {
     const params = {
         "@type": "freesurfer/gcatrainskull" as const,
         "gcatrain_dir": gcatrain_dir,
@@ -58,7 +58,7 @@ function gcatrainskull_params(
  * @returns Command-line arguments.
  */
 function gcatrainskull_cargs(
-    params: GcatrainskullParameters,
+    params: GcatrainskullParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function gcatrainskull_cargs(
  * @returns Outputs object.
  */
 function gcatrainskull_outputs(
-    params: GcatrainskullParameters,
+    params: GcatrainskullParamsDict,
     execution: Execution,
 ): GcatrainskullOutputs {
     const ret: GcatrainskullOutputs = {
@@ -105,7 +105,7 @@ function gcatrainskull_outputs(
  * @returns NamedTuple of outputs (described in `GcatrainskullOutputs`).
  */
 function gcatrainskull_execute(
-    params: GcatrainskullParameters,
+    params: GcatrainskullParamsDict,
     runner: Runner | null = null,
 ): GcatrainskullOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function gcatrainskull(
 export {
       GCATRAINSKULL_METADATA,
       GcatrainskullOutputs,
+      GcatrainskullParamsDict,
+      GcatrainskullParamsDictTagged,
       gcatrainskull,
       gcatrainskull_execute,
       gcatrainskull_params,

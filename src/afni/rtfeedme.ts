@@ -11,7 +11,7 @@ const RTFEEDME_METADATA: Metadata = {
 };
 
 
-interface RtfeedmeParameters {
+interface RtfeedmeParamsDict {
     "@type"?: "afni/rtfeedme";
     "datasets": Array<InputPathType>;
     "host"?: string | null | undefined;
@@ -25,11 +25,11 @@ interface RtfeedmeParameters {
     "note"?: Array<string> | null | undefined;
     "yrange"?: number | null | undefined;
 }
-type RtfeedmeParametersTagged = Required<Pick<RtfeedmeParameters, '@type'>> & RtfeedmeParameters;
+type RtfeedmeParamsDictTagged = Required<Pick<RtfeedmeParamsDict, '@type'>> & RtfeedmeParamsDict;
 
 
 /**
- * Output object returned when calling `RtfeedmeParameters(...)`.
+ * Output object returned when calling `RtfeedmeParamsDict(...)`.
  *
  * @interface
  */
@@ -70,7 +70,7 @@ function rtfeedme_params(
     drive_cmd: Array<string> | null = null,
     note: Array<string> | null = null,
     yrange: number | null = null,
-): RtfeedmeParametersTagged {
+): RtfeedmeParamsDictTagged {
     const params = {
         "@type": "afni/rtfeedme" as const,
         "datasets": datasets,
@@ -112,7 +112,7 @@ function rtfeedme_params(
  * @returns Command-line arguments.
  */
 function rtfeedme_cargs(
-    params: RtfeedmeParameters,
+    params: RtfeedmeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -182,7 +182,7 @@ function rtfeedme_cargs(
  * @returns Outputs object.
  */
 function rtfeedme_outputs(
-    params: RtfeedmeParameters,
+    params: RtfeedmeParamsDict,
     execution: Execution,
 ): RtfeedmeOutputs {
     const ret: RtfeedmeOutputs = {
@@ -207,7 +207,7 @@ function rtfeedme_outputs(
  * @returns NamedTuple of outputs (described in `RtfeedmeOutputs`).
  */
 function rtfeedme_execute(
-    params: RtfeedmeParameters,
+    params: RtfeedmeParamsDict,
     runner: Runner | null = null,
 ): RtfeedmeOutputs {
     runner = runner || getGlobalRunner();
@@ -266,6 +266,8 @@ function rtfeedme(
 export {
       RTFEEDME_METADATA,
       RtfeedmeOutputs,
+      RtfeedmeParamsDict,
+      RtfeedmeParamsDictTagged,
       rtfeedme,
       rtfeedme_execute,
       rtfeedme_params,

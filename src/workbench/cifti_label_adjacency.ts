@@ -10,7 +10,7 @@ const CIFTI_LABEL_ADJACENCY_METADATA: Metadata = {
 };
 
 
-interface CiftiLabelAdjacencyParameters {
+interface CiftiLabelAdjacencyParamsDict {
     "@type"?: "workbench/cifti-label-adjacency";
     "adjacency-out": string;
     "surface"?: InputPathType | null | undefined;
@@ -18,11 +18,11 @@ interface CiftiLabelAdjacencyParameters {
     "surface"?: InputPathType | null | undefined;
     "label-in": InputPathType;
 }
-type CiftiLabelAdjacencyParametersTagged = Required<Pick<CiftiLabelAdjacencyParameters, '@type'>> & CiftiLabelAdjacencyParameters;
+type CiftiLabelAdjacencyParamsDictTagged = Required<Pick<CiftiLabelAdjacencyParamsDict, '@type'>> & CiftiLabelAdjacencyParamsDict;
 
 
 /**
- * Output object returned when calling `CiftiLabelAdjacencyParameters(...)`.
+ * Output object returned when calling `CiftiLabelAdjacencyParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function cifti_label_adjacency_params(
     surface_: InputPathType | null,
     surface_2: InputPathType | null,
     label_in: InputPathType,
-): CiftiLabelAdjacencyParametersTagged {
+): CiftiLabelAdjacencyParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-adjacency" as const,
         "adjacency-out": adjacency_out,
@@ -89,7 +89,7 @@ function cifti_label_adjacency_params(
  * @returns Command-line arguments.
  */
 function cifti_label_adjacency_cargs(
-    params: CiftiLabelAdjacencyParameters,
+    params: CiftiLabelAdjacencyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -120,7 +120,7 @@ function cifti_label_adjacency_cargs(
  * @returns Outputs object.
  */
 function cifti_label_adjacency_outputs(
-    params: CiftiLabelAdjacencyParameters,
+    params: CiftiLabelAdjacencyParamsDict,
     execution: Execution,
 ): CiftiLabelAdjacencyOutputs {
     const ret: CiftiLabelAdjacencyOutputs = {
@@ -142,7 +142,7 @@ function cifti_label_adjacency_outputs(
  * @returns NamedTuple of outputs (described in `CiftiLabelAdjacencyOutputs`).
  */
 function cifti_label_adjacency_execute(
-    params: CiftiLabelAdjacencyParameters,
+    params: CiftiLabelAdjacencyParamsDict,
     runner: Runner | null = null,
 ): CiftiLabelAdjacencyOutputs {
     runner = runner || getGlobalRunner();
@@ -191,6 +191,8 @@ function cifti_label_adjacency(
 export {
       CIFTI_LABEL_ADJACENCY_METADATA,
       CiftiLabelAdjacencyOutputs,
+      CiftiLabelAdjacencyParamsDict,
+      CiftiLabelAdjacencyParamsDictTagged,
       cifti_label_adjacency,
       cifti_label_adjacency_execute,
       cifti_label_adjacency_params,

@@ -11,17 +11,17 @@ const MRI_POLV_METADATA: Metadata = {
 };
 
 
-interface MriPolvParameters {
+interface MriPolvParamsDict {
     "@type"?: "freesurfer/mri_polv";
     "window_size"?: number | null | undefined;
     "input_image": InputPathType;
     "output_image": InputPathType;
 }
-type MriPolvParametersTagged = Required<Pick<MriPolvParameters, '@type'>> & MriPolvParameters;
+type MriPolvParamsDictTagged = Required<Pick<MriPolvParamsDict, '@type'>> & MriPolvParamsDict;
 
 
 /**
- * Output object returned when calling `MriPolvParameters(...)`.
+ * Output object returned when calling `MriPolvParamsDict(...)`.
  *
  * @interface
  */
@@ -46,7 +46,7 @@ function mri_polv_params(
     input_image: InputPathType,
     output_image: InputPathType,
     window_size: number | null = null,
-): MriPolvParametersTagged {
+): MriPolvParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_polv" as const,
         "input_image": input_image,
@@ -68,7 +68,7 @@ function mri_polv_params(
  * @returns Command-line arguments.
  */
 function mri_polv_cargs(
-    params: MriPolvParameters,
+    params: MriPolvParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,7 +94,7 @@ function mri_polv_cargs(
  * @returns Outputs object.
  */
 function mri_polv_outputs(
-    params: MriPolvParameters,
+    params: MriPolvParamsDict,
     execution: Execution,
 ): MriPolvOutputs {
     const ret: MriPolvOutputs = {
@@ -119,7 +119,7 @@ function mri_polv_outputs(
  * @returns NamedTuple of outputs (described in `MriPolvOutputs`).
  */
 function mri_polv_execute(
-    params: MriPolvParameters,
+    params: MriPolvParamsDict,
     runner: Runner | null = null,
 ): MriPolvOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function mri_polv(
 export {
       MRI_POLV_METADATA,
       MriPolvOutputs,
+      MriPolvParamsDict,
+      MriPolvParamsDictTagged,
       mri_polv,
       mri_polv_execute,
       mri_polv_params,

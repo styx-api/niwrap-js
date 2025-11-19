@@ -11,18 +11,18 @@ const CREATE_DISPLACEMENT_FIELD_METADATA: Metadata = {
 };
 
 
-interface CreateDisplacementFieldParameters {
+interface CreateDisplacementFieldParamsDict {
     "@type"?: "ants/CreateDisplacementField";
     "image_dimension": number;
     "enforce_zero_boundary_flag": boolean;
     "component_images": Array<InputPathType>;
     "output_image": string;
 }
-type CreateDisplacementFieldParametersTagged = Required<Pick<CreateDisplacementFieldParameters, '@type'>> & CreateDisplacementFieldParameters;
+type CreateDisplacementFieldParamsDictTagged = Required<Pick<CreateDisplacementFieldParamsDict, '@type'>> & CreateDisplacementFieldParamsDict;
 
 
 /**
- * Output object returned when calling `CreateDisplacementFieldParameters(...)`.
+ * Output object returned when calling `CreateDisplacementFieldParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function create_displacement_field_params(
     enforce_zero_boundary_flag: boolean,
     component_images: Array<InputPathType>,
     output_image: string,
-): CreateDisplacementFieldParametersTagged {
+): CreateDisplacementFieldParamsDictTagged {
     const params = {
         "@type": "ants/CreateDisplacementField" as const,
         "image_dimension": image_dimension,
@@ -74,7 +74,7 @@ function create_displacement_field_params(
  * @returns Command-line arguments.
  */
 function create_displacement_field_cargs(
-    params: CreateDisplacementFieldParameters,
+    params: CreateDisplacementFieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function create_displacement_field_cargs(
  * @returns Outputs object.
  */
 function create_displacement_field_outputs(
-    params: CreateDisplacementFieldParameters,
+    params: CreateDisplacementFieldParamsDict,
     execution: Execution,
 ): CreateDisplacementFieldOutputs {
     const ret: CreateDisplacementFieldOutputs = {
@@ -122,7 +122,7 @@ function create_displacement_field_outputs(
  * @returns NamedTuple of outputs (described in `CreateDisplacementFieldOutputs`).
  */
 function create_displacement_field_execute(
-    params: CreateDisplacementFieldParameters,
+    params: CreateDisplacementFieldParamsDict,
     runner: Runner | null = null,
 ): CreateDisplacementFieldOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function create_displacement_field(
 export {
       CREATE_DISPLACEMENT_FIELD_METADATA,
       CreateDisplacementFieldOutputs,
+      CreateDisplacementFieldParamsDict,
+      CreateDisplacementFieldParamsDictTagged,
       create_displacement_field,
       create_displacement_field_execute,
       create_displacement_field_params,

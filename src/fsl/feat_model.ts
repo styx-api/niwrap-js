@@ -11,16 +11,16 @@ const FEAT_MODEL_METADATA: Metadata = {
 };
 
 
-interface FeatModelParameters {
+interface FeatModelParamsDict {
     "@type"?: "fsl/feat_model";
     "design_name_root": string;
     "confound_matrix"?: InputPathType | null | undefined;
 }
-type FeatModelParametersTagged = Required<Pick<FeatModelParameters, '@type'>> & FeatModelParameters;
+type FeatModelParamsDictTagged = Required<Pick<FeatModelParamsDict, '@type'>> & FeatModelParamsDict;
 
 
 /**
- * Output object returned when calling `FeatModelParameters(...)`.
+ * Output object returned when calling `FeatModelParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface FeatModelOutputs {
 function feat_model_params(
     design_name_root: string,
     confound_matrix: InputPathType | null = null,
-): FeatModelParametersTagged {
+): FeatModelParamsDictTagged {
     const params = {
         "@type": "fsl/feat_model" as const,
         "design_name_root": design_name_root,
@@ -64,7 +64,7 @@ function feat_model_params(
  * @returns Command-line arguments.
  */
 function feat_model_cargs(
-    params: FeatModelParameters,
+    params: FeatModelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function feat_model_cargs(
  * @returns Outputs object.
  */
 function feat_model_outputs(
-    params: FeatModelParameters,
+    params: FeatModelParamsDict,
     execution: Execution,
 ): FeatModelOutputs {
     const ret: FeatModelOutputs = {
@@ -111,7 +111,7 @@ function feat_model_outputs(
  * @returns NamedTuple of outputs (described in `FeatModelOutputs`).
  */
 function feat_model_execute(
-    params: FeatModelParameters,
+    params: FeatModelParamsDict,
     runner: Runner | null = null,
 ): FeatModelOutputs {
     runner = runner || getGlobalRunner();
@@ -152,6 +152,8 @@ function feat_model(
 export {
       FEAT_MODEL_METADATA,
       FeatModelOutputs,
+      FeatModelParamsDict,
+      FeatModelParamsDictTagged,
       feat_model,
       feat_model_execute,
       feat_model_params,

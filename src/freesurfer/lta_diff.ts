@@ -11,7 +11,7 @@ const LTA_DIFF_METADATA: Metadata = {
 };
 
 
-interface LtaDiffParameters {
+interface LtaDiffParamsDict {
     "@type"?: "freesurfer/lta_diff";
     "transform1": InputPathType;
     "transform2"?: InputPathType | null | undefined;
@@ -22,11 +22,11 @@ interface LtaDiffParameters {
     "normdiv"?: number | null | undefined;
     "radius"?: number | null | undefined;
 }
-type LtaDiffParametersTagged = Required<Pick<LtaDiffParameters, '@type'>> & LtaDiffParameters;
+type LtaDiffParamsDictTagged = Required<Pick<LtaDiffParamsDict, '@type'>> & LtaDiffParamsDict;
 
 
 /**
- * Output object returned when calling `LtaDiffParameters(...)`.
+ * Output object returned when calling `LtaDiffParamsDict(...)`.
  *
  * @interface
  */
@@ -61,7 +61,7 @@ function lta_diff_params(
     vox: boolean = false,
     normdiv: number | null = null,
     radius: number | null = null,
-): LtaDiffParametersTagged {
+): LtaDiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/lta_diff" as const,
         "transform1": transform1,
@@ -94,7 +94,7 @@ function lta_diff_params(
  * @returns Command-line arguments.
  */
 function lta_diff_cargs(
-    params: LtaDiffParameters,
+    params: LtaDiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -143,7 +143,7 @@ function lta_diff_cargs(
  * @returns Outputs object.
  */
 function lta_diff_outputs(
-    params: LtaDiffParameters,
+    params: LtaDiffParamsDict,
     execution: Execution,
 ): LtaDiffOutputs {
     const ret: LtaDiffOutputs = {
@@ -168,7 +168,7 @@ function lta_diff_outputs(
  * @returns NamedTuple of outputs (described in `LtaDiffOutputs`).
  */
 function lta_diff_execute(
-    params: LtaDiffParameters,
+    params: LtaDiffParamsDict,
     runner: Runner | null = null,
 ): LtaDiffOutputs {
     runner = runner || getGlobalRunner();
@@ -221,6 +221,8 @@ function lta_diff(
 export {
       LTA_DIFF_METADATA,
       LtaDiffOutputs,
+      LtaDiffParamsDict,
+      LtaDiffParamsDictTagged,
       lta_diff,
       lta_diff_execute,
       lta_diff_params,

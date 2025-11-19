@@ -11,7 +11,7 @@ const MRI_CONCATENATE_GCAM_METADATA: Metadata = {
 };
 
 
-interface MriConcatenateGcamParameters {
+interface MriConcatenateGcamParamsDict {
     "@type"?: "freesurfer/mri_concatenate_gcam";
     "inputs": Array<InputPathType>;
     "output": string;
@@ -21,11 +21,11 @@ interface MriConcatenateGcamParameters {
     "invert": boolean;
     "downsample": boolean;
 }
-type MriConcatenateGcamParametersTagged = Required<Pick<MriConcatenateGcamParameters, '@type'>> & MriConcatenateGcamParameters;
+type MriConcatenateGcamParamsDictTagged = Required<Pick<MriConcatenateGcamParamsDict, '@type'>> & MriConcatenateGcamParamsDict;
 
 
 /**
- * Output object returned when calling `MriConcatenateGcamParameters(...)`.
+ * Output object returned when calling `MriConcatenateGcamParamsDict(...)`.
  *
  * @interface
  */
@@ -62,7 +62,7 @@ function mri_concatenate_gcam_params(
     reduce: boolean = false,
     invert: boolean = false,
     downsample: boolean = false,
-): MriConcatenateGcamParametersTagged {
+): MriConcatenateGcamParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_concatenate_gcam" as const,
         "inputs": inputs,
@@ -90,7 +90,7 @@ function mri_concatenate_gcam_params(
  * @returns Command-line arguments.
  */
 function mri_concatenate_gcam_cargs(
-    params: MriConcatenateGcamParameters,
+    params: MriConcatenateGcamParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -131,7 +131,7 @@ function mri_concatenate_gcam_cargs(
  * @returns Outputs object.
  */
 function mri_concatenate_gcam_outputs(
-    params: MriConcatenateGcamParameters,
+    params: MriConcatenateGcamParamsDict,
     execution: Execution,
 ): MriConcatenateGcamOutputs {
     const ret: MriConcatenateGcamOutputs = {
@@ -157,7 +157,7 @@ function mri_concatenate_gcam_outputs(
  * @returns NamedTuple of outputs (described in `MriConcatenateGcamOutputs`).
  */
 function mri_concatenate_gcam_execute(
-    params: MriConcatenateGcamParameters,
+    params: MriConcatenateGcamParamsDict,
     runner: Runner | null = null,
 ): MriConcatenateGcamOutputs {
     runner = runner || getGlobalRunner();
@@ -208,6 +208,8 @@ function mri_concatenate_gcam(
 export {
       MRI_CONCATENATE_GCAM_METADATA,
       MriConcatenateGcamOutputs,
+      MriConcatenateGcamParamsDict,
+      MriConcatenateGcamParamsDictTagged,
       mri_concatenate_gcam,
       mri_concatenate_gcam_execute,
       mri_concatenate_gcam_params,

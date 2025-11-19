@@ -11,15 +11,15 @@ const IM2NIML_METADATA: Metadata = {
 };
 
 
-interface Im2nimlParameters {
+interface Im2nimlParamsDict {
     "@type"?: "afni/im2niml";
     "input_files": Array<InputPathType>;
 }
-type Im2nimlParametersTagged = Required<Pick<Im2nimlParameters, '@type'>> & Im2nimlParameters;
+type Im2nimlParamsDictTagged = Required<Pick<Im2nimlParamsDict, '@type'>> & Im2nimlParamsDict;
 
 
 /**
- * Output object returned when calling `Im2nimlParameters(...)`.
+ * Output object returned when calling `Im2nimlParamsDict(...)`.
  *
  * @interface
  */
@@ -44,7 +44,7 @@ interface Im2nimlOutputs {
  */
 function im2niml_params(
     input_files: Array<InputPathType>,
-): Im2nimlParametersTagged {
+): Im2nimlParamsDictTagged {
     const params = {
         "@type": "afni/im2niml" as const,
         "input_files": input_files,
@@ -62,7 +62,7 @@ function im2niml_params(
  * @returns Command-line arguments.
  */
 function im2niml_cargs(
-    params: Im2nimlParameters,
+    params: Im2nimlParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function im2niml_cargs(
  * @returns Outputs object.
  */
 function im2niml_outputs(
-    params: Im2nimlParameters,
+    params: Im2nimlParamsDict,
     execution: Execution,
 ): Im2nimlOutputs {
     const ret: Im2nimlOutputs = {
@@ -107,7 +107,7 @@ function im2niml_outputs(
  * @returns NamedTuple of outputs (described in `Im2nimlOutputs`).
  */
 function im2niml_execute(
-    params: Im2nimlParameters,
+    params: Im2nimlParamsDict,
     runner: Runner | null = null,
 ): Im2nimlOutputs {
     runner = runner || getGlobalRunner();
@@ -146,6 +146,8 @@ function im2niml(
 export {
       IM2NIML_METADATA,
       Im2nimlOutputs,
+      Im2nimlParamsDict,
+      Im2nimlParamsDictTagged,
       im2niml,
       im2niml_execute,
       im2niml_params,

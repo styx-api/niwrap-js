@@ -11,18 +11,18 @@ const ZERO_LT_4DFP_METADATA: Metadata = {
 };
 
 
-interface ZeroLt4dfpParameters {
+interface ZeroLt4dfpParamsDict {
     "@type"?: "freesurfer/zero_lt_4dfp";
     "flt_value": number;
     "file_4dfp": InputPathType;
     "outroot"?: string | null | undefined;
     "endianness"?: string | null | undefined;
 }
-type ZeroLt4dfpParametersTagged = Required<Pick<ZeroLt4dfpParameters, '@type'>> & ZeroLt4dfpParameters;
+type ZeroLt4dfpParamsDictTagged = Required<Pick<ZeroLt4dfpParamsDict, '@type'>> & ZeroLt4dfpParamsDict;
 
 
 /**
- * Output object returned when calling `ZeroLt4dfpParameters(...)`.
+ * Output object returned when calling `ZeroLt4dfpParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function zero_lt_4dfp_params(
     file_4dfp: InputPathType,
     outroot: string | null = null,
     endianness: string | null = null,
-): ZeroLt4dfpParametersTagged {
+): ZeroLt4dfpParamsDictTagged {
     const params = {
         "@type": "freesurfer/zero_lt_4dfp" as const,
         "flt_value": flt_value,
@@ -78,7 +78,7 @@ function zero_lt_4dfp_params(
  * @returns Command-line arguments.
  */
 function zero_lt_4dfp_cargs(
-    params: ZeroLt4dfpParameters,
+    params: ZeroLt4dfpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function zero_lt_4dfp_cargs(
  * @returns Outputs object.
  */
 function zero_lt_4dfp_outputs(
-    params: ZeroLt4dfpParameters,
+    params: ZeroLt4dfpParamsDict,
     execution: Execution,
 ): ZeroLt4dfpOutputs {
     const ret: ZeroLt4dfpOutputs = {
@@ -133,7 +133,7 @@ function zero_lt_4dfp_outputs(
  * @returns NamedTuple of outputs (described in `ZeroLt4dfpOutputs`).
  */
 function zero_lt_4dfp_execute(
-    params: ZeroLt4dfpParameters,
+    params: ZeroLt4dfpParamsDict,
     runner: Runner | null = null,
 ): ZeroLt4dfpOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function zero_lt_4dfp(
 export {
       ZERO_LT_4DFP_METADATA,
       ZeroLt4dfpOutputs,
+      ZeroLt4dfpParamsDict,
+      ZeroLt4dfpParamsDictTagged,
       zero_lt_4dfp,
       zero_lt_4dfp_execute,
       zero_lt_4dfp_params,

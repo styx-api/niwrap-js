@@ -11,7 +11,7 @@ const BMEDITS2SURF_METADATA: Metadata = {
 };
 
 
-interface Bmedits2surfParameters {
+interface Bmedits2surfParamsDict {
     "@type"?: "freesurfer/bmedits2surf";
     "subject": string;
     "self": boolean;
@@ -24,11 +24,11 @@ interface Bmedits2surfParameters {
     "right_hemisphere": boolean;
     "no_surfs": boolean;
 }
-type Bmedits2surfParametersTagged = Required<Pick<Bmedits2surfParameters, '@type'>> & Bmedits2surfParameters;
+type Bmedits2surfParamsDictTagged = Required<Pick<Bmedits2surfParamsDict, '@type'>> & Bmedits2surfParamsDict;
 
 
 /**
- * Output object returned when calling `Bmedits2surfParameters(...)`.
+ * Output object returned when calling `Bmedits2surfParamsDict(...)`.
  *
  * @interface
  */
@@ -90,7 +90,7 @@ function bmedits2surf_params(
     left_hemisphere: boolean = false,
     right_hemisphere: boolean = false,
     no_surfs: boolean = false,
-): Bmedits2surfParametersTagged {
+): Bmedits2surfParamsDictTagged {
     const params = {
         "@type": "freesurfer/bmedits2surf" as const,
         "subject": subject,
@@ -119,7 +119,7 @@ function bmedits2surf_params(
  * @returns Command-line arguments.
  */
 function bmedits2surf_cargs(
-    params: Bmedits2surfParameters,
+    params: Bmedits2surfParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -171,7 +171,7 @@ function bmedits2surf_cargs(
  * @returns Outputs object.
  */
 function bmedits2surf_outputs(
-    params: Bmedits2surfParameters,
+    params: Bmedits2surfParamsDict,
     execution: Execution,
 ): Bmedits2surfOutputs {
     const ret: Bmedits2surfOutputs = {
@@ -202,7 +202,7 @@ function bmedits2surf_outputs(
  * @returns NamedTuple of outputs (described in `Bmedits2surfOutputs`).
  */
 function bmedits2surf_execute(
-    params: Bmedits2surfParameters,
+    params: Bmedits2surfParamsDict,
     runner: Runner | null = null,
 ): Bmedits2surfOutputs {
     runner = runner || getGlobalRunner();
@@ -258,6 +258,8 @@ function bmedits2surf(
 export {
       BMEDITS2SURF_METADATA,
       Bmedits2surfOutputs,
+      Bmedits2surfParamsDict,
+      Bmedits2surfParamsDictTagged,
       bmedits2surf,
       bmedits2surf_execute,
       bmedits2surf_params,

@@ -11,7 +11,7 @@ const JKGCATRAIN_METADATA: Metadata = {
 };
 
 
-interface JkgcatrainParameters {
+interface JkgcatrainParamsDict {
     "@type"?: "freesurfer/jkgcatrain";
     "gca_directory": string;
     "iteration_number"?: number | null | undefined;
@@ -19,11 +19,11 @@ interface JkgcatrainParameters {
     "no_submit": boolean;
     "mail_flag": boolean;
 }
-type JkgcatrainParametersTagged = Required<Pick<JkgcatrainParameters, '@type'>> & JkgcatrainParameters;
+type JkgcatrainParamsDictTagged = Required<Pick<JkgcatrainParamsDict, '@type'>> & JkgcatrainParamsDict;
 
 
 /**
- * Output object returned when calling `JkgcatrainParameters(...)`.
+ * Output object returned when calling `JkgcatrainParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function jkgcatrain_params(
     num_threads: number | null = null,
     no_submit: boolean = false,
     mail_flag: boolean = false,
-): JkgcatrainParametersTagged {
+): JkgcatrainParamsDictTagged {
     const params = {
         "@type": "freesurfer/jkgcatrain" as const,
         "gca_directory": gca_directory,
@@ -78,7 +78,7 @@ function jkgcatrain_params(
  * @returns Command-line arguments.
  */
 function jkgcatrain_cargs(
-    params: JkgcatrainParameters,
+    params: JkgcatrainParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -118,7 +118,7 @@ function jkgcatrain_cargs(
  * @returns Outputs object.
  */
 function jkgcatrain_outputs(
-    params: JkgcatrainParameters,
+    params: JkgcatrainParamsDict,
     execution: Execution,
 ): JkgcatrainOutputs {
     const ret: JkgcatrainOutputs = {
@@ -143,7 +143,7 @@ function jkgcatrain_outputs(
  * @returns NamedTuple of outputs (described in `JkgcatrainOutputs`).
  */
 function jkgcatrain_execute(
-    params: JkgcatrainParameters,
+    params: JkgcatrainParamsDict,
     runner: Runner | null = null,
 ): JkgcatrainOutputs {
     runner = runner || getGlobalRunner();
@@ -190,6 +190,8 @@ function jkgcatrain(
 export {
       JKGCATRAIN_METADATA,
       JkgcatrainOutputs,
+      JkgcatrainParamsDict,
+      JkgcatrainParamsDictTagged,
       jkgcatrain,
       jkgcatrain_execute,
       jkgcatrain_params,

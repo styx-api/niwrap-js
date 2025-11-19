@@ -11,7 +11,7 @@ const V__EXTRACT_MEICA_ORTVEC_METADATA: Metadata = {
 };
 
 
-interface VExtractMeicaOrtvecParameters {
+interface VExtractMeicaOrtvecParamsDict {
     "@type"?: "afni/@extract_meica_ortvec";
     "prefix": string;
     "meica_dir"?: string | null | undefined;
@@ -20,11 +20,11 @@ interface VExtractMeicaOrtvecParameters {
     "work_dir"?: string | null | undefined;
     "verbosity"?: string | null | undefined;
 }
-type VExtractMeicaOrtvecParametersTagged = Required<Pick<VExtractMeicaOrtvecParameters, '@type'>> & VExtractMeicaOrtvecParameters;
+type VExtractMeicaOrtvecParamsDictTagged = Required<Pick<VExtractMeicaOrtvecParamsDict, '@type'>> & VExtractMeicaOrtvecParamsDict;
 
 
 /**
- * Output object returned when calling `VExtractMeicaOrtvecParameters(...)`.
+ * Output object returned when calling `VExtractMeicaOrtvecParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v__extract_meica_ortvec_params(
     reject_midk: number | null = null,
     work_dir: string | null = null,
     verbosity: string | null = null,
-): VExtractMeicaOrtvecParametersTagged {
+): VExtractMeicaOrtvecParamsDictTagged {
     const params = {
         "@type": "afni/@extract_meica_ortvec" as const,
         "prefix": prefix,
@@ -92,7 +92,7 @@ function v__extract_meica_ortvec_params(
  * @returns Command-line arguments.
  */
 function v__extract_meica_ortvec_cargs(
-    params: VExtractMeicaOrtvecParameters,
+    params: VExtractMeicaOrtvecParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function v__extract_meica_ortvec_cargs(
  * @returns Outputs object.
  */
 function v__extract_meica_ortvec_outputs(
-    params: VExtractMeicaOrtvecParameters,
+    params: VExtractMeicaOrtvecParamsDict,
     execution: Execution,
 ): VExtractMeicaOrtvecOutputs {
     const ret: VExtractMeicaOrtvecOutputs = {
@@ -170,7 +170,7 @@ function v__extract_meica_ortvec_outputs(
  * @returns NamedTuple of outputs (described in `VExtractMeicaOrtvecOutputs`).
  */
 function v__extract_meica_ortvec_execute(
-    params: VExtractMeicaOrtvecParameters,
+    params: VExtractMeicaOrtvecParamsDict,
     runner: Runner | null = null,
 ): VExtractMeicaOrtvecOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function v__extract_meica_ortvec(
 
 export {
       VExtractMeicaOrtvecOutputs,
+      VExtractMeicaOrtvecParamsDict,
+      VExtractMeicaOrtvecParamsDictTagged,
       V__EXTRACT_MEICA_ORTVEC_METADATA,
       v__extract_meica_ortvec,
       v__extract_meica_ortvec_execute,

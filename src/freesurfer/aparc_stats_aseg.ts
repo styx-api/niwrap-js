@@ -11,7 +11,7 @@ const APARC_STATS_ASEG_METADATA: Metadata = {
 };
 
 
-interface AparcStatsAsegParameters {
+interface AparcStatsAsegParamsDict {
     "@type"?: "freesurfer/aparc_stats_aseg";
     "subject_name": string;
     "gcs_name": string;
@@ -36,11 +36,11 @@ interface AparcStatsAsegParameters {
     "expert_clean_flag": boolean;
     "expert_overwrite_flag": boolean;
 }
-type AparcStatsAsegParametersTagged = Required<Pick<AparcStatsAsegParameters, '@type'>> & AparcStatsAsegParameters;
+type AparcStatsAsegParamsDictTagged = Required<Pick<AparcStatsAsegParamsDict, '@type'>> & AparcStatsAsegParamsDict;
 
 
 /**
- * Output object returned when calling `AparcStatsAsegParameters(...)`.
+ * Output object returned when calling `AparcStatsAsegParamsDict(...)`.
  *
  * @interface
  */
@@ -103,7 +103,7 @@ function aparc_stats_aseg_params(
     expert_use_flag: boolean = false,
     expert_clean_flag: boolean = false,
     expert_overwrite_flag: boolean = false,
-): AparcStatsAsegParametersTagged {
+): AparcStatsAsegParamsDictTagged {
     const params = {
         "@type": "freesurfer/aparc_stats_aseg" as const,
         "subject_name": subject_name,
@@ -158,7 +158,7 @@ function aparc_stats_aseg_params(
  * @returns Command-line arguments.
  */
 function aparc_stats_aseg_cargs(
-    params: AparcStatsAsegParameters,
+    params: AparcStatsAsegParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -268,7 +268,7 @@ function aparc_stats_aseg_cargs(
  * @returns Outputs object.
  */
 function aparc_stats_aseg_outputs(
-    params: AparcStatsAsegParameters,
+    params: AparcStatsAsegParamsDict,
     execution: Execution,
 ): AparcStatsAsegOutputs {
     const ret: AparcStatsAsegOutputs = {
@@ -293,7 +293,7 @@ function aparc_stats_aseg_outputs(
  * @returns NamedTuple of outputs (described in `AparcStatsAsegOutputs`).
  */
 function aparc_stats_aseg_execute(
-    params: AparcStatsAsegParameters,
+    params: AparcStatsAsegParamsDict,
     runner: Runner | null = null,
 ): AparcStatsAsegOutputs {
     runner = runner || getGlobalRunner();
@@ -374,6 +374,8 @@ function aparc_stats_aseg(
 export {
       APARC_STATS_ASEG_METADATA,
       AparcStatsAsegOutputs,
+      AparcStatsAsegParamsDict,
+      AparcStatsAsegParamsDictTagged,
       aparc_stats_aseg,
       aparc_stats_aseg_execute,
       aparc_stats_aseg_params,

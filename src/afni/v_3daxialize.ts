@@ -11,7 +11,7 @@ const V_3DAXIALIZE_METADATA: Metadata = {
 };
 
 
-interface V3daxializeParameters {
+interface V3daxializeParamsDict {
     "@type"?: "afni/3daxialize";
     "infile": InputPathType;
     "prefix"?: string | null | undefined;
@@ -22,11 +22,11 @@ interface V3daxializeParameters {
     "orient_code"?: string | null | undefined;
     "frugal": boolean;
 }
-type V3daxializeParametersTagged = Required<Pick<V3daxializeParameters, '@type'>> & V3daxializeParameters;
+type V3daxializeParamsDictTagged = Required<Pick<V3daxializeParamsDict, '@type'>> & V3daxializeParamsDict;
 
 
 /**
- * Output object returned when calling `V3daxializeParameters(...)`.
+ * Output object returned when calling `V3daxializeParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function v_3daxialize_params(
     axial: boolean = false,
     orient_code: string | null = null,
     frugal: boolean = false,
-): V3daxializeParametersTagged {
+): V3daxializeParamsDictTagged {
     const params = {
         "@type": "afni/3daxialize" as const,
         "infile": infile,
@@ -94,7 +94,7 @@ function v_3daxialize_params(
  * @returns Command-line arguments.
  */
 function v_3daxialize_cargs(
-    params: V3daxializeParameters,
+    params: V3daxializeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -140,7 +140,7 @@ function v_3daxialize_cargs(
  * @returns Outputs object.
  */
 function v_3daxialize_outputs(
-    params: V3daxializeParameters,
+    params: V3daxializeParamsDict,
     execution: Execution,
 ): V3daxializeOutputs {
     const ret: V3daxializeOutputs = {
@@ -166,7 +166,7 @@ function v_3daxialize_outputs(
  * @returns NamedTuple of outputs (described in `V3daxializeOutputs`).
  */
 function v_3daxialize_execute(
-    params: V3daxializeParameters,
+    params: V3daxializeParamsDict,
     runner: Runner | null = null,
 ): V3daxializeOutputs {
     runner = runner || getGlobalRunner();
@@ -218,6 +218,8 @@ function v_3daxialize(
 
 export {
       V3daxializeOutputs,
+      V3daxializeParamsDict,
+      V3daxializeParamsDictTagged,
       V_3DAXIALIZE_METADATA,
       v_3daxialize,
       v_3daxialize_execute,

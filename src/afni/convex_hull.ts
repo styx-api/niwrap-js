@@ -11,7 +11,7 @@ const CONVEX_HULL_METADATA: Metadata = {
 };
 
 
-interface ConvexHullParameters {
+interface ConvexHullParamsDict {
     "@type"?: "afni/ConvexHull";
     "vol"?: InputPathType | null | undefined;
     "isoval"?: number | null | undefined;
@@ -30,11 +30,11 @@ interface ConvexHullParameters {
     "novolreg": boolean;
     "setenv"?: string | null | undefined;
 }
-type ConvexHullParametersTagged = Required<Pick<ConvexHullParameters, '@type'>> & ConvexHullParameters;
+type ConvexHullParamsDictTagged = Required<Pick<ConvexHullParamsDict, '@type'>> & ConvexHullParamsDict;
 
 
 /**
- * Output object returned when calling `ConvexHullParameters(...)`.
+ * Output object returned when calling `ConvexHullParamsDict(...)`.
  *
  * @interface
  */
@@ -89,7 +89,7 @@ function convex_hull_params(
     debug: string | null = null,
     novolreg: boolean = false,
     setenv: string | null = null,
-): ConvexHullParametersTagged {
+): ConvexHullParamsDictTagged {
     const params = {
         "@type": "afni/ConvexHull" as const,
         "proj_xy": proj_xy,
@@ -148,7 +148,7 @@ function convex_hull_params(
  * @returns Command-line arguments.
  */
 function convex_hull_cargs(
-    params: ConvexHullParameters,
+    params: ConvexHullParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -253,7 +253,7 @@ function convex_hull_cargs(
  * @returns Outputs object.
  */
 function convex_hull_outputs(
-    params: ConvexHullParameters,
+    params: ConvexHullParamsDict,
     execution: Execution,
 ): ConvexHullOutputs {
     const ret: ConvexHullOutputs = {
@@ -279,7 +279,7 @@ function convex_hull_outputs(
  * @returns NamedTuple of outputs (described in `ConvexHullOutputs`).
  */
 function convex_hull_execute(
-    params: ConvexHullParameters,
+    params: ConvexHullParamsDict,
     runner: Runner | null = null,
 ): ConvexHullOutputs {
     runner = runner || getGlobalRunner();
@@ -348,6 +348,8 @@ function convex_hull(
 export {
       CONVEX_HULL_METADATA,
       ConvexHullOutputs,
+      ConvexHullParamsDict,
+      ConvexHullParamsDictTagged,
       convex_hull,
       convex_hull_execute,
       convex_hull_params,

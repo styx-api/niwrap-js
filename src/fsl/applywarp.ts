@@ -11,7 +11,7 @@ const APPLYWARP_METADATA: Metadata = {
 };
 
 
-interface ApplywarpParameters {
+interface ApplywarpParamsDict {
     "@type"?: "fsl/applywarp";
     "interp"?: "nn" | "trilinear" | "sinc" | "spline" | null | undefined;
     "in_file": InputPathType;
@@ -29,11 +29,11 @@ interface ApplywarpParameters {
     "superlevel_2"?: number | null | undefined;
     "supersample": boolean;
 }
-type ApplywarpParametersTagged = Required<Pick<ApplywarpParameters, '@type'>> & ApplywarpParameters;
+type ApplywarpParamsDictTagged = Required<Pick<ApplywarpParamsDict, '@type'>> & ApplywarpParamsDict;
 
 
 /**
- * Output object returned when calling `ApplywarpParameters(...)`.
+ * Output object returned when calling `ApplywarpParamsDict(...)`.
  *
  * @interface
  */
@@ -86,7 +86,7 @@ function applywarp_params(
     superlevel: "a" | null = null,
     superlevel_2: number | null = null,
     supersample: boolean = false,
-): ApplywarpParametersTagged {
+): ApplywarpParamsDictTagged {
     const params = {
         "@type": "fsl/applywarp" as const,
         "in_file": in_file,
@@ -138,7 +138,7 @@ function applywarp_params(
  * @returns Command-line arguments.
  */
 function applywarp_cargs(
-    params: ApplywarpParameters,
+    params: ApplywarpParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -197,7 +197,7 @@ function applywarp_cargs(
  * @returns Outputs object.
  */
 function applywarp_outputs(
-    params: ApplywarpParameters,
+    params: ApplywarpParamsDict,
     execution: Execution,
 ): ApplywarpOutputs {
     const ret: ApplywarpOutputs = {
@@ -223,7 +223,7 @@ function applywarp_outputs(
  * @returns NamedTuple of outputs (described in `ApplywarpOutputs`).
  */
 function applywarp_execute(
-    params: ApplywarpParameters,
+    params: ApplywarpParamsDict,
     runner: Runner | null = null,
 ): ApplywarpOutputs {
     runner = runner || getGlobalRunner();
@@ -290,6 +290,8 @@ function applywarp(
 export {
       APPLYWARP_METADATA,
       ApplywarpOutputs,
+      ApplywarpParamsDict,
+      ApplywarpParamsDictTagged,
       applywarp,
       applywarp_execute,
       applywarp_params,

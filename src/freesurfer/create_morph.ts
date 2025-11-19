@@ -11,7 +11,7 @@ const CREATE_MORPH_METADATA: Metadata = {
 };
 
 
-interface CreateMorphParameters {
+interface CreateMorphParamsDict {
     "@type"?: "freesurfer/createMorph";
     "input_transforms": Array<string>;
     "output_transform": string;
@@ -19,11 +19,11 @@ interface CreateMorphParameters {
     "subject"?: InputPathType | null | undefined;
     "debug_coordinates"?: Array<number> | null | undefined;
 }
-type CreateMorphParametersTagged = Required<Pick<CreateMorphParameters, '@type'>> & CreateMorphParameters;
+type CreateMorphParamsDictTagged = Required<Pick<CreateMorphParamsDict, '@type'>> & CreateMorphParamsDict;
 
 
 /**
- * Output object returned when calling `CreateMorphParameters(...)`.
+ * Output object returned when calling `CreateMorphParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function create_morph_params(
     template: InputPathType | null = null,
     subject: InputPathType | null = null,
     debug_coordinates: Array<number> | null = null,
-): CreateMorphParametersTagged {
+): CreateMorphParamsDictTagged {
     const params = {
         "@type": "freesurfer/createMorph" as const,
         "input_transforms": input_transforms,
@@ -84,7 +84,7 @@ function create_morph_params(
  * @returns Command-line arguments.
  */
 function create_morph_cargs(
-    params: CreateMorphParameters,
+    params: CreateMorphParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function create_morph_cargs(
  * @returns Outputs object.
  */
 function create_morph_outputs(
-    params: CreateMorphParameters,
+    params: CreateMorphParamsDict,
     execution: Execution,
 ): CreateMorphOutputs {
     const ret: CreateMorphOutputs = {
@@ -154,7 +154,7 @@ function create_morph_outputs(
  * @returns NamedTuple of outputs (described in `CreateMorphOutputs`).
  */
 function create_morph_execute(
-    params: CreateMorphParameters,
+    params: CreateMorphParamsDict,
     runner: Runner | null = null,
 ): CreateMorphOutputs {
     runner = runner || getGlobalRunner();
@@ -201,6 +201,8 @@ function create_morph(
 export {
       CREATE_MORPH_METADATA,
       CreateMorphOutputs,
+      CreateMorphParamsDict,
+      CreateMorphParamsDictTagged,
       create_morph,
       create_morph_execute,
       create_morph_params,

@@ -11,7 +11,7 @@ const EPI_B0_CORRECT_PY_METADATA: Metadata = {
 };
 
 
-interface EpiB0CorrectPyParameters {
+interface EpiB0CorrectPyParamsDict {
     "@type"?: "afni/epi_b0_correct.py";
     "prefix": string;
     "input_freq": InputPathType;
@@ -38,11 +38,11 @@ interface EpiB0CorrectPyParameters {
     "ver": boolean;
     "date": boolean;
 }
-type EpiB0CorrectPyParametersTagged = Required<Pick<EpiB0CorrectPyParameters, '@type'>> & EpiB0CorrectPyParameters;
+type EpiB0CorrectPyParamsDictTagged = Required<Pick<EpiB0CorrectPyParamsDict, '@type'>> & EpiB0CorrectPyParamsDict;
 
 
 /**
- * Output object returned when calling `EpiB0CorrectPyParameters(...)`.
+ * Output object returned when calling `EpiB0CorrectPyParamsDict(...)`.
  *
  * @interface
  */
@@ -129,7 +129,7 @@ function epi_b0_correct_py_params(
     help: boolean = false,
     ver: boolean = false,
     date: boolean = false,
-): EpiB0CorrectPyParametersTagged {
+): EpiB0CorrectPyParamsDictTagged {
     const params = {
         "@type": "afni/epi_b0_correct.py" as const,
         "prefix": prefix,
@@ -198,7 +198,7 @@ function epi_b0_correct_py_params(
  * @returns Command-line arguments.
  */
 function epi_b0_correct_py_cargs(
-    params: EpiB0CorrectPyParameters,
+    params: EpiB0CorrectPyParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -331,7 +331,7 @@ function epi_b0_correct_py_cargs(
  * @returns Outputs object.
  */
 function epi_b0_correct_py_outputs(
-    params: EpiB0CorrectPyParameters,
+    params: EpiB0CorrectPyParamsDict,
     execution: Execution,
 ): EpiB0CorrectPyOutputs {
     const ret: EpiB0CorrectPyOutputs = {
@@ -361,7 +361,7 @@ function epi_b0_correct_py_outputs(
  * @returns NamedTuple of outputs (described in `EpiB0CorrectPyOutputs`).
  */
 function epi_b0_correct_py_execute(
-    params: EpiB0CorrectPyParameters,
+    params: EpiB0CorrectPyParamsDict,
     runner: Runner | null = null,
 ): EpiB0CorrectPyOutputs {
     runner = runner || getGlobalRunner();
@@ -446,6 +446,8 @@ function epi_b0_correct_py(
 export {
       EPI_B0_CORRECT_PY_METADATA,
       EpiB0CorrectPyOutputs,
+      EpiB0CorrectPyParamsDict,
+      EpiB0CorrectPyParamsDictTagged,
       epi_b0_correct_py,
       epi_b0_correct_py_execute,
       epi_b0_correct_py_params,

@@ -11,7 +11,7 @@ const TBSS_SKELETON_METADATA: Metadata = {
 };
 
 
-interface TbssSkeletonParameters {
+interface TbssSkeletonParamsDict {
     "@type"?: "fsl/tbss_skeleton";
     "input_image": InputPathType;
     "output_image"?: string | null | undefined;
@@ -21,11 +21,11 @@ interface TbssSkeletonParameters {
     "debug_flag": boolean;
     "debug2_flag"?: InputPathType | null | undefined;
 }
-type TbssSkeletonParametersTagged = Required<Pick<TbssSkeletonParameters, '@type'>> & TbssSkeletonParameters;
+type TbssSkeletonParamsDictTagged = Required<Pick<TbssSkeletonParamsDict, '@type'>> & TbssSkeletonParamsDict;
 
 
 /**
- * Output object returned when calling `TbssSkeletonParameters(...)`.
+ * Output object returned when calling `TbssSkeletonParamsDict(...)`.
  *
  * @interface
  */
@@ -78,7 +78,7 @@ function tbss_skeleton_params(
     alt_skeleton: InputPathType | null = null,
     debug_flag: boolean = false,
     debug2_flag: InputPathType | null = null,
-): TbssSkeletonParametersTagged {
+): TbssSkeletonParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_skeleton" as const,
         "input_image": input_image,
@@ -112,7 +112,7 @@ function tbss_skeleton_params(
  * @returns Command-line arguments.
  */
 function tbss_skeleton_cargs(
-    params: TbssSkeletonParameters,
+    params: TbssSkeletonParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -167,7 +167,7 @@ function tbss_skeleton_cargs(
  * @returns Outputs object.
  */
 function tbss_skeleton_outputs(
-    params: TbssSkeletonParameters,
+    params: TbssSkeletonParamsDict,
     execution: Execution,
 ): TbssSkeletonOutputs {
     const ret: TbssSkeletonOutputs = {
@@ -197,7 +197,7 @@ function tbss_skeleton_outputs(
  * @returns NamedTuple of outputs (described in `TbssSkeletonOutputs`).
  */
 function tbss_skeleton_execute(
-    params: TbssSkeletonParameters,
+    params: TbssSkeletonParamsDict,
     runner: Runner | null = null,
 ): TbssSkeletonOutputs {
     runner = runner || getGlobalRunner();
@@ -248,6 +248,8 @@ function tbss_skeleton(
 export {
       TBSS_SKELETON_METADATA,
       TbssSkeletonOutputs,
+      TbssSkeletonParamsDict,
+      TbssSkeletonParamsDictTagged,
       tbss_skeleton,
       tbss_skeleton_execute,
       tbss_skeleton_params,

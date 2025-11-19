@@ -11,18 +11,18 @@ const MEANVAL_METADATA: Metadata = {
 };
 
 
-interface MeanvalParameters {
+interface MeanvalParamsDict {
     "@type"?: "freesurfer/meanval";
     "input_file": InputPathType;
     "mask_file": InputPathType;
     "output_file": string;
     "avgwf_flag": boolean;
 }
-type MeanvalParametersTagged = Required<Pick<MeanvalParameters, '@type'>> & MeanvalParameters;
+type MeanvalParamsDictTagged = Required<Pick<MeanvalParamsDict, '@type'>> & MeanvalParamsDict;
 
 
 /**
- * Output object returned when calling `MeanvalParameters(...)`.
+ * Output object returned when calling `MeanvalParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function meanval_params(
     mask_file: InputPathType,
     output_file: string,
     avgwf_flag: boolean = false,
-): MeanvalParametersTagged {
+): MeanvalParamsDictTagged {
     const params = {
         "@type": "freesurfer/meanval" as const,
         "input_file": input_file,
@@ -74,7 +74,7 @@ function meanval_params(
  * @returns Command-line arguments.
  */
 function meanval_cargs(
-    params: MeanvalParameters,
+    params: MeanvalParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function meanval_cargs(
  * @returns Outputs object.
  */
 function meanval_outputs(
-    params: MeanvalParameters,
+    params: MeanvalParamsDict,
     execution: Execution,
 ): MeanvalOutputs {
     const ret: MeanvalOutputs = {
@@ -133,7 +133,7 @@ function meanval_outputs(
  * @returns NamedTuple of outputs (described in `MeanvalOutputs`).
  */
 function meanval_execute(
-    params: MeanvalParameters,
+    params: MeanvalParamsDict,
     runner: Runner | null = null,
 ): MeanvalOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function meanval(
 export {
       MEANVAL_METADATA,
       MeanvalOutputs,
+      MeanvalParamsDict,
+      MeanvalParamsDictTagged,
       meanval,
       meanval_execute,
       meanval_params,

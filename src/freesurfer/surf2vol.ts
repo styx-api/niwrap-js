@@ -11,7 +11,7 @@ const SURF2VOL_METADATA: Metadata = {
 };
 
 
-interface Surf2volParameters {
+interface Surf2volParamsDict {
     "@type"?: "freesurfer/surf2vol";
     "fixed_surface": InputPathType;
     "moving_surface": InputPathType;
@@ -31,11 +31,11 @@ interface Surf2volParameters {
     "debug_output": boolean;
     "cache_transform"?: string | null | undefined;
 }
-type Surf2volParametersTagged = Required<Pick<Surf2volParameters, '@type'>> & Surf2volParameters;
+type Surf2volParamsDictTagged = Required<Pick<Surf2volParamsDict, '@type'>> & Surf2volParamsDict;
 
 
 /**
- * Output object returned when calling `Surf2volParameters(...)`.
+ * Output object returned when calling `Surf2volParamsDict(...)`.
  *
  * @interface
  */
@@ -96,7 +96,7 @@ function surf2vol_params(
     dirty_factor: number | null = null,
     debug_output: boolean = false,
     cache_transform: string | null = null,
-): Surf2volParametersTagged {
+): Surf2volParamsDictTagged {
     const params = {
         "@type": "freesurfer/surf2vol" as const,
         "fixed_surface": fixed_surface,
@@ -154,7 +154,7 @@ function surf2vol_params(
  * @returns Command-line arguments.
  */
 function surf2vol_cargs(
-    params: Surf2volParameters,
+    params: Surf2volParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -263,7 +263,7 @@ function surf2vol_cargs(
  * @returns Outputs object.
  */
 function surf2vol_outputs(
-    params: Surf2volParameters,
+    params: Surf2volParamsDict,
     execution: Execution,
 ): Surf2volOutputs {
     const ret: Surf2volOutputs = {
@@ -290,7 +290,7 @@ function surf2vol_outputs(
  * @returns NamedTuple of outputs (described in `Surf2volOutputs`).
  */
 function surf2vol_execute(
-    params: Surf2volParameters,
+    params: Surf2volParamsDict,
     runner: Runner | null = null,
 ): Surf2volOutputs {
     runner = runner || getGlobalRunner();
@@ -361,6 +361,8 @@ function surf2vol(
 export {
       SURF2VOL_METADATA,
       Surf2volOutputs,
+      Surf2volParamsDict,
+      Surf2volParamsDictTagged,
       surf2vol,
       surf2vol_execute,
       surf2vol_params,

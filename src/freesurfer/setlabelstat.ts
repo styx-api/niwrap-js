@@ -11,18 +11,18 @@ const SETLABELSTAT_METADATA: Metadata = {
 };
 
 
-interface SetlabelstatParameters {
+interface SetlabelstatParamsDict {
     "@type"?: "freesurfer/setlabelstat";
     "inlabelfile": InputPathType;
     "outlabelfile": InputPathType;
     "statval": number;
     "help": boolean;
 }
-type SetlabelstatParametersTagged = Required<Pick<SetlabelstatParameters, '@type'>> & SetlabelstatParameters;
+type SetlabelstatParamsDictTagged = Required<Pick<SetlabelstatParamsDict, '@type'>> & SetlabelstatParamsDict;
 
 
 /**
- * Output object returned when calling `SetlabelstatParameters(...)`.
+ * Output object returned when calling `SetlabelstatParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function setlabelstat_params(
     outlabelfile: InputPathType,
     statval: number,
     help: boolean = false,
-): SetlabelstatParametersTagged {
+): SetlabelstatParamsDictTagged {
     const params = {
         "@type": "freesurfer/setlabelstat" as const,
         "inlabelfile": inlabelfile,
@@ -74,7 +74,7 @@ function setlabelstat_params(
  * @returns Command-line arguments.
  */
 function setlabelstat_cargs(
-    params: SetlabelstatParameters,
+    params: SetlabelstatParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -107,7 +107,7 @@ function setlabelstat_cargs(
  * @returns Outputs object.
  */
 function setlabelstat_outputs(
-    params: SetlabelstatParameters,
+    params: SetlabelstatParamsDict,
     execution: Execution,
 ): SetlabelstatOutputs {
     const ret: SetlabelstatOutputs = {
@@ -133,7 +133,7 @@ function setlabelstat_outputs(
  * @returns NamedTuple of outputs (described in `SetlabelstatOutputs`).
  */
 function setlabelstat_execute(
-    params: SetlabelstatParameters,
+    params: SetlabelstatParamsDict,
     runner: Runner | null = null,
 ): SetlabelstatOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function setlabelstat(
 export {
       SETLABELSTAT_METADATA,
       SetlabelstatOutputs,
+      SetlabelstatParamsDict,
+      SetlabelstatParamsDictTagged,
       setlabelstat,
       setlabelstat_execute,
       setlabelstat_params,

@@ -11,18 +11,18 @@ const MRI_MC_METADATA: Metadata = {
 };
 
 
-interface MriMcParameters {
+interface MriMcParamsDict {
     "@type"?: "freesurfer/mri_mc";
     "input_volume": InputPathType;
     "label_value": number;
     "output_surface": string;
     "connectivity"?: number | null | undefined;
 }
-type MriMcParametersTagged = Required<Pick<MriMcParameters, '@type'>> & MriMcParameters;
+type MriMcParamsDictTagged = Required<Pick<MriMcParamsDict, '@type'>> & MriMcParamsDict;
 
 
 /**
- * Output object returned when calling `MriMcParameters(...)`.
+ * Output object returned when calling `MriMcParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_mc_params(
     label_value: number,
     output_surface: string,
     connectivity: number | null = null,
-): MriMcParametersTagged {
+): MriMcParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_mc" as const,
         "input_volume": input_volume,
@@ -76,7 +76,7 @@ function mri_mc_params(
  * @returns Command-line arguments.
  */
 function mri_mc_cargs(
-    params: MriMcParameters,
+    params: MriMcParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -99,7 +99,7 @@ function mri_mc_cargs(
  * @returns Outputs object.
  */
 function mri_mc_outputs(
-    params: MriMcParameters,
+    params: MriMcParamsDict,
     execution: Execution,
 ): MriMcOutputs {
     const ret: MriMcOutputs = {
@@ -125,7 +125,7 @@ function mri_mc_outputs(
  * @returns NamedTuple of outputs (described in `MriMcOutputs`).
  */
 function mri_mc_execute(
-    params: MriMcParameters,
+    params: MriMcParamsDict,
     runner: Runner | null = null,
 ): MriMcOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function mri_mc(
 export {
       MRI_MC_METADATA,
       MriMcOutputs,
+      MriMcParamsDict,
+      MriMcParamsDictTagged,
       mri_mc,
       mri_mc_execute,
       mri_mc_params,

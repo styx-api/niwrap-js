@@ -11,18 +11,18 @@ const MRI_LABEL_HISTO_METADATA: Metadata = {
 };
 
 
-interface MriLabelHistoParameters {
+interface MriLabelHistoParamsDict {
     "@type"?: "freesurfer/mri_label_histo";
     "t1_volume": InputPathType;
     "labeled_volume": InputPathType;
     "label": number;
     "output": string;
 }
-type MriLabelHistoParametersTagged = Required<Pick<MriLabelHistoParameters, '@type'>> & MriLabelHistoParameters;
+type MriLabelHistoParamsDictTagged = Required<Pick<MriLabelHistoParamsDict, '@type'>> & MriLabelHistoParamsDict;
 
 
 /**
- * Output object returned when calling `MriLabelHistoParameters(...)`.
+ * Output object returned when calling `MriLabelHistoParamsDict(...)`.
  *
  * @interface
  */
@@ -53,7 +53,7 @@ function mri_label_histo_params(
     labeled_volume: InputPathType,
     label: number,
     output: string,
-): MriLabelHistoParametersTagged {
+): MriLabelHistoParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_label_histo" as const,
         "t1_volume": t1_volume,
@@ -74,7 +74,7 @@ function mri_label_histo_params(
  * @returns Command-line arguments.
  */
 function mri_label_histo_cargs(
-    params: MriLabelHistoParameters,
+    params: MriLabelHistoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function mri_label_histo_cargs(
  * @returns Outputs object.
  */
 function mri_label_histo_outputs(
-    params: MriLabelHistoParameters,
+    params: MriLabelHistoParamsDict,
     execution: Execution,
 ): MriLabelHistoOutputs {
     const ret: MriLabelHistoOutputs = {
@@ -122,7 +122,7 @@ function mri_label_histo_outputs(
  * @returns NamedTuple of outputs (described in `MriLabelHistoOutputs`).
  */
 function mri_label_histo_execute(
-    params: MriLabelHistoParameters,
+    params: MriLabelHistoParamsDict,
     runner: Runner | null = null,
 ): MriLabelHistoOutputs {
     runner = runner || getGlobalRunner();
@@ -167,6 +167,8 @@ function mri_label_histo(
 export {
       MRI_LABEL_HISTO_METADATA,
       MriLabelHistoOutputs,
+      MriLabelHistoParamsDict,
+      MriLabelHistoParamsDictTagged,
       mri_label_histo,
       mri_label_histo_execute,
       mri_label_histo_params,

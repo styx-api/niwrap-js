@@ -11,7 +11,7 @@ const V_3D_ZEROPAD_METADATA: Metadata = {
 };
 
 
-interface V3dZeropadParameters {
+interface V3dZeropadParamsDict {
     "@type"?: "afni/3dZeropad";
     "dataset": InputPathType;
     "I"?: number | null | undefined;
@@ -29,11 +29,11 @@ interface V3dZeropadParameters {
     "master_dataset"?: InputPathType | null | undefined;
     "prefix"?: string | null | undefined;
 }
-type V3dZeropadParametersTagged = Required<Pick<V3dZeropadParameters, '@type'>> & V3dZeropadParameters;
+type V3dZeropadParamsDictTagged = Required<Pick<V3dZeropadParamsDict, '@type'>> & V3dZeropadParamsDict;
 
 
 /**
- * Output object returned when calling `V3dZeropadParameters(...)`.
+ * Output object returned when calling `V3dZeropadParamsDict(...)`.
  *
  * @interface
  */
@@ -90,7 +90,7 @@ function v_3d_zeropad_params(
     mm_flag: boolean = false,
     master_dataset: InputPathType | null = null,
     prefix: string | null = null,
-): V3dZeropadParametersTagged {
+): V3dZeropadParamsDictTagged {
     const params = {
         "@type": "afni/3dZeropad" as const,
         "dataset": dataset,
@@ -146,7 +146,7 @@ function v_3d_zeropad_params(
  * @returns Command-line arguments.
  */
 function v_3d_zeropad_cargs(
-    params: V3dZeropadParameters,
+    params: V3dZeropadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -243,7 +243,7 @@ function v_3d_zeropad_cargs(
  * @returns Outputs object.
  */
 function v_3d_zeropad_outputs(
-    params: V3dZeropadParameters,
+    params: V3dZeropadParamsDict,
     execution: Execution,
 ): V3dZeropadOutputs {
     const ret: V3dZeropadOutputs = {
@@ -270,7 +270,7 @@ function v_3d_zeropad_outputs(
  * @returns NamedTuple of outputs (described in `V3dZeropadOutputs`).
  */
 function v_3d_zeropad_execute(
-    params: V3dZeropadParameters,
+    params: V3dZeropadParamsDict,
     runner: Runner | null = null,
 ): V3dZeropadOutputs {
     runner = runner || getGlobalRunner();
@@ -336,6 +336,8 @@ function v_3d_zeropad(
 
 export {
       V3dZeropadOutputs,
+      V3dZeropadParamsDict,
+      V3dZeropadParamsDictTagged,
       V_3D_ZEROPAD_METADATA,
       v_3d_zeropad,
       v_3d_zeropad_execute,

@@ -11,7 +11,7 @@ const V_3DMASK_TOOL_METADATA: Metadata = {
 };
 
 
-interface V3dmaskToolParameters {
+interface V3dmaskToolParamsDict {
     "@type"?: "afni/3dmask_tool";
     "count": boolean;
     "datum"?: "byte" | "short" | "float" | null | undefined;
@@ -27,11 +27,11 @@ interface V3dmaskToolParameters {
     "union": boolean;
     "verbose"?: number | null | undefined;
 }
-type V3dmaskToolParametersTagged = Required<Pick<V3dmaskToolParameters, '@type'>> & V3dmaskToolParameters;
+type V3dmaskToolParamsDictTagged = Required<Pick<V3dmaskToolParamsDict, '@type'>> & V3dmaskToolParamsDict;
 
 
 /**
- * Output object returned when calling `V3dmaskToolParameters(...)`.
+ * Output object returned when calling `V3dmaskToolParamsDict(...)`.
  *
  * @interface
  */
@@ -84,7 +84,7 @@ function v_3dmask_tool_params(
     outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     union: boolean = false,
     verbose: number | null = null,
-): V3dmaskToolParametersTagged {
+): V3dmaskToolParamsDictTagged {
     const params = {
         "@type": "afni/3dmask_tool" as const,
         "count": count,
@@ -130,7 +130,7 @@ function v_3dmask_tool_params(
  * @returns Command-line arguments.
  */
 function v_3dmask_tool_cargs(
-    params: V3dmaskToolParameters,
+    params: V3dmaskToolParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -206,7 +206,7 @@ function v_3dmask_tool_cargs(
  * @returns Outputs object.
  */
 function v_3dmask_tool_outputs(
-    params: V3dmaskToolParameters,
+    params: V3dmaskToolParamsDict,
     execution: Execution,
 ): V3dmaskToolOutputs {
     const ret: V3dmaskToolOutputs = {
@@ -233,7 +233,7 @@ function v_3dmask_tool_outputs(
  * @returns NamedTuple of outputs (described in `V3dmaskToolOutputs`).
  */
 function v_3dmask_tool_execute(
-    params: V3dmaskToolParameters,
+    params: V3dmaskToolParamsDict,
     runner: Runner | null = null,
 ): V3dmaskToolOutputs {
     runner = runner || getGlobalRunner();
@@ -295,6 +295,8 @@ function v_3dmask_tool(
 
 export {
       V3dmaskToolOutputs,
+      V3dmaskToolParamsDict,
+      V3dmaskToolParamsDictTagged,
       V_3DMASK_TOOL_METADATA,
       v_3dmask_tool,
       v_3dmask_tool_execute,

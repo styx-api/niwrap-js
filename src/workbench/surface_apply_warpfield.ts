@@ -10,18 +10,18 @@ const SURFACE_APPLY_WARPFIELD_METADATA: Metadata = {
 };
 
 
-interface SurfaceApplyWarpfieldParameters {
+interface SurfaceApplyWarpfieldParamsDict {
     "@type"?: "workbench/surface-apply-warpfield";
     "out-surf": string;
     "forward-warp"?: string | null | undefined;
     "in-surf": InputPathType;
     "warpfield": string;
 }
-type SurfaceApplyWarpfieldParametersTagged = Required<Pick<SurfaceApplyWarpfieldParameters, '@type'>> & SurfaceApplyWarpfieldParameters;
+type SurfaceApplyWarpfieldParamsDictTagged = Required<Pick<SurfaceApplyWarpfieldParamsDict, '@type'>> & SurfaceApplyWarpfieldParamsDict;
 
 
 /**
- * Output object returned when calling `SurfaceApplyWarpfieldParameters(...)`.
+ * Output object returned when calling `SurfaceApplyWarpfieldParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function surface_apply_warpfield_params(
     forward_warp: string | null,
     in_surf: InputPathType,
     warpfield: string,
-): SurfaceApplyWarpfieldParametersTagged {
+): SurfaceApplyWarpfieldParamsDictTagged {
     const params = {
         "@type": "workbench/surface-apply-warpfield" as const,
         "out-surf": out_surf,
@@ -77,7 +77,7 @@ function surface_apply_warpfield_params(
  * @returns Command-line arguments.
  */
 function surface_apply_warpfield_cargs(
-    params: SurfaceApplyWarpfieldParameters,
+    params: SurfaceApplyWarpfieldParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function surface_apply_warpfield_cargs(
  * @returns Outputs object.
  */
 function surface_apply_warpfield_outputs(
-    params: SurfaceApplyWarpfieldParameters,
+    params: SurfaceApplyWarpfieldParamsDict,
     execution: Execution,
 ): SurfaceApplyWarpfieldOutputs {
     const ret: SurfaceApplyWarpfieldOutputs = {
@@ -129,7 +129,7 @@ function surface_apply_warpfield_outputs(
  * @returns NamedTuple of outputs (described in `SurfaceApplyWarpfieldOutputs`).
  */
 function surface_apply_warpfield_execute(
-    params: SurfaceApplyWarpfieldParameters,
+    params: SurfaceApplyWarpfieldParamsDict,
     runner: Runner | null = null,
 ): SurfaceApplyWarpfieldOutputs {
     runner = runner || getGlobalRunner();
@@ -174,6 +174,8 @@ function surface_apply_warpfield(
 export {
       SURFACE_APPLY_WARPFIELD_METADATA,
       SurfaceApplyWarpfieldOutputs,
+      SurfaceApplyWarpfieldParamsDict,
+      SurfaceApplyWarpfieldParamsDictTagged,
       surface_apply_warpfield,
       surface_apply_warpfield_execute,
       surface_apply_warpfield_params,

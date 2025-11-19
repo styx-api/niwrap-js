@@ -11,15 +11,15 @@ const MORPH_RGB_LH_METADATA: Metadata = {
 };
 
 
-interface MorphRgbLhParameters {
+interface MorphRgbLhParamsDict {
     "@type"?: "freesurfer/morph_rgb-lh";
     "subject_id": string;
 }
-type MorphRgbLhParametersTagged = Required<Pick<MorphRgbLhParameters, '@type'>> & MorphRgbLhParameters;
+type MorphRgbLhParamsDictTagged = Required<Pick<MorphRgbLhParamsDict, '@type'>> & MorphRgbLhParamsDict;
 
 
 /**
- * Output object returned when calling `MorphRgbLhParameters(...)`.
+ * Output object returned when calling `MorphRgbLhParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MorphRgbLhOutputs {
  */
 function morph_rgb_lh_params(
     subject_id: string,
-): MorphRgbLhParametersTagged {
+): MorphRgbLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_rgb-lh" as const,
         "subject_id": subject_id,
@@ -58,7 +58,7 @@ function morph_rgb_lh_params(
  * @returns Command-line arguments.
  */
 function morph_rgb_lh_cargs(
-    params: MorphRgbLhParameters,
+    params: MorphRgbLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -80,7 +80,7 @@ function morph_rgb_lh_cargs(
  * @returns Outputs object.
  */
 function morph_rgb_lh_outputs(
-    params: MorphRgbLhParameters,
+    params: MorphRgbLhParamsDict,
     execution: Execution,
 ): MorphRgbLhOutputs {
     const ret: MorphRgbLhOutputs = {
@@ -105,7 +105,7 @@ function morph_rgb_lh_outputs(
  * @returns NamedTuple of outputs (described in `MorphRgbLhOutputs`).
  */
 function morph_rgb_lh_execute(
-    params: MorphRgbLhParameters,
+    params: MorphRgbLhParamsDict,
     runner: Runner | null = null,
 ): MorphRgbLhOutputs {
     runner = runner || getGlobalRunner();
@@ -144,6 +144,8 @@ function morph_rgb_lh(
 export {
       MORPH_RGB_LH_METADATA,
       MorphRgbLhOutputs,
+      MorphRgbLhParamsDict,
+      MorphRgbLhParamsDictTagged,
       morph_rgb_lh,
       morph_rgb_lh_execute,
       morph_rgb_lh_params,

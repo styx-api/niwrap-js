@@ -11,15 +11,15 @@ const FIDUCIALS_CALIBRATION_METADATA: Metadata = {
 };
 
 
-interface FiducialsCalibrationParameters {
+interface FiducialsCalibrationParamsDict {
     "@type"?: "freesurfer/fiducials_calibration";
     "qt_plugin_installation"?: string | null | undefined;
 }
-type FiducialsCalibrationParametersTagged = Required<Pick<FiducialsCalibrationParameters, '@type'>> & FiducialsCalibrationParameters;
+type FiducialsCalibrationParamsDictTagged = Required<Pick<FiducialsCalibrationParamsDict, '@type'>> & FiducialsCalibrationParamsDict;
 
 
 /**
- * Output object returned when calling `FiducialsCalibrationParameters(...)`.
+ * Output object returned when calling `FiducialsCalibrationParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface FiducialsCalibrationOutputs {
  */
 function fiducials_calibration_params(
     qt_plugin_installation: string | null = null,
-): FiducialsCalibrationParametersTagged {
+): FiducialsCalibrationParamsDictTagged {
     const params = {
         "@type": "freesurfer/fiducials_calibration" as const,
     };
@@ -60,7 +60,7 @@ function fiducials_calibration_params(
  * @returns Command-line arguments.
  */
 function fiducials_calibration_cargs(
-    params: FiducialsCalibrationParameters,
+    params: FiducialsCalibrationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function fiducials_calibration_cargs(
  * @returns Outputs object.
  */
 function fiducials_calibration_outputs(
-    params: FiducialsCalibrationParameters,
+    params: FiducialsCalibrationParamsDict,
     execution: Execution,
 ): FiducialsCalibrationOutputs {
     const ret: FiducialsCalibrationOutputs = {
@@ -106,7 +106,7 @@ function fiducials_calibration_outputs(
  * @returns NamedTuple of outputs (described in `FiducialsCalibrationOutputs`).
  */
 function fiducials_calibration_execute(
-    params: FiducialsCalibrationParameters,
+    params: FiducialsCalibrationParamsDict,
     runner: Runner | null = null,
 ): FiducialsCalibrationOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function fiducials_calibration(
 export {
       FIDUCIALS_CALIBRATION_METADATA,
       FiducialsCalibrationOutputs,
+      FiducialsCalibrationParamsDict,
+      FiducialsCalibrationParamsDictTagged,
       fiducials_calibration,
       fiducials_calibration_execute,
       fiducials_calibration_params,

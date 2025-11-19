@@ -11,15 +11,15 @@ const MORPH_ONLY_SUBJECT_METADATA: Metadata = {
 };
 
 
-interface MorphOnlySubjectParameters {
+interface MorphOnlySubjectParamsDict {
     "@type"?: "freesurfer/morph_only_subject";
     "placeholder_input"?: string | null | undefined;
 }
-type MorphOnlySubjectParametersTagged = Required<Pick<MorphOnlySubjectParameters, '@type'>> & MorphOnlySubjectParameters;
+type MorphOnlySubjectParamsDictTagged = Required<Pick<MorphOnlySubjectParamsDict, '@type'>> & MorphOnlySubjectParamsDict;
 
 
 /**
- * Output object returned when calling `MorphOnlySubjectParameters(...)`.
+ * Output object returned when calling `MorphOnlySubjectParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface MorphOnlySubjectOutputs {
  */
 function morph_only_subject_params(
     placeholder_input: string | null = null,
-): MorphOnlySubjectParametersTagged {
+): MorphOnlySubjectParamsDictTagged {
     const params = {
         "@type": "freesurfer/morph_only_subject" as const,
     };
@@ -60,7 +60,7 @@ function morph_only_subject_params(
  * @returns Command-line arguments.
  */
 function morph_only_subject_cargs(
-    params: MorphOnlySubjectParameters,
+    params: MorphOnlySubjectParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -81,7 +81,7 @@ function morph_only_subject_cargs(
  * @returns Outputs object.
  */
 function morph_only_subject_outputs(
-    params: MorphOnlySubjectParameters,
+    params: MorphOnlySubjectParamsDict,
     execution: Execution,
 ): MorphOnlySubjectOutputs {
     const ret: MorphOnlySubjectOutputs = {
@@ -106,7 +106,7 @@ function morph_only_subject_outputs(
  * @returns NamedTuple of outputs (described in `MorphOnlySubjectOutputs`).
  */
 function morph_only_subject_execute(
-    params: MorphOnlySubjectParameters,
+    params: MorphOnlySubjectParamsDict,
     runner: Runner | null = null,
 ): MorphOnlySubjectOutputs {
     runner = runner || getGlobalRunner();
@@ -145,6 +145,8 @@ function morph_only_subject(
 export {
       MORPH_ONLY_SUBJECT_METADATA,
       MorphOnlySubjectOutputs,
+      MorphOnlySubjectParamsDict,
+      MorphOnlySubjectParamsDictTagged,
       morph_only_subject,
       morph_only_subject_execute,
       morph_only_subject_params,

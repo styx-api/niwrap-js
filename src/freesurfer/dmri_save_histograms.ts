@@ -11,7 +11,7 @@ const DMRI_SAVE_HISTOGRAMS_METADATA: Metadata = {
 };
 
 
-interface DmriSaveHistogramsParameters {
+interface DmriSaveHistogramsParamsDict {
     "@type"?: "freesurfer/dmri_saveHistograms";
     "parcellation": InputPathType;
     "number_of_bundles": number;
@@ -19,11 +19,11 @@ interface DmriSaveHistogramsParameters {
     "output_csv": string;
     "brain_bundle_flag": boolean;
 }
-type DmriSaveHistogramsParametersTagged = Required<Pick<DmriSaveHistogramsParameters, '@type'>> & DmriSaveHistogramsParameters;
+type DmriSaveHistogramsParamsDictTagged = Required<Pick<DmriSaveHistogramsParamsDict, '@type'>> & DmriSaveHistogramsParamsDict;
 
 
 /**
- * Output object returned when calling `DmriSaveHistogramsParameters(...)`.
+ * Output object returned when calling `DmriSaveHistogramsParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function dmri_save_histograms_params(
     vtk_bundle_list: Array<InputPathType>,
     output_csv: string,
     brain_bundle_flag: boolean = false,
-): DmriSaveHistogramsParametersTagged {
+): DmriSaveHistogramsParamsDictTagged {
     const params = {
         "@type": "freesurfer/dmri_saveHistograms" as const,
         "parcellation": parcellation,
@@ -78,7 +78,7 @@ function dmri_save_histograms_params(
  * @returns Command-line arguments.
  */
 function dmri_save_histograms_cargs(
-    params: DmriSaveHistogramsParameters,
+    params: DmriSaveHistogramsParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -112,7 +112,7 @@ function dmri_save_histograms_cargs(
  * @returns Outputs object.
  */
 function dmri_save_histograms_outputs(
-    params: DmriSaveHistogramsParameters,
+    params: DmriSaveHistogramsParamsDict,
     execution: Execution,
 ): DmriSaveHistogramsOutputs {
     const ret: DmriSaveHistogramsOutputs = {
@@ -138,7 +138,7 @@ function dmri_save_histograms_outputs(
  * @returns NamedTuple of outputs (described in `DmriSaveHistogramsOutputs`).
  */
 function dmri_save_histograms_execute(
-    params: DmriSaveHistogramsParameters,
+    params: DmriSaveHistogramsParamsDict,
     runner: Runner | null = null,
 ): DmriSaveHistogramsOutputs {
     runner = runner || getGlobalRunner();
@@ -185,6 +185,8 @@ function dmri_save_histograms(
 export {
       DMRI_SAVE_HISTOGRAMS_METADATA,
       DmriSaveHistogramsOutputs,
+      DmriSaveHistogramsParamsDict,
+      DmriSaveHistogramsParamsDictTagged,
       dmri_save_histograms,
       dmri_save_histograms_execute,
       dmri_save_histograms_params,

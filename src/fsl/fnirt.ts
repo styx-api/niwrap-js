@@ -11,7 +11,7 @@ const FNIRT_METADATA: Metadata = {
 };
 
 
-interface FnirtParameters {
+interface FnirtParamsDict {
     "@type"?: "fsl/fnirt";
     "affine_file"?: InputPathType | null | undefined;
     "config_file"?: "T1_2_MNI152_2mm" | "FA_2_FMRIB58_1mm" | null | undefined;
@@ -25,11 +25,11 @@ interface FnirtParameters {
     "refmask_file"?: InputPathType | null | undefined;
     "warped_file"?: InputPathType | null | undefined;
 }
-type FnirtParametersTagged = Required<Pick<FnirtParameters, '@type'>> & FnirtParameters;
+type FnirtParamsDictTagged = Required<Pick<FnirtParamsDict, '@type'>> & FnirtParamsDict;
 
 
 /**
- * Output object returned when calling `FnirtParameters(...)`.
+ * Output object returned when calling `FnirtParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function fnirt_params(
     modulatedref_file: string | null = null,
     refmask_file: InputPathType | null = null,
     warped_file: InputPathType | null = null,
-): FnirtParametersTagged {
+): FnirtParamsDictTagged {
     const params = {
         "@type": "fsl/fnirt" as const,
         "in_file": in_file,
@@ -140,7 +140,7 @@ function fnirt_params(
  * @returns Command-line arguments.
  */
 function fnirt_cargs(
-    params: FnirtParameters,
+    params: FnirtParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -187,7 +187,7 @@ function fnirt_cargs(
  * @returns Outputs object.
  */
 function fnirt_outputs(
-    params: FnirtParameters,
+    params: FnirtParamsDict,
     execution: Execution,
 ): FnirtOutputs {
     const ret: FnirtOutputs = {
@@ -218,7 +218,7 @@ function fnirt_outputs(
  * @returns NamedTuple of outputs (described in `FnirtOutputs`).
  */
 function fnirt_execute(
-    params: FnirtParameters,
+    params: FnirtParamsDict,
     runner: Runner | null = null,
 ): FnirtOutputs {
     runner = runner || getGlobalRunner();
@@ -277,6 +277,8 @@ function fnirt(
 export {
       FNIRT_METADATA,
       FnirtOutputs,
+      FnirtParamsDict,
+      FnirtParamsDictTagged,
       fnirt,
       fnirt_execute,
       fnirt_params,

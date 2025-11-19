@@ -10,18 +10,18 @@ const LABEL_MASK_METADATA: Metadata = {
 };
 
 
-interface LabelMaskParameters {
+interface LabelMaskParamsDict {
     "@type"?: "workbench/label-mask";
     "label-out": string;
     "column"?: string | null | undefined;
     "label": InputPathType;
     "mask": InputPathType;
 }
-type LabelMaskParametersTagged = Required<Pick<LabelMaskParameters, '@type'>> & LabelMaskParameters;
+type LabelMaskParamsDictTagged = Required<Pick<LabelMaskParamsDict, '@type'>> & LabelMaskParamsDict;
 
 
 /**
- * Output object returned when calling `LabelMaskParameters(...)`.
+ * Output object returned when calling `LabelMaskParamsDict(...)`.
  *
  * @interface
  */
@@ -54,7 +54,7 @@ function label_mask_params(
     column: string | null,
     label: InputPathType,
     mask: InputPathType,
-): LabelMaskParametersTagged {
+): LabelMaskParamsDictTagged {
     const params = {
         "@type": "workbench/label-mask" as const,
         "label-out": label_out,
@@ -77,7 +77,7 @@ function label_mask_params(
  * @returns Command-line arguments.
  */
 function label_mask_cargs(
-    params: LabelMaskParameters,
+    params: LabelMaskParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function label_mask_cargs(
  * @returns Outputs object.
  */
 function label_mask_outputs(
-    params: LabelMaskParameters,
+    params: LabelMaskParamsDict,
     execution: Execution,
 ): LabelMaskOutputs {
     const ret: LabelMaskOutputs = {
@@ -127,7 +127,7 @@ function label_mask_outputs(
  * @returns NamedTuple of outputs (described in `LabelMaskOutputs`).
  */
 function label_mask_execute(
-    params: LabelMaskParameters,
+    params: LabelMaskParamsDict,
     runner: Runner | null = null,
 ): LabelMaskOutputs {
     runner = runner || getGlobalRunner();
@@ -170,6 +170,8 @@ function label_mask(
 export {
       LABEL_MASK_METADATA,
       LabelMaskOutputs,
+      LabelMaskParamsDict,
+      LabelMaskParamsDictTagged,
       label_mask,
       label_mask_execute,
       label_mask_params,

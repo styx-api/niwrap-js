@@ -11,7 +11,7 @@ const MRIS_VOLMASK_VTK_METADATA: Metadata = {
 };
 
 
-interface MrisVolmaskVtkParameters {
+interface MrisVolmaskVtkParamsDict {
     "@type"?: "freesurfer/mris_volmask_vtk";
     "cap_distance"?: number | null | undefined;
     "label_background"?: number | null | undefined;
@@ -32,11 +32,11 @@ interface MrisVolmaskVtkParameters {
     "save_ribbon": boolean;
     "io_param": string;
 }
-type MrisVolmaskVtkParametersTagged = Required<Pick<MrisVolmaskVtkParameters, '@type'>> & MrisVolmaskVtkParameters;
+type MrisVolmaskVtkParamsDictTagged = Required<Pick<MrisVolmaskVtkParamsDict, '@type'>> & MrisVolmaskVtkParamsDict;
 
 
 /**
- * Output object returned when calling `MrisVolmaskVtkParameters(...)`.
+ * Output object returned when calling `MrisVolmaskVtkParamsDict(...)`.
  *
  * @interface
  */
@@ -123,7 +123,7 @@ function mris_volmask_vtk_params(
     parallel: boolean = false,
     edit_aseg: boolean = false,
     save_ribbon: boolean = false,
-): MrisVolmaskVtkParametersTagged {
+): MrisVolmaskVtkParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_volmask_vtk" as const,
         "save_distance": save_distance,
@@ -180,7 +180,7 @@ function mris_volmask_vtk_params(
  * @returns Command-line arguments.
  */
 function mris_volmask_vtk_cargs(
-    params: MrisVolmaskVtkParameters,
+    params: MrisVolmaskVtkParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -283,7 +283,7 @@ function mris_volmask_vtk_cargs(
  * @returns Outputs object.
  */
 function mris_volmask_vtk_outputs(
-    params: MrisVolmaskVtkParameters,
+    params: MrisVolmaskVtkParamsDict,
     execution: Execution,
 ): MrisVolmaskVtkOutputs {
     const ret: MrisVolmaskVtkOutputs = {
@@ -316,7 +316,7 @@ function mris_volmask_vtk_outputs(
  * @returns NamedTuple of outputs (described in `MrisVolmaskVtkOutputs`).
  */
 function mris_volmask_vtk_execute(
-    params: MrisVolmaskVtkParameters,
+    params: MrisVolmaskVtkParamsDict,
     runner: Runner | null = null,
 ): MrisVolmaskVtkOutputs {
     runner = runner || getGlobalRunner();
@@ -389,6 +389,8 @@ function mris_volmask_vtk(
 export {
       MRIS_VOLMASK_VTK_METADATA,
       MrisVolmaskVtkOutputs,
+      MrisVolmaskVtkParamsDict,
+      MrisVolmaskVtkParamsDictTagged,
       mris_volmask_vtk,
       mris_volmask_vtk_execute,
       mris_volmask_vtk_params,

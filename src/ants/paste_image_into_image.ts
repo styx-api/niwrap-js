@@ -11,7 +11,7 @@ const PASTE_IMAGE_INTO_IMAGE_METADATA: Metadata = {
 };
 
 
-interface PasteImageIntoImageParameters {
+interface PasteImageIntoImageParamsDict {
     "@type"?: "ants/PasteImageIntoImage";
     "image_dimension": number;
     "input_canvas_image": InputPathType;
@@ -22,11 +22,11 @@ interface PasteImageIntoImageParameters {
     "paint_over_non_background_voxels"?: 0 | 1 | 2 | null | undefined;
     "conflict_label"?: number | null | undefined;
 }
-type PasteImageIntoImageParametersTagged = Required<Pick<PasteImageIntoImageParameters, '@type'>> & PasteImageIntoImageParameters;
+type PasteImageIntoImageParamsDictTagged = Required<Pick<PasteImageIntoImageParamsDict, '@type'>> & PasteImageIntoImageParamsDict;
 
 
 /**
- * Output object returned when calling `PasteImageIntoImageParameters(...)`.
+ * Output object returned when calling `PasteImageIntoImageParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function paste_image_into_image_params(
     background_label: number | null = null,
     paint_over_non_background_voxels: 0 | 1 | 2 | null = null,
     conflict_label: number | null = null,
-): PasteImageIntoImageParametersTagged {
+): PasteImageIntoImageParamsDictTagged {
     const params = {
         "@type": "ants/PasteImageIntoImage" as const,
         "image_dimension": image_dimension,
@@ -96,7 +96,7 @@ function paste_image_into_image_params(
  * @returns Command-line arguments.
  */
 function paste_image_into_image_cargs(
-    params: PasteImageIntoImageParameters,
+    params: PasteImageIntoImageParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -128,7 +128,7 @@ function paste_image_into_image_cargs(
  * @returns Outputs object.
  */
 function paste_image_into_image_outputs(
-    params: PasteImageIntoImageParameters,
+    params: PasteImageIntoImageParamsDict,
     execution: Execution,
 ): PasteImageIntoImageOutputs {
     const ret: PasteImageIntoImageOutputs = {
@@ -154,7 +154,7 @@ function paste_image_into_image_outputs(
  * @returns NamedTuple of outputs (described in `PasteImageIntoImageOutputs`).
  */
 function paste_image_into_image_execute(
-    params: PasteImageIntoImageParameters,
+    params: PasteImageIntoImageParamsDict,
     runner: Runner | null = null,
 ): PasteImageIntoImageOutputs {
     runner = runner || getGlobalRunner();
@@ -207,6 +207,8 @@ function paste_image_into_image(
 export {
       PASTE_IMAGE_INTO_IMAGE_METADATA,
       PasteImageIntoImageOutputs,
+      PasteImageIntoImageParamsDict,
+      PasteImageIntoImageParamsDictTagged,
       paste_image_into_image,
       paste_image_into_image_execute,
       paste_image_into_image_params,

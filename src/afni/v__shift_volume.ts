@@ -11,7 +11,7 @@ const V__SHIFT_VOLUME_METADATA: Metadata = {
 };
 
 
-interface VShiftVolumeParameters {
+interface VShiftVolumeParamsDict {
     "@type"?: "afni/@Shift_Volume";
     "rai_shift_vector"?: Array<number> | null | undefined;
     "mni_anat_to_mni": boolean;
@@ -20,11 +20,11 @@ interface VShiftVolumeParameters {
     "no_cp": boolean;
     "prefix": string;
 }
-type VShiftVolumeParametersTagged = Required<Pick<VShiftVolumeParameters, '@type'>> & VShiftVolumeParameters;
+type VShiftVolumeParamsDictTagged = Required<Pick<VShiftVolumeParamsDict, '@type'>> & VShiftVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `VShiftVolumeParameters(...)`.
+ * Output object returned when calling `VShiftVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -59,7 +59,7 @@ function v__shift_volume_params(
     mni_anat_to_mni: boolean = false,
     mni_to_mni_anat: boolean = false,
     no_cp: boolean = false,
-): VShiftVolumeParametersTagged {
+): VShiftVolumeParamsDictTagged {
     const params = {
         "@type": "afni/@Shift_Volume" as const,
         "mni_anat_to_mni": mni_anat_to_mni,
@@ -84,7 +84,7 @@ function v__shift_volume_params(
  * @returns Command-line arguments.
  */
 function v__shift_volume_cargs(
-    params: VShiftVolumeParameters,
+    params: VShiftVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function v__shift_volume_cargs(
  * @returns Outputs object.
  */
 function v__shift_volume_outputs(
-    params: VShiftVolumeParameters,
+    params: VShiftVolumeParamsDict,
     execution: Execution,
 ): VShiftVolumeOutputs {
     const ret: VShiftVolumeOutputs = {
@@ -151,7 +151,7 @@ function v__shift_volume_outputs(
  * @returns NamedTuple of outputs (described in `VShiftVolumeOutputs`).
  */
 function v__shift_volume_execute(
-    params: VShiftVolumeParameters,
+    params: VShiftVolumeParamsDict,
     runner: Runner | null = null,
 ): VShiftVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function v__shift_volume(
 
 export {
       VShiftVolumeOutputs,
+      VShiftVolumeParamsDict,
+      VShiftVolumeParamsDictTagged,
       V__SHIFT_VOLUME_METADATA,
       v__shift_volume,
       v__shift_volume_execute,

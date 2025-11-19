@@ -10,21 +10,21 @@ const ANNOTATION_RESAMPLE_METADATA: Metadata = {
 };
 
 
-interface AnnotationResampleSurfacePairParameters {
+interface AnnotationResampleSurfacePairParamsDict {
     "@type"?: "surface-pair";
     "source-surface": InputPathType;
     "target-surface": InputPathType;
 }
-type AnnotationResampleSurfacePairParametersTagged = Required<Pick<AnnotationResampleSurfacePairParameters, '@type'>> & AnnotationResampleSurfacePairParameters;
+type AnnotationResampleSurfacePairParamsDictTagged = Required<Pick<AnnotationResampleSurfacePairParamsDict, '@type'>> & AnnotationResampleSurfacePairParamsDict;
 
 
-interface AnnotationResampleParameters {
+interface AnnotationResampleParamsDict {
     "@type"?: "workbench/annotation-resample";
-    "surface-pair"?: Array<AnnotationResampleSurfacePairParameters> | null | undefined;
+    "surface-pair"?: Array<AnnotationResampleSurfacePairParamsDict> | null | undefined;
     "annotation-in": InputPathType;
     "annotation-out": string;
 }
-type AnnotationResampleParametersTagged = Required<Pick<AnnotationResampleParameters, '@type'>> & AnnotationResampleParameters;
+type AnnotationResampleParamsDictTagged = Required<Pick<AnnotationResampleParamsDict, '@type'>> & AnnotationResampleParamsDict;
 
 
 /**
@@ -35,10 +35,10 @@ type AnnotationResampleParametersTagged = Required<Pick<AnnotationResampleParame
  *
  * @returns Parameter dictionary
  */
-function annotation_resample_surface_pair_params(
+function annotation_resample_surface_pair(
     source_surface: InputPathType,
     target_surface: InputPathType,
-): AnnotationResampleSurfacePairParametersTagged {
+): AnnotationResampleSurfacePairParamsDictTagged {
     const params = {
         "@type": "surface-pair" as const,
         "source-surface": source_surface,
@@ -57,7 +57,7 @@ function annotation_resample_surface_pair_params(
  * @returns Command-line arguments.
  */
 function annotation_resample_surface_pair_cargs(
-    params: AnnotationResampleSurfacePairParameters,
+    params: AnnotationResampleSurfacePairParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -71,7 +71,7 @@ function annotation_resample_surface_pair_cargs(
 
 
 /**
- * Output object returned when calling `AnnotationResampleParameters(...)`.
+ * Output object returned when calling `AnnotationResampleParamsDict(...)`.
  *
  * @interface
  */
@@ -95,8 +95,8 @@ interface AnnotationResampleOutputs {
 function annotation_resample_params(
     annotation_in: InputPathType,
     annotation_out: string,
-    surface_pair: Array<AnnotationResampleSurfacePairParameters> | null = null,
-): AnnotationResampleParametersTagged {
+    surface_pair: Array<AnnotationResampleSurfacePairParamsDict> | null = null,
+): AnnotationResampleParamsDictTagged {
     const params = {
         "@type": "workbench/annotation-resample" as const,
         "annotation-in": annotation_in,
@@ -118,7 +118,7 @@ function annotation_resample_params(
  * @returns Command-line arguments.
  */
 function annotation_resample_cargs(
-    params: AnnotationResampleParameters,
+    params: AnnotationResampleParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -144,7 +144,7 @@ function annotation_resample_cargs(
  * @returns Outputs object.
  */
 function annotation_resample_outputs(
-    params: AnnotationResampleParameters,
+    params: AnnotationResampleParamsDict,
     execution: Execution,
 ): AnnotationResampleOutputs {
     const ret: AnnotationResampleOutputs = {
@@ -167,7 +167,7 @@ function annotation_resample_outputs(
  * @returns NamedTuple of outputs (described in `AnnotationResampleOutputs`).
  */
 function annotation_resample_execute(
-    params: AnnotationResampleParameters,
+    params: AnnotationResampleParamsDict,
     runner: Runner | null = null,
 ): AnnotationResampleOutputs {
     runner = runner || getGlobalRunner();
@@ -197,7 +197,7 @@ function annotation_resample_execute(
 function annotation_resample(
     annotation_in: InputPathType,
     annotation_out: string,
-    surface_pair: Array<AnnotationResampleSurfacePairParameters> | null = null,
+    surface_pair: Array<AnnotationResampleSurfacePairParamsDict> | null = null,
     runner: Runner | null = null,
 ): AnnotationResampleOutputs {
     const params = annotation_resample_params(annotation_in, annotation_out, surface_pair)
@@ -208,8 +208,12 @@ function annotation_resample(
 export {
       ANNOTATION_RESAMPLE_METADATA,
       AnnotationResampleOutputs,
+      AnnotationResampleParamsDict,
+      AnnotationResampleParamsDictTagged,
+      AnnotationResampleSurfacePairParamsDict,
+      AnnotationResampleSurfacePairParamsDictTagged,
       annotation_resample,
       annotation_resample_execute,
       annotation_resample_params,
-      annotation_resample_surface_pair_params,
+      annotation_resample_surface_pair,
 };

@@ -11,7 +11,7 @@ const IMAGE_MATH_METADATA: Metadata = {
 };
 
 
-interface ImageMathParameters {
+interface ImageMathParamsDict {
     "@type"?: "ants/ImageMath";
     "image_dimension": 2 | 3 | 4;
     "output_image": string;
@@ -19,11 +19,11 @@ interface ImageMathParameters {
     "image1": InputPathType;
     "image2"?: InputPathType | null | undefined;
 }
-type ImageMathParametersTagged = Required<Pick<ImageMathParameters, '@type'>> & ImageMathParameters;
+type ImageMathParamsDictTagged = Required<Pick<ImageMathParamsDict, '@type'>> & ImageMathParamsDict;
 
 
 /**
- * Output object returned when calling `ImageMathParameters(...)`.
+ * Output object returned when calling `ImageMathParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function image_math_params(
     operations_and_inputs: string,
     image1: InputPathType,
     image2: InputPathType | null = null,
-): ImageMathParametersTagged {
+): ImageMathParamsDictTagged {
     const params = {
         "@type": "ants/ImageMath" as const,
         "image_dimension": image_dimension,
@@ -80,7 +80,7 @@ function image_math_params(
  * @returns Command-line arguments.
  */
 function image_math_cargs(
-    params: ImageMathParameters,
+    params: ImageMathParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -105,7 +105,7 @@ function image_math_cargs(
  * @returns Outputs object.
  */
 function image_math_outputs(
-    params: ImageMathParameters,
+    params: ImageMathParamsDict,
     execution: Execution,
 ): ImageMathOutputs {
     const ret: ImageMathOutputs = {
@@ -131,7 +131,7 @@ function image_math_outputs(
  * @returns NamedTuple of outputs (described in `ImageMathOutputs`).
  */
 function image_math_execute(
-    params: ImageMathParameters,
+    params: ImageMathParamsDict,
     runner: Runner | null = null,
 ): ImageMathOutputs {
     runner = runner || getGlobalRunner();
@@ -178,6 +178,8 @@ function image_math(
 export {
       IMAGE_MATH_METADATA,
       ImageMathOutputs,
+      ImageMathParamsDict,
+      ImageMathParamsDictTagged,
       image_math,
       image_math_execute,
       image_math_params,

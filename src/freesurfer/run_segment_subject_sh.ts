@@ -11,16 +11,16 @@ const RUN_SEGMENT_SUBJECT_SH_METADATA: Metadata = {
 };
 
 
-interface RunSegmentSubjectShParameters {
+interface RunSegmentSubjectShParamsDict {
     "@type"?: "freesurfer/run_SegmentSubject.sh";
     "deployedMCRroot": string;
     "arguments"?: string | null | undefined;
 }
-type RunSegmentSubjectShParametersTagged = Required<Pick<RunSegmentSubjectShParameters, '@type'>> & RunSegmentSubjectShParameters;
+type RunSegmentSubjectShParamsDictTagged = Required<Pick<RunSegmentSubjectShParamsDict, '@type'>> & RunSegmentSubjectShParamsDict;
 
 
 /**
- * Output object returned when calling `RunSegmentSubjectShParameters(...)`.
+ * Output object returned when calling `RunSegmentSubjectShParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface RunSegmentSubjectShOutputs {
 function run_segment_subject_sh_params(
     deployed_mcrroot: string,
     arguments_: string | null = null,
-): RunSegmentSubjectShParametersTagged {
+): RunSegmentSubjectShParamsDictTagged {
     const params = {
         "@type": "freesurfer/run_SegmentSubject.sh" as const,
         "deployedMCRroot": deployed_mcrroot,
@@ -68,7 +68,7 @@ function run_segment_subject_sh_params(
  * @returns Command-line arguments.
  */
 function run_segment_subject_sh_cargs(
-    params: RunSegmentSubjectShParameters,
+    params: RunSegmentSubjectShParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -90,7 +90,7 @@ function run_segment_subject_sh_cargs(
  * @returns Outputs object.
  */
 function run_segment_subject_sh_outputs(
-    params: RunSegmentSubjectShParameters,
+    params: RunSegmentSubjectShParamsDict,
     execution: Execution,
 ): RunSegmentSubjectShOutputs {
     const ret: RunSegmentSubjectShOutputs = {
@@ -116,7 +116,7 @@ function run_segment_subject_sh_outputs(
  * @returns NamedTuple of outputs (described in `RunSegmentSubjectShOutputs`).
  */
 function run_segment_subject_sh_execute(
-    params: RunSegmentSubjectShParameters,
+    params: RunSegmentSubjectShParamsDict,
     runner: Runner | null = null,
 ): RunSegmentSubjectShOutputs {
     runner = runner || getGlobalRunner();
@@ -157,6 +157,8 @@ function run_segment_subject_sh(
 export {
       RUN_SEGMENT_SUBJECT_SH_METADATA,
       RunSegmentSubjectShOutputs,
+      RunSegmentSubjectShParamsDict,
+      RunSegmentSubjectShParamsDictTagged,
       run_segment_subject_sh,
       run_segment_subject_sh_execute,
       run_segment_subject_sh_params,

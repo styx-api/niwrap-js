@@ -11,7 +11,7 @@ const FAT_PROC_DECMAP_METADATA: Metadata = {
 };
 
 
-interface FatProcDecmapParameters {
+interface FatProcDecmapParamsDict {
     "@type"?: "afni/fat_proc_decmap";
     "in_fa": InputPathType;
     "in_v1": InputPathType;
@@ -25,11 +25,11 @@ interface FatProcDecmapParameters {
     "no_cmd_out": boolean;
     "no_qc_view": boolean;
 }
-type FatProcDecmapParametersTagged = Required<Pick<FatProcDecmapParameters, '@type'>> & FatProcDecmapParameters;
+type FatProcDecmapParamsDictTagged = Required<Pick<FatProcDecmapParamsDict, '@type'>> & FatProcDecmapParamsDict;
 
 
 /**
- * Output object returned when calling `FatProcDecmapParameters(...)`.
+ * Output object returned when calling `FatProcDecmapParamsDict(...)`.
  *
  * @interface
  */
@@ -94,7 +94,7 @@ function fat_proc_decmap_params(
     qc_prefix: string | null = null,
     no_cmd_out: boolean = false,
     no_qc_view: boolean = false,
-): FatProcDecmapParametersTagged {
+): FatProcDecmapParamsDictTagged {
     const params = {
         "@type": "afni/fat_proc_decmap" as const,
         "in_fa": in_fa,
@@ -132,7 +132,7 @@ function fat_proc_decmap_params(
  * @returns Command-line arguments.
  */
 function fat_proc_decmap_cargs(
-    params: FatProcDecmapParameters,
+    params: FatProcDecmapParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -201,7 +201,7 @@ function fat_proc_decmap_cargs(
  * @returns Outputs object.
  */
 function fat_proc_decmap_outputs(
-    params: FatProcDecmapParameters,
+    params: FatProcDecmapParamsDict,
     execution: Execution,
 ): FatProcDecmapOutputs {
     const ret: FatProcDecmapOutputs = {
@@ -232,7 +232,7 @@ function fat_proc_decmap_outputs(
  * @returns NamedTuple of outputs (described in `FatProcDecmapOutputs`).
  */
 function fat_proc_decmap_execute(
-    params: FatProcDecmapParameters,
+    params: FatProcDecmapParamsDict,
     runner: Runner | null = null,
 ): FatProcDecmapOutputs {
     runner = runner || getGlobalRunner();
@@ -291,6 +291,8 @@ function fat_proc_decmap(
 export {
       FAT_PROC_DECMAP_METADATA,
       FatProcDecmapOutputs,
+      FatProcDecmapParamsDict,
+      FatProcDecmapParamsDictTagged,
       fat_proc_decmap,
       fat_proc_decmap_execute,
       fat_proc_decmap_params,

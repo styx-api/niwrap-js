@@ -11,16 +11,16 @@ const INFLATE_SUBJECT_LH_METADATA: Metadata = {
 };
 
 
-interface InflateSubjectLhParameters {
+interface InflateSubjectLhParamsDict {
     "@type"?: "freesurfer/inflate_subject-lh";
     "input_folder": string;
     "hostname_flag": boolean;
 }
-type InflateSubjectLhParametersTagged = Required<Pick<InflateSubjectLhParameters, '@type'>> & InflateSubjectLhParameters;
+type InflateSubjectLhParamsDictTagged = Required<Pick<InflateSubjectLhParamsDict, '@type'>> & InflateSubjectLhParamsDict;
 
 
 /**
- * Output object returned when calling `InflateSubjectLhParameters(...)`.
+ * Output object returned when calling `InflateSubjectLhParamsDict(...)`.
  *
  * @interface
  */
@@ -43,7 +43,7 @@ interface InflateSubjectLhOutputs {
 function inflate_subject_lh_params(
     input_folder: string,
     hostname_flag: boolean = false,
-): InflateSubjectLhParametersTagged {
+): InflateSubjectLhParamsDictTagged {
     const params = {
         "@type": "freesurfer/inflate_subject-lh" as const,
         "input_folder": input_folder,
@@ -62,7 +62,7 @@ function inflate_subject_lh_params(
  * @returns Command-line arguments.
  */
 function inflate_subject_lh_cargs(
-    params: InflateSubjectLhParameters,
+    params: InflateSubjectLhParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -87,7 +87,7 @@ function inflate_subject_lh_cargs(
  * @returns Outputs object.
  */
 function inflate_subject_lh_outputs(
-    params: InflateSubjectLhParameters,
+    params: InflateSubjectLhParamsDict,
     execution: Execution,
 ): InflateSubjectLhOutputs {
     const ret: InflateSubjectLhOutputs = {
@@ -112,7 +112,7 @@ function inflate_subject_lh_outputs(
  * @returns NamedTuple of outputs (described in `InflateSubjectLhOutputs`).
  */
 function inflate_subject_lh_execute(
-    params: InflateSubjectLhParameters,
+    params: InflateSubjectLhParamsDict,
     runner: Runner | null = null,
 ): InflateSubjectLhOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function inflate_subject_lh(
 export {
       INFLATE_SUBJECT_LH_METADATA,
       InflateSubjectLhOutputs,
+      InflateSubjectLhParamsDict,
+      InflateSubjectLhParamsDictTagged,
       inflate_subject_lh,
       inflate_subject_lh_execute,
       inflate_subject_lh_params,

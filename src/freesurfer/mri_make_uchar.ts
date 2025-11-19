@@ -11,7 +11,7 @@ const MRI_MAKE_UCHAR_METADATA: Metadata = {
 };
 
 
-interface MriMakeUcharParameters {
+interface MriMakeUcharParamsDict {
     "@type"?: "freesurfer/mri_make_uchar";
     "input_volume": InputPathType;
     "talairach_xform": InputPathType;
@@ -22,11 +22,11 @@ interface MriMakeUcharParameters {
     "cumulative_histo"?: string | null | undefined;
     "vradvol"?: string | null | undefined;
 }
-type MriMakeUcharParametersTagged = Required<Pick<MriMakeUcharParameters, '@type'>> & MriMakeUcharParameters;
+type MriMakeUcharParamsDictTagged = Required<Pick<MriMakeUcharParamsDict, '@type'>> & MriMakeUcharParamsDict;
 
 
 /**
- * Output object returned when calling `MriMakeUcharParameters(...)`.
+ * Output object returned when calling `MriMakeUcharParamsDict(...)`.
  *
  * @interface
  */
@@ -65,7 +65,7 @@ function mri_make_uchar_params(
     max_radius: number | null = null,
     cumulative_histo: string | null = null,
     vradvol: string | null = null,
-): MriMakeUcharParametersTagged {
+): MriMakeUcharParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_make_uchar" as const,
         "input_volume": input_volume,
@@ -100,7 +100,7 @@ function mri_make_uchar_params(
  * @returns Command-line arguments.
  */
 function mri_make_uchar_cargs(
-    params: MriMakeUcharParameters,
+    params: MriMakeUcharParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -151,7 +151,7 @@ function mri_make_uchar_cargs(
  * @returns Outputs object.
  */
 function mri_make_uchar_outputs(
-    params: MriMakeUcharParameters,
+    params: MriMakeUcharParamsDict,
     execution: Execution,
 ): MriMakeUcharOutputs {
     const ret: MriMakeUcharOutputs = {
@@ -177,7 +177,7 @@ function mri_make_uchar_outputs(
  * @returns NamedTuple of outputs (described in `MriMakeUcharOutputs`).
  */
 function mri_make_uchar_execute(
-    params: MriMakeUcharParameters,
+    params: MriMakeUcharParamsDict,
     runner: Runner | null = null,
 ): MriMakeUcharOutputs {
     runner = runner || getGlobalRunner();
@@ -230,6 +230,8 @@ function mri_make_uchar(
 export {
       MRI_MAKE_UCHAR_METADATA,
       MriMakeUcharOutputs,
+      MriMakeUcharParamsDict,
+      MriMakeUcharParamsDictTagged,
       mri_make_uchar,
       mri_make_uchar_execute,
       mri_make_uchar_params,

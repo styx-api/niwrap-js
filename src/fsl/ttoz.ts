@@ -11,7 +11,7 @@ const TTOZ_METADATA: Metadata = {
 };
 
 
-interface TtozParameters {
+interface TtozParamsDict {
     "@type"?: "fsl/ttoz";
     "varsfile": InputPathType;
     "cbsfile": InputPathType;
@@ -19,11 +19,11 @@ interface TtozParameters {
     "outputvol"?: string | null | undefined;
     "help_flag": boolean;
 }
-type TtozParametersTagged = Required<Pick<TtozParameters, '@type'>> & TtozParameters;
+type TtozParamsDictTagged = Required<Pick<TtozParamsDict, '@type'>> & TtozParamsDict;
 
 
 /**
- * Output object returned when calling `TtozParameters(...)`.
+ * Output object returned when calling `TtozParamsDict(...)`.
  *
  * @interface
  */
@@ -56,7 +56,7 @@ function ttoz_params(
     dof: number,
     outputvol: string | null = null,
     help_flag: boolean = false,
-): TtozParametersTagged {
+): TtozParamsDictTagged {
     const params = {
         "@type": "fsl/ttoz" as const,
         "varsfile": varsfile,
@@ -80,7 +80,7 @@ function ttoz_params(
  * @returns Command-line arguments.
  */
 function ttoz_cargs(
-    params: TtozParameters,
+    params: TtozParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -110,7 +110,7 @@ function ttoz_cargs(
  * @returns Outputs object.
  */
 function ttoz_outputs(
-    params: TtozParameters,
+    params: TtozParamsDict,
     execution: Execution,
 ): TtozOutputs {
     const ret: TtozOutputs = {
@@ -136,7 +136,7 @@ function ttoz_outputs(
  * @returns NamedTuple of outputs (described in `TtozOutputs`).
  */
 function ttoz_execute(
-    params: TtozParameters,
+    params: TtozParamsDict,
     runner: Runner | null = null,
 ): TtozOutputs {
     runner = runner || getGlobalRunner();
@@ -183,6 +183,8 @@ function ttoz(
 export {
       TTOZ_METADATA,
       TtozOutputs,
+      TtozParamsDict,
+      TtozParamsDictTagged,
       ttoz,
       ttoz_execute,
       ttoz_params,

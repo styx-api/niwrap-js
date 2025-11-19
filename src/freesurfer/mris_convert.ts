@@ -11,7 +11,7 @@ const MRIS_CONVERT_METADATA: Metadata = {
 };
 
 
-interface MrisConvertParameters {
+interface MrisConvertParamsDict {
     "@type"?: "freesurfer/mris_convert";
     "input_file": InputPathType;
     "second_input_file"?: InputPathType | null | undefined;
@@ -52,11 +52,11 @@ interface MrisConvertParameters {
     "cras_add": boolean;
     "cras_subtract": boolean;
 }
-type MrisConvertParametersTagged = Required<Pick<MrisConvertParameters, '@type'>> & MrisConvertParameters;
+type MrisConvertParamsDictTagged = Required<Pick<MrisConvertParamsDict, '@type'>> & MrisConvertParamsDict;
 
 
 /**
- * Output object returned when calling `MrisConvertParameters(...)`.
+ * Output object returned when calling `MrisConvertParamsDict(...)`.
  *
  * @interface
  */
@@ -155,7 +155,7 @@ function mris_convert_params(
     label_to_mask: string | null = null,
     cras_add: boolean = false,
     cras_subtract: boolean = false,
-): MrisConvertParametersTagged {
+): MrisConvertParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_convert" as const,
         "input_file": input_file,
@@ -248,7 +248,7 @@ function mris_convert_params(
  * @returns Command-line arguments.
  */
 function mris_convert_cargs(
-    params: MrisConvertParameters,
+    params: MrisConvertParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -430,7 +430,7 @@ function mris_convert_cargs(
  * @returns Outputs object.
  */
 function mris_convert_outputs(
-    params: MrisConvertParameters,
+    params: MrisConvertParamsDict,
     execution: Execution,
 ): MrisConvertOutputs {
     const ret: MrisConvertOutputs = {
@@ -456,7 +456,7 @@ function mris_convert_outputs(
  * @returns NamedTuple of outputs (described in `MrisConvertOutputs`).
  */
 function mris_convert_execute(
-    params: MrisConvertParameters,
+    params: MrisConvertParamsDict,
     runner: Runner | null = null,
 ): MrisConvertOutputs {
     runner = runner || getGlobalRunner();
@@ -569,6 +569,8 @@ function mris_convert(
 export {
       MRIS_CONVERT_METADATA,
       MrisConvertOutputs,
+      MrisConvertParamsDict,
+      MrisConvertParamsDictTagged,
       mris_convert,
       mris_convert_execute,
       mris_convert_params,

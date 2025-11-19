@@ -10,24 +10,24 @@ const VOLUME_GRADIENT_METADATA: Metadata = {
 };
 
 
-interface VolumeGradientPresmoothParameters {
+interface VolumeGradientPresmoothParamsDict {
     "@type"?: "presmooth";
     "kernel": number;
     "fwhm": boolean;
 }
-type VolumeGradientPresmoothParametersTagged = Required<Pick<VolumeGradientPresmoothParameters, '@type'>> & VolumeGradientPresmoothParameters;
+type VolumeGradientPresmoothParamsDictTagged = Required<Pick<VolumeGradientPresmoothParamsDict, '@type'>> & VolumeGradientPresmoothParamsDict;
 
 
-interface VolumeGradientParameters {
+interface VolumeGradientParamsDict {
     "@type"?: "workbench/volume-gradient";
     "volume-out": string;
-    "presmooth"?: VolumeGradientPresmoothParameters | null | undefined;
+    "presmooth"?: VolumeGradientPresmoothParamsDict | null | undefined;
     "roi-volume"?: InputPathType | null | undefined;
     "vector-volume-out"?: string | null | undefined;
     "subvol"?: string | null | undefined;
     "volume-in": InputPathType;
 }
-type VolumeGradientParametersTagged = Required<Pick<VolumeGradientParameters, '@type'>> & VolumeGradientParameters;
+type VolumeGradientParamsDictTagged = Required<Pick<VolumeGradientParamsDict, '@type'>> & VolumeGradientParamsDict;
 
 
 /**
@@ -38,10 +38,10 @@ type VolumeGradientParametersTagged = Required<Pick<VolumeGradientParameters, '@
  *
  * @returns Parameter dictionary
  */
-function volume_gradient_presmooth_params(
+function volume_gradient_presmooth(
     kernel: number,
     fwhm: boolean = false,
-): VolumeGradientPresmoothParametersTagged {
+): VolumeGradientPresmoothParamsDictTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
@@ -60,7 +60,7 @@ function volume_gradient_presmooth_params(
  * @returns Command-line arguments.
  */
 function volume_gradient_presmooth_cargs(
-    params: VolumeGradientPresmoothParameters,
+    params: VolumeGradientPresmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -76,7 +76,7 @@ function volume_gradient_presmooth_cargs(
 
 
 /**
- * Output object returned when calling `VolumeGradientParameters(...)`.
+ * Output object returned when calling `VolumeGradientParamsDict(...)`.
  *
  * @interface
  */
@@ -116,8 +116,8 @@ function volume_gradient_params(
     vector_volume_out: string | null,
     subvol: string | null,
     volume_in: InputPathType,
-    presmooth: VolumeGradientPresmoothParameters | null = null,
-): VolumeGradientParametersTagged {
+    presmooth: VolumeGradientPresmoothParamsDict | null = null,
+): VolumeGradientParamsDictTagged {
     const params = {
         "@type": "workbench/volume-gradient" as const,
         "volume-out": volume_out,
@@ -148,7 +148,7 @@ function volume_gradient_params(
  * @returns Command-line arguments.
  */
 function volume_gradient_cargs(
-    params: VolumeGradientParameters,
+    params: VolumeGradientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -180,7 +180,7 @@ function volume_gradient_cargs(
  * @returns Outputs object.
  */
 function volume_gradient_outputs(
-    params: VolumeGradientParameters,
+    params: VolumeGradientParamsDict,
     execution: Execution,
 ): VolumeGradientOutputs {
     const ret: VolumeGradientOutputs = {
@@ -202,7 +202,7 @@ function volume_gradient_outputs(
  * @returns NamedTuple of outputs (described in `VolumeGradientOutputs`).
  */
 function volume_gradient_execute(
-    params: VolumeGradientParameters,
+    params: VolumeGradientParamsDict,
     runner: Runner | null = null,
 ): VolumeGradientOutputs {
     runner = runner || getGlobalRunner();
@@ -242,7 +242,7 @@ function volume_gradient(
     vector_volume_out: string | null,
     subvol: string | null,
     volume_in: InputPathType,
-    presmooth: VolumeGradientPresmoothParameters | null = null,
+    presmooth: VolumeGradientPresmoothParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeGradientOutputs {
     const params = volume_gradient_params(volume_out, roi_volume, vector_volume_out, subvol, volume_in, presmooth)
@@ -253,8 +253,12 @@ function volume_gradient(
 export {
       VOLUME_GRADIENT_METADATA,
       VolumeGradientOutputs,
+      VolumeGradientParamsDict,
+      VolumeGradientParamsDictTagged,
+      VolumeGradientPresmoothParamsDict,
+      VolumeGradientPresmoothParamsDictTagged,
       volume_gradient,
       volume_gradient_execute,
       volume_gradient_params,
-      volume_gradient_presmooth_params,
+      volume_gradient_presmooth,
 };

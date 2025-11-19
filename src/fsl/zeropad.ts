@@ -11,16 +11,16 @@ const ZEROPAD_METADATA: Metadata = {
 };
 
 
-interface ZeropadParameters {
+interface ZeropadParamsDict {
     "@type"?: "fsl/zeropad";
     "input_number": string;
     "length": number;
 }
-type ZeropadParametersTagged = Required<Pick<ZeropadParameters, '@type'>> & ZeropadParameters;
+type ZeropadParamsDictTagged = Required<Pick<ZeropadParamsDict, '@type'>> & ZeropadParamsDict;
 
 
 /**
- * Output object returned when calling `ZeropadParameters(...)`.
+ * Output object returned when calling `ZeropadParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface ZeropadOutputs {
 function zeropad_params(
     input_number: string,
     length: number,
-): ZeropadParametersTagged {
+): ZeropadParamsDictTagged {
     const params = {
         "@type": "fsl/zeropad" as const,
         "input_number": input_number,
@@ -66,7 +66,7 @@ function zeropad_params(
  * @returns Command-line arguments.
  */
 function zeropad_cargs(
-    params: ZeropadParameters,
+    params: ZeropadParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -86,7 +86,7 @@ function zeropad_cargs(
  * @returns Outputs object.
  */
 function zeropad_outputs(
-    params: ZeropadParameters,
+    params: ZeropadParamsDict,
     execution: Execution,
 ): ZeropadOutputs {
     const ret: ZeropadOutputs = {
@@ -112,7 +112,7 @@ function zeropad_outputs(
  * @returns NamedTuple of outputs (described in `ZeropadOutputs`).
  */
 function zeropad_execute(
-    params: ZeropadParameters,
+    params: ZeropadParamsDict,
     runner: Runner | null = null,
 ): ZeropadOutputs {
     runner = runner || getGlobalRunner();
@@ -153,6 +153,8 @@ function zeropad(
 export {
       ZEROPAD_METADATA,
       ZeropadOutputs,
+      ZeropadParamsDict,
+      ZeropadParamsDictTagged,
       zeropad,
       zeropad_execute,
       zeropad_params,

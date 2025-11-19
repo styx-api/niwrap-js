@@ -11,7 +11,7 @@ const MRI_LONG_NORMALIZE_METADATA: Metadata = {
 };
 
 
-interface MriLongNormalizeParameters {
+interface MriLongNormalizeParamsDict {
     "@type"?: "freesurfer/mri_long_normalize";
     "input_vol": InputPathType;
     "base_tp_file": InputPathType;
@@ -25,11 +25,11 @@ interface MriLongNormalizeParameters {
     "reading"?: Array<string> | null | undefined;
     "print_usage": boolean;
 }
-type MriLongNormalizeParametersTagged = Required<Pick<MriLongNormalizeParameters, '@type'>> & MriLongNormalizeParameters;
+type MriLongNormalizeParamsDictTagged = Required<Pick<MriLongNormalizeParamsDict, '@type'>> & MriLongNormalizeParamsDict;
 
 
 /**
- * Output object returned when calling `MriLongNormalizeParameters(...)`.
+ * Output object returned when calling `MriLongNormalizeParamsDict(...)`.
  *
  * @interface
  */
@@ -74,7 +74,7 @@ function mri_long_normalize_params(
     debug_gx: Array<number> | null = null,
     reading: Array<string> | null = null,
     print_usage: boolean = false,
-): MriLongNormalizeParametersTagged {
+): MriLongNormalizeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_long_normalize" as const,
         "input_vol": input_vol,
@@ -114,7 +114,7 @@ function mri_long_normalize_params(
  * @returns Command-line arguments.
  */
 function mri_long_normalize_cargs(
-    params: MriLongNormalizeParameters,
+    params: MriLongNormalizeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -177,7 +177,7 @@ function mri_long_normalize_cargs(
  * @returns Outputs object.
  */
 function mri_long_normalize_outputs(
-    params: MriLongNormalizeParameters,
+    params: MriLongNormalizeParamsDict,
     execution: Execution,
 ): MriLongNormalizeOutputs {
     const ret: MriLongNormalizeOutputs = {
@@ -203,7 +203,7 @@ function mri_long_normalize_outputs(
  * @returns NamedTuple of outputs (described in `MriLongNormalizeOutputs`).
  */
 function mri_long_normalize_execute(
-    params: MriLongNormalizeParameters,
+    params: MriLongNormalizeParamsDict,
     runner: Runner | null = null,
 ): MriLongNormalizeOutputs {
     runner = runner || getGlobalRunner();
@@ -262,6 +262,8 @@ function mri_long_normalize(
 export {
       MRI_LONG_NORMALIZE_METADATA,
       MriLongNormalizeOutputs,
+      MriLongNormalizeParamsDict,
+      MriLongNormalizeParamsDictTagged,
       mri_long_normalize,
       mri_long_normalize_execute,
       mri_long_normalize_params,

@@ -10,27 +10,27 @@ const METRIC_GRADIENT_METADATA: Metadata = {
 };
 
 
-interface MetricGradientPresmoothParameters {
+interface MetricGradientPresmoothParamsDict {
     "@type"?: "presmooth";
     "kernel": number;
     "fwhm": boolean;
 }
-type MetricGradientPresmoothParametersTagged = Required<Pick<MetricGradientPresmoothParameters, '@type'>> & MetricGradientPresmoothParameters;
+type MetricGradientPresmoothParamsDictTagged = Required<Pick<MetricGradientPresmoothParamsDict, '@type'>> & MetricGradientPresmoothParamsDict;
 
 
-interface MetricGradientRoiParameters {
+interface MetricGradientRoiParamsDict {
     "@type"?: "roi";
     "roi-metric": InputPathType;
     "match-columns": boolean;
 }
-type MetricGradientRoiParametersTagged = Required<Pick<MetricGradientRoiParameters, '@type'>> & MetricGradientRoiParameters;
+type MetricGradientRoiParamsDictTagged = Required<Pick<MetricGradientRoiParamsDict, '@type'>> & MetricGradientRoiParamsDict;
 
 
-interface MetricGradientParameters {
+interface MetricGradientParamsDict {
     "@type"?: "workbench/metric-gradient";
     "metric-out": string;
-    "presmooth"?: MetricGradientPresmoothParameters | null | undefined;
-    "roi"?: MetricGradientRoiParameters | null | undefined;
+    "presmooth"?: MetricGradientPresmoothParamsDict | null | undefined;
+    "roi"?: MetricGradientRoiParamsDict | null | undefined;
     "vector-metric-out"?: string | null | undefined;
     "column"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
@@ -38,7 +38,7 @@ interface MetricGradientParameters {
     "surface": InputPathType;
     "metric-in": InputPathType;
 }
-type MetricGradientParametersTagged = Required<Pick<MetricGradientParameters, '@type'>> & MetricGradientParameters;
+type MetricGradientParamsDictTagged = Required<Pick<MetricGradientParamsDict, '@type'>> & MetricGradientParamsDict;
 
 
 /**
@@ -49,10 +49,10 @@ type MetricGradientParametersTagged = Required<Pick<MetricGradientParameters, '@
  *
  * @returns Parameter dictionary
  */
-function metric_gradient_presmooth_params(
+function metric_gradient_presmooth(
     kernel: number,
     fwhm: boolean = false,
-): MetricGradientPresmoothParametersTagged {
+): MetricGradientPresmoothParamsDictTagged {
     const params = {
         "@type": "presmooth" as const,
         "kernel": kernel,
@@ -71,7 +71,7 @@ function metric_gradient_presmooth_params(
  * @returns Command-line arguments.
  */
 function metric_gradient_presmooth_cargs(
-    params: MetricGradientPresmoothParameters,
+    params: MetricGradientPresmoothParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -94,10 +94,10 @@ function metric_gradient_presmooth_cargs(
  *
  * @returns Parameter dictionary
  */
-function metric_gradient_roi_params(
+function metric_gradient_roi(
     roi_metric: InputPathType,
     match_columns: boolean = false,
-): MetricGradientRoiParametersTagged {
+): MetricGradientRoiParamsDictTagged {
     const params = {
         "@type": "roi" as const,
         "roi-metric": roi_metric,
@@ -116,7 +116,7 @@ function metric_gradient_roi_params(
  * @returns Command-line arguments.
  */
 function metric_gradient_roi_cargs(
-    params: MetricGradientRoiParameters,
+    params: MetricGradientRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -132,7 +132,7 @@ function metric_gradient_roi_cargs(
 
 
 /**
- * Output object returned when calling `MetricGradientParameters(...)`.
+ * Output object returned when calling `MetricGradientParamsDict(...)`.
  *
  * @interface
  */
@@ -176,10 +176,10 @@ function metric_gradient_params(
     area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    presmooth: MetricGradientPresmoothParameters | null = null,
-    roi: MetricGradientRoiParameters | null = null,
+    presmooth: MetricGradientPresmoothParamsDict | null = null,
+    roi: MetricGradientRoiParamsDict | null = null,
     average_normals: boolean = false,
-): MetricGradientParametersTagged {
+): MetricGradientParamsDictTagged {
     const params = {
         "@type": "workbench/metric-gradient" as const,
         "metric-out": metric_out,
@@ -215,7 +215,7 @@ function metric_gradient_params(
  * @returns Command-line arguments.
  */
 function metric_gradient_cargs(
-    params: MetricGradientParameters,
+    params: MetricGradientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -250,7 +250,7 @@ function metric_gradient_cargs(
  * @returns Outputs object.
  */
 function metric_gradient_outputs(
-    params: MetricGradientParameters,
+    params: MetricGradientParamsDict,
     execution: Execution,
 ): MetricGradientOutputs {
     const ret: MetricGradientOutputs = {
@@ -280,7 +280,7 @@ function metric_gradient_outputs(
  * @returns NamedTuple of outputs (described in `MetricGradientOutputs`).
  */
 function metric_gradient_execute(
-    params: MetricGradientParameters,
+    params: MetricGradientParamsDict,
     runner: Runner | null = null,
 ): MetricGradientOutputs {
     runner = runner || getGlobalRunner();
@@ -332,8 +332,8 @@ function metric_gradient(
     area_metric: InputPathType | null,
     surface: InputPathType,
     metric_in: InputPathType,
-    presmooth: MetricGradientPresmoothParameters | null = null,
-    roi: MetricGradientRoiParameters | null = null,
+    presmooth: MetricGradientPresmoothParamsDict | null = null,
+    roi: MetricGradientRoiParamsDict | null = null,
     average_normals: boolean = false,
     runner: Runner | null = null,
 ): MetricGradientOutputs {
@@ -345,9 +345,15 @@ function metric_gradient(
 export {
       METRIC_GRADIENT_METADATA,
       MetricGradientOutputs,
+      MetricGradientParamsDict,
+      MetricGradientParamsDictTagged,
+      MetricGradientPresmoothParamsDict,
+      MetricGradientPresmoothParamsDictTagged,
+      MetricGradientRoiParamsDict,
+      MetricGradientRoiParamsDictTagged,
       metric_gradient,
       metric_gradient_execute,
       metric_gradient_params,
-      metric_gradient_presmooth_params,
-      metric_gradient_roi_params,
+      metric_gradient_presmooth,
+      metric_gradient_roi,
 };

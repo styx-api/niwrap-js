@@ -11,7 +11,7 @@ const MRIS_WM_VOLUME_METADATA: Metadata = {
 };
 
 
-interface MrisWmVolumeParameters {
+interface MrisWmVolumeParamsDict {
     "@type"?: "freesurfer/mris_wm_volume";
     "subject": string;
     "hemi": string;
@@ -20,11 +20,11 @@ interface MrisWmVolumeParameters {
     "asegname"?: string | null | undefined;
     "verbose": boolean;
 }
-type MrisWmVolumeParametersTagged = Required<Pick<MrisWmVolumeParameters, '@type'>> & MrisWmVolumeParameters;
+type MrisWmVolumeParamsDictTagged = Required<Pick<MrisWmVolumeParamsDict, '@type'>> & MrisWmVolumeParamsDict;
 
 
 /**
- * Output object returned when calling `MrisWmVolumeParameters(...)`.
+ * Output object returned when calling `MrisWmVolumeParamsDict(...)`.
  *
  * @interface
  */
@@ -55,7 +55,7 @@ function mris_wm_volume_params(
     whitesurfname: string | null = null,
     asegname: string | null = null,
     verbose: boolean = false,
-): MrisWmVolumeParametersTagged {
+): MrisWmVolumeParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_wm_volume" as const,
         "subject": subject,
@@ -84,7 +84,7 @@ function mris_wm_volume_params(
  * @returns Command-line arguments.
  */
 function mris_wm_volume_cargs(
-    params: MrisWmVolumeParameters,
+    params: MrisWmVolumeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -125,7 +125,7 @@ function mris_wm_volume_cargs(
  * @returns Outputs object.
  */
 function mris_wm_volume_outputs(
-    params: MrisWmVolumeParameters,
+    params: MrisWmVolumeParamsDict,
     execution: Execution,
 ): MrisWmVolumeOutputs {
     const ret: MrisWmVolumeOutputs = {
@@ -150,7 +150,7 @@ function mris_wm_volume_outputs(
  * @returns NamedTuple of outputs (described in `MrisWmVolumeOutputs`).
  */
 function mris_wm_volume_execute(
-    params: MrisWmVolumeParameters,
+    params: MrisWmVolumeParamsDict,
     runner: Runner | null = null,
 ): MrisWmVolumeOutputs {
     runner = runner || getGlobalRunner();
@@ -199,6 +199,8 @@ function mris_wm_volume(
 export {
       MRIS_WM_VOLUME_METADATA,
       MrisWmVolumeOutputs,
+      MrisWmVolumeParamsDict,
+      MrisWmVolumeParamsDictTagged,
       mris_wm_volume,
       mris_wm_volume_execute,
       mris_wm_volume_params,

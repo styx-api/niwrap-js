@@ -11,7 +11,7 @@ const MRI_LABEL2LABEL_METADATA: Metadata = {
 };
 
 
-interface MriLabel2labelParameters {
+interface MriLabel2labelParamsDict {
     "@type"?: "freesurfer/mri_label2label";
     "src_label": InputPathType;
     "trg_label": string;
@@ -60,11 +60,11 @@ interface MriLabel2labelParameters {
     "to_tkr"?: string | null | undefined;
     "scanner": boolean;
 }
-type MriLabel2labelParametersTagged = Required<Pick<MriLabel2labelParameters, '@type'>> & MriLabel2labelParameters;
+type MriLabel2labelParamsDictTagged = Required<Pick<MriLabel2labelParamsDict, '@type'>> & MriLabel2labelParamsDict;
 
 
 /**
- * Output object returned when calling `MriLabel2labelParameters(...)`.
+ * Output object returned when calling `MriLabel2labelParamsDict(...)`.
  *
  * @interface
  */
@@ -175,7 +175,7 @@ function mri_label2label_params(
     to_scanner: string | null = null,
     to_tkr: string | null = null,
     scanner: boolean = false,
-): MriLabel2labelParametersTagged {
+): MriLabel2labelParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_label2label" as const,
         "src_label": src_label,
@@ -316,7 +316,7 @@ function mri_label2label_params(
  * @returns Command-line arguments.
  */
 function mri_label2label_cargs(
-    params: MriLabel2labelParameters,
+    params: MriLabel2labelParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -591,7 +591,7 @@ function mri_label2label_cargs(
  * @returns Outputs object.
  */
 function mri_label2label_outputs(
-    params: MriLabel2labelParameters,
+    params: MriLabel2labelParamsDict,
     execution: Execution,
 ): MriLabel2labelOutputs {
     const ret: MriLabel2labelOutputs = {
@@ -616,7 +616,7 @@ function mri_label2label_outputs(
  * @returns NamedTuple of outputs (described in `MriLabel2labelOutputs`).
  */
 function mri_label2label_execute(
-    params: MriLabel2labelParameters,
+    params: MriLabel2labelParamsDict,
     runner: Runner | null = null,
 ): MriLabel2labelOutputs {
     runner = runner || getGlobalRunner();
@@ -745,6 +745,8 @@ function mri_label2label(
 export {
       MRI_LABEL2LABEL_METADATA,
       MriLabel2labelOutputs,
+      MriLabel2labelParamsDict,
+      MriLabel2labelParamsDictTagged,
       mri_label2label,
       mri_label2label_execute,
       mri_label2label_params,

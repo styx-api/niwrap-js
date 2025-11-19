@@ -11,7 +11,7 @@ const V_3D_TCORR1_D_METADATA: Metadata = {
 };
 
 
-interface V3dTcorr1DParameters {
+interface V3dTcorr1DParamsDict {
     "@type"?: "afni/3dTcorr1D";
     "ktaub": boolean;
     "num_threads"?: number | null | undefined;
@@ -22,11 +22,11 @@ interface V3dTcorr1DParameters {
     "xset": InputPathType;
     "y_1d": InputPathType;
 }
-type V3dTcorr1DParametersTagged = Required<Pick<V3dTcorr1DParameters, '@type'>> & V3dTcorr1DParameters;
+type V3dTcorr1DParamsDictTagged = Required<Pick<V3dTcorr1DParamsDict, '@type'>> & V3dTcorr1DParamsDict;
 
 
 /**
- * Output object returned when calling `V3dTcorr1DParameters(...)`.
+ * Output object returned when calling `V3dTcorr1DParamsDict(...)`.
  *
  * @interface
  */
@@ -69,7 +69,7 @@ function v_3d_tcorr1_d_params(
     pearson: boolean = false,
     quadrant: boolean = false,
     spearman: boolean = false,
-): V3dTcorr1DParametersTagged {
+): V3dTcorr1DParamsDictTagged {
     const params = {
         "@type": "afni/3dTcorr1D" as const,
         "ktaub": ktaub,
@@ -98,7 +98,7 @@ function v_3d_tcorr1_d_params(
  * @returns Command-line arguments.
  */
 function v_3d_tcorr1_d_cargs(
-    params: V3dTcorr1DParameters,
+    params: V3dTcorr1DParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -134,7 +134,7 @@ function v_3d_tcorr1_d_cargs(
  * @returns Outputs object.
  */
 function v_3d_tcorr1_d_outputs(
-    params: V3dTcorr1DParameters,
+    params: V3dTcorr1DParamsDict,
     execution: Execution,
 ): V3dTcorr1DOutputs {
     const ret: V3dTcorr1DOutputs = {
@@ -161,7 +161,7 @@ function v_3d_tcorr1_d_outputs(
  * @returns NamedTuple of outputs (described in `V3dTcorr1DOutputs`).
  */
 function v_3d_tcorr1_d_execute(
-    params: V3dTcorr1DParameters,
+    params: V3dTcorr1DParamsDict,
     runner: Runner | null = null,
 ): V3dTcorr1DOutputs {
     runner = runner || getGlobalRunner();
@@ -213,6 +213,8 @@ function v_3d_tcorr1_d(
 
 export {
       V3dTcorr1DOutputs,
+      V3dTcorr1DParamsDict,
+      V3dTcorr1DParamsDictTagged,
       V_3D_TCORR1_D_METADATA,
       v_3d_tcorr1_d,
       v_3d_tcorr1_d_execute,

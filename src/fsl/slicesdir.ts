@@ -11,7 +11,7 @@ const SLICESDIR_METADATA: Metadata = {
 };
 
 
-interface SlicesdirParameters {
+interface SlicesdirParamsDict {
     "@type"?: "fsl/slicesdir";
     "flag_filelist": boolean;
     "outline_image"?: InputPathType | null | undefined;
@@ -19,11 +19,11 @@ interface SlicesdirParameters {
     "slice_option": boolean;
     "filelist": Array<string>;
 }
-type SlicesdirParametersTagged = Required<Pick<SlicesdirParameters, '@type'>> & SlicesdirParameters;
+type SlicesdirParamsDictTagged = Required<Pick<SlicesdirParamsDict, '@type'>> & SlicesdirParamsDict;
 
 
 /**
- * Output object returned when calling `SlicesdirParameters(...)`.
+ * Output object returned when calling `SlicesdirParamsDict(...)`.
  *
  * @interface
  */
@@ -52,7 +52,7 @@ function slicesdir_params(
     outline_image: InputPathType | null = null,
     edge_threshold: number | null = null,
     slice_option: boolean = false,
-): SlicesdirParametersTagged {
+): SlicesdirParamsDictTagged {
     const params = {
         "@type": "fsl/slicesdir" as const,
         "flag_filelist": flag_filelist,
@@ -78,7 +78,7 @@ function slicesdir_params(
  * @returns Command-line arguments.
  */
 function slicesdir_cargs(
-    params: SlicesdirParameters,
+    params: SlicesdirParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -115,7 +115,7 @@ function slicesdir_cargs(
  * @returns Outputs object.
  */
 function slicesdir_outputs(
-    params: SlicesdirParameters,
+    params: SlicesdirParamsDict,
     execution: Execution,
 ): SlicesdirOutputs {
     const ret: SlicesdirOutputs = {
@@ -140,7 +140,7 @@ function slicesdir_outputs(
  * @returns NamedTuple of outputs (described in `SlicesdirOutputs`).
  */
 function slicesdir_execute(
-    params: SlicesdirParameters,
+    params: SlicesdirParamsDict,
     runner: Runner | null = null,
 ): SlicesdirOutputs {
     runner = runner || getGlobalRunner();
@@ -187,6 +187,8 @@ function slicesdir(
 export {
       SLICESDIR_METADATA,
       SlicesdirOutputs,
+      SlicesdirParamsDict,
+      SlicesdirParamsDictTagged,
       slicesdir,
       slicesdir_execute,
       slicesdir_params,

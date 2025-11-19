@@ -11,15 +11,15 @@ const TBSS_1_PREPROC_METADATA: Metadata = {
 };
 
 
-interface Tbss1PreprocParameters {
+interface Tbss1PreprocParamsDict {
     "@type"?: "fsl/tbss_1_preproc";
     "images": Array<InputPathType>;
 }
-type Tbss1PreprocParametersTagged = Required<Pick<Tbss1PreprocParameters, '@type'>> & Tbss1PreprocParameters;
+type Tbss1PreprocParamsDictTagged = Required<Pick<Tbss1PreprocParamsDict, '@type'>> & Tbss1PreprocParamsDict;
 
 
 /**
- * Output object returned when calling `Tbss1PreprocParameters(...)`.
+ * Output object returned when calling `Tbss1PreprocParamsDict(...)`.
  *
  * @interface
  */
@@ -40,7 +40,7 @@ interface Tbss1PreprocOutputs {
  */
 function tbss_1_preproc_params(
     images: Array<InputPathType>,
-): Tbss1PreprocParametersTagged {
+): Tbss1PreprocParamsDictTagged {
     const params = {
         "@type": "fsl/tbss_1_preproc" as const,
         "images": images,
@@ -58,7 +58,7 @@ function tbss_1_preproc_params(
  * @returns Command-line arguments.
  */
 function tbss_1_preproc_cargs(
-    params: Tbss1PreprocParameters,
+    params: Tbss1PreprocParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -77,7 +77,7 @@ function tbss_1_preproc_cargs(
  * @returns Outputs object.
  */
 function tbss_1_preproc_outputs(
-    params: Tbss1PreprocParameters,
+    params: Tbss1PreprocParamsDict,
     execution: Execution,
 ): Tbss1PreprocOutputs {
     const ret: Tbss1PreprocOutputs = {
@@ -102,7 +102,7 @@ function tbss_1_preproc_outputs(
  * @returns NamedTuple of outputs (described in `Tbss1PreprocOutputs`).
  */
 function tbss_1_preproc_execute(
-    params: Tbss1PreprocParameters,
+    params: Tbss1PreprocParamsDict,
     runner: Runner | null = null,
 ): Tbss1PreprocOutputs {
     runner = runner || getGlobalRunner();
@@ -141,6 +141,8 @@ function tbss_1_preproc(
 export {
       TBSS_1_PREPROC_METADATA,
       Tbss1PreprocOutputs,
+      Tbss1PreprocParamsDict,
+      Tbss1PreprocParamsDictTagged,
       tbss_1_preproc,
       tbss_1_preproc_execute,
       tbss_1_preproc_params,

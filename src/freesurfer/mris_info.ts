@@ -11,7 +11,7 @@ const MRIS_INFO_METADATA: Metadata = {
 };
 
 
-interface MrisInfoParameters {
+interface MrisInfoParamsDict {
     "@type"?: "freesurfer/mris_info";
     "surfacefile": InputPathType;
     "outfile"?: InputPathType | null | undefined;
@@ -37,11 +37,11 @@ interface MrisInfoParameters {
     "version_flag": boolean;
     "help_flag": boolean;
 }
-type MrisInfoParametersTagged = Required<Pick<MrisInfoParameters, '@type'>> & MrisInfoParameters;
+type MrisInfoParamsDictTagged = Required<Pick<MrisInfoParamsDict, '@type'>> & MrisInfoParamsDict;
 
 
 /**
- * Output object returned when calling `MrisInfoParameters(...)`.
+ * Output object returned when calling `MrisInfoParamsDict(...)`.
  *
  * @interface
  */
@@ -114,7 +114,7 @@ function mris_info_params(
     nogifti_flag: boolean = false,
     version_flag: boolean = false,
     help_flag: boolean = false,
-): MrisInfoParametersTagged {
+): MrisInfoParamsDictTagged {
     const params = {
         "@type": "freesurfer/mris_info" as const,
         "surfacefile": surfacefile,
@@ -182,7 +182,7 @@ function mris_info_params(
  * @returns Command-line arguments.
  */
 function mris_info_cargs(
-    params: MrisInfoParameters,
+    params: MrisInfoParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -309,7 +309,7 @@ function mris_info_cargs(
  * @returns Outputs object.
  */
 function mris_info_outputs(
-    params: MrisInfoParameters,
+    params: MrisInfoParamsDict,
     execution: Execution,
 ): MrisInfoOutputs {
     const ret: MrisInfoOutputs = {
@@ -336,7 +336,7 @@ function mris_info_outputs(
  * @returns NamedTuple of outputs (described in `MrisInfoOutputs`).
  */
 function mris_info_execute(
-    params: MrisInfoParameters,
+    params: MrisInfoParamsDict,
     runner: Runner | null = null,
 ): MrisInfoOutputs {
     runner = runner || getGlobalRunner();
@@ -419,6 +419,8 @@ function mris_info(
 export {
       MRIS_INFO_METADATA,
       MrisInfoOutputs,
+      MrisInfoParamsDict,
+      MrisInfoParamsDictTagged,
       mris_info,
       mris_info_execute,
       mris_info_params,

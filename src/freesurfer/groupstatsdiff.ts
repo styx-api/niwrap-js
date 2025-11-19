@@ -11,7 +11,7 @@ const GROUPSTATSDIFF_METADATA: Metadata = {
 };
 
 
-interface GroupstatsdiffParameters {
+interface GroupstatsdiffParamsDict {
     "@type"?: "freesurfer/groupstatsdiff";
     "group1_dir": string;
     "group2_dir": string;
@@ -34,11 +34,11 @@ interface GroupstatsdiffParameters {
     "no_dice": boolean;
     "dice_ctab"?: string | null | undefined;
 }
-type GroupstatsdiffParametersTagged = Required<Pick<GroupstatsdiffParameters, '@type'>> & GroupstatsdiffParameters;
+type GroupstatsdiffParamsDictTagged = Required<Pick<GroupstatsdiffParamsDict, '@type'>> & GroupstatsdiffParamsDict;
 
 
 /**
- * Output object returned when calling `GroupstatsdiffParameters(...)`.
+ * Output object returned when calling `GroupstatsdiffParamsDict(...)`.
  *
  * @interface
  */
@@ -97,7 +97,7 @@ function groupstatsdiff_params(
     subjects_dir2: string | null = null,
     no_dice: boolean = false,
     dice_ctab: string | null = null,
-): GroupstatsdiffParametersTagged {
+): GroupstatsdiffParamsDictTagged {
     const params = {
         "@type": "freesurfer/groupstatsdiff" as const,
         "group1_dir": group1_dir,
@@ -142,7 +142,7 @@ function groupstatsdiff_params(
  * @returns Command-line arguments.
  */
 function groupstatsdiff_cargs(
-    params: GroupstatsdiffParameters,
+    params: GroupstatsdiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -235,7 +235,7 @@ function groupstatsdiff_cargs(
  * @returns Outputs object.
  */
 function groupstatsdiff_outputs(
-    params: GroupstatsdiffParameters,
+    params: GroupstatsdiffParamsDict,
     execution: Execution,
 ): GroupstatsdiffOutputs {
     const ret: GroupstatsdiffOutputs = {
@@ -260,7 +260,7 @@ function groupstatsdiff_outputs(
  * @returns NamedTuple of outputs (described in `GroupstatsdiffOutputs`).
  */
 function groupstatsdiff_execute(
-    params: GroupstatsdiffParameters,
+    params: GroupstatsdiffParamsDict,
     runner: Runner | null = null,
 ): GroupstatsdiffOutputs {
     runner = runner || getGlobalRunner();
@@ -337,6 +337,8 @@ function groupstatsdiff(
 export {
       GROUPSTATSDIFF_METADATA,
       GroupstatsdiffOutputs,
+      GroupstatsdiffParamsDict,
+      GroupstatsdiffParamsDictTagged,
       groupstatsdiff,
       groupstatsdiff_execute,
       groupstatsdiff_params,

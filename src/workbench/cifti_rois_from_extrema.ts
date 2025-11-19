@@ -10,21 +10,21 @@ const CIFTI_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 };
 
 
-interface CiftiRoisFromExtremaGaussianParameters {
+interface CiftiRoisFromExtremaGaussianParamsDict {
     "@type"?: "gaussian";
     "surf-sigma": number;
     "vol-sigma": number;
 }
-type CiftiRoisFromExtremaGaussianParametersTagged = Required<Pick<CiftiRoisFromExtremaGaussianParameters, '@type'>> & CiftiRoisFromExtremaGaussianParameters;
+type CiftiRoisFromExtremaGaussianParamsDictTagged = Required<Pick<CiftiRoisFromExtremaGaussianParamsDict, '@type'>> & CiftiRoisFromExtremaGaussianParamsDict;
 
 
-interface CiftiRoisFromExtremaParameters {
+interface CiftiRoisFromExtremaParamsDict {
     "@type"?: "workbench/cifti-rois-from-extrema";
     "cifti-out": string;
     "surface"?: InputPathType | null | undefined;
     "surface"?: InputPathType | null | undefined;
     "surface"?: InputPathType | null | undefined;
-    "gaussian"?: CiftiRoisFromExtremaGaussianParameters | null | undefined;
+    "gaussian"?: CiftiRoisFromExtremaGaussianParamsDict | null | undefined;
     "method"?: string | null | undefined;
     "merged-volume": boolean;
     "cifti": InputPathType;
@@ -32,7 +32,7 @@ interface CiftiRoisFromExtremaParameters {
     "vol-limit": number;
     "direction": string;
 }
-type CiftiRoisFromExtremaParametersTagged = Required<Pick<CiftiRoisFromExtremaParameters, '@type'>> & CiftiRoisFromExtremaParameters;
+type CiftiRoisFromExtremaParamsDictTagged = Required<Pick<CiftiRoisFromExtremaParamsDict, '@type'>> & CiftiRoisFromExtremaParamsDict;
 
 
 /**
@@ -43,10 +43,10 @@ type CiftiRoisFromExtremaParametersTagged = Required<Pick<CiftiRoisFromExtremaPa
  *
  * @returns Parameter dictionary
  */
-function cifti_rois_from_extrema_gaussian_params(
+function cifti_rois_from_extrema_gaussian(
     surf_sigma: number,
     vol_sigma: number,
-): CiftiRoisFromExtremaGaussianParametersTagged {
+): CiftiRoisFromExtremaGaussianParamsDictTagged {
     const params = {
         "@type": "gaussian" as const,
         "surf-sigma": surf_sigma,
@@ -65,7 +65,7 @@ function cifti_rois_from_extrema_gaussian_params(
  * @returns Command-line arguments.
  */
 function cifti_rois_from_extrema_gaussian_cargs(
-    params: CiftiRoisFromExtremaGaussianParameters,
+    params: CiftiRoisFromExtremaGaussianParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -79,7 +79,7 @@ function cifti_rois_from_extrema_gaussian_cargs(
 
 
 /**
- * Output object returned when calling `CiftiRoisFromExtremaParameters(...)`.
+ * Output object returned when calling `CiftiRoisFromExtremaParamsDict(...)`.
  *
  * @interface
  */
@@ -130,9 +130,9 @@ function cifti_rois_from_extrema_params(
     surf_limit: number,
     vol_limit: number,
     direction: string,
-    gaussian: CiftiRoisFromExtremaGaussianParameters | null = null,
+    gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
     merged_volume: boolean = false,
-): CiftiRoisFromExtremaParametersTagged {
+): CiftiRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-rois-from-extrema" as const,
         "cifti-out": cifti_out,
@@ -170,7 +170,7 @@ function cifti_rois_from_extrema_params(
  * @returns Command-line arguments.
  */
 function cifti_rois_from_extrema_cargs(
-    params: CiftiRoisFromExtremaParameters,
+    params: CiftiRoisFromExtremaParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -208,7 +208,7 @@ function cifti_rois_from_extrema_cargs(
  * @returns Outputs object.
  */
 function cifti_rois_from_extrema_outputs(
-    params: CiftiRoisFromExtremaParameters,
+    params: CiftiRoisFromExtremaParamsDict,
     execution: Execution,
 ): CiftiRoisFromExtremaOutputs {
     const ret: CiftiRoisFromExtremaOutputs = {
@@ -230,7 +230,7 @@ function cifti_rois_from_extrema_outputs(
  * @returns NamedTuple of outputs (described in `CiftiRoisFromExtremaOutputs`).
  */
 function cifti_rois_from_extrema_execute(
-    params: CiftiRoisFromExtremaParameters,
+    params: CiftiRoisFromExtremaParamsDict,
     runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
     runner = runner || getGlobalRunner();
@@ -281,7 +281,7 @@ function cifti_rois_from_extrema(
     surf_limit: number,
     vol_limit: number,
     direction: string,
-    gaussian: CiftiRoisFromExtremaGaussianParameters | null = null,
+    gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
     merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
@@ -292,9 +292,13 @@ function cifti_rois_from_extrema(
 
 export {
       CIFTI_ROIS_FROM_EXTREMA_METADATA,
+      CiftiRoisFromExtremaGaussianParamsDict,
+      CiftiRoisFromExtremaGaussianParamsDictTagged,
       CiftiRoisFromExtremaOutputs,
+      CiftiRoisFromExtremaParamsDict,
+      CiftiRoisFromExtremaParamsDictTagged,
       cifti_rois_from_extrema,
       cifti_rois_from_extrema_execute,
-      cifti_rois_from_extrema_gaussian_params,
+      cifti_rois_from_extrema_gaussian,
       cifti_rois_from_extrema_params,
 };

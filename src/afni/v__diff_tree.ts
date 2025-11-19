@@ -11,7 +11,7 @@ const V__DIFF_TREE_METADATA: Metadata = {
 };
 
 
-interface VDiffTreeParameters {
+interface VDiffTreeParamsDict {
     "@type"?: "afni/@diff.tree";
     "new_dir": string;
     "old_dir": string;
@@ -32,11 +32,11 @@ interface VDiffTreeParameters {
     "xxdiff": boolean;
     "X_option": boolean;
 }
-type VDiffTreeParametersTagged = Required<Pick<VDiffTreeParameters, '@type'>> & VDiffTreeParameters;
+type VDiffTreeParamsDictTagged = Required<Pick<VDiffTreeParamsDict, '@type'>> & VDiffTreeParamsDict;
 
 
 /**
- * Output object returned when calling `VDiffTreeParameters(...)`.
+ * Output object returned when calling `VDiffTreeParamsDict(...)`.
  *
  * @interface
  */
@@ -91,7 +91,7 @@ function v__diff_tree_params(
     diff_prog: string | null = null,
     xxdiff: boolean = false,
     x_option: boolean = false,
-): VDiffTreeParametersTagged {
+): VDiffTreeParamsDictTagged {
     const params = {
         "@type": "afni/@diff.tree" as const,
         "new_dir": new_dir,
@@ -140,7 +140,7 @@ function v__diff_tree_params(
  * @returns Command-line arguments.
  */
 function v__diff_tree_cargs(
-    params: VDiffTreeParameters,
+    params: VDiffTreeParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -229,7 +229,7 @@ function v__diff_tree_cargs(
  * @returns Outputs object.
  */
 function v__diff_tree_outputs(
-    params: VDiffTreeParameters,
+    params: VDiffTreeParamsDict,
     execution: Execution,
 ): VDiffTreeOutputs {
     const ret: VDiffTreeOutputs = {
@@ -254,7 +254,7 @@ function v__diff_tree_outputs(
  * @returns NamedTuple of outputs (described in `VDiffTreeOutputs`).
  */
 function v__diff_tree_execute(
-    params: VDiffTreeParameters,
+    params: VDiffTreeParamsDict,
     runner: Runner | null = null,
 ): VDiffTreeOutputs {
     runner = runner || getGlobalRunner();
@@ -326,6 +326,8 @@ function v__diff_tree(
 
 export {
       VDiffTreeOutputs,
+      VDiffTreeParamsDict,
+      VDiffTreeParamsDictTagged,
       V__DIFF_TREE_METADATA,
       v__diff_tree,
       v__diff_tree_execute,

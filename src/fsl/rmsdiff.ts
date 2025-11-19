@@ -11,18 +11,18 @@ const RMSDIFF_METADATA: Metadata = {
 };
 
 
-interface RmsdiffParameters {
+interface RmsdiffParamsDict {
     "@type"?: "fsl/rmsdiff";
     "matrixfile1": InputPathType;
     "matrixfile2": InputPathType;
     "refvol": InputPathType;
     "mask"?: InputPathType | null | undefined;
 }
-type RmsdiffParametersTagged = Required<Pick<RmsdiffParameters, '@type'>> & RmsdiffParameters;
+type RmsdiffParamsDictTagged = Required<Pick<RmsdiffParamsDict, '@type'>> & RmsdiffParamsDict;
 
 
 /**
- * Output object returned when calling `RmsdiffParameters(...)`.
+ * Output object returned when calling `RmsdiffParamsDict(...)`.
  *
  * @interface
  */
@@ -49,7 +49,7 @@ function rmsdiff_params(
     matrixfile2: InputPathType,
     refvol: InputPathType,
     mask: InputPathType | null = null,
-): RmsdiffParametersTagged {
+): RmsdiffParamsDictTagged {
     const params = {
         "@type": "fsl/rmsdiff" as const,
         "matrixfile1": matrixfile1,
@@ -72,7 +72,7 @@ function rmsdiff_params(
  * @returns Command-line arguments.
  */
 function rmsdiff_cargs(
-    params: RmsdiffParameters,
+    params: RmsdiffParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -96,7 +96,7 @@ function rmsdiff_cargs(
  * @returns Outputs object.
  */
 function rmsdiff_outputs(
-    params: RmsdiffParameters,
+    params: RmsdiffParamsDict,
     execution: Execution,
 ): RmsdiffOutputs {
     const ret: RmsdiffOutputs = {
@@ -121,7 +121,7 @@ function rmsdiff_outputs(
  * @returns NamedTuple of outputs (described in `RmsdiffOutputs`).
  */
 function rmsdiff_execute(
-    params: RmsdiffParameters,
+    params: RmsdiffParamsDict,
     runner: Runner | null = null,
 ): RmsdiffOutputs {
     runner = runner || getGlobalRunner();
@@ -166,6 +166,8 @@ function rmsdiff(
 export {
       RMSDIFF_METADATA,
       RmsdiffOutputs,
+      RmsdiffParamsDict,
+      RmsdiffParamsDictTagged,
       rmsdiff,
       rmsdiff_execute,
       rmsdiff_params,

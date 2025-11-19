@@ -11,7 +11,7 @@ const MELODIC_METADATA: Metadata = {
 };
 
 
-interface MelodicParameters {
+interface MelodicParamsDict {
     "@type"?: "fsl/melodic";
     "input_file": InputPathType;
     "output_directory"?: string | null | undefined;
@@ -63,11 +63,11 @@ interface MelodicParameters {
     "report_maps"?: string | null | undefined;
     "keep_meanvol": boolean;
 }
-type MelodicParametersTagged = Required<Pick<MelodicParameters, '@type'>> & MelodicParameters;
+type MelodicParamsDictTagged = Required<Pick<MelodicParamsDict, '@type'>> & MelodicParamsDict;
 
 
 /**
- * Output object returned when calling `MelodicParameters(...)`.
+ * Output object returned when calling `MelodicParamsDict(...)`.
  *
  * @interface
  */
@@ -204,7 +204,7 @@ function melodic_params(
     debug: boolean = false,
     report_maps: string | null = null,
     keep_meanvol: boolean = false,
-): MelodicParametersTagged {
+): MelodicParamsDictTagged {
     const params = {
         "@type": "fsl/melodic" as const,
         "input_file": input_file,
@@ -322,7 +322,7 @@ function melodic_params(
  * @returns Command-line arguments.
  */
 function melodic_cargs(
-    params: MelodicParameters,
+    params: MelodicParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -566,7 +566,7 @@ function melodic_cargs(
  * @returns Outputs object.
  */
 function melodic_outputs(
-    params: MelodicParameters,
+    params: MelodicParamsDict,
     execution: Execution,
 ): MelodicOutputs {
     const ret: MelodicOutputs = {
@@ -596,7 +596,7 @@ function melodic_outputs(
  * @returns NamedTuple of outputs (described in `MelodicOutputs`).
  */
 function melodic_execute(
-    params: MelodicParameters,
+    params: MelodicParamsDict,
     runner: Runner | null = null,
 ): MelodicOutputs {
     runner = runner || getGlobalRunner();
@@ -731,6 +731,8 @@ function melodic(
 export {
       MELODIC_METADATA,
       MelodicOutputs,
+      MelodicParamsDict,
+      MelodicParamsDictTagged,
       melodic,
       melodic_execute,
       melodic_params,

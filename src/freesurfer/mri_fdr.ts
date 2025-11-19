@@ -11,7 +11,7 @@ const MRI_FDR_METADATA: Metadata = {
 };
 
 
-interface MriFdrParameters {
+interface MriFdrParamsDict {
     "@type"?: "freesurfer/mri_fdr";
     "input_files": Array<string>;
     "fdr_value": number;
@@ -24,11 +24,11 @@ interface MriFdrParameters {
     "debug": boolean;
     "check_options": boolean;
 }
-type MriFdrParametersTagged = Required<Pick<MriFdrParameters, '@type'>> & MriFdrParameters;
+type MriFdrParamsDictTagged = Required<Pick<MriFdrParamsDict, '@type'>> & MriFdrParamsDict;
 
 
 /**
- * Output object returned when calling `MriFdrParameters(...)`.
+ * Output object returned when calling `MriFdrParamsDict(...)`.
  *
  * @interface
  */
@@ -67,7 +67,7 @@ function mri_fdr_params(
     threshold_file: string | null = null,
     debug: boolean = false,
     check_options: boolean = false,
-): MriFdrParametersTagged {
+): MriFdrParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_fdr" as const,
         "input_files": input_files,
@@ -98,7 +98,7 @@ function mri_fdr_params(
  * @returns Command-line arguments.
  */
 function mri_fdr_cargs(
-    params: MriFdrParameters,
+    params: MriFdrParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -154,7 +154,7 @@ function mri_fdr_cargs(
  * @returns Outputs object.
  */
 function mri_fdr_outputs(
-    params: MriFdrParameters,
+    params: MriFdrParamsDict,
     execution: Execution,
 ): MriFdrOutputs {
     const ret: MriFdrOutputs = {
@@ -179,7 +179,7 @@ function mri_fdr_outputs(
  * @returns NamedTuple of outputs (described in `MriFdrOutputs`).
  */
 function mri_fdr_execute(
-    params: MriFdrParameters,
+    params: MriFdrParamsDict,
     runner: Runner | null = null,
 ): MriFdrOutputs {
     runner = runner || getGlobalRunner();
@@ -236,6 +236,8 @@ function mri_fdr(
 export {
       MRI_FDR_METADATA,
       MriFdrOutputs,
+      MriFdrParamsDict,
+      MriFdrParamsDictTagged,
       mri_fdr,
       mri_fdr_execute,
       mri_fdr_params,

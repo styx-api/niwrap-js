@@ -11,7 +11,7 @@ const MRI_COREG_METADATA: Metadata = {
 };
 
 
-interface MriCoregParameters {
+interface MriCoregParamsDict {
     "@type"?: "freesurfer/mri_coreg";
     "movvol": InputPathType;
     "refvol": InputPathType;
@@ -67,11 +67,11 @@ interface MriCoregParameters {
     "checkopts": boolean;
     "version": boolean;
 }
-type MriCoregParametersTagged = Required<Pick<MriCoregParameters, '@type'>> & MriCoregParameters;
+type MriCoregParamsDictTagged = Required<Pick<MriCoregParamsDict, '@type'>> & MriCoregParamsDict;
 
 
 /**
- * Output object returned when calling `MriCoregParameters(...)`.
+ * Output object returned when calling `MriCoregParamsDict(...)`.
  *
  * @interface
  */
@@ -224,7 +224,7 @@ function mri_coreg_params(
     debug: boolean = false,
     checkopts: boolean = false,
     version: boolean = false,
-): MriCoregParametersTagged {
+): MriCoregParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_coreg" as const,
         "movvol": movvol,
@@ -360,7 +360,7 @@ function mri_coreg_params(
  * @returns Command-line arguments.
  */
 function mri_coreg_cargs(
-    params: MriCoregParameters,
+    params: MriCoregParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -639,7 +639,7 @@ function mri_coreg_cargs(
  * @returns Outputs object.
  */
 function mri_coreg_outputs(
-    params: MriCoregParameters,
+    params: MriCoregParamsDict,
     execution: Execution,
 ): MriCoregOutputs {
     const ret: MriCoregOutputs = {
@@ -671,7 +671,7 @@ function mri_coreg_outputs(
  * @returns NamedTuple of outputs (described in `MriCoregOutputs`).
  */
 function mri_coreg_execute(
-    params: MriCoregParameters,
+    params: MriCoregParamsDict,
     runner: Runner | null = null,
 ): MriCoregOutputs {
     runner = runner || getGlobalRunner();
@@ -814,6 +814,8 @@ function mri_coreg(
 export {
       MRI_COREG_METADATA,
       MriCoregOutputs,
+      MriCoregParamsDict,
+      MriCoregParamsDictTagged,
       mri_coreg,
       mri_coreg_execute,
       mri_coreg_params,

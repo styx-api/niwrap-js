@@ -11,16 +11,16 @@ const FS_TEMP_DIR_METADATA: Metadata = {
 };
 
 
-interface FsTempDirParameters {
+interface FsTempDirParamsDict {
     "@type"?: "freesurfer/fs_temp_dir";
     "base_directory"?: string | null | undefined;
     "scratch": boolean;
 }
-type FsTempDirParametersTagged = Required<Pick<FsTempDirParameters, '@type'>> & FsTempDirParameters;
+type FsTempDirParamsDictTagged = Required<Pick<FsTempDirParamsDict, '@type'>> & FsTempDirParamsDict;
 
 
 /**
- * Output object returned when calling `FsTempDirParameters(...)`.
+ * Output object returned when calling `FsTempDirParamsDict(...)`.
  *
  * @interface
  */
@@ -47,7 +47,7 @@ interface FsTempDirOutputs {
 function fs_temp_dir_params(
     base_directory: string | null = null,
     scratch: boolean = false,
-): FsTempDirParametersTagged {
+): FsTempDirParamsDictTagged {
     const params = {
         "@type": "freesurfer/fs_temp_dir" as const,
         "scratch": scratch,
@@ -68,7 +68,7 @@ function fs_temp_dir_params(
  * @returns Command-line arguments.
  */
 function fs_temp_dir_cargs(
-    params: FsTempDirParameters,
+    params: FsTempDirParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -95,7 +95,7 @@ function fs_temp_dir_cargs(
  * @returns Outputs object.
  */
 function fs_temp_dir_outputs(
-    params: FsTempDirParameters,
+    params: FsTempDirParamsDict,
     execution: Execution,
 ): FsTempDirOutputs {
     const ret: FsTempDirOutputs = {
@@ -121,7 +121,7 @@ function fs_temp_dir_outputs(
  * @returns NamedTuple of outputs (described in `FsTempDirOutputs`).
  */
 function fs_temp_dir_execute(
-    params: FsTempDirParameters,
+    params: FsTempDirParamsDict,
     runner: Runner | null = null,
 ): FsTempDirOutputs {
     runner = runner || getGlobalRunner();
@@ -162,6 +162,8 @@ function fs_temp_dir(
 export {
       FS_TEMP_DIR_METADATA,
       FsTempDirOutputs,
+      FsTempDirParamsDict,
+      FsTempDirParamsDictTagged,
       fs_temp_dir,
       fs_temp_dir_execute,
       fs_temp_dir_params,

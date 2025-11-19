@@ -11,7 +11,7 @@ const V__SUMA_MAKE_SPEC_CARET_METADATA: Metadata = {
 };
 
 
-interface VSumaMakeSpecCaretParameters {
+interface VSumaMakeSpecCaretParamsDict {
     "@type"?: "afni/@SUMA_Make_Spec_Caret";
     "subject_id": string;
     "help": boolean;
@@ -20,11 +20,11 @@ interface VSumaMakeSpecCaretParameters {
     "surface_path"?: string | null | undefined;
     "side_labels_style"?: number | null | undefined;
 }
-type VSumaMakeSpecCaretParametersTagged = Required<Pick<VSumaMakeSpecCaretParameters, '@type'>> & VSumaMakeSpecCaretParameters;
+type VSumaMakeSpecCaretParamsDictTagged = Required<Pick<VSumaMakeSpecCaretParamsDict, '@type'>> & VSumaMakeSpecCaretParamsDict;
 
 
 /**
- * Output object returned when calling `VSumaMakeSpecCaretParameters(...)`.
+ * Output object returned when calling `VSumaMakeSpecCaretParamsDict(...)`.
  *
  * @interface
  */
@@ -63,7 +63,7 @@ function v__suma_make_spec_caret_params(
     echo: boolean = false,
     surface_path: string | null = null,
     side_labels_style: number | null = null,
-): VSumaMakeSpecCaretParametersTagged {
+): VSumaMakeSpecCaretParamsDictTagged {
     const params = {
         "@type": "afni/@SUMA_Make_Spec_Caret" as const,
         "subject_id": subject_id,
@@ -92,7 +92,7 @@ function v__suma_make_spec_caret_params(
  * @returns Command-line arguments.
  */
 function v__suma_make_spec_caret_cargs(
-    params: VSumaMakeSpecCaretParameters,
+    params: VSumaMakeSpecCaretParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -138,7 +138,7 @@ function v__suma_make_spec_caret_cargs(
  * @returns Outputs object.
  */
 function v__suma_make_spec_caret_outputs(
-    params: VSumaMakeSpecCaretParameters,
+    params: VSumaMakeSpecCaretParamsDict,
     execution: Execution,
 ): VSumaMakeSpecCaretOutputs {
     const ret: VSumaMakeSpecCaretOutputs = {
@@ -165,7 +165,7 @@ function v__suma_make_spec_caret_outputs(
  * @returns NamedTuple of outputs (described in `VSumaMakeSpecCaretOutputs`).
  */
 function v__suma_make_spec_caret_execute(
-    params: VSumaMakeSpecCaretParameters,
+    params: VSumaMakeSpecCaretParamsDict,
     runner: Runner | null = null,
 ): VSumaMakeSpecCaretOutputs {
     runner = runner || getGlobalRunner();
@@ -213,6 +213,8 @@ function v__suma_make_spec_caret(
 
 export {
       VSumaMakeSpecCaretOutputs,
+      VSumaMakeSpecCaretParamsDict,
+      VSumaMakeSpecCaretParamsDictTagged,
       V__SUMA_MAKE_SPEC_CARET_METADATA,
       v__suma_make_spec_caret,
       v__suma_make_spec_caret_execute,

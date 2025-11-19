@@ -10,45 +10,45 @@ const CIFTI_CORRELATION_GRADIENT_METADATA: Metadata = {
 };
 
 
-interface CiftiCorrelationGradientLeftSurfaceParameters {
+interface CiftiCorrelationGradientLeftSurfaceParamsDict {
     "@type"?: "left-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiCorrelationGradientLeftSurfaceParametersTagged = Required<Pick<CiftiCorrelationGradientLeftSurfaceParameters, '@type'>> & CiftiCorrelationGradientLeftSurfaceParameters;
+type CiftiCorrelationGradientLeftSurfaceParamsDictTagged = Required<Pick<CiftiCorrelationGradientLeftSurfaceParamsDict, '@type'>> & CiftiCorrelationGradientLeftSurfaceParamsDict;
 
 
-interface CiftiCorrelationGradientRightSurfaceParameters {
+interface CiftiCorrelationGradientRightSurfaceParamsDict {
     "@type"?: "right-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiCorrelationGradientRightSurfaceParametersTagged = Required<Pick<CiftiCorrelationGradientRightSurfaceParameters, '@type'>> & CiftiCorrelationGradientRightSurfaceParameters;
+type CiftiCorrelationGradientRightSurfaceParamsDictTagged = Required<Pick<CiftiCorrelationGradientRightSurfaceParamsDict, '@type'>> & CiftiCorrelationGradientRightSurfaceParamsDict;
 
 
-interface CiftiCorrelationGradientCerebellumSurfaceParameters {
+interface CiftiCorrelationGradientCerebellumSurfaceParamsDict {
     "@type"?: "cerebellum-surface";
     "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
 }
-type CiftiCorrelationGradientCerebellumSurfaceParametersTagged = Required<Pick<CiftiCorrelationGradientCerebellumSurfaceParameters, '@type'>> & CiftiCorrelationGradientCerebellumSurfaceParameters;
+type CiftiCorrelationGradientCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiCorrelationGradientCerebellumSurfaceParamsDict, '@type'>> & CiftiCorrelationGradientCerebellumSurfaceParamsDict;
 
 
-interface CiftiCorrelationGradientDoubleCorrelationParameters {
+interface CiftiCorrelationGradientDoubleCorrelationParamsDict {
     "@type"?: "double-correlation";
     "fisher-z-first": boolean;
     "no-demean-first": boolean;
     "covariance-first": boolean;
 }
-type CiftiCorrelationGradientDoubleCorrelationParametersTagged = Required<Pick<CiftiCorrelationGradientDoubleCorrelationParameters, '@type'>> & CiftiCorrelationGradientDoubleCorrelationParameters;
+type CiftiCorrelationGradientDoubleCorrelationParamsDictTagged = Required<Pick<CiftiCorrelationGradientDoubleCorrelationParamsDict, '@type'>> & CiftiCorrelationGradientDoubleCorrelationParamsDict;
 
 
-interface CiftiCorrelationGradientParameters {
+interface CiftiCorrelationGradientParamsDict {
     "@type"?: "workbench/cifti-correlation-gradient";
     "cifti-out": string;
-    "left-surface"?: CiftiCorrelationGradientLeftSurfaceParameters | null | undefined;
-    "right-surface"?: CiftiCorrelationGradientRightSurfaceParameters | null | undefined;
-    "cerebellum-surface"?: CiftiCorrelationGradientCerebellumSurfaceParameters | null | undefined;
+    "left-surface"?: CiftiCorrelationGradientLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiCorrelationGradientRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null | undefined;
     "surface-kernel"?: number | null | undefined;
     "volume-kernel"?: number | null | undefined;
     "presmooth-fwhm": boolean;
@@ -58,10 +58,10 @@ interface CiftiCorrelationGradientParameters {
     "distance"?: number | null | undefined;
     "covariance": boolean;
     "limit-GB"?: number | null | undefined;
-    "double-correlation"?: CiftiCorrelationGradientDoubleCorrelationParameters | null | undefined;
+    "double-correlation"?: CiftiCorrelationGradientDoubleCorrelationParamsDict | null | undefined;
     "cifti": InputPathType;
 }
-type CiftiCorrelationGradientParametersTagged = Required<Pick<CiftiCorrelationGradientParameters, '@type'>> & CiftiCorrelationGradientParameters;
+type CiftiCorrelationGradientParamsDictTagged = Required<Pick<CiftiCorrelationGradientParamsDict, '@type'>> & CiftiCorrelationGradientParamsDict;
 
 
 /**
@@ -74,10 +74,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_correlation_gradient_left_surface_params(
+function cifti_correlation_gradient_left_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiCorrelationGradientLeftSurfaceParametersTagged {
+): CiftiCorrelationGradientLeftSurfaceParamsDictTagged {
     const params = {
         "@type": "left-surface" as const,
         "surface": surface,
@@ -98,7 +98,7 @@ function cifti_correlation_gradient_left_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_correlation_gradient_left_surface_cargs(
-    params: CiftiCorrelationGradientLeftSurfaceParameters,
+    params: CiftiCorrelationGradientLeftSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -124,10 +124,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_correlation_gradient_right_surface_params(
+function cifti_correlation_gradient_right_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiCorrelationGradientRightSurfaceParametersTagged {
+): CiftiCorrelationGradientRightSurfaceParamsDictTagged {
     const params = {
         "@type": "right-surface" as const,
         "surface": surface,
@@ -148,7 +148,7 @@ function cifti_correlation_gradient_right_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_correlation_gradient_right_surface_cargs(
-    params: CiftiCorrelationGradientRightSurfaceParameters,
+    params: CiftiCorrelationGradientRightSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -174,10 +174,10 @@ the corrected vertex areas, as a metric
  *
  * @returns Parameter dictionary
  */
-function cifti_correlation_gradient_cerebellum_surface_params(
+function cifti_correlation_gradient_cerebellum_surface(
     surface: InputPathType,
     area_metric: InputPathType | null,
-): CiftiCorrelationGradientCerebellumSurfaceParametersTagged {
+): CiftiCorrelationGradientCerebellumSurfaceParamsDictTagged {
     const params = {
         "@type": "cerebellum-surface" as const,
         "surface": surface,
@@ -198,7 +198,7 @@ function cifti_correlation_gradient_cerebellum_surface_params(
  * @returns Command-line arguments.
  */
 function cifti_correlation_gradient_cerebellum_surface_cargs(
-    params: CiftiCorrelationGradientCerebellumSurfaceParameters,
+    params: CiftiCorrelationGradientCerebellumSurfaceParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -223,11 +223,11 @@ function cifti_correlation_gradient_cerebellum_surface_cargs(
  *
  * @returns Parameter dictionary
  */
-function cifti_correlation_gradient_double_correlation_params(
+function cifti_correlation_gradient_double_correlation(
     fisher_z_first: boolean = false,
     no_demean_first: boolean = false,
     covariance_first: boolean = false,
-): CiftiCorrelationGradientDoubleCorrelationParametersTagged {
+): CiftiCorrelationGradientDoubleCorrelationParamsDictTagged {
     const params = {
         "@type": "double-correlation" as const,
         "fisher-z-first": fisher_z_first,
@@ -247,7 +247,7 @@ function cifti_correlation_gradient_double_correlation_params(
  * @returns Command-line arguments.
  */
 function cifti_correlation_gradient_double_correlation_cargs(
-    params: CiftiCorrelationGradientDoubleCorrelationParameters,
+    params: CiftiCorrelationGradientDoubleCorrelationParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -264,7 +264,7 @@ function cifti_correlation_gradient_double_correlation_cargs(
 
 
 /**
- * Output object returned when calling `CiftiCorrelationGradientParameters(...)`.
+ * Output object returned when calling `CiftiCorrelationGradientParamsDict(...)`.
  *
  * @interface
  */
@@ -319,15 +319,15 @@ function cifti_correlation_gradient_params(
     distance_: number | null,
     limit_gb: number | null,
     cifti: InputPathType,
-    left_surface: CiftiCorrelationGradientLeftSurfaceParameters | null = null,
-    right_surface: CiftiCorrelationGradientRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiCorrelationGradientLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiCorrelationGradientRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null = null,
     presmooth_fwhm: boolean = false,
     undo_fisher_z: boolean = false,
     fisher_z: boolean = false,
     covariance: boolean = false,
-    double_correlation: CiftiCorrelationGradientDoubleCorrelationParameters | null = null,
-): CiftiCorrelationGradientParametersTagged {
+    double_correlation: CiftiCorrelationGradientDoubleCorrelationParamsDict | null = null,
+): CiftiCorrelationGradientParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-correlation-gradient" as const,
         "cifti-out": cifti_out,
@@ -377,7 +377,7 @@ function cifti_correlation_gradient_params(
  * @returns Command-line arguments.
  */
 function cifti_correlation_gradient_cargs(
-    params: CiftiCorrelationGradientParameters,
+    params: CiftiCorrelationGradientParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
@@ -420,7 +420,7 @@ function cifti_correlation_gradient_cargs(
  * @returns Outputs object.
  */
 function cifti_correlation_gradient_outputs(
-    params: CiftiCorrelationGradientParameters,
+    params: CiftiCorrelationGradientParamsDict,
     execution: Execution,
 ): CiftiCorrelationGradientOutputs {
     const ret: CiftiCorrelationGradientOutputs = {
@@ -442,7 +442,7 @@ function cifti_correlation_gradient_outputs(
  * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
  */
 function cifti_correlation_gradient_execute(
-    params: CiftiCorrelationGradientParameters,
+    params: CiftiCorrelationGradientParamsDict,
     runner: Runner | null = null,
 ): CiftiCorrelationGradientOutputs {
     runner = runner || getGlobalRunner();
@@ -497,14 +497,14 @@ function cifti_correlation_gradient(
     distance_: number | null,
     limit_gb: number | null,
     cifti: InputPathType,
-    left_surface: CiftiCorrelationGradientLeftSurfaceParameters | null = null,
-    right_surface: CiftiCorrelationGradientRightSurfaceParameters | null = null,
-    cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParameters | null = null,
+    left_surface: CiftiCorrelationGradientLeftSurfaceParamsDict | null = null,
+    right_surface: CiftiCorrelationGradientRightSurfaceParamsDict | null = null,
+    cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null = null,
     presmooth_fwhm: boolean = false,
     undo_fisher_z: boolean = false,
     fisher_z: boolean = false,
     covariance: boolean = false,
-    double_correlation: CiftiCorrelationGradientDoubleCorrelationParameters | null = null,
+    double_correlation: CiftiCorrelationGradientDoubleCorrelationParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiCorrelationGradientOutputs {
     const params = cifti_correlation_gradient_params(cifti_out, surface_kernel, volume_kernel, distance, distance_, limit_gb, cifti, left_surface, right_surface, cerebellum_surface, presmooth_fwhm, undo_fisher_z, fisher_z, covariance, double_correlation)
@@ -514,12 +514,22 @@ function cifti_correlation_gradient(
 
 export {
       CIFTI_CORRELATION_GRADIENT_METADATA,
+      CiftiCorrelationGradientCerebellumSurfaceParamsDict,
+      CiftiCorrelationGradientCerebellumSurfaceParamsDictTagged,
+      CiftiCorrelationGradientDoubleCorrelationParamsDict,
+      CiftiCorrelationGradientDoubleCorrelationParamsDictTagged,
+      CiftiCorrelationGradientLeftSurfaceParamsDict,
+      CiftiCorrelationGradientLeftSurfaceParamsDictTagged,
       CiftiCorrelationGradientOutputs,
+      CiftiCorrelationGradientParamsDict,
+      CiftiCorrelationGradientParamsDictTagged,
+      CiftiCorrelationGradientRightSurfaceParamsDict,
+      CiftiCorrelationGradientRightSurfaceParamsDictTagged,
       cifti_correlation_gradient,
-      cifti_correlation_gradient_cerebellum_surface_params,
-      cifti_correlation_gradient_double_correlation_params,
+      cifti_correlation_gradient_cerebellum_surface,
+      cifti_correlation_gradient_double_correlation,
       cifti_correlation_gradient_execute,
-      cifti_correlation_gradient_left_surface_params,
+      cifti_correlation_gradient_left_surface,
       cifti_correlation_gradient_params,
-      cifti_correlation_gradient_right_surface_params,
+      cifti_correlation_gradient_right_surface,
 };
