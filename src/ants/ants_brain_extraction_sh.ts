@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_BRAIN_EXTRACTION_SH_METADATA: Metadata = {
-    id: "1c9417f2b9955b0d99b45712b650286b61783b3e.boutiques",
+    id: "72830e1ccd1043926fd7dcd995dc980ded440138.boutiques",
     name: "antsBrainExtraction.sh",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -13,20 +13,20 @@ const ANTS_BRAIN_EXTRACTION_SH_METADATA: Metadata = {
 
 interface AntsBrainExtractionShParamsDict {
     "@type"?: "ants/antsBrainExtraction.sh";
-    "image_dimension": number;
+    "image_dimension": 2 | 3;
     "anatomical_image": InputPathType;
     "template": InputPathType;
     "probability_mask": InputPathType;
     "tissue_classification"?: string | null | undefined;
     "brain_extraction_registration_mask"?: InputPathType | null | undefined;
-    "keep_temporary_files": boolean;
-    "single_floating_point_precision": boolean;
+    "keep_temporary_files"?: boolean | null | undefined;
+    "single_floating_point_precision"?: boolean | null | undefined;
     "initial_moving_transform"?: InputPathType | null | undefined;
     "rotation_search_params"?: string | null | undefined;
     "image_file_suffix"?: string | null | undefined;
     "translation_search_params"?: string | null | undefined;
-    "random_seeding": boolean;
-    "debug_mode": boolean;
+    "random_seeding"?: boolean | null | undefined;
+    "debug_mode"?: number | null | undefined;
     "output_prefix"?: string | null | undefined;
 }
 type AntsBrainExtractionShParamsDictTagged = Required<Pick<AntsBrainExtractionShParamsDict, '@type'>> & AntsBrainExtractionShParamsDict;
@@ -47,52 +47,76 @@ interface AntsBrainExtractionShOutputs {
      */
     brain_extracted_image: OutputPathType | null;
     /**
-     * Brain mask
+     * Brain extraction mask
      */
     brain_mask: OutputPathType | null;
     /**
-     * Brain probability mask
+     * Brain segmentation (tissue classification)
      */
-    brain_probability_mask: OutputPathType | null;
+    brain_segmentation: OutputPathType | null;
+    /**
+     * Cerebrospinal fluid segmentation
+     */
+    csf_segmentation: OutputPathType | null;
+    /**
+     * Gray matter segmentation
+     */
+    gm_segmentation: OutputPathType | null;
+    /**
+     * White matter segmentation
+     */
+    wm_segmentation: OutputPathType | null;
+    /**
+     * Generic affine transform from registration
+     */
+    generic_affine: OutputPathType | null;
+    /**
+     * Warp field from registration
+     */
+    warp_field: OutputPathType | null;
+    /**
+     * Inverse warp field from registration
+     */
+    inverse_warp_field: OutputPathType | null;
 }
 
 
 /**
  * Build parameters.
  *
- * @param anatomical_image Anatomical image (Structural image, typically T1)
+ * @param image_dimension Image dimension (2 or 3 for 2- or 3-dimensional image)
+ * @param anatomical_image Anatomical image (Structural image, typically T1). If more than one anatomical image is specified, subsequently specified images are used during the segmentation process. However, only the first image is used in the registration of priors.
  * @param template Brain extraction template (Anatomical template)
- * @param probability_mask Brain extraction probability mask
- * @param image_dimension Image dimension (2 or 3)
- * @param tissue_classification Tissue classification
- * @param brain_extraction_registration_mask Brain extraction registration mask
- * @param keep_temporary_files Keep temporary files
- * @param single_floating_point_precision Use single floating point precision
- * @param initial_moving_transform Initial moving transform
- * @param rotation_search_params Rotation search parameters
- * @param image_file_suffix Image file suffix
- * @param translation_search_params Translation search parameters
- * @param random_seeding Use random seeding
- * @param debug_mode Test / debug mode
- * @param output_prefix Output prefix
+ * @param probability_mask Brain extraction probability mask (with intensity range 1=definitely brain to 0=definitely background)
+ * @param tissue_classification Tissue classification - A k-means segmentation to find tissue classes. Format: KxcsfLabelxgmLabelxwmLabel. Examples: '3x1x2x3' for T1 (K=3, CSF=1, GM=2, WM=3), '3x3x2x1' for T2, '3x1x3x2' for FLAIR, '4x4x2x3' for K=4
+ * @param brain_extraction_registration_mask Brain extraction registration mask (Mask used for registration to limit the metric computation to a specific region)
+ * @param keep_temporary_files Keep temporary files (keep brain extraction/segmentation warps, etc). 0=delete, 1=keep
+ * @param single_floating_point_precision Use antsRegistration with single (1) or double (0) floating point precision
+ * @param initial_moving_transform Initial moving transform (An ITK affine transform, e.g., from antsAI or ITK-SNAP). Without this option, the script calls antsAI to search for a good initial moving transform.
+ * @param rotation_search_params Rotation search parameters for antsAI in format 'step,arcFraction'. Step is in degrees, arcFraction goes from 0 (no search) to 1 (search -180 to 180 degrees)
+ * @param image_file_suffix Image file suffix (any standard ITK IO format, e.g., nrrd, nii.gz, mhd)
+ * @param translation_search_params Translation search parameters for antsAI in format 'step,range'. Step is in mm, -range to range will be tested in each dimension
+ * @param random_seeding Use random seeding: 1=use random seed from system clock, 0=use fixed seed (ANTS_RANDOM_SEED=19650218 or value from environment). For reproducibility, set to 0 and also set ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+ * @param debug_mode Test/debug mode: If > 0, runs a faster version of the script. Only for debugging, results will not be good.
+ * @param output_prefix Output prefix (directory + file prefix)
  *
  * @returns Parameter dictionary
  */
 function ants_brain_extraction_sh_params(
+    image_dimension: 2 | 3,
     anatomical_image: InputPathType,
     template: InputPathType,
     probability_mask: InputPathType,
-    image_dimension: number = 3,
     tissue_classification: string | null = null,
     brain_extraction_registration_mask: InputPathType | null = null,
-    keep_temporary_files: boolean = false,
-    single_floating_point_precision: boolean = false,
+    keep_temporary_files: boolean | null = null,
+    single_floating_point_precision: boolean | null = null,
     initial_moving_transform: InputPathType | null = null,
     rotation_search_params: string | null = null,
     image_file_suffix: string | null = null,
     translation_search_params: string | null = null,
-    random_seeding: boolean = false,
-    debug_mode: boolean = false,
+    random_seeding: boolean | null = null,
+    debug_mode: number | null = null,
     output_prefix: string | null = null,
 ): AntsBrainExtractionShParamsDictTagged {
     const params = {
@@ -101,16 +125,18 @@ function ants_brain_extraction_sh_params(
         "anatomical_image": anatomical_image,
         "template": template,
         "probability_mask": probability_mask,
-        "keep_temporary_files": keep_temporary_files,
-        "single_floating_point_precision": single_floating_point_precision,
-        "random_seeding": random_seeding,
-        "debug_mode": debug_mode,
     };
     if (tissue_classification !== null) {
         params["tissue_classification"] = tissue_classification;
     }
     if (brain_extraction_registration_mask !== null) {
         params["brain_extraction_registration_mask"] = brain_extraction_registration_mask;
+    }
+    if (keep_temporary_files !== null) {
+        params["keep_temporary_files"] = keep_temporary_files;
+    }
+    if (single_floating_point_precision !== null) {
+        params["single_floating_point_precision"] = single_floating_point_precision;
     }
     if (initial_moving_transform !== null) {
         params["initial_moving_transform"] = initial_moving_transform;
@@ -123,6 +149,12 @@ function ants_brain_extraction_sh_params(
     }
     if (translation_search_params !== null) {
         params["translation_search_params"] = translation_search_params;
+    }
+    if (random_seeding !== null) {
+        params["random_seeding"] = random_seeding;
+    }
+    if (debug_mode !== null) {
+        params["debug_mode"] = debug_mode;
     }
     if (output_prefix !== null) {
         params["output_prefix"] = output_prefix;
@@ -147,7 +179,7 @@ function ants_brain_extraction_sh_cargs(
     cargs.push("antsBrainExtraction.sh");
     cargs.push(
         "-d",
-        String((params["image_dimension"] ?? 3))
+        String((params["image_dimension"] ?? null))
     );
     cargs.push(
         "-a",
@@ -173,11 +205,17 @@ function ants_brain_extraction_sh_cargs(
             execution.inputFile((params["brain_extraction_registration_mask"] ?? null))
         );
     }
-    if ((params["keep_temporary_files"] ?? false)) {
-        cargs.push("-k");
+    if ((params["keep_temporary_files"] ?? null) !== null) {
+        cargs.push(
+            "-k",
+            ((params["keep_temporary_files"] ?? null) ? "1" : "0")
+        );
     }
-    if ((params["single_floating_point_precision"] ?? false)) {
-        cargs.push("-q");
+    if ((params["single_floating_point_precision"] ?? null) !== null) {
+        cargs.push(
+            "-q",
+            ((params["single_floating_point_precision"] ?? null) ? "1" : "0")
+        );
     }
     if ((params["initial_moving_transform"] ?? null) !== null) {
         cargs.push(
@@ -203,11 +241,17 @@ function ants_brain_extraction_sh_cargs(
             (params["translation_search_params"] ?? null)
         );
     }
-    if ((params["random_seeding"] ?? false)) {
-        cargs.push("-u");
+    if ((params["random_seeding"] ?? null) !== null) {
+        cargs.push(
+            "-u",
+            ((params["random_seeding"] ?? null) ? "1" : "0")
+        );
     }
-    if ((params["debug_mode"] ?? false)) {
-        cargs.push("-z");
+    if ((params["debug_mode"] ?? null) !== null) {
+        cargs.push(
+            "-z",
+            String((params["debug_mode"] ?? null))
+        );
     }
     if ((params["output_prefix"] ?? null) !== null) {
         cargs.push(
@@ -233,9 +277,15 @@ function ants_brain_extraction_sh_outputs(
 ): AntsBrainExtractionShOutputs {
     const ret: AntsBrainExtractionShOutputs = {
         root: execution.outputFile("."),
-        brain_extracted_image: execution.outputFile([(params["output_prefix"] ?? ""), "BrainExtractionBrain.nii.gz"].join('')),
-        brain_mask: execution.outputFile([(params["output_prefix"] ?? ""), "BrainExtractionMask.nii.gz"].join('')),
-        brain_probability_mask: execution.outputFile([(params["output_prefix"] ?? ""), "BrainExtractionPrior0GenericAffine.mat"].join('')),
+        brain_extracted_image: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionBrain.nii.gz"].join('')) : null,
+        brain_mask: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionMask.nii.gz"].join('')) : null,
+        brain_segmentation: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionSegmentation.nii.gz"].join('')) : null,
+        csf_segmentation: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionCSF.nii.gz"].join('')) : null,
+        gm_segmentation: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionGM.nii.gz"].join('')) : null,
+        wm_segmentation: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionWM.nii.gz"].join('')) : null,
+        generic_affine: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionPrior0GenericAffine.mat"].join('')) : null,
+        warp_field: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionPrior1Warp.nii.gz"].join('')) : null,
+        inverse_warp_field: ((params["output_prefix"] ?? null) !== null) ? execution.outputFile([(params["output_prefix"] ?? null), "BrainExtractionPrior1InverseWarp.nii.gz"].join('')) : null,
     };
     return ret;
 }
@@ -244,7 +294,7 @@ function ants_brain_extraction_sh_outputs(
 /**
  * antsBrainExtraction.sh
  *
- * antsBrainExtraction.sh performs template-based brain extraction.
+ * antsBrainExtraction.sh performs template-based brain extraction using N4 bias correction, registration, and Atropos segmentation.
  *
  * Author: ANTs Developers
  *
@@ -272,50 +322,50 @@ function ants_brain_extraction_sh_execute(
 /**
  * antsBrainExtraction.sh
  *
- * antsBrainExtraction.sh performs template-based brain extraction.
+ * antsBrainExtraction.sh performs template-based brain extraction using N4 bias correction, registration, and Atropos segmentation.
  *
  * Author: ANTs Developers
  *
  * URL: https://github.com/ANTsX/ANTs
  *
- * @param anatomical_image Anatomical image (Structural image, typically T1)
+ * @param image_dimension Image dimension (2 or 3 for 2- or 3-dimensional image)
+ * @param anatomical_image Anatomical image (Structural image, typically T1). If more than one anatomical image is specified, subsequently specified images are used during the segmentation process. However, only the first image is used in the registration of priors.
  * @param template Brain extraction template (Anatomical template)
- * @param probability_mask Brain extraction probability mask
- * @param image_dimension Image dimension (2 or 3)
- * @param tissue_classification Tissue classification
- * @param brain_extraction_registration_mask Brain extraction registration mask
- * @param keep_temporary_files Keep temporary files
- * @param single_floating_point_precision Use single floating point precision
- * @param initial_moving_transform Initial moving transform
- * @param rotation_search_params Rotation search parameters
- * @param image_file_suffix Image file suffix
- * @param translation_search_params Translation search parameters
- * @param random_seeding Use random seeding
- * @param debug_mode Test / debug mode
- * @param output_prefix Output prefix
+ * @param probability_mask Brain extraction probability mask (with intensity range 1=definitely brain to 0=definitely background)
+ * @param tissue_classification Tissue classification - A k-means segmentation to find tissue classes. Format: KxcsfLabelxgmLabelxwmLabel. Examples: '3x1x2x3' for T1 (K=3, CSF=1, GM=2, WM=3), '3x3x2x1' for T2, '3x1x3x2' for FLAIR, '4x4x2x3' for K=4
+ * @param brain_extraction_registration_mask Brain extraction registration mask (Mask used for registration to limit the metric computation to a specific region)
+ * @param keep_temporary_files Keep temporary files (keep brain extraction/segmentation warps, etc). 0=delete, 1=keep
+ * @param single_floating_point_precision Use antsRegistration with single (1) or double (0) floating point precision
+ * @param initial_moving_transform Initial moving transform (An ITK affine transform, e.g., from antsAI or ITK-SNAP). Without this option, the script calls antsAI to search for a good initial moving transform.
+ * @param rotation_search_params Rotation search parameters for antsAI in format 'step,arcFraction'. Step is in degrees, arcFraction goes from 0 (no search) to 1 (search -180 to 180 degrees)
+ * @param image_file_suffix Image file suffix (any standard ITK IO format, e.g., nrrd, nii.gz, mhd)
+ * @param translation_search_params Translation search parameters for antsAI in format 'step,range'. Step is in mm, -range to range will be tested in each dimension
+ * @param random_seeding Use random seeding: 1=use random seed from system clock, 0=use fixed seed (ANTS_RANDOM_SEED=19650218 or value from environment). For reproducibility, set to 0 and also set ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=1
+ * @param debug_mode Test/debug mode: If > 0, runs a faster version of the script. Only for debugging, results will not be good.
+ * @param output_prefix Output prefix (directory + file prefix)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsBrainExtractionShOutputs`).
  */
 function ants_brain_extraction_sh(
+    image_dimension: 2 | 3,
     anatomical_image: InputPathType,
     template: InputPathType,
     probability_mask: InputPathType,
-    image_dimension: number = 3,
     tissue_classification: string | null = null,
     brain_extraction_registration_mask: InputPathType | null = null,
-    keep_temporary_files: boolean = false,
-    single_floating_point_precision: boolean = false,
+    keep_temporary_files: boolean | null = null,
+    single_floating_point_precision: boolean | null = null,
     initial_moving_transform: InputPathType | null = null,
     rotation_search_params: string | null = null,
     image_file_suffix: string | null = null,
     translation_search_params: string | null = null,
-    random_seeding: boolean = false,
-    debug_mode: boolean = false,
+    random_seeding: boolean | null = null,
+    debug_mode: number | null = null,
     output_prefix: string | null = null,
     runner: Runner | null = null,
 ): AntsBrainExtractionShOutputs {
-    const params = ants_brain_extraction_sh_params(anatomical_image, template, probability_mask, image_dimension, tissue_classification, brain_extraction_registration_mask, keep_temporary_files, single_floating_point_precision, initial_moving_transform, rotation_search_params, image_file_suffix, translation_search_params, random_seeding, debug_mode, output_prefix)
+    const params = ants_brain_extraction_sh_params(image_dimension, anatomical_image, template, probability_mask, tissue_classification, brain_extraction_registration_mask, keep_temporary_files, single_floating_point_precision, initial_moving_transform, rotation_search_params, image_file_suffix, translation_search_params, random_seeding, debug_mode, output_prefix)
     return ants_brain_extraction_sh_execute(params, runner);
 }
 
