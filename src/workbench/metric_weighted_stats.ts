@@ -7,6 +7,7 @@ const METRIC_WEIGHTED_STATS_METADATA: Metadata = {
     id: "59d1210ae1d155885888b93e8db71154f04e52bd.workbench",
     name: "metric-weighted-stats",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

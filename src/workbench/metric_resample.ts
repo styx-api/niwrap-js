@@ -7,6 +7,7 @@ const METRIC_RESAMPLE_METADATA: Metadata = {
     id: "15cbd9ee4611659b2625a9bb44679901f4b387a8.workbench",
     name: "metric-resample",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

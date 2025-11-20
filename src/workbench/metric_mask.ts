@@ -7,6 +7,7 @@ const METRIC_MASK_METADATA: Metadata = {
     id: "681850b8635d1fb30c276619483f247b1d36e566.workbench",
     name: "metric-mask",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

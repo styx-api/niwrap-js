@@ -7,6 +7,7 @@ const CIFTI_AVERAGE_METADATA: Metadata = {
     id: "f30740343235dc708940e806f82a27a090de7bc3.workbench",
     name: "cifti-average",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

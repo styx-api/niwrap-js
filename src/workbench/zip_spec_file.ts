@@ -7,6 +7,7 @@ const ZIP_SPEC_FILE_METADATA: Metadata = {
     id: "06edf7f38703ef83935a1b2ad9fc02acb523add6.workbench",
     name: "zip-spec-file",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

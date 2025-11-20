@@ -7,6 +7,7 @@ const CIFTI_REDUCE_METADATA: Metadata = {
     id: "ac3127da84c910f2776662995c42ebd49423218d.workbench",
     name: "cifti-reduce",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

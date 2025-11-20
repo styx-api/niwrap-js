@@ -7,6 +7,7 @@ const VOLUME_FILL_HOLES_METADATA: Metadata = {
     id: "447c0fe666083fe1acbc67cf224c9e527b125009.workbench",
     name: "volume-fill-holes",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

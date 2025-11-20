@@ -7,6 +7,7 @@ const VOLUME_DISTORTION_METADATA: Metadata = {
     id: "71b5b8e30a3f86c052e4af8965fbf9041a247504.workbench",
     name: "volume-distortion",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

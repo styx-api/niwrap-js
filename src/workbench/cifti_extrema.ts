@@ -7,6 +7,7 @@ const CIFTI_EXTREMA_METADATA: Metadata = {
     id: "96cc4edc754b1196eb76c4a8761c2b9a9cc4593f.workbench",
     name: "cifti-extrema",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

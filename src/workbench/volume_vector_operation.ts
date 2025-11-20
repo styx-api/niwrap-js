@@ -7,6 +7,7 @@ const VOLUME_VECTOR_OPERATION_METADATA: Metadata = {
     id: "65ffcaf250032f2877d161286b6492b7d52088ef.workbench",
     name: "volume-vector-operation",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

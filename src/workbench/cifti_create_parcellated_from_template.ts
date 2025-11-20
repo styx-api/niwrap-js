@@ -7,6 +7,7 @@ const CIFTI_CREATE_PARCELLATED_FROM_TEMPLATE_METADATA: Metadata = {
     id: "3f274d723b32862f2a3c97e709a1481f947e0288.workbench",
     name: "cifti-create-parcellated-from-template",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

@@ -7,6 +7,7 @@ const SPEC_FILE_RELOCATE_METADATA: Metadata = {
     id: "18d002a145082ef00fd24f099aca16f95fc0b29a.workbench",
     name: "spec-file-relocate",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

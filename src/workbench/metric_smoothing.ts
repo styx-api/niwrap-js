@@ -7,6 +7,7 @@ const METRIC_SMOOTHING_METADATA: Metadata = {
     id: "4cac13b0419558d62931d434fd4c5540aac0f7fe.workbench",
     name: "metric-smoothing",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

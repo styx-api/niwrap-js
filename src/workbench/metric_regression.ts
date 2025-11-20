@@ -7,6 +7,7 @@ const METRIC_REGRESSION_METADATA: Metadata = {
     id: "112cf7b9fc8784489485c6275842f1d2dadef8d8.workbench",
     name: "metric-regression",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

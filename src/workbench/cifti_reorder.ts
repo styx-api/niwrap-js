@@ -7,6 +7,7 @@ const CIFTI_REORDER_METADATA: Metadata = {
     id: "ffb7f63d2e3e825e9f4ce066509d90696e9b1cbd.workbench",
     name: "cifti-reorder",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

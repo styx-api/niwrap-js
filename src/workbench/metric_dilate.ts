@@ -7,6 +7,7 @@ const METRIC_DILATE_METADATA: Metadata = {
     id: "5f7bbed13558b8a40bfedd7f35e6b45da7a74ffa.workbench",
     name: "metric-dilate",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

@@ -7,6 +7,7 @@ const METADATA_REMOVE_PROVENANCE_METADATA: Metadata = {
     id: "e8c16ad9420831ac3f90677352afe3ddc5dcbac7.workbench",
     name: "metadata-remove-provenance",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

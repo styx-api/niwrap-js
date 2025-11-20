@@ -7,6 +7,7 @@ const SURFACE_SET_COORDINATES_METADATA: Metadata = {
     id: "6300d8d0bb2424f11e6f8bc0f67e98142564cdff.workbench",
     name: "surface-set-coordinates",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

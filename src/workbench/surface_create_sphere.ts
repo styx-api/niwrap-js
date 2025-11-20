@@ -7,6 +7,7 @@ const SURFACE_CREATE_SPHERE_METADATA: Metadata = {
     id: "bed788743061812c1852a66ee0671bb89ebb21bd.workbench",
     name: "surface-create-sphere",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

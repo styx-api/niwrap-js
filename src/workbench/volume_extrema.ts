@@ -7,6 +7,7 @@ const VOLUME_EXTREMA_METADATA: Metadata = {
     id: "bde4b9ab2a53737d37cd5c4267bc185877f0a3aa.workbench",
     name: "volume-extrema",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

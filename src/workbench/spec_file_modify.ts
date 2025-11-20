@@ -7,6 +7,7 @@ const SPEC_FILE_MODIFY_METADATA: Metadata = {
     id: "445d6412e50c348caabba3213e8b6d10e9cc1ae4.workbench",
     name: "spec-file-modify",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

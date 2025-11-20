@@ -7,6 +7,7 @@ const CONVERT_MATRIX4_TO_WORKBENCH_SPARSE_METADATA: Metadata = {
     id: "bb2236b447f9edba4ba2e429ee0ed0348145ebe7.workbench",
     name: "convert-matrix4-to-workbench-sparse",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

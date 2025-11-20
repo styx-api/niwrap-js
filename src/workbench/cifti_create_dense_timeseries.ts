@@ -7,6 +7,7 @@ const CIFTI_CREATE_DENSE_TIMESERIES_METADATA: Metadata = {
     id: "f5d206eb0bc377ff0fe1029ae7f196cdc4e2d75c.workbench",
     name: "cifti-create-dense-timeseries",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

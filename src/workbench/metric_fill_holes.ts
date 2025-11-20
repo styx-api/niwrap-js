@@ -7,6 +7,7 @@ const METRIC_FILL_HOLES_METADATA: Metadata = {
     id: "916b4440d23123db026c96a96daf12161b6b7e49.workbench",
     name: "metric-fill-holes",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

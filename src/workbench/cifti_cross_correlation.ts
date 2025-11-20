@@ -7,6 +7,7 @@ const CIFTI_CROSS_CORRELATION_METADATA: Metadata = {
     id: "bbcfb85ed14069fc9f3ef9b6a868dfa5f987f0d4.workbench",
     name: "cifti-cross-correlation",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

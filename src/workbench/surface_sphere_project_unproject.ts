@@ -7,6 +7,7 @@ const SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA: Metadata = {
     id: "142e37fc5627ecfadf24cbd4bebe0d1242646548.workbench",
     name: "surface-sphere-project-unproject",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

@@ -7,6 +7,7 @@ const CIFTI_AVERAGE_ROI_CORRELATION_METADATA: Metadata = {
     id: "8675ac82eeff102d67fcb3c8cd17fa1826495162.workbench",
     name: "cifti-average-roi-correlation",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

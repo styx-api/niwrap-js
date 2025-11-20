@@ -7,6 +7,7 @@ const BORDER_RESAMPLE_METADATA: Metadata = {
     id: "323bcae88f347c08d0669f3360e5db16c8affb3e.workbench",
     name: "border-resample",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

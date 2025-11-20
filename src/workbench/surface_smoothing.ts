@@ -7,6 +7,7 @@ const SURFACE_SMOOTHING_METADATA: Metadata = {
     id: "ed8f3a670c4c85072256a932d9737b524da04f12.workbench",
     name: "surface-smoothing",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

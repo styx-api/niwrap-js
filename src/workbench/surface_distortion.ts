@@ -7,6 +7,7 @@ const SURFACE_DISTORTION_METADATA: Metadata = {
     id: "6b557cde1c22a8589b67dd2c10b7db6b8b4df56a.workbench",
     name: "surface-distortion",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

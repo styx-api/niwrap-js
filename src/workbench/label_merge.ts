@@ -7,6 +7,7 @@ const LABEL_MERGE_METADATA: Metadata = {
     id: "791909e8270318bd504b97ada9b61a7c8e2898d1.workbench",
     name: "label-merge",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

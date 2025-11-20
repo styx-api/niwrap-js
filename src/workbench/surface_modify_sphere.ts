@@ -7,6 +7,7 @@ const SURFACE_MODIFY_SPHERE_METADATA: Metadata = {
     id: "bd702111cb8b1766b63c379235de453d7fec39d5.workbench",
     name: "surface-modify-sphere",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

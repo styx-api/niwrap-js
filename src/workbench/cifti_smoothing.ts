@@ -7,6 +7,7 @@ const CIFTI_SMOOTHING_METADATA: Metadata = {
     id: "13acc3e6ded7de43dd47b9ee49249c55bebbc762.workbench",
     name: "cifti-smoothing",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

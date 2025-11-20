@@ -7,6 +7,7 @@ const CONVERT_AFFINE_METADATA: Metadata = {
     id: "f8f331e0186c1d179bf357df5d5eadf7019f39e3.workbench",
     name: "convert-affine",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

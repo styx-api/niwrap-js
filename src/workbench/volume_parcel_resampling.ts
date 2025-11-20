@@ -7,6 +7,7 @@ const VOLUME_PARCEL_RESAMPLING_METADATA: Metadata = {
     id: "b8666fd0e3fda0690696a4034402cad85826cbf3.workbench",
     name: "volume-parcel-resampling",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

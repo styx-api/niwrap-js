@@ -7,6 +7,7 @@ const SURFACE_RESAMPLE_METADATA: Metadata = {
     id: "7444b5037afcb50035450f5b834be135d744ef02.workbench",
     name: "surface-resample",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

@@ -7,6 +7,7 @@ const CIFTI_REPLACE_STRUCTURE_METADATA: Metadata = {
     id: "06b2d63161345b1accca9efe553084791baedc0f.workbench",
     name: "cifti-replace-structure",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

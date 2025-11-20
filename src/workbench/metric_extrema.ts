@@ -7,6 +7,7 @@ const METRIC_EXTREMA_METADATA: Metadata = {
     id: "fb4c43ba07a28fe93481caee84a1b4079b198219.workbench",
     name: "metric-extrema",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

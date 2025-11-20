@@ -7,6 +7,7 @@ const WBSPARSE_MERGE_DENSE_METADATA: Metadata = {
     id: "69e9cfff66f0dc37b20b5be7517c4b481e100f89.workbench",
     name: "wbsparse-merge-dense",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

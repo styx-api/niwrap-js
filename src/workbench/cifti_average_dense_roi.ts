@@ -7,6 +7,7 @@ const CIFTI_AVERAGE_DENSE_ROI_METADATA: Metadata = {
     id: "0fd33a97699f38cf197556ae9aed297156e9295a.workbench",
     name: "cifti-average-dense-roi",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 

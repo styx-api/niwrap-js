@@ -7,6 +7,7 @@ const CIFTI_MERGE_METADATA: Metadata = {
     id: "7fb02481d87d8cd2e3909083db81c14bb985ba00.workbench",
     name: "cifti-merge",
     package: "workbench",
+    container_image_tag: "nx10x/workbench:2.1.0",
 };
 
 
