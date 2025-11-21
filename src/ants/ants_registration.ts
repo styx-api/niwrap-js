@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_REGISTRATION_METADATA: Metadata = {
-    id: "2a63accee921365e0dc00c94ee071f77f0a8845f.boutiques",
+    id: "067e3045451de9a93d1272494a23e2df83ef5663.boutiques",
     name: "antsRegistration",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -1821,7 +1821,7 @@ function ants_registration_winsorize_image_intensities_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["[", String((params["lower_quantile"] ?? null)), String((params["upper_quantile"] ?? null)), "]"].join(''));
+    cargs.push(["[", String((params["lower_quantile"] ?? null)), ",", String((params["upper_quantile"] ?? null)), "]"].join(''));
     return cargs;
 }
 
