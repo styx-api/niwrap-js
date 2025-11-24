@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_REGISTRATION_METADATA: Metadata = {
-    id: "067e3045451de9a93d1272494a23e2df83ef5663.boutiques",
+    id: "86707a12f497c1fc5ce28e8b8d8b83ce0463ad5f.boutiques",
     name: "antsRegistration",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -20,8 +20,7 @@ type AntsRegistrationInitialMovingTransformParamsDictTagged = Required<Pick<Ants
 
 interface AntsRegistrationInitialMovingTransformUseInverseParamsDict {
     "@type"?: "initial_moving_transform_use_inverse";
-    "initial_moving_transform": InputPathType;
-    "use_inverse"?: boolean | null | undefined;
+    "use_inverse_value"?: boolean | null | undefined;
 }
 type AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged = Required<Pick<AntsRegistrationInitialMovingTransformUseInverseParamsDict, '@type'>> & AntsRegistrationInitialMovingTransformUseInverseParamsDict;
 
@@ -87,12 +86,18 @@ interface AntsRegistrationTransformGaussianDisplacementFieldParamsDict {
 type AntsRegistrationTransformGaussianDisplacementFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformGaussianDisplacementFieldParamsDict, '@type'>> & AntsRegistrationTransformGaussianDisplacementFieldParamsDict;
 
 
+interface AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict {
+    "@type"?: "total_field_mesh_size_at_base_level";
+    "spline_order_value"?: number | null | undefined;
+}
+type AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDictTagged = Required<Pick<AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict, '@type'>> & AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict;
+
+
 interface AntsRegistrationTransformBsplineDisplacementFieldParamsDict {
     "@type"?: "transform_bspline_displacement_field";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
-    "total_field_mesh_size_at_base_level"?: number | null | undefined;
-    "spline_order"?: number | null | undefined;
+    "total_field_mesh_size_at_base_level"?: AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict | null | undefined;
 }
 type AntsRegistrationTransformBsplineDisplacementFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformBsplineDisplacementFieldParamsDict, '@type'>> & AntsRegistrationTransformBsplineDisplacementFieldParamsDict;
 
@@ -109,54 +114,105 @@ interface AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict {
 type AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict, '@type'>> & AntsRegistrationTransformTimeVaryingVelocityFieldParamsDict;
 
 
+interface AntsRegistrationNumberOfTimePointSamplesParamsDict {
+    "@type"?: "number_of_time_point_samples";
+    "spline_order_value"?: number | null | undefined;
+}
+type AntsRegistrationNumberOfTimePointSamplesParamsDictTagged = Required<Pick<AntsRegistrationNumberOfTimePointSamplesParamsDict, '@type'>> & AntsRegistrationNumberOfTimePointSamplesParamsDict;
+
+
 interface AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict {
     "@type"?: "transform_time_varying_bspline_velocity_field";
     "gradient_step": number;
     "velocity_field_mesh_size": number;
-    "number_of_time_point_samples"?: number | null | undefined;
-    "spline_order"?: number | null | undefined;
+    "number_of_time_point_samples"?: AntsRegistrationNumberOfTimePointSamplesParamsDict | null | undefined;
 }
 type AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged = Required<Pick<AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict, '@type'>> & AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDict;
+
+
+interface AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict {
+    "@type"?: "update_field_variance_in_voxel_space";
+    "total_field_variance_in_voxel_space_value"?: number | null | undefined;
+}
+type AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDictTagged = Required<Pick<AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict, '@type'>> & AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict;
 
 
 interface AntsRegistrationTransformSynParamsDict {
     "@type"?: "transform_syn";
     "gradient_step": number;
-    "update_field_variance_in_voxel_space": number;
-    "total_field_variance_in_voxel_space": number;
+    "update_field_variance_in_voxel_space"?: AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict | null | undefined;
 }
 type AntsRegistrationTransformSynParamsDictTagged = Required<Pick<AntsRegistrationTransformSynParamsDict, '@type'>> & AntsRegistrationTransformSynParamsDict;
+
+
+interface AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict {
+    "@type"?: "total_field_mesh_size_at_base_level_1";
+    "spline_order_value"?: number | null | undefined;
+}
+type AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDictTagged = Required<Pick<AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict, '@type'>> & AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict;
 
 
 interface AntsRegistrationTransformBsplineSynParamsDict {
     "@type"?: "transform_bspline_syn";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
-    "total_field_mesh_size_at_base_level"?: number | null | undefined;
-    "spline_order"?: number | null | undefined;
+    "total_field_mesh_size_at_base_level"?: AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict | null | undefined;
 }
 type AntsRegistrationTransformBsplineSynParamsDictTagged = Required<Pick<AntsRegistrationTransformBsplineSynParamsDict, '@type'>> & AntsRegistrationTransformBsplineSynParamsDict;
 
 
 interface AntsRegistrationTransformExponentialParamsDict {
     "@type"?: "transform_exponential";
-    "gradient_step": number;
-    "update_field_variance_in_voxel_space": number;
-    "velocity_field_variance_in_voxel_space": number;
-    "number_of_integration_steps": number;
+    "number_of_integration_steps_value"?: number | null | undefined;
 }
 type AntsRegistrationTransformExponentialParamsDictTagged = Required<Pick<AntsRegistrationTransformExponentialParamsDict, '@type'>> & AntsRegistrationTransformExponentialParamsDict;
+
+
+interface AntsRegistrationNumberOfIntegrationSteps1ParamsDict {
+    "@type"?: "number_of_integration_steps_1";
+    "spline_order_value"?: number | null | undefined;
+}
+type AntsRegistrationNumberOfIntegrationSteps1ParamsDictTagged = Required<Pick<AntsRegistrationNumberOfIntegrationSteps1ParamsDict, '@type'>> & AntsRegistrationNumberOfIntegrationSteps1ParamsDict;
+
+
+interface AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDict {
+    "@type"?: "velocity_field_mesh_size_at_base_level";
+    "velocity_field_mesh_size_at_base_level_value": number;
+    "number_of_integration_steps"?: AntsRegistrationNumberOfIntegrationSteps1ParamsDict | null | undefined;
+}
+type AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDictTagged = Required<Pick<AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDict, '@type'>> & AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDict;
 
 
 interface AntsRegistrationTransformBsplineExponentialParamsDict {
     "@type"?: "transform_bspline_exponential";
     "gradient_step": number;
     "update_field_mesh_size_at_base_level": number;
-    "velocity_field_mesh_size_at_base_level"?: number | null | undefined;
-    "number_of_integration_steps"?: number | null | undefined;
-    "spline_order"?: number | null | undefined;
+    "velocity_field_mesh_size_at_base_level"?: AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDict | null | undefined;
 }
 type AntsRegistrationTransformBsplineExponentialParamsDictTagged = Required<Pick<AntsRegistrationTransformBsplineExponentialParamsDict, '@type'>> & AntsRegistrationTransformBsplineExponentialParamsDict;
+
+
+interface AntsRegistrationSamplingPercentageParamsDict {
+    "@type"?: "sampling_percentage";
+    "use_gradient_filter_value"?: boolean | null | undefined;
+}
+type AntsRegistrationSamplingPercentageParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentageParamsDict, '@type'>> & AntsRegistrationSamplingPercentageParamsDict;
+
+
+interface AntsRegistrationSamplingStrategyParamsDict {
+    "@type"?: "sampling_strategy";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsRegistrationSamplingPercentageParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingStrategyParamsDictTagged = Required<Pick<AntsRegistrationSamplingStrategyParamsDict, '@type'>> & AntsRegistrationSamplingStrategyParamsDict;
+
+
+interface AntsRegistrationRadiusParamsDict {
+    "@type"?: "radius";
+    "radius_value": number;
+    "sampling_strategy"?: AntsRegistrationSamplingStrategyParamsDict | null | undefined;
+}
+type AntsRegistrationRadiusParamsDictTagged = Required<Pick<AntsRegistrationRadiusParamsDict, '@type'>> & AntsRegistrationRadiusParamsDict;
 
 
 interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict {
@@ -164,12 +220,32 @@ interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict {
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
-    "radius"?: number | null | undefined;
-    "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
-    "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: boolean | null | undefined;
+    "radius"?: AntsRegistrationRadiusParamsDict | null | undefined;
 }
 type AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged = Required<Pick<AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict, '@type'>> & AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage1ParamsDict {
+    "@type"?: "sampling_percentage_1";
+    "use_gradient_filter_value"?: boolean | null | undefined;
+}
+type AntsRegistrationSamplingPercentage1ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage1ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage1ParamsDict;
+
+
+interface AntsRegistrationSamplingStrategy1ParamsDict {
+    "@type"?: "sampling_strategy_1";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage1ParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingStrategy1ParamsDictTagged = Required<Pick<AntsRegistrationSamplingStrategy1ParamsDict, '@type'>> & AntsRegistrationSamplingStrategy1ParamsDict;
+
+
+interface AntsRegistrationNumberOfBinsParamsDict {
+    "@type"?: "number_of_bins";
+    "number_of_bins_value": number;
+    "sampling_strategy"?: AntsRegistrationSamplingStrategy1ParamsDict | null | undefined;
+}
+type AntsRegistrationNumberOfBinsParamsDictTagged = Required<Pick<AntsRegistrationNumberOfBinsParamsDict, '@type'>> & AntsRegistrationNumberOfBinsParamsDict;
 
 
 interface AntsRegistrationMetricMutualInformationParamsDict {
@@ -177,12 +253,32 @@ interface AntsRegistrationMetricMutualInformationParamsDict {
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
-    "number_of_bins"?: number | null | undefined;
-    "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
-    "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: boolean | null | undefined;
+    "number_of_bins"?: AntsRegistrationNumberOfBinsParamsDict | null | undefined;
 }
 type AntsRegistrationMetricMutualInformationParamsDictTagged = Required<Pick<AntsRegistrationMetricMutualInformationParamsDict, '@type'>> & AntsRegistrationMetricMutualInformationParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage2ParamsDict {
+    "@type"?: "sampling_percentage_2";
+    "use_gradient_filter_value"?: boolean | null | undefined;
+}
+type AntsRegistrationSamplingPercentage2ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage2ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage2ParamsDict;
+
+
+interface AntsRegistrationSamplingStrategy2ParamsDict {
+    "@type"?: "sampling_strategy_2";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage2ParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingStrategy2ParamsDictTagged = Required<Pick<AntsRegistrationSamplingStrategy2ParamsDict, '@type'>> & AntsRegistrationSamplingStrategy2ParamsDict;
+
+
+interface AntsRegistrationNumberOfBins1ParamsDict {
+    "@type"?: "number_of_bins_1";
+    "number_of_bins_value": number;
+    "sampling_strategy"?: AntsRegistrationSamplingStrategy2ParamsDict | null | undefined;
+}
+type AntsRegistrationNumberOfBins1ParamsDictTagged = Required<Pick<AntsRegistrationNumberOfBins1ParamsDict, '@type'>> & AntsRegistrationNumberOfBins1ParamsDict;
 
 
 interface AntsRegistrationMetricMattesParamsDict {
@@ -190,12 +286,32 @@ interface AntsRegistrationMetricMattesParamsDict {
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
-    "number_of_bins"?: number | null | undefined;
-    "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
-    "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: boolean | null | undefined;
+    "number_of_bins"?: AntsRegistrationNumberOfBins1ParamsDict | null | undefined;
 }
 type AntsRegistrationMetricMattesParamsDictTagged = Required<Pick<AntsRegistrationMetricMattesParamsDict, '@type'>> & AntsRegistrationMetricMattesParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage3ParamsDict {
+    "@type"?: "sampling_percentage_3";
+    "use_gradient_filter_value"?: boolean | null | undefined;
+}
+type AntsRegistrationSamplingPercentage3ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage3ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage3ParamsDict;
+
+
+interface AntsRegistrationSamplingStrategy3ParamsDict {
+    "@type"?: "sampling_strategy_3";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage3ParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingStrategy3ParamsDictTagged = Required<Pick<AntsRegistrationSamplingStrategy3ParamsDict, '@type'>> & AntsRegistrationSamplingStrategy3ParamsDict;
+
+
+interface AntsRegistrationRadius1ParamsDict {
+    "@type"?: "radius_1";
+    "radius_value": number;
+    "sampling_strategy"?: AntsRegistrationSamplingStrategy3ParamsDict | null | undefined;
+}
+type AntsRegistrationRadius1ParamsDictTagged = Required<Pick<AntsRegistrationRadius1ParamsDict, '@type'>> & AntsRegistrationRadius1ParamsDict;
 
 
 interface AntsRegistrationMetricMeanSquaresParamsDict {
@@ -203,12 +319,32 @@ interface AntsRegistrationMetricMeanSquaresParamsDict {
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
-    "radius"?: number | null | undefined;
-    "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
-    "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: boolean | null | undefined;
+    "radius"?: AntsRegistrationRadius1ParamsDict | null | undefined;
 }
 type AntsRegistrationMetricMeanSquaresParamsDictTagged = Required<Pick<AntsRegistrationMetricMeanSquaresParamsDict, '@type'>> & AntsRegistrationMetricMeanSquaresParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage4ParamsDict {
+    "@type"?: "sampling_percentage_4";
+    "use_gradient_filter_value"?: boolean | null | undefined;
+}
+type AntsRegistrationSamplingPercentage4ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage4ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage4ParamsDict;
+
+
+interface AntsRegistrationSamplingStrategy4ParamsDict {
+    "@type"?: "sampling_strategy_4";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage4ParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingStrategy4ParamsDictTagged = Required<Pick<AntsRegistrationSamplingStrategy4ParamsDict, '@type'>> & AntsRegistrationSamplingStrategy4ParamsDict;
+
+
+interface AntsRegistrationNumberOfBins2ParamsDict {
+    "@type"?: "number_of_bins_2";
+    "number_of_bins_value": number;
+    "sampling_strategy"?: AntsRegistrationSamplingStrategy4ParamsDict | null | undefined;
+}
+type AntsRegistrationNumberOfBins2ParamsDictTagged = Required<Pick<AntsRegistrationNumberOfBins2ParamsDict, '@type'>> & AntsRegistrationNumberOfBins2ParamsDict;
 
 
 interface AntsRegistrationMetricDemonsParamsDict {
@@ -216,12 +352,32 @@ interface AntsRegistrationMetricDemonsParamsDict {
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
-    "number_of_bins"?: number | null | undefined;
-    "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
-    "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: boolean | null | undefined;
+    "number_of_bins"?: AntsRegistrationNumberOfBins2ParamsDict | null | undefined;
 }
 type AntsRegistrationMetricDemonsParamsDictTagged = Required<Pick<AntsRegistrationMetricDemonsParamsDict, '@type'>> & AntsRegistrationMetricDemonsParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage5ParamsDict {
+    "@type"?: "sampling_percentage_5";
+    "use_gradient_filter_value"?: boolean | null | undefined;
+}
+type AntsRegistrationSamplingPercentage5ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage5ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage5ParamsDict;
+
+
+interface AntsRegistrationSamplingStrategy5ParamsDict {
+    "@type"?: "sampling_strategy_5";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage5ParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingStrategy5ParamsDictTagged = Required<Pick<AntsRegistrationSamplingStrategy5ParamsDict, '@type'>> & AntsRegistrationSamplingStrategy5ParamsDict;
+
+
+interface AntsRegistrationRadius2ParamsDict {
+    "@type"?: "radius_2";
+    "radius_value": number;
+    "sampling_strategy"?: AntsRegistrationSamplingStrategy5ParamsDict | null | undefined;
+}
+type AntsRegistrationRadius2ParamsDictTagged = Required<Pick<AntsRegistrationRadius2ParamsDict, '@type'>> & AntsRegistrationRadius2ParamsDict;
 
 
 interface AntsRegistrationMetricGlobalCorrelationParamsDict {
@@ -229,12 +385,16 @@ interface AntsRegistrationMetricGlobalCorrelationParamsDict {
     "fixed_image": string;
     "moving_image": string;
     "metric_weight": number;
-    "radius"?: number | null | undefined;
-    "sampling_strategy"?: "None" | "Regular" | "Random" | null | undefined;
-    "sampling_percentage"?: number | null | undefined;
-    "use_gradient_filter"?: boolean | null | undefined;
+    "radius"?: AntsRegistrationRadius2ParamsDict | null | undefined;
 }
 type AntsRegistrationMetricGlobalCorrelationParamsDictTagged = Required<Pick<AntsRegistrationMetricGlobalCorrelationParamsDict, '@type'>> & AntsRegistrationMetricGlobalCorrelationParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage6ParamsDict {
+    "@type"?: "sampling_percentage_6";
+    "boundary_points_only_value"?: "0" | null | undefined;
+}
+type AntsRegistrationSamplingPercentage6ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage6ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage6ParamsDict;
 
 
 interface AntsRegistrationMetricEuclideanIcpParamsDict {
@@ -242,19 +402,65 @@ interface AntsRegistrationMetricEuclideanIcpParamsDict {
     "fixed_point_set": string;
     "moving_point_set": string;
     "metric_weight": number;
-    "sampling_percentage"?: number | null | undefined;
-    "boundary_points_only"?: "0" | null | undefined;
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage6ParamsDict | null | undefined;
 }
 type AntsRegistrationMetricEuclideanIcpParamsDictTagged = Required<Pick<AntsRegistrationMetricEuclideanIcpParamsDict, '@type'>> & AntsRegistrationMetricEuclideanIcpParamsDict;
 
 
+interface AntsRegistrationPointSetSigmaParamsDict {
+    "@type"?: "point_set_sigma";
+    "k_neighborhood_value"?: number | null | undefined;
+}
+type AntsRegistrationPointSetSigmaParamsDictTagged = Required<Pick<AntsRegistrationPointSetSigmaParamsDict, '@type'>> & AntsRegistrationPointSetSigmaParamsDict;
+
+
+interface AntsRegistrationBoundaryPointsOnly1ParamsDict {
+    "@type"?: "boundary_points_only_1";
+    "boundary_points_only_value": "0";
+    "point_set_sigma"?: AntsRegistrationPointSetSigmaParamsDict | null | undefined;
+}
+type AntsRegistrationBoundaryPointsOnly1ParamsDictTagged = Required<Pick<AntsRegistrationBoundaryPointsOnly1ParamsDict, '@type'>> & AntsRegistrationBoundaryPointsOnly1ParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage7ParamsDict {
+    "@type"?: "sampling_percentage_7";
+    "sampling_percentage_value": number;
+    "boundary_points_only"?: AntsRegistrationBoundaryPointsOnly1ParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingPercentage7ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage7ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage7ParamsDict;
+
+
 interface AntsRegistrationMetricPointSetExpectationParamsDict {
     "@type"?: "metric_point_set_expectation";
+    "fixed_point_set": string;
+    "moving_point_set": string;
     "metric_weight": number;
-    "point_set_sigma"?: number | null | undefined;
-    "sampling_percentage"?: number | null | undefined;
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage7ParamsDict | null | undefined;
 }
 type AntsRegistrationMetricPointSetExpectationParamsDictTagged = Required<Pick<AntsRegistrationMetricPointSetExpectationParamsDict, '@type'>> & AntsRegistrationMetricPointSetExpectationParamsDict;
+
+
+interface AntsRegistrationPointSetSigma1ParamsDict {
+    "@type"?: "point_set_sigma_1";
+    "k_neighborhood_value"?: number | null | undefined;
+}
+type AntsRegistrationPointSetSigma1ParamsDictTagged = Required<Pick<AntsRegistrationPointSetSigma1ParamsDict, '@type'>> & AntsRegistrationPointSetSigma1ParamsDict;
+
+
+interface AntsRegistrationBoundaryPointsOnly2ParamsDict {
+    "@type"?: "boundary_points_only_2";
+    "boundary_points_only_value": "0";
+    "point_set_sigma"?: AntsRegistrationPointSetSigma1ParamsDict | null | undefined;
+}
+type AntsRegistrationBoundaryPointsOnly2ParamsDictTagged = Required<Pick<AntsRegistrationBoundaryPointsOnly2ParamsDict, '@type'>> & AntsRegistrationBoundaryPointsOnly2ParamsDict;
+
+
+interface AntsRegistrationSamplingPercentage8ParamsDict {
+    "@type"?: "sampling_percentage_8";
+    "sampling_percentage_value": number;
+    "boundary_points_only"?: AntsRegistrationBoundaryPointsOnly2ParamsDict | null | undefined;
+}
+type AntsRegistrationSamplingPercentage8ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage8ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage8ParamsDict;
 
 
 interface AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict {
@@ -262,16 +468,50 @@ interface AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict {
     "fixed_point_set": string;
     "moving_point_set": string;
     "metric_weight": number;
-    "sampling_percentage"?: number | null | undefined;
-    "boundary_points_only"?: "0" | null | undefined;
-    "point_set_sigma"?: number | null | undefined;
-    "k_neighborhood"?: number | null | undefined;
+    "sampling_percentage"?: AntsRegistrationSamplingPercentage8ParamsDict | null | undefined;
 }
 type AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged = Required<Pick<AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict, '@type'>> & AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDict;
 
 
+interface AntsRegistrationKNeighborhood2ParamsDict {
+    "@type"?: "k_neighborhood_2";
+    "gradient_sigma_value"?: number | null | undefined;
+}
+type AntsRegistrationKNeighborhood2ParamsDictTagged = Required<Pick<AntsRegistrationKNeighborhood2ParamsDict, '@type'>> & AntsRegistrationKNeighborhood2ParamsDict;
+
+
+interface AntsRegistrationDistanceSigmaParamsDict {
+    "@type"?: "distance_sigma";
+    "distance_sigma_value": number;
+    "k_neighborhood"?: AntsRegistrationKNeighborhood2ParamsDict | null | undefined;
+}
+type AntsRegistrationDistanceSigmaParamsDictTagged = Required<Pick<AntsRegistrationDistanceSigmaParamsDict, '@type'>> & AntsRegistrationDistanceSigmaParamsDict;
+
+
+interface AntsRegistrationIntensitySigmaParamsDict {
+    "@type"?: "intensity_sigma";
+    "intensity_sigma_value": number;
+    "distance_sigma"?: AntsRegistrationDistanceSigmaParamsDict | null | undefined;
+}
+type AntsRegistrationIntensitySigmaParamsDictTagged = Required<Pick<AntsRegistrationIntensitySigmaParamsDict, '@type'>> & AntsRegistrationIntensitySigmaParamsDict;
+
+
+interface AntsRegistrationNeighborhoodRadiusParamsDict {
+    "@type"?: "neighborhood_radius";
+    "neighborhood_radius_value": string;
+    "intensity_sigma"?: AntsRegistrationIntensitySigmaParamsDict | null | undefined;
+}
+type AntsRegistrationNeighborhoodRadiusParamsDictTagged = Required<Pick<AntsRegistrationNeighborhoodRadiusParamsDict, '@type'>> & AntsRegistrationNeighborhoodRadiusParamsDict;
+
+
 interface AntsRegistrationMetricIgdmParamsDict {
     "@type"?: "metric_igdm";
+    "fixed_image": string;
+    "moving_image": string;
+    "metric_weight": number;
+    "fixed_mask": string;
+    "moving_mask": string;
+    "neighborhood_radius"?: AntsRegistrationNeighborhoodRadiusParamsDict | null | undefined;
 }
 type AntsRegistrationMetricIgdmParamsDictTagged = Required<Pick<AntsRegistrationMetricIgdmParamsDict, '@type'>> & AntsRegistrationMetricIgdmParamsDict;
 
@@ -307,8 +547,7 @@ type AntsRegistrationWinsorizeImageIntensitiesParamsDictTagged = Required<Pick<A
 
 interface AntsRegistrationMasksParamsDict {
     "@type"?: "masks";
-    "fixed_mask"?: string | null | undefined;
-    "moving_mask"?: string | null | undefined;
+    "moving_mask_value"?: string | null | undefined;
 }
 type AntsRegistrationMasksParamsDictTagged = Required<Pick<AntsRegistrationMasksParamsDict, '@type'>> & AntsRegistrationMasksParamsDict;
 
@@ -500,20 +739,18 @@ function ants_registration_initial_moving_transform_cargs(
 /**
  * Build parameters.
  *
- * @param use_inverse Use the inverse of the initial moving transform.
+ * @param use_inverse_value Use the inverse of the initial moving transform.
  *
  * @returns Parameter dictionary
  */
 function ants_registration_initial_moving_transform_use_inverse(
-    initial_moving_transform: InputPathType,
-    use_inverse: boolean | null = null,
+    use_inverse_value: boolean | null = null,
 ): AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged {
     const params = {
         "@type": "initial_moving_transform_use_inverse" as const,
-        "initial_moving_transform": initial_moving_transform,
     };
-    if (use_inverse !== null) {
-        params["use_inverse"] = use_inverse;
+    if (use_inverse_value !== null) {
+        params["use_inverse_value"] = use_inverse_value;
     }
     return params;
 }
@@ -532,8 +769,8 @@ function ants_registration_initial_moving_transform_use_inverse_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_inverse"] ?? null) !== null) {
-        cargs.push(["[", execution.inputFile((params["initial_moving_transform"] ?? null)), ",", ((params["use_inverse"] ?? null) ? "1" : "0"), "]"].join(''));
+    if ((params["use_inverse_value"] ?? null) !== null) {
+        cargs.push([",", ((params["use_inverse_value"] ?? null) ? "1" : "0")].join(''));
     }
     return cargs;
 }
@@ -836,11 +1073,49 @@ function ants_registration_transform_gaussian_displacement_field_cargs(
  *
  * @returns Parameter dictionary
  */
+function ants_registration_total_field_mesh_size_at_base_level(
+    spline_order_value: number | null = null,
+): AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDictTagged {
+    const params = {
+        "@type": "total_field_mesh_size_at_base_level" as const,
+    };
+    if (spline_order_value !== null) {
+        params["spline_order_value"] = spline_order_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_total_field_mesh_size_at_base_level_cargs(
+    params: AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["spline_order_value"] ?? null) !== null) {
+        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_bspline_displacement_field(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
-    total_field_mesh_size_at_base_level: number | null = null,
-    spline_order: number | null = null,
+    total_field_mesh_size_at_base_level: AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict | null = null,
 ): AntsRegistrationTransformBsplineDisplacementFieldParamsDictTagged {
     const params = {
         "@type": "transform_bspline_displacement_field" as const,
@@ -849,9 +1124,6 @@ function ants_registration_transform_bspline_displacement_field(
     };
     if (total_field_mesh_size_at_base_level !== null) {
         params["total_field_mesh_size_at_base_level"] = total_field_mesh_size_at_base_level;
-    }
-    if (spline_order !== null) {
-        params["spline_order"] = spline_order;
     }
     return params;
 }
@@ -870,8 +1142,8 @@ function ants_registration_transform_bspline_displacement_field_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
-        cargs.push(["BSplineDisplacementField[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ",", (((params["total_field_mesh_size_at_base_level"] ?? null) !== null) ? String((params["total_field_mesh_size_at_base_level"] ?? null)) : ""), (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
+    if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null) {
+        cargs.push(["BSplineDisplacementField[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_total_field_mesh_size_at_base_level_cargs((params["total_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
     }
     return cargs;
 }
@@ -928,11 +1200,49 @@ function ants_registration_transform_time_varying_velocity_field_cargs(
  *
  * @returns Parameter dictionary
  */
+function ants_registration_number_of_time_point_samples(
+    spline_order_value: number | null = null,
+): AntsRegistrationNumberOfTimePointSamplesParamsDictTagged {
+    const params = {
+        "@type": "number_of_time_point_samples" as const,
+    };
+    if (spline_order_value !== null) {
+        params["spline_order_value"] = spline_order_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_number_of_time_point_samples_cargs(
+    params: AntsRegistrationNumberOfTimePointSamplesParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["spline_order_value"] ?? null) !== null) {
+        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
 function ants_registration_transform_time_varying_bspline_velocity_field(
     gradient_step: number,
     velocity_field_mesh_size: number,
-    number_of_time_point_samples: number | null = null,
-    spline_order: number | null = null,
+    number_of_time_point_samples: AntsRegistrationNumberOfTimePointSamplesParamsDict | null = null,
 ): AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged {
     const params = {
         "@type": "transform_time_varying_bspline_velocity_field" as const,
@@ -941,9 +1251,6 @@ function ants_registration_transform_time_varying_bspline_velocity_field(
     };
     if (number_of_time_point_samples !== null) {
         params["number_of_time_point_samples"] = number_of_time_point_samples;
-    }
-    if (spline_order !== null) {
-        params["spline_order"] = spline_order;
     }
     return params;
 }
@@ -962,8 +1269,47 @@ function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_time_point_samples"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
-        cargs.push(["TimeVaryingBSplineVelocityField[", String((params["gradient_step"] ?? null)), ",", String((params["velocity_field_mesh_size"] ?? null)), ",", (((params["number_of_time_point_samples"] ?? null) !== null) ? String((params["number_of_time_point_samples"] ?? null)) : ""), ",", (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
+    if ((params["number_of_time_point_samples"] ?? null) !== null) {
+        cargs.push(["TimeVaryingBSplineVelocityField[", String((params["gradient_step"] ?? null)), ",", String((params["velocity_field_mesh_size"] ?? null)), ants_registration_number_of_time_point_samples_cargs((params["number_of_time_point_samples"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_update_field_variance_in_voxel_space(
+    total_field_variance_in_voxel_space_value: number | null = null,
+): AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDictTagged {
+    const params = {
+        "@type": "update_field_variance_in_voxel_space" as const,
+    };
+    if (total_field_variance_in_voxel_space_value !== null) {
+        params["total_field_variance_in_voxel_space_value"] = total_field_variance_in_voxel_space_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_update_field_variance_in_voxel_space_cargs(
+    params: AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["total_field_variance_in_voxel_space_value"] ?? null) !== null) {
+        cargs.push([",", String((params["total_field_variance_in_voxel_space_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -977,15 +1323,15 @@ function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
  */
 function ants_registration_transform_syn(
     gradient_step: number,
-    update_field_variance_in_voxel_space: number,
-    total_field_variance_in_voxel_space: number,
+    update_field_variance_in_voxel_space: AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict | null = null,
 ): AntsRegistrationTransformSynParamsDictTagged {
     const params = {
         "@type": "transform_syn" as const,
         "gradient_step": gradient_step,
-        "update_field_variance_in_voxel_space": update_field_variance_in_voxel_space,
-        "total_field_variance_in_voxel_space": total_field_variance_in_voxel_space,
     };
+    if (update_field_variance_in_voxel_space !== null) {
+        params["update_field_variance_in_voxel_space"] = update_field_variance_in_voxel_space;
+    }
     return params;
 }
 
@@ -1003,7 +1349,48 @@ function ants_registration_transform_syn_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["SyN[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["total_field_variance_in_voxel_space"] ?? null)), "]"].join(''));
+    if ((params["update_field_variance_in_voxel_space"] ?? null) !== null) {
+        cargs.push(["SyN[", String((params["gradient_step"] ?? null)), ants_registration_update_field_variance_in_voxel_space_cargs((params["update_field_variance_in_voxel_space"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_total_field_mesh_size_at_base_level_1(
+    spline_order_value: number | null = null,
+): AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDictTagged {
+    const params = {
+        "@type": "total_field_mesh_size_at_base_level_1" as const,
+    };
+    if (spline_order_value !== null) {
+        params["spline_order_value"] = spline_order_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_total_field_mesh_size_at_base_level_1_cargs(
+    params: AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["spline_order_value"] ?? null) !== null) {
+        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+    }
     return cargs;
 }
 
@@ -1017,8 +1404,7 @@ function ants_registration_transform_syn_cargs(
 function ants_registration_transform_bspline_syn(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
-    total_field_mesh_size_at_base_level: number | null = null,
-    spline_order: number | null = null,
+    total_field_mesh_size_at_base_level: AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict | null = null,
 ): AntsRegistrationTransformBsplineSynParamsDictTagged {
     const params = {
         "@type": "transform_bspline_syn" as const,
@@ -1027,9 +1413,6 @@ function ants_registration_transform_bspline_syn(
     };
     if (total_field_mesh_size_at_base_level !== null) {
         params["total_field_mesh_size_at_base_level"] = total_field_mesh_size_at_base_level;
-    }
-    if (spline_order !== null) {
-        params["spline_order"] = spline_order;
     }
     return params;
 }
@@ -1048,8 +1431,8 @@ function ants_registration_transform_bspline_syn_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
-        cargs.push(["BSplineSyN[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ",", (((params["total_field_mesh_size_at_base_level"] ?? null) !== null) ? String((params["total_field_mesh_size_at_base_level"] ?? null)) : ""), ",", (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
+    if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null) {
+        cargs.push(["BSplineSyN[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_total_field_mesh_size_at_base_level_1_cargs((params["total_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
     }
     return cargs;
 }
@@ -1062,18 +1445,14 @@ function ants_registration_transform_bspline_syn_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_transform_exponential(
-    gradient_step: number,
-    update_field_variance_in_voxel_space: number,
-    velocity_field_variance_in_voxel_space: number,
-    number_of_integration_steps: number,
+    number_of_integration_steps_value: number | null = null,
 ): AntsRegistrationTransformExponentialParamsDictTagged {
     const params = {
         "@type": "transform_exponential" as const,
-        "gradient_step": gradient_step,
-        "update_field_variance_in_voxel_space": update_field_variance_in_voxel_space,
-        "velocity_field_variance_in_voxel_space": velocity_field_variance_in_voxel_space,
-        "number_of_integration_steps": number_of_integration_steps,
     };
+    if (number_of_integration_steps_value !== null) {
+        params["number_of_integration_steps_value"] = number_of_integration_steps_value;
+    }
     return params;
 }
 
@@ -1091,7 +1470,89 @@ function ants_registration_transform_exponential_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["Exponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["velocity_field_variance_in_voxel_space"] ?? null)), ",", String((params["number_of_integration_steps"] ?? null)), "]"].join(''));
+    if ((params["number_of_integration_steps_value"] ?? null) !== null) {
+        cargs.push([",", String((params["number_of_integration_steps_value"] ?? null))].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_number_of_integration_steps_1(
+    spline_order_value: number | null = null,
+): AntsRegistrationNumberOfIntegrationSteps1ParamsDictTagged {
+    const params = {
+        "@type": "number_of_integration_steps_1" as const,
+    };
+    if (spline_order_value !== null) {
+        params["spline_order_value"] = spline_order_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_number_of_integration_steps_1_cargs(
+    params: AntsRegistrationNumberOfIntegrationSteps1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["spline_order_value"] ?? null) !== null) {
+        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_velocity_field_mesh_size_at_base_level(
+    velocity_field_mesh_size_at_base_level_value: number,
+    number_of_integration_steps: AntsRegistrationNumberOfIntegrationSteps1ParamsDict | null = null,
+): AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDictTagged {
+    const params = {
+        "@type": "velocity_field_mesh_size_at_base_level" as const,
+        "velocity_field_mesh_size_at_base_level_value": velocity_field_mesh_size_at_base_level_value,
+    };
+    if (number_of_integration_steps !== null) {
+        params["number_of_integration_steps"] = number_of_integration_steps;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_velocity_field_mesh_size_at_base_level_cargs(
+    params: AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["number_of_integration_steps"] ?? null) !== null) {
+        cargs.push([",", String((params["velocity_field_mesh_size_at_base_level_value"] ?? null)), ants_registration_number_of_integration_steps_1_cargs((params["number_of_integration_steps"] ?? null), execution).join("")].join(''));
+    }
     return cargs;
 }
 
@@ -1105,9 +1566,7 @@ function ants_registration_transform_exponential_cargs(
 function ants_registration_transform_bspline_exponential(
     gradient_step: number,
     update_field_mesh_size_at_base_level: number,
-    velocity_field_mesh_size_at_base_level: number | null = null,
-    number_of_integration_steps: number | null = null,
-    spline_order: number | null = null,
+    velocity_field_mesh_size_at_base_level: AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDict | null = null,
 ): AntsRegistrationTransformBsplineExponentialParamsDictTagged {
     const params = {
         "@type": "transform_bspline_exponential" as const,
@@ -1116,12 +1575,6 @@ function ants_registration_transform_bspline_exponential(
     };
     if (velocity_field_mesh_size_at_base_level !== null) {
         params["velocity_field_mesh_size_at_base_level"] = velocity_field_mesh_size_at_base_level;
-    }
-    if (number_of_integration_steps !== null) {
-        params["number_of_integration_steps"] = number_of_integration_steps;
-    }
-    if (spline_order !== null) {
-        params["spline_order"] = spline_order;
     }
     return params;
 }
@@ -1140,8 +1593,129 @@ function ants_registration_transform_bspline_exponential_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["velocity_field_mesh_size_at_base_level"] ?? null) !== null || (params["number_of_integration_steps"] ?? null) !== null || (params["spline_order"] ?? null) !== null) {
-        cargs.push(["BSplineExponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ",", (((params["velocity_field_mesh_size_at_base_level"] ?? null) !== null) ? String((params["velocity_field_mesh_size_at_base_level"] ?? null)) : ""), ",", (((params["number_of_integration_steps"] ?? null) !== null) ? String((params["number_of_integration_steps"] ?? null)) : ""), ",", (((params["spline_order"] ?? null) !== null) ? String((params["spline_order"] ?? null)) : ""), "]"].join(''));
+    if ((params["velocity_field_mesh_size_at_base_level"] ?? null) !== null) {
+        cargs.push(["BSplineExponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_velocity_field_mesh_size_at_base_level_cargs((params["velocity_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage(
+    use_gradient_filter_value: boolean | null = null,
+): AntsRegistrationSamplingPercentageParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage" as const,
+    };
+    if (use_gradient_filter_value !== null) {
+        params["use_gradient_filter_value"] = use_gradient_filter_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_cargs(
+    params: AntsRegistrationSamplingPercentageParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["use_gradient_filter_value"] ?? null) !== null) {
+        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_strategy(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsRegistrationSamplingPercentageParamsDict | null = null,
+): AntsRegistrationSamplingStrategyParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_strategy_cargs(
+    params: AntsRegistrationSamplingStrategyParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_radius(
+    radius_value: number,
+    sampling_strategy: AntsRegistrationSamplingStrategyParamsDict | null = null,
+): AntsRegistrationRadiusParamsDictTagged {
+    const params = {
+        "@type": "radius" as const,
+        "radius_value": radius_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_radius_cargs(
+    params: AntsRegistrationRadiusParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_strategy"] ?? null) !== null) {
+        cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1157,10 +1731,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
-    radius: number | null = null,
-    sampling_strategy: "None" | "Regular" | "Random" | null = null,
-    sampling_percentage: number | null = null,
-    use_gradient_filter: boolean | null = null,
+    radius: AntsRegistrationRadiusParamsDict | null = null,
 ): AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged {
     const params = {
         "@type": "metric_ants_neighbourhood_cross_correlation" as const,
@@ -1170,15 +1741,6 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation(
     };
     if (radius !== null) {
         params["radius"] = radius;
-    }
-    if (sampling_strategy !== null) {
-        params["sampling_strategy"] = sampling_strategy;
-    }
-    if (sampling_percentage !== null) {
-        params["sampling_percentage"] = sampling_percentage;
-    }
-    if (use_gradient_filter !== null) {
-        params["use_gradient_filter"] = use_gradient_filter;
     }
     return params;
 }
@@ -1197,8 +1759,129 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
+    if ((params["radius"] ?? null) !== null) {
+        cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_1(
+    use_gradient_filter_value: boolean | null = null,
+): AntsRegistrationSamplingPercentage1ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_1" as const,
+    };
+    if (use_gradient_filter_value !== null) {
+        params["use_gradient_filter_value"] = use_gradient_filter_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_1_cargs(
+    params: AntsRegistrationSamplingPercentage1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["use_gradient_filter_value"] ?? null) !== null) {
+        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_strategy_1(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsRegistrationSamplingPercentage1ParamsDict | null = null,
+): AntsRegistrationSamplingStrategy1ParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy_1" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_strategy_1_cargs(
+    params: AntsRegistrationSamplingStrategy1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_1_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_number_of_bins(
+    number_of_bins_value: number,
+    sampling_strategy: AntsRegistrationSamplingStrategy1ParamsDict | null = null,
+): AntsRegistrationNumberOfBinsParamsDictTagged {
+    const params = {
+        "@type": "number_of_bins" as const,
+        "number_of_bins_value": number_of_bins_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_number_of_bins_cargs(
+    params: AntsRegistrationNumberOfBinsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_strategy"] ?? null) !== null) {
+        cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_1_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1214,10 +1897,7 @@ function ants_registration_metric_mutual_information(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
-    number_of_bins: number | null = null,
-    sampling_strategy: "None" | "Regular" | "Random" | null = null,
-    sampling_percentage: number | null = null,
-    use_gradient_filter: boolean | null = null,
+    number_of_bins: AntsRegistrationNumberOfBinsParamsDict | null = null,
 ): AntsRegistrationMetricMutualInformationParamsDictTagged {
     const params = {
         "@type": "metric_mutual_information" as const,
@@ -1227,15 +1907,6 @@ function ants_registration_metric_mutual_information(
     };
     if (number_of_bins !== null) {
         params["number_of_bins"] = number_of_bins;
-    }
-    if (sampling_strategy !== null) {
-        params["sampling_strategy"] = sampling_strategy;
-    }
-    if (sampling_percentage !== null) {
-        params["sampling_percentage"] = sampling_percentage;
-    }
-    if (use_gradient_filter !== null) {
-        params["use_gradient_filter"] = use_gradient_filter;
     }
     return params;
 }
@@ -1254,8 +1925,129 @@ function ants_registration_metric_mutual_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
+    if ((params["number_of_bins"] ?? null) !== null) {
+        cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_2(
+    use_gradient_filter_value: boolean | null = null,
+): AntsRegistrationSamplingPercentage2ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_2" as const,
+    };
+    if (use_gradient_filter_value !== null) {
+        params["use_gradient_filter_value"] = use_gradient_filter_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_2_cargs(
+    params: AntsRegistrationSamplingPercentage2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["use_gradient_filter_value"] ?? null) !== null) {
+        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_strategy_2(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsRegistrationSamplingPercentage2ParamsDict | null = null,
+): AntsRegistrationSamplingStrategy2ParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy_2" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_strategy_2_cargs(
+    params: AntsRegistrationSamplingStrategy2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_2_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_number_of_bins_1(
+    number_of_bins_value: number,
+    sampling_strategy: AntsRegistrationSamplingStrategy2ParamsDict | null = null,
+): AntsRegistrationNumberOfBins1ParamsDictTagged {
+    const params = {
+        "@type": "number_of_bins_1" as const,
+        "number_of_bins_value": number_of_bins_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_number_of_bins_1_cargs(
+    params: AntsRegistrationNumberOfBins1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_strategy"] ?? null) !== null) {
+        cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_2_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1271,10 +2063,7 @@ function ants_registration_metric_mattes(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
-    number_of_bins: number | null = null,
-    sampling_strategy: "None" | "Regular" | "Random" | null = null,
-    sampling_percentage: number | null = null,
-    use_gradient_filter: boolean | null = null,
+    number_of_bins: AntsRegistrationNumberOfBins1ParamsDict | null = null,
 ): AntsRegistrationMetricMattesParamsDictTagged {
     const params = {
         "@type": "metric_mattes" as const,
@@ -1284,15 +2073,6 @@ function ants_registration_metric_mattes(
     };
     if (number_of_bins !== null) {
         params["number_of_bins"] = number_of_bins;
-    }
-    if (sampling_strategy !== null) {
-        params["sampling_strategy"] = sampling_strategy;
-    }
-    if (sampling_percentage !== null) {
-        params["sampling_percentage"] = sampling_percentage;
-    }
-    if (use_gradient_filter !== null) {
-        params["use_gradient_filter"] = use_gradient_filter;
     }
     return params;
 }
@@ -1311,8 +2091,129 @@ function ants_registration_metric_mattes_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
+    if ((params["number_of_bins"] ?? null) !== null) {
+        cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_1_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_3(
+    use_gradient_filter_value: boolean | null = null,
+): AntsRegistrationSamplingPercentage3ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_3" as const,
+    };
+    if (use_gradient_filter_value !== null) {
+        params["use_gradient_filter_value"] = use_gradient_filter_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_3_cargs(
+    params: AntsRegistrationSamplingPercentage3ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["use_gradient_filter_value"] ?? null) !== null) {
+        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_strategy_3(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsRegistrationSamplingPercentage3ParamsDict | null = null,
+): AntsRegistrationSamplingStrategy3ParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy_3" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_strategy_3_cargs(
+    params: AntsRegistrationSamplingStrategy3ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_3_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_radius_1(
+    radius_value: number,
+    sampling_strategy: AntsRegistrationSamplingStrategy3ParamsDict | null = null,
+): AntsRegistrationRadius1ParamsDictTagged {
+    const params = {
+        "@type": "radius_1" as const,
+        "radius_value": radius_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_radius_1_cargs(
+    params: AntsRegistrationRadius1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_strategy"] ?? null) !== null) {
+        cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_3_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1328,10 +2229,7 @@ function ants_registration_metric_mean_squares(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
-    radius: number | null = null,
-    sampling_strategy: "None" | "Regular" | "Random" | null = null,
-    sampling_percentage: number | null = null,
-    use_gradient_filter: boolean | null = null,
+    radius: AntsRegistrationRadius1ParamsDict | null = null,
 ): AntsRegistrationMetricMeanSquaresParamsDictTagged {
     const params = {
         "@type": "metric_mean_squares" as const,
@@ -1341,15 +2239,6 @@ function ants_registration_metric_mean_squares(
     };
     if (radius !== null) {
         params["radius"] = radius;
-    }
-    if (sampling_strategy !== null) {
-        params["sampling_strategy"] = sampling_strategy;
-    }
-    if (sampling_percentage !== null) {
-        params["sampling_percentage"] = sampling_percentage;
-    }
-    if (use_gradient_filter !== null) {
-        params["use_gradient_filter"] = use_gradient_filter;
     }
     return params;
 }
@@ -1368,8 +2257,129 @@ function ants_registration_metric_mean_squares_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
+    if ((params["radius"] ?? null) !== null) {
+        cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_1_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_4(
+    use_gradient_filter_value: boolean | null = null,
+): AntsRegistrationSamplingPercentage4ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_4" as const,
+    };
+    if (use_gradient_filter_value !== null) {
+        params["use_gradient_filter_value"] = use_gradient_filter_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_4_cargs(
+    params: AntsRegistrationSamplingPercentage4ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["use_gradient_filter_value"] ?? null) !== null) {
+        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_strategy_4(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsRegistrationSamplingPercentage4ParamsDict | null = null,
+): AntsRegistrationSamplingStrategy4ParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy_4" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_strategy_4_cargs(
+    params: AntsRegistrationSamplingStrategy4ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_4_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_number_of_bins_2(
+    number_of_bins_value: number,
+    sampling_strategy: AntsRegistrationSamplingStrategy4ParamsDict | null = null,
+): AntsRegistrationNumberOfBins2ParamsDictTagged {
+    const params = {
+        "@type": "number_of_bins_2" as const,
+        "number_of_bins_value": number_of_bins_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_number_of_bins_2_cargs(
+    params: AntsRegistrationNumberOfBins2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_strategy"] ?? null) !== null) {
+        cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_4_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1385,10 +2395,7 @@ function ants_registration_metric_demons(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
-    number_of_bins: number | null = null,
-    sampling_strategy: "None" | "Regular" | "Random" | null = null,
-    sampling_percentage: number | null = null,
-    use_gradient_filter: boolean | null = null,
+    number_of_bins: AntsRegistrationNumberOfBins2ParamsDict | null = null,
 ): AntsRegistrationMetricDemonsParamsDictTagged {
     const params = {
         "@type": "metric_demons" as const,
@@ -1398,15 +2405,6 @@ function ants_registration_metric_demons(
     };
     if (number_of_bins !== null) {
         params["number_of_bins"] = number_of_bins;
-    }
-    if (sampling_strategy !== null) {
-        params["sampling_strategy"] = sampling_strategy;
-    }
-    if (sampling_percentage !== null) {
-        params["sampling_percentage"] = sampling_percentage;
-    }
-    if (use_gradient_filter !== null) {
-        params["use_gradient_filter"] = use_gradient_filter;
     }
     return params;
 }
@@ -1425,8 +2423,129 @@ function ants_registration_metric_demons_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_bins"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["number_of_bins"] ?? null) !== null) ? String((params["number_of_bins"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
+    if ((params["number_of_bins"] ?? null) !== null) {
+        cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_2_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_5(
+    use_gradient_filter_value: boolean | null = null,
+): AntsRegistrationSamplingPercentage5ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_5" as const,
+    };
+    if (use_gradient_filter_value !== null) {
+        params["use_gradient_filter_value"] = use_gradient_filter_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_5_cargs(
+    params: AntsRegistrationSamplingPercentage5ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["use_gradient_filter_value"] ?? null) !== null) {
+        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_strategy_5(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsRegistrationSamplingPercentage5ParamsDict | null = null,
+): AntsRegistrationSamplingStrategy5ParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy_5" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_strategy_5_cargs(
+    params: AntsRegistrationSamplingStrategy5ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_5_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_radius_2(
+    radius_value: number,
+    sampling_strategy: AntsRegistrationSamplingStrategy5ParamsDict | null = null,
+): AntsRegistrationRadius2ParamsDictTagged {
+    const params = {
+        "@type": "radius_2" as const,
+        "radius_value": radius_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_radius_2_cargs(
+    params: AntsRegistrationRadius2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sampling_strategy"] ?? null) !== null) {
+        cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_5_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1442,10 +2561,7 @@ function ants_registration_metric_global_correlation(
     fixed_image: string,
     moving_image: string,
     metric_weight: number,
-    radius: number | null = null,
-    sampling_strategy: "None" | "Regular" | "Random" | null = null,
-    sampling_percentage: number | null = null,
-    use_gradient_filter: boolean | null = null,
+    radius: AntsRegistrationRadius2ParamsDict | null = null,
 ): AntsRegistrationMetricGlobalCorrelationParamsDictTagged {
     const params = {
         "@type": "metric_global_correlation" as const,
@@ -1455,15 +2571,6 @@ function ants_registration_metric_global_correlation(
     };
     if (radius !== null) {
         params["radius"] = radius;
-    }
-    if (sampling_strategy !== null) {
-        params["sampling_strategy"] = sampling_strategy;
-    }
-    if (sampling_percentage !== null) {
-        params["sampling_percentage"] = sampling_percentage;
-    }
-    if (use_gradient_filter !== null) {
-        params["use_gradient_filter"] = use_gradient_filter;
     }
     return params;
 }
@@ -1482,8 +2589,47 @@ function ants_registration_metric_global_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["radius"] ?? null) !== null || (params["sampling_strategy"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null || (params["use_gradient_filter"] ?? null) !== null) {
-        cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["radius"] ?? null) !== null) ? String((params["radius"] ?? null)) : ""), ",", (((params["sampling_strategy"] ?? null) !== null) ? (params["sampling_strategy"] ?? null) : ""), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["use_gradient_filter"] ?? null) !== null) ? ((params["use_gradient_filter"] ?? null) ? "true" : "false") : ""), "]"].join(''));
+    if ((params["radius"] ?? null) !== null) {
+        cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_2_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_6(
+    boundary_points_only_value: "0" | null = null,
+): AntsRegistrationSamplingPercentage6ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_6" as const,
+    };
+    if (boundary_points_only_value !== null) {
+        params["boundary_points_only_value"] = boundary_points_only_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_6_cargs(
+    params: AntsRegistrationSamplingPercentage6ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["boundary_points_only_value"] ?? null) !== null) {
+        cargs.push([",", (params["boundary_points_only_value"] ?? null)].join(''));
     }
     return cargs;
 }
@@ -1499,8 +2645,7 @@ function ants_registration_metric_euclidean_icp(
     fixed_point_set: string,
     moving_point_set: string,
     metric_weight: number,
-    sampling_percentage: number | null = null,
-    boundary_points_only: "0" | null = null,
+    sampling_percentage: AntsRegistrationSamplingPercentage6ParamsDict | null = null,
 ): AntsRegistrationMetricEuclideanIcpParamsDictTagged {
     const params = {
         "@type": "metric_euclidean_icp" as const,
@@ -1510,9 +2655,6 @@ function ants_registration_metric_euclidean_icp(
     };
     if (sampling_percentage !== null) {
         params["sampling_percentage"] = sampling_percentage;
-    }
-    if (boundary_points_only !== null) {
-        params["boundary_points_only"] = boundary_points_only;
     }
     return params;
 }
@@ -1531,8 +2673,129 @@ function ants_registration_metric_euclidean_icp_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null || (params["boundary_points_only"] ?? null) !== null) {
-        cargs.push(["ICP[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["boundary_points_only"] ?? null) !== null) ? (params["boundary_points_only"] ?? null) : ""), "]"].join(''));
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push(["ICP[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_6_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_point_set_sigma(
+    k_neighborhood_value: number | null = null,
+): AntsRegistrationPointSetSigmaParamsDictTagged {
+    const params = {
+        "@type": "point_set_sigma" as const,
+    };
+    if (k_neighborhood_value !== null) {
+        params["k_neighborhood_value"] = k_neighborhood_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_point_set_sigma_cargs(
+    params: AntsRegistrationPointSetSigmaParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["k_neighborhood_value"] ?? null) !== null) {
+        cargs.push([",", String((params["k_neighborhood_value"] ?? null))].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_boundary_points_only_1(
+    boundary_points_only_value: "0",
+    point_set_sigma: AntsRegistrationPointSetSigmaParamsDict | null = null,
+): AntsRegistrationBoundaryPointsOnly1ParamsDictTagged {
+    const params = {
+        "@type": "boundary_points_only_1" as const,
+        "boundary_points_only_value": boundary_points_only_value,
+    };
+    if (point_set_sigma !== null) {
+        params["point_set_sigma"] = point_set_sigma;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_boundary_points_only_1_cargs(
+    params: AntsRegistrationBoundaryPointsOnly1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["point_set_sigma"] ?? null) !== null) {
+        cargs.push([",", (params["boundary_points_only_value"] ?? null), ants_registration_point_set_sigma_cargs((params["point_set_sigma"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_7(
+    sampling_percentage_value: number,
+    boundary_points_only: AntsRegistrationBoundaryPointsOnly1ParamsDict | null = null,
+): AntsRegistrationSamplingPercentage7ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_7" as const,
+        "sampling_percentage_value": sampling_percentage_value,
+    };
+    if (boundary_points_only !== null) {
+        params["boundary_points_only"] = boundary_points_only;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_7_cargs(
+    params: AntsRegistrationSamplingPercentage7ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["boundary_points_only"] ?? null) !== null) {
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ants_registration_boundary_points_only_1_cargs((params["boundary_points_only"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1545,17 +2808,17 @@ function ants_registration_metric_euclidean_icp_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_point_set_expectation(
+    fixed_point_set: string,
+    moving_point_set: string,
     metric_weight: number,
-    point_set_sigma: number | null = null,
-    sampling_percentage: number | null = null,
+    sampling_percentage: AntsRegistrationSamplingPercentage7ParamsDict | null = null,
 ): AntsRegistrationMetricPointSetExpectationParamsDictTagged {
     const params = {
         "@type": "metric_point_set_expectation" as const,
+        "fixed_point_set": fixed_point_set,
+        "moving_point_set": moving_point_set,
         "metric_weight": metric_weight,
     };
-    if (point_set_sigma !== null) {
-        params["point_set_sigma"] = point_set_sigma;
-    }
     if (sampling_percentage !== null) {
         params["sampling_percentage"] = sampling_percentage;
     }
@@ -1576,8 +2839,129 @@ function ants_registration_metric_point_set_expectation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["point_set_sigma"] ?? null) !== null || (params["sampling_percentage"] ?? null) !== null) {
-        cargs.push(["PSE[[FIXED_IMAGE],[MOVING_IMAGE],", String((params["metric_weight"] ?? null)), ",,", (((params["point_set_sigma"] ?? null) !== null) ? String((params["point_set_sigma"] ?? null)) : ""), "[SAMPLING_STRATEGY],", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), "[USE_GRADIENT_FILTER]]"].join(''));
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push(["PSE[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_7_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_point_set_sigma_1(
+    k_neighborhood_value: number | null = null,
+): AntsRegistrationPointSetSigma1ParamsDictTagged {
+    const params = {
+        "@type": "point_set_sigma_1" as const,
+    };
+    if (k_neighborhood_value !== null) {
+        params["k_neighborhood_value"] = k_neighborhood_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_point_set_sigma_1_cargs(
+    params: AntsRegistrationPointSetSigma1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["k_neighborhood_value"] ?? null) !== null) {
+        cargs.push([",", String((params["k_neighborhood_value"] ?? null))].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_boundary_points_only_2(
+    boundary_points_only_value: "0",
+    point_set_sigma: AntsRegistrationPointSetSigma1ParamsDict | null = null,
+): AntsRegistrationBoundaryPointsOnly2ParamsDictTagged {
+    const params = {
+        "@type": "boundary_points_only_2" as const,
+        "boundary_points_only_value": boundary_points_only_value,
+    };
+    if (point_set_sigma !== null) {
+        params["point_set_sigma"] = point_set_sigma;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_boundary_points_only_2_cargs(
+    params: AntsRegistrationBoundaryPointsOnly2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["point_set_sigma"] ?? null) !== null) {
+        cargs.push([",", (params["boundary_points_only_value"] ?? null), ants_registration_point_set_sigma_1_cargs((params["point_set_sigma"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_sampling_percentage_8(
+    sampling_percentage_value: number,
+    boundary_points_only: AntsRegistrationBoundaryPointsOnly2ParamsDict | null = null,
+): AntsRegistrationSamplingPercentage8ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_8" as const,
+        "sampling_percentage_value": sampling_percentage_value,
+    };
+    if (boundary_points_only !== null) {
+        params["boundary_points_only"] = boundary_points_only;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_sampling_percentage_8_cargs(
+    params: AntsRegistrationSamplingPercentage8ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["boundary_points_only"] ?? null) !== null) {
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ants_registration_boundary_points_only_2_cargs((params["boundary_points_only"] ?? null), execution).join("")].join(''));
     }
     return cargs;
 }
@@ -1593,10 +2977,7 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis(
     fixed_point_set: string,
     moving_point_set: string,
     metric_weight: number,
-    sampling_percentage: number | null = null,
-    boundary_points_only: "0" | null = null,
-    point_set_sigma: number | null = null,
-    k_neighborhood: number | null = null,
+    sampling_percentage: AntsRegistrationSamplingPercentage8ParamsDict | null = null,
 ): AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged {
     const params = {
         "@type": "metric_jensen_havrda_charvet_tsallis" as const,
@@ -1606,15 +2987,6 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis(
     };
     if (sampling_percentage !== null) {
         params["sampling_percentage"] = sampling_percentage;
-    }
-    if (boundary_points_only !== null) {
-        params["boundary_points_only"] = boundary_points_only;
-    }
-    if (point_set_sigma !== null) {
-        params["point_set_sigma"] = point_set_sigma;
-    }
-    if (k_neighborhood !== null) {
-        params["k_neighborhood"] = k_neighborhood;
     }
     return params;
 }
@@ -1633,8 +3005,8 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null || (params["boundary_points_only"] ?? null) !== null || (params["point_set_sigma"] ?? null) !== null || (params["k_neighborhood"] ?? null) !== null) {
-        cargs.push(["JHCT[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (((params["sampling_percentage"] ?? null) !== null) ? String((params["sampling_percentage"] ?? null)) : ""), ",", (((params["boundary_points_only"] ?? null) !== null) ? (params["boundary_points_only"] ?? null) : ""), ",", (((params["point_set_sigma"] ?? null) !== null) ? String((params["point_set_sigma"] ?? null)) : ""), ",", (((params["k_neighborhood"] ?? null) !== null) ? String((params["k_neighborhood"] ?? null)) : ""), "]"].join(''));
+    if ((params["sampling_percentage"] ?? null) !== null) {
+        cargs.push(["JHCT[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_8_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
     }
     return cargs;
 }
@@ -1643,13 +3015,190 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
 /**
  * Build parameters.
  *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_k_neighborhood_2(
+    gradient_sigma_value: number | null = null,
+): AntsRegistrationKNeighborhood2ParamsDictTagged {
+    const params = {
+        "@type": "k_neighborhood_2" as const,
+    };
+    if (gradient_sigma_value !== null) {
+        params["gradient_sigma_value"] = gradient_sigma_value;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_k_neighborhood_2_cargs(
+    params: AntsRegistrationKNeighborhood2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["gradient_sigma_value"] ?? null) !== null) {
+        cargs.push([",", String((params["gradient_sigma_value"] ?? null))].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_distance_sigma(
+    distance_sigma_value: number,
+    k_neighborhood: AntsRegistrationKNeighborhood2ParamsDict | null = null,
+): AntsRegistrationDistanceSigmaParamsDictTagged {
+    const params = {
+        "@type": "distance_sigma" as const,
+        "distance_sigma_value": distance_sigma_value,
+    };
+    if (k_neighborhood !== null) {
+        params["k_neighborhood"] = k_neighborhood;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_distance_sigma_cargs(
+    params: AntsRegistrationDistanceSigmaParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["k_neighborhood"] ?? null) !== null) {
+        cargs.push([",", String((params["distance_sigma_value"] ?? null)), ants_registration_k_neighborhood_2_cargs((params["k_neighborhood"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_intensity_sigma(
+    intensity_sigma_value: number,
+    distance_sigma: AntsRegistrationDistanceSigmaParamsDict | null = null,
+): AntsRegistrationIntensitySigmaParamsDictTagged {
+    const params = {
+        "@type": "intensity_sigma" as const,
+        "intensity_sigma_value": intensity_sigma_value,
+    };
+    if (distance_sigma !== null) {
+        params["distance_sigma"] = distance_sigma;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_intensity_sigma_cargs(
+    params: AntsRegistrationIntensitySigmaParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["distance_sigma"] ?? null) !== null) {
+        cargs.push([",", String((params["intensity_sigma_value"] ?? null)), ants_registration_distance_sigma_cargs((params["distance_sigma"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_registration_neighborhood_radius(
+    neighborhood_radius_value: string,
+    intensity_sigma: AntsRegistrationIntensitySigmaParamsDict | null = null,
+): AntsRegistrationNeighborhoodRadiusParamsDictTagged {
+    const params = {
+        "@type": "neighborhood_radius" as const,
+        "neighborhood_radius_value": neighborhood_radius_value,
+    };
+    if (intensity_sigma !== null) {
+        params["intensity_sigma"] = intensity_sigma;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_registration_neighborhood_radius_cargs(
+    params: AntsRegistrationNeighborhoodRadiusParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["intensity_sigma"] ?? null) !== null) {
+        cargs.push([",", (params["neighborhood_radius_value"] ?? null), ants_registration_intensity_sigma_cargs((params["intensity_sigma"] ?? null), execution).join("")].join(''));
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
  * @returns Parameter dictionary
  */
 function ants_registration_metric_igdm(
+    fixed_image: string,
+    moving_image: string,
+    metric_weight: number,
+    fixed_mask: string,
+    moving_mask: string,
+    neighborhood_radius: AntsRegistrationNeighborhoodRadiusParamsDict | null = null,
 ): AntsRegistrationMetricIgdmParamsDictTagged {
     const params = {
         "@type": "metric_igdm" as const,
+        "fixed_image": fixed_image,
+        "moving_image": moving_image,
+        "metric_weight": metric_weight,
+        "fixed_mask": fixed_mask,
+        "moving_mask": moving_mask,
     };
+    if (neighborhood_radius !== null) {
+        params["neighborhood_radius"] = neighborhood_radius;
+    }
     return params;
 }
 
@@ -1667,7 +3216,9 @@ function ants_registration_metric_igdm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push("IGDM[");
+    if ((params["neighborhood_radius"] ?? null) !== null) {
+        cargs.push(["IGDM[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (params["fixed_mask"] ?? null), ",", (params["moving_mask"] ?? null), ants_registration_neighborhood_radius_cargs((params["neighborhood_radius"] ?? null), execution).join(""), "]"].join(''));
+    }
     return cargs;
 }
 
@@ -1833,17 +3384,13 @@ function ants_registration_winsorize_image_intensities_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_masks(
-    fixed_mask: string | null = null,
-    moving_mask: string | null = null,
+    moving_mask_value: string | null = null,
 ): AntsRegistrationMasksParamsDictTagged {
     const params = {
         "@type": "masks" as const,
     };
-    if (fixed_mask !== null) {
-        params["fixed_mask"] = fixed_mask;
-    }
-    if (moving_mask !== null) {
-        params["moving_mask"] = moving_mask;
+    if (moving_mask_value !== null) {
+        params["moving_mask_value"] = moving_mask_value;
     }
     return params;
 }
@@ -1862,8 +3409,8 @@ function ants_registration_masks_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fixed_mask"] ?? null) !== null || (params["moving_mask"] ?? null) !== null) {
-        cargs.push(["[", (((params["fixed_mask"] ?? null) !== null) ? (params["fixed_mask"] ?? null) : ""), (((params["moving_mask"] ?? null) !== null) ? (params["moving_mask"] ?? null) : ""), "]"].join(''));
+    if ((params["moving_mask_value"] ?? null) !== null) {
+        cargs.push([",", (params["moving_mask_value"] ?? null)].join(''));
     }
     return cargs;
 }
@@ -2265,14 +3812,24 @@ function ants_registration(
 
 export {
       ANTS_REGISTRATION_METADATA,
+      AntsRegistrationBoundaryPointsOnly1ParamsDict,
+      AntsRegistrationBoundaryPointsOnly1ParamsDictTagged,
+      AntsRegistrationBoundaryPointsOnly2ParamsDict,
+      AntsRegistrationBoundaryPointsOnly2ParamsDictTagged,
       AntsRegistrationConvergenceParamsDict,
       AntsRegistrationConvergenceParamsDictTagged,
+      AntsRegistrationDistanceSigmaParamsDict,
+      AntsRegistrationDistanceSigmaParamsDictTagged,
       AntsRegistrationInitialMovingTransformInitializationFeatureParamsDict,
       AntsRegistrationInitialMovingTransformInitializationFeatureParamsDictTagged,
       AntsRegistrationInitialMovingTransformParamsDict,
       AntsRegistrationInitialMovingTransformParamsDictTagged,
       AntsRegistrationInitialMovingTransformUseInverseParamsDict,
       AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged,
+      AntsRegistrationIntensitySigmaParamsDict,
+      AntsRegistrationIntensitySigmaParamsDictTagged,
+      AntsRegistrationKNeighborhood2ParamsDict,
+      AntsRegistrationKNeighborhood2ParamsDictTagged,
       AntsRegistrationMasksParamsDict,
       AntsRegistrationMasksParamsDictTagged,
       AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict,
@@ -2295,11 +3852,67 @@ export {
       AntsRegistrationMetricMutualInformationParamsDictTagged,
       AntsRegistrationMetricPointSetExpectationParamsDict,
       AntsRegistrationMetricPointSetExpectationParamsDictTagged,
+      AntsRegistrationNeighborhoodRadiusParamsDict,
+      AntsRegistrationNeighborhoodRadiusParamsDictTagged,
+      AntsRegistrationNumberOfBins1ParamsDict,
+      AntsRegistrationNumberOfBins1ParamsDictTagged,
+      AntsRegistrationNumberOfBins2ParamsDict,
+      AntsRegistrationNumberOfBins2ParamsDictTagged,
+      AntsRegistrationNumberOfBinsParamsDict,
+      AntsRegistrationNumberOfBinsParamsDictTagged,
+      AntsRegistrationNumberOfIntegrationSteps1ParamsDict,
+      AntsRegistrationNumberOfIntegrationSteps1ParamsDictTagged,
+      AntsRegistrationNumberOfTimePointSamplesParamsDict,
+      AntsRegistrationNumberOfTimePointSamplesParamsDictTagged,
       AntsRegistrationOutputs,
       AntsRegistrationParamsDict,
       AntsRegistrationParamsDictTagged,
+      AntsRegistrationPointSetSigma1ParamsDict,
+      AntsRegistrationPointSetSigma1ParamsDictTagged,
+      AntsRegistrationPointSetSigmaParamsDict,
+      AntsRegistrationPointSetSigmaParamsDictTagged,
+      AntsRegistrationRadius1ParamsDict,
+      AntsRegistrationRadius1ParamsDictTagged,
+      AntsRegistrationRadius2ParamsDict,
+      AntsRegistrationRadius2ParamsDictTagged,
+      AntsRegistrationRadiusParamsDict,
+      AntsRegistrationRadiusParamsDictTagged,
+      AntsRegistrationSamplingPercentage1ParamsDict,
+      AntsRegistrationSamplingPercentage1ParamsDictTagged,
+      AntsRegistrationSamplingPercentage2ParamsDict,
+      AntsRegistrationSamplingPercentage2ParamsDictTagged,
+      AntsRegistrationSamplingPercentage3ParamsDict,
+      AntsRegistrationSamplingPercentage3ParamsDictTagged,
+      AntsRegistrationSamplingPercentage4ParamsDict,
+      AntsRegistrationSamplingPercentage4ParamsDictTagged,
+      AntsRegistrationSamplingPercentage5ParamsDict,
+      AntsRegistrationSamplingPercentage5ParamsDictTagged,
+      AntsRegistrationSamplingPercentage6ParamsDict,
+      AntsRegistrationSamplingPercentage6ParamsDictTagged,
+      AntsRegistrationSamplingPercentage7ParamsDict,
+      AntsRegistrationSamplingPercentage7ParamsDictTagged,
+      AntsRegistrationSamplingPercentage8ParamsDict,
+      AntsRegistrationSamplingPercentage8ParamsDictTagged,
+      AntsRegistrationSamplingPercentageParamsDict,
+      AntsRegistrationSamplingPercentageParamsDictTagged,
+      AntsRegistrationSamplingStrategy1ParamsDict,
+      AntsRegistrationSamplingStrategy1ParamsDictTagged,
+      AntsRegistrationSamplingStrategy2ParamsDict,
+      AntsRegistrationSamplingStrategy2ParamsDictTagged,
+      AntsRegistrationSamplingStrategy3ParamsDict,
+      AntsRegistrationSamplingStrategy3ParamsDictTagged,
+      AntsRegistrationSamplingStrategy4ParamsDict,
+      AntsRegistrationSamplingStrategy4ParamsDictTagged,
+      AntsRegistrationSamplingStrategy5ParamsDict,
+      AntsRegistrationSamplingStrategy5ParamsDictTagged,
+      AntsRegistrationSamplingStrategyParamsDict,
+      AntsRegistrationSamplingStrategyParamsDictTagged,
       AntsRegistrationStageParamsDict,
       AntsRegistrationStageParamsDictTagged,
+      AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict,
+      AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDictTagged,
+      AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict,
+      AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDictTagged,
       AntsRegistrationTransformAffineParamsDict,
       AntsRegistrationTransformAffineParamsDictTagged,
       AntsRegistrationTransformBsplineDisplacementFieldParamsDict,
@@ -2328,14 +3941,23 @@ export {
       AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged,
       AntsRegistrationTransformTranslationParamsDict,
       AntsRegistrationTransformTranslationParamsDictTagged,
+      AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict,
+      AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDictTagged,
+      AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDict,
+      AntsRegistrationVelocityFieldMeshSizeAtBaseLevelParamsDictTagged,
       AntsRegistrationWinsorizeImageIntensitiesParamsDict,
       AntsRegistrationWinsorizeImageIntensitiesParamsDictTagged,
       ants_registration,
+      ants_registration_boundary_points_only_1,
+      ants_registration_boundary_points_only_2,
       ants_registration_convergence,
+      ants_registration_distance_sigma,
       ants_registration_execute,
       ants_registration_initial_moving_transform,
       ants_registration_initial_moving_transform_initialization_feature,
       ants_registration_initial_moving_transform_use_inverse,
+      ants_registration_intensity_sigma,
+      ants_registration_k_neighborhood_2,
       ants_registration_masks,
       ants_registration_metric_ants_neighbourhood_cross_correlation,
       ants_registration_metric_demons,
@@ -2347,8 +3969,36 @@ export {
       ants_registration_metric_mean_squares,
       ants_registration_metric_mutual_information,
       ants_registration_metric_point_set_expectation,
+      ants_registration_neighborhood_radius,
+      ants_registration_number_of_bins,
+      ants_registration_number_of_bins_1,
+      ants_registration_number_of_bins_2,
+      ants_registration_number_of_integration_steps_1,
+      ants_registration_number_of_time_point_samples,
       ants_registration_params,
+      ants_registration_point_set_sigma,
+      ants_registration_point_set_sigma_1,
+      ants_registration_radius,
+      ants_registration_radius_1,
+      ants_registration_radius_2,
+      ants_registration_sampling_percentage,
+      ants_registration_sampling_percentage_1,
+      ants_registration_sampling_percentage_2,
+      ants_registration_sampling_percentage_3,
+      ants_registration_sampling_percentage_4,
+      ants_registration_sampling_percentage_5,
+      ants_registration_sampling_percentage_6,
+      ants_registration_sampling_percentage_7,
+      ants_registration_sampling_percentage_8,
+      ants_registration_sampling_strategy,
+      ants_registration_sampling_strategy_1,
+      ants_registration_sampling_strategy_2,
+      ants_registration_sampling_strategy_3,
+      ants_registration_sampling_strategy_4,
+      ants_registration_sampling_strategy_5,
       ants_registration_stage,
+      ants_registration_total_field_mesh_size_at_base_level,
+      ants_registration_total_field_mesh_size_at_base_level_1,
       ants_registration_transform_affine,
       ants_registration_transform_bspline,
       ants_registration_transform_bspline_displacement_field,
@@ -2363,5 +4013,7 @@ export {
       ants_registration_transform_time_varying_bspline_velocity_field,
       ants_registration_transform_time_varying_velocity_field,
       ants_registration_transform_translation,
+      ants_registration_update_field_variance_in_voxel_space,
+      ants_registration_velocity_field_mesh_size_at_base_level,
       ants_registration_winsorize_image_intensities,
 };
