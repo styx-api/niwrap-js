@@ -104,11 +104,9 @@ function volume_smoothing_cargs(
             "-volume-smoothing",
             (params["volume-out"] ?? null),
             (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
-            "-roi",
-            (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : ""),
+            ["-roi", (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : "")].join(''),
             (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
+            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));

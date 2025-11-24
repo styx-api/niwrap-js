@@ -107,12 +107,9 @@ function label_dilate_cargs(
             "wb_command",
             "-label-dilate",
             (params["label-out"] ?? null),
-            "-bad-vertex-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+            ["-bad-vertex-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["label"] ?? null)));

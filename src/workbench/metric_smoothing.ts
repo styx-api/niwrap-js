@@ -177,12 +177,9 @@ function metric_smoothing_cargs(
             (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
             ...(((params["roi"] ?? null) !== null) ? metric_smoothing_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-            "-method",
-            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join(''),
+            ["-method", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

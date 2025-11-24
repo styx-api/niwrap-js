@@ -98,8 +98,7 @@ function file_convert_border_version_convert_cargs(
             execution.inputFile((params["border-in"] ?? null)),
             String((params["out-version"] ?? null)),
             (params["border-out"] ?? null),
-            "-surface",
-            execution.inputFile((params["surface"] ?? null))
+            ["-surface", execution.inputFile((params["surface"] ?? null))].join('')
         );
     }
     return cargs;

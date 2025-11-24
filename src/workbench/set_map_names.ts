@@ -139,10 +139,8 @@ function set_map_names_cargs(
         cargs.push(
             "wb_command",
             "-set-map-names",
-            "-name-file",
-            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
-            "-from-data-file",
-            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
+            ["-name-file", (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")].join(''),
+            ["-from-data-file", (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")].join(''),
             ...(((params["map"] ?? null) !== null) ? (params["map"] ?? null).map(s => set_map_names_map_cargs(s, execution)).flat() : [])
         );
     }

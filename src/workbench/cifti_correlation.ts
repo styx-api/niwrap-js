@@ -102,16 +102,11 @@ function cifti_correlation_roi_override_cargs(
     if ((params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-vol"] ?? null) !== null || (params["roi-cifti"] ?? null) !== null) {
         cargs.push(
             "-roi-override",
-            "-left-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-right-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-cerebellum-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-vol-roi",
-            (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
-            "-cifti-roi",
-            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : "")
+            ["-left-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-right-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-cerebellum-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-vol-roi", (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : "")].join(''),
+            ["-cifti-roi", (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : "")].join('')
         );
     }
     return cargs;
@@ -203,13 +198,11 @@ function cifti_correlation_cargs(
             "-cifti-correlation",
             (params["cifti-out"] ?? null),
             ...(((params["roi-override"] ?? null) !== null) ? cifti_correlation_roi_override_cargs((params["roi-override"] ?? null), execution) : []),
-            "-weights",
-            (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),
+            ["-weights", (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : "")].join(''),
             (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
             (((params["no-demean"] ?? false)) ? "-no-demean" : ""),
             (((params["covariance"] ?? false)) ? "-covariance" : ""),
-            "-mem-limit",
-            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
+            ["-mem-limit", (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["cifti"] ?? null)));

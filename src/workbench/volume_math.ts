@@ -80,8 +80,7 @@ function volume_math_var_cargs(
             "-var",
             (params["name"] ?? null),
             execution.inputFile((params["volume"] ?? null)),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
+            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join(''),
             (((params["repeat"] ?? false)) ? "-repeat" : "")
         );
     }
@@ -157,8 +156,7 @@ function volume_math_cargs(
             "wb_command",
             "-volume-math",
             (params["volume-out"] ?? null),
-            "-fixnan",
-            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
+            ["-fixnan", (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : "")].join(''),
             ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat() : [])
         );
     }

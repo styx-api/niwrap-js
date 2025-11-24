@@ -151,8 +151,7 @@ function convert_matrix4_to_workbench_sparse_cargs(
         cargs.push(
             "wb_command",
             "-convert-matrix4-to-workbench-sparse",
-            "-surface-seeds",
-            (((params["seed-roi"] ?? null) !== null) ? execution.inputFile((params["seed-roi"] ?? null)) : ""),
+            ["-surface-seeds", (((params["seed-roi"] ?? null) !== null) ? execution.inputFile((params["seed-roi"] ?? null)) : "")].join(''),
             ...(((params["volume-seeds"] ?? null) !== null) ? convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume-seeds"] ?? null), execution) : [])
         );
     }

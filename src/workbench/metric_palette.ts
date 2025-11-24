@@ -429,27 +429,19 @@ function metric_palette_cargs(
         cargs.push(
             "wb_command",
             "-metric-palette",
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
             ...(((params["pos-percent"] ?? null) !== null) ? metric_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),
             ...(((params["neg-percent"] ?? null) !== null) ? metric_palette_neg_percent_cargs((params["neg-percent"] ?? null), execution) : []),
             ...(((params["pos-user"] ?? null) !== null) ? metric_palette_pos_user_cargs((params["pos-user"] ?? null), execution) : []),
             ...(((params["neg-user"] ?? null) !== null) ? metric_palette_neg_user_cargs((params["neg-user"] ?? null), execution) : []),
-            "-interpolate",
-            (((params["interpolate"] ?? null) !== null) ? ((params["interpolate"] ?? null) ? "true" : "false") : ""),
-            "-disp-pos",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-disp-neg",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-disp-zero",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-palette-name",
-            (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
+            ["-interpolate", (((params["interpolate"] ?? null) !== null) ? ((params["interpolate"] ?? null) ? "true" : "false") : "")].join(''),
+            ["-disp-pos", (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : "")].join(''),
+            ["-disp-neg", (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : "")].join(''),
+            ["-disp-zero", (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : "")].join(''),
+            ["-palette-name", (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : "")].join(''),
             ...(((params["thresholding"] ?? null) !== null) ? metric_palette_thresholding_cargs((params["thresholding"] ?? null), execution) : []),
-            "-inversion",
-            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
-            "-normalization",
-            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")
+            ["-inversion", (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")].join(''),
+            ["-normalization", (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")].join('')
         );
     }
     cargs.push((params["metric"] ?? null));

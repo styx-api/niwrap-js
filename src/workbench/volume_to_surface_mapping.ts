@@ -27,6 +27,13 @@ interface VolumeToSurfaceMappingDilateMissingParamsDict {
 type VolumeToSurfaceMappingDilateMissingParamsDictTagged = Required<Pick<VolumeToSurfaceMappingDilateMissingParamsDict, '@type'>> & VolumeToSurfaceMappingDilateMissingParamsDict;
 
 
+interface VolumeToSurfaceMappingBadVerticesOutParamsDict {
+    "@type"?: "bad-vertices-out";
+    "roi-out": string;
+}
+type VolumeToSurfaceMappingBadVerticesOutParamsDictTagged = Required<Pick<VolumeToSurfaceMappingBadVerticesOutParamsDict, '@type'>> & VolumeToSurfaceMappingBadVerticesOutParamsDict;
+
+
 interface VolumeToSurfaceMappingOutputWeightsParamsDict {
     "@type"?: "output-weights";
     "vertex": number;
@@ -45,7 +52,7 @@ interface VolumeToSurfaceMappingRibbonConstrainedParamsDict {
     "thin-columns": boolean;
     "scale"?: number | null | undefined;
     "method"?: string | null | undefined;
-    "roi-out"?: string | null | undefined;
+    "bad-vertices-out"?: VolumeToSurfaceMappingBadVerticesOutParamsDict | null | undefined;
     "output-weights"?: VolumeToSurfaceMappingOutputWeightsParamsDict | null | undefined;
     "text-out"?: string | null | undefined;
 }
@@ -168,6 +175,82 @@ function volume_to_surface_mapping_dilate_missing_cargs(
 
 
 /**
+ * Output object returned when calling `VolumeToSurfaceMappingBadVerticesOutParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface VolumeToSurfaceMappingBadVerticesOutOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output metric file of vertices that have no data
+     */
+    roi_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roi_out the output metric file of vertices that have no data
+ *
+ * @returns Parameter dictionary
+ */
+function volume_to_surface_mapping_bad_vertices_out(
+    roi_out: string,
+): VolumeToSurfaceMappingBadVerticesOutParamsDictTagged {
+    const params = {
+        "@type": "bad-vertices-out" as const,
+        "roi-out": roi_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function volume_to_surface_mapping_bad_vertices_out_cargs(
+    params: VolumeToSurfaceMappingBadVerticesOutParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-bad-vertices-out",
+        (params["roi-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function volume_to_surface_mapping_bad_vertices_out_outputs(
+    params: VolumeToSurfaceMappingBadVerticesOutParamsDict,
+    execution: Execution,
+): VolumeToSurfaceMappingBadVerticesOutOutputs {
+    const ret: VolumeToSurfaceMappingBadVerticesOutOutputs = {
+        root: execution.outputFile("."),
+        roi_out: execution.outputFile([(params["roi-out"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
  * Output object returned when calling `VolumeToSurfaceMappingOutputWeightsParamsDict | null(...)`.
  *
  * @interface
@@ -258,6 +341,10 @@ interface VolumeToSurfaceMappingRibbonConstrainedOutputs {
      */
     root: OutputPathType;
     /**
+     * Outputs from `volume_to_surface_mapping_bad_vertices_out_outputs`.
+     */
+    bad_vertices_out: VolumeToSurfaceMappingBadVerticesOutOutputs | null;
+    /**
      * Outputs from `volume_to_surface_mapping_output_weights_outputs`.
      */
     output_weights: VolumeToSurfaceMappingOutputWeightsOutputs | null;
@@ -281,9 +368,7 @@ value to multiply the local thickness by, to get the gaussian sigma
  * @param method instead of a weighted average of voxels, interpolate at subpoints inside the ribbon
 
 interpolation method, must be CUBIC, ENCLOSING_VOXEL, or TRILINEAR
- * @param roi_out output an ROI of which vertices didn't intersect any valid voxels
-
-the output metric file of vertices that have no data
+ * @param bad_vertices_out output an ROI of which vertices didn't intersect any valid voxels
  * @param output_weights write the voxel weights for a vertex to a volume file
  * @param text_out write the voxel weights for all vertices to a text file
 
@@ -300,7 +385,7 @@ function volume_to_surface_mapping_ribbon_constrained(
     thin_columns: boolean = false,
     scale: number | null = null,
     method: string | null = null,
-    roi_out: string | null = null,
+    bad_vertices_out: VolumeToSurfaceMappingBadVerticesOutParamsDict | null = null,
     output_weights: VolumeToSurfaceMappingOutputWeightsParamsDict | null = null,
     text_out: string | null = null,
 ): VolumeToSurfaceMappingRibbonConstrainedParamsDictTagged {
@@ -325,8 +410,8 @@ function volume_to_surface_mapping_ribbon_constrained(
     if (method !== null) {
         params["method"] = method;
     }
-    if (roi_out !== null) {
-        params["roi-out"] = roi_out;
+    if (bad_vertices_out !== null) {
+        params["bad-vertices-out"] = bad_vertices_out;
     }
     if (output_weights !== null) {
         params["output-weights"] = output_weights;
@@ -351,25 +436,20 @@ function volume_to_surface_mapping_ribbon_constrained_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["volume-roi"] ?? null) !== null || (params["dilate-missing"] ?? null) !== null || (params["subdiv-num"] ?? null) !== null || (params["thin-columns"] ?? false) || (params["scale"] ?? null) !== null || (params["method"] ?? null) !== null || (params["roi-out"] ?? null) !== null || (params["output-weights"] ?? null) !== null || (params["text-out"] ?? null) !== null) {
+    if ((params["volume-roi"] ?? null) !== null || (params["dilate-missing"] ?? null) !== null || (params["subdiv-num"] ?? null) !== null || (params["thin-columns"] ?? false) || (params["scale"] ?? null) !== null || (params["method"] ?? null) !== null || (params["bad-vertices-out"] ?? null) !== null || (params["output-weights"] ?? null) !== null || (params["text-out"] ?? null) !== null) {
         cargs.push(
             "-ribbon-constrained",
             execution.inputFile((params["inner-surf"] ?? null)),
             execution.inputFile((params["outer-surf"] ?? null)),
             ...(((params["volume-roi"] ?? null) !== null) ? volume_to_surface_mapping_volume_roi_cargs((params["volume-roi"] ?? null), execution) : []),
             ...(((params["dilate-missing"] ?? null) !== null) ? volume_to_surface_mapping_dilate_missing_cargs((params["dilate-missing"] ?? null), execution) : []),
-            "-voxel-subdiv",
-            (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
+            ["-voxel-subdiv", (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : "")].join(''),
             (((params["thin-columns"] ?? false)) ? "-thin-columns" : ""),
-            "-gaussian",
-            (((params["scale"] ?? null) !== null) ? String((params["scale"] ?? null)) : ""),
-            "-interpolate",
-            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
-            "-bad-vertices-out",
-            (((params["roi-out"] ?? null) !== null) ? (params["roi-out"] ?? null) : ""),
+            ["-gaussian", (((params["scale"] ?? null) !== null) ? String((params["scale"] ?? null)) : "")].join(''),
+            ["-interpolate", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join(''),
+            ...(((params["bad-vertices-out"] ?? null) !== null) ? volume_to_surface_mapping_bad_vertices_out_cargs((params["bad-vertices-out"] ?? null), execution) : []),
             ...(((params["output-weights"] ?? null) !== null) ? volume_to_surface_mapping_output_weights_cargs((params["output-weights"] ?? null), execution) : []),
-            "-output-weights-text",
-            (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
+            ["-output-weights-text", (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")].join('')
         );
     }
     return cargs;
@@ -390,6 +470,7 @@ function volume_to_surface_mapping_ribbon_constrained_outputs(
 ): VolumeToSurfaceMappingRibbonConstrainedOutputs {
     const ret: VolumeToSurfaceMappingRibbonConstrainedOutputs = {
         root: execution.outputFile("."),
+        bad_vertices_out: (params["bad-vertices-out"] ?? null) ? (volume_to_surface_mapping_bad_vertices_out_outputs((params["bad-vertices-out"] ?? null), execution) ?? null) : null,
         output_weights: (params["output-weights"] ?? null) ? (volume_to_surface_mapping_output_weights_outputs((params["output-weights"] ?? null), execution) ?? null) : null,
     };
     return ret;
@@ -543,8 +624,7 @@ function volume_to_surface_mapping_cargs(
             (((params["cubic"] ?? false)) ? "-cubic" : ""),
             ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
             ...(((params["myelin-style"] ?? null) !== null) ? volume_to_surface_mapping_myelin_style_cargs((params["myelin-style"] ?? null), execution) : []),
-            "-subvol-select",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
+            ["-subvol-select", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume"] ?? null)));
@@ -645,6 +725,9 @@ function volume_to_surface_mapping(
 
 export {
       VOLUME_TO_SURFACE_MAPPING_METADATA,
+      VolumeToSurfaceMappingBadVerticesOutOutputs,
+      VolumeToSurfaceMappingBadVerticesOutParamsDict,
+      VolumeToSurfaceMappingBadVerticesOutParamsDictTagged,
       VolumeToSurfaceMappingDilateMissingParamsDict,
       VolumeToSurfaceMappingDilateMissingParamsDictTagged,
       VolumeToSurfaceMappingMyelinStyleParamsDict,
@@ -661,6 +744,7 @@ export {
       VolumeToSurfaceMappingVolumeRoiParamsDict,
       VolumeToSurfaceMappingVolumeRoiParamsDictTagged,
       volume_to_surface_mapping,
+      volume_to_surface_mapping_bad_vertices_out,
       volume_to_surface_mapping_dilate_missing,
       volume_to_surface_mapping_execute,
       volume_to_surface_mapping_myelin_style,

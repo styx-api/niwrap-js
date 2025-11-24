@@ -19,12 +19,19 @@ interface VolumeGradientPresmoothParamsDict {
 type VolumeGradientPresmoothParamsDictTagged = Required<Pick<VolumeGradientPresmoothParamsDict, '@type'>> & VolumeGradientPresmoothParamsDict;
 
 
+interface VolumeGradientVectorsParamsDict {
+    "@type"?: "vectors";
+    "vector-volume-out": string;
+}
+type VolumeGradientVectorsParamsDictTagged = Required<Pick<VolumeGradientVectorsParamsDict, '@type'>> & VolumeGradientVectorsParamsDict;
+
+
 interface VolumeGradientParamsDict {
     "@type"?: "workbench/volume-gradient";
     "volume-out": string;
     "presmooth"?: VolumeGradientPresmoothParamsDict | null | undefined;
     "roi-volume"?: InputPathType | null | undefined;
-    "vector-volume-out"?: string | null | undefined;
+    "vectors"?: VolumeGradientVectorsParamsDict | null | undefined;
     "subvol"?: string | null | undefined;
     "volume-in": InputPathType;
 }
@@ -77,6 +84,82 @@ function volume_gradient_presmooth_cargs(
 
 
 /**
+ * Output object returned when calling `VolumeGradientVectorsParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface VolumeGradientVectorsOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the vectors as a volume file
+     */
+    vector_volume_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param vector_volume_out the vectors as a volume file
+ *
+ * @returns Parameter dictionary
+ */
+function volume_gradient_vectors(
+    vector_volume_out: string,
+): VolumeGradientVectorsParamsDictTagged {
+    const params = {
+        "@type": "vectors" as const,
+        "vector-volume-out": vector_volume_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function volume_gradient_vectors_cargs(
+    params: VolumeGradientVectorsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-vectors",
+        (params["vector-volume-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function volume_gradient_vectors_outputs(
+    params: VolumeGradientVectorsParamsDict,
+    execution: Execution,
+): VolumeGradientVectorsOutputs {
+    const ret: VolumeGradientVectorsOutputs = {
+        root: execution.outputFile("."),
+        vector_volume_out: execution.outputFile([(params["vector-volume-out"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
  * Output object returned when calling `VolumeGradientParamsDict(...)`.
  *
  * @interface
@@ -90,6 +173,10 @@ interface VolumeGradientOutputs {
      * the output gradient magnitude volume
      */
     volume_out: OutputPathType;
+    /**
+     * Outputs from `volume_gradient_vectors_outputs`.
+     */
+    vectors: VolumeGradientVectorsOutputs | null;
 }
 
 
@@ -102,9 +189,7 @@ interface VolumeGradientOutputs {
  * @param roi_volume select a region of interest to take the gradient of
 
 the region to take the gradient within
- * @param vector_volume_out output vectors
-
-the vectors as a volume file
+ * @param vectors output vectors
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
@@ -116,7 +201,7 @@ function volume_gradient_params(
     volume_in: InputPathType,
     presmooth: VolumeGradientPresmoothParamsDict | null = null,
     roi_volume: InputPathType | null = null,
-    vector_volume_out: string | null = null,
+    vectors: VolumeGradientVectorsParamsDict | null = null,
     subvol: string | null = null,
 ): VolumeGradientParamsDictTagged {
     const params = {
@@ -130,8 +215,8 @@ function volume_gradient_params(
     if (roi_volume !== null) {
         params["roi-volume"] = roi_volume;
     }
-    if (vector_volume_out !== null) {
-        params["vector-volume-out"] = vector_volume_out;
+    if (vectors !== null) {
+        params["vectors"] = vectors;
     }
     if (subvol !== null) {
         params["subvol"] = subvol;
@@ -153,18 +238,15 @@ function volume_gradient_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["presmooth"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["vector-volume-out"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
+    if ((params["presmooth"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["vectors"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-volume-gradient",
             (params["volume-out"] ?? null),
             ...(((params["presmooth"] ?? null) !== null) ? volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            "-vectors",
-            (((params["vector-volume-out"] ?? null) !== null) ? (params["vector-volume-out"] ?? null) : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
+            ["-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
+            ...(((params["vectors"] ?? null) !== null) ? volume_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
+            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
@@ -187,6 +269,7 @@ function volume_gradient_outputs(
     const ret: VolumeGradientOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
+        vectors: (params["vectors"] ?? null) ? (volume_gradient_vectors_outputs((params["vectors"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -227,9 +310,7 @@ function volume_gradient_execute(
  * @param roi_volume select a region of interest to take the gradient of
 
 the region to take the gradient within
- * @param vector_volume_out output vectors
-
-the vectors as a volume file
+ * @param vectors output vectors
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
@@ -242,11 +323,11 @@ function volume_gradient(
     volume_in: InputPathType,
     presmooth: VolumeGradientPresmoothParamsDict | null = null,
     roi_volume: InputPathType | null = null,
-    vector_volume_out: string | null = null,
+    vectors: VolumeGradientVectorsParamsDict | null = null,
     subvol: string | null = null,
     runner: Runner | null = null,
 ): VolumeGradientOutputs {
-    const params = volume_gradient_params(volume_out, volume_in, presmooth, roi_volume, vector_volume_out, subvol)
+    const params = volume_gradient_params(volume_out, volume_in, presmooth, roi_volume, vectors, subvol)
     return volume_gradient_execute(params, runner);
 }
 
@@ -258,8 +339,12 @@ export {
       VolumeGradientParamsDictTagged,
       VolumeGradientPresmoothParamsDict,
       VolumeGradientPresmoothParamsDictTagged,
+      VolumeGradientVectorsOutputs,
+      VolumeGradientVectorsParamsDict,
+      VolumeGradientVectorsParamsDictTagged,
       volume_gradient,
       volume_gradient_execute,
       volume_gradient_params,
       volume_gradient_presmooth,
+      volume_gradient_vectors,
 };

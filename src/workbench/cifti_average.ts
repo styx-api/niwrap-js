@@ -122,8 +122,7 @@ function cifti_average_cifti_cargs(
         cargs.push(
             "-cifti",
             execution.inputFile((params["cifti-in"] ?? null)),
-            "-weight",
-            String((params["weight"] ?? null))
+            ["-weight", String((params["weight"] ?? null))].join('')
         );
     }
     return cargs;
@@ -201,8 +200,7 @@ function cifti_average_cargs(
             "-cifti-average",
             (params["cifti-out"] ?? null),
             ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-            "-mem-limit",
-            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
+            ["-mem-limit", (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")].join(''),
             ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat() : [])
         );
     }

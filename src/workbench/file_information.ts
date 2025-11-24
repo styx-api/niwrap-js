@@ -72,8 +72,7 @@ function file_information_only_metadata_cargs(
     if ((params["key"] ?? null) !== null) {
         cargs.push(
             "-only-metadata",
-            "-key",
-            (params["key"] ?? null)
+            ["-key", (params["key"] ?? null)].join('')
         );
     }
     return cargs;

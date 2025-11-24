@@ -82,8 +82,7 @@ function volume_label_export_table_cargs(
         cargs.push(
             "wb_command",
             "-volume-label-export-table",
-            "-hierarchy",
-            (params["json-out"] ?? null)
+            ["-hierarchy", (params["json-out"] ?? null)].join('')
         );
     }
     cargs.push(execution.inputFile((params["label-in"] ?? null)));

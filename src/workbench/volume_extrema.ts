@@ -228,15 +228,13 @@ function volume_extrema_cargs(
             "-volume-extrema",
             (params["volume-out"] ?? null),
             ...(((params["presmooth"] ?? null) !== null) ? volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            ["-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
             ...(((params["threshold"] ?? null) !== null) ? volume_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
             (((params["sum-subvols"] ?? false)) ? "-sum-subvols" : ""),
             (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
             (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
             (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
-            "-subvolume",
-            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
+            ["-subvolume", (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));

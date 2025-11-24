@@ -87,8 +87,7 @@ function label_mask_cargs(
             "wb_command",
             "-label-mask",
             (params["label-out"] ?? null),
-            "-column",
-            (params["column"] ?? null)
+            ["-column", (params["column"] ?? null)].join('')
         );
     }
     cargs.push(execution.inputFile((params["label"] ?? null)));

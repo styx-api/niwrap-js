@@ -256,10 +256,8 @@ function cifti_merge_cargs(
             "wb_command",
             "-cifti-merge",
             (params["cifti-out"] ?? null),
-            "-direction",
-            (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
-            "-mem-limit",
-            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
+            ["-direction", (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : "")].join(''),
+            ["-mem-limit", (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")].join(''),
             ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat() : [])
         );
     }

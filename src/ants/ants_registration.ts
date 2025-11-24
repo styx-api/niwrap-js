@@ -20,6 +20,7 @@ type AntsRegistrationInitialMovingTransformParamsDictTagged = Required<Pick<Ants
 
 interface AntsRegistrationInitialMovingTransformUseInverseParamsDict {
     "@type"?: "initial_moving_transform_use_inverse";
+    "initial_moving_transform": InputPathType;
     "use_inverse_value"?: boolean | null | undefined;
 }
 type AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged = Required<Pick<AntsRegistrationInitialMovingTransformUseInverseParamsDict, '@type'>> & AntsRegistrationInitialMovingTransformUseInverseParamsDict;
@@ -88,6 +89,7 @@ type AntsRegistrationTransformGaussianDisplacementFieldParamsDictTagged = Requir
 
 interface AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict {
     "@type"?: "total_field_mesh_size_at_base_level";
+    "total_field_mesh_size_at_base_level_value": number;
     "spline_order_value"?: number | null | undefined;
 }
 type AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDictTagged = Required<Pick<AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict, '@type'>> & AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDict;
@@ -116,6 +118,7 @@ type AntsRegistrationTransformTimeVaryingVelocityFieldParamsDictTagged = Require
 
 interface AntsRegistrationNumberOfTimePointSamplesParamsDict {
     "@type"?: "number_of_time_point_samples";
+    "number_of_time_point_samples_value": number;
     "spline_order_value"?: number | null | undefined;
 }
 type AntsRegistrationNumberOfTimePointSamplesParamsDictTagged = Required<Pick<AntsRegistrationNumberOfTimePointSamplesParamsDict, '@type'>> & AntsRegistrationNumberOfTimePointSamplesParamsDict;
@@ -132,6 +135,7 @@ type AntsRegistrationTransformTimeVaryingBsplineVelocityFieldParamsDictTagged = 
 
 interface AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict {
     "@type"?: "update_field_variance_in_voxel_space";
+    "update_field_variance_in_voxel_space_value": number;
     "total_field_variance_in_voxel_space_value"?: number | null | undefined;
 }
 type AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDictTagged = Required<Pick<AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict, '@type'>> & AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDict;
@@ -147,6 +151,7 @@ type AntsRegistrationTransformSynParamsDictTagged = Required<Pick<AntsRegistrati
 
 interface AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict {
     "@type"?: "total_field_mesh_size_at_base_level_1";
+    "total_field_mesh_size_at_base_level_value": number;
     "spline_order_value"?: number | null | undefined;
 }
 type AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDictTagged = Required<Pick<AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict, '@type'>> & AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDict;
@@ -163,6 +168,9 @@ type AntsRegistrationTransformBsplineSynParamsDictTagged = Required<Pick<AntsReg
 
 interface AntsRegistrationTransformExponentialParamsDict {
     "@type"?: "transform_exponential";
+    "gradient_step": number;
+    "update_field_variance_in_voxel_space": number;
+    "velocity_field_variance_in_voxel_space": number;
     "number_of_integration_steps_value"?: number | null | undefined;
 }
 type AntsRegistrationTransformExponentialParamsDictTagged = Required<Pick<AntsRegistrationTransformExponentialParamsDict, '@type'>> & AntsRegistrationTransformExponentialParamsDict;
@@ -170,6 +178,7 @@ type AntsRegistrationTransformExponentialParamsDictTagged = Required<Pick<AntsRe
 
 interface AntsRegistrationNumberOfIntegrationSteps1ParamsDict {
     "@type"?: "number_of_integration_steps_1";
+    "number_of_integration_steps_value": number;
     "spline_order_value"?: number | null | undefined;
 }
 type AntsRegistrationNumberOfIntegrationSteps1ParamsDictTagged = Required<Pick<AntsRegistrationNumberOfIntegrationSteps1ParamsDict, '@type'>> & AntsRegistrationNumberOfIntegrationSteps1ParamsDict;
@@ -194,6 +203,7 @@ type AntsRegistrationTransformBsplineExponentialParamsDictTagged = Required<Pick
 
 interface AntsRegistrationSamplingPercentageParamsDict {
     "@type"?: "sampling_percentage";
+    "sampling_percentage_value": number;
     "use_gradient_filter_value"?: boolean | null | undefined;
 }
 type AntsRegistrationSamplingPercentageParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentageParamsDict, '@type'>> & AntsRegistrationSamplingPercentageParamsDict;
@@ -227,6 +237,7 @@ type AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged = R
 
 interface AntsRegistrationSamplingPercentage1ParamsDict {
     "@type"?: "sampling_percentage_1";
+    "sampling_percentage_value": number;
     "use_gradient_filter_value"?: boolean | null | undefined;
 }
 type AntsRegistrationSamplingPercentage1ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage1ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage1ParamsDict;
@@ -260,6 +271,7 @@ type AntsRegistrationMetricMutualInformationParamsDictTagged = Required<Pick<Ant
 
 interface AntsRegistrationSamplingPercentage2ParamsDict {
     "@type"?: "sampling_percentage_2";
+    "sampling_percentage_value": number;
     "use_gradient_filter_value"?: boolean | null | undefined;
 }
 type AntsRegistrationSamplingPercentage2ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage2ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage2ParamsDict;
@@ -293,6 +305,7 @@ type AntsRegistrationMetricMattesParamsDictTagged = Required<Pick<AntsRegistrati
 
 interface AntsRegistrationSamplingPercentage3ParamsDict {
     "@type"?: "sampling_percentage_3";
+    "sampling_percentage_value": number;
     "use_gradient_filter_value"?: boolean | null | undefined;
 }
 type AntsRegistrationSamplingPercentage3ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage3ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage3ParamsDict;
@@ -326,6 +339,7 @@ type AntsRegistrationMetricMeanSquaresParamsDictTagged = Required<Pick<AntsRegis
 
 interface AntsRegistrationSamplingPercentage4ParamsDict {
     "@type"?: "sampling_percentage_4";
+    "sampling_percentage_value": number;
     "use_gradient_filter_value"?: boolean | null | undefined;
 }
 type AntsRegistrationSamplingPercentage4ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage4ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage4ParamsDict;
@@ -359,6 +373,7 @@ type AntsRegistrationMetricDemonsParamsDictTagged = Required<Pick<AntsRegistrati
 
 interface AntsRegistrationSamplingPercentage5ParamsDict {
     "@type"?: "sampling_percentage_5";
+    "sampling_percentage_value": number;
     "use_gradient_filter_value"?: boolean | null | undefined;
 }
 type AntsRegistrationSamplingPercentage5ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage5ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage5ParamsDict;
@@ -392,6 +407,7 @@ type AntsRegistrationMetricGlobalCorrelationParamsDictTagged = Required<Pick<Ant
 
 interface AntsRegistrationSamplingPercentage6ParamsDict {
     "@type"?: "sampling_percentage_6";
+    "sampling_percentage_value": number;
     "boundary_points_only_value"?: "0" | null | undefined;
 }
 type AntsRegistrationSamplingPercentage6ParamsDictTagged = Required<Pick<AntsRegistrationSamplingPercentage6ParamsDict, '@type'>> & AntsRegistrationSamplingPercentage6ParamsDict;
@@ -409,6 +425,7 @@ type AntsRegistrationMetricEuclideanIcpParamsDictTagged = Required<Pick<AntsRegi
 
 interface AntsRegistrationPointSetSigmaParamsDict {
     "@type"?: "point_set_sigma";
+    "point_set_sigma_value": number;
     "k_neighborhood_value"?: number | null | undefined;
 }
 type AntsRegistrationPointSetSigmaParamsDictTagged = Required<Pick<AntsRegistrationPointSetSigmaParamsDict, '@type'>> & AntsRegistrationPointSetSigmaParamsDict;
@@ -442,6 +459,7 @@ type AntsRegistrationMetricPointSetExpectationParamsDictTagged = Required<Pick<A
 
 interface AntsRegistrationPointSetSigma1ParamsDict {
     "@type"?: "point_set_sigma_1";
+    "point_set_sigma_value": number;
     "k_neighborhood_value"?: number | null | undefined;
 }
 type AntsRegistrationPointSetSigma1ParamsDictTagged = Required<Pick<AntsRegistrationPointSetSigma1ParamsDict, '@type'>> & AntsRegistrationPointSetSigma1ParamsDict;
@@ -475,6 +493,7 @@ type AntsRegistrationMetricJensenHavrdaCharvetTsallisParamsDictTagged = Required
 
 interface AntsRegistrationKNeighborhood2ParamsDict {
     "@type"?: "k_neighborhood_2";
+    "k_neighborhood_value": number;
     "gradient_sigma_value"?: number | null | undefined;
 }
 type AntsRegistrationKNeighborhood2ParamsDictTagged = Required<Pick<AntsRegistrationKNeighborhood2ParamsDict, '@type'>> & AntsRegistrationKNeighborhood2ParamsDict;
@@ -547,6 +566,7 @@ type AntsRegistrationWinsorizeImageIntensitiesParamsDictTagged = Required<Pick<A
 
 interface AntsRegistrationMasksParamsDict {
     "@type"?: "masks";
+    "fixed_mask"?: string | null | undefined;
     "moving_mask_value"?: string | null | undefined;
 }
 type AntsRegistrationMasksParamsDictTagged = Required<Pick<AntsRegistrationMasksParamsDict, '@type'>> & AntsRegistrationMasksParamsDict;
@@ -744,10 +764,12 @@ function ants_registration_initial_moving_transform_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_initial_moving_transform_use_inverse(
+    initial_moving_transform: InputPathType,
     use_inverse_value: boolean | null = null,
 ): AntsRegistrationInitialMovingTransformUseInverseParamsDictTagged {
     const params = {
         "@type": "initial_moving_transform_use_inverse" as const,
+        "initial_moving_transform": initial_moving_transform,
     };
     if (use_inverse_value !== null) {
         params["use_inverse_value"] = use_inverse_value;
@@ -770,7 +792,7 @@ function ants_registration_initial_moving_transform_use_inverse_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_inverse_value"] ?? null) !== null) {
-        cargs.push([",", ((params["use_inverse_value"] ?? null) ? "1" : "0")].join(''));
+        cargs.push([execution.inputFile((params["initial_moving_transform"] ?? null)), ",", ((params["use_inverse_value"] ?? null) ? "1" : "0")].join(''));
     }
     return cargs;
 }
@@ -1074,10 +1096,12 @@ function ants_registration_transform_gaussian_displacement_field_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_total_field_mesh_size_at_base_level(
+    total_field_mesh_size_at_base_level_value: number,
     spline_order_value: number | null = null,
 ): AntsRegistrationTotalFieldMeshSizeAtBaseLevelParamsDictTagged {
     const params = {
         "@type": "total_field_mesh_size_at_base_level" as const,
+        "total_field_mesh_size_at_base_level_value": total_field_mesh_size_at_base_level_value,
     };
     if (spline_order_value !== null) {
         params["spline_order_value"] = spline_order_value;
@@ -1100,7 +1124,7 @@ function ants_registration_total_field_mesh_size_at_base_level_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+        cargs.push([",", String((params["total_field_mesh_size_at_base_level_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -1201,10 +1225,12 @@ function ants_registration_transform_time_varying_velocity_field_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_number_of_time_point_samples(
+    number_of_time_point_samples_value: number,
     spline_order_value: number | null = null,
 ): AntsRegistrationNumberOfTimePointSamplesParamsDictTagged {
     const params = {
         "@type": "number_of_time_point_samples" as const,
+        "number_of_time_point_samples_value": number_of_time_point_samples_value,
     };
     if (spline_order_value !== null) {
         params["spline_order_value"] = spline_order_value;
@@ -1227,7 +1253,7 @@ function ants_registration_number_of_time_point_samples_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+        cargs.push([",", String((params["number_of_time_point_samples_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -1283,10 +1309,12 @@ function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_update_field_variance_in_voxel_space(
+    update_field_variance_in_voxel_space_value: number,
     total_field_variance_in_voxel_space_value: number | null = null,
 ): AntsRegistrationUpdateFieldVarianceInVoxelSpaceParamsDictTagged {
     const params = {
         "@type": "update_field_variance_in_voxel_space" as const,
+        "update_field_variance_in_voxel_space_value": update_field_variance_in_voxel_space_value,
     };
     if (total_field_variance_in_voxel_space_value !== null) {
         params["total_field_variance_in_voxel_space_value"] = total_field_variance_in_voxel_space_value;
@@ -1309,7 +1337,7 @@ function ants_registration_update_field_variance_in_voxel_space_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["total_field_variance_in_voxel_space_value"] ?? null) !== null) {
-        cargs.push([",", String((params["total_field_variance_in_voxel_space_value"] ?? null))].join(''));
+        cargs.push([",", String((params["update_field_variance_in_voxel_space_value"] ?? null)), ",", String((params["total_field_variance_in_voxel_space_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -1363,10 +1391,12 @@ function ants_registration_transform_syn_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_total_field_mesh_size_at_base_level_1(
+    total_field_mesh_size_at_base_level_value: number,
     spline_order_value: number | null = null,
 ): AntsRegistrationTotalFieldMeshSizeAtBaseLevel1ParamsDictTagged {
     const params = {
         "@type": "total_field_mesh_size_at_base_level_1" as const,
+        "total_field_mesh_size_at_base_level_value": total_field_mesh_size_at_base_level_value,
     };
     if (spline_order_value !== null) {
         params["spline_order_value"] = spline_order_value;
@@ -1389,7 +1419,7 @@ function ants_registration_total_field_mesh_size_at_base_level_1_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+        cargs.push([",", String((params["total_field_mesh_size_at_base_level_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -1445,10 +1475,16 @@ function ants_registration_transform_bspline_syn_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_transform_exponential(
+    gradient_step: number,
+    update_field_variance_in_voxel_space: number,
+    velocity_field_variance_in_voxel_space: number,
     number_of_integration_steps_value: number | null = null,
 ): AntsRegistrationTransformExponentialParamsDictTagged {
     const params = {
         "@type": "transform_exponential" as const,
+        "gradient_step": gradient_step,
+        "update_field_variance_in_voxel_space": update_field_variance_in_voxel_space,
+        "velocity_field_variance_in_voxel_space": velocity_field_variance_in_voxel_space,
     };
     if (number_of_integration_steps_value !== null) {
         params["number_of_integration_steps_value"] = number_of_integration_steps_value;
@@ -1471,7 +1507,7 @@ function ants_registration_transform_exponential_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["number_of_integration_steps_value"] ?? null) !== null) {
-        cargs.push([",", String((params["number_of_integration_steps_value"] ?? null))].join(''));
+        cargs.push(["Exponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["velocity_field_variance_in_voxel_space"] ?? null)), ",", String((params["number_of_integration_steps_value"] ?? null)), "]"].join(''));
     }
     return cargs;
 }
@@ -1484,10 +1520,12 @@ function ants_registration_transform_exponential_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_number_of_integration_steps_1(
+    number_of_integration_steps_value: number,
     spline_order_value: number | null = null,
 ): AntsRegistrationNumberOfIntegrationSteps1ParamsDictTagged {
     const params = {
         "@type": "number_of_integration_steps_1" as const,
+        "number_of_integration_steps_value": number_of_integration_steps_value,
     };
     if (spline_order_value !== null) {
         params["spline_order_value"] = spline_order_value;
@@ -1510,7 +1548,7 @@ function ants_registration_number_of_integration_steps_1_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["spline_order_value"] ?? null))].join(''));
+        cargs.push([",", String((params["number_of_integration_steps_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -1607,10 +1645,12 @@ function ants_registration_transform_bspline_exponential_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_sampling_percentage(
+    sampling_percentage_value: number,
     use_gradient_filter_value: boolean | null = null,
 ): AntsRegistrationSamplingPercentageParamsDictTagged {
     const params = {
         "@type": "sampling_percentage" as const,
+        "sampling_percentage_value": sampling_percentage_value,
     };
     if (use_gradient_filter_value !== null) {
         params["use_gradient_filter_value"] = use_gradient_filter_value;
@@ -1633,7 +1673,7 @@ function ants_registration_sampling_percentage_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     }
     return cargs;
 }
@@ -1773,10 +1813,12 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_sampling_percentage_1(
+    sampling_percentage_value: number,
     use_gradient_filter_value: boolean | null = null,
 ): AntsRegistrationSamplingPercentage1ParamsDictTagged {
     const params = {
         "@type": "sampling_percentage_1" as const,
+        "sampling_percentage_value": sampling_percentage_value,
     };
     if (use_gradient_filter_value !== null) {
         params["use_gradient_filter_value"] = use_gradient_filter_value;
@@ -1799,7 +1841,7 @@ function ants_registration_sampling_percentage_1_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     }
     return cargs;
 }
@@ -1939,10 +1981,12 @@ function ants_registration_metric_mutual_information_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_sampling_percentage_2(
+    sampling_percentage_value: number,
     use_gradient_filter_value: boolean | null = null,
 ): AntsRegistrationSamplingPercentage2ParamsDictTagged {
     const params = {
         "@type": "sampling_percentage_2" as const,
+        "sampling_percentage_value": sampling_percentage_value,
     };
     if (use_gradient_filter_value !== null) {
         params["use_gradient_filter_value"] = use_gradient_filter_value;
@@ -1965,7 +2009,7 @@ function ants_registration_sampling_percentage_2_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     }
     return cargs;
 }
@@ -2105,10 +2149,12 @@ function ants_registration_metric_mattes_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_sampling_percentage_3(
+    sampling_percentage_value: number,
     use_gradient_filter_value: boolean | null = null,
 ): AntsRegistrationSamplingPercentage3ParamsDictTagged {
     const params = {
         "@type": "sampling_percentage_3" as const,
+        "sampling_percentage_value": sampling_percentage_value,
     };
     if (use_gradient_filter_value !== null) {
         params["use_gradient_filter_value"] = use_gradient_filter_value;
@@ -2131,7 +2177,7 @@ function ants_registration_sampling_percentage_3_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     }
     return cargs;
 }
@@ -2271,10 +2317,12 @@ function ants_registration_metric_mean_squares_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_sampling_percentage_4(
+    sampling_percentage_value: number,
     use_gradient_filter_value: boolean | null = null,
 ): AntsRegistrationSamplingPercentage4ParamsDictTagged {
     const params = {
         "@type": "sampling_percentage_4" as const,
+        "sampling_percentage_value": sampling_percentage_value,
     };
     if (use_gradient_filter_value !== null) {
         params["use_gradient_filter_value"] = use_gradient_filter_value;
@@ -2297,7 +2345,7 @@ function ants_registration_sampling_percentage_4_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     }
     return cargs;
 }
@@ -2437,10 +2485,12 @@ function ants_registration_metric_demons_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_sampling_percentage_5(
+    sampling_percentage_value: number,
     use_gradient_filter_value: boolean | null = null,
 ): AntsRegistrationSamplingPercentage5ParamsDictTagged {
     const params = {
         "@type": "sampling_percentage_5" as const,
+        "sampling_percentage_value": sampling_percentage_value,
     };
     if (use_gradient_filter_value !== null) {
         params["use_gradient_filter_value"] = use_gradient_filter_value;
@@ -2463,7 +2513,7 @@ function ants_registration_sampling_percentage_5_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     }
     return cargs;
 }
@@ -2603,10 +2653,12 @@ function ants_registration_metric_global_correlation_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_sampling_percentage_6(
+    sampling_percentage_value: number,
     boundary_points_only_value: "0" | null = null,
 ): AntsRegistrationSamplingPercentage6ParamsDictTagged {
     const params = {
         "@type": "sampling_percentage_6" as const,
+        "sampling_percentage_value": sampling_percentage_value,
     };
     if (boundary_points_only_value !== null) {
         params["boundary_points_only_value"] = boundary_points_only_value;
@@ -2629,7 +2681,7 @@ function ants_registration_sampling_percentage_6_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["boundary_points_only_value"] ?? null) !== null) {
-        cargs.push([",", (params["boundary_points_only_value"] ?? null)].join(''));
+        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", (params["boundary_points_only_value"] ?? null)].join(''));
     }
     return cargs;
 }
@@ -2687,10 +2739,12 @@ function ants_registration_metric_euclidean_icp_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_point_set_sigma(
+    point_set_sigma_value: number,
     k_neighborhood_value: number | null = null,
 ): AntsRegistrationPointSetSigmaParamsDictTagged {
     const params = {
         "@type": "point_set_sigma" as const,
+        "point_set_sigma_value": point_set_sigma_value,
     };
     if (k_neighborhood_value !== null) {
         params["k_neighborhood_value"] = k_neighborhood_value;
@@ -2713,7 +2767,7 @@ function ants_registration_point_set_sigma_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["k_neighborhood_value"] ?? null) !== null) {
-        cargs.push([",", String((params["k_neighborhood_value"] ?? null))].join(''));
+        cargs.push([",", String((params["point_set_sigma_value"] ?? null)), ",", String((params["k_neighborhood_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -2853,10 +2907,12 @@ function ants_registration_metric_point_set_expectation_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_point_set_sigma_1(
+    point_set_sigma_value: number,
     k_neighborhood_value: number | null = null,
 ): AntsRegistrationPointSetSigma1ParamsDictTagged {
     const params = {
         "@type": "point_set_sigma_1" as const,
+        "point_set_sigma_value": point_set_sigma_value,
     };
     if (k_neighborhood_value !== null) {
         params["k_neighborhood_value"] = k_neighborhood_value;
@@ -2879,7 +2935,7 @@ function ants_registration_point_set_sigma_1_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["k_neighborhood_value"] ?? null) !== null) {
-        cargs.push([",", String((params["k_neighborhood_value"] ?? null))].join(''));
+        cargs.push([",", String((params["point_set_sigma_value"] ?? null)), ",", String((params["k_neighborhood_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -3019,10 +3075,12 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_k_neighborhood_2(
+    k_neighborhood_value: number,
     gradient_sigma_value: number | null = null,
 ): AntsRegistrationKNeighborhood2ParamsDictTagged {
     const params = {
         "@type": "k_neighborhood_2" as const,
+        "k_neighborhood_value": k_neighborhood_value,
     };
     if (gradient_sigma_value !== null) {
         params["gradient_sigma_value"] = gradient_sigma_value;
@@ -3045,7 +3103,7 @@ function ants_registration_k_neighborhood_2_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["gradient_sigma_value"] ?? null) !== null) {
-        cargs.push([",", String((params["gradient_sigma_value"] ?? null))].join(''));
+        cargs.push([",", String((params["k_neighborhood_value"] ?? null)), ",", String((params["gradient_sigma_value"] ?? null))].join(''));
     }
     return cargs;
 }
@@ -3384,11 +3442,15 @@ function ants_registration_winsorize_image_intensities_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_masks(
+    fixed_mask: string | null = null,
     moving_mask_value: string | null = null,
 ): AntsRegistrationMasksParamsDictTagged {
     const params = {
         "@type": "masks" as const,
     };
+    if (fixed_mask !== null) {
+        params["fixed_mask"] = fixed_mask;
+    }
     if (moving_mask_value !== null) {
         params["moving_mask_value"] = moving_mask_value;
     }
@@ -3409,8 +3471,8 @@ function ants_registration_masks_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["moving_mask_value"] ?? null) !== null) {
-        cargs.push([",", (params["moving_mask_value"] ?? null)].join(''));
+    if ((params["fixed_mask"] ?? null) !== null || (params["moving_mask_value"] ?? null) !== null) {
+        cargs.push(["[", (((params["fixed_mask"] ?? null) !== null) ? (params["fixed_mask"] ?? null) : ""), ",", (((params["moving_mask_value"] ?? null) !== null) ? (params["moving_mask_value"] ?? null) : ""), "]"].join(''));
     }
     return cargs;
 }

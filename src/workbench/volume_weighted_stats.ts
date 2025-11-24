@@ -221,14 +221,11 @@ function volume_weighted_stats_cargs(
             "wb_command",
             "-volume-weighted-stats",
             ...(((params["weight-volume"] ?? null) !== null) ? volume_weighted_stats_weight_volume_cargs((params["weight-volume"] ?? null), execution) : []),
-            "-subvolume",
-            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),
+            ["-subvolume", (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")].join(''),
             ...(((params["roi"] ?? null) !== null) ? volume_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["mean"] ?? false)) ? "-mean" : ""),
-            "-stdev",
-            (((params["sample"] ?? null) !== null) ? "-sample" : ""),
-            "-percentile",
-            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
+            ["-stdev", (((params["sample"] ?? null) !== null) ? "-sample" : "")].join(''),
+            ["-percentile", (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : "")].join(''),
             (((params["sum"] ?? false)) ? "-sum" : ""),
             (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );

@@ -11,39 +11,74 @@ const CIFTI_SEPARATE_METADATA: Metadata = {
 };
 
 
+interface CiftiSeparateRoiParamsDict {
+    "@type"?: "roi";
+    "roi-out": string;
+}
+type CiftiSeparateRoiParamsDictTagged = Required<Pick<CiftiSeparateRoiParamsDict, '@type'>> & CiftiSeparateRoiParamsDict;
+
+
+interface CiftiSeparateLabelParamsDict {
+    "@type"?: "label";
+    "label-out": string;
+}
+type CiftiSeparateLabelParamsDictTagged = Required<Pick<CiftiSeparateLabelParamsDict, '@type'>> & CiftiSeparateLabelParamsDict;
+
+
 interface CiftiSeparateVolumeAllParamsDict {
     "@type"?: "volume-all";
     "volume-out": string;
-    "roi-out"?: string | null | undefined;
-    "label-out"?: string | null | undefined;
+    "roi"?: CiftiSeparateRoiParamsDict | null | undefined;
+    "label"?: CiftiSeparateLabelParamsDict | null | undefined;
     "crop": boolean;
 }
 type CiftiSeparateVolumeAllParamsDictTagged = Required<Pick<CiftiSeparateVolumeAllParamsDict, '@type'>> & CiftiSeparateVolumeAllParamsDict;
 
 
-interface CiftiSeparateLabelParamsDict {
+interface CiftiSeparateRoiParamsDict_ {
+    "@type"?: "roi";
+    "roi-out": string;
+}
+type CiftiSeparateRoiParamsDictTagged_ = Required<Pick<CiftiSeparateRoiParamsDict_, '@type'>> & CiftiSeparateRoiParamsDict_;
+
+
+interface CiftiSeparateLabelParamsDict_ {
     "@type"?: "label";
     "structure": string;
     "label-out": string;
-    "roi-out"?: string | null | undefined;
+    "roi"?: CiftiSeparateRoiParamsDict_ | null | undefined;
 }
-type CiftiSeparateLabelParamsDictTagged = Required<Pick<CiftiSeparateLabelParamsDict, '@type'>> & CiftiSeparateLabelParamsDict;
+type CiftiSeparateLabelParamsDictTagged_ = Required<Pick<CiftiSeparateLabelParamsDict_, '@type'>> & CiftiSeparateLabelParamsDict_;
+
+
+interface CiftiSeparateRoiParamsDict_2 {
+    "@type"?: "roi";
+    "roi-out": string;
+}
+type CiftiSeparateRoiParamsDictTagged_2 = Required<Pick<CiftiSeparateRoiParamsDict_2, '@type'>> & CiftiSeparateRoiParamsDict_2;
 
 
 interface CiftiSeparateMetricParamsDict {
     "@type"?: "metric";
     "structure": string;
     "metric-out": string;
-    "roi-out"?: string | null | undefined;
+    "roi"?: CiftiSeparateRoiParamsDict_2 | null | undefined;
 }
 type CiftiSeparateMetricParamsDictTagged = Required<Pick<CiftiSeparateMetricParamsDict, '@type'>> & CiftiSeparateMetricParamsDict;
+
+
+interface CiftiSeparateRoiParamsDict_3 {
+    "@type"?: "roi";
+    "roi-out": string;
+}
+type CiftiSeparateRoiParamsDictTagged_3 = Required<Pick<CiftiSeparateRoiParamsDict_3, '@type'>> & CiftiSeparateRoiParamsDict_3;
 
 
 interface CiftiSeparateVolumeParamsDict {
     "@type"?: "volume";
     "structure": string;
     "volume-out": string;
-    "roi-out"?: string | null | undefined;
+    "roi"?: CiftiSeparateRoiParamsDict_3 | null | undefined;
     "crop": boolean;
 }
 type CiftiSeparateVolumeParamsDictTagged = Required<Pick<CiftiSeparateVolumeParamsDict, '@type'>> & CiftiSeparateVolumeParamsDict;
@@ -52,7 +87,7 @@ type CiftiSeparateVolumeParamsDictTagged = Required<Pick<CiftiSeparateVolumePara
 interface CiftiSeparateParamsDict {
     "@type"?: "workbench/cifti-separate";
     "volume-all"?: CiftiSeparateVolumeAllParamsDict | null | undefined;
-    "label"?: Array<CiftiSeparateLabelParamsDict> | null | undefined;
+    "label"?: Array<CiftiSeparateLabelParamsDict_> | null | undefined;
     "metric"?: Array<CiftiSeparateMetricParamsDict> | null | undefined;
     "volume"?: Array<CiftiSeparateVolumeParamsDict> | null | undefined;
     "cifti-in": InputPathType;
@@ -62,53 +97,36 @@ type CiftiSeparateParamsDictTagged = Required<Pick<CiftiSeparateParamsDict, '@ty
 
 
 /**
- * Output object returned when calling `CiftiSeparateVolumeAllParamsDict | null(...)`.
+ * Output object returned when calling `CiftiSeparateRoiParamsDict | null(...)`.
  *
  * @interface
  */
-interface CiftiSeparateVolumeAllOutputs {
+interface CiftiSeparateRoiOutputs {
     /**
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
     /**
-     * the output volume
+     * the roi output volume
      */
-    volume_out: OutputPathType;
+    roi_out: OutputPathType;
 }
 
 
 /**
  * Build parameters.
  *
- * @param volume_out the output volume
- * @param roi_out also output the roi of which voxels have data
-
-the roi output volume
- * @param label_out output a volume label file indicating the location of structures
-
-the label output volume
- * @param crop crop volume to the size of the data rather than using the original volume size
+ * @param roi_out the roi output volume
  *
  * @returns Parameter dictionary
  */
-function cifti_separate_volume_all(
-    volume_out: string,
-    roi_out: string | null = null,
-    label_out: string | null = null,
-    crop: boolean = false,
-): CiftiSeparateVolumeAllParamsDictTagged {
+function cifti_separate_roi(
+    roi_out: string,
+): CiftiSeparateRoiParamsDictTagged {
     const params = {
-        "@type": "volume-all" as const,
-        "volume-out": volume_out,
-        "crop": crop,
+        "@type": "roi" as const,
+        "roi-out": roi_out,
     };
-    if (roi_out !== null) {
-        params["roi-out"] = roi_out;
-    }
-    if (label_out !== null) {
-        params["label-out"] = label_out;
-    }
     return params;
 }
 
@@ -121,22 +139,15 @@ function cifti_separate_volume_all(
  *
  * @returns Command-line arguments.
  */
-function cifti_separate_volume_all_cargs(
-    params: CiftiSeparateVolumeAllParamsDict,
+function cifti_separate_roi_cargs(
+    params: CiftiSeparateRoiParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-out"] ?? null) !== null || (params["label-out"] ?? null) !== null || (params["crop"] ?? false)) {
-        cargs.push(
-            "-volume-all",
-            (params["volume-out"] ?? null),
-            "-roi",
-            (((params["roi-out"] ?? null) !== null) ? (params["roi-out"] ?? null) : ""),
-            "-label",
-            (((params["label-out"] ?? null) !== null) ? (params["label-out"] ?? null) : ""),
-            (((params["crop"] ?? false)) ? "-crop" : "")
-        );
-    }
+    cargs.push(
+        "-roi",
+        (params["roi-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -149,20 +160,20 @@ function cifti_separate_volume_all_cargs(
  *
  * @returns Outputs object.
  */
-function cifti_separate_volume_all_outputs(
-    params: CiftiSeparateVolumeAllParamsDict,
+function cifti_separate_roi_outputs(
+    params: CiftiSeparateRoiParamsDict,
     execution: Execution,
-): CiftiSeparateVolumeAllOutputs {
-    const ret: CiftiSeparateVolumeAllOutputs = {
+): CiftiSeparateRoiOutputs {
+    const ret: CiftiSeparateRoiOutputs = {
         root: execution.outputFile("."),
-        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
+        roi_out: execution.outputFile([(params["roi-out"] ?? null)].join('')),
     };
     return ret;
 }
 
 
 /**
- * Output object returned when calling `Array<CiftiSeparateLabelParamsDict> | null(...)`.
+ * Output object returned when calling `CiftiSeparateLabelParamsDict | null(...)`.
  *
  * @interface
  */
@@ -172,7 +183,7 @@ interface CiftiSeparateLabelOutputs {
      */
     root: OutputPathType;
     /**
-     * the output label file
+     * the label output volume
      */
     label_out: OutputPathType;
 }
@@ -181,27 +192,17 @@ interface CiftiSeparateLabelOutputs {
 /**
  * Build parameters.
  *
- * @param structure the structure to output
- * @param label_out the output label file
- * @param roi_out also output the roi of which vertices have data
-
-the roi output metric
+ * @param label_out the label output volume
  *
  * @returns Parameter dictionary
  */
 function cifti_separate_label(
-    structure: string,
     label_out: string,
-    roi_out: string | null = null,
 ): CiftiSeparateLabelParamsDictTagged {
     const params = {
         "@type": "label" as const,
-        "structure": structure,
         "label-out": label_out,
     };
-    if (roi_out !== null) {
-        params["roi-out"] = roi_out;
-    }
     return params;
 }
 
@@ -219,15 +220,10 @@ function cifti_separate_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-out"] ?? null) !== null) {
-        cargs.push(
-            "-label",
-            (params["structure"] ?? null),
-            (params["label-out"] ?? null),
-            "-roi",
-            (params["roi-out"] ?? null)
-        );
-    }
+    cargs.push(
+        "-label",
+        (params["label-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -253,6 +249,355 @@ function cifti_separate_label_outputs(
 
 
 /**
+ * Output object returned when calling `CiftiSeparateVolumeAllParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface CiftiSeparateVolumeAllOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output volume
+     */
+    volume_out: OutputPathType;
+    /**
+     * Outputs from `cifti_separate_roi_outputs`.
+     */
+    roi: CiftiSeparateRoiOutputs | null;
+    /**
+     * Outputs from `cifti_separate_label_outputs`.
+     */
+    label: CiftiSeparateLabelOutputs | null;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param volume_out the output volume
+ * @param roi also output the roi of which voxels have data
+ * @param label output a volume label file indicating the location of structures
+ * @param crop crop volume to the size of the data rather than using the original volume size
+ *
+ * @returns Parameter dictionary
+ */
+function cifti_separate_volume_all(
+    volume_out: string,
+    roi: CiftiSeparateRoiParamsDict | null = null,
+    label: CiftiSeparateLabelParamsDict | null = null,
+    crop: boolean = false,
+): CiftiSeparateVolumeAllParamsDictTagged {
+    const params = {
+        "@type": "volume-all" as const,
+        "volume-out": volume_out,
+        "crop": crop,
+    };
+    if (roi !== null) {
+        params["roi"] = roi;
+    }
+    if (label !== null) {
+        params["label"] = label;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function cifti_separate_volume_all_cargs(
+    params: CiftiSeparateVolumeAllParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["roi"] ?? null) !== null || (params["label"] ?? null) !== null || (params["crop"] ?? false)) {
+        cargs.push(
+            "-volume-all",
+            (params["volume-out"] ?? null),
+            ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs((params["roi"] ?? null), execution) : []),
+            ...(((params["label"] ?? null) !== null) ? cifti_separate_label_cargs((params["label"] ?? null), execution) : []),
+            (((params["crop"] ?? false)) ? "-crop" : "")
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function cifti_separate_volume_all_outputs(
+    params: CiftiSeparateVolumeAllParamsDict,
+    execution: Execution,
+): CiftiSeparateVolumeAllOutputs {
+    const ret: CiftiSeparateVolumeAllOutputs = {
+        root: execution.outputFile("."),
+        volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
+        roi: (params["roi"] ?? null) ? (cifti_separate_roi_outputs((params["roi"] ?? null), execution) ?? null) : null,
+        label: (params["label"] ?? null) ? (cifti_separate_label_outputs((params["label"] ?? null), execution) ?? null) : null,
+    };
+    return ret;
+}
+
+
+/**
+ * Output object returned when calling `CiftiSeparateRoiParamsDict_ | null(...)`.
+ *
+ * @interface
+ */
+interface CiftiSeparateRoiOutputs_ {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the roi output metric
+     */
+    roi_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roi_out the roi output metric
+ *
+ * @returns Parameter dictionary
+ */
+function cifti_separate_roi_(
+    roi_out: string,
+): CiftiSeparateRoiParamsDictTagged_ {
+    const params = {
+        "@type": "roi" as const,
+        "roi-out": roi_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function cifti_separate_roi_cargs_(
+    params: CiftiSeparateRoiParamsDict_,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-roi",
+        (params["roi-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function cifti_separate_roi_outputs_(
+    params: CiftiSeparateRoiParamsDict_,
+    execution: Execution,
+): CiftiSeparateRoiOutputs_ {
+    const ret: CiftiSeparateRoiOutputs_ = {
+        root: execution.outputFile("."),
+        roi_out: execution.outputFile([(params["roi-out"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
+ * Output object returned when calling `Array<CiftiSeparateLabelParamsDict_> | null(...)`.
+ *
+ * @interface
+ */
+interface CiftiSeparateLabelOutputs_ {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output label file
+     */
+    label_out: OutputPathType;
+    /**
+     * Outputs from `cifti_separate_roi_outputs_`.
+     */
+    roi: CiftiSeparateRoiOutputs_ | null;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param structure the structure to output
+ * @param label_out the output label file
+ * @param roi also output the roi of which vertices have data
+ *
+ * @returns Parameter dictionary
+ */
+function cifti_separate_label_(
+    structure: string,
+    label_out: string,
+    roi: CiftiSeparateRoiParamsDict_ | null = null,
+): CiftiSeparateLabelParamsDictTagged_ {
+    const params = {
+        "@type": "label" as const,
+        "structure": structure,
+        "label-out": label_out,
+    };
+    if (roi !== null) {
+        params["roi"] = roi;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function cifti_separate_label_cargs_(
+    params: CiftiSeparateLabelParamsDict_,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["roi"] ?? null) !== null) {
+        cargs.push(
+            "-label",
+            (params["structure"] ?? null),
+            (params["label-out"] ?? null),
+            ...cifti_separate_roi_cargs_((params["roi"] ?? null), execution)
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function cifti_separate_label_outputs_(
+    params: CiftiSeparateLabelParamsDict_,
+    execution: Execution,
+): CiftiSeparateLabelOutputs_ {
+    const ret: CiftiSeparateLabelOutputs_ = {
+        root: execution.outputFile("."),
+        label_out: execution.outputFile([(params["label-out"] ?? null)].join('')),
+        roi: (params["roi"] ?? null) ? (cifti_separate_roi_outputs_((params["roi"] ?? null), execution) ?? null) : null,
+    };
+    return ret;
+}
+
+
+/**
+ * Output object returned when calling `CiftiSeparateRoiParamsDict_2 | null(...)`.
+ *
+ * @interface
+ */
+interface CiftiSeparateRoiOutputs_2 {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the roi output metric
+     */
+    roi_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roi_out the roi output metric
+ *
+ * @returns Parameter dictionary
+ */
+function cifti_separate_roi_2(
+    roi_out: string,
+): CiftiSeparateRoiParamsDictTagged_2 {
+    const params = {
+        "@type": "roi" as const,
+        "roi-out": roi_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function cifti_separate_roi_cargs_2(
+    params: CiftiSeparateRoiParamsDict_2,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-roi",
+        (params["roi-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function cifti_separate_roi_outputs_2(
+    params: CiftiSeparateRoiParamsDict_2,
+    execution: Execution,
+): CiftiSeparateRoiOutputs_2 {
+    const ret: CiftiSeparateRoiOutputs_2 = {
+        root: execution.outputFile("."),
+        roi_out: execution.outputFile([(params["roi-out"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
  * Output object returned when calling `Array<CiftiSeparateMetricParamsDict> | null(...)`.
  *
  * @interface
@@ -266,6 +611,10 @@ interface CiftiSeparateMetricOutputs {
      * the output metric
      */
     metric_out: OutputPathType;
+    /**
+     * Outputs from `cifti_separate_roi_outputs_2`.
+     */
+    roi: CiftiSeparateRoiOutputs_2 | null;
 }
 
 
@@ -274,24 +623,22 @@ interface CiftiSeparateMetricOutputs {
  *
  * @param structure the structure to output
  * @param metric_out the output metric
- * @param roi_out also output the roi of which vertices have data
-
-the roi output metric
+ * @param roi also output the roi of which vertices have data
  *
  * @returns Parameter dictionary
  */
 function cifti_separate_metric(
     structure: string,
     metric_out: string,
-    roi_out: string | null = null,
+    roi: CiftiSeparateRoiParamsDict_2 | null = null,
 ): CiftiSeparateMetricParamsDictTagged {
     const params = {
         "@type": "metric" as const,
         "structure": structure,
         "metric-out": metric_out,
     };
-    if (roi_out !== null) {
-        params["roi-out"] = roi_out;
+    if (roi !== null) {
+        params["roi"] = roi;
     }
     return params;
 }
@@ -310,13 +657,12 @@ function cifti_separate_metric_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-out"] ?? null) !== null) {
+    if ((params["roi"] ?? null) !== null) {
         cargs.push(
             "-metric",
             (params["structure"] ?? null),
             (params["metric-out"] ?? null),
-            "-roi",
-            (params["roi-out"] ?? null)
+            ...cifti_separate_roi_cargs_2((params["roi"] ?? null), execution)
         );
     }
     return cargs;
@@ -338,6 +684,83 @@ function cifti_separate_metric_outputs(
     const ret: CiftiSeparateMetricOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
+        roi: (params["roi"] ?? null) ? (cifti_separate_roi_outputs_2((params["roi"] ?? null), execution) ?? null) : null,
+    };
+    return ret;
+}
+
+
+/**
+ * Output object returned when calling `CiftiSeparateRoiParamsDict_3 | null(...)`.
+ *
+ * @interface
+ */
+interface CiftiSeparateRoiOutputs_3 {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the roi output volume
+     */
+    roi_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roi_out the roi output volume
+ *
+ * @returns Parameter dictionary
+ */
+function cifti_separate_roi_3(
+    roi_out: string,
+): CiftiSeparateRoiParamsDictTagged_3 {
+    const params = {
+        "@type": "roi" as const,
+        "roi-out": roi_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function cifti_separate_roi_cargs_3(
+    params: CiftiSeparateRoiParamsDict_3,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-roi",
+        (params["roi-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function cifti_separate_roi_outputs_3(
+    params: CiftiSeparateRoiParamsDict_3,
+    execution: Execution,
+): CiftiSeparateRoiOutputs_3 {
+    const ret: CiftiSeparateRoiOutputs_3 = {
+        root: execution.outputFile("."),
+        roi_out: execution.outputFile([(params["roi-out"] ?? null)].join('')),
     };
     return ret;
 }
@@ -357,6 +780,10 @@ interface CiftiSeparateVolumeOutputs {
      * the output volume
      */
     volume_out: OutputPathType;
+    /**
+     * Outputs from `cifti_separate_roi_outputs_3`.
+     */
+    roi: CiftiSeparateRoiOutputs_3 | null;
 }
 
 
@@ -365,9 +792,7 @@ interface CiftiSeparateVolumeOutputs {
  *
  * @param structure the structure to output
  * @param volume_out the output volume
- * @param roi_out also output the roi of which voxels have data
-
-the roi output volume
+ * @param roi also output the roi of which voxels have data
  * @param crop crop volume to the size of the component rather than using the original volume size
  *
  * @returns Parameter dictionary
@@ -375,7 +800,7 @@ the roi output volume
 function cifti_separate_volume(
     structure: string,
     volume_out: string,
-    roi_out: string | null = null,
+    roi: CiftiSeparateRoiParamsDict_3 | null = null,
     crop: boolean = false,
 ): CiftiSeparateVolumeParamsDictTagged {
     const params = {
@@ -384,8 +809,8 @@ function cifti_separate_volume(
         "volume-out": volume_out,
         "crop": crop,
     };
-    if (roi_out !== null) {
-        params["roi-out"] = roi_out;
+    if (roi !== null) {
+        params["roi"] = roi;
     }
     return params;
 }
@@ -404,13 +829,12 @@ function cifti_separate_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-out"] ?? null) !== null || (params["crop"] ?? false)) {
+    if ((params["roi"] ?? null) !== null || (params["crop"] ?? false)) {
         cargs.push(
             "-volume",
             (params["structure"] ?? null),
             (params["volume-out"] ?? null),
-            "-roi",
-            (((params["roi-out"] ?? null) !== null) ? (params["roi-out"] ?? null) : ""),
+            ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs_3((params["roi"] ?? null), execution) : []),
             (((params["crop"] ?? false)) ? "-crop" : "")
         );
     }
@@ -433,6 +857,7 @@ function cifti_separate_volume_outputs(
     const ret: CiftiSeparateVolumeOutputs = {
         root: execution.outputFile("."),
         volume_out: execution.outputFile([(params["volume-out"] ?? null)].join('')),
+        roi: (params["roi"] ?? null) ? (cifti_separate_roi_outputs_3((params["roi"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -453,9 +878,9 @@ interface CiftiSeparateOutputs {
      */
     volume_all: CiftiSeparateVolumeAllOutputs | null;
     /**
-     * Outputs from `cifti_separate_label_outputs`.This is a list of outputs with the same length and order as the inputs.
+     * Outputs from `cifti_separate_label_outputs_`.This is a list of outputs with the same length and order as the inputs.
      */
-    label: Array<CiftiSeparateLabelOutputs> | null;
+    label: Array<CiftiSeparateLabelOutputs_> | null;
     /**
      * Outputs from `cifti_separate_metric_outputs`.This is a list of outputs with the same length and order as the inputs.
      */
@@ -483,7 +908,7 @@ function cifti_separate_params(
     cifti_in: InputPathType,
     direction: string,
     volume_all: CiftiSeparateVolumeAllParamsDict | null = null,
-    label: Array<CiftiSeparateLabelParamsDict> | null = null,
+    label: Array<CiftiSeparateLabelParamsDict_> | null = null,
     metric: Array<CiftiSeparateMetricParamsDict> | null = null,
     volume: Array<CiftiSeparateVolumeParamsDict> | null = null,
 ): CiftiSeparateParamsDictTagged {
@@ -526,7 +951,7 @@ function cifti_separate_cargs(
             "wb_command",
             "-cifti-separate",
             ...(((params["volume-all"] ?? null) !== null) ? cifti_separate_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
-            ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_separate_label_cargs(s, execution)).flat() : []),
+            ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_separate_label_cargs_(s, execution)).flat() : []),
             ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_separate_metric_cargs(s, execution)).flat() : []),
             ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_separate_volume_cargs(s, execution)).flat() : [])
         );
@@ -552,7 +977,7 @@ function cifti_separate_outputs(
     const ret: CiftiSeparateOutputs = {
         root: execution.outputFile("."),
         volume_all: (params["volume-all"] ?? null) ? (cifti_separate_volume_all_outputs((params["volume-all"] ?? null), execution) ?? null) : null,
-        label: (params["label"] ?? null) ? (params["label"] ?? null).map(i => cifti_separate_label_outputs(i, execution) ?? null) : null,
+        label: (params["label"] ?? null) ? (params["label"] ?? null).map(i => cifti_separate_label_outputs_(i, execution) ?? null) : null,
         metric: (params["metric"] ?? null) ? (params["metric"] ?? null).map(i => cifti_separate_metric_outputs(i, execution) ?? null) : null,
         volume: (params["volume"] ?? null) ? (params["volume"] ?? null).map(i => cifti_separate_volume_outputs(i, execution) ?? null) : null,
     };
@@ -683,7 +1108,7 @@ function cifti_separate(
     cifti_in: InputPathType,
     direction: string,
     volume_all: CiftiSeparateVolumeAllParamsDict | null = null,
-    label: Array<CiftiSeparateLabelParamsDict> | null = null,
+    label: Array<CiftiSeparateLabelParamsDict_> | null = null,
     metric: Array<CiftiSeparateMetricParamsDict> | null = null,
     volume: Array<CiftiSeparateVolumeParamsDict> | null = null,
     runner: Runner | null = null,
@@ -696,14 +1121,29 @@ function cifti_separate(
 export {
       CIFTI_SEPARATE_METADATA,
       CiftiSeparateLabelOutputs,
+      CiftiSeparateLabelOutputs_,
       CiftiSeparateLabelParamsDict,
       CiftiSeparateLabelParamsDictTagged,
+      CiftiSeparateLabelParamsDictTagged_,
+      CiftiSeparateLabelParamsDict_,
       CiftiSeparateMetricOutputs,
       CiftiSeparateMetricParamsDict,
       CiftiSeparateMetricParamsDictTagged,
       CiftiSeparateOutputs,
       CiftiSeparateParamsDict,
       CiftiSeparateParamsDictTagged,
+      CiftiSeparateRoiOutputs,
+      CiftiSeparateRoiOutputs_,
+      CiftiSeparateRoiOutputs_2,
+      CiftiSeparateRoiOutputs_3,
+      CiftiSeparateRoiParamsDict,
+      CiftiSeparateRoiParamsDictTagged,
+      CiftiSeparateRoiParamsDictTagged_,
+      CiftiSeparateRoiParamsDictTagged_2,
+      CiftiSeparateRoiParamsDictTagged_3,
+      CiftiSeparateRoiParamsDict_,
+      CiftiSeparateRoiParamsDict_2,
+      CiftiSeparateRoiParamsDict_3,
       CiftiSeparateVolumeAllOutputs,
       CiftiSeparateVolumeAllParamsDict,
       CiftiSeparateVolumeAllParamsDictTagged,
@@ -713,8 +1153,13 @@ export {
       cifti_separate,
       cifti_separate_execute,
       cifti_separate_label,
+      cifti_separate_label_,
       cifti_separate_metric,
       cifti_separate_params,
+      cifti_separate_roi,
+      cifti_separate_roi_,
+      cifti_separate_roi_2,
+      cifti_separate_roi_3,
       cifti_separate_volume,
       cifti_separate_volume_all,
 };

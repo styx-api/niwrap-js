@@ -99,10 +99,8 @@ function metric_rois_to_border_cargs(
             "wb_command",
             "-metric-rois-to-border",
             (params["border-out"] ?? null),
-            "-placement",
-            (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
+            ["-placement", (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : "")].join(''),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

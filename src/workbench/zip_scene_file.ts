@@ -90,8 +90,7 @@ function zip_scene_file_cargs(
         cargs.push(
             "wb_command",
             "-zip-scene-file",
-            "-base-dir",
-            (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
+            ["-base-dir", (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : "")].join(''),
             (((params["skip-missing"] ?? false)) ? "-skip-missing" : ""),
             (((params["write-scene-file"] ?? false)) ? "-write-scene-file" : "")
         );

@@ -220,13 +220,10 @@ function metric_tfce_cargs(
             "-metric-tfce",
             (params["metric-out"] ?? null),
             ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
             ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

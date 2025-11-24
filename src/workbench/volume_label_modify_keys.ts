@@ -87,8 +87,7 @@ function volume_label_modify_keys_cargs(
             "wb_command",
             "-volume-label-modify-keys",
             (params["volume-out"] ?? null),
-            "-subvolume",
-            (params["subvolume"] ?? null)
+            ["-subvolume", (params["subvolume"] ?? null)].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));

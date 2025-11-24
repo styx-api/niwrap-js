@@ -100,10 +100,8 @@ function surface_geodesic_distance_cargs(
             "-surface-geodesic-distance",
             (params["metric-out"] ?? null),
             (((params["naive"] ?? false)) ? "-naive" : ""),
-            "-limit",
-            (((params["limit-mm"] ?? null) !== null) ? String((params["limit-mm"] ?? null)) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+            ["-limit", (((params["limit-mm"] ?? null) !== null) ? String((params["limit-mm"] ?? null)) : "")].join(''),
+            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

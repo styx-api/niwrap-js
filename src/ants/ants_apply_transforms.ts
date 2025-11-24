@@ -731,7 +731,7 @@ function ants_apply_transforms_multi_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["[", (params["params"] ?? null).map(s => ants_apply_transforms_params_cargs_dyn_fn(s["@type"])(s, execution)).flat().join(","), "]"].join(''));
+    cargs.push(["MultiLabel", "[", (params["params"] ?? null).map(s => ants_apply_transforms_params_cargs_dyn_fn(s["@type"])(s, execution)).flat().join(","), "]"].join(''));
     return cargs;
 }
 

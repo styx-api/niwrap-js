@@ -11,14 +11,97 @@ const SURFACE_TO_SURFACE_3D_DISTANCE_METADATA: Metadata = {
 };
 
 
+interface SurfaceToSurface3dDistanceVectorsParamsDict {
+    "@type"?: "vectors";
+    "vectors-out": string;
+}
+type SurfaceToSurface3dDistanceVectorsParamsDictTagged = Required<Pick<SurfaceToSurface3dDistanceVectorsParamsDict, '@type'>> & SurfaceToSurface3dDistanceVectorsParamsDict;
+
+
 interface SurfaceToSurface3dDistanceParamsDict {
     "@type"?: "workbench/surface-to-surface-3d-distance";
     "dists-out": string;
-    "vectors-out"?: string | null | undefined;
+    "vectors"?: SurfaceToSurface3dDistanceVectorsParamsDict | null | undefined;
     "surface-comp": InputPathType;
     "surface-ref": InputPathType;
 }
 type SurfaceToSurface3dDistanceParamsDictTagged = Required<Pick<SurfaceToSurface3dDistanceParamsDict, '@type'>> & SurfaceToSurface3dDistanceParamsDict;
+
+
+/**
+ * Output object returned when calling `SurfaceToSurface3dDistanceVectorsParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface SurfaceToSurface3dDistanceVectorsOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output vectors
+     */
+    vectors_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param vectors_out the output vectors
+ *
+ * @returns Parameter dictionary
+ */
+function surface_to_surface_3d_distance_vectors(
+    vectors_out: string,
+): SurfaceToSurface3dDistanceVectorsParamsDictTagged {
+    const params = {
+        "@type": "vectors" as const,
+        "vectors-out": vectors_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function surface_to_surface_3d_distance_vectors_cargs(
+    params: SurfaceToSurface3dDistanceVectorsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-vectors",
+        (params["vectors-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function surface_to_surface_3d_distance_vectors_outputs(
+    params: SurfaceToSurface3dDistanceVectorsParamsDict,
+    execution: Execution,
+): SurfaceToSurface3dDistanceVectorsOutputs {
+    const ret: SurfaceToSurface3dDistanceVectorsOutputs = {
+        root: execution.outputFile("."),
+        vectors_out: execution.outputFile([(params["vectors-out"] ?? null)].join('')),
+    };
+    return ret;
+}
 
 
 /**
@@ -35,6 +118,10 @@ interface SurfaceToSurface3dDistanceOutputs {
      * the output distances
      */
     dists_out: OutputPathType;
+    /**
+     * Outputs from `surface_to_surface_3d_distance_vectors_outputs`.
+     */
+    vectors: SurfaceToSurface3dDistanceVectorsOutputs | null;
 }
 
 
@@ -44,9 +131,7 @@ interface SurfaceToSurface3dDistanceOutputs {
  * @param dists_out the output distances
  * @param surface_comp the surface to compare to the reference
  * @param surface_ref the surface to use as the reference
- * @param vectors_out output the displacement vectors
-
-the output vectors
+ * @param vectors output the displacement vectors
  *
  * @returns Parameter dictionary
  */
@@ -54,7 +139,7 @@ function surface_to_surface_3d_distance_params(
     dists_out: string,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
-    vectors_out: string | null = null,
+    vectors: SurfaceToSurface3dDistanceVectorsParamsDict | null = null,
 ): SurfaceToSurface3dDistanceParamsDictTagged {
     const params = {
         "@type": "workbench/surface-to-surface-3d-distance" as const,
@@ -62,8 +147,8 @@ function surface_to_surface_3d_distance_params(
         "surface-comp": surface_comp,
         "surface-ref": surface_ref,
     };
-    if (vectors_out !== null) {
-        params["vectors-out"] = vectors_out;
+    if (vectors !== null) {
+        params["vectors"] = vectors;
     }
     return params;
 }
@@ -82,13 +167,12 @@ function surface_to_surface_3d_distance_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["vectors-out"] ?? null) !== null) {
+    if ((params["vectors"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-surface-to-surface-3d-distance",
             (params["dists-out"] ?? null),
-            "-vectors",
-            (params["vectors-out"] ?? null)
+            ...surface_to_surface_3d_distance_vectors_cargs((params["vectors"] ?? null), execution)
         );
     }
     cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
@@ -112,6 +196,7 @@ function surface_to_surface_3d_distance_outputs(
     const ret: SurfaceToSurface3dDistanceOutputs = {
         root: execution.outputFile("."),
         dists_out: execution.outputFile([(params["dists-out"] ?? null)].join('')),
+        vectors: (params["vectors"] ?? null) ? (surface_to_surface_3d_distance_vectors_outputs((params["vectors"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -149,9 +234,7 @@ function surface_to_surface_3d_distance_execute(
  * @param dists_out the output distances
  * @param surface_comp the surface to compare to the reference
  * @param surface_ref the surface to use as the reference
- * @param vectors_out output the displacement vectors
-
-the output vectors
+ * @param vectors output the displacement vectors
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceToSurface3dDistanceOutputs`).
@@ -160,10 +243,10 @@ function surface_to_surface_3d_distance(
     dists_out: string,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
-    vectors_out: string | null = null,
+    vectors: SurfaceToSurface3dDistanceVectorsParamsDict | null = null,
     runner: Runner | null = null,
 ): SurfaceToSurface3dDistanceOutputs {
-    const params = surface_to_surface_3d_distance_params(dists_out, surface_comp, surface_ref, vectors_out)
+    const params = surface_to_surface_3d_distance_params(dists_out, surface_comp, surface_ref, vectors)
     return surface_to_surface_3d_distance_execute(params, runner);
 }
 
@@ -173,7 +256,11 @@ export {
       SurfaceToSurface3dDistanceOutputs,
       SurfaceToSurface3dDistanceParamsDict,
       SurfaceToSurface3dDistanceParamsDictTagged,
+      SurfaceToSurface3dDistanceVectorsOutputs,
+      SurfaceToSurface3dDistanceVectorsParamsDict,
+      SurfaceToSurface3dDistanceVectorsParamsDictTagged,
       surface_to_surface_3d_distance,
       surface_to_surface_3d_distance_execute,
       surface_to_surface_3d_distance_params,
+      surface_to_surface_3d_distance_vectors,
 };

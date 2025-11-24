@@ -11,13 +11,179 @@ const SURFACE_CURVATURE_METADATA: Metadata = {
 };
 
 
+interface SurfaceCurvatureMeanParamsDict {
+    "@type"?: "mean";
+    "mean-out": string;
+}
+type SurfaceCurvatureMeanParamsDictTagged = Required<Pick<SurfaceCurvatureMeanParamsDict, '@type'>> & SurfaceCurvatureMeanParamsDict;
+
+
+interface SurfaceCurvatureGaussParamsDict {
+    "@type"?: "gauss";
+    "gauss-out": string;
+}
+type SurfaceCurvatureGaussParamsDictTagged = Required<Pick<SurfaceCurvatureGaussParamsDict, '@type'>> & SurfaceCurvatureGaussParamsDict;
+
+
 interface SurfaceCurvatureParamsDict {
     "@type"?: "workbench/surface-curvature";
-    "mean-out"?: string | null | undefined;
-    "gauss-out"?: string | null | undefined;
+    "mean"?: SurfaceCurvatureMeanParamsDict | null | undefined;
+    "gauss"?: SurfaceCurvatureGaussParamsDict | null | undefined;
     "surface": InputPathType;
 }
 type SurfaceCurvatureParamsDictTagged = Required<Pick<SurfaceCurvatureParamsDict, '@type'>> & SurfaceCurvatureParamsDict;
+
+
+/**
+ * Output object returned when calling `SurfaceCurvatureMeanParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface SurfaceCurvatureMeanOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * mean curvature metric
+     */
+    mean_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param mean_out mean curvature metric
+ *
+ * @returns Parameter dictionary
+ */
+function surface_curvature_mean(
+    mean_out: string,
+): SurfaceCurvatureMeanParamsDictTagged {
+    const params = {
+        "@type": "mean" as const,
+        "mean-out": mean_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function surface_curvature_mean_cargs(
+    params: SurfaceCurvatureMeanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-mean",
+        (params["mean-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function surface_curvature_mean_outputs(
+    params: SurfaceCurvatureMeanParamsDict,
+    execution: Execution,
+): SurfaceCurvatureMeanOutputs {
+    const ret: SurfaceCurvatureMeanOutputs = {
+        root: execution.outputFile("."),
+        mean_out: execution.outputFile([(params["mean-out"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
+ * Output object returned when calling `SurfaceCurvatureGaussParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface SurfaceCurvatureGaussOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * gaussian curvature metric
+     */
+    gauss_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param gauss_out gaussian curvature metric
+ *
+ * @returns Parameter dictionary
+ */
+function surface_curvature_gauss(
+    gauss_out: string,
+): SurfaceCurvatureGaussParamsDictTagged {
+    const params = {
+        "@type": "gauss" as const,
+        "gauss-out": gauss_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function surface_curvature_gauss_cargs(
+    params: SurfaceCurvatureGaussParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-gauss",
+        (params["gauss-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function surface_curvature_gauss_outputs(
+    params: SurfaceCurvatureGaussParamsDict,
+    execution: Execution,
+): SurfaceCurvatureGaussOutputs {
+    const ret: SurfaceCurvatureGaussOutputs = {
+        root: execution.outputFile("."),
+        gauss_out: execution.outputFile([(params["gauss-out"] ?? null)].join('')),
+    };
+    return ret;
+}
 
 
 /**
@@ -30,6 +196,14 @@ interface SurfaceCurvatureOutputs {
      * Output root folder. This is the root folder for all outputs.
      */
     root: OutputPathType;
+    /**
+     * Outputs from `surface_curvature_mean_outputs`.
+     */
+    mean: SurfaceCurvatureMeanOutputs | null;
+    /**
+     * Outputs from `surface_curvature_gauss_outputs`.
+     */
+    gauss: SurfaceCurvatureGaussOutputs | null;
 }
 
 
@@ -37,29 +211,25 @@ interface SurfaceCurvatureOutputs {
  * Build parameters.
  *
  * @param surface the surface to compute the curvature of
- * @param mean_out output mean curvature
-
-mean curvature metric
- * @param gauss_out output gaussian curvature
-
-gaussian curvature metric
+ * @param mean output mean curvature
+ * @param gauss output gaussian curvature
  *
  * @returns Parameter dictionary
  */
 function surface_curvature_params(
     surface: InputPathType,
-    mean_out: string | null = null,
-    gauss_out: string | null = null,
+    mean: SurfaceCurvatureMeanParamsDict | null = null,
+    gauss: SurfaceCurvatureGaussParamsDict | null = null,
 ): SurfaceCurvatureParamsDictTagged {
     const params = {
         "@type": "workbench/surface-curvature" as const,
         "surface": surface,
     };
-    if (mean_out !== null) {
-        params["mean-out"] = mean_out;
+    if (mean !== null) {
+        params["mean"] = mean;
     }
-    if (gauss_out !== null) {
-        params["gauss-out"] = gauss_out;
+    if (gauss !== null) {
+        params["gauss"] = gauss;
     }
     return params;
 }
@@ -78,14 +248,12 @@ function surface_curvature_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["mean-out"] ?? null) !== null || (params["gauss-out"] ?? null) !== null) {
+    if ((params["mean"] ?? null) !== null || (params["gauss"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-surface-curvature",
-            "-mean",
-            (((params["mean-out"] ?? null) !== null) ? (params["mean-out"] ?? null) : ""),
-            "-gauss",
-            (((params["gauss-out"] ?? null) !== null) ? (params["gauss-out"] ?? null) : "")
+            ...(((params["mean"] ?? null) !== null) ? surface_curvature_mean_cargs((params["mean"] ?? null), execution) : []),
+            ...(((params["gauss"] ?? null) !== null) ? surface_curvature_gauss_cargs((params["gauss"] ?? null), execution) : [])
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -107,6 +275,8 @@ function surface_curvature_outputs(
 ): SurfaceCurvatureOutputs {
     const ret: SurfaceCurvatureOutputs = {
         root: execution.outputFile("."),
+        mean: (params["mean"] ?? null) ? (surface_curvature_mean_outputs((params["mean"] ?? null), execution) ?? null) : null,
+        gauss: (params["gauss"] ?? null) ? (surface_curvature_gauss_outputs((params["gauss"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -146,33 +316,37 @@ function surface_curvature_execute(
  * ACM-0-98791-601-8/93/008.
  *
  * @param surface the surface to compute the curvature of
- * @param mean_out output mean curvature
-
-mean curvature metric
- * @param gauss_out output gaussian curvature
-
-gaussian curvature metric
+ * @param mean output mean curvature
+ * @param gauss output gaussian curvature
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCurvatureOutputs`).
  */
 function surface_curvature(
     surface: InputPathType,
-    mean_out: string | null = null,
-    gauss_out: string | null = null,
+    mean: SurfaceCurvatureMeanParamsDict | null = null,
+    gauss: SurfaceCurvatureGaussParamsDict | null = null,
     runner: Runner | null = null,
 ): SurfaceCurvatureOutputs {
-    const params = surface_curvature_params(surface, mean_out, gauss_out)
+    const params = surface_curvature_params(surface, mean, gauss)
     return surface_curvature_execute(params, runner);
 }
 
 
 export {
       SURFACE_CURVATURE_METADATA,
+      SurfaceCurvatureGaussOutputs,
+      SurfaceCurvatureGaussParamsDict,
+      SurfaceCurvatureGaussParamsDictTagged,
+      SurfaceCurvatureMeanOutputs,
+      SurfaceCurvatureMeanParamsDict,
+      SurfaceCurvatureMeanParamsDictTagged,
       SurfaceCurvatureOutputs,
       SurfaceCurvatureParamsDict,
       SurfaceCurvatureParamsDictTagged,
       surface_curvature,
       surface_curvature_execute,
+      surface_curvature_gauss,
+      surface_curvature_mean,
       surface_curvature_params,
 };

@@ -139,8 +139,7 @@ function cifti_create_parcellated_from_template_cargs(
             "wb_command",
             "-cifti-create-parcellated-from-template",
             (params["cifti-out"] ?? null),
-            "-fill-value",
-            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+            ["-fill-value", (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : "")].join(''),
             ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_create_parcellated_from_template_cifti_cargs(s, execution)).flat() : [])
         );
     }

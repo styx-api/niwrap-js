@@ -99,12 +99,9 @@ function cifti_label_adjacency_cargs(
             "wb_command",
             "-cifti-label-adjacency",
             (params["adjacency-out"] ?? null),
-            "-left-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-            "-right-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-            "-cerebellum-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")
+            ["-left-surface", (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")].join(''),
+            ["-right-surface", (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")].join(''),
+            ["-cerebellum-surface", (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["label-in"] ?? null)));

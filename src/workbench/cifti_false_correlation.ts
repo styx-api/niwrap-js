@@ -91,8 +91,7 @@ function cifti_false_correlation_left_surface_cargs(
         cargs.push(
             "-left-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-dump-text",
-            (params["text-out"] ?? null)
+            ["-dump-text", (params["text-out"] ?? null)].join('')
         );
     }
     return cargs;
@@ -141,8 +140,7 @@ function cifti_false_correlation_right_surface_cargs(
         cargs.push(
             "-right-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-dump-text",
-            (params["text-out"] ?? null)
+            ["-dump-text", (params["text-out"] ?? null)].join('')
         );
     }
     return cargs;
@@ -191,8 +189,7 @@ function cifti_false_correlation_cerebellum_surface_cargs(
         cargs.push(
             "-cerebellum-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-dump-text",
-            (params["text-out"] ?? null)
+            ["-dump-text", (params["text-out"] ?? null)].join('')
         );
     }
     return cargs;

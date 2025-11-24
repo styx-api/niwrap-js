@@ -11,15 +11,98 @@ const SURFACE_CORTEX_LAYER_METADATA: Metadata = {
 };
 
 
+interface SurfaceCortexLayerPlacementOutParamsDict {
+    "@type"?: "placement-out";
+    "placement-metric": string;
+}
+type SurfaceCortexLayerPlacementOutParamsDictTagged = Required<Pick<SurfaceCortexLayerPlacementOutParamsDict, '@type'>> & SurfaceCortexLayerPlacementOutParamsDict;
+
+
 interface SurfaceCortexLayerParamsDict {
     "@type"?: "workbench/surface-cortex-layer";
     "out-surface": string;
-    "placement-metric"?: string | null | undefined;
+    "placement-out"?: SurfaceCortexLayerPlacementOutParamsDict | null | undefined;
     "white-surface": InputPathType;
     "pial-surface": InputPathType;
     "location": number;
 }
 type SurfaceCortexLayerParamsDictTagged = Required<Pick<SurfaceCortexLayerParamsDict, '@type'>> & SurfaceCortexLayerParamsDict;
+
+
+/**
+ * Output object returned when calling `SurfaceCortexLayerPlacementOutParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface SurfaceCortexLayerPlacementOutOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * output metric
+     */
+    placement_metric: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param placement_metric output metric
+ *
+ * @returns Parameter dictionary
+ */
+function surface_cortex_layer_placement_out(
+    placement_metric: string,
+): SurfaceCortexLayerPlacementOutParamsDictTagged {
+    const params = {
+        "@type": "placement-out" as const,
+        "placement-metric": placement_metric,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function surface_cortex_layer_placement_out_cargs(
+    params: SurfaceCortexLayerPlacementOutParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-placement-out",
+        (params["placement-metric"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function surface_cortex_layer_placement_out_outputs(
+    params: SurfaceCortexLayerPlacementOutParamsDict,
+    execution: Execution,
+): SurfaceCortexLayerPlacementOutOutputs {
+    const ret: SurfaceCortexLayerPlacementOutOutputs = {
+        root: execution.outputFile("."),
+        placement_metric: execution.outputFile([(params["placement-metric"] ?? null)].join('')),
+    };
+    return ret;
+}
 
 
 /**
@@ -36,6 +119,10 @@ interface SurfaceCortexLayerOutputs {
      * the output surface
      */
     out_surface: OutputPathType;
+    /**
+     * Outputs from `surface_cortex_layer_placement_out_outputs`.
+     */
+    placement_out: SurfaceCortexLayerPlacementOutOutputs | null;
 }
 
 
@@ -46,9 +133,7 @@ interface SurfaceCortexLayerOutputs {
  * @param white_surface the white matter surface
  * @param pial_surface the pial surface
  * @param location what volume fraction to place the layer at
- * @param placement_metric output the placement as a volume fraction from pial to white
-
-output metric
+ * @param placement_out output the placement as a volume fraction from pial to white
  *
  * @returns Parameter dictionary
  */
@@ -57,7 +142,7 @@ function surface_cortex_layer_params(
     white_surface: InputPathType,
     pial_surface: InputPathType,
     location: number,
-    placement_metric: string | null = null,
+    placement_out: SurfaceCortexLayerPlacementOutParamsDict | null = null,
 ): SurfaceCortexLayerParamsDictTagged {
     const params = {
         "@type": "workbench/surface-cortex-layer" as const,
@@ -66,8 +151,8 @@ function surface_cortex_layer_params(
         "pial-surface": pial_surface,
         "location": location,
     };
-    if (placement_metric !== null) {
-        params["placement-metric"] = placement_metric;
+    if (placement_out !== null) {
+        params["placement-out"] = placement_out;
     }
     return params;
 }
@@ -86,13 +171,12 @@ function surface_cortex_layer_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["placement-metric"] ?? null) !== null) {
+    if ((params["placement-out"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-surface-cortex-layer",
             (params["out-surface"] ?? null),
-            "-placement-out",
-            (params["placement-metric"] ?? null)
+            ...surface_cortex_layer_placement_out_cargs((params["placement-out"] ?? null), execution)
         );
     }
     cargs.push(execution.inputFile((params["white-surface"] ?? null)));
@@ -117,6 +201,7 @@ function surface_cortex_layer_outputs(
     const ret: SurfaceCortexLayerOutputs = {
         root: execution.outputFile("."),
         out_surface: execution.outputFile([(params["out-surface"] ?? null)].join('')),
+        placement_out: (params["placement-out"] ?? null) ? (surface_cortex_layer_placement_out_outputs((params["placement-out"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -155,9 +240,7 @@ function surface_cortex_layer_execute(
  * @param white_surface the white matter surface
  * @param pial_surface the pial surface
  * @param location what volume fraction to place the layer at
- * @param placement_metric output the placement as a volume fraction from pial to white
-
-output metric
+ * @param placement_out output the placement as a volume fraction from pial to white
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCortexLayerOutputs`).
@@ -167,10 +250,10 @@ function surface_cortex_layer(
     white_surface: InputPathType,
     pial_surface: InputPathType,
     location: number,
-    placement_metric: string | null = null,
+    placement_out: SurfaceCortexLayerPlacementOutParamsDict | null = null,
     runner: Runner | null = null,
 ): SurfaceCortexLayerOutputs {
-    const params = surface_cortex_layer_params(out_surface, white_surface, pial_surface, location, placement_metric)
+    const params = surface_cortex_layer_params(out_surface, white_surface, pial_surface, location, placement_out)
     return surface_cortex_layer_execute(params, runner);
 }
 
@@ -180,7 +263,11 @@ export {
       SurfaceCortexLayerOutputs,
       SurfaceCortexLayerParamsDict,
       SurfaceCortexLayerParamsDictTagged,
+      SurfaceCortexLayerPlacementOutOutputs,
+      SurfaceCortexLayerPlacementOutParamsDict,
+      SurfaceCortexLayerPlacementOutParamsDictTagged,
       surface_cortex_layer,
       surface_cortex_layer_execute,
       surface_cortex_layer_params,
+      surface_cortex_layer_placement_out,
 };

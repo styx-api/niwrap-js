@@ -121,8 +121,7 @@ function cifti_create_dense_from_template_series_cargs(
             "-series",
             String((params["step"] ?? null)),
             String((params["start"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
+            ["-unit", (params["unit"] ?? null)].join('')
         );
     }
     return cargs;
@@ -443,8 +442,7 @@ function cifti_create_dense_from_template_cargs(
             (params["cifti-out"] ?? null),
             ...(((params["series"] ?? null) !== null) ? cifti_create_dense_from_template_series_cargs((params["series"] ?? null), execution) : []),
             ...(((params["volume-all"] ?? null) !== null) ? cifti_create_dense_from_template_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
-            "-label-collision",
-            (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),
+            ["-label-collision", (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : "")].join(''),
             ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_create_dense_from_template_cifti_cargs(s, execution)).flat() : []),
             ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_from_template_metric_cargs(s, execution)).flat() : []),
             ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_create_dense_from_template_label_cargs(s, execution)).flat() : []),

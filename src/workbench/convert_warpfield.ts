@@ -267,13 +267,10 @@ function convert_warpfield_cargs(
             "wb_command",
             "-convert-warpfield",
             ...(((params["from-world"] ?? null) !== null) ? convert_warpfield_from_world_cargs((params["from-world"] ?? null), execution) : []),
-            "-from-itk",
-            (((params["input"] ?? null) !== null) ? (params["input"] ?? null) : ""),
+            ["-from-itk", (((params["input"] ?? null) !== null) ? (params["input"] ?? null) : "")].join(''),
             ...(((params["from-fnirt"] ?? null) !== null) ? convert_warpfield_from_fnirt_cargs((params["from-fnirt"] ?? null), execution) : []),
-            "-to-world",
-            (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : ""),
-            "-to-itk",
-            (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : ""),
+            ["-to-world", (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : "")].join(''),
+            ["-to-itk", (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : "")].join(''),
             ...(((params["to-fnirt"] ?? null) !== null) ? (params["to-fnirt"] ?? null).map(s => convert_warpfield_to_fnirt_cargs(s, execution)).flat() : [])
         );
     }

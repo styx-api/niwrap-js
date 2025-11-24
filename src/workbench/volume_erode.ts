@@ -95,10 +95,8 @@ function volume_erode_cargs(
             "wb_command",
             "-volume-erode",
             (params["volume-out"] ?? null),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
+            ["-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
+            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume"] ?? null)));

@@ -11,6 +11,20 @@ const SURFACE_AVERAGE_METADATA: Metadata = {
 };
 
 
+interface SurfaceAverageStddevParamsDict {
+    "@type"?: "stddev";
+    "stddev-metric-out": string;
+}
+type SurfaceAverageStddevParamsDictTagged = Required<Pick<SurfaceAverageStddevParamsDict, '@type'>> & SurfaceAverageStddevParamsDict;
+
+
+interface SurfaceAverageUncertaintyParamsDict {
+    "@type"?: "uncertainty";
+    "uncert-metric-out": string;
+}
+type SurfaceAverageUncertaintyParamsDictTagged = Required<Pick<SurfaceAverageUncertaintyParamsDict, '@type'>> & SurfaceAverageUncertaintyParamsDict;
+
+
 interface SurfaceAverageSurfParamsDict {
     "@type"?: "surf";
     "surface": InputPathType;
@@ -22,11 +36,163 @@ type SurfaceAverageSurfParamsDictTagged = Required<Pick<SurfaceAverageSurfParams
 interface SurfaceAverageParamsDict {
     "@type"?: "workbench/surface-average";
     "surface-out": string;
-    "stddev-metric-out"?: string | null | undefined;
-    "uncert-metric-out"?: string | null | undefined;
+    "stddev"?: SurfaceAverageStddevParamsDict | null | undefined;
+    "uncertainty"?: SurfaceAverageUncertaintyParamsDict | null | undefined;
     "surf"?: Array<SurfaceAverageSurfParamsDict> | null | undefined;
 }
 type SurfaceAverageParamsDictTagged = Required<Pick<SurfaceAverageParamsDict, '@type'>> & SurfaceAverageParamsDict;
+
+
+/**
+ * Output object returned when calling `SurfaceAverageStddevParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface SurfaceAverageStddevOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output metric for 3D sample standard deviation
+     */
+    stddev_metric_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param stddev_metric_out the output metric for 3D sample standard deviation
+ *
+ * @returns Parameter dictionary
+ */
+function surface_average_stddev(
+    stddev_metric_out: string,
+): SurfaceAverageStddevParamsDictTagged {
+    const params = {
+        "@type": "stddev" as const,
+        "stddev-metric-out": stddev_metric_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function surface_average_stddev_cargs(
+    params: SurfaceAverageStddevParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-stddev",
+        (params["stddev-metric-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function surface_average_stddev_outputs(
+    params: SurfaceAverageStddevParamsDict,
+    execution: Execution,
+): SurfaceAverageStddevOutputs {
+    const ret: SurfaceAverageStddevOutputs = {
+        root: execution.outputFile("."),
+        stddev_metric_out: execution.outputFile([(params["stddev-metric-out"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
+ * Output object returned when calling `SurfaceAverageUncertaintyParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface SurfaceAverageUncertaintyOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output metric for uncertainty
+     */
+    uncert_metric_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param uncert_metric_out the output metric for uncertainty
+ *
+ * @returns Parameter dictionary
+ */
+function surface_average_uncertainty(
+    uncert_metric_out: string,
+): SurfaceAverageUncertaintyParamsDictTagged {
+    const params = {
+        "@type": "uncertainty" as const,
+        "uncert-metric-out": uncert_metric_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function surface_average_uncertainty_cargs(
+    params: SurfaceAverageUncertaintyParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-uncertainty",
+        (params["uncert-metric-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function surface_average_uncertainty_outputs(
+    params: SurfaceAverageUncertaintyParamsDict,
+    execution: Execution,
+): SurfaceAverageUncertaintyOutputs {
+    const ret: SurfaceAverageUncertaintyOutputs = {
+        root: execution.outputFile("."),
+        uncert_metric_out: execution.outputFile([(params["uncert-metric-out"] ?? null)].join('')),
+    };
+    return ret;
+}
 
 
 /**
@@ -71,8 +237,7 @@ function surface_average_surf_cargs(
         cargs.push(
             "-surf",
             execution.inputFile((params["surface"] ?? null)),
-            "-weight",
-            String((params["weight"] ?? null))
+            ["-weight", String((params["weight"] ?? null))].join('')
         );
     }
     return cargs;
@@ -93,6 +258,14 @@ interface SurfaceAverageOutputs {
      * the output averaged surface
      */
     surface_out: OutputPathType;
+    /**
+     * Outputs from `surface_average_stddev_outputs`.
+     */
+    stddev: SurfaceAverageStddevOutputs | null;
+    /**
+     * Outputs from `surface_average_uncertainty_outputs`.
+     */
+    uncertainty: SurfaceAverageUncertaintyOutputs | null;
 }
 
 
@@ -100,31 +273,27 @@ interface SurfaceAverageOutputs {
  * Build parameters.
  *
  * @param surface_out the output averaged surface
- * @param stddev_metric_out compute 3D sample standard deviation
-
-the output metric for 3D sample standard deviation
- * @param uncert_metric_out compute caret5 'uncertainty'
-
-the output metric for uncertainty
+ * @param stddev compute 3D sample standard deviation
+ * @param uncertainty compute caret5 'uncertainty'
  * @param surf specify a surface to include in the average
  *
  * @returns Parameter dictionary
  */
 function surface_average_params(
     surface_out: string,
-    stddev_metric_out: string | null = null,
-    uncert_metric_out: string | null = null,
+    stddev: SurfaceAverageStddevParamsDict | null = null,
+    uncertainty: SurfaceAverageUncertaintyParamsDict | null = null,
     surf: Array<SurfaceAverageSurfParamsDict> | null = null,
 ): SurfaceAverageParamsDictTagged {
     const params = {
         "@type": "workbench/surface-average" as const,
         "surface-out": surface_out,
     };
-    if (stddev_metric_out !== null) {
-        params["stddev-metric-out"] = stddev_metric_out;
+    if (stddev !== null) {
+        params["stddev"] = stddev;
     }
-    if (uncert_metric_out !== null) {
-        params["uncert-metric-out"] = uncert_metric_out;
+    if (uncertainty !== null) {
+        params["uncertainty"] = uncertainty;
     }
     if (surf !== null) {
         params["surf"] = surf;
@@ -146,15 +315,13 @@ function surface_average_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["stddev-metric-out"] ?? null) !== null || (params["uncert-metric-out"] ?? null) !== null || (params["surf"] ?? null) !== null) {
+    if ((params["stddev"] ?? null) !== null || (params["uncertainty"] ?? null) !== null || (params["surf"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-surface-average",
             (params["surface-out"] ?? null),
-            "-stddev",
-            (((params["stddev-metric-out"] ?? null) !== null) ? (params["stddev-metric-out"] ?? null) : ""),
-            "-uncertainty",
-            (((params["uncert-metric-out"] ?? null) !== null) ? (params["uncert-metric-out"] ?? null) : ""),
+            ...(((params["stddev"] ?? null) !== null) ? surface_average_stddev_cargs((params["stddev"] ?? null), execution) : []),
+            ...(((params["uncertainty"] ?? null) !== null) ? surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution) : []),
             ...(((params["surf"] ?? null) !== null) ? (params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat() : [])
         );
     }
@@ -177,6 +344,8 @@ function surface_average_outputs(
     const ret: SurfaceAverageOutputs = {
         root: execution.outputFile("."),
         surface_out: execution.outputFile([(params["surface-out"] ?? null)].join('')),
+        stddev: (params["stddev"] ?? null) ? (surface_average_stddev_outputs((params["stddev"] ?? null), execution) ?? null) : null,
+        uncertainty: (params["uncertainty"] ?? null) ? (surface_average_uncertainty_outputs((params["uncertainty"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -220,12 +389,8 @@ function surface_average_execute(
  * When weights are used, the 3D sample standard deviation treats them as reliability weights.
  *
  * @param surface_out the output averaged surface
- * @param stddev_metric_out compute 3D sample standard deviation
-
-the output metric for 3D sample standard deviation
- * @param uncert_metric_out compute caret5 'uncertainty'
-
-the output metric for uncertainty
+ * @param stddev compute 3D sample standard deviation
+ * @param uncertainty compute caret5 'uncertainty'
  * @param surf specify a surface to include in the average
  * @param runner Command runner
  *
@@ -233,12 +398,12 @@ the output metric for uncertainty
  */
 function surface_average(
     surface_out: string,
-    stddev_metric_out: string | null = null,
-    uncert_metric_out: string | null = null,
+    stddev: SurfaceAverageStddevParamsDict | null = null,
+    uncertainty: SurfaceAverageUncertaintyParamsDict | null = null,
     surf: Array<SurfaceAverageSurfParamsDict> | null = null,
     runner: Runner | null = null,
 ): SurfaceAverageOutputs {
-    const params = surface_average_params(surface_out, stddev_metric_out, uncert_metric_out, surf)
+    const params = surface_average_params(surface_out, stddev, uncertainty, surf)
     return surface_average_execute(params, runner);
 }
 
@@ -248,10 +413,18 @@ export {
       SurfaceAverageOutputs,
       SurfaceAverageParamsDict,
       SurfaceAverageParamsDictTagged,
+      SurfaceAverageStddevOutputs,
+      SurfaceAverageStddevParamsDict,
+      SurfaceAverageStddevParamsDictTagged,
       SurfaceAverageSurfParamsDict,
       SurfaceAverageSurfParamsDictTagged,
+      SurfaceAverageUncertaintyOutputs,
+      SurfaceAverageUncertaintyParamsDict,
+      SurfaceAverageUncertaintyParamsDictTagged,
       surface_average,
       surface_average_execute,
       surface_average_params,
+      surface_average_stddev,
       surface_average_surf,
+      surface_average_uncertainty,
 };

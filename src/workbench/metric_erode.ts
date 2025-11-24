@@ -107,12 +107,9 @@ function metric_erode_cargs(
             "wb_command",
             "-metric-erode",
             (params["metric-out"] ?? null),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["metric"] ?? null)));

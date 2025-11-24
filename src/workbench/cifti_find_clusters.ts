@@ -115,8 +115,7 @@ function cifti_find_clusters_left_surface_cargs(
         cargs.push(
             "-left-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
+            ["-corrected-areas", execution.inputFile((params["area-metric"] ?? null))].join('')
         );
     }
     return cargs;
@@ -165,8 +164,7 @@ function cifti_find_clusters_right_surface_cargs(
         cargs.push(
             "-right-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
+            ["-corrected-areas", execution.inputFile((params["area-metric"] ?? null))].join('')
         );
     }
     return cargs;
@@ -215,8 +213,7 @@ function cifti_find_clusters_cerebellum_surface_cargs(
         cargs.push(
             "-cerebellum-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
+            ["-corrected-areas", execution.inputFile((params["area-metric"] ?? null))].join('')
         );
     }
     return cargs;
@@ -429,13 +426,11 @@ function cifti_find_clusters_cargs(
             ...(((params["left-surface"] ?? null) !== null) ? cifti_find_clusters_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
             ...(((params["right-surface"] ?? null) !== null) ? cifti_find_clusters_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
             ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_find_clusters_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-            "-cifti-roi",
-            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
+            ["-cifti-roi", (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : "")].join(''),
             (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
             ...(((params["size-ratio"] ?? null) !== null) ? cifti_find_clusters_size_ratio_cargs((params["size-ratio"] ?? null), execution) : []),
             ...(((params["distance"] ?? null) !== null) ? cifti_find_clusters_distance_cargs((params["distance"] ?? null), execution) : []),
-            "-start",
-            (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
+            ["-start", (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["cifti"] ?? null)));

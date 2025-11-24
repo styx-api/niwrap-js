@@ -321,12 +321,10 @@ function convert_affine_cargs(
             "wb_command",
             "-convert-affine",
             ...(((params["from-world"] ?? null) !== null) ? convert_affine_from_world_cargs((params["from-world"] ?? null), execution) : []),
-            "-from-itk",
-            (((params["input"] ?? null) !== null) ? (params["input"] ?? null) : ""),
+            ["-from-itk", (((params["input"] ?? null) !== null) ? (params["input"] ?? null) : "")].join(''),
             ...(((params["from-flirt"] ?? null) !== null) ? convert_affine_from_flirt_cargs((params["from-flirt"] ?? null), execution) : []),
             ...(((params["to-world"] ?? null) !== null) ? convert_affine_to_world_cargs((params["to-world"] ?? null), execution) : []),
-            "-to-itk",
-            (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : ""),
+            ["-to-itk", (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : "")].join(''),
             ...(((params["to-flirt"] ?? null) !== null) ? (params["to-flirt"] ?? null).map(s => convert_affine_to_flirt_cargs(s, execution)).flat() : [])
         );
     }

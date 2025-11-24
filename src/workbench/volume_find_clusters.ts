@@ -128,16 +128,11 @@ function volume_find_clusters_cargs(
             "-volume-find-clusters",
             (params["volume-out"] ?? null),
             (((params["less-than"] ?? false)) ? "-less-than" : ""),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-            "-size-ratio",
-            (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
-            "-distance",
-            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-            "-start",
-            (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
+            ["-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
+            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join(''),
+            ["-size-ratio", (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : "")].join(''),
+            ["-distance", (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : "")].join(''),
+            ["-start", (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));

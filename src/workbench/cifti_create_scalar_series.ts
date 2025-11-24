@@ -150,8 +150,7 @@ function cifti_create_scalar_series_cargs(
             "-cifti-create-scalar-series",
             (params["cifti-out"] ?? null),
             (((params["transpose"] ?? false)) ? "-transpose" : ""),
-            "-name-file",
-            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
+            ["-name-file", (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")].join(''),
             ...(((params["series"] ?? null) !== null) ? cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution) : [])
         );
     }

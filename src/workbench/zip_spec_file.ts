@@ -86,8 +86,7 @@ function zip_spec_file_cargs(
         cargs.push(
             "wb_command",
             "-zip-spec-file",
-            "-base-dir",
-            (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
+            ["-base-dir", (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : "")].join(''),
             (((params["skip-missing"] ?? false)) ? "-skip-missing" : "")
         );
     }

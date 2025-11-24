@@ -287,8 +287,7 @@ function volume_resample_warp_cargs(
         cargs.push(
             "-warp",
             (params["warpfield"] ?? null),
-            "-fnirt",
-            (params["source-volume"] ?? null)
+            ["-fnirt", (params["source-volume"] ?? null)].join('')
         );
     }
     return cargs;
@@ -379,8 +378,7 @@ function volume_resample_cargs(
             "wb_command",
             "-volume-resample",
             (params["volume-out"] ?? null),
-            "-background",
-            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+            ["-background", (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : "")].join(''),
             ...(((params["affine"] ?? null) !== null) ? (params["affine"] ?? null).map(s => volume_resample_affine_cargs(s, execution)).flat() : []),
             ...(((params["affine-series"] ?? null) !== null) ? (params["affine-series"] ?? null).map(s => volume_resample_affine_series_cargs(s, execution)).flat() : []),
             ...(((params["warp"] ?? null) !== null) ? (params["warp"] ?? null).map(s => volume_resample_warp_cargs(s, execution)).flat() : [])

@@ -107,10 +107,8 @@ function metric_false_correlation_cargs(
             "wb_command",
             "-metric-false-correlation",
             (params["metric-out"] ?? null),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-dump-text",
-            (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
+            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-dump-text", (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

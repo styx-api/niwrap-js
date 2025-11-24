@@ -94,12 +94,9 @@ function metric_estimate_fwhm_cargs(
         cargs.push(
             "wb_command",
             "-metric-estimate-fwhm",
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-whole-file",
-            (((params["demean"] ?? null) !== null) ? "-demean" : "")
+            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            ["-whole-file", (((params["demean"] ?? null) !== null) ? "-demean" : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

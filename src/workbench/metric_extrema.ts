@@ -232,15 +232,13 @@ function metric_extrema_cargs(
             "-metric-extrema",
             (params["metric-out"] ?? null),
             ...(((params["presmooth"] ?? null) !== null) ? metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
             ...(((params["threshold"] ?? null) !== null) ? metric_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
             (((params["sum-columns"] ?? false)) ? "-sum-columns" : ""),
             (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
             (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
             (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

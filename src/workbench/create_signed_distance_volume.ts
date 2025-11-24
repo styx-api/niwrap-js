@@ -11,10 +11,17 @@ const CREATE_SIGNED_DISTANCE_VOLUME_METADATA: Metadata = {
 };
 
 
+interface CreateSignedDistanceVolumeRoiOutParamsDict {
+    "@type"?: "roi-out";
+    "roi-vol": string;
+}
+type CreateSignedDistanceVolumeRoiOutParamsDictTagged = Required<Pick<CreateSignedDistanceVolumeRoiOutParamsDict, '@type'>> & CreateSignedDistanceVolumeRoiOutParamsDict;
+
+
 interface CreateSignedDistanceVolumeParamsDict {
     "@type"?: "workbench/create-signed-distance-volume";
     "outvol": string;
-    "roi-vol"?: string | null | undefined;
+    "roi-out"?: CreateSignedDistanceVolumeRoiOutParamsDict | null | undefined;
     "value"?: number | null | undefined;
     "dist"?: number | null | undefined;
     "dist"?: number | null | undefined;
@@ -24,6 +31,82 @@ interface CreateSignedDistanceVolumeParamsDict {
     "refspace": string;
 }
 type CreateSignedDistanceVolumeParamsDictTagged = Required<Pick<CreateSignedDistanceVolumeParamsDict, '@type'>> & CreateSignedDistanceVolumeParamsDict;
+
+
+/**
+ * Output object returned when calling `CreateSignedDistanceVolumeRoiOutParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface CreateSignedDistanceVolumeRoiOutOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output roi volume
+     */
+    roi_vol: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roi_vol the output roi volume
+ *
+ * @returns Parameter dictionary
+ */
+function create_signed_distance_volume_roi_out(
+    roi_vol: string,
+): CreateSignedDistanceVolumeRoiOutParamsDictTagged {
+    const params = {
+        "@type": "roi-out" as const,
+        "roi-vol": roi_vol,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function create_signed_distance_volume_roi_out_cargs(
+    params: CreateSignedDistanceVolumeRoiOutParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-roi-out",
+        (params["roi-vol"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function create_signed_distance_volume_roi_out_outputs(
+    params: CreateSignedDistanceVolumeRoiOutParamsDict,
+    execution: Execution,
+): CreateSignedDistanceVolumeRoiOutOutputs {
+    const ret: CreateSignedDistanceVolumeRoiOutOutputs = {
+        root: execution.outputFile("."),
+        roi_vol: execution.outputFile([(params["roi-vol"] ?? null)].join('')),
+    };
+    return ret;
+}
 
 
 /**
@@ -40,6 +123,10 @@ interface CreateSignedDistanceVolumeOutputs {
      * the output volume
      */
     outvol: OutputPathType;
+    /**
+     * Outputs from `create_signed_distance_volume_roi_out_outputs`.
+     */
+    roi_out: CreateSignedDistanceVolumeRoiOutOutputs | null;
 }
 
 
@@ -49,9 +136,7 @@ interface CreateSignedDistanceVolumeOutputs {
  * @param outvol the output volume
  * @param surface the input surface
  * @param refspace a volume in the desired output space (dims, spacing, origin)
- * @param roi_vol output an roi volume of where the output has a computed value
-
-the output roi volume
+ * @param roi_out output an roi volume of where the output has a computed value
  * @param value specify a value to put in all voxels that don't get assigned a distance
 
 value to fill with (default 0)
@@ -74,7 +159,7 @@ function create_signed_distance_volume_params(
     outvol: string,
     surface: InputPathType,
     refspace: string,
-    roi_vol: string | null = null,
+    roi_out: CreateSignedDistanceVolumeRoiOutParamsDict | null = null,
     value: number | null = null,
     dist: number | null = null,
     dist_: number | null = null,
@@ -87,8 +172,8 @@ function create_signed_distance_volume_params(
         "surface": surface,
         "refspace": refspace,
     };
-    if (roi_vol !== null) {
-        params["roi-vol"] = roi_vol;
+    if (roi_out !== null) {
+        params["roi-out"] = roi_out;
     }
     if (value !== null) {
         params["value"] = value;
@@ -122,23 +207,17 @@ function create_signed_distance_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-vol"] ?? null) !== null || (params["value"] ?? null) !== null || (params["dist"] ?? null) !== null || (params["dist"] ?? null) !== null || (params["num"] ?? null) !== null || (params["method"] ?? null) !== null) {
+    if ((params["roi-out"] ?? null) !== null || (params["value"] ?? null) !== null || (params["dist"] ?? null) !== null || (params["dist"] ?? null) !== null || (params["num"] ?? null) !== null || (params["method"] ?? null) !== null) {
         cargs.push(
             "wb_command",
             "-create-signed-distance-volume",
             (params["outvol"] ?? null),
-            "-roi-out",
-            (((params["roi-vol"] ?? null) !== null) ? (params["roi-vol"] ?? null) : ""),
-            "-fill-value",
-            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-            "-exact-limit",
-            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
-            "-approx-limit",
-            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
-            "-approx-neighborhood",
-            (((params["num"] ?? null) !== null) ? String((params["num"] ?? null)) : ""),
-            "-winding",
-            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
+            ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : []),
+            ["-fill-value", (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : "")].join(''),
+            ["-exact-limit", (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : "")].join(''),
+            ["-approx-limit", (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : "")].join(''),
+            ["-approx-neighborhood", (((params["num"] ?? null) !== null) ? String((params["num"] ?? null)) : "")].join(''),
+            ["-winding", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -162,6 +241,7 @@ function create_signed_distance_volume_outputs(
     const ret: CreateSignedDistanceVolumeOutputs = {
         root: execution.outputFile("."),
         outvol: execution.outputFile([(params["outvol"] ?? null)].join('')),
+        roi_out: (params["roi-out"] ?? null) ? (create_signed_distance_volume_roi_out_outputs((params["roi-out"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -213,9 +293,7 @@ function create_signed_distance_volume_execute(
  * @param outvol the output volume
  * @param surface the input surface
  * @param refspace a volume in the desired output space (dims, spacing, origin)
- * @param roi_vol output an roi volume of where the output has a computed value
-
-the output roi volume
+ * @param roi_out output an roi volume of where the output has a computed value
  * @param value specify a value to put in all voxels that don't get assigned a distance
 
 value to fill with (default 0)
@@ -239,7 +317,7 @@ function create_signed_distance_volume(
     outvol: string,
     surface: InputPathType,
     refspace: string,
-    roi_vol: string | null = null,
+    roi_out: CreateSignedDistanceVolumeRoiOutParamsDict | null = null,
     value: number | null = null,
     dist: number | null = null,
     dist_: number | null = null,
@@ -247,7 +325,7 @@ function create_signed_distance_volume(
     method: string | null = null,
     runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
-    const params = create_signed_distance_volume_params(outvol, surface, refspace, roi_vol, value, dist, dist_, num, method)
+    const params = create_signed_distance_volume_params(outvol, surface, refspace, roi_out, value, dist, dist_, num, method)
     return create_signed_distance_volume_execute(params, runner);
 }
 
@@ -257,7 +335,11 @@ export {
       CreateSignedDistanceVolumeOutputs,
       CreateSignedDistanceVolumeParamsDict,
       CreateSignedDistanceVolumeParamsDictTagged,
+      CreateSignedDistanceVolumeRoiOutOutputs,
+      CreateSignedDistanceVolumeRoiOutParamsDict,
+      CreateSignedDistanceVolumeRoiOutParamsDictTagged,
       create_signed_distance_volume,
       create_signed_distance_volume_execute,
       create_signed_distance_volume_params,
+      create_signed_distance_volume_roi_out,
 };

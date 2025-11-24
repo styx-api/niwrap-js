@@ -86,8 +86,7 @@ function border_length_cargs(
         cargs.push(
             "wb_command",
             "-border-length",
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
+            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join(''),
             (((params["separate-pieces"] ?? false)) ? "-separate-pieces" : ""),
             (((params["hide-border-name"] ?? false)) ? "-hide-border-name" : "")
         );

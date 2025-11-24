@@ -80,8 +80,7 @@ function metric_math_var_cargs(
             "-var",
             (params["name"] ?? null),
             execution.inputFile((params["metric"] ?? null)),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
             (((params["repeat"] ?? false)) ? "-repeat" : "")
         );
     }
@@ -157,8 +156,7 @@ function metric_math_cargs(
             "wb_command",
             "-metric-math",
             (params["metric-out"] ?? null),
-            "-fixnan",
-            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
+            ["-fixnan", (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : "")].join(''),
             ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => metric_math_var_cargs(s, execution)).flat() : [])
         );
     }

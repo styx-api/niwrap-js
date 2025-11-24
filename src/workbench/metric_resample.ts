@@ -27,13 +27,20 @@ interface MetricResampleAreaMetricsParamsDict {
 type MetricResampleAreaMetricsParamsDictTagged = Required<Pick<MetricResampleAreaMetricsParamsDict, '@type'>> & MetricResampleAreaMetricsParamsDict;
 
 
+interface MetricResampleValidRoiOutParamsDict {
+    "@type"?: "valid-roi-out";
+    "roi-out": string;
+}
+type MetricResampleValidRoiOutParamsDictTagged = Required<Pick<MetricResampleValidRoiOutParamsDict, '@type'>> & MetricResampleValidRoiOutParamsDict;
+
+
 interface MetricResampleParamsDict {
     "@type"?: "workbench/metric-resample";
     "metric-out": string;
     "area-surfs"?: MetricResampleAreaSurfsParamsDict | null | undefined;
     "area-metrics"?: MetricResampleAreaMetricsParamsDict | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "roi-out"?: string | null | undefined;
+    "valid-roi-out"?: MetricResampleValidRoiOutParamsDict | null | undefined;
     "largest": boolean;
     "bypass-sphere-check": boolean;
     "metric-in": InputPathType;
@@ -131,6 +138,82 @@ function metric_resample_area_metrics_cargs(
 
 
 /**
+ * Output object returned when calling `MetricResampleValidRoiOutParamsDict | null(...)`.
+ *
+ * @interface
+ */
+interface MetricResampleValidRoiOutOutputs {
+    /**
+     * Output root folder. This is the root folder for all outputs.
+     */
+    root: OutputPathType;
+    /**
+     * the output roi as a metric
+     */
+    roi_out: OutputPathType;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roi_out the output roi as a metric
+ *
+ * @returns Parameter dictionary
+ */
+function metric_resample_valid_roi_out(
+    roi_out: string,
+): MetricResampleValidRoiOutParamsDictTagged {
+    const params = {
+        "@type": "valid-roi-out" as const,
+        "roi-out": roi_out,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function metric_resample_valid_roi_out_cargs(
+    params: MetricResampleValidRoiOutParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(
+        "-valid-roi-out",
+        (params["roi-out"] ?? null)
+    );
+    return cargs;
+}
+
+
+/**
+ * Build outputs object containing output file paths and possibly stdout/stderr.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Outputs object.
+ */
+function metric_resample_valid_roi_out_outputs(
+    params: MetricResampleValidRoiOutParamsDict,
+    execution: Execution,
+): MetricResampleValidRoiOutOutputs {
+    const ret: MetricResampleValidRoiOutOutputs = {
+        root: execution.outputFile("."),
+        roi_out: execution.outputFile([(params["roi-out"] ?? null)].join('')),
+    };
+    return ret;
+}
+
+
+/**
  * Output object returned when calling `MetricResampleParamsDict(...)`.
  *
  * @interface
@@ -144,6 +227,10 @@ interface MetricResampleOutputs {
      * the output metric
      */
     metric_out: OutputPathType;
+    /**
+     * Outputs from `metric_resample_valid_roi_out_outputs`.
+     */
+    valid_roi_out: MetricResampleValidRoiOutOutputs | null;
 }
 
 
@@ -160,9 +247,7 @@ interface MetricResampleOutputs {
  * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
 
 the roi, as a metric file
- * @param roi_out output the ROI of vertices that got data from valid source vertices
-
-the output roi as a metric
+ * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
  * @param largest use only the value of the vertex with the largest weight
  * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  *
@@ -177,7 +262,7 @@ function metric_resample_params(
     area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
     area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
     roi_metric: InputPathType | null = null,
-    roi_out: string | null = null,
+    valid_roi_out: MetricResampleValidRoiOutParamsDict | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
 ): MetricResampleParamsDictTagged {
@@ -200,8 +285,8 @@ function metric_resample_params(
     if (roi_metric !== null) {
         params["roi-metric"] = roi_metric;
     }
-    if (roi_out !== null) {
-        params["roi-out"] = roi_out;
+    if (valid_roi_out !== null) {
+        params["valid-roi-out"] = valid_roi_out;
     }
     return params;
 }
@@ -220,17 +305,15 @@ function metric_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-surfs"] ?? null) !== null || (params["area-metrics"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-out"] ?? null) !== null || (params["largest"] ?? false) || (params["bypass-sphere-check"] ?? false)) {
+    if ((params["area-surfs"] ?? null) !== null || (params["area-metrics"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["valid-roi-out"] ?? null) !== null || (params["largest"] ?? false) || (params["bypass-sphere-check"] ?? false)) {
         cargs.push(
             "wb_command",
             "-metric-resample",
             (params["metric-out"] ?? null),
             ...(((params["area-surfs"] ?? null) !== null) ? metric_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
             ...(((params["area-metrics"] ?? null) !== null) ? metric_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
-            "-current-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-valid-roi-out",
-            (((params["roi-out"] ?? null) !== null) ? (params["roi-out"] ?? null) : ""),
+            ["-current-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ...(((params["valid-roi-out"] ?? null) !== null) ? metric_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : []),
             (((params["largest"] ?? false)) ? "-largest" : ""),
             (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")
         );
@@ -258,6 +341,7 @@ function metric_resample_outputs(
     const ret: MetricResampleOutputs = {
         root: execution.outputFile("."),
         metric_out: execution.outputFile([(params["metric-out"] ?? null)].join('')),
+        valid_roi_out: (params["valid-roi-out"] ?? null) ? (metric_resample_valid_roi_out_outputs((params["valid-roi-out"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }
@@ -326,9 +410,7 @@ function metric_resample_execute(
  * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
 
 the roi, as a metric file
- * @param roi_out output the ROI of vertices that got data from valid source vertices
-
-the output roi as a metric
+ * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
  * @param largest use only the value of the vertex with the largest weight
  * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
  * @param runner Command runner
@@ -344,12 +426,12 @@ function metric_resample(
     area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
     area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
     roi_metric: InputPathType | null = null,
-    roi_out: string | null = null,
+    valid_roi_out: MetricResampleValidRoiOutParamsDict | null = null,
     largest: boolean = false,
     bypass_sphere_check: boolean = false,
     runner: Runner | null = null,
 ): MetricResampleOutputs {
-    const params = metric_resample_params(metric_out, metric_in, current_sphere, new_sphere, method, area_surfs, area_metrics, roi_metric, roi_out, largest, bypass_sphere_check)
+    const params = metric_resample_params(metric_out, metric_in, current_sphere, new_sphere, method, area_surfs, area_metrics, roi_metric, valid_roi_out, largest, bypass_sphere_check)
     return metric_resample_execute(params, runner);
 }
 
@@ -363,9 +445,13 @@ export {
       MetricResampleOutputs,
       MetricResampleParamsDict,
       MetricResampleParamsDictTagged,
+      MetricResampleValidRoiOutOutputs,
+      MetricResampleValidRoiOutParamsDict,
+      MetricResampleValidRoiOutParamsDictTagged,
       metric_resample,
       metric_resample_area_metrics,
       metric_resample_area_surfs,
       metric_resample_execute,
       metric_resample_params,
+      metric_resample_valid_roi_out,
 };

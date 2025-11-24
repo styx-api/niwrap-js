@@ -90,12 +90,9 @@ function volume_estimate_fwhm_cargs(
         cargs.push(
             "wb_command",
             "-volume-estimate-fwhm",
-            "-roi",
-            (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-            "-whole-file",
-            (((params["demean"] ?? null) !== null) ? "-demean" : "")
+            ["-roi", (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : "")].join(''),
+            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join(''),
+            ["-whole-file", (((params["demean"] ?? null) !== null) ? "-demean" : "")].join('')
         );
     }
     cargs.push(execution.inputFile((params["volume"] ?? null)));

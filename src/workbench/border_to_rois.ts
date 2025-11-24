@@ -95,8 +95,7 @@ function border_to_rois_cargs(
             "wb_command",
             "-border-to-rois",
             (params["metric-out"] ?? null),
-            "-border",
-            (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
+            ["-border", (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : "")].join(''),
             (((params["inverse"] ?? false)) ? "-inverse" : ""),
             (((params["include-border"] ?? false)) ? "-include-border" : "")
         );

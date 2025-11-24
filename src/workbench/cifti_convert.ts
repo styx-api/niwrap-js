@@ -210,8 +210,7 @@ function cifti_convert_reset_timepoints_cargs(
             "-reset-timepoints",
             String((params["timestep"] ?? null)),
             String((params["timestart"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
+            ["-unit", (params["unit"] ?? null)].join('')
         );
     }
     return cargs;
@@ -505,8 +504,7 @@ function cifti_convert_reset_timepoints_cargs_(
             "-reset-timepoints",
             String((params["timestep"] ?? null)),
             String((params["timestart"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
+            ["-unit", (params["unit"] ?? null)].join('')
         );
     }
     return cargs;
@@ -655,8 +653,7 @@ function cifti_convert_to_text_cargs(
             "-to-text",
             execution.inputFile((params["cifti-in"] ?? null)),
             (params["text-out"] ?? null),
-            "-col-delim",
-            (params["delim-string"] ?? null)
+            ["-col-delim", (params["delim-string"] ?? null)].join('')
         );
     }
     return cargs;
@@ -709,8 +706,7 @@ function cifti_convert_reset_timepoints_cargs_2(
             "-reset-timepoints",
             String((params["timestep"] ?? null)),
             String((params["timestart"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
+            ["-unit", (params["unit"] ?? null)].join('')
         );
     }
     return cargs;
@@ -792,8 +788,7 @@ function cifti_convert_from_text_cargs(
             (params["text-in"] ?? null),
             execution.inputFile((params["cifti-template"] ?? null)),
             (params["cifti-out"] ?? null),
-            "-col-delim",
-            (((params["delim-string"] ?? null) !== null) ? (params["delim-string"] ?? null) : ""),
+            ["-col-delim", (((params["delim-string"] ?? null) !== null) ? (params["delim-string"] ?? null) : "")].join(''),
             ...(((params["reset-timepoints"] ?? null) !== null) ? cifti_convert_reset_timepoints_cargs_2((params["reset-timepoints"] ?? null), execution) : []),
             (((params["reset-scalars"] ?? false)) ? "-reset-scalars" : "")
         );

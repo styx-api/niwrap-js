@@ -95,8 +95,7 @@ function cifti_dilate_left_surface_cargs(
         cargs.push(
             "-left-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-left-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
+            ["-left-corrected-areas", execution.inputFile((params["area-metric"] ?? null))].join('')
         );
     }
     return cargs;
@@ -145,8 +144,7 @@ function cifti_dilate_right_surface_cargs(
         cargs.push(
             "-right-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-right-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
+            ["-right-corrected-areas", execution.inputFile((params["area-metric"] ?? null))].join('')
         );
     }
     return cargs;
@@ -195,8 +193,7 @@ function cifti_dilate_cerebellum_surface_cargs(
         cargs.push(
             "-cerebellum-surface",
             execution.inputFile((params["surface"] ?? null)),
-            "-cerebellum-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
+            ["-cerebellum-corrected-areas", execution.inputFile((params["area-metric"] ?? null))].join('')
         );
     }
     return cargs;
@@ -302,8 +299,7 @@ function cifti_dilate_cargs(
             ...(((params["left-surface"] ?? null) !== null) ? cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
             ...(((params["right-surface"] ?? null) !== null) ? cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
             ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-            "-bad-brainordinate-roi",
-            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
+            ["-bad-brainordinate-roi", (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : "")].join(''),
             (((params["nearest"] ?? false)) ? "-nearest" : ""),
             (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
             (((params["legacy-mode"] ?? false)) ? "-legacy-mode" : "")

@@ -180,10 +180,8 @@ function cifti_label_to_border_cargs(
         cargs.push(
             "wb_command",
             "-cifti-label-to-border",
-            "-placement",
-            (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            ["-placement", (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : "")].join(''),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
             ...(((params["border"] ?? null) !== null) ? (params["border"] ?? null).map(s => cifti_label_to_border_border_cargs(s, execution)).flat() : [])
         );
     }

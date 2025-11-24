@@ -81,8 +81,7 @@ function metric_regression_remove_cargs(
         cargs.push(
             "-remove",
             execution.inputFile((params["metric"] ?? null)),
-            "-remove-column",
-            (params["column"] ?? null)
+            ["-remove-column", (params["column"] ?? null)].join('')
         );
     }
     return cargs;
@@ -131,8 +130,7 @@ function metric_regression_keep_cargs(
         cargs.push(
             "-keep",
             execution.inputFile((params["metric"] ?? null)),
-            "-keep-column",
-            (params["column"] ?? null)
+            ["-keep-column", (params["column"] ?? null)].join('')
         );
     }
     return cargs;
@@ -219,10 +217,8 @@ function metric_regression_cargs(
             "wb_command",
             "-metric-regression",
             (params["metric-out"] ?? null),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
             ...(((params["remove"] ?? null) !== null) ? (params["remove"] ?? null).map(s => metric_regression_remove_cargs(s, execution)).flat() : []),
             ...(((params["keep"] ?? null) !== null) ? (params["keep"] ?? null).map(s => metric_regression_keep_cargs(s, execution)).flat() : [])
         );

@@ -120,18 +120,12 @@ function cifti_weighted_stats_spatial_weights_cargs(
     if ((params["left-surf"] ?? null) !== null || (params["right-surf"] ?? null) !== null || (params["cerebellum-surf"] ?? null) !== null || (params["left-metric"] ?? null) !== null || (params["right-metric"] ?? null) !== null || (params["cerebellum-metric"] ?? null) !== null) {
         cargs.push(
             "-spatial-weights",
-            "-left-area-surf",
-            (((params["left-surf"] ?? null) !== null) ? execution.inputFile((params["left-surf"] ?? null)) : ""),
-            "-right-area-surf",
-            (((params["right-surf"] ?? null) !== null) ? execution.inputFile((params["right-surf"] ?? null)) : ""),
-            "-cerebellum-area-surf",
-            (((params["cerebellum-surf"] ?? null) !== null) ? execution.inputFile((params["cerebellum-surf"] ?? null)) : ""),
-            "-left-area-metric",
-            (((params["left-metric"] ?? null) !== null) ? execution.inputFile((params["left-metric"] ?? null)) : ""),
-            "-right-area-metric",
-            (((params["right-metric"] ?? null) !== null) ? execution.inputFile((params["right-metric"] ?? null)) : ""),
-            "-cerebellum-area-metric",
-            (((params["cerebellum-metric"] ?? null) !== null) ? execution.inputFile((params["cerebellum-metric"] ?? null)) : "")
+            ["-left-area-surf", (((params["left-surf"] ?? null) !== null) ? execution.inputFile((params["left-surf"] ?? null)) : "")].join(''),
+            ["-right-area-surf", (((params["right-surf"] ?? null) !== null) ? execution.inputFile((params["right-surf"] ?? null)) : "")].join(''),
+            ["-cerebellum-area-surf", (((params["cerebellum-surf"] ?? null) !== null) ? execution.inputFile((params["cerebellum-surf"] ?? null)) : "")].join(''),
+            ["-left-area-metric", (((params["left-metric"] ?? null) !== null) ? execution.inputFile((params["left-metric"] ?? null)) : "")].join(''),
+            ["-right-area-metric", (((params["right-metric"] ?? null) !== null) ? execution.inputFile((params["right-metric"] ?? null)) : "")].join(''),
+            ["-cerebellum-area-metric", (((params["cerebellum-metric"] ?? null) !== null) ? execution.inputFile((params["cerebellum-metric"] ?? null)) : "")].join('')
         );
     }
     return cargs;
@@ -279,16 +273,12 @@ function cifti_weighted_stats_cargs(
             "wb_command",
             "-cifti-weighted-stats",
             ...(((params["spatial-weights"] ?? null) !== null) ? cifti_weighted_stats_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
-            "-cifti-weights",
-            (((params["weight-cifti"] ?? null) !== null) ? execution.inputFile((params["weight-cifti"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : ""),
+            ["-cifti-weights", (((params["weight-cifti"] ?? null) !== null) ? execution.inputFile((params["weight-cifti"] ?? null)) : "")].join(''),
+            ["-column", (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : "")].join(''),
             ...(((params["roi"] ?? null) !== null) ? cifti_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["mean"] ?? false)) ? "-mean" : ""),
-            "-stdev",
-            (((params["sample"] ?? null) !== null) ? "-sample" : ""),
-            "-percentile",
-            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
+            ["-stdev", (((params["sample"] ?? null) !== null) ? "-sample" : "")].join(''),
+            ["-percentile", (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : "")].join(''),
             (((params["sum"] ?? false)) ? "-sum" : ""),
             (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );
