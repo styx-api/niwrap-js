@@ -58,8 +58,6 @@ export {easythresh, easythresh_execute, easythresh_params} from './fsl/easythres
 export {eddy, eddy_execute, eddy_params} from './fsl/eddy'
 export {eddy_combine, eddy_combine_execute, eddy_combine_params} from './fsl/eddy_combine'
 export {eddy_correct, eddy_correct_execute, eddy_correct_params} from './fsl/eddy_correct'
-export {eddy_cuda, eddy_cuda_execute, eddy_cuda_params} from './fsl/eddy_cuda'
-export {eddy_cuda10_2, eddy_cuda10_2_execute, eddy_cuda10_2_params} from './fsl/eddy_cuda10_2'
 export {eddy_cuda8_0, eddy_cuda8_0_execute, eddy_cuda8_0_params} from './fsl/eddy_cuda8_0'
 export {eddy_cuda9_1, eddy_cuda9_1_execute, eddy_cuda9_1_params} from './fsl/eddy_cuda9_1'
 export {eddy_openmp, eddy_openmp_execute, eddy_openmp_params} from './fsl/eddy_openmp'
@@ -303,10 +301,8 @@ import { dual_regression_execute } from './fsl/dual_regression'
 import { easythresh_execute } from './fsl/easythresh'
 import { eddy_combine_execute } from './fsl/eddy_combine'
 import { eddy_correct_execute } from './fsl/eddy_correct'
-import { eddy_cuda10_2_execute } from './fsl/eddy_cuda10_2'
 import { eddy_cuda8_0_execute } from './fsl/eddy_cuda8_0'
 import { eddy_cuda9_1_execute } from './fsl/eddy_cuda9_1'
-import { eddy_cuda_execute } from './fsl/eddy_cuda'
 import { eddy_execute } from './fsl/eddy'
 import { eddy_openmp_execute } from './fsl/eddy_openmp'
 import { eddy_quad_execute } from './fsl/eddy_quad'
@@ -563,10 +559,8 @@ function execute(
         "fsl/eddy": eddy_execute,
         "fsl/eddy_combine": eddy_combine_execute,
         "fsl/eddy_correct": eddy_correct_execute,
-        "fsl/eddy_cuda": eddy_cuda_execute,
         "fsl/eddy_cuda8.0": eddy_cuda8_0_execute,
         "fsl/eddy_cuda9.1": eddy_cuda9_1_execute,
-        "fsl/eddy_cuda10.2": eddy_cuda10_2_execute,
         "fsl/eddy_openmp": eddy_openmp_execute,
         "fsl/eddy_quad": eddy_quad_execute,
         "fsl/epi_reg": epi_reg_execute,
