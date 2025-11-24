@@ -86,8 +86,10 @@ function set_structure_cargs(
         cargs.push(
             "wb_command",
             "-set-structure",
-            ["-surface-type", (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")].join(''),
-            ["-surface-secondary-type", (((params["secondary type"] ?? null) !== null) ? (params["secondary type"] ?? null) : "")].join('')
+            "-surface-type",
+            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
+            "-surface-secondary-type",
+            (((params["secondary type"] ?? null) !== null) ? (params["secondary type"] ?? null) : "")
         );
     }
     cargs.push((params["data-file"] ?? null));

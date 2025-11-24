@@ -153,9 +153,12 @@ function cifti_stats_cargs(
         cargs.push(
             "wb_command",
             "-cifti-stats",
-            ["-reduce", (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : "")].join(''),
-            ["-percentile", (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : "")].join(''),
-            ["-column", (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : "")].join(''),
+            "-reduce",
+            (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : ""),
+            "-percentile",
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : ""),
             ...(((params["roi"] ?? null) !== null) ? cifti_stats_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );

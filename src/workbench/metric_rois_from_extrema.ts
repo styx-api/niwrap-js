@@ -115,10 +115,14 @@ function metric_rois_from_extrema_cargs(
             "wb_command",
             "-metric-rois-from-extrema",
             (params["metric-out"] ?? null),
-            ["-gaussian", (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : "")].join(''),
-            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
-            ["-overlap-logic", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join(''),
-            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join('')
+            "-gaussian",
+            (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
+            "-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-overlap-logic",
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

@@ -135,13 +135,18 @@ function metric_dilate_cargs(
             "wb_command",
             "-metric-dilate",
             (params["metric-out"] ?? null),
-            ["-bad-vertex-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
-            ["-data-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
-            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            "-bad-vertex-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-data-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             (((params["nearest"] ?? false)) ? "-nearest" : ""),
             (((params["linear"] ?? false)) ? "-linear" : ""),
-            ["-exponent", (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : "")].join(''),
-            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join(''),
+            "-exponent",
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
+            "-corrected-areas",
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
             (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
         );
     }

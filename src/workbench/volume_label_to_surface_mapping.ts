@@ -97,9 +97,12 @@ function volume_label_to_surface_mapping_ribbon_constrained_cargs(
             "-ribbon-constrained",
             execution.inputFile((params["inner-surf"] ?? null)),
             execution.inputFile((params["outer-surf"] ?? null)),
-            ["-volume-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
-            ["-dilate-missing", (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : "")].join(''),
-            ["-voxel-subdiv", (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : "")].join(''),
+            "-volume-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-dilate-missing",
+            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
+            "-voxel-subdiv",
+            (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
             (((params["thin-columns"] ?? false)) ? "-thin-columns" : "")
         );
     }
@@ -179,7 +182,8 @@ function volume_label_to_surface_mapping_cargs(
             "-volume-label-to-surface-mapping",
             (params["label-out"] ?? null),
             ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_label_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
-            ["-subvol-select", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
+            "-subvol-select",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["volume"] ?? null)));

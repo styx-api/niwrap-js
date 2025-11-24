@@ -321,7 +321,8 @@ function cifti_replace_structure_cargs(
             "-cifti-replace-structure",
             ...(((params["volume-all"] ?? null) !== null) ? cifti_replace_structure_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
             (((params["discard-unused-labels"] ?? false)) ? "-discard-unused-labels" : ""),
-            ["-label-collision", (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : "")].join(''),
+            "-label-collision",
+            (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),
             ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_replace_structure_label_cargs(s, execution)).flat() : []),
             ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_replace_structure_metric_cargs(s, execution)).flat() : []),
             ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_replace_structure_volume_cargs(s, execution)).flat() : [])

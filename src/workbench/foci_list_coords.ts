@@ -78,7 +78,8 @@ function foci_list_coords_cargs(
         cargs.push(
             "wb_command",
             "-foci-list-coords",
-            ["-names-out", (params["names-file-out"] ?? null)].join('')
+            "-names-out",
+            (params["names-file-out"] ?? null)
         );
     }
     cargs.push(execution.inputFile((params["foci-file"] ?? null)));

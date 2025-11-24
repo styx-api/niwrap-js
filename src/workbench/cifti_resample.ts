@@ -210,7 +210,8 @@ function cifti_resample_weighted_cargs(
     if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
         cargs.push(
             "-weighted",
-            ["-exponent", (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : "")].join(''),
+            "-exponent",
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
             (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
         );
     }
@@ -310,7 +311,8 @@ function cifti_resample_weighted_cargs_(
     if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
         cargs.push(
             "-weighted",
-            ["-exponent", (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : "")].join(''),
+            "-exponent",
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
             (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
         );
     }
@@ -505,7 +507,8 @@ function cifti_resample_warpfield_cargs(
         cargs.push(
             "-warpfield",
             (params["warpfield"] ?? null),
-            ["-fnirt", (params["source-volume"] ?? null)].join('')
+            "-fnirt",
+            (params["source-volume"] ?? null)
         );
     }
     return cargs;

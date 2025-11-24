@@ -101,7 +101,8 @@ function volume_parcel_smoothing_cargs(
             (params["volume-out"] ?? null),
             (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
             (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
+            "-subvolume",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["data-volume"] ?? null)));

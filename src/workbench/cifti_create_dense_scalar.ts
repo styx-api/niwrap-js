@@ -150,7 +150,8 @@ function cifti_create_dense_scalar_left_metric_cargs(
         cargs.push(
             "-left-metric",
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi-left", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-left",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -199,7 +200,8 @@ function cifti_create_dense_scalar_right_metric_cargs(
         cargs.push(
             "-right-metric",
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi-right", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-right",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -248,7 +250,8 @@ function cifti_create_dense_scalar_cerebellum_metric_cargs(
         cargs.push(
             "-cerebellum-metric",
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi-cerebellum", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-cerebellum",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -301,7 +304,8 @@ function cifti_create_dense_scalar_metric_cargs(
             "-metric",
             (params["structure"] ?? null),
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -397,7 +401,8 @@ function cifti_create_dense_scalar_cargs(
             ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_scalar_left_metric_cargs((params["left-metric"] ?? null), execution) : []),
             ...(((params["right-metric"] ?? null) !== null) ? cifti_create_dense_scalar_right_metric_cargs((params["right-metric"] ?? null), execution) : []),
             ...(((params["cerebellum-metric"] ?? null) !== null) ? cifti_create_dense_scalar_cerebellum_metric_cargs((params["cerebellum-metric"] ?? null), execution) : []),
-            ["-name-file", (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")].join(''),
+            "-name-file",
+            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
             ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_scalar_metric_cargs(s, execution)).flat() : [])
         );
     }

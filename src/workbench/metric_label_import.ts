@@ -112,10 +112,13 @@ function metric_label_import_cargs(
             "-metric-label-import",
             (params["output"] ?? null),
             (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
-            ["-unlabeled-value", (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : "")].join(''),
-            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            "-unlabeled-value",
+            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
-            ["-hierarchy", (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")].join('')
+            "-hierarchy",
+            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));

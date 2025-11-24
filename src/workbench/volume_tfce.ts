@@ -208,9 +208,11 @@ function volume_tfce_cargs(
             "-volume-tfce",
             (params["volume-out"] ?? null),
             ...(((params["presmooth"] ?? null) !== null) ? volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            ["-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
+            "-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
             ...(((params["parameters"] ?? null) !== null) ? volume_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
-            ["-subvolume", (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")].join('')
+            "-subvolume",
+            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));

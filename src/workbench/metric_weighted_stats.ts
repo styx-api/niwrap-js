@@ -177,13 +177,18 @@ function metric_weighted_stats_cargs(
         cargs.push(
             "wb_command",
             "-metric-weighted-stats",
-            ["-area-surface", (((params["area-surface"] ?? null) !== null) ? execution.inputFile((params["area-surface"] ?? null)) : "")].join(''),
-            ["-weight-metric", (((params["weight-metric"] ?? null) !== null) ? execution.inputFile((params["weight-metric"] ?? null)) : "")].join(''),
-            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
+            "-area-surface",
+            (((params["area-surface"] ?? null) !== null) ? execution.inputFile((params["area-surface"] ?? null)) : ""),
+            "-weight-metric",
+            (((params["weight-metric"] ?? null) !== null) ? execution.inputFile((params["weight-metric"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             ...(((params["roi"] ?? null) !== null) ? metric_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["mean"] ?? false)) ? "-mean" : ""),
-            ["-stdev", (((params["sample"] ?? null) !== null) ? "-sample" : "")].join(''),
-            ["-percentile", (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : "")].join(''),
+            "-stdev",
+            (((params["sample"] ?? null) !== null) ? "-sample" : ""),
+            "-percentile",
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
             (((params["sum"] ?? false)) ? "-sum" : ""),
             (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );

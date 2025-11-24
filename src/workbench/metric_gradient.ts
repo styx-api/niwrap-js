@@ -313,8 +313,10 @@ function metric_gradient_cargs(
             ...(((params["presmooth"] ?? null) !== null) ? metric_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
             ...(((params["roi"] ?? null) !== null) ? metric_gradient_roi_cargs((params["roi"] ?? null), execution) : []),
             ...(((params["vectors"] ?? null) !== null) ? metric_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
-            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
-            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join(''),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            "-corrected-areas",
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
             (((params["average-normals"] ?? false)) ? "-average-normals" : "")
         );
     }

@@ -152,7 +152,8 @@ function cifti_create_dense_timeseries_left_metric_cargs(
         cargs.push(
             "-left-metric",
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi-left", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-left",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -201,7 +202,8 @@ function cifti_create_dense_timeseries_right_metric_cargs(
         cargs.push(
             "-right-metric",
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi-right", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-right",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -250,7 +252,8 @@ function cifti_create_dense_timeseries_cerebellum_metric_cargs(
         cargs.push(
             "-cerebellum-metric",
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi-cerebellum", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-cerebellum",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -303,7 +306,8 @@ function cifti_create_dense_timeseries_metric_cargs(
             "-metric",
             (params["structure"] ?? null),
             execution.inputFile((params["metric"] ?? null)),
-            ["-roi", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -413,9 +417,12 @@ function cifti_create_dense_timeseries_cargs(
             ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_left_metric_cargs((params["left-metric"] ?? null), execution) : []),
             ...(((params["right-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_right_metric_cargs((params["right-metric"] ?? null), execution) : []),
             ...(((params["cerebellum-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_cerebellum_metric_cargs((params["cerebellum-metric"] ?? null), execution) : []),
-            ["-timestep", (((params["interval"] ?? null) !== null) ? String((params["interval"] ?? null)) : "")].join(''),
-            ["-timestart", (((params["start"] ?? null) !== null) ? String((params["start"] ?? null)) : "")].join(''),
-            ["-unit", (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")].join(''),
+            "-timestep",
+            (((params["interval"] ?? null) !== null) ? String((params["interval"] ?? null)) : ""),
+            "-timestart",
+            (((params["start"] ?? null) !== null) ? String((params["start"] ?? null)) : ""),
+            "-unit",
+            (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : ""),
             ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_timeseries_metric_cargs(s, execution)).flat() : [])
         );
     }

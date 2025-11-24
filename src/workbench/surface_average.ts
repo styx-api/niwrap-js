@@ -237,7 +237,8 @@ function surface_average_surf_cargs(
         cargs.push(
             "-surf",
             execution.inputFile((params["surface"] ?? null)),
-            ["-weight", String((params["weight"] ?? null))].join('')
+            "-weight",
+            String((params["weight"] ?? null))
         );
     }
     return cargs;

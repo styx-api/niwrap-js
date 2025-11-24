@@ -443,13 +443,17 @@ function volume_to_surface_mapping_ribbon_constrained_cargs(
             execution.inputFile((params["outer-surf"] ?? null)),
             ...(((params["volume-roi"] ?? null) !== null) ? volume_to_surface_mapping_volume_roi_cargs((params["volume-roi"] ?? null), execution) : []),
             ...(((params["dilate-missing"] ?? null) !== null) ? volume_to_surface_mapping_dilate_missing_cargs((params["dilate-missing"] ?? null), execution) : []),
-            ["-voxel-subdiv", (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : "")].join(''),
+            "-voxel-subdiv",
+            (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
             (((params["thin-columns"] ?? false)) ? "-thin-columns" : ""),
-            ["-gaussian", (((params["scale"] ?? null) !== null) ? String((params["scale"] ?? null)) : "")].join(''),
-            ["-interpolate", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join(''),
+            "-gaussian",
+            (((params["scale"] ?? null) !== null) ? String((params["scale"] ?? null)) : ""),
+            "-interpolate",
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
             ...(((params["bad-vertices-out"] ?? null) !== null) ? volume_to_surface_mapping_bad_vertices_out_cargs((params["bad-vertices-out"] ?? null), execution) : []),
             ...(((params["output-weights"] ?? null) !== null) ? volume_to_surface_mapping_output_weights_cargs((params["output-weights"] ?? null), execution) : []),
-            ["-output-weights-text", (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")].join('')
+            "-output-weights-text",
+            (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
         );
     }
     return cargs;
@@ -624,7 +628,8 @@ function volume_to_surface_mapping_cargs(
             (((params["cubic"] ?? false)) ? "-cubic" : ""),
             ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
             ...(((params["myelin-style"] ?? null) !== null) ? volume_to_surface_mapping_myelin_style_cargs((params["myelin-style"] ?? null), execution) : []),
-            ["-subvol-select", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
+            "-subvol-select",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["volume"] ?? null)));

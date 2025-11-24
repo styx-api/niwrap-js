@@ -105,7 +105,8 @@ function volume_parcel_resampling_generic_cargs(
             (params["volume-out"] ?? null),
             (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
             (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
+            "-subvolume",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));

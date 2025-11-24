@@ -82,7 +82,8 @@ function cifti_label_export_table_cargs(
         cargs.push(
             "wb_command",
             "-cifti-label-export-table",
-            ["-hierarchy", (params["json-out"] ?? null)].join('')
+            "-hierarchy",
+            (params["json-out"] ?? null)
         );
     }
     cargs.push(execution.inputFile((params["label-in"] ?? null)));

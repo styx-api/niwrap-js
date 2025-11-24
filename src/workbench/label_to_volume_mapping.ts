@@ -86,7 +86,8 @@ function label_to_volume_mapping_ribbon_constrained_cargs(
             "-ribbon-constrained",
             execution.inputFile((params["inner-surf"] ?? null)),
             execution.inputFile((params["outer-surf"] ?? null)),
-            ["-voxel-subdiv", (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : "")].join(''),
+            "-voxel-subdiv",
+            (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
             (((params["greedy"] ?? false)) ? "-greedy" : ""),
             (((params["thick-columns"] ?? false)) ? "-thick-columns" : "")
         );
@@ -169,7 +170,8 @@ function label_to_volume_mapping_cargs(
             "wb_command",
             "-label-to-volume-mapping",
             (params["volume-out"] ?? null),
-            ["-nearest-vertex", (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : "")].join(''),
+            "-nearest-vertex",
+            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
             ...(((params["ribbon-constrained"] ?? null) !== null) ? label_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : [])
         );
     }

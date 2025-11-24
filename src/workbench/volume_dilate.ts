@@ -228,10 +228,14 @@ function volume_dilate_cargs(
             "wb_command",
             "-volume-dilate",
             (params["volume-out"] ?? null),
-            ["-exponent", (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : "")].join(''),
-            ["-bad-voxel-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
-            ["-data-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
-            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join(''),
+            "-exponent",
+            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
+            "-bad-voxel-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-data-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-subvolume",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
             (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : ""),
             ...(((params["grad-extrapolate"] ?? null) !== null) ? volume_dilate_grad_extrapolate_cargs((params["grad-extrapolate"] ?? null), execution) : [])
         );

@@ -123,7 +123,8 @@ function surface_distortion_match_surface_area_cargs(
     if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
             "-match-surface-area",
-            ["-roi", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -216,7 +217,8 @@ function surface_distortion_cargs(
             ...(((params["match-surface-area"] ?? null) !== null) ? surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution) : []),
             (((params["caret5-method"] ?? false)) ? "-caret5-method" : ""),
             (((params["edge-method"] ?? false)) ? "-edge-method" : ""),
-            ["-local-affine-method", (((params["log2"] ?? null) !== null) ? "-log2" : "")].join('')
+            "-local-affine-method",
+            (((params["log2"] ?? null) !== null) ? "-log2" : "")
         );
     }
     cargs.push(execution.inputFile((params["surface-reference"] ?? null)));

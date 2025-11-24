@@ -86,7 +86,8 @@ function surface_geodesic_distance_sparse_text_cargs(
         cargs.push(
             "wb_command",
             "-surface-geodesic-distance-sparse-text",
-            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join(''),
+            "-corrected-areas",
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
             (((params["naive"] ?? false)) ? "-naive" : "")
         );
     }

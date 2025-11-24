@@ -213,11 +213,16 @@ function create_signed_distance_volume_cargs(
             "-create-signed-distance-volume",
             (params["outvol"] ?? null),
             ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : []),
-            ["-fill-value", (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : "")].join(''),
-            ["-exact-limit", (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : "")].join(''),
-            ["-approx-limit", (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : "")].join(''),
-            ["-approx-neighborhood", (((params["num"] ?? null) !== null) ? String((params["num"] ?? null)) : "")].join(''),
-            ["-winding", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join('')
+            "-fill-value",
+            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+            "-exact-limit",
+            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
+            "-approx-limit",
+            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
+            "-approx-neighborhood",
+            (((params["num"] ?? null) !== null) ? String((params["num"] ?? null)) : ""),
+            "-winding",
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

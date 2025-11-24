@@ -144,8 +144,10 @@ function cifti_estimate_fwhm_cargs(
             "wb_command",
             "-cifti-estimate-fwhm",
             (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
-            ["-column", (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : "")].join(''),
-            ["-whole-file", (((params["demean"] ?? null) !== null) ? "-demean" : "")].join(''),
+            "-column",
+            (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : ""),
+            "-whole-file",
+            (((params["demean"] ?? null) !== null) ? "-demean" : ""),
             ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_estimate_fwhm_surface_cargs(s, execution)).flat() : [])
         );
     }

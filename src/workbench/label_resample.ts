@@ -312,7 +312,8 @@ function label_resample_cargs(
             (params["label-out"] ?? null),
             ...(((params["area-surfs"] ?? null) !== null) ? label_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
             ...(((params["area-metrics"] ?? null) !== null) ? label_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
-            ["-current-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
+            "-current-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             ...(((params["valid-roi-out"] ?? null) !== null) ? label_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : []),
             (((params["largest"] ?? false)) ? "-largest" : ""),
             (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")

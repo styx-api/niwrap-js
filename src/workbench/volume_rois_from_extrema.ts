@@ -111,10 +111,14 @@ function volume_rois_from_extrema_cargs(
             "wb_command",
             "-volume-rois-from-extrema",
             (params["volume-out"] ?? null),
-            ["-gaussian", (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : "")].join(''),
-            ["-roi", (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : "")].join(''),
-            ["-overlap-logic", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join(''),
-            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join('')
+            "-gaussian",
+            (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
+            "-roi",
+            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+            "-overlap-logic",
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
+            "-subvolume",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));

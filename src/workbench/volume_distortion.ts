@@ -91,7 +91,8 @@ function volume_distortion_cargs(
             "wb_command",
             "-volume-distortion",
             (params["volume-out"] ?? null),
-            ["-fnirt", (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : "")].join(''),
+            "-fnirt",
+            (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
             (((params["circular"] ?? false)) ? "-circular" : ""),
             (((params["log2"] ?? false)) ? "-log2" : "")
         );

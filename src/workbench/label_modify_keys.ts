@@ -87,7 +87,8 @@ function label_modify_keys_cargs(
             "wb_command",
             "-label-modify-keys",
             (params["label-out"] ?? null),
-            ["-column", (params["column"] ?? null)].join('')
+            "-column",
+            (params["column"] ?? null)
         );
     }
     cargs.push(execution.inputFile((params["label-in"] ?? null)));

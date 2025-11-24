@@ -99,9 +99,12 @@ function cifti_label_to_roi_cargs(
             "wb_command",
             "-cifti-label-to-roi",
             (params["scalar-out"] ?? null),
-            ["-name", (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : "")].join(''),
-            ["-key", (((params["label-key"] ?? null) !== null) ? String((params["label-key"] ?? null)) : "")].join(''),
-            ["-map", (((params["map"] ?? null) !== null) ? (params["map"] ?? null) : "")].join('')
+            "-name",
+            (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : ""),
+            "-key",
+            (((params["label-key"] ?? null) !== null) ? String((params["label-key"] ?? null)) : ""),
+            "-map",
+            (((params["map"] ?? null) !== null) ? (params["map"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["label-in"] ?? null)));

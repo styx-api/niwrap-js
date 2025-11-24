@@ -95,8 +95,10 @@ function label_to_border_cargs(
             "wb_command",
             "-label-to-border",
             (params["border-out"] ?? null),
-            ["-placement", (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : "")].join(''),
-            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join('')
+            "-placement",
+            (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

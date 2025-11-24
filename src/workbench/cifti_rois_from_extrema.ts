@@ -180,11 +180,15 @@ function cifti_rois_from_extrema_cargs(
             "wb_command",
             "-cifti-rois-from-extrema",
             (params["cifti-out"] ?? null),
-            ["-left-surface", (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")].join(''),
-            ["-right-surface", (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")].join(''),
-            ["-cerebellum-surface", (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")].join(''),
+            "-left-surface",
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
+            "-right-surface",
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
+            "-cerebellum-surface",
+            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
             ...(((params["gaussian"] ?? null) !== null) ? cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution) : []),
-            ["-overlap-logic", (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")].join(''),
+            "-overlap-logic",
+            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
             (((params["merged-volume"] ?? false)) ? "-merged-volume" : "")
         );
     }

@@ -153,9 +153,12 @@ function volume_stats_cargs(
         cargs.push(
             "wb_command",
             "-volume-stats",
-            ["-reduce", (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : "")].join(''),
-            ["-percentile", (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : "")].join(''),
-            ["-subvolume", (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")].join(''),
+            "-reduce",
+            (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : ""),
+            "-percentile",
+            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
+            "-subvolume",
+            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),
             ...(((params["roi"] ?? null) !== null) ? volume_stats_roi_cargs((params["roi"] ?? null), execution) : []),
             (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
         );

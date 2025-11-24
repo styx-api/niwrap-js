@@ -66,7 +66,8 @@ function nifti_information_print_xml_cargs(
     if ((params["version"] ?? null) !== null) {
         cargs.push(
             "-print-xml",
-            ["-version", (params["version"] ?? null)].join('')
+            "-version",
+            (params["version"] ?? null)
         );
     }
     return cargs;
@@ -136,7 +137,8 @@ function nifti_information_cargs(
         cargs.push(
             "wb_command",
             "-nifti-information",
-            ["-print-header", (((params["allow-truncated"] ?? null) !== null) ? "-allow-truncated" : "")].join(''),
+            "-print-header",
+            (((params["allow-truncated"] ?? null) !== null) ? "-allow-truncated" : ""),
             (((params["print-matrix"] ?? false)) ? "-print-matrix" : ""),
             ...(((params["print-xml"] ?? null) !== null) ? nifti_information_print_xml_cargs((params["print-xml"] ?? null), execution) : [])
         );

@@ -140,12 +140,18 @@ function metric_find_clusters_cargs(
             "-metric-find-clusters",
             (params["metric-out"] ?? null),
             (((params["less-than"] ?? false)) ? "-less-than" : ""),
-            ["-roi", (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")].join(''),
-            ["-corrected-areas", (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")].join(''),
-            ["-column", (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")].join(''),
-            ["-size-ratio", (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : "")].join(''),
-            ["-distance", (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : "")].join(''),
-            ["-start", (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")].join('')
+            "-roi",
+            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+            "-corrected-areas",
+            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
+            "-column",
+            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+            "-size-ratio",
+            (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
+            "-distance",
+            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
+            "-start",
+            (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
         );
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));

@@ -148,7 +148,8 @@ function cifti_reduce_cargs(
             "wb_command",
             "-cifti-reduce",
             (params["cifti-out"] ?? null),
-            ["-direction", (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : "")].join(''),
+            "-direction",
+            (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
             ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
             (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
         );

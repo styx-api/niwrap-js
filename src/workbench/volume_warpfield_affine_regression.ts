@@ -143,8 +143,10 @@ function volume_warpfield_affine_regression_cargs(
         cargs.push(
             "wb_command",
             "-volume-warpfield-affine-regression",
-            ["-roi", (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : "")].join(''),
-            ["-fnirt", (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : "")].join(''),
+            "-roi",
+            (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
+            "-fnirt",
+            (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
             ...(((params["flirt-out"] ?? null) !== null) ? volume_warpfield_affine_regression_flirt_out_cargs((params["flirt-out"] ?? null), execution) : [])
         );
     }

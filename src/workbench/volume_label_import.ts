@@ -112,10 +112,13 @@ function volume_label_import_cargs(
             "-volume-label-import",
             (params["output"] ?? null),
             (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
-            ["-unlabeled-value", (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : "")].join(''),
-            ["-subvolume", (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")].join(''),
+            "-unlabeled-value",
+            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+            "-subvolume",
+            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
             (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
-            ["-hierarchy", (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")].join('')
+            "-hierarchy",
+            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
         );
     }
     cargs.push(execution.inputFile((params["input"] ?? null)));

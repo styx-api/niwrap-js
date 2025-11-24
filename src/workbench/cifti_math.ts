@@ -211,7 +211,8 @@ function cifti_math_cargs(
             "wb_command",
             "-cifti-math",
             (params["cifti-out"] ?? null),
-            ["-fixnan", (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : "")].join(''),
+            "-fixnan",
+            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
             (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : ""),
             ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat() : [])
         );

@@ -135,7 +135,8 @@ function cifti_merge_dense_cargs(
             "wb_command",
             "-cifti-merge-dense",
             (params["cifti-out"] ?? null),
-            ["-label-collision", (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : "")].join(''),
+            "-label-collision",
+            (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),
             ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_dense_cifti_cargs(s, execution)).flat() : [])
         );
     }

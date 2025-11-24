@@ -149,7 +149,8 @@ function cifti_create_label_left_label_cargs(
         cargs.push(
             "-left-label",
             execution.inputFile((params["label"] ?? null)),
-            ["-roi-left", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-left",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -198,7 +199,8 @@ function cifti_create_label_right_label_cargs(
         cargs.push(
             "-right-label",
             execution.inputFile((params["label"] ?? null)),
-            ["-roi-right", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-right",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -247,7 +249,8 @@ function cifti_create_label_cerebellum_label_cargs(
         cargs.push(
             "-cerebellum-label",
             execution.inputFile((params["label"] ?? null)),
-            ["-roi-cerebellum", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi-cerebellum",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;
@@ -300,7 +303,8 @@ function cifti_create_label_label_cargs(
             "-label",
             (params["structure"] ?? null),
             execution.inputFile((params["label"] ?? null)),
-            ["-roi", execution.inputFile((params["roi-metric"] ?? null))].join('')
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
         );
     }
     return cargs;

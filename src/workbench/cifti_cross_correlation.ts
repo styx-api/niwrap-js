@@ -99,9 +99,11 @@ function cifti_cross_correlation_cargs(
             "wb_command",
             "-cifti-cross-correlation",
             (params["cifti-out"] ?? null),
-            ["-weights", (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : "")].join(''),
+            "-weights",
+            (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),
             (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
-            ["-mem-limit", (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")].join('')
+            "-mem-limit",
+            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
         );
     }
     cargs.push(execution.inputFile((params["cifti-a"] ?? null)));

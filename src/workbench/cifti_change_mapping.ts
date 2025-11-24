@@ -93,7 +93,8 @@ function cifti_change_mapping_series_cargs(
             "-series",
             String((params["step"] ?? null)),
             String((params["start"] ?? null)),
-            ["-unit", (params["unit"] ?? null)].join('')
+            "-unit",
+            (params["unit"] ?? null)
         );
     }
     return cargs;
@@ -138,7 +139,8 @@ function cifti_change_mapping_scalar_cargs(
     if ((params["file"] ?? null) !== null) {
         cargs.push(
             "-scalar",
-            ["-name-file", (params["file"] ?? null)].join('')
+            "-name-file",
+            (params["file"] ?? null)
         );
     }
     return cargs;
