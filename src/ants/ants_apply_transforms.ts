@@ -66,9 +66,16 @@ interface AntsApplyTransformsAlphaParamsDict {
 type AntsApplyTransformsAlphaParamsDictTagged = Required<Pick<AntsApplyTransformsAlphaParamsDict, '@type'>> & AntsApplyTransformsAlphaParamsDict;
 
 
+interface AntsApplyTransformsParamParamsDict {
+    "@type"?: "param";
+    "params": Array<AntsApplyTransformsSigmaParamsDictTagged | AntsApplyTransformsAlphaParamsDictTagged>;
+}
+type AntsApplyTransformsParamParamsDictTagged = Required<Pick<AntsApplyTransformsParamParamsDict, '@type'>> & AntsApplyTransformsParamParamsDict;
+
+
 interface AntsApplyTransformsMultiLabelParamsDict {
     "@type"?: "multiLabel";
-    "params": Array<AntsApplyTransformsSigmaParamsDictTagged | AntsApplyTransformsAlphaParamsDictTagged>;
+    "params": AntsApplyTransformsParamParamsDict;
 }
 type AntsApplyTransformsMultiLabelParamsDictTagged = Required<Pick<AntsApplyTransformsMultiLabelParamsDict, '@type'>> & AntsApplyTransformsMultiLabelParamsDict;
 
@@ -703,8 +710,43 @@ function ants_apply_transforms_alpha_cargs(
  *
  * @returns Parameter dictionary
  */
-function ants_apply_transforms_multi_label(
+function ants_apply_transforms_param(
     params_: Array<AntsApplyTransformsSigmaParamsDictTagged | AntsApplyTransformsAlphaParamsDictTagged>,
+): AntsApplyTransformsParamParamsDictTagged {
+    const params = {
+        "@type": "param" as const,
+        "params": params_,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_apply_transforms_param_cargs(
+    params: AntsApplyTransformsParamParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["[", (params["params"] ?? null).map(s => ants_apply_transforms_params_cargs_dyn_fn(s["@type"])(s, execution)).flat().join(","), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_apply_transforms_multi_label(
+    params_: AntsApplyTransformsParamParamsDict,
 ): AntsApplyTransformsMultiLabelParamsDictTagged {
     const params = {
         "@type": "multiLabel" as const,
@@ -727,7 +769,7 @@ function ants_apply_transforms_multi_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["MultiLabel", "[", (params["params"] ?? null).map(s => ants_apply_transforms_params_cargs_dyn_fn(s["@type"])(s, execution)).flat().join(","), "]"].join(''));
+    cargs.push(["MultiLabel", ants_apply_transforms_param_cargs((params["params"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -1355,6 +1397,8 @@ export {
       AntsApplyTransformsNearestNeighborParamsDict,
       AntsApplyTransformsNearestNeighborParamsDictTagged,
       AntsApplyTransformsOutputs,
+      AntsApplyTransformsParamParamsDict,
+      AntsApplyTransformsParamParamsDictTagged,
       AntsApplyTransformsParamsDict,
       AntsApplyTransformsParamsDictTagged,
       AntsApplyTransformsSigmaParamsDict,
@@ -1383,6 +1427,7 @@ export {
       ants_apply_transforms_multi_label,
       ants_apply_transforms_multi_labelnoparams,
       ants_apply_transforms_nearest_neighbor,
+      ants_apply_transforms_param,
       ants_apply_transforms_params,
       ants_apply_transforms_sigma,
       ants_apply_transforms_transform_file_name,
