@@ -86,16 +86,14 @@ function surface_generate_inflated_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["iterations-scale-value"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-surface-generate-inflated",
-            (params["inflated-surface-out"] ?? null),
-            (params["very-inflated-surface-out"] ?? null),
-            "-iterations-scale",
-            String((params["iterations-scale-value"] ?? null))
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-generate-inflated",
+        (params["inflated-surface-out"] ?? null),
+        (params["very-inflated-surface-out"] ?? null),
+        "-iterations-scale",
+        String((params["iterations-scale-value"] ?? null))
+    );
     cargs.push(execution.inputFile((params["anatomical-surface-in"] ?? null)));
     return cargs;
 }

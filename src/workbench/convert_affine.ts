@@ -91,13 +91,11 @@ function convert_affine_from_world_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["inverse"] ?? false)) {
-        cargs.push(
-            "-from-world",
-            (params["input"] ?? null),
-            "-inverse"
-        );
-    }
+    cargs.push(
+        "-from-world",
+        (params["input"] ?? null),
+        "-inverse"
+    );
     return cargs;
 }
 
@@ -183,13 +181,11 @@ function convert_affine_to_world_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["inverse"] ?? false)) {
-        cargs.push(
-            "-to-world",
-            (params["output"] ?? null),
-            "-inverse"
-        );
-    }
+    cargs.push(
+        "-to-world",
+        (params["output"] ?? null),
+        "-inverse"
+    );
     return cargs;
 }
 

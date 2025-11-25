@@ -88,15 +88,13 @@ function cifti_change_mapping_series_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["unit"] ?? null) !== null) {
-        cargs.push(
-            "-series",
-            String((params["step"] ?? null)),
-            String((params["start"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
-        );
-    }
+    cargs.push(
+        "-series",
+        String((params["step"] ?? null)),
+        String((params["start"] ?? null)),
+        "-unit",
+        (params["unit"] ?? null)
+    );
     return cargs;
 }
 
@@ -259,16 +257,14 @@ function cifti_change_mapping_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["series"] ?? null) !== null || (params["scalar"] ?? null) !== null || (params["from-cifti"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-change-mapping",
-            (params["cifti-out"] ?? null),
-            ...(((params["series"] ?? null) !== null) ? cifti_change_mapping_series_cargs((params["series"] ?? null), execution) : []),
-            ...(((params["scalar"] ?? null) !== null) ? cifti_change_mapping_scalar_cargs((params["scalar"] ?? null), execution) : []),
-            ...(((params["from-cifti"] ?? null) !== null) ? cifti_change_mapping_from_cifti_cargs((params["from-cifti"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-change-mapping",
+        (params["cifti-out"] ?? null),
+        ...cifti_change_mapping_series_cargs((params["series"] ?? null), execution),
+        ...cifti_change_mapping_scalar_cargs((params["scalar"] ?? null), execution),
+        ...cifti_change_mapping_from_cifti_cargs((params["from-cifti"] ?? null), execution)
+    );
     cargs.push(execution.inputFile((params["data-cifti"] ?? null)));
     cargs.push((params["direction"] ?? null));
     return cargs;

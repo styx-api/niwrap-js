@@ -88,14 +88,12 @@ function cifti_erode_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-left-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-left-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-left-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -138,14 +136,12 @@ function cifti_erode_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-right-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-right-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-right-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -188,14 +184,12 @@ function cifti_erode_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-cerebellum-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-cerebellum-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-cerebellum-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -278,17 +272,15 @@ function cifti_erode_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["merged-volume"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-cifti-erode",
-            (params["cifti-out"] ?? null),
-            ...(((params["left-surface"] ?? null) !== null) ? cifti_erode_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-            ...(((params["right-surface"] ?? null) !== null) ? cifti_erode_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_erode_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-            (((params["merged-volume"] ?? false)) ? "-merged-volume" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-erode",
+        (params["cifti-out"] ?? null),
+        ...cifti_erode_left_surface_cargs((params["left-surface"] ?? null), execution),
+        ...cifti_erode_right_surface_cargs((params["right-surface"] ?? null), execution),
+        ...cifti_erode_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
+        "-merged-volume"
+    );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push(String((params["surface-distance"] ?? null)));

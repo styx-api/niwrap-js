@@ -118,9 +118,7 @@ function v_3d_tcorr1_d_cargs(
     if ((params["quadrant"] ?? false)) {
         cargs.push("-quadrant");
     }
-    if ((params["spearman"] ?? false)) {
-        cargs.push(["-spearman", execution.inputFile((params["xset"] ?? null)), execution.inputFile((params["y_1d"] ?? null))].join(''));
-    }
+    cargs.push(["-spearman", execution.inputFile((params["xset"] ?? null)), execution.inputFile((params["y_1d"] ?? null))].join(''));
     return cargs;
 }
 

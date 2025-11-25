@@ -98,19 +98,17 @@ function volume_smoothing_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false) || (params["roivol"] ?? null) !== null || (params["fix-zeros"] ?? false) || (params["subvol"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-smoothing",
-            (params["volume-out"] ?? null),
-            (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
-            "-roi",
-            (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : ""),
-            (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-smoothing",
+        (params["volume-out"] ?? null),
+        "-fwhm",
+        "-roi",
+        execution.inputFile((params["roivol"] ?? null)),
+        "-fix-zeros",
+        "-subvolume",
+        (params["subvol"] ?? null)
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));
     return cargs;

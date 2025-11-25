@@ -205,15 +205,13 @@ function cifti_convert_reset_timepoints_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["unit"] ?? null) !== null) {
-        cargs.push(
-            "-reset-timepoints",
-            String((params["timestep"] ?? null)),
-            String((params["timestart"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
-        );
-    }
+    cargs.push(
+        "-reset-timepoints",
+        String((params["timestep"] ?? null)),
+        String((params["timestart"] ?? null)),
+        "-unit",
+        (params["unit"] ?? null)
+    );
     return cargs;
 }
 
@@ -255,14 +253,12 @@ function cifti_convert_replace_binary_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["flip-endian"] ?? false) || (params["transpose"] ?? false)) {
-        cargs.push(
-            "-replace-binary",
-            (params["binary-in"] ?? null),
-            (((params["flip-endian"] ?? false)) ? "-flip-endian" : ""),
-            (((params["transpose"] ?? false)) ? "-transpose" : "")
-        );
-    }
+    cargs.push(
+        "-replace-binary",
+        (params["binary-in"] ?? null),
+        "-flip-endian",
+        "-transpose"
+    );
     return cargs;
 }
 
@@ -334,17 +330,15 @@ function cifti_convert_from_gifti_ext_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["reset-timepoints"] ?? null) !== null || (params["reset-scalars"] ?? false) || (params["column-reset-scalars"] ?? false) || (params["replace-binary"] ?? null) !== null) {
-        cargs.push(
-            "-from-gifti-ext",
-            (params["gifti-in"] ?? null),
-            (params["cifti-out"] ?? null),
-            ...(((params["reset-timepoints"] ?? null) !== null) ? cifti_convert_reset_timepoints_cargs((params["reset-timepoints"] ?? null), execution) : []),
-            (((params["reset-scalars"] ?? false)) ? "-reset-scalars" : ""),
-            (((params["column-reset-scalars"] ?? false)) ? "-column-reset-scalars" : ""),
-            ...(((params["replace-binary"] ?? null) !== null) ? cifti_convert_replace_binary_cargs((params["replace-binary"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "-from-gifti-ext",
+        (params["gifti-in"] ?? null),
+        (params["cifti-out"] ?? null),
+        ...cifti_convert_reset_timepoints_cargs((params["reset-timepoints"] ?? null), execution),
+        "-reset-scalars",
+        "-column-reset-scalars",
+        ...cifti_convert_replace_binary_cargs((params["replace-binary"] ?? null), execution)
+    );
     return cargs;
 }
 
@@ -426,15 +420,13 @@ function cifti_convert_to_nifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["smaller-file"] ?? false) || (params["smaller-dims"] ?? false)) {
-        cargs.push(
-            "-to-nifti",
-            execution.inputFile((params["cifti-in"] ?? null)),
-            (params["nifti-out"] ?? null),
-            (((params["smaller-file"] ?? false)) ? "-smaller-file" : ""),
-            (((params["smaller-dims"] ?? false)) ? "-smaller-dims" : "")
-        );
-    }
+    cargs.push(
+        "-to-nifti",
+        execution.inputFile((params["cifti-in"] ?? null)),
+        (params["nifti-out"] ?? null),
+        "-smaller-file",
+        "-smaller-dims"
+    );
     return cargs;
 }
 
@@ -500,15 +492,13 @@ function cifti_convert_reset_timepoints_cargs_(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["unit"] ?? null) !== null) {
-        cargs.push(
-            "-reset-timepoints",
-            String((params["timestep"] ?? null)),
-            String((params["timestart"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
-        );
-    }
+    cargs.push(
+        "-reset-timepoints",
+        String((params["timestep"] ?? null)),
+        String((params["timestart"] ?? null)),
+        "-unit",
+        (params["unit"] ?? null)
+    );
     return cargs;
 }
 
@@ -575,16 +565,14 @@ function cifti_convert_from_nifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["reset-timepoints"] ?? null) !== null || (params["reset-scalars"] ?? false)) {
-        cargs.push(
-            "-from-nifti",
-            execution.inputFile((params["nifti-in"] ?? null)),
-            execution.inputFile((params["cifti-template"] ?? null)),
-            (params["cifti-out"] ?? null),
-            ...(((params["reset-timepoints"] ?? null) !== null) ? cifti_convert_reset_timepoints_cargs_((params["reset-timepoints"] ?? null), execution) : []),
-            (((params["reset-scalars"] ?? false)) ? "-reset-scalars" : "")
-        );
-    }
+    cargs.push(
+        "-from-nifti",
+        execution.inputFile((params["nifti-in"] ?? null)),
+        execution.inputFile((params["cifti-template"] ?? null)),
+        (params["cifti-out"] ?? null),
+        ...cifti_convert_reset_timepoints_cargs_((params["reset-timepoints"] ?? null), execution),
+        "-reset-scalars"
+    );
     return cargs;
 }
 
@@ -650,15 +638,13 @@ function cifti_convert_to_text_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["delim-string"] ?? null) !== null) {
-        cargs.push(
-            "-to-text",
-            execution.inputFile((params["cifti-in"] ?? null)),
-            (params["text-out"] ?? null),
-            "-col-delim",
-            (params["delim-string"] ?? null)
-        );
-    }
+    cargs.push(
+        "-to-text",
+        execution.inputFile((params["cifti-in"] ?? null)),
+        (params["text-out"] ?? null),
+        "-col-delim",
+        (params["delim-string"] ?? null)
+    );
     return cargs;
 }
 
@@ -704,15 +690,13 @@ function cifti_convert_reset_timepoints_cargs_2(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["unit"] ?? null) !== null) {
-        cargs.push(
-            "-reset-timepoints",
-            String((params["timestep"] ?? null)),
-            String((params["timestart"] ?? null)),
-            "-unit",
-            (params["unit"] ?? null)
-        );
-    }
+    cargs.push(
+        "-reset-timepoints",
+        String((params["timestep"] ?? null)),
+        String((params["timestart"] ?? null)),
+        "-unit",
+        (params["unit"] ?? null)
+    );
     return cargs;
 }
 
@@ -786,18 +770,16 @@ function cifti_convert_from_text_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["delim-string"] ?? null) !== null || (params["reset-timepoints"] ?? null) !== null || (params["reset-scalars"] ?? false)) {
-        cargs.push(
-            "-from-text",
-            (params["text-in"] ?? null),
-            execution.inputFile((params["cifti-template"] ?? null)),
-            (params["cifti-out"] ?? null),
-            "-col-delim",
-            (((params["delim-string"] ?? null) !== null) ? (params["delim-string"] ?? null) : ""),
-            ...(((params["reset-timepoints"] ?? null) !== null) ? cifti_convert_reset_timepoints_cargs_2((params["reset-timepoints"] ?? null), execution) : []),
-            (((params["reset-scalars"] ?? false)) ? "-reset-scalars" : "")
-        );
-    }
+    cargs.push(
+        "-from-text",
+        (params["text-in"] ?? null),
+        execution.inputFile((params["cifti-template"] ?? null)),
+        (params["cifti-out"] ?? null),
+        "-col-delim",
+        (params["delim-string"] ?? null),
+        ...cifti_convert_reset_timepoints_cargs_2((params["reset-timepoints"] ?? null), execution),
+        "-reset-scalars"
+    );
     return cargs;
 }
 

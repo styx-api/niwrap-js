@@ -75,16 +75,14 @@ function volume_math_var_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["subvol"] ?? null) !== null || (params["repeat"] ?? false)) {
-        cargs.push(
-            "-var",
-            (params["name"] ?? null),
-            execution.inputFile((params["volume"] ?? null)),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-            (((params["repeat"] ?? false)) ? "-repeat" : "")
-        );
-    }
+    cargs.push(
+        "-var",
+        (params["name"] ?? null),
+        execution.inputFile((params["volume"] ?? null)),
+        "-subvolume",
+        (params["subvol"] ?? null),
+        "-repeat"
+    );
     return cargs;
 }
 
@@ -152,16 +150,14 @@ function volume_math_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["replace"] ?? null) !== null || (params["var"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-math",
-            (params["volume-out"] ?? null),
-            "-fixnan",
-            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
-            ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-math",
+        (params["volume-out"] ?? null),
+        "-fixnan",
+        String((params["replace"] ?? null)),
+        ...(params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat()
+    );
     cargs.push((params["expression"] ?? null));
     return cargs;
 }

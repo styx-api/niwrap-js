@@ -76,13 +76,11 @@ function volume_weighted_stats_weight_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["match-maps"] ?? false)) {
-        cargs.push(
-            "-weight-volume",
-            execution.inputFile((params["weight-volume"] ?? null)),
-            "-match-maps"
-        );
-    }
+    cargs.push(
+        "-weight-volume",
+        execution.inputFile((params["weight-volume"] ?? null)),
+        "-match-maps"
+    );
     return cargs;
 }
 
@@ -121,13 +119,11 @@ function volume_weighted_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["match-maps"] ?? false)) {
-        cargs.push(
-            "-roi",
-            execution.inputFile((params["roi-volume"] ?? null)),
-            "-match-maps"
-        );
-    }
+    cargs.push(
+        "-roi",
+        execution.inputFile((params["roi-volume"] ?? null)),
+        "-match-maps"
+    );
     return cargs;
 }
 

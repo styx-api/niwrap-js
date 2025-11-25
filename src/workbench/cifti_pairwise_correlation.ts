@@ -82,15 +82,13 @@ function cifti_pairwise_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fisher-z"] ?? false) || (params["override-mapping-check"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-cifti-pairwise-correlation",
-            (params["cifti-out"] ?? null),
-            (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
-            (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-pairwise-correlation",
+        (params["cifti-out"] ?? null),
+        "-fisher-z",
+        "-override-mapping-check"
+    );
     cargs.push(execution.inputFile((params["cifti-a"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-b"] ?? null)));
     return cargs;

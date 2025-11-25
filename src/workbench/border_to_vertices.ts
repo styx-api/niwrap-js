@@ -82,15 +82,13 @@ function border_to_vertices_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["name"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-border-to-vertices",
-            (params["metric-out"] ?? null),
-            "-border",
-            (params["name"] ?? null)
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-border-to-vertices",
+        (params["metric-out"] ?? null),
+        "-border",
+        (params["name"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["border-file"] ?? null)));
     return cargs;

@@ -95,12 +95,10 @@ function v_3d_tcat_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dTcat");
-    if ((params["rlt"] ?? null) !== null) {
-        cargs.push(
-            "-rlt",
-            [(params["rlt"] ?? null), execution.inputFile((params["in_files"] ?? null))].join('')
-        );
-    }
+    cargs.push(
+        "-rlt",
+        [(params["rlt"] ?? null), execution.inputFile((params["in_files"] ?? null))].join('')
+    );
     if ((params["out_file"] ?? null) !== null) {
         cargs.push(
             "-prefix",

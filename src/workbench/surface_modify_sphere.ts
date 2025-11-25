@@ -78,14 +78,12 @@ function surface_modify_sphere_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["recenter"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-surface-modify-sphere",
-            (params["sphere-out"] ?? null),
-            "-recenter"
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-modify-sphere",
+        (params["sphere-out"] ?? null),
+        "-recenter"
+    );
     cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
     cargs.push(String((params["radius"] ?? null)));
     return cargs;

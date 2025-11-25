@@ -117,14 +117,12 @@ function spec_file_modify_remove_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["recursive"] ?? false) || (params["suffix"] ?? false)) {
-        cargs.push(
-            "-remove",
-            (params["filename"] ?? null),
-            (((params["recursive"] ?? false)) ? "-recursive" : ""),
-            (((params["suffix"] ?? false)) ? "-suffix" : "")
-        );
-    }
+    cargs.push(
+        "-remove",
+        (params["filename"] ?? null),
+        "-recursive",
+        "-suffix"
+    );
     return cargs;
 }
 

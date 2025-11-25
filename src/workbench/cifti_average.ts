@@ -118,14 +118,12 @@ function cifti_average_cifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["weight"] ?? null) !== null) {
-        cargs.push(
-            "-cifti",
-            execution.inputFile((params["cifti-in"] ?? null)),
-            "-weight",
-            String((params["weight"] ?? null))
-        );
-    }
+    cargs.push(
+        "-cifti",
+        execution.inputFile((params["cifti-in"] ?? null)),
+        "-weight",
+        String((params["weight"] ?? null))
+    );
     return cargs;
 }
 
@@ -195,17 +193,15 @@ function cifti_average_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["exclude-outliers"] ?? null) !== null || (params["limit-GB"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-average",
-            (params["cifti-out"] ?? null),
-            ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-            "-mem-limit",
-            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
-            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-average",
+        (params["cifti-out"] ?? null),
+        ...cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution),
+        "-mem-limit",
+        String((params["limit-GB"] ?? null)),
+        ...(params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

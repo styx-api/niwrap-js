@@ -167,14 +167,12 @@ function surface_to_surface_3d_distance_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["vectors"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-surface-to-surface-3d-distance",
-            (params["dists-out"] ?? null),
-            ...surface_to_surface_3d_distance_vectors_cargs((params["vectors"] ?? null), execution)
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-to-surface-3d-distance",
+        (params["dists-out"] ?? null),
+        ...surface_to_surface_3d_distance_vectors_cargs((params["vectors"] ?? null), execution)
+    );
     cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
     cargs.push(execution.inputFile((params["surface-ref"] ?? null)));
     return cargs;

@@ -145,14 +145,12 @@ function cifti_create_label_left_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null) {
-        cargs.push(
-            "-left-label",
-            execution.inputFile((params["label"] ?? null)),
-            "-roi-left",
-            execution.inputFile((params["roi-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-left-label",
+        execution.inputFile((params["label"] ?? null)),
+        "-roi-left",
+        execution.inputFile((params["roi-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -195,14 +193,12 @@ function cifti_create_label_right_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null) {
-        cargs.push(
-            "-right-label",
-            execution.inputFile((params["label"] ?? null)),
-            "-roi-right",
-            execution.inputFile((params["roi-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-right-label",
+        execution.inputFile((params["label"] ?? null)),
+        "-roi-right",
+        execution.inputFile((params["roi-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -245,14 +241,12 @@ function cifti_create_label_cerebellum_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null) {
-        cargs.push(
-            "-cerebellum-label",
-            execution.inputFile((params["label"] ?? null)),
-            "-roi-cerebellum",
-            execution.inputFile((params["roi-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-cerebellum-label",
+        execution.inputFile((params["label"] ?? null)),
+        "-roi-cerebellum",
+        execution.inputFile((params["roi-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -298,15 +292,13 @@ function cifti_create_label_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null) {
-        cargs.push(
-            "-label",
-            (params["structure"] ?? null),
-            execution.inputFile((params["label"] ?? null)),
-            "-roi",
-            execution.inputFile((params["roi-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-label",
+        (params["structure"] ?? null),
+        execution.inputFile((params["label"] ?? null)),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -384,18 +376,16 @@ function cifti_create_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["volume"] ?? null) !== null || (params["left-label"] ?? null) !== null || (params["right-label"] ?? null) !== null || (params["cerebellum-label"] ?? null) !== null || (params["label"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-create-label",
-            (params["cifti-out"] ?? null),
-            ...(((params["volume"] ?? null) !== null) ? cifti_create_label_volume_cargs((params["volume"] ?? null), execution) : []),
-            ...(((params["left-label"] ?? null) !== null) ? cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution) : []),
-            ...(((params["right-label"] ?? null) !== null) ? cifti_create_label_right_label_cargs((params["right-label"] ?? null), execution) : []),
-            ...(((params["cerebellum-label"] ?? null) !== null) ? cifti_create_label_cerebellum_label_cargs((params["cerebellum-label"] ?? null), execution) : []),
-            ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_create_label_label_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-create-label",
+        (params["cifti-out"] ?? null),
+        ...cifti_create_label_volume_cargs((params["volume"] ?? null), execution),
+        ...cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution),
+        ...cifti_create_label_right_label_cargs((params["right-label"] ?? null), execution),
+        ...cifti_create_label_cerebellum_label_cargs((params["cerebellum-label"] ?? null), execution),
+        ...(params["label"] ?? null).map(s => cifti_create_label_label_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

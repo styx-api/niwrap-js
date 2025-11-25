@@ -433,34 +433,32 @@ function cifti_palette_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["column"] ?? null) !== null || (params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["interpolate"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["name"] ?? null) !== null || (params["thresholding"] ?? null) !== null || (params["type"] ?? null) !== null || (params["type"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-palette",
-            (params["cifti-out"] ?? null),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            ...(((params["pos-percent"] ?? null) !== null) ? cifti_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),
-            ...(((params["neg-percent"] ?? null) !== null) ? cifti_palette_neg_percent_cargs((params["neg-percent"] ?? null), execution) : []),
-            ...(((params["pos-user"] ?? null) !== null) ? cifti_palette_pos_user_cargs((params["pos-user"] ?? null), execution) : []),
-            ...(((params["neg-user"] ?? null) !== null) ? cifti_palette_neg_user_cargs((params["neg-user"] ?? null), execution) : []),
-            "-interpolate",
-            (((params["interpolate"] ?? null) !== null) ? ((params["interpolate"] ?? null) ? "true" : "false") : ""),
-            "-disp-pos",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-disp-neg",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-disp-zero",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-palette-name",
-            (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
-            ...(((params["thresholding"] ?? null) !== null) ? cifti_palette_thresholding_cargs((params["thresholding"] ?? null), execution) : []),
-            "-inversion",
-            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
-            "-normalization",
-            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-palette",
+        (params["cifti-out"] ?? null),
+        "-column",
+        (params["column"] ?? null),
+        ...cifti_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution),
+        ...cifti_palette_neg_percent_cargs((params["neg-percent"] ?? null), execution),
+        ...cifti_palette_pos_user_cargs((params["pos-user"] ?? null), execution),
+        ...cifti_palette_neg_user_cargs((params["neg-user"] ?? null), execution),
+        "-interpolate",
+        ((params["interpolate"] ?? null) ? "true" : "false"),
+        "-disp-pos",
+        ((params["display"] ?? null) ? "true" : "false"),
+        "-disp-neg",
+        ((params["display"] ?? null) ? "true" : "false"),
+        "-disp-zero",
+        ((params["display"] ?? null) ? "true" : "false"),
+        "-palette-name",
+        (params["name"] ?? null),
+        ...cifti_palette_thresholding_cargs((params["thresholding"] ?? null), execution),
+        "-inversion",
+        (params["type"] ?? null),
+        "-normalization",
+        (params["type"] ?? null)
+    );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["mode"] ?? null));
     return cargs;

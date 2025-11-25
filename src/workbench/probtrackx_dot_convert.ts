@@ -322,23 +322,21 @@ function probtrackx_dot_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["row-voxels"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["row-cifti"] ?? null) !== null || (params["col-voxels"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["col-cifti"] ?? null) !== null || (params["transpose"] ?? false) || (params["make-symmetric"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-probtrackx-dot-convert",
-            (params["cifti-out"] ?? null),
-            ...(((params["row-voxels"] ?? null) !== null) ? probtrackx_dot_convert_row_voxels_cargs((params["row-voxels"] ?? null), execution) : []),
-            "-row-surface",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            ...(((params["row-cifti"] ?? null) !== null) ? probtrackx_dot_convert_row_cifti_cargs((params["row-cifti"] ?? null), execution) : []),
-            ...(((params["col-voxels"] ?? null) !== null) ? probtrackx_dot_convert_col_voxels_cargs((params["col-voxels"] ?? null), execution) : []),
-            "-col-surface",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            ...(((params["col-cifti"] ?? null) !== null) ? probtrackx_dot_convert_col_cifti_cargs((params["col-cifti"] ?? null), execution) : []),
-            (((params["transpose"] ?? false)) ? "-transpose" : ""),
-            (((params["make-symmetric"] ?? false)) ? "-make-symmetric" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-probtrackx-dot-convert",
+        (params["cifti-out"] ?? null),
+        ...probtrackx_dot_convert_row_voxels_cargs((params["row-voxels"] ?? null), execution),
+        "-row-surface",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        ...probtrackx_dot_convert_row_cifti_cargs((params["row-cifti"] ?? null), execution),
+        ...probtrackx_dot_convert_col_voxels_cargs((params["col-voxels"] ?? null), execution),
+        "-col-surface",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        ...probtrackx_dot_convert_col_cifti_cargs((params["col-cifti"] ?? null), execution),
+        "-transpose",
+        "-make-symmetric"
+    );
     cargs.push((params["dot-file"] ?? null));
     return cargs;
 }

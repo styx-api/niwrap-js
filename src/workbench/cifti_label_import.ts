@@ -98,19 +98,17 @@ function cifti_label_import_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["discard-others"] ?? false) || (params["value"] ?? null) !== null || (params["drop-unused-labels"] ?? false) || (params["file"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-label-import",
-            (params["output"] ?? null),
-            (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
-            "-unlabeled-value",
-            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-            (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
-            "-hierarchy",
-            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-label-import",
+        (params["output"] ?? null),
+        "-discard-others",
+        "-unlabeled-value",
+        String((params["value"] ?? null)),
+        "-drop-unused-labels",
+        "-hierarchy",
+        (params["file"] ?? null)
+    );
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label-list-file"] ?? null));
     return cargs;

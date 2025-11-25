@@ -102,14 +102,12 @@ function cifti_smoothing_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-left-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-left-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-left-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -152,14 +150,12 @@ function cifti_smoothing_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-right-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-right-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-right-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -202,14 +198,12 @@ function cifti_smoothing_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-cerebellum-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-cerebellum-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-cerebellum-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -255,15 +249,13 @@ function cifti_smoothing_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-surface",
-            (params["structure"] ?? null),
-            execution.inputFile((params["surface"] ?? null)),
-            "-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-surface",
+        (params["structure"] ?? null),
+        execution.inputFile((params["surface"] ?? null)),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -367,23 +359,21 @@ function cifti_smoothing_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false) || (params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["roi-cifti"] ?? null) !== null || (params["fix-zeros-volume"] ?? false) || (params["fix-zeros-surface"] ?? false) || (params["merged-volume"] ?? false) || (params["surface"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-smoothing",
-            (params["cifti-out"] ?? null),
-            (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
-            ...(((params["left-surface"] ?? null) !== null) ? cifti_smoothing_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-            ...(((params["right-surface"] ?? null) !== null) ? cifti_smoothing_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_smoothing_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-            "-cifti-roi",
-            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
-            (((params["fix-zeros-volume"] ?? false)) ? "-fix-zeros-volume" : ""),
-            (((params["fix-zeros-surface"] ?? false)) ? "-fix-zeros-surface" : ""),
-            (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
-            ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_smoothing_surface_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-smoothing",
+        (params["cifti-out"] ?? null),
+        "-fwhm",
+        ...cifti_smoothing_left_surface_cargs((params["left-surface"] ?? null), execution),
+        ...cifti_smoothing_right_surface_cargs((params["right-surface"] ?? null), execution),
+        ...cifti_smoothing_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
+        "-cifti-roi",
+        execution.inputFile((params["roi-cifti"] ?? null)),
+        "-fix-zeros-volume",
+        "-fix-zeros-surface",
+        "-merged-volume",
+        ...(params["surface"] ?? null).map(s => cifti_smoothing_surface_cargs(s, execution)).flat()
+    );
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push(String((params["surface-kernel"] ?? null)));
     cargs.push(String((params["volume-kernel"] ?? null)));

@@ -107,14 +107,12 @@ function cifti_gradient_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-left-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-left-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-left-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -157,14 +155,12 @@ function cifti_gradient_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-right-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-right-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-right-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -207,14 +203,12 @@ function cifti_gradient_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-cerebellum-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-cerebellum-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-cerebellum-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -336,15 +330,13 @@ function cifti_gradient_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-surface",
-            (params["structure"] ?? null),
-            execution.inputFile((params["surface"] ?? null)),
-            "-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-surface",
+        (params["structure"] ?? null),
+        execution.inputFile((params["surface"] ?? null)),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -452,24 +444,22 @@ function cifti_gradient_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["surface-kernel"] ?? null) !== null || (params["volume-kernel"] ?? null) !== null || (params["presmooth-fwhm"] ?? false) || (params["average-output"] ?? false) || (params["vectors"] ?? null) !== null || (params["surface"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-gradient",
-            (params["cifti-out"] ?? null),
-            ...(((params["left-surface"] ?? null) !== null) ? cifti_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-            ...(((params["right-surface"] ?? null) !== null) ? cifti_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-            "-surface-presmooth",
-            (((params["surface-kernel"] ?? null) !== null) ? String((params["surface-kernel"] ?? null)) : ""),
-            "-volume-presmooth",
-            (((params["volume-kernel"] ?? null) !== null) ? String((params["volume-kernel"] ?? null)) : ""),
-            (((params["presmooth-fwhm"] ?? false)) ? "-presmooth-fwhm" : ""),
-            (((params["average-output"] ?? false)) ? "-average-output" : ""),
-            ...(((params["vectors"] ?? null) !== null) ? cifti_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
-            ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_gradient_surface_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-gradient",
+        (params["cifti-out"] ?? null),
+        ...cifti_gradient_left_surface_cargs((params["left-surface"] ?? null), execution),
+        ...cifti_gradient_right_surface_cargs((params["right-surface"] ?? null), execution),
+        ...cifti_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
+        "-surface-presmooth",
+        String((params["surface-kernel"] ?? null)),
+        "-volume-presmooth",
+        String((params["volume-kernel"] ?? null)),
+        "-presmooth-fwhm",
+        "-average-output",
+        ...cifti_gradient_vectors_cargs((params["vectors"] ?? null), execution),
+        ...(params["surface"] ?? null).map(s => cifti_gradient_surface_cargs(s, execution)).flat()
+    );
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push((params["direction"] ?? null));
     return cargs;

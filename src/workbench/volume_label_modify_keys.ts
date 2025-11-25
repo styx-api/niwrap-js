@@ -82,15 +82,13 @@ function volume_label_modify_keys_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["subvolume"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-label-modify-keys",
-            (params["volume-out"] ?? null),
-            "-subvolume",
-            (params["subvolume"] ?? null)
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-label-modify-keys",
+        (params["volume-out"] ?? null),
+        "-subvolume",
+        (params["subvolume"] ?? null)
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push((params["remap-file"] ?? null));
     return cargs;

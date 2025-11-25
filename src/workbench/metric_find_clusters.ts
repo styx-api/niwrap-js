@@ -134,26 +134,24 @@ function metric_find_clusters_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["less-than"] ?? false) || (params["roi-metric"] ?? null) !== null || (params["area-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["ratio"] ?? null) !== null || (params["distance"] ?? null) !== null || (params["startval"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-find-clusters",
-            (params["metric-out"] ?? null),
-            (((params["less-than"] ?? false)) ? "-less-than" : ""),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-size-ratio",
-            (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
-            "-distance",
-            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-            "-start",
-            (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-find-clusters",
+        (params["metric-out"] ?? null),
+        "-less-than",
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null)),
+        "-column",
+        (params["column"] ?? null),
+        "-size-ratio",
+        String((params["ratio"] ?? null)),
+        "-distance",
+        String((params["distance"] ?? null)),
+        "-start",
+        String((params["startval"] ?? null))
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push(String((params["value-threshold"] ?? null)));

@@ -77,13 +77,11 @@ function metric_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["reverse"] ?? false)) {
-        cargs.push(
-            "-up-to",
-            (params["last-column"] ?? null),
-            "-reverse"
-        );
-    }
+    cargs.push(
+        "-up-to",
+        (params["last-column"] ?? null),
+        "-reverse"
+    );
     return cargs;
 }
 
@@ -124,13 +122,11 @@ function metric_merge_column_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["up-to"] ?? null) !== null) {
-        cargs.push(
-            "-column",
-            (params["column"] ?? null),
-            ...metric_merge_up_to_cargs((params["up-to"] ?? null), execution)
-        );
-    }
+    cargs.push(
+        "-column",
+        (params["column"] ?? null),
+        ...metric_merge_up_to_cargs((params["up-to"] ?? null), execution)
+    );
     return cargs;
 }
 
@@ -171,13 +167,11 @@ function metric_merge_metric_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["column"] ?? null) !== null) {
-        cargs.push(
-            "-metric",
-            execution.inputFile((params["metric-in"] ?? null)),
-            ...(params["column"] ?? null).map(s => metric_merge_column_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "-metric",
+        execution.inputFile((params["metric-in"] ?? null)),
+        ...(params["column"] ?? null).map(s => metric_merge_column_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 
@@ -235,14 +229,12 @@ function metric_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["metric"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-merge",
-            (params["metric-out"] ?? null),
-            ...(params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-merge",
+        (params["metric-out"] ?? null),
+        ...(params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

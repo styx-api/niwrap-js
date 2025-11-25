@@ -276,15 +276,13 @@ function convert_matrix4_to_matrix2_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["distances"] ?? null) !== null || (params["individual-fibers"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-convert-matrix4-to-matrix2",
-            (params["counts-out"] ?? null),
-            ...(((params["distances"] ?? null) !== null) ? convert_matrix4_to_matrix2_distances_cargs((params["distances"] ?? null), execution) : []),
-            ...(((params["individual-fibers"] ?? null) !== null) ? convert_matrix4_to_matrix2_individual_fibers_cargs((params["individual-fibers"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-convert-matrix4-to-matrix2",
+        (params["counts-out"] ?? null),
+        ...convert_matrix4_to_matrix2_distances_cargs((params["distances"] ?? null), execution),
+        ...convert_matrix4_to_matrix2_individual_fibers_cargs((params["individual-fibers"] ?? null), execution)
+    );
     cargs.push((params["matrix4-wbsparse"] ?? null));
     return cargs;
 }

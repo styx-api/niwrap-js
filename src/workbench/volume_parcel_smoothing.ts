@@ -94,17 +94,15 @@ function volume_parcel_smoothing_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false) || (params["fix-zeros"] ?? false) || (params["subvol"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-parcel-smoothing",
-            (params["volume-out"] ?? null),
-            (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
-            (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-parcel-smoothing",
+        (params["volume-out"] ?? null),
+        "-fwhm",
+        "-fix-zeros",
+        "-subvolume",
+        (params["subvol"] ?? null)
+    );
     cargs.push(execution.inputFile((params["data-volume"] ?? null)));
     cargs.push(execution.inputFile((params["label-volume"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));

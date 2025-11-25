@@ -72,13 +72,11 @@ function volume_gradient_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false)) {
-        cargs.push(
-            "-presmooth",
-            String((params["kernel"] ?? null)),
-            "-fwhm"
-        );
-    }
+    cargs.push(
+        "-presmooth",
+        String((params["kernel"] ?? null)),
+        "-fwhm"
+    );
     return cargs;
 }
 
@@ -238,19 +236,17 @@ function volume_gradient_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["presmooth"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["vectors"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-gradient",
-            (params["volume-out"] ?? null),
-            ...(((params["presmooth"] ?? null) !== null) ? volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            ...(((params["vectors"] ?? null) !== null) ? volume_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-gradient",
+        (params["volume-out"] ?? null),
+        ...volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution),
+        "-roi",
+        execution.inputFile((params["roi-volume"] ?? null)),
+        ...volume_gradient_vectors_cargs((params["vectors"] ?? null), execution),
+        "-subvolume",
+        (params["subvol"] ?? null)
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }

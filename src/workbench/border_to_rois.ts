@@ -90,17 +90,15 @@ function border_to_rois_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["name"] ?? null) !== null || (params["inverse"] ?? false) || (params["include-border"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-border-to-rois",
-            (params["metric-out"] ?? null),
-            "-border",
-            (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
-            (((params["inverse"] ?? false)) ? "-inverse" : ""),
-            (((params["include-border"] ?? false)) ? "-include-border" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-border-to-rois",
+        (params["metric-out"] ?? null),
+        "-border",
+        (params["name"] ?? null),
+        "-inverse",
+        "-include-border"
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["border-file"] ?? null)));
     return cargs;

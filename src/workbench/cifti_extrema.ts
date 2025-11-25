@@ -203,30 +203,28 @@ function cifti_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["surface-kernel"] ?? null) !== null || (params["volume-kernel"] ?? null) !== null || (params["presmooth-fwhm"] ?? false) || (params["threshold"] ?? null) !== null || (params["merged-volume"] ?? false) || (params["sum-maps"] ?? false) || (params["consolidate-mode"] ?? false) || (params["only-maxima"] ?? false) || (params["only-minima"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-cifti-extrema",
-            (params["cifti-out"] ?? null),
-            "-left-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-            "-right-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-            "-cerebellum-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-            "-surface-presmooth",
-            (((params["surface-kernel"] ?? null) !== null) ? String((params["surface-kernel"] ?? null)) : ""),
-            "-volume-presmooth",
-            (((params["volume-kernel"] ?? null) !== null) ? String((params["volume-kernel"] ?? null)) : ""),
-            (((params["presmooth-fwhm"] ?? false)) ? "-presmooth-fwhm" : ""),
-            ...(((params["threshold"] ?? null) !== null) ? cifti_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
-            (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
-            (((params["sum-maps"] ?? false)) ? "-sum-maps" : ""),
-            (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
-            (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
-            (((params["only-minima"] ?? false)) ? "-only-minima" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-extrema",
+        (params["cifti-out"] ?? null),
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-surface-presmooth",
+        String((params["surface-kernel"] ?? null)),
+        "-volume-presmooth",
+        String((params["volume-kernel"] ?? null)),
+        "-presmooth-fwhm",
+        ...cifti_extrema_threshold_cargs((params["threshold"] ?? null), execution),
+        "-merged-volume",
+        "-sum-maps",
+        "-consolidate-mode",
+        "-only-maxima",
+        "-only-minima"
+    );
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push(String((params["surface-distance"] ?? null)));
     cargs.push(String((params["volume-distance"] ?? null)));

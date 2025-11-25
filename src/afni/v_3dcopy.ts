@@ -87,12 +87,10 @@ function v_3dcopy_cargs(
     if ((params["denote"] ?? false)) {
         cargs.push("-denote");
     }
-    if ((params["view"] ?? null) !== null) {
-        cargs.push(
-            "+",
-            [(params["old_prefix"] ?? null), (params["view"] ?? null)].join('')
-        );
-    }
+    cargs.push(
+        "+",
+        [(params["old_prefix"] ?? null), (params["view"] ?? null)].join('')
+    );
     cargs.push((params["new_prefix"] ?? null));
     return cargs;
 }

@@ -98,20 +98,18 @@ function surface_geodesic_distance_all_to_all_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null || (params["limit-mm"] ?? null) !== null || (params["area-metric"] ?? null) !== null || (params["naive"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-surface-geodesic-distance-all-to-all",
-            (params["cifti-out"] ?? null),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-limit",
-            (((params["limit-mm"] ?? null) !== null) ? String((params["limit-mm"] ?? null)) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-            (((params["naive"] ?? false)) ? "-naive" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-geodesic-distance-all-to-all",
+        (params["cifti-out"] ?? null),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-limit",
+        String((params["limit-mm"] ?? null)),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null)),
+        "-naive"
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }

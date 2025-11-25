@@ -91,14 +91,12 @@ function cifti_dilate_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-left-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-left-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-left-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -141,14 +139,12 @@ function cifti_dilate_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-right-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-right-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-right-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -191,14 +187,12 @@ function cifti_dilate_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-cerebellum-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-cerebellum-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-cerebellum-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -294,21 +288,19 @@ function cifti_dilate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["roi-cifti"] ?? null) !== null || (params["nearest"] ?? false) || (params["merged-volume"] ?? false) || (params["legacy-mode"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-cifti-dilate",
-            (params["cifti-out"] ?? null),
-            ...(((params["left-surface"] ?? null) !== null) ? cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-            ...(((params["right-surface"] ?? null) !== null) ? cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-            "-bad-brainordinate-roi",
-            (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
-            (((params["nearest"] ?? false)) ? "-nearest" : ""),
-            (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
-            (((params["legacy-mode"] ?? false)) ? "-legacy-mode" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-dilate",
+        (params["cifti-out"] ?? null),
+        ...cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution),
+        ...cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution),
+        ...cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
+        "-bad-brainordinate-roi",
+        execution.inputFile((params["roi-cifti"] ?? null)),
+        "-nearest",
+        "-merged-volume",
+        "-legacy-mode"
+    );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push(String((params["surface-distance"] ?? null)));

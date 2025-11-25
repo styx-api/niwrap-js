@@ -82,13 +82,11 @@ function convert_warpfield_from_world_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["absolute"] ?? false)) {
-        cargs.push(
-            "-from-world",
-            (params["input"] ?? null),
-            "-absolute"
-        );
-    }
+    cargs.push(
+        "-from-world",
+        (params["input"] ?? null),
+        "-absolute"
+    );
     return cargs;
 }
 
@@ -130,14 +128,12 @@ function convert_warpfield_from_fnirt_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["absolute"] ?? false)) {
-        cargs.push(
-            "-from-fnirt",
-            (params["input"] ?? null),
-            (params["source-volume"] ?? null),
-            "-absolute"
-        );
-    }
+    cargs.push(
+        "-from-fnirt",
+        (params["input"] ?? null),
+        (params["source-volume"] ?? null),
+        "-absolute"
+    );
     return cargs;
 }
 

@@ -207,24 +207,22 @@ function create_signed_distance_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-out"] ?? null) !== null || (params["value"] ?? null) !== null || (params["dist"] ?? null) !== null || (params["dist"] ?? null) !== null || (params["num"] ?? null) !== null || (params["method"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-create-signed-distance-volume",
-            (params["outvol"] ?? null),
-            ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : []),
-            "-fill-value",
-            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-            "-exact-limit",
-            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
-            "-approx-limit",
-            (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
-            "-approx-neighborhood",
-            (((params["num"] ?? null) !== null) ? String((params["num"] ?? null)) : ""),
-            "-winding",
-            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-create-signed-distance-volume",
+        (params["outvol"] ?? null),
+        ...create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution),
+        "-fill-value",
+        String((params["value"] ?? null)),
+        "-exact-limit",
+        String((params["dist"] ?? null)),
+        "-approx-limit",
+        String((params["dist"] ?? null)),
+        "-approx-neighborhood",
+        String((params["num"] ?? null)),
+        "-winding",
+        (params["method"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push((params["refspace"] ?? null));
     return cargs;

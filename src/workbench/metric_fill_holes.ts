@@ -82,15 +82,13 @@ function metric_fill_holes_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-fill-holes",
-            (params["metric-out"] ?? null),
-            "-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-fill-holes",
+        (params["metric-out"] ?? null),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;

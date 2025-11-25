@@ -233,14 +233,12 @@ function surface_average_surf_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["weight"] ?? null) !== null) {
-        cargs.push(
-            "-surf",
-            execution.inputFile((params["surface"] ?? null)),
-            "-weight",
-            String((params["weight"] ?? null))
-        );
-    }
+    cargs.push(
+        "-surf",
+        execution.inputFile((params["surface"] ?? null)),
+        "-weight",
+        String((params["weight"] ?? null))
+    );
     return cargs;
 }
 
@@ -316,16 +314,14 @@ function surface_average_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["stddev"] ?? null) !== null || (params["uncertainty"] ?? null) !== null || (params["surf"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-surface-average",
-            (params["surface-out"] ?? null),
-            ...(((params["stddev"] ?? null) !== null) ? surface_average_stddev_cargs((params["stddev"] ?? null), execution) : []),
-            ...(((params["uncertainty"] ?? null) !== null) ? surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution) : []),
-            ...(((params["surf"] ?? null) !== null) ? (params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-average",
+        (params["surface-out"] ?? null),
+        ...surface_average_stddev_cargs((params["stddev"] ?? null), execution),
+        ...surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution),
+        ...(params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

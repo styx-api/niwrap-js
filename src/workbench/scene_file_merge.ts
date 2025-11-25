@@ -77,13 +77,11 @@ function scene_file_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["reverse"] ?? false)) {
-        cargs.push(
-            "-up-to",
-            (params["last-column"] ?? null),
-            "-reverse"
-        );
-    }
+    cargs.push(
+        "-up-to",
+        (params["last-column"] ?? null),
+        "-reverse"
+    );
     return cargs;
 }
 
@@ -124,13 +122,11 @@ function scene_file_merge_scene_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["up-to"] ?? null) !== null) {
-        cargs.push(
-            "-scene",
-            (params["scene"] ?? null),
-            ...scene_file_merge_up_to_cargs((params["up-to"] ?? null), execution)
-        );
-    }
+    cargs.push(
+        "-scene",
+        (params["scene"] ?? null),
+        ...scene_file_merge_up_to_cargs((params["up-to"] ?? null), execution)
+    );
     return cargs;
 }
 
@@ -171,13 +167,11 @@ function scene_file_merge_scene_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["scene"] ?? null) !== null) {
-        cargs.push(
-            "-scene-file",
-            (params["scene-file"] ?? null),
-            ...(params["scene"] ?? null).map(s => scene_file_merge_scene_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "-scene-file",
+        (params["scene-file"] ?? null),
+        ...(params["scene"] ?? null).map(s => scene_file_merge_scene_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

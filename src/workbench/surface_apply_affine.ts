@@ -131,14 +131,12 @@ function surface_apply_affine_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["flirt"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-surface-apply-affine",
-            (params["out-surf"] ?? null),
-            ...surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution)
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-apply-affine",
+        (params["out-surf"] ?? null),
+        ...surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution)
+    );
     cargs.push(execution.inputFile((params["in-surf"] ?? null)));
     cargs.push((params["affine"] ?? null));
     return cargs;

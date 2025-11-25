@@ -130,26 +130,24 @@ function metric_dilate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["nearest"] ?? false) || (params["linear"] ?? false) || (params["exponent"] ?? null) !== null || (params["area-metric"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-metric-dilate",
-            (params["metric-out"] ?? null),
-            "-bad-vertex-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-data-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            (((params["nearest"] ?? false)) ? "-nearest" : ""),
-            (((params["linear"] ?? false)) ? "-linear" : ""),
-            "-exponent",
-            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-dilate",
+        (params["metric-out"] ?? null),
+        "-bad-vertex-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-data-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-column",
+        (params["column"] ?? null),
+        "-nearest",
+        "-linear",
+        "-exponent",
+        String((params["exponent"] ?? null)),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null)),
+        "-legacy-cutoff"
+    );
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));

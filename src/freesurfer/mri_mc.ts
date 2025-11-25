@@ -83,9 +83,7 @@ function mri_mc_cargs(
     cargs.push("mri_mc");
     cargs.push(execution.inputFile((params["input_volume"] ?? null)));
     cargs.push(String((params["label_value"] ?? null)));
-    if ((params["connectivity"] ?? null) !== null) {
-        cargs.push([(params["output_surface"] ?? null), String((params["connectivity"] ?? null))].join(''));
-    }
+    cargs.push([(params["output_surface"] ?? null), String((params["connectivity"] ?? null))].join(''));
     return cargs;
 }
 

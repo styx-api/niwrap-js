@@ -79,13 +79,11 @@ function metric_extrema_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false)) {
-        cargs.push(
-            "-presmooth",
-            String((params["kernel"] ?? null)),
-            "-fwhm"
-        );
-    }
+    cargs.push(
+        "-presmooth",
+        String((params["kernel"] ?? null)),
+        "-fwhm"
+    );
     return cargs;
 }
 
@@ -226,23 +224,21 @@ function metric_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["presmooth"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["threshold"] ?? null) !== null || (params["sum-columns"] ?? false) || (params["consolidate-mode"] ?? false) || (params["only-maxima"] ?? false) || (params["only-minima"] ?? false) || (params["column"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-extrema",
-            (params["metric-out"] ?? null),
-            ...(((params["presmooth"] ?? null) !== null) ? metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            ...(((params["threshold"] ?? null) !== null) ? metric_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
-            (((params["sum-columns"] ?? false)) ? "-sum-columns" : ""),
-            (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
-            (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
-            (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-extrema",
+        (params["metric-out"] ?? null),
+        ...metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        ...metric_extrema_threshold_cargs((params["threshold"] ?? null), execution),
+        "-sum-columns",
+        "-consolidate-mode",
+        "-only-maxima",
+        "-only-minima",
+        "-column",
+        (params["column"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));

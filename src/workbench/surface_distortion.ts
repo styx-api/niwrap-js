@@ -74,13 +74,11 @@ function surface_distortion_smooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false)) {
-        cargs.push(
-            "-smooth",
-            String((params["sigma"] ?? null)),
-            "-fwhm"
-        );
-    }
+    cargs.push(
+        "-smooth",
+        String((params["sigma"] ?? null)),
+        "-fwhm"
+    );
     return cargs;
 }
 
@@ -208,19 +206,17 @@ function surface_distortion_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["smooth"] ?? null) !== null || (params["match-surface-area"] ?? null) !== null || (params["caret5-method"] ?? false) || (params["edge-method"] ?? false) || (params["log2"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-surface-distortion",
-            (params["metric-out"] ?? null),
-            ...(((params["smooth"] ?? null) !== null) ? surface_distortion_smooth_cargs((params["smooth"] ?? null), execution) : []),
-            ...(((params["match-surface-area"] ?? null) !== null) ? surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution) : []),
-            (((params["caret5-method"] ?? false)) ? "-caret5-method" : ""),
-            (((params["edge-method"] ?? false)) ? "-edge-method" : ""),
-            "-local-affine-method",
-            (((params["log2"] ?? null) !== null) ? "-log2" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-distortion",
+        (params["metric-out"] ?? null),
+        ...surface_distortion_smooth_cargs((params["smooth"] ?? null), execution),
+        ...surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution),
+        "-caret5-method",
+        "-edge-method",
+        "-local-affine-method",
+        "-log2"
+    );
     cargs.push(execution.inputFile((params["surface-reference"] ?? null)));
     cargs.push(execution.inputFile((params["surface-distorted"] ?? null)));
     return cargs;

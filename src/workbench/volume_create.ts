@@ -267,15 +267,13 @@ function volume_create_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["plumb"] ?? null) !== null || (params["sform"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-create",
-            (params["volume-out"] ?? null),
-            ...(((params["plumb"] ?? null) !== null) ? volume_create_plumb_cargs((params["plumb"] ?? null), execution) : []),
-            ...(((params["sform"] ?? null) !== null) ? volume_create_sform_cargs((params["sform"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-create",
+        (params["volume-out"] ?? null),
+        ...volume_create_plumb_cargs((params["plumb"] ?? null), execution),
+        ...volume_create_sform_cargs((params["sform"] ?? null), execution)
+    );
     cargs.push(String((params["i-dim"] ?? null)));
     cargs.push(String((params["j-dim"] ?? null)));
     cargs.push(String((params["k-dim"] ?? null)));

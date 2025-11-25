@@ -92,16 +92,14 @@ function file_convert_border_version_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["surface"] ?? null) !== null) {
-        cargs.push(
-            "-border-version-convert",
-            execution.inputFile((params["border-in"] ?? null)),
-            String((params["out-version"] ?? null)),
-            (params["border-out"] ?? null),
-            "-surface",
-            execution.inputFile((params["surface"] ?? null))
-        );
-    }
+    cargs.push(
+        "-border-version-convert",
+        execution.inputFile((params["border-in"] ?? null)),
+        String((params["out-version"] ?? null)),
+        (params["border-out"] ?? null),
+        "-surface",
+        execution.inputFile((params["surface"] ?? null))
+    );
     return cargs;
 }
 

@@ -78,13 +78,11 @@ function volume_extrema_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false)) {
-        cargs.push(
-            "-presmooth",
-            String((params["kernel"] ?? null)),
-            "-fwhm"
-        );
-    }
+    cargs.push(
+        "-presmooth",
+        String((params["kernel"] ?? null)),
+        "-fwhm"
+    );
     return cargs;
 }
 
@@ -222,23 +220,21 @@ function volume_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["presmooth"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["threshold"] ?? null) !== null || (params["sum-subvols"] ?? false) || (params["consolidate-mode"] ?? false) || (params["only-maxima"] ?? false) || (params["only-minima"] ?? false) || (params["subvolume"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-extrema",
-            (params["volume-out"] ?? null),
-            ...(((params["presmooth"] ?? null) !== null) ? volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            ...(((params["threshold"] ?? null) !== null) ? volume_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
-            (((params["sum-subvols"] ?? false)) ? "-sum-subvols" : ""),
-            (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
-            (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
-            (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
-            "-subvolume",
-            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-extrema",
+        (params["volume-out"] ?? null),
+        ...volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution),
+        "-roi",
+        execution.inputFile((params["roi-volume"] ?? null)),
+        ...volume_extrema_threshold_cargs((params["threshold"] ?? null), execution),
+        "-sum-subvols",
+        "-consolidate-mode",
+        "-only-maxima",
+        "-only-minima",
+        "-subvolume",
+        (params["subvolume"] ?? null)
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
     return cargs;

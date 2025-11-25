@@ -81,17 +81,15 @@ function metric_to_volume_mapping_ribbon_constrained_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["subdiv-num"] ?? null) !== null || (params["greedy"] ?? false) || (params["thick-columns"] ?? false)) {
-        cargs.push(
-            "-ribbon-constrained",
-            execution.inputFile((params["inner-surf"] ?? null)),
-            execution.inputFile((params["outer-surf"] ?? null)),
-            "-voxel-subdiv",
-            (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
-            (((params["greedy"] ?? false)) ? "-greedy" : ""),
-            (((params["thick-columns"] ?? false)) ? "-thick-columns" : "")
-        );
-    }
+    cargs.push(
+        "-ribbon-constrained",
+        execution.inputFile((params["inner-surf"] ?? null)),
+        execution.inputFile((params["outer-surf"] ?? null)),
+        "-voxel-subdiv",
+        String((params["subdiv-num"] ?? null)),
+        "-greedy",
+        "-thick-columns"
+    );
     return cargs;
 }
 
@@ -165,16 +163,14 @@ function metric_to_volume_mapping_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["distance"] ?? null) !== null || (params["ribbon-constrained"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-to-volume-mapping",
-            (params["volume-out"] ?? null),
-            "-nearest-vertex",
-            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-            ...(((params["ribbon-constrained"] ?? null) !== null) ? metric_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-to-volume-mapping",
+        (params["volume-out"] ?? null),
+        "-nearest-vertex",
+        String((params["distance"] ?? null)),
+        ...metric_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution)
+    );
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["volume-space"] ?? null)));

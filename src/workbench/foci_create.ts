@@ -128,14 +128,12 @@ function foci_create_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["class"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-foci-create",
-            (params["output"] ?? null),
-            ...(params["class"] ?? null).map(s => foci_create_class_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-foci-create",
+        (params["output"] ?? null),
+        ...(params["class"] ?? null).map(s => foci_create_class_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

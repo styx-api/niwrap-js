@@ -82,15 +82,13 @@ function label_modify_keys_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["column"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-label-modify-keys",
-            (params["label-out"] ?? null),
-            "-column",
-            (params["column"] ?? null)
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-label-modify-keys",
+        (params["label-out"] ?? null),
+        "-column",
+        (params["column"] ?? null)
+    );
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["remap-file"] ?? null));
     return cargs;

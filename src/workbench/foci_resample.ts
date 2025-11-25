@@ -249,18 +249,16 @@ function foci_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["left-surfaces"] ?? null) !== null || (params["right-surfaces"] ?? null) !== null || (params["cerebellum-surfaces"] ?? null) !== null || (params["discard-distance-from-surface"] ?? false) || (params["restore-xyz"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-foci-resample",
-            (params["foci-out"] ?? null),
-            ...(((params["left-surfaces"] ?? null) !== null) ? foci_resample_left_surfaces_cargs((params["left-surfaces"] ?? null), execution) : []),
-            ...(((params["right-surfaces"] ?? null) !== null) ? foci_resample_right_surfaces_cargs((params["right-surfaces"] ?? null), execution) : []),
-            ...(((params["cerebellum-surfaces"] ?? null) !== null) ? foci_resample_cerebellum_surfaces_cargs((params["cerebellum-surfaces"] ?? null), execution) : []),
-            (((params["discard-distance-from-surface"] ?? false)) ? "-discard-distance-from-surface" : ""),
-            (((params["restore-xyz"] ?? false)) ? "-restore-xyz" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-foci-resample",
+        (params["foci-out"] ?? null),
+        ...foci_resample_left_surfaces_cargs((params["left-surfaces"] ?? null), execution),
+        ...foci_resample_right_surfaces_cargs((params["right-surfaces"] ?? null), execution),
+        ...foci_resample_cerebellum_surfaces_cargs((params["cerebellum-surfaces"] ?? null), execution),
+        "-discard-distance-from-surface",
+        "-restore-xyz"
+    );
     cargs.push(execution.inputFile((params["foci-in"] ?? null)));
     return cargs;
 }

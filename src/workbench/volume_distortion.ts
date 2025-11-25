@@ -86,17 +86,15 @@ function volume_distortion_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["source-volume"] ?? null) !== null || (params["circular"] ?? false) || (params["log2"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-volume-distortion",
-            (params["volume-out"] ?? null),
-            "-fnirt",
-            (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
-            (((params["circular"] ?? false)) ? "-circular" : ""),
-            (((params["log2"] ?? false)) ? "-log2" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-distortion",
+        (params["volume-out"] ?? null),
+        "-fnirt",
+        (params["source-volume"] ?? null),
+        "-circular",
+        "-log2"
+    );
     cargs.push((params["warpfield"] ?? null));
     return cargs;
 }

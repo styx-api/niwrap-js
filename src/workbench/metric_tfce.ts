@@ -75,13 +75,11 @@ function metric_tfce_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false)) {
-        cargs.push(
-            "-presmooth",
-            String((params["kernel"] ?? null)),
-            "-fwhm"
-        );
-    }
+    cargs.push(
+        "-presmooth",
+        String((params["kernel"] ?? null)),
+        "-fwhm"
+    );
     return cargs;
 }
 
@@ -214,21 +212,19 @@ function metric_tfce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["presmooth"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["parameters"] ?? null) !== null || (params["column"] ?? null) !== null || (params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-tfce",
-            (params["metric-out"] ?? null),
-            ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-tfce",
+        (params["metric-out"] ?? null),
+        ...metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        ...metric_tfce_parameters_cargs((params["parameters"] ?? null), execution),
+        "-column",
+        (params["column"] ?? null),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;

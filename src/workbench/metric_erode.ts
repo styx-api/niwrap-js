@@ -102,19 +102,17 @@ function metric_erode_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-erode",
-            (params["metric-out"] ?? null),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-erode",
+        (params["metric-out"] ?? null),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-column",
+        (params["column"] ?? null),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));

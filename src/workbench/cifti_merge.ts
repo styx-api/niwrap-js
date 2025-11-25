@@ -79,13 +79,11 @@ function cifti_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["reverse"] ?? false)) {
-        cargs.push(
-            "-up-to",
-            (params["last-index"] ?? null),
-            "-reverse"
-        );
-    }
+    cargs.push(
+        "-up-to",
+        (params["last-index"] ?? null),
+        "-reverse"
+    );
     return cargs;
 }
 
@@ -126,13 +124,11 @@ function cifti_merge_index_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["up-to"] ?? null) !== null) {
-        cargs.push(
-            "-index",
-            (params["index"] ?? null),
-            ...cifti_merge_up_to_cargs((params["up-to"] ?? null), execution)
-        );
-    }
+    cargs.push(
+        "-index",
+        (params["index"] ?? null),
+        ...cifti_merge_up_to_cargs((params["up-to"] ?? null), execution)
+    );
     return cargs;
 }
 
@@ -173,13 +169,11 @@ function cifti_merge_cifti_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["index"] ?? null) !== null) {
-        cargs.push(
-            "-cifti",
-            execution.inputFile((params["cifti-in"] ?? null)),
-            ...(params["index"] ?? null).map(s => cifti_merge_index_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "-cifti",
+        execution.inputFile((params["cifti-in"] ?? null)),
+        ...(params["index"] ?? null).map(s => cifti_merge_index_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 
@@ -251,18 +245,16 @@ function cifti_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["direction"] ?? null) !== null || (params["limit-GB"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-merge",
-            (params["cifti-out"] ?? null),
-            "-direction",
-            (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
-            "-mem-limit",
-            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
-            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-merge",
+        (params["cifti-out"] ?? null),
+        "-direction",
+        (params["direction"] ?? null),
+        "-mem-limit",
+        String((params["limit-GB"] ?? null)),
+        ...(params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

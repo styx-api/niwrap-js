@@ -138,9 +138,7 @@ function n4_bias_field_correction_convergence_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["convergence_threshold"] ?? null) !== null) {
-        cargs.push(["[", (params["convergence"] ?? null).map(String).join("x"), ",", String((params["convergence_threshold"] ?? null)), "]"].join(''));
-    }
+    cargs.push(["[", (params["convergence"] ?? null).map(String).join("x"), ",", String((params["convergence_threshold"] ?? null)), "]"].join(''));
     return cargs;
 }
 
@@ -179,9 +177,7 @@ function n4_bias_field_correction_bspline_fitting_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["spline_order"] ?? null) !== null) {
-        cargs.push(["[", (params["spline_distance"] ?? null).map(String).join("x"), ",", String((params["spline_order"] ?? null)), "]"].join(''));
-    }
+    cargs.push(["[", (params["spline_distance"] ?? null).map(String).join("x"), ",", String((params["spline_order"] ?? null)), "]"].join(''));
     return cargs;
 }
 
@@ -363,9 +359,7 @@ function n4_bias_field_correction_corrected_output_noise_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["biasFile"] ?? null) !== null) {
-        cargs.push(["[", (params["correctedOutputFileName"] ?? null), ",", (params["biasFile"] ?? null), "]"].join(''));
-    }
+    cargs.push(["[", (params["correctedOutputFileName"] ?? null), ",", (params["biasFile"] ?? null), "]"].join(''));
     return cargs;
 }
 

@@ -77,14 +77,12 @@ function cifti_math_select_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["repeat"] ?? false)) {
-        cargs.push(
-            "-select",
-            String((params["dim"] ?? null)),
-            (params["index"] ?? null),
-            "-repeat"
-        );
-    }
+    cargs.push(
+        "-select",
+        String((params["dim"] ?? null)),
+        (params["index"] ?? null),
+        "-repeat"
+    );
     return cargs;
 }
 
@@ -128,14 +126,12 @@ function cifti_math_var_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["select"] ?? null) !== null) {
-        cargs.push(
-            "-var",
-            (params["name"] ?? null),
-            execution.inputFile((params["cifti"] ?? null)),
-            ...(params["select"] ?? null).map(s => cifti_math_select_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "-var",
+        (params["name"] ?? null),
+        execution.inputFile((params["cifti"] ?? null)),
+        ...(params["select"] ?? null).map(s => cifti_math_select_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 
@@ -206,17 +202,15 @@ function cifti_math_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["replace"] ?? null) !== null || (params["override-mapping-check"] ?? false) || (params["var"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-math",
-            (params["cifti-out"] ?? null),
-            "-fixnan",
-            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
-            (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : ""),
-            ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-math",
+        (params["cifti-out"] ?? null),
+        "-fixnan",
+        String((params["replace"] ?? null)),
+        "-override-mapping-check",
+        ...(params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat()
+    );
     cargs.push((params["expression"] ?? null));
     return cargs;
 }

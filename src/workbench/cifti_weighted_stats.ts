@@ -172,13 +172,11 @@ function cifti_weighted_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["match-maps"] ?? false)) {
-        cargs.push(
-            "-roi",
-            execution.inputFile((params["roi-cifti"] ?? null)),
-            "-match-maps"
-        );
-    }
+    cargs.push(
+        "-roi",
+        execution.inputFile((params["roi-cifti"] ?? null)),
+        "-match-maps"
+    );
     return cargs;
 }
 

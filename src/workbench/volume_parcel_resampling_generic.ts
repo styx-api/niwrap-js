@@ -98,17 +98,15 @@ function volume_parcel_resampling_generic_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false) || (params["fix-zeros"] ?? false) || (params["subvol"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-parcel-resampling-generic",
-            (params["volume-out"] ?? null),
-            (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
-            (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-parcel-resampling-generic",
+        (params["volume-out"] ?? null),
+        "-fwhm",
+        "-fix-zeros",
+        "-subvolume",
+        (params["subvol"] ?? null)
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(execution.inputFile((params["cur-parcels"] ?? null)));
     cargs.push(execution.inputFile((params["new-parcels"] ?? null)));

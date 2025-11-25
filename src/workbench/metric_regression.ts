@@ -77,14 +77,12 @@ function metric_regression_remove_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["column"] ?? null) !== null) {
-        cargs.push(
-            "-remove",
-            execution.inputFile((params["metric"] ?? null)),
-            "-remove-column",
-            (params["column"] ?? null)
-        );
-    }
+    cargs.push(
+        "-remove",
+        execution.inputFile((params["metric"] ?? null)),
+        "-remove-column",
+        (params["column"] ?? null)
+    );
     return cargs;
 }
 
@@ -127,14 +125,12 @@ function metric_regression_keep_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["column"] ?? null) !== null) {
-        cargs.push(
-            "-keep",
-            execution.inputFile((params["metric"] ?? null)),
-            "-keep-column",
-            (params["column"] ?? null)
-        );
-    }
+    cargs.push(
+        "-keep",
+        execution.inputFile((params["metric"] ?? null)),
+        "-keep-column",
+        (params["column"] ?? null)
+    );
     return cargs;
 }
 
@@ -214,19 +210,17 @@ function metric_regression_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["remove"] ?? null) !== null || (params["keep"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-regression",
-            (params["metric-out"] ?? null),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            ...(((params["remove"] ?? null) !== null) ? (params["remove"] ?? null).map(s => metric_regression_remove_cargs(s, execution)).flat() : []),
-            ...(((params["keep"] ?? null) !== null) ? (params["keep"] ?? null).map(s => metric_regression_keep_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-regression",
+        (params["metric-out"] ?? null),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-column",
+        (params["column"] ?? null),
+        ...(params["remove"] ?? null).map(s => metric_regression_remove_cargs(s, execution)).flat(),
+        ...(params["keep"] ?? null).map(s => metric_regression_keep_cargs(s, execution)).flat()
+    );
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }

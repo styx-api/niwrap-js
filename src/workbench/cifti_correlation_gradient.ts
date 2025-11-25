@@ -103,14 +103,12 @@ function cifti_correlation_gradient_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-left-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-left-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-left-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -153,14 +151,12 @@ function cifti_correlation_gradient_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-right-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-right-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-right-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -203,14 +199,12 @@ function cifti_correlation_gradient_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "-cerebellum-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-cerebellum-corrected-areas",
-            execution.inputFile((params["area-metric"] ?? null))
-        );
-    }
+    cargs.push(
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-cerebellum-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     return cargs;
 }
 
@@ -382,31 +376,29 @@ function cifti_correlation_gradient_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["surface-kernel"] ?? null) !== null || (params["volume-kernel"] ?? null) !== null || (params["presmooth-fwhm"] ?? false) || (params["undo-fisher-z"] ?? false) || (params["fisher-z"] ?? false) || (params["distance"] ?? null) !== null || (params["distance"] ?? null) !== null || (params["covariance"] ?? false) || (params["limit-GB"] ?? null) !== null || (params["double-correlation"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-correlation-gradient",
-            (params["cifti-out"] ?? null),
-            ...(((params["left-surface"] ?? null) !== null) ? cifti_correlation_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-            ...(((params["right-surface"] ?? null) !== null) ? cifti_correlation_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_correlation_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-            "-surface-presmooth",
-            (((params["surface-kernel"] ?? null) !== null) ? String((params["surface-kernel"] ?? null)) : ""),
-            "-volume-presmooth",
-            (((params["volume-kernel"] ?? null) !== null) ? String((params["volume-kernel"] ?? null)) : ""),
-            (((params["presmooth-fwhm"] ?? false)) ? "-presmooth-fwhm" : ""),
-            (((params["undo-fisher-z"] ?? false)) ? "-undo-fisher-z" : ""),
-            (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
-            "-surface-exclude",
-            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-            "-volume-exclude",
-            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-            (((params["covariance"] ?? false)) ? "-covariance" : ""),
-            "-mem-limit",
-            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
-            ...(((params["double-correlation"] ?? null) !== null) ? cifti_correlation_gradient_double_correlation_cargs((params["double-correlation"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-correlation-gradient",
+        (params["cifti-out"] ?? null),
+        ...cifti_correlation_gradient_left_surface_cargs((params["left-surface"] ?? null), execution),
+        ...cifti_correlation_gradient_right_surface_cargs((params["right-surface"] ?? null), execution),
+        ...cifti_correlation_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
+        "-surface-presmooth",
+        String((params["surface-kernel"] ?? null)),
+        "-volume-presmooth",
+        String((params["volume-kernel"] ?? null)),
+        "-presmooth-fwhm",
+        "-undo-fisher-z",
+        "-fisher-z",
+        "-surface-exclude",
+        String((params["distance"] ?? null)),
+        "-volume-exclude",
+        String((params["distance"] ?? null)),
+        "-covariance",
+        "-mem-limit",
+        String((params["limit-GB"] ?? null)),
+        ...cifti_correlation_gradient_double_correlation_cargs((params["double-correlation"] ?? null), execution)
+    );
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     return cargs;
 }

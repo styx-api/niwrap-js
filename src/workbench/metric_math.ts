@@ -75,16 +75,14 @@ function metric_math_var_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["column"] ?? null) !== null || (params["repeat"] ?? false)) {
-        cargs.push(
-            "-var",
-            (params["name"] ?? null),
-            execution.inputFile((params["metric"] ?? null)),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            (((params["repeat"] ?? false)) ? "-repeat" : "")
-        );
-    }
+    cargs.push(
+        "-var",
+        (params["name"] ?? null),
+        execution.inputFile((params["metric"] ?? null)),
+        "-column",
+        (params["column"] ?? null),
+        "-repeat"
+    );
     return cargs;
 }
 
@@ -152,16 +150,14 @@ function metric_math_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["replace"] ?? null) !== null || (params["var"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-math",
-            (params["metric-out"] ?? null),
-            "-fixnan",
-            (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
-            ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => metric_math_var_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-math",
+        (params["metric-out"] ?? null),
+        "-fixnan",
+        String((params["replace"] ?? null)),
+        ...(params["var"] ?? null).map(s => metric_math_var_cargs(s, execution)).flat()
+    );
     cargs.push((params["expression"] ?? null));
     return cargs;
 }

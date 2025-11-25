@@ -373,25 +373,23 @@ function cifti_parcellate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["spatial-weights"] ?? null) !== null || (params["weight-cifti"] ?? null) !== null || (params["method"] ?? null) !== null || (params["exclude-outliers"] ?? null) !== null || (params["only-numeric"] ?? false) || (params["value"] ?? null) !== null || (params["nonempty-mask-out"] ?? null) !== null || (params["legacy-mode"] ?? false) || (params["include-empty"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-cifti-parcellate",
-            (params["cifti-out"] ?? null),
-            ...(((params["spatial-weights"] ?? null) !== null) ? cifti_parcellate_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
-            "-cifti-weights",
-            (((params["weight-cifti"] ?? null) !== null) ? execution.inputFile((params["weight-cifti"] ?? null)) : ""),
-            "-method",
-            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
-            ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_parcellate_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-            (((params["only-numeric"] ?? false)) ? "-only-numeric" : ""),
-            "-fill-value",
-            (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-            ...(((params["nonempty-mask-out"] ?? null) !== null) ? cifti_parcellate_nonempty_mask_out_cargs((params["nonempty-mask-out"] ?? null), execution) : []),
-            (((params["legacy-mode"] ?? false)) ? "-legacy-mode" : ""),
-            (((params["include-empty"] ?? false)) ? "-include-empty" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-parcellate",
+        (params["cifti-out"] ?? null),
+        ...cifti_parcellate_spatial_weights_cargs((params["spatial-weights"] ?? null), execution),
+        "-cifti-weights",
+        execution.inputFile((params["weight-cifti"] ?? null)),
+        "-method",
+        (params["method"] ?? null),
+        ...cifti_parcellate_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution),
+        "-only-numeric",
+        "-fill-value",
+        String((params["value"] ?? null)),
+        ...cifti_parcellate_nonempty_mask_out_cargs((params["nonempty-mask-out"] ?? null), execution),
+        "-legacy-mode",
+        "-include-empty"
+    );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-label"] ?? null)));
     cargs.push((params["direction"] ?? null));

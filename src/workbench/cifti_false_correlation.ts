@@ -87,14 +87,12 @@ function cifti_false_correlation_left_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["text-out"] ?? null) !== null) {
-        cargs.push(
-            "-left-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-dump-text",
-            (params["text-out"] ?? null)
-        );
-    }
+    cargs.push(
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-dump-text",
+        (params["text-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -137,14 +135,12 @@ function cifti_false_correlation_right_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["text-out"] ?? null) !== null) {
-        cargs.push(
-            "-right-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-dump-text",
-            (params["text-out"] ?? null)
-        );
-    }
+    cargs.push(
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-dump-text",
+        (params["text-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -187,14 +183,12 @@ function cifti_false_correlation_cerebellum_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["text-out"] ?? null) !== null) {
-        cargs.push(
-            "-cerebellum-surface",
-            execution.inputFile((params["surface"] ?? null)),
-            "-dump-text",
-            (params["text-out"] ?? null)
-        );
-    }
+    cargs.push(
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-dump-text",
+        (params["text-out"] ?? null)
+    );
     return cargs;
 }
 
@@ -274,16 +268,14 @@ function cifti_false_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-false-correlation",
-            (params["cifti-out"] ?? null),
-            ...(((params["left-surface"] ?? null) !== null) ? cifti_false_correlation_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-            ...(((params["right-surface"] ?? null) !== null) ? cifti_false_correlation_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_false_correlation_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-false-correlation",
+        (params["cifti-out"] ?? null),
+        ...cifti_false_correlation_left_surface_cargs((params["left-surface"] ?? null), execution),
+        ...cifti_false_correlation_right_surface_cargs((params["right-surface"] ?? null), execution),
+        ...cifti_false_correlation_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution)
+    );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push(String((params["3D-dist"] ?? null)));
     cargs.push(String((params["geo-outer"] ?? null)));

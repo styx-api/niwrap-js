@@ -74,14 +74,12 @@ function label_probability_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["exclude-unlabeled"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-label-probability",
-            (params["probability-metric-out"] ?? null),
-            "-exclude-unlabeled"
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-label-probability",
+        (params["probability-metric-out"] ?? null),
+        "-exclude-unlabeled"
+    );
     cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;
 }

@@ -135,15 +135,13 @@ function volume_reduce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["exclude-outliers"] ?? null) !== null || (params["only-numeric"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-volume-reduce",
-            (params["volume-out"] ?? null),
-            ...(((params["exclude-outliers"] ?? null) !== null) ? volume_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-            (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-reduce",
+        (params["volume-out"] ?? null),
+        ...volume_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution),
+        "-only-numeric"
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push((params["operation"] ?? null));
     return cargs;

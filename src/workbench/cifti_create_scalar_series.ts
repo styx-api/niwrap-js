@@ -144,17 +144,15 @@ function cifti_create_scalar_series_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["transpose"] ?? false) || (params["file"] ?? null) !== null || (params["series"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-create-scalar-series",
-            (params["cifti-out"] ?? null),
-            (((params["transpose"] ?? false)) ? "-transpose" : ""),
-            "-name-file",
-            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
-            ...(((params["series"] ?? null) !== null) ? cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution) : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-create-scalar-series",
+        (params["cifti-out"] ?? null),
+        "-transpose",
+        "-name-file",
+        (params["file"] ?? null),
+        ...cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution)
+    );
     cargs.push((params["input"] ?? null));
     return cargs;
 }

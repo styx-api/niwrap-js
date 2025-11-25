@@ -78,14 +78,12 @@ function volume_copy_extensions_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["drop-unknown"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-volume-copy-extensions",
-            (params["volume-out"] ?? null),
-            "-drop-unknown"
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-copy-extensions",
+        (params["volume-out"] ?? null),
+        "-drop-unknown"
+    );
     cargs.push(execution.inputFile((params["data-volume"] ?? null)));
     cargs.push(execution.inputFile((params["extension-volume"] ?? null)));
     return cargs;

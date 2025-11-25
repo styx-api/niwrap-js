@@ -110,21 +110,19 @@ function metric_rois_from_extrema_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sigma"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["method"] ?? null) !== null || (params["column"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-rois-from-extrema",
-            (params["metric-out"] ?? null),
-            "-gaussian",
-            (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-overlap-logic",
-            (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-rois-from-extrema",
+        (params["metric-out"] ?? null),
+        "-gaussian",
+        String((params["sigma"] ?? null)),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-overlap-logic",
+        (params["method"] ?? null),
+        "-column",
+        (params["column"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));

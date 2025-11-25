@@ -82,15 +82,13 @@ function foci_get_projection_vertex_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["name"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-foci-get-projection-vertex",
-            (params["metric-out"] ?? null),
-            "-name",
-            (params["name"] ?? null)
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-foci-get-projection-vertex",
+        (params["metric-out"] ?? null),
+        "-name",
+        (params["name"] ?? null)
+    );
     cargs.push(execution.inputFile((params["foci"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;

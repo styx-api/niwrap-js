@@ -90,17 +90,15 @@ function volume_erode_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-volume"] ?? null) !== null || (params["subvol"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-erode",
-            (params["volume-out"] ?? null),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-erode",
+        (params["volume-out"] ?? null),
+        "-roi",
+        execution.inputFile((params["roi-volume"] ?? null)),
+        "-subvolume",
+        (params["subvol"] ?? null)
+    );
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
     return cargs;

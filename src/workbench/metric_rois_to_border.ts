@@ -94,17 +94,15 @@ function metric_rois_to_border_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fraction"] ?? null) !== null || (params["column"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-rois-to-border",
-            (params["border-out"] ?? null),
-            "-placement",
-            (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-rois-to-border",
+        (params["border-out"] ?? null),
+        "-placement",
+        String((params["fraction"] ?? null)),
+        "-column",
+        (params["column"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push((params["class-name"] ?? null));

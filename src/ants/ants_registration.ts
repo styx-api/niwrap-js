@@ -791,9 +791,7 @@ function ants_registration_initial_moving_transform_use_inverse_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_inverse_value"] ?? null) !== null) {
-        cargs.push([execution.inputFile((params["initial_moving_transform"] ?? null)), ",", ((params["use_inverse_value"] ?? null) ? "1" : "0")].join(''));
-    }
+    cargs.push([execution.inputFile((params["initial_moving_transform"] ?? null)), ",", ((params["use_inverse_value"] ?? null) ? "1" : "0")].join(''));
     return cargs;
 }
 
@@ -1123,9 +1121,7 @@ function ants_registration_total_field_mesh_size_at_base_level_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["total_field_mesh_size_at_base_level_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["total_field_mesh_size_at_base_level_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -1166,9 +1162,7 @@ function ants_registration_transform_bspline_displacement_field_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null) {
-        cargs.push(["BSplineDisplacementField[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_total_field_mesh_size_at_base_level_cargs((params["total_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["BSplineDisplacementField[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_total_field_mesh_size_at_base_level_cargs((params["total_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -1252,9 +1246,7 @@ function ants_registration_number_of_time_point_samples_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["number_of_time_point_samples_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["number_of_time_point_samples_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -1295,9 +1287,7 @@ function ants_registration_transform_time_varying_bspline_velocity_field_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_time_point_samples"] ?? null) !== null) {
-        cargs.push(["TimeVaryingBSplineVelocityField[", String((params["gradient_step"] ?? null)), ",", String((params["velocity_field_mesh_size"] ?? null)), ants_registration_number_of_time_point_samples_cargs((params["number_of_time_point_samples"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["TimeVaryingBSplineVelocityField[", String((params["gradient_step"] ?? null)), ",", String((params["velocity_field_mesh_size"] ?? null)), ants_registration_number_of_time_point_samples_cargs((params["number_of_time_point_samples"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -1336,9 +1326,7 @@ function ants_registration_update_field_variance_in_voxel_space_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["total_field_variance_in_voxel_space_value"] ?? null) !== null) {
-        cargs.push([",", String((params["update_field_variance_in_voxel_space_value"] ?? null)), ",", String((params["total_field_variance_in_voxel_space_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["update_field_variance_in_voxel_space_value"] ?? null)), ",", String((params["total_field_variance_in_voxel_space_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -1377,9 +1365,7 @@ function ants_registration_transform_syn_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["update_field_variance_in_voxel_space"] ?? null) !== null) {
-        cargs.push(["SyN[", String((params["gradient_step"] ?? null)), ants_registration_update_field_variance_in_voxel_space_cargs((params["update_field_variance_in_voxel_space"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["SyN[", String((params["gradient_step"] ?? null)), ants_registration_update_field_variance_in_voxel_space_cargs((params["update_field_variance_in_voxel_space"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -1418,9 +1404,7 @@ function ants_registration_total_field_mesh_size_at_base_level_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["total_field_mesh_size_at_base_level_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["total_field_mesh_size_at_base_level_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -1461,9 +1445,7 @@ function ants_registration_transform_bspline_syn_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["total_field_mesh_size_at_base_level"] ?? null) !== null) {
-        cargs.push(["BSplineSyN[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_total_field_mesh_size_at_base_level_1_cargs((params["total_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["BSplineSyN[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_total_field_mesh_size_at_base_level_1_cargs((params["total_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -1506,9 +1488,7 @@ function ants_registration_transform_exponential_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_integration_steps_value"] ?? null) !== null) {
-        cargs.push(["Exponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["velocity_field_variance_in_voxel_space"] ?? null)), ",", String((params["number_of_integration_steps_value"] ?? null)), "]"].join(''));
-    }
+    cargs.push(["Exponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_variance_in_voxel_space"] ?? null)), ",", String((params["velocity_field_variance_in_voxel_space"] ?? null)), ",", String((params["number_of_integration_steps_value"] ?? null)), "]"].join(''));
     return cargs;
 }
 
@@ -1547,9 +1527,7 @@ function ants_registration_number_of_integration_steps_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["spline_order_value"] ?? null) !== null) {
-        cargs.push([",", String((params["number_of_integration_steps_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["number_of_integration_steps_value"] ?? null)), ",", String((params["spline_order_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -1588,9 +1566,7 @@ function ants_registration_velocity_field_mesh_size_at_base_level_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_integration_steps"] ?? null) !== null) {
-        cargs.push([",", String((params["velocity_field_mesh_size_at_base_level_value"] ?? null)), ants_registration_number_of_integration_steps_1_cargs((params["number_of_integration_steps"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["velocity_field_mesh_size_at_base_level_value"] ?? null)), ants_registration_number_of_integration_steps_1_cargs((params["number_of_integration_steps"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -1631,9 +1607,7 @@ function ants_registration_transform_bspline_exponential_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["velocity_field_mesh_size_at_base_level"] ?? null) !== null) {
-        cargs.push(["BSplineExponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_velocity_field_mesh_size_at_base_level_cargs((params["velocity_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["BSplineExponential[", String((params["gradient_step"] ?? null)), ",", String((params["update_field_mesh_size_at_base_level"] ?? null)), ants_registration_velocity_field_mesh_size_at_base_level_cargs((params["velocity_field_mesh_size_at_base_level"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -1672,9 +1646,7 @@ function ants_registration_sampling_percentage_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     return cargs;
 }
 
@@ -1713,9 +1685,7 @@ function ants_registration_sampling_strategy_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -1754,9 +1724,7 @@ function ants_registration_radius_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_strategy"] ?? null) !== null) {
-        cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -1799,9 +1767,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["radius"] ?? null) !== null) {
-        cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -1840,9 +1806,7 @@ function ants_registration_sampling_percentage_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     return cargs;
 }
 
@@ -1881,9 +1845,7 @@ function ants_registration_sampling_strategy_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_1_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_1_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -1922,9 +1884,7 @@ function ants_registration_number_of_bins_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_strategy"] ?? null) !== null) {
-        cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_1_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_1_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -1967,9 +1927,7 @@ function ants_registration_metric_mutual_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_bins"] ?? null) !== null) {
-        cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2008,9 +1966,7 @@ function ants_registration_sampling_percentage_2_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     return cargs;
 }
 
@@ -2049,9 +2005,7 @@ function ants_registration_sampling_strategy_2_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_2_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_2_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2090,9 +2044,7 @@ function ants_registration_number_of_bins_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_strategy"] ?? null) !== null) {
-        cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_2_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_2_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2135,9 +2087,7 @@ function ants_registration_metric_mattes_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_bins"] ?? null) !== null) {
-        cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_1_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_1_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2176,9 +2126,7 @@ function ants_registration_sampling_percentage_3_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     return cargs;
 }
 
@@ -2217,9 +2165,7 @@ function ants_registration_sampling_strategy_3_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_3_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_3_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2258,9 +2204,7 @@ function ants_registration_radius_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_strategy"] ?? null) !== null) {
-        cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_3_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_3_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2303,9 +2247,7 @@ function ants_registration_metric_mean_squares_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["radius"] ?? null) !== null) {
-        cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_1_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_1_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2344,9 +2286,7 @@ function ants_registration_sampling_percentage_4_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     return cargs;
 }
 
@@ -2385,9 +2325,7 @@ function ants_registration_sampling_strategy_4_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_4_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_4_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2426,9 +2364,7 @@ function ants_registration_number_of_bins_2_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_strategy"] ?? null) !== null) {
-        cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_4_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["number_of_bins_value"] ?? null)), ants_registration_sampling_strategy_4_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2471,9 +2407,7 @@ function ants_registration_metric_demons_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["number_of_bins"] ?? null) !== null) {
-        cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_2_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_number_of_bins_2_cargs((params["number_of_bins"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2512,9 +2446,7 @@ function ants_registration_sampling_percentage_5_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["use_gradient_filter_value"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", ((params["use_gradient_filter_value"] ?? null) ? "true" : "false")].join(''));
     return cargs;
 }
 
@@ -2553,9 +2485,7 @@ function ants_registration_sampling_strategy_5_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_5_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), ants_registration_sampling_percentage_5_cargs((params["sampling_percentage"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2594,9 +2524,7 @@ function ants_registration_radius_2_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_strategy"] ?? null) !== null) {
-        cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_5_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["radius_value"] ?? null)), ants_registration_sampling_strategy_5_cargs((params["sampling_strategy"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2639,9 +2567,7 @@ function ants_registration_metric_global_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["radius"] ?? null) !== null) {
-        cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_2_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_radius_2_cargs((params["radius"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2680,9 +2606,7 @@ function ants_registration_sampling_percentage_6_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["boundary_points_only_value"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", (params["boundary_points_only_value"] ?? null)].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ",", (params["boundary_points_only_value"] ?? null)].join(''));
     return cargs;
 }
 
@@ -2725,9 +2649,7 @@ function ants_registration_metric_euclidean_icp_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push(["ICP[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_6_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["ICP[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_6_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2766,9 +2688,7 @@ function ants_registration_point_set_sigma_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["k_neighborhood_value"] ?? null) !== null) {
-        cargs.push([",", String((params["point_set_sigma_value"] ?? null)), ",", String((params["k_neighborhood_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["point_set_sigma_value"] ?? null)), ",", String((params["k_neighborhood_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -2807,9 +2727,7 @@ function ants_registration_boundary_points_only_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["point_set_sigma"] ?? null) !== null) {
-        cargs.push([",", (params["boundary_points_only_value"] ?? null), ants_registration_point_set_sigma_cargs((params["point_set_sigma"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["boundary_points_only_value"] ?? null), ants_registration_point_set_sigma_cargs((params["point_set_sigma"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2848,9 +2766,7 @@ function ants_registration_sampling_percentage_7_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["boundary_points_only"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ants_registration_boundary_points_only_1_cargs((params["boundary_points_only"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ants_registration_boundary_points_only_1_cargs((params["boundary_points_only"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -2893,9 +2809,7 @@ function ants_registration_metric_point_set_expectation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push(["PSE[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_7_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["PSE[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_7_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2934,9 +2848,7 @@ function ants_registration_point_set_sigma_1_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["k_neighborhood_value"] ?? null) !== null) {
-        cargs.push([",", String((params["point_set_sigma_value"] ?? null)), ",", String((params["k_neighborhood_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["point_set_sigma_value"] ?? null)), ",", String((params["k_neighborhood_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -2975,9 +2887,7 @@ function ants_registration_boundary_points_only_2_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["point_set_sigma"] ?? null) !== null) {
-        cargs.push([",", (params["boundary_points_only_value"] ?? null), ants_registration_point_set_sigma_1_cargs((params["point_set_sigma"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["boundary_points_only_value"] ?? null), ants_registration_point_set_sigma_1_cargs((params["point_set_sigma"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -3016,9 +2926,7 @@ function ants_registration_sampling_percentage_8_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["boundary_points_only"] ?? null) !== null) {
-        cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ants_registration_boundary_points_only_2_cargs((params["boundary_points_only"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null)), ants_registration_boundary_points_only_2_cargs((params["boundary_points_only"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -3061,9 +2969,7 @@ function ants_registration_metric_jensen_havrda_charvet_tsallis_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sampling_percentage"] ?? null) !== null) {
-        cargs.push(["JHCT[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_8_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["JHCT[", (params["fixed_point_set"] ?? null), ",", (params["moving_point_set"] ?? null), ",", String((params["metric_weight"] ?? null)), ants_registration_sampling_percentage_8_cargs((params["sampling_percentage"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -3102,9 +3008,7 @@ function ants_registration_k_neighborhood_2_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["gradient_sigma_value"] ?? null) !== null) {
-        cargs.push([",", String((params["k_neighborhood_value"] ?? null)), ",", String((params["gradient_sigma_value"] ?? null))].join(''));
-    }
+    cargs.push([",", String((params["k_neighborhood_value"] ?? null)), ",", String((params["gradient_sigma_value"] ?? null))].join(''));
     return cargs;
 }
 
@@ -3143,9 +3047,7 @@ function ants_registration_distance_sigma_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["k_neighborhood"] ?? null) !== null) {
-        cargs.push([",", String((params["distance_sigma_value"] ?? null)), ants_registration_k_neighborhood_2_cargs((params["k_neighborhood"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["distance_sigma_value"] ?? null)), ants_registration_k_neighborhood_2_cargs((params["k_neighborhood"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -3184,9 +3086,7 @@ function ants_registration_intensity_sigma_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["distance_sigma"] ?? null) !== null) {
-        cargs.push([",", String((params["intensity_sigma_value"] ?? null)), ants_registration_distance_sigma_cargs((params["distance_sigma"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", String((params["intensity_sigma_value"] ?? null)), ants_registration_distance_sigma_cargs((params["distance_sigma"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -3225,9 +3125,7 @@ function ants_registration_neighborhood_radius_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["intensity_sigma"] ?? null) !== null) {
-        cargs.push([",", (params["neighborhood_radius_value"] ?? null), ants_registration_intensity_sigma_cargs((params["intensity_sigma"] ?? null), execution).join("")].join(''));
-    }
+    cargs.push([",", (params["neighborhood_radius_value"] ?? null), ants_registration_intensity_sigma_cargs((params["intensity_sigma"] ?? null), execution).join("")].join(''));
     return cargs;
 }
 
@@ -3274,9 +3172,7 @@ function ants_registration_metric_igdm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["neighborhood_radius"] ?? null) !== null) {
-        cargs.push(["IGDM[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (params["fixed_mask"] ?? null), ",", (params["moving_mask"] ?? null), ants_registration_neighborhood_radius_cargs((params["neighborhood_radius"] ?? null), execution).join(""), "]"].join(''));
-    }
+    cargs.push(["IGDM[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (params["fixed_mask"] ?? null), ",", (params["moving_mask"] ?? null), ants_registration_neighborhood_radius_cargs((params["neighborhood_radius"] ?? null), execution).join(""), "]"].join(''));
     return cargs;
 }
 

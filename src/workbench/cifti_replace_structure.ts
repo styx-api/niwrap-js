@@ -92,13 +92,11 @@ function cifti_replace_structure_volume_all_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["from-cropped"] ?? false)) {
-        cargs.push(
-            "-volume-all",
-            execution.inputFile((params["volume"] ?? null)),
-            "-from-cropped"
-        );
-    }
+    cargs.push(
+        "-volume-all",
+        execution.inputFile((params["volume"] ?? null)),
+        "-from-cropped"
+    );
     return cargs;
 }
 
@@ -226,14 +224,12 @@ function cifti_replace_structure_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["from-cropped"] ?? false)) {
-        cargs.push(
-            "-volume",
-            (params["structure"] ?? null),
-            execution.inputFile((params["volume"] ?? null)),
-            "-from-cropped"
-        );
-    }
+    cargs.push(
+        "-volume",
+        (params["structure"] ?? null),
+        execution.inputFile((params["volume"] ?? null)),
+        "-from-cropped"
+    );
     return cargs;
 }
 

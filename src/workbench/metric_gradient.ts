@@ -83,13 +83,11 @@ function metric_gradient_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false)) {
-        cargs.push(
-            "-presmooth",
-            String((params["kernel"] ?? null)),
-            "-fwhm"
-        );
-    }
+    cargs.push(
+        "-presmooth",
+        String((params["kernel"] ?? null)),
+        "-fwhm"
+    );
     return cargs;
 }
 
@@ -128,13 +126,11 @@ function metric_gradient_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["match-columns"] ?? false)) {
-        cargs.push(
-            "-roi",
-            execution.inputFile((params["roi-metric"] ?? null)),
-            "-match-columns"
-        );
-    }
+    cargs.push(
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-match-columns"
+    );
     return cargs;
 }
 
@@ -305,21 +301,19 @@ function metric_gradient_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["presmooth"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["vectors"] ?? null) !== null || (params["column"] ?? null) !== null || (params["area-metric"] ?? null) !== null || (params["average-normals"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-metric-gradient",
-            (params["metric-out"] ?? null),
-            ...(((params["presmooth"] ?? null) !== null) ? metric_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            ...(((params["roi"] ?? null) !== null) ? metric_gradient_roi_cargs((params["roi"] ?? null), execution) : []),
-            ...(((params["vectors"] ?? null) !== null) ? metric_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-            (((params["average-normals"] ?? false)) ? "-average-normals" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-gradient",
+        (params["metric-out"] ?? null),
+        ...metric_gradient_presmooth_cargs((params["presmooth"] ?? null), execution),
+        ...metric_gradient_roi_cargs((params["roi"] ?? null), execution),
+        ...metric_gradient_vectors_cargs((params["vectors"] ?? null), execution),
+        "-column",
+        (params["column"] ?? null),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null)),
+        "-average-normals"
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;

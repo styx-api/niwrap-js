@@ -73,13 +73,11 @@ function volume_tfce_presmooth_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fwhm"] ?? false)) {
-        cargs.push(
-            "-presmooth",
-            String((params["kernel"] ?? null)),
-            "-fwhm"
-        );
-    }
+    cargs.push(
+        "-presmooth",
+        String((params["kernel"] ?? null)),
+        "-fwhm"
+    );
     return cargs;
 }
 
@@ -202,19 +200,17 @@ function volume_tfce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["presmooth"] ?? null) !== null || (params["roi-volume"] ?? null) !== null || (params["parameters"] ?? null) !== null || (params["subvolume"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-tfce",
-            (params["volume-out"] ?? null),
-            ...(((params["presmooth"] ?? null) !== null) ? volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            ...(((params["parameters"] ?? null) !== null) ? volume_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
-            "-subvolume",
-            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-tfce",
+        (params["volume-out"] ?? null),
+        ...volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution),
+        "-roi",
+        execution.inputFile((params["roi-volume"] ?? null)),
+        ...volume_tfce_parameters_cargs((params["parameters"] ?? null), execution),
+        "-subvolume",
+        (params["subvolume"] ?? null)
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }

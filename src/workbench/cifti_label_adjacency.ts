@@ -94,19 +94,17 @@ function cifti_label_adjacency_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["surface"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-label-adjacency",
-            (params["adjacency-out"] ?? null),
-            "-left-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-            "-right-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-            "-cerebellum-surface",
-            (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-label-adjacency",
+        (params["adjacency-out"] ?? null),
+        "-left-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-right-surface",
+        execution.inputFile((params["surface"] ?? null)),
+        "-cerebellum-surface",
+        execution.inputFile((params["surface"] ?? null))
+    );
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }

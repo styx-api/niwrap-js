@@ -82,15 +82,13 @@ function signed_distance_to_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["method"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-signed-distance-to-surface",
-            (params["metric"] ?? null),
-            "-winding",
-            (params["method"] ?? null)
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-signed-distance-to-surface",
+        (params["metric"] ?? null),
+        "-winding",
+        (params["method"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
     cargs.push(execution.inputFile((params["surface-ref"] ?? null)));
     return cargs;

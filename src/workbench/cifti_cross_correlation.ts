@@ -94,18 +94,16 @@ function cifti_cross_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["weight-file"] ?? null) !== null || (params["fisher-z"] ?? false) || (params["limit-GB"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-cross-correlation",
-            (params["cifti-out"] ?? null),
-            "-weights",
-            (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),
-            (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
-            "-mem-limit",
-            (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-cross-correlation",
+        (params["cifti-out"] ?? null),
+        "-weights",
+        (params["weight-file"] ?? null),
+        "-fisher-z",
+        "-mem-limit",
+        String((params["limit-GB"] ?? null))
+    );
     cargs.push(execution.inputFile((params["cifti-a"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-b"] ?? null)));
     return cargs;

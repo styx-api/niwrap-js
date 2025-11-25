@@ -122,14 +122,12 @@ function cifti_merge_parcels_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["cifti"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-merge-parcels",
-            (params["cifti-out"] ?? null),
-            ...(params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-merge-parcels",
+        (params["cifti-out"] ?? null),
+        ...(params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat()
+    );
     cargs.push((params["direction"] ?? null));
     return cargs;
 }

@@ -122,24 +122,22 @@ function volume_find_clusters_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["less-than"] ?? false) || (params["roi-volume"] ?? null) !== null || (params["subvol"] ?? null) !== null || (params["ratio"] ?? null) !== null || (params["distance"] ?? null) !== null || (params["startval"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-find-clusters",
-            (params["volume-out"] ?? null),
-            (((params["less-than"] ?? false)) ? "-less-than" : ""),
-            "-roi",
-            (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-            "-size-ratio",
-            (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
-            "-distance",
-            (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-            "-start",
-            (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-find-clusters",
+        (params["volume-out"] ?? null),
+        "-less-than",
+        "-roi",
+        execution.inputFile((params["roi-volume"] ?? null)),
+        "-subvolume",
+        (params["subvol"] ?? null),
+        "-size-ratio",
+        String((params["ratio"] ?? null)),
+        "-distance",
+        String((params["distance"] ?? null)),
+        "-start",
+        String((params["startval"] ?? null))
+    );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["value-threshold"] ?? null)));
     cargs.push(String((params["minimum-volume"] ?? null)));

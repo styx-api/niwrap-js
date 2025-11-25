@@ -94,18 +94,16 @@ function surface_geodesic_distance_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["naive"] ?? false) || (params["limit-mm"] ?? null) !== null || (params["area-metric"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-surface-geodesic-distance",
-            (params["metric-out"] ?? null),
-            (((params["naive"] ?? false)) ? "-naive" : ""),
-            "-limit",
-            (((params["limit-mm"] ?? null) !== null) ? String((params["limit-mm"] ?? null)) : ""),
-            "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-surface-geodesic-distance",
+        (params["metric-out"] ?? null),
+        "-naive",
+        "-limit",
+        String((params["limit-mm"] ?? null)),
+        "-corrected-areas",
+        execution.inputFile((params["area-metric"] ?? null))
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["vertex"] ?? null)));
     return cargs;

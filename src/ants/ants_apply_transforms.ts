@@ -426,9 +426,7 @@ function ants_apply_transforms_composite_displacement_field_output_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["printOutCompositeWarpFile"] ?? null) !== null) {
-        cargs.push(["[", (params["compositeDisplacementField"] ?? null), ",printOutCompositeWarpFile=", ((params["printOutCompositeWarpFile"] ?? null) ? "1" : "0"), "]"].join(''));
-    }
+    cargs.push(["[", (params["compositeDisplacementField"] ?? null), ",printOutCompositeWarpFile=", ((params["printOutCompositeWarpFile"] ?? null) ? "1" : "0"), "]"].join(''));
     return cargs;
 }
 
@@ -506,9 +504,7 @@ function ants_apply_transforms_generic_affine_transform_output_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["calculateInverse"] ?? null) !== null) {
-        cargs.push(["Linear[", (params["genericAffineTransformFile"] ?? null), ",calculateInverse=", ((params["calculateInverse"] ?? null) ? "1" : "0"), "]"].join(''));
-    }
+    cargs.push(["Linear[", (params["genericAffineTransformFile"] ?? null), ",calculateInverse=", ((params["calculateInverse"] ?? null) ? "1" : "0"), "]"].join(''));
     return cargs;
 }
 

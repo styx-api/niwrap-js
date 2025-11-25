@@ -102,17 +102,15 @@ function metric_false_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi-metric"] ?? null) !== null || (params["text-out"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-metric-false-correlation",
-            (params["metric-out"] ?? null),
-            "-roi",
-            (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-            "-dump-text",
-            (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-metric-false-correlation",
+        (params["metric-out"] ?? null),
+        "-roi",
+        execution.inputFile((params["roi-metric"] ?? null)),
+        "-dump-text",
+        (params["text-out"] ?? null)
+    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push(String((params["3D-dist"] ?? null)));

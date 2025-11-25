@@ -77,13 +77,11 @@ function border_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["reverse"] ?? false)) {
-        cargs.push(
-            "-up-to",
-            (params["last-border"] ?? null),
-            "-reverse"
-        );
-    }
+    cargs.push(
+        "-up-to",
+        (params["last-border"] ?? null),
+        "-reverse"
+    );
     return cargs;
 }
 
@@ -124,13 +122,11 @@ function border_merge_select_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["up-to"] ?? null) !== null) {
-        cargs.push(
-            "-select",
-            (params["border"] ?? null),
-            ...border_merge_up_to_cargs((params["up-to"] ?? null), execution)
-        );
-    }
+    cargs.push(
+        "-select",
+        (params["border"] ?? null),
+        ...border_merge_up_to_cargs((params["up-to"] ?? null), execution)
+    );
     return cargs;
 }
 
@@ -171,13 +167,11 @@ function border_merge_border_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["select"] ?? null) !== null) {
-        cargs.push(
-            "-border",
-            execution.inputFile((params["border-file-in"] ?? null)),
-            ...(params["select"] ?? null).map(s => border_merge_select_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "-border",
+        execution.inputFile((params["border-file-in"] ?? null)),
+        ...(params["select"] ?? null).map(s => border_merge_select_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 
@@ -235,14 +229,12 @@ function border_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["border"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-border-merge",
-            (params["border-file-out"] ?? null),
-            ...(params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-border-merge",
+        (params["border-file-out"] ?? null),
+        ...(params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

@@ -207,9 +207,7 @@ function denoise_image_corrected_output_noise_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["noiseFile"] ?? null) !== null) {
-        cargs.push(["[", (params["correctedOutputFileName"] ?? null), ",", (params["noiseFile"] ?? null), "]"].join(''));
-    }
+    cargs.push(["[", (params["correctedOutputFileName"] ?? null), ",", (params["noiseFile"] ?? null), "]"].join(''));
     return cargs;
 }
 

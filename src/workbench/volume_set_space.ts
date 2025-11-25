@@ -241,13 +241,11 @@ function volume_set_space_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["ignore-dims"] ?? false)) {
-        cargs.push(
-            "-file",
-            (params["volume-ref"] ?? null),
-            "-ignore-dims"
-        );
-    }
+    cargs.push(
+        "-file",
+        (params["volume-ref"] ?? null),
+        "-ignore-dims"
+    );
     return cargs;
 }
 

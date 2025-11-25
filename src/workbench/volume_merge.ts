@@ -77,13 +77,11 @@ function volume_merge_up_to_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["reverse"] ?? false)) {
-        cargs.push(
-            "-up-to",
-            (params["last-subvol"] ?? null),
-            "-reverse"
-        );
-    }
+    cargs.push(
+        "-up-to",
+        (params["last-subvol"] ?? null),
+        "-reverse"
+    );
     return cargs;
 }
 
@@ -124,13 +122,11 @@ function volume_merge_subvolume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["up-to"] ?? null) !== null) {
-        cargs.push(
-            "-subvolume",
-            (params["subvol"] ?? null),
-            ...volume_merge_up_to_cargs((params["up-to"] ?? null), execution)
-        );
-    }
+    cargs.push(
+        "-subvolume",
+        (params["subvol"] ?? null),
+        ...volume_merge_up_to_cargs((params["up-to"] ?? null), execution)
+    );
     return cargs;
 }
 
@@ -171,13 +167,11 @@ function volume_merge_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["subvolume"] ?? null) !== null) {
-        cargs.push(
-            "-volume",
-            execution.inputFile((params["volume-in"] ?? null)),
-            ...(params["subvolume"] ?? null).map(s => volume_merge_subvolume_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "-volume",
+        execution.inputFile((params["volume-in"] ?? null)),
+        ...(params["subvolume"] ?? null).map(s => volume_merge_subvolume_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 
@@ -235,14 +229,12 @@ function volume_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["volume"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-volume-merge",
-            (params["volume-out"] ?? null),
-            ...(params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat()
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-volume-merge",
+        (params["volume-out"] ?? null),
+        ...(params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat()
+    );
     return cargs;
 }
 

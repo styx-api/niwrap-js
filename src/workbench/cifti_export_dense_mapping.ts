@@ -86,14 +86,12 @@ function cifti_export_dense_mapping_volume_all_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["no-cifti-index"] ?? false) || (params["structure"] ?? false)) {
-        cargs.push(
-            "-volume-all",
-            (params["text-out"] ?? null),
-            (((params["no-cifti-index"] ?? false)) ? "-no-cifti-index" : ""),
-            (((params["structure"] ?? false)) ? "-structure" : "")
-        );
-    }
+    cargs.push(
+        "-volume-all",
+        (params["text-out"] ?? null),
+        "-no-cifti-index",
+        "-structure"
+    );
     return cargs;
 }
 
@@ -135,14 +133,12 @@ function cifti_export_dense_mapping_surface_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["no-cifti-index"] ?? false)) {
-        cargs.push(
-            "-surface",
-            (params["structure"] ?? null),
-            (params["text-out"] ?? null),
-            "-no-cifti-index"
-        );
-    }
+    cargs.push(
+        "-surface",
+        (params["structure"] ?? null),
+        (params["text-out"] ?? null),
+        "-no-cifti-index"
+    );
     return cargs;
 }
 
@@ -184,14 +180,12 @@ function cifti_export_dense_mapping_volume_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["no-cifti-index"] ?? false)) {
-        cargs.push(
-            "-volume",
-            (params["structure"] ?? null),
-            (params["text-out"] ?? null),
-            "-no-cifti-index"
-        );
-    }
+    cargs.push(
+        "-volume",
+        (params["structure"] ?? null),
+        (params["text-out"] ?? null),
+        "-no-cifti-index"
+    );
     return cargs;
 }
 

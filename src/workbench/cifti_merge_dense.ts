@@ -130,16 +130,14 @@ function cifti_merge_dense_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["action"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-cifti-merge-dense",
-            (params["cifti-out"] ?? null),
-            "-label-collision",
-            (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),
-            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_dense_cifti_cargs(s, execution)).flat() : [])
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-merge-dense",
+        (params["cifti-out"] ?? null),
+        "-label-collision",
+        (params["action"] ?? null),
+        ...(params["cifti"] ?? null).map(s => cifti_merge_dense_cifti_cargs(s, execution)).flat()
+    );
     cargs.push((params["direction"] ?? null));
     return cargs;
 }

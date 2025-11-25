@@ -65,13 +65,11 @@ function volume_stats_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["match-maps"] ?? false)) {
-        cargs.push(
-            "-roi",
-            execution.inputFile((params["roi-volume"] ?? null)),
-            "-match-maps"
-        );
-    }
+    cargs.push(
+        "-roi",
+        execution.inputFile((params["roi-volume"] ?? null)),
+        "-match-maps"
+    );
     return cargs;
 }
 

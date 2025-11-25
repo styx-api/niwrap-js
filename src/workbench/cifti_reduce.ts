@@ -143,17 +143,15 @@ function cifti_reduce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["direction"] ?? null) !== null || (params["exclude-outliers"] ?? null) !== null || (params["only-numeric"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-cifti-reduce",
-            (params["cifti-out"] ?? null),
-            "-direction",
-            (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
-            ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-            (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
-        );
-    }
+    cargs.push(
+        "wb_command",
+        "-cifti-reduce",
+        (params["cifti-out"] ?? null),
+        "-direction",
+        (params["direction"] ?? null),
+        ...cifti_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution),
+        "-only-numeric"
+    );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["operation"] ?? null));
     return cargs;
