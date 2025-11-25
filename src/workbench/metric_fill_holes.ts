@@ -87,7 +87,7 @@ function metric_fill_holes_cargs(
         "-metric-fill-holes",
         (params["metric-out"] ?? null),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));

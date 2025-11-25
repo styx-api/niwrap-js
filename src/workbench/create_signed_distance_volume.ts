@@ -211,17 +211,17 @@ function create_signed_distance_volume_cargs(
         "wb_command",
         "-create-signed-distance-volume",
         (params["outvol"] ?? null),
-        ...create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution),
+        ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : []),
         "-fill-value",
-        String((params["value"] ?? null)),
+        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
         "-exact-limit",
-        String((params["dist"] ?? null)),
+        (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
         "-approx-limit",
-        String((params["dist"] ?? null)),
+        (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
         "-approx-neighborhood",
-        String((params["num"] ?? null)),
+        (((params["num"] ?? null) !== null) ? String((params["num"] ?? null)) : ""),
         "-winding",
-        (params["method"] ?? null)
+        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push((params["refspace"] ?? null));

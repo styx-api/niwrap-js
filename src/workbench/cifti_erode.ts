@@ -92,7 +92,7 @@ function cifti_erode_left_surface_cargs(
         "-left-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-left-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -140,7 +140,7 @@ function cifti_erode_right_surface_cargs(
         "-right-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-right-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -188,7 +188,7 @@ function cifti_erode_cerebellum_surface_cargs(
         "-cerebellum-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-cerebellum-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -276,10 +276,10 @@ function cifti_erode_cargs(
         "wb_command",
         "-cifti-erode",
         (params["cifti-out"] ?? null),
-        ...cifti_erode_left_surface_cargs((params["left-surface"] ?? null), execution),
-        ...cifti_erode_right_surface_cargs((params["right-surface"] ?? null), execution),
-        ...cifti_erode_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
-        "-merged-volume"
+        ...(((params["left-surface"] ?? null) !== null) ? cifti_erode_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+        ...(((params["right-surface"] ?? null) !== null) ? cifti_erode_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_erode_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
+        (((params["merged-volume"] ?? false)) ? "-merged-volume" : "")
     );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));

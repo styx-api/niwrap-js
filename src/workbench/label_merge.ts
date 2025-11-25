@@ -80,7 +80,7 @@ function label_merge_up_to_cargs(
     cargs.push(
         "-up-to",
         (params["last-column"] ?? null),
-        "-reverse"
+        (((params["reverse"] ?? false)) ? "-reverse" : "")
     );
     return cargs;
 }
@@ -125,7 +125,7 @@ function label_merge_column_cargs(
     cargs.push(
         "-column",
         (params["column"] ?? null),
-        ...label_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        ...(((params["up-to"] ?? null) !== null) ? label_merge_up_to_cargs((params["up-to"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -170,7 +170,7 @@ function label_merge_label_cargs(
     cargs.push(
         "-label",
         execution.inputFile((params["label-in"] ?? null)),
-        ...(params["column"] ?? null).map(s => label_merge_column_cargs(s, execution)).flat()
+        ...(((params["column"] ?? null) !== null) ? (params["column"] ?? null).map(s => label_merge_column_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }
@@ -233,7 +233,7 @@ function label_merge_cargs(
         "wb_command",
         "-label-merge",
         (params["label-out"] ?? null),
-        ...(params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat()
+        ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

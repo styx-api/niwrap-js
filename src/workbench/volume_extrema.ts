@@ -81,7 +81,7 @@ function volume_extrema_presmooth_cargs(
     cargs.push(
         "-presmooth",
         String((params["kernel"] ?? null)),
-        "-fwhm"
+        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
     );
     return cargs;
 }
@@ -224,16 +224,16 @@ function volume_extrema_cargs(
         "wb_command",
         "-volume-extrema",
         (params["volume-out"] ?? null),
-        ...volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution),
+        ...(((params["presmooth"] ?? null) !== null) ? volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
-        ...volume_extrema_threshold_cargs((params["threshold"] ?? null), execution),
-        "-sum-subvols",
-        "-consolidate-mode",
-        "-only-maxima",
-        "-only-minima",
+        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+        ...(((params["threshold"] ?? null) !== null) ? volume_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
+        (((params["sum-subvols"] ?? false)) ? "-sum-subvols" : ""),
+        (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
+        (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
+        (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
         "-subvolume",
-        (params["subvolume"] ?? null)
+        (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));

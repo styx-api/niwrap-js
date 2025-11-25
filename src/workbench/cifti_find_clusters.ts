@@ -115,7 +115,7 @@ function cifti_find_clusters_left_surface_cargs(
         "-left-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -163,7 +163,7 @@ function cifti_find_clusters_right_surface_cargs(
         "-right-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -211,7 +211,7 @@ function cifti_find_clusters_cerebellum_surface_cargs(
         "-cerebellum-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -418,17 +418,17 @@ function cifti_find_clusters_cargs(
         "wb_command",
         "-cifti-find-clusters",
         (params["cifti-out"] ?? null),
-        "-less-than",
-        ...cifti_find_clusters_left_surface_cargs((params["left-surface"] ?? null), execution),
-        ...cifti_find_clusters_right_surface_cargs((params["right-surface"] ?? null), execution),
-        ...cifti_find_clusters_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
+        (((params["less-than"] ?? false)) ? "-less-than" : ""),
+        ...(((params["left-surface"] ?? null) !== null) ? cifti_find_clusters_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+        ...(((params["right-surface"] ?? null) !== null) ? cifti_find_clusters_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_find_clusters_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
         "-cifti-roi",
-        execution.inputFile((params["roi-cifti"] ?? null)),
-        "-merged-volume",
-        ...cifti_find_clusters_size_ratio_cargs((params["size-ratio"] ?? null), execution),
-        ...cifti_find_clusters_distance_cargs((params["distance"] ?? null), execution),
+        (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
+        (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
+        ...(((params["size-ratio"] ?? null) !== null) ? cifti_find_clusters_size_ratio_cargs((params["size-ratio"] ?? null), execution) : []),
+        ...(((params["distance"] ?? null) !== null) ? cifti_find_clusters_distance_cargs((params["distance"] ?? null), execution) : []),
         "-start",
-        String((params["startval"] ?? null))
+        (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push(String((params["surface-value-threshold"] ?? null)));

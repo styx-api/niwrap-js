@@ -126,7 +126,7 @@ function cifti_merge_parcels_cargs(
         "wb_command",
         "-cifti-merge-parcels",
         (params["cifti-out"] ?? null),
-        ...(params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat()
+        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat() : [])
     );
     cargs.push((params["direction"] ?? null));
     return cargs;

@@ -80,8 +80,8 @@ function volume_math_var_cargs(
         (params["name"] ?? null),
         execution.inputFile((params["volume"] ?? null)),
         "-subvolume",
-        (params["subvol"] ?? null),
-        "-repeat"
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
+        (((params["repeat"] ?? false)) ? "-repeat" : "")
     );
     return cargs;
 }
@@ -155,8 +155,8 @@ function volume_math_cargs(
         "-volume-math",
         (params["volume-out"] ?? null),
         "-fixnan",
-        String((params["replace"] ?? null)),
-        ...(params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat()
+        (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
+        ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat() : [])
     );
     cargs.push((params["expression"] ?? null));
     return cargs;

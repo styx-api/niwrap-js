@@ -87,7 +87,7 @@ function mri_mark_temporal_lobe_cargs(
             (params["spacing"] ?? null)
         );
     }
-    cargs.push(["-gradient", (params["subjects"] ?? null).map(f => execution.inputFile(f)).join(""), (params["output_file"] ?? null)].join(''));
+    cargs.push([(((params["use_gradient"] ?? false)) ? "-gradient" : ""), (params["subjects"] ?? null).map(f => execution.inputFile(f)).join(""), (params["output_file"] ?? null)].join(''));
     return cargs;
 }
 

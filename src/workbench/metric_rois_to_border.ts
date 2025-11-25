@@ -99,9 +99,9 @@ function metric_rois_to_border_cargs(
         "-metric-rois-to-border",
         (params["border-out"] ?? null),
         "-placement",
-        String((params["fraction"] ?? null)),
+        (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
         "-column",
-        (params["column"] ?? null)
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric"] ?? null)));

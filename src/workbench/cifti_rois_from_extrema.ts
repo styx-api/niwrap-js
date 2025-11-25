@@ -180,15 +180,15 @@ function cifti_rois_from_extrema_cargs(
         "-cifti-rois-from-extrema",
         (params["cifti-out"] ?? null),
         "-left-surface",
-        execution.inputFile((params["surface"] ?? null)),
+        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
         "-right-surface",
-        execution.inputFile((params["surface"] ?? null)),
+        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
         "-cerebellum-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        ...cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution),
+        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
+        ...(((params["gaussian"] ?? null) !== null) ? cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution) : []),
         "-overlap-logic",
-        (params["method"] ?? null),
-        "-merged-volume"
+        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
+        (((params["merged-volume"] ?? false)) ? "-merged-volume" : "")
     );
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push(String((params["surf-limit"] ?? null)));

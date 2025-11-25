@@ -132,7 +132,7 @@ function foci_create_cargs(
         "wb_command",
         "-foci-create",
         (params["output"] ?? null),
-        ...(params["class"] ?? null).map(s => foci_create_class_cargs(s, execution)).flat()
+        ...(((params["class"] ?? null) !== null) ? (params["class"] ?? null).map(s => foci_create_class_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

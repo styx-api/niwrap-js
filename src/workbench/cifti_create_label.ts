@@ -149,7 +149,7 @@ function cifti_create_label_left_label_cargs(
         "-left-label",
         execution.inputFile((params["label"] ?? null)),
         "-roi-left",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -197,7 +197,7 @@ function cifti_create_label_right_label_cargs(
         "-right-label",
         execution.inputFile((params["label"] ?? null)),
         "-roi-right",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -245,7 +245,7 @@ function cifti_create_label_cerebellum_label_cargs(
         "-cerebellum-label",
         execution.inputFile((params["label"] ?? null)),
         "-roi-cerebellum",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -297,7 +297,7 @@ function cifti_create_label_label_cargs(
         (params["structure"] ?? null),
         execution.inputFile((params["label"] ?? null)),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -380,11 +380,11 @@ function cifti_create_label_cargs(
         "wb_command",
         "-cifti-create-label",
         (params["cifti-out"] ?? null),
-        ...cifti_create_label_volume_cargs((params["volume"] ?? null), execution),
-        ...cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution),
-        ...cifti_create_label_right_label_cargs((params["right-label"] ?? null), execution),
-        ...cifti_create_label_cerebellum_label_cargs((params["cerebellum-label"] ?? null), execution),
-        ...(params["label"] ?? null).map(s => cifti_create_label_label_cargs(s, execution)).flat()
+        ...(((params["volume"] ?? null) !== null) ? cifti_create_label_volume_cargs((params["volume"] ?? null), execution) : []),
+        ...(((params["left-label"] ?? null) !== null) ? cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution) : []),
+        ...(((params["right-label"] ?? null) !== null) ? cifti_create_label_right_label_cargs((params["right-label"] ?? null), execution) : []),
+        ...(((params["cerebellum-label"] ?? null) !== null) ? cifti_create_label_cerebellum_label_cargs((params["cerebellum-label"] ?? null), execution) : []),
+        ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_create_label_label_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

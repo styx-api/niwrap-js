@@ -99,11 +99,11 @@ function volume_label_to_roi_cargs(
         "-volume-label-to-roi",
         (params["volume-out"] ?? null),
         "-name",
-        (params["label-name"] ?? null),
+        (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : ""),
         "-key",
-        String((params["label-key"] ?? null)),
+        (((params["label-key"] ?? null) !== null) ? String((params["label-key"] ?? null)) : ""),
         "-map",
-        (params["map"] ?? null)
+        (((params["map"] ?? null) !== null) ? (params["map"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;

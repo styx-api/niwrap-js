@@ -97,7 +97,7 @@ function v_3d_tcat_cargs(
     cargs.push("3dTcat");
     cargs.push(
         "-rlt",
-        [(params["rlt"] ?? null), execution.inputFile((params["in_files"] ?? null))].join('')
+        [(((params["rlt"] ?? null) !== null) ? (params["rlt"] ?? null) : ""), execution.inputFile((params["in_files"] ?? null))].join('')
     );
     if ((params["out_file"] ?? null) !== null) {
         cargs.push(

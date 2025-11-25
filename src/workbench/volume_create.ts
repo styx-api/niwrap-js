@@ -271,8 +271,8 @@ function volume_create_cargs(
         "wb_command",
         "-volume-create",
         (params["volume-out"] ?? null),
-        ...volume_create_plumb_cargs((params["plumb"] ?? null), execution),
-        ...volume_create_sform_cargs((params["sform"] ?? null), execution)
+        ...(((params["plumb"] ?? null) !== null) ? volume_create_plumb_cargs((params["plumb"] ?? null), execution) : []),
+        ...(((params["sform"] ?? null) !== null) ? volume_create_sform_cargs((params["sform"] ?? null), execution) : [])
     );
     cargs.push(String((params["i-dim"] ?? null)));
     cargs.push(String((params["j-dim"] ?? null)));

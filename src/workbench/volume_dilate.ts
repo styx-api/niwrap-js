@@ -79,7 +79,7 @@ function volume_dilate_presmooth_cargs(
     cargs.push(
         "-presmooth",
         String((params["kernel"] ?? null)),
-        "-fwhm"
+        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
     );
     return cargs;
 }
@@ -226,15 +226,15 @@ function volume_dilate_cargs(
         "-volume-dilate",
         (params["volume-out"] ?? null),
         "-exponent",
-        String((params["exponent"] ?? null)),
+        (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
         "-bad-voxel-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
+        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
         "-data-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
+        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
         "-subvolume",
-        (params["subvol"] ?? null),
-        "-legacy-cutoff",
-        ...volume_dilate_grad_extrapolate_cargs((params["grad-extrapolate"] ?? null), execution)
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
+        (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : ""),
+        ...(((params["grad-extrapolate"] ?? null) !== null) ? volume_dilate_grad_extrapolate_cargs((params["grad-extrapolate"] ?? null), execution) : [])
     );
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));

@@ -102,10 +102,10 @@ function volume_parcel_resampling_cargs(
         "wb_command",
         "-volume-parcel-resampling",
         (params["volume-out"] ?? null),
-        "-fix-zeros",
-        "-fwhm",
+        (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
+        (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
         "-subvolume",
-        (params["subvol"] ?? null)
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(execution.inputFile((params["cur-parcels"] ?? null)));

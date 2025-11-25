@@ -86,9 +86,9 @@ function metric_to_volume_mapping_ribbon_constrained_cargs(
         execution.inputFile((params["inner-surf"] ?? null)),
         execution.inputFile((params["outer-surf"] ?? null)),
         "-voxel-subdiv",
-        String((params["subdiv-num"] ?? null)),
-        "-greedy",
-        "-thick-columns"
+        (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
+        (((params["greedy"] ?? false)) ? "-greedy" : ""),
+        (((params["thick-columns"] ?? false)) ? "-thick-columns" : "")
     );
     return cargs;
 }
@@ -168,8 +168,8 @@ function metric_to_volume_mapping_cargs(
         "-metric-to-volume-mapping",
         (params["volume-out"] ?? null),
         "-nearest-vertex",
-        String((params["distance"] ?? null)),
-        ...metric_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution)
+        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
+        ...(((params["ribbon-constrained"] ?? null) !== null) ? metric_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : [])
     );
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));

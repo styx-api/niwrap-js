@@ -121,7 +121,7 @@ function volume_to_surface_mapping_volume_roi_cargs(
     cargs.push(
         "-volume-roi",
         execution.inputFile((params["roi-volume"] ?? null)),
-        "-weighted"
+        (((params["weighted"] ?? false)) ? "-weighted" : "")
     );
     return cargs;
 }
@@ -164,7 +164,7 @@ function volume_to_surface_mapping_dilate_missing_cargs(
     cargs.push(
         "-dilate-missing",
         String((params["dist"] ?? null)),
-        "-nearest"
+        (((params["nearest"] ?? false)) ? "-nearest" : "")
     );
     return cargs;
 }
@@ -436,19 +436,19 @@ function volume_to_surface_mapping_ribbon_constrained_cargs(
         "-ribbon-constrained",
         execution.inputFile((params["inner-surf"] ?? null)),
         execution.inputFile((params["outer-surf"] ?? null)),
-        ...volume_to_surface_mapping_volume_roi_cargs((params["volume-roi"] ?? null), execution),
-        ...volume_to_surface_mapping_dilate_missing_cargs((params["dilate-missing"] ?? null), execution),
+        ...(((params["volume-roi"] ?? null) !== null) ? volume_to_surface_mapping_volume_roi_cargs((params["volume-roi"] ?? null), execution) : []),
+        ...(((params["dilate-missing"] ?? null) !== null) ? volume_to_surface_mapping_dilate_missing_cargs((params["dilate-missing"] ?? null), execution) : []),
         "-voxel-subdiv",
-        String((params["subdiv-num"] ?? null)),
-        "-thin-columns",
+        (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
+        (((params["thin-columns"] ?? false)) ? "-thin-columns" : ""),
         "-gaussian",
-        String((params["scale"] ?? null)),
+        (((params["scale"] ?? null) !== null) ? String((params["scale"] ?? null)) : ""),
         "-interpolate",
-        (params["method"] ?? null),
-        ...volume_to_surface_mapping_bad_vertices_out_cargs((params["bad-vertices-out"] ?? null), execution),
-        ...volume_to_surface_mapping_output_weights_cargs((params["output-weights"] ?? null), execution),
+        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
+        ...(((params["bad-vertices-out"] ?? null) !== null) ? volume_to_surface_mapping_bad_vertices_out_cargs((params["bad-vertices-out"] ?? null), execution) : []),
+        ...(((params["output-weights"] ?? null) !== null) ? volume_to_surface_mapping_output_weights_cargs((params["output-weights"] ?? null), execution) : []),
         "-output-weights-text",
-        (params["text-out"] ?? null)
+        (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
     );
     return cargs;
 }
@@ -520,7 +520,7 @@ function volume_to_surface_mapping_myelin_style_cargs(
         execution.inputFile((params["ribbon-roi"] ?? null)),
         execution.inputFile((params["thickness"] ?? null)),
         String((params["sigma"] ?? null)),
-        "-legacy-bug"
+        (((params["legacy-bug"] ?? false)) ? "-legacy-bug" : "")
     );
     return cargs;
 }
@@ -614,13 +614,13 @@ function volume_to_surface_mapping_cargs(
         "wb_command",
         "-volume-to-surface-mapping",
         (params["metric-out"] ?? null),
-        "-trilinear",
-        "-enclosing",
-        "-cubic",
-        ...volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution),
-        ...volume_to_surface_mapping_myelin_style_cargs((params["myelin-style"] ?? null), execution),
+        (((params["trilinear"] ?? false)) ? "-trilinear" : ""),
+        (((params["enclosing"] ?? false)) ? "-enclosing" : ""),
+        (((params["cubic"] ?? false)) ? "-cubic" : ""),
+        ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
+        ...(((params["myelin-style"] ?? null) !== null) ? volume_to_surface_mapping_myelin_style_cargs((params["myelin-style"] ?? null), execution) : []),
         "-subvol-select",
-        (params["subvol"] ?? null)
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));

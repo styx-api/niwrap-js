@@ -119,15 +119,15 @@ function cifti_restrict_dense_map_cargs(
         "-cifti-restrict-dense-map",
         (params["cifti-out"] ?? null),
         "-cifti-roi",
-        execution.inputFile((params["roi-cifti"] ?? null)),
+        (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
         "-left-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-right-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-cerebellum-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-vol-roi",
-        execution.inputFile((params["roi-vol"] ?? null))
+        (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));

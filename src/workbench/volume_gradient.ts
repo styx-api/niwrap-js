@@ -75,7 +75,7 @@ function volume_gradient_presmooth_cargs(
     cargs.push(
         "-presmooth",
         String((params["kernel"] ?? null)),
-        "-fwhm"
+        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
     );
     return cargs;
 }
@@ -240,12 +240,12 @@ function volume_gradient_cargs(
         "wb_command",
         "-volume-gradient",
         (params["volume-out"] ?? null),
-        ...volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution),
+        ...(((params["presmooth"] ?? null) !== null) ? volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
-        ...volume_gradient_vectors_cargs((params["vectors"] ?? null), execution),
+        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+        ...(((params["vectors"] ?? null) !== null) ? volume_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
         "-subvolume",
-        (params["subvol"] ?? null)
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;

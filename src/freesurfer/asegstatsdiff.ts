@@ -78,7 +78,7 @@ function asegstatsdiff_cargs(
     const cargs: string[] = [];
     cargs.push("asegstatsdiff");
     cargs.push((params["subject1"] ?? null));
-    cargs.push([(params["subject2"] ?? null), (params["outdir"] ?? null)].join(''));
+    cargs.push([(params["subject2"] ?? null), (((params["outdir"] ?? null) !== null) ? (params["outdir"] ?? null) : "")].join(''));
     return cargs;
 }
 

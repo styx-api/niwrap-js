@@ -78,7 +78,7 @@ function metric_tfce_presmooth_cargs(
     cargs.push(
         "-presmooth",
         String((params["kernel"] ?? null)),
-        "-fwhm"
+        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
     );
     return cargs;
 }
@@ -216,14 +216,14 @@ function metric_tfce_cargs(
         "wb_command",
         "-metric-tfce",
         (params["metric-out"] ?? null),
-        ...metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution),
+        ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
-        ...metric_tfce_parameters_cargs((params["parameters"] ?? null), execution),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+        ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
         "-column",
-        (params["column"] ?? null),
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));

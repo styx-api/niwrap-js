@@ -120,8 +120,8 @@ function spec_file_modify_remove_cargs(
     cargs.push(
         "-remove",
         (params["filename"] ?? null),
-        "-recursive",
-        "-suffix"
+        (((params["recursive"] ?? false)) ? "-recursive" : ""),
+        (((params["suffix"] ?? false)) ? "-suffix" : "")
     );
     return cargs;
 }

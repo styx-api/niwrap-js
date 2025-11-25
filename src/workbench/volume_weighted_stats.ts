@@ -79,7 +79,7 @@ function volume_weighted_stats_weight_volume_cargs(
     cargs.push(
         "-weight-volume",
         execution.inputFile((params["weight-volume"] ?? null)),
-        "-match-maps"
+        (((params["match-maps"] ?? false)) ? "-match-maps" : "")
     );
     return cargs;
 }
@@ -122,7 +122,7 @@ function volume_weighted_stats_roi_cargs(
     cargs.push(
         "-roi",
         execution.inputFile((params["roi-volume"] ?? null)),
-        "-match-maps"
+        (((params["match-maps"] ?? false)) ? "-match-maps" : "")
     );
     return cargs;
 }

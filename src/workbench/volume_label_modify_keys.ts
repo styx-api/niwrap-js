@@ -87,7 +87,7 @@ function volume_label_modify_keys_cargs(
         "-volume-label-modify-keys",
         (params["volume-out"] ?? null),
         "-subvolume",
-        (params["subvolume"] ?? null)
+        (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push((params["remap-file"] ?? null));

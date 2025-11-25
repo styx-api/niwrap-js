@@ -95,7 +95,7 @@ function cifti_dilate_left_surface_cargs(
         "-left-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-left-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -143,7 +143,7 @@ function cifti_dilate_right_surface_cargs(
         "-right-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-right-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -191,7 +191,7 @@ function cifti_dilate_cerebellum_surface_cargs(
         "-cerebellum-surface",
         execution.inputFile((params["surface"] ?? null)),
         "-cerebellum-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -292,14 +292,14 @@ function cifti_dilate_cargs(
         "wb_command",
         "-cifti-dilate",
         (params["cifti-out"] ?? null),
-        ...cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution),
-        ...cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution),
-        ...cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution),
+        ...(((params["left-surface"] ?? null) !== null) ? cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+        ...(((params["right-surface"] ?? null) !== null) ? cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
         "-bad-brainordinate-roi",
-        execution.inputFile((params["roi-cifti"] ?? null)),
-        "-nearest",
-        "-merged-volume",
-        "-legacy-mode"
+        (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
+        (((params["nearest"] ?? false)) ? "-nearest" : ""),
+        (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
+        (((params["legacy-mode"] ?? false)) ? "-legacy-mode" : "")
     );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));

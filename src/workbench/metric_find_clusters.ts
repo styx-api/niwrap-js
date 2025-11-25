@@ -138,19 +138,19 @@ function metric_find_clusters_cargs(
         "wb_command",
         "-metric-find-clusters",
         (params["metric-out"] ?? null),
-        "-less-than",
+        (((params["less-than"] ?? false)) ? "-less-than" : ""),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null)),
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
         "-column",
-        (params["column"] ?? null),
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
         "-size-ratio",
-        String((params["ratio"] ?? null)),
+        (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
         "-distance",
-        String((params["distance"] ?? null)),
+        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
         "-start",
-        String((params["startval"] ?? null))
+        (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));

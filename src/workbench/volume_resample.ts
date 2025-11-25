@@ -147,7 +147,7 @@ function volume_resample_affine_cargs(
     cargs.push(
         "-affine",
         (params["affine"] ?? null),
-        ...volume_resample_flirt_cargs((params["flirt"] ?? null), execution)
+        ...(((params["flirt"] ?? null) !== null) ? volume_resample_flirt_cargs((params["flirt"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -235,7 +235,7 @@ function volume_resample_affine_series_cargs(
     cargs.push(
         "-affine-series",
         (params["affine-series"] ?? null),
-        ...volume_resample_flirt_cargs_((params["flirt"] ?? null), execution)
+        ...(((params["flirt"] ?? null) !== null) ? volume_resample_flirt_cargs_((params["flirt"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -283,7 +283,7 @@ function volume_resample_warp_cargs(
         "-warp",
         (params["warpfield"] ?? null),
         "-fnirt",
-        (params["source-volume"] ?? null)
+        (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : "")
     );
     return cargs;
 }
@@ -373,10 +373,10 @@ function volume_resample_cargs(
         "-volume-resample",
         (params["volume-out"] ?? null),
         "-background",
-        String((params["value"] ?? null)),
-        ...(params["affine"] ?? null).map(s => volume_resample_affine_cargs(s, execution)).flat(),
-        ...(params["affine-series"] ?? null).map(s => volume_resample_affine_series_cargs(s, execution)).flat(),
-        ...(params["warp"] ?? null).map(s => volume_resample_warp_cargs(s, execution)).flat()
+        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+        ...(((params["affine"] ?? null) !== null) ? (params["affine"] ?? null).map(s => volume_resample_affine_cargs(s, execution)).flat() : []),
+        ...(((params["affine-series"] ?? null) !== null) ? (params["affine-series"] ?? null).map(s => volume_resample_affine_series_cargs(s, execution)).flat() : []),
+        ...(((params["warp"] ?? null) !== null) ? (params["warp"] ?? null).map(s => volume_resample_warp_cargs(s, execution)).flat() : [])
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push((params["volume-space"] ?? null));

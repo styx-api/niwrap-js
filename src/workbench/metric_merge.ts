@@ -80,7 +80,7 @@ function metric_merge_up_to_cargs(
     cargs.push(
         "-up-to",
         (params["last-column"] ?? null),
-        "-reverse"
+        (((params["reverse"] ?? false)) ? "-reverse" : "")
     );
     return cargs;
 }
@@ -125,7 +125,7 @@ function metric_merge_column_cargs(
     cargs.push(
         "-column",
         (params["column"] ?? null),
-        ...metric_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        ...(((params["up-to"] ?? null) !== null) ? metric_merge_up_to_cargs((params["up-to"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -170,7 +170,7 @@ function metric_merge_metric_cargs(
     cargs.push(
         "-metric",
         execution.inputFile((params["metric-in"] ?? null)),
-        ...(params["column"] ?? null).map(s => metric_merge_column_cargs(s, execution)).flat()
+        ...(((params["column"] ?? null) !== null) ? (params["column"] ?? null).map(s => metric_merge_column_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }
@@ -233,7 +233,7 @@ function metric_merge_cargs(
         "wb_command",
         "-metric-merge",
         (params["metric-out"] ?? null),
-        ...(params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat()
+        ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

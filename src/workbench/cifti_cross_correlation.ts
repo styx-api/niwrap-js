@@ -99,10 +99,10 @@ function cifti_cross_correlation_cargs(
         "-cifti-cross-correlation",
         (params["cifti-out"] ?? null),
         "-weights",
-        (params["weight-file"] ?? null),
-        "-fisher-z",
+        (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),
+        (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
         "-mem-limit",
-        String((params["limit-GB"] ?? null))
+        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["cifti-a"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-b"] ?? null)));

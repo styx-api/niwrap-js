@@ -92,7 +92,7 @@ function surface_generate_inflated_cargs(
         (params["inflated-surface-out"] ?? null),
         (params["very-inflated-surface-out"] ?? null),
         "-iterations-scale",
-        String((params["iterations-scale-value"] ?? null))
+        (((params["iterations-scale-value"] ?? null) !== null) ? String((params["iterations-scale-value"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["anatomical-surface-in"] ?? null)));
     return cargs;

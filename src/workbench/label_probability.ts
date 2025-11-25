@@ -78,7 +78,7 @@ function label_probability_cargs(
         "wb_command",
         "-label-probability",
         (params["probability-metric-out"] ?? null),
-        "-exclude-unlabeled"
+        (((params["exclude-unlabeled"] ?? false)) ? "-exclude-unlabeled" : "")
     );
     cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;

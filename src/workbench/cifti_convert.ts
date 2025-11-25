@@ -210,7 +210,7 @@ function cifti_convert_reset_timepoints_cargs(
         String((params["timestep"] ?? null)),
         String((params["timestart"] ?? null)),
         "-unit",
-        (params["unit"] ?? null)
+        (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")
     );
     return cargs;
 }
@@ -256,8 +256,8 @@ function cifti_convert_replace_binary_cargs(
     cargs.push(
         "-replace-binary",
         (params["binary-in"] ?? null),
-        "-flip-endian",
-        "-transpose"
+        (((params["flip-endian"] ?? false)) ? "-flip-endian" : ""),
+        (((params["transpose"] ?? false)) ? "-transpose" : "")
     );
     return cargs;
 }
@@ -334,10 +334,10 @@ function cifti_convert_from_gifti_ext_cargs(
         "-from-gifti-ext",
         (params["gifti-in"] ?? null),
         (params["cifti-out"] ?? null),
-        ...cifti_convert_reset_timepoints_cargs((params["reset-timepoints"] ?? null), execution),
-        "-reset-scalars",
-        "-column-reset-scalars",
-        ...cifti_convert_replace_binary_cargs((params["replace-binary"] ?? null), execution)
+        ...(((params["reset-timepoints"] ?? null) !== null) ? cifti_convert_reset_timepoints_cargs((params["reset-timepoints"] ?? null), execution) : []),
+        (((params["reset-scalars"] ?? false)) ? "-reset-scalars" : ""),
+        (((params["column-reset-scalars"] ?? false)) ? "-column-reset-scalars" : ""),
+        ...(((params["replace-binary"] ?? null) !== null) ? cifti_convert_replace_binary_cargs((params["replace-binary"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -424,8 +424,8 @@ function cifti_convert_to_nifti_cargs(
         "-to-nifti",
         execution.inputFile((params["cifti-in"] ?? null)),
         (params["nifti-out"] ?? null),
-        "-smaller-file",
-        "-smaller-dims"
+        (((params["smaller-file"] ?? false)) ? "-smaller-file" : ""),
+        (((params["smaller-dims"] ?? false)) ? "-smaller-dims" : "")
     );
     return cargs;
 }
@@ -497,7 +497,7 @@ function cifti_convert_reset_timepoints_cargs_(
         String((params["timestep"] ?? null)),
         String((params["timestart"] ?? null)),
         "-unit",
-        (params["unit"] ?? null)
+        (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")
     );
     return cargs;
 }
@@ -570,8 +570,8 @@ function cifti_convert_from_nifti_cargs(
         execution.inputFile((params["nifti-in"] ?? null)),
         execution.inputFile((params["cifti-template"] ?? null)),
         (params["cifti-out"] ?? null),
-        ...cifti_convert_reset_timepoints_cargs_((params["reset-timepoints"] ?? null), execution),
-        "-reset-scalars"
+        ...(((params["reset-timepoints"] ?? null) !== null) ? cifti_convert_reset_timepoints_cargs_((params["reset-timepoints"] ?? null), execution) : []),
+        (((params["reset-scalars"] ?? false)) ? "-reset-scalars" : "")
     );
     return cargs;
 }
@@ -643,7 +643,7 @@ function cifti_convert_to_text_cargs(
         execution.inputFile((params["cifti-in"] ?? null)),
         (params["text-out"] ?? null),
         "-col-delim",
-        (params["delim-string"] ?? null)
+        (((params["delim-string"] ?? null) !== null) ? (params["delim-string"] ?? null) : "")
     );
     return cargs;
 }
@@ -695,7 +695,7 @@ function cifti_convert_reset_timepoints_cargs_2(
         String((params["timestep"] ?? null)),
         String((params["timestart"] ?? null)),
         "-unit",
-        (params["unit"] ?? null)
+        (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")
     );
     return cargs;
 }
@@ -776,9 +776,9 @@ function cifti_convert_from_text_cargs(
         execution.inputFile((params["cifti-template"] ?? null)),
         (params["cifti-out"] ?? null),
         "-col-delim",
-        (params["delim-string"] ?? null),
-        ...cifti_convert_reset_timepoints_cargs_2((params["reset-timepoints"] ?? null), execution),
-        "-reset-scalars"
+        (((params["delim-string"] ?? null) !== null) ? (params["delim-string"] ?? null) : ""),
+        ...(((params["reset-timepoints"] ?? null) !== null) ? cifti_convert_reset_timepoints_cargs_2((params["reset-timepoints"] ?? null), execution) : []),
+        (((params["reset-scalars"] ?? false)) ? "-reset-scalars" : "")
     );
     return cargs;
 }

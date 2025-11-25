@@ -91,9 +91,9 @@ function volume_distortion_cargs(
         "-volume-distortion",
         (params["volume-out"] ?? null),
         "-fnirt",
-        (params["source-volume"] ?? null),
-        "-circular",
-        "-log2"
+        (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
+        (((params["circular"] ?? false)) ? "-circular" : ""),
+        (((params["log2"] ?? false)) ? "-log2" : "")
     );
     cargs.push((params["warpfield"] ?? null));
     return cargs;

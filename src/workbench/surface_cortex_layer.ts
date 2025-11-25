@@ -175,7 +175,7 @@ function surface_cortex_layer_cargs(
         "wb_command",
         "-surface-cortex-layer",
         (params["out-surface"] ?? null),
-        ...surface_cortex_layer_placement_out_cargs((params["placement-out"] ?? null), execution)
+        ...(((params["placement-out"] ?? null) !== null) ? surface_cortex_layer_placement_out_cargs((params["placement-out"] ?? null), execution) : [])
     );
     cargs.push(execution.inputFile((params["white-surface"] ?? null)));
     cargs.push(execution.inputFile((params["pial-surface"] ?? null)));

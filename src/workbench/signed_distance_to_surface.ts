@@ -87,7 +87,7 @@ function signed_distance_to_surface_cargs(
         "-signed-distance-to-surface",
         (params["metric"] ?? null),
         "-winding",
-        (params["method"] ?? null)
+        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
     cargs.push(execution.inputFile((params["surface-ref"] ?? null)));

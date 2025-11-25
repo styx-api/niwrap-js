@@ -87,7 +87,7 @@ function foci_get_projection_vertex_cargs(
         "-foci-get-projection-vertex",
         (params["metric-out"] ?? null),
         "-name",
-        (params["name"] ?? null)
+        (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["foci"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));

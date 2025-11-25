@@ -107,11 +107,11 @@ function label_erode_cargs(
         "-label-erode",
         (params["label-out"] ?? null),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-column",
-        (params["column"] ?? null),
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["label"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));

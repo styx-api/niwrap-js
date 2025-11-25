@@ -87,7 +87,7 @@ function label_modify_keys_cargs(
         "-label-modify-keys",
         (params["label-out"] ?? null),
         "-column",
-        (params["column"] ?? null)
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["remap-file"] ?? null));

@@ -87,7 +87,7 @@ function cifti_label_modify_keys_cargs(
         "-cifti-label-modify-keys",
         (params["cifti-out"] ?? null),
         "-column",
-        (params["column"] ?? null)
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["remap-file"] ?? null));

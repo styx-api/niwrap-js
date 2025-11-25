@@ -115,13 +115,13 @@ function surface_geodesic_rois_cargs(
         "-surface-geodesic-rois",
         (params["metric-out"] ?? null),
         "-gaussian",
-        String((params["sigma"] ?? null)),
+        (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
         "-overlap-logic",
-        (params["method"] ?? null),
+        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
         "-names",
-        (params["name-list-file"] ?? null),
+        (((params["name-list-file"] ?? null) !== null) ? (params["name-list-file"] ?? null) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));

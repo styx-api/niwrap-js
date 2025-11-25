@@ -98,10 +98,10 @@ function volume_vector_operation_cargs(
         "wb_command",
         "-volume-vector-operation",
         (params["volume-out"] ?? null),
-        "-normalize-a",
-        "-normalize-b",
-        "-normalize-output",
-        "-magnitude"
+        (((params["normalize-a"] ?? false)) ? "-normalize-a" : ""),
+        (((params["normalize-b"] ?? false)) ? "-normalize-b" : ""),
+        (((params["normalize-output"] ?? false)) ? "-normalize-output" : ""),
+        (((params["magnitude"] ?? false)) ? "-magnitude" : "")
     );
     cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
     cargs.push(execution.inputFile((params["vectors-b"] ?? null)));

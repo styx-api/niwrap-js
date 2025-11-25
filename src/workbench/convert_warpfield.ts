@@ -85,7 +85,7 @@ function convert_warpfield_from_world_cargs(
     cargs.push(
         "-from-world",
         (params["input"] ?? null),
-        "-absolute"
+        (((params["absolute"] ?? false)) ? "-absolute" : "")
     );
     return cargs;
 }
@@ -132,7 +132,7 @@ function convert_warpfield_from_fnirt_cargs(
         "-from-fnirt",
         (params["input"] ?? null),
         (params["source-volume"] ?? null),
-        "-absolute"
+        (((params["absolute"] ?? false)) ? "-absolute" : "")
     );
     return cargs;
 }

@@ -150,7 +150,7 @@ function cifti_create_dense_scalar_left_metric_cargs(
         "-left-metric",
         execution.inputFile((params["metric"] ?? null)),
         "-roi-left",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -198,7 +198,7 @@ function cifti_create_dense_scalar_right_metric_cargs(
         "-right-metric",
         execution.inputFile((params["metric"] ?? null)),
         "-roi-right",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -246,7 +246,7 @@ function cifti_create_dense_scalar_cerebellum_metric_cargs(
         "-cerebellum-metric",
         execution.inputFile((params["metric"] ?? null)),
         "-roi-cerebellum",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -298,7 +298,7 @@ function cifti_create_dense_scalar_metric_cargs(
         (params["structure"] ?? null),
         execution.inputFile((params["metric"] ?? null)),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     return cargs;
 }
@@ -388,13 +388,13 @@ function cifti_create_dense_scalar_cargs(
         "wb_command",
         "-cifti-create-dense-scalar",
         (params["cifti-out"] ?? null),
-        ...cifti_create_dense_scalar_volume_cargs((params["volume"] ?? null), execution),
-        ...cifti_create_dense_scalar_left_metric_cargs((params["left-metric"] ?? null), execution),
-        ...cifti_create_dense_scalar_right_metric_cargs((params["right-metric"] ?? null), execution),
-        ...cifti_create_dense_scalar_cerebellum_metric_cargs((params["cerebellum-metric"] ?? null), execution),
+        ...(((params["volume"] ?? null) !== null) ? cifti_create_dense_scalar_volume_cargs((params["volume"] ?? null), execution) : []),
+        ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_scalar_left_metric_cargs((params["left-metric"] ?? null), execution) : []),
+        ...(((params["right-metric"] ?? null) !== null) ? cifti_create_dense_scalar_right_metric_cargs((params["right-metric"] ?? null), execution) : []),
+        ...(((params["cerebellum-metric"] ?? null) !== null) ? cifti_create_dense_scalar_cerebellum_metric_cargs((params["cerebellum-metric"] ?? null), execution) : []),
         "-name-file",
-        (params["file"] ?? null),
-        ...(params["metric"] ?? null).map(s => cifti_create_dense_scalar_metric_cargs(s, execution)).flat()
+        (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
+        ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_scalar_metric_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

@@ -260,8 +260,8 @@ function cifti_resample_dconn_memory_volume_predilate_cargs(
     cargs.push(
         "-volume-predilate",
         String((params["dilate-mm"] ?? null)),
-        "-nearest",
-        ...cifti_resample_dconn_memory_weighted_cargs((params["weighted"] ?? null), execution)
+        (((params["nearest"] ?? false)) ? "-nearest" : ""),
+        ...(((params["weighted"] ?? null) !== null) ? cifti_resample_dconn_memory_weighted_cargs((params["weighted"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -362,9 +362,9 @@ function cifti_resample_dconn_memory_surface_postdilate_cargs(
     cargs.push(
         "-surface-postdilate",
         String((params["dilate-mm"] ?? null)),
-        "-nearest",
-        "-linear",
-        ...cifti_resample_dconn_memory_weighted_cargs_((params["weighted"] ?? null), execution)
+        (((params["nearest"] ?? false)) ? "-nearest" : ""),
+        (((params["linear"] ?? false)) ? "-linear" : ""),
+        ...(((params["weighted"] ?? null) !== null) ? cifti_resample_dconn_memory_weighted_cargs_((params["weighted"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -452,7 +452,7 @@ function cifti_resample_dconn_memory_affine_cargs(
     cargs.push(
         "-affine",
         (params["affine-file"] ?? null),
-        ...cifti_resample_dconn_memory_flirt_cargs((params["flirt"] ?? null), execution)
+        ...(((params["flirt"] ?? null) !== null) ? cifti_resample_dconn_memory_flirt_cargs((params["flirt"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -500,7 +500,7 @@ function cifti_resample_dconn_memory_warpfield_cargs(
         "-warpfield",
         (params["warpfield"] ?? null),
         "-fnirt",
-        (params["source-volume"] ?? null)
+        (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : "")
     );
     return cargs;
 }
@@ -640,8 +640,8 @@ function cifti_resample_dconn_memory_left_spheres_cargs(
         "-left-spheres",
         execution.inputFile((params["current-sphere"] ?? null)),
         execution.inputFile((params["new-sphere"] ?? null)),
-        ...cifti_resample_dconn_memory_left_area_surfs_cargs((params["left-area-surfs"] ?? null), execution),
-        ...cifti_resample_dconn_memory_left_area_metrics_cargs((params["left-area-metrics"] ?? null), execution)
+        ...(((params["left-area-surfs"] ?? null) !== null) ? cifti_resample_dconn_memory_left_area_surfs_cargs((params["left-area-surfs"] ?? null), execution) : []),
+        ...(((params["left-area-metrics"] ?? null) !== null) ? cifti_resample_dconn_memory_left_area_metrics_cargs((params["left-area-metrics"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -781,8 +781,8 @@ function cifti_resample_dconn_memory_right_spheres_cargs(
         "-right-spheres",
         execution.inputFile((params["current-sphere"] ?? null)),
         execution.inputFile((params["new-sphere"] ?? null)),
-        ...cifti_resample_dconn_memory_right_area_surfs_cargs((params["right-area-surfs"] ?? null), execution),
-        ...cifti_resample_dconn_memory_right_area_metrics_cargs((params["right-area-metrics"] ?? null), execution)
+        ...(((params["right-area-surfs"] ?? null) !== null) ? cifti_resample_dconn_memory_right_area_surfs_cargs((params["right-area-surfs"] ?? null), execution) : []),
+        ...(((params["right-area-metrics"] ?? null) !== null) ? cifti_resample_dconn_memory_right_area_metrics_cargs((params["right-area-metrics"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -922,8 +922,8 @@ function cifti_resample_dconn_memory_cerebellum_spheres_cargs(
         "-cerebellum-spheres",
         execution.inputFile((params["current-sphere"] ?? null)),
         execution.inputFile((params["new-sphere"] ?? null)),
-        ...cifti_resample_dconn_memory_cerebellum_area_surfs_cargs((params["cerebellum-area-surfs"] ?? null), execution),
-        ...cifti_resample_dconn_memory_cerebellum_area_metrics_cargs((params["cerebellum-area-metrics"] ?? null), execution)
+        ...(((params["cerebellum-area-surfs"] ?? null) !== null) ? cifti_resample_dconn_memory_cerebellum_area_surfs_cargs((params["cerebellum-area-surfs"] ?? null), execution) : []),
+        ...(((params["cerebellum-area-metrics"] ?? null) !== null) ? cifti_resample_dconn_memory_cerebellum_area_metrics_cargs((params["cerebellum-area-metrics"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -1034,14 +1034,14 @@ function cifti_resample_dconn_memory_cargs(
         "wb_command",
         "-cifti-resample-dconn-memory",
         (params["cifti-out"] ?? null),
-        "-surface-largest",
-        ...cifti_resample_dconn_memory_volume_predilate_cargs((params["volume-predilate"] ?? null), execution),
-        ...cifti_resample_dconn_memory_surface_postdilate_cargs((params["surface-postdilate"] ?? null), execution),
-        ...cifti_resample_dconn_memory_affine_cargs((params["affine"] ?? null), execution),
-        ...cifti_resample_dconn_memory_warpfield_cargs((params["warpfield"] ?? null), execution),
-        ...cifti_resample_dconn_memory_left_spheres_cargs((params["left-spheres"] ?? null), execution),
-        ...cifti_resample_dconn_memory_right_spheres_cargs((params["right-spheres"] ?? null), execution),
-        ...cifti_resample_dconn_memory_cerebellum_spheres_cargs((params["cerebellum-spheres"] ?? null), execution)
+        (((params["surface-largest"] ?? false)) ? "-surface-largest" : ""),
+        ...(((params["volume-predilate"] ?? null) !== null) ? cifti_resample_dconn_memory_volume_predilate_cargs((params["volume-predilate"] ?? null), execution) : []),
+        ...(((params["surface-postdilate"] ?? null) !== null) ? cifti_resample_dconn_memory_surface_postdilate_cargs((params["surface-postdilate"] ?? null), execution) : []),
+        ...(((params["affine"] ?? null) !== null) ? cifti_resample_dconn_memory_affine_cargs((params["affine"] ?? null), execution) : []),
+        ...(((params["warpfield"] ?? null) !== null) ? cifti_resample_dconn_memory_warpfield_cargs((params["warpfield"] ?? null), execution) : []),
+        ...(((params["left-spheres"] ?? null) !== null) ? cifti_resample_dconn_memory_left_spheres_cargs((params["left-spheres"] ?? null), execution) : []),
+        ...(((params["right-spheres"] ?? null) !== null) ? cifti_resample_dconn_memory_right_spheres_cargs((params["right-spheres"] ?? null), execution) : []),
+        ...(((params["cerebellum-spheres"] ?? null) !== null) ? cifti_resample_dconn_memory_cerebellum_spheres_cargs((params["cerebellum-spheres"] ?? null), execution) : [])
     );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-template"] ?? null)));

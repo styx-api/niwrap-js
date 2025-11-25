@@ -244,7 +244,7 @@ function volume_set_space_file_cargs(
     cargs.push(
         "-file",
         (params["volume-ref"] ?? null),
-        "-ignore-dims"
+        (((params["ignore-dims"] ?? false)) ? "-ignore-dims" : "")
     );
     return cargs;
 }

@@ -72,7 +72,7 @@ function metric_smoothing_roi_cargs(
     cargs.push(
         "-roi",
         execution.inputFile((params["roi-metric"] ?? null)),
-        "-match-columns"
+        (((params["match-columns"] ?? false)) ? "-match-columns" : "")
     );
     return cargs;
 }
@@ -171,15 +171,15 @@ function metric_smoothing_cargs(
         "wb_command",
         "-metric-smoothing",
         (params["metric-out"] ?? null),
-        "-fwhm",
-        ...metric_smoothing_roi_cargs((params["roi"] ?? null), execution),
-        "-fix-zeros",
+        (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
+        ...(((params["roi"] ?? null) !== null) ? metric_smoothing_roi_cargs((params["roi"] ?? null), execution) : []),
+        (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
         "-column",
-        (params["column"] ?? null),
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null)),
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
         "-method",
-        (params["method"] ?? null)
+        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));

@@ -79,7 +79,7 @@ function cifti_average_roi_correlation_cifti_roi_cargs(
     cargs.push(
         "-cifti-roi",
         execution.inputFile((params["roi-cifti"] ?? null)),
-        "-in-memory"
+        (((params["in-memory"] ?? false)) ? "-in-memory" : "")
     );
     return cargs;
 }
@@ -235,22 +235,22 @@ function cifti_average_roi_correlation_cargs(
         "wb_command",
         "-cifti-average-roi-correlation",
         (params["cifti-out"] ?? null),
-        ...cifti_average_roi_correlation_cifti_roi_cargs((params["cifti-roi"] ?? null), execution),
+        ...(((params["cifti-roi"] ?? null) !== null) ? cifti_average_roi_correlation_cifti_roi_cargs((params["cifti-roi"] ?? null), execution) : []),
         "-left-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-right-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-cerebellum-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-vol-roi",
-        execution.inputFile((params["roi-vol"] ?? null)),
+        (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
         "-left-area-surf",
-        execution.inputFile((params["left-surf"] ?? null)),
+        (((params["left-surf"] ?? null) !== null) ? execution.inputFile((params["left-surf"] ?? null)) : ""),
         "-right-area-surf",
-        execution.inputFile((params["right-surf"] ?? null)),
+        (((params["right-surf"] ?? null) !== null) ? execution.inputFile((params["right-surf"] ?? null)) : ""),
         "-cerebellum-area-surf",
-        execution.inputFile((params["cerebellum-surf"] ?? null)),
-        ...(params["cifti"] ?? null).map(s => cifti_average_roi_correlation_cifti_cargs(s, execution)).flat()
+        (((params["cerebellum-surf"] ?? null) !== null) ? execution.inputFile((params["cerebellum-surf"] ?? null)) : ""),
+        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_roi_correlation_cifti_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

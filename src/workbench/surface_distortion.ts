@@ -77,7 +77,7 @@ function surface_distortion_smooth_cargs(
     cargs.push(
         "-smooth",
         String((params["sigma"] ?? null)),
-        "-fwhm"
+        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
     );
     return cargs;
 }
@@ -210,12 +210,12 @@ function surface_distortion_cargs(
         "wb_command",
         "-surface-distortion",
         (params["metric-out"] ?? null),
-        ...surface_distortion_smooth_cargs((params["smooth"] ?? null), execution),
-        ...surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution),
-        "-caret5-method",
-        "-edge-method",
+        ...(((params["smooth"] ?? null) !== null) ? surface_distortion_smooth_cargs((params["smooth"] ?? null), execution) : []),
+        ...(((params["match-surface-area"] ?? null) !== null) ? surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution) : []),
+        (((params["caret5-method"] ?? false)) ? "-caret5-method" : ""),
+        (((params["edge-method"] ?? false)) ? "-edge-method" : ""),
         "-local-affine-method",
-        "-log2"
+        (((params["log2"] ?? null) !== null) ? "-log2" : "")
     );
     cargs.push(execution.inputFile((params["surface-reference"] ?? null)));
     cargs.push(execution.inputFile((params["surface-distorted"] ?? null)));

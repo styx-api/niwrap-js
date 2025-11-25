@@ -107,9 +107,9 @@ function metric_false_correlation_cargs(
         "-metric-false-correlation",
         (params["metric-out"] ?? null),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-dump-text",
-        (params["text-out"] ?? null)
+        (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));

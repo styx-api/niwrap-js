@@ -102,12 +102,12 @@ function cifti_label_import_cargs(
         "wb_command",
         "-cifti-label-import",
         (params["output"] ?? null),
-        "-discard-others",
+        (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
         "-unlabeled-value",
-        String((params["value"] ?? null)),
-        "-drop-unused-labels",
+        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+        (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
         "-hierarchy",
-        (params["file"] ?? null)
+        (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label-list-file"] ?? null));

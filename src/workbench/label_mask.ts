@@ -87,7 +87,7 @@ function label_mask_cargs(
         "-label-mask",
         (params["label-out"] ?? null),
         "-column",
-        (params["column"] ?? null)
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["label"] ?? null)));
     cargs.push(execution.inputFile((params["mask"] ?? null)));

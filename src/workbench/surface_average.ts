@@ -237,7 +237,7 @@ function surface_average_surf_cargs(
         "-surf",
         execution.inputFile((params["surface"] ?? null)),
         "-weight",
-        String((params["weight"] ?? null))
+        (((params["weight"] ?? null) !== null) ? String((params["weight"] ?? null)) : "")
     );
     return cargs;
 }
@@ -318,9 +318,9 @@ function surface_average_cargs(
         "wb_command",
         "-surface-average",
         (params["surface-out"] ?? null),
-        ...surface_average_stddev_cargs((params["stddev"] ?? null), execution),
-        ...surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution),
-        ...(params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat()
+        ...(((params["stddev"] ?? null) !== null) ? surface_average_stddev_cargs((params["stddev"] ?? null), execution) : []),
+        ...(((params["uncertainty"] ?? null) !== null) ? surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution) : []),
+        ...(((params["surf"] ?? null) !== null) ? (params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

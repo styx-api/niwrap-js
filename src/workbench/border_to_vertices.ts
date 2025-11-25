@@ -87,7 +87,7 @@ function border_to_vertices_cargs(
         "-border-to-vertices",
         (params["metric-out"] ?? null),
         "-border",
-        (params["name"] ?? null)
+        (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["border-file"] ?? null)));

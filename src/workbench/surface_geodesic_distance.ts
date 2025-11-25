@@ -98,11 +98,11 @@ function surface_geodesic_distance_cargs(
         "wb_command",
         "-surface-geodesic-distance",
         (params["metric-out"] ?? null),
-        "-naive",
+        (((params["naive"] ?? false)) ? "-naive" : ""),
         "-limit",
-        String((params["limit-mm"] ?? null)),
+        (((params["limit-mm"] ?? null) !== null) ? String((params["limit-mm"] ?? null)) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null))
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["vertex"] ?? null)));

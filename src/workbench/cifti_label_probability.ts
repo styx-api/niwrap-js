@@ -78,7 +78,7 @@ function cifti_label_probability_cargs(
         "wb_command",
         "-cifti-label-probability",
         (params["probability-dscalar-out"] ?? null),
-        "-exclude-unlabeled"
+        (((params["exclude-unlabeled"] ?? false)) ? "-exclude-unlabeled" : "")
     );
     cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;

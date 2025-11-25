@@ -111,13 +111,13 @@ function volume_rois_from_extrema_cargs(
         "-volume-rois-from-extrema",
         (params["volume-out"] ?? null),
         "-gaussian",
-        String((params["sigma"] ?? null)),
+        (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
         "-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
+        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
         "-overlap-logic",
-        (params["method"] ?? null),
+        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
         "-subvolume",
-        (params["subvol"] ?? null)
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));

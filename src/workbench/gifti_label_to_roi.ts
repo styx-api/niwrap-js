@@ -99,11 +99,11 @@ function gifti_label_to_roi_cargs(
         "-gifti-label-to-roi",
         (params["metric-out"] ?? null),
         "-name",
-        (params["label-name"] ?? null),
+        (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : ""),
         "-key",
-        String((params["label-key"] ?? null)),
+        (((params["label-key"] ?? null) !== null) ? String((params["label-key"] ?? null)) : ""),
         "-map",
-        (params["map"] ?? null)
+        (((params["map"] ?? null) !== null) ? (params["map"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;

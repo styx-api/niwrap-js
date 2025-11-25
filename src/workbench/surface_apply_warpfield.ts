@@ -87,7 +87,7 @@ function surface_apply_warpfield_cargs(
         "-surface-apply-warpfield",
         (params["out-surf"] ?? null),
         "-fnirt",
-        (params["forward-warp"] ?? null)
+        (((params["forward-warp"] ?? null) !== null) ? (params["forward-warp"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["in-surf"] ?? null)));
     cargs.push((params["warpfield"] ?? null));

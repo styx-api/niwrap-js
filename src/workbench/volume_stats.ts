@@ -68,7 +68,7 @@ function volume_stats_roi_cargs(
     cargs.push(
         "-roi",
         execution.inputFile((params["roi-volume"] ?? null)),
-        "-match-maps"
+        (((params["match-maps"] ?? false)) ? "-match-maps" : "")
     );
     return cargs;
 }

@@ -156,7 +156,7 @@ function convert_fiber_orientations_cargs(
         "wb_command",
         "-convert-fiber-orientations",
         (params["fiber-out"] ?? null),
-        ...(params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat()
+        ...(((params["fiber"] ?? null) !== null) ? (params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat() : [])
     );
     cargs.push(execution.inputFile((params["label-volume"] ?? null)));
     return cargs;

@@ -309,13 +309,13 @@ function label_resample_cargs(
         "wb_command",
         "-label-resample",
         (params["label-out"] ?? null),
-        ...label_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution),
-        ...label_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution),
+        ...(((params["area-surfs"] ?? null) !== null) ? label_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
+        ...(((params["area-metrics"] ?? null) !== null) ? label_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
         "-current-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
-        ...label_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution),
-        "-largest",
-        "-bypass-sphere-check"
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+        ...(((params["valid-roi-out"] ?? null) !== null) ? label_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : []),
+        (((params["largest"] ?? false)) ? "-largest" : ""),
+        (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")
     );
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push(execution.inputFile((params["current-sphere"] ?? null)));

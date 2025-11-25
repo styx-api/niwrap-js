@@ -83,7 +83,7 @@ function eddy_correct_cargs(
     cargs.push("eddy_correct");
     cargs.push(execution.inputFile((params["4d_input"] ?? null)));
     cargs.push((params["4d_output"] ?? null));
-    cargs.push([String((params["reference_no"] ?? null)), (params["interp_method"] ?? null)].join(''));
+    cargs.push([String((params["reference_no"] ?? null)), (((params["interp_method"] ?? null) !== null) ? (params["interp_method"] ?? null) : "")].join(''));
     return cargs;
 }
 

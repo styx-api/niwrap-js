@@ -82,7 +82,7 @@ function metric_extrema_presmooth_cargs(
     cargs.push(
         "-presmooth",
         String((params["kernel"] ?? null)),
-        "-fwhm"
+        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
     );
     return cargs;
 }
@@ -228,16 +228,16 @@ function metric_extrema_cargs(
         "wb_command",
         "-metric-extrema",
         (params["metric-out"] ?? null),
-        ...metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution),
+        ...(((params["presmooth"] ?? null) !== null) ? metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
-        ...metric_extrema_threshold_cargs((params["threshold"] ?? null), execution),
-        "-sum-columns",
-        "-consolidate-mode",
-        "-only-maxima",
-        "-only-minima",
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
+        ...(((params["threshold"] ?? null) !== null) ? metric_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
+        (((params["sum-columns"] ?? false)) ? "-sum-columns" : ""),
+        (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
+        (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
+        (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
         "-column",
-        (params["column"] ?? null)
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));

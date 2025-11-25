@@ -148,10 +148,10 @@ function cifti_create_scalar_series_cargs(
         "wb_command",
         "-cifti-create-scalar-series",
         (params["cifti-out"] ?? null),
-        "-transpose",
+        (((params["transpose"] ?? false)) ? "-transpose" : ""),
         "-name-file",
-        (params["file"] ?? null),
-        ...cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution)
+        (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
+        ...(((params["series"] ?? null) !== null) ? cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution) : [])
     );
     cargs.push((params["input"] ?? null));
     return cargs;

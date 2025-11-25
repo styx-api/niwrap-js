@@ -135,7 +135,7 @@ function surface_apply_affine_cargs(
         "wb_command",
         "-surface-apply-affine",
         (params["out-surf"] ?? null),
-        ...surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution)
+        ...(((params["flirt"] ?? null) !== null) ? surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution) : [])
     );
     cargs.push(execution.inputFile((params["in-surf"] ?? null)));
     cargs.push((params["affine"] ?? null));

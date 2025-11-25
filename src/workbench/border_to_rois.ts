@@ -95,9 +95,9 @@ function border_to_rois_cargs(
         "-border-to-rois",
         (params["metric-out"] ?? null),
         "-border",
-        (params["name"] ?? null),
-        "-inverse",
-        "-include-border"
+        (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
+        (((params["inverse"] ?? false)) ? "-inverse" : ""),
+        (((params["include-border"] ?? false)) ? "-include-border" : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["border-file"] ?? null)));

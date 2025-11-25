@@ -110,14 +110,14 @@ function metric_label_import_cargs(
         "wb_command",
         "-metric-label-import",
         (params["output"] ?? null),
-        "-discard-others",
+        (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
         "-unlabeled-value",
-        String((params["value"] ?? null)),
+        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
         "-column",
-        (params["column"] ?? null),
-        "-drop-unused-labels",
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+        (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
         "-hierarchy",
-        (params["file"] ?? null)
+        (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label-list-file"] ?? null));

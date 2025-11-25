@@ -89,8 +89,8 @@ function cifti_export_dense_mapping_volume_all_cargs(
     cargs.push(
         "-volume-all",
         (params["text-out"] ?? null),
-        "-no-cifti-index",
-        "-structure"
+        (((params["no-cifti-index"] ?? false)) ? "-no-cifti-index" : ""),
+        (((params["structure"] ?? false)) ? "-structure" : "")
     );
     return cargs;
 }
@@ -137,7 +137,7 @@ function cifti_export_dense_mapping_surface_cargs(
         "-surface",
         (params["structure"] ?? null),
         (params["text-out"] ?? null),
-        "-no-cifti-index"
+        (((params["no-cifti-index"] ?? false)) ? "-no-cifti-index" : "")
     );
     return cargs;
 }
@@ -184,7 +184,7 @@ function cifti_export_dense_mapping_volume_cargs(
         "-volume",
         (params["structure"] ?? null),
         (params["text-out"] ?? null),
-        "-no-cifti-index"
+        (((params["no-cifti-index"] ?? false)) ? "-no-cifti-index" : "")
     );
     return cargs;
 }

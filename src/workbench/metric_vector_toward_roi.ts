@@ -87,7 +87,7 @@ function metric_vector_toward_roi_cargs(
         "-metric-vector-toward-roi",
         (params["metric-out"] ?? null),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null))
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["target-roi"] ?? null)));

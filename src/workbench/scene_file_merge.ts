@@ -80,7 +80,7 @@ function scene_file_merge_up_to_cargs(
     cargs.push(
         "-up-to",
         (params["last-column"] ?? null),
-        "-reverse"
+        (((params["reverse"] ?? false)) ? "-reverse" : "")
     );
     return cargs;
 }
@@ -125,7 +125,7 @@ function scene_file_merge_scene_cargs(
     cargs.push(
         "-scene",
         (params["scene"] ?? null),
-        ...scene_file_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        ...(((params["up-to"] ?? null) !== null) ? scene_file_merge_up_to_cargs((params["up-to"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -170,7 +170,7 @@ function scene_file_merge_scene_file_cargs(
     cargs.push(
         "-scene-file",
         (params["scene-file"] ?? null),
-        ...(params["scene"] ?? null).map(s => scene_file_merge_scene_cargs(s, execution)).flat()
+        ...(((params["scene"] ?? null) !== null) ? (params["scene"] ?? null).map(s => scene_file_merge_scene_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

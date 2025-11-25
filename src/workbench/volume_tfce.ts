@@ -76,7 +76,7 @@ function volume_tfce_presmooth_cargs(
     cargs.push(
         "-presmooth",
         String((params["kernel"] ?? null)),
-        "-fwhm"
+        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
     );
     return cargs;
 }
@@ -204,12 +204,12 @@ function volume_tfce_cargs(
         "wb_command",
         "-volume-tfce",
         (params["volume-out"] ?? null),
-        ...volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution),
+        ...(((params["presmooth"] ?? null) !== null) ? volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
-        ...volume_tfce_parameters_cargs((params["parameters"] ?? null), execution),
+        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
+        ...(((params["parameters"] ?? null) !== null) ? volume_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
         "-subvolume",
-        (params["subvolume"] ?? null)
+        (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;

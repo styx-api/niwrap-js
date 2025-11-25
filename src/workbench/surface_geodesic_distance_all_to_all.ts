@@ -103,12 +103,12 @@ function surface_geodesic_distance_all_to_all_cargs(
         "-surface-geodesic-distance-all-to-all",
         (params["cifti-out"] ?? null),
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-limit",
-        String((params["limit-mm"] ?? null)),
+        (((params["limit-mm"] ?? null) !== null) ? String((params["limit-mm"] ?? null)) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null)),
-        "-naive"
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
+        (((params["naive"] ?? false)) ? "-naive" : "")
     );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;

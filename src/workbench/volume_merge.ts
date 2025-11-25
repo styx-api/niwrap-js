@@ -80,7 +80,7 @@ function volume_merge_up_to_cargs(
     cargs.push(
         "-up-to",
         (params["last-subvol"] ?? null),
-        "-reverse"
+        (((params["reverse"] ?? false)) ? "-reverse" : "")
     );
     return cargs;
 }
@@ -125,7 +125,7 @@ function volume_merge_subvolume_cargs(
     cargs.push(
         "-subvolume",
         (params["subvol"] ?? null),
-        ...volume_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        ...(((params["up-to"] ?? null) !== null) ? volume_merge_up_to_cargs((params["up-to"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -170,7 +170,7 @@ function volume_merge_volume_cargs(
     cargs.push(
         "-volume",
         execution.inputFile((params["volume-in"] ?? null)),
-        ...(params["subvolume"] ?? null).map(s => volume_merge_subvolume_cargs(s, execution)).flat()
+        ...(((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null).map(s => volume_merge_subvolume_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }
@@ -233,7 +233,7 @@ function volume_merge_cargs(
         "wb_command",
         "-volume-merge",
         (params["volume-out"] ?? null),
-        ...(params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat()
+        ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

@@ -201,14 +201,14 @@ function cifti_correlation_cargs(
         "wb_command",
         "-cifti-correlation",
         (params["cifti-out"] ?? null),
-        ...cifti_correlation_roi_override_cargs((params["roi-override"] ?? null), execution),
+        ...(((params["roi-override"] ?? null) !== null) ? cifti_correlation_roi_override_cargs((params["roi-override"] ?? null), execution) : []),
         "-weights",
-        (params["weight-file"] ?? null),
-        "-fisher-z",
-        "-no-demean",
-        "-covariance",
+        (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),
+        (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
+        (((params["no-demean"] ?? false)) ? "-no-demean" : ""),
+        (((params["covariance"] ?? false)) ? "-covariance" : ""),
         "-mem-limit",
-        String((params["limit-GB"] ?? null))
+        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     return cargs;

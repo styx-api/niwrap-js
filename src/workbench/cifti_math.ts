@@ -81,7 +81,7 @@ function cifti_math_select_cargs(
         "-select",
         String((params["dim"] ?? null)),
         (params["index"] ?? null),
-        "-repeat"
+        (((params["repeat"] ?? false)) ? "-repeat" : "")
     );
     return cargs;
 }
@@ -130,7 +130,7 @@ function cifti_math_var_cargs(
         "-var",
         (params["name"] ?? null),
         execution.inputFile((params["cifti"] ?? null)),
-        ...(params["select"] ?? null).map(s => cifti_math_select_cargs(s, execution)).flat()
+        ...(((params["select"] ?? null) !== null) ? (params["select"] ?? null).map(s => cifti_math_select_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }
@@ -207,9 +207,9 @@ function cifti_math_cargs(
         "-cifti-math",
         (params["cifti-out"] ?? null),
         "-fixnan",
-        String((params["replace"] ?? null)),
-        "-override-mapping-check",
-        ...(params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat()
+        (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
+        (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : ""),
+        ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat() : [])
     );
     cargs.push((params["expression"] ?? null));
     return cargs;

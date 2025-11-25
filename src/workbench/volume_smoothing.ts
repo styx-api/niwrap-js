@@ -102,12 +102,12 @@ function volume_smoothing_cargs(
         "wb_command",
         "-volume-smoothing",
         (params["volume-out"] ?? null),
-        "-fwhm",
+        (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
         "-roi",
-        execution.inputFile((params["roivol"] ?? null)),
-        "-fix-zeros",
+        (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : ""),
+        (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
         "-subvolume",
-        (params["subvol"] ?? null)
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));

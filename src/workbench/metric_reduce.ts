@@ -139,8 +139,8 @@ function metric_reduce_cargs(
         "wb_command",
         "-metric-reduce",
         (params["metric-out"] ?? null),
-        ...metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution),
-        "-only-numeric"
+        ...(((params["exclude-outliers"] ?? null) !== null) ? metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
+        (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
     );
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push((params["operation"] ?? null));

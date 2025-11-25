@@ -320,9 +320,9 @@ function cifti_separate_volume_all_cargs(
     cargs.push(
         "-volume-all",
         (params["volume-out"] ?? null),
-        ...cifti_separate_roi_cargs((params["roi"] ?? null), execution),
-        ...cifti_separate_label_cargs((params["label"] ?? null), execution),
-        "-crop"
+        ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs((params["roi"] ?? null), execution) : []),
+        ...(((params["label"] ?? null) !== null) ? cifti_separate_label_cargs((params["label"] ?? null), execution) : []),
+        (((params["crop"] ?? false)) ? "-crop" : "")
     );
     return cargs;
 }
@@ -490,7 +490,7 @@ function cifti_separate_label_cargs_(
         "-label",
         (params["structure"] ?? null),
         (params["label-out"] ?? null),
-        ...cifti_separate_roi_cargs_((params["roi"] ?? null), execution)
+        ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs_((params["roi"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -657,7 +657,7 @@ function cifti_separate_metric_cargs(
         "-metric",
         (params["structure"] ?? null),
         (params["metric-out"] ?? null),
-        ...cifti_separate_roi_cargs_2((params["roi"] ?? null), execution)
+        ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs_2((params["roi"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -827,8 +827,8 @@ function cifti_separate_volume_cargs(
         "-volume",
         (params["structure"] ?? null),
         (params["volume-out"] ?? null),
-        ...cifti_separate_roi_cargs_3((params["roi"] ?? null), execution),
-        "-crop"
+        ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs_3((params["roi"] ?? null), execution) : []),
+        (((params["crop"] ?? false)) ? "-crop" : "")
     );
     return cargs;
 }

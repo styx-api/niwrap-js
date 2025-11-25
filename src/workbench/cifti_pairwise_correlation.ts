@@ -86,8 +86,8 @@ function cifti_pairwise_correlation_cargs(
         "wb_command",
         "-cifti-pairwise-correlation",
         (params["cifti-out"] ?? null),
-        "-fisher-z",
-        "-override-mapping-check"
+        (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
+        (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : "")
     );
     cargs.push(execution.inputFile((params["cifti-a"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-b"] ?? null)));

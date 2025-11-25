@@ -89,7 +89,7 @@ function v_3dcopy_cargs(
     }
     cargs.push(
         "+",
-        [(params["old_prefix"] ?? null), (params["view"] ?? null)].join('')
+        [(params["old_prefix"] ?? null), (((params["view"] ?? null) !== null) ? (params["view"] ?? null) : "")].join('')
     );
     cargs.push((params["new_prefix"] ?? null));
     return cargs;

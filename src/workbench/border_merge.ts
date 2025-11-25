@@ -80,7 +80,7 @@ function border_merge_up_to_cargs(
     cargs.push(
         "-up-to",
         (params["last-border"] ?? null),
-        "-reverse"
+        (((params["reverse"] ?? false)) ? "-reverse" : "")
     );
     return cargs;
 }
@@ -125,7 +125,7 @@ function border_merge_select_cargs(
     cargs.push(
         "-select",
         (params["border"] ?? null),
-        ...border_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        ...(((params["up-to"] ?? null) !== null) ? border_merge_up_to_cargs((params["up-to"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -170,7 +170,7 @@ function border_merge_border_cargs(
     cargs.push(
         "-border",
         execution.inputFile((params["border-file-in"] ?? null)),
-        ...(params["select"] ?? null).map(s => border_merge_select_cargs(s, execution)).flat()
+        ...(((params["select"] ?? null) !== null) ? (params["select"] ?? null).map(s => border_merge_select_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }
@@ -233,7 +233,7 @@ function border_merge_cargs(
         "wb_command",
         "-border-merge",
         (params["border-file-out"] ?? null),
-        ...(params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat()
+        ...(((params["border"] ?? null) !== null) ? (params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

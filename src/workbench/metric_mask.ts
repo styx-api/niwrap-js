@@ -87,7 +87,7 @@ function metric_mask_cargs(
         "-metric-mask",
         (params["metric-out"] ?? null),
         "-column",
-        (params["column"] ?? null)
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
     );
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["mask"] ?? null)));

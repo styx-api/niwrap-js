@@ -94,7 +94,7 @@ function convert_affine_from_world_cargs(
     cargs.push(
         "-from-world",
         (params["input"] ?? null),
-        "-inverse"
+        (((params["inverse"] ?? false)) ? "-inverse" : "")
     );
     return cargs;
 }
@@ -184,7 +184,7 @@ function convert_affine_to_world_cargs(
     cargs.push(
         "-to-world",
         (params["output"] ?? null),
-        "-inverse"
+        (((params["inverse"] ?? false)) ? "-inverse" : "")
     );
     return cargs;
 }

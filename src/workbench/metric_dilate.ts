@@ -135,18 +135,18 @@ function metric_dilate_cargs(
         "-metric-dilate",
         (params["metric-out"] ?? null),
         "-bad-vertex-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-data-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
+        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
         "-column",
-        (params["column"] ?? null),
-        "-nearest",
-        "-linear",
+        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
+        (((params["nearest"] ?? false)) ? "-nearest" : ""),
+        (((params["linear"] ?? false)) ? "-linear" : ""),
         "-exponent",
-        String((params["exponent"] ?? null)),
+        (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
         "-corrected-areas",
-        execution.inputFile((params["area-metric"] ?? null)),
-        "-legacy-cutoff"
+        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
+        (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
     );
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));

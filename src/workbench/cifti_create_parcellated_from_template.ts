@@ -139,8 +139,8 @@ function cifti_create_parcellated_from_template_cargs(
         "-cifti-create-parcellated-from-template",
         (params["cifti-out"] ?? null),
         "-fill-value",
-        String((params["value"] ?? null)),
-        ...(params["cifti"] ?? null).map(s => cifti_create_parcellated_from_template_cifti_cargs(s, execution)).flat()
+        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
+        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_create_parcellated_from_template_cifti_cargs(s, execution)).flat() : [])
     );
     cargs.push(execution.inputFile((params["cifti-template"] ?? null)));
     cargs.push((params["modify-direction"] ?? null));

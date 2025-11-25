@@ -72,7 +72,7 @@ function metric_weighted_stats_roi_cargs(
     cargs.push(
         "-roi",
         execution.inputFile((params["roi-metric"] ?? null)),
-        "-match-maps"
+        (((params["match-maps"] ?? false)) ? "-match-maps" : "")
     );
     return cargs;
 }

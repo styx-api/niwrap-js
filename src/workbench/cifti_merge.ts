@@ -82,7 +82,7 @@ function cifti_merge_up_to_cargs(
     cargs.push(
         "-up-to",
         (params["last-index"] ?? null),
-        "-reverse"
+        (((params["reverse"] ?? false)) ? "-reverse" : "")
     );
     return cargs;
 }
@@ -127,7 +127,7 @@ function cifti_merge_index_cargs(
     cargs.push(
         "-index",
         (params["index"] ?? null),
-        ...cifti_merge_up_to_cargs((params["up-to"] ?? null), execution)
+        ...(((params["up-to"] ?? null) !== null) ? cifti_merge_up_to_cargs((params["up-to"] ?? null), execution) : [])
     );
     return cargs;
 }
@@ -172,7 +172,7 @@ function cifti_merge_cifti_cargs(
     cargs.push(
         "-cifti",
         execution.inputFile((params["cifti-in"] ?? null)),
-        ...(params["index"] ?? null).map(s => cifti_merge_index_cargs(s, execution)).flat()
+        ...(((params["index"] ?? null) !== null) ? (params["index"] ?? null).map(s => cifti_merge_index_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }
@@ -250,10 +250,10 @@ function cifti_merge_cargs(
         "-cifti-merge",
         (params["cifti-out"] ?? null),
         "-direction",
-        (params["direction"] ?? null),
+        (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
         "-mem-limit",
-        String((params["limit-GB"] ?? null)),
-        ...(params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat()
+        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
+        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat() : [])
     );
     return cargs;
 }

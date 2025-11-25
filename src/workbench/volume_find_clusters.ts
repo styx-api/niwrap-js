@@ -126,17 +126,17 @@ function volume_find_clusters_cargs(
         "wb_command",
         "-volume-find-clusters",
         (params["volume-out"] ?? null),
-        "-less-than",
+        (((params["less-than"] ?? false)) ? "-less-than" : ""),
         "-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
+        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
         "-subvolume",
-        (params["subvol"] ?? null),
+        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
         "-size-ratio",
-        String((params["ratio"] ?? null)),
+        (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
         "-distance",
-        String((params["distance"] ?? null)),
+        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
         "-start",
-        String((params["startval"] ?? null))
+        (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
     );
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["value-threshold"] ?? null)));
