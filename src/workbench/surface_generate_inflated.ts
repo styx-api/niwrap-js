@@ -88,7 +88,9 @@ function surface_generate_inflated_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-generate-inflated",
+        "-surface-generate-inflated"
+    );
+    cargs.push(
         (params["inflated-surface-out"] ?? null),
         (params["very-inflated-surface-out"] ?? null),
         "-iterations-scale",

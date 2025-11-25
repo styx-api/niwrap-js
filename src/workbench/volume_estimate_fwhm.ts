@@ -86,10 +86,12 @@ function volume_estimate_fwhm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-volume-estimate-fwhm"
+    );
     if ((params["roivol"] ?? null) !== null || (params["subvol"] ?? null) !== null || (params["demean"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-volume-estimate-fwhm",
             "-roi",
             (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : ""),
             "-subvolume",

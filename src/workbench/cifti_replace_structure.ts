@@ -311,10 +311,12 @@ function cifti_replace_structure_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-replace-structure"
+    );
     if ((params["volume-all"] ?? null) !== null || (params["discard-unused-labels"] ?? false) || (params["action"] ?? null) !== null || (params["label"] ?? null) !== null || (params["metric"] ?? null) !== null || (params["volume"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-cifti-replace-structure",
             ...(((params["volume-all"] ?? null) !== null) ? cifti_replace_structure_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
             (((params["discard-unused-labels"] ?? false)) ? "-discard-unused-labels" : ""),
             "-label-collision",

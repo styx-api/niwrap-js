@@ -171,10 +171,12 @@ function metric_weighted_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-metric-weighted-stats"
+    );
     if ((params["area-surface"] ?? null) !== null || (params["weight-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-metric-weighted-stats",
             "-area-surface",
             (((params["area-surface"] ?? null) !== null) ? execution.inputFile((params["area-surface"] ?? null)) : ""),
             "-weight-metric",

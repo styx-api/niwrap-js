@@ -432,7 +432,9 @@ function cifti_create_dense_from_template_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-create-dense-from-template",
+        "-cifti-create-dense-from-template"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["series"] ?? null) !== null) ? cifti_create_dense_from_template_series_cargs((params["series"] ?? null), execution) : []),
         ...(((params["volume-all"] ?? null) !== null) ? cifti_create_dense_from_template_volume_all_cargs((params["volume-all"] ?? null), execution) : []),

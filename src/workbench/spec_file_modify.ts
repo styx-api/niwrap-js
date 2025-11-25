@@ -181,10 +181,12 @@ function spec_file_modify_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-spec-file-modify"
+    );
     if ((params["add"] ?? null) !== null || (params["remove"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-spec-file-modify",
             ...(((params["add"] ?? null) !== null) ? (params["add"] ?? null).map(s => spec_file_modify_add_cargs(s, execution)).flat() : []),
             ...(((params["remove"] ?? null) !== null) ? (params["remove"] ?? null).map(s => spec_file_modify_remove_cargs(s, execution)).flat() : [])
         );

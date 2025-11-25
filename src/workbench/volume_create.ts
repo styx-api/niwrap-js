@@ -269,7 +269,9 @@ function volume_create_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-create",
+        "-volume-create"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["plumb"] ?? null) !== null) ? volume_create_plumb_cargs((params["plumb"] ?? null), execution) : []),
         ...(((params["sform"] ?? null) !== null) ? volume_create_sform_cargs((params["sform"] ?? null), execution) : [])

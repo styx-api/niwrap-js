@@ -312,10 +312,12 @@ function convert_affine_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-convert-affine"
+    );
     if ((params["from-world"] ?? null) !== null || (params["input"] ?? null) !== null || (params["from-flirt"] ?? null) !== null || (params["to-world"] ?? null) !== null || (params["output"] ?? null) !== null || (params["to-flirt"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-convert-affine",
             ...(((params["from-world"] ?? null) !== null) ? convert_affine_from_world_cargs((params["from-world"] ?? null), execution) : []),
             "-from-itk",
             (((params["input"] ?? null) !== null) ? (params["input"] ?? null) : ""),

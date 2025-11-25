@@ -92,7 +92,9 @@ function fiber_dot_products_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-fiber-dot-products",
+        "-fiber-dot-products"
+    );
+    cargs.push(
         (params["dot-metric"] ?? null),
         (params["f-metric"] ?? null)
     );

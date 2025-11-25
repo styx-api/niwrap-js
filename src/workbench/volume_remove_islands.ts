@@ -72,9 +72,9 @@ function volume_remove_islands_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-remove-islands",
-        (params["volume-out"] ?? null)
+        "-volume-remove-islands"
     );
+    cargs.push((params["volume-out"] ?? null));
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }

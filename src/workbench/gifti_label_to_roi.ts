@@ -96,7 +96,9 @@ function gifti_label_to_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-gifti-label-to-roi",
+        "-gifti-label-to-roi"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-name",
         (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : ""),

@@ -133,10 +133,12 @@ function nifti_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-nifti-information"
+    );
     if ((params["allow-truncated"] ?? null) !== null || (params["print-matrix"] ?? false) || (params["print-xml"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-nifti-information",
             "-print-header",
             (((params["allow-truncated"] ?? null) !== null) ? "-allow-truncated" : ""),
             (((params["print-matrix"] ?? false)) ? "-print-matrix" : ""),

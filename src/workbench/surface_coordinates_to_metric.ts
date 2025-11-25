@@ -72,9 +72,9 @@ function surface_coordinates_to_metric_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-coordinates-to-metric",
-        (params["metric-out"] ?? null)
+        "-surface-coordinates-to-metric"
     );
+    cargs.push((params["metric-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }

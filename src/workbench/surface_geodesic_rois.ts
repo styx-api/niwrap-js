@@ -112,7 +112,9 @@ function surface_geodesic_rois_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-geodesic-rois",
+        "-surface-geodesic-rois"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-gaussian",
         (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),

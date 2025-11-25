@@ -152,7 +152,9 @@ function volume_math_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-math",
+        "-volume-math"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-fixnan",
         (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),

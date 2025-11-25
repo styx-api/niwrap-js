@@ -96,7 +96,9 @@ function cifti_label_to_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-label-to-roi",
+        "-cifti-label-to-roi"
+    );
+    cargs.push(
         (params["scalar-out"] ?? null),
         "-name",
         (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : ""),

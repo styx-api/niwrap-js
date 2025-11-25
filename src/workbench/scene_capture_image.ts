@@ -377,10 +377,12 @@ function scene_capture_image_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-scene-capture-image"
+    );
     if ((params["size-window"] ?? false) || (params["size-capture"] ?? false) || (params["size-width-height"] ?? null) !== null || (params["width"] ?? null) !== null || (params["height"] ?? null) !== null || (params["units"] ?? null) !== null || (params["resolution"] ?? null) !== null || (params["size"] ?? null) !== null || (params["no-scene-colors"] ?? false) || (params["set-map-yoke"] ?? null) !== null || (params["conn-db-login"] ?? null) !== null || (params["show-capture-settings"] ?? false) || (params["Renderer"] ?? null) !== null || (params["print-image-info"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-scene-capture-image",
             (((params["size-window"] ?? false)) ? "-size-window" : ""),
             (((params["size-capture"] ?? false)) ? "-size-capture" : ""),
             ...(((params["size-width-height"] ?? null) !== null) ? scene_capture_image_size_width_height_cargs((params["size-width-height"] ?? null), execution) : []),

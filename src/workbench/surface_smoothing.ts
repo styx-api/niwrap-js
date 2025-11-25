@@ -80,9 +80,9 @@ function surface_smoothing_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-smoothing",
-        (params["surface-out"] ?? null)
+        "-surface-smoothing"
     );
+    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(String((params["smoothing-strength"] ?? null)));
     cargs.push(String((params["smoothing-iterations"] ?? null)));

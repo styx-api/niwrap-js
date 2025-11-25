@@ -124,7 +124,9 @@ function cifti_merge_parcels_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-merge-parcels",
+        "-cifti-merge-parcels"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_parcels_cifti_cargs(s, execution)).flat() : [])
     );

@@ -96,7 +96,9 @@ function cifti_label_adjacency_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-label-adjacency",
+        "-cifti-label-adjacency"
+    );
+    cargs.push(
         (params["adjacency-out"] ?? null),
         "-left-surface",
         (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),

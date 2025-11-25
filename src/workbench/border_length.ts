@@ -82,10 +82,12 @@ function border_length_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-border-length"
+    );
     if ((params["area-metric"] ?? null) !== null || (params["separate-pieces"] ?? false) || (params["hide-border-name"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-border-length",
             "-corrected-areas",
             (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
             (((params["separate-pieces"] ?? false)) ? "-separate-pieces" : ""),

@@ -370,7 +370,9 @@ function volume_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-resample",
+        "-volume-resample"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-background",
         (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),

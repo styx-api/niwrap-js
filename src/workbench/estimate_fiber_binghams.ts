@@ -108,9 +108,9 @@ function estimate_fiber_binghams_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-estimate-fiber-binghams",
-        (params["cifti-out"] ?? null)
+        "-estimate-fiber-binghams"
     );
+    cargs.push((params["cifti-out"] ?? null));
     cargs.push(execution.inputFile((params["merged_f1samples"] ?? null)));
     cargs.push(execution.inputFile((params["merged_th1samples"] ?? null)));
     cargs.push(execution.inputFile((params["merged_ph1samples"] ?? null)));

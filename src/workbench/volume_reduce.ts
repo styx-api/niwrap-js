@@ -137,7 +137,9 @@ function volume_reduce_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-reduce",
+        "-volume-reduce"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["exclude-outliers"] ?? null) !== null) ? volume_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
         (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")

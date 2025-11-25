@@ -70,12 +70,12 @@ function border_export_color_table_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-border-export-color-table"
+    );
     if ((params["class-colors"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-border-export-color-table",
-            "-class-colors"
-        );
+        cargs.push("-class-colors");
     }
     cargs.push(execution.inputFile((params["border-file"] ?? null)));
     cargs.push((params["table-out"] ?? null));

@@ -76,9 +76,9 @@ function gifti_all_labels_to_rois_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-gifti-all-labels-to-rois",
-        (params["metric-out"] ?? null)
+        "-gifti-all-labels-to-rois"
     );
+    cargs.push((params["metric-out"] ?? null));
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
     return cargs;

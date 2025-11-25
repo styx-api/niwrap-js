@@ -316,7 +316,9 @@ function surface_average_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-average",
+        "-surface-average"
+    );
+    cargs.push(
         (params["surface-out"] ?? null),
         ...(((params["stddev"] ?? null) !== null) ? surface_average_stddev_cargs((params["stddev"] ?? null), execution) : []),
         ...(((params["uncertainty"] ?? null) !== null) ? surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution) : []),

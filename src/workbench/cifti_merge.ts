@@ -247,7 +247,9 @@ function cifti_merge_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-merge",
+        "-cifti-merge"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-direction",
         (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),

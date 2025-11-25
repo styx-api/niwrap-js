@@ -84,7 +84,9 @@ function surface_apply_warpfield_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-apply-warpfield",
+        "-surface-apply-warpfield"
+    );
+    cargs.push(
         (params["out-surf"] ?? null),
         "-fnirt",
         (((params["forward-warp"] ?? null) !== null) ? (params["forward-warp"] ?? null) : "")

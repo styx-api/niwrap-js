@@ -375,7 +375,9 @@ function cifti_parcellate_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-parcellate",
+        "-cifti-parcellate"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["spatial-weights"] ?? null) !== null) ? cifti_parcellate_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
         "-cifti-weights",

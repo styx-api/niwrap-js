@@ -307,7 +307,9 @@ function metric_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-resample",
+        "-metric-resample"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["area-surfs"] ?? null) !== null) ? metric_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
         ...(((params["area-metrics"] ?? null) !== null) ? metric_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),

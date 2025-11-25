@@ -254,10 +254,12 @@ function file_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-file-convert"
+    );
     if ((params["border-version-convert"] ?? null) !== null || (params["nifti-version-convert"] ?? null) !== null || (params["cifti-version-convert"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-file-convert",
             ...(((params["border-version-convert"] ?? null) !== null) ? file_convert_border_version_convert_cargs((params["border-version-convert"] ?? null), execution) : []),
             ...(((params["nifti-version-convert"] ?? null) !== null) ? file_convert_nifti_version_convert_cargs((params["nifti-version-convert"] ?? null), execution) : []),
             ...(((params["cifti-version-convert"] ?? null) !== null) ? file_convert_cifti_version_convert_cargs((params["cifti-version-convert"] ?? null), execution) : [])

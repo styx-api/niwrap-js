@@ -233,7 +233,9 @@ function cifti_average_dense_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-average-dense-roi",
+        "-cifti-average-dense-roi"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["cifti-roi"] ?? null) !== null) ? cifti_average_dense_roi_cifti_roi_cargs((params["cifti-roi"] ?? null), execution) : []),
         "-left-roi",

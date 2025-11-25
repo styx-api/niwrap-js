@@ -136,7 +136,9 @@ function metric_find_clusters_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-find-clusters",
+        "-metric-find-clusters"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         (((params["less-than"] ?? false)) ? "-less-than" : ""),
         "-roi",

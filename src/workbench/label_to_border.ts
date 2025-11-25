@@ -92,7 +92,9 @@ function label_to_border_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-to-border",
+        "-label-to-border"
+    );
+    cargs.push(
         (params["border-out"] ?? null),
         "-placement",
         (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),

@@ -80,9 +80,9 @@ function cifti_parcel_mapping_to_label_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-parcel-mapping-to-label",
-        (params["dlabel-out"] ?? null)
+        "-cifti-parcel-mapping-to-label"
     );
+    cargs.push((params["dlabel-out"] ?? null));
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push(execution.inputFile((params["template-cifti"] ?? null)));

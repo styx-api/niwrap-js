@@ -82,10 +82,12 @@ function zip_spec_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-zip-spec-file"
+    );
     if ((params["directory"] ?? null) !== null || (params["skip-missing"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-zip-spec-file",
             "-base-dir",
             (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
             (((params["skip-missing"] ?? false)) ? "-skip-missing" : "")

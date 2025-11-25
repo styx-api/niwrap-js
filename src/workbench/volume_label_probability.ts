@@ -76,7 +76,9 @@ function volume_label_probability_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-label-probability",
+        "-volume-label-probability"
+    );
+    cargs.push(
         (params["probability-out"] ?? null),
         (((params["exclude-unlabeled"] ?? false)) ? "-exclude-unlabeled" : "")
     );

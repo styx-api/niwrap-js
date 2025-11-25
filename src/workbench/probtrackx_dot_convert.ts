@@ -324,7 +324,9 @@ function probtrackx_dot_convert_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-probtrackx-dot-convert",
+        "-probtrackx-dot-convert"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["row-voxels"] ?? null) !== null) ? probtrackx_dot_convert_row_voxels_cargs((params["row-voxels"] ?? null), execution) : []),
         "-row-surface",

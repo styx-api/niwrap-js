@@ -118,12 +118,12 @@ function wbsparse_merge_dense_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-wbsparse-merge-dense"
+    );
     if ((params["wbsparse"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-wbsparse-merge-dense",
-            ...(params["wbsparse"] ?? null).map(s => wbsparse_merge_dense_wbsparse_cargs(s, execution)).flat()
-        );
+        cargs.push(...(params["wbsparse"] ?? null).map(s => wbsparse_merge_dense_wbsparse_cargs(s, execution)).flat());
     }
     cargs.push((params["direction"] ?? null));
     cargs.push((params["wbsparse-out"] ?? null));

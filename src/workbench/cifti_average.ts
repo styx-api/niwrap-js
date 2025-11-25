@@ -195,7 +195,9 @@ function cifti_average_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-average",
+        "-cifti-average"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
         "-mem-limit",

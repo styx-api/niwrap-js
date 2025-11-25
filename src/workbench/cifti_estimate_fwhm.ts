@@ -139,10 +139,12 @@ function cifti_estimate_fwhm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-estimate-fwhm"
+    );
     if ((params["merged-volume"] ?? false) || (params["column"] ?? null) !== null || (params["demean"] ?? null) !== null || (params["surface"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-cifti-estimate-fwhm",
             (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
             "-column",
             (((params["column"] ?? null) !== null) ? String((params["column"] ?? null)) : ""),

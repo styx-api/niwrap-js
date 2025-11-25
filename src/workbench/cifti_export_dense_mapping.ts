@@ -252,10 +252,12 @@ function cifti_export_dense_mapping_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-export-dense-mapping"
+    );
     if ((params["volume-all"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["volume"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-cifti-export-dense-mapping",
             ...(((params["volume-all"] ?? null) !== null) ? cifti_export_dense_mapping_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
             ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_export_dense_mapping_surface_cargs(s, execution)).flat() : []),
             ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_export_dense_mapping_volume_cargs(s, execution)).flat() : [])

@@ -80,9 +80,9 @@ function surface_sphere_project_unproject_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-sphere-project-unproject",
-        (params["sphere-out"] ?? null)
+        "-surface-sphere-project-unproject"
     );
+    cargs.push((params["sphere-out"] ?? null));
     cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
     cargs.push(execution.inputFile((params["sphere-project-to"] ?? null)));
     cargs.push(execution.inputFile((params["sphere-unproject-from"] ?? null)));

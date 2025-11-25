@@ -137,7 +137,9 @@ function metric_reduce_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-reduce",
+        "-metric-reduce"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["exclude-outliers"] ?? null) !== null) ? metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
         (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")

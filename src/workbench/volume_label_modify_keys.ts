@@ -84,7 +84,9 @@ function volume_label_modify_keys_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-label-modify-keys",
+        "-volume-label-modify-keys"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-subvolume",
         (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")

@@ -307,7 +307,9 @@ function label_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-resample",
+        "-label-resample"
+    );
+    cargs.push(
         (params["label-out"] ?? null),
         ...(((params["area-surfs"] ?? null) !== null) ? label_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
         ...(((params["area-metrics"] ?? null) !== null) ? label_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),

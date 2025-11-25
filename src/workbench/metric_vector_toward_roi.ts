@@ -84,7 +84,9 @@ function metric_vector_toward_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-vector-toward-roi",
+        "-metric-vector-toward-roi"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-roi",
         (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")

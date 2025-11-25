@@ -378,7 +378,9 @@ function cifti_create_label_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-create-label",
+        "-cifti-create-label"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["volume"] ?? null) !== null) ? cifti_create_label_volume_cargs((params["volume"] ?? null), execution) : []),
         ...(((params["left-label"] ?? null) !== null) ? cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution) : []),

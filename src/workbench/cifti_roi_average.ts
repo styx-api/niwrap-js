@@ -106,10 +106,12 @@ function cifti_roi_average_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-roi-average"
+    );
     if ((params["roi-cifti"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-metric"] ?? null) !== null || (params["roi-vol"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-cifti-roi-average",
             "-cifti-roi",
             (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
             "-left-roi",

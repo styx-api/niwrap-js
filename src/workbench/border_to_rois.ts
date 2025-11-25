@@ -92,7 +92,9 @@ function border_to_rois_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-border-to-rois",
+        "-border-to-rois"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-border",
         (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),

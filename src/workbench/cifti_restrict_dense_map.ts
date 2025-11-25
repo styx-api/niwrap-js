@@ -116,7 +116,9 @@ function cifti_restrict_dense_map_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-restrict-dense-map",
+        "-cifti-restrict-dense-map"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-cifti-roi",
         (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),

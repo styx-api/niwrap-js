@@ -152,7 +152,9 @@ function metric_math_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-math",
+        "-metric-math"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-fixnan",
         (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),

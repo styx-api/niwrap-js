@@ -124,7 +124,9 @@ function volume_find_clusters_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-find-clusters",
+        "-volume-find-clusters"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         (((params["less-than"] ?? false)) ? "-less-than" : ""),
         "-roi",

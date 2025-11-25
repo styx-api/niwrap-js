@@ -199,7 +199,9 @@ function cifti_correlation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-correlation",
+        "-cifti-correlation"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["roi-override"] ?? null) !== null) ? cifti_correlation_roi_override_cargs((params["roi-override"] ?? null), execution) : []),
         "-weights",

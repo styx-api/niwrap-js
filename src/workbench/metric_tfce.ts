@@ -214,7 +214,9 @@ function metric_tfce_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-tfce",
+        "-metric-tfce"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",

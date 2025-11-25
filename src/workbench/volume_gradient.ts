@@ -238,7 +238,9 @@ function volume_gradient_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-gradient",
+        "-volume-gradient"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",

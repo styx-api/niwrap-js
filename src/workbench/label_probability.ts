@@ -76,7 +76,9 @@ function label_probability_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-probability",
+        "-label-probability"
+    );
+    cargs.push(
         (params["probability-metric-out"] ?? null),
         (((params["exclude-unlabeled"] ?? false)) ? "-exclude-unlabeled" : "")
     );

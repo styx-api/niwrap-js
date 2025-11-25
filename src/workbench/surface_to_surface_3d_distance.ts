@@ -169,7 +169,9 @@ function surface_to_surface_3d_distance_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-to-surface-3d-distance",
+        "-surface-to-surface-3d-distance"
+    );
+    cargs.push(
         (params["dists-out"] ?? null),
         ...(((params["vectors"] ?? null) !== null) ? surface_to_surface_3d_distance_vectors_cargs((params["vectors"] ?? null), execution) : [])
     );

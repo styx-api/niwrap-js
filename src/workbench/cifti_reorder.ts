@@ -80,9 +80,9 @@ function cifti_reorder_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-reorder",
-        (params["cifti-out"] ?? null)
+        "-cifti-reorder"
     );
+    cargs.push((params["cifti-out"] ?? null));
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push((params["reorder-list"] ?? null));

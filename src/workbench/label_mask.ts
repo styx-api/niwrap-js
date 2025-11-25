@@ -84,7 +84,9 @@ function label_mask_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-mask",
+        "-label-mask"
+    );
+    cargs.push(
         (params["label-out"] ?? null),
         "-column",
         (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")

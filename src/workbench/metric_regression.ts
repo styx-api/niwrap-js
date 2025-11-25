@@ -212,7 +212,9 @@ function metric_regression_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-regression",
+        "-metric-regression"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-roi",
         (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),

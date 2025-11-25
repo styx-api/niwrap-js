@@ -92,9 +92,9 @@ function surface_inflation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-inflation",
-        (params["surface-out"] ?? null)
+        "-surface-inflation"
     );
+    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["anatomical-surface-in"] ?? null)));
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(String((params["number-of-smoothing-cycles"] ?? null)));

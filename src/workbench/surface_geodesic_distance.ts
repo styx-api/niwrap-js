@@ -96,7 +96,9 @@ function surface_geodesic_distance_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-geodesic-distance",
+        "-surface-geodesic-distance"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         (((params["naive"] ?? false)) ? "-naive" : ""),
         "-limit",

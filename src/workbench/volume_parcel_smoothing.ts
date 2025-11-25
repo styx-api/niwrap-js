@@ -96,7 +96,9 @@ function volume_parcel_smoothing_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-parcel-smoothing",
+        "-volume-parcel-smoothing"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
         (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),

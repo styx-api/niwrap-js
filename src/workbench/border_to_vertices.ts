@@ -84,7 +84,9 @@ function border_to_vertices_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-border-to-vertices",
+        "-border-to-vertices"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-border",
         (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : "")

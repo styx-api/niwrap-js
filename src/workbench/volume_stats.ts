@@ -147,10 +147,12 @@ function volume_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-volume-stats"
+    );
     if ((params["operation"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["subvolume"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["show-map-name"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-volume-stats",
             "-reduce",
             (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : ""),
             "-percentile",

@@ -154,7 +154,9 @@ function convert_fiber_orientations_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-convert-fiber-orientations",
+        "-convert-fiber-orientations"
+    );
+    cargs.push(
         (params["fiber-out"] ?? null),
         ...(((params["fiber"] ?? null) !== null) ? (params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat() : [])
     );

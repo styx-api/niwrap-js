@@ -72,9 +72,9 @@ function surface_flip_normals_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-flip-normals",
-        (params["surface-out"] ?? null)
+        "-surface-flip-normals"
     );
+    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }

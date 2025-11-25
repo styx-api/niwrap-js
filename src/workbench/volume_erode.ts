@@ -92,7 +92,9 @@ function volume_erode_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-erode",
+        "-volume-erode"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-roi",
         (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),

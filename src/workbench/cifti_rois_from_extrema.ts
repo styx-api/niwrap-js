@@ -177,7 +177,9 @@ function cifti_rois_from_extrema_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-rois-from-extrema",
+        "-cifti-rois-from-extrema"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-left-surface",
         (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),

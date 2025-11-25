@@ -100,7 +100,9 @@ function volume_smoothing_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-smoothing",
+        "-volume-smoothing"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
         "-roi",

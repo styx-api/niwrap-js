@@ -891,10 +891,12 @@ function cifti_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-convert"
+    );
     if ((params["to-gifti-ext"] ?? null) !== null || (params["from-gifti-ext"] ?? null) !== null || (params["to-nifti"] ?? null) !== null || (params["from-nifti"] ?? null) !== null || (params["to-text"] ?? null) !== null || (params["from-text"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-cifti-convert",
             ...(((params["to-gifti-ext"] ?? null) !== null) ? cifti_convert_to_gifti_ext_cargs((params["to-gifti-ext"] ?? null), execution) : []),
             ...(((params["from-gifti-ext"] ?? null) !== null) ? cifti_convert_from_gifti_ext_cargs((params["from-gifti-ext"] ?? null), execution) : []),
             ...(((params["to-nifti"] ?? null) !== null) ? cifti_convert_to_nifti_cargs((params["to-nifti"] ?? null), execution) : []),

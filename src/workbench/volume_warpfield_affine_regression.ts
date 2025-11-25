@@ -139,10 +139,12 @@ function volume_warpfield_affine_regression_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-volume-warpfield-affine-regression"
+    );
     if ((params["roi-vol"] ?? null) !== null || (params["source-volume"] ?? null) !== null || (params["flirt-out"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-volume-warpfield-affine-regression",
             "-roi",
             (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
             "-fnirt",

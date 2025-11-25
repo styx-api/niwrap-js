@@ -132,7 +132,9 @@ function metric_dilate_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-dilate",
+        "-metric-dilate"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-bad-vertex-roi",
         (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),

@@ -231,7 +231,9 @@ function label_merge_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-merge",
+        "-label-merge"
+    );
+    cargs.push(
         (params["label-out"] ?? null),
         ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat() : [])
     );

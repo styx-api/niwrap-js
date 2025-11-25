@@ -76,7 +76,9 @@ function cifti_label_probability_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-label-probability",
+        "-cifti-label-probability"
+    );
+    cargs.push(
         (params["probability-dscalar-out"] ?? null),
         (((params["exclude-unlabeled"] ?? false)) ? "-exclude-unlabeled" : "")
     );

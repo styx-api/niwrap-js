@@ -1032,7 +1032,9 @@ function cifti_resample_dconn_memory_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-resample-dconn-memory",
+        "-cifti-resample-dconn-memory"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         (((params["surface-largest"] ?? false)) ? "-surface-largest" : ""),
         ...(((params["volume-predilate"] ?? null) !== null) ? cifti_resample_dconn_memory_volume_predilate_cargs((params["volume-predilate"] ?? null), execution) : []),

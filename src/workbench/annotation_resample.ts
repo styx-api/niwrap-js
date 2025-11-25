@@ -123,12 +123,12 @@ function annotation_resample_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-annotation-resample"
+    );
     if ((params["surface-pair"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-annotation-resample",
-            ...(params["surface-pair"] ?? null).map(s => annotation_resample_surface_pair_cargs(s, execution)).flat()
-        );
+        cargs.push(...(params["surface-pair"] ?? null).map(s => annotation_resample_surface_pair_cargs(s, execution)).flat());
     }
     cargs.push(execution.inputFile((params["annotation-in"] ?? null)));
     cargs.push((params["annotation-out"] ?? null));

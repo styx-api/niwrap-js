@@ -233,7 +233,9 @@ function cifti_average_roi_correlation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-average-roi-correlation",
+        "-cifti-average-roi-correlation"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["cifti-roi"] ?? null) !== null) ? cifti_average_roi_correlation_cifti_roi_cargs((params["cifti-roi"] ?? null), execution) : []),
         "-left-roi",

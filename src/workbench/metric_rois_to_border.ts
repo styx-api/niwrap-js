@@ -96,7 +96,9 @@ function metric_rois_to_border_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-rois-to-border",
+        "-metric-rois-to-border"
+    );
+    cargs.push(
         (params["border-out"] ?? null),
         "-placement",
         (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),

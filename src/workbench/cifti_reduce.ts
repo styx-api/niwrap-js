@@ -145,7 +145,9 @@ function cifti_reduce_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-reduce",
+        "-cifti-reduce"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-direction",
         (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),

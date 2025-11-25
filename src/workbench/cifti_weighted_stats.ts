@@ -272,10 +272,12 @@ function cifti_weighted_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-weighted-stats"
+    );
     if ((params["spatial-weights"] ?? null) !== null || (params["weight-cifti"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-cifti-weighted-stats",
             ...(((params["spatial-weights"] ?? null) !== null) ? cifti_weighted_stats_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
             "-cifti-weights",
             (((params["weight-cifti"] ?? null) !== null) ? execution.inputFile((params["weight-cifti"] ?? null)) : ""),

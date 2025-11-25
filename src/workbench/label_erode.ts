@@ -104,7 +104,9 @@ function label_erode_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-erode",
+        "-label-erode"
+    );
+    cargs.push(
         (params["label-out"] ?? null),
         "-roi",
         (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),

@@ -76,9 +76,9 @@ function surface_set_coordinates_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-set-coordinates",
-        (params["surface-out"] ?? null)
+        "-surface-set-coordinates"
     );
+    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(execution.inputFile((params["coord-metric"] ?? null)));
     return cargs;

@@ -386,7 +386,9 @@ function cifti_create_dense_scalar_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-create-dense-scalar",
+        "-cifti-create-dense-scalar"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["volume"] ?? null) !== null) ? cifti_create_dense_scalar_volume_cargs((params["volume"] ?? null), execution) : []),
         ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_scalar_left_metric_cargs((params["left-metric"] ?? null), execution) : []),

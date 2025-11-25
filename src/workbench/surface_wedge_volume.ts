@@ -76,9 +76,9 @@ function surface_wedge_volume_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-wedge-volume",
-        (params["metric"] ?? null)
+        "-surface-wedge-volume"
     );
+    cargs.push((params["metric"] ?? null));
     cargs.push(execution.inputFile((params["inner-surface"] ?? null)));
     cargs.push(execution.inputFile((params["outer-surface"] ?? null)));
     return cargs;

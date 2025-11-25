@@ -435,7 +435,9 @@ function cifti_palette_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-palette",
+        "-cifti-palette"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-column",
         (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),

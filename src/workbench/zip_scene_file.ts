@@ -86,10 +86,12 @@ function zip_scene_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-zip-scene-file"
+    );
     if ((params["directory"] ?? null) !== null || (params["skip-missing"] ?? false) || (params["write-scene-file"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-zip-scene-file",
             "-base-dir",
             (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
             (((params["skip-missing"] ?? false)) ? "-skip-missing" : ""),

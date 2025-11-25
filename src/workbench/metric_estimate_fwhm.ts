@@ -90,10 +90,12 @@ function metric_estimate_fwhm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-metric-estimate-fwhm"
+    );
     if ((params["roi-metric"] ?? null) !== null || (params["column"] ?? null) !== null || (params["demean"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-metric-estimate-fwhm",
             "-roi",
             (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
             "-column",

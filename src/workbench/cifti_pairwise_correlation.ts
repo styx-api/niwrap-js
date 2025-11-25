@@ -84,7 +84,9 @@ function cifti_pairwise_correlation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-pairwise-correlation",
+        "-cifti-pairwise-correlation"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
         (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : "")

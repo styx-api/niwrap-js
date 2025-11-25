@@ -112,7 +112,9 @@ function metric_rois_from_extrema_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-rois-from-extrema",
+        "-metric-rois-from-extrema"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-gaussian",
         (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),

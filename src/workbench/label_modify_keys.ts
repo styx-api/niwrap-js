@@ -84,7 +84,9 @@ function label_modify_keys_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-modify-keys",
+        "-label-modify-keys"
+    );
+    cargs.push(
         (params["label-out"] ?? null),
         "-column",
         (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")

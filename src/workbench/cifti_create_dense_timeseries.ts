@@ -402,7 +402,9 @@ function cifti_create_dense_timeseries_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-create-dense-timeseries",
+        "-cifti-create-dense-timeseries"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["volume"] ?? null) !== null) ? cifti_create_dense_timeseries_volume_cargs((params["volume"] ?? null), execution) : []),
         ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_left_metric_cargs((params["left-metric"] ?? null), execution) : []),

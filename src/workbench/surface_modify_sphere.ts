@@ -80,7 +80,9 @@ function surface_modify_sphere_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-modify-sphere",
+        "-surface-modify-sphere"
+    );
+    cargs.push(
         (params["sphere-out"] ?? null),
         (((params["recenter"] ?? false)) ? "-recenter" : "")
     );

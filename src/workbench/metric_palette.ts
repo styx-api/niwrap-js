@@ -425,10 +425,12 @@ function metric_palette_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-metric-palette"
+    );
     if ((params["column"] ?? null) !== null || (params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["interpolate"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["name"] ?? null) !== null || (params["thresholding"] ?? null) !== null || (params["type"] ?? null) !== null || (params["type"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-metric-palette",
             "-column",
             (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             ...(((params["pos-percent"] ?? null) !== null) ? metric_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),

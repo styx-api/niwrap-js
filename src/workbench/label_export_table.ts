@@ -74,10 +74,12 @@ function label_export_table_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-label-export-table"
+    );
     if ((params["json-out"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-label-export-table",
             "-hierarchy",
             (params["json-out"] ?? null)
         );

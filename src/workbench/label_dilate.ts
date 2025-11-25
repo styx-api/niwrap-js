@@ -104,7 +104,9 @@ function label_dilate_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-label-dilate",
+        "-label-dilate"
+    );
+    cargs.push(
         (params["label-out"] ?? null),
         "-bad-vertex-roi",
         (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),

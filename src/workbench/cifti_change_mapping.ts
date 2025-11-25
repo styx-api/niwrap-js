@@ -259,7 +259,9 @@ function cifti_change_mapping_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-change-mapping",
+        "-cifti-change-mapping"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["series"] ?? null) !== null) ? cifti_change_mapping_series_cargs((params["series"] ?? null), execution) : []),
         ...(((params["scalar"] ?? null) !== null) ? cifti_change_mapping_scalar_cargs((params["scalar"] ?? null), execution) : []),

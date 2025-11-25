@@ -251,7 +251,9 @@ function foci_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-foci-resample",
+        "-foci-resample"
+    );
+    cargs.push(
         (params["foci-out"] ?? null),
         ...(((params["left-surfaces"] ?? null) !== null) ? foci_resample_left_surfaces_cargs((params["left-surfaces"] ?? null), execution) : []),
         ...(((params["right-surfaces"] ?? null) !== null) ? foci_resample_right_surfaces_cargs((params["right-surfaces"] ?? null), execution) : []),

@@ -118,12 +118,12 @@ function border_file_export_to_caret5_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-border-file-export-to-caret5"
+    );
     if ((params["surface"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-border-file-export-to-caret5",
-            ...(params["surface"] ?? null).map(s => border_file_export_to_caret5_surface_cargs(s, execution)).flat()
-        );
+        cargs.push(...(params["surface"] ?? null).map(s => border_file_export_to_caret5_surface_cargs(s, execution)).flat());
     }
     cargs.push((params["border-file"] ?? null));
     cargs.push((params["output-file-prefix"] ?? null));

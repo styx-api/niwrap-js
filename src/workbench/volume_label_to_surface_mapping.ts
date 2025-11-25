@@ -176,7 +176,9 @@ function volume_label_to_surface_mapping_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-label-to-surface-mapping",
+        "-volume-label-to-surface-mapping"
+    );
+    cargs.push(
         (params["label-out"] ?? null),
         ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_label_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
         "-subvol-select",

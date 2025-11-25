@@ -100,7 +100,9 @@ function cifti_label_import_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-label-import",
+        "-cifti-label-import"
+    );
+    cargs.push(
         (params["output"] ?? null),
         (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
         "-unlabeled-value",

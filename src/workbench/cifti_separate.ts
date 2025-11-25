@@ -938,10 +938,12 @@ function cifti_separate_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-separate"
+    );
     if ((params["volume-all"] ?? null) !== null || (params["label"] ?? null) !== null || (params["metric"] ?? null) !== null || (params["volume"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-cifti-separate",
             ...(((params["volume-all"] ?? null) !== null) ? cifti_separate_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
             ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_separate_label_cargs_(s, execution)).flat() : []),
             ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_separate_metric_cargs(s, execution)).flat() : []),

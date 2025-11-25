@@ -84,7 +84,9 @@ function metric_mask_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-mask",
+        "-metric-mask"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-column",
         (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")

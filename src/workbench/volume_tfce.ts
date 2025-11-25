@@ -202,7 +202,9 @@ function volume_tfce_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-tfce",
+        "-volume-tfce"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",

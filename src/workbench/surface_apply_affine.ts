@@ -133,7 +133,9 @@ function surface_apply_affine_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-apply-affine",
+        "-surface-apply-affine"
+    );
+    cargs.push(
         (params["out-surf"] ?? null),
         ...(((params["flirt"] ?? null) !== null) ? surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution) : [])
     );

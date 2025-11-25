@@ -416,7 +416,9 @@ function cifti_find_clusters_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-find-clusters",
+        "-cifti-find-clusters"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         (((params["less-than"] ?? false)) ? "-less-than" : ""),
         ...(((params["left-surface"] ?? null) !== null) ? cifti_find_clusters_left_surface_cargs((params["left-surface"] ?? null), execution) : []),

@@ -80,7 +80,9 @@ function cifti_transpose_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-transpose",
+        "-cifti-transpose"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-mem-limit",
         (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")

@@ -108,7 +108,9 @@ function volume_rois_from_extrema_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-rois-from-extrema",
+        "-volume-rois-from-extrema"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-gaussian",
         (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),

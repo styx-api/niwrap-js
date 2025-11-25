@@ -147,10 +147,12 @@ function convert_matrix4_to_workbench_sparse_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-convert-matrix4-to-workbench-sparse"
+    );
     if ((params["seed-roi"] ?? null) !== null || (params["volume-seeds"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-convert-matrix4-to-workbench-sparse",
             "-surface-seeds",
             (((params["seed-roi"] ?? null) !== null) ? execution.inputFile((params["seed-roi"] ?? null)) : ""),
             ...(((params["volume-seeds"] ?? null) !== null) ? convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume-seeds"] ?? null), execution) : [])

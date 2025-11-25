@@ -136,7 +136,9 @@ function cifti_create_parcellated_from_template_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-create-parcellated-from-template",
+        "-cifti-create-parcellated-from-template"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-fill-value",
         (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),

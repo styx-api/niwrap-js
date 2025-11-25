@@ -72,9 +72,9 @@ function volume_components_to_frames_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-components-to-frames",
-        (params["output"] ?? null)
+        "-volume-components-to-frames"
     );
+    cargs.push((params["output"] ?? null));
     cargs.push(execution.inputFile((params["input"] ?? null)));
     return cargs;
 }

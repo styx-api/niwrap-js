@@ -84,7 +84,9 @@ function signed_distance_to_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-signed-distance-to-surface",
+        "-signed-distance-to-surface"
+    );
+    cargs.push(
         (params["metric"] ?? null),
         "-winding",
         (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")

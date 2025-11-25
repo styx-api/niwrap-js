@@ -312,10 +312,12 @@ function volume_set_space_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-volume-set-space"
+    );
     if ((params["plumb"] ?? null) !== null || (params["sform"] ?? null) !== null || (params["file"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-volume-set-space",
             ...(((params["plumb"] ?? null) !== null) ? volume_set_space_plumb_cargs((params["plumb"] ?? null), execution) : []),
             ...(((params["sform"] ?? null) !== null) ? volume_set_space_sform_cargs((params["sform"] ?? null), execution) : []),
             ...(((params["file"] ?? null) !== null) ? volume_set_space_file_cargs((params["file"] ?? null), execution) : [])

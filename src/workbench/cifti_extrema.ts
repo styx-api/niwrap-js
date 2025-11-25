@@ -205,7 +205,9 @@ function cifti_extrema_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-extrema",
+        "-cifti-extrema"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-left-surface",
         (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),

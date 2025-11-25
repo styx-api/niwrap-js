@@ -88,7 +88,9 @@ function volume_distortion_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-distortion",
+        "-volume-distortion"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-fnirt",
         (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),

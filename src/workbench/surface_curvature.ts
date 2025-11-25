@@ -248,10 +248,12 @@ function surface_curvature_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-surface-curvature"
+    );
     if ((params["mean"] ?? null) !== null || (params["gauss"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-surface-curvature",
             ...(((params["mean"] ?? null) !== null) ? surface_curvature_mean_cargs((params["mean"] ?? null), execution) : []),
             ...(((params["gauss"] ?? null) !== null) ? surface_curvature_gauss_cargs((params["gauss"] ?? null), execution) : [])
         );

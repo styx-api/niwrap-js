@@ -226,7 +226,9 @@ function metric_extrema_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-extrema",
+        "-metric-extrema"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",

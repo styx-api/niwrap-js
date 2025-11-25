@@ -209,7 +209,9 @@ function create_signed_distance_volume_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-create-signed-distance-volume",
+        "-create-signed-distance-volume"
+    );
+    cargs.push(
         (params["outvol"] ?? null),
         ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : []),
         "-fill-value",

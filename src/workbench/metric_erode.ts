@@ -104,7 +104,9 @@ function metric_erode_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-erode",
+        "-metric-erode"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-roi",
         (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),

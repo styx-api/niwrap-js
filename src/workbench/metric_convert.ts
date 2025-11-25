@@ -259,10 +259,12 @@ function metric_convert_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-metric-convert"
+    );
     if ((params["to-nifti"] ?? null) !== null || (params["from-nifti"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-metric-convert",
             ...(((params["to-nifti"] ?? null) !== null) ? metric_convert_to_nifti_cargs((params["to-nifti"] ?? null), execution) : []),
             ...(((params["from-nifti"] ?? null) !== null) ? metric_convert_from_nifti_cargs((params["from-nifti"] ?? null), execution) : [])
         );

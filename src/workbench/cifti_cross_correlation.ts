@@ -96,7 +96,9 @@ function cifti_cross_correlation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-cross-correlation",
+        "-cifti-cross-correlation"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-weights",
         (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),

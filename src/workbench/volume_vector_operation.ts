@@ -96,7 +96,9 @@ function volume_vector_operation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-vector-operation",
+        "-volume-vector-operation"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         (((params["normalize-a"] ?? false)) ? "-normalize-a" : ""),
         (((params["normalize-b"] ?? false)) ? "-normalize-b" : ""),

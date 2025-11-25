@@ -204,7 +204,9 @@ function cifti_math_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-math",
+        "-cifti-math"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-fixnan",
         (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),

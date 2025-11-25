@@ -173,7 +173,9 @@ function surface_cortex_layer_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-cortex-layer",
+        "-surface-cortex-layer"
+    );
+    cargs.push(
         (params["out-surface"] ?? null),
         ...(((params["placement-out"] ?? null) !== null) ? surface_cortex_layer_placement_out_cargs((params["placement-out"] ?? null), execution) : [])
     );

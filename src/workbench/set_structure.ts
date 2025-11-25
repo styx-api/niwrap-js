@@ -82,10 +82,12 @@ function set_structure_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-set-structure"
+    );
     if ((params["type"] ?? null) !== null || (params["secondary type"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-set-structure",
             "-surface-type",
             (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
             "-surface-secondary-type",

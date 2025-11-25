@@ -153,10 +153,12 @@ function file_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-file-information"
+    );
     if ((params["no-map-info"] ?? false) || (params["only-step-interval"] ?? false) || (params["only-number-of-maps"] ?? false) || (params["only-map-names"] ?? false) || (params["only-metadata"] ?? null) !== null || (params["only-cifti-xml"] ?? false) || (params["czi"] ?? false) || (params["czi-all-sub-blocks"] ?? false) || (params["czi-xml"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-file-information",
             (((params["no-map-info"] ?? false)) ? "-no-map-info" : ""),
             (((params["only-step-interval"] ?? false)) ? "-only-step-interval" : ""),
             (((params["only-number-of-maps"] ?? false)) ? "-only-number-of-maps" : ""),

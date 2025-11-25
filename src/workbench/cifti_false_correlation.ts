@@ -270,7 +270,9 @@ function cifti_false_correlation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-false-correlation",
+        "-cifti-false-correlation"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["left-surface"] ?? null) !== null) ? cifti_false_correlation_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
         ...(((params["right-surface"] ?? null) !== null) ? cifti_false_correlation_right_surface_cargs((params["right-surface"] ?? null), execution) : []),

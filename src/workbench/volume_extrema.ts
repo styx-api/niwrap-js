@@ -222,7 +222,9 @@ function volume_extrema_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-extrema",
+        "-volume-extrema"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         "-roi",

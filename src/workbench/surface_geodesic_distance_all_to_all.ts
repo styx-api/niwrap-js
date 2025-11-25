@@ -100,7 +100,9 @@ function surface_geodesic_distance_all_to_all_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-geodesic-distance-all-to-all",
+        "-surface-geodesic-distance-all-to-all"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-roi",
         (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),

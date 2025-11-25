@@ -303,7 +303,9 @@ function metric_gradient_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-gradient",
+        "-metric-gradient"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? metric_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
         ...(((params["roi"] ?? null) !== null) ? metric_gradient_roi_cargs((params["roi"] ?? null), execution) : []),

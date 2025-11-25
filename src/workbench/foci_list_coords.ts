@@ -74,10 +74,12 @@ function foci_list_coords_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-foci-list-coords"
+    );
     if ((params["names-file-out"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-foci-list-coords",
             "-names-out",
             (params["names-file-out"] ?? null)
         );

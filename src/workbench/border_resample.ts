@@ -80,9 +80,9 @@ function border_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-border-resample",
-        (params["border-out"] ?? null)
+        "-border-resample"
     );
+    cargs.push((params["border-out"] ?? null));
     cargs.push(execution.inputFile((params["border-in"] ?? null)));
     cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new-sphere"] ?? null)));

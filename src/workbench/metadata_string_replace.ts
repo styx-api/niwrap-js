@@ -78,12 +78,12 @@ function metadata_string_replace_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-metadata-string-replace"
+    );
     if ((params["case-insensitive"] ?? false)) {
-        cargs.push(
-            "wb_command",
-            "-metadata-string-replace",
-            "-case-insensitive"
-        );
+        cargs.push("-case-insensitive");
     }
     cargs.push((params["input-file"] ?? null));
     cargs.push((params["find-string"] ?? null));

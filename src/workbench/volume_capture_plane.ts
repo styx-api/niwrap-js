@@ -130,6 +130,8 @@ function volume_capture_plane_cargs(
         "wb_command",
         "-volume-capture-plane"
     );
+    cargs.push(
+    );
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push((params["subvolume"] ?? null));
     cargs.push((params["interp"] ?? null));

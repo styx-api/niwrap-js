@@ -169,7 +169,9 @@ function metric_smoothing_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-smoothing",
+        "-metric-smoothing"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
         ...(((params["roi"] ?? null) !== null) ? metric_smoothing_roi_cargs((params["roi"] ?? null), execution) : []),

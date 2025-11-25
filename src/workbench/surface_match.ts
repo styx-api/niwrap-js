@@ -74,6 +74,8 @@ function surface_match_cargs(
         "wb_command",
         "-surface-match"
     );
+    cargs.push(
+    );
     cargs.push(execution.inputFile((params["Match Surface File"] ?? null)));
     cargs.push(execution.inputFile((params["Input Surface File"] ?? null)));
     cargs.push((params["Output Surface Name"] ?? null));

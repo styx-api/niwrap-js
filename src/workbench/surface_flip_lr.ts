@@ -72,9 +72,9 @@ function surface_flip_lr_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-flip-lr",
-        (params["surface-out"] ?? null)
+        "-surface-flip-lr"
     );
+    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }

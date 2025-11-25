@@ -84,7 +84,9 @@ function foci_get_projection_vertex_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-foci-get-projection-vertex",
+        "-foci-get-projection-vertex"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         "-name",
         (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : "")

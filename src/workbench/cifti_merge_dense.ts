@@ -132,7 +132,9 @@ function cifti_merge_dense_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-merge-dense",
+        "-cifti-merge-dense"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-label-collision",
         (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),

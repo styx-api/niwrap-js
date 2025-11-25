@@ -231,7 +231,9 @@ function volume_merge_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-merge",
+        "-volume-merge"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat() : [])
     );

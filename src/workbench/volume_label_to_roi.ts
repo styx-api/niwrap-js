@@ -96,7 +96,9 @@ function volume_label_to_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-label-to-roi",
+        "-volume-label-to-roi"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-name",
         (((params["label-name"] ?? null) !== null) ? (params["label-name"] ?? null) : ""),

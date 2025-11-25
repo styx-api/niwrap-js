@@ -76,9 +76,9 @@ function cifti_all_labels_to_rois_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-all-labels-to-rois",
-        (params["cifti-out"] ?? null)
+        "-cifti-all-labels-to-rois"
     );
+    cargs.push((params["cifti-out"] ?? null));
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
     return cargs;

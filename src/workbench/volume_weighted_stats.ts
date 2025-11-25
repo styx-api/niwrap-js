@@ -212,10 +212,12 @@ function volume_weighted_stats_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-volume-weighted-stats"
+    );
     if ((params["weight-volume"] ?? null) !== null || (params["subvolume"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-volume-weighted-stats",
             ...(((params["weight-volume"] ?? null) !== null) ? volume_weighted_stats_weight_volume_cargs((params["weight-volume"] ?? null), execution) : []),
             "-subvolume",
             (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),

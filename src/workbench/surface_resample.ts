@@ -202,7 +202,9 @@ function surface_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-resample",
+        "-surface-resample"
+    );
+    cargs.push(
         (params["surface-out"] ?? null),
         ...(((params["area-surfs"] ?? null) !== null) ? surface_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
         ...(((params["area-metrics"] ?? null) !== null) ? surface_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),

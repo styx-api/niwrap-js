@@ -70,6 +70,8 @@ function spec_file_relocate_cargs(
         "wb_command",
         "-spec-file-relocate"
     );
+    cargs.push(
+    );
     cargs.push((params["input-spec"] ?? null));
     cargs.push((params["output-spec"] ?? null));
     return cargs;

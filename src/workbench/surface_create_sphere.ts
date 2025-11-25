@@ -72,9 +72,9 @@ function surface_create_sphere_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-create-sphere",
-        (params["sphere-out"] ?? null)
+        "-surface-create-sphere"
     );
+    cargs.push((params["sphere-out"] ?? null));
     cargs.push(String((params["num-vertices"] ?? null)));
     return cargs;
 }

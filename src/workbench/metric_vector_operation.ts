@@ -96,7 +96,9 @@ function metric_vector_operation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-vector-operation",
+        "-metric-vector-operation"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         (((params["normalize-a"] ?? false)) ? "-normalize-a" : ""),
         (((params["normalize-b"] ?? false)) ? "-normalize-b" : ""),

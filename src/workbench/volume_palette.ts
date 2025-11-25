@@ -425,10 +425,12 @@ function volume_palette_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-volume-palette"
+    );
     if ((params["subvolume"] ?? null) !== null || (params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["interpolate"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["name"] ?? null) !== null || (params["thresholding"] ?? null) !== null || (params["type"] ?? null) !== null || (params["type"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-volume-palette",
             "-subvolume",
             (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),
             ...(((params["pos-percent"] ?? null) !== null) ? volume_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),

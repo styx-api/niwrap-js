@@ -84,7 +84,9 @@ function cifti_label_modify_keys_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-label-modify-keys",
+        "-cifti-label-modify-keys"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         "-column",
         (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")

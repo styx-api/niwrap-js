@@ -135,10 +135,12 @@ function set_map_names_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-set-map-names"
+    );
     if ((params["file"] ?? null) !== null || (params["file"] ?? null) !== null || (params["map"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-set-map-names",
             "-name-file",
             (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
             "-from-data-file",

@@ -82,10 +82,12 @@ function surface_geodesic_distance_sparse_text_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-surface-geodesic-distance-sparse-text"
+    );
     if ((params["area-metric"] ?? null) !== null || (params["naive"] ?? false)) {
         cargs.push(
-            "wb_command",
-            "-surface-geodesic-distance-sparse-text",
             "-corrected-areas",
             (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
             (((params["naive"] ?? false)) ? "-naive" : "")

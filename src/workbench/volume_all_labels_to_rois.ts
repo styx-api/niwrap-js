@@ -76,9 +76,9 @@ function volume_all_labels_to_rois_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-all-labels-to-rois",
-        (params["volume-out"] ?? null)
+        "-volume-all-labels-to-rois"
     );
+    cargs.push((params["volume-out"] ?? null));
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
     return cargs;

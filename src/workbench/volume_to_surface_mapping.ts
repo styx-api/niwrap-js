@@ -612,7 +612,9 @@ function volume_to_surface_mapping_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-to-surface-mapping",
+        "-volume-to-surface-mapping"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         (((params["trilinear"] ?? false)) ? "-trilinear" : ""),
         (((params["enclosing"] ?? false)) ? "-enclosing" : ""),

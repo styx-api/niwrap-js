@@ -231,7 +231,9 @@ function metric_merge_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-merge",
+        "-metric-merge"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat() : [])
     );

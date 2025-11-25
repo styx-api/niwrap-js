@@ -76,9 +76,9 @@ function gifti_label_add_prefix_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-gifti-label-add-prefix",
-        (params["label-out"] ?? null)
+        "-gifti-label-add-prefix"
     );
+    cargs.push((params["label-out"] ?? null));
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["prefix"] ?? null));
     return cargs;

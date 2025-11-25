@@ -100,7 +100,9 @@ function volume_parcel_resampling_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-parcel-resampling",
+        "-volume-parcel-resampling"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
         (((params["fwhm"] ?? false)) ? "-fwhm" : ""),

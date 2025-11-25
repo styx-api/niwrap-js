@@ -72,9 +72,9 @@ function surface_normals_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-normals",
-        (params["metric-out"] ?? null)
+        "-surface-normals"
     );
+    cargs.push((params["metric-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }

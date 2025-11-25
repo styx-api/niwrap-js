@@ -223,7 +223,9 @@ function volume_dilate_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-dilate",
+        "-volume-dilate"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-exponent",
         (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),

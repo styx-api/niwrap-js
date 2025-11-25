@@ -446,7 +446,9 @@ function cifti_gradient_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-gradient",
+        "-cifti-gradient"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["left-surface"] ?? null) !== null) ? cifti_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
         ...(((params["right-surface"] ?? null) !== null) ? cifti_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),

@@ -72,9 +72,9 @@ function volume_fill_holes_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-volume-fill-holes",
-        (params["volume-out"] ?? null)
+        "-volume-fill-holes"
     );
+    cargs.push((params["volume-out"] ?? null));
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }

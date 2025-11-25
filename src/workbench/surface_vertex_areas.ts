@@ -72,9 +72,9 @@ function surface_vertex_areas_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-vertex-areas",
-        (params["metric"] ?? null)
+        "-surface-vertex-areas"
     );
+    cargs.push((params["metric"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }

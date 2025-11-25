@@ -66,6 +66,8 @@ function surface_information_cargs(
         "wb_command",
         "-surface-information"
     );
+    cargs.push(
+    );
     cargs.push(execution.inputFile((params["Surface File"] ?? null)));
     return cargs;
 }

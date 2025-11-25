@@ -96,7 +96,9 @@ function cifti_vector_operation_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-vector-operation",
+        "-cifti-vector-operation"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         (((params["normalize-a"] ?? false)) ? "-normalize-a" : ""),
         (((params["normalize-b"] ?? false)) ? "-normalize-b" : ""),

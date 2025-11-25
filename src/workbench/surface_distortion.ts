@@ -208,7 +208,9 @@ function surface_distortion_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-distortion",
+        "-surface-distortion"
+    );
+    cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["smooth"] ?? null) !== null) ? surface_distortion_smooth_cargs((params["smooth"] ?? null), execution) : []),
         ...(((params["match-surface-area"] ?? null) !== null) ? surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution) : []),

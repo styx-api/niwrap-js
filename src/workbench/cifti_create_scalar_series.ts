@@ -146,7 +146,9 @@ function cifti_create_scalar_series_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-create-scalar-series",
+        "-cifti-create-scalar-series"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         (((params["transpose"] ?? false)) ? "-transpose" : ""),
         "-name-file",

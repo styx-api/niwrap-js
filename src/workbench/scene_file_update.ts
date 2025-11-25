@@ -246,10 +246,12 @@ function scene_file_update_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-scene-file-update"
+    );
     if ((params["fix-map-palette-settings"] ?? false) || (params["remove-missing-files"] ?? false) || (params["error"] ?? false) || (params["verbose"] ?? false) || (params["copy-map-one-palette"] ?? null) !== null || (params["data-file-add"] ?? null) !== null || (params["data-file-remove"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-scene-file-update",
             (((params["fix-map-palette-settings"] ?? false)) ? "-fix-map-palette-settings" : ""),
             (((params["remove-missing-files"] ?? false)) ? "-remove-missing-files" : ""),
             (((params["error"] ?? false)) ? "-error" : ""),

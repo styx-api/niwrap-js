@@ -176,10 +176,12 @@ function cifti_label_to_border_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-cifti-label-to-border"
+    );
     if ((params["fraction"] ?? null) !== null || (params["column"] ?? null) !== null || (params["border"] ?? null) !== null) {
         cargs.push(
-            "wb_command",
-            "-cifti-label-to-border",
             "-placement",
             (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
             "-column",

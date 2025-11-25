@@ -231,7 +231,9 @@ function border_merge_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-border-merge",
+        "-border-merge"
+    );
+    cargs.push(
         (params["border-file-out"] ?? null),
         ...(((params["border"] ?? null) !== null) ? (params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat() : [])
     );

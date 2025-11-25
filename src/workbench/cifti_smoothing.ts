@@ -361,7 +361,9 @@ function cifti_smoothing_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-smoothing",
+        "-cifti-smoothing"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
         ...(((params["left-surface"] ?? null) !== null) ? cifti_smoothing_left_surface_cargs((params["left-surface"] ?? null), execution) : []),

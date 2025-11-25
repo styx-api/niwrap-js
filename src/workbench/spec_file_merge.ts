@@ -74,6 +74,8 @@ function spec_file_merge_cargs(
         "wb_command",
         "-spec-file-merge"
     );
+    cargs.push(
+    );
     cargs.push((params["spec-1"] ?? null));
     cargs.push((params["spec-2"] ?? null));
     cargs.push((params["out-spec"] ?? null));

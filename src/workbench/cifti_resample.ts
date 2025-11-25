@@ -1036,7 +1036,9 @@ function cifti_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-cifti-resample",
+        "-cifti-resample"
+    );
+    cargs.push(
         (params["cifti-out"] ?? null),
         (((params["surface-largest"] ?? false)) ? "-surface-largest" : ""),
         ...(((params["volume-predilate"] ?? null) !== null) ? cifti_resample_volume_predilate_cargs((params["volume-predilate"] ?? null), execution) : []),

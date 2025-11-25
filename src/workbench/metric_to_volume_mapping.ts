@@ -165,7 +165,9 @@ function metric_to_volume_mapping_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-metric-to-volume-mapping",
+        "-metric-to-volume-mapping"
+    );
+    cargs.push(
         (params["volume-out"] ?? null),
         "-nearest-vertex",
         (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),

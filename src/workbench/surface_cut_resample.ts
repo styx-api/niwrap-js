@@ -80,9 +80,9 @@ function surface_cut_resample_cargs(
     const cargs: string[] = [];
     cargs.push(
         "wb_command",
-        "-surface-cut-resample",
-        (params["surface-out"] ?? null)
+        "-surface-cut-resample"
     );
+    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new-sphere"] ?? null)));

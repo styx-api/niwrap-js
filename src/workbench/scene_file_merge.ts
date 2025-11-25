@@ -225,12 +225,12 @@ function scene_file_merge_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push(
+        "wb_command",
+        "-scene-file-merge"
+    );
     if ((params["scene-file"] ?? null) !== null) {
-        cargs.push(
-            "wb_command",
-            "-scene-file-merge",
-            ...(params["scene-file"] ?? null).map(s => scene_file_merge_scene_file_cargs(s, execution)).flat()
-        );
+        cargs.push(...(params["scene-file"] ?? null).map(s => scene_file_merge_scene_file_cargs(s, execution)).flat());
     }
     cargs.push((params["scene-file-out"] ?? null));
     return cargs;
