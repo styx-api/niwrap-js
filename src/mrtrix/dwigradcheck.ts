@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const DWIGRADCHECK_METADATA: Metadata = {
-    id: "da91c0d77a46dd23fc98bad56497487a81e19371.boutiques",
+    id: "efa3ccbad97d0c5bc080c7e11292722025c2c985.boutiques",
     name: "dwigradcheck",
     package: "mrtrix",
     container_image_tag: "mrtrix3/mrtrix3:3.0.4",
@@ -190,13 +190,9 @@ interface DwigradcheckOutputs {
      */
     export_grad_mrtrix: OutputPathType | null;
     /**
-     * export the diffusion-weighted gradient table to file in FSL format 
-     */
-    export_grad_fsl: OutputPathType | null;
-    /**
      * Outputs from `dwigradcheck_export_grad_fsl_outputs`.
      */
-    export_grad_fsl_: DwigradcheckExportGradFslOutputs | null;
+    export_grad_fsl: DwigradcheckExportGradFslOutputs | null;
 }
 
 
@@ -398,8 +394,7 @@ function dwigradcheck_outputs(
     const ret: DwigradcheckOutputs = {
         root: execution.outputFile("."),
         export_grad_mrtrix: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl: ((params["export_grad_mrtrix"] ?? null) !== null) ? execution.outputFile([(params["export_grad_mrtrix"] ?? null)].join('')) : null,
-        export_grad_fsl_: (params["export_grad_fsl"] ?? null) ? (dwigradcheck_export_grad_fsl_outputs((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
+        export_grad_fsl: (params["export_grad_fsl"] ?? null) ? (dwigradcheck_export_grad_fsl_outputs((params["export_grad_fsl"] ?? null), execution) ?? null) : null,
     };
     return ret;
 }

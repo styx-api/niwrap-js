@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_1D_DW_GRAD_O_MAT___METADATA: Metadata = {
-    id: "089c358fdaa8a6343f360bc42573e573155fe1b0.boutiques",
+    id: "6d06ff4a264d54f2bd119e11f55215f899c828b5.boutiques",
     name: "1dDW_Grad_o_Mat++",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -271,7 +271,7 @@ function v_1d_dw_grad_o_mat___outputs(
         root: execution.outputFile("."),
         outfile: execution.outputFile([(params["out_row_vec"] ?? null)].join('')),
         out_row_bval_file: ((params["out_row_bval_sep"] ?? null) !== null) ? execution.outputFile([(params["out_row_bval_sep"] ?? null)].join('')) : null,
-        out_col_bval_file: ((params["out_row_bval_sep"] ?? null) !== null) ? execution.outputFile([(params["out_row_bval_sep"] ?? null)].join('')) : null,
+        out_col_bval_file: ((params["out_col_bval_sep"] ?? null) !== null) ? execution.outputFile([(params["out_col_bval_sep"] ?? null)].join('')) : null,
     };
     return ret;
 }
