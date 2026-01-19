@@ -39,10 +39,10 @@ interface MetricResampleParamsDict {
     "metric-out": string;
     "area-surfs"?: MetricResampleAreaSurfsParamsDict | null | undefined;
     "area-metrics"?: MetricResampleAreaMetricsParamsDict | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
     "valid-roi-out"?: MetricResampleValidRoiOutParamsDict | null | undefined;
-    "largest": boolean;
+    "roi-metric"?: InputPathType | null | undefined;
     "bypass-sphere-check": boolean;
+    "largest": boolean;
     "metric-in": InputPathType;
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
@@ -244,12 +244,12 @@ interface MetricResampleOutputs {
  * @param method the method name
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
  * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
 
 the roi, as a metric file
- * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
- * @param largest use only the value of the vertex with the largest weight
  * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param largest use only the value of the vertex with the largest weight
  *
  * @returns Parameter dictionary
  */
@@ -261,16 +261,16 @@ function metric_resample_params(
     method: string,
     area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
     area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
-    roi_metric: InputPathType | null = null,
     valid_roi_out: MetricResampleValidRoiOutParamsDict | null = null,
-    largest: boolean = false,
+    roi_metric: InputPathType | null = null,
     bypass_sphere_check: boolean = false,
+    largest: boolean = false,
 ): MetricResampleParamsDictTagged {
     const params = {
         "@type": "workbench/metric-resample" as const,
         "metric-out": metric_out,
-        "largest": largest,
         "bypass-sphere-check": bypass_sphere_check,
+        "largest": largest,
         "metric-in": metric_in,
         "current-sphere": current_sphere,
         "new-sphere": new_sphere,
@@ -282,11 +282,11 @@ function metric_resample_params(
     if (area_metrics !== null) {
         params["area-metrics"] = area_metrics;
     }
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
-    }
     if (valid_roi_out !== null) {
         params["valid-roi-out"] = valid_roi_out;
+    }
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -313,12 +313,20 @@ function metric_resample_cargs(
         (params["metric-out"] ?? null),
         ...(((params["area-surfs"] ?? null) !== null) ? metric_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
         ...(((params["area-metrics"] ?? null) !== null) ? metric_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
-        "-current-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        ...(((params["valid-roi-out"] ?? null) !== null) ? metric_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : []),
-        (((params["largest"] ?? false)) ? "-largest" : ""),
-        (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")
+        ...(((params["valid-roi-out"] ?? null) !== null) ? metric_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : [])
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-current-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["bypass-sphere-check"] ?? false)) {
+        cargs.push("-bypass-sphere-check");
+    }
+    if ((params["largest"] ?? false)) {
+        cargs.push("-largest");
+    }
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
@@ -408,12 +416,12 @@ function metric_resample_execute(
  * @param method the method name
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
+ * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
  * @param roi_metric use an input roi on the current mesh to exclude non-data vertices
 
 the roi, as a metric file
- * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
- * @param largest use only the value of the vertex with the largest weight
  * @param bypass_sphere_check ADVANCED: allow the current and new 'spheres' to have arbitrary shape as long as they follow the same contour
+ * @param largest use only the value of the vertex with the largest weight
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
@@ -426,13 +434,13 @@ function metric_resample(
     method: string,
     area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
     area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
-    roi_metric: InputPathType | null = null,
     valid_roi_out: MetricResampleValidRoiOutParamsDict | null = null,
-    largest: boolean = false,
+    roi_metric: InputPathType | null = null,
     bypass_sphere_check: boolean = false,
+    largest: boolean = false,
     runner: Runner | null = null,
 ): MetricResampleOutputs {
-    const params = metric_resample_params(metric_out, metric_in, current_sphere, new_sphere, method, area_surfs, area_metrics, roi_metric, valid_roi_out, largest, bypass_sphere_check)
+    const params = metric_resample_params(metric_out, metric_in, current_sphere, new_sphere, method, area_surfs, area_metrics, valid_roi_out, roi_metric, bypass_sphere_check, largest)
     return metric_resample_execute(params, runner);
 }
 

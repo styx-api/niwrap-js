@@ -14,9 +14,9 @@ const LABEL_ERODE_METADATA: Metadata = {
 interface LabelErodeParamsDict {
     "@type"?: "workbench/label-erode";
     "label-out": string;
-    "roi-metric"?: InputPathType | null | undefined;
-    "column"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
     "label": InputPathType;
     "surface": InputPathType;
     "erode-dist": number;
@@ -48,15 +48,15 @@ interface LabelErodeOutputs {
  * @param label the input label
  * @param surface the surface to erode on
  * @param erode_dist distance in mm to erode the labels
- * @param roi_metric assume values outside this roi are labeled
-
-metric file, positive values denote vertices that have data
- * @param column select a single column to erode
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column to erode
+
+the column number or name
+ * @param roi_metric assume values outside this roi are labeled
+
+metric file, positive values denote vertices that have data
  *
  * @returns Parameter dictionary
  */
@@ -65,9 +65,9 @@ function label_erode_params(
     label: InputPathType,
     surface: InputPathType,
     erode_dist: number,
-    roi_metric: InputPathType | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
 ): LabelErodeParamsDictTagged {
     const params = {
         "@type": "workbench/label-erode" as const,
@@ -76,14 +76,14 @@ function label_erode_params(
         "surface": surface,
         "erode-dist": erode_dist,
     };
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     if (column !== null) {
         params["column"] = column;
     }
-    if (area_metric !== null) {
-        params["area-metric"] = area_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -106,15 +106,25 @@ function label_erode_cargs(
         "wb_command",
         "-label-erode"
     );
-    cargs.push(
-        (params["label-out"] ?? null),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-    );
+    cargs.push((params["label-out"] ?? null));
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["label"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["erode-dist"] ?? null)));
@@ -179,15 +189,15 @@ function label_erode_execute(
  * @param label the input label
  * @param surface the surface to erode on
  * @param erode_dist distance in mm to erode the labels
- * @param roi_metric assume values outside this roi are labeled
-
-metric file, positive values denote vertices that have data
- * @param column select a single column to erode
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column to erode
+
+the column number or name
+ * @param roi_metric assume values outside this roi are labeled
+
+metric file, positive values denote vertices that have data
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelErodeOutputs`).
@@ -197,12 +207,12 @@ function label_erode(
     label: InputPathType,
     surface: InputPathType,
     erode_dist: number,
-    roi_metric: InputPathType | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelErodeOutputs {
-    const params = label_erode_params(label_out, label, surface, erode_dist, roi_metric, column, area_metric)
+    const params = label_erode_params(label_out, label, surface, erode_dist, area_metric, column, roi_metric)
     return label_erode_execute(params, runner);
 }
 

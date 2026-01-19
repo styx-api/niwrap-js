@@ -30,14 +30,14 @@ interface CiftiAverageDenseRoiParamsDict {
     "@type"?: "workbench/cifti-average-dense-roi";
     "cifti-out": string;
     "cifti-roi"?: CiftiAverageDenseRoiCiftiRoiParamsDict | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
-    "roi-vol"?: InputPathType | null | undefined;
-    "left-surf"?: InputPathType | null | undefined;
-    "right-surf"?: InputPathType | null | undefined;
-    "cerebellum-surf"?: InputPathType | null | undefined;
     "cifti"?: Array<CiftiAverageDenseRoiCiftiParamsDict> | null | undefined;
+    "cerebellum-surf"?: InputPathType | null | undefined;
+    "right-surf"?: InputPathType | null | undefined;
+    "left-surf"?: InputPathType | null | undefined;
+    "roi-vol"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
 }
 type CiftiAverageDenseRoiParamsDictTagged = Required<Pick<CiftiAverageDenseRoiParamsDict, '@type'>> & CiftiAverageDenseRoiParamsDict;
 
@@ -78,9 +78,11 @@ function cifti_average_dense_roi_cifti_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cifti-roi",
-        execution.inputFile((params["roi-cifti"] ?? null)),
-        (((params["in-memory"] ?? false)) ? "-in-memory" : "")
+        execution.inputFile((params["roi-cifti"] ?? null))
     );
+    if ((params["in-memory"] ?? false)) {
+        cargs.push("-in-memory");
+    }
     return cargs;
 }
 
@@ -146,42 +148,42 @@ interface CiftiAverageDenseRoiOutputs {
  *
  * @param cifti_out output cifti dscalar file
  * @param cifti_roi cifti file containing combined weights
- * @param roi_metric weights to use for left hempsphere
-
-the left roi as a metric file
- * @param roi_metric_ weights to use for right hempsphere
-
-the right roi as a metric file
- * @param roi_metric_2 weights to use for cerebellum surface
-
-the cerebellum roi as a metric file
- * @param roi_vol voxel weights to use
-
-the roi volume file
- * @param left_surf specify the left surface for vertex area correction
-
-the left surface file
- * @param right_surf specify the right surface for vertex area correction
-
-the right surface file
+ * @param cifti specify an input cifti file
  * @param cerebellum_surf specify the cerebellum surface for vertex area correction
 
 the cerebellum surface file
- * @param cifti specify an input cifti file
+ * @param right_surf specify the right surface for vertex area correction
+
+the right surface file
+ * @param left_surf specify the left surface for vertex area correction
+
+the left surface file
+ * @param roi_vol voxel weights to use
+
+the roi volume file
+ * @param roi_metric weights to use for cerebellum surface
+
+the cerebellum roi as a metric file
+ * @param roi_metric_ weights to use for right hempsphere
+
+the right roi as a metric file
+ * @param roi_metric_2 weights to use for left hempsphere
+
+the left roi as a metric file
  *
  * @returns Parameter dictionary
  */
 function cifti_average_dense_roi_params(
     cifti_out: string,
     cifti_roi: CiftiAverageDenseRoiCiftiRoiParamsDict | null = null,
+    cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
+    cerebellum_surf: InputPathType | null = null,
+    right_surf: InputPathType | null = null,
+    left_surf: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
     roi_metric: InputPathType | null = null,
     roi_metric_: InputPathType | null = null,
     roi_metric_2: InputPathType | null = null,
-    roi_vol: InputPathType | null = null,
-    left_surf: InputPathType | null = null,
-    right_surf: InputPathType | null = null,
-    cerebellum_surf: InputPathType | null = null,
-    cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
 ): CiftiAverageDenseRoiParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-average-dense-roi" as const,
@@ -189,6 +191,21 @@ function cifti_average_dense_roi_params(
     };
     if (cifti_roi !== null) {
         params["cifti-roi"] = cifti_roi;
+    }
+    if (cifti !== null) {
+        params["cifti"] = cifti;
+    }
+    if (cerebellum_surf !== null) {
+        params["cerebellum-surf"] = cerebellum_surf;
+    }
+    if (right_surf !== null) {
+        params["right-surf"] = right_surf;
+    }
+    if (left_surf !== null) {
+        params["left-surf"] = left_surf;
+    }
+    if (roi_vol !== null) {
+        params["roi-vol"] = roi_vol;
     }
     if (roi_metric !== null) {
         params["roi-metric"] = roi_metric;
@@ -198,21 +215,6 @@ function cifti_average_dense_roi_params(
     }
     if (roi_metric_2 !== null) {
         params["roi-metric"] = roi_metric_2;
-    }
-    if (roi_vol !== null) {
-        params["roi-vol"] = roi_vol;
-    }
-    if (left_surf !== null) {
-        params["left-surf"] = left_surf;
-    }
-    if (right_surf !== null) {
-        params["right-surf"] = right_surf;
-    }
-    if (cerebellum_surf !== null) {
-        params["cerebellum-surf"] = cerebellum_surf;
-    }
-    if (cifti !== null) {
-        params["cifti"] = cifti;
     }
     return params;
 }
@@ -238,22 +240,50 @@ function cifti_average_dense_roi_cargs(
     cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["cifti-roi"] ?? null) !== null) ? cifti_average_dense_roi_cifti_roi_cargs((params["cifti-roi"] ?? null), execution) : []),
-        "-left-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-right-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-cerebellum-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-vol-roi",
-        (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
-        "-left-area-surf",
-        (((params["left-surf"] ?? null) !== null) ? execution.inputFile((params["left-surf"] ?? null)) : ""),
-        "-right-area-surf",
-        (((params["right-surf"] ?? null) !== null) ? execution.inputFile((params["right-surf"] ?? null)) : ""),
-        "-cerebellum-area-surf",
-        (((params["cerebellum-surf"] ?? null) !== null) ? execution.inputFile((params["cerebellum-surf"] ?? null)) : ""),
         ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_dense_roi_cifti_cargs(s, execution)).flat() : [])
     );
+    if ((params["cerebellum-surf"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-area-surf",
+            execution.inputFile((params["cerebellum-surf"] ?? null))
+        );
+    }
+    if ((params["right-surf"] ?? null) !== null) {
+        cargs.push(
+            "-right-area-surf",
+            execution.inputFile((params["right-surf"] ?? null))
+        );
+    }
+    if ((params["left-surf"] ?? null) !== null) {
+        cargs.push(
+            "-left-area-surf",
+            execution.inputFile((params["left-surf"] ?? null))
+        );
+    }
+    if ((params["roi-vol"] ?? null) !== null) {
+        cargs.push(
+            "-vol-roi",
+            execution.inputFile((params["roi-vol"] ?? null))
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-right-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-left-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -309,28 +339,28 @@ function cifti_average_dense_roi_execute(
  *
  * @param cifti_out output cifti dscalar file
  * @param cifti_roi cifti file containing combined weights
- * @param roi_metric weights to use for left hempsphere
-
-the left roi as a metric file
- * @param roi_metric_ weights to use for right hempsphere
-
-the right roi as a metric file
- * @param roi_metric_2 weights to use for cerebellum surface
-
-the cerebellum roi as a metric file
- * @param roi_vol voxel weights to use
-
-the roi volume file
- * @param left_surf specify the left surface for vertex area correction
-
-the left surface file
- * @param right_surf specify the right surface for vertex area correction
-
-the right surface file
+ * @param cifti specify an input cifti file
  * @param cerebellum_surf specify the cerebellum surface for vertex area correction
 
 the cerebellum surface file
- * @param cifti specify an input cifti file
+ * @param right_surf specify the right surface for vertex area correction
+
+the right surface file
+ * @param left_surf specify the left surface for vertex area correction
+
+the left surface file
+ * @param roi_vol voxel weights to use
+
+the roi volume file
+ * @param roi_metric weights to use for cerebellum surface
+
+the cerebellum roi as a metric file
+ * @param roi_metric_ weights to use for right hempsphere
+
+the right roi as a metric file
+ * @param roi_metric_2 weights to use for left hempsphere
+
+the left roi as a metric file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiAverageDenseRoiOutputs`).
@@ -338,17 +368,17 @@ the cerebellum surface file
 function cifti_average_dense_roi(
     cifti_out: string,
     cifti_roi: CiftiAverageDenseRoiCiftiRoiParamsDict | null = null,
+    cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
+    cerebellum_surf: InputPathType | null = null,
+    right_surf: InputPathType | null = null,
+    left_surf: InputPathType | null = null,
+    roi_vol: InputPathType | null = null,
     roi_metric: InputPathType | null = null,
     roi_metric_: InputPathType | null = null,
     roi_metric_2: InputPathType | null = null,
-    roi_vol: InputPathType | null = null,
-    left_surf: InputPathType | null = null,
-    right_surf: InputPathType | null = null,
-    cerebellum_surf: InputPathType | null = null,
-    cifti: Array<CiftiAverageDenseRoiCiftiParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiAverageDenseRoiOutputs {
-    const params = cifti_average_dense_roi_params(cifti_out, cifti_roi, roi_metric, roi_metric_, roi_metric_2, roi_vol, left_surf, right_surf, cerebellum_surf, cifti)
+    const params = cifti_average_dense_roi_params(cifti_out, cifti_roi, cifti, cerebellum_surf, right_surf, left_surf, roi_vol, roi_metric, roi_metric_, roi_metric_2)
     return cifti_average_dense_roi_execute(params, runner);
 }
 

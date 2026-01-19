@@ -13,9 +13,9 @@ const VOLUME_ESTIMATE_FWHM_METADATA: Metadata = {
 
 interface VolumeEstimateFwhmParamsDict {
     "@type"?: "workbench/volume-estimate-fwhm";
-    "roivol"?: InputPathType | null | undefined;
-    "subvol"?: string | null | undefined;
     "demean"?: boolean | null | undefined;
+    "subvol"?: string | null | undefined;
+    "roivol"?: InputPathType | null | undefined;
     "volume": InputPathType;
 }
 type VolumeEstimateFwhmParamsDictTagged = Required<Pick<VolumeEstimateFwhmParamsDict, '@type'>> & VolumeEstimateFwhmParamsDict;
@@ -38,36 +38,36 @@ interface VolumeEstimateFwhmOutputs {
  * Build parameters.
  *
  * @param volume the input volume
- * @param roivol use only data within an ROI
-
-the volume to use as an ROI
- * @param subvol select a single subvolume to estimate smoothness of
-
-the subvolume number or name
  * @param demean estimate for the whole file at once, not each subvolume separately
 
 subtract the mean image before estimating smoothness
+ * @param subvol select a single subvolume to estimate smoothness of
+
+the subvolume number or name
+ * @param roivol use only data within an ROI
+
+the volume to use as an ROI
  *
  * @returns Parameter dictionary
  */
 function volume_estimate_fwhm_params(
     volume: InputPathType,
-    roivol: InputPathType | null = null,
-    subvol: string | null = null,
     demean: boolean | null = null,
+    subvol: string | null = null,
+    roivol: InputPathType | null = null,
 ): VolumeEstimateFwhmParamsDictTagged {
     const params = {
         "@type": "workbench/volume-estimate-fwhm" as const,
         "volume": volume,
     };
-    if (roivol !== null) {
-        params["roivol"] = roivol;
+    if (demean !== null) {
+        params["demean"] = demean;
     }
     if (subvol !== null) {
         params["subvol"] = subvol;
     }
-    if (demean !== null) {
-        params["demean"] = demean;
+    if (roivol !== null) {
+        params["roivol"] = roivol;
     }
     return params;
 }
@@ -90,14 +90,22 @@ function volume_estimate_fwhm_cargs(
         "wb_command",
         "-volume-estimate-fwhm"
     );
-    if ((params["roivol"] ?? null) !== null || (params["subvol"] ?? null) !== null || (params["demean"] ?? null) !== null) {
+    if ((params["demean"] ?? null) !== null) {
+        cargs.push(
+            "-whole-file",
+            "-demean"
+        );
+    }
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null)
+        );
+    }
+    if ((params["roivol"] ?? null) !== null) {
         cargs.push(
             "-roi",
-            (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : ""),
-            "-subvolume",
-            (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-            "-whole-file",
-            (((params["demean"] ?? null) !== null) ? "-demean" : "")
+            execution.inputFile((params["roivol"] ?? null))
         );
     }
     cargs.push(execution.inputFile((params["volume"] ?? null)));
@@ -154,27 +162,27 @@ function volume_estimate_fwhm_execute(
  * Estimates the smoothness of the input volume in X, Y, and Z directions separately, printing the estimates to standard output, in mm as FWHM.  If -subvolume or -whole-file are not specified, each subvolume is estimated and displayed separately.
  *
  * @param volume the input volume
- * @param roivol use only data within an ROI
-
-the volume to use as an ROI
- * @param subvol select a single subvolume to estimate smoothness of
-
-the subvolume number or name
  * @param demean estimate for the whole file at once, not each subvolume separately
 
 subtract the mean image before estimating smoothness
+ * @param subvol select a single subvolume to estimate smoothness of
+
+the subvolume number or name
+ * @param roivol use only data within an ROI
+
+the volume to use as an ROI
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeEstimateFwhmOutputs`).
  */
 function volume_estimate_fwhm(
     volume: InputPathType,
-    roivol: InputPathType | null = null,
-    subvol: string | null = null,
     demean: boolean | null = null,
+    subvol: string | null = null,
+    roivol: InputPathType | null = null,
     runner: Runner | null = null,
 ): VolumeEstimateFwhmOutputs {
-    const params = volume_estimate_fwhm_params(volume, roivol, subvol, demean)
+    const params = volume_estimate_fwhm_params(volume, demean, subvol, roivol)
     return volume_estimate_fwhm_execute(params, runner);
 }
 

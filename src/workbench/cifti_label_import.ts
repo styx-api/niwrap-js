@@ -14,10 +14,10 @@ const CIFTI_LABEL_IMPORT_METADATA: Metadata = {
 interface CiftiLabelImportParamsDict {
     "@type"?: "workbench/cifti-label-import";
     "output": string;
-    "discard-others": boolean;
+    "file"?: string | null | undefined;
     "value"?: number | null | undefined;
     "drop-unused-labels": boolean;
-    "file"?: string | null | undefined;
+    "discard-others": boolean;
     "input": InputPathType;
     "label-list-file": string;
 }
@@ -47,14 +47,14 @@ interface CiftiLabelImportOutputs {
  * @param output the output cifti label file
  * @param input the input cifti file
  * @param label_list_file text file containing the values and names for labels
- * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param value set the value that will be interpreted as unlabeled
 
 the numeric value for unlabeled (default 0)
  * @param drop_unused_labels remove any unused label values from the label table
- * @param file read label name hierarchy from a json file
-
-the input json file
+ * @param discard_others set any values not mentioned in the label list to the ??? label
  *
  * @returns Parameter dictionary
  */
@@ -62,24 +62,24 @@ function cifti_label_import_params(
     output: string,
     input: InputPathType,
     label_list_file: string,
-    discard_others: boolean = false,
+    file: string | null = null,
     value: number | null = null,
     drop_unused_labels: boolean = false,
-    file: string | null = null,
+    discard_others: boolean = false,
 ): CiftiLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-import" as const,
         "output": output,
-        "discard-others": discard_others,
         "drop-unused-labels": drop_unused_labels,
+        "discard-others": discard_others,
         "input": input,
         "label-list-file": label_list_file,
     };
-    if (value !== null) {
-        params["value"] = value;
-    }
     if (file !== null) {
         params["file"] = file;
+    }
+    if (value !== null) {
+        params["value"] = value;
     }
     return params;
 }
@@ -102,15 +102,25 @@ function cifti_label_import_cargs(
         "wb_command",
         "-cifti-label-import"
     );
-    cargs.push(
-        (params["output"] ?? null),
-        (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
-        "-unlabeled-value",
-        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-        (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
-        "-hierarchy",
-        (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
-    );
+    cargs.push((params["output"] ?? null));
+    if ((params["file"] ?? null) !== null) {
+        cargs.push(
+            "-hierarchy",
+            (params["file"] ?? null)
+        );
+    }
+    if ((params["value"] ?? null) !== null) {
+        cargs.push(
+            "-unlabeled-value",
+            String((params["value"] ?? null))
+        );
+    }
+    if ((params["drop-unused-labels"] ?? false)) {
+        cargs.push("-drop-unused-labels");
+    }
+    if ((params["discard-others"] ?? false)) {
+        cargs.push("-discard-others");
+    }
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label-list-file"] ?? null));
     return cargs;
@@ -185,14 +195,14 @@ function cifti_label_import_execute(
  * @param output the output cifti label file
  * @param input the input cifti file
  * @param label_list_file text file containing the values and names for labels
- * @param discard_others set any values not mentioned in the label list to the ??? label
+ * @param file read label name hierarchy from a json file
+
+the input json file
  * @param value set the value that will be interpreted as unlabeled
 
 the numeric value for unlabeled (default 0)
  * @param drop_unused_labels remove any unused label values from the label table
- * @param file read label name hierarchy from a json file
-
-the input json file
+ * @param discard_others set any values not mentioned in the label list to the ??? label
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelImportOutputs`).
@@ -201,13 +211,13 @@ function cifti_label_import(
     output: string,
     input: InputPathType,
     label_list_file: string,
-    discard_others: boolean = false,
+    file: string | null = null,
     value: number | null = null,
     drop_unused_labels: boolean = false,
-    file: string | null = null,
+    discard_others: boolean = false,
     runner: Runner | null = null,
 ): CiftiLabelImportOutputs {
-    const params = cifti_label_import_params(output, input, label_list_file, discard_others, value, drop_unused_labels, file)
+    const params = cifti_label_import_params(output, input, label_list_file, file, value, drop_unused_labels, discard_others)
     return cifti_label_import_execute(params, runner);
 }
 

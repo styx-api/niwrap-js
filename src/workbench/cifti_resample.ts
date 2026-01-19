@@ -22,8 +22,8 @@ type CiftiResampleWeightedParamsDictTagged = Required<Pick<CiftiResampleWeighted
 interface CiftiResampleVolumePredilateParamsDict {
     "@type"?: "volume-predilate";
     "dilate-mm": number;
-    "nearest": boolean;
     "weighted"?: CiftiResampleWeightedParamsDict | null | undefined;
+    "nearest": boolean;
 }
 type CiftiResampleVolumePredilateParamsDictTagged = Required<Pick<CiftiResampleVolumePredilateParamsDict, '@type'>> & CiftiResampleVolumePredilateParamsDict;
 
@@ -39,9 +39,9 @@ type CiftiResampleWeightedParamsDictTagged_ = Required<Pick<CiftiResampleWeighte
 interface CiftiResampleSurfacePostdilateParamsDict {
     "@type"?: "surface-postdilate";
     "dilate-mm": number;
-    "nearest": boolean;
-    "linear": boolean;
     "weighted"?: CiftiResampleWeightedParamsDict_ | null | undefined;
+    "linear": boolean;
+    "nearest": boolean;
 }
 type CiftiResampleSurfacePostdilateParamsDictTagged = Required<Pick<CiftiResampleSurfacePostdilateParamsDict, '@type'>> & CiftiResampleSurfacePostdilateParamsDict;
 
@@ -151,7 +151,6 @@ type CiftiResampleCerebellumSpheresParamsDictTagged = Required<Pick<CiftiResampl
 interface CiftiResampleParamsDict {
     "@type"?: "workbench/cifti-resample";
     "cifti-out": string;
-    "surface-largest": boolean;
     "volume-predilate"?: CiftiResampleVolumePredilateParamsDict | null | undefined;
     "surface-postdilate"?: CiftiResampleSurfacePostdilateParamsDict | null | undefined;
     "affine"?: CiftiResampleAffineParamsDict | null | undefined;
@@ -159,6 +158,7 @@ interface CiftiResampleParamsDict {
     "left-spheres"?: CiftiResampleLeftSpheresParamsDict | null | undefined;
     "right-spheres"?: CiftiResampleRightSpheresParamsDict | null | undefined;
     "cerebellum-spheres"?: CiftiResampleCerebellumSpheresParamsDict | null | undefined;
+    "surface-largest": boolean;
     "cifti-in": InputPathType;
     "direction": string;
     "cifti-template": InputPathType;
@@ -207,13 +207,15 @@ function cifti_resample_weighted_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
+    cargs.push("-weighted");
+    if ((params["exponent"] ?? null) !== null) {
         cargs.push(
-            "-weighted",
             "-exponent",
-            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
-            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
+            String((params["exponent"] ?? null))
         );
+    }
+    if ((params["legacy-cutoff"] ?? false)) {
+        cargs.push("-legacy-cutoff");
     }
     return cargs;
 }
@@ -223,15 +225,15 @@ function cifti_resample_weighted_cargs(
  * Build parameters.
  *
  * @param dilate_mm distance, in mm, to dilate
- * @param nearest use nearest value dilation
  * @param weighted use weighted dilation (default)
+ * @param nearest use nearest value dilation
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_volume_predilate(
     dilate_mm: number,
-    nearest: boolean = false,
     weighted: CiftiResampleWeightedParamsDict | null = null,
+    nearest: boolean = false,
 ): CiftiResampleVolumePredilateParamsDictTagged {
     const params = {
         "@type": "volume-predilate" as const,
@@ -261,9 +263,11 @@ function cifti_resample_volume_predilate_cargs(
     cargs.push(
         "-volume-predilate",
         String((params["dilate-mm"] ?? null)),
-        (((params["nearest"] ?? false)) ? "-nearest" : ""),
         ...(((params["weighted"] ?? null) !== null) ? cifti_resample_weighted_cargs((params["weighted"] ?? null), execution) : [])
     );
+    if ((params["nearest"] ?? false)) {
+        cargs.push("-nearest");
+    }
     return cargs;
 }
 
@@ -306,13 +310,15 @@ function cifti_resample_weighted_cargs_(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
+    cargs.push("-weighted");
+    if ((params["exponent"] ?? null) !== null) {
         cargs.push(
-            "-weighted",
             "-exponent",
-            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
-            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
+            String((params["exponent"] ?? null))
         );
+    }
+    if ((params["legacy-cutoff"] ?? false)) {
+        cargs.push("-legacy-cutoff");
     }
     return cargs;
 }
@@ -322,23 +328,23 @@ function cifti_resample_weighted_cargs_(
  * Build parameters.
  *
  * @param dilate_mm distance, in mm, to dilate
- * @param nearest use nearest value dilation
- * @param linear use linear dilation
  * @param weighted use weighted dilation (default for non-label data)
+ * @param linear use linear dilation
+ * @param nearest use nearest value dilation
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_surface_postdilate(
     dilate_mm: number,
-    nearest: boolean = false,
-    linear: boolean = false,
     weighted: CiftiResampleWeightedParamsDict_ | null = null,
+    linear: boolean = false,
+    nearest: boolean = false,
 ): CiftiResampleSurfacePostdilateParamsDictTagged {
     const params = {
         "@type": "surface-postdilate" as const,
         "dilate-mm": dilate_mm,
-        "nearest": nearest,
         "linear": linear,
+        "nearest": nearest,
     };
     if (weighted !== null) {
         params["weighted"] = weighted;
@@ -363,10 +369,14 @@ function cifti_resample_surface_postdilate_cargs(
     cargs.push(
         "-surface-postdilate",
         String((params["dilate-mm"] ?? null)),
-        (((params["nearest"] ?? false)) ? "-nearest" : ""),
-        (((params["linear"] ?? false)) ? "-linear" : ""),
         ...(((params["weighted"] ?? null) !== null) ? cifti_resample_weighted_cargs_((params["weighted"] ?? null), execution) : [])
     );
+    if ((params["linear"] ?? false)) {
+        cargs.push("-linear");
+    }
+    if ((params["nearest"] ?? false)) {
+        cargs.push("-nearest");
+    }
     return cargs;
 }
 
@@ -499,10 +509,14 @@ function cifti_resample_warpfield_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-warpfield",
-        (params["warpfield"] ?? null),
-        "-fnirt",
-        (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : "")
+        (params["warpfield"] ?? null)
     );
+    if ((params["source-volume"] ?? null) !== null) {
+        cargs.push(
+            "-fnirt",
+            (params["source-volume"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -957,7 +971,6 @@ interface CiftiResampleOutputs {
  * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
  * @param surface_method specify a surface resampling method
  * @param volume_method specify a volume interpolation method
- * @param surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
  * @param volume_predilate dilate the volume components before resampling
  * @param surface_postdilate dilate the surface components after resampling
  * @param affine use an affine transformation on the volume components
@@ -965,6 +978,7 @@ interface CiftiResampleOutputs {
  * @param left_spheres specify spheres for left surface resampling
  * @param right_spheres specify spheres for right surface resampling
  * @param cerebellum_spheres specify spheres for cerebellum surface resampling
+ * @param surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
  *
  * @returns Parameter dictionary
  */
@@ -976,7 +990,6 @@ function cifti_resample_params(
     template_direction: string,
     surface_method: string,
     volume_method: string,
-    surface_largest: boolean = false,
     volume_predilate: CiftiResampleVolumePredilateParamsDict | null = null,
     surface_postdilate: CiftiResampleSurfacePostdilateParamsDict | null = null,
     affine: CiftiResampleAffineParamsDict | null = null,
@@ -984,6 +997,7 @@ function cifti_resample_params(
     left_spheres: CiftiResampleLeftSpheresParamsDict | null = null,
     right_spheres: CiftiResampleRightSpheresParamsDict | null = null,
     cerebellum_spheres: CiftiResampleCerebellumSpheresParamsDict | null = null,
+    surface_largest: boolean = false,
 ): CiftiResampleParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-resample" as const,
@@ -1040,7 +1054,6 @@ function cifti_resample_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        (((params["surface-largest"] ?? false)) ? "-surface-largest" : ""),
         ...(((params["volume-predilate"] ?? null) !== null) ? cifti_resample_volume_predilate_cargs((params["volume-predilate"] ?? null), execution) : []),
         ...(((params["surface-postdilate"] ?? null) !== null) ? cifti_resample_surface_postdilate_cargs((params["surface-postdilate"] ?? null), execution) : []),
         ...(((params["affine"] ?? null) !== null) ? cifti_resample_affine_cargs((params["affine"] ?? null), execution) : []),
@@ -1049,6 +1062,9 @@ function cifti_resample_cargs(
         ...(((params["right-spheres"] ?? null) !== null) ? cifti_resample_right_spheres_cargs((params["right-spheres"] ?? null), execution) : []),
         ...(((params["cerebellum-spheres"] ?? null) !== null) ? cifti_resample_cerebellum_spheres_cargs((params["cerebellum-spheres"] ?? null), execution) : [])
     );
+    if ((params["surface-largest"] ?? false)) {
+        cargs.push("-surface-largest");
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push(execution.inputFile((params["cifti-template"] ?? null)));
@@ -1143,7 +1159,6 @@ function cifti_resample_execute(
  * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
  * @param surface_method specify a surface resampling method
  * @param volume_method specify a volume interpolation method
- * @param surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
  * @param volume_predilate dilate the volume components before resampling
  * @param surface_postdilate dilate the surface components after resampling
  * @param affine use an affine transformation on the volume components
@@ -1151,6 +1166,7 @@ function cifti_resample_execute(
  * @param left_spheres specify spheres for left surface resampling
  * @param right_spheres specify spheres for right surface resampling
  * @param cerebellum_spheres specify spheres for cerebellum surface resampling
+ * @param surface_largest use largest weight instead of weighted average or popularity when doing surface resampling
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiResampleOutputs`).
@@ -1163,7 +1179,6 @@ function cifti_resample(
     template_direction: string,
     surface_method: string,
     volume_method: string,
-    surface_largest: boolean = false,
     volume_predilate: CiftiResampleVolumePredilateParamsDict | null = null,
     surface_postdilate: CiftiResampleSurfacePostdilateParamsDict | null = null,
     affine: CiftiResampleAffineParamsDict | null = null,
@@ -1171,9 +1186,10 @@ function cifti_resample(
     left_spheres: CiftiResampleLeftSpheresParamsDict | null = null,
     right_spheres: CiftiResampleRightSpheresParamsDict | null = null,
     cerebellum_spheres: CiftiResampleCerebellumSpheresParamsDict | null = null,
+    surface_largest: boolean = false,
     runner: Runner | null = null,
 ): CiftiResampleOutputs {
-    const params = cifti_resample_params(cifti_out, cifti_in, direction, cifti_template, template_direction, surface_method, volume_method, surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
+    const params = cifti_resample_params(cifti_out, cifti_in, direction, cifti_template, template_direction, surface_method, volume_method, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres, surface_largest)
     return cifti_resample_execute(params, runner);
 }
 

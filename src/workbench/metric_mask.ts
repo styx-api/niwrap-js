@@ -86,11 +86,13 @@ function metric_mask_cargs(
         "wb_command",
         "-metric-mask"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["mask"] ?? null)));
     return cargs;

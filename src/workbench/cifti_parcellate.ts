@@ -13,12 +13,12 @@ const CIFTI_PARCELLATE_METADATA: Metadata = {
 
 interface CiftiParcellateSpatialWeightsParamsDict {
     "@type"?: "spatial-weights";
-    "left-surf"?: InputPathType | null | undefined;
-    "right-surf"?: InputPathType | null | undefined;
-    "cerebellum-surf"?: InputPathType | null | undefined;
-    "left-metric"?: InputPathType | null | undefined;
-    "right-metric"?: InputPathType | null | undefined;
     "cerebellum-metric"?: InputPathType | null | undefined;
+    "right-metric"?: InputPathType | null | undefined;
+    "left-metric"?: InputPathType | null | undefined;
+    "cerebellum-surf"?: InputPathType | null | undefined;
+    "right-surf"?: InputPathType | null | undefined;
+    "left-surf"?: InputPathType | null | undefined;
 }
 type CiftiParcellateSpatialWeightsParamsDictTagged = Required<Pick<CiftiParcellateSpatialWeightsParamsDict, '@type'>> & CiftiParcellateSpatialWeightsParamsDict;
 
@@ -42,14 +42,14 @@ interface CiftiParcellateParamsDict {
     "@type"?: "workbench/cifti-parcellate";
     "cifti-out": string;
     "spatial-weights"?: CiftiParcellateSpatialWeightsParamsDict | null | undefined;
-    "weight-cifti"?: InputPathType | null | undefined;
-    "method"?: string | null | undefined;
     "exclude-outliers"?: CiftiParcellateExcludeOutliersParamsDict | null | undefined;
-    "only-numeric": boolean;
-    "value"?: number | null | undefined;
     "nonempty-mask-out"?: CiftiParcellateNonemptyMaskOutParamsDict | null | undefined;
-    "legacy-mode": boolean;
+    "value"?: number | null | undefined;
+    "method"?: string | null | undefined;
+    "weight-cifti"?: InputPathType | null | undefined;
     "include-empty": boolean;
+    "legacy-mode": boolean;
+    "only-numeric": boolean;
     "cifti-in": InputPathType;
     "cifti-label": InputPathType;
     "direction": string;
@@ -60,55 +60,55 @@ type CiftiParcellateParamsDictTagged = Required<Pick<CiftiParcellateParamsDict, 
 /**
  * Build parameters.
  *
- * @param left_surf use a surface for left vertex areas
-
-the left surface to use, areas are in mm^2
- * @param right_surf use a surface for right vertex areas
-
-the right surface to use, areas are in mm^2
- * @param cerebellum_surf use a surface for cerebellum vertex areas
-
-the cerebellum surface to use, areas are in mm^2
- * @param left_metric use a metric file for left vertex weights
-
-metric file containing left vertex weights
- * @param right_metric use a metric file for right vertex weights
-
-metric file containing right vertex weights
  * @param cerebellum_metric use a metric file for cerebellum vertex weights
 
 metric file containing cerebellum vertex weights
+ * @param right_metric use a metric file for right vertex weights
+
+metric file containing right vertex weights
+ * @param left_metric use a metric file for left vertex weights
+
+metric file containing left vertex weights
+ * @param cerebellum_surf use a surface for cerebellum vertex areas
+
+the cerebellum surface to use, areas are in mm^2
+ * @param right_surf use a surface for right vertex areas
+
+the right surface to use, areas are in mm^2
+ * @param left_surf use a surface for left vertex areas
+
+the left surface to use, areas are in mm^2
  *
  * @returns Parameter dictionary
  */
 function cifti_parcellate_spatial_weights(
-    left_surf: InputPathType | null = null,
-    right_surf: InputPathType | null = null,
-    cerebellum_surf: InputPathType | null = null,
-    left_metric: InputPathType | null = null,
-    right_metric: InputPathType | null = null,
     cerebellum_metric: InputPathType | null = null,
+    right_metric: InputPathType | null = null,
+    left_metric: InputPathType | null = null,
+    cerebellum_surf: InputPathType | null = null,
+    right_surf: InputPathType | null = null,
+    left_surf: InputPathType | null = null,
 ): CiftiParcellateSpatialWeightsParamsDictTagged {
     const params = {
         "@type": "spatial-weights" as const,
     };
-    if (left_surf !== null) {
-        params["left-surf"] = left_surf;
-    }
-    if (right_surf !== null) {
-        params["right-surf"] = right_surf;
-    }
-    if (cerebellum_surf !== null) {
-        params["cerebellum-surf"] = cerebellum_surf;
-    }
-    if (left_metric !== null) {
-        params["left-metric"] = left_metric;
+    if (cerebellum_metric !== null) {
+        params["cerebellum-metric"] = cerebellum_metric;
     }
     if (right_metric !== null) {
         params["right-metric"] = right_metric;
     }
-    if (cerebellum_metric !== null) {
-        params["cerebellum-metric"] = cerebellum_metric;
+    if (left_metric !== null) {
+        params["left-metric"] = left_metric;
+    }
+    if (cerebellum_surf !== null) {
+        params["cerebellum-surf"] = cerebellum_surf;
+    }
+    if (right_surf !== null) {
+        params["right-surf"] = right_surf;
+    }
+    if (left_surf !== null) {
+        params["left-surf"] = left_surf;
     }
     return params;
 }
@@ -127,21 +127,41 @@ function cifti_parcellate_spatial_weights_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["left-surf"] ?? null) !== null || (params["right-surf"] ?? null) !== null || (params["cerebellum-surf"] ?? null) !== null || (params["left-metric"] ?? null) !== null || (params["right-metric"] ?? null) !== null || (params["cerebellum-metric"] ?? null) !== null) {
+    cargs.push("-spatial-weights");
+    if ((params["cerebellum-metric"] ?? null) !== null) {
         cargs.push(
-            "-spatial-weights",
-            "-left-area-surf",
-            (((params["left-surf"] ?? null) !== null) ? execution.inputFile((params["left-surf"] ?? null)) : ""),
-            "-right-area-surf",
-            (((params["right-surf"] ?? null) !== null) ? execution.inputFile((params["right-surf"] ?? null)) : ""),
-            "-cerebellum-area-surf",
-            (((params["cerebellum-surf"] ?? null) !== null) ? execution.inputFile((params["cerebellum-surf"] ?? null)) : ""),
-            "-left-area-metric",
-            (((params["left-metric"] ?? null) !== null) ? execution.inputFile((params["left-metric"] ?? null)) : ""),
-            "-right-area-metric",
-            (((params["right-metric"] ?? null) !== null) ? execution.inputFile((params["right-metric"] ?? null)) : ""),
             "-cerebellum-area-metric",
-            (((params["cerebellum-metric"] ?? null) !== null) ? execution.inputFile((params["cerebellum-metric"] ?? null)) : "")
+            execution.inputFile((params["cerebellum-metric"] ?? null))
+        );
+    }
+    if ((params["right-metric"] ?? null) !== null) {
+        cargs.push(
+            "-right-area-metric",
+            execution.inputFile((params["right-metric"] ?? null))
+        );
+    }
+    if ((params["left-metric"] ?? null) !== null) {
+        cargs.push(
+            "-left-area-metric",
+            execution.inputFile((params["left-metric"] ?? null))
+        );
+    }
+    if ((params["cerebellum-surf"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-area-surf",
+            execution.inputFile((params["cerebellum-surf"] ?? null))
+        );
+    }
+    if ((params["right-surf"] ?? null) !== null) {
+        cargs.push(
+            "-right-area-surf",
+            execution.inputFile((params["right-surf"] ?? null))
+        );
+    }
+    if ((params["left-surf"] ?? null) !== null) {
+        cargs.push(
+            "-left-area-surf",
+            execution.inputFile((params["left-surf"] ?? null))
         );
     }
     return cargs;
@@ -296,20 +316,20 @@ interface CiftiParcellateOutputs {
  * @param cifti_label a cifti label file to use for the parcellation
  * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
  * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
- * @param weight_cifti use a cifti file containing weights
-
-the weights to use, as a cifti file
- * @param method specify method of parcellation (default MEAN, or MODE if label data)
-
-the method to use to assign parcel values from the values of member brainordinates
  * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
- * @param only_numeric exclude non-numeric values
+ * @param nonempty_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
  * @param value specify value to use in empty parcels (default 0)
 
 the value to fill empty parcels with
- * @param nonempty_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
- * @param legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
+ * @param method specify method of parcellation (default MEAN, or MODE if label data)
+
+the method to use to assign parcel values from the values of member brainordinates
+ * @param weight_cifti use a cifti file containing weights
+
+the weights to use, as a cifti file
  * @param include_empty deprecated: now the default behavior
+ * @param legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
+ * @param only_numeric exclude non-numeric values
  *
  * @returns Parameter dictionary
  */
@@ -319,21 +339,21 @@ function cifti_parcellate_params(
     cifti_label: InputPathType,
     direction: string,
     spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
-    weight_cifti: InputPathType | null = null,
-    method: string | null = null,
     exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
-    only_numeric: boolean = false,
-    value: number | null = null,
     nonempty_mask_out: CiftiParcellateNonemptyMaskOutParamsDict | null = null,
-    legacy_mode: boolean = false,
+    value: number | null = null,
+    method: string | null = null,
+    weight_cifti: InputPathType | null = null,
     include_empty: boolean = false,
+    legacy_mode: boolean = false,
+    only_numeric: boolean = false,
 ): CiftiParcellateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-parcellate" as const,
         "cifti-out": cifti_out,
-        "only-numeric": only_numeric,
-        "legacy-mode": legacy_mode,
         "include-empty": include_empty,
+        "legacy-mode": legacy_mode,
+        "only-numeric": only_numeric,
         "cifti-in": cifti_in,
         "cifti-label": cifti_label,
         "direction": direction,
@@ -341,20 +361,20 @@ function cifti_parcellate_params(
     if (spatial_weights !== null) {
         params["spatial-weights"] = spatial_weights;
     }
-    if (weight_cifti !== null) {
-        params["weight-cifti"] = weight_cifti;
-    }
-    if (method !== null) {
-        params["method"] = method;
-    }
     if (exclude_outliers !== null) {
         params["exclude-outliers"] = exclude_outliers;
+    }
+    if (nonempty_mask_out !== null) {
+        params["nonempty-mask-out"] = nonempty_mask_out;
     }
     if (value !== null) {
         params["value"] = value;
     }
-    if (nonempty_mask_out !== null) {
-        params["nonempty-mask-out"] = nonempty_mask_out;
+    if (method !== null) {
+        params["method"] = method;
+    }
+    if (weight_cifti !== null) {
+        params["weight-cifti"] = weight_cifti;
     }
     return params;
 }
@@ -380,18 +400,36 @@ function cifti_parcellate_cargs(
     cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["spatial-weights"] ?? null) !== null) ? cifti_parcellate_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
-        "-cifti-weights",
-        (((params["weight-cifti"] ?? null) !== null) ? execution.inputFile((params["weight-cifti"] ?? null)) : ""),
-        "-method",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
         ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_parcellate_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-        (((params["only-numeric"] ?? false)) ? "-only-numeric" : ""),
-        "-fill-value",
-        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-        ...(((params["nonempty-mask-out"] ?? null) !== null) ? cifti_parcellate_nonempty_mask_out_cargs((params["nonempty-mask-out"] ?? null), execution) : []),
-        (((params["legacy-mode"] ?? false)) ? "-legacy-mode" : ""),
-        (((params["include-empty"] ?? false)) ? "-include-empty" : "")
+        ...(((params["nonempty-mask-out"] ?? null) !== null) ? cifti_parcellate_nonempty_mask_out_cargs((params["nonempty-mask-out"] ?? null), execution) : [])
     );
+    if ((params["value"] ?? null) !== null) {
+        cargs.push(
+            "-fill-value",
+            String((params["value"] ?? null))
+        );
+    }
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-method",
+            (params["method"] ?? null)
+        );
+    }
+    if ((params["weight-cifti"] ?? null) !== null) {
+        cargs.push(
+            "-cifti-weights",
+            execution.inputFile((params["weight-cifti"] ?? null))
+        );
+    }
+    if ((params["include-empty"] ?? false)) {
+        cargs.push("-include-empty");
+    }
+    if ((params["legacy-mode"] ?? false)) {
+        cargs.push("-legacy-mode");
+    }
+    if ((params["only-numeric"] ?? false)) {
+        cargs.push("-only-numeric");
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-label"] ?? null)));
     cargs.push((params["direction"] ?? null));
@@ -500,20 +538,20 @@ function cifti_parcellate_execute(
  * @param cifti_label a cifti label file to use for the parcellation
  * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
  * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
- * @param weight_cifti use a cifti file containing weights
-
-the weights to use, as a cifti file
- * @param method specify method of parcellation (default MEAN, or MODE if label data)
-
-the method to use to assign parcel values from the values of member brainordinates
  * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
- * @param only_numeric exclude non-numeric values
+ * @param nonempty_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
  * @param value specify value to use in empty parcels (default 0)
 
 the value to fill empty parcels with
- * @param nonempty_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
- * @param legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
+ * @param method specify method of parcellation (default MEAN, or MODE if label data)
+
+the method to use to assign parcel values from the values of member brainordinates
+ * @param weight_cifti use a cifti file containing weights
+
+the weights to use, as a cifti file
  * @param include_empty deprecated: now the default behavior
+ * @param legacy_mode use the old behavior, parcels are defined by the intersection between labels and valid data, and empty parcels are discarded
+ * @param only_numeric exclude non-numeric values
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
@@ -524,17 +562,17 @@ function cifti_parcellate(
     cifti_label: InputPathType,
     direction: string,
     spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
-    weight_cifti: InputPathType | null = null,
-    method: string | null = null,
     exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
-    only_numeric: boolean = false,
-    value: number | null = null,
     nonempty_mask_out: CiftiParcellateNonemptyMaskOutParamsDict | null = null,
-    legacy_mode: boolean = false,
+    value: number | null = null,
+    method: string | null = null,
+    weight_cifti: InputPathType | null = null,
     include_empty: boolean = false,
+    legacy_mode: boolean = false,
+    only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiParcellateOutputs {
-    const params = cifti_parcellate_params(cifti_out, cifti_in, cifti_label, direction, spatial_weights, weight_cifti, method, exclude_outliers, only_numeric, value, nonempty_mask_out, legacy_mode, include_empty)
+    const params = cifti_parcellate_params(cifti_out, cifti_in, cifti_label, direction, spatial_weights, exclude_outliers, nonempty_mask_out, value, method, weight_cifti, include_empty, legacy_mode, only_numeric)
     return cifti_parcellate_execute(params, runner);
 }
 

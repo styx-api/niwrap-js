@@ -15,9 +15,9 @@ interface VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict {
     "@type"?: "ribbon-constrained";
     "inner-surf": InputPathType;
     "outer-surf": InputPathType;
-    "roi-volume"?: InputPathType | null | undefined;
-    "dist"?: number | null | undefined;
     "subdiv-num"?: number | null | undefined;
+    "dist"?: number | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
     "thin-columns": boolean;
 }
 type VolumeLabelToSurfaceMappingRibbonConstrainedParamsDictTagged = Required<Pick<VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict, '@type'>> & VolumeLabelToSurfaceMappingRibbonConstrainedParamsDict;
@@ -39,15 +39,15 @@ type VolumeLabelToSurfaceMappingParamsDictTagged = Required<Pick<VolumeLabelToSu
  *
  * @param inner_surf the inner surface of the ribbon
  * @param outer_surf the outer surface of the ribbon
- * @param roi_volume use a volume roi
-
-the volume file
- * @param dist use dilation for small vertices that 'missed' the geometry tests
-
-distance in mm for dilation (can be small, like 1mm)
  * @param subdiv_num voxel divisions while estimating voxel weights
 
 number of subdivisions, default 3
+ * @param dist use dilation for small vertices that 'missed' the geometry tests
+
+distance in mm for dilation (can be small, like 1mm)
+ * @param roi_volume use a volume roi
+
+the volume file
  * @param thin_columns use non-overlapping polyhedra
  *
  * @returns Parameter dictionary
@@ -55,9 +55,9 @@ number of subdivisions, default 3
 function volume_label_to_surface_mapping_ribbon_constrained(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
-    roi_volume: InputPathType | null = null,
-    dist: number | null = null,
     subdiv_num: number | null = null,
+    dist: number | null = null,
+    roi_volume: InputPathType | null = null,
     thin_columns: boolean = false,
 ): VolumeLabelToSurfaceMappingRibbonConstrainedParamsDictTagged {
     const params = {
@@ -66,14 +66,14 @@ function volume_label_to_surface_mapping_ribbon_constrained(
         "outer-surf": outer_surf,
         "thin-columns": thin_columns,
     };
-    if (roi_volume !== null) {
-        params["roi-volume"] = roi_volume;
+    if (subdiv_num !== null) {
+        params["subdiv-num"] = subdiv_num;
     }
     if (dist !== null) {
         params["dist"] = dist;
     }
-    if (subdiv_num !== null) {
-        params["subdiv-num"] = subdiv_num;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
     return params;
 }
@@ -95,15 +95,29 @@ function volume_label_to_surface_mapping_ribbon_constrained_cargs(
     cargs.push(
         "-ribbon-constrained",
         execution.inputFile((params["inner-surf"] ?? null)),
-        execution.inputFile((params["outer-surf"] ?? null)),
-        "-volume-roi",
-        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-        "-dilate-missing",
-        (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
-        "-voxel-subdiv",
-        (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
-        (((params["thin-columns"] ?? false)) ? "-thin-columns" : "")
+        execution.inputFile((params["outer-surf"] ?? null))
     );
+    if ((params["subdiv-num"] ?? null) !== null) {
+        cargs.push(
+            "-voxel-subdiv",
+            String((params["subdiv-num"] ?? null))
+        );
+    }
+    if ((params["dist"] ?? null) !== null) {
+        cargs.push(
+            "-dilate-missing",
+            String((params["dist"] ?? null))
+        );
+    }
+    if ((params["roi-volume"] ?? null) !== null) {
+        cargs.push(
+            "-volume-roi",
+            execution.inputFile((params["roi-volume"] ?? null))
+        );
+    }
+    if ((params["thin-columns"] ?? false)) {
+        cargs.push("-thin-columns");
+    }
     return cargs;
 }
 
@@ -180,10 +194,14 @@ function volume_label_to_surface_mapping_cargs(
     );
     cargs.push(
         (params["label-out"] ?? null),
-        ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_label_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
-        "-subvol-select",
-        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
+        ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_label_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : [])
     );
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvol-select",
+            (params["subvol"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["volume"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;

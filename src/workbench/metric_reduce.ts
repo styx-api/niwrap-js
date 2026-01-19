@@ -141,9 +141,11 @@ function metric_reduce_cargs(
     );
     cargs.push(
         (params["metric-out"] ?? null),
-        ...(((params["exclude-outliers"] ?? null) !== null) ? metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-        (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
+        ...(((params["exclude-outliers"] ?? null) !== null) ? metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : [])
     );
+    if ((params["only-numeric"] ?? false)) {
+        cargs.push("-only-numeric");
+    }
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push((params["operation"] ?? null));
     return cargs;

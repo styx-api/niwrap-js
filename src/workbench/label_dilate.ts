@@ -14,9 +14,9 @@ const LABEL_DILATE_METADATA: Metadata = {
 interface LabelDilateParamsDict {
     "@type"?: "workbench/label-dilate";
     "label-out": string;
-    "roi-metric"?: InputPathType | null | undefined;
-    "column"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
     "label": InputPathType;
     "surface": InputPathType;
     "dilate-dist": number;
@@ -48,15 +48,15 @@ interface LabelDilateOutputs {
  * @param label the input label
  * @param surface the surface to dilate on
  * @param dilate_dist distance in mm to dilate the labels
- * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
-
-metric file, positive values denote vertices to have their values replaced
- * @param column select a single column to dilate
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
+
+metric file, positive values denote vertices to have their values replaced
  *
  * @returns Parameter dictionary
  */
@@ -65,9 +65,9 @@ function label_dilate_params(
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
-    roi_metric: InputPathType | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
 ): LabelDilateParamsDictTagged {
     const params = {
         "@type": "workbench/label-dilate" as const,
@@ -76,14 +76,14 @@ function label_dilate_params(
         "surface": surface,
         "dilate-dist": dilate_dist,
     };
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     if (column !== null) {
         params["column"] = column;
     }
-    if (area_metric !== null) {
-        params["area-metric"] = area_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -106,15 +106,25 @@ function label_dilate_cargs(
         "wb_command",
         "-label-dilate"
     );
-    cargs.push(
-        (params["label-out"] ?? null),
-        "-bad-vertex-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-    );
+    cargs.push((params["label-out"] ?? null));
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-bad-vertex-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["label"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["dilate-dist"] ?? null)));
@@ -175,15 +185,15 @@ function label_dilate_execute(
  * @param label the input label
  * @param surface the surface to dilate on
  * @param dilate_dist distance in mm to dilate the labels
- * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
-
-metric file, positive values denote vertices to have their values replaced
- * @param column select a single column to dilate
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with the unlabeled key
+
+metric file, positive values denote vertices to have their values replaced
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
@@ -193,12 +203,12 @@ function label_dilate(
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
-    roi_metric: InputPathType | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelDilateOutputs {
-    const params = label_dilate_params(label_out, label, surface, dilate_dist, roi_metric, column, area_metric)
+    const params = label_dilate_params(label_out, label, surface, dilate_dist, area_metric, column, roi_metric)
     return label_dilate_execute(params, runner);
 }
 

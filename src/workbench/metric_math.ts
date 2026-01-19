@@ -24,8 +24,8 @@ type MetricMathVarParamsDictTagged = Required<Pick<MetricMathVarParamsDict, '@ty
 interface MetricMathParamsDict {
     "@type"?: "workbench/metric-math";
     "metric-out": string;
-    "replace"?: number | null | undefined;
     "var"?: Array<MetricMathVarParamsDict> | null | undefined;
+    "replace"?: number | null | undefined;
     "expression": string;
 }
 type MetricMathParamsDictTagged = Required<Pick<MetricMathParamsDict, '@type'>> & MetricMathParamsDict;
@@ -78,11 +78,17 @@ function metric_math_var_cargs(
     cargs.push(
         "-var",
         (params["name"] ?? null),
-        execution.inputFile((params["metric"] ?? null)),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        (((params["repeat"] ?? false)) ? "-repeat" : "")
+        execution.inputFile((params["metric"] ?? null))
     );
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["repeat"] ?? false)) {
+        cargs.push("-repeat");
+    }
     return cargs;
 }
 
@@ -109,29 +115,29 @@ interface MetricMathOutputs {
  *
  * @param metric_out the output metric
  * @param expression the expression to evaluate, in quotes
+ * @param var_ a metric to use as a variable
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param var_ a metric to use as a variable
  *
  * @returns Parameter dictionary
  */
 function metric_math_params(
     metric_out: string,
     expression: string,
-    replace: number | null = null,
     var_: Array<MetricMathVarParamsDict> | null = null,
+    replace: number | null = null,
 ): MetricMathParamsDictTagged {
     const params = {
         "@type": "workbench/metric-math" as const,
         "metric-out": metric_out,
         "expression": expression,
     };
-    if (replace !== null) {
-        params["replace"] = replace;
-    }
     if (var_ !== null) {
         params["var"] = var_;
+    }
+    if (replace !== null) {
+        params["replace"] = replace;
     }
     return params;
 }
@@ -156,10 +162,14 @@ function metric_math_cargs(
     );
     cargs.push(
         (params["metric-out"] ?? null),
-        "-fixnan",
-        (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
         ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => metric_math_var_cargs(s, execution)).flat() : [])
     );
+    if ((params["replace"] ?? null) !== null) {
+        cargs.push(
+            "-fixnan",
+            String((params["replace"] ?? null))
+        );
+    }
     cargs.push((params["expression"] ?? null));
     return cargs;
 }
@@ -290,10 +300,10 @@ function metric_math_execute(
  *
  * @param metric_out the output metric
  * @param expression the expression to evaluate, in quotes
+ * @param var_ a metric to use as a variable
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param var_ a metric to use as a variable
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricMathOutputs`).
@@ -301,11 +311,11 @@ value to replace NaN with
 function metric_math(
     metric_out: string,
     expression: string,
-    replace: number | null = null,
     var_: Array<MetricMathVarParamsDict> | null = null,
+    replace: number | null = null,
     runner: Runner | null = null,
 ): MetricMathOutputs {
-    const params = metric_math_params(metric_out, expression, replace, var_)
+    const params = metric_math_params(metric_out, expression, var_, replace)
     return metric_math_execute(params, runner);
 }
 

@@ -16,8 +16,8 @@ interface LabelToVolumeMappingRibbonConstrainedParamsDict {
     "inner-surf": InputPathType;
     "outer-surf": InputPathType;
     "subdiv-num"?: number | null | undefined;
-    "greedy": boolean;
     "thick-columns": boolean;
+    "greedy": boolean;
 }
 type LabelToVolumeMappingRibbonConstrainedParamsDictTagged = Required<Pick<LabelToVolumeMappingRibbonConstrainedParamsDict, '@type'>> & LabelToVolumeMappingRibbonConstrainedParamsDict;
 
@@ -25,8 +25,8 @@ type LabelToVolumeMappingRibbonConstrainedParamsDictTagged = Required<Pick<Label
 interface LabelToVolumeMappingParamsDict {
     "@type"?: "workbench/label-to-volume-mapping";
     "volume-out": string;
-    "distance"?: number | null | undefined;
     "ribbon-constrained"?: LabelToVolumeMappingRibbonConstrainedParamsDict | null | undefined;
+    "distance"?: number | null | undefined;
     "label": InputPathType;
     "surface": InputPathType;
     "volume-space": InputPathType;
@@ -42,8 +42,8 @@ type LabelToVolumeMappingParamsDictTagged = Required<Pick<LabelToVolumeMappingPa
  * @param subdiv_num voxel divisions while estimating voxel weights
 
 number of subdivisions, default 3
- * @param greedy also put labels in voxels with less than 50% partial volume (legacy behavior)
  * @param thick_columns use overlapping columns (legacy method)
+ * @param greedy also put labels in voxels with less than 50% partial volume (legacy behavior)
  *
  * @returns Parameter dictionary
  */
@@ -51,15 +51,15 @@ function label_to_volume_mapping_ribbon_constrained(
     inner_surf: InputPathType,
     outer_surf: InputPathType,
     subdiv_num: number | null = null,
-    greedy: boolean = false,
     thick_columns: boolean = false,
+    greedy: boolean = false,
 ): LabelToVolumeMappingRibbonConstrainedParamsDictTagged {
     const params = {
         "@type": "ribbon-constrained" as const,
         "inner-surf": inner_surf,
         "outer-surf": outer_surf,
-        "greedy": greedy,
         "thick-columns": thick_columns,
+        "greedy": greedy,
     };
     if (subdiv_num !== null) {
         params["subdiv-num"] = subdiv_num;
@@ -84,12 +84,20 @@ function label_to_volume_mapping_ribbon_constrained_cargs(
     cargs.push(
         "-ribbon-constrained",
         execution.inputFile((params["inner-surf"] ?? null)),
-        execution.inputFile((params["outer-surf"] ?? null)),
-        "-voxel-subdiv",
-        (((params["subdiv-num"] ?? null) !== null) ? String((params["subdiv-num"] ?? null)) : ""),
-        (((params["greedy"] ?? false)) ? "-greedy" : ""),
-        (((params["thick-columns"] ?? false)) ? "-thick-columns" : "")
+        execution.inputFile((params["outer-surf"] ?? null))
     );
+    if ((params["subdiv-num"] ?? null) !== null) {
+        cargs.push(
+            "-voxel-subdiv",
+            String((params["subdiv-num"] ?? null))
+        );
+    }
+    if ((params["thick-columns"] ?? false)) {
+        cargs.push("-thick-columns");
+    }
+    if ((params["greedy"] ?? false)) {
+        cargs.push("-greedy");
+    }
     return cargs;
 }
 
@@ -118,10 +126,10 @@ interface LabelToVolumeMappingOutputs {
  * @param label the input label file
  * @param surface the surface to use coordinates from
  * @param volume_space a volume file in the desired output volume space
+ * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param distance use the label from the vertex closest to the voxel center
 
 how far from the surface to map labels to voxels, in mm
- * @param ribbon_constrained use ribbon constrained mapping algorithm
  *
  * @returns Parameter dictionary
  */
@@ -130,8 +138,8 @@ function label_to_volume_mapping_params(
     label: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
-    distance: number | null = null,
     ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParamsDict | null = null,
+    distance: number | null = null,
 ): LabelToVolumeMappingParamsDictTagged {
     const params = {
         "@type": "workbench/label-to-volume-mapping" as const,
@@ -140,11 +148,11 @@ function label_to_volume_mapping_params(
         "surface": surface,
         "volume-space": volume_space,
     };
-    if (distance !== null) {
-        params["distance"] = distance;
-    }
     if (ribbon_constrained !== null) {
         params["ribbon-constrained"] = ribbon_constrained;
+    }
+    if (distance !== null) {
+        params["distance"] = distance;
     }
     return params;
 }
@@ -169,10 +177,14 @@ function label_to_volume_mapping_cargs(
     );
     cargs.push(
         (params["volume-out"] ?? null),
-        "-nearest-vertex",
-        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
         ...(((params["ribbon-constrained"] ?? null) !== null) ? label_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : [])
     );
+    if ((params["distance"] ?? null) !== null) {
+        cargs.push(
+            "-nearest-vertex",
+            String((params["distance"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["label"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["volume-space"] ?? null)));
@@ -233,10 +245,10 @@ function label_to_volume_mapping_execute(
  * @param label the input label file
  * @param surface the surface to use coordinates from
  * @param volume_space a volume file in the desired output volume space
+ * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param distance use the label from the vertex closest to the voxel center
 
 how far from the surface to map labels to voxels, in mm
- * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
@@ -246,11 +258,11 @@ function label_to_volume_mapping(
     label: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
-    distance: number | null = null,
     ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParamsDict | null = null,
+    distance: number | null = null,
     runner: Runner | null = null,
 ): LabelToVolumeMappingOutputs {
-    const params = label_to_volume_mapping_params(volume_out, label, surface, volume_space, distance, ribbon_constrained)
+    const params = label_to_volume_mapping_params(volume_out, label, surface, volume_space, ribbon_constrained, distance)
     return label_to_volume_mapping_execute(params, runner);
 }
 

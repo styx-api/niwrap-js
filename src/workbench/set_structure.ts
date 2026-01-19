@@ -13,8 +13,8 @@ const SET_STRUCTURE_METADATA: Metadata = {
 
 interface SetStructureParamsDict {
     "@type"?: "workbench/set-structure";
-    "type"?: string | null | undefined;
     "secondary type"?: string | null | undefined;
+    "type"?: string | null | undefined;
     "data-file": string;
     "structure": string;
 }
@@ -39,31 +39,31 @@ interface SetStructureOutputs {
  *
  * @param data_file the file to set the structure of
  * @param structure the structure to set the file to
- * @param type_ set the type of a surface (only used if file is a surface file)
-
-name of surface type
  * @param secondary_type set the secondary type of a surface (only used if file is a surface file)
 
 name of surface secondary type
+ * @param type_ set the type of a surface (only used if file is a surface file)
+
+name of surface type
  *
  * @returns Parameter dictionary
  */
 function set_structure_params(
     data_file: string,
     structure: string,
-    type_: string | null = null,
     secondary_type: string | null = null,
+    type_: string | null = null,
 ): SetStructureParamsDictTagged {
     const params = {
         "@type": "workbench/set-structure" as const,
         "data-file": data_file,
         "structure": structure,
     };
-    if (type_ !== null) {
-        params["type"] = type_;
-    }
     if (secondary_type !== null) {
         params["secondary type"] = secondary_type;
+    }
+    if (type_ !== null) {
+        params["type"] = type_;
     }
     return params;
 }
@@ -86,12 +86,16 @@ function set_structure_cargs(
         "wb_command",
         "-set-structure"
     );
-    if ((params["type"] ?? null) !== null || (params["secondary type"] ?? null) !== null) {
+    if ((params["secondary type"] ?? null) !== null) {
+        cargs.push(
+            "-surface-secondary-type",
+            (params["secondary type"] ?? null)
+        );
+    }
+    if ((params["type"] ?? null) !== null) {
         cargs.push(
             "-surface-type",
-            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
-            "-surface-secondary-type",
-            (((params["secondary type"] ?? null) !== null) ? (params["secondary type"] ?? null) : "")
+            (params["type"] ?? null)
         );
     }
     cargs.push((params["data-file"] ?? null));
@@ -268,12 +272,12 @@ function set_structure_execute(
  *
  * @param data_file the file to set the structure of
  * @param structure the structure to set the file to
- * @param type_ set the type of a surface (only used if file is a surface file)
-
-name of surface type
  * @param secondary_type set the secondary type of a surface (only used if file is a surface file)
 
 name of surface secondary type
+ * @param type_ set the type of a surface (only used if file is a surface file)
+
+name of surface type
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetStructureOutputs`).
@@ -281,11 +285,11 @@ name of surface secondary type
 function set_structure(
     data_file: string,
     structure: string,
-    type_: string | null = null,
     secondary_type: string | null = null,
+    type_: string | null = null,
     runner: Runner | null = null,
 ): SetStructureOutputs {
-    const params = set_structure_params(data_file, structure, type_, secondary_type)
+    const params = set_structure_params(data_file, structure, secondary_type, type_)
     return set_structure_execute(params, runner);
 }
 

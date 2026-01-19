@@ -44,15 +44,15 @@ interface CiftiLabelAdjacencyOutputs {
  *
  * @param adjacency_out the output cifti pconn adjacency matrix
  * @param label_in the input cifti label file
- * @param surface specify the left surface to use
+ * @param surface specify the cerebellum surface to use
 
-the left surface file
+the cerebellum surface file
  * @param surface_ specify the right surface to use
 
 the right surface file
- * @param surface_2 specify the cerebellum surface to use
+ * @param surface_2 specify the left surface to use
 
-the cerebellum surface file
+the left surface file
  *
  * @returns Parameter dictionary
  */
@@ -98,15 +98,25 @@ function cifti_label_adjacency_cargs(
         "wb_command",
         "-cifti-label-adjacency"
     );
-    cargs.push(
-        (params["adjacency-out"] ?? null),
-        "-left-surface",
-        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-        "-right-surface",
-        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-        "-cerebellum-surface",
-        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : "")
-    );
+    cargs.push((params["adjacency-out"] ?? null));
+    if ((params["surface"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-surface",
+            execution.inputFile((params["surface"] ?? null))
+        );
+    }
+    if ((params["surface"] ?? null) !== null) {
+        cargs.push(
+            "-right-surface",
+            execution.inputFile((params["surface"] ?? null))
+        );
+    }
+    if ((params["surface"] ?? null) !== null) {
+        cargs.push(
+            "-left-surface",
+            execution.inputFile((params["surface"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }
@@ -163,15 +173,15 @@ function cifti_label_adjacency_execute(
  *
  * @param adjacency_out the output cifti pconn adjacency matrix
  * @param label_in the input cifti label file
- * @param surface specify the left surface to use
+ * @param surface specify the cerebellum surface to use
 
-the left surface file
+the cerebellum surface file
  * @param surface_ specify the right surface to use
 
 the right surface file
- * @param surface_2 specify the cerebellum surface to use
+ * @param surface_2 specify the left surface to use
 
-the cerebellum surface file
+the left surface file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelAdjacencyOutputs`).

@@ -78,10 +78,10 @@ function volume_label_probability_cargs(
         "wb_command",
         "-volume-label-probability"
     );
-    cargs.push(
-        (params["probability-out"] ?? null),
-        (((params["exclude-unlabeled"] ?? false)) ? "-exclude-unlabeled" : "")
-    );
+    cargs.push((params["probability-out"] ?? null));
+    if ((params["exclude-unlabeled"] ?? false)) {
+        cargs.push("-exclude-unlabeled");
+    }
     cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;
 }

@@ -31,9 +31,9 @@ interface VolumeTfceParamsDict {
     "@type"?: "workbench/volume-tfce";
     "volume-out": string;
     "presmooth"?: VolumeTfcePresmoothParamsDict | null | undefined;
-    "roi-volume"?: InputPathType | null | undefined;
     "parameters"?: VolumeTfceParametersParamsDict | null | undefined;
     "subvolume"?: string | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
     "volume-in": InputPathType;
 }
 type VolumeTfceParamsDictTagged = Required<Pick<VolumeTfceParamsDict, '@type'>> & VolumeTfceParamsDict;
@@ -75,9 +75,11 @@ function volume_tfce_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-presmooth",
-        String((params["kernel"] ?? null)),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
+        String((params["kernel"] ?? null))
     );
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     return cargs;
 }
 
@@ -148,13 +150,13 @@ interface VolumeTfceOutputs {
  * @param volume_out the output volume
  * @param volume_in the volume to run TFCE on
  * @param presmooth smooth the volume before running TFCE
- * @param roi_volume select a region of interest to run TFCE on
-
-the area to run TFCE on, as a volume
  * @param parameters set parameters for TFCE integral
  * @param subvolume select a single subvolume
 
 the subvolume number or name
+ * @param roi_volume select a region of interest to run TFCE on
+
+the area to run TFCE on, as a volume
  *
  * @returns Parameter dictionary
  */
@@ -162,9 +164,9 @@ function volume_tfce_params(
     volume_out: string,
     volume_in: InputPathType,
     presmooth: VolumeTfcePresmoothParamsDict | null = null,
-    roi_volume: InputPathType | null = null,
     parameters: VolumeTfceParametersParamsDict | null = null,
     subvolume: string | null = null,
+    roi_volume: InputPathType | null = null,
 ): VolumeTfceParamsDictTagged {
     const params = {
         "@type": "workbench/volume-tfce" as const,
@@ -174,14 +176,14 @@ function volume_tfce_params(
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
     }
-    if (roi_volume !== null) {
-        params["roi-volume"] = roi_volume;
-    }
     if (parameters !== null) {
         params["parameters"] = parameters;
     }
     if (subvolume !== null) {
         params["subvolume"] = subvolume;
+    }
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
     return params;
 }
@@ -207,12 +209,20 @@ function volume_tfce_cargs(
     cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? volume_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        "-roi",
-        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-        ...(((params["parameters"] ?? null) !== null) ? volume_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
-        "-subvolume",
-        (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : "")
+        ...(((params["parameters"] ?? null) !== null) ? volume_tfce_parameters_cargs((params["parameters"] ?? null), execution) : [])
     );
+    if ((params["subvolume"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvolume"] ?? null)
+        );
+    }
+    if ((params["roi-volume"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-volume"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }
@@ -286,13 +296,13 @@ function volume_tfce_execute(
  * @param volume_out the output volume
  * @param volume_in the volume to run TFCE on
  * @param presmooth smooth the volume before running TFCE
- * @param roi_volume select a region of interest to run TFCE on
-
-the area to run TFCE on, as a volume
  * @param parameters set parameters for TFCE integral
  * @param subvolume select a single subvolume
 
 the subvolume number or name
+ * @param roi_volume select a region of interest to run TFCE on
+
+the area to run TFCE on, as a volume
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeTfceOutputs`).
@@ -301,12 +311,12 @@ function volume_tfce(
     volume_out: string,
     volume_in: InputPathType,
     presmooth: VolumeTfcePresmoothParamsDict | null = null,
-    roi_volume: InputPathType | null = null,
     parameters: VolumeTfceParametersParamsDict | null = null,
     subvolume: string | null = null,
+    roi_volume: InputPathType | null = null,
     runner: Runner | null = null,
 ): VolumeTfceOutputs {
-    const params = volume_tfce_params(volume_out, volume_in, presmooth, roi_volume, parameters, subvolume)
+    const params = volume_tfce_params(volume_out, volume_in, presmooth, parameters, subvolume, roi_volume)
     return volume_tfce_execute(params, runner);
 }
 

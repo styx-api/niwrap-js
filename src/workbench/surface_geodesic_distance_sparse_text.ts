@@ -86,12 +86,14 @@ function surface_geodesic_distance_sparse_text_cargs(
         "wb_command",
         "-surface-geodesic-distance-sparse-text"
     );
-    if ((params["area-metric"] ?? null) !== null || (params["naive"] ?? false)) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
             "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-            (((params["naive"] ?? false)) ? "-naive" : "")
+            execution.inputFile((params["area-metric"] ?? null))
         );
+    }
+    if ((params["naive"] ?? false)) {
+        cargs.push("-naive");
     }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));

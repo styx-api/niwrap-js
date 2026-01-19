@@ -14,8 +14,8 @@ const METRIC_ROIS_TO_BORDER_METADATA: Metadata = {
 interface MetricRoisToBorderParamsDict {
     "@type"?: "workbench/metric-rois-to-border";
     "border-out": string;
-    "fraction"?: number | null | undefined;
     "column"?: string | null | undefined;
+    "fraction"?: number | null | undefined;
     "surface": InputPathType;
     "metric": InputPathType;
     "class-name": string;
@@ -47,12 +47,12 @@ interface MetricRoisToBorderOutputs {
  * @param surface the surface to use for neighbor information
  * @param metric the input metric containing ROIs
  * @param class_name the name to use for the class of the output borders
- * @param fraction set how far along the edge border points are drawn
-
-fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
  *
  * @returns Parameter dictionary
  */
@@ -61,8 +61,8 @@ function metric_rois_to_border_params(
     surface: InputPathType,
     metric: InputPathType,
     class_name: string,
-    fraction: number | null = null,
     column: string | null = null,
+    fraction: number | null = null,
 ): MetricRoisToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/metric-rois-to-border" as const,
@@ -71,11 +71,11 @@ function metric_rois_to_border_params(
         "metric": metric,
         "class-name": class_name,
     };
-    if (fraction !== null) {
-        params["fraction"] = fraction;
-    }
     if (column !== null) {
         params["column"] = column;
+    }
+    if (fraction !== null) {
+        params["fraction"] = fraction;
     }
     return params;
 }
@@ -98,13 +98,19 @@ function metric_rois_to_border_cargs(
         "wb_command",
         "-metric-rois-to-border"
     );
-    cargs.push(
-        (params["border-out"] ?? null),
-        "-placement",
-        (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-    );
+    cargs.push((params["border-out"] ?? null));
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["fraction"] ?? null) !== null) {
+        cargs.push(
+            "-placement",
+            String((params["fraction"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push((params["class-name"] ?? null));
@@ -165,12 +171,12 @@ function metric_rois_to_border_execute(
  * @param surface the surface to use for neighbor information
  * @param metric the input metric containing ROIs
  * @param class_name the name to use for the class of the output borders
- * @param fraction set how far along the edge border points are drawn
-
-fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisToBorderOutputs`).
@@ -180,11 +186,11 @@ function metric_rois_to_border(
     surface: InputPathType,
     metric: InputPathType,
     class_name: string,
-    fraction: number | null = null,
     column: string | null = null,
+    fraction: number | null = null,
     runner: Runner | null = null,
 ): MetricRoisToBorderOutputs {
-    const params = metric_rois_to_border_params(border_out, surface, metric, class_name, fraction, column)
+    const params = metric_rois_to_border_params(border_out, surface, metric, class_name, column, fraction)
     return metric_rois_to_border_execute(params, runner);
 }
 

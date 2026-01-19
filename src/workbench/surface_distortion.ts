@@ -31,9 +31,9 @@ interface SurfaceDistortionParamsDict {
     "metric-out": string;
     "smooth"?: SurfaceDistortionSmoothParamsDict | null | undefined;
     "match-surface-area"?: SurfaceDistortionMatchSurfaceAreaParamsDict | null | undefined;
-    "caret5-method": boolean;
-    "edge-method": boolean;
     "log2"?: boolean | null | undefined;
+    "edge-method": boolean;
+    "caret5-method": boolean;
     "surface-reference": InputPathType;
     "surface-distorted": InputPathType;
 }
@@ -76,9 +76,11 @@ function surface_distortion_smooth_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-smooth",
-        String((params["sigma"] ?? null)),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
+        String((params["sigma"] ?? null))
     );
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     return cargs;
 }
 
@@ -118,9 +120,9 @@ function surface_distortion_match_surface_area_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push("-match-surface-area");
     if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
-            "-match-surface-area",
             "-roi",
             execution.inputFile((params["roi-metric"] ?? null))
         );
@@ -154,11 +156,11 @@ interface SurfaceDistortionOutputs {
  * @param surface_distorted the distorted surface
  * @param smooth smooth the area data
  * @param match_surface_area isotropically rescale the distorted surface so that it has the same surface area as the reference surface
- * @param caret5_method use the surface distortion method from caret5
- * @param edge_method calculate distortion of edge lengths rather than areas
  * @param log2 calculate distortion by the local affines between triangles
 
 apply base-2 log transform
+ * @param edge_method calculate distortion of edge lengths rather than areas
+ * @param caret5_method use the surface distortion method from caret5
  *
  * @returns Parameter dictionary
  */
@@ -168,15 +170,15 @@ function surface_distortion_params(
     surface_distorted: InputPathType,
     smooth: SurfaceDistortionSmoothParamsDict | null = null,
     match_surface_area: SurfaceDistortionMatchSurfaceAreaParamsDict | null = null,
-    caret5_method: boolean = false,
-    edge_method: boolean = false,
     log2: boolean | null = null,
+    edge_method: boolean = false,
+    caret5_method: boolean = false,
 ): SurfaceDistortionParamsDictTagged {
     const params = {
         "@type": "workbench/surface-distortion" as const,
         "metric-out": metric_out,
-        "caret5-method": caret5_method,
         "edge-method": edge_method,
+        "caret5-method": caret5_method,
         "surface-reference": surface_reference,
         "surface-distorted": surface_distorted,
     };
@@ -213,12 +215,20 @@ function surface_distortion_cargs(
     cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["smooth"] ?? null) !== null) ? surface_distortion_smooth_cargs((params["smooth"] ?? null), execution) : []),
-        ...(((params["match-surface-area"] ?? null) !== null) ? surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution) : []),
-        (((params["caret5-method"] ?? false)) ? "-caret5-method" : ""),
-        (((params["edge-method"] ?? false)) ? "-edge-method" : ""),
-        "-local-affine-method",
-        (((params["log2"] ?? null) !== null) ? "-log2" : "")
+        ...(((params["match-surface-area"] ?? null) !== null) ? surface_distortion_match_surface_area_cargs((params["match-surface-area"] ?? null), execution) : [])
     );
+    if ((params["log2"] ?? null) !== null) {
+        cargs.push(
+            "-local-affine-method",
+            "-log2"
+        );
+    }
+    if ((params["edge-method"] ?? false)) {
+        cargs.push("-edge-method");
+    }
+    if ((params["caret5-method"] ?? false)) {
+        cargs.push("-caret5-method");
+    }
     cargs.push(execution.inputFile((params["surface-reference"] ?? null)));
     cargs.push(execution.inputFile((params["surface-distorted"] ?? null)));
     return cargs;
@@ -291,11 +301,11 @@ function surface_distortion_execute(
  * @param surface_distorted the distorted surface
  * @param smooth smooth the area data
  * @param match_surface_area isotropically rescale the distorted surface so that it has the same surface area as the reference surface
- * @param caret5_method use the surface distortion method from caret5
- * @param edge_method calculate distortion of edge lengths rather than areas
  * @param log2 calculate distortion by the local affines between triangles
 
 apply base-2 log transform
+ * @param edge_method calculate distortion of edge lengths rather than areas
+ * @param caret5_method use the surface distortion method from caret5
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceDistortionOutputs`).
@@ -306,12 +316,12 @@ function surface_distortion(
     surface_distorted: InputPathType,
     smooth: SurfaceDistortionSmoothParamsDict | null = null,
     match_surface_area: SurfaceDistortionMatchSurfaceAreaParamsDict | null = null,
-    caret5_method: boolean = false,
-    edge_method: boolean = false,
     log2: boolean | null = null,
+    edge_method: boolean = false,
+    caret5_method: boolean = false,
     runner: Runner | null = null,
 ): SurfaceDistortionOutputs {
-    const params = surface_distortion_params(metric_out, surface_reference, surface_distorted, smooth, match_surface_area, caret5_method, edge_method, log2)
+    const params = surface_distortion_params(metric_out, surface_reference, surface_distorted, smooth, match_surface_area, log2, edge_method, caret5_method)
     return surface_distortion_execute(params, runner);
 }
 

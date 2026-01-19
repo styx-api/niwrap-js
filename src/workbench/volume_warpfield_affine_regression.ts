@@ -21,9 +21,9 @@ type VolumeWarpfieldAffineRegressionFlirtOutParamsDictTagged = Required<Pick<Vol
 
 interface VolumeWarpfieldAffineRegressionParamsDict {
     "@type"?: "workbench/volume-warpfield-affine-regression";
-    "roi-vol"?: InputPathType | null | undefined;
-    "source-volume"?: string | null | undefined;
     "flirt-out"?: VolumeWarpfieldAffineRegressionFlirtOutParamsDict | null | undefined;
+    "source-volume"?: string | null | undefined;
+    "roi-vol"?: InputPathType | null | undefined;
     "warpfield": string;
     "affine-out": string;
 }
@@ -91,36 +91,36 @@ interface VolumeWarpfieldAffineRegressionOutputs {
  *
  * @param warpfield the input warpfield
  * @param affine_out output - the output affine file
- * @param roi_vol only consider voxels within a mask (e.g., a brain mask)
-
-the mask volume
+ * @param flirt_out write output as a flirt matrix rather than a world coordinate transform
  * @param source_volume input is a fnirt warpfield
 
 the source volume used when generating the fnirt warpfield
- * @param flirt_out write output as a flirt matrix rather than a world coordinate transform
+ * @param roi_vol only consider voxels within a mask (e.g., a brain mask)
+
+the mask volume
  *
  * @returns Parameter dictionary
  */
 function volume_warpfield_affine_regression_params(
     warpfield: string,
     affine_out: string,
-    roi_vol: InputPathType | null = null,
-    source_volume: string | null = null,
     flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParamsDict | null = null,
+    source_volume: string | null = null,
+    roi_vol: InputPathType | null = null,
 ): VolumeWarpfieldAffineRegressionParamsDictTagged {
     const params = {
         "@type": "workbench/volume-warpfield-affine-regression" as const,
         "warpfield": warpfield,
         "affine-out": affine_out,
     };
-    if (roi_vol !== null) {
-        params["roi-vol"] = roi_vol;
+    if (flirt_out !== null) {
+        params["flirt-out"] = flirt_out;
     }
     if (source_volume !== null) {
         params["source-volume"] = source_volume;
     }
-    if (flirt_out !== null) {
-        params["flirt-out"] = flirt_out;
+    if (roi_vol !== null) {
+        params["roi-vol"] = roi_vol;
     }
     return params;
 }
@@ -143,13 +143,19 @@ function volume_warpfield_affine_regression_cargs(
         "wb_command",
         "-volume-warpfield-affine-regression"
     );
-    if ((params["roi-vol"] ?? null) !== null || (params["source-volume"] ?? null) !== null || (params["flirt-out"] ?? null) !== null) {
+    if ((params["flirt-out"] ?? null) !== null) {
+        cargs.push(...volume_warpfield_affine_regression_flirt_out_cargs((params["flirt-out"] ?? null), execution));
+    }
+    if ((params["source-volume"] ?? null) !== null) {
+        cargs.push(
+            "-fnirt",
+            (params["source-volume"] ?? null)
+        );
+    }
+    if ((params["roi-vol"] ?? null) !== null) {
         cargs.push(
             "-roi",
-            (((params["roi-vol"] ?? null) !== null) ? execution.inputFile((params["roi-vol"] ?? null)) : ""),
-            "-fnirt",
-            (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
-            ...(((params["flirt-out"] ?? null) !== null) ? volume_warpfield_affine_regression_flirt_out_cargs((params["flirt-out"] ?? null), execution) : [])
+            execution.inputFile((params["roi-vol"] ?? null))
         );
     }
     cargs.push((params["warpfield"] ?? null));
@@ -212,13 +218,13 @@ function volume_warpfield_affine_regression_execute(
  *
  * @param warpfield the input warpfield
  * @param affine_out output - the output affine file
- * @param roi_vol only consider voxels within a mask (e.g., a brain mask)
-
-the mask volume
+ * @param flirt_out write output as a flirt matrix rather than a world coordinate transform
  * @param source_volume input is a fnirt warpfield
 
 the source volume used when generating the fnirt warpfield
- * @param flirt_out write output as a flirt matrix rather than a world coordinate transform
+ * @param roi_vol only consider voxels within a mask (e.g., a brain mask)
+
+the mask volume
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeWarpfieldAffineRegressionOutputs`).
@@ -226,12 +232,12 @@ the source volume used when generating the fnirt warpfield
 function volume_warpfield_affine_regression(
     warpfield: string,
     affine_out: string,
-    roi_vol: InputPathType | null = null,
-    source_volume: string | null = null,
     flirt_out: VolumeWarpfieldAffineRegressionFlirtOutParamsDict | null = null,
+    source_volume: string | null = null,
+    roi_vol: InputPathType | null = null,
     runner: Runner | null = null,
 ): VolumeWarpfieldAffineRegressionOutputs {
-    const params = volume_warpfield_affine_regression_params(warpfield, affine_out, roi_vol, source_volume, flirt_out)
+    const params = volume_warpfield_affine_regression_params(warpfield, affine_out, flirt_out, source_volume, roi_vol)
     return volume_warpfield_affine_regression_execute(params, runner);
 }
 

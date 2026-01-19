@@ -21,8 +21,8 @@ type ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDictTagged = Required<Pick<
 
 interface ConvertMatrix4ToWorkbenchSparseParamsDict {
     "@type"?: "workbench/convert-matrix4-to-workbench-sparse";
-    "seed-roi"?: InputPathType | null | undefined;
     "volume-seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null | undefined;
+    "seed-roi"?: InputPathType | null | undefined;
     "matrix4_1": string;
     "matrix4_2": string;
     "matrix4_3": string;
@@ -98,10 +98,10 @@ interface ConvertMatrix4ToWorkbenchSparseOutputs {
  * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
  * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
  * @param wb_sparse_out output - the output workbench sparse file
+ * @param volume_seeds specify the volume seed space
  * @param seed_roi specify the surface seed space
 
 metric roi file of all vertices used in the seed space
- * @param volume_seeds specify the volume seed space
  *
  * @returns Parameter dictionary
  */
@@ -112,8 +112,8 @@ function convert_matrix4_to_workbench_sparse_params(
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
-    seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null = null,
+    seed_roi: InputPathType | null = null,
 ): ConvertMatrix4ToWorkbenchSparseParamsDictTagged {
     const params = {
         "@type": "workbench/convert-matrix4-to-workbench-sparse" as const,
@@ -124,11 +124,11 @@ function convert_matrix4_to_workbench_sparse_params(
         "voxel-list": voxel_list,
         "wb-sparse-out": wb_sparse_out,
     };
-    if (seed_roi !== null) {
-        params["seed-roi"] = seed_roi;
-    }
     if (volume_seeds !== null) {
         params["volume-seeds"] = volume_seeds;
+    }
+    if (seed_roi !== null) {
+        params["seed-roi"] = seed_roi;
     }
     return params;
 }
@@ -151,11 +151,13 @@ function convert_matrix4_to_workbench_sparse_cargs(
         "wb_command",
         "-convert-matrix4-to-workbench-sparse"
     );
-    if ((params["seed-roi"] ?? null) !== null || (params["volume-seeds"] ?? null) !== null) {
+    if ((params["volume-seeds"] ?? null) !== null) {
+        cargs.push(...convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume-seeds"] ?? null), execution));
+    }
+    if ((params["seed-roi"] ?? null) !== null) {
         cargs.push(
             "-surface-seeds",
-            (((params["seed-roi"] ?? null) !== null) ? execution.inputFile((params["seed-roi"] ?? null)) : ""),
-            ...(((params["volume-seeds"] ?? null) !== null) ? convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume-seeds"] ?? null), execution) : [])
+            execution.inputFile((params["seed-roi"] ?? null))
         );
     }
     cargs.push((params["matrix4_1"] ?? null));
@@ -222,10 +224,10 @@ function convert_matrix4_to_workbench_sparse_execute(
  * @param orientation_file the .fiberTEMP.nii file this trajectory file applies to
  * @param voxel_list list of white matter voxel index triplets as used in the trajectory matrix
  * @param wb_sparse_out output - the output workbench sparse file
+ * @param volume_seeds specify the volume seed space
  * @param seed_roi specify the surface seed space
 
 metric roi file of all vertices used in the seed space
- * @param volume_seeds specify the volume seed space
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertMatrix4ToWorkbenchSparseOutputs`).
@@ -237,11 +239,11 @@ function convert_matrix4_to_workbench_sparse(
     orientation_file: InputPathType,
     voxel_list: string,
     wb_sparse_out: string,
-    seed_roi: InputPathType | null = null,
     volume_seeds: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null = null,
+    seed_roi: InputPathType | null = null,
     runner: Runner | null = null,
 ): ConvertMatrix4ToWorkbenchSparseOutputs {
-    const params = convert_matrix4_to_workbench_sparse_params(matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, seed_roi, volume_seeds)
+    const params = convert_matrix4_to_workbench_sparse_params(matrix4_1, matrix4_2, matrix4_3, orientation_file, voxel_list, wb_sparse_out, volume_seeds, seed_roi)
     return convert_matrix4_to_workbench_sparse_execute(params, runner);
 }
 

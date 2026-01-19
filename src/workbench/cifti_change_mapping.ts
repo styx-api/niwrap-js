@@ -91,10 +91,14 @@ function cifti_change_mapping_series_cargs(
     cargs.push(
         "-series",
         String((params["step"] ?? null)),
-        String((params["start"] ?? null)),
-        "-unit",
-        (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")
+        String((params["start"] ?? null))
     );
+    if ((params["unit"] ?? null) !== null) {
+        cargs.push(
+            "-unit",
+            (params["unit"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -134,9 +138,9 @@ function cifti_change_mapping_scalar_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push("-scalar");
     if ((params["file"] ?? null) !== null) {
         cargs.push(
-            "-scalar",
             "-name-file",
             (params["file"] ?? null)
         );

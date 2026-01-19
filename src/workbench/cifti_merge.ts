@@ -38,9 +38,9 @@ type CiftiMergeCiftiParamsDictTagged = Required<Pick<CiftiMergeCiftiParamsDict, 
 interface CiftiMergeParamsDict {
     "@type"?: "workbench/cifti-merge";
     "cifti-out": string;
-    "direction"?: string | null | undefined;
-    "limit-GB"?: number | null | undefined;
     "cifti"?: Array<CiftiMergeCiftiParamsDict> | null | undefined;
+    "limit-GB"?: number | null | undefined;
+    "direction"?: string | null | undefined;
 }
 type CiftiMergeParamsDictTagged = Required<Pick<CiftiMergeParamsDict, '@type'>> & CiftiMergeParamsDict;
 
@@ -81,9 +81,11 @@ function cifti_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-up-to",
-        (params["last-index"] ?? null),
-        (((params["reverse"] ?? false)) ? "-reverse" : "")
+        (params["last-index"] ?? null)
     );
+    if ((params["reverse"] ?? false)) {
+        cargs.push("-reverse");
+    }
     return cargs;
 }
 
@@ -199,34 +201,34 @@ interface CiftiMergeOutputs {
  * Build parameters.
  *
  * @param cifti_out output cifti file
- * @param direction merge in a direction other than along rows
-
-the dimension to split/concatenate along, default ROW
+ * @param cifti specify an input cifti file
  * @param limit_gb restrict memory used for file reading efficiency
 
 memory limit in gigabytes
- * @param cifti specify an input cifti file
+ * @param direction merge in a direction other than along rows
+
+the dimension to split/concatenate along, default ROW
  *
  * @returns Parameter dictionary
  */
 function cifti_merge_params(
     cifti_out: string,
-    direction: string | null = null,
-    limit_gb: number | null = null,
     cifti: Array<CiftiMergeCiftiParamsDict> | null = null,
+    limit_gb: number | null = null,
+    direction: string | null = null,
 ): CiftiMergeParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-merge" as const,
         "cifti-out": cifti_out,
     };
-    if (direction !== null) {
-        params["direction"] = direction;
+    if (cifti !== null) {
+        params["cifti"] = cifti;
     }
     if (limit_gb !== null) {
         params["limit-GB"] = limit_gb;
     }
-    if (cifti !== null) {
-        params["cifti"] = cifti;
+    if (direction !== null) {
+        params["direction"] = direction;
     }
     return params;
 }
@@ -251,12 +253,20 @@ function cifti_merge_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        "-direction",
-        (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
-        "-mem-limit",
-        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
         ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat() : [])
     );
+    if ((params["limit-GB"] ?? null) !== null) {
+        cargs.push(
+            "-mem-limit",
+            String((params["limit-GB"] ?? null))
+        );
+    }
+    if ((params["direction"] ?? null) !== null) {
+        cargs.push(
+            "-direction",
+            (params["direction"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -319,25 +329,25 @@ function cifti_merge_execute(
  * This example would take the first column from first.dtseries.nii, followed by all columns from second.dtseries.nii, and write these columns to out.dtseries.nii.  .
  *
  * @param cifti_out output cifti file
- * @param direction merge in a direction other than along rows
-
-the dimension to split/concatenate along, default ROW
+ * @param cifti specify an input cifti file
  * @param limit_gb restrict memory used for file reading efficiency
 
 memory limit in gigabytes
- * @param cifti specify an input cifti file
+ * @param direction merge in a direction other than along rows
+
+the dimension to split/concatenate along, default ROW
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMergeOutputs`).
  */
 function cifti_merge(
     cifti_out: string,
-    direction: string | null = null,
-    limit_gb: number | null = null,
     cifti: Array<CiftiMergeCiftiParamsDict> | null = null,
+    limit_gb: number | null = null,
+    direction: string | null = null,
     runner: Runner | null = null,
 ): CiftiMergeOutputs {
-    const params = cifti_merge_params(cifti_out, direction, limit_gb, cifti)
+    const params = cifti_merge_params(cifti_out, cifti, limit_gb, direction)
     return cifti_merge_execute(params, runner);
 }
 

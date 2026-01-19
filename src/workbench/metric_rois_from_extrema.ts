@@ -14,10 +14,10 @@ const METRIC_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 interface MetricRoisFromExtremaParamsDict {
     "@type"?: "workbench/metric-rois-from-extrema";
     "metric-out": string;
-    "sigma"?: number | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
-    "method"?: string | null | undefined;
     "column"?: string | null | undefined;
+    "method"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "sigma"?: number | null | undefined;
     "surface": InputPathType;
     "metric": InputPathType;
     "limit": number;
@@ -49,18 +49,18 @@ interface MetricRoisFromExtremaOutputs {
  * @param surface the surface to use for geodesic distance
  * @param metric the input metric file
  * @param limit geodesic distance limit from vertex, in mm
- * @param sigma generate a gaussian kernel instead of a flat ROI
-
-the sigma for the gaussian kernel, in mm
- * @param roi_metric select a region of interest to use
-
-the area to use, as a metric
- * @param method how to handle overlapping ROIs, default ALLOW
-
-the method of resolving overlaps
  * @param column select a single input column to use
 
 the column number or name
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param roi_metric select a region of interest to use
+
+the area to use, as a metric
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
  *
  * @returns Parameter dictionary
  */
@@ -69,10 +69,10 @@ function metric_rois_from_extrema_params(
     surface: InputPathType,
     metric: InputPathType,
     limit: number,
-    sigma: number | null = null,
-    roi_metric: InputPathType | null = null,
-    method: string | null = null,
     column: string | null = null,
+    method: string | null = null,
+    roi_metric: InputPathType | null = null,
+    sigma: number | null = null,
 ): MetricRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/metric-rois-from-extrema" as const,
@@ -81,17 +81,17 @@ function metric_rois_from_extrema_params(
         "metric": metric,
         "limit": limit,
     };
-    if (sigma !== null) {
-        params["sigma"] = sigma;
-    }
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
+    if (column !== null) {
+        params["column"] = column;
     }
     if (method !== null) {
         params["method"] = method;
     }
-    if (column !== null) {
-        params["column"] = column;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
+    }
+    if (sigma !== null) {
+        params["sigma"] = sigma;
     }
     return params;
 }
@@ -114,17 +114,31 @@ function metric_rois_from_extrema_cargs(
         "wb_command",
         "-metric-rois-from-extrema"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-gaussian",
-        (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-overlap-logic",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-overlap-logic",
+            (params["method"] ?? null)
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["sigma"] ?? null) !== null) {
+        cargs.push(
+            "-gaussian",
+            String((params["sigma"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));
@@ -185,18 +199,18 @@ function metric_rois_from_extrema_execute(
  * @param surface the surface to use for geodesic distance
  * @param metric the input metric file
  * @param limit geodesic distance limit from vertex, in mm
- * @param sigma generate a gaussian kernel instead of a flat ROI
-
-the sigma for the gaussian kernel, in mm
- * @param roi_metric select a region of interest to use
-
-the area to use, as a metric
- * @param method how to handle overlapping ROIs, default ALLOW
-
-the method of resolving overlaps
  * @param column select a single input column to use
 
 the column number or name
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param roi_metric select a region of interest to use
+
+the area to use, as a metric
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricRoisFromExtremaOutputs`).
@@ -206,13 +220,13 @@ function metric_rois_from_extrema(
     surface: InputPathType,
     metric: InputPathType,
     limit: number,
-    sigma: number | null = null,
-    roi_metric: InputPathType | null = null,
-    method: string | null = null,
     column: string | null = null,
+    method: string | null = null,
+    roi_metric: InputPathType | null = null,
+    sigma: number | null = null,
     runner: Runner | null = null,
 ): MetricRoisFromExtremaOutputs {
-    const params = metric_rois_from_extrema_params(metric_out, surface, metric, limit, sigma, roi_metric, method, column)
+    const params = metric_rois_from_extrema_params(metric_out, surface, metric, limit, column, method, roi_metric, sigma)
     return metric_rois_from_extrema_execute(params, runner);
 }
 

@@ -22,8 +22,8 @@ type SpecFileModifyAddParamsDictTagged = Required<Pick<SpecFileModifyAddParamsDi
 interface SpecFileModifyRemoveParamsDict {
     "@type"?: "remove";
     "filename": string;
-    "recursive": boolean;
     "suffix": boolean;
+    "recursive": boolean;
 }
 type SpecFileModifyRemoveParamsDictTagged = Required<Pick<SpecFileModifyRemoveParamsDict, '@type'>> & SpecFileModifyRemoveParamsDict;
 
@@ -84,21 +84,21 @@ function spec_file_modify_add_cargs(
  * Build parameters.
  *
  * @param filename the filename to remove
- * @param recursive remove all files that match the string starting from any folder
  * @param suffix match any file that ends with the given string (if there are multiple matches, error unless -recursive was also specified)
+ * @param recursive remove all files that match the string starting from any folder
  *
  * @returns Parameter dictionary
  */
 function spec_file_modify_remove(
     filename: string,
-    recursive: boolean = false,
     suffix: boolean = false,
+    recursive: boolean = false,
 ): SpecFileModifyRemoveParamsDictTagged {
     const params = {
         "@type": "remove" as const,
         "filename": filename,
-        "recursive": recursive,
         "suffix": suffix,
+        "recursive": recursive,
     };
     return params;
 }
@@ -119,10 +119,14 @@ function spec_file_modify_remove_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-remove",
-        (params["filename"] ?? null),
-        (((params["recursive"] ?? false)) ? "-recursive" : ""),
-        (((params["suffix"] ?? false)) ? "-suffix" : "")
+        (params["filename"] ?? null)
     );
+    if ((params["suffix"] ?? false)) {
+        cargs.push("-suffix");
+    }
+    if ((params["recursive"] ?? false)) {
+        cargs.push("-recursive");
+    }
     return cargs;
 }
 

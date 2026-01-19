@@ -22,11 +22,11 @@ type CiftiRoisFromExtremaGaussianParamsDictTagged = Required<Pick<CiftiRoisFromE
 interface CiftiRoisFromExtremaParamsDict {
     "@type"?: "workbench/cifti-rois-from-extrema";
     "cifti-out": string;
-    "surface"?: InputPathType | null | undefined;
-    "surface"?: InputPathType | null | undefined;
-    "surface"?: InputPathType | null | undefined;
     "gaussian"?: CiftiRoisFromExtremaGaussianParamsDict | null | undefined;
     "method"?: string | null | undefined;
+    "surface"?: InputPathType | null | undefined;
+    "surface"?: InputPathType | null | undefined;
+    "surface"?: InputPathType | null | undefined;
     "merged-volume": boolean;
     "cifti": InputPathType;
     "surf-limit": number;
@@ -104,19 +104,19 @@ interface CiftiRoisFromExtremaOutputs {
  * @param surf_limit geodesic distance limit from vertex, in mm
  * @param vol_limit euclidean distance limit from voxel center, in mm
  * @param direction which dimension an extrema map is along, ROW or COLUMN
- * @param surface specify the left surface to use
-
-the left surface file
- * @param surface_ specify the right surface to use
-
-the right surface file
- * @param surface_2 specify the cerebellum surface to use
-
-the cerebellum surface file
  * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param method how to handle overlapping ROIs, default ALLOW
 
 the method of resolving overlaps
+ * @param surface specify the cerebellum surface to use
+
+the cerebellum surface file
+ * @param surface_ specify the right surface to use
+
+the right surface file
+ * @param surface_2 specify the left surface to use
+
+the left surface file
  * @param merged_volume treat volume components as if they were a single component
  *
  * @returns Parameter dictionary
@@ -127,11 +127,11 @@ function cifti_rois_from_extrema_params(
     surf_limit: number,
     vol_limit: number,
     direction: string,
+    gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
+    method: string | null = null,
     surface: InputPathType | null = null,
     surface_: InputPathType | null = null,
     surface_2: InputPathType | null = null,
-    gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
-    method: string | null = null,
     merged_volume: boolean = false,
 ): CiftiRoisFromExtremaParamsDictTagged {
     const params = {
@@ -143,6 +143,12 @@ function cifti_rois_from_extrema_params(
         "vol-limit": vol_limit,
         "direction": direction,
     };
+    if (gaussian !== null) {
+        params["gaussian"] = gaussian;
+    }
+    if (method !== null) {
+        params["method"] = method;
+    }
     if (surface !== null) {
         params["surface"] = surface;
     }
@@ -151,12 +157,6 @@ function cifti_rois_from_extrema_params(
     }
     if (surface_2 !== null) {
         params["surface"] = surface_2;
-    }
-    if (gaussian !== null) {
-        params["gaussian"] = gaussian;
-    }
-    if (method !== null) {
-        params["method"] = method;
     }
     return params;
 }
@@ -181,17 +181,35 @@ function cifti_rois_from_extrema_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        "-left-surface",
-        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-        "-right-surface",
-        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-        "-cerebellum-surface",
-        (((params["surface"] ?? null) !== null) ? execution.inputFile((params["surface"] ?? null)) : ""),
-        ...(((params["gaussian"] ?? null) !== null) ? cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution) : []),
-        "-overlap-logic",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
-        (((params["merged-volume"] ?? false)) ? "-merged-volume" : "")
+        ...(((params["gaussian"] ?? null) !== null) ? cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution) : [])
     );
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-overlap-logic",
+            (params["method"] ?? null)
+        );
+    }
+    if ((params["surface"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-surface",
+            execution.inputFile((params["surface"] ?? null))
+        );
+    }
+    if ((params["surface"] ?? null) !== null) {
+        cargs.push(
+            "-right-surface",
+            execution.inputFile((params["surface"] ?? null))
+        );
+    }
+    if ((params["surface"] ?? null) !== null) {
+        cargs.push(
+            "-left-surface",
+            execution.inputFile((params["surface"] ?? null))
+        );
+    }
+    if ((params["merged-volume"] ?? false)) {
+        cargs.push("-merged-volume");
+    }
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push(String((params["surf-limit"] ?? null)));
     cargs.push(String((params["vol-limit"] ?? null)));
@@ -254,19 +272,19 @@ function cifti_rois_from_extrema_execute(
  * @param surf_limit geodesic distance limit from vertex, in mm
  * @param vol_limit euclidean distance limit from voxel center, in mm
  * @param direction which dimension an extrema map is along, ROW or COLUMN
- * @param surface specify the left surface to use
-
-the left surface file
- * @param surface_ specify the right surface to use
-
-the right surface file
- * @param surface_2 specify the cerebellum surface to use
-
-the cerebellum surface file
  * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param method how to handle overlapping ROIs, default ALLOW
 
 the method of resolving overlaps
+ * @param surface specify the cerebellum surface to use
+
+the cerebellum surface file
+ * @param surface_ specify the right surface to use
+
+the right surface file
+ * @param surface_2 specify the left surface to use
+
+the left surface file
  * @param merged_volume treat volume components as if they were a single component
  * @param runner Command runner
  *
@@ -278,15 +296,15 @@ function cifti_rois_from_extrema(
     surf_limit: number,
     vol_limit: number,
     direction: string,
+    gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
+    method: string | null = null,
     surface: InputPathType | null = null,
     surface_: InputPathType | null = null,
     surface_2: InputPathType | null = null,
-    gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
-    method: string | null = null,
     merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
-    const params = cifti_rois_from_extrema_params(cifti_out, cifti, surf_limit, vol_limit, direction, surface, surface_, surface_2, gaussian, method, merged_volume)
+    const params = cifti_rois_from_extrema_params(cifti_out, cifti, surf_limit, vol_limit, direction, gaussian, method, surface, surface_, surface_2, merged_volume)
     return cifti_rois_from_extrema_execute(params, runner);
 }
 

@@ -243,9 +243,11 @@ function volume_set_space_file_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-file",
-        (params["volume-ref"] ?? null),
-        (((params["ignore-dims"] ?? false)) ? "-ignore-dims" : "")
+        (params["volume-ref"] ?? null)
     );
+    if ((params["ignore-dims"] ?? false)) {
+        cargs.push("-ignore-dims");
+    }
     return cargs;
 }
 

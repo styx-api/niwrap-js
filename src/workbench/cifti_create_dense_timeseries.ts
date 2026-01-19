@@ -59,10 +59,10 @@ interface CiftiCreateDenseTimeseriesParamsDict {
     "left-metric"?: CiftiCreateDenseTimeseriesLeftMetricParamsDict | null | undefined;
     "right-metric"?: CiftiCreateDenseTimeseriesRightMetricParamsDict | null | undefined;
     "cerebellum-metric"?: CiftiCreateDenseTimeseriesCerebellumMetricParamsDict | null | undefined;
-    "interval"?: number | null | undefined;
-    "start"?: number | null | undefined;
-    "unit"?: string | null | undefined;
     "metric"?: Array<CiftiCreateDenseTimeseriesMetricParamsDict> | null | undefined;
+    "unit"?: string | null | undefined;
+    "start"?: number | null | undefined;
+    "interval"?: number | null | undefined;
 }
 type CiftiCreateDenseTimeseriesParamsDictTagged = Required<Pick<CiftiCreateDenseTimeseriesParamsDict, '@type'>> & CiftiCreateDenseTimeseriesParamsDict;
 
@@ -150,10 +150,14 @@ function cifti_create_dense_timeseries_left_metric_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-left-metric",
-        execution.inputFile((params["metric"] ?? null)),
-        "-roi-left",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["metric"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi-left",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -198,10 +202,14 @@ function cifti_create_dense_timeseries_right_metric_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-right-metric",
-        execution.inputFile((params["metric"] ?? null)),
-        "-roi-right",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["metric"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi-right",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -246,10 +254,14 @@ function cifti_create_dense_timeseries_cerebellum_metric_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cerebellum-metric",
-        execution.inputFile((params["metric"] ?? null)),
-        "-roi-cerebellum",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["metric"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi-cerebellum",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -298,10 +310,14 @@ function cifti_create_dense_timeseries_metric_cargs(
     cargs.push(
         "-metric",
         (params["structure"] ?? null),
-        execution.inputFile((params["metric"] ?? null)),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["metric"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -331,16 +347,16 @@ interface CiftiCreateDenseTimeseriesOutputs {
  * @param left_metric metric for the left cortical surface
  * @param right_metric metric for the right cortical surface
  * @param cerebellum_metric metric for the cerebellum
- * @param interval set the timestep
-
-the timestep, in seconds (default 1.0)
- * @param start set the start time
-
-the time at the first frame, in seconds (default 0.0)
+ * @param metric metric for a specified surface structure
  * @param unit use a unit other than time
 
 unit identifier (default SECOND)
- * @param metric metric for a specified surface structure
+ * @param start set the start time
+
+the time at the first frame, in seconds (default 0.0)
+ * @param interval set the timestep
+
+the timestep, in seconds (default 1.0)
  *
  * @returns Parameter dictionary
  */
@@ -350,10 +366,10 @@ function cifti_create_dense_timeseries_params(
     left_metric: CiftiCreateDenseTimeseriesLeftMetricParamsDict | null = null,
     right_metric: CiftiCreateDenseTimeseriesRightMetricParamsDict | null = null,
     cerebellum_metric: CiftiCreateDenseTimeseriesCerebellumMetricParamsDict | null = null,
-    interval: number | null = null,
-    start: number | null = null,
-    unit: string | null = null,
     metric: Array<CiftiCreateDenseTimeseriesMetricParamsDict> | null = null,
+    unit: string | null = null,
+    start: number | null = null,
+    interval: number | null = null,
 ): CiftiCreateDenseTimeseriesParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-dense-timeseries" as const,
@@ -371,17 +387,17 @@ function cifti_create_dense_timeseries_params(
     if (cerebellum_metric !== null) {
         params["cerebellum-metric"] = cerebellum_metric;
     }
-    if (interval !== null) {
-        params["interval"] = interval;
-    }
-    if (start !== null) {
-        params["start"] = start;
+    if (metric !== null) {
+        params["metric"] = metric;
     }
     if (unit !== null) {
         params["unit"] = unit;
     }
-    if (metric !== null) {
-        params["metric"] = metric;
+    if (start !== null) {
+        params["start"] = start;
+    }
+    if (interval !== null) {
+        params["interval"] = interval;
     }
     return params;
 }
@@ -410,14 +426,26 @@ function cifti_create_dense_timeseries_cargs(
         ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_left_metric_cargs((params["left-metric"] ?? null), execution) : []),
         ...(((params["right-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_right_metric_cargs((params["right-metric"] ?? null), execution) : []),
         ...(((params["cerebellum-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_cerebellum_metric_cargs((params["cerebellum-metric"] ?? null), execution) : []),
-        "-timestep",
-        (((params["interval"] ?? null) !== null) ? String((params["interval"] ?? null)) : ""),
-        "-timestart",
-        (((params["start"] ?? null) !== null) ? String((params["start"] ?? null)) : ""),
-        "-unit",
-        (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : ""),
         ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_timeseries_metric_cargs(s, execution)).flat() : [])
     );
+    if ((params["unit"] ?? null) !== null) {
+        cargs.push(
+            "-unit",
+            (params["unit"] ?? null)
+        );
+    }
+    if ((params["start"] ?? null) !== null) {
+        cargs.push(
+            "-timestart",
+            String((params["start"] ?? null))
+        );
+    }
+    if ((params["interval"] ?? null) !== null) {
+        cargs.push(
+            "-timestep",
+            String((params["interval"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -566,16 +594,16 @@ function cifti_create_dense_timeseries_execute(
  * @param left_metric metric for the left cortical surface
  * @param right_metric metric for the right cortical surface
  * @param cerebellum_metric metric for the cerebellum
- * @param interval set the timestep
-
-the timestep, in seconds (default 1.0)
- * @param start set the start time
-
-the time at the first frame, in seconds (default 0.0)
+ * @param metric metric for a specified surface structure
  * @param unit use a unit other than time
 
 unit identifier (default SECOND)
- * @param metric metric for a specified surface structure
+ * @param start set the start time
+
+the time at the first frame, in seconds (default 0.0)
+ * @param interval set the timestep
+
+the timestep, in seconds (default 1.0)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateDenseTimeseriesOutputs`).
@@ -586,13 +614,13 @@ function cifti_create_dense_timeseries(
     left_metric: CiftiCreateDenseTimeseriesLeftMetricParamsDict | null = null,
     right_metric: CiftiCreateDenseTimeseriesRightMetricParamsDict | null = null,
     cerebellum_metric: CiftiCreateDenseTimeseriesCerebellumMetricParamsDict | null = null,
-    interval: number | null = null,
-    start: number | null = null,
-    unit: string | null = null,
     metric: Array<CiftiCreateDenseTimeseriesMetricParamsDict> | null = null,
+    unit: string | null = null,
+    start: number | null = null,
+    interval: number | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseTimeseriesOutputs {
-    const params = cifti_create_dense_timeseries_params(cifti_out, volume, left_metric, right_metric, cerebellum_metric, interval, start, unit, metric)
+    const params = cifti_create_dense_timeseries_params(cifti_out, volume, left_metric, right_metric, cerebellum_metric, metric, unit, start, interval)
     return cifti_create_dense_timeseries_execute(params, runner);
 }
 

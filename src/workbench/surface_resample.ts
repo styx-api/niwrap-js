@@ -207,9 +207,11 @@ function surface_resample_cargs(
     cargs.push(
         (params["surface-out"] ?? null),
         ...(((params["area-surfs"] ?? null) !== null) ? surface_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
-        ...(((params["area-metrics"] ?? null) !== null) ? surface_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
-        (((params["bypass-sphere-check"] ?? false)) ? "-bypass-sphere-check" : "")
+        ...(((params["area-metrics"] ?? null) !== null) ? surface_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : [])
     );
+    if ((params["bypass-sphere-check"] ?? false)) {
+        cargs.push("-bypass-sphere-check");
+    }
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new-sphere"] ?? null)));

@@ -22,12 +22,12 @@ type MetricSmoothingRoiParamsDictTagged = Required<Pick<MetricSmoothingRoiParams
 interface MetricSmoothingParamsDict {
     "@type"?: "workbench/metric-smoothing";
     "metric-out": string;
-    "fwhm": boolean;
     "roi"?: MetricSmoothingRoiParamsDict | null | undefined;
-    "fix-zeros": boolean;
-    "column"?: string | null | undefined;
-    "area-metric"?: InputPathType | null | undefined;
     "method"?: string | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "fix-zeros": boolean;
+    "fwhm": boolean;
     "surface": InputPathType;
     "metric-in": InputPathType;
     "smoothing-kernel": number;
@@ -71,9 +71,11 @@ function metric_smoothing_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
-        (((params["match-columns"] ?? false)) ? "-match-columns" : "")
+        execution.inputFile((params["roi-metric"] ?? null))
     );
+    if ((params["match-columns"] ?? false)) {
+        cargs.push("-match-columns");
+    }
     return cargs;
 }
 
@@ -102,18 +104,18 @@ interface MetricSmoothingOutputs {
  * @param surface the surface to smooth on
  * @param metric_in the metric to smooth
  * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param fwhm kernel size is FWHM, not sigma
  * @param roi select a region of interest to smooth
- * @param fix_zeros treat zero values as not being data
- * @param column select a single column to smooth
-
-the column number or name
- * @param area_metric vertex areas to use instead of computing them from the surface
-
-the corrected vertex areas, as a metric
  * @param method select smoothing method, default GEO_GAUSS_AREA
 
 the name of the smoothing method
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
+ * @param column select a single column to smooth
+
+the column number or name
+ * @param fix_zeros treat zero values as not being data
+ * @param fwhm kernel size is FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
@@ -122,18 +124,18 @@ function metric_smoothing_params(
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
-    fwhm: boolean = false,
     roi: MetricSmoothingRoiParamsDict | null = null,
-    fix_zeros: boolean = false,
-    column: string | null = null,
-    area_metric: InputPathType | null = null,
     method: string | null = null,
+    area_metric: InputPathType | null = null,
+    column: string | null = null,
+    fix_zeros: boolean = false,
+    fwhm: boolean = false,
 ): MetricSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/metric-smoothing" as const,
         "metric-out": metric_out,
-        "fwhm": fwhm,
         "fix-zeros": fix_zeros,
+        "fwhm": fwhm,
         "surface": surface,
         "metric-in": metric_in,
         "smoothing-kernel": smoothing_kernel,
@@ -141,14 +143,14 @@ function metric_smoothing_params(
     if (roi !== null) {
         params["roi"] = roi;
     }
-    if (column !== null) {
-        params["column"] = column;
+    if (method !== null) {
+        params["method"] = method;
     }
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
     }
-    if (method !== null) {
-        params["method"] = method;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -173,16 +175,32 @@ function metric_smoothing_cargs(
     );
     cargs.push(
         (params["metric-out"] ?? null),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
-        ...(((params["roi"] ?? null) !== null) ? metric_smoothing_roi_cargs((params["roi"] ?? null), execution) : []),
-        (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-        "-method",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
+        ...(((params["roi"] ?? null) !== null) ? metric_smoothing_roi_cargs((params["roi"] ?? null), execution) : [])
     );
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-method",
+            (params["method"] ?? null)
+        );
+    }
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["fix-zeros"] ?? false)) {
+        cargs.push("-fix-zeros");
+    }
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push(String((params["smoothing-kernel"] ?? null)));
@@ -275,18 +293,18 @@ function metric_smoothing_execute(
  * @param surface the surface to smooth on
  * @param metric_in the metric to smooth
  * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param fwhm kernel size is FWHM, not sigma
  * @param roi select a region of interest to smooth
- * @param fix_zeros treat zero values as not being data
- * @param column select a single column to smooth
-
-the column number or name
- * @param area_metric vertex areas to use instead of computing them from the surface
-
-the corrected vertex areas, as a metric
  * @param method select smoothing method, default GEO_GAUSS_AREA
 
 the name of the smoothing method
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
+ * @param column select a single column to smooth
+
+the column number or name
+ * @param fix_zeros treat zero values as not being data
+ * @param fwhm kernel size is FWHM, not sigma
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricSmoothingOutputs`).
@@ -296,15 +314,15 @@ function metric_smoothing(
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
-    fwhm: boolean = false,
     roi: MetricSmoothingRoiParamsDict | null = null,
-    fix_zeros: boolean = false,
-    column: string | null = null,
-    area_metric: InputPathType | null = null,
     method: string | null = null,
+    area_metric: InputPathType | null = null,
+    column: string | null = null,
+    fix_zeros: boolean = false,
+    fwhm: boolean = false,
     runner: Runner | null = null,
 ): MetricSmoothingOutputs {
-    const params = metric_smoothing_params(metric_out, surface, metric_in, smoothing_kernel, fwhm, roi, fix_zeros, column, area_metric, method)
+    const params = metric_smoothing_params(metric_out, surface, metric_in, smoothing_kernel, roi, method, area_metric, column, fix_zeros, fwhm)
     return metric_smoothing_execute(params, runner);
 }
 

@@ -89,10 +89,14 @@ function cifti_false_correlation_left_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-left-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-dump-text",
-        (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["text-out"] ?? null) !== null) {
+        cargs.push(
+            "-dump-text",
+            (params["text-out"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -137,10 +141,14 @@ function cifti_false_correlation_right_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-right-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-dump-text",
-        (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["text-out"] ?? null) !== null) {
+        cargs.push(
+            "-dump-text",
+            (params["text-out"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -185,10 +193,14 @@ function cifti_false_correlation_cerebellum_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cerebellum-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-dump-text",
-        (((params["text-out"] ?? null) !== null) ? (params["text-out"] ?? null) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["text-out"] ?? null) !== null) {
+        cargs.push(
+            "-dump-text",
+            (params["text-out"] ?? null)
+        );
+    }
     return cargs;
 }
 

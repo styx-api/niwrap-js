@@ -56,19 +56,19 @@ type CiftiPaletteThresholdingParamsDictTagged = Required<Pick<CiftiPaletteThresh
 interface CiftiPaletteParamsDict {
     "@type"?: "workbench/cifti-palette";
     "cifti-out": string;
-    "column"?: string | null | undefined;
     "pos-percent"?: CiftiPalettePosPercentParamsDict | null | undefined;
     "neg-percent"?: CiftiPaletteNegPercentParamsDict | null | undefined;
     "pos-user"?: CiftiPalettePosUserParamsDict | null | undefined;
     "neg-user"?: CiftiPaletteNegUserParamsDict | null | undefined;
-    "interpolate"?: boolean | null | undefined;
-    "display"?: boolean | null | undefined;
-    "display"?: boolean | null | undefined;
-    "display"?: boolean | null | undefined;
-    "name"?: string | null | undefined;
     "thresholding"?: CiftiPaletteThresholdingParamsDict | null | undefined;
     "type"?: string | null | undefined;
     "type"?: string | null | undefined;
+    "name"?: string | null | undefined;
+    "display"?: boolean | null | undefined;
+    "display"?: boolean | null | undefined;
+    "display"?: boolean | null | undefined;
+    "interpolate"?: boolean | null | undefined;
+    "column"?: string | null | undefined;
     "cifti-in": InputPathType;
     "mode": string;
 }
@@ -321,35 +321,35 @@ interface CiftiPaletteOutputs {
  * @param cifti_out the output cifti file
  * @param cifti_in the cifti input
  * @param mode the mapping mode
- * @param column select a single column for scalar maps
-
-the column number or name
  * @param pos_percent percentage min/max for positive data coloring
  * @param neg_percent percentage min/max for negative data coloring
  * @param pos_user user min/max values for positive data coloring
  * @param neg_user user min/max values for negative data coloring
- * @param interpolate interpolate colors
+ * @param thresholding set the thresholding
+ * @param type_ specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
 
-boolean, whether to interpolate
- * @param display display positive data
+the normalization mode
+ * @param type_2 specify palette inversion
+
+the type of inversion
+ * @param name set the palette used
+
+the name of the palette
+ * @param display display data closer to zero than the min cutoff
 
 boolean, whether to display
  * @param display_ display positive data
 
 boolean, whether to display
- * @param display_2 display data closer to zero than the min cutoff
+ * @param display_2 display positive data
 
 boolean, whether to display
- * @param name set the palette used
+ * @param interpolate interpolate colors
 
-the name of the palette
- * @param thresholding set the thresholding
- * @param type_ specify palette inversion
+boolean, whether to interpolate
+ * @param column select a single column for scalar maps
 
-the type of inversion
- * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
-
-the normalization mode
+the column number or name
  *
  * @returns Parameter dictionary
  */
@@ -357,19 +357,19 @@ function cifti_palette_params(
     cifti_out: string,
     cifti_in: InputPathType,
     mode: string,
-    column: string | null = null,
     pos_percent: CiftiPalettePosPercentParamsDict | null = null,
     neg_percent: CiftiPaletteNegPercentParamsDict | null = null,
     pos_user: CiftiPalettePosUserParamsDict | null = null,
     neg_user: CiftiPaletteNegUserParamsDict | null = null,
-    interpolate: boolean | null = null,
-    display: boolean | null = null,
-    display_: boolean | null = null,
-    display_2: boolean | null = null,
-    name: string | null = null,
     thresholding: CiftiPaletteThresholdingParamsDict | null = null,
     type_: string | null = null,
     type_2: string | null = null,
+    name: string | null = null,
+    display: boolean | null = null,
+    display_: boolean | null = null,
+    display_2: boolean | null = null,
+    interpolate: boolean | null = null,
+    column: string | null = null,
 ): CiftiPaletteParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-palette" as const,
@@ -377,9 +377,6 @@ function cifti_palette_params(
         "cifti-in": cifti_in,
         "mode": mode,
     };
-    if (column !== null) {
-        params["column"] = column;
-    }
     if (pos_percent !== null) {
         params["pos-percent"] = pos_percent;
     }
@@ -392,8 +389,17 @@ function cifti_palette_params(
     if (neg_user !== null) {
         params["neg-user"] = neg_user;
     }
-    if (interpolate !== null) {
-        params["interpolate"] = interpolate;
+    if (thresholding !== null) {
+        params["thresholding"] = thresholding;
+    }
+    if (type_ !== null) {
+        params["type"] = type_;
+    }
+    if (type_2 !== null) {
+        params["type"] = type_2;
+    }
+    if (name !== null) {
+        params["name"] = name;
     }
     if (display !== null) {
         params["display"] = display;
@@ -404,17 +410,11 @@ function cifti_palette_params(
     if (display_2 !== null) {
         params["display"] = display_2;
     }
-    if (name !== null) {
-        params["name"] = name;
+    if (interpolate !== null) {
+        params["interpolate"] = interpolate;
     }
-    if (thresholding !== null) {
-        params["thresholding"] = thresholding;
-    }
-    if (type_ !== null) {
-        params["type"] = type_;
-    }
-    if (type_2 !== null) {
-        params["type"] = type_2;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -439,28 +439,60 @@ function cifti_palette_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
         ...(((params["pos-percent"] ?? null) !== null) ? cifti_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),
         ...(((params["neg-percent"] ?? null) !== null) ? cifti_palette_neg_percent_cargs((params["neg-percent"] ?? null), execution) : []),
         ...(((params["pos-user"] ?? null) !== null) ? cifti_palette_pos_user_cargs((params["pos-user"] ?? null), execution) : []),
         ...(((params["neg-user"] ?? null) !== null) ? cifti_palette_neg_user_cargs((params["neg-user"] ?? null), execution) : []),
-        "-interpolate",
-        (((params["interpolate"] ?? null) !== null) ? ((params["interpolate"] ?? null) ? "true" : "false") : ""),
-        "-disp-pos",
-        (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-        "-disp-neg",
-        (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-        "-disp-zero",
-        (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-        "-palette-name",
-        (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
-        ...(((params["thresholding"] ?? null) !== null) ? cifti_palette_thresholding_cargs((params["thresholding"] ?? null), execution) : []),
-        "-inversion",
-        (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
-        "-normalization",
-        (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")
+        ...(((params["thresholding"] ?? null) !== null) ? cifti_palette_thresholding_cargs((params["thresholding"] ?? null), execution) : [])
     );
+    if ((params["type"] ?? null) !== null) {
+        cargs.push(
+            "-normalization",
+            (params["type"] ?? null)
+        );
+    }
+    if ((params["type"] ?? null) !== null) {
+        cargs.push(
+            "-inversion",
+            (params["type"] ?? null)
+        );
+    }
+    if ((params["name"] ?? null) !== null) {
+        cargs.push(
+            "-palette-name",
+            (params["name"] ?? null)
+        );
+    }
+    if ((params["display"] ?? null) !== null) {
+        cargs.push(
+            "-disp-zero",
+            ((params["display"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["display"] ?? null) !== null) {
+        cargs.push(
+            "-disp-neg",
+            ((params["display"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["display"] ?? null) !== null) {
+        cargs.push(
+            "-disp-pos",
+            ((params["display"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["interpolate"] ?? null) !== null) {
+        cargs.push(
+            "-interpolate",
+            ((params["interpolate"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["mode"] ?? null));
     return cargs;
@@ -673,35 +705,35 @@ function cifti_palette_execute(
  * @param cifti_out the output cifti file
  * @param cifti_in the cifti input
  * @param mode the mapping mode
- * @param column select a single column for scalar maps
-
-the column number or name
  * @param pos_percent percentage min/max for positive data coloring
  * @param neg_percent percentage min/max for negative data coloring
  * @param pos_user user min/max values for positive data coloring
  * @param neg_user user min/max values for negative data coloring
- * @param interpolate interpolate colors
+ * @param thresholding set the thresholding
+ * @param type_ specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
 
-boolean, whether to interpolate
- * @param display display positive data
+the normalization mode
+ * @param type_2 specify palette inversion
+
+the type of inversion
+ * @param name set the palette used
+
+the name of the palette
+ * @param display display data closer to zero than the min cutoff
 
 boolean, whether to display
  * @param display_ display positive data
 
 boolean, whether to display
- * @param display_2 display data closer to zero than the min cutoff
+ * @param display_2 display positive data
 
 boolean, whether to display
- * @param name set the palette used
+ * @param interpolate interpolate colors
 
-the name of the palette
- * @param thresholding set the thresholding
- * @param type_ specify palette inversion
+boolean, whether to interpolate
+ * @param column select a single column for scalar maps
 
-the type of inversion
- * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
-
-the normalization mode
+the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiPaletteOutputs`).
@@ -710,22 +742,22 @@ function cifti_palette(
     cifti_out: string,
     cifti_in: InputPathType,
     mode: string,
-    column: string | null = null,
     pos_percent: CiftiPalettePosPercentParamsDict | null = null,
     neg_percent: CiftiPaletteNegPercentParamsDict | null = null,
     pos_user: CiftiPalettePosUserParamsDict | null = null,
     neg_user: CiftiPaletteNegUserParamsDict | null = null,
-    interpolate: boolean | null = null,
-    display: boolean | null = null,
-    display_: boolean | null = null,
-    display_2: boolean | null = null,
-    name: string | null = null,
     thresholding: CiftiPaletteThresholdingParamsDict | null = null,
     type_: string | null = null,
     type_2: string | null = null,
+    name: string | null = null,
+    display: boolean | null = null,
+    display_: boolean | null = null,
+    display_2: boolean | null = null,
+    interpolate: boolean | null = null,
+    column: string | null = null,
     runner: Runner | null = null,
 ): CiftiPaletteOutputs {
-    const params = cifti_palette_params(cifti_out, cifti_in, mode, column, pos_percent, neg_percent, pos_user, neg_user, interpolate, display, display_, display_2, name, thresholding, type_, type_2)
+    const params = cifti_palette_params(cifti_out, cifti_in, mode, pos_percent, neg_percent, pos_user, neg_user, thresholding, type_, type_2, name, display, display_, display_2, interpolate, column)
     return cifti_palette_execute(params, runner);
 }
 

@@ -14,13 +14,13 @@ const METRIC_FIND_CLUSTERS_METADATA: Metadata = {
 interface MetricFindClustersParamsDict {
     "@type"?: "workbench/metric-find-clusters";
     "metric-out": string;
-    "less-than": boolean;
-    "roi-metric"?: InputPathType | null | undefined;
-    "area-metric"?: InputPathType | null | undefined;
-    "column"?: string | null | undefined;
-    "ratio"?: number | null | undefined;
-    "distance"?: number | null | undefined;
     "startval"?: number | null | undefined;
+    "distance"?: number | null | undefined;
+    "ratio"?: number | null | undefined;
+    "column"?: string | null | undefined;
+    "area-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "less-than": boolean;
     "surface": InputPathType;
     "metric-in": InputPathType;
     "value-threshold": number;
@@ -54,25 +54,25 @@ interface MetricFindClustersOutputs {
  * @param metric_in the input metric
  * @param value_threshold threshold for data values
  * @param minimum_area threshold for cluster area, in mm^2
- * @param less_than find values less than <value-threshold>, rather than greater
- * @param roi_metric select a region of interest
-
-the roi, as a metric
- * @param area_metric vertex areas to use instead of computing them from the surface
-
-the corrected vertex areas, as a metric
- * @param column select a single column
-
-the column number or name
- * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
-
-fraction of the largest cluster's area
- * @param distance ignore clusters further than a given distance from the largest cluster
-
-how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
+ * @param distance ignore clusters further than a given distance from the largest cluster
+
+how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
+
+fraction of the largest cluster's area
+ * @param column select a single column
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
+ * @param roi_metric select a region of interest
+
+the roi, as a metric
+ * @param less_than find values less than <value-threshold>, rather than greater
  *
  * @returns Parameter dictionary
  */
@@ -82,13 +82,13 @@ function metric_find_clusters_params(
     metric_in: InputPathType,
     value_threshold: number,
     minimum_area: number,
-    less_than: boolean = false,
-    roi_metric: InputPathType | null = null,
-    area_metric: InputPathType | null = null,
-    column: string | null = null,
-    ratio: number | null = null,
-    distance: number | null = null,
     startval: number | null = null,
+    distance: number | null = null,
+    ratio: number | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
+    roi_metric: InputPathType | null = null,
+    less_than: boolean = false,
 ): MetricFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/metric-find-clusters" as const,
@@ -99,23 +99,23 @@ function metric_find_clusters_params(
         "value-threshold": value_threshold,
         "minimum-area": minimum_area,
     };
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
-    }
-    if (area_metric !== null) {
-        params["area-metric"] = area_metric;
-    }
-    if (column !== null) {
-        params["column"] = column;
-    }
-    if (ratio !== null) {
-        params["ratio"] = ratio;
+    if (startval !== null) {
+        params["startval"] = startval;
     }
     if (distance !== null) {
         params["distance"] = distance;
     }
-    if (startval !== null) {
-        params["startval"] = startval;
+    if (ratio !== null) {
+        params["ratio"] = ratio;
+    }
+    if (column !== null) {
+        params["column"] = column;
+    }
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
+    }
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -138,22 +138,46 @@ function metric_find_clusters_cargs(
         "wb_command",
         "-metric-find-clusters"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        (((params["less-than"] ?? false)) ? "-less-than" : ""),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        "-size-ratio",
-        (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
-        "-distance",
-        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-        "-start",
-        (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["startval"] ?? null) !== null) {
+        cargs.push(
+            "-start",
+            String((params["startval"] ?? null))
+        );
+    }
+    if ((params["distance"] ?? null) !== null) {
+        cargs.push(
+            "-distance",
+            String((params["distance"] ?? null))
+        );
+    }
+    if ((params["ratio"] ?? null) !== null) {
+        cargs.push(
+            "-size-ratio",
+            String((params["ratio"] ?? null))
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["less-than"] ?? false)) {
+        cargs.push("-less-than");
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push(String((params["value-threshold"] ?? null)));
@@ -216,25 +240,25 @@ function metric_find_clusters_execute(
  * @param metric_in the input metric
  * @param value_threshold threshold for data values
  * @param minimum_area threshold for cluster area, in mm^2
- * @param less_than find values less than <value-threshold>, rather than greater
- * @param roi_metric select a region of interest
-
-the roi, as a metric
- * @param area_metric vertex areas to use instead of computing them from the surface
-
-the corrected vertex areas, as a metric
- * @param column select a single column
-
-the column number or name
- * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
-
-fraction of the largest cluster's area
- * @param distance ignore clusters further than a given distance from the largest cluster
-
-how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
+ * @param distance ignore clusters further than a given distance from the largest cluster
+
+how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
+
+fraction of the largest cluster's area
+ * @param column select a single column
+
+the column number or name
+ * @param area_metric vertex areas to use instead of computing them from the surface
+
+the corrected vertex areas, as a metric
+ * @param roi_metric select a region of interest
+
+the roi, as a metric
+ * @param less_than find values less than <value-threshold>, rather than greater
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
@@ -245,16 +269,16 @@ function metric_find_clusters(
     metric_in: InputPathType,
     value_threshold: number,
     minimum_area: number,
-    less_than: boolean = false,
-    roi_metric: InputPathType | null = null,
-    area_metric: InputPathType | null = null,
-    column: string | null = null,
-    ratio: number | null = null,
-    distance: number | null = null,
     startval: number | null = null,
+    distance: number | null = null,
+    ratio: number | null = null,
+    column: string | null = null,
+    area_metric: InputPathType | null = null,
+    roi_metric: InputPathType | null = null,
+    less_than: boolean = false,
     runner: Runner | null = null,
 ): MetricFindClustersOutputs {
-    const params = metric_find_clusters_params(metric_out, surface, metric_in, value_threshold, minimum_area, less_than, roi_metric, area_metric, column, ratio, distance, startval)
+    const params = metric_find_clusters_params(metric_out, surface, metric_in, value_threshold, minimum_area, startval, distance, ratio, column, area_metric, roi_metric, less_than)
     return metric_find_clusters_execute(params, runner);
 }
 

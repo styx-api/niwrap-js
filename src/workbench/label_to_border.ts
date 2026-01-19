@@ -14,8 +14,8 @@ const LABEL_TO_BORDER_METADATA: Metadata = {
 interface LabelToBorderParamsDict {
     "@type"?: "workbench/label-to-border";
     "border-out": string;
-    "fraction"?: number | null | undefined;
     "column"?: string | null | undefined;
+    "fraction"?: number | null | undefined;
     "surface": InputPathType;
     "label-in": InputPathType;
 }
@@ -45,12 +45,12 @@ interface LabelToBorderOutputs {
  * @param border_out the output border file
  * @param surface the surface to use for neighbor information
  * @param label_in the input label file
- * @param fraction set how far along the edge border points are drawn
-
-fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
  *
  * @returns Parameter dictionary
  */
@@ -58,8 +58,8 @@ function label_to_border_params(
     border_out: string,
     surface: InputPathType,
     label_in: InputPathType,
-    fraction: number | null = null,
     column: string | null = null,
+    fraction: number | null = null,
 ): LabelToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/label-to-border" as const,
@@ -67,11 +67,11 @@ function label_to_border_params(
         "surface": surface,
         "label-in": label_in,
     };
-    if (fraction !== null) {
-        params["fraction"] = fraction;
-    }
     if (column !== null) {
         params["column"] = column;
+    }
+    if (fraction !== null) {
+        params["fraction"] = fraction;
     }
     return params;
 }
@@ -94,13 +94,19 @@ function label_to_border_cargs(
         "wb_command",
         "-label-to-border"
     );
-    cargs.push(
-        (params["border-out"] ?? null),
-        "-placement",
-        (((params["fraction"] ?? null) !== null) ? String((params["fraction"] ?? null)) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-    );
+    cargs.push((params["border-out"] ?? null));
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["fraction"] ?? null) !== null) {
+        cargs.push(
+            "-placement",
+            String((params["fraction"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
@@ -159,12 +165,12 @@ function label_to_border_execute(
  * @param border_out the output border file
  * @param surface the surface to use for neighbor information
  * @param label_in the input label file
- * @param fraction set how far along the edge border points are drawn
-
-fraction along edge from inside vertex (default 0.33)
  * @param column select a single column
 
 the column number or name
+ * @param fraction set how far along the edge border points are drawn
+
+fraction along edge from inside vertex (default 0.33)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
@@ -173,11 +179,11 @@ function label_to_border(
     border_out: string,
     surface: InputPathType,
     label_in: InputPathType,
-    fraction: number | null = null,
     column: string | null = null,
+    fraction: number | null = null,
     runner: Runner | null = null,
 ): LabelToBorderOutputs {
-    const params = label_to_border_params(border_out, surface, label_in, fraction, column)
+    const params = label_to_border_params(border_out, surface, label_in, column, fraction)
     return label_to_border_execute(params, runner);
 }
 

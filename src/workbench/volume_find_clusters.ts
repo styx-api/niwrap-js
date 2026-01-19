@@ -14,12 +14,12 @@ const VOLUME_FIND_CLUSTERS_METADATA: Metadata = {
 interface VolumeFindClustersParamsDict {
     "@type"?: "workbench/volume-find-clusters";
     "volume-out": string;
-    "less-than": boolean;
-    "roi-volume"?: InputPathType | null | undefined;
-    "subvol"?: string | null | undefined;
-    "ratio"?: number | null | undefined;
-    "distance"?: number | null | undefined;
     "startval"?: number | null | undefined;
+    "distance"?: number | null | undefined;
+    "ratio"?: number | null | undefined;
+    "subvol"?: string | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
+    "less-than": boolean;
     "volume-in": InputPathType;
     "value-threshold": number;
     "minimum-volume": number;
@@ -51,22 +51,22 @@ interface VolumeFindClustersOutputs {
  * @param volume_in the input volume
  * @param value_threshold threshold for data values
  * @param minimum_volume threshold for cluster volume, in mm^3
- * @param less_than find values less than <value-threshold>, rather than greater
- * @param roi_volume select a region of interest
-
-the roi, as a volume file
- * @param subvol select a single subvolume
-
-the subvolume number or name
- * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
-
-fraction of the largest cluster's volume
- * @param distance ignore clusters further than a given distance from the largest cluster
-
-how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
+ * @param distance ignore clusters further than a given distance from the largest cluster
+
+how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
+
+fraction of the largest cluster's volume
+ * @param subvol select a single subvolume
+
+the subvolume number or name
+ * @param roi_volume select a region of interest
+
+the roi, as a volume file
+ * @param less_than find values less than <value-threshold>, rather than greater
  *
  * @returns Parameter dictionary
  */
@@ -75,12 +75,12 @@ function volume_find_clusters_params(
     volume_in: InputPathType,
     value_threshold: number,
     minimum_volume: number,
-    less_than: boolean = false,
-    roi_volume: InputPathType | null = null,
-    subvol: string | null = null,
-    ratio: number | null = null,
-    distance: number | null = null,
     startval: number | null = null,
+    distance: number | null = null,
+    ratio: number | null = null,
+    subvol: string | null = null,
+    roi_volume: InputPathType | null = null,
+    less_than: boolean = false,
 ): VolumeFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/volume-find-clusters" as const,
@@ -90,20 +90,20 @@ function volume_find_clusters_params(
         "value-threshold": value_threshold,
         "minimum-volume": minimum_volume,
     };
-    if (roi_volume !== null) {
-        params["roi-volume"] = roi_volume;
-    }
-    if (subvol !== null) {
-        params["subvol"] = subvol;
-    }
-    if (ratio !== null) {
-        params["ratio"] = ratio;
+    if (startval !== null) {
+        params["startval"] = startval;
     }
     if (distance !== null) {
         params["distance"] = distance;
     }
-    if (startval !== null) {
-        params["startval"] = startval;
+    if (ratio !== null) {
+        params["ratio"] = ratio;
+    }
+    if (subvol !== null) {
+        params["subvol"] = subvol;
+    }
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
     return params;
 }
@@ -126,20 +126,40 @@ function volume_find_clusters_cargs(
         "wb_command",
         "-volume-find-clusters"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        (((params["less-than"] ?? false)) ? "-less-than" : ""),
-        "-roi",
-        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-        "-subvolume",
-        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-        "-size-ratio",
-        (((params["ratio"] ?? null) !== null) ? String((params["ratio"] ?? null)) : ""),
-        "-distance",
-        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-        "-start",
-        (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
-    );
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["startval"] ?? null) !== null) {
+        cargs.push(
+            "-start",
+            String((params["startval"] ?? null))
+        );
+    }
+    if ((params["distance"] ?? null) !== null) {
+        cargs.push(
+            "-distance",
+            String((params["distance"] ?? null))
+        );
+    }
+    if ((params["ratio"] ?? null) !== null) {
+        cargs.push(
+            "-size-ratio",
+            String((params["ratio"] ?? null))
+        );
+    }
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null)
+        );
+    }
+    if ((params["roi-volume"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-volume"] ?? null))
+        );
+    }
+    if ((params["less-than"] ?? false)) {
+        cargs.push("-less-than");
+    }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["value-threshold"] ?? null)));
     cargs.push(String((params["minimum-volume"] ?? null)));
@@ -200,22 +220,22 @@ function volume_find_clusters_execute(
  * @param volume_in the input volume
  * @param value_threshold threshold for data values
  * @param minimum_volume threshold for cluster volume, in mm^3
- * @param less_than find values less than <value-threshold>, rather than greater
- * @param roi_volume select a region of interest
-
-the roi, as a volume file
- * @param subvol select a single subvolume
-
-the subvolume number or name
- * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
-
-fraction of the largest cluster's volume
- * @param distance ignore clusters further than a given distance from the largest cluster
-
-how far from the largest cluster a cluster can be, edge to edge, in mm
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
+ * @param distance ignore clusters further than a given distance from the largest cluster
+
+how far from the largest cluster a cluster can be, edge to edge, in mm
+ * @param ratio ignore clusters smaller than a given fraction of the largest cluster in map
+
+fraction of the largest cluster's volume
+ * @param subvol select a single subvolume
+
+the subvolume number or name
+ * @param roi_volume select a region of interest
+
+the roi, as a volume file
+ * @param less_than find values less than <value-threshold>, rather than greater
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
@@ -225,15 +245,15 @@ function volume_find_clusters(
     volume_in: InputPathType,
     value_threshold: number,
     minimum_volume: number,
-    less_than: boolean = false,
-    roi_volume: InputPathType | null = null,
-    subvol: string | null = null,
-    ratio: number | null = null,
-    distance: number | null = null,
     startval: number | null = null,
+    distance: number | null = null,
+    ratio: number | null = null,
+    subvol: string | null = null,
+    roi_volume: InputPathType | null = null,
+    less_than: boolean = false,
     runner: Runner | null = null,
 ): VolumeFindClustersOutputs {
-    const params = volume_find_clusters_params(volume_out, volume_in, value_threshold, minimum_volume, less_than, roi_volume, subvol, ratio, distance, startval)
+    const params = volume_find_clusters_params(volume_out, volume_in, value_threshold, minimum_volume, startval, distance, ratio, subvol, roi_volume, less_than)
     return volume_find_clusters_execute(params, runner);
 }
 

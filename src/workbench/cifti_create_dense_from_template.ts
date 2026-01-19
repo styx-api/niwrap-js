@@ -65,11 +65,11 @@ interface CiftiCreateDenseFromTemplateParamsDict {
     "cifti-out": string;
     "series"?: CiftiCreateDenseFromTemplateSeriesParamsDict | null | undefined;
     "volume-all"?: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null | undefined;
-    "action"?: string | null | undefined;
     "cifti"?: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null | undefined;
     "metric"?: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null | undefined;
     "label"?: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null | undefined;
     "volume"?: Array<CiftiCreateDenseFromTemplateVolumeParamsDict> | null | undefined;
+    "action"?: string | null | undefined;
     "template-cifti": InputPathType;
 }
 type CiftiCreateDenseFromTemplateParamsDictTagged = Required<Pick<CiftiCreateDenseFromTemplateParamsDict, '@type'>> & CiftiCreateDenseFromTemplateParamsDict;
@@ -119,10 +119,14 @@ function cifti_create_dense_from_template_series_cargs(
     cargs.push(
         "-series",
         String((params["step"] ?? null)),
-        String((params["start"] ?? null)),
-        "-unit",
-        (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")
+        String((params["start"] ?? null))
     );
+    if ((params["unit"] ?? null) !== null) {
+        cargs.push(
+            "-unit",
+            (params["unit"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -163,9 +167,11 @@ function cifti_create_dense_from_template_volume_all_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-volume-all",
-        execution.inputFile((params["volume-in"] ?? null)),
-        (((params["from-cropped"] ?? false)) ? "-from-cropped" : "")
+        execution.inputFile((params["volume-in"] ?? null))
     );
+    if ((params["from-cropped"] ?? false)) {
+        cargs.push("-from-cropped");
+    }
     return cargs;
 }
 
@@ -335,9 +341,11 @@ function cifti_create_dense_from_template_volume_cargs(
     cargs.push(
         "-volume",
         (params["structure"] ?? null),
-        execution.inputFile((params["volume-in"] ?? null)),
-        (((params["from-cropped"] ?? false)) ? "-from-cropped" : "")
+        execution.inputFile((params["volume-in"] ?? null))
     );
+    if ((params["from-cropped"] ?? false)) {
+        cargs.push("-from-cropped");
+    }
     return cargs;
 }
 
@@ -366,13 +374,13 @@ interface CiftiCreateDenseFromTemplateOutputs {
  * @param template_cifti file to match brainordinates of
  * @param series make a dtseries file instead of a dscalar
  * @param volume_all specify an input volume file for all voxel data
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param cifti use input data from a cifti file
  * @param metric use input data from a metric file
  * @param label use input data from surface label files
  * @param volume use a volume file for a single volume structure's data
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  *
  * @returns Parameter dictionary
  */
@@ -381,11 +389,11 @@ function cifti_create_dense_from_template_params(
     template_cifti: InputPathType,
     series: CiftiCreateDenseFromTemplateSeriesParamsDict | null = null,
     volume_all: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null = null,
-    action: string | null = null,
     cifti: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null = null,
     metric: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null = null,
     label: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null = null,
     volume: Array<CiftiCreateDenseFromTemplateVolumeParamsDict> | null = null,
+    action: string | null = null,
 ): CiftiCreateDenseFromTemplateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-dense-from-template" as const,
@@ -398,9 +406,6 @@ function cifti_create_dense_from_template_params(
     if (volume_all !== null) {
         params["volume-all"] = volume_all;
     }
-    if (action !== null) {
-        params["action"] = action;
-    }
     if (cifti !== null) {
         params["cifti"] = cifti;
     }
@@ -412,6 +417,9 @@ function cifti_create_dense_from_template_params(
     }
     if (volume !== null) {
         params["volume"] = volume;
+    }
+    if (action !== null) {
+        params["action"] = action;
     }
     return params;
 }
@@ -438,13 +446,17 @@ function cifti_create_dense_from_template_cargs(
         (params["cifti-out"] ?? null),
         ...(((params["series"] ?? null) !== null) ? cifti_create_dense_from_template_series_cargs((params["series"] ?? null), execution) : []),
         ...(((params["volume-all"] ?? null) !== null) ? cifti_create_dense_from_template_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
-        "-label-collision",
-        (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),
         ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_create_dense_from_template_cifti_cargs(s, execution)).flat() : []),
         ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_from_template_metric_cargs(s, execution)).flat() : []),
         ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_create_dense_from_template_label_cargs(s, execution)).flat() : []),
         ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_create_dense_from_template_volume_cargs(s, execution)).flat() : [])
     );
+    if ((params["action"] ?? null) !== null) {
+        cargs.push(
+            "-label-collision",
+            (params["action"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["template-cifti"] ?? null)));
     return cargs;
 }
@@ -597,13 +609,13 @@ function cifti_create_dense_from_template_execute(
  * @param template_cifti file to match brainordinates of
  * @param series make a dtseries file instead of a dscalar
  * @param volume_all specify an input volume file for all voxel data
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param cifti use input data from a cifti file
  * @param metric use input data from a metric file
  * @param label use input data from surface label files
  * @param volume use a volume file for a single volume structure's data
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'SURFACES_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateDenseFromTemplateOutputs`).
@@ -613,14 +625,14 @@ function cifti_create_dense_from_template(
     template_cifti: InputPathType,
     series: CiftiCreateDenseFromTemplateSeriesParamsDict | null = null,
     volume_all: CiftiCreateDenseFromTemplateVolumeAllParamsDict | null = null,
-    action: string | null = null,
     cifti: Array<CiftiCreateDenseFromTemplateCiftiParamsDict> | null = null,
     metric: Array<CiftiCreateDenseFromTemplateMetricParamsDict> | null = null,
     label: Array<CiftiCreateDenseFromTemplateLabelParamsDict> | null = null,
     volume: Array<CiftiCreateDenseFromTemplateVolumeParamsDict> | null = null,
+    action: string | null = null,
     runner: Runner | null = null,
 ): CiftiCreateDenseFromTemplateOutputs {
-    const params = cifti_create_dense_from_template_params(cifti_out, template_cifti, series, volume_all, action, cifti, metric, label, volume)
+    const params = cifti_create_dense_from_template_params(cifti_out, template_cifti, series, volume_all, cifti, metric, label, volume, action)
     return cifti_create_dense_from_template_execute(params, runner);
 }
 

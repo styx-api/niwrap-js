@@ -14,9 +14,9 @@ const SURFACE_GEODESIC_DISTANCE_METADATA: Metadata = {
 interface SurfaceGeodesicDistanceParamsDict {
     "@type"?: "workbench/surface-geodesic-distance";
     "metric-out": string;
-    "naive": boolean;
-    "limit-mm"?: number | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
+    "limit-mm"?: number | null | undefined;
+    "naive": boolean;
     "surface": InputPathType;
     "vertex": number;
 }
@@ -46,13 +46,13 @@ interface SurfaceGeodesicDistanceOutputs {
  * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param vertex the vertex to compute geodesic distance from
- * @param naive use only neighbors, don't crawl triangles (not recommended)
- * @param limit_mm stop at a certain distance
-
-distance in mm to stop at
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param limit_mm stop at a certain distance
+
+distance in mm to stop at
+ * @param naive use only neighbors, don't crawl triangles (not recommended)
  *
  * @returns Parameter dictionary
  */
@@ -60,9 +60,9 @@ function surface_geodesic_distance_params(
     metric_out: string,
     surface: InputPathType,
     vertex: number,
-    naive: boolean = false,
-    limit_mm: number | null = null,
     area_metric: InputPathType | null = null,
+    limit_mm: number | null = null,
+    naive: boolean = false,
 ): SurfaceGeodesicDistanceParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-distance" as const,
@@ -71,11 +71,11 @@ function surface_geodesic_distance_params(
         "surface": surface,
         "vertex": vertex,
     };
-    if (limit_mm !== null) {
-        params["limit-mm"] = limit_mm;
-    }
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
+    }
+    if (limit_mm !== null) {
+        params["limit-mm"] = limit_mm;
     }
     return params;
 }
@@ -98,14 +98,22 @@ function surface_geodesic_distance_cargs(
         "wb_command",
         "-surface-geodesic-distance"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        (((params["naive"] ?? false)) ? "-naive" : ""),
-        "-limit",
-        (((params["limit-mm"] ?? null) !== null) ? String((params["limit-mm"] ?? null)) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["limit-mm"] ?? null) !== null) {
+        cargs.push(
+            "-limit",
+            String((params["limit-mm"] ?? null))
+        );
+    }
+    if ((params["naive"] ?? false)) {
+        cargs.push("-naive");
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["vertex"] ?? null)));
     return cargs;
@@ -172,13 +180,13 @@ function surface_geodesic_distance_execute(
  * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param vertex the vertex to compute geodesic distance from
- * @param naive use only neighbors, don't crawl triangles (not recommended)
- * @param limit_mm stop at a certain distance
-
-distance in mm to stop at
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param limit_mm stop at a certain distance
+
+distance in mm to stop at
+ * @param naive use only neighbors, don't crawl triangles (not recommended)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicDistanceOutputs`).
@@ -187,12 +195,12 @@ function surface_geodesic_distance(
     metric_out: string,
     surface: InputPathType,
     vertex: number,
-    naive: boolean = false,
-    limit_mm: number | null = null,
     area_metric: InputPathType | null = null,
+    limit_mm: number | null = null,
+    naive: boolean = false,
     runner: Runner | null = null,
 ): SurfaceGeodesicDistanceOutputs {
-    const params = surface_geodesic_distance_params(metric_out, surface, vertex, naive, limit_mm, area_metric)
+    const params = surface_geodesic_distance_params(metric_out, surface, vertex, area_metric, limit_mm, naive)
     return surface_geodesic_distance_execute(params, runner);
 }
 

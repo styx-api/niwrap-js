@@ -82,10 +82,10 @@ function surface_modify_sphere_cargs(
         "wb_command",
         "-surface-modify-sphere"
     );
-    cargs.push(
-        (params["sphere-out"] ?? null),
-        (((params["recenter"] ?? false)) ? "-recenter" : "")
-    );
+    cargs.push((params["sphere-out"] ?? null));
+    if ((params["recenter"] ?? false)) {
+        cargs.push("-recenter");
+    }
     cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
     cargs.push(String((params["radius"] ?? null)));
     return cargs;

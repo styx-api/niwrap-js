@@ -21,9 +21,9 @@ type SetMapNamesMapParamsDictTagged = Required<Pick<SetMapNamesMapParamsDict, '@
 
 interface SetMapNamesParamsDict {
     "@type"?: "workbench/set-map-names";
-    "file"?: string | null | undefined;
-    "file"?: string | null | undefined;
     "map"?: Array<SetMapNamesMapParamsDict> | null | undefined;
+    "file"?: string | null | undefined;
+    "file"?: string | null | undefined;
     "data-file": string;
 }
 type SetMapNamesParamsDictTagged = Required<Pick<SetMapNamesParamsDict, '@type'>> & SetMapNamesParamsDict;
@@ -89,34 +89,34 @@ interface SetMapNamesOutputs {
  * Build parameters.
  *
  * @param data_file the file to set the map names of
- * @param file use a text file to replace all map names
-
-text file containing map names, one per line
- * @param file_ use the map names from another data file
+ * @param map specify a map to set the name of
+ * @param file use the map names from another data file
 
 a data file with the same number of maps
- * @param map specify a map to set the name of
+ * @param file_ use a text file to replace all map names
+
+text file containing map names, one per line
  *
  * @returns Parameter dictionary
  */
 function set_map_names_params(
     data_file: string,
+    map: Array<SetMapNamesMapParamsDict> | null = null,
     file: string | null = null,
     file_: string | null = null,
-    map: Array<SetMapNamesMapParamsDict> | null = null,
 ): SetMapNamesParamsDictTagged {
     const params = {
         "@type": "workbench/set-map-names" as const,
         "data-file": data_file,
     };
+    if (map !== null) {
+        params["map"] = map;
+    }
     if (file !== null) {
         params["file"] = file;
     }
     if (file_ !== null) {
         params["file"] = file_;
-    }
-    if (map !== null) {
-        params["map"] = map;
     }
     return params;
 }
@@ -139,13 +139,19 @@ function set_map_names_cargs(
         "wb_command",
         "-set-map-names"
     );
-    if ((params["file"] ?? null) !== null || (params["file"] ?? null) !== null || (params["map"] ?? null) !== null) {
+    if ((params["map"] ?? null) !== null) {
+        cargs.push(...(params["map"] ?? null).map(s => set_map_names_map_cargs(s, execution)).flat());
+    }
+    if ((params["file"] ?? null) !== null) {
+        cargs.push(
+            "-from-data-file",
+            (params["file"] ?? null)
+        );
+    }
+    if ((params["file"] ?? null) !== null) {
         cargs.push(
             "-name-file",
-            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
-            "-from-data-file",
-            (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
-            ...(((params["map"] ?? null) !== null) ? (params["map"] ?? null).map(s => set_map_names_map_cargs(s, execution)).flat() : [])
+            (params["file"] ?? null)
         );
     }
     cargs.push((params["data-file"] ?? null));
@@ -202,25 +208,25 @@ function set_map_names_execute(
  * Sets the name of one or more maps for metric, shape, label, volume, cifti scalar or cifti label files.  You must specify either -name-file, or -from-data-file, or at least one -map option.  The three option types are mutually exclusive.
  *
  * @param data_file the file to set the map names of
- * @param file use a text file to replace all map names
-
-text file containing map names, one per line
- * @param file_ use the map names from another data file
+ * @param map specify a map to set the name of
+ * @param file use the map names from another data file
 
 a data file with the same number of maps
- * @param map specify a map to set the name of
+ * @param file_ use a text file to replace all map names
+
+text file containing map names, one per line
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SetMapNamesOutputs`).
  */
 function set_map_names(
     data_file: string,
+    map: Array<SetMapNamesMapParamsDict> | null = null,
     file: string | null = null,
     file_: string | null = null,
-    map: Array<SetMapNamesMapParamsDict> | null = null,
     runner: Runner | null = null,
 ): SetMapNamesOutputs {
-    const params = set_map_names_params(data_file, file, file_, map)
+    const params = set_map_names_params(data_file, map, file, file_)
     return set_map_names_execute(params, runner);
 }
 

@@ -86,11 +86,13 @@ function label_modify_keys_cargs(
         "wb_command",
         "-label-modify-keys"
     );
-    cargs.push(
-        (params["label-out"] ?? null),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-    );
+    cargs.push((params["label-out"] ?? null));
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["remap-file"] ?? null));
     return cargs;

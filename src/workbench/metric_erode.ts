@@ -14,9 +14,9 @@ const METRIC_ERODE_METADATA: Metadata = {
 interface MetricErodeParamsDict {
     "@type"?: "workbench/metric-erode";
     "metric-out": string;
-    "roi-metric"?: InputPathType | null | undefined;
-    "column"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
     "metric": InputPathType;
     "surface": InputPathType;
     "distance": number;
@@ -48,15 +48,15 @@ interface MetricErodeOutputs {
  * @param metric the metric file to erode
  * @param surface the surface to compute on
  * @param distance distance in mm to erode
- * @param roi_metric assume values outside this roi are nonzero
-
-metric file, positive values denote vertices that have data
- * @param column select a single column to erode
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column to erode
+
+the column number or name
+ * @param roi_metric assume values outside this roi are nonzero
+
+metric file, positive values denote vertices that have data
  *
  * @returns Parameter dictionary
  */
@@ -65,9 +65,9 @@ function metric_erode_params(
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
-    roi_metric: InputPathType | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
 ): MetricErodeParamsDictTagged {
     const params = {
         "@type": "workbench/metric-erode" as const,
@@ -76,14 +76,14 @@ function metric_erode_params(
         "surface": surface,
         "distance": distance,
     };
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     if (column !== null) {
         params["column"] = column;
     }
-    if (area_metric !== null) {
-        params["area-metric"] = area_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -106,15 +106,25 @@ function metric_erode_cargs(
         "wb_command",
         "-metric-erode"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
@@ -179,15 +189,15 @@ function metric_erode_execute(
  * @param metric the metric file to erode
  * @param surface the surface to compute on
  * @param distance distance in mm to erode
- * @param roi_metric assume values outside this roi are nonzero
-
-metric file, positive values denote vertices that have data
- * @param column select a single column to erode
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column to erode
+
+the column number or name
+ * @param roi_metric assume values outside this roi are nonzero
+
+metric file, positive values denote vertices that have data
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
@@ -197,12 +207,12 @@ function metric_erode(
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
-    roi_metric: InputPathType | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricErodeOutputs {
-    const params = metric_erode_params(metric_out, metric, surface, distance, roi_metric, column, area_metric)
+    const params = metric_erode_params(metric_out, metric, surface, distance, area_metric, column, roi_metric)
     return metric_erode_execute(params, runner);
 }
 

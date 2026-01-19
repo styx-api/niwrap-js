@@ -321,9 +321,11 @@ function cifti_separate_volume_all_cargs(
         "-volume-all",
         (params["volume-out"] ?? null),
         ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs((params["roi"] ?? null), execution) : []),
-        ...(((params["label"] ?? null) !== null) ? cifti_separate_label_cargs((params["label"] ?? null), execution) : []),
-        (((params["crop"] ?? false)) ? "-crop" : "")
+        ...(((params["label"] ?? null) !== null) ? cifti_separate_label_cargs((params["label"] ?? null), execution) : [])
     );
+    if ((params["crop"] ?? false)) {
+        cargs.push("-crop");
+    }
     return cargs;
 }
 
@@ -827,9 +829,11 @@ function cifti_separate_volume_cargs(
         "-volume",
         (params["structure"] ?? null),
         (params["volume-out"] ?? null),
-        ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs_3((params["roi"] ?? null), execution) : []),
-        (((params["crop"] ?? false)) ? "-crop" : "")
+        ...(((params["roi"] ?? null) !== null) ? cifti_separate_roi_cargs_3((params["roi"] ?? null), execution) : [])
     );
+    if ((params["crop"] ?? false)) {
+        cargs.push("-crop");
+    }
     return cargs;
 }
 

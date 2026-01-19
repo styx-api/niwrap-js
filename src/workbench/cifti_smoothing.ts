@@ -47,15 +47,15 @@ type CiftiSmoothingSurfaceParamsDictTagged = Required<Pick<CiftiSmoothingSurface
 interface CiftiSmoothingParamsDict {
     "@type"?: "workbench/cifti-smoothing";
     "cifti-out": string;
-    "fwhm": boolean;
     "left-surface"?: CiftiSmoothingLeftSurfaceParamsDict | null | undefined;
     "right-surface"?: CiftiSmoothingRightSurfaceParamsDict | null | undefined;
     "cerebellum-surface"?: CiftiSmoothingCerebellumSurfaceParamsDict | null | undefined;
-    "roi-cifti"?: InputPathType | null | undefined;
-    "fix-zeros-volume": boolean;
-    "fix-zeros-surface": boolean;
-    "merged-volume": boolean;
     "surface"?: Array<CiftiSmoothingSurfaceParamsDict> | null | undefined;
+    "roi-cifti"?: InputPathType | null | undefined;
+    "merged-volume": boolean;
+    "fix-zeros-surface": boolean;
+    "fix-zeros-volume": boolean;
+    "fwhm": boolean;
     "cifti": InputPathType;
     "surface-kernel": number;
     "volume-kernel": number;
@@ -104,10 +104,14 @@ function cifti_smoothing_left_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-left-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-left-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-left-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -152,10 +156,14 @@ function cifti_smoothing_right_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-right-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-right-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-right-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -200,10 +208,14 @@ function cifti_smoothing_cerebellum_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cerebellum-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-cerebellum-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -252,10 +264,14 @@ function cifti_smoothing_surface_cargs(
     cargs.push(
         "-surface",
         (params["structure"] ?? null),
-        execution.inputFile((params["surface"] ?? null)),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -285,17 +301,17 @@ interface CiftiSmoothingOutputs {
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param direction which dimension to smooth along, ROW or COLUMN
- * @param fwhm kernel sizes are FWHM, not sigma
  * @param left_surface specify the left cortical surface to use
  * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param surface specify a surface by structure name
  * @param roi_cifti smooth only within regions of interest
 
 the regions to smooth within, as a cifti file
- * @param fix_zeros_volume treat values of zero in the volume as missing data
- * @param fix_zeros_surface treat values of zero on the surface as missing data
  * @param merged_volume smooth across subcortical structure boundaries
- * @param surface specify a surface by structure name
+ * @param fix_zeros_surface treat values of zero on the surface as missing data
+ * @param fix_zeros_volume treat values of zero in the volume as missing data
+ * @param fwhm kernel sizes are FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
@@ -305,23 +321,23 @@ function cifti_smoothing_params(
     surface_kernel: number,
     volume_kernel: number,
     direction: string,
-    fwhm: boolean = false,
     left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
     right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
-    roi_cifti: InputPathType | null = null,
-    fix_zeros_volume: boolean = false,
-    fix_zeros_surface: boolean = false,
-    merged_volume: boolean = false,
     surface: Array<CiftiSmoothingSurfaceParamsDict> | null = null,
+    roi_cifti: InputPathType | null = null,
+    merged_volume: boolean = false,
+    fix_zeros_surface: boolean = false,
+    fix_zeros_volume: boolean = false,
+    fwhm: boolean = false,
 ): CiftiSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-smoothing" as const,
         "cifti-out": cifti_out,
-        "fwhm": fwhm,
-        "fix-zeros-volume": fix_zeros_volume,
-        "fix-zeros-surface": fix_zeros_surface,
         "merged-volume": merged_volume,
+        "fix-zeros-surface": fix_zeros_surface,
+        "fix-zeros-volume": fix_zeros_volume,
+        "fwhm": fwhm,
         "cifti": cifti,
         "surface-kernel": surface_kernel,
         "volume-kernel": volume_kernel,
@@ -336,11 +352,11 @@ function cifti_smoothing_params(
     if (cerebellum_surface !== null) {
         params["cerebellum-surface"] = cerebellum_surface;
     }
-    if (roi_cifti !== null) {
-        params["roi-cifti"] = roi_cifti;
-    }
     if (surface !== null) {
         params["surface"] = surface;
+    }
+    if (roi_cifti !== null) {
+        params["roi-cifti"] = roi_cifti;
     }
     return params;
 }
@@ -365,17 +381,29 @@ function cifti_smoothing_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
         ...(((params["left-surface"] ?? null) !== null) ? cifti_smoothing_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
         ...(((params["right-surface"] ?? null) !== null) ? cifti_smoothing_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
         ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_smoothing_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-        "-cifti-roi",
-        (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
-        (((params["fix-zeros-volume"] ?? false)) ? "-fix-zeros-volume" : ""),
-        (((params["fix-zeros-surface"] ?? false)) ? "-fix-zeros-surface" : ""),
-        (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
         ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_smoothing_surface_cargs(s, execution)).flat() : [])
     );
+    if ((params["roi-cifti"] ?? null) !== null) {
+        cargs.push(
+            "-cifti-roi",
+            execution.inputFile((params["roi-cifti"] ?? null))
+        );
+    }
+    if ((params["merged-volume"] ?? false)) {
+        cargs.push("-merged-volume");
+    }
+    if ((params["fix-zeros-surface"] ?? false)) {
+        cargs.push("-fix-zeros-surface");
+    }
+    if ((params["fix-zeros-volume"] ?? false)) {
+        cargs.push("-fix-zeros-volume");
+    }
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push(String((params["surface-kernel"] ?? null)));
     cargs.push(String((params["volume-kernel"] ?? null)));
@@ -522,17 +550,17 @@ function cifti_smoothing_execute(
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param direction which dimension to smooth along, ROW or COLUMN
- * @param fwhm kernel sizes are FWHM, not sigma
  * @param left_surface specify the left cortical surface to use
  * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
+ * @param surface specify a surface by structure name
  * @param roi_cifti smooth only within regions of interest
 
 the regions to smooth within, as a cifti file
- * @param fix_zeros_volume treat values of zero in the volume as missing data
- * @param fix_zeros_surface treat values of zero on the surface as missing data
  * @param merged_volume smooth across subcortical structure boundaries
- * @param surface specify a surface by structure name
+ * @param fix_zeros_surface treat values of zero on the surface as missing data
+ * @param fix_zeros_volume treat values of zero in the volume as missing data
+ * @param fwhm kernel sizes are FWHM, not sigma
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiSmoothingOutputs`).
@@ -543,18 +571,18 @@ function cifti_smoothing(
     surface_kernel: number,
     volume_kernel: number,
     direction: string,
-    fwhm: boolean = false,
     left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
     right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
-    roi_cifti: InputPathType | null = null,
-    fix_zeros_volume: boolean = false,
-    fix_zeros_surface: boolean = false,
-    merged_volume: boolean = false,
     surface: Array<CiftiSmoothingSurfaceParamsDict> | null = null,
+    roi_cifti: InputPathType | null = null,
+    merged_volume: boolean = false,
+    fix_zeros_surface: boolean = false,
+    fix_zeros_volume: boolean = false,
+    fwhm: boolean = false,
     runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
-    const params = cifti_smoothing_params(cifti_out, cifti, surface_kernel, volume_kernel, direction, fwhm, left_surface, right_surface, cerebellum_surface, roi_cifti, fix_zeros_volume, fix_zeros_surface, merged_volume, surface)
+    const params = cifti_smoothing_params(cifti_out, cifti, surface_kernel, volume_kernel, direction, left_surface, right_surface, cerebellum_surface, surface, roi_cifti, merged_volume, fix_zeros_surface, fix_zeros_volume, fwhm)
     return cifti_smoothing_execute(params, runner);
 }
 

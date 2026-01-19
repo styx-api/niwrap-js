@@ -22,11 +22,11 @@ interface CreateSignedDistanceVolumeParamsDict {
     "@type"?: "workbench/create-signed-distance-volume";
     "outvol": string;
     "roi-out"?: CreateSignedDistanceVolumeRoiOutParamsDict | null | undefined;
-    "value"?: number | null | undefined;
-    "dist"?: number | null | undefined;
-    "dist"?: number | null | undefined;
-    "num"?: number | null | undefined;
     "method"?: string | null | undefined;
+    "num"?: number | null | undefined;
+    "dist"?: number | null | undefined;
+    "dist"?: number | null | undefined;
+    "value"?: number | null | undefined;
     "surface": InputPathType;
     "refspace": string;
 }
@@ -137,21 +137,21 @@ interface CreateSignedDistanceVolumeOutputs {
  * @param surface the input surface
  * @param refspace a volume in the desired output space (dims, spacing, origin)
  * @param roi_out output an roi volume of where the output has a computed value
- * @param value specify a value to put in all voxels that don't get assigned a distance
-
-value to fill with (default 0)
- * @param dist specify distance for exact output
-
-distance in mm (default 5)
- * @param dist_ specify distance for approximate output
-
-distance in mm (default 20)
- * @param num voxel neighborhood for approximate calculation
-
-size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
+ * @param num voxel neighborhood for approximate calculation
+
+size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
+ * @param dist specify distance for approximate output
+
+distance in mm (default 20)
+ * @param dist_ specify distance for exact output
+
+distance in mm (default 5)
+ * @param value specify a value to put in all voxels that don't get assigned a distance
+
+value to fill with (default 0)
  *
  * @returns Parameter dictionary
  */
@@ -160,11 +160,11 @@ function create_signed_distance_volume_params(
     surface: InputPathType,
     refspace: string,
     roi_out: CreateSignedDistanceVolumeRoiOutParamsDict | null = null,
-    value: number | null = null,
+    method: string | null = null,
+    num: number | null = null,
     dist: number | null = null,
     dist_: number | null = null,
-    num: number | null = null,
-    method: string | null = null,
+    value: number | null = null,
 ): CreateSignedDistanceVolumeParamsDictTagged {
     const params = {
         "@type": "workbench/create-signed-distance-volume" as const,
@@ -175,8 +175,11 @@ function create_signed_distance_volume_params(
     if (roi_out !== null) {
         params["roi-out"] = roi_out;
     }
-    if (value !== null) {
-        params["value"] = value;
+    if (method !== null) {
+        params["method"] = method;
+    }
+    if (num !== null) {
+        params["num"] = num;
     }
     if (dist !== null) {
         params["dist"] = dist;
@@ -184,11 +187,8 @@ function create_signed_distance_volume_params(
     if (dist_ !== null) {
         params["dist"] = dist_;
     }
-    if (num !== null) {
-        params["num"] = num;
-    }
-    if (method !== null) {
-        params["method"] = method;
+    if (value !== null) {
+        params["value"] = value;
     }
     return params;
 }
@@ -213,18 +213,38 @@ function create_signed_distance_volume_cargs(
     );
     cargs.push(
         (params["outvol"] ?? null),
-        ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : []),
-        "-fill-value",
-        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-        "-exact-limit",
-        (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
-        "-approx-limit",
-        (((params["dist"] ?? null) !== null) ? String((params["dist"] ?? null)) : ""),
-        "-approx-neighborhood",
-        (((params["num"] ?? null) !== null) ? String((params["num"] ?? null)) : ""),
-        "-winding",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
+        ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : [])
     );
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-winding",
+            (params["method"] ?? null)
+        );
+    }
+    if ((params["num"] ?? null) !== null) {
+        cargs.push(
+            "-approx-neighborhood",
+            String((params["num"] ?? null))
+        );
+    }
+    if ((params["dist"] ?? null) !== null) {
+        cargs.push(
+            "-approx-limit",
+            String((params["dist"] ?? null))
+        );
+    }
+    if ((params["dist"] ?? null) !== null) {
+        cargs.push(
+            "-exact-limit",
+            String((params["dist"] ?? null))
+        );
+    }
+    if ((params["value"] ?? null) !== null) {
+        cargs.push(
+            "-fill-value",
+            String((params["value"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push((params["refspace"] ?? null));
     return cargs;
@@ -299,21 +319,21 @@ function create_signed_distance_volume_execute(
  * @param surface the input surface
  * @param refspace a volume in the desired output space (dims, spacing, origin)
  * @param roi_out output an roi volume of where the output has a computed value
- * @param value specify a value to put in all voxels that don't get assigned a distance
-
-value to fill with (default 0)
- * @param dist specify distance for exact output
-
-distance in mm (default 5)
- * @param dist_ specify distance for approximate output
-
-distance in mm (default 20)
- * @param num voxel neighborhood for approximate calculation
-
-size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
+ * @param num voxel neighborhood for approximate calculation
+
+size of neighborhood cube measured from center to face, in voxels (default 2 = 5x5x5)
+ * @param dist specify distance for approximate output
+
+distance in mm (default 20)
+ * @param dist_ specify distance for exact output
+
+distance in mm (default 5)
+ * @param value specify a value to put in all voxels that don't get assigned a distance
+
+value to fill with (default 0)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
@@ -323,14 +343,14 @@ function create_signed_distance_volume(
     surface: InputPathType,
     refspace: string,
     roi_out: CreateSignedDistanceVolumeRoiOutParamsDict | null = null,
-    value: number | null = null,
+    method: string | null = null,
+    num: number | null = null,
     dist: number | null = null,
     dist_: number | null = null,
-    num: number | null = null,
-    method: string | null = null,
+    value: number | null = null,
     runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
-    const params = create_signed_distance_volume_params(outvol, surface, refspace, roi_out, value, dist, dist_, num, method)
+    const params = create_signed_distance_volume_params(outvol, surface, refspace, roi_out, method, num, dist, dist_, value)
     return create_signed_distance_volume_execute(params, runner);
 }
 

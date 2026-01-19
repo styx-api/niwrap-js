@@ -79,9 +79,11 @@ function metric_merge_up_to_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-up-to",
-        (params["last-column"] ?? null),
-        (((params["reverse"] ?? false)) ? "-reverse" : "")
+        (params["last-column"] ?? null)
     );
+    if ((params["reverse"] ?? false)) {
+        cargs.push("-reverse");
+    }
     return cargs;
 }
 

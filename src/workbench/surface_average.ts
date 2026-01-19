@@ -235,10 +235,14 @@ function surface_average_surf_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-surf",
-        execution.inputFile((params["surface"] ?? null)),
-        "-weight",
-        (((params["weight"] ?? null) !== null) ? String((params["weight"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["weight"] ?? null) !== null) {
+        cargs.push(
+            "-weight",
+            String((params["weight"] ?? null))
+        );
+    }
     return cargs;
 }
 

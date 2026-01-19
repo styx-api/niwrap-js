@@ -34,13 +34,13 @@ type SceneFileUpdateDataFileRemoveParamsDictTagged = Required<Pick<SceneFileUpda
 
 interface SceneFileUpdateParamsDict {
     "@type"?: "workbench/scene-file-update";
-    "fix-map-palette-settings": boolean;
-    "remove-missing-files": boolean;
-    "error": boolean;
-    "verbose": boolean;
     "copy-map-one-palette"?: Array<SceneFileUpdateCopyMapOnePaletteParamsDict> | null | undefined;
     "data-file-add"?: Array<SceneFileUpdateDataFileAddParamsDict> | null | undefined;
     "data-file-remove"?: Array<SceneFileUpdateDataFileRemoveParamsDict> | null | undefined;
+    "verbose": boolean;
+    "error": boolean;
+    "remove-missing-files": boolean;
+    "fix-map-palette-settings": boolean;
     "input-scene-file": string;
     "output-scene-file": string;
     "scene-name-or-number": string;
@@ -188,13 +188,13 @@ interface SceneFileUpdateOutputs {
  * @param input_scene_file the input scene file
  * @param output_scene_file the new scene file to create
  * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param fix_map_palette_settings Fix palette settings for files with change in number of maps
- * @param remove_missing_files Remove missing files from SpecFile
- * @param error Abort command if there is an error performing any of the operations on the scene file
- * @param verbose Print names of files that have palettes updated
  * @param copy_map_one_palette Copy palettes settings from first map to all maps in a data file
  * @param data_file_add Add a data file to scene's loaded files
  * @param data_file_remove Remove a data file from scene's loaded files
+ * @param verbose Print names of files that have palettes updated
+ * @param error Abort command if there is an error performing any of the operations on the scene file
+ * @param remove_missing_files Remove missing files from SpecFile
+ * @param fix_map_palette_settings Fix palette settings for files with change in number of maps
  *
  * @returns Parameter dictionary
  */
@@ -202,20 +202,20 @@ function scene_file_update_params(
     input_scene_file: string,
     output_scene_file: string,
     scene_name_or_number: string,
-    fix_map_palette_settings: boolean = false,
-    remove_missing_files: boolean = false,
-    error: boolean = false,
-    verbose: boolean = false,
     copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParamsDict> | null = null,
     data_file_add: Array<SceneFileUpdateDataFileAddParamsDict> | null = null,
     data_file_remove: Array<SceneFileUpdateDataFileRemoveParamsDict> | null = null,
+    verbose: boolean = false,
+    error: boolean = false,
+    remove_missing_files: boolean = false,
+    fix_map_palette_settings: boolean = false,
 ): SceneFileUpdateParamsDictTagged {
     const params = {
         "@type": "workbench/scene-file-update" as const,
-        "fix-map-palette-settings": fix_map_palette_settings,
-        "remove-missing-files": remove_missing_files,
-        "error": error,
         "verbose": verbose,
+        "error": error,
+        "remove-missing-files": remove_missing_files,
+        "fix-map-palette-settings": fix_map_palette_settings,
         "input-scene-file": input_scene_file,
         "output-scene-file": output_scene_file,
         "scene-name-or-number": scene_name_or_number,
@@ -250,16 +250,24 @@ function scene_file_update_cargs(
         "wb_command",
         "-scene-file-update"
     );
-    if ((params["fix-map-palette-settings"] ?? false) || (params["remove-missing-files"] ?? false) || (params["error"] ?? false) || (params["verbose"] ?? false) || (params["copy-map-one-palette"] ?? null) !== null || (params["data-file-add"] ?? null) !== null || (params["data-file-remove"] ?? null) !== null) {
+    if ((params["copy-map-one-palette"] ?? null) !== null || (params["data-file-add"] ?? null) !== null || (params["data-file-remove"] ?? null) !== null) {
         cargs.push(
-            (((params["fix-map-palette-settings"] ?? false)) ? "-fix-map-palette-settings" : ""),
-            (((params["remove-missing-files"] ?? false)) ? "-remove-missing-files" : ""),
-            (((params["error"] ?? false)) ? "-error" : ""),
-            (((params["verbose"] ?? false)) ? "-verbose" : ""),
             ...(((params["copy-map-one-palette"] ?? null) !== null) ? (params["copy-map-one-palette"] ?? null).map(s => scene_file_update_copy_map_one_palette_cargs(s, execution)).flat() : []),
             ...(((params["data-file-add"] ?? null) !== null) ? (params["data-file-add"] ?? null).map(s => scene_file_update_data_file_add_cargs(s, execution)).flat() : []),
             ...(((params["data-file-remove"] ?? null) !== null) ? (params["data-file-remove"] ?? null).map(s => scene_file_update_data_file_remove_cargs(s, execution)).flat() : [])
         );
+    }
+    if ((params["verbose"] ?? false)) {
+        cargs.push("-verbose");
+    }
+    if ((params["error"] ?? false)) {
+        cargs.push("-error");
+    }
+    if ((params["remove-missing-files"] ?? false)) {
+        cargs.push("-remove-missing-files");
+    }
+    if ((params["fix-map-palette-settings"] ?? false)) {
+        cargs.push("-fix-map-palette-settings");
     }
     cargs.push((params["input-scene-file"] ?? null));
     cargs.push((params["output-scene-file"] ?? null));
@@ -337,13 +345,13 @@ function scene_file_update_execute(
  * @param input_scene_file the input scene file
  * @param output_scene_file the new scene file to create
  * @param scene_name_or_number name or number (starting at one) of the scene in the scene file
- * @param fix_map_palette_settings Fix palette settings for files with change in number of maps
- * @param remove_missing_files Remove missing files from SpecFile
- * @param error Abort command if there is an error performing any of the operations on the scene file
- * @param verbose Print names of files that have palettes updated
  * @param copy_map_one_palette Copy palettes settings from first map to all maps in a data file
  * @param data_file_add Add a data file to scene's loaded files
  * @param data_file_remove Remove a data file from scene's loaded files
+ * @param verbose Print names of files that have palettes updated
+ * @param error Abort command if there is an error performing any of the operations on the scene file
+ * @param remove_missing_files Remove missing files from SpecFile
+ * @param fix_map_palette_settings Fix palette settings for files with change in number of maps
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneFileUpdateOutputs`).
@@ -352,16 +360,16 @@ function scene_file_update(
     input_scene_file: string,
     output_scene_file: string,
     scene_name_or_number: string,
-    fix_map_palette_settings: boolean = false,
-    remove_missing_files: boolean = false,
-    error: boolean = false,
-    verbose: boolean = false,
     copy_map_one_palette: Array<SceneFileUpdateCopyMapOnePaletteParamsDict> | null = null,
     data_file_add: Array<SceneFileUpdateDataFileAddParamsDict> | null = null,
     data_file_remove: Array<SceneFileUpdateDataFileRemoveParamsDict> | null = null,
+    verbose: boolean = false,
+    error: boolean = false,
+    remove_missing_files: boolean = false,
+    fix_map_palette_settings: boolean = false,
     runner: Runner | null = null,
 ): SceneFileUpdateOutputs {
-    const params = scene_file_update_params(input_scene_file, output_scene_file, scene_name_or_number, fix_map_palette_settings, remove_missing_files, error, verbose, copy_map_one_palette, data_file_add, data_file_remove)
+    const params = scene_file_update_params(input_scene_file, output_scene_file, scene_name_or_number, copy_map_one_palette, data_file_add, data_file_remove, verbose, error, remove_missing_files, fix_map_palette_settings)
     return scene_file_update_execute(params, runner);
 }
 

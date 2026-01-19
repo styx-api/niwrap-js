@@ -86,11 +86,13 @@ function metric_vector_toward_roi_cargs(
         "wb_command",
         "-metric-vector-toward-roi"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["target-roi"] ?? null)));
     return cargs;

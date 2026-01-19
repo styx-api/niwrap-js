@@ -32,9 +32,9 @@ type CiftiMathVarParamsDictTagged = Required<Pick<CiftiMathVarParamsDict, '@type
 interface CiftiMathParamsDict {
     "@type"?: "workbench/cifti-math";
     "cifti-out": string;
+    "var"?: Array<CiftiMathVarParamsDict> | null | undefined;
     "replace"?: number | null | undefined;
     "override-mapping-check": boolean;
-    "var"?: Array<CiftiMathVarParamsDict> | null | undefined;
     "expression": string;
 }
 type CiftiMathParamsDictTagged = Required<Pick<CiftiMathParamsDict, '@type'>> & CiftiMathParamsDict;
@@ -80,9 +80,11 @@ function cifti_math_select_cargs(
     cargs.push(
         "-select",
         String((params["dim"] ?? null)),
-        (params["index"] ?? null),
-        (((params["repeat"] ?? false)) ? "-repeat" : "")
+        (params["index"] ?? null)
     );
+    if ((params["repeat"] ?? false)) {
+        cargs.push("-repeat");
+    }
     return cargs;
 }
 
@@ -158,20 +160,20 @@ interface CiftiMathOutputs {
  *
  * @param cifti_out the output cifti file
  * @param expression the expression to evaluate, in quotes
+ * @param var_ a cifti file to use as a variable
  * @param replace replace NaN results with a value
 
 value to replace NaN with
  * @param override_mapping_check don't check the mappings for compatibility, only check length
- * @param var_ a cifti file to use as a variable
  *
  * @returns Parameter dictionary
  */
 function cifti_math_params(
     cifti_out: string,
     expression: string,
+    var_: Array<CiftiMathVarParamsDict> | null = null,
     replace: number | null = null,
     override_mapping_check: boolean = false,
-    var_: Array<CiftiMathVarParamsDict> | null = null,
 ): CiftiMathParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-math" as const,
@@ -179,11 +181,11 @@ function cifti_math_params(
         "override-mapping-check": override_mapping_check,
         "expression": expression,
     };
-    if (replace !== null) {
-        params["replace"] = replace;
-    }
     if (var_ !== null) {
         params["var"] = var_;
+    }
+    if (replace !== null) {
+        params["replace"] = replace;
     }
     return params;
 }
@@ -208,11 +210,17 @@ function cifti_math_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        "-fixnan",
-        (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
-        (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : ""),
         ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat() : [])
     );
+    if ((params["replace"] ?? null) !== null) {
+        cargs.push(
+            "-fixnan",
+            String((params["replace"] ?? null))
+        );
+    }
+    if ((params["override-mapping-check"] ?? false)) {
+        cargs.push("-override-mapping-check");
+    }
     cargs.push((params["expression"] ?? null));
     return cargs;
 }
@@ -351,11 +359,11 @@ function cifti_math_execute(
  *
  * @param cifti_out the output cifti file
  * @param expression the expression to evaluate, in quotes
+ * @param var_ a cifti file to use as a variable
  * @param replace replace NaN results with a value
 
 value to replace NaN with
  * @param override_mapping_check don't check the mappings for compatibility, only check length
- * @param var_ a cifti file to use as a variable
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMathOutputs`).
@@ -363,12 +371,12 @@ value to replace NaN with
 function cifti_math(
     cifti_out: string,
     expression: string,
+    var_: Array<CiftiMathVarParamsDict> | null = null,
     replace: number | null = null,
     override_mapping_check: boolean = false,
-    var_: Array<CiftiMathVarParamsDict> | null = null,
     runner: Runner | null = null,
 ): CiftiMathOutputs {
-    const params = cifti_math_params(cifti_out, expression, replace, override_mapping_check, var_)
+    const params = cifti_math_params(cifti_out, expression, var_, replace, override_mapping_check)
     return cifti_math_execute(params, runner);
 }
 

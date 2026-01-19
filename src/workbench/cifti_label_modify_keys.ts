@@ -86,11 +86,13 @@ function cifti_label_modify_keys_cargs(
         "wb_command",
         "-cifti-label-modify-keys"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["remap-file"] ?? null));
     return cargs;

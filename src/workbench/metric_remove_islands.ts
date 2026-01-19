@@ -86,11 +86,13 @@ function metric_remove_islands_cargs(
         "wb_command",
         "-metric-remove-islands"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;

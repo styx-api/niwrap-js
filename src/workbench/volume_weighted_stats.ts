@@ -30,13 +30,13 @@ type VolumeWeightedStatsRoiParamsDictTagged = Required<Pick<VolumeWeightedStatsR
 interface VolumeWeightedStatsParamsDict {
     "@type"?: "workbench/volume-weighted-stats";
     "weight-volume"?: VolumeWeightedStatsWeightVolumeParamsDict | null | undefined;
-    "subvolume"?: string | null | undefined;
     "roi"?: VolumeWeightedStatsRoiParamsDict | null | undefined;
-    "mean": boolean;
-    "sample"?: boolean | null | undefined;
     "percent"?: number | null | undefined;
-    "sum": boolean;
+    "sample"?: boolean | null | undefined;
+    "subvolume"?: string | null | undefined;
     "show-map-name": boolean;
+    "sum": boolean;
+    "mean": boolean;
     "volume-in": InputPathType;
 }
 type VolumeWeightedStatsParamsDictTagged = Required<Pick<VolumeWeightedStatsParamsDict, '@type'>> & VolumeWeightedStatsParamsDict;
@@ -78,9 +78,11 @@ function volume_weighted_stats_weight_volume_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-weight-volume",
-        execution.inputFile((params["weight-volume"] ?? null)),
-        (((params["match-maps"] ?? false)) ? "-match-maps" : "")
+        execution.inputFile((params["weight-volume"] ?? null))
     );
+    if ((params["match-maps"] ?? false)) {
+        cargs.push("-match-maps");
+    }
     return cargs;
 }
 
@@ -121,9 +123,11 @@ function volume_weighted_stats_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-roi",
-        execution.inputFile((params["roi-volume"] ?? null)),
-        (((params["match-maps"] ?? false)) ? "-match-maps" : "")
+        execution.inputFile((params["roi-volume"] ?? null))
     );
+    if ((params["match-maps"] ?? false)) {
+        cargs.push("-match-maps");
+    }
     return cargs;
 }
 
@@ -146,54 +150,54 @@ interface VolumeWeightedStatsOutputs {
  *
  * @param volume_in the input volume
  * @param weight_volume use weights from a volume file
- * @param subvolume only display output for one subvolume
-
-the subvolume number or name
  * @param roi only consider data inside an roi
- * @param mean compute weighted mean
- * @param sample compute weighted standard deviation
-
-estimate population stdev from the sample
  * @param percent compute weighted percentile
 
 the percentile to find, must be between 0 and 100
- * @param sum compute weighted sum
+ * @param sample compute weighted standard deviation
+
+estimate population stdev from the sample
+ * @param subvolume only display output for one subvolume
+
+the subvolume number or name
  * @param show_map_name print map index and name before each output
+ * @param sum compute weighted sum
+ * @param mean compute weighted mean
  *
  * @returns Parameter dictionary
  */
 function volume_weighted_stats_params(
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParamsDict | null = null,
-    subvolume: string | null = null,
     roi: VolumeWeightedStatsRoiParamsDict | null = null,
-    mean: boolean = false,
-    sample: boolean | null = null,
     percent: number | null = null,
-    sum: boolean = false,
+    sample: boolean | null = null,
+    subvolume: string | null = null,
     show_map_name: boolean = false,
+    sum: boolean = false,
+    mean: boolean = false,
 ): VolumeWeightedStatsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-weighted-stats" as const,
-        "mean": mean,
-        "sum": sum,
         "show-map-name": show_map_name,
+        "sum": sum,
+        "mean": mean,
         "volume-in": volume_in,
     };
     if (weight_volume !== null) {
         params["weight-volume"] = weight_volume;
     }
-    if (subvolume !== null) {
-        params["subvolume"] = subvolume;
-    }
     if (roi !== null) {
         params["roi"] = roi;
+    }
+    if (percent !== null) {
+        params["percent"] = percent;
     }
     if (sample !== null) {
         params["sample"] = sample;
     }
-    if (percent !== null) {
-        params["percent"] = percent;
+    if (subvolume !== null) {
+        params["subvolume"] = subvolume;
     }
     return params;
 }
@@ -216,20 +220,38 @@ function volume_weighted_stats_cargs(
         "wb_command",
         "-volume-weighted-stats"
     );
-    if ((params["weight-volume"] ?? null) !== null || (params["subvolume"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["mean"] ?? false) || (params["sample"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["sum"] ?? false) || (params["show-map-name"] ?? false)) {
+    if ((params["weight-volume"] ?? null) !== null || (params["roi"] ?? null) !== null) {
         cargs.push(
             ...(((params["weight-volume"] ?? null) !== null) ? volume_weighted_stats_weight_volume_cargs((params["weight-volume"] ?? null), execution) : []),
-            "-subvolume",
-            (((params["subvolume"] ?? null) !== null) ? (params["subvolume"] ?? null) : ""),
-            ...(((params["roi"] ?? null) !== null) ? volume_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : []),
-            (((params["mean"] ?? false)) ? "-mean" : ""),
-            "-stdev",
-            (((params["sample"] ?? null) !== null) ? "-sample" : ""),
-            "-percentile",
-            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
-            (((params["sum"] ?? false)) ? "-sum" : ""),
-            (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
+            ...(((params["roi"] ?? null) !== null) ? volume_weighted_stats_roi_cargs((params["roi"] ?? null), execution) : [])
         );
+    }
+    if ((params["percent"] ?? null) !== null) {
+        cargs.push(
+            "-percentile",
+            String((params["percent"] ?? null))
+        );
+    }
+    if ((params["sample"] ?? null) !== null) {
+        cargs.push(
+            "-stdev",
+            "-sample"
+        );
+    }
+    if ((params["subvolume"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvolume"] ?? null)
+        );
+    }
+    if ((params["show-map-name"] ?? false)) {
+        cargs.push("-show-map-name");
+    }
+    if ((params["sum"] ?? false)) {
+        cargs.push("-sum");
+    }
+    if ((params["mean"] ?? false)) {
+        cargs.push("-mean");
     }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
@@ -290,19 +312,19 @@ function volume_weighted_stats_execute(
  *
  * @param volume_in the input volume
  * @param weight_volume use weights from a volume file
- * @param subvolume only display output for one subvolume
-
-the subvolume number or name
  * @param roi only consider data inside an roi
- * @param mean compute weighted mean
- * @param sample compute weighted standard deviation
-
-estimate population stdev from the sample
  * @param percent compute weighted percentile
 
 the percentile to find, must be between 0 and 100
- * @param sum compute weighted sum
+ * @param sample compute weighted standard deviation
+
+estimate population stdev from the sample
+ * @param subvolume only display output for one subvolume
+
+the subvolume number or name
  * @param show_map_name print map index and name before each output
+ * @param sum compute weighted sum
+ * @param mean compute weighted mean
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeWeightedStatsOutputs`).
@@ -310,16 +332,16 @@ the percentile to find, must be between 0 and 100
 function volume_weighted_stats(
     volume_in: InputPathType,
     weight_volume: VolumeWeightedStatsWeightVolumeParamsDict | null = null,
-    subvolume: string | null = null,
     roi: VolumeWeightedStatsRoiParamsDict | null = null,
-    mean: boolean = false,
-    sample: boolean | null = null,
     percent: number | null = null,
-    sum: boolean = false,
+    sample: boolean | null = null,
+    subvolume: string | null = null,
     show_map_name: boolean = false,
+    sum: boolean = false,
+    mean: boolean = false,
     runner: Runner | null = null,
 ): VolumeWeightedStatsOutputs {
-    const params = volume_weighted_stats_params(volume_in, weight_volume, subvolume, roi, mean, sample, percent, sum, show_map_name)
+    const params = volume_weighted_stats_params(volume_in, weight_volume, roi, percent, sample, subvolume, show_map_name, sum, mean)
     return volume_weighted_stats_execute(params, runner);
 }
 

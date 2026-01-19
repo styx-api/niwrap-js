@@ -82,10 +82,10 @@ function volume_copy_extensions_cargs(
         "wb_command",
         "-volume-copy-extensions"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        (((params["drop-unknown"] ?? false)) ? "-drop-unknown" : "")
-    );
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["drop-unknown"] ?? false)) {
+        cargs.push("-drop-unknown");
+    }
     cargs.push(execution.inputFile((params["data-volume"] ?? null)));
     cargs.push(execution.inputFile((params["extension-volume"] ?? null)));
     return cargs;

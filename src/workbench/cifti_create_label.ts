@@ -147,10 +147,14 @@ function cifti_create_label_left_label_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-left-label",
-        execution.inputFile((params["label"] ?? null)),
-        "-roi-left",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["label"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi-left",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -195,10 +199,14 @@ function cifti_create_label_right_label_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-right-label",
-        execution.inputFile((params["label"] ?? null)),
-        "-roi-right",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["label"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi-right",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -243,10 +251,14 @@ function cifti_create_label_cerebellum_label_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cerebellum-label",
-        execution.inputFile((params["label"] ?? null)),
-        "-roi-cerebellum",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["label"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi-cerebellum",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -295,10 +307,14 @@ function cifti_create_label_label_cargs(
     cargs.push(
         "-label",
         (params["structure"] ?? null),
-        execution.inputFile((params["label"] ?? null)),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : "")
+        execution.inputFile((params["label"] ?? null))
     );
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 

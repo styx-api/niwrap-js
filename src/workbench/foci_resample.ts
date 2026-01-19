@@ -41,8 +41,8 @@ interface FociResampleParamsDict {
     "left-surfaces"?: FociResampleLeftSurfacesParamsDict | null | undefined;
     "right-surfaces"?: FociResampleRightSurfacesParamsDict | null | undefined;
     "cerebellum-surfaces"?: FociResampleCerebellumSurfacesParamsDict | null | undefined;
-    "discard-distance-from-surface": boolean;
     "restore-xyz": boolean;
+    "discard-distance-from-surface": boolean;
     "foci-in": InputPathType;
 }
 type FociResampleParamsDictTagged = Required<Pick<FociResampleParamsDict, '@type'>> & FociResampleParamsDict;
@@ -202,8 +202,8 @@ interface FociResampleOutputs {
  * @param left_surfaces the left surfaces for resampling
  * @param right_surfaces the right surfaces for resampling
  * @param cerebellum_surfaces the cerebellum surfaces for resampling
- * @param discard_distance_from_surface ignore the distance the foci are above or below the current surface
  * @param restore_xyz put the original xyz coordinates into the foci, rather than the coordinates obtained from unprojection
+ * @param discard_distance_from_surface ignore the distance the foci are above or below the current surface
  *
  * @returns Parameter dictionary
  */
@@ -213,14 +213,14 @@ function foci_resample_params(
     left_surfaces: FociResampleLeftSurfacesParamsDict | null = null,
     right_surfaces: FociResampleRightSurfacesParamsDict | null = null,
     cerebellum_surfaces: FociResampleCerebellumSurfacesParamsDict | null = null,
-    discard_distance_from_surface: boolean = false,
     restore_xyz: boolean = false,
+    discard_distance_from_surface: boolean = false,
 ): FociResampleParamsDictTagged {
     const params = {
         "@type": "workbench/foci-resample" as const,
         "foci-out": foci_out,
-        "discard-distance-from-surface": discard_distance_from_surface,
         "restore-xyz": restore_xyz,
+        "discard-distance-from-surface": discard_distance_from_surface,
         "foci-in": foci_in,
     };
     if (left_surfaces !== null) {
@@ -257,10 +257,14 @@ function foci_resample_cargs(
         (params["foci-out"] ?? null),
         ...(((params["left-surfaces"] ?? null) !== null) ? foci_resample_left_surfaces_cargs((params["left-surfaces"] ?? null), execution) : []),
         ...(((params["right-surfaces"] ?? null) !== null) ? foci_resample_right_surfaces_cargs((params["right-surfaces"] ?? null), execution) : []),
-        ...(((params["cerebellum-surfaces"] ?? null) !== null) ? foci_resample_cerebellum_surfaces_cargs((params["cerebellum-surfaces"] ?? null), execution) : []),
-        (((params["discard-distance-from-surface"] ?? false)) ? "-discard-distance-from-surface" : ""),
-        (((params["restore-xyz"] ?? false)) ? "-restore-xyz" : "")
+        ...(((params["cerebellum-surfaces"] ?? null) !== null) ? foci_resample_cerebellum_surfaces_cargs((params["cerebellum-surfaces"] ?? null), execution) : [])
     );
+    if ((params["restore-xyz"] ?? false)) {
+        cargs.push("-restore-xyz");
+    }
+    if ((params["discard-distance-from-surface"] ?? false)) {
+        cargs.push("-discard-distance-from-surface");
+    }
     cargs.push(execution.inputFile((params["foci-in"] ?? null)));
     return cargs;
 }
@@ -320,8 +324,8 @@ function foci_resample_execute(
  * @param left_surfaces the left surfaces for resampling
  * @param right_surfaces the right surfaces for resampling
  * @param cerebellum_surfaces the cerebellum surfaces for resampling
- * @param discard_distance_from_surface ignore the distance the foci are above or below the current surface
  * @param restore_xyz put the original xyz coordinates into the foci, rather than the coordinates obtained from unprojection
+ * @param discard_distance_from_surface ignore the distance the foci are above or below the current surface
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FociResampleOutputs`).
@@ -332,11 +336,11 @@ function foci_resample(
     left_surfaces: FociResampleLeftSurfacesParamsDict | null = null,
     right_surfaces: FociResampleRightSurfacesParamsDict | null = null,
     cerebellum_surfaces: FociResampleCerebellumSurfacesParamsDict | null = null,
-    discard_distance_from_surface: boolean = false,
     restore_xyz: boolean = false,
+    discard_distance_from_surface: boolean = false,
     runner: Runner | null = null,
 ): FociResampleOutputs {
-    const params = foci_resample_params(foci_out, foci_in, left_surfaces, right_surfaces, cerebellum_surfaces, discard_distance_from_surface, restore_xyz)
+    const params = foci_resample_params(foci_out, foci_in, left_surfaces, right_surfaces, cerebellum_surfaces, restore_xyz, discard_distance_from_surface)
     return foci_resample_execute(params, runner);
 }
 

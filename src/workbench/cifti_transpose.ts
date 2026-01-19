@@ -82,11 +82,13 @@ function cifti_transpose_cargs(
         "wb_command",
         "-cifti-transpose"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        "-mem-limit",
-        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["limit-GB"] ?? null) !== null) {
+        cargs.push(
+            "-mem-limit",
+            String((params["limit-GB"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }

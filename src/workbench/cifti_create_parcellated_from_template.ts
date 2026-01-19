@@ -21,8 +21,8 @@ type CiftiCreateParcellatedFromTemplateCiftiParamsDictTagged = Required<Pick<Cif
 interface CiftiCreateParcellatedFromTemplateParamsDict {
     "@type"?: "workbench/cifti-create-parcellated-from-template";
     "cifti-out": string;
-    "value"?: number | null | undefined;
     "cifti"?: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null | undefined;
+    "value"?: number | null | undefined;
     "cifti-template": InputPathType;
     "modify-direction": string;
 }
@@ -91,10 +91,10 @@ interface CiftiCreateParcellatedFromTemplateOutputs {
  * @param cifti_out the output cifti file
  * @param cifti_template a cifti file with the template parcel mapping along column
  * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
+ * @param cifti specify an input cifti file
  * @param value specify value to be used in parcels that don't match
 
 value to use (default 0)
- * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
@@ -102,8 +102,8 @@ function cifti_create_parcellated_from_template_params(
     cifti_out: string,
     cifti_template: InputPathType,
     modify_direction: string,
-    value: number | null = null,
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null = null,
+    value: number | null = null,
 ): CiftiCreateParcellatedFromTemplateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-parcellated-from-template" as const,
@@ -111,11 +111,11 @@ function cifti_create_parcellated_from_template_params(
         "cifti-template": cifti_template,
         "modify-direction": modify_direction,
     };
-    if (value !== null) {
-        params["value"] = value;
-    }
     if (cifti !== null) {
         params["cifti"] = cifti;
+    }
+    if (value !== null) {
+        params["value"] = value;
     }
     return params;
 }
@@ -140,10 +140,14 @@ function cifti_create_parcellated_from_template_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        "-fill-value",
-        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
         ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_create_parcellated_from_template_cifti_cargs(s, execution)).flat() : [])
     );
+    if ((params["value"] ?? null) !== null) {
+        cargs.push(
+            "-fill-value",
+            String((params["value"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["cifti-template"] ?? null)));
     cargs.push((params["modify-direction"] ?? null));
     return cargs;
@@ -202,10 +206,10 @@ function cifti_create_parcellated_from_template_execute(
  * @param cifti_out the output cifti file
  * @param cifti_template a cifti file with the template parcel mapping along column
  * @param modify_direction which dimension of the output file should match the template (integer, 'ROW', or 'COLUMN')
+ * @param cifti specify an input cifti file
  * @param value specify value to be used in parcels that don't match
 
 value to use (default 0)
- * @param cifti specify an input cifti file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateParcellatedFromTemplateOutputs`).
@@ -214,11 +218,11 @@ function cifti_create_parcellated_from_template(
     cifti_out: string,
     cifti_template: InputPathType,
     modify_direction: string,
-    value: number | null = null,
     cifti: Array<CiftiCreateParcellatedFromTemplateCiftiParamsDict> | null = null,
+    value: number | null = null,
     runner: Runner | null = null,
 ): CiftiCreateParcellatedFromTemplateOutputs {
-    const params = cifti_create_parcellated_from_template_params(cifti_out, cifti_template, modify_direction, value, cifti)
+    const params = cifti_create_parcellated_from_template_params(cifti_out, cifti_template, modify_direction, cifti, value)
     return cifti_create_parcellated_from_template_execute(params, runner);
 }
 

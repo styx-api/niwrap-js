@@ -86,11 +86,13 @@ function border_to_vertices_cargs(
         "wb_command",
         "-border-to-vertices"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-border",
-        (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["name"] ?? null) !== null) {
+        cargs.push(
+            "-border",
+            (params["name"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["border-file"] ?? null)));
     return cargs;

@@ -14,14 +14,14 @@ const METRIC_DILATE_METADATA: Metadata = {
 interface MetricDilateParamsDict {
     "@type"?: "workbench/metric-dilate";
     "metric-out": string;
-    "roi-metric"?: InputPathType | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
-    "column"?: string | null | undefined;
-    "nearest": boolean;
-    "linear": boolean;
-    "exponent"?: number | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
+    "exponent"?: number | null | undefined;
+    "column"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
     "legacy-cutoff": boolean;
+    "linear": boolean;
+    "nearest": boolean;
     "metric": InputPathType;
     "surface": InputPathType;
     "distance": number;
@@ -53,24 +53,24 @@ interface MetricDilateOutputs {
  * @param metric the metric to dilate
  * @param surface the surface to compute on
  * @param distance distance in mm to dilate
- * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero
-
-metric file, positive values denote vertices to have their values replaced
- * @param roi_metric_ specify an roi of where there is data
-
-metric file, positive values denote vertices that have data
- * @param column select a single column to dilate
-
-the column number or name
- * @param nearest use the nearest good value instead of a weighted average
- * @param linear fill in values with linear interpolation along strongest gradient
- * @param exponent use a different exponent in the weighting function
-
-exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param exponent use a different exponent in the weighting function
+
+exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param roi_metric specify an roi of where there is data
+
+metric file, positive values denote vertices that have data
+ * @param roi_metric_ specify an roi of vertices to overwrite, rather than vertices with value zero
+
+metric file, positive values denote vertices to have their values replaced
  * @param legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
+ * @param linear fill in values with linear interpolation along strongest gradient
+ * @param nearest use the nearest good value instead of a weighted average
  *
  * @returns Parameter dictionary
  */
@@ -79,39 +79,39 @@ function metric_dilate_params(
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    area_metric: InputPathType | null = null,
+    exponent: number | null = null,
+    column: string | null = null,
     roi_metric: InputPathType | null = null,
     roi_metric_: InputPathType | null = null,
-    column: string | null = null,
-    nearest: boolean = false,
-    linear: boolean = false,
-    exponent: number | null = null,
-    area_metric: InputPathType | null = null,
     legacy_cutoff: boolean = false,
+    linear: boolean = false,
+    nearest: boolean = false,
 ): MetricDilateParamsDictTagged {
     const params = {
         "@type": "workbench/metric-dilate" as const,
         "metric-out": metric_out,
-        "nearest": nearest,
-        "linear": linear,
         "legacy-cutoff": legacy_cutoff,
+        "linear": linear,
+        "nearest": nearest,
         "metric": metric,
         "surface": surface,
         "distance": distance,
     };
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
+    }
+    if (exponent !== null) {
+        params["exponent"] = exponent;
+    }
+    if (column !== null) {
+        params["column"] = column;
+    }
     if (roi_metric !== null) {
         params["roi-metric"] = roi_metric;
     }
     if (roi_metric_ !== null) {
         params["roi-metric"] = roi_metric_;
-    }
-    if (column !== null) {
-        params["column"] = column;
-    }
-    if (exponent !== null) {
-        params["exponent"] = exponent;
-    }
-    if (area_metric !== null) {
-        params["area-metric"] = area_metric;
     }
     return params;
 }
@@ -134,22 +134,46 @@ function metric_dilate_cargs(
         "wb_command",
         "-metric-dilate"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-bad-vertex-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-data-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        (((params["nearest"] ?? false)) ? "-nearest" : ""),
-        (((params["linear"] ?? false)) ? "-linear" : ""),
-        "-exponent",
-        (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-        (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["exponent"] ?? null) !== null) {
+        cargs.push(
+            "-exponent",
+            String((params["exponent"] ?? null))
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-data-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-bad-vertex-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["legacy-cutoff"] ?? false)) {
+        cargs.push("-legacy-cutoff");
+    }
+    if ((params["linear"] ?? false)) {
+        cargs.push("-linear");
+    }
+    if ((params["nearest"] ?? false)) {
+        cargs.push("-nearest");
+    }
     cargs.push(execution.inputFile((params["metric"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
@@ -222,24 +246,24 @@ function metric_dilate_execute(
  * @param metric the metric to dilate
  * @param surface the surface to compute on
  * @param distance distance in mm to dilate
- * @param roi_metric specify an roi of vertices to overwrite, rather than vertices with value zero
-
-metric file, positive values denote vertices to have their values replaced
- * @param roi_metric_ specify an roi of where there is data
-
-metric file, positive values denote vertices that have data
- * @param column select a single column to dilate
-
-the column number or name
- * @param nearest use the nearest good value instead of a weighted average
- * @param linear fill in values with linear interpolation along strongest gradient
- * @param exponent use a different exponent in the weighting function
-
-exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param exponent use a different exponent in the weighting function
+
+exponent 'n' to use in (area / (distance ^ n)) as the weighting function (default 6)
+ * @param column select a single column to dilate
+
+the column number or name
+ * @param roi_metric specify an roi of where there is data
+
+metric file, positive values denote vertices that have data
+ * @param roi_metric_ specify an roi of vertices to overwrite, rather than vertices with value zero
+
+metric file, positive values denote vertices to have their values replaced
  * @param legacy_cutoff use the v1.3.2 method of choosing how many vertices to use when calulating the dilated value with weighted method
+ * @param linear fill in values with linear interpolation along strongest gradient
+ * @param nearest use the nearest good value instead of a weighted average
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricDilateOutputs`).
@@ -249,17 +273,17 @@ function metric_dilate(
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    area_metric: InputPathType | null = null,
+    exponent: number | null = null,
+    column: string | null = null,
     roi_metric: InputPathType | null = null,
     roi_metric_: InputPathType | null = null,
-    column: string | null = null,
-    nearest: boolean = false,
-    linear: boolean = false,
-    exponent: number | null = null,
-    area_metric: InputPathType | null = null,
     legacy_cutoff: boolean = false,
+    linear: boolean = false,
+    nearest: boolean = false,
     runner: Runner | null = null,
 ): MetricDilateOutputs {
-    const params = metric_dilate_params(metric_out, metric, surface, distance, roi_metric, roi_metric_, column, nearest, linear, exponent, area_metric, legacy_cutoff)
+    const params = metric_dilate_params(metric_out, metric, surface, distance, area_metric, exponent, column, roi_metric, roi_metric_, legacy_cutoff, linear, nearest)
     return metric_dilate_execute(params, runner);
 }
 

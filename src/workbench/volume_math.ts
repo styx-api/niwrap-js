@@ -24,8 +24,8 @@ type VolumeMathVarParamsDictTagged = Required<Pick<VolumeMathVarParamsDict, '@ty
 interface VolumeMathParamsDict {
     "@type"?: "workbench/volume-math";
     "volume-out": string;
-    "replace"?: number | null | undefined;
     "var"?: Array<VolumeMathVarParamsDict> | null | undefined;
+    "replace"?: number | null | undefined;
     "expression": string;
 }
 type VolumeMathParamsDictTagged = Required<Pick<VolumeMathParamsDict, '@type'>> & VolumeMathParamsDict;
@@ -78,11 +78,17 @@ function volume_math_var_cargs(
     cargs.push(
         "-var",
         (params["name"] ?? null),
-        execution.inputFile((params["volume"] ?? null)),
-        "-subvolume",
-        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-        (((params["repeat"] ?? false)) ? "-repeat" : "")
+        execution.inputFile((params["volume"] ?? null))
     );
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null)
+        );
+    }
+    if ((params["repeat"] ?? false)) {
+        cargs.push("-repeat");
+    }
     return cargs;
 }
 
@@ -109,29 +115,29 @@ interface VolumeMathOutputs {
  *
  * @param volume_out the output volume
  * @param expression the expression to evaluate, in quotes
+ * @param var_ a volume file to use as a variable
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param var_ a volume file to use as a variable
  *
  * @returns Parameter dictionary
  */
 function volume_math_params(
     volume_out: string,
     expression: string,
-    replace: number | null = null,
     var_: Array<VolumeMathVarParamsDict> | null = null,
+    replace: number | null = null,
 ): VolumeMathParamsDictTagged {
     const params = {
         "@type": "workbench/volume-math" as const,
         "volume-out": volume_out,
         "expression": expression,
     };
-    if (replace !== null) {
-        params["replace"] = replace;
-    }
     if (var_ !== null) {
         params["var"] = var_;
+    }
+    if (replace !== null) {
+        params["replace"] = replace;
     }
     return params;
 }
@@ -156,10 +162,14 @@ function volume_math_cargs(
     );
     cargs.push(
         (params["volume-out"] ?? null),
-        "-fixnan",
-        (((params["replace"] ?? null) !== null) ? String((params["replace"] ?? null)) : ""),
         ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => volume_math_var_cargs(s, execution)).flat() : [])
     );
+    if ((params["replace"] ?? null) !== null) {
+        cargs.push(
+            "-fixnan",
+            String((params["replace"] ?? null))
+        );
+    }
     cargs.push((params["expression"] ?? null));
     return cargs;
 }
@@ -290,10 +300,10 @@ function volume_math_execute(
  *
  * @param volume_out the output volume
  * @param expression the expression to evaluate, in quotes
+ * @param var_ a volume file to use as a variable
  * @param replace replace NaN results with a value
 
 value to replace NaN with
- * @param var_ a volume file to use as a variable
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeMathOutputs`).
@@ -301,11 +311,11 @@ value to replace NaN with
 function volume_math(
     volume_out: string,
     expression: string,
-    replace: number | null = null,
     var_: Array<VolumeMathVarParamsDict> | null = null,
+    replace: number | null = null,
     runner: Runner | null = null,
 ): VolumeMathOutputs {
-    const params = volume_math_params(volume_out, expression, replace, var_)
+    const params = volume_math_params(volume_out, expression, var_, replace)
     return volume_math_execute(params, runner);
 }
 

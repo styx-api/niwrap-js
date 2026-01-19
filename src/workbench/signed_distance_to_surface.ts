@@ -86,11 +86,13 @@ function signed_distance_to_surface_cargs(
         "wb_command",
         "-signed-distance-to-surface"
     );
-    cargs.push(
-        (params["metric"] ?? null),
-        "-winding",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : "")
-    );
+    cargs.push((params["metric"] ?? null));
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-winding",
+            (params["method"] ?? null)
+        );
+    }
     cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
     cargs.push(execution.inputFile((params["surface-ref"] ?? null)));
     return cargs;

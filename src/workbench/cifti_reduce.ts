@@ -22,8 +22,8 @@ type CiftiReduceExcludeOutliersParamsDictTagged = Required<Pick<CiftiReduceExclu
 interface CiftiReduceParamsDict {
     "@type"?: "workbench/cifti-reduce";
     "cifti-out": string;
-    "direction"?: string | null | undefined;
     "exclude-outliers"?: CiftiReduceExcludeOutliersParamsDict | null | undefined;
+    "direction"?: string | null | undefined;
     "only-numeric": boolean;
     "cifti-in": InputPathType;
     "operation": string;
@@ -97,10 +97,10 @@ interface CiftiReduceOutputs {
  * @param cifti_out the output cifti file
  * @param cifti_in the cifti file to reduce
  * @param operation the reduction operator to use
+ * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param direction specify what direction to reduce along
 
 the direction (default ROW)
- * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  *
  * @returns Parameter dictionary
@@ -109,8 +109,8 @@ function cifti_reduce_params(
     cifti_out: string,
     cifti_in: InputPathType,
     operation: string,
-    direction: string | null = null,
     exclude_outliers: CiftiReduceExcludeOutliersParamsDict | null = null,
+    direction: string | null = null,
     only_numeric: boolean = false,
 ): CiftiReduceParamsDictTagged {
     const params = {
@@ -120,11 +120,11 @@ function cifti_reduce_params(
         "cifti-in": cifti_in,
         "operation": operation,
     };
-    if (direction !== null) {
-        params["direction"] = direction;
-    }
     if (exclude_outliers !== null) {
         params["exclude-outliers"] = exclude_outliers;
+    }
+    if (direction !== null) {
+        params["direction"] = direction;
     }
     return params;
 }
@@ -149,11 +149,17 @@ function cifti_reduce_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        "-direction",
-        (((params["direction"] ?? null) !== null) ? (params["direction"] ?? null) : ""),
-        ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-        (((params["only-numeric"] ?? false)) ? "-only-numeric" : "")
+        ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : [])
     );
+    if ((params["direction"] ?? null) !== null) {
+        cargs.push(
+            "-direction",
+            (params["direction"] ?? null)
+        );
+    }
+    if ((params["only-numeric"] ?? false)) {
+        cargs.push("-only-numeric");
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["operation"] ?? null));
     return cargs;
@@ -248,10 +254,10 @@ function cifti_reduce_execute(
  * @param cifti_out the output cifti file
  * @param cifti_in the cifti file to reduce
  * @param operation the reduction operator to use
+ * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param direction specify what direction to reduce along
 
 the direction (default ROW)
- * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  * @param runner Command runner
  *
@@ -261,12 +267,12 @@ function cifti_reduce(
     cifti_out: string,
     cifti_in: InputPathType,
     operation: string,
-    direction: string | null = null,
     exclude_outliers: CiftiReduceExcludeOutliersParamsDict | null = null,
+    direction: string | null = null,
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiReduceOutputs {
-    const params = cifti_reduce_params(cifti_out, cifti_in, operation, direction, exclude_outliers, only_numeric)
+    const params = cifti_reduce_params(cifti_out, cifti_in, operation, exclude_outliers, direction, only_numeric)
     return cifti_reduce_execute(params, runner);
 }
 

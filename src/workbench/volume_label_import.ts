@@ -14,11 +14,11 @@ const VOLUME_LABEL_IMPORT_METADATA: Metadata = {
 interface VolumeLabelImportParamsDict {
     "@type"?: "workbench/volume-label-import";
     "output": string;
-    "discard-others": boolean;
-    "value"?: number | null | undefined;
-    "subvol"?: string | null | undefined;
-    "drop-unused-labels": boolean;
     "file"?: string | null | undefined;
+    "subvol"?: string | null | undefined;
+    "value"?: number | null | undefined;
+    "drop-unused-labels": boolean;
+    "discard-others": boolean;
     "input": InputPathType;
     "label-list-file": string;
 }
@@ -48,17 +48,17 @@ interface VolumeLabelImportOutputs {
  * @param output the output workbench label volume
  * @param input the input volume file
  * @param label_list_file text file containing the values and names for labels
- * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
- * @param value set the value that will be interpreted as unlabeled
-
-the numeric value for unlabeled (default 0)
- * @param subvol select a single subvolume to import
-
-the subvolume number or name
- * @param drop_unused_labels remove any unused label values from the label table
  * @param file read label name hierarchy from a json file
 
 the input json file
+ * @param subvol select a single subvolume to import
+
+the subvolume number or name
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
  *
  * @returns Parameter dictionary
  */
@@ -66,28 +66,28 @@ function volume_label_import_params(
     output: string,
     input: InputPathType,
     label_list_file: string,
-    discard_others: boolean = false,
-    value: number | null = null,
-    subvol: string | null = null,
-    drop_unused_labels: boolean = false,
     file: string | null = null,
+    subvol: string | null = null,
+    value: number | null = null,
+    drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
 ): VolumeLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-import" as const,
         "output": output,
-        "discard-others": discard_others,
         "drop-unused-labels": drop_unused_labels,
+        "discard-others": discard_others,
         "input": input,
         "label-list-file": label_list_file,
     };
-    if (value !== null) {
-        params["value"] = value;
+    if (file !== null) {
+        params["file"] = file;
     }
     if (subvol !== null) {
         params["subvol"] = subvol;
     }
-    if (file !== null) {
-        params["file"] = file;
+    if (value !== null) {
+        params["value"] = value;
     }
     return params;
 }
@@ -110,17 +110,31 @@ function volume_label_import_cargs(
         "wb_command",
         "-volume-label-import"
     );
-    cargs.push(
-        (params["output"] ?? null),
-        (((params["discard-others"] ?? false)) ? "-discard-others" : ""),
-        "-unlabeled-value",
-        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
-        "-subvolume",
-        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : ""),
-        (((params["drop-unused-labels"] ?? false)) ? "-drop-unused-labels" : ""),
-        "-hierarchy",
-        (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : "")
-    );
+    cargs.push((params["output"] ?? null));
+    if ((params["file"] ?? null) !== null) {
+        cargs.push(
+            "-hierarchy",
+            (params["file"] ?? null)
+        );
+    }
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null)
+        );
+    }
+    if ((params["value"] ?? null) !== null) {
+        cargs.push(
+            "-unlabeled-value",
+            String((params["value"] ?? null))
+        );
+    }
+    if ((params["drop-unused-labels"] ?? false)) {
+        cargs.push("-drop-unused-labels");
+    }
+    if ((params["discard-others"] ?? false)) {
+        cargs.push("-discard-others");
+    }
     cargs.push(execution.inputFile((params["input"] ?? null)));
     cargs.push((params["label-list-file"] ?? null));
     return cargs;
@@ -195,17 +209,17 @@ function volume_label_import_execute(
  * @param output the output workbench label volume
  * @param input the input volume file
  * @param label_list_file text file containing the values and names for labels
- * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
- * @param value set the value that will be interpreted as unlabeled
-
-the numeric value for unlabeled (default 0)
- * @param subvol select a single subvolume to import
-
-the subvolume number or name
- * @param drop_unused_labels remove any unused label values from the label table
  * @param file read label name hierarchy from a json file
 
 the input json file
+ * @param subvol select a single subvolume to import
+
+the subvolume number or name
+ * @param value set the value that will be interpreted as unlabeled
+
+the numeric value for unlabeled (default 0)
+ * @param drop_unused_labels remove any unused label values from the label table
+ * @param discard_others set any voxels with values not mentioned in the label list to the ??? label
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelImportOutputs`).
@@ -214,14 +228,14 @@ function volume_label_import(
     output: string,
     input: InputPathType,
     label_list_file: string,
-    discard_others: boolean = false,
-    value: number | null = null,
-    subvol: string | null = null,
-    drop_unused_labels: boolean = false,
     file: string | null = null,
+    subvol: string | null = null,
+    value: number | null = null,
+    drop_unused_labels: boolean = false,
+    discard_others: boolean = false,
     runner: Runner | null = null,
 ): VolumeLabelImportOutputs {
-    const params = volume_label_import_params(output, input, label_list_file, discard_others, value, subvol, drop_unused_labels, file)
+    const params = volume_label_import_params(output, input, label_list_file, file, subvol, value, drop_unused_labels, discard_others)
     return volume_label_import_execute(params, runner);
 }
 

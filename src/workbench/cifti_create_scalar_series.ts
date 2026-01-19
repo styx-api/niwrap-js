@@ -23,9 +23,9 @@ type CiftiCreateScalarSeriesSeriesParamsDictTagged = Required<Pick<CiftiCreateSc
 interface CiftiCreateScalarSeriesParamsDict {
     "@type"?: "workbench/cifti-create-scalar-series";
     "cifti-out": string;
-    "transpose": boolean;
-    "file"?: string | null | undefined;
     "series"?: CiftiCreateScalarSeriesSeriesParamsDict | null | undefined;
+    "file"?: string | null | undefined;
+    "transpose": boolean;
     "input": string;
 }
 type CiftiCreateScalarSeriesParamsDictTagged = Required<Pick<CiftiCreateScalarSeriesParamsDict, '@type'>> & CiftiCreateScalarSeriesParamsDict;
@@ -100,20 +100,20 @@ interface CiftiCreateScalarSeriesOutputs {
  *
  * @param cifti_out output cifti file
  * @param input input file
- * @param transpose use if the rows of the text file are along the scalar dimension
+ * @param series set the units and values of the series
  * @param file use a text file to set names on scalar dimension
 
 text file containing names, one per line
- * @param series set the units and values of the series
+ * @param transpose use if the rows of the text file are along the scalar dimension
  *
  * @returns Parameter dictionary
  */
 function cifti_create_scalar_series_params(
     cifti_out: string,
     input: string,
-    transpose: boolean = false,
-    file: string | null = null,
     series: CiftiCreateScalarSeriesSeriesParamsDict | null = null,
+    file: string | null = null,
+    transpose: boolean = false,
 ): CiftiCreateScalarSeriesParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-create-scalar-series" as const,
@@ -121,11 +121,11 @@ function cifti_create_scalar_series_params(
         "transpose": transpose,
         "input": input,
     };
-    if (file !== null) {
-        params["file"] = file;
-    }
     if (series !== null) {
         params["series"] = series;
+    }
+    if (file !== null) {
+        params["file"] = file;
     }
     return params;
 }
@@ -150,11 +150,17 @@ function cifti_create_scalar_series_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        (((params["transpose"] ?? false)) ? "-transpose" : ""),
-        "-name-file",
-        (((params["file"] ?? null) !== null) ? (params["file"] ?? null) : ""),
         ...(((params["series"] ?? null) !== null) ? cifti_create_scalar_series_series_cargs((params["series"] ?? null), execution) : [])
     );
+    if ((params["file"] ?? null) !== null) {
+        cargs.push(
+            "-name-file",
+            (params["file"] ?? null)
+        );
+    }
+    if ((params["transpose"] ?? false)) {
+        cargs.push("-transpose");
+    }
     cargs.push((params["input"] ?? null));
     return cargs;
 }
@@ -225,11 +231,11 @@ function cifti_create_scalar_series_execute(
  *
  * @param cifti_out output cifti file
  * @param input input file
- * @param transpose use if the rows of the text file are along the scalar dimension
+ * @param series set the units and values of the series
  * @param file use a text file to set names on scalar dimension
 
 text file containing names, one per line
- * @param series set the units and values of the series
+ * @param transpose use if the rows of the text file are along the scalar dimension
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCreateScalarSeriesOutputs`).
@@ -237,12 +243,12 @@ text file containing names, one per line
 function cifti_create_scalar_series(
     cifti_out: string,
     input: string,
-    transpose: boolean = false,
-    file: string | null = null,
     series: CiftiCreateScalarSeriesSeriesParamsDict | null = null,
+    file: string | null = null,
+    transpose: boolean = false,
     runner: Runner | null = null,
 ): CiftiCreateScalarSeriesOutputs {
-    const params = cifti_create_scalar_series_params(cifti_out, input, transpose, file, series)
+    const params = cifti_create_scalar_series_params(cifti_out, input, series, file, transpose)
     return cifti_create_scalar_series_execute(params, runner);
 }
 

@@ -14,8 +14,8 @@ const CIFTI_PAIRWISE_CORRELATION_METADATA: Metadata = {
 interface CiftiPairwiseCorrelationParamsDict {
     "@type"?: "workbench/cifti-pairwise-correlation";
     "cifti-out": string;
-    "fisher-z": boolean;
     "override-mapping-check": boolean;
+    "fisher-z": boolean;
     "cifti-a": InputPathType;
     "cifti-b": InputPathType;
 }
@@ -45,8 +45,8 @@ interface CiftiPairwiseCorrelationOutputs {
  * @param cifti_out output cifti file
  * @param cifti_a first input cifti file
  * @param cifti_b second input cifti file
- * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  * @param override_mapping_check don't check the mappings for compatibility, only check length
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  *
  * @returns Parameter dictionary
  */
@@ -54,14 +54,14 @@ function cifti_pairwise_correlation_params(
     cifti_out: string,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
-    fisher_z: boolean = false,
     override_mapping_check: boolean = false,
+    fisher_z: boolean = false,
 ): CiftiPairwiseCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-pairwise-correlation" as const,
         "cifti-out": cifti_out,
-        "fisher-z": fisher_z,
         "override-mapping-check": override_mapping_check,
+        "fisher-z": fisher_z,
         "cifti-a": cifti_a,
         "cifti-b": cifti_b,
     };
@@ -86,11 +86,13 @@ function cifti_pairwise_correlation_cargs(
         "wb_command",
         "-cifti-pairwise-correlation"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
-        (((params["override-mapping-check"] ?? false)) ? "-override-mapping-check" : "")
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["override-mapping-check"] ?? false)) {
+        cargs.push("-override-mapping-check");
+    }
+    if ((params["fisher-z"] ?? false)) {
+        cargs.push("-fisher-z");
+    }
     cargs.push(execution.inputFile((params["cifti-a"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-b"] ?? null)));
     return cargs;
@@ -149,8 +151,8 @@ function cifti_pairwise_correlation_execute(
  * @param cifti_out output cifti file
  * @param cifti_a first input cifti file
  * @param cifti_b second input cifti file
- * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  * @param override_mapping_check don't check the mappings for compatibility, only check length
+ * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiPairwiseCorrelationOutputs`).
@@ -159,11 +161,11 @@ function cifti_pairwise_correlation(
     cifti_out: string,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
-    fisher_z: boolean = false,
     override_mapping_check: boolean = false,
+    fisher_z: boolean = false,
     runner: Runner | null = null,
 ): CiftiPairwiseCorrelationOutputs {
-    const params = cifti_pairwise_correlation_params(cifti_out, cifti_a, cifti_b, fisher_z, override_mapping_check)
+    const params = cifti_pairwise_correlation_params(cifti_out, cifti_a, cifti_b, override_mapping_check, fisher_z)
     return cifti_pairwise_correlation_execute(params, runner);
 }
 

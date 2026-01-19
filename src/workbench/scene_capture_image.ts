@@ -45,20 +45,20 @@ type SceneCaptureImageConnDbLoginParamsDictTagged = Required<Pick<SceneCaptureIm
 
 interface SceneCaptureImageParamsDict {
     "@type"?: "workbench/scene-capture-image";
-    "size-window": boolean;
-    "size-capture": boolean;
     "size-width-height"?: SceneCaptureImageSizeWidthHeightParamsDict | null | undefined;
-    "width"?: number | null | undefined;
-    "height"?: number | null | undefined;
-    "units"?: string | null | undefined;
     "resolution"?: SceneCaptureImageResolutionParamsDict | null | undefined;
-    "size"?: number | null | undefined;
-    "no-scene-colors": boolean;
     "set-map-yoke"?: SceneCaptureImageSetMapYokeParamsDict | null | undefined;
     "conn-db-login"?: SceneCaptureImageConnDbLoginParamsDict | null | undefined;
-    "show-capture-settings": boolean;
     "Renderer"?: string | null | undefined;
+    "size"?: number | null | undefined;
+    "units"?: string | null | undefined;
+    "height"?: number | null | undefined;
+    "width"?: number | null | undefined;
     "print-image-info": boolean;
+    "show-capture-settings": boolean;
+    "no-scene-colors": boolean;
+    "size-capture": boolean;
+    "size-window": boolean;
     "scene-file": string;
     "scene-name-or-number": string;
     "image-file-name": string;
@@ -265,15 +265,20 @@ interface SceneCaptureImageOutputs {
    The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
 
    If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
- * @param size_window Output image is size of window's graphics region from when scene was created.
- * @param size_capture Output image uses size from Capture Dialog when scene was created
  * @param size_width_height Width and height for output image
- * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
+ * @param resolution Image resolution (number pixels per size unit)
+      Default is 300 PIXELS_PER_INCH
+ * @param set_map_yoke Override selected map index for a map yoking group.
+ * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
+ * @param renderer Select renderer for drawing image
 
-Width for output image
- * @param height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.
+Name of renderer to use for drawing image
+   Available renderers are (first is default):
+   OSMesa - Mesa3D OSMesa software renderer
 
-Height for output image
+ * @param size Add a margin to sides of the image using the window's background color.
+
+size of margin, in pixels, added to all sides of output image
  * @param units Units for image width/height
       Default is PIXELS
 
@@ -284,22 +289,17 @@ Name of units for image width/height.  Valid units are:
    METERS
    PIXELS
 
- * @param resolution Image resolution (number pixels per size unit)
-      Default is 300 PIXELS_PER_INCH
- * @param size Add a margin to sides of the image using the window's background color.
+ * @param height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.
 
-size of margin, in pixels, added to all sides of output image
- * @param no_scene_colors Do not use background and foreground colors in scene
- * @param set_map_yoke Override selected map index for a map yoking group.
- * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
- * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
- * @param renderer Select renderer for drawing image
+Height for output image
+ * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
 
-Name of renderer to use for drawing image
-   Available renderers are (first is default):
-   OSMesa - Mesa3D OSMesa software renderer
-
+Width for output image
  * @param print_image_info Print the size and other information about output images only and DO NOT create any output images
+ * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
+ * @param no_scene_colors Do not use background and foreground colors in scene
+ * @param size_capture Output image uses size from Capture Dialog when scene was created
+ * @param size_window Output image is size of window's graphics region from when scene was created.
  *
  * @returns Parameter dictionary
  */
@@ -307,28 +307,28 @@ function scene_capture_image_params(
     scene_file: string,
     scene_name_or_number: string,
     image_file_name: string,
-    size_window: boolean = false,
-    size_capture: boolean = false,
     size_width_height: SceneCaptureImageSizeWidthHeightParamsDict | null = null,
-    width: number | null = null,
-    height: number | null = null,
-    units: string | null = null,
     resolution: SceneCaptureImageResolutionParamsDict | null = null,
-    size: number | null = null,
-    no_scene_colors: boolean = false,
     set_map_yoke: SceneCaptureImageSetMapYokeParamsDict | null = null,
     conn_db_login: SceneCaptureImageConnDbLoginParamsDict | null = null,
-    show_capture_settings: boolean = false,
     renderer: string | null = null,
+    size: number | null = null,
+    units: string | null = null,
+    height: number | null = null,
+    width: number | null = null,
     print_image_info: boolean = false,
+    show_capture_settings: boolean = false,
+    no_scene_colors: boolean = false,
+    size_capture: boolean = false,
+    size_window: boolean = false,
 ): SceneCaptureImageParamsDictTagged {
     const params = {
         "@type": "workbench/scene-capture-image" as const,
-        "size-window": size_window,
-        "size-capture": size_capture,
-        "no-scene-colors": no_scene_colors,
-        "show-capture-settings": show_capture_settings,
         "print-image-info": print_image_info,
+        "show-capture-settings": show_capture_settings,
+        "no-scene-colors": no_scene_colors,
+        "size-capture": size_capture,
+        "size-window": size_window,
         "scene-file": scene_file,
         "scene-name-or-number": scene_name_or_number,
         "image-file-name": image_file_name,
@@ -336,20 +336,8 @@ function scene_capture_image_params(
     if (size_width_height !== null) {
         params["size-width-height"] = size_width_height;
     }
-    if (width !== null) {
-        params["width"] = width;
-    }
-    if (height !== null) {
-        params["height"] = height;
-    }
-    if (units !== null) {
-        params["units"] = units;
-    }
     if (resolution !== null) {
         params["resolution"] = resolution;
-    }
-    if (size !== null) {
-        params["size"] = size;
     }
     if (set_map_yoke !== null) {
         params["set-map-yoke"] = set_map_yoke;
@@ -359,6 +347,18 @@ function scene_capture_image_params(
     }
     if (renderer !== null) {
         params["Renderer"] = renderer;
+    }
+    if (size !== null) {
+        params["size"] = size;
+    }
+    if (units !== null) {
+        params["units"] = units;
+    }
+    if (height !== null) {
+        params["height"] = height;
+    }
+    if (width !== null) {
+        params["width"] = width;
     }
     return params;
 }
@@ -381,28 +381,58 @@ function scene_capture_image_cargs(
         "wb_command",
         "-scene-capture-image"
     );
-    if ((params["size-window"] ?? false) || (params["size-capture"] ?? false) || (params["size-width-height"] ?? null) !== null || (params["width"] ?? null) !== null || (params["height"] ?? null) !== null || (params["units"] ?? null) !== null || (params["resolution"] ?? null) !== null || (params["size"] ?? null) !== null || (params["no-scene-colors"] ?? false) || (params["set-map-yoke"] ?? null) !== null || (params["conn-db-login"] ?? null) !== null || (params["show-capture-settings"] ?? false) || (params["Renderer"] ?? null) !== null || (params["print-image-info"] ?? false)) {
+    if ((params["size-width-height"] ?? null) !== null || (params["resolution"] ?? null) !== null || (params["set-map-yoke"] ?? null) !== null || (params["conn-db-login"] ?? null) !== null) {
         cargs.push(
-            (((params["size-window"] ?? false)) ? "-size-window" : ""),
-            (((params["size-capture"] ?? false)) ? "-size-capture" : ""),
             ...(((params["size-width-height"] ?? null) !== null) ? scene_capture_image_size_width_height_cargs((params["size-width-height"] ?? null), execution) : []),
-            "-size-width",
-            (((params["width"] ?? null) !== null) ? String((params["width"] ?? null)) : ""),
-            "-size-height",
-            (((params["height"] ?? null) !== null) ? String((params["height"] ?? null)) : ""),
-            "-units",
-            (((params["units"] ?? null) !== null) ? (params["units"] ?? null) : ""),
             ...(((params["resolution"] ?? null) !== null) ? scene_capture_image_resolution_cargs((params["resolution"] ?? null), execution) : []),
-            "-margin",
-            (((params["size"] ?? null) !== null) ? String((params["size"] ?? null)) : ""),
-            (((params["no-scene-colors"] ?? false)) ? "-no-scene-colors" : ""),
             ...(((params["set-map-yoke"] ?? null) !== null) ? scene_capture_image_set_map_yoke_cargs((params["set-map-yoke"] ?? null), execution) : []),
-            ...(((params["conn-db-login"] ?? null) !== null) ? scene_capture_image_conn_db_login_cargs((params["conn-db-login"] ?? null), execution) : []),
-            (((params["show-capture-settings"] ?? false)) ? "-show-capture-settings" : ""),
-            "-renderer",
-            (((params["Renderer"] ?? null) !== null) ? (params["Renderer"] ?? null) : ""),
-            (((params["print-image-info"] ?? false)) ? "-print-image-info" : "")
+            ...(((params["conn-db-login"] ?? null) !== null) ? scene_capture_image_conn_db_login_cargs((params["conn-db-login"] ?? null), execution) : [])
         );
+    }
+    if ((params["Renderer"] ?? null) !== null) {
+        cargs.push(
+            "-renderer",
+            (params["Renderer"] ?? null)
+        );
+    }
+    if ((params["size"] ?? null) !== null) {
+        cargs.push(
+            "-margin",
+            String((params["size"] ?? null))
+        );
+    }
+    if ((params["units"] ?? null) !== null) {
+        cargs.push(
+            "-units",
+            (params["units"] ?? null)
+        );
+    }
+    if ((params["height"] ?? null) !== null) {
+        cargs.push(
+            "-size-height",
+            String((params["height"] ?? null))
+        );
+    }
+    if ((params["width"] ?? null) !== null) {
+        cargs.push(
+            "-size-width",
+            String((params["width"] ?? null))
+        );
+    }
+    if ((params["print-image-info"] ?? false)) {
+        cargs.push("-print-image-info");
+    }
+    if ((params["show-capture-settings"] ?? false)) {
+        cargs.push("-show-capture-settings");
+    }
+    if ((params["no-scene-colors"] ?? false)) {
+        cargs.push("-no-scene-colors");
+    }
+    if ((params["size-capture"] ?? false)) {
+        cargs.push("-size-capture");
+    }
+    if ((params["size-window"] ?? false)) {
+        cargs.push("-size-window");
     }
     cargs.push((params["scene-file"] ?? null));
     cargs.push((params["scene-name-or-number"] ?? null));
@@ -519,15 +549,20 @@ function scene_capture_image_execute(
    The file name must end with a valid extension that identifies the image file format.  Valid extensions on this system are: (.bmp .jpeg .jpg .png .ppm).
 
    If there is more than one window in the scene, multiple image files are output with the window's number inserted into the name of the image file immediately before the image file's extension.
- * @param size_window Output image is size of window's graphics region from when scene was created.
- * @param size_capture Output image uses size from Capture Dialog when scene was created
  * @param size_width_height Width and height for output image
- * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
+ * @param resolution Image resolution (number pixels per size unit)
+      Default is 300 PIXELS_PER_INCH
+ * @param set_map_yoke Override selected map index for a map yoking group.
+ * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
+ * @param renderer Select renderer for drawing image
 
-Width for output image
- * @param height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.
+Name of renderer to use for drawing image
+   Available renderers are (first is default):
+   OSMesa - Mesa3D OSMesa software renderer
 
-Height for output image
+ * @param size Add a margin to sides of the image using the window's background color.
+
+size of margin, in pixels, added to all sides of output image
  * @param units Units for image width/height
       Default is PIXELS
 
@@ -538,22 +573,17 @@ Name of units for image width/height.  Valid units are:
    METERS
    PIXELS
 
- * @param resolution Image resolution (number pixels per size unit)
-      Default is 300 PIXELS_PER_INCH
- * @param size Add a margin to sides of the image using the window's background color.
+ * @param height Height for output image.  Width is computed using the aspect ratio from the window's width and height saved in the scene.
 
-size of margin, in pixels, added to all sides of output image
- * @param no_scene_colors Do not use background and foreground colors in scene
- * @param set_map_yoke Override selected map index for a map yoking group.
- * @param conn_db_login Login for scenes with files in Connectome Database.  If this option is not specified, the login and password stored in the user's preferences is used.
- * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
- * @param renderer Select renderer for drawing image
+Height for output image
+ * @param width Width for output image.  Height is computed using the aspect ratio from the window's width and height saved in the scene.
 
-Name of renderer to use for drawing image
-   Available renderers are (first is default):
-   OSMesa - Mesa3D OSMesa software renderer
-
+Width for output image
  * @param print_image_info Print the size and other information about output images only and DO NOT create any output images
+ * @param show_capture_settings Print settings from Capture Dialog only, DO NOT create image file(s)
+ * @param no_scene_colors Do not use background and foreground colors in scene
+ * @param size_capture Output image uses size from Capture Dialog when scene was created
+ * @param size_window Output image is size of window's graphics region from when scene was created.
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SceneCaptureImageOutputs`).
@@ -562,23 +592,23 @@ function scene_capture_image(
     scene_file: string,
     scene_name_or_number: string,
     image_file_name: string,
-    size_window: boolean = false,
-    size_capture: boolean = false,
     size_width_height: SceneCaptureImageSizeWidthHeightParamsDict | null = null,
-    width: number | null = null,
-    height: number | null = null,
-    units: string | null = null,
     resolution: SceneCaptureImageResolutionParamsDict | null = null,
-    size: number | null = null,
-    no_scene_colors: boolean = false,
     set_map_yoke: SceneCaptureImageSetMapYokeParamsDict | null = null,
     conn_db_login: SceneCaptureImageConnDbLoginParamsDict | null = null,
-    show_capture_settings: boolean = false,
     renderer: string | null = null,
+    size: number | null = null,
+    units: string | null = null,
+    height: number | null = null,
+    width: number | null = null,
     print_image_info: boolean = false,
+    show_capture_settings: boolean = false,
+    no_scene_colors: boolean = false,
+    size_capture: boolean = false,
+    size_window: boolean = false,
     runner: Runner | null = null,
 ): SceneCaptureImageOutputs {
-    const params = scene_capture_image_params(scene_file, scene_name_or_number, image_file_name, size_window, size_capture, size_width_height, width, height, units, resolution, size, no_scene_colors, set_map_yoke, conn_db_login, show_capture_settings, renderer, print_image_info)
+    const params = scene_capture_image_params(scene_file, scene_name_or_number, image_file_name, size_width_height, resolution, set_map_yoke, conn_db_login, renderer, size, units, height, width, print_image_info, show_capture_settings, no_scene_colors, size_capture, size_window)
     return scene_capture_image_execute(params, runner);
 }
 

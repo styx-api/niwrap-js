@@ -47,11 +47,11 @@ type CiftiReplaceStructureVolumeParamsDictTagged = Required<Pick<CiftiReplaceStr
 interface CiftiReplaceStructureParamsDict {
     "@type"?: "workbench/cifti-replace-structure";
     "volume-all"?: CiftiReplaceStructureVolumeAllParamsDict | null | undefined;
-    "discard-unused-labels": boolean;
-    "action"?: string | null | undefined;
     "label"?: Array<CiftiReplaceStructureLabelParamsDict> | null | undefined;
     "metric"?: Array<CiftiReplaceStructureMetricParamsDict> | null | undefined;
     "volume"?: Array<CiftiReplaceStructureVolumeParamsDict> | null | undefined;
+    "action"?: string | null | undefined;
+    "discard-unused-labels": boolean;
     "cifti": string;
     "direction": string;
 }
@@ -94,9 +94,11 @@ function cifti_replace_structure_volume_all_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-volume-all",
-        execution.inputFile((params["volume"] ?? null)),
-        (((params["from-cropped"] ?? false)) ? "-from-cropped" : "")
+        execution.inputFile((params["volume"] ?? null))
     );
+    if ((params["from-cropped"] ?? false)) {
+        cargs.push("-from-cropped");
+    }
     return cargs;
 }
 
@@ -227,9 +229,11 @@ function cifti_replace_structure_volume_cargs(
     cargs.push(
         "-volume",
         (params["structure"] ?? null),
-        execution.inputFile((params["volume"] ?? null)),
-        (((params["from-cropped"] ?? false)) ? "-from-cropped" : "")
+        execution.inputFile((params["volume"] ?? null))
     );
+    if ((params["from-cropped"] ?? false)) {
+        cargs.push("-from-cropped");
+    }
     return cargs;
 }
 
@@ -253,13 +257,13 @@ interface CiftiReplaceStructureOutputs {
  * @param cifti the cifti to modify
  * @param direction which dimension to interpret as a single map, ROW or COLUMN
  * @param volume_all replace the data in all volume components
- * @param discard_unused_labels when operating on a dlabel file, drop any unused label keys from the label table
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param label replace the data in a surface label component
  * @param metric replace the data in a surface component
  * @param volume replace the data in a volume component
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
+ * @param discard_unused_labels when operating on a dlabel file, drop any unused label keys from the label table
  *
  * @returns Parameter dictionary
  */
@@ -267,11 +271,11 @@ function cifti_replace_structure_params(
     cifti: string,
     direction: string,
     volume_all: CiftiReplaceStructureVolumeAllParamsDict | null = null,
-    discard_unused_labels: boolean = false,
-    action: string | null = null,
     label: Array<CiftiReplaceStructureLabelParamsDict> | null = null,
     metric: Array<CiftiReplaceStructureMetricParamsDict> | null = null,
     volume: Array<CiftiReplaceStructureVolumeParamsDict> | null = null,
+    action: string | null = null,
+    discard_unused_labels: boolean = false,
 ): CiftiReplaceStructureParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-replace-structure" as const,
@@ -282,9 +286,6 @@ function cifti_replace_structure_params(
     if (volume_all !== null) {
         params["volume-all"] = volume_all;
     }
-    if (action !== null) {
-        params["action"] = action;
-    }
     if (label !== null) {
         params["label"] = label;
     }
@@ -293,6 +294,9 @@ function cifti_replace_structure_params(
     }
     if (volume !== null) {
         params["volume"] = volume;
+    }
+    if (action !== null) {
+        params["action"] = action;
     }
     return params;
 }
@@ -315,16 +319,22 @@ function cifti_replace_structure_cargs(
         "wb_command",
         "-cifti-replace-structure"
     );
-    if ((params["volume-all"] ?? null) !== null || (params["discard-unused-labels"] ?? false) || (params["action"] ?? null) !== null || (params["label"] ?? null) !== null || (params["metric"] ?? null) !== null || (params["volume"] ?? null) !== null) {
+    if ((params["volume-all"] ?? null) !== null || (params["label"] ?? null) !== null || (params["metric"] ?? null) !== null || (params["volume"] ?? null) !== null) {
         cargs.push(
             ...(((params["volume-all"] ?? null) !== null) ? cifti_replace_structure_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
-            (((params["discard-unused-labels"] ?? false)) ? "-discard-unused-labels" : ""),
-            "-label-collision",
-            (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),
             ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_replace_structure_label_cargs(s, execution)).flat() : []),
             ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_replace_structure_metric_cargs(s, execution)).flat() : []),
             ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_replace_structure_volume_cargs(s, execution)).flat() : [])
         );
+    }
+    if ((params["action"] ?? null) !== null) {
+        cargs.push(
+            "-label-collision",
+            (params["action"] ?? null)
+        );
+    }
+    if ((params["discard-unused-labels"] ?? false)) {
+        cargs.push("-discard-unused-labels");
     }
     cargs.push((params["cifti"] ?? null));
     cargs.push((params["direction"] ?? null));
@@ -459,13 +469,13 @@ function cifti_replace_structure_execute(
  * @param cifti the cifti to modify
  * @param direction which dimension to interpret as a single map, ROW or COLUMN
  * @param volume_all replace the data in all volume components
- * @param discard_unused_labels when operating on a dlabel file, drop any unused label keys from the label table
- * @param action how to handle conflicts between label keys
-
-'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
  * @param label replace the data in a surface label component
  * @param metric replace the data in a surface component
  * @param volume replace the data in a volume component
+ * @param action how to handle conflicts between label keys
+
+'ERROR', 'LEFT_SURFACE_FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
+ * @param discard_unused_labels when operating on a dlabel file, drop any unused label keys from the label table
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiReplaceStructureOutputs`).
@@ -474,14 +484,14 @@ function cifti_replace_structure(
     cifti: string,
     direction: string,
     volume_all: CiftiReplaceStructureVolumeAllParamsDict | null = null,
-    discard_unused_labels: boolean = false,
-    action: string | null = null,
     label: Array<CiftiReplaceStructureLabelParamsDict> | null = null,
     metric: Array<CiftiReplaceStructureMetricParamsDict> | null = null,
     volume: Array<CiftiReplaceStructureVolumeParamsDict> | null = null,
+    action: string | null = null,
+    discard_unused_labels: boolean = false,
     runner: Runner | null = null,
 ): CiftiReplaceStructureOutputs {
-    const params = cifti_replace_structure_params(cifti, direction, volume_all, discard_unused_labels, action, label, metric, volume)
+    const params = cifti_replace_structure_params(cifti, direction, volume_all, label, metric, volume, action, discard_unused_labels)
     return cifti_replace_structure_execute(params, runner);
 }
 

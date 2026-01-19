@@ -54,15 +54,15 @@ type CiftiFindClustersDistanceParamsDictTagged = Required<Pick<CiftiFindClusters
 interface CiftiFindClustersParamsDict {
     "@type"?: "workbench/cifti-find-clusters";
     "cifti-out": string;
-    "less-than": boolean;
     "left-surface"?: CiftiFindClustersLeftSurfaceParamsDict | null | undefined;
     "right-surface"?: CiftiFindClustersRightSurfaceParamsDict | null | undefined;
     "cerebellum-surface"?: CiftiFindClustersCerebellumSurfaceParamsDict | null | undefined;
-    "roi-cifti"?: InputPathType | null | undefined;
-    "merged-volume": boolean;
     "size-ratio"?: CiftiFindClustersSizeRatioParamsDict | null | undefined;
     "distance"?: CiftiFindClustersDistanceParamsDict | null | undefined;
     "startval"?: number | null | undefined;
+    "roi-cifti"?: InputPathType | null | undefined;
+    "merged-volume": boolean;
+    "less-than": boolean;
     "cifti": InputPathType;
     "surface-value-threshold": number;
     "surface-minimum-area": number;
@@ -113,10 +113,14 @@ function cifti_find_clusters_left_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-left-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -161,10 +165,14 @@ function cifti_find_clusters_right_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-right-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -209,10 +217,14 @@ function cifti_find_clusters_cerebellum_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cerebellum-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -330,19 +342,19 @@ interface CiftiFindClustersOutputs {
  * @param volume_value_threshold threshold for volume data values
  * @param volume_minimum_size threshold for volume cluster size, in mm^3
  * @param direction which dimension to use for spatial information, ROW or COLUMN
- * @param less_than find values less than <value-threshold>, rather than greater
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param roi_cifti search only within regions of interest
-
-the regions to search within, as a cifti file
- * @param merged_volume treat volume components as if they were a single component
  * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
  * @param distance ignore clusters further than a given distance from the largest cluster in the structure
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
+ * @param roi_cifti search only within regions of interest
+
+the regions to search within, as a cifti file
+ * @param merged_volume treat volume components as if they were a single component
+ * @param less_than find values less than <value-threshold>, rather than greater
  *
  * @returns Parameter dictionary
  */
@@ -354,21 +366,21 @@ function cifti_find_clusters_params(
     volume_value_threshold: number,
     volume_minimum_size: number,
     direction: string,
-    less_than: boolean = false,
     left_surface: CiftiFindClustersLeftSurfaceParamsDict | null = null,
     right_surface: CiftiFindClustersRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiFindClustersCerebellumSurfaceParamsDict | null = null,
-    roi_cifti: InputPathType | null = null,
-    merged_volume: boolean = false,
     size_ratio: CiftiFindClustersSizeRatioParamsDict | null = null,
     distance: CiftiFindClustersDistanceParamsDict | null = null,
     startval: number | null = null,
+    roi_cifti: InputPathType | null = null,
+    merged_volume: boolean = false,
+    less_than: boolean = false,
 ): CiftiFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-find-clusters" as const,
         "cifti-out": cifti_out,
-        "less-than": less_than,
         "merged-volume": merged_volume,
+        "less-than": less_than,
         "cifti": cifti,
         "surface-value-threshold": surface_value_threshold,
         "surface-minimum-area": surface_minimum_area,
@@ -385,9 +397,6 @@ function cifti_find_clusters_params(
     if (cerebellum_surface !== null) {
         params["cerebellum-surface"] = cerebellum_surface;
     }
-    if (roi_cifti !== null) {
-        params["roi-cifti"] = roi_cifti;
-    }
     if (size_ratio !== null) {
         params["size-ratio"] = size_ratio;
     }
@@ -396,6 +405,9 @@ function cifti_find_clusters_params(
     }
     if (startval !== null) {
         params["startval"] = startval;
+    }
+    if (roi_cifti !== null) {
+        params["roi-cifti"] = roi_cifti;
     }
     return params;
 }
@@ -420,18 +432,30 @@ function cifti_find_clusters_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        (((params["less-than"] ?? false)) ? "-less-than" : ""),
         ...(((params["left-surface"] ?? null) !== null) ? cifti_find_clusters_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
         ...(((params["right-surface"] ?? null) !== null) ? cifti_find_clusters_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
         ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_find_clusters_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-        "-cifti-roi",
-        (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
-        (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
         ...(((params["size-ratio"] ?? null) !== null) ? cifti_find_clusters_size_ratio_cargs((params["size-ratio"] ?? null), execution) : []),
-        ...(((params["distance"] ?? null) !== null) ? cifti_find_clusters_distance_cargs((params["distance"] ?? null), execution) : []),
-        "-start",
-        (((params["startval"] ?? null) !== null) ? String((params["startval"] ?? null)) : "")
+        ...(((params["distance"] ?? null) !== null) ? cifti_find_clusters_distance_cargs((params["distance"] ?? null), execution) : [])
     );
+    if ((params["startval"] ?? null) !== null) {
+        cargs.push(
+            "-start",
+            String((params["startval"] ?? null))
+        );
+    }
+    if ((params["roi-cifti"] ?? null) !== null) {
+        cargs.push(
+            "-cifti-roi",
+            execution.inputFile((params["roi-cifti"] ?? null))
+        );
+    }
+    if ((params["merged-volume"] ?? false)) {
+        cargs.push("-merged-volume");
+    }
+    if ((params["less-than"] ?? false)) {
+        cargs.push("-less-than");
+    }
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     cargs.push(String((params["surface-value-threshold"] ?? null)));
     cargs.push(String((params["surface-minimum-area"] ?? null)));
@@ -498,19 +522,19 @@ function cifti_find_clusters_execute(
  * @param volume_value_threshold threshold for volume data values
  * @param volume_minimum_size threshold for volume cluster size, in mm^3
  * @param direction which dimension to use for spatial information, ROW or COLUMN
- * @param less_than find values less than <value-threshold>, rather than greater
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param roi_cifti search only within regions of interest
-
-the regions to search within, as a cifti file
- * @param merged_volume treat volume components as if they were a single component
  * @param size_ratio ignore clusters smaller than a given fraction of the largest cluster in the structure
  * @param distance ignore clusters further than a given distance from the largest cluster in the structure
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
+ * @param roi_cifti search only within regions of interest
+
+the regions to search within, as a cifti file
+ * @param merged_volume treat volume components as if they were a single component
+ * @param less_than find values less than <value-threshold>, rather than greater
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiFindClustersOutputs`).
@@ -523,18 +547,18 @@ function cifti_find_clusters(
     volume_value_threshold: number,
     volume_minimum_size: number,
     direction: string,
-    less_than: boolean = false,
     left_surface: CiftiFindClustersLeftSurfaceParamsDict | null = null,
     right_surface: CiftiFindClustersRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiFindClustersCerebellumSurfaceParamsDict | null = null,
-    roi_cifti: InputPathType | null = null,
-    merged_volume: boolean = false,
     size_ratio: CiftiFindClustersSizeRatioParamsDict | null = null,
     distance: CiftiFindClustersDistanceParamsDict | null = null,
     startval: number | null = null,
+    roi_cifti: InputPathType | null = null,
+    merged_volume: boolean = false,
+    less_than: boolean = false,
     runner: Runner | null = null,
 ): CiftiFindClustersOutputs {
-    const params = cifti_find_clusters_params(cifti_out, cifti, surface_value_threshold, surface_minimum_area, volume_value_threshold, volume_minimum_size, direction, less_than, left_surface, right_surface, cerebellum_surface, roi_cifti, merged_volume, size_ratio, distance, startval)
+    const params = cifti_find_clusters_params(cifti_out, cifti, surface_value_threshold, surface_minimum_area, volume_value_threshold, volume_minimum_size, direction, left_surface, right_surface, cerebellum_surface, size_ratio, distance, startval, roi_cifti, merged_volume, less_than)
     return cifti_find_clusters_execute(params, runner);
 }
 

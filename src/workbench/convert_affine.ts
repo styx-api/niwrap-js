@@ -48,11 +48,11 @@ type ConvertAffineToFlirtParamsDictTagged = Required<Pick<ConvertAffineToFlirtPa
 interface ConvertAffineParamsDict {
     "@type"?: "workbench/convert-affine";
     "from-world"?: ConvertAffineFromWorldParamsDict | null | undefined;
-    "input"?: string | null | undefined;
     "from-flirt"?: ConvertAffineFromFlirtParamsDict | null | undefined;
     "to-world"?: ConvertAffineToWorldParamsDict | null | undefined;
-    "output"?: string | null | undefined;
     "to-flirt"?: Array<ConvertAffineToFlirtParamsDict> | null | undefined;
+    "output"?: string | null | undefined;
+    "input"?: string | null | undefined;
 }
 type ConvertAffineParamsDictTagged = Required<Pick<ConvertAffineParamsDict, '@type'>> & ConvertAffineParamsDict;
 
@@ -93,9 +93,11 @@ function convert_affine_from_world_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-from-world",
-        (params["input"] ?? null),
-        (((params["inverse"] ?? false)) ? "-inverse" : "")
+        (params["input"] ?? null)
     );
+    if ((params["inverse"] ?? false)) {
+        cargs.push("-inverse");
+    }
     return cargs;
 }
 
@@ -183,9 +185,11 @@ function convert_affine_to_world_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-to-world",
-        (params["output"] ?? null),
-        (((params["inverse"] ?? false)) ? "-inverse" : "")
+        (params["output"] ?? null)
     );
+    if ((params["inverse"] ?? false)) {
+        cargs.push("-inverse");
+    }
     return cargs;
 }
 
@@ -254,25 +258,25 @@ interface ConvertAffineOutputs {
  * Build parameters.
  *
  * @param from_world input is a NIFTI 'world' affine
- * @param input input is an ITK matrix
-
-the input affine
  * @param from_flirt input is a flirt matrix
  * @param to_world write output as a NIFTI 'world' affine
+ * @param to_flirt write output as a flirt matrix
  * @param output write output as an ITK affine
 
 output - the output affine
- * @param to_flirt write output as a flirt matrix
+ * @param input input is an ITK matrix
+
+the input affine
  *
  * @returns Parameter dictionary
  */
 function convert_affine_params(
     from_world: ConvertAffineFromWorldParamsDict | null = null,
-    input: string | null = null,
     from_flirt: ConvertAffineFromFlirtParamsDict | null = null,
     to_world: ConvertAffineToWorldParamsDict | null = null,
-    output: string | null = null,
     to_flirt: Array<ConvertAffineToFlirtParamsDict> | null = null,
+    output: string | null = null,
+    input: string | null = null,
 ): ConvertAffineParamsDictTagged {
     const params = {
         "@type": "workbench/convert-affine" as const,
@@ -280,20 +284,20 @@ function convert_affine_params(
     if (from_world !== null) {
         params["from-world"] = from_world;
     }
-    if (input !== null) {
-        params["input"] = input;
-    }
     if (from_flirt !== null) {
         params["from-flirt"] = from_flirt;
     }
     if (to_world !== null) {
         params["to-world"] = to_world;
     }
+    if (to_flirt !== null) {
+        params["to-flirt"] = to_flirt;
+    }
     if (output !== null) {
         params["output"] = output;
     }
-    if (to_flirt !== null) {
-        params["to-flirt"] = to_flirt;
+    if (input !== null) {
+        params["input"] = input;
     }
     return params;
 }
@@ -316,16 +320,24 @@ function convert_affine_cargs(
         "wb_command",
         "-convert-affine"
     );
-    if ((params["from-world"] ?? null) !== null || (params["input"] ?? null) !== null || (params["from-flirt"] ?? null) !== null || (params["to-world"] ?? null) !== null || (params["output"] ?? null) !== null || (params["to-flirt"] ?? null) !== null) {
+    if ((params["from-world"] ?? null) !== null || (params["from-flirt"] ?? null) !== null || (params["to-world"] ?? null) !== null || (params["to-flirt"] ?? null) !== null) {
         cargs.push(
             ...(((params["from-world"] ?? null) !== null) ? convert_affine_from_world_cargs((params["from-world"] ?? null), execution) : []),
-            "-from-itk",
-            (((params["input"] ?? null) !== null) ? (params["input"] ?? null) : ""),
             ...(((params["from-flirt"] ?? null) !== null) ? convert_affine_from_flirt_cargs((params["from-flirt"] ?? null), execution) : []),
             ...(((params["to-world"] ?? null) !== null) ? convert_affine_to_world_cargs((params["to-world"] ?? null), execution) : []),
-            "-to-itk",
-            (((params["output"] ?? null) !== null) ? (params["output"] ?? null) : ""),
             ...(((params["to-flirt"] ?? null) !== null) ? (params["to-flirt"] ?? null).map(s => convert_affine_to_flirt_cargs(s, execution)).flat() : [])
+        );
+    }
+    if ((params["output"] ?? null) !== null) {
+        cargs.push(
+            "-to-itk",
+            (params["output"] ?? null)
+        );
+    }
+    if ((params["input"] ?? null) !== null) {
+        cargs.push(
+            "-from-itk",
+            (params["input"] ?? null)
         );
     }
     return cargs;
@@ -389,29 +401,29 @@ function convert_affine_execute(
  * You must specify exactly one -from option, but you may specify multiple -to options, and -to-flirt may be specified more than once.
  *
  * @param from_world input is a NIFTI 'world' affine
- * @param input input is an ITK matrix
-
-the input affine
  * @param from_flirt input is a flirt matrix
  * @param to_world write output as a NIFTI 'world' affine
+ * @param to_flirt write output as a flirt matrix
  * @param output write output as an ITK affine
 
 output - the output affine
- * @param to_flirt write output as a flirt matrix
+ * @param input input is an ITK matrix
+
+the input affine
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertAffineOutputs`).
  */
 function convert_affine(
     from_world: ConvertAffineFromWorldParamsDict | null = null,
-    input: string | null = null,
     from_flirt: ConvertAffineFromFlirtParamsDict | null = null,
     to_world: ConvertAffineToWorldParamsDict | null = null,
-    output: string | null = null,
     to_flirt: Array<ConvertAffineToFlirtParamsDict> | null = null,
+    output: string | null = null,
+    input: string | null = null,
     runner: Runner | null = null,
 ): ConvertAffineOutputs {
-    const params = convert_affine_params(from_world, input, from_flirt, to_world, output, to_flirt)
+    const params = convert_affine_params(from_world, from_flirt, to_world, to_flirt, output, input)
     return convert_affine_execute(params, runner);
 }
 

@@ -30,9 +30,9 @@ interface VolumeGradientParamsDict {
     "@type"?: "workbench/volume-gradient";
     "volume-out": string;
     "presmooth"?: VolumeGradientPresmoothParamsDict | null | undefined;
-    "roi-volume"?: InputPathType | null | undefined;
     "vectors"?: VolumeGradientVectorsParamsDict | null | undefined;
     "subvol"?: string | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
     "volume-in": InputPathType;
 }
 type VolumeGradientParamsDictTagged = Required<Pick<VolumeGradientParamsDict, '@type'>> & VolumeGradientParamsDict;
@@ -74,9 +74,11 @@ function volume_gradient_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-presmooth",
-        String((params["kernel"] ?? null)),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
+        String((params["kernel"] ?? null))
     );
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     return cargs;
 }
 
@@ -184,13 +186,13 @@ interface VolumeGradientOutputs {
  * @param volume_out the output gradient magnitude volume
  * @param volume_in the input volume
  * @param presmooth smooth the volume before computing the gradient
- * @param roi_volume select a region of interest to take the gradient of
-
-the region to take the gradient within
  * @param vectors output vectors
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
+ * @param roi_volume select a region of interest to take the gradient of
+
+the region to take the gradient within
  *
  * @returns Parameter dictionary
  */
@@ -198,9 +200,9 @@ function volume_gradient_params(
     volume_out: string,
     volume_in: InputPathType,
     presmooth: VolumeGradientPresmoothParamsDict | null = null,
-    roi_volume: InputPathType | null = null,
     vectors: VolumeGradientVectorsParamsDict | null = null,
     subvol: string | null = null,
+    roi_volume: InputPathType | null = null,
 ): VolumeGradientParamsDictTagged {
     const params = {
         "@type": "workbench/volume-gradient" as const,
@@ -210,14 +212,14 @@ function volume_gradient_params(
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
     }
-    if (roi_volume !== null) {
-        params["roi-volume"] = roi_volume;
-    }
     if (vectors !== null) {
         params["vectors"] = vectors;
     }
     if (subvol !== null) {
         params["subvol"] = subvol;
+    }
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
     }
     return params;
 }
@@ -243,12 +245,20 @@ function volume_gradient_cargs(
     cargs.push(
         (params["volume-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? volume_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        "-roi",
-        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-        ...(((params["vectors"] ?? null) !== null) ? volume_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
-        "-subvolume",
-        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
+        ...(((params["vectors"] ?? null) !== null) ? volume_gradient_vectors_cargs((params["vectors"] ?? null), execution) : [])
     );
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null)
+        );
+    }
+    if ((params["roi-volume"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-volume"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }
@@ -307,13 +317,13 @@ function volume_gradient_execute(
  * @param volume_out the output gradient magnitude volume
  * @param volume_in the input volume
  * @param presmooth smooth the volume before computing the gradient
- * @param roi_volume select a region of interest to take the gradient of
-
-the region to take the gradient within
  * @param vectors output vectors
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
+ * @param roi_volume select a region of interest to take the gradient of
+
+the region to take the gradient within
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeGradientOutputs`).
@@ -322,12 +332,12 @@ function volume_gradient(
     volume_out: string,
     volume_in: InputPathType,
     presmooth: VolumeGradientPresmoothParamsDict | null = null,
-    roi_volume: InputPathType | null = null,
     vectors: VolumeGradientVectorsParamsDict | null = null,
     subvol: string | null = null,
+    roi_volume: InputPathType | null = null,
     runner: Runner | null = null,
 ): VolumeGradientOutputs {
-    const params = volume_gradient_params(volume_out, volume_in, presmooth, roi_volume, vectors, subvol)
+    const params = volume_gradient_params(volume_out, volume_in, presmooth, vectors, subvol, roi_volume)
     return volume_gradient_execute(params, runner);
 }
 

@@ -14,8 +14,8 @@ const BORDER_LENGTH_METADATA: Metadata = {
 interface BorderLengthParamsDict {
     "@type"?: "workbench/border-length";
     "area-metric"?: InputPathType | null | undefined;
-    "separate-pieces": boolean;
     "hide-border-name": boolean;
+    "separate-pieces": boolean;
     "border": InputPathType;
     "surface": InputPathType;
 }
@@ -43,8 +43,8 @@ interface BorderLengthOutputs {
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param separate_pieces report lengths for multi-part borders as separate numbers
  * @param hide_border_name don't print border name before each output
+ * @param separate_pieces report lengths for multi-part borders as separate numbers
  *
  * @returns Parameter dictionary
  */
@@ -52,13 +52,13 @@ function border_length_params(
     border: InputPathType,
     surface: InputPathType,
     area_metric: InputPathType | null = null,
-    separate_pieces: boolean = false,
     hide_border_name: boolean = false,
+    separate_pieces: boolean = false,
 ): BorderLengthParamsDictTagged {
     const params = {
         "@type": "workbench/border-length" as const,
-        "separate-pieces": separate_pieces,
         "hide-border-name": hide_border_name,
+        "separate-pieces": separate_pieces,
         "border": border,
         "surface": surface,
     };
@@ -86,13 +86,17 @@ function border_length_cargs(
         "wb_command",
         "-border-length"
     );
-    if ((params["area-metric"] ?? null) !== null || (params["separate-pieces"] ?? false) || (params["hide-border-name"] ?? false)) {
+    if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
             "-corrected-areas",
-            (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : ""),
-            (((params["separate-pieces"] ?? false)) ? "-separate-pieces" : ""),
-            (((params["hide-border-name"] ?? false)) ? "-hide-border-name" : "")
+            execution.inputFile((params["area-metric"] ?? null))
         );
+    }
+    if ((params["hide-border-name"] ?? false)) {
+        cargs.push("-hide-border-name");
+    }
+    if ((params["separate-pieces"] ?? false)) {
+        cargs.push("-separate-pieces");
     }
     cargs.push(execution.inputFile((params["border"] ?? null)));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
@@ -157,8 +161,8 @@ function border_length_execute(
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
- * @param separate_pieces report lengths for multi-part borders as separate numbers
  * @param hide_border_name don't print border name before each output
+ * @param separate_pieces report lengths for multi-part borders as separate numbers
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderLengthOutputs`).
@@ -167,11 +171,11 @@ function border_length(
     border: InputPathType,
     surface: InputPathType,
     area_metric: InputPathType | null = null,
-    separate_pieces: boolean = false,
     hide_border_name: boolean = false,
+    separate_pieces: boolean = false,
     runner: Runner | null = null,
 ): BorderLengthOutputs {
-    const params = border_length_params(border, surface, area_metric, separate_pieces, hide_border_name)
+    const params = border_length_params(border, surface, area_metric, hide_border_name, separate_pieces)
     return border_length_execute(params, runner);
 }
 

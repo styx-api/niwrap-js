@@ -14,10 +14,10 @@ const VOLUME_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 interface VolumeRoisFromExtremaParamsDict {
     "@type"?: "workbench/volume-rois-from-extrema";
     "volume-out": string;
-    "sigma"?: number | null | undefined;
-    "roi-volume"?: InputPathType | null | undefined;
-    "method"?: string | null | undefined;
     "subvol"?: string | null | undefined;
+    "method"?: string | null | undefined;
+    "roi-volume"?: InputPathType | null | undefined;
+    "sigma"?: number | null | undefined;
     "volume-in": InputPathType;
     "limit": number;
 }
@@ -47,18 +47,18 @@ interface VolumeRoisFromExtremaOutputs {
  * @param volume_out the output volume
  * @param volume_in the input volume
  * @param limit distance limit from voxel center, in mm
- * @param sigma generate a gaussian kernel instead of a flat ROI
-
-the sigma for the gaussian kernel, in mm
- * @param roi_volume select a region of interest to use
-
-the region to use
- * @param method how to handle overlapping ROIs, default ALLOW
-
-the method of resolving overlaps
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param roi_volume select a region of interest to use
+
+the region to use
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
  *
  * @returns Parameter dictionary
  */
@@ -66,10 +66,10 @@ function volume_rois_from_extrema_params(
     volume_out: string,
     volume_in: InputPathType,
     limit: number,
-    sigma: number | null = null,
-    roi_volume: InputPathType | null = null,
-    method: string | null = null,
     subvol: string | null = null,
+    method: string | null = null,
+    roi_volume: InputPathType | null = null,
+    sigma: number | null = null,
 ): VolumeRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/volume-rois-from-extrema" as const,
@@ -77,17 +77,17 @@ function volume_rois_from_extrema_params(
         "volume-in": volume_in,
         "limit": limit,
     };
-    if (sigma !== null) {
-        params["sigma"] = sigma;
-    }
-    if (roi_volume !== null) {
-        params["roi-volume"] = roi_volume;
+    if (subvol !== null) {
+        params["subvol"] = subvol;
     }
     if (method !== null) {
         params["method"] = method;
     }
-    if (subvol !== null) {
-        params["subvol"] = subvol;
+    if (roi_volume !== null) {
+        params["roi-volume"] = roi_volume;
+    }
+    if (sigma !== null) {
+        params["sigma"] = sigma;
     }
     return params;
 }
@@ -110,17 +110,31 @@ function volume_rois_from_extrema_cargs(
         "wb_command",
         "-volume-rois-from-extrema"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        "-gaussian",
-        (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
-        "-roi",
-        (((params["roi-volume"] ?? null) !== null) ? execution.inputFile((params["roi-volume"] ?? null)) : ""),
-        "-overlap-logic",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
-        "-subvolume",
-        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
-    );
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null)
+        );
+    }
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-overlap-logic",
+            (params["method"] ?? null)
+        );
+    }
+    if ((params["roi-volume"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-volume"] ?? null))
+        );
+    }
+    if ((params["sigma"] ?? null) !== null) {
+        cargs.push(
+            "-gaussian",
+            String((params["sigma"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));
     return cargs;
@@ -179,18 +193,18 @@ function volume_rois_from_extrema_execute(
  * @param volume_out the output volume
  * @param volume_in the input volume
  * @param limit distance limit from voxel center, in mm
- * @param sigma generate a gaussian kernel instead of a flat ROI
-
-the sigma for the gaussian kernel, in mm
- * @param roi_volume select a region of interest to use
-
-the region to use
- * @param method how to handle overlapping ROIs, default ALLOW
-
-the method of resolving overlaps
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param roi_volume select a region of interest to use
+
+the region to use
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeRoisFromExtremaOutputs`).
@@ -199,13 +213,13 @@ function volume_rois_from_extrema(
     volume_out: string,
     volume_in: InputPathType,
     limit: number,
-    sigma: number | null = null,
-    roi_volume: InputPathType | null = null,
-    method: string | null = null,
     subvol: string | null = null,
+    method: string | null = null,
+    roi_volume: InputPathType | null = null,
+    sigma: number | null = null,
     runner: Runner | null = null,
 ): VolumeRoisFromExtremaOutputs {
-    const params = volume_rois_from_extrema_params(volume_out, volume_in, limit, sigma, roi_volume, method, subvol)
+    const params = volume_rois_from_extrema_params(volume_out, volume_in, limit, subvol, method, roi_volume, sigma)
     return volume_rois_from_extrema_execute(params, runner);
 }
 

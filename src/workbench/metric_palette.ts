@@ -55,19 +55,19 @@ type MetricPaletteThresholdingParamsDictTagged = Required<Pick<MetricPaletteThre
 
 interface MetricPaletteParamsDict {
     "@type"?: "workbench/metric-palette";
-    "column"?: string | null | undefined;
     "pos-percent"?: MetricPalettePosPercentParamsDict | null | undefined;
     "neg-percent"?: MetricPaletteNegPercentParamsDict | null | undefined;
     "pos-user"?: MetricPalettePosUserParamsDict | null | undefined;
     "neg-user"?: MetricPaletteNegUserParamsDict | null | undefined;
-    "interpolate"?: boolean | null | undefined;
-    "display"?: boolean | null | undefined;
-    "display"?: boolean | null | undefined;
-    "display"?: boolean | null | undefined;
-    "name"?: string | null | undefined;
     "thresholding"?: MetricPaletteThresholdingParamsDict | null | undefined;
     "type"?: string | null | undefined;
     "type"?: string | null | undefined;
+    "name"?: string | null | undefined;
+    "display"?: boolean | null | undefined;
+    "display"?: boolean | null | undefined;
+    "display"?: boolean | null | undefined;
+    "interpolate"?: boolean | null | undefined;
+    "column"?: string | null | undefined;
     "metric": string;
     "mode": string;
 }
@@ -315,63 +315,60 @@ interface MetricPaletteOutputs {
  *
  * @param metric the metric to modify
  * @param mode the mapping mode
- * @param column select a single column
-
-the column number or name
  * @param pos_percent percentage min/max for positive data coloring
  * @param neg_percent percentage min/max for negative data coloring
  * @param pos_user user min/max values for positive data coloring
  * @param neg_user user min/max values for negative data coloring
- * @param interpolate interpolate colors
+ * @param thresholding set the thresholding
+ * @param type_ specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
 
-boolean, whether to interpolate
- * @param display display positive data
+the normalization mode
+ * @param type_2 specify palette inversion
+
+the type of inversion
+ * @param name set the palette used
+
+the name of the palette
+ * @param display display data closer to zero than the min cutoff
 
 boolean, whether to display
  * @param display_ display positive data
 
 boolean, whether to display
- * @param display_2 display data closer to zero than the min cutoff
+ * @param display_2 display positive data
 
 boolean, whether to display
- * @param name set the palette used
+ * @param interpolate interpolate colors
 
-the name of the palette
- * @param thresholding set the thresholding
- * @param type_ specify palette inversion
+boolean, whether to interpolate
+ * @param column select a single column
 
-the type of inversion
- * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
-
-the normalization mode
+the column number or name
  *
  * @returns Parameter dictionary
  */
 function metric_palette_params(
     metric: string,
     mode: string,
-    column: string | null = null,
     pos_percent: MetricPalettePosPercentParamsDict | null = null,
     neg_percent: MetricPaletteNegPercentParamsDict | null = null,
     pos_user: MetricPalettePosUserParamsDict | null = null,
     neg_user: MetricPaletteNegUserParamsDict | null = null,
-    interpolate: boolean | null = null,
-    display: boolean | null = null,
-    display_: boolean | null = null,
-    display_2: boolean | null = null,
-    name: string | null = null,
     thresholding: MetricPaletteThresholdingParamsDict | null = null,
     type_: string | null = null,
     type_2: string | null = null,
+    name: string | null = null,
+    display: boolean | null = null,
+    display_: boolean | null = null,
+    display_2: boolean | null = null,
+    interpolate: boolean | null = null,
+    column: string | null = null,
 ): MetricPaletteParamsDictTagged {
     const params = {
         "@type": "workbench/metric-palette" as const,
         "metric": metric,
         "mode": mode,
     };
-    if (column !== null) {
-        params["column"] = column;
-    }
     if (pos_percent !== null) {
         params["pos-percent"] = pos_percent;
     }
@@ -384,8 +381,17 @@ function metric_palette_params(
     if (neg_user !== null) {
         params["neg-user"] = neg_user;
     }
-    if (interpolate !== null) {
-        params["interpolate"] = interpolate;
+    if (thresholding !== null) {
+        params["thresholding"] = thresholding;
+    }
+    if (type_ !== null) {
+        params["type"] = type_;
+    }
+    if (type_2 !== null) {
+        params["type"] = type_2;
+    }
+    if (name !== null) {
+        params["name"] = name;
     }
     if (display !== null) {
         params["display"] = display;
@@ -396,17 +402,11 @@ function metric_palette_params(
     if (display_2 !== null) {
         params["display"] = display_2;
     }
-    if (name !== null) {
-        params["name"] = name;
+    if (interpolate !== null) {
+        params["interpolate"] = interpolate;
     }
-    if (thresholding !== null) {
-        params["thresholding"] = thresholding;
-    }
-    if (type_ !== null) {
-        params["type"] = type_;
-    }
-    if (type_2 !== null) {
-        params["type"] = type_2;
+    if (column !== null) {
+        params["column"] = column;
     }
     return params;
 }
@@ -429,29 +429,61 @@ function metric_palette_cargs(
         "wb_command",
         "-metric-palette"
     );
-    if ((params["column"] ?? null) !== null || (params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["interpolate"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["display"] ?? null) !== null || (params["name"] ?? null) !== null || (params["thresholding"] ?? null) !== null || (params["type"] ?? null) !== null || (params["type"] ?? null) !== null) {
+    if ((params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["thresholding"] ?? null) !== null) {
         cargs.push(
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
             ...(((params["pos-percent"] ?? null) !== null) ? metric_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),
             ...(((params["neg-percent"] ?? null) !== null) ? metric_palette_neg_percent_cargs((params["neg-percent"] ?? null), execution) : []),
             ...(((params["pos-user"] ?? null) !== null) ? metric_palette_pos_user_cargs((params["pos-user"] ?? null), execution) : []),
             ...(((params["neg-user"] ?? null) !== null) ? metric_palette_neg_user_cargs((params["neg-user"] ?? null), execution) : []),
-            "-interpolate",
-            (((params["interpolate"] ?? null) !== null) ? ((params["interpolate"] ?? null) ? "true" : "false") : ""),
-            "-disp-pos",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-disp-neg",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-disp-zero",
-            (((params["display"] ?? null) !== null) ? ((params["display"] ?? null) ? "true" : "false") : ""),
-            "-palette-name",
-            (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
-            ...(((params["thresholding"] ?? null) !== null) ? metric_palette_thresholding_cargs((params["thresholding"] ?? null), execution) : []),
-            "-inversion",
-            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : ""),
+            ...(((params["thresholding"] ?? null) !== null) ? metric_palette_thresholding_cargs((params["thresholding"] ?? null), execution) : [])
+        );
+    }
+    if ((params["type"] ?? null) !== null) {
+        cargs.push(
             "-normalization",
-            (((params["type"] ?? null) !== null) ? (params["type"] ?? null) : "")
+            (params["type"] ?? null)
+        );
+    }
+    if ((params["type"] ?? null) !== null) {
+        cargs.push(
+            "-inversion",
+            (params["type"] ?? null)
+        );
+    }
+    if ((params["name"] ?? null) !== null) {
+        cargs.push(
+            "-palette-name",
+            (params["name"] ?? null)
+        );
+    }
+    if ((params["display"] ?? null) !== null) {
+        cargs.push(
+            "-disp-zero",
+            ((params["display"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["display"] ?? null) !== null) {
+        cargs.push(
+            "-disp-neg",
+            ((params["display"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["display"] ?? null) !== null) {
+        cargs.push(
+            "-disp-pos",
+            ((params["display"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["interpolate"] ?? null) !== null) {
+        cargs.push(
+            "-interpolate",
+            ((params["interpolate"] ?? null) ? "true" : "false")
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
         );
     }
     cargs.push((params["metric"] ?? null));
@@ -660,35 +692,35 @@ function metric_palette_execute(
  *
  * @param metric the metric to modify
  * @param mode the mapping mode
- * @param column select a single column
-
-the column number or name
  * @param pos_percent percentage min/max for positive data coloring
  * @param neg_percent percentage min/max for negative data coloring
  * @param pos_user user min/max values for positive data coloring
  * @param neg_user user min/max values for negative data coloring
- * @param interpolate interpolate colors
+ * @param thresholding set the thresholding
+ * @param type_ specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
 
-boolean, whether to interpolate
- * @param display display positive data
+the normalization mode
+ * @param type_2 specify palette inversion
+
+the type of inversion
+ * @param name set the palette used
+
+the name of the palette
+ * @param display display data closer to zero than the min cutoff
 
 boolean, whether to display
  * @param display_ display positive data
 
 boolean, whether to display
- * @param display_2 display data closer to zero than the min cutoff
+ * @param display_2 display positive data
 
 boolean, whether to display
- * @param name set the palette used
+ * @param interpolate interpolate colors
 
-the name of the palette
- * @param thresholding set the thresholding
- * @param type_ specify palette inversion
+boolean, whether to interpolate
+ * @param column select a single column
 
-the type of inversion
- * @param type_2 specify normalization mode (NOTE: this is always a file-wide setting, NOT per-map)
-
-the normalization mode
+the column number or name
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricPaletteOutputs`).
@@ -696,22 +728,22 @@ the normalization mode
 function metric_palette(
     metric: string,
     mode: string,
-    column: string | null = null,
     pos_percent: MetricPalettePosPercentParamsDict | null = null,
     neg_percent: MetricPaletteNegPercentParamsDict | null = null,
     pos_user: MetricPalettePosUserParamsDict | null = null,
     neg_user: MetricPaletteNegUserParamsDict | null = null,
-    interpolate: boolean | null = null,
-    display: boolean | null = null,
-    display_: boolean | null = null,
-    display_2: boolean | null = null,
-    name: string | null = null,
     thresholding: MetricPaletteThresholdingParamsDict | null = null,
     type_: string | null = null,
     type_2: string | null = null,
+    name: string | null = null,
+    display: boolean | null = null,
+    display_: boolean | null = null,
+    display_2: boolean | null = null,
+    interpolate: boolean | null = null,
+    column: string | null = null,
     runner: Runner | null = null,
 ): MetricPaletteOutputs {
-    const params = metric_palette_params(metric, mode, column, pos_percent, neg_percent, pos_user, neg_user, interpolate, display, display_, display_2, name, thresholding, type_, type_2)
+    const params = metric_palette_params(metric, mode, pos_percent, neg_percent, pos_user, neg_user, thresholding, type_, type_2, name, display, display_, display_2, interpolate, column)
     return metric_palette_execute(params, runner);
 }
 

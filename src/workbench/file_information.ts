@@ -20,15 +20,15 @@ type FileInformationOnlyMetadataParamsDictTagged = Required<Pick<FileInformation
 
 interface FileInformationParamsDict {
     "@type"?: "workbench/file-information";
-    "no-map-info": boolean;
-    "only-step-interval": boolean;
-    "only-number-of-maps": boolean;
-    "only-map-names": boolean;
     "only-metadata"?: FileInformationOnlyMetadataParamsDict | null | undefined;
-    "only-cifti-xml": boolean;
-    "czi": boolean;
-    "czi-all-sub-blocks": boolean;
     "czi-xml": boolean;
+    "czi-all-sub-blocks": boolean;
+    "czi": boolean;
+    "only-cifti-xml": boolean;
+    "only-map-names": boolean;
+    "only-number-of-maps": boolean;
+    "only-step-interval": boolean;
+    "no-map-info": boolean;
     "data-file": string;
 }
 type FileInformationParamsDictTagged = Required<Pick<FileInformationParamsDict, '@type'>> & FileInformationParamsDict;
@@ -69,9 +69,9 @@ function file_information_only_metadata_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push("-only-metadata");
     if ((params["key"] ?? null) !== null) {
         cargs.push(
-            "-only-metadata",
             "-key",
             (params["key"] ?? null)
         );
@@ -97,40 +97,40 @@ interface FileInformationOutputs {
  * Build parameters.
  *
  * @param data_file data file
- * @param no_map_info do not show map information for files that support maps
- * @param only_step_interval suppress normal output, print the interval between maps
- * @param only_number_of_maps suppress normal output, print the number of maps
- * @param only_map_names suppress normal output, print the names of all maps
  * @param only_metadata suppress normal output, print file metadata
- * @param only_cifti_xml suppress normal output, print the cifti xml if the file type has it
- * @param czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
- * @param czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
  * @param czi_xml show XML from CZI file
+ * @param czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
+ * @param czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
+ * @param only_cifti_xml suppress normal output, print the cifti xml if the file type has it
+ * @param only_map_names suppress normal output, print the names of all maps
+ * @param only_number_of_maps suppress normal output, print the number of maps
+ * @param only_step_interval suppress normal output, print the interval between maps
+ * @param no_map_info do not show map information for files that support maps
  *
  * @returns Parameter dictionary
  */
 function file_information_params(
     data_file: string,
-    no_map_info: boolean = false,
-    only_step_interval: boolean = false,
-    only_number_of_maps: boolean = false,
-    only_map_names: boolean = false,
     only_metadata: FileInformationOnlyMetadataParamsDict | null = null,
-    only_cifti_xml: boolean = false,
-    czi: boolean = false,
-    czi_all_sub_blocks: boolean = false,
     czi_xml: boolean = false,
+    czi_all_sub_blocks: boolean = false,
+    czi: boolean = false,
+    only_cifti_xml: boolean = false,
+    only_map_names: boolean = false,
+    only_number_of_maps: boolean = false,
+    only_step_interval: boolean = false,
+    no_map_info: boolean = false,
 ): FileInformationParamsDictTagged {
     const params = {
         "@type": "workbench/file-information" as const,
-        "no-map-info": no_map_info,
-        "only-step-interval": only_step_interval,
-        "only-number-of-maps": only_number_of_maps,
-        "only-map-names": only_map_names,
-        "only-cifti-xml": only_cifti_xml,
-        "czi": czi,
-        "czi-all-sub-blocks": czi_all_sub_blocks,
         "czi-xml": czi_xml,
+        "czi-all-sub-blocks": czi_all_sub_blocks,
+        "czi": czi,
+        "only-cifti-xml": only_cifti_xml,
+        "only-map-names": only_map_names,
+        "only-number-of-maps": only_number_of_maps,
+        "only-step-interval": only_step_interval,
+        "no-map-info": no_map_info,
         "data-file": data_file,
     };
     if (only_metadata !== null) {
@@ -157,18 +157,32 @@ function file_information_cargs(
         "wb_command",
         "-file-information"
     );
-    if ((params["no-map-info"] ?? false) || (params["only-step-interval"] ?? false) || (params["only-number-of-maps"] ?? false) || (params["only-map-names"] ?? false) || (params["only-metadata"] ?? null) !== null || (params["only-cifti-xml"] ?? false) || (params["czi"] ?? false) || (params["czi-all-sub-blocks"] ?? false) || (params["czi-xml"] ?? false)) {
-        cargs.push(
-            (((params["no-map-info"] ?? false)) ? "-no-map-info" : ""),
-            (((params["only-step-interval"] ?? false)) ? "-only-step-interval" : ""),
-            (((params["only-number-of-maps"] ?? false)) ? "-only-number-of-maps" : ""),
-            (((params["only-map-names"] ?? false)) ? "-only-map-names" : ""),
-            ...(((params["only-metadata"] ?? null) !== null) ? file_information_only_metadata_cargs((params["only-metadata"] ?? null), execution) : []),
-            (((params["only-cifti-xml"] ?? false)) ? "-only-cifti-xml" : ""),
-            (((params["czi"] ?? false)) ? "-czi" : ""),
-            (((params["czi-all-sub-blocks"] ?? false)) ? "-czi-all-sub-blocks" : ""),
-            (((params["czi-xml"] ?? false)) ? "-czi-xml" : "")
-        );
+    if ((params["only-metadata"] ?? null) !== null) {
+        cargs.push(...file_information_only_metadata_cargs((params["only-metadata"] ?? null), execution));
+    }
+    if ((params["czi-xml"] ?? false)) {
+        cargs.push("-czi-xml");
+    }
+    if ((params["czi-all-sub-blocks"] ?? false)) {
+        cargs.push("-czi-all-sub-blocks");
+    }
+    if ((params["czi"] ?? false)) {
+        cargs.push("-czi");
+    }
+    if ((params["only-cifti-xml"] ?? false)) {
+        cargs.push("-only-cifti-xml");
+    }
+    if ((params["only-map-names"] ?? false)) {
+        cargs.push("-only-map-names");
+    }
+    if ((params["only-number-of-maps"] ?? false)) {
+        cargs.push("-only-number-of-maps");
+    }
+    if ((params["only-step-interval"] ?? false)) {
+        cargs.push("-only-step-interval");
+    }
+    if ((params["no-map-info"] ?? false)) {
+        cargs.push("-no-map-info");
     }
     cargs.push((params["data-file"] ?? null));
     return cargs;
@@ -304,33 +318,33 @@ function file_information_execute(
  * .
  *
  * @param data_file data file
- * @param no_map_info do not show map information for files that support maps
- * @param only_step_interval suppress normal output, print the interval between maps
- * @param only_number_of_maps suppress normal output, print the number of maps
- * @param only_map_names suppress normal output, print the names of all maps
  * @param only_metadata suppress normal output, print file metadata
- * @param only_cifti_xml suppress normal output, print the cifti xml if the file type has it
- * @param czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
- * @param czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
  * @param czi_xml show XML from CZI file
+ * @param czi_all_sub_blocks show all sub-blocks in CZI file (may produce long output)
+ * @param czi For a CZI file, show information from the libCZI Info Command instead of the Workbench CZI File
+ * @param only_cifti_xml suppress normal output, print the cifti xml if the file type has it
+ * @param only_map_names suppress normal output, print the names of all maps
+ * @param only_number_of_maps suppress normal output, print the number of maps
+ * @param only_step_interval suppress normal output, print the interval between maps
+ * @param no_map_info do not show map information for files that support maps
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FileInformationOutputs`).
  */
 function file_information(
     data_file: string,
-    no_map_info: boolean = false,
-    only_step_interval: boolean = false,
-    only_number_of_maps: boolean = false,
-    only_map_names: boolean = false,
     only_metadata: FileInformationOnlyMetadataParamsDict | null = null,
-    only_cifti_xml: boolean = false,
-    czi: boolean = false,
-    czi_all_sub_blocks: boolean = false,
     czi_xml: boolean = false,
+    czi_all_sub_blocks: boolean = false,
+    czi: boolean = false,
+    only_cifti_xml: boolean = false,
+    only_map_names: boolean = false,
+    only_number_of_maps: boolean = false,
+    only_step_interval: boolean = false,
+    no_map_info: boolean = false,
     runner: Runner | null = null,
 ): FileInformationOutputs {
-    const params = file_information_params(data_file, no_map_info, only_step_interval, only_number_of_maps, only_map_names, only_metadata, only_cifti_xml, czi, czi_all_sub_blocks, czi_xml)
+    const params = file_information_params(data_file, only_metadata, czi_xml, czi_all_sub_blocks, czi, only_cifti_xml, only_map_names, only_number_of_maps, only_step_interval, no_map_info)
     return file_information_execute(params, runner);
 }
 

@@ -21,10 +21,10 @@ type MetricStatsRoiParamsDictTagged = Required<Pick<MetricStatsRoiParamsDict, '@
 
 interface MetricStatsParamsDict {
     "@type"?: "workbench/metric-stats";
-    "operation"?: string | null | undefined;
-    "percent"?: number | null | undefined;
-    "column"?: string | null | undefined;
     "roi"?: MetricStatsRoiParamsDict | null | undefined;
+    "column"?: string | null | undefined;
+    "percent"?: number | null | undefined;
+    "operation"?: string | null | undefined;
     "show-map-name": boolean;
     "metric-in": InputPathType;
 }
@@ -67,9 +67,11 @@ function metric_stats_roi_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-roi",
-        execution.inputFile((params["roi-metric"] ?? null)),
-        (((params["match-maps"] ?? false)) ? "-match-maps" : "")
+        execution.inputFile((params["roi-metric"] ?? null))
     );
+    if ((params["match-maps"] ?? false)) {
+        cargs.push("-match-maps");
+    }
     return cargs;
 }
 
@@ -91,26 +93,26 @@ interface MetricStatsOutputs {
  * Build parameters.
  *
  * @param metric_in the input metric
- * @param operation use a reduction operation
-
-the reduction operation
- * @param percent give the value at a percentile
-
-the percentile to find, must be between 0 and 100
+ * @param roi only consider data inside an roi
  * @param column only display output for one column
 
 the column number or name
- * @param roi only consider data inside an roi
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param operation use a reduction operation
+
+the reduction operation
  * @param show_map_name print map index and name before each output
  *
  * @returns Parameter dictionary
  */
 function metric_stats_params(
     metric_in: InputPathType,
-    operation: string | null = null,
-    percent: number | null = null,
-    column: string | null = null,
     roi: MetricStatsRoiParamsDict | null = null,
+    column: string | null = null,
+    percent: number | null = null,
+    operation: string | null = null,
     show_map_name: boolean = false,
 ): MetricStatsParamsDictTagged {
     const params = {
@@ -118,17 +120,17 @@ function metric_stats_params(
         "show-map-name": show_map_name,
         "metric-in": metric_in,
     };
-    if (operation !== null) {
-        params["operation"] = operation;
-    }
-    if (percent !== null) {
-        params["percent"] = percent;
+    if (roi !== null) {
+        params["roi"] = roi;
     }
     if (column !== null) {
         params["column"] = column;
     }
-    if (roi !== null) {
-        params["roi"] = roi;
+    if (percent !== null) {
+        params["percent"] = percent;
+    }
+    if (operation !== null) {
+        params["operation"] = operation;
     }
     return params;
 }
@@ -151,17 +153,29 @@ function metric_stats_cargs(
         "wb_command",
         "-metric-stats"
     );
-    if ((params["operation"] ?? null) !== null || (params["percent"] ?? null) !== null || (params["column"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["show-map-name"] ?? false)) {
+    if ((params["roi"] ?? null) !== null) {
+        cargs.push(...metric_stats_roi_cargs((params["roi"] ?? null), execution));
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["percent"] ?? null) !== null) {
+        cargs.push(
+            "-percentile",
+            String((params["percent"] ?? null))
+        );
+    }
+    if ((params["operation"] ?? null) !== null) {
         cargs.push(
             "-reduce",
-            (((params["operation"] ?? null) !== null) ? (params["operation"] ?? null) : ""),
-            "-percentile",
-            (((params["percent"] ?? null) !== null) ? String((params["percent"] ?? null)) : ""),
-            "-column",
-            (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-            ...(((params["roi"] ?? null) !== null) ? metric_stats_roi_cargs((params["roi"] ?? null), execution) : []),
-            (((params["show-map-name"] ?? false)) ? "-show-map-name" : "")
+            (params["operation"] ?? null)
         );
+    }
+    if ((params["show-map-name"] ?? false)) {
+        cargs.push("-show-map-name");
     }
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
@@ -257,16 +271,16 @@ function metric_stats_execute(
  * .
  *
  * @param metric_in the input metric
- * @param operation use a reduction operation
-
-the reduction operation
- * @param percent give the value at a percentile
-
-the percentile to find, must be between 0 and 100
+ * @param roi only consider data inside an roi
  * @param column only display output for one column
 
 the column number or name
- * @param roi only consider data inside an roi
+ * @param percent give the value at a percentile
+
+the percentile to find, must be between 0 and 100
+ * @param operation use a reduction operation
+
+the reduction operation
  * @param show_map_name print map index and name before each output
  * @param runner Command runner
  *
@@ -274,14 +288,14 @@ the column number or name
  */
 function metric_stats(
     metric_in: InputPathType,
-    operation: string | null = null,
-    percent: number | null = null,
-    column: string | null = null,
     roi: MetricStatsRoiParamsDict | null = null,
+    column: string | null = null,
+    percent: number | null = null,
+    operation: string | null = null,
     show_map_name: boolean = false,
     runner: Runner | null = null,
 ): MetricStatsOutputs {
-    const params = metric_stats_params(metric_in, operation, percent, column, roi, show_map_name)
+    const params = metric_stats_params(metric_in, roi, column, percent, operation, show_map_name)
     return metric_stats_execute(params, runner);
 }
 

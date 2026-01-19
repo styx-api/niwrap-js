@@ -37,9 +37,9 @@ type CiftiCorrelationGradientCerebellumSurfaceParamsDictTagged = Required<Pick<C
 
 interface CiftiCorrelationGradientDoubleCorrelationParamsDict {
     "@type"?: "double-correlation";
-    "fisher-z-first": boolean;
-    "no-demean-first": boolean;
     "covariance-first": boolean;
+    "no-demean-first": boolean;
+    "fisher-z-first": boolean;
 }
 type CiftiCorrelationGradientDoubleCorrelationParamsDictTagged = Required<Pick<CiftiCorrelationGradientDoubleCorrelationParamsDict, '@type'>> & CiftiCorrelationGradientDoubleCorrelationParamsDict;
 
@@ -50,16 +50,16 @@ interface CiftiCorrelationGradientParamsDict {
     "left-surface"?: CiftiCorrelationGradientLeftSurfaceParamsDict | null | undefined;
     "right-surface"?: CiftiCorrelationGradientRightSurfaceParamsDict | null | undefined;
     "cerebellum-surface"?: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null | undefined;
-    "surface-kernel"?: number | null | undefined;
-    "volume-kernel"?: number | null | undefined;
-    "presmooth-fwhm": boolean;
-    "undo-fisher-z": boolean;
-    "fisher-z": boolean;
-    "distance"?: number | null | undefined;
-    "distance"?: number | null | undefined;
-    "covariance": boolean;
-    "limit-GB"?: number | null | undefined;
     "double-correlation"?: CiftiCorrelationGradientDoubleCorrelationParamsDict | null | undefined;
+    "limit-GB"?: number | null | undefined;
+    "distance"?: number | null | undefined;
+    "distance"?: number | null | undefined;
+    "volume-kernel"?: number | null | undefined;
+    "surface-kernel"?: number | null | undefined;
+    "covariance": boolean;
+    "fisher-z": boolean;
+    "undo-fisher-z": boolean;
+    "presmooth-fwhm": boolean;
     "cifti": InputPathType;
 }
 type CiftiCorrelationGradientParamsDictTagged = Required<Pick<CiftiCorrelationGradientParamsDict, '@type'>> & CiftiCorrelationGradientParamsDict;
@@ -105,10 +105,14 @@ function cifti_correlation_gradient_left_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-left-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-left-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-left-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -153,10 +157,14 @@ function cifti_correlation_gradient_right_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-right-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-right-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-right-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -201,10 +209,14 @@ function cifti_correlation_gradient_cerebellum_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cerebellum-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-cerebellum-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -212,22 +224,22 @@ function cifti_correlation_gradient_cerebellum_surface_cargs(
 /**
  * Build parameters.
  *
- * @param fisher_z_first after the FIRST correlation, apply fisher small z transform (ie, artanh)
- * @param no_demean_first instead of correlation for the FIRST operation, do dot product of rows, then normalize by diagonal
  * @param covariance_first instead of correlation for the FIRST operation, compute covariance
+ * @param no_demean_first instead of correlation for the FIRST operation, do dot product of rows, then normalize by diagonal
+ * @param fisher_z_first after the FIRST correlation, apply fisher small z transform (ie, artanh)
  *
  * @returns Parameter dictionary
  */
 function cifti_correlation_gradient_double_correlation(
-    fisher_z_first: boolean = false,
-    no_demean_first: boolean = false,
     covariance_first: boolean = false,
+    no_demean_first: boolean = false,
+    fisher_z_first: boolean = false,
 ): CiftiCorrelationGradientDoubleCorrelationParamsDictTagged {
     const params = {
         "@type": "double-correlation" as const,
-        "fisher-z-first": fisher_z_first,
-        "no-demean-first": no_demean_first,
         "covariance-first": covariance_first,
+        "no-demean-first": no_demean_first,
+        "fisher-z-first": fisher_z_first,
     };
     return params;
 }
@@ -246,13 +258,15 @@ function cifti_correlation_gradient_double_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["fisher-z-first"] ?? false) || (params["no-demean-first"] ?? false) || (params["covariance-first"] ?? false)) {
-        cargs.push(
-            "-double-correlation",
-            (((params["fisher-z-first"] ?? false)) ? "-fisher-z-first" : ""),
-            (((params["no-demean-first"] ?? false)) ? "-no-demean-first" : ""),
-            (((params["covariance-first"] ?? false)) ? "-covariance-first" : "")
-        );
+    cargs.push("-double-correlation");
+    if ((params["covariance-first"] ?? false)) {
+        cargs.push("-covariance-first");
+    }
+    if ((params["no-demean-first"] ?? false)) {
+        cargs.push("-no-demean-first");
+    }
+    if ((params["fisher-z-first"] ?? false)) {
+        cargs.push("-fisher-z-first");
     }
     return cargs;
 }
@@ -283,26 +297,26 @@ interface CiftiCorrelationGradientOutputs {
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param surface_kernel smooth on the surface before computing the gradient
-
-the size of the gaussian surface smoothing kernel in mm, as sigma by default
- * @param volume_kernel smooth the volume before computing the gradient
-
-the size of the gaussian volume smoothing kernel in mm, as sigma by default
- * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
- * @param undo_fisher_z apply the inverse fisher small z transform to the input
- * @param fisher_z apply the fisher small z transform to the correlations before taking the gradient
- * @param distance exclude vertices near each seed vertex from computation
-
-geodesic distance from seed vertex for the exclusion zone, in mm
- * @param distance_ exclude voxels near each seed voxel from computation
-
-distance from seed voxel for the exclusion zone, in mm
- * @param covariance compute covariance instead of correlation
+ * @param double_correlation do two correlations before taking the gradient
  * @param limit_gb restrict memory usage
 
 memory limit in gigabytes
- * @param double_correlation do two correlations before taking the gradient
+ * @param distance exclude voxels near each seed voxel from computation
+
+distance from seed voxel for the exclusion zone, in mm
+ * @param distance_ exclude vertices near each seed vertex from computation
+
+geodesic distance from seed vertex for the exclusion zone, in mm
+ * @param volume_kernel smooth the volume before computing the gradient
+
+the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param surface_kernel smooth on the surface before computing the gradient
+
+the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param covariance compute covariance instead of correlation
+ * @param fisher_z apply the fisher small z transform to the correlations before taking the gradient
+ * @param undo_fisher_z apply the inverse fisher small z transform to the input
+ * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
@@ -312,24 +326,24 @@ function cifti_correlation_gradient_params(
     left_surface: CiftiCorrelationGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiCorrelationGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null = null,
-    surface_kernel: number | null = null,
-    volume_kernel: number | null = null,
-    presmooth_fwhm: boolean = false,
-    undo_fisher_z: boolean = false,
-    fisher_z: boolean = false,
+    double_correlation: CiftiCorrelationGradientDoubleCorrelationParamsDict | null = null,
+    limit_gb: number | null = null,
     distance: number | null = null,
     distance_: number | null = null,
+    volume_kernel: number | null = null,
+    surface_kernel: number | null = null,
     covariance: boolean = false,
-    limit_gb: number | null = null,
-    double_correlation: CiftiCorrelationGradientDoubleCorrelationParamsDict | null = null,
+    fisher_z: boolean = false,
+    undo_fisher_z: boolean = false,
+    presmooth_fwhm: boolean = false,
 ): CiftiCorrelationGradientParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-correlation-gradient" as const,
         "cifti-out": cifti_out,
-        "presmooth-fwhm": presmooth_fwhm,
-        "undo-fisher-z": undo_fisher_z,
-        "fisher-z": fisher_z,
         "covariance": covariance,
+        "fisher-z": fisher_z,
+        "undo-fisher-z": undo_fisher_z,
+        "presmooth-fwhm": presmooth_fwhm,
         "cifti": cifti,
     };
     if (left_surface !== null) {
@@ -341,11 +355,11 @@ function cifti_correlation_gradient_params(
     if (cerebellum_surface !== null) {
         params["cerebellum-surface"] = cerebellum_surface;
     }
-    if (surface_kernel !== null) {
-        params["surface-kernel"] = surface_kernel;
+    if (double_correlation !== null) {
+        params["double-correlation"] = double_correlation;
     }
-    if (volume_kernel !== null) {
-        params["volume-kernel"] = volume_kernel;
+    if (limit_gb !== null) {
+        params["limit-GB"] = limit_gb;
     }
     if (distance !== null) {
         params["distance"] = distance;
@@ -353,11 +367,11 @@ function cifti_correlation_gradient_params(
     if (distance_ !== null) {
         params["distance"] = distance_;
     }
-    if (limit_gb !== null) {
-        params["limit-GB"] = limit_gb;
+    if (volume_kernel !== null) {
+        params["volume-kernel"] = volume_kernel;
     }
-    if (double_correlation !== null) {
-        params["double-correlation"] = double_correlation;
+    if (surface_kernel !== null) {
+        params["surface-kernel"] = surface_kernel;
     }
     return params;
 }
@@ -385,22 +399,50 @@ function cifti_correlation_gradient_cargs(
         ...(((params["left-surface"] ?? null) !== null) ? cifti_correlation_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
         ...(((params["right-surface"] ?? null) !== null) ? cifti_correlation_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
         ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_correlation_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-        "-surface-presmooth",
-        (((params["surface-kernel"] ?? null) !== null) ? String((params["surface-kernel"] ?? null)) : ""),
-        "-volume-presmooth",
-        (((params["volume-kernel"] ?? null) !== null) ? String((params["volume-kernel"] ?? null)) : ""),
-        (((params["presmooth-fwhm"] ?? false)) ? "-presmooth-fwhm" : ""),
-        (((params["undo-fisher-z"] ?? false)) ? "-undo-fisher-z" : ""),
-        (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
-        "-surface-exclude",
-        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-        "-volume-exclude",
-        (((params["distance"] ?? null) !== null) ? String((params["distance"] ?? null)) : ""),
-        (((params["covariance"] ?? false)) ? "-covariance" : ""),
-        "-mem-limit",
-        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
         ...(((params["double-correlation"] ?? null) !== null) ? cifti_correlation_gradient_double_correlation_cargs((params["double-correlation"] ?? null), execution) : [])
     );
+    if ((params["limit-GB"] ?? null) !== null) {
+        cargs.push(
+            "-mem-limit",
+            String((params["limit-GB"] ?? null))
+        );
+    }
+    if ((params["distance"] ?? null) !== null) {
+        cargs.push(
+            "-volume-exclude",
+            String((params["distance"] ?? null))
+        );
+    }
+    if ((params["distance"] ?? null) !== null) {
+        cargs.push(
+            "-surface-exclude",
+            String((params["distance"] ?? null))
+        );
+    }
+    if ((params["volume-kernel"] ?? null) !== null) {
+        cargs.push(
+            "-volume-presmooth",
+            String((params["volume-kernel"] ?? null))
+        );
+    }
+    if ((params["surface-kernel"] ?? null) !== null) {
+        cargs.push(
+            "-surface-presmooth",
+            String((params["surface-kernel"] ?? null))
+        );
+    }
+    if ((params["covariance"] ?? false)) {
+        cargs.push("-covariance");
+    }
+    if ((params["fisher-z"] ?? false)) {
+        cargs.push("-fisher-z");
+    }
+    if ((params["undo-fisher-z"] ?? false)) {
+        cargs.push("-undo-fisher-z");
+    }
+    if ((params["presmooth-fwhm"] ?? false)) {
+        cargs.push("-presmooth-fwhm");
+    }
     cargs.push(execution.inputFile((params["cifti"] ?? null)));
     return cargs;
 }
@@ -460,26 +502,26 @@ function cifti_correlation_gradient_execute(
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
- * @param surface_kernel smooth on the surface before computing the gradient
-
-the size of the gaussian surface smoothing kernel in mm, as sigma by default
- * @param volume_kernel smooth the volume before computing the gradient
-
-the size of the gaussian volume smoothing kernel in mm, as sigma by default
- * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
- * @param undo_fisher_z apply the inverse fisher small z transform to the input
- * @param fisher_z apply the fisher small z transform to the correlations before taking the gradient
- * @param distance exclude vertices near each seed vertex from computation
-
-geodesic distance from seed vertex for the exclusion zone, in mm
- * @param distance_ exclude voxels near each seed voxel from computation
-
-distance from seed voxel for the exclusion zone, in mm
- * @param covariance compute covariance instead of correlation
+ * @param double_correlation do two correlations before taking the gradient
  * @param limit_gb restrict memory usage
 
 memory limit in gigabytes
- * @param double_correlation do two correlations before taking the gradient
+ * @param distance exclude voxels near each seed voxel from computation
+
+distance from seed voxel for the exclusion zone, in mm
+ * @param distance_ exclude vertices near each seed vertex from computation
+
+geodesic distance from seed vertex for the exclusion zone, in mm
+ * @param volume_kernel smooth the volume before computing the gradient
+
+the size of the gaussian volume smoothing kernel in mm, as sigma by default
+ * @param surface_kernel smooth on the surface before computing the gradient
+
+the size of the gaussian surface smoothing kernel in mm, as sigma by default
+ * @param covariance compute covariance instead of correlation
+ * @param fisher_z apply the fisher small z transform to the correlations before taking the gradient
+ * @param undo_fisher_z apply the inverse fisher small z transform to the input
+ * @param presmooth_fwhm smoothing kernel sizes are FWHM, not sigma
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
@@ -490,19 +532,19 @@ function cifti_correlation_gradient(
     left_surface: CiftiCorrelationGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiCorrelationGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null = null,
-    surface_kernel: number | null = null,
-    volume_kernel: number | null = null,
-    presmooth_fwhm: boolean = false,
-    undo_fisher_z: boolean = false,
-    fisher_z: boolean = false,
+    double_correlation: CiftiCorrelationGradientDoubleCorrelationParamsDict | null = null,
+    limit_gb: number | null = null,
     distance: number | null = null,
     distance_: number | null = null,
+    volume_kernel: number | null = null,
+    surface_kernel: number | null = null,
     covariance: boolean = false,
-    limit_gb: number | null = null,
-    double_correlation: CiftiCorrelationGradientDoubleCorrelationParamsDict | null = null,
+    fisher_z: boolean = false,
+    undo_fisher_z: boolean = false,
+    presmooth_fwhm: boolean = false,
     runner: Runner | null = null,
 ): CiftiCorrelationGradientOutputs {
-    const params = cifti_correlation_gradient_params(cifti_out, cifti, left_surface, right_surface, cerebellum_surface, surface_kernel, volume_kernel, presmooth_fwhm, undo_fisher_z, fisher_z, distance, distance_, covariance, limit_gb, double_correlation)
+    const params = cifti_correlation_gradient_params(cifti_out, cifti, left_surface, right_surface, cerebellum_surface, double_correlation, limit_gb, distance, distance_, volume_kernel, surface_kernel, covariance, fisher_z, undo_fisher_z, presmooth_fwhm)
     return cifti_correlation_gradient_execute(params, runner);
 }
 

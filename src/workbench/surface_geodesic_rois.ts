@@ -14,10 +14,10 @@ const SURFACE_GEODESIC_ROIS_METADATA: Metadata = {
 interface SurfaceGeodesicRoisParamsDict {
     "@type"?: "workbench/surface-geodesic-rois";
     "metric-out": string;
-    "sigma"?: number | null | undefined;
-    "method"?: string | null | undefined;
-    "name-list-file"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
+    "name-list-file"?: string | null | undefined;
+    "method"?: string | null | undefined;
+    "sigma"?: number | null | undefined;
     "surface": InputPathType;
     "limit": number;
     "vertex-list-file": string;
@@ -49,18 +49,18 @@ interface SurfaceGeodesicRoisOutputs {
  * @param surface the surface to draw on
  * @param limit geodesic distance limit from vertex, in mm
  * @param vertex_list_file a text file containing the vertices to draw ROIs around
- * @param sigma generate a gaussian kernel instead of a flat ROI
-
-the sigma for the gaussian kernel, in mm
- * @param method how to handle overlapping ROIs, default ALLOW
-
-the method of resolving overlaps
- * @param name_list_file name the columns from text file
-
-a text file containing column names, one per line
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param name_list_file name the columns from text file
+
+a text file containing column names, one per line
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
  *
  * @returns Parameter dictionary
  */
@@ -69,10 +69,10 @@ function surface_geodesic_rois_params(
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
-    sigma: number | null = null,
-    method: string | null = null,
-    name_list_file: string | null = null,
     area_metric: InputPathType | null = null,
+    name_list_file: string | null = null,
+    method: string | null = null,
+    sigma: number | null = null,
 ): SurfaceGeodesicRoisParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-rois" as const,
@@ -81,17 +81,17 @@ function surface_geodesic_rois_params(
         "limit": limit,
         "vertex-list-file": vertex_list_file,
     };
-    if (sigma !== null) {
-        params["sigma"] = sigma;
-    }
-    if (method !== null) {
-        params["method"] = method;
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     if (name_list_file !== null) {
         params["name-list-file"] = name_list_file;
     }
-    if (area_metric !== null) {
-        params["area-metric"] = area_metric;
+    if (method !== null) {
+        params["method"] = method;
+    }
+    if (sigma !== null) {
+        params["sigma"] = sigma;
     }
     return params;
 }
@@ -114,17 +114,31 @@ function surface_geodesic_rois_cargs(
         "wb_command",
         "-surface-geodesic-rois"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-gaussian",
-        (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""),
-        "-overlap-logic",
-        (((params["method"] ?? null) !== null) ? (params["method"] ?? null) : ""),
-        "-names",
-        (((params["name-list-file"] ?? null) !== null) ? (params["name-list-file"] ?? null) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["name-list-file"] ?? null) !== null) {
+        cargs.push(
+            "-names",
+            (params["name-list-file"] ?? null)
+        );
+    }
+    if ((params["method"] ?? null) !== null) {
+        cargs.push(
+            "-overlap-logic",
+            (params["method"] ?? null)
+        );
+    }
+    if ((params["sigma"] ?? null) !== null) {
+        cargs.push(
+            "-gaussian",
+            String((params["sigma"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(String((params["limit"] ?? null)));
     cargs.push((params["vertex-list-file"] ?? null));
@@ -185,18 +199,18 @@ function surface_geodesic_rois_execute(
  * @param surface the surface to draw on
  * @param limit geodesic distance limit from vertex, in mm
  * @param vertex_list_file a text file containing the vertices to draw ROIs around
- * @param sigma generate a gaussian kernel instead of a flat ROI
-
-the sigma for the gaussian kernel, in mm
- * @param method how to handle overlapping ROIs, default ALLOW
-
-the method of resolving overlaps
- * @param name_list_file name the columns from text file
-
-a text file containing column names, one per line
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param name_list_file name the columns from text file
+
+a text file containing column names, one per line
+ * @param method how to handle overlapping ROIs, default ALLOW
+
+the method of resolving overlaps
+ * @param sigma generate a gaussian kernel instead of a flat ROI
+
+the sigma for the gaussian kernel, in mm
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicRoisOutputs`).
@@ -206,13 +220,13 @@ function surface_geodesic_rois(
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
-    sigma: number | null = null,
-    method: string | null = null,
-    name_list_file: string | null = null,
     area_metric: InputPathType | null = null,
+    name_list_file: string | null = null,
+    method: string | null = null,
+    sigma: number | null = null,
     runner: Runner | null = null,
 ): SurfaceGeodesicRoisOutputs {
-    const params = surface_geodesic_rois_params(metric_out, surface, limit, vertex_list_file, sigma, method, name_list_file, area_metric)
+    const params = surface_geodesic_rois_params(metric_out, surface, limit, vertex_list_file, area_metric, name_list_file, method, sigma)
     return surface_geodesic_rois_execute(params, runner);
 }
 

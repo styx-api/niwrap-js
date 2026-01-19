@@ -15,8 +15,8 @@ interface VolumeDistortionParamsDict {
     "@type"?: "workbench/volume-distortion";
     "volume-out": string;
     "source-volume"?: string | null | undefined;
-    "circular": boolean;
     "log2": boolean;
+    "circular": boolean;
     "warpfield": string;
 }
 type VolumeDistortionParamsDictTagged = Required<Pick<VolumeDistortionParamsDict, '@type'>> & VolumeDistortionParamsDict;
@@ -47,8 +47,8 @@ interface VolumeDistortionOutputs {
  * @param source_volume MUST be used if using a fnirt warpfield
 
 the source volume used when generating the warpfield
- * @param circular use the circle-based formula for the anisotropic measure
  * @param log2 apply base-2 log transform
+ * @param circular use the circle-based formula for the anisotropic measure
  *
  * @returns Parameter dictionary
  */
@@ -56,14 +56,14 @@ function volume_distortion_params(
     volume_out: string,
     warpfield: string,
     source_volume: string | null = null,
-    circular: boolean = false,
     log2: boolean = false,
+    circular: boolean = false,
 ): VolumeDistortionParamsDictTagged {
     const params = {
         "@type": "workbench/volume-distortion" as const,
         "volume-out": volume_out,
-        "circular": circular,
         "log2": log2,
+        "circular": circular,
         "warpfield": warpfield,
     };
     if (source_volume !== null) {
@@ -90,13 +90,19 @@ function volume_distortion_cargs(
         "wb_command",
         "-volume-distortion"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        "-fnirt",
-        (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : ""),
-        (((params["circular"] ?? false)) ? "-circular" : ""),
-        (((params["log2"] ?? false)) ? "-log2" : "")
-    );
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["source-volume"] ?? null) !== null) {
+        cargs.push(
+            "-fnirt",
+            (params["source-volume"] ?? null)
+        );
+    }
+    if ((params["log2"] ?? false)) {
+        cargs.push("-log2");
+    }
+    if ((params["circular"] ?? false)) {
+        cargs.push("-circular");
+    }
     cargs.push((params["warpfield"] ?? null));
     return cargs;
 }
@@ -160,8 +166,8 @@ function volume_distortion_execute(
  * @param source_volume MUST be used if using a fnirt warpfield
 
 the source volume used when generating the warpfield
- * @param circular use the circle-based formula for the anisotropic measure
  * @param log2 apply base-2 log transform
+ * @param circular use the circle-based formula for the anisotropic measure
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeDistortionOutputs`).
@@ -170,11 +176,11 @@ function volume_distortion(
     volume_out: string,
     warpfield: string,
     source_volume: string | null = null,
-    circular: boolean = false,
     log2: boolean = false,
+    circular: boolean = false,
     runner: Runner | null = null,
 ): VolumeDistortionOutputs {
-    const params = volume_distortion_params(volume_out, warpfield, source_volume, circular, log2)
+    const params = volume_distortion_params(volume_out, warpfield, source_volume, log2, circular)
     return volume_distortion_execute(params, runner);
 }
 

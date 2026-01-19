@@ -31,13 +31,13 @@ interface MetricExtremaParamsDict {
     "@type"?: "workbench/metric-extrema";
     "metric-out": string;
     "presmooth"?: MetricExtremaPresmoothParamsDict | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
     "threshold"?: MetricExtremaThresholdParamsDict | null | undefined;
-    "sum-columns": boolean;
-    "consolidate-mode": boolean;
-    "only-maxima": boolean;
-    "only-minima": boolean;
     "column"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
+    "only-minima": boolean;
+    "only-maxima": boolean;
+    "consolidate-mode": boolean;
+    "sum-columns": boolean;
     "surface": InputPathType;
     "metric-in": InputPathType;
     "distance": number;
@@ -81,9 +81,11 @@ function metric_extrema_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-presmooth",
-        String((params["kernel"] ?? null)),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
+        String((params["kernel"] ?? null))
     );
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     return cargs;
 }
 
@@ -156,17 +158,17 @@ interface MetricExtremaOutputs {
  * @param metric_in the metric to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
  * @param presmooth smooth the metric before finding extrema
- * @param roi_metric ignore values outside the selected area
-
-the area to find extrema in, as a metric
  * @param threshold ignore small extrema
- * @param sum_columns output the sum of the extrema columns instead of each column separately
- * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
- * @param only_maxima only find the maxima
- * @param only_minima only find the minima
  * @param column select a single column to find extrema in
 
 the column number or name
+ * @param roi_metric ignore values outside the selected area
+
+the area to find extrema in, as a metric
+ * @param only_minima only find the minima
+ * @param only_maxima only find the maxima
+ * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param sum_columns output the sum of the extrema columns instead of each column separately
  *
  * @returns Parameter dictionary
  */
@@ -176,21 +178,21 @@ function metric_extrema_params(
     metric_in: InputPathType,
     distance: number,
     presmooth: MetricExtremaPresmoothParamsDict | null = null,
-    roi_metric: InputPathType | null = null,
     threshold: MetricExtremaThresholdParamsDict | null = null,
-    sum_columns: boolean = false,
-    consolidate_mode: boolean = false,
-    only_maxima: boolean = false,
-    only_minima: boolean = false,
     column: string | null = null,
+    roi_metric: InputPathType | null = null,
+    only_minima: boolean = false,
+    only_maxima: boolean = false,
+    consolidate_mode: boolean = false,
+    sum_columns: boolean = false,
 ): MetricExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/metric-extrema" as const,
         "metric-out": metric_out,
-        "sum-columns": sum_columns,
-        "consolidate-mode": consolidate_mode,
-        "only-maxima": only_maxima,
         "only-minima": only_minima,
+        "only-maxima": only_maxima,
+        "consolidate-mode": consolidate_mode,
+        "sum-columns": sum_columns,
         "surface": surface,
         "metric-in": metric_in,
         "distance": distance,
@@ -198,14 +200,14 @@ function metric_extrema_params(
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
     }
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
-    }
     if (threshold !== null) {
         params["threshold"] = threshold;
     }
     if (column !== null) {
         params["column"] = column;
+    }
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -231,16 +233,32 @@ function metric_extrema_cargs(
     cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        ...(((params["threshold"] ?? null) !== null) ? metric_extrema_threshold_cargs((params["threshold"] ?? null), execution) : []),
-        (((params["sum-columns"] ?? false)) ? "-sum-columns" : ""),
-        (((params["consolidate-mode"] ?? false)) ? "-consolidate-mode" : ""),
-        (((params["only-maxima"] ?? false)) ? "-only-maxima" : ""),
-        (((params["only-minima"] ?? false)) ? "-only-minima" : ""),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : "")
+        ...(((params["threshold"] ?? null) !== null) ? metric_extrema_threshold_cargs((params["threshold"] ?? null), execution) : [])
     );
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
+    if ((params["only-minima"] ?? false)) {
+        cargs.push("-only-minima");
+    }
+    if ((params["only-maxima"] ?? false)) {
+        cargs.push("-only-maxima");
+    }
+    if ((params["consolidate-mode"] ?? false)) {
+        cargs.push("-consolidate-mode");
+    }
+    if ((params["sum-columns"] ?? false)) {
+        cargs.push("-sum-columns");
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push(String((params["distance"] ?? null)));
@@ -318,17 +336,17 @@ function metric_extrema_execute(
  * @param metric_in the metric to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
  * @param presmooth smooth the metric before finding extrema
- * @param roi_metric ignore values outside the selected area
-
-the area to find extrema in, as a metric
  * @param threshold ignore small extrema
- * @param sum_columns output the sum of the extrema columns instead of each column separately
- * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
- * @param only_maxima only find the maxima
- * @param only_minima only find the minima
  * @param column select a single column to find extrema in
 
 the column number or name
+ * @param roi_metric ignore values outside the selected area
+
+the area to find extrema in, as a metric
+ * @param only_minima only find the minima
+ * @param only_maxima only find the maxima
+ * @param consolidate_mode use consolidation of local minima instead of a large neighborhood
+ * @param sum_columns output the sum of the extrema columns instead of each column separately
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricExtremaOutputs`).
@@ -339,16 +357,16 @@ function metric_extrema(
     metric_in: InputPathType,
     distance: number,
     presmooth: MetricExtremaPresmoothParamsDict | null = null,
-    roi_metric: InputPathType | null = null,
     threshold: MetricExtremaThresholdParamsDict | null = null,
-    sum_columns: boolean = false,
-    consolidate_mode: boolean = false,
-    only_maxima: boolean = false,
-    only_minima: boolean = false,
     column: string | null = null,
+    roi_metric: InputPathType | null = null,
+    only_minima: boolean = false,
+    only_maxima: boolean = false,
+    consolidate_mode: boolean = false,
+    sum_columns: boolean = false,
     runner: Runner | null = null,
 ): MetricExtremaOutputs {
-    const params = metric_extrema_params(metric_out, surface, metric_in, distance, presmooth, roi_metric, threshold, sum_columns, consolidate_mode, only_maxima, only_minima, column)
+    const params = metric_extrema_params(metric_out, surface, metric_in, distance, presmooth, threshold, column, roi_metric, only_minima, only_maxima, consolidate_mode, sum_columns)
     return metric_extrema_execute(params, runner);
 }
 

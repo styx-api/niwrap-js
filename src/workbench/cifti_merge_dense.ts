@@ -21,8 +21,8 @@ type CiftiMergeDenseCiftiParamsDictTagged = Required<Pick<CiftiMergeDenseCiftiPa
 interface CiftiMergeDenseParamsDict {
     "@type"?: "workbench/cifti-merge-dense";
     "cifti-out": string;
-    "action"?: string | null | undefined;
     "cifti"?: Array<CiftiMergeDenseCiftiParamsDict> | null | undefined;
+    "action"?: string | null | undefined;
     "direction": string;
 }
 type CiftiMergeDenseParamsDictTagged = Required<Pick<CiftiMergeDenseParamsDict, '@type'>> & CiftiMergeDenseParamsDict;
@@ -89,29 +89,29 @@ interface CiftiMergeDenseOutputs {
  *
  * @param cifti_out the output cifti file
  * @param direction which dimension to merge along, ROW or COLUMN
+ * @param cifti specify an input cifti file
  * @param action how to handle conflicts between label keys
 
 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
- * @param cifti specify an input cifti file
  *
  * @returns Parameter dictionary
  */
 function cifti_merge_dense_params(
     cifti_out: string,
     direction: string,
-    action: string | null = null,
     cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
+    action: string | null = null,
 ): CiftiMergeDenseParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-merge-dense" as const,
         "cifti-out": cifti_out,
         "direction": direction,
     };
-    if (action !== null) {
-        params["action"] = action;
-    }
     if (cifti !== null) {
         params["cifti"] = cifti;
+    }
+    if (action !== null) {
+        params["action"] = action;
     }
     return params;
 }
@@ -136,10 +136,14 @@ function cifti_merge_dense_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        "-label-collision",
-        (((params["action"] ?? null) !== null) ? (params["action"] ?? null) : ""),
         ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_dense_cifti_cargs(s, execution)).flat() : [])
     );
+    if ((params["action"] ?? null) !== null) {
+        cargs.push(
+            "-label-collision",
+            (params["action"] ?? null)
+        );
+    }
     cargs.push((params["direction"] ?? null));
     return cargs;
 }
@@ -196,10 +200,10 @@ function cifti_merge_dense_execute(
  *
  * @param cifti_out the output cifti file
  * @param direction which dimension to merge along, ROW or COLUMN
+ * @param cifti specify an input cifti file
  * @param action how to handle conflicts between label keys
 
 'ERROR', 'FIRST', or 'LEGACY', default 'ERROR', use 'LEGACY' to match v1.4.2 and earlier
- * @param cifti specify an input cifti file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
@@ -207,11 +211,11 @@ function cifti_merge_dense_execute(
 function cifti_merge_dense(
     cifti_out: string,
     direction: string,
-    action: string | null = null,
     cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
+    action: string | null = null,
     runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
-    const params = cifti_merge_dense_params(cifti_out, direction, action, cifti)
+    const params = cifti_merge_dense_params(cifti_out, direction, cifti, action)
     return cifti_merge_dense_execute(params, runner);
 }
 

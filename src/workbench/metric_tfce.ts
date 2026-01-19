@@ -31,10 +31,10 @@ interface MetricTfceParamsDict {
     "@type"?: "workbench/metric-tfce";
     "metric-out": string;
     "presmooth"?: MetricTfcePresmoothParamsDict | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
     "parameters"?: MetricTfceParametersParamsDict | null | undefined;
-    "column"?: string | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
+    "column"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "metric-in": InputPathType;
 }
@@ -77,9 +77,11 @@ function metric_tfce_presmooth_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-presmooth",
-        String((params["kernel"] ?? null)),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : "")
+        String((params["kernel"] ?? null))
     );
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     return cargs;
 }
 
@@ -151,16 +153,16 @@ interface MetricTfceOutputs {
  * @param surface the surface to compute on
  * @param metric_in the metric to run TFCE on
  * @param presmooth smooth the metric before running TFCE
- * @param roi_metric select a region of interest to run TFCE on
-
-the area to run TFCE on, as a metric
  * @param parameters set parameters for TFCE integral
- * @param column select a single column
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column
+
+the column number or name
+ * @param roi_metric select a region of interest to run TFCE on
+
+the area to run TFCE on, as a metric
  *
  * @returns Parameter dictionary
  */
@@ -169,10 +171,10 @@ function metric_tfce_params(
     surface: InputPathType,
     metric_in: InputPathType,
     presmooth: MetricTfcePresmoothParamsDict | null = null,
-    roi_metric: InputPathType | null = null,
     parameters: MetricTfceParametersParamsDict | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
 ): MetricTfceParamsDictTagged {
     const params = {
         "@type": "workbench/metric-tfce" as const,
@@ -183,17 +185,17 @@ function metric_tfce_params(
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
     }
-    if (roi_metric !== null) {
-        params["roi-metric"] = roi_metric;
-    }
     if (parameters !== null) {
         params["parameters"] = parameters;
+    }
+    if (area_metric !== null) {
+        params["area-metric"] = area_metric;
     }
     if (column !== null) {
         params["column"] = column;
     }
-    if (area_metric !== null) {
-        params["area-metric"] = area_metric;
+    if (roi_metric !== null) {
+        params["roi-metric"] = roi_metric;
     }
     return params;
 }
@@ -219,14 +221,26 @@ function metric_tfce_cargs(
     cargs.push(
         (params["metric-out"] ?? null),
         ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        "-roi",
-        (((params["roi-metric"] ?? null) !== null) ? execution.inputFile((params["roi-metric"] ?? null)) : ""),
-        ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : []),
-        "-column",
-        (((params["column"] ?? null) !== null) ? (params["column"] ?? null) : ""),
-        "-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : [])
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
+    if ((params["column"] ?? null) !== null) {
+        cargs.push(
+            "-column",
+            (params["column"] ?? null)
+        );
+    }
+    if ((params["roi-metric"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roi-metric"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
@@ -306,16 +320,16 @@ function metric_tfce_execute(
  * @param surface the surface to compute on
  * @param metric_in the metric to run TFCE on
  * @param presmooth smooth the metric before running TFCE
- * @param roi_metric select a region of interest to run TFCE on
-
-the area to run TFCE on, as a metric
  * @param parameters set parameters for TFCE integral
- * @param column select a single column
-
-the column number or name
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
+ * @param column select a single column
+
+the column number or name
+ * @param roi_metric select a region of interest to run TFCE on
+
+the area to run TFCE on, as a metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MetricTfceOutputs`).
@@ -325,13 +339,13 @@ function metric_tfce(
     surface: InputPathType,
     metric_in: InputPathType,
     presmooth: MetricTfcePresmoothParamsDict | null = null,
-    roi_metric: InputPathType | null = null,
     parameters: MetricTfceParametersParamsDict | null = null,
-    column: string | null = null,
     area_metric: InputPathType | null = null,
+    column: string | null = null,
+    roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricTfceOutputs {
-    const params = metric_tfce_params(metric_out, surface, metric_in, presmooth, roi_metric, parameters, column, area_metric)
+    const params = metric_tfce_params(metric_out, surface, metric_in, presmooth, parameters, area_metric, column, roi_metric)
     return metric_tfce_execute(params, runner);
 }
 

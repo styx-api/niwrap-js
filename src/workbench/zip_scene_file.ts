@@ -14,8 +14,8 @@ const ZIP_SCENE_FILE_METADATA: Metadata = {
 interface ZipSceneFileParamsDict {
     "@type"?: "workbench/zip-scene-file";
     "directory"?: string | null | undefined;
-    "skip-missing": boolean;
     "write-scene-file": boolean;
+    "skip-missing": boolean;
     "scene-file": string;
     "extract-folder": string;
     "zip-file": string;
@@ -45,8 +45,8 @@ interface ZipSceneFileOutputs {
  * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
 
 the directory
- * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  * @param write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
+ * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  *
  * @returns Parameter dictionary
  */
@@ -55,13 +55,13 @@ function zip_scene_file_params(
     extract_folder: string,
     zip_file: string,
     directory: string | null = null,
-    skip_missing: boolean = false,
     write_scene_file: boolean = false,
+    skip_missing: boolean = false,
 ): ZipSceneFileParamsDictTagged {
     const params = {
         "@type": "workbench/zip-scene-file" as const,
-        "skip-missing": skip_missing,
         "write-scene-file": write_scene_file,
+        "skip-missing": skip_missing,
         "scene-file": scene_file,
         "extract-folder": extract_folder,
         "zip-file": zip_file,
@@ -90,13 +90,17 @@ function zip_scene_file_cargs(
         "wb_command",
         "-zip-scene-file"
     );
-    if ((params["directory"] ?? null) !== null || (params["skip-missing"] ?? false) || (params["write-scene-file"] ?? false)) {
+    if ((params["directory"] ?? null) !== null) {
         cargs.push(
             "-base-dir",
-            (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
-            (((params["skip-missing"] ?? false)) ? "-skip-missing" : ""),
-            (((params["write-scene-file"] ?? false)) ? "-write-scene-file" : "")
+            (params["directory"] ?? null)
         );
+    }
+    if ((params["write-scene-file"] ?? false)) {
+        cargs.push("-write-scene-file");
+    }
+    if ((params["skip-missing"] ?? false)) {
+        cargs.push("-skip-missing");
     }
     cargs.push((params["scene-file"] ?? null));
     cargs.push((params["extract-folder"] ?? null));
@@ -159,8 +163,8 @@ function zip_scene_file_execute(
  * @param directory specify a directory that all data files are somewhere within, this will become the root of the zipfile's directory structure
 
 the directory
- * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  * @param write_scene_file rewrite the scene file before zipping, to store a new base path or fix extra '..'s in paths that might break
+ * @param skip_missing any missing files will generate only warnings, and the zip file will be created anyway
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ZipSceneFileOutputs`).
@@ -170,11 +174,11 @@ function zip_scene_file(
     extract_folder: string,
     zip_file: string,
     directory: string | null = null,
-    skip_missing: boolean = false,
     write_scene_file: boolean = false,
+    skip_missing: boolean = false,
     runner: Runner | null = null,
 ): ZipSceneFileOutputs {
-    const params = zip_scene_file_params(scene_file, extract_folder, zip_file, directory, skip_missing, write_scene_file)
+    const params = zip_scene_file_params(scene_file, extract_folder, zip_file, directory, write_scene_file, skip_missing)
     return zip_scene_file_execute(params, runner);
 }
 

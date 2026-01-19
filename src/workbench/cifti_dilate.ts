@@ -42,9 +42,9 @@ interface CiftiDilateParamsDict {
     "right-surface"?: CiftiDilateRightSurfaceParamsDict | null | undefined;
     "cerebellum-surface"?: CiftiDilateCerebellumSurfaceParamsDict | null | undefined;
     "roi-cifti"?: InputPathType | null | undefined;
-    "nearest": boolean;
-    "merged-volume": boolean;
     "legacy-mode": boolean;
+    "merged-volume": boolean;
+    "nearest": boolean;
     "cifti-in": InputPathType;
     "direction": string;
     "surface-distance": number;
@@ -93,10 +93,14 @@ function cifti_dilate_left_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-left-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-left-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-left-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -141,10 +145,14 @@ function cifti_dilate_right_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-right-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-right-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-right-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -189,10 +197,14 @@ function cifti_dilate_cerebellum_surface_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cerebellum-surface",
-        execution.inputFile((params["surface"] ?? null)),
-        "-cerebellum-corrected-areas",
-        (((params["area-metric"] ?? null) !== null) ? execution.inputFile((params["area-metric"] ?? null)) : "")
+        execution.inputFile((params["surface"] ?? null))
     );
+    if ((params["area-metric"] ?? null) !== null) {
+        cargs.push(
+            "-cerebellum-corrected-areas",
+            execution.inputFile((params["area-metric"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -228,9 +240,9 @@ interface CiftiDilateOutputs {
  * @param roi_cifti specify an roi of brainordinates to overwrite, rather than zeros
 
 cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
- * @param nearest use nearest good value instead of a weighted average
- * @param merged_volume treat volume components as if they were a single component
  * @param legacy_mode use the math from v1.3.2 and earlier for weighted dilation
+ * @param merged_volume treat volume components as if they were a single component
+ * @param nearest use nearest good value instead of a weighted average
  *
  * @returns Parameter dictionary
  */
@@ -244,16 +256,16 @@ function cifti_dilate_params(
     right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
     roi_cifti: InputPathType | null = null,
-    nearest: boolean = false,
-    merged_volume: boolean = false,
     legacy_mode: boolean = false,
+    merged_volume: boolean = false,
+    nearest: boolean = false,
 ): CiftiDilateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-dilate" as const,
         "cifti-out": cifti_out,
-        "nearest": nearest,
-        "merged-volume": merged_volume,
         "legacy-mode": legacy_mode,
+        "merged-volume": merged_volume,
+        "nearest": nearest,
         "cifti-in": cifti_in,
         "direction": direction,
         "surface-distance": surface_distance,
@@ -296,13 +308,23 @@ function cifti_dilate_cargs(
         (params["cifti-out"] ?? null),
         ...(((params["left-surface"] ?? null) !== null) ? cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
         ...(((params["right-surface"] ?? null) !== null) ? cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-        "-bad-brainordinate-roi",
-        (((params["roi-cifti"] ?? null) !== null) ? execution.inputFile((params["roi-cifti"] ?? null)) : ""),
-        (((params["nearest"] ?? false)) ? "-nearest" : ""),
-        (((params["merged-volume"] ?? false)) ? "-merged-volume" : ""),
-        (((params["legacy-mode"] ?? false)) ? "-legacy-mode" : "")
+        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : [])
     );
+    if ((params["roi-cifti"] ?? null) !== null) {
+        cargs.push(
+            "-bad-brainordinate-roi",
+            execution.inputFile((params["roi-cifti"] ?? null))
+        );
+    }
+    if ((params["legacy-mode"] ?? false)) {
+        cargs.push("-legacy-mode");
+    }
+    if ((params["merged-volume"] ?? false)) {
+        cargs.push("-merged-volume");
+    }
+    if ((params["nearest"] ?? false)) {
+        cargs.push("-nearest");
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push(String((params["surface-distance"] ?? null)));
@@ -379,9 +401,9 @@ function cifti_dilate_execute(
  * @param roi_cifti specify an roi of brainordinates to overwrite, rather than zeros
 
 cifti dscalar or dtseries file, positive values denote brainordinates to have their values replaced
- * @param nearest use nearest good value instead of a weighted average
- * @param merged_volume treat volume components as if they were a single component
  * @param legacy_mode use the math from v1.3.2 and earlier for weighted dilation
+ * @param merged_volume treat volume components as if they were a single component
+ * @param nearest use nearest good value instead of a weighted average
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
@@ -396,12 +418,12 @@ function cifti_dilate(
     right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
     roi_cifti: InputPathType | null = null,
-    nearest: boolean = false,
-    merged_volume: boolean = false,
     legacy_mode: boolean = false,
+    merged_volume: boolean = false,
+    nearest: boolean = false,
     runner: Runner | null = null,
 ): CiftiDilateOutputs {
-    const params = cifti_dilate_params(cifti_out, cifti_in, direction, surface_distance, volume_distance, left_surface, right_surface, cerebellum_surface, roi_cifti, nearest, merged_volume, legacy_mode)
+    const params = cifti_dilate_params(cifti_out, cifti_in, direction, surface_distance, volume_distance, left_surface, right_surface, cerebellum_surface, roi_cifti, legacy_mode, merged_volume, nearest)
     return cifti_dilate_execute(params, runner);
 }
 

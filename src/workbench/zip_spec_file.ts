@@ -86,12 +86,14 @@ function zip_spec_file_cargs(
         "wb_command",
         "-zip-spec-file"
     );
-    if ((params["directory"] ?? null) !== null || (params["skip-missing"] ?? false)) {
+    if ((params["directory"] ?? null) !== null) {
         cargs.push(
             "-base-dir",
-            (((params["directory"] ?? null) !== null) ? (params["directory"] ?? null) : ""),
-            (((params["skip-missing"] ?? false)) ? "-skip-missing" : "")
+            (params["directory"] ?? null)
         );
+    }
+    if ((params["skip-missing"] ?? false)) {
+        cargs.push("-skip-missing");
     }
     cargs.push((params["spec-file"] ?? null));
     cargs.push((params["extract-folder"] ?? null));

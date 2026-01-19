@@ -15,8 +15,8 @@ interface BorderToRoisParamsDict {
     "@type"?: "workbench/border-to-rois";
     "metric-out": string;
     "name"?: string | null | undefined;
-    "inverse": boolean;
     "include-border": boolean;
+    "inverse": boolean;
     "surface": InputPathType;
     "border-file": InputPathType;
 }
@@ -49,8 +49,8 @@ interface BorderToRoisOutputs {
  * @param name create ROI for only one border
 
 the name of the border
- * @param inverse use inverse selection (outside border)
  * @param include_border include vertices the border is closest to
+ * @param inverse use inverse selection (outside border)
  *
  * @returns Parameter dictionary
  */
@@ -59,14 +59,14 @@ function border_to_rois_params(
     surface: InputPathType,
     border_file: InputPathType,
     name: string | null = null,
-    inverse: boolean = false,
     include_border: boolean = false,
+    inverse: boolean = false,
 ): BorderToRoisParamsDictTagged {
     const params = {
         "@type": "workbench/border-to-rois" as const,
         "metric-out": metric_out,
-        "inverse": inverse,
         "include-border": include_border,
+        "inverse": inverse,
         "surface": surface,
         "border-file": border_file,
     };
@@ -94,13 +94,19 @@ function border_to_rois_cargs(
         "wb_command",
         "-border-to-rois"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        "-border",
-        (((params["name"] ?? null) !== null) ? (params["name"] ?? null) : ""),
-        (((params["inverse"] ?? false)) ? "-inverse" : ""),
-        (((params["include-border"] ?? false)) ? "-include-border" : "")
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["name"] ?? null) !== null) {
+        cargs.push(
+            "-border",
+            (params["name"] ?? null)
+        );
+    }
+    if ((params["include-border"] ?? false)) {
+        cargs.push("-include-border");
+    }
+    if ((params["inverse"] ?? false)) {
+        cargs.push("-inverse");
+    }
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push(execution.inputFile((params["border-file"] ?? null)));
     return cargs;
@@ -162,8 +168,8 @@ function border_to_rois_execute(
  * @param name create ROI for only one border
 
 the name of the border
- * @param inverse use inverse selection (outside border)
  * @param include_border include vertices the border is closest to
+ * @param inverse use inverse selection (outside border)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderToRoisOutputs`).
@@ -173,11 +179,11 @@ function border_to_rois(
     surface: InputPathType,
     border_file: InputPathType,
     name: string | null = null,
-    inverse: boolean = false,
     include_border: boolean = false,
+    inverse: boolean = false,
     runner: Runner | null = null,
 ): BorderToRoisOutputs {
-    const params = border_to_rois_params(metric_out, surface, border_file, name, inverse, include_border)
+    const params = border_to_rois_params(metric_out, surface, border_file, name, include_border, inverse)
     return border_to_rois_execute(params, runner);
 }
 

@@ -14,10 +14,10 @@ const VOLUME_SMOOTHING_METADATA: Metadata = {
 interface VolumeSmoothingParamsDict {
     "@type"?: "workbench/volume-smoothing";
     "volume-out": string;
-    "fwhm": boolean;
+    "subvol"?: string | null | undefined;
     "roivol"?: InputPathType | null | undefined;
     "fix-zeros": boolean;
-    "subvol"?: string | null | undefined;
+    "fwhm": boolean;
     "volume-in": InputPathType;
     "kernel": number;
 }
@@ -47,14 +47,14 @@ interface VolumeSmoothingOutputs {
  * @param volume_out the output volume
  * @param volume_in the volume to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param fwhm kernel size is FWHM, not sigma
+ * @param subvol select a single subvolume to smooth
+
+the subvolume number or name
  * @param roivol smooth only from data within an ROI
 
 the volume to use as an ROI
  * @param fix_zeros treat zero values as not being data
- * @param subvol select a single subvolume to smooth
-
-the subvolume number or name
+ * @param fwhm kernel size is FWHM, not sigma
  *
  * @returns Parameter dictionary
  */
@@ -62,24 +62,24 @@ function volume_smoothing_params(
     volume_out: string,
     volume_in: InputPathType,
     kernel: number,
-    fwhm: boolean = false,
+    subvol: string | null = null,
     roivol: InputPathType | null = null,
     fix_zeros: boolean = false,
-    subvol: string | null = null,
+    fwhm: boolean = false,
 ): VolumeSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-smoothing" as const,
         "volume-out": volume_out,
-        "fwhm": fwhm,
         "fix-zeros": fix_zeros,
+        "fwhm": fwhm,
         "volume-in": volume_in,
         "kernel": kernel,
     };
-    if (roivol !== null) {
-        params["roivol"] = roivol;
-    }
     if (subvol !== null) {
         params["subvol"] = subvol;
+    }
+    if (roivol !== null) {
+        params["roivol"] = roivol;
     }
     return params;
 }
@@ -102,15 +102,25 @@ function volume_smoothing_cargs(
         "wb_command",
         "-volume-smoothing"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        (((params["fwhm"] ?? false)) ? "-fwhm" : ""),
-        "-roi",
-        (((params["roivol"] ?? null) !== null) ? execution.inputFile((params["roivol"] ?? null)) : ""),
-        (((params["fix-zeros"] ?? false)) ? "-fix-zeros" : ""),
-        "-subvolume",
-        (((params["subvol"] ?? null) !== null) ? (params["subvol"] ?? null) : "")
-    );
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["subvol"] ?? null) !== null) {
+        cargs.push(
+            "-subvolume",
+            (params["subvol"] ?? null)
+        );
+    }
+    if ((params["roivol"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            execution.inputFile((params["roivol"] ?? null))
+        );
+    }
+    if ((params["fix-zeros"] ?? false)) {
+        cargs.push("-fix-zeros");
+    }
+    if ((params["fwhm"] ?? false)) {
+        cargs.push("-fwhm");
+    }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push(String((params["kernel"] ?? null)));
     return cargs;
@@ -173,14 +183,14 @@ function volume_smoothing_execute(
  * @param volume_out the output volume
  * @param volume_in the volume to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
- * @param fwhm kernel size is FWHM, not sigma
+ * @param subvol select a single subvolume to smooth
+
+the subvolume number or name
  * @param roivol smooth only from data within an ROI
 
 the volume to use as an ROI
  * @param fix_zeros treat zero values as not being data
- * @param subvol select a single subvolume to smooth
-
-the subvolume number or name
+ * @param fwhm kernel size is FWHM, not sigma
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeSmoothingOutputs`).
@@ -189,13 +199,13 @@ function volume_smoothing(
     volume_out: string,
     volume_in: InputPathType,
     kernel: number,
-    fwhm: boolean = false,
+    subvol: string | null = null,
     roivol: InputPathType | null = null,
     fix_zeros: boolean = false,
-    subvol: string | null = null,
+    fwhm: boolean = false,
     runner: Runner | null = null,
 ): VolumeSmoothingOutputs {
-    const params = volume_smoothing_params(volume_out, volume_in, kernel, fwhm, roivol, fix_zeros, subvol)
+    const params = volume_smoothing_params(volume_out, volume_in, kernel, subvol, roivol, fix_zeros, fwhm)
     return volume_smoothing_execute(params, runner);
 }
 

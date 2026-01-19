@@ -31,8 +31,8 @@ interface CiftiAverageParamsDict {
     "@type"?: "workbench/cifti-average";
     "cifti-out": string;
     "exclude-outliers"?: CiftiAverageExcludeOutliersParamsDict | null | undefined;
-    "limit-GB"?: number | null | undefined;
     "cifti"?: Array<CiftiAverageCiftiParamsDict> | null | undefined;
+    "limit-GB"?: number | null | undefined;
 }
 type CiftiAverageParamsDictTagged = Required<Pick<CiftiAverageParamsDict, '@type'>> & CiftiAverageParamsDict;
 
@@ -120,10 +120,14 @@ function cifti_average_cifti_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-cifti",
-        execution.inputFile((params["cifti-in"] ?? null)),
-        "-weight",
-        (((params["weight"] ?? null) !== null) ? String((params["weight"] ?? null)) : "")
+        execution.inputFile((params["cifti-in"] ?? null))
     );
+    if ((params["weight"] ?? null) !== null) {
+        cargs.push(
+            "-weight",
+            String((params["weight"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -150,18 +154,18 @@ interface CiftiAverageOutputs {
  *
  * @param cifti_out output cifti file
  * @param exclude_outliers exclude outliers by standard deviation of each element across files
+ * @param cifti specify an input file
  * @param limit_gb restrict memory used for file reading efficiency
 
 memory limit in gigabytes
- * @param cifti specify an input file
  *
  * @returns Parameter dictionary
  */
 function cifti_average_params(
     cifti_out: string,
     exclude_outliers: CiftiAverageExcludeOutliersParamsDict | null = null,
-    limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParamsDict> | null = null,
+    limit_gb: number | null = null,
 ): CiftiAverageParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-average" as const,
@@ -170,11 +174,11 @@ function cifti_average_params(
     if (exclude_outliers !== null) {
         params["exclude-outliers"] = exclude_outliers;
     }
-    if (limit_gb !== null) {
-        params["limit-GB"] = limit_gb;
-    }
     if (cifti !== null) {
         params["cifti"] = cifti;
+    }
+    if (limit_gb !== null) {
+        params["limit-GB"] = limit_gb;
     }
     return params;
 }
@@ -200,10 +204,14 @@ function cifti_average_cargs(
     cargs.push(
         (params["cifti-out"] ?? null),
         ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-        "-mem-limit",
-        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : ""),
         ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat() : [])
     );
+    if ((params["limit-GB"] ?? null) !== null) {
+        cargs.push(
+            "-mem-limit",
+            String((params["limit-GB"] ?? null))
+        );
+    }
     return cargs;
 }
 
@@ -259,10 +267,10 @@ function cifti_average_execute(
  *
  * @param cifti_out output cifti file
  * @param exclude_outliers exclude outliers by standard deviation of each element across files
+ * @param cifti specify an input file
  * @param limit_gb restrict memory used for file reading efficiency
 
 memory limit in gigabytes
- * @param cifti specify an input file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiAverageOutputs`).
@@ -270,11 +278,11 @@ memory limit in gigabytes
 function cifti_average(
     cifti_out: string,
     exclude_outliers: CiftiAverageExcludeOutliersParamsDict | null = null,
-    limit_gb: number | null = null,
     cifti: Array<CiftiAverageCiftiParamsDict> | null = null,
+    limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiAverageOutputs {
-    const params = cifti_average_params(cifti_out, exclude_outliers, limit_gb, cifti)
+    const params = cifti_average_params(cifti_out, exclude_outliers, cifti, limit_gb)
     return cifti_average_execute(params, runner);
 }
 

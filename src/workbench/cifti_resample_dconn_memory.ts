@@ -22,8 +22,8 @@ type CiftiResampleDconnMemoryWeightedParamsDictTagged = Required<Pick<CiftiResam
 interface CiftiResampleDconnMemoryVolumePredilateParamsDict {
     "@type"?: "volume-predilate";
     "dilate-mm": number;
-    "nearest": boolean;
     "weighted"?: CiftiResampleDconnMemoryWeightedParamsDict | null | undefined;
+    "nearest": boolean;
 }
 type CiftiResampleDconnMemoryVolumePredilateParamsDictTagged = Required<Pick<CiftiResampleDconnMemoryVolumePredilateParamsDict, '@type'>> & CiftiResampleDconnMemoryVolumePredilateParamsDict;
 
@@ -39,9 +39,9 @@ type CiftiResampleDconnMemoryWeightedParamsDictTagged_ = Required<Pick<CiftiResa
 interface CiftiResampleDconnMemorySurfacePostdilateParamsDict {
     "@type"?: "surface-postdilate";
     "dilate-mm": number;
-    "nearest": boolean;
-    "linear": boolean;
     "weighted"?: CiftiResampleDconnMemoryWeightedParamsDict_ | null | undefined;
+    "linear": boolean;
+    "nearest": boolean;
 }
 type CiftiResampleDconnMemorySurfacePostdilateParamsDictTagged = Required<Pick<CiftiResampleDconnMemorySurfacePostdilateParamsDict, '@type'>> & CiftiResampleDconnMemorySurfacePostdilateParamsDict;
 
@@ -151,7 +151,6 @@ type CiftiResampleDconnMemoryCerebellumSpheresParamsDictTagged = Required<Pick<C
 interface CiftiResampleDconnMemoryParamsDict {
     "@type"?: "workbench/cifti-resample-dconn-memory";
     "cifti-out": string;
-    "surface-largest": boolean;
     "volume-predilate"?: CiftiResampleDconnMemoryVolumePredilateParamsDict | null | undefined;
     "surface-postdilate"?: CiftiResampleDconnMemorySurfacePostdilateParamsDict | null | undefined;
     "affine"?: CiftiResampleDconnMemoryAffineParamsDict | null | undefined;
@@ -159,6 +158,7 @@ interface CiftiResampleDconnMemoryParamsDict {
     "left-spheres"?: CiftiResampleDconnMemoryLeftSpheresParamsDict | null | undefined;
     "right-spheres"?: CiftiResampleDconnMemoryRightSpheresParamsDict | null | undefined;
     "cerebellum-spheres"?: CiftiResampleDconnMemoryCerebellumSpheresParamsDict | null | undefined;
+    "surface-largest": boolean;
     "cifti-in": InputPathType;
     "cifti-template": InputPathType;
     "template-direction": string;
@@ -206,13 +206,15 @@ function cifti_resample_dconn_memory_weighted_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
+    cargs.push("-weighted");
+    if ((params["exponent"] ?? null) !== null) {
         cargs.push(
-            "-weighted",
             "-exponent",
-            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
-            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
+            String((params["exponent"] ?? null))
         );
+    }
+    if ((params["legacy-cutoff"] ?? false)) {
+        cargs.push("-legacy-cutoff");
     }
     return cargs;
 }
@@ -222,15 +224,15 @@ function cifti_resample_dconn_memory_weighted_cargs(
  * Build parameters.
  *
  * @param dilate_mm distance, in mm, to dilate
- * @param nearest use nearest value dilation
  * @param weighted use weighted dilation (default)
+ * @param nearest use nearest value dilation
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_dconn_memory_volume_predilate(
     dilate_mm: number,
-    nearest: boolean = false,
     weighted: CiftiResampleDconnMemoryWeightedParamsDict | null = null,
+    nearest: boolean = false,
 ): CiftiResampleDconnMemoryVolumePredilateParamsDictTagged {
     const params = {
         "@type": "volume-predilate" as const,
@@ -260,9 +262,11 @@ function cifti_resample_dconn_memory_volume_predilate_cargs(
     cargs.push(
         "-volume-predilate",
         String((params["dilate-mm"] ?? null)),
-        (((params["nearest"] ?? false)) ? "-nearest" : ""),
         ...(((params["weighted"] ?? null) !== null) ? cifti_resample_dconn_memory_weighted_cargs((params["weighted"] ?? null), execution) : [])
     );
+    if ((params["nearest"] ?? false)) {
+        cargs.push("-nearest");
+    }
     return cargs;
 }
 
@@ -305,13 +309,15 @@ function cifti_resample_dconn_memory_weighted_cargs_(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["exponent"] ?? null) !== null || (params["legacy-cutoff"] ?? false)) {
+    cargs.push("-weighted");
+    if ((params["exponent"] ?? null) !== null) {
         cargs.push(
-            "-weighted",
             "-exponent",
-            (((params["exponent"] ?? null) !== null) ? String((params["exponent"] ?? null)) : ""),
-            (((params["legacy-cutoff"] ?? false)) ? "-legacy-cutoff" : "")
+            String((params["exponent"] ?? null))
         );
+    }
+    if ((params["legacy-cutoff"] ?? false)) {
+        cargs.push("-legacy-cutoff");
     }
     return cargs;
 }
@@ -321,23 +327,23 @@ function cifti_resample_dconn_memory_weighted_cargs_(
  * Build parameters.
  *
  * @param dilate_mm distance, in mm, to dilate
- * @param nearest use nearest value dilation
- * @param linear use linear dilation
  * @param weighted use weighted dilation (default)
+ * @param linear use linear dilation
+ * @param nearest use nearest value dilation
  *
  * @returns Parameter dictionary
  */
 function cifti_resample_dconn_memory_surface_postdilate(
     dilate_mm: number,
-    nearest: boolean = false,
-    linear: boolean = false,
     weighted: CiftiResampleDconnMemoryWeightedParamsDict_ | null = null,
+    linear: boolean = false,
+    nearest: boolean = false,
 ): CiftiResampleDconnMemorySurfacePostdilateParamsDictTagged {
     const params = {
         "@type": "surface-postdilate" as const,
         "dilate-mm": dilate_mm,
-        "nearest": nearest,
         "linear": linear,
+        "nearest": nearest,
     };
     if (weighted !== null) {
         params["weighted"] = weighted;
@@ -362,10 +368,14 @@ function cifti_resample_dconn_memory_surface_postdilate_cargs(
     cargs.push(
         "-surface-postdilate",
         String((params["dilate-mm"] ?? null)),
-        (((params["nearest"] ?? false)) ? "-nearest" : ""),
-        (((params["linear"] ?? false)) ? "-linear" : ""),
         ...(((params["weighted"] ?? null) !== null) ? cifti_resample_dconn_memory_weighted_cargs_((params["weighted"] ?? null), execution) : [])
     );
+    if ((params["linear"] ?? false)) {
+        cargs.push("-linear");
+    }
+    if ((params["nearest"] ?? false)) {
+        cargs.push("-nearest");
+    }
     return cargs;
 }
 
@@ -498,10 +508,14 @@ function cifti_resample_dconn_memory_warpfield_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-warpfield",
-        (params["warpfield"] ?? null),
-        "-fnirt",
-        (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : "")
+        (params["warpfield"] ?? null)
     );
+    if ((params["source-volume"] ?? null) !== null) {
+        cargs.push(
+            "-fnirt",
+            (params["source-volume"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -955,7 +969,6 @@ interface CiftiResampleDconnMemoryOutputs {
  * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
  * @param surface_method specify a surface resampling method
  * @param volume_method specify a volume interpolation method
- * @param surface_largest use largest weight instead of weighted average when doing surface resampling
  * @param volume_predilate dilate the volume components before resampling
  * @param surface_postdilate dilate the surface components after resampling
  * @param affine use an affine transformation on the volume components
@@ -963,6 +976,7 @@ interface CiftiResampleDconnMemoryOutputs {
  * @param left_spheres specify spheres for left surface resampling
  * @param right_spheres specify spheres for right surface resampling
  * @param cerebellum_spheres specify spheres for cerebellum surface resampling
+ * @param surface_largest use largest weight instead of weighted average when doing surface resampling
  *
  * @returns Parameter dictionary
  */
@@ -973,7 +987,6 @@ function cifti_resample_dconn_memory_params(
     template_direction: string,
     surface_method: string,
     volume_method: string,
-    surface_largest: boolean = false,
     volume_predilate: CiftiResampleDconnMemoryVolumePredilateParamsDict | null = null,
     surface_postdilate: CiftiResampleDconnMemorySurfacePostdilateParamsDict | null = null,
     affine: CiftiResampleDconnMemoryAffineParamsDict | null = null,
@@ -981,6 +994,7 @@ function cifti_resample_dconn_memory_params(
     left_spheres: CiftiResampleDconnMemoryLeftSpheresParamsDict | null = null,
     right_spheres: CiftiResampleDconnMemoryRightSpheresParamsDict | null = null,
     cerebellum_spheres: CiftiResampleDconnMemoryCerebellumSpheresParamsDict | null = null,
+    surface_largest: boolean = false,
 ): CiftiResampleDconnMemoryParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-resample-dconn-memory" as const,
@@ -1036,7 +1050,6 @@ function cifti_resample_dconn_memory_cargs(
     );
     cargs.push(
         (params["cifti-out"] ?? null),
-        (((params["surface-largest"] ?? false)) ? "-surface-largest" : ""),
         ...(((params["volume-predilate"] ?? null) !== null) ? cifti_resample_dconn_memory_volume_predilate_cargs((params["volume-predilate"] ?? null), execution) : []),
         ...(((params["surface-postdilate"] ?? null) !== null) ? cifti_resample_dconn_memory_surface_postdilate_cargs((params["surface-postdilate"] ?? null), execution) : []),
         ...(((params["affine"] ?? null) !== null) ? cifti_resample_dconn_memory_affine_cargs((params["affine"] ?? null), execution) : []),
@@ -1045,6 +1058,9 @@ function cifti_resample_dconn_memory_cargs(
         ...(((params["right-spheres"] ?? null) !== null) ? cifti_resample_dconn_memory_right_spheres_cargs((params["right-spheres"] ?? null), execution) : []),
         ...(((params["cerebellum-spheres"] ?? null) !== null) ? cifti_resample_dconn_memory_cerebellum_spheres_cargs((params["cerebellum-spheres"] ?? null), execution) : [])
     );
+    if ((params["surface-largest"] ?? false)) {
+        cargs.push("-surface-largest");
+    }
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-template"] ?? null)));
     cargs.push((params["template-direction"] ?? null));
@@ -1137,7 +1153,6 @@ function cifti_resample_dconn_memory_execute(
  * @param template_direction the direction of the template to use as the resampling space, ROW or COLUMN
  * @param surface_method specify a surface resampling method
  * @param volume_method specify a volume interpolation method
- * @param surface_largest use largest weight instead of weighted average when doing surface resampling
  * @param volume_predilate dilate the volume components before resampling
  * @param surface_postdilate dilate the surface components after resampling
  * @param affine use an affine transformation on the volume components
@@ -1145,6 +1160,7 @@ function cifti_resample_dconn_memory_execute(
  * @param left_spheres specify spheres for left surface resampling
  * @param right_spheres specify spheres for right surface resampling
  * @param cerebellum_spheres specify spheres for cerebellum surface resampling
+ * @param surface_largest use largest weight instead of weighted average when doing surface resampling
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiResampleDconnMemoryOutputs`).
@@ -1156,7 +1172,6 @@ function cifti_resample_dconn_memory(
     template_direction: string,
     surface_method: string,
     volume_method: string,
-    surface_largest: boolean = false,
     volume_predilate: CiftiResampleDconnMemoryVolumePredilateParamsDict | null = null,
     surface_postdilate: CiftiResampleDconnMemorySurfacePostdilateParamsDict | null = null,
     affine: CiftiResampleDconnMemoryAffineParamsDict | null = null,
@@ -1164,9 +1179,10 @@ function cifti_resample_dconn_memory(
     left_spheres: CiftiResampleDconnMemoryLeftSpheresParamsDict | null = null,
     right_spheres: CiftiResampleDconnMemoryRightSpheresParamsDict | null = null,
     cerebellum_spheres: CiftiResampleDconnMemoryCerebellumSpheresParamsDict | null = null,
+    surface_largest: boolean = false,
     runner: Runner | null = null,
 ): CiftiResampleDconnMemoryOutputs {
-    const params = cifti_resample_dconn_memory_params(cifti_out, cifti_in, cifti_template, template_direction, surface_method, volume_method, surface_largest, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres)
+    const params = cifti_resample_dconn_memory_params(cifti_out, cifti_in, cifti_template, template_direction, surface_method, volume_method, volume_predilate, surface_postdilate, affine, warpfield, left_spheres, right_spheres, cerebellum_spheres, surface_largest)
     return cifti_resample_dconn_memory_execute(params, runner);
 }
 

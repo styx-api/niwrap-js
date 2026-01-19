@@ -14,9 +14,9 @@ const CIFTI_CROSS_CORRELATION_METADATA: Metadata = {
 interface CiftiCrossCorrelationParamsDict {
     "@type"?: "workbench/cifti-cross-correlation";
     "cifti-out": string;
+    "limit-GB"?: number | null | undefined;
     "weight-file"?: string | null | undefined;
     "fisher-z": boolean;
-    "limit-GB"?: number | null | undefined;
     "cifti-a": InputPathType;
     "cifti-b": InputPathType;
 }
@@ -46,13 +46,13 @@ interface CiftiCrossCorrelationOutputs {
  * @param cifti_out output cifti file
  * @param cifti_a first input cifti file
  * @param cifti_b second input cifti file
+ * @param limit_gb restrict memory usage
+
+memory limit in gigabytes
  * @param weight_file specify column weights
 
 text file containing one weight per column
  * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
- * @param limit_gb restrict memory usage
-
-memory limit in gigabytes
  *
  * @returns Parameter dictionary
  */
@@ -60,9 +60,9 @@ function cifti_cross_correlation_params(
     cifti_out: string,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
+    limit_gb: number | null = null,
     weight_file: string | null = null,
     fisher_z: boolean = false,
-    limit_gb: number | null = null,
 ): CiftiCrossCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-cross-correlation" as const,
@@ -71,11 +71,11 @@ function cifti_cross_correlation_params(
         "cifti-a": cifti_a,
         "cifti-b": cifti_b,
     };
-    if (weight_file !== null) {
-        params["weight-file"] = weight_file;
-    }
     if (limit_gb !== null) {
         params["limit-GB"] = limit_gb;
+    }
+    if (weight_file !== null) {
+        params["weight-file"] = weight_file;
     }
     return params;
 }
@@ -98,14 +98,22 @@ function cifti_cross_correlation_cargs(
         "wb_command",
         "-cifti-cross-correlation"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        "-weights",
-        (((params["weight-file"] ?? null) !== null) ? (params["weight-file"] ?? null) : ""),
-        (((params["fisher-z"] ?? false)) ? "-fisher-z" : ""),
-        "-mem-limit",
-        (((params["limit-GB"] ?? null) !== null) ? String((params["limit-GB"] ?? null)) : "")
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["limit-GB"] ?? null) !== null) {
+        cargs.push(
+            "-mem-limit",
+            String((params["limit-GB"] ?? null))
+        );
+    }
+    if ((params["weight-file"] ?? null) !== null) {
+        cargs.push(
+            "-weights",
+            (params["weight-file"] ?? null)
+        );
+    }
+    if ((params["fisher-z"] ?? false)) {
+        cargs.push("-fisher-z");
+    }
     cargs.push(execution.inputFile((params["cifti-a"] ?? null)));
     cargs.push(execution.inputFile((params["cifti-b"] ?? null)));
     return cargs;
@@ -172,13 +180,13 @@ function cifti_cross_correlation_execute(
  * @param cifti_out output cifti file
  * @param cifti_a first input cifti file
  * @param cifti_b second input cifti file
+ * @param limit_gb restrict memory usage
+
+memory limit in gigabytes
  * @param weight_file specify column weights
 
 text file containing one weight per column
  * @param fisher_z apply fisher small z transform (ie, artanh) to correlation
- * @param limit_gb restrict memory usage
-
-memory limit in gigabytes
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiCrossCorrelationOutputs`).
@@ -187,12 +195,12 @@ function cifti_cross_correlation(
     cifti_out: string,
     cifti_a: InputPathType,
     cifti_b: InputPathType,
+    limit_gb: number | null = null,
     weight_file: string | null = null,
     fisher_z: boolean = false,
-    limit_gb: number | null = null,
     runner: Runner | null = null,
 ): CiftiCrossCorrelationOutputs {
-    const params = cifti_cross_correlation_params(cifti_out, cifti_a, cifti_b, weight_file, fisher_z, limit_gb)
+    const params = cifti_cross_correlation_params(cifti_out, cifti_a, cifti_b, limit_gb, weight_file, fisher_z)
     return cifti_cross_correlation_execute(params, runner);
 }
 

@@ -54,10 +54,10 @@ type VolumeResampleWarpParamsDictTagged = Required<Pick<VolumeResampleWarpParams
 interface VolumeResampleParamsDict {
     "@type"?: "workbench/volume-resample";
     "volume-out": string;
-    "value"?: number | null | undefined;
     "affine"?: Array<VolumeResampleAffineParamsDict> | null | undefined;
     "affine-series"?: Array<VolumeResampleAffineSeriesParamsDict> | null | undefined;
     "warp"?: Array<VolumeResampleWarpParamsDict> | null | undefined;
+    "value"?: number | null | undefined;
     "volume-in": InputPathType;
     "volume-space": string;
     "method": string;
@@ -281,10 +281,14 @@ function volume_resample_warp_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-warp",
-        (params["warpfield"] ?? null),
-        "-fnirt",
-        (((params["source-volume"] ?? null) !== null) ? (params["source-volume"] ?? null) : "")
+        (params["warpfield"] ?? null)
     );
+    if ((params["source-volume"] ?? null) !== null) {
+        cargs.push(
+            "-fnirt",
+            (params["source-volume"] ?? null)
+        );
+    }
     return cargs;
 }
 
@@ -313,12 +317,12 @@ interface VolumeResampleOutputs {
  * @param volume_in volume to resample
  * @param volume_space a volume file in the volume space you want for the output
  * @param method the resampling method
- * @param value use a specified value for locations outside the FoV of the input image or warpfield(s)
-
-the value to use (default 0)
  * @param affine add an affine transform
  * @param affine_series add an independent affine per-frame
  * @param warp add a nonlinear warpfield transform
+ * @param value use a specified value for locations outside the FoV of the input image or warpfield(s)
+
+the value to use (default 0)
  *
  * @returns Parameter dictionary
  */
@@ -327,10 +331,10 @@ function volume_resample_params(
     volume_in: InputPathType,
     volume_space: string,
     method: string,
-    value: number | null = null,
     affine: Array<VolumeResampleAffineParamsDict> | null = null,
     affine_series: Array<VolumeResampleAffineSeriesParamsDict> | null = null,
     warp: Array<VolumeResampleWarpParamsDict> | null = null,
+    value: number | null = null,
 ): VolumeResampleParamsDictTagged {
     const params = {
         "@type": "workbench/volume-resample" as const,
@@ -339,9 +343,6 @@ function volume_resample_params(
         "volume-space": volume_space,
         "method": method,
     };
-    if (value !== null) {
-        params["value"] = value;
-    }
     if (affine !== null) {
         params["affine"] = affine;
     }
@@ -350,6 +351,9 @@ function volume_resample_params(
     }
     if (warp !== null) {
         params["warp"] = warp;
+    }
+    if (value !== null) {
+        params["value"] = value;
     }
     return params;
 }
@@ -374,12 +378,16 @@ function volume_resample_cargs(
     );
     cargs.push(
         (params["volume-out"] ?? null),
-        "-background",
-        (((params["value"] ?? null) !== null) ? String((params["value"] ?? null)) : ""),
         ...(((params["affine"] ?? null) !== null) ? (params["affine"] ?? null).map(s => volume_resample_affine_cargs(s, execution)).flat() : []),
         ...(((params["affine-series"] ?? null) !== null) ? (params["affine-series"] ?? null).map(s => volume_resample_affine_series_cargs(s, execution)).flat() : []),
         ...(((params["warp"] ?? null) !== null) ? (params["warp"] ?? null).map(s => volume_resample_warp_cargs(s, execution)).flat() : [])
     );
+    if ((params["value"] ?? null) !== null) {
+        cargs.push(
+            "-background",
+            String((params["value"] ?? null))
+        );
+    }
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     cargs.push((params["volume-space"] ?? null));
     cargs.push((params["method"] ?? null));
@@ -448,12 +456,12 @@ function volume_resample_execute(
  * @param volume_in volume to resample
  * @param volume_space a volume file in the volume space you want for the output
  * @param method the resampling method
- * @param value use a specified value for locations outside the FoV of the input image or warpfield(s)
-
-the value to use (default 0)
  * @param affine add an affine transform
  * @param affine_series add an independent affine per-frame
  * @param warp add a nonlinear warpfield transform
+ * @param value use a specified value for locations outside the FoV of the input image or warpfield(s)
+
+the value to use (default 0)
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeResampleOutputs`).
@@ -463,13 +471,13 @@ function volume_resample(
     volume_in: InputPathType,
     volume_space: string,
     method: string,
-    value: number | null = null,
     affine: Array<VolumeResampleAffineParamsDict> | null = null,
     affine_series: Array<VolumeResampleAffineSeriesParamsDict> | null = null,
     warp: Array<VolumeResampleWarpParamsDict> | null = null,
+    value: number | null = null,
     runner: Runner | null = null,
 ): VolumeResampleOutputs {
-    const params = volume_resample_params(volume_out, volume_in, volume_space, method, value, affine, affine_series, warp)
+    const params = volume_resample_params(volume_out, volume_in, volume_space, method, affine, affine_series, warp, value)
     return volume_resample_execute(params, runner);
 }
 
