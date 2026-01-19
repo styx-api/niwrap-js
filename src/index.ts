@@ -23,7 +23,7 @@ import * as mrtrix3tissue from './mrtrix3tissue'
 import * as niftyreg from './niftyreg'
 import * as workbench from './workbench'
 import {Runner} from 'styxdefs'
-export const version = '0.8.0';
+export const version = '0.8.1';
 export function execute(params: any, runner: Runner | null = null) {;
   const stype = params["@type"];
   if (stype.startsWith("afni/")) return afni.execute(params, runner);
