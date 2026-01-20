@@ -37,12 +37,12 @@ type CiftiChangeMappingFromCiftiParamsDictTagged = Required<Pick<CiftiChangeMapp
 
 interface CiftiChangeMappingParamsDict {
     "@type"?: "workbench/cifti-change-mapping";
+    "data-cifti": InputPathType;
+    "direction": string;
     "cifti-out": string;
     "series"?: CiftiChangeMappingSeriesParamsDict | null | undefined;
     "scalar"?: CiftiChangeMappingScalarParamsDict | null | undefined;
     "from-cifti"?: CiftiChangeMappingFromCiftiParamsDict | null | undefined;
-    "data-cifti": InputPathType;
-    "direction": string;
 }
 type CiftiChangeMappingParamsDictTagged = Required<Pick<CiftiChangeMappingParamsDict, '@type'>> & CiftiChangeMappingParamsDict;
 
@@ -212,9 +212,9 @@ interface CiftiChangeMappingOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti file
  * @param data_cifti the cifti file to use the data from
  * @param direction which direction on <data-cifti> to replace the mapping
+ * @param cifti_out the output cifti file
  * @param series set the mapping to series
  * @param scalar set the mapping to scalar
  * @param from_cifti copy mapping from another cifti file
@@ -222,18 +222,18 @@ interface CiftiChangeMappingOutputs {
  * @returns Parameter dictionary
  */
 function cifti_change_mapping_params(
-    cifti_out: string,
     data_cifti: InputPathType,
     direction: string,
+    cifti_out: string,
     series: CiftiChangeMappingSeriesParamsDict | null = null,
     scalar: CiftiChangeMappingScalarParamsDict | null = null,
     from_cifti: CiftiChangeMappingFromCiftiParamsDict | null = null,
 ): CiftiChangeMappingParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-change-mapping" as const,
-        "cifti-out": cifti_out,
         "data-cifti": data_cifti,
         "direction": direction,
+        "cifti-out": cifti_out,
     };
     if (series !== null) {
         params["series"] = series;
@@ -265,14 +265,16 @@ function cifti_change_mapping_cargs(
         "wb_command",
         "-cifti-change-mapping"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["series"] ?? null) !== null) ? cifti_change_mapping_series_cargs((params["series"] ?? null), execution) : []),
-        ...(((params["scalar"] ?? null) !== null) ? cifti_change_mapping_scalar_cargs((params["scalar"] ?? null), execution) : []),
-        ...(((params["from-cifti"] ?? null) !== null) ? cifti_change_mapping_from_cifti_cargs((params["from-cifti"] ?? null), execution) : [])
-    );
     cargs.push(execution.inputFile((params["data-cifti"] ?? null)));
     cargs.push((params["direction"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["series"] ?? null) !== null || (params["scalar"] ?? null) !== null || (params["from-cifti"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["series"] ?? null) !== null) ? cifti_change_mapping_series_cargs((params["series"] ?? null), execution) : []),
+            ...(((params["scalar"] ?? null) !== null) ? cifti_change_mapping_scalar_cargs((params["scalar"] ?? null), execution) : []),
+            ...(((params["from-cifti"] ?? null) !== null) ? cifti_change_mapping_from_cifti_cargs((params["from-cifti"] ?? null), execution) : [])
+        );
+    }
     return cargs;
 }
 
@@ -340,9 +342,9 @@ function cifti_change_mapping_execute(
  * METER
  * RADIAN.
  *
- * @param cifti_out the output cifti file
  * @param data_cifti the cifti file to use the data from
  * @param direction which direction on <data-cifti> to replace the mapping
+ * @param cifti_out the output cifti file
  * @param series set the mapping to series
  * @param scalar set the mapping to scalar
  * @param from_cifti copy mapping from another cifti file
@@ -351,15 +353,15 @@ function cifti_change_mapping_execute(
  * @returns NamedTuple of outputs (described in `CiftiChangeMappingOutputs`).
  */
 function cifti_change_mapping(
-    cifti_out: string,
     data_cifti: InputPathType,
     direction: string,
+    cifti_out: string,
     series: CiftiChangeMappingSeriesParamsDict | null = null,
     scalar: CiftiChangeMappingScalarParamsDict | null = null,
     from_cifti: CiftiChangeMappingFromCiftiParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiChangeMappingOutputs {
-    const params = cifti_change_mapping_params(cifti_out, data_cifti, direction, series, scalar, from_cifti)
+    const params = cifti_change_mapping_params(data_cifti, direction, cifti_out, series, scalar, from_cifti)
     return cifti_change_mapping_execute(params, runner);
 }
 

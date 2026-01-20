@@ -70,8 +70,6 @@ function backend_average_dense_roi_cargs(
         "wb_command",
         "-backend-average-dense-roi"
     );
-    cargs.push(
-    );
     cargs.push((params["index-list"] ?? null));
     cargs.push((params["out-file"] ?? null));
     return cargs;

@@ -21,10 +21,10 @@ type SurfaceApplyAffineFlirtParamsDictTagged = Required<Pick<SurfaceApplyAffineF
 
 interface SurfaceApplyAffineParamsDict {
     "@type"?: "workbench/surface-apply-affine";
-    "out-surf": string;
-    "flirt"?: SurfaceApplyAffineFlirtParamsDict | null | undefined;
     "in-surf": InputPathType;
     "affine": string;
+    "out-surf": string;
+    "flirt"?: SurfaceApplyAffineFlirtParamsDict | null | undefined;
 }
 type SurfaceApplyAffineParamsDictTagged = Required<Pick<SurfaceApplyAffineParamsDict, '@type'>> & SurfaceApplyAffineParamsDict;
 
@@ -92,24 +92,24 @@ interface SurfaceApplyAffineOutputs {
 /**
  * Build parameters.
  *
- * @param out_surf the output transformed surface
  * @param in_surf the surface to transform
  * @param affine the affine file
+ * @param out_surf the output transformed surface
  * @param flirt MUST be used if affine is a flirt affine
  *
  * @returns Parameter dictionary
  */
 function surface_apply_affine_params(
-    out_surf: string,
     in_surf: InputPathType,
     affine: string,
+    out_surf: string,
     flirt: SurfaceApplyAffineFlirtParamsDict | null = null,
 ): SurfaceApplyAffineParamsDictTagged {
     const params = {
         "@type": "workbench/surface-apply-affine" as const,
-        "out-surf": out_surf,
         "in-surf": in_surf,
         "affine": affine,
+        "out-surf": out_surf,
     };
     if (flirt !== null) {
         params["flirt"] = flirt;
@@ -135,12 +135,12 @@ function surface_apply_affine_cargs(
         "wb_command",
         "-surface-apply-affine"
     );
-    cargs.push(
-        (params["out-surf"] ?? null),
-        ...(((params["flirt"] ?? null) !== null) ? surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution) : [])
-    );
     cargs.push(execution.inputFile((params["in-surf"] ?? null)));
     cargs.push((params["affine"] ?? null));
+    cargs.push((params["out-surf"] ?? null));
+    if ((params["flirt"] ?? null) !== null) {
+        cargs.push(...surface_apply_affine_flirt_cargs((params["flirt"] ?? null), execution));
+    }
     return cargs;
 }
 
@@ -194,22 +194,22 @@ function surface_apply_affine_execute(
  *
  * For flirt matrices, you must use the -flirt option, because flirt matrices are not a complete description of the coordinate transform they represent.  If the -flirt option is not present, the affine must be a nifti 'world' affine, which can be obtained with the -convert-affine command, or aff_conv from the 4dfp suite.
  *
- * @param out_surf the output transformed surface
  * @param in_surf the surface to transform
  * @param affine the affine file
+ * @param out_surf the output transformed surface
  * @param flirt MUST be used if affine is a flirt affine
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceApplyAffineOutputs`).
  */
 function surface_apply_affine(
-    out_surf: string,
     in_surf: InputPathType,
     affine: string,
+    out_surf: string,
     flirt: SurfaceApplyAffineFlirtParamsDict | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyAffineOutputs {
-    const params = surface_apply_affine_params(out_surf, in_surf, affine, flirt)
+    const params = surface_apply_affine_params(in_surf, affine, out_surf, flirt)
     return surface_apply_affine_execute(params, runner);
 }
 

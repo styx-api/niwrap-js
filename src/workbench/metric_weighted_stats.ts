@@ -21,6 +21,7 @@ type MetricWeightedStatsRoiParamsDictTagged = Required<Pick<MetricWeightedStatsR
 
 interface MetricWeightedStatsParamsDict {
     "@type"?: "workbench/metric-weighted-stats";
+    "metric-in": InputPathType;
     "roi"?: MetricWeightedStatsRoiParamsDict | null | undefined;
     "percent"?: number | null | undefined;
     "sample"?: boolean | null | undefined;
@@ -30,7 +31,6 @@ interface MetricWeightedStatsParamsDict {
     "show-map-name": boolean;
     "sum": boolean;
     "mean": boolean;
-    "metric-in": InputPathType;
 }
 type MetricWeightedStatsParamsDictTagged = Required<Pick<MetricWeightedStatsParamsDict, '@type'>> & MetricWeightedStatsParamsDict;
 
@@ -133,10 +133,10 @@ function metric_weighted_stats_params(
 ): MetricWeightedStatsParamsDictTagged {
     const params = {
         "@type": "workbench/metric-weighted-stats" as const,
+        "metric-in": metric_in,
         "show-map-name": show_map_name,
         "sum": sum,
         "mean": mean,
-        "metric-in": metric_in,
     };
     if (roi !== null) {
         params["roi"] = roi;
@@ -177,6 +177,7 @@ function metric_weighted_stats_cargs(
         "wb_command",
         "-metric-weighted-stats"
     );
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     if ((params["roi"] ?? null) !== null) {
         cargs.push(...metric_weighted_stats_roi_cargs((params["roi"] ?? null), execution));
     }
@@ -219,7 +220,6 @@ function metric_weighted_stats_cargs(
     if ((params["mean"] ?? false)) {
         cargs.push("-mean");
     }
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 

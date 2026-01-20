@@ -13,10 +13,10 @@ const METRIC_MASK_METADATA: Metadata = {
 
 interface MetricMaskParamsDict {
     "@type"?: "workbench/metric-mask";
-    "metric-out": string;
-    "column"?: string | null | undefined;
     "metric": InputPathType;
     "mask": InputPathType;
+    "metric-out": string;
+    "column"?: string | null | undefined;
 }
 type MetricMaskParamsDictTagged = Required<Pick<MetricMaskParamsDict, '@type'>> & MetricMaskParamsDict;
 
@@ -41,9 +41,9 @@ interface MetricMaskOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param metric the input metric
  * @param mask the mask metric
+ * @param metric_out the output metric
  * @param column select a single column
 
 the column number or name
@@ -51,16 +51,16 @@ the column number or name
  * @returns Parameter dictionary
  */
 function metric_mask_params(
-    metric_out: string,
     metric: InputPathType,
     mask: InputPathType,
+    metric_out: string,
     column: string | null = null,
 ): MetricMaskParamsDictTagged {
     const params = {
         "@type": "workbench/metric-mask" as const,
-        "metric-out": metric_out,
         "metric": metric,
         "mask": mask,
+        "metric-out": metric_out,
     };
     if (column !== null) {
         params["column"] = column;
@@ -86,6 +86,8 @@ function metric_mask_cargs(
         "wb_command",
         "-metric-mask"
     );
+    cargs.push(execution.inputFile((params["metric"] ?? null)));
+    cargs.push(execution.inputFile((params["mask"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["column"] ?? null) !== null) {
         cargs.push(
@@ -93,8 +95,6 @@ function metric_mask_cargs(
             (params["column"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["metric"] ?? null)));
-    cargs.push(execution.inputFile((params["mask"] ?? null)));
     return cargs;
 }
 
@@ -148,9 +148,9 @@ function metric_mask_execute(
  *
  * By default, the output metric is a copy of the input metric, but with zeros wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
  *
- * @param metric_out the output metric
  * @param metric the input metric
  * @param mask the mask metric
+ * @param metric_out the output metric
  * @param column select a single column
 
 the column number or name
@@ -159,13 +159,13 @@ the column number or name
  * @returns NamedTuple of outputs (described in `MetricMaskOutputs`).
  */
 function metric_mask(
-    metric_out: string,
     metric: InputPathType,
     mask: InputPathType,
+    metric_out: string,
     column: string | null = null,
     runner: Runner | null = null,
 ): MetricMaskOutputs {
-    const params = metric_mask_params(metric_out, metric, mask, column)
+    const params = metric_mask_params(metric, mask, metric_out, column)
     return metric_mask_execute(params, runner);
 }
 

@@ -21,6 +21,10 @@ type CiftiRoisFromExtremaGaussianParamsDictTagged = Required<Pick<CiftiRoisFromE
 
 interface CiftiRoisFromExtremaParamsDict {
     "@type"?: "workbench/cifti-rois-from-extrema";
+    "cifti": InputPathType;
+    "surf-limit": number;
+    "vol-limit": number;
+    "direction": string;
     "cifti-out": string;
     "gaussian"?: CiftiRoisFromExtremaGaussianParamsDict | null | undefined;
     "method"?: string | null | undefined;
@@ -28,10 +32,6 @@ interface CiftiRoisFromExtremaParamsDict {
     "surface"?: InputPathType | null | undefined;
     "surface"?: InputPathType | null | undefined;
     "merged-volume": boolean;
-    "cifti": InputPathType;
-    "surf-limit": number;
-    "vol-limit": number;
-    "direction": string;
 }
 type CiftiRoisFromExtremaParamsDictTagged = Required<Pick<CiftiRoisFromExtremaParamsDict, '@type'>> & CiftiRoisFromExtremaParamsDict;
 
@@ -99,11 +99,11 @@ interface CiftiRoisFromExtremaOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param surf_limit geodesic distance limit from vertex, in mm
  * @param vol_limit euclidean distance limit from voxel center, in mm
  * @param direction which dimension an extrema map is along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param method how to handle overlapping ROIs, default ALLOW
 
@@ -122,11 +122,11 @@ the left surface file
  * @returns Parameter dictionary
  */
 function cifti_rois_from_extrema_params(
-    cifti_out: string,
     cifti: InputPathType,
     surf_limit: number,
     vol_limit: number,
     direction: string,
+    cifti_out: string,
     gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
     method: string | null = null,
     surface: InputPathType | null = null,
@@ -136,12 +136,12 @@ function cifti_rois_from_extrema_params(
 ): CiftiRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-rois-from-extrema" as const,
-        "cifti-out": cifti_out,
-        "merged-volume": merged_volume,
         "cifti": cifti,
         "surf-limit": surf_limit,
         "vol-limit": vol_limit,
         "direction": direction,
+        "cifti-out": cifti_out,
+        "merged-volume": merged_volume,
     };
     if (gaussian !== null) {
         params["gaussian"] = gaussian;
@@ -179,10 +179,14 @@ function cifti_rois_from_extrema_cargs(
         "wb_command",
         "-cifti-rois-from-extrema"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["gaussian"] ?? null) !== null) ? cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push(String((params["surf-limit"] ?? null)));
+    cargs.push(String((params["vol-limit"] ?? null)));
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["gaussian"] ?? null) !== null) {
+        cargs.push(...cifti_rois_from_extrema_gaussian_cargs((params["gaussian"] ?? null), execution));
+    }
     if ((params["method"] ?? null) !== null) {
         cargs.push(
             "-overlap-logic",
@@ -210,10 +214,6 @@ function cifti_rois_from_extrema_cargs(
     if ((params["merged-volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push(String((params["surf-limit"] ?? null)));
-    cargs.push(String((params["vol-limit"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -267,11 +267,11 @@ function cifti_rois_from_extrema_execute(
  *
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param surf_limit geodesic distance limit from vertex, in mm
  * @param vol_limit euclidean distance limit from voxel center, in mm
  * @param direction which dimension an extrema map is along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param gaussian generate gaussian kernels instead of flat ROIs
  * @param method how to handle overlapping ROIs, default ALLOW
 
@@ -291,11 +291,11 @@ the left surface file
  * @returns NamedTuple of outputs (described in `CiftiRoisFromExtremaOutputs`).
  */
 function cifti_rois_from_extrema(
-    cifti_out: string,
     cifti: InputPathType,
     surf_limit: number,
     vol_limit: number,
     direction: string,
+    cifti_out: string,
     gaussian: CiftiRoisFromExtremaGaussianParamsDict | null = null,
     method: string | null = null,
     surface: InputPathType | null = null,
@@ -304,7 +304,7 @@ function cifti_rois_from_extrema(
     merged_volume: boolean = false,
     runner: Runner | null = null,
 ): CiftiRoisFromExtremaOutputs {
-    const params = cifti_rois_from_extrema_params(cifti_out, cifti, surf_limit, vol_limit, direction, gaussian, method, surface, surface_, surface_2, merged_volume)
+    const params = cifti_rois_from_extrema_params(cifti, surf_limit, vol_limit, direction, cifti_out, gaussian, method, surface, surface_, surface_2, merged_volume)
     return cifti_rois_from_extrema_execute(params, runner);
 }
 

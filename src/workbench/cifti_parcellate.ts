@@ -40,6 +40,9 @@ type CiftiParcellateNonemptyMaskOutParamsDictTagged = Required<Pick<CiftiParcell
 
 interface CiftiParcellateParamsDict {
     "@type"?: "workbench/cifti-parcellate";
+    "cifti-in": InputPathType;
+    "cifti-label": InputPathType;
+    "direction": string;
     "cifti-out": string;
     "spatial-weights"?: CiftiParcellateSpatialWeightsParamsDict | null | undefined;
     "exclude-outliers"?: CiftiParcellateExcludeOutliersParamsDict | null | undefined;
@@ -50,9 +53,6 @@ interface CiftiParcellateParamsDict {
     "include-empty": boolean;
     "legacy-mode": boolean;
     "only-numeric": boolean;
-    "cifti-in": InputPathType;
-    "cifti-label": InputPathType;
-    "direction": string;
 }
 type CiftiParcellateParamsDictTagged = Required<Pick<CiftiParcellateParamsDict, '@type'>> & CiftiParcellateParamsDict;
 
@@ -311,10 +311,10 @@ interface CiftiParcellateOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out output cifti file
  * @param cifti_in the cifti file to parcellate
  * @param cifti_label a cifti label file to use for the parcellation
  * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
+ * @param cifti_out output cifti file
  * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
  * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
  * @param nonempty_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
@@ -334,10 +334,10 @@ the weights to use, as a cifti file
  * @returns Parameter dictionary
  */
 function cifti_parcellate_params(
-    cifti_out: string,
     cifti_in: InputPathType,
     cifti_label: InputPathType,
     direction: string,
+    cifti_out: string,
     spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
     exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
     nonempty_mask_out: CiftiParcellateNonemptyMaskOutParamsDict | null = null,
@@ -350,13 +350,13 @@ function cifti_parcellate_params(
 ): CiftiParcellateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-parcellate" as const,
+        "cifti-in": cifti_in,
+        "cifti-label": cifti_label,
+        "direction": direction,
         "cifti-out": cifti_out,
         "include-empty": include_empty,
         "legacy-mode": legacy_mode,
         "only-numeric": only_numeric,
-        "cifti-in": cifti_in,
-        "cifti-label": cifti_label,
-        "direction": direction,
     };
     if (spatial_weights !== null) {
         params["spatial-weights"] = spatial_weights;
@@ -397,12 +397,17 @@ function cifti_parcellate_cargs(
         "wb_command",
         "-cifti-parcellate"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["spatial-weights"] ?? null) !== null) ? cifti_parcellate_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
-        ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_parcellate_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-        ...(((params["nonempty-mask-out"] ?? null) !== null) ? cifti_parcellate_nonempty_mask_out_cargs((params["nonempty-mask-out"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push(execution.inputFile((params["cifti-label"] ?? null)));
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["spatial-weights"] ?? null) !== null || (params["exclude-outliers"] ?? null) !== null || (params["nonempty-mask-out"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["spatial-weights"] ?? null) !== null) ? cifti_parcellate_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
+            ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_parcellate_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
+            ...(((params["nonempty-mask-out"] ?? null) !== null) ? cifti_parcellate_nonempty_mask_out_cargs((params["nonempty-mask-out"] ?? null), execution) : [])
+        );
+    }
     if ((params["value"] ?? null) !== null) {
         cargs.push(
             "-fill-value",
@@ -430,9 +435,6 @@ function cifti_parcellate_cargs(
     if ((params["only-numeric"] ?? false)) {
         cargs.push("-only-numeric");
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
-    cargs.push(execution.inputFile((params["cifti-label"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -533,10 +535,10 @@ function cifti_parcellate_execute(
  *
  * The -*-weights options are mutually exclusive and may only be used with MEAN (default), SUM, STDEV, SAMPSTDEV, VARIANCE, MEDIAN, or MODE (default for label data).
  *
- * @param cifti_out output cifti file
  * @param cifti_in the cifti file to parcellate
  * @param cifti_label a cifti label file to use for the parcellation
  * @param direction which mapping to parcellate (integer, ROW, or COLUMN)
+ * @param cifti_out output cifti file
  * @param spatial_weights use voxel volume and either vertex areas or metric files as weights
  * @param exclude_outliers exclude non-numeric values and outliers from each parcel by standard deviation
  * @param nonempty_mask_out output a matching pscalar file that has 0s in empty parcels, and 1s elsewhere
@@ -557,10 +559,10 @@ the weights to use, as a cifti file
  * @returns NamedTuple of outputs (described in `CiftiParcellateOutputs`).
  */
 function cifti_parcellate(
-    cifti_out: string,
     cifti_in: InputPathType,
     cifti_label: InputPathType,
     direction: string,
+    cifti_out: string,
     spatial_weights: CiftiParcellateSpatialWeightsParamsDict | null = null,
     exclude_outliers: CiftiParcellateExcludeOutliersParamsDict | null = null,
     nonempty_mask_out: CiftiParcellateNonemptyMaskOutParamsDict | null = null,
@@ -572,7 +574,7 @@ function cifti_parcellate(
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): CiftiParcellateOutputs {
-    const params = cifti_parcellate_params(cifti_out, cifti_in, cifti_label, direction, spatial_weights, exclude_outliers, nonempty_mask_out, value, method, weight_cifti, include_empty, legacy_mode, only_numeric)
+    const params = cifti_parcellate_params(cifti_in, cifti_label, direction, cifti_out, spatial_weights, exclude_outliers, nonempty_mask_out, value, method, weight_cifti, include_empty, legacy_mode, only_numeric)
     return cifti_parcellate_execute(params, runner);
 }
 

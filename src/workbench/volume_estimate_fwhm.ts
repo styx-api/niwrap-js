@@ -13,10 +13,10 @@ const VOLUME_ESTIMATE_FWHM_METADATA: Metadata = {
 
 interface VolumeEstimateFwhmParamsDict {
     "@type"?: "workbench/volume-estimate-fwhm";
+    "volume": InputPathType;
     "demean"?: boolean | null | undefined;
     "subvol"?: string | null | undefined;
     "roivol"?: InputPathType | null | undefined;
-    "volume": InputPathType;
 }
 type VolumeEstimateFwhmParamsDictTagged = Required<Pick<VolumeEstimateFwhmParamsDict, '@type'>> & VolumeEstimateFwhmParamsDict;
 
@@ -90,6 +90,7 @@ function volume_estimate_fwhm_cargs(
         "wb_command",
         "-volume-estimate-fwhm"
     );
+    cargs.push(execution.inputFile((params["volume"] ?? null)));
     if ((params["demean"] ?? null) !== null) {
         cargs.push(
             "-whole-file",
@@ -108,7 +109,6 @@ function volume_estimate_fwhm_cargs(
             execution.inputFile((params["roivol"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["volume"] ?? null)));
     return cargs;
 }
 

@@ -33,6 +33,7 @@ type CiftiWeightedStatsRoiParamsDictTagged = Required<Pick<CiftiWeightedStatsRoi
 
 interface CiftiWeightedStatsParamsDict {
     "@type"?: "workbench/cifti-weighted-stats";
+    "cifti-in": InputPathType;
     "spatial-weights"?: CiftiWeightedStatsSpatialWeightsParamsDict | null | undefined;
     "roi"?: CiftiWeightedStatsRoiParamsDict | null | undefined;
     "percent"?: number | null | undefined;
@@ -42,7 +43,6 @@ interface CiftiWeightedStatsParamsDict {
     "show-map-name": boolean;
     "sum": boolean;
     "mean": boolean;
-    "cifti-in": InputPathType;
 }
 type CiftiWeightedStatsParamsDictTagged = Required<Pick<CiftiWeightedStatsParamsDict, '@type'>> & CiftiWeightedStatsParamsDict;
 
@@ -254,10 +254,10 @@ function cifti_weighted_stats_params(
 ): CiftiWeightedStatsParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-weighted-stats" as const,
+        "cifti-in": cifti_in,
         "show-map-name": show_map_name,
         "sum": sum,
         "mean": mean,
-        "cifti-in": cifti_in,
     };
     if (spatial_weights !== null) {
         params["spatial-weights"] = spatial_weights;
@@ -298,6 +298,7 @@ function cifti_weighted_stats_cargs(
         "wb_command",
         "-cifti-weighted-stats"
     );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     if ((params["spatial-weights"] ?? null) !== null || (params["roi"] ?? null) !== null) {
         cargs.push(
             ...(((params["spatial-weights"] ?? null) !== null) ? cifti_weighted_stats_spatial_weights_cargs((params["spatial-weights"] ?? null), execution) : []),
@@ -337,7 +338,6 @@ function cifti_weighted_stats_cargs(
     if ((params["mean"] ?? false)) {
         cargs.push("-mean");
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }
 

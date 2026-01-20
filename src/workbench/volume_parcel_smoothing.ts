@@ -13,13 +13,13 @@ const VOLUME_PARCEL_SMOOTHING_METADATA: Metadata = {
 
 interface VolumeParcelSmoothingParamsDict {
     "@type"?: "workbench/volume-parcel-smoothing";
+    "data-volume": InputPathType;
+    "label-volume": InputPathType;
+    "kernel": number;
     "volume-out": string;
     "subvol"?: string | null | undefined;
     "fix-zeros": boolean;
     "fwhm": boolean;
-    "data-volume": InputPathType;
-    "label-volume": InputPathType;
-    "kernel": number;
 }
 type VolumeParcelSmoothingParamsDictTagged = Required<Pick<VolumeParcelSmoothingParamsDict, '@type'>> & VolumeParcelSmoothingParamsDict;
 
@@ -44,10 +44,10 @@ interface VolumeParcelSmoothingOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume
  * @param data_volume the volume to smooth
  * @param label_volume a label volume containing the parcels to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param volume_out the output volume
  * @param subvol select a single subvolume to smooth
 
 the subvolume number or name
@@ -57,22 +57,22 @@ the subvolume number or name
  * @returns Parameter dictionary
  */
 function volume_parcel_smoothing_params(
-    volume_out: string,
     data_volume: InputPathType,
     label_volume: InputPathType,
     kernel: number,
+    volume_out: string,
     subvol: string | null = null,
     fix_zeros: boolean = false,
     fwhm: boolean = false,
 ): VolumeParcelSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-parcel-smoothing" as const,
-        "volume-out": volume_out,
-        "fix-zeros": fix_zeros,
-        "fwhm": fwhm,
         "data-volume": data_volume,
         "label-volume": label_volume,
         "kernel": kernel,
+        "volume-out": volume_out,
+        "fix-zeros": fix_zeros,
+        "fwhm": fwhm,
     };
     if (subvol !== null) {
         params["subvol"] = subvol;
@@ -98,6 +98,9 @@ function volume_parcel_smoothing_cargs(
         "wb_command",
         "-volume-parcel-smoothing"
     );
+    cargs.push(execution.inputFile((params["data-volume"] ?? null)));
+    cargs.push(execution.inputFile((params["label-volume"] ?? null)));
+    cargs.push(String((params["kernel"] ?? null)));
     cargs.push((params["volume-out"] ?? null));
     if ((params["subvol"] ?? null) !== null) {
         cargs.push(
@@ -111,9 +114,6 @@ function volume_parcel_smoothing_cargs(
     if ((params["fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
-    cargs.push(execution.inputFile((params["data-volume"] ?? null)));
-    cargs.push(execution.inputFile((params["label-volume"] ?? null)));
-    cargs.push(String((params["kernel"] ?? null)));
     return cargs;
 }
 
@@ -167,10 +167,10 @@ function volume_parcel_smoothing_execute(
  *
  * The volume is smoothed within each label in the label volume using data only from within the label.  Equivalent to running volume smoothing with ROIs matching each label separately, then adding the resulting volumes, but faster.
  *
- * @param volume_out the output volume
  * @param data_volume the volume to smooth
  * @param label_volume a label volume containing the parcels to smooth
  * @param kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param volume_out the output volume
  * @param subvol select a single subvolume to smooth
 
 the subvolume number or name
@@ -181,16 +181,16 @@ the subvolume number or name
  * @returns NamedTuple of outputs (described in `VolumeParcelSmoothingOutputs`).
  */
 function volume_parcel_smoothing(
-    volume_out: string,
     data_volume: InputPathType,
     label_volume: InputPathType,
     kernel: number,
+    volume_out: string,
     subvol: string | null = null,
     fix_zeros: boolean = false,
     fwhm: boolean = false,
     runner: Runner | null = null,
 ): VolumeParcelSmoothingOutputs {
-    const params = volume_parcel_smoothing_params(volume_out, data_volume, label_volume, kernel, subvol, fix_zeros, fwhm)
+    const params = volume_parcel_smoothing_params(data_volume, label_volume, kernel, volume_out, subvol, fix_zeros, fwhm)
     return volume_parcel_smoothing_execute(params, runner);
 }
 

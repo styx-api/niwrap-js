@@ -13,8 +13,8 @@ const SURFACE_CREATE_SPHERE_METADATA: Metadata = {
 
 interface SurfaceCreateSphereParamsDict {
     "@type"?: "workbench/surface-create-sphere";
-    "sphere-out": string;
     "num-vertices": number;
+    "sphere-out": string;
 }
 type SurfaceCreateSphereParamsDictTagged = Required<Pick<SurfaceCreateSphereParamsDict, '@type'>> & SurfaceCreateSphereParamsDict;
 
@@ -39,19 +39,19 @@ interface SurfaceCreateSphereOutputs {
 /**
  * Build parameters.
  *
- * @param sphere_out the output sphere
  * @param num_vertices desired number of vertices
+ * @param sphere_out the output sphere
  *
  * @returns Parameter dictionary
  */
 function surface_create_sphere_params(
-    sphere_out: string,
     num_vertices: number,
+    sphere_out: string,
 ): SurfaceCreateSphereParamsDictTagged {
     const params = {
         "@type": "workbench/surface-create-sphere" as const,
-        "sphere-out": sphere_out,
         "num-vertices": num_vertices,
+        "sphere-out": sphere_out,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function surface_create_sphere_cargs(
         "wb_command",
         "-surface-create-sphere"
     );
-    cargs.push((params["sphere-out"] ?? null));
     cargs.push(String((params["num-vertices"] ?? null)));
+    cargs.push((params["sphere-out"] ?? null));
     return cargs;
 }
 
@@ -139,18 +139,18 @@ function surface_create_sphere_execute(
  * $ wb_command -set-structure Sphere.6k.R.surf.gii CORTEX_RIGHT
  * $ wb_command -set-structure Sphere.6k.L.surf.gii CORTEX_LEFT.
  *
- * @param sphere_out the output sphere
  * @param num_vertices desired number of vertices
+ * @param sphere_out the output sphere
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCreateSphereOutputs`).
  */
 function surface_create_sphere(
-    sphere_out: string,
     num_vertices: number,
+    sphere_out: string,
     runner: Runner | null = null,
 ): SurfaceCreateSphereOutputs {
-    const params = surface_create_sphere_params(sphere_out, num_vertices)
+    const params = surface_create_sphere_params(num_vertices, sphere_out)
     return surface_create_sphere_execute(params, runner);
 }
 

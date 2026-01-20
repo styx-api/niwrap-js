@@ -235,10 +235,10 @@ function volume_merge_cargs(
         "wb_command",
         "-volume-merge"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["volume"] ?? null) !== null) {
+        cargs.push(...(params["volume"] ?? null).map(s => volume_merge_volume_cargs(s, execution)).flat());
+    }
     return cargs;
 }
 

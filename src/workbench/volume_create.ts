@@ -44,12 +44,12 @@ type VolumeCreateSformParamsDictTagged = Required<Pick<VolumeCreateSformParamsDi
 
 interface VolumeCreateParamsDict {
     "@type"?: "workbench/volume-create";
-    "volume-out": string;
-    "plumb"?: VolumeCreatePlumbParamsDict | null | undefined;
-    "sform"?: VolumeCreateSformParamsDict | null | undefined;
     "i-dim": number;
     "j-dim": number;
     "k-dim": number;
+    "volume-out": string;
+    "plumb"?: VolumeCreatePlumbParamsDict | null | undefined;
+    "sform"?: VolumeCreateSformParamsDict | null | undefined;
 }
 type VolumeCreateParamsDictTagged = Required<Pick<VolumeCreateParamsDict, '@type'>> & VolumeCreateParamsDict;
 
@@ -220,29 +220,29 @@ interface VolumeCreateOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume
  * @param i_dim length of first dimension
  * @param j_dim length of second dimension
  * @param k_dim length of third dimension
+ * @param volume_out the output volume
  * @param plumb set via axis order and spacing/offset
  * @param sform set via a nifti sform
  *
  * @returns Parameter dictionary
  */
 function volume_create_params(
-    volume_out: string,
     i_dim: number,
     j_dim: number,
     k_dim: number,
+    volume_out: string,
     plumb: VolumeCreatePlumbParamsDict | null = null,
     sform: VolumeCreateSformParamsDict | null = null,
 ): VolumeCreateParamsDictTagged {
     const params = {
         "@type": "workbench/volume-create" as const,
-        "volume-out": volume_out,
         "i-dim": i_dim,
         "j-dim": j_dim,
         "k-dim": k_dim,
+        "volume-out": volume_out,
     };
     if (plumb !== null) {
         params["plumb"] = plumb;
@@ -271,14 +271,16 @@ function volume_create_cargs(
         "wb_command",
         "-volume-create"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        ...(((params["plumb"] ?? null) !== null) ? volume_create_plumb_cargs((params["plumb"] ?? null), execution) : []),
-        ...(((params["sform"] ?? null) !== null) ? volume_create_sform_cargs((params["sform"] ?? null), execution) : [])
-    );
     cargs.push(String((params["i-dim"] ?? null)));
     cargs.push(String((params["j-dim"] ?? null)));
     cargs.push(String((params["k-dim"] ?? null)));
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["plumb"] ?? null) !== null || (params["sform"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["plumb"] ?? null) !== null) ? volume_create_plumb_cargs((params["plumb"] ?? null), execution) : []),
+            ...(((params["sform"] ?? null) !== null) ? volume_create_sform_cargs((params["sform"] ?? null), execution) : [])
+        );
+    }
     return cargs;
 }
 
@@ -332,10 +334,10 @@ function volume_create_execute(
  *
  * Creates a volume file full of zeros.  Exactly one of -plumb or -sform must be specified.
  *
- * @param volume_out the output volume
  * @param i_dim length of first dimension
  * @param j_dim length of second dimension
  * @param k_dim length of third dimension
+ * @param volume_out the output volume
  * @param plumb set via axis order and spacing/offset
  * @param sform set via a nifti sform
  * @param runner Command runner
@@ -343,15 +345,15 @@ function volume_create_execute(
  * @returns NamedTuple of outputs (described in `VolumeCreateOutputs`).
  */
 function volume_create(
-    volume_out: string,
     i_dim: number,
     j_dim: number,
     k_dim: number,
+    volume_out: string,
     plumb: VolumeCreatePlumbParamsDict | null = null,
     sform: VolumeCreateSformParamsDict | null = null,
     runner: Runner | null = null,
 ): VolumeCreateOutputs {
-    const params = volume_create_params(volume_out, i_dim, j_dim, k_dim, plumb, sform)
+    const params = volume_create_params(i_dim, j_dim, k_dim, volume_out, plumb, sform)
     return volume_create_execute(params, runner);
 }
 

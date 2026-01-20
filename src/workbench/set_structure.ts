@@ -13,10 +13,10 @@ const SET_STRUCTURE_METADATA: Metadata = {
 
 interface SetStructureParamsDict {
     "@type"?: "workbench/set-structure";
-    "secondary type"?: string | null | undefined;
-    "type"?: string | null | undefined;
     "data-file": string;
     "structure": string;
+    "secondary type"?: string | null | undefined;
+    "type"?: string | null | undefined;
 }
 type SetStructureParamsDictTagged = Required<Pick<SetStructureParamsDict, '@type'>> & SetStructureParamsDict;
 
@@ -86,6 +86,8 @@ function set_structure_cargs(
         "wb_command",
         "-set-structure"
     );
+    cargs.push((params["data-file"] ?? null));
+    cargs.push((params["structure"] ?? null));
     if ((params["secondary type"] ?? null) !== null) {
         cargs.push(
             "-surface-secondary-type",
@@ -98,8 +100,6 @@ function set_structure_cargs(
             (params["type"] ?? null)
         );
     }
-    cargs.push((params["data-file"] ?? null));
-    cargs.push((params["structure"] ?? null));
     return cargs;
 }
 

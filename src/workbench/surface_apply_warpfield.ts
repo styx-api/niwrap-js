@@ -13,10 +13,10 @@ const SURFACE_APPLY_WARPFIELD_METADATA: Metadata = {
 
 interface SurfaceApplyWarpfieldParamsDict {
     "@type"?: "workbench/surface-apply-warpfield";
-    "out-surf": string;
-    "forward-warp"?: string | null | undefined;
     "in-surf": InputPathType;
     "warpfield": string;
+    "out-surf": string;
+    "forward-warp"?: string | null | undefined;
 }
 type SurfaceApplyWarpfieldParamsDictTagged = Required<Pick<SurfaceApplyWarpfieldParamsDict, '@type'>> & SurfaceApplyWarpfieldParamsDict;
 
@@ -41,9 +41,9 @@ interface SurfaceApplyWarpfieldOutputs {
 /**
  * Build parameters.
  *
- * @param out_surf the output transformed surface
  * @param in_surf the surface to transform
  * @param warpfield the INVERSE warpfield
+ * @param out_surf the output transformed surface
  * @param forward_warp MUST be used if using a fnirt warpfield
 
 the forward warpfield
@@ -51,16 +51,16 @@ the forward warpfield
  * @returns Parameter dictionary
  */
 function surface_apply_warpfield_params(
-    out_surf: string,
     in_surf: InputPathType,
     warpfield: string,
+    out_surf: string,
     forward_warp: string | null = null,
 ): SurfaceApplyWarpfieldParamsDictTagged {
     const params = {
         "@type": "workbench/surface-apply-warpfield" as const,
-        "out-surf": out_surf,
         "in-surf": in_surf,
         "warpfield": warpfield,
+        "out-surf": out_surf,
     };
     if (forward_warp !== null) {
         params["forward-warp"] = forward_warp;
@@ -86,6 +86,8 @@ function surface_apply_warpfield_cargs(
         "wb_command",
         "-surface-apply-warpfield"
     );
+    cargs.push(execution.inputFile((params["in-surf"] ?? null)));
+    cargs.push((params["warpfield"] ?? null));
     cargs.push((params["out-surf"] ?? null));
     if ((params["forward-warp"] ?? null) !== null) {
         cargs.push(
@@ -93,8 +95,6 @@ function surface_apply_warpfield_cargs(
             (params["forward-warp"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["in-surf"] ?? null)));
-    cargs.push((params["warpfield"] ?? null));
     return cargs;
 }
 
@@ -152,9 +152,9 @@ function surface_apply_warpfield_execute(
  *
  * If the -fnirt option is not present, the warpfield must be a nifti 'world' warpfield, which can be obtained with the -convert-warpfield command.
  *
- * @param out_surf the output transformed surface
  * @param in_surf the surface to transform
  * @param warpfield the INVERSE warpfield
+ * @param out_surf the output transformed surface
  * @param forward_warp MUST be used if using a fnirt warpfield
 
 the forward warpfield
@@ -163,13 +163,13 @@ the forward warpfield
  * @returns NamedTuple of outputs (described in `SurfaceApplyWarpfieldOutputs`).
  */
 function surface_apply_warpfield(
-    out_surf: string,
     in_surf: InputPathType,
     warpfield: string,
+    out_surf: string,
     forward_warp: string | null = null,
     runner: Runner | null = null,
 ): SurfaceApplyWarpfieldOutputs {
-    const params = surface_apply_warpfield_params(out_surf, in_surf, warpfield, forward_warp)
+    const params = surface_apply_warpfield_params(in_surf, warpfield, out_surf, forward_warp)
     return surface_apply_warpfield_execute(params, runner);
 }
 

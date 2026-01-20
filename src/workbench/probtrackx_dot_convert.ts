@@ -45,6 +45,7 @@ type ProbtrackxDotConvertColCiftiParamsDictTagged = Required<Pick<ProbtrackxDotC
 
 interface ProbtrackxDotConvertParamsDict {
     "@type"?: "workbench/probtrackx-dot-convert";
+    "dot-file": string;
     "cifti-out": string;
     "row-voxels"?: ProbtrackxDotConvertRowVoxelsParamsDict | null | undefined;
     "row-cifti"?: ProbtrackxDotConvertRowCiftiParamsDict | null | undefined;
@@ -54,7 +55,6 @@ interface ProbtrackxDotConvertParamsDict {
     "roi-metric"?: InputPathType | null | undefined;
     "make-symmetric": boolean;
     "transpose": boolean;
-    "dot-file": string;
 }
 type ProbtrackxDotConvertParamsDictTagged = Required<Pick<ProbtrackxDotConvertParamsDict, '@type'>> & ProbtrackxDotConvertParamsDict;
 
@@ -251,8 +251,8 @@ interface ProbtrackxDotConvertOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out output cifti file
  * @param dot_file input .dot file
+ * @param cifti_out output cifti file
  * @param row_voxels the output mapping along a row will be voxels
  * @param row_cifti take the mapping along a row from a cifti file
  * @param col_voxels the output mapping along a column will be voxels
@@ -269,8 +269,8 @@ a metric file with positive values on all vertices used
  * @returns Parameter dictionary
  */
 function probtrackx_dot_convert_params(
-    cifti_out: string,
     dot_file: string,
+    cifti_out: string,
     row_voxels: ProbtrackxDotConvertRowVoxelsParamsDict | null = null,
     row_cifti: ProbtrackxDotConvertRowCiftiParamsDict | null = null,
     col_voxels: ProbtrackxDotConvertColVoxelsParamsDict | null = null,
@@ -282,10 +282,10 @@ function probtrackx_dot_convert_params(
 ): ProbtrackxDotConvertParamsDictTagged {
     const params = {
         "@type": "workbench/probtrackx-dot-convert" as const,
+        "dot-file": dot_file,
         "cifti-out": cifti_out,
         "make-symmetric": make_symmetric,
         "transpose": transpose,
-        "dot-file": dot_file,
     };
     if (row_voxels !== null) {
         params["row-voxels"] = row_voxels;
@@ -326,13 +326,16 @@ function probtrackx_dot_convert_cargs(
         "wb_command",
         "-probtrackx-dot-convert"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["row-voxels"] ?? null) !== null) ? probtrackx_dot_convert_row_voxels_cargs((params["row-voxels"] ?? null), execution) : []),
-        ...(((params["row-cifti"] ?? null) !== null) ? probtrackx_dot_convert_row_cifti_cargs((params["row-cifti"] ?? null), execution) : []),
-        ...(((params["col-voxels"] ?? null) !== null) ? probtrackx_dot_convert_col_voxels_cargs((params["col-voxels"] ?? null), execution) : []),
-        ...(((params["col-cifti"] ?? null) !== null) ? probtrackx_dot_convert_col_cifti_cargs((params["col-cifti"] ?? null), execution) : [])
-    );
+    cargs.push((params["dot-file"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["row-voxels"] ?? null) !== null || (params["row-cifti"] ?? null) !== null || (params["col-voxels"] ?? null) !== null || (params["col-cifti"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["row-voxels"] ?? null) !== null) ? probtrackx_dot_convert_row_voxels_cargs((params["row-voxels"] ?? null), execution) : []),
+            ...(((params["row-cifti"] ?? null) !== null) ? probtrackx_dot_convert_row_cifti_cargs((params["row-cifti"] ?? null), execution) : []),
+            ...(((params["col-voxels"] ?? null) !== null) ? probtrackx_dot_convert_col_voxels_cargs((params["col-voxels"] ?? null), execution) : []),
+            ...(((params["col-cifti"] ?? null) !== null) ? probtrackx_dot_convert_col_cifti_cargs((params["col-cifti"] ?? null), execution) : [])
+        );
+    }
     if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
             "-col-surface",
@@ -351,7 +354,6 @@ function probtrackx_dot_convert_cargs(
     if ((params["transpose"] ?? false)) {
         cargs.push("-transpose");
     }
-    cargs.push((params["dot-file"] ?? null));
     return cargs;
 }
 
@@ -483,8 +485,8 @@ function probtrackx_dot_convert_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * @param cifti_out output cifti file
  * @param dot_file input .dot file
+ * @param cifti_out output cifti file
  * @param row_voxels the output mapping along a row will be voxels
  * @param row_cifti take the mapping along a row from a cifti file
  * @param col_voxels the output mapping along a column will be voxels
@@ -502,8 +504,8 @@ a metric file with positive values on all vertices used
  * @returns NamedTuple of outputs (described in `ProbtrackxDotConvertOutputs`).
  */
 function probtrackx_dot_convert(
-    cifti_out: string,
     dot_file: string,
+    cifti_out: string,
     row_voxels: ProbtrackxDotConvertRowVoxelsParamsDict | null = null,
     row_cifti: ProbtrackxDotConvertRowCiftiParamsDict | null = null,
     col_voxels: ProbtrackxDotConvertColVoxelsParamsDict | null = null,
@@ -514,7 +516,7 @@ function probtrackx_dot_convert(
     transpose: boolean = false,
     runner: Runner | null = null,
 ): ProbtrackxDotConvertOutputs {
-    const params = probtrackx_dot_convert_params(cifti_out, dot_file, row_voxels, row_cifti, col_voxels, col_cifti, roi_metric, roi_metric_, make_symmetric, transpose)
+    const params = probtrackx_dot_convert_params(dot_file, cifti_out, row_voxels, row_cifti, col_voxels, col_cifti, roi_metric, roi_metric_, make_symmetric, transpose)
     return probtrackx_dot_convert_execute(params, runner);
 }
 

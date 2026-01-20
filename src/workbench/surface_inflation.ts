@@ -13,13 +13,13 @@ const SURFACE_INFLATION_METADATA: Metadata = {
 
 interface SurfaceInflationParamsDict {
     "@type"?: "workbench/surface-inflation";
-    "surface-out": string;
     "anatomical-surface-in": InputPathType;
     "surface-in": InputPathType;
     "number-of-smoothing-cycles": number;
     "smoothing-strength": number;
     "smoothing-iterations": number;
     "inflation-factor": number;
+    "surface-out": string;
 }
 type SurfaceInflationParamsDictTagged = Required<Pick<SurfaceInflationParamsDict, '@type'>> & SurfaceInflationParamsDict;
 
@@ -44,34 +44,34 @@ interface SurfaceInflationOutputs {
 /**
  * Build parameters.
  *
- * @param surface_out output surface file
  * @param anatomical_surface_in the anatomical surface
  * @param surface_in the surface file to inflate
  * @param number_of_smoothing_cycles number of smoothing cycles
  * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
  * @param smoothing_iterations smoothing iterations
  * @param inflation_factor inflation factor
+ * @param surface_out output surface file
  *
  * @returns Parameter dictionary
  */
 function surface_inflation_params(
-    surface_out: string,
     anatomical_surface_in: InputPathType,
     surface_in: InputPathType,
     number_of_smoothing_cycles: number,
     smoothing_strength: number,
     smoothing_iterations: number,
     inflation_factor: number,
+    surface_out: string,
 ): SurfaceInflationParamsDictTagged {
     const params = {
         "@type": "workbench/surface-inflation" as const,
-        "surface-out": surface_out,
         "anatomical-surface-in": anatomical_surface_in,
         "surface-in": surface_in,
         "number-of-smoothing-cycles": number_of_smoothing_cycles,
         "smoothing-strength": smoothing_strength,
         "smoothing-iterations": smoothing_iterations,
         "inflation-factor": inflation_factor,
+        "surface-out": surface_out,
     };
     return params;
 }
@@ -94,13 +94,13 @@ function surface_inflation_cargs(
         "wb_command",
         "-surface-inflation"
     );
-    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["anatomical-surface-in"] ?? null)));
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(String((params["number-of-smoothing-cycles"] ?? null)));
     cargs.push(String((params["smoothing-strength"] ?? null)));
     cargs.push(String((params["smoothing-iterations"] ?? null)));
     cargs.push(String((params["inflation-factor"] ?? null)));
+    cargs.push((params["surface-out"] ?? null));
     return cargs;
 }
 
@@ -154,28 +154,28 @@ function surface_inflation_execute(
  *
  * Inflate a surface by performing cycles that consist of smoothing  followed by inflation (to correct shrinkage caused by smoothing).
  *
- * @param surface_out output surface file
  * @param anatomical_surface_in the anatomical surface
  * @param surface_in the surface file to inflate
  * @param number_of_smoothing_cycles number of smoothing cycles
  * @param smoothing_strength smoothing strength (ranges [0.0 - 1.0])
  * @param smoothing_iterations smoothing iterations
  * @param inflation_factor inflation factor
+ * @param surface_out output surface file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceInflationOutputs`).
  */
 function surface_inflation(
-    surface_out: string,
     anatomical_surface_in: InputPathType,
     surface_in: InputPathType,
     number_of_smoothing_cycles: number,
     smoothing_strength: number,
     smoothing_iterations: number,
     inflation_factor: number,
+    surface_out: string,
     runner: Runner | null = null,
 ): SurfaceInflationOutputs {
-    const params = surface_inflation_params(surface_out, anatomical_surface_in, surface_in, number_of_smoothing_cycles, smoothing_strength, smoothing_iterations, inflation_factor)
+    const params = surface_inflation_params(anatomical_surface_in, surface_in, number_of_smoothing_cycles, smoothing_strength, smoothing_iterations, inflation_factor, surface_out)
     return surface_inflation_execute(params, runner);
 }
 

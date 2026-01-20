@@ -52,11 +52,11 @@ type VolumeSetSpaceFileParamsDictTagged = Required<Pick<VolumeSetSpaceFileParams
 
 interface VolumeSetSpaceParamsDict {
     "@type"?: "workbench/volume-set-space";
+    "volume-in": InputPathType;
+    "volume-out": string;
     "plumb"?: VolumeSetSpacePlumbParamsDict | null | undefined;
     "sform"?: VolumeSetSpaceSformParamsDict | null | undefined;
     "file"?: VolumeSetSpaceFileParamsDict | null | undefined;
-    "volume-in": InputPathType;
-    "volume-out": string;
 }
 type VolumeSetSpaceParamsDictTagged = Required<Pick<VolumeSetSpaceParamsDict, '@type'>> & VolumeSetSpaceParamsDict;
 
@@ -318,6 +318,8 @@ function volume_set_space_cargs(
         "wb_command",
         "-volume-set-space"
     );
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push((params["volume-out"] ?? null));
     if ((params["plumb"] ?? null) !== null || (params["sform"] ?? null) !== null || (params["file"] ?? null) !== null) {
         cargs.push(
             ...(((params["plumb"] ?? null) !== null) ? volume_set_space_plumb_cargs((params["plumb"] ?? null), execution) : []),
@@ -325,8 +327,6 @@ function volume_set_space_cargs(
             ...(((params["file"] ?? null) !== null) ? volume_set_space_file_cargs((params["file"] ?? null), execution) : [])
         );
     }
-    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
-    cargs.push((params["volume-out"] ?? null));
     return cargs;
 }
 

@@ -21,10 +21,10 @@ type SetMapNamesMapParamsDictTagged = Required<Pick<SetMapNamesMapParamsDict, '@
 
 interface SetMapNamesParamsDict {
     "@type"?: "workbench/set-map-names";
+    "data-file": string;
     "map"?: Array<SetMapNamesMapParamsDict> | null | undefined;
     "file"?: string | null | undefined;
     "file"?: string | null | undefined;
-    "data-file": string;
 }
 type SetMapNamesParamsDictTagged = Required<Pick<SetMapNamesParamsDict, '@type'>> & SetMapNamesParamsDict;
 
@@ -139,6 +139,7 @@ function set_map_names_cargs(
         "wb_command",
         "-set-map-names"
     );
+    cargs.push((params["data-file"] ?? null));
     if ((params["map"] ?? null) !== null) {
         cargs.push(...(params["map"] ?? null).map(s => set_map_names_map_cargs(s, execution)).flat());
     }
@@ -154,7 +155,6 @@ function set_map_names_cargs(
             (params["file"] ?? null)
         );
     }
-    cargs.push((params["data-file"] ?? null));
     return cargs;
 }
 

@@ -28,6 +28,9 @@ type VolumeDilateGradExtrapolateParamsDictTagged = Required<Pick<VolumeDilateGra
 
 interface VolumeDilateParamsDict {
     "@type"?: "workbench/volume-dilate";
+    "volume": InputPathType;
+    "distance": number;
+    "method": string;
     "volume-out": string;
     "grad-extrapolate"?: VolumeDilateGradExtrapolateParamsDict | null | undefined;
     "subvol"?: string | null | undefined;
@@ -35,9 +38,6 @@ interface VolumeDilateParamsDict {
     "roi-volume"?: InputPathType | null | undefined;
     "exponent"?: number | null | undefined;
     "legacy-cutoff": boolean;
-    "volume": InputPathType;
-    "distance": number;
-    "method": string;
 }
 type VolumeDilateParamsDictTagged = Required<Pick<VolumeDilateParamsDict, '@type'>> & VolumeDilateParamsDict;
 
@@ -150,10 +150,10 @@ interface VolumeDilateOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume
  * @param volume the volume to dilate
  * @param distance distance in mm to dilate
  * @param method dilation method to use
+ * @param volume_out the output volume
  * @param grad_extrapolate additionally use the gradient to extrapolate, intended to be used with WEIGHTED
  * @param subvol select a single subvolume to dilate
 
@@ -172,10 +172,10 @@ exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7
  * @returns Parameter dictionary
  */
 function volume_dilate_params(
-    volume_out: string,
     volume: InputPathType,
     distance: number,
     method: string,
+    volume_out: string,
     grad_extrapolate: VolumeDilateGradExtrapolateParamsDict | null = null,
     subvol: string | null = null,
     roi_volume: InputPathType | null = null,
@@ -185,11 +185,11 @@ function volume_dilate_params(
 ): VolumeDilateParamsDictTagged {
     const params = {
         "@type": "workbench/volume-dilate" as const,
-        "volume-out": volume_out,
-        "legacy-cutoff": legacy_cutoff,
         "volume": volume,
         "distance": distance,
         "method": method,
+        "volume-out": volume_out,
+        "legacy-cutoff": legacy_cutoff,
     };
     if (grad_extrapolate !== null) {
         params["grad-extrapolate"] = grad_extrapolate;
@@ -227,10 +227,13 @@ function volume_dilate_cargs(
         "wb_command",
         "-volume-dilate"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        ...(((params["grad-extrapolate"] ?? null) !== null) ? volume_dilate_grad_extrapolate_cargs((params["grad-extrapolate"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["volume"] ?? null)));
+    cargs.push(String((params["distance"] ?? null)));
+    cargs.push((params["method"] ?? null));
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["grad-extrapolate"] ?? null) !== null) {
+        cargs.push(...volume_dilate_grad_extrapolate_cargs((params["grad-extrapolate"] ?? null), execution));
+    }
     if ((params["subvol"] ?? null) !== null) {
         cargs.push(
             "-subvolume",
@@ -258,9 +261,6 @@ function volume_dilate_cargs(
     if ((params["legacy-cutoff"] ?? false)) {
         cargs.push("-legacy-cutoff");
     }
-    cargs.push(execution.inputFile((params["volume"] ?? null)));
-    cargs.push(String((params["distance"] ?? null)));
-    cargs.push((params["method"] ?? null));
     return cargs;
 }
 
@@ -332,10 +332,10 @@ function volume_dilate_execute(
  * NEAREST - use the value from the nearest good voxel
  * WEIGHTED - use a weighted average based on distance.
  *
- * @param volume_out the output volume
  * @param volume the volume to dilate
  * @param distance distance in mm to dilate
  * @param method dilation method to use
+ * @param volume_out the output volume
  * @param grad_extrapolate additionally use the gradient to extrapolate, intended to be used with WEIGHTED
  * @param subvol select a single subvolume to dilate
 
@@ -355,10 +355,10 @@ exponent 'n' to use in (1 / (distance ^ n)) as the weighting function (default 7
  * @returns NamedTuple of outputs (described in `VolumeDilateOutputs`).
  */
 function volume_dilate(
-    volume_out: string,
     volume: InputPathType,
     distance: number,
     method: string,
+    volume_out: string,
     grad_extrapolate: VolumeDilateGradExtrapolateParamsDict | null = null,
     subvol: string | null = null,
     roi_volume: InputPathType | null = null,
@@ -367,7 +367,7 @@ function volume_dilate(
     legacy_cutoff: boolean = false,
     runner: Runner | null = null,
 ): VolumeDilateOutputs {
-    const params = volume_dilate_params(volume_out, volume, distance, method, grad_extrapolate, subvol, roi_volume, roi_volume_, exponent, legacy_cutoff)
+    const params = volume_dilate_params(volume, distance, method, volume_out, grad_extrapolate, subvol, roi_volume, roi_volume_, exponent, legacy_cutoff)
     return volume_dilate_execute(params, runner);
 }
 

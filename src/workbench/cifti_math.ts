@@ -31,11 +31,11 @@ type CiftiMathVarParamsDictTagged = Required<Pick<CiftiMathVarParamsDict, '@type
 
 interface CiftiMathParamsDict {
     "@type"?: "workbench/cifti-math";
+    "expression": string;
     "cifti-out": string;
     "var"?: Array<CiftiMathVarParamsDict> | null | undefined;
     "replace"?: number | null | undefined;
     "override-mapping-check": boolean;
-    "expression": string;
 }
 type CiftiMathParamsDictTagged = Required<Pick<CiftiMathParamsDict, '@type'>> & CiftiMathParamsDict;
 
@@ -158,8 +158,8 @@ interface CiftiMathOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti file
  * @param expression the expression to evaluate, in quotes
+ * @param cifti_out the output cifti file
  * @param var_ a cifti file to use as a variable
  * @param replace replace NaN results with a value
 
@@ -169,17 +169,17 @@ value to replace NaN with
  * @returns Parameter dictionary
  */
 function cifti_math_params(
-    cifti_out: string,
     expression: string,
+    cifti_out: string,
     var_: Array<CiftiMathVarParamsDict> | null = null,
     replace: number | null = null,
     override_mapping_check: boolean = false,
 ): CiftiMathParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-math" as const,
+        "expression": expression,
         "cifti-out": cifti_out,
         "override-mapping-check": override_mapping_check,
-        "expression": expression,
     };
     if (var_ !== null) {
         params["var"] = var_;
@@ -208,10 +208,11 @@ function cifti_math_cargs(
         "wb_command",
         "-cifti-math"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["var"] ?? null) !== null) ? (params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["expression"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["var"] ?? null) !== null) {
+        cargs.push(...(params["var"] ?? null).map(s => cifti_math_var_cargs(s, execution)).flat());
+    }
     if ((params["replace"] ?? null) !== null) {
         cargs.push(
             "-fixnan",
@@ -221,7 +222,6 @@ function cifti_math_cargs(
     if ((params["override-mapping-check"] ?? false)) {
         cargs.push("-override-mapping-check");
     }
-    cargs.push((params["expression"] ?? null));
     return cargs;
 }
 
@@ -357,8 +357,8 @@ function cifti_math_execute(
  *    clamp: 3 arguments, clamp(x, low, high) = min(max(x, low), high)
  * .
  *
- * @param cifti_out the output cifti file
  * @param expression the expression to evaluate, in quotes
+ * @param cifti_out the output cifti file
  * @param var_ a cifti file to use as a variable
  * @param replace replace NaN results with a value
 
@@ -369,14 +369,14 @@ value to replace NaN with
  * @returns NamedTuple of outputs (described in `CiftiMathOutputs`).
  */
 function cifti_math(
-    cifti_out: string,
     expression: string,
+    cifti_out: string,
     var_: Array<CiftiMathVarParamsDict> | null = null,
     replace: number | null = null,
     override_mapping_check: boolean = false,
     runner: Runner | null = null,
 ): CiftiMathOutputs {
-    const params = cifti_math_params(cifti_out, expression, var_, replace, override_mapping_check)
+    const params = cifti_math_params(expression, cifti_out, var_, replace, override_mapping_check)
     return cifti_math_execute(params, runner);
 }
 

@@ -13,14 +13,14 @@ const METRIC_VECTOR_OPERATION_METADATA: Metadata = {
 
 interface MetricVectorOperationParamsDict {
     "@type"?: "workbench/metric-vector-operation";
+    "vectors-a": InputPathType;
+    "vectors-b": InputPathType;
+    "operation": string;
     "metric-out": string;
     "magnitude": boolean;
     "normalize-output": boolean;
     "normalize-b": boolean;
     "normalize-a": boolean;
-    "vectors-a": InputPathType;
-    "vectors-b": InputPathType;
-    "operation": string;
 }
 type MetricVectorOperationParamsDictTagged = Required<Pick<MetricVectorOperationParamsDict, '@type'>> & MetricVectorOperationParamsDict;
 
@@ -45,10 +45,10 @@ interface MetricVectorOperationOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
+ * @param metric_out the output file
  * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param normalize_output normalize output vectors (not valid for dot product)
  * @param normalize_b normalize vectors of second input
@@ -57,10 +57,10 @@ interface MetricVectorOperationOutputs {
  * @returns Parameter dictionary
  */
 function metric_vector_operation_params(
-    metric_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
+    metric_out: string,
     magnitude: boolean = false,
     normalize_output: boolean = false,
     normalize_b: boolean = false,
@@ -68,14 +68,14 @@ function metric_vector_operation_params(
 ): MetricVectorOperationParamsDictTagged {
     const params = {
         "@type": "workbench/metric-vector-operation" as const,
+        "vectors-a": vectors_a,
+        "vectors-b": vectors_b,
+        "operation": operation,
         "metric-out": metric_out,
         "magnitude": magnitude,
         "normalize-output": normalize_output,
         "normalize-b": normalize_b,
         "normalize-a": normalize_a,
-        "vectors-a": vectors_a,
-        "vectors-b": vectors_b,
-        "operation": operation,
     };
     return params;
 }
@@ -98,6 +98,9 @@ function metric_vector_operation_cargs(
         "wb_command",
         "-metric-vector-operation"
     );
+    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
+    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
+    cargs.push((params["operation"] ?? null));
     cargs.push((params["metric-out"] ?? null));
     if ((params["magnitude"] ?? false)) {
         cargs.push("-magnitude");
@@ -111,9 +114,6 @@ function metric_vector_operation_cargs(
     if ((params["normalize-a"] ?? false)) {
         cargs.push("-normalize-a");
     }
-    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
-    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
-    cargs.push((params["operation"] ?? null));
     return cargs;
 }
 
@@ -177,10 +177,10 @@ function metric_vector_operation_execute(
  * ADD
  * SUBTRACT.
  *
- * @param metric_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
+ * @param metric_out the output file
  * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param normalize_output normalize output vectors (not valid for dot product)
  * @param normalize_b normalize vectors of second input
@@ -190,17 +190,17 @@ function metric_vector_operation_execute(
  * @returns NamedTuple of outputs (described in `MetricVectorOperationOutputs`).
  */
 function metric_vector_operation(
-    metric_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
+    metric_out: string,
     magnitude: boolean = false,
     normalize_output: boolean = false,
     normalize_b: boolean = false,
     normalize_a: boolean = false,
     runner: Runner | null = null,
 ): MetricVectorOperationOutputs {
-    const params = metric_vector_operation_params(metric_out, vectors_a, vectors_b, operation, magnitude, normalize_output, normalize_b, normalize_a)
+    const params = metric_vector_operation_params(vectors_a, vectors_b, operation, metric_out, magnitude, normalize_output, normalize_b, normalize_a)
     return metric_vector_operation_execute(params, runner);
 }
 

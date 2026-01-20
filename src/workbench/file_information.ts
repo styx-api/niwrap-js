@@ -20,6 +20,7 @@ type FileInformationOnlyMetadataParamsDictTagged = Required<Pick<FileInformation
 
 interface FileInformationParamsDict {
     "@type"?: "workbench/file-information";
+    "data-file": string;
     "only-metadata"?: FileInformationOnlyMetadataParamsDict | null | undefined;
     "czi-xml": boolean;
     "czi-all-sub-blocks": boolean;
@@ -29,7 +30,6 @@ interface FileInformationParamsDict {
     "only-number-of-maps": boolean;
     "only-step-interval": boolean;
     "no-map-info": boolean;
-    "data-file": string;
 }
 type FileInformationParamsDictTagged = Required<Pick<FileInformationParamsDict, '@type'>> & FileInformationParamsDict;
 
@@ -123,6 +123,7 @@ function file_information_params(
 ): FileInformationParamsDictTagged {
     const params = {
         "@type": "workbench/file-information" as const,
+        "data-file": data_file,
         "czi-xml": czi_xml,
         "czi-all-sub-blocks": czi_all_sub_blocks,
         "czi": czi,
@@ -131,7 +132,6 @@ function file_information_params(
         "only-number-of-maps": only_number_of_maps,
         "only-step-interval": only_step_interval,
         "no-map-info": no_map_info,
-        "data-file": data_file,
     };
     if (only_metadata !== null) {
         params["only-metadata"] = only_metadata;
@@ -157,6 +157,7 @@ function file_information_cargs(
         "wb_command",
         "-file-information"
     );
+    cargs.push((params["data-file"] ?? null));
     if ((params["only-metadata"] ?? null) !== null) {
         cargs.push(...file_information_only_metadata_cargs((params["only-metadata"] ?? null), execution));
     }
@@ -184,7 +185,6 @@ function file_information_cargs(
     if ((params["no-map-info"] ?? false)) {
         cargs.push("-no-map-info");
     }
-    cargs.push((params["data-file"] ?? null));
     return cargs;
 }
 

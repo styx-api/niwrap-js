@@ -55,6 +55,8 @@ type MetricPaletteThresholdingParamsDictTagged = Required<Pick<MetricPaletteThre
 
 interface MetricPaletteParamsDict {
     "@type"?: "workbench/metric-palette";
+    "metric": string;
+    "mode": string;
     "pos-percent"?: MetricPalettePosPercentParamsDict | null | undefined;
     "neg-percent"?: MetricPaletteNegPercentParamsDict | null | undefined;
     "pos-user"?: MetricPalettePosUserParamsDict | null | undefined;
@@ -68,8 +70,6 @@ interface MetricPaletteParamsDict {
     "display"?: boolean | null | undefined;
     "interpolate"?: boolean | null | undefined;
     "column"?: string | null | undefined;
-    "metric": string;
-    "mode": string;
 }
 type MetricPaletteParamsDictTagged = Required<Pick<MetricPaletteParamsDict, '@type'>> & MetricPaletteParamsDict;
 
@@ -429,6 +429,8 @@ function metric_palette_cargs(
         "wb_command",
         "-metric-palette"
     );
+    cargs.push((params["metric"] ?? null));
+    cargs.push((params["mode"] ?? null));
     if ((params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["thresholding"] ?? null) !== null) {
         cargs.push(
             ...(((params["pos-percent"] ?? null) !== null) ? metric_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),
@@ -486,8 +488,6 @@ function metric_palette_cargs(
             (params["column"] ?? null)
         );
     }
-    cargs.push((params["metric"] ?? null));
-    cargs.push((params["mode"] ?? null));
     return cargs;
 }
 

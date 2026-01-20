@@ -71,6 +71,8 @@ type VolumeToSurfaceMappingMyelinStyleParamsDictTagged = Required<Pick<VolumeToS
 
 interface VolumeToSurfaceMappingParamsDict {
     "@type"?: "workbench/volume-to-surface-mapping";
+    "volume": InputPathType;
+    "surface": InputPathType;
     "metric-out": string;
     "ribbon-constrained"?: VolumeToSurfaceMappingRibbonConstrainedParamsDict | null | undefined;
     "myelin-style"?: VolumeToSurfaceMappingMyelinStyleParamsDict | null | undefined;
@@ -78,8 +80,6 @@ interface VolumeToSurfaceMappingParamsDict {
     "cubic": boolean;
     "enclosing": boolean;
     "trilinear": boolean;
-    "volume": InputPathType;
-    "surface": InputPathType;
 }
 type VolumeToSurfaceMappingParamsDictTagged = Required<Pick<VolumeToSurfaceMappingParamsDict, '@type'>> & VolumeToSurfaceMappingParamsDict;
 
@@ -574,9 +574,9 @@ interface VolumeToSurfaceMappingOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric file
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
+ * @param metric_out the output metric file
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param myelin_style use the method from myelin mapping
  * @param subvol select a single subvolume to map
@@ -589,9 +589,9 @@ the subvolume number or name
  * @returns Parameter dictionary
  */
 function volume_to_surface_mapping_params(
-    metric_out: string,
     volume: InputPathType,
     surface: InputPathType,
+    metric_out: string,
     ribbon_constrained: VolumeToSurfaceMappingRibbonConstrainedParamsDict | null = null,
     myelin_style: VolumeToSurfaceMappingMyelinStyleParamsDict | null = null,
     subvol: string | null = null,
@@ -601,12 +601,12 @@ function volume_to_surface_mapping_params(
 ): VolumeToSurfaceMappingParamsDictTagged {
     const params = {
         "@type": "workbench/volume-to-surface-mapping" as const,
+        "volume": volume,
+        "surface": surface,
         "metric-out": metric_out,
         "cubic": cubic,
         "enclosing": enclosing,
         "trilinear": trilinear,
-        "volume": volume,
-        "surface": surface,
     };
     if (ribbon_constrained !== null) {
         params["ribbon-constrained"] = ribbon_constrained;
@@ -638,11 +638,15 @@ function volume_to_surface_mapping_cargs(
         "wb_command",
         "-volume-to-surface-mapping"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
-        ...(((params["myelin-style"] ?? null) !== null) ? volume_to_surface_mapping_myelin_style_cargs((params["myelin-style"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["volume"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["ribbon-constrained"] ?? null) !== null || (params["myelin-style"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["ribbon-constrained"] ?? null) !== null) ? volume_to_surface_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : []),
+            ...(((params["myelin-style"] ?? null) !== null) ? volume_to_surface_mapping_myelin_style_cargs((params["myelin-style"] ?? null), execution) : [])
+        );
+    }
     if ((params["subvol"] ?? null) !== null) {
         cargs.push(
             "-subvol-select",
@@ -658,8 +662,6 @@ function volume_to_surface_mapping_cargs(
     if ((params["trilinear"] ?? false)) {
         cargs.push("-trilinear");
     }
-    cargs.push(execution.inputFile((params["volume"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }
 
@@ -722,9 +724,9 @@ function volume_to_surface_mapping_execute(
  *
  * The myelin style method uses part of the caret5 myelin mapping command to do the mapping: for each surface vertex, take all voxels that are in a cylinder with radius and height equal to cortical thickness, centered on the vertex and aligned with the surface normal, and that are also within the ribbon ROI, and apply a gaussian kernel with the specified sigma to them to get the weights to use.  The -legacy-bug flag reverts to the unintended behavior present from the initial implementation up to and including v1.2.3, which had only the tangential cutoff and a bounding box intended to be larger than where the cylinder cutoff should have been.
  *
- * @param metric_out the output metric file
  * @param volume the volume to map data from
  * @param surface the surface to map the data onto
+ * @param metric_out the output metric file
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param myelin_style use the method from myelin mapping
  * @param subvol select a single subvolume to map
@@ -738,9 +740,9 @@ the subvolume number or name
  * @returns NamedTuple of outputs (described in `VolumeToSurfaceMappingOutputs`).
  */
 function volume_to_surface_mapping(
-    metric_out: string,
     volume: InputPathType,
     surface: InputPathType,
+    metric_out: string,
     ribbon_constrained: VolumeToSurfaceMappingRibbonConstrainedParamsDict | null = null,
     myelin_style: VolumeToSurfaceMappingMyelinStyleParamsDict | null = null,
     subvol: string | null = null,
@@ -749,7 +751,7 @@ function volume_to_surface_mapping(
     trilinear: boolean = false,
     runner: Runner | null = null,
 ): VolumeToSurfaceMappingOutputs {
-    const params = volume_to_surface_mapping_params(metric_out, volume, surface, ribbon_constrained, myelin_style, subvol, cubic, enclosing, trilinear)
+    const params = volume_to_surface_mapping_params(volume, surface, metric_out, ribbon_constrained, myelin_style, subvol, cubic, enclosing, trilinear)
     return volume_to_surface_mapping_execute(params, runner);
 }
 

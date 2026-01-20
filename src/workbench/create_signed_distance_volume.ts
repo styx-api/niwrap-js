@@ -20,6 +20,8 @@ type CreateSignedDistanceVolumeRoiOutParamsDictTagged = Required<Pick<CreateSign
 
 interface CreateSignedDistanceVolumeParamsDict {
     "@type"?: "workbench/create-signed-distance-volume";
+    "surface": InputPathType;
+    "refspace": string;
     "outvol": string;
     "roi-out"?: CreateSignedDistanceVolumeRoiOutParamsDict | null | undefined;
     "method"?: string | null | undefined;
@@ -27,8 +29,6 @@ interface CreateSignedDistanceVolumeParamsDict {
     "dist"?: number | null | undefined;
     "dist"?: number | null | undefined;
     "value"?: number | null | undefined;
-    "surface": InputPathType;
-    "refspace": string;
 }
 type CreateSignedDistanceVolumeParamsDictTagged = Required<Pick<CreateSignedDistanceVolumeParamsDict, '@type'>> & CreateSignedDistanceVolumeParamsDict;
 
@@ -133,9 +133,9 @@ interface CreateSignedDistanceVolumeOutputs {
 /**
  * Build parameters.
  *
- * @param outvol the output volume
  * @param surface the input surface
  * @param refspace a volume in the desired output space (dims, spacing, origin)
+ * @param outvol the output volume
  * @param roi_out output an roi volume of where the output has a computed value
  * @param method winding method for point inside surface test
 
@@ -156,9 +156,9 @@ value to fill with (default 0)
  * @returns Parameter dictionary
  */
 function create_signed_distance_volume_params(
-    outvol: string,
     surface: InputPathType,
     refspace: string,
+    outvol: string,
     roi_out: CreateSignedDistanceVolumeRoiOutParamsDict | null = null,
     method: string | null = null,
     num: number | null = null,
@@ -168,9 +168,9 @@ function create_signed_distance_volume_params(
 ): CreateSignedDistanceVolumeParamsDictTagged {
     const params = {
         "@type": "workbench/create-signed-distance-volume" as const,
-        "outvol": outvol,
         "surface": surface,
         "refspace": refspace,
+        "outvol": outvol,
     };
     if (roi_out !== null) {
         params["roi-out"] = roi_out;
@@ -211,10 +211,12 @@ function create_signed_distance_volume_cargs(
         "wb_command",
         "-create-signed-distance-volume"
     );
-    cargs.push(
-        (params["outvol"] ?? null),
-        ...(((params["roi-out"] ?? null) !== null) ? create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push((params["refspace"] ?? null));
+    cargs.push((params["outvol"] ?? null));
+    if ((params["roi-out"] ?? null) !== null) {
+        cargs.push(...create_signed_distance_volume_roi_out_cargs((params["roi-out"] ?? null), execution));
+    }
     if ((params["method"] ?? null) !== null) {
         cargs.push(
             "-winding",
@@ -245,8 +247,6 @@ function create_signed_distance_volume_cargs(
             String((params["value"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push((params["refspace"] ?? null));
     return cargs;
 }
 
@@ -315,9 +315,9 @@ function create_signed_distance_volume_execute(
  *
  * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
  *
- * @param outvol the output volume
  * @param surface the input surface
  * @param refspace a volume in the desired output space (dims, spacing, origin)
+ * @param outvol the output volume
  * @param roi_out output an roi volume of where the output has a computed value
  * @param method winding method for point inside surface test
 
@@ -339,9 +339,9 @@ value to fill with (default 0)
  * @returns NamedTuple of outputs (described in `CreateSignedDistanceVolumeOutputs`).
  */
 function create_signed_distance_volume(
-    outvol: string,
     surface: InputPathType,
     refspace: string,
+    outvol: string,
     roi_out: CreateSignedDistanceVolumeRoiOutParamsDict | null = null,
     method: string | null = null,
     num: number | null = null,
@@ -350,7 +350,7 @@ function create_signed_distance_volume(
     value: number | null = null,
     runner: Runner | null = null,
 ): CreateSignedDistanceVolumeOutputs {
-    const params = create_signed_distance_volume_params(outvol, surface, refspace, roi_out, method, num, dist, dist_, value)
+    const params = create_signed_distance_volume_params(surface, refspace, outvol, roi_out, method, num, dist, dist_, value)
     return create_signed_distance_volume_execute(params, runner);
 }
 

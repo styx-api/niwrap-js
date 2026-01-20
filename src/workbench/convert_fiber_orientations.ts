@@ -26,9 +26,9 @@ type ConvertFiberOrientationsFiberParamsDictTagged = Required<Pick<ConvertFiberO
 
 interface ConvertFiberOrientationsParamsDict {
     "@type"?: "workbench/convert-fiber-orientations";
+    "label-volume": InputPathType;
     "fiber-out": string;
     "fiber"?: Array<ConvertFiberOrientationsFiberParamsDict> | null | undefined;
-    "label-volume": InputPathType;
 }
 type ConvertFiberOrientationsParamsDictTagged = Required<Pick<ConvertFiberOrientationsParamsDict, '@type'>> & ConvertFiberOrientationsParamsDict;
 
@@ -116,21 +116,21 @@ interface ConvertFiberOrientationsOutputs {
 /**
  * Build parameters.
  *
- * @param fiber_out the output fiber orientation file
  * @param label_volume volume of cifti structure labels
+ * @param fiber_out the output fiber orientation file
  * @param fiber specify the parameter volumes for a fiber
  *
  * @returns Parameter dictionary
  */
 function convert_fiber_orientations_params(
-    fiber_out: string,
     label_volume: InputPathType,
+    fiber_out: string,
     fiber: Array<ConvertFiberOrientationsFiberParamsDict> | null = null,
 ): ConvertFiberOrientationsParamsDictTagged {
     const params = {
         "@type": "workbench/convert-fiber-orientations" as const,
-        "fiber-out": fiber_out,
         "label-volume": label_volume,
+        "fiber-out": fiber_out,
     };
     if (fiber !== null) {
         params["fiber"] = fiber;
@@ -156,11 +156,11 @@ function convert_fiber_orientations_cargs(
         "wb_command",
         "-convert-fiber-orientations"
     );
-    cargs.push(
-        (params["fiber-out"] ?? null),
-        ...(((params["fiber"] ?? null) !== null) ? (params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat() : [])
-    );
     cargs.push(execution.inputFile((params["label-volume"] ?? null)));
+    cargs.push((params["fiber-out"] ?? null));
+    if ((params["fiber"] ?? null) !== null) {
+        cargs.push(...(params["fiber"] ?? null).map(s => convert_fiber_orientations_fiber_cargs(s, execution)).flat());
+    }
     return cargs;
 }
 
@@ -288,20 +288,20 @@ function convert_fiber_orientations_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * @param fiber_out the output fiber orientation file
  * @param label_volume volume of cifti structure labels
+ * @param fiber_out the output fiber orientation file
  * @param fiber specify the parameter volumes for a fiber
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `ConvertFiberOrientationsOutputs`).
  */
 function convert_fiber_orientations(
-    fiber_out: string,
     label_volume: InputPathType,
+    fiber_out: string,
     fiber: Array<ConvertFiberOrientationsFiberParamsDict> | null = null,
     runner: Runner | null = null,
 ): ConvertFiberOrientationsOutputs {
-    const params = convert_fiber_orientations_params(fiber_out, label_volume, fiber)
+    const params = convert_fiber_orientations_params(label_volume, fiber_out, fiber)
     return convert_fiber_orientations_execute(params, runner);
 }
 

@@ -13,14 +13,14 @@ const METRIC_FALSE_CORRELATION_METADATA: Metadata = {
 
 interface MetricFalseCorrelationParamsDict {
     "@type"?: "workbench/metric-false-correlation";
-    "metric-out": string;
-    "text-out"?: string | null | undefined;
-    "roi-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "metric-in": InputPathType;
     "3D-dist": number;
     "geo-outer": number;
     "geo-inner": number;
+    "metric-out": string;
+    "text-out"?: string | null | undefined;
+    "roi-metric"?: InputPathType | null | undefined;
 }
 type MetricFalseCorrelationParamsDictTagged = Required<Pick<MetricFalseCorrelationParamsDict, '@type'>> & MetricFalseCorrelationParamsDict;
 
@@ -45,12 +45,12 @@ interface MetricFalseCorrelationOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute geodesic and 3D distance with
  * @param metric_in the metric to correlate
  * @param v_3_d_dist maximum 3D distance to check around each vertex
  * @param geo_outer maximum geodesic distance to use for neighboring correlation
  * @param geo_inner minimum geodesic distance to use for neighboring correlation
+ * @param metric_out the output metric
  * @param text_out dump the raw measures used to a text file
 
 the output text file
@@ -61,23 +61,23 @@ the region, as a metric file
  * @returns Parameter dictionary
  */
 function metric_false_correlation_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
+    metric_out: string,
     text_out: string | null = null,
     roi_metric: InputPathType | null = null,
 ): MetricFalseCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/metric-false-correlation" as const,
-        "metric-out": metric_out,
         "surface": surface,
         "metric-in": metric_in,
         "3D-dist": v_3_d_dist,
         "geo-outer": geo_outer,
         "geo-inner": geo_inner,
+        "metric-out": metric_out,
     };
     if (text_out !== null) {
         params["text-out"] = text_out;
@@ -106,6 +106,11 @@ function metric_false_correlation_cargs(
         "wb_command",
         "-metric-false-correlation"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push(String((params["3D-dist"] ?? null)));
+    cargs.push(String((params["geo-outer"] ?? null)));
+    cargs.push(String((params["geo-inner"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["text-out"] ?? null) !== null) {
         cargs.push(
@@ -119,11 +124,6 @@ function metric_false_correlation_cargs(
             execution.inputFile((params["roi-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
-    cargs.push(String((params["3D-dist"] ?? null)));
-    cargs.push(String((params["geo-outer"] ?? null)));
-    cargs.push(String((params["geo-inner"] ?? null)));
     return cargs;
 }
 
@@ -177,12 +177,12 @@ function metric_false_correlation_execute(
  *
  * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute geodesic and 3D distance with
  * @param metric_in the metric to correlate
  * @param v_3_d_dist maximum 3D distance to check around each vertex
  * @param geo_outer maximum geodesic distance to use for neighboring correlation
  * @param geo_inner minimum geodesic distance to use for neighboring correlation
+ * @param metric_out the output metric
  * @param text_out dump the raw measures used to a text file
 
 the output text file
@@ -194,17 +194,17 @@ the region, as a metric file
  * @returns NamedTuple of outputs (described in `MetricFalseCorrelationOutputs`).
  */
 function metric_false_correlation(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
+    metric_out: string,
     text_out: string | null = null,
     roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricFalseCorrelationOutputs {
-    const params = metric_false_correlation_params(metric_out, surface, metric_in, v_3_d_dist, geo_outer, geo_inner, text_out, roi_metric)
+    const params = metric_false_correlation_params(surface, metric_in, v_3_d_dist, geo_outer, geo_inner, metric_out, text_out, roi_metric)
     return metric_false_correlation_execute(params, runner);
 }
 

@@ -235,10 +235,10 @@ function metric_merge_cargs(
         "wb_command",
         "-metric-merge"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["metric"] ?? null) !== null) {
+        cargs.push(...(params["metric"] ?? null).map(s => metric_merge_metric_cargs(s, execution)).flat());
+    }
     return cargs;
 }
 

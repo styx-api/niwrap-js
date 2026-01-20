@@ -70,8 +70,6 @@ function scene_file_relocate_cargs(
         "wb_command",
         "-scene-file-relocate"
     );
-    cargs.push(
-    );
     cargs.push((params["input-scene"] ?? null));
     cargs.push((params["output-scene"] ?? null));
     return cargs;

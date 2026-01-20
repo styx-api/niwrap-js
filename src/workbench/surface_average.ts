@@ -322,12 +322,14 @@ function surface_average_cargs(
         "wb_command",
         "-surface-average"
     );
-    cargs.push(
-        (params["surface-out"] ?? null),
-        ...(((params["stddev"] ?? null) !== null) ? surface_average_stddev_cargs((params["stddev"] ?? null), execution) : []),
-        ...(((params["uncertainty"] ?? null) !== null) ? surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution) : []),
-        ...(((params["surf"] ?? null) !== null) ? (params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["surface-out"] ?? null));
+    if ((params["stddev"] ?? null) !== null || (params["uncertainty"] ?? null) !== null || (params["surf"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["stddev"] ?? null) !== null) ? surface_average_stddev_cargs((params["stddev"] ?? null), execution) : []),
+            ...(((params["uncertainty"] ?? null) !== null) ? surface_average_uncertainty_cargs((params["uncertainty"] ?? null), execution) : []),
+            ...(((params["surf"] ?? null) !== null) ? (params["surf"] ?? null).map(s => surface_average_surf_cargs(s, execution)).flat() : [])
+        );
+    }
     return cargs;
 }
 

@@ -86,12 +86,12 @@ type CiftiSeparateVolumeParamsDictTagged = Required<Pick<CiftiSeparateVolumePara
 
 interface CiftiSeparateParamsDict {
     "@type"?: "workbench/cifti-separate";
+    "cifti-in": InputPathType;
+    "direction": string;
     "volume-all"?: CiftiSeparateVolumeAllParamsDict | null | undefined;
     "label"?: Array<CiftiSeparateLabelParamsDict_> | null | undefined;
     "metric"?: Array<CiftiSeparateMetricParamsDict> | null | undefined;
     "volume"?: Array<CiftiSeparateVolumeParamsDict> | null | undefined;
-    "cifti-in": InputPathType;
-    "direction": string;
 }
 type CiftiSeparateParamsDictTagged = Required<Pick<CiftiSeparateParamsDict, '@type'>> & CiftiSeparateParamsDict;
 
@@ -946,6 +946,8 @@ function cifti_separate_cargs(
         "wb_command",
         "-cifti-separate"
     );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push((params["direction"] ?? null));
     if ((params["volume-all"] ?? null) !== null || (params["label"] ?? null) !== null || (params["metric"] ?? null) !== null || (params["volume"] ?? null) !== null) {
         cargs.push(
             ...(((params["volume-all"] ?? null) !== null) ? cifti_separate_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
@@ -954,8 +956,6 @@ function cifti_separate_cargs(
             ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_separate_volume_cargs(s, execution)).flat() : [])
         );
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 

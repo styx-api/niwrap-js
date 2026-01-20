@@ -30,9 +30,9 @@ type SpecFileModifyRemoveParamsDictTagged = Required<Pick<SpecFileModifyRemovePa
 
 interface SpecFileModifyParamsDict {
     "@type"?: "workbench/spec-file-modify";
+    "spec-file": string;
     "add"?: Array<SpecFileModifyAddParamsDict> | null | undefined;
     "remove"?: Array<SpecFileModifyRemoveParamsDict> | null | undefined;
-    "spec-file": string;
 }
 type SpecFileModifyParamsDictTagged = Required<Pick<SpecFileModifyParamsDict, '@type'>> & SpecFileModifyParamsDict;
 
@@ -189,13 +189,13 @@ function spec_file_modify_cargs(
         "wb_command",
         "-spec-file-modify"
     );
+    cargs.push((params["spec-file"] ?? null));
     if ((params["add"] ?? null) !== null || (params["remove"] ?? null) !== null) {
         cargs.push(
             ...(((params["add"] ?? null) !== null) ? (params["add"] ?? null).map(s => spec_file_modify_add_cargs(s, execution)).flat() : []),
             ...(((params["remove"] ?? null) !== null) ? (params["remove"] ?? null).map(s => spec_file_modify_remove_cargs(s, execution)).flat() : [])
         );
     }
-    cargs.push((params["spec-file"] ?? null));
     return cargs;
 }
 

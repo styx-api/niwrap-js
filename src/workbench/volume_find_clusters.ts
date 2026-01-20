@@ -13,6 +13,9 @@ const VOLUME_FIND_CLUSTERS_METADATA: Metadata = {
 
 interface VolumeFindClustersParamsDict {
     "@type"?: "workbench/volume-find-clusters";
+    "volume-in": InputPathType;
+    "value-threshold": number;
+    "minimum-volume": number;
     "volume-out": string;
     "startval"?: number | null | undefined;
     "distance"?: number | null | undefined;
@@ -20,9 +23,6 @@ interface VolumeFindClustersParamsDict {
     "subvol"?: string | null | undefined;
     "roi-volume"?: InputPathType | null | undefined;
     "less-than": boolean;
-    "volume-in": InputPathType;
-    "value-threshold": number;
-    "minimum-volume": number;
 }
 type VolumeFindClustersParamsDictTagged = Required<Pick<VolumeFindClustersParamsDict, '@type'>> & VolumeFindClustersParamsDict;
 
@@ -47,10 +47,10 @@ interface VolumeFindClustersOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume
  * @param volume_in the input volume
  * @param value_threshold threshold for data values
  * @param minimum_volume threshold for cluster volume, in mm^3
+ * @param volume_out the output volume
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
@@ -71,10 +71,10 @@ the roi, as a volume file
  * @returns Parameter dictionary
  */
 function volume_find_clusters_params(
-    volume_out: string,
     volume_in: InputPathType,
     value_threshold: number,
     minimum_volume: number,
+    volume_out: string,
     startval: number | null = null,
     distance: number | null = null,
     ratio: number | null = null,
@@ -84,11 +84,11 @@ function volume_find_clusters_params(
 ): VolumeFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/volume-find-clusters" as const,
-        "volume-out": volume_out,
-        "less-than": less_than,
         "volume-in": volume_in,
         "value-threshold": value_threshold,
         "minimum-volume": minimum_volume,
+        "volume-out": volume_out,
+        "less-than": less_than,
     };
     if (startval !== null) {
         params["startval"] = startval;
@@ -126,6 +126,9 @@ function volume_find_clusters_cargs(
         "wb_command",
         "-volume-find-clusters"
     );
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push(String((params["value-threshold"] ?? null)));
+    cargs.push(String((params["minimum-volume"] ?? null)));
     cargs.push((params["volume-out"] ?? null));
     if ((params["startval"] ?? null) !== null) {
         cargs.push(
@@ -160,9 +163,6 @@ function volume_find_clusters_cargs(
     if ((params["less-than"] ?? false)) {
         cargs.push("-less-than");
     }
-    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
-    cargs.push(String((params["value-threshold"] ?? null)));
-    cargs.push(String((params["minimum-volume"] ?? null)));
     return cargs;
 }
 
@@ -216,10 +216,10 @@ function volume_find_clusters_execute(
  *
  * Outputs a volume with nonzero integers for all voxels within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across frames of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -volume-math.
  *
- * @param volume_out the output volume
  * @param volume_in the input volume
  * @param value_threshold threshold for data values
  * @param minimum_volume threshold for cluster volume, in mm^3
+ * @param volume_out the output volume
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
@@ -241,10 +241,10 @@ the roi, as a volume file
  * @returns NamedTuple of outputs (described in `VolumeFindClustersOutputs`).
  */
 function volume_find_clusters(
-    volume_out: string,
     volume_in: InputPathType,
     value_threshold: number,
     minimum_volume: number,
+    volume_out: string,
     startval: number | null = null,
     distance: number | null = null,
     ratio: number | null = null,
@@ -253,7 +253,7 @@ function volume_find_clusters(
     less_than: boolean = false,
     runner: Runner | null = null,
 ): VolumeFindClustersOutputs {
-    const params = volume_find_clusters_params(volume_out, volume_in, value_threshold, minimum_volume, startval, distance, ratio, subvol, roi_volume, less_than)
+    const params = volume_find_clusters_params(volume_in, value_threshold, minimum_volume, volume_out, startval, distance, ratio, subvol, roi_volume, less_than)
     return volume_find_clusters_execute(params, runner);
 }
 

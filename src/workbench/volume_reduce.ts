@@ -21,11 +21,11 @@ type VolumeReduceExcludeOutliersParamsDictTagged = Required<Pick<VolumeReduceExc
 
 interface VolumeReduceParamsDict {
     "@type"?: "workbench/volume-reduce";
+    "volume-in": InputPathType;
+    "operation": string;
     "volume-out": string;
     "exclude-outliers"?: VolumeReduceExcludeOutliersParamsDict | null | undefined;
     "only-numeric": boolean;
-    "volume-in": InputPathType;
-    "operation": string;
 }
 type VolumeReduceParamsDictTagged = Required<Pick<VolumeReduceParamsDict, '@type'>> & VolumeReduceParamsDict;
 
@@ -93,27 +93,27 @@ interface VolumeReduceOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume
  * @param volume_in the volume file to reduce
  * @param operation the reduction operator to use
+ * @param volume_out the output volume
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  *
  * @returns Parameter dictionary
  */
 function volume_reduce_params(
-    volume_out: string,
     volume_in: InputPathType,
     operation: string,
+    volume_out: string,
     exclude_outliers: VolumeReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
 ): VolumeReduceParamsDictTagged {
     const params = {
         "@type": "workbench/volume-reduce" as const,
-        "volume-out": volume_out,
-        "only-numeric": only_numeric,
         "volume-in": volume_in,
         "operation": operation,
+        "volume-out": volume_out,
+        "only-numeric": only_numeric,
     };
     if (exclude_outliers !== null) {
         params["exclude-outliers"] = exclude_outliers;
@@ -139,15 +139,15 @@ function volume_reduce_cargs(
         "wb_command",
         "-volume-reduce"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        ...(((params["exclude-outliers"] ?? null) !== null) ? volume_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push((params["operation"] ?? null));
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["exclude-outliers"] ?? null) !== null) {
+        cargs.push(...volume_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution));
+    }
     if ((params["only-numeric"] ?? false)) {
         cargs.push("-only-numeric");
     }
-    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
-    cargs.push((params["operation"] ?? null));
     return cargs;
 }
 
@@ -237,9 +237,9 @@ function volume_reduce_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * @param volume_out the output volume
  * @param volume_in the volume file to reduce
  * @param operation the reduction operator to use
+ * @param volume_out the output volume
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  * @param runner Command runner
@@ -247,14 +247,14 @@ function volume_reduce_execute(
  * @returns NamedTuple of outputs (described in `VolumeReduceOutputs`).
  */
 function volume_reduce(
-    volume_out: string,
     volume_in: InputPathType,
     operation: string,
+    volume_out: string,
     exclude_outliers: VolumeReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): VolumeReduceOutputs {
-    const params = volume_reduce_params(volume_out, volume_in, operation, exclude_outliers, only_numeric)
+    const params = volume_reduce_params(volume_in, operation, volume_out, exclude_outliers, only_numeric)
     return volume_reduce_execute(params, runner);
 }
 

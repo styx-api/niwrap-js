@@ -13,9 +13,9 @@ const LABEL_PROBABILITY_METADATA: Metadata = {
 
 interface LabelProbabilityParamsDict {
     "@type"?: "workbench/label-probability";
+    "label-maps": InputPathType;
     "probability-metric-out": string;
     "exclude-unlabeled": boolean;
-    "label-maps": InputPathType;
 }
 type LabelProbabilityParamsDictTagged = Required<Pick<LabelProbabilityParamsDict, '@type'>> & LabelProbabilityParamsDict;
 
@@ -40,22 +40,22 @@ interface LabelProbabilityOutputs {
 /**
  * Build parameters.
  *
- * @param probability_metric_out the relative frequencies of each label at each vertex
  * @param label_maps label file containing individual label maps from many subjects
+ * @param probability_metric_out the relative frequencies of each label at each vertex
  * @param exclude_unlabeled don't make a probability map of the unlabeled key
  *
  * @returns Parameter dictionary
  */
 function label_probability_params(
-    probability_metric_out: string,
     label_maps: InputPathType,
+    probability_metric_out: string,
     exclude_unlabeled: boolean = false,
 ): LabelProbabilityParamsDictTagged {
     const params = {
         "@type": "workbench/label-probability" as const,
+        "label-maps": label_maps,
         "probability-metric-out": probability_metric_out,
         "exclude-unlabeled": exclude_unlabeled,
-        "label-maps": label_maps,
     };
     return params;
 }
@@ -78,11 +78,11 @@ function label_probability_cargs(
         "wb_command",
         "-label-probability"
     );
+    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     cargs.push((params["probability-metric-out"] ?? null));
     if ((params["exclude-unlabeled"] ?? false)) {
         cargs.push("-exclude-unlabeled");
     }
-    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;
 }
 
@@ -136,20 +136,20 @@ function label_probability_execute(
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex, divided by the number of input maps.
  *
- * @param probability_metric_out the relative frequencies of each label at each vertex
  * @param label_maps label file containing individual label maps from many subjects
+ * @param probability_metric_out the relative frequencies of each label at each vertex
  * @param exclude_unlabeled don't make a probability map of the unlabeled key
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `LabelProbabilityOutputs`).
  */
 function label_probability(
-    probability_metric_out: string,
     label_maps: InputPathType,
+    probability_metric_out: string,
     exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): LabelProbabilityOutputs {
-    const params = label_probability_params(probability_metric_out, label_maps, exclude_unlabeled)
+    const params = label_probability_params(label_maps, probability_metric_out, exclude_unlabeled)
     return label_probability_execute(params, runner);
 }
 

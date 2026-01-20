@@ -29,6 +29,7 @@ type VolumeWeightedStatsRoiParamsDictTagged = Required<Pick<VolumeWeightedStatsR
 
 interface VolumeWeightedStatsParamsDict {
     "@type"?: "workbench/volume-weighted-stats";
+    "volume-in": InputPathType;
     "weight-volume"?: VolumeWeightedStatsWeightVolumeParamsDict | null | undefined;
     "roi"?: VolumeWeightedStatsRoiParamsDict | null | undefined;
     "percent"?: number | null | undefined;
@@ -37,7 +38,6 @@ interface VolumeWeightedStatsParamsDict {
     "show-map-name": boolean;
     "sum": boolean;
     "mean": boolean;
-    "volume-in": InputPathType;
 }
 type VolumeWeightedStatsParamsDictTagged = Required<Pick<VolumeWeightedStatsParamsDict, '@type'>> & VolumeWeightedStatsParamsDict;
 
@@ -179,10 +179,10 @@ function volume_weighted_stats_params(
 ): VolumeWeightedStatsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-weighted-stats" as const,
+        "volume-in": volume_in,
         "show-map-name": show_map_name,
         "sum": sum,
         "mean": mean,
-        "volume-in": volume_in,
     };
     if (weight_volume !== null) {
         params["weight-volume"] = weight_volume;
@@ -220,6 +220,7 @@ function volume_weighted_stats_cargs(
         "wb_command",
         "-volume-weighted-stats"
     );
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     if ((params["weight-volume"] ?? null) !== null || (params["roi"] ?? null) !== null) {
         cargs.push(
             ...(((params["weight-volume"] ?? null) !== null) ? volume_weighted_stats_weight_volume_cargs((params["weight-volume"] ?? null), execution) : []),
@@ -253,7 +254,6 @@ function volume_weighted_stats_cargs(
     if ((params["mean"] ?? false)) {
         cargs.push("-mean");
     }
-    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }
 

@@ -29,6 +29,9 @@ type MetricExtremaThresholdParamsDictTagged = Required<Pick<MetricExtremaThresho
 
 interface MetricExtremaParamsDict {
     "@type"?: "workbench/metric-extrema";
+    "surface": InputPathType;
+    "metric-in": InputPathType;
+    "distance": number;
     "metric-out": string;
     "presmooth"?: MetricExtremaPresmoothParamsDict | null | undefined;
     "threshold"?: MetricExtremaThresholdParamsDict | null | undefined;
@@ -38,9 +41,6 @@ interface MetricExtremaParamsDict {
     "only-maxima": boolean;
     "consolidate-mode": boolean;
     "sum-columns": boolean;
-    "surface": InputPathType;
-    "metric-in": InputPathType;
-    "distance": number;
 }
 type MetricExtremaParamsDictTagged = Required<Pick<MetricExtremaParamsDict, '@type'>> & MetricExtremaParamsDict;
 
@@ -153,10 +153,10 @@ interface MetricExtremaOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output extrema metric
  * @param surface the surface to use for distance information
  * @param metric_in the metric to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
+ * @param metric_out the output extrema metric
  * @param presmooth smooth the metric before finding extrema
  * @param threshold ignore small extrema
  * @param column select a single column to find extrema in
@@ -173,10 +173,10 @@ the area to find extrema in, as a metric
  * @returns Parameter dictionary
  */
 function metric_extrema_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     distance: number,
+    metric_out: string,
     presmooth: MetricExtremaPresmoothParamsDict | null = null,
     threshold: MetricExtremaThresholdParamsDict | null = null,
     column: string | null = null,
@@ -188,14 +188,14 @@ function metric_extrema_params(
 ): MetricExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/metric-extrema" as const,
+        "surface": surface,
+        "metric-in": metric_in,
+        "distance": distance,
         "metric-out": metric_out,
         "only-minima": only_minima,
         "only-maxima": only_maxima,
         "consolidate-mode": consolidate_mode,
         "sum-columns": sum_columns,
-        "surface": surface,
-        "metric-in": metric_in,
-        "distance": distance,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
@@ -230,11 +230,16 @@ function metric_extrema_cargs(
         "wb_command",
         "-metric-extrema"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["presmooth"] ?? null) !== null) ? metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        ...(((params["threshold"] ?? null) !== null) ? metric_extrema_threshold_cargs((params["threshold"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push(String((params["distance"] ?? null)));
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["presmooth"] ?? null) !== null || (params["threshold"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["presmooth"] ?? null) !== null) ? metric_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
+            ...(((params["threshold"] ?? null) !== null) ? metric_extrema_threshold_cargs((params["threshold"] ?? null), execution) : [])
+        );
+    }
     if ((params["column"] ?? null) !== null) {
         cargs.push(
             "-column",
@@ -259,9 +264,6 @@ function metric_extrema_cargs(
     if ((params["sum-columns"] ?? false)) {
         cargs.push("-sum-columns");
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
-    cargs.push(String((params["distance"] ?? null)));
     return cargs;
 }
 
@@ -331,10 +333,10 @@ function metric_extrema_execute(
  *
  * By default, all input columns are used with no smoothing, use -column to specify a single column to use, and -presmooth to smooth the input before finding the extrema.
  *
- * @param metric_out the output extrema metric
  * @param surface the surface to use for distance information
  * @param metric_in the metric to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
+ * @param metric_out the output extrema metric
  * @param presmooth smooth the metric before finding extrema
  * @param threshold ignore small extrema
  * @param column select a single column to find extrema in
@@ -352,10 +354,10 @@ the area to find extrema in, as a metric
  * @returns NamedTuple of outputs (described in `MetricExtremaOutputs`).
  */
 function metric_extrema(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     distance: number,
+    metric_out: string,
     presmooth: MetricExtremaPresmoothParamsDict | null = null,
     threshold: MetricExtremaThresholdParamsDict | null = null,
     column: string | null = null,
@@ -366,7 +368,7 @@ function metric_extrema(
     sum_columns: boolean = false,
     runner: Runner | null = null,
 ): MetricExtremaOutputs {
-    const params = metric_extrema_params(metric_out, surface, metric_in, distance, presmooth, threshold, column, roi_metric, only_minima, only_maxima, consolidate_mode, sum_columns)
+    const params = metric_extrema_params(surface, metric_in, distance, metric_out, presmooth, threshold, column, roi_metric, only_minima, only_maxima, consolidate_mode, sum_columns)
     return metric_extrema_execute(params, runner);
 }
 

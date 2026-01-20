@@ -13,11 +13,11 @@ const BORDER_LENGTH_METADATA: Metadata = {
 
 interface BorderLengthParamsDict {
     "@type"?: "workbench/border-length";
+    "border": InputPathType;
+    "surface": InputPathType;
     "area-metric"?: InputPathType | null | undefined;
     "hide-border-name": boolean;
     "separate-pieces": boolean;
-    "border": InputPathType;
-    "surface": InputPathType;
 }
 type BorderLengthParamsDictTagged = Required<Pick<BorderLengthParamsDict, '@type'>> & BorderLengthParamsDict;
 
@@ -57,10 +57,10 @@ function border_length_params(
 ): BorderLengthParamsDictTagged {
     const params = {
         "@type": "workbench/border-length" as const,
-        "hide-border-name": hide_border_name,
-        "separate-pieces": separate_pieces,
         "border": border,
         "surface": surface,
+        "hide-border-name": hide_border_name,
+        "separate-pieces": separate_pieces,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -86,6 +86,8 @@ function border_length_cargs(
         "wb_command",
         "-border-length"
     );
+    cargs.push(execution.inputFile((params["border"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
             "-corrected-areas",
@@ -98,8 +100,6 @@ function border_length_cargs(
     if ((params["separate-pieces"] ?? false)) {
         cargs.push("-separate-pieces");
     }
-    cargs.push(execution.inputFile((params["border"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }
 

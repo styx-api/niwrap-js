@@ -13,10 +13,10 @@ const SIGNED_DISTANCE_TO_SURFACE_METADATA: Metadata = {
 
 interface SignedDistanceToSurfaceParamsDict {
     "@type"?: "workbench/signed-distance-to-surface";
-    "metric": string;
-    "method"?: string | null | undefined;
     "surface-comp": InputPathType;
     "surface-ref": InputPathType;
+    "metric": string;
+    "method"?: string | null | undefined;
 }
 type SignedDistanceToSurfaceParamsDictTagged = Required<Pick<SignedDistanceToSurfaceParamsDict, '@type'>> & SignedDistanceToSurfaceParamsDict;
 
@@ -41,9 +41,9 @@ interface SignedDistanceToSurfaceOutputs {
 /**
  * Build parameters.
  *
- * @param metric the output metric
  * @param surface_comp the comparison surface to measure the signed distance on
  * @param surface_ref the reference surface that defines the signed distance function
+ * @param metric the output metric
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
@@ -51,16 +51,16 @@ name of the method (default EVEN_ODD)
  * @returns Parameter dictionary
  */
 function signed_distance_to_surface_params(
-    metric: string,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
+    metric: string,
     method: string | null = null,
 ): SignedDistanceToSurfaceParamsDictTagged {
     const params = {
         "@type": "workbench/signed-distance-to-surface" as const,
-        "metric": metric,
         "surface-comp": surface_comp,
         "surface-ref": surface_ref,
+        "metric": metric,
     };
     if (method !== null) {
         params["method"] = method;
@@ -86,6 +86,8 @@ function signed_distance_to_surface_cargs(
         "wb_command",
         "-signed-distance-to-surface"
     );
+    cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
+    cargs.push(execution.inputFile((params["surface-ref"] ?? null)));
     cargs.push((params["metric"] ?? null));
     if ((params["method"] ?? null) !== null) {
         cargs.push(
@@ -93,8 +95,6 @@ function signed_distance_to_surface_cargs(
             (params["method"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["surface-comp"] ?? null)));
-    cargs.push(execution.inputFile((params["surface-ref"] ?? null)));
     return cargs;
 }
 
@@ -162,9 +162,9 @@ function signed_distance_to_surface_execute(
  *
  * The NORMALS method uses the normals of triangles and edges, or the closest triangle hit by a ray from the point.  This method may be slightly faster, but is only reliable for a closed surface that does not cross through itself.  All other methods count entry (positive) and exit (negative) crossings of a vertical ray from the point, then counts as inside if the total is odd, negative, or nonzero, respectively.
  *
- * @param metric the output metric
  * @param surface_comp the comparison surface to measure the signed distance on
  * @param surface_ref the reference surface that defines the signed distance function
+ * @param metric the output metric
  * @param method winding method for point inside surface test
 
 name of the method (default EVEN_ODD)
@@ -173,13 +173,13 @@ name of the method (default EVEN_ODD)
  * @returns NamedTuple of outputs (described in `SignedDistanceToSurfaceOutputs`).
  */
 function signed_distance_to_surface(
-    metric: string,
     surface_comp: InputPathType,
     surface_ref: InputPathType,
+    metric: string,
     method: string | null = null,
     runner: Runner | null = null,
 ): SignedDistanceToSurfaceOutputs {
-    const params = signed_distance_to_surface_params(metric, surface_comp, surface_ref, method)
+    const params = signed_distance_to_surface_params(surface_comp, surface_ref, metric, method)
     return signed_distance_to_surface_execute(params, runner);
 }
 

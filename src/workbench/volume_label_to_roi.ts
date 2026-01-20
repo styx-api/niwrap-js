@@ -13,11 +13,11 @@ const VOLUME_LABEL_TO_ROI_METADATA: Metadata = {
 
 interface VolumeLabelToRoiParamsDict {
     "@type"?: "workbench/volume-label-to-roi";
+    "label-in": InputPathType;
     "volume-out": string;
     "map"?: string | null | undefined;
     "label-key"?: number | null | undefined;
     "label-name"?: string | null | undefined;
-    "label-in": InputPathType;
 }
 type VolumeLabelToRoiParamsDictTagged = Required<Pick<VolumeLabelToRoiParamsDict, '@type'>> & VolumeLabelToRoiParamsDict;
 
@@ -42,8 +42,8 @@ interface VolumeLabelToRoiOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume file
  * @param label_in the input volume label file
+ * @param volume_out the output volume file
  * @param map select a single label map to use
 
 the map number or name
@@ -57,16 +57,16 @@ the label name that you want an roi of
  * @returns Parameter dictionary
  */
 function volume_label_to_roi_params(
-    volume_out: string,
     label_in: InputPathType,
+    volume_out: string,
     map: string | null = null,
     label_key: number | null = null,
     label_name: string | null = null,
 ): VolumeLabelToRoiParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-to-roi" as const,
-        "volume-out": volume_out,
         "label-in": label_in,
+        "volume-out": volume_out,
     };
     if (map !== null) {
         params["map"] = map;
@@ -98,6 +98,7 @@ function volume_label_to_roi_cargs(
         "wb_command",
         "-volume-label-to-roi"
     );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["volume-out"] ?? null));
     if ((params["map"] ?? null) !== null) {
         cargs.push(
@@ -117,7 +118,6 @@ function volume_label_to_roi_cargs(
             (params["label-name"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }
 
@@ -171,8 +171,8 @@ function volume_label_to_roi_execute(
  *
  * For each map in <label-in>, a map is created in <volume-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
  *
- * @param volume_out the output volume file
  * @param label_in the input volume label file
+ * @param volume_out the output volume file
  * @param map select a single label map to use
 
 the map number or name
@@ -187,14 +187,14 @@ the label name that you want an roi of
  * @returns NamedTuple of outputs (described in `VolumeLabelToRoiOutputs`).
  */
 function volume_label_to_roi(
-    volume_out: string,
     label_in: InputPathType,
+    volume_out: string,
     map: string | null = null,
     label_key: number | null = null,
     label_name: string | null = null,
     runner: Runner | null = null,
 ): VolumeLabelToRoiOutputs {
-    const params = volume_label_to_roi_params(volume_out, label_in, map, label_key, label_name)
+    const params = volume_label_to_roi_params(label_in, volume_out, map, label_key, label_name)
     return volume_label_to_roi_execute(params, runner);
 }
 

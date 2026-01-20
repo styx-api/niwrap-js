@@ -74,8 +74,6 @@ function surface_closest_vertex_cargs(
         "wb_command",
         "-surface-closest-vertex"
     );
-    cargs.push(
-    );
     cargs.push(execution.inputFile((params["surface"] ?? null)));
     cargs.push((params["coord-list-file"] ?? null));
     cargs.push((params["vertex-list-out"] ?? null));

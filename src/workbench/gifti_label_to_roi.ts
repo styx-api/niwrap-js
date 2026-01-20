@@ -13,11 +13,11 @@ const GIFTI_LABEL_TO_ROI_METADATA: Metadata = {
 
 interface GiftiLabelToRoiParamsDict {
     "@type"?: "workbench/gifti-label-to-roi";
+    "label-in": InputPathType;
     "metric-out": string;
     "map"?: string | null | undefined;
     "label-key"?: number | null | undefined;
     "label-name"?: string | null | undefined;
-    "label-in": InputPathType;
 }
 type GiftiLabelToRoiParamsDictTagged = Required<Pick<GiftiLabelToRoiParamsDict, '@type'>> & GiftiLabelToRoiParamsDict;
 
@@ -42,8 +42,8 @@ interface GiftiLabelToRoiOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric file
  * @param label_in the input gifti label file
+ * @param metric_out the output metric file
  * @param map select a single label map to use
 
 the map number or name
@@ -57,16 +57,16 @@ the label name that you want an roi of
  * @returns Parameter dictionary
  */
 function gifti_label_to_roi_params(
-    metric_out: string,
     label_in: InputPathType,
+    metric_out: string,
     map: string | null = null,
     label_key: number | null = null,
     label_name: string | null = null,
 ): GiftiLabelToRoiParamsDictTagged {
     const params = {
         "@type": "workbench/gifti-label-to-roi" as const,
-        "metric-out": metric_out,
         "label-in": label_in,
+        "metric-out": metric_out,
     };
     if (map !== null) {
         params["map"] = map;
@@ -98,6 +98,7 @@ function gifti_label_to_roi_cargs(
         "wb_command",
         "-gifti-label-to-roi"
     );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["map"] ?? null) !== null) {
         cargs.push(
@@ -117,7 +118,6 @@ function gifti_label_to_roi_cargs(
             (params["label-name"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }
 
@@ -171,8 +171,8 @@ function gifti_label_to_roi_execute(
  *
  * For each map in <label-in>, a map is created in <metric-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
  *
- * @param metric_out the output metric file
  * @param label_in the input gifti label file
+ * @param metric_out the output metric file
  * @param map select a single label map to use
 
 the map number or name
@@ -187,14 +187,14 @@ the label name that you want an roi of
  * @returns NamedTuple of outputs (described in `GiftiLabelToRoiOutputs`).
  */
 function gifti_label_to_roi(
-    metric_out: string,
     label_in: InputPathType,
+    metric_out: string,
     map: string | null = null,
     label_key: number | null = null,
     label_name: string | null = null,
     runner: Runner | null = null,
 ): GiftiLabelToRoiOutputs {
-    const params = gifti_label_to_roi_params(metric_out, label_in, map, label_key, label_name)
+    const params = gifti_label_to_roi_params(label_in, metric_out, map, label_key, label_name)
     return gifti_label_to_roi_execute(params, runner);
 }
 

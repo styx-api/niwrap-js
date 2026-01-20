@@ -74,8 +74,6 @@ function gifti_convert_cargs(
         "wb_command",
         "-gifti-convert"
     );
-    cargs.push(
-    );
     cargs.push((params["gifti-encoding"] ?? null));
     cargs.push((params["input-gifti-file"] ?? null));
     cargs.push((params["output-gifti-file"] ?? null));

@@ -53,6 +53,8 @@ type CiftiGradientSurfaceParamsDictTagged = Required<Pick<CiftiGradientSurfacePa
 
 interface CiftiGradientParamsDict {
     "@type"?: "workbench/cifti-gradient";
+    "cifti": InputPathType;
+    "direction": string;
     "cifti-out": string;
     "left-surface"?: CiftiGradientLeftSurfaceParamsDict | null | undefined;
     "right-surface"?: CiftiGradientRightSurfaceParamsDict | null | undefined;
@@ -63,8 +65,6 @@ interface CiftiGradientParamsDict {
     "surface-kernel"?: number | null | undefined;
     "average-output": boolean;
     "presmooth-fwhm": boolean;
-    "cifti": InputPathType;
-    "direction": string;
 }
 type CiftiGradientParamsDictTagged = Required<Pick<CiftiGradientParamsDict, '@type'>> & CiftiGradientParamsDict;
 
@@ -381,9 +381,9 @@ interface CiftiGradientOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param direction which dimension to take the gradient along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -401,9 +401,9 @@ the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @returns Parameter dictionary
  */
 function cifti_gradient_params(
-    cifti_out: string,
     cifti: InputPathType,
     direction: string,
+    cifti_out: string,
     left_surface: CiftiGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiGradientCerebellumSurfaceParamsDict | null = null,
@@ -416,11 +416,11 @@ function cifti_gradient_params(
 ): CiftiGradientParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-gradient" as const,
+        "cifti": cifti,
+        "direction": direction,
         "cifti-out": cifti_out,
         "average-output": average_output,
         "presmooth-fwhm": presmooth_fwhm,
-        "cifti": cifti,
-        "direction": direction,
     };
     if (left_surface !== null) {
         params["left-surface"] = left_surface;
@@ -464,14 +464,18 @@ function cifti_gradient_cargs(
         "wb_command",
         "-cifti-gradient"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["left-surface"] ?? null) !== null) ? cifti_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-        ...(((params["right-surface"] ?? null) !== null) ? cifti_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-        ...(((params["vectors"] ?? null) !== null) ? cifti_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
-        ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_gradient_surface_cargs(s, execution)).flat() : [])
-    );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["vectors"] ?? null) !== null || (params["surface"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["left-surface"] ?? null) !== null) ? cifti_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+            ...(((params["right-surface"] ?? null) !== null) ? cifti_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
+            ...(((params["vectors"] ?? null) !== null) ? cifti_gradient_vectors_cargs((params["vectors"] ?? null), execution) : []),
+            ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_gradient_surface_cargs(s, execution)).flat() : [])
+        );
+    }
     if ((params["volume-kernel"] ?? null) !== null) {
         cargs.push(
             "-volume-presmooth",
@@ -490,8 +494,6 @@ function cifti_gradient_cargs(
     if ((params["presmooth-fwhm"] ?? false)) {
         cargs.push("-presmooth-fwhm");
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -622,9 +624,9 @@ function cifti_gradient_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param direction which dimension to take the gradient along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -643,9 +645,9 @@ the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @returns NamedTuple of outputs (described in `CiftiGradientOutputs`).
  */
 function cifti_gradient(
-    cifti_out: string,
     cifti: InputPathType,
     direction: string,
+    cifti_out: string,
     left_surface: CiftiGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiGradientCerebellumSurfaceParamsDict | null = null,
@@ -657,7 +659,7 @@ function cifti_gradient(
     presmooth_fwhm: boolean = false,
     runner: Runner | null = null,
 ): CiftiGradientOutputs {
-    const params = cifti_gradient_params(cifti_out, cifti, direction, left_surface, right_surface, cerebellum_surface, vectors, surface, volume_kernel, surface_kernel, average_output, presmooth_fwhm)
+    const params = cifti_gradient_params(cifti, direction, cifti_out, left_surface, right_surface, cerebellum_surface, vectors, surface, volume_kernel, surface_kernel, average_output, presmooth_fwhm)
     return cifti_gradient_execute(params, runner);
 }
 

@@ -70,8 +70,6 @@ function backend_average_roi_correlation_cargs(
         "wb_command",
         "-backend-average-roi-correlation"
     );
-    cargs.push(
-    );
     cargs.push((params["index-list"] ?? null));
     cargs.push((params["out-file"] ?? null));
     return cargs;

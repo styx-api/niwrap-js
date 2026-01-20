@@ -70,8 +70,6 @@ function metadata_remove_provenance_cargs(
         "wb_command",
         "-metadata-remove-provenance"
     );
-    cargs.push(
-    );
     cargs.push((params["input-file"] ?? null));
     cargs.push((params["output-file"] ?? null));
     return cargs;

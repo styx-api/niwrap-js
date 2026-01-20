@@ -21,14 +21,14 @@ type ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDictTagged = Required<Pick<
 
 interface ConvertMatrix4ToWorkbenchSparseParamsDict {
     "@type"?: "workbench/convert-matrix4-to-workbench-sparse";
-    "volume-seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null | undefined;
-    "seed-roi"?: InputPathType | null | undefined;
     "matrix4_1": string;
     "matrix4_2": string;
     "matrix4_3": string;
     "orientation-file": InputPathType;
     "voxel-list": string;
     "wb-sparse-out": string;
+    "volume-seeds"?: ConvertMatrix4ToWorkbenchSparseVolumeSeedsParamsDict | null | undefined;
+    "seed-roi"?: InputPathType | null | undefined;
 }
 type ConvertMatrix4ToWorkbenchSparseParamsDictTagged = Required<Pick<ConvertMatrix4ToWorkbenchSparseParamsDict, '@type'>> & ConvertMatrix4ToWorkbenchSparseParamsDict;
 
@@ -151,6 +151,12 @@ function convert_matrix4_to_workbench_sparse_cargs(
         "wb_command",
         "-convert-matrix4-to-workbench-sparse"
     );
+    cargs.push((params["matrix4_1"] ?? null));
+    cargs.push((params["matrix4_2"] ?? null));
+    cargs.push((params["matrix4_3"] ?? null));
+    cargs.push(execution.inputFile((params["orientation-file"] ?? null)));
+    cargs.push((params["voxel-list"] ?? null));
+    cargs.push((params["wb-sparse-out"] ?? null));
     if ((params["volume-seeds"] ?? null) !== null) {
         cargs.push(...convert_matrix4_to_workbench_sparse_volume_seeds_cargs((params["volume-seeds"] ?? null), execution));
     }
@@ -160,12 +166,6 @@ function convert_matrix4_to_workbench_sparse_cargs(
             execution.inputFile((params["seed-roi"] ?? null))
         );
     }
-    cargs.push((params["matrix4_1"] ?? null));
-    cargs.push((params["matrix4_2"] ?? null));
-    cargs.push((params["matrix4_3"] ?? null));
-    cargs.push(execution.inputFile((params["orientation-file"] ?? null)));
-    cargs.push((params["voxel-list"] ?? null));
-    cargs.push((params["wb-sparse-out"] ?? null));
     return cargs;
 }
 

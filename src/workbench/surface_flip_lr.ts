@@ -13,8 +13,8 @@ const SURFACE_FLIP_LR_METADATA: Metadata = {
 
 interface SurfaceFlipLrParamsDict {
     "@type"?: "workbench/surface-flip-lr";
-    "surface-out": string;
     "surface": InputPathType;
+    "surface-out": string;
 }
 type SurfaceFlipLrParamsDictTagged = Required<Pick<SurfaceFlipLrParamsDict, '@type'>> & SurfaceFlipLrParamsDict;
 
@@ -39,19 +39,19 @@ interface SurfaceFlipLrOutputs {
 /**
  * Build parameters.
  *
- * @param surface_out the output flipped surface
  * @param surface the surface to flip
+ * @param surface_out the output flipped surface
  *
  * @returns Parameter dictionary
  */
 function surface_flip_lr_params(
-    surface_out: string,
     surface: InputPathType,
+    surface_out: string,
 ): SurfaceFlipLrParamsDictTagged {
     const params = {
         "@type": "workbench/surface-flip-lr" as const,
-        "surface-out": surface_out,
         "surface": surface,
+        "surface-out": surface_out,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function surface_flip_lr_cargs(
         "wb_command",
         "-surface-flip-lr"
     );
-    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push((params["surface-out"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function surface_flip_lr_execute(
  *
  * This command negates the x coordinate of each vertex, and flips the surface normals, so that you have a surface of opposite handedness with the same features and vertex correspondence, with normals consistent with the original surface.  That is, if the input surface has normals facing outward, the output surface will also have normals facing outward.
  *
- * @param surface_out the output flipped surface
  * @param surface the surface to flip
+ * @param surface_out the output flipped surface
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceFlipLrOutputs`).
  */
 function surface_flip_lr(
-    surface_out: string,
     surface: InputPathType,
+    surface_out: string,
     runner: Runner | null = null,
 ): SurfaceFlipLrOutputs {
-    const params = surface_flip_lr_params(surface_out, surface)
+    const params = surface_flip_lr_params(surface, surface_out)
     return surface_flip_lr_execute(params, runner);
 }
 

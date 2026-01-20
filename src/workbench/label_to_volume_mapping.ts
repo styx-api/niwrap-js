@@ -24,12 +24,12 @@ type LabelToVolumeMappingRibbonConstrainedParamsDictTagged = Required<Pick<Label
 
 interface LabelToVolumeMappingParamsDict {
     "@type"?: "workbench/label-to-volume-mapping";
-    "volume-out": string;
-    "ribbon-constrained"?: LabelToVolumeMappingRibbonConstrainedParamsDict | null | undefined;
-    "distance"?: number | null | undefined;
     "label": InputPathType;
     "surface": InputPathType;
     "volume-space": InputPathType;
+    "volume-out": string;
+    "ribbon-constrained"?: LabelToVolumeMappingRibbonConstrainedParamsDict | null | undefined;
+    "distance"?: number | null | undefined;
 }
 type LabelToVolumeMappingParamsDictTagged = Required<Pick<LabelToVolumeMappingParamsDict, '@type'>> & LabelToVolumeMappingParamsDict;
 
@@ -122,10 +122,10 @@ interface LabelToVolumeMappingOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume file
  * @param label the input label file
  * @param surface the surface to use coordinates from
  * @param volume_space a volume file in the desired output volume space
+ * @param volume_out the output volume file
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param distance use the label from the vertex closest to the voxel center
 
@@ -134,19 +134,19 @@ how far from the surface to map labels to voxels, in mm
  * @returns Parameter dictionary
  */
 function label_to_volume_mapping_params(
-    volume_out: string,
     label: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
+    volume_out: string,
     ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParamsDict | null = null,
     distance: number | null = null,
 ): LabelToVolumeMappingParamsDictTagged {
     const params = {
         "@type": "workbench/label-to-volume-mapping" as const,
-        "volume-out": volume_out,
         "label": label,
         "surface": surface,
         "volume-space": volume_space,
+        "volume-out": volume_out,
     };
     if (ribbon_constrained !== null) {
         params["ribbon-constrained"] = ribbon_constrained;
@@ -175,19 +175,19 @@ function label_to_volume_mapping_cargs(
         "wb_command",
         "-label-to-volume-mapping"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        ...(((params["ribbon-constrained"] ?? null) !== null) ? label_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["label"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["volume-space"] ?? null)));
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["ribbon-constrained"] ?? null) !== null) {
+        cargs.push(...label_to_volume_mapping_ribbon_constrained_cargs((params["ribbon-constrained"] ?? null), execution));
+    }
     if ((params["distance"] ?? null) !== null) {
         cargs.push(
             "-nearest-vertex",
             String((params["distance"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["label"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["volume-space"] ?? null)));
     return cargs;
 }
 
@@ -241,10 +241,10 @@ function label_to_volume_mapping_execute(
  *
  * Maps labels from a gifti label file into a volume file.  You must specify exactly one mapping method option.  The -nearest-vertex method uses the label from the vertex closest to the voxel center.  The -ribbon-constrained method uses the same method as in -volume-to-surface-mapping, then uses the weights in reverse, with popularity logic to decide on a label to use.
  *
- * @param volume_out the output volume file
  * @param label the input label file
  * @param surface the surface to use coordinates from
  * @param volume_space a volume file in the desired output volume space
+ * @param volume_out the output volume file
  * @param ribbon_constrained use ribbon constrained mapping algorithm
  * @param distance use the label from the vertex closest to the voxel center
 
@@ -254,15 +254,15 @@ how far from the surface to map labels to voxels, in mm
  * @returns NamedTuple of outputs (described in `LabelToVolumeMappingOutputs`).
  */
 function label_to_volume_mapping(
-    volume_out: string,
     label: InputPathType,
     surface: InputPathType,
     volume_space: InputPathType,
+    volume_out: string,
     ribbon_constrained: LabelToVolumeMappingRibbonConstrainedParamsDict | null = null,
     distance: number | null = null,
     runner: Runner | null = null,
 ): LabelToVolumeMappingOutputs {
-    const params = label_to_volume_mapping_params(volume_out, label, surface, volume_space, ribbon_constrained, distance)
+    const params = label_to_volume_mapping_params(label, surface, volume_space, volume_out, ribbon_constrained, distance)
     return label_to_volume_mapping_execute(params, runner);
 }
 

@@ -21,11 +21,11 @@ type VolumeWarpfieldAffineRegressionFlirtOutParamsDictTagged = Required<Pick<Vol
 
 interface VolumeWarpfieldAffineRegressionParamsDict {
     "@type"?: "workbench/volume-warpfield-affine-regression";
+    "warpfield": string;
+    "affine-out": string;
     "flirt-out"?: VolumeWarpfieldAffineRegressionFlirtOutParamsDict | null | undefined;
     "source-volume"?: string | null | undefined;
     "roi-vol"?: InputPathType | null | undefined;
-    "warpfield": string;
-    "affine-out": string;
 }
 type VolumeWarpfieldAffineRegressionParamsDictTagged = Required<Pick<VolumeWarpfieldAffineRegressionParamsDict, '@type'>> & VolumeWarpfieldAffineRegressionParamsDict;
 
@@ -143,6 +143,8 @@ function volume_warpfield_affine_regression_cargs(
         "wb_command",
         "-volume-warpfield-affine-regression"
     );
+    cargs.push((params["warpfield"] ?? null));
+    cargs.push((params["affine-out"] ?? null));
     if ((params["flirt-out"] ?? null) !== null) {
         cargs.push(...volume_warpfield_affine_regression_flirt_out_cargs((params["flirt-out"] ?? null), execution));
     }
@@ -158,8 +160,6 @@ function volume_warpfield_affine_regression_cargs(
             execution.inputFile((params["roi-vol"] ?? null))
         );
     }
-    cargs.push((params["warpfield"] ?? null));
-    cargs.push((params["affine-out"] ?? null));
     return cargs;
 }
 

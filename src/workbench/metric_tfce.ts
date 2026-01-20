@@ -29,14 +29,14 @@ type MetricTfceParametersParamsDictTagged = Required<Pick<MetricTfceParametersPa
 
 interface MetricTfceParamsDict {
     "@type"?: "workbench/metric-tfce";
+    "surface": InputPathType;
+    "metric-in": InputPathType;
     "metric-out": string;
     "presmooth"?: MetricTfcePresmoothParamsDict | null | undefined;
     "parameters"?: MetricTfceParametersParamsDict | null | undefined;
     "area-metric"?: InputPathType | null | undefined;
     "column"?: string | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "surface": InputPathType;
-    "metric-in": InputPathType;
 }
 type MetricTfceParamsDictTagged = Required<Pick<MetricTfceParamsDict, '@type'>> & MetricTfceParamsDict;
 
@@ -149,9 +149,9 @@ interface MetricTfceOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param metric_in the metric to run TFCE on
+ * @param metric_out the output metric
  * @param presmooth smooth the metric before running TFCE
  * @param parameters set parameters for TFCE integral
  * @param area_metric vertex areas to use instead of computing them from the surface
@@ -167,9 +167,9 @@ the area to run TFCE on, as a metric
  * @returns Parameter dictionary
  */
 function metric_tfce_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     presmooth: MetricTfcePresmoothParamsDict | null = null,
     parameters: MetricTfceParametersParamsDict | null = null,
     area_metric: InputPathType | null = null,
@@ -178,9 +178,9 @@ function metric_tfce_params(
 ): MetricTfceParamsDictTagged {
     const params = {
         "@type": "workbench/metric-tfce" as const,
-        "metric-out": metric_out,
         "surface": surface,
         "metric-in": metric_in,
+        "metric-out": metric_out,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
@@ -218,11 +218,15 @@ function metric_tfce_cargs(
         "wb_command",
         "-metric-tfce"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["presmooth"] ?? null) !== null || (params["parameters"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["presmooth"] ?? null) !== null) ? metric_tfce_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
+            ...(((params["parameters"] ?? null) !== null) ? metric_tfce_parameters_cargs((params["parameters"] ?? null), execution) : [])
+        );
+    }
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
             "-corrected-areas",
@@ -241,8 +245,6 @@ function metric_tfce_cargs(
             execution.inputFile((params["roi-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -316,9 +318,9 @@ function metric_tfce_execute(
  *
  * The TFCE method is explained in: Smith SM, Nichols TE., "Threshold-free cluster enhancement: addressing problems of smoothing, threshold dependence and localisation in cluster inference." Neuroimage. 2009 Jan 1;44(1):83-98. PMID: 18501637.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param metric_in the metric to run TFCE on
+ * @param metric_out the output metric
  * @param presmooth smooth the metric before running TFCE
  * @param parameters set parameters for TFCE integral
  * @param area_metric vertex areas to use instead of computing them from the surface
@@ -335,9 +337,9 @@ the area to run TFCE on, as a metric
  * @returns NamedTuple of outputs (described in `MetricTfceOutputs`).
  */
 function metric_tfce(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     presmooth: MetricTfcePresmoothParamsDict | null = null,
     parameters: MetricTfceParametersParamsDict | null = null,
     area_metric: InputPathType | null = null,
@@ -345,7 +347,7 @@ function metric_tfce(
     roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricTfceOutputs {
-    const params = metric_tfce_params(metric_out, surface, metric_in, presmooth, parameters, area_metric, column, roi_metric)
+    const params = metric_tfce_params(surface, metric_in, metric_out, presmooth, parameters, area_metric, column, roi_metric)
     return metric_tfce_execute(params, runner);
 }
 

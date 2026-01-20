@@ -13,10 +13,10 @@ const LABEL_MASK_METADATA: Metadata = {
 
 interface LabelMaskParamsDict {
     "@type"?: "workbench/label-mask";
-    "label-out": string;
-    "column"?: string | null | undefined;
     "label": InputPathType;
     "mask": InputPathType;
+    "label-out": string;
+    "column"?: string | null | undefined;
 }
 type LabelMaskParamsDictTagged = Required<Pick<LabelMaskParamsDict, '@type'>> & LabelMaskParamsDict;
 
@@ -41,9 +41,9 @@ interface LabelMaskOutputs {
 /**
  * Build parameters.
  *
- * @param label_out the output label file
  * @param label the label file to mask
  * @param mask the mask metric
+ * @param label_out the output label file
  * @param column select a single column
 
 the column number or name
@@ -51,16 +51,16 @@ the column number or name
  * @returns Parameter dictionary
  */
 function label_mask_params(
-    label_out: string,
     label: InputPathType,
     mask: InputPathType,
+    label_out: string,
     column: string | null = null,
 ): LabelMaskParamsDictTagged {
     const params = {
         "@type": "workbench/label-mask" as const,
-        "label-out": label_out,
         "label": label,
         "mask": mask,
+        "label-out": label_out,
     };
     if (column !== null) {
         params["column"] = column;
@@ -86,6 +86,8 @@ function label_mask_cargs(
         "wb_command",
         "-label-mask"
     );
+    cargs.push(execution.inputFile((params["label"] ?? null)));
+    cargs.push(execution.inputFile((params["mask"] ?? null)));
     cargs.push((params["label-out"] ?? null));
     if ((params["column"] ?? null) !== null) {
         cargs.push(
@@ -93,8 +95,6 @@ function label_mask_cargs(
             (params["column"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["label"] ?? null)));
-    cargs.push(execution.inputFile((params["mask"] ?? null)));
     return cargs;
 }
 
@@ -148,9 +148,9 @@ function label_mask_execute(
  *
  * By default, the output label is a copy of the input label, but with the 'unused' label wherever the mask metric is zero or negative.  if -column is specified, the output contains only one column, the masked version of the specified input column.
  *
- * @param label_out the output label file
  * @param label the label file to mask
  * @param mask the mask metric
+ * @param label_out the output label file
  * @param column select a single column
 
 the column number or name
@@ -159,13 +159,13 @@ the column number or name
  * @returns NamedTuple of outputs (described in `LabelMaskOutputs`).
  */
 function label_mask(
-    label_out: string,
     label: InputPathType,
     mask: InputPathType,
+    label_out: string,
     column: string | null = null,
     runner: Runner | null = null,
 ): LabelMaskOutputs {
-    const params = label_mask_params(label_out, label, mask, column)
+    const params = label_mask_params(label, mask, label_out, column)
     return label_mask_execute(params, runner);
 }
 

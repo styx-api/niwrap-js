@@ -13,10 +13,10 @@ const METRIC_VECTOR_TOWARD_ROI_METADATA: Metadata = {
 
 interface MetricVectorTowardRoiParamsDict {
     "@type"?: "workbench/metric-vector-toward-roi";
-    "metric-out": string;
-    "roi-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "target-roi": InputPathType;
+    "metric-out": string;
+    "roi-metric"?: InputPathType | null | undefined;
 }
 type MetricVectorTowardRoiParamsDictTagged = Required<Pick<MetricVectorTowardRoiParamsDict, '@type'>> & MetricVectorTowardRoiParamsDict;
 
@@ -41,9 +41,9 @@ interface MetricVectorTowardRoiOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param target_roi the roi to find the shortest path to
+ * @param metric_out the output metric
  * @param roi_metric don't compute for vertices outside an roi
 
 the region to compute inside, as a metric
@@ -51,16 +51,16 @@ the region to compute inside, as a metric
  * @returns Parameter dictionary
  */
 function metric_vector_toward_roi_params(
-    metric_out: string,
     surface: InputPathType,
     target_roi: InputPathType,
+    metric_out: string,
     roi_metric: InputPathType | null = null,
 ): MetricVectorTowardRoiParamsDictTagged {
     const params = {
         "@type": "workbench/metric-vector-toward-roi" as const,
-        "metric-out": metric_out,
         "surface": surface,
         "target-roi": target_roi,
+        "metric-out": metric_out,
     };
     if (roi_metric !== null) {
         params["roi-metric"] = roi_metric;
@@ -86,6 +86,8 @@ function metric_vector_toward_roi_cargs(
         "wb_command",
         "-metric-vector-toward-roi"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["target-roi"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
@@ -93,8 +95,6 @@ function metric_vector_toward_roi_cargs(
             execution.inputFile((params["roi-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["target-roi"] ?? null)));
     return cargs;
 }
 
@@ -148,9 +148,9 @@ function metric_vector_toward_roi_execute(
  *
  * At each vertex, compute the vector along the start of the shortest path to the ROI.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param target_roi the roi to find the shortest path to
+ * @param metric_out the output metric
  * @param roi_metric don't compute for vertices outside an roi
 
 the region to compute inside, as a metric
@@ -159,13 +159,13 @@ the region to compute inside, as a metric
  * @returns NamedTuple of outputs (described in `MetricVectorTowardRoiOutputs`).
  */
 function metric_vector_toward_roi(
-    metric_out: string,
     surface: InputPathType,
     target_roi: InputPathType,
+    metric_out: string,
     roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricVectorTowardRoiOutputs {
-    const params = metric_vector_toward_roi_params(metric_out, surface, target_roi, roi_metric)
+    const params = metric_vector_toward_roi_params(surface, target_roi, metric_out, roi_metric)
     return metric_vector_toward_roi_execute(params, runner);
 }
 

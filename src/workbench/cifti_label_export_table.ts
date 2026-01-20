@@ -13,10 +13,10 @@ const CIFTI_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 interface CiftiLabelExportTableParamsDict {
     "@type"?: "workbench/cifti-label-export-table";
-    "json-out"?: string | null | undefined;
     "label-in": InputPathType;
     "map": string;
     "table-out": string;
+    "json-out"?: string | null | undefined;
 }
 type CiftiLabelExportTableParamsDictTagged = Required<Pick<CiftiLabelExportTableParamsDict, '@type'>> & CiftiLabelExportTableParamsDict;
 
@@ -82,15 +82,15 @@ function cifti_label_export_table_cargs(
         "wb_command",
         "-cifti-label-export-table"
     );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
+    cargs.push((params["map"] ?? null));
+    cargs.push((params["table-out"] ?? null));
     if ((params["json-out"] ?? null) !== null) {
         cargs.push(
             "-hierarchy",
             (params["json-out"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
-    cargs.push((params["map"] ?? null));
-    cargs.push((params["table-out"] ?? null));
     return cargs;
 }
 

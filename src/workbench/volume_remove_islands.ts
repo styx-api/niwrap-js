@@ -13,8 +13,8 @@ const VOLUME_REMOVE_ISLANDS_METADATA: Metadata = {
 
 interface VolumeRemoveIslandsParamsDict {
     "@type"?: "workbench/volume-remove-islands";
-    "volume-out": string;
     "volume-in": InputPathType;
+    "volume-out": string;
 }
 type VolumeRemoveIslandsParamsDictTagged = Required<Pick<VolumeRemoveIslandsParamsDict, '@type'>> & VolumeRemoveIslandsParamsDict;
 
@@ -39,19 +39,19 @@ interface VolumeRemoveIslandsOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output ROI volume
  * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
  *
  * @returns Parameter dictionary
  */
 function volume_remove_islands_params(
-    volume_out: string,
     volume_in: InputPathType,
+    volume_out: string,
 ): VolumeRemoveIslandsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-remove-islands" as const,
-        "volume-out": volume_out,
         "volume-in": volume_in,
+        "volume-out": volume_out,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function volume_remove_islands_cargs(
         "wb_command",
         "-volume-remove-islands"
     );
-    cargs.push((params["volume-out"] ?? null));
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push((params["volume-out"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function volume_remove_islands_execute(
  *
  * Finds all face-connected parts of the ROI, and zeros out all but the largest one.
  *
- * @param volume_out the output ROI volume
  * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeRemoveIslandsOutputs`).
  */
 function volume_remove_islands(
-    volume_out: string,
     volume_in: InputPathType,
+    volume_out: string,
     runner: Runner | null = null,
 ): VolumeRemoveIslandsOutputs {
-    const params = volume_remove_islands_params(volume_out, volume_in)
+    const params = volume_remove_islands_params(volume_in, volume_out)
     return volume_remove_islands_execute(params, runner);
 }
 

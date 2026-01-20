@@ -251,10 +251,10 @@ function cifti_merge_cargs(
         "wb_command",
         "-cifti-merge"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["cifti"] ?? null) !== null) {
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_merge_cifti_cargs(s, execution)).flat());
+    }
     if ((params["limit-GB"] ?? null) !== null) {
         cargs.push(
             "-mem-limit",

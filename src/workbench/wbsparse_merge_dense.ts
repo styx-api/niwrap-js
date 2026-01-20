@@ -20,9 +20,9 @@ type WbsparseMergeDenseWbsparseParamsDictTagged = Required<Pick<WbsparseMergeDen
 
 interface WbsparseMergeDenseParamsDict {
     "@type"?: "workbench/wbsparse-merge-dense";
-    "wbsparse"?: Array<WbsparseMergeDenseWbsparseParamsDict> | null | undefined;
     "direction": string;
     "wbsparse-out": string;
+    "wbsparse"?: Array<WbsparseMergeDenseWbsparseParamsDict> | null | undefined;
 }
 type WbsparseMergeDenseParamsDictTagged = Required<Pick<WbsparseMergeDenseParamsDict, '@type'>> & WbsparseMergeDenseParamsDict;
 
@@ -122,11 +122,11 @@ function wbsparse_merge_dense_cargs(
         "wb_command",
         "-wbsparse-merge-dense"
     );
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["wbsparse-out"] ?? null));
     if ((params["wbsparse"] ?? null) !== null) {
         cargs.push(...(params["wbsparse"] ?? null).map(s => wbsparse_merge_dense_wbsparse_cargs(s, execution)).flat());
     }
-    cargs.push((params["direction"] ?? null));
-    cargs.push((params["wbsparse-out"] ?? null));
     return cargs;
 }
 

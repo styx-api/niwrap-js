@@ -36,6 +36,10 @@ type MetricResampleValidRoiOutParamsDictTagged = Required<Pick<MetricResampleVal
 
 interface MetricResampleParamsDict {
     "@type"?: "workbench/metric-resample";
+    "metric-in": InputPathType;
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
+    "method": string;
     "metric-out": string;
     "area-surfs"?: MetricResampleAreaSurfsParamsDict | null | undefined;
     "area-metrics"?: MetricResampleAreaMetricsParamsDict | null | undefined;
@@ -43,10 +47,6 @@ interface MetricResampleParamsDict {
     "roi-metric"?: InputPathType | null | undefined;
     "bypass-sphere-check": boolean;
     "largest": boolean;
-    "metric-in": InputPathType;
-    "current-sphere": InputPathType;
-    "new-sphere": InputPathType;
-    "method": string;
 }
 type MetricResampleParamsDictTagged = Required<Pick<MetricResampleParamsDict, '@type'>> & MetricResampleParamsDict;
 
@@ -237,11 +237,11 @@ interface MetricResampleOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param metric_in the metric file to resample
  * @param current_sphere a sphere surface with the mesh that the metric is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
+ * @param metric_out the output metric
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
  * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
@@ -254,11 +254,11 @@ the roi, as a metric file
  * @returns Parameter dictionary
  */
 function metric_resample_params(
-    metric_out: string,
     metric_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
+    metric_out: string,
     area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
     area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
     valid_roi_out: MetricResampleValidRoiOutParamsDict | null = null,
@@ -268,13 +268,13 @@ function metric_resample_params(
 ): MetricResampleParamsDictTagged {
     const params = {
         "@type": "workbench/metric-resample" as const,
-        "metric-out": metric_out,
-        "bypass-sphere-check": bypass_sphere_check,
-        "largest": largest,
         "metric-in": metric_in,
         "current-sphere": current_sphere,
         "new-sphere": new_sphere,
         "method": method,
+        "metric-out": metric_out,
+        "bypass-sphere-check": bypass_sphere_check,
+        "largest": largest,
     };
     if (area_surfs !== null) {
         params["area-surfs"] = area_surfs;
@@ -309,12 +309,18 @@ function metric_resample_cargs(
         "wb_command",
         "-metric-resample"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["area-surfs"] ?? null) !== null) ? metric_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
-        ...(((params["area-metrics"] ?? null) !== null) ? metric_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
-        ...(((params["valid-roi-out"] ?? null) !== null) ? metric_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
+    cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
+    cargs.push((params["method"] ?? null));
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["area-surfs"] ?? null) !== null || (params["area-metrics"] ?? null) !== null || (params["valid-roi-out"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["area-surfs"] ?? null) !== null) ? metric_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
+            ...(((params["area-metrics"] ?? null) !== null) ? metric_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
+            ...(((params["valid-roi-out"] ?? null) !== null) ? metric_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : [])
+        );
+    }
     if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
             "-current-roi",
@@ -327,10 +333,6 @@ function metric_resample_cargs(
     if ((params["largest"] ?? false)) {
         cargs.push("-largest");
     }
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
-    cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
-    cargs.push((params["method"] ?? null));
     return cargs;
 }
 
@@ -409,11 +411,11 @@ function metric_resample_execute(
  * BARYCENTRIC
  * .
  *
- * @param metric_out the output metric
  * @param metric_in the metric file to resample
  * @param current_sphere a sphere surface with the mesh that the metric is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
+ * @param metric_out the output metric
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
  * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
@@ -427,11 +429,11 @@ the roi, as a metric file
  * @returns NamedTuple of outputs (described in `MetricResampleOutputs`).
  */
 function metric_resample(
-    metric_out: string,
     metric_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
+    metric_out: string,
     area_surfs: MetricResampleAreaSurfsParamsDict | null = null,
     area_metrics: MetricResampleAreaMetricsParamsDict | null = null,
     valid_roi_out: MetricResampleValidRoiOutParamsDict | null = null,
@@ -440,7 +442,7 @@ function metric_resample(
     largest: boolean = false,
     runner: Runner | null = null,
 ): MetricResampleOutputs {
-    const params = metric_resample_params(metric_out, metric_in, current_sphere, new_sphere, method, area_surfs, area_metrics, valid_roi_out, roi_metric, bypass_sphere_check, largest)
+    const params = metric_resample_params(metric_in, current_sphere, new_sphere, method, metric_out, area_surfs, area_metrics, valid_roi_out, roi_metric, bypass_sphere_check, largest)
     return metric_resample_execute(params, runner);
 }
 

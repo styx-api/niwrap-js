@@ -13,8 +13,8 @@ const SURFACE_COORDINATES_TO_METRIC_METADATA: Metadata = {
 
 interface SurfaceCoordinatesToMetricParamsDict {
     "@type"?: "workbench/surface-coordinates-to-metric";
-    "metric-out": string;
     "surface": InputPathType;
+    "metric-out": string;
 }
 type SurfaceCoordinatesToMetricParamsDictTagged = Required<Pick<SurfaceCoordinatesToMetricParamsDict, '@type'>> & SurfaceCoordinatesToMetricParamsDict;
 
@@ -39,19 +39,19 @@ interface SurfaceCoordinatesToMetricOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param surface the surface to use the coordinates of
+ * @param metric_out the output metric
  *
  * @returns Parameter dictionary
  */
 function surface_coordinates_to_metric_params(
-    metric_out: string,
     surface: InputPathType,
+    metric_out: string,
 ): SurfaceCoordinatesToMetricParamsDictTagged {
     const params = {
         "@type": "workbench/surface-coordinates-to-metric" as const,
-        "metric-out": metric_out,
         "surface": surface,
+        "metric-out": metric_out,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function surface_coordinates_to_metric_cargs(
         "wb_command",
         "-surface-coordinates-to-metric"
     );
-    cargs.push((params["metric-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push((params["metric-out"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function surface_coordinates_to_metric_execute(
  *
  * Puts the coordinates of the surface into a 3-map metric file, as x, y, z.
  *
- * @param metric_out the output metric
  * @param surface the surface to use the coordinates of
+ * @param metric_out the output metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCoordinatesToMetricOutputs`).
  */
 function surface_coordinates_to_metric(
-    metric_out: string,
     surface: InputPathType,
+    metric_out: string,
     runner: Runner | null = null,
 ): SurfaceCoordinatesToMetricOutputs {
-    const params = surface_coordinates_to_metric_params(metric_out, surface)
+    const params = surface_coordinates_to_metric_params(surface, metric_out)
     return surface_coordinates_to_metric_execute(params, runner);
 }
 

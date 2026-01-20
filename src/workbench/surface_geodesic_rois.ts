@@ -13,14 +13,14 @@ const SURFACE_GEODESIC_ROIS_METADATA: Metadata = {
 
 interface SurfaceGeodesicRoisParamsDict {
     "@type"?: "workbench/surface-geodesic-rois";
+    "surface": InputPathType;
+    "limit": number;
+    "vertex-list-file": string;
     "metric-out": string;
     "area-metric"?: InputPathType | null | undefined;
     "name-list-file"?: string | null | undefined;
     "method"?: string | null | undefined;
     "sigma"?: number | null | undefined;
-    "surface": InputPathType;
-    "limit": number;
-    "vertex-list-file": string;
 }
 type SurfaceGeodesicRoisParamsDictTagged = Required<Pick<SurfaceGeodesicRoisParamsDict, '@type'>> & SurfaceGeodesicRoisParamsDict;
 
@@ -45,10 +45,10 @@ interface SurfaceGeodesicRoisOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param surface the surface to draw on
  * @param limit geodesic distance limit from vertex, in mm
  * @param vertex_list_file a text file containing the vertices to draw ROIs around
+ * @param metric_out the output metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -65,10 +65,10 @@ the sigma for the gaussian kernel, in mm
  * @returns Parameter dictionary
  */
 function surface_geodesic_rois_params(
-    metric_out: string,
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     name_list_file: string | null = null,
     method: string | null = null,
@@ -76,10 +76,10 @@ function surface_geodesic_rois_params(
 ): SurfaceGeodesicRoisParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-rois" as const,
-        "metric-out": metric_out,
         "surface": surface,
         "limit": limit,
         "vertex-list-file": vertex_list_file,
+        "metric-out": metric_out,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -114,6 +114,9 @@ function surface_geodesic_rois_cargs(
         "wb_command",
         "-surface-geodesic-rois"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(String((params["limit"] ?? null)));
+    cargs.push((params["vertex-list-file"] ?? null));
     cargs.push((params["metric-out"] ?? null));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
@@ -139,9 +142,6 @@ function surface_geodesic_rois_cargs(
             String((params["sigma"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(String((params["limit"] ?? null)));
-    cargs.push((params["vertex-list-file"] ?? null));
     return cargs;
 }
 
@@ -195,10 +195,10 @@ function surface_geodesic_rois_execute(
  *
  * For each vertex in the list file, a column in the output metric is created, and an ROI around that vertex is drawn in that column.  Each metric column will have zeros outside the geodesic distance spacified by <limit>, and by default will have a value of 1.0 inside it.  If the -gaussian option is specified, the values inside the ROI will instead form a gaussian with the specified value of sigma, normalized so that the sum of the nonzero values in the metric column is 1.0.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
- * @param metric_out the output metric
  * @param surface the surface to draw on
  * @param limit geodesic distance limit from vertex, in mm
  * @param vertex_list_file a text file containing the vertices to draw ROIs around
+ * @param metric_out the output metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -216,17 +216,17 @@ the sigma for the gaussian kernel, in mm
  * @returns NamedTuple of outputs (described in `SurfaceGeodesicRoisOutputs`).
  */
 function surface_geodesic_rois(
-    metric_out: string,
     surface: InputPathType,
     limit: number,
     vertex_list_file: string,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     name_list_file: string | null = null,
     method: string | null = null,
     sigma: number | null = null,
     runner: Runner | null = null,
 ): SurfaceGeodesicRoisOutputs {
-    const params = surface_geodesic_rois_params(metric_out, surface, limit, vertex_list_file, area_metric, name_list_file, method, sigma)
+    const params = surface_geodesic_rois_params(surface, limit, vertex_list_file, metric_out, area_metric, name_list_file, method, sigma)
     return surface_geodesic_rois_execute(params, runner);
 }
 

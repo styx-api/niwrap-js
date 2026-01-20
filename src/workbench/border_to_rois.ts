@@ -13,12 +13,12 @@ const BORDER_TO_ROIS_METADATA: Metadata = {
 
 interface BorderToRoisParamsDict {
     "@type"?: "workbench/border-to-rois";
+    "surface": InputPathType;
+    "border-file": InputPathType;
     "metric-out": string;
     "name"?: string | null | undefined;
     "include-border": boolean;
     "inverse": boolean;
-    "surface": InputPathType;
-    "border-file": InputPathType;
 }
 type BorderToRoisParamsDictTagged = Required<Pick<BorderToRoisParamsDict, '@type'>> & BorderToRoisParamsDict;
 
@@ -43,9 +43,9 @@ interface BorderToRoisOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric file
  * @param surface the surface the borders are drawn on
  * @param border_file the border file
+ * @param metric_out the output metric file
  * @param name create ROI for only one border
 
 the name of the border
@@ -55,20 +55,20 @@ the name of the border
  * @returns Parameter dictionary
  */
 function border_to_rois_params(
-    metric_out: string,
     surface: InputPathType,
     border_file: InputPathType,
+    metric_out: string,
     name: string | null = null,
     include_border: boolean = false,
     inverse: boolean = false,
 ): BorderToRoisParamsDictTagged {
     const params = {
         "@type": "workbench/border-to-rois" as const,
+        "surface": surface,
+        "border-file": border_file,
         "metric-out": metric_out,
         "include-border": include_border,
         "inverse": inverse,
-        "surface": surface,
-        "border-file": border_file,
     };
     if (name !== null) {
         params["name"] = name;
@@ -94,6 +94,8 @@ function border_to_rois_cargs(
         "wb_command",
         "-border-to-rois"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["border-file"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["name"] ?? null) !== null) {
         cargs.push(
@@ -107,8 +109,6 @@ function border_to_rois_cargs(
     if ((params["inverse"] ?? false)) {
         cargs.push("-inverse");
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["border-file"] ?? null)));
     return cargs;
 }
 
@@ -162,9 +162,9 @@ function border_to_rois_execute(
  *
  * By default, draws ROIs inside all borders in the border file, as separate metric columns.
  *
- * @param metric_out the output metric file
  * @param surface the surface the borders are drawn on
  * @param border_file the border file
+ * @param metric_out the output metric file
  * @param name create ROI for only one border
 
 the name of the border
@@ -175,15 +175,15 @@ the name of the border
  * @returns NamedTuple of outputs (described in `BorderToRoisOutputs`).
  */
 function border_to_rois(
-    metric_out: string,
     surface: InputPathType,
     border_file: InputPathType,
+    metric_out: string,
     name: string | null = null,
     include_border: boolean = false,
     inverse: boolean = false,
     runner: Runner | null = null,
 ): BorderToRoisOutputs {
-    const params = border_to_rois_params(metric_out, surface, border_file, name, include_border, inverse)
+    const params = border_to_rois_params(surface, border_file, metric_out, name, include_border, inverse)
     return border_to_rois_execute(params, runner);
 }
 

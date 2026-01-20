@@ -21,11 +21,11 @@ type MetricReduceExcludeOutliersParamsDictTagged = Required<Pick<MetricReduceExc
 
 interface MetricReduceParamsDict {
     "@type"?: "workbench/metric-reduce";
+    "metric-in": InputPathType;
+    "operation": string;
     "metric-out": string;
     "exclude-outliers"?: MetricReduceExcludeOutliersParamsDict | null | undefined;
     "only-numeric": boolean;
-    "metric-in": InputPathType;
-    "operation": string;
 }
 type MetricReduceParamsDictTagged = Required<Pick<MetricReduceParamsDict, '@type'>> & MetricReduceParamsDict;
 
@@ -93,27 +93,27 @@ interface MetricReduceOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param metric_in the metric to reduce
  * @param operation the reduction operator to use
+ * @param metric_out the output metric
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  *
  * @returns Parameter dictionary
  */
 function metric_reduce_params(
-    metric_out: string,
     metric_in: InputPathType,
     operation: string,
+    metric_out: string,
     exclude_outliers: MetricReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
 ): MetricReduceParamsDictTagged {
     const params = {
         "@type": "workbench/metric-reduce" as const,
-        "metric-out": metric_out,
-        "only-numeric": only_numeric,
         "metric-in": metric_in,
         "operation": operation,
+        "metric-out": metric_out,
+        "only-numeric": only_numeric,
     };
     if (exclude_outliers !== null) {
         params["exclude-outliers"] = exclude_outliers;
@@ -139,15 +139,15 @@ function metric_reduce_cargs(
         "wb_command",
         "-metric-reduce"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["exclude-outliers"] ?? null) !== null) ? metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push((params["operation"] ?? null));
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["exclude-outliers"] ?? null) !== null) {
+        cargs.push(...metric_reduce_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution));
+    }
     if ((params["only-numeric"] ?? false)) {
         cargs.push("-only-numeric");
     }
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
-    cargs.push((params["operation"] ?? null));
     return cargs;
 }
 
@@ -237,9 +237,9 @@ function metric_reduce_execute(
  * COUNT_NONZERO: the number of nonzero elements in the data
  * .
  *
- * @param metric_out the output metric
  * @param metric_in the metric to reduce
  * @param operation the reduction operator to use
+ * @param metric_out the output metric
  * @param exclude_outliers exclude non-numeric values and outliers by standard deviation
  * @param only_numeric exclude non-numeric values
  * @param runner Command runner
@@ -247,14 +247,14 @@ function metric_reduce_execute(
  * @returns NamedTuple of outputs (described in `MetricReduceOutputs`).
  */
 function metric_reduce(
-    metric_out: string,
     metric_in: InputPathType,
     operation: string,
+    metric_out: string,
     exclude_outliers: MetricReduceExcludeOutliersParamsDict | null = null,
     only_numeric: boolean = false,
     runner: Runner | null = null,
 ): MetricReduceOutputs {
-    const params = metric_reduce_params(metric_out, metric_in, operation, exclude_outliers, only_numeric)
+    const params = metric_reduce_params(metric_in, operation, metric_out, exclude_outliers, only_numeric)
     return metric_reduce_execute(params, runner);
 }
 

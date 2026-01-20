@@ -27,9 +27,9 @@ type SurfaceCurvatureGaussParamsDictTagged = Required<Pick<SurfaceCurvatureGauss
 
 interface SurfaceCurvatureParamsDict {
     "@type"?: "workbench/surface-curvature";
+    "surface": InputPathType;
     "mean"?: SurfaceCurvatureMeanParamsDict | null | undefined;
     "gauss"?: SurfaceCurvatureGaussParamsDict | null | undefined;
-    "surface": InputPathType;
 }
 type SurfaceCurvatureParamsDictTagged = Required<Pick<SurfaceCurvatureParamsDict, '@type'>> & SurfaceCurvatureParamsDict;
 
@@ -252,13 +252,13 @@ function surface_curvature_cargs(
         "wb_command",
         "-surface-curvature"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
     if ((params["mean"] ?? null) !== null || (params["gauss"] ?? null) !== null) {
         cargs.push(
             ...(((params["mean"] ?? null) !== null) ? surface_curvature_mean_cargs((params["mean"] ?? null), execution) : []),
             ...(((params["gauss"] ?? null) !== null) ? surface_curvature_gauss_cargs((params["gauss"] ?? null), execution) : [])
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
     return cargs;
 }
 

@@ -13,13 +13,13 @@ const VOLUME_ROIS_FROM_EXTREMA_METADATA: Metadata = {
 
 interface VolumeRoisFromExtremaParamsDict {
     "@type"?: "workbench/volume-rois-from-extrema";
+    "volume-in": InputPathType;
+    "limit": number;
     "volume-out": string;
     "subvol"?: string | null | undefined;
     "method"?: string | null | undefined;
     "roi-volume"?: InputPathType | null | undefined;
     "sigma"?: number | null | undefined;
-    "volume-in": InputPathType;
-    "limit": number;
 }
 type VolumeRoisFromExtremaParamsDictTagged = Required<Pick<VolumeRoisFromExtremaParamsDict, '@type'>> & VolumeRoisFromExtremaParamsDict;
 
@@ -44,9 +44,9 @@ interface VolumeRoisFromExtremaOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume
  * @param volume_in the input volume
  * @param limit distance limit from voxel center, in mm
+ * @param volume_out the output volume
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
@@ -63,9 +63,9 @@ the sigma for the gaussian kernel, in mm
  * @returns Parameter dictionary
  */
 function volume_rois_from_extrema_params(
-    volume_out: string,
     volume_in: InputPathType,
     limit: number,
+    volume_out: string,
     subvol: string | null = null,
     method: string | null = null,
     roi_volume: InputPathType | null = null,
@@ -73,9 +73,9 @@ function volume_rois_from_extrema_params(
 ): VolumeRoisFromExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/volume-rois-from-extrema" as const,
-        "volume-out": volume_out,
         "volume-in": volume_in,
         "limit": limit,
+        "volume-out": volume_out,
     };
     if (subvol !== null) {
         params["subvol"] = subvol;
@@ -110,6 +110,8 @@ function volume_rois_from_extrema_cargs(
         "wb_command",
         "-volume-rois-from-extrema"
     );
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push(String((params["limit"] ?? null)));
     cargs.push((params["volume-out"] ?? null));
     if ((params["subvol"] ?? null) !== null) {
         cargs.push(
@@ -135,8 +137,6 @@ function volume_rois_from_extrema_cargs(
             String((params["sigma"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
-    cargs.push(String((params["limit"] ?? null)));
     return cargs;
 }
 
@@ -190,9 +190,9 @@ function volume_rois_from_extrema_execute(
  *
  * For each nonzero value in each map, make a map with an ROI around that location.  If the -gaussian option is specified, then normalized gaussian kernels are output instead of ROIs.  The <method> argument to -overlap-logic must be one of ALLOW, CLOSEST, or EXCLUDE.  ALLOW is the default, and means that ROIs are treated independently and may overlap.  CLOSEST means that ROIs may not overlap, and that no ROI contains vertices that are closer to a different seed vertex.  EXCLUDE means that ROIs may not overlap, and that any vertex within range of more than one ROI does not belong to any ROI.
  *
- * @param volume_out the output volume
  * @param volume_in the input volume
  * @param limit distance limit from voxel center, in mm
+ * @param volume_out the output volume
  * @param subvol select a single subvolume to take the gradient of
 
 the subvolume number or name
@@ -210,16 +210,16 @@ the sigma for the gaussian kernel, in mm
  * @returns NamedTuple of outputs (described in `VolumeRoisFromExtremaOutputs`).
  */
 function volume_rois_from_extrema(
-    volume_out: string,
     volume_in: InputPathType,
     limit: number,
+    volume_out: string,
     subvol: string | null = null,
     method: string | null = null,
     roi_volume: InputPathType | null = null,
     sigma: number | null = null,
     runner: Runner | null = null,
 ): VolumeRoisFromExtremaOutputs {
-    const params = volume_rois_from_extrema_params(volume_out, volume_in, limit, subvol, method, roi_volume, sigma)
+    const params = volume_rois_from_extrema_params(volume_in, limit, volume_out, subvol, method, roi_volume, sigma)
     return volume_rois_from_extrema_execute(params, runner);
 }
 

@@ -13,13 +13,13 @@ const LABEL_DILATE_METADATA: Metadata = {
 
 interface LabelDilateParamsDict {
     "@type"?: "workbench/label-dilate";
+    "label": InputPathType;
+    "surface": InputPathType;
+    "dilate-dist": number;
     "label-out": string;
     "area-metric"?: InputPathType | null | undefined;
     "column"?: string | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "label": InputPathType;
-    "surface": InputPathType;
-    "dilate-dist": number;
 }
 type LabelDilateParamsDictTagged = Required<Pick<LabelDilateParamsDict, '@type'>> & LabelDilateParamsDict;
 
@@ -44,10 +44,10 @@ interface LabelDilateOutputs {
 /**
  * Build parameters.
  *
- * @param label_out the output label file
  * @param label the input label
  * @param surface the surface to dilate on
  * @param dilate_dist distance in mm to dilate the labels
+ * @param label_out the output label file
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -61,20 +61,20 @@ metric file, positive values denote vertices to have their values replaced
  * @returns Parameter dictionary
  */
 function label_dilate_params(
-    label_out: string,
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
+    label_out: string,
     area_metric: InputPathType | null = null,
     column: string | null = null,
     roi_metric: InputPathType | null = null,
 ): LabelDilateParamsDictTagged {
     const params = {
         "@type": "workbench/label-dilate" as const,
-        "label-out": label_out,
         "label": label,
         "surface": surface,
         "dilate-dist": dilate_dist,
+        "label-out": label_out,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -106,6 +106,9 @@ function label_dilate_cargs(
         "wb_command",
         "-label-dilate"
     );
+    cargs.push(execution.inputFile((params["label"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(String((params["dilate-dist"] ?? null)));
     cargs.push((params["label-out"] ?? null));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
@@ -125,9 +128,6 @@ function label_dilate_cargs(
             execution.inputFile((params["roi-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["label"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(String((params["dilate-dist"] ?? null)));
     return cargs;
 }
 
@@ -181,10 +181,10 @@ function label_dilate_execute(
  *
  * Fills in label information for all vertices designated as bad, up to the specified distance away from other labels.  If -bad-vertex-roi is specified, all vertices, including those with the unlabeled key, are good, except for vertices with a positive value in the ROI.  If it is not specified, only vertices with the unlabeled key are bad.
  *
- * @param label_out the output label file
  * @param label the input label
  * @param surface the surface to dilate on
  * @param dilate_dist distance in mm to dilate the labels
+ * @param label_out the output label file
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -199,16 +199,16 @@ metric file, positive values denote vertices to have their values replaced
  * @returns NamedTuple of outputs (described in `LabelDilateOutputs`).
  */
 function label_dilate(
-    label_out: string,
     label: InputPathType,
     surface: InputPathType,
     dilate_dist: number,
+    label_out: string,
     area_metric: InputPathType | null = null,
     column: string | null = null,
     roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): LabelDilateOutputs {
-    const params = label_dilate_params(label_out, label, surface, dilate_dist, area_metric, column, roi_metric)
+    const params = label_dilate_params(label, surface, dilate_dist, label_out, area_metric, column, roi_metric)
     return label_dilate_execute(params, runner);
 }
 

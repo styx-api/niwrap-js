@@ -13,9 +13,9 @@ const BORDER_EXPORT_COLOR_TABLE_METADATA: Metadata = {
 
 interface BorderExportColorTableParamsDict {
     "@type"?: "workbench/border-export-color-table";
-    "class-colors": boolean;
     "border-file": InputPathType;
     "table-out": string;
+    "class-colors": boolean;
 }
 type BorderExportColorTableParamsDictTagged = Required<Pick<BorderExportColorTableParamsDict, '@type'>> & BorderExportColorTableParamsDict;
 
@@ -49,9 +49,9 @@ function border_export_color_table_params(
 ): BorderExportColorTableParamsDictTagged {
     const params = {
         "@type": "workbench/border-export-color-table" as const,
-        "class-colors": class_colors,
         "border-file": border_file,
         "table-out": table_out,
+        "class-colors": class_colors,
     };
     return params;
 }
@@ -74,11 +74,11 @@ function border_export_color_table_cargs(
         "wb_command",
         "-border-export-color-table"
     );
+    cargs.push(execution.inputFile((params["border-file"] ?? null)));
+    cargs.push((params["table-out"] ?? null));
     if ((params["class-colors"] ?? false)) {
         cargs.push("-class-colors");
     }
-    cargs.push(execution.inputFile((params["border-file"] ?? null)));
-    cargs.push((params["table-out"] ?? null));
     return cargs;
 }
 

@@ -37,6 +37,10 @@ type CiftiDilateCerebellumSurfaceParamsDictTagged = Required<Pick<CiftiDilateCer
 
 interface CiftiDilateParamsDict {
     "@type"?: "workbench/cifti-dilate";
+    "cifti-in": InputPathType;
+    "direction": string;
+    "surface-distance": number;
+    "volume-distance": number;
     "cifti-out": string;
     "left-surface"?: CiftiDilateLeftSurfaceParamsDict | null | undefined;
     "right-surface"?: CiftiDilateRightSurfaceParamsDict | null | undefined;
@@ -45,10 +49,6 @@ interface CiftiDilateParamsDict {
     "legacy-mode": boolean;
     "merged-volume": boolean;
     "nearest": boolean;
-    "cifti-in": InputPathType;
-    "direction": string;
-    "surface-distance": number;
-    "volume-distance": number;
 }
 type CiftiDilateParamsDictTagged = Required<Pick<CiftiDilateParamsDict, '@type'>> & CiftiDilateParamsDict;
 
@@ -229,11 +229,11 @@ interface CiftiDilateOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti file
  * @param cifti_in the input cifti file
  * @param direction which dimension to dilate along, ROW or COLUMN
  * @param surface_distance the distance to dilate on surfaces, in mm
  * @param volume_distance the distance to dilate in the volume, in mm
+ * @param cifti_out the output cifti file
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -247,11 +247,11 @@ cifti dscalar or dtseries file, positive values denote brainordinates to have th
  * @returns Parameter dictionary
  */
 function cifti_dilate_params(
-    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
     surface_distance: number,
     volume_distance: number,
+    cifti_out: string,
     left_surface: CiftiDilateLeftSurfaceParamsDict | null = null,
     right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
@@ -262,14 +262,14 @@ function cifti_dilate_params(
 ): CiftiDilateParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-dilate" as const,
-        "cifti-out": cifti_out,
-        "legacy-mode": legacy_mode,
-        "merged-volume": merged_volume,
-        "nearest": nearest,
         "cifti-in": cifti_in,
         "direction": direction,
         "surface-distance": surface_distance,
         "volume-distance": volume_distance,
+        "cifti-out": cifti_out,
+        "legacy-mode": legacy_mode,
+        "merged-volume": merged_volume,
+        "nearest": nearest,
     };
     if (left_surface !== null) {
         params["left-surface"] = left_surface;
@@ -304,12 +304,18 @@ function cifti_dilate_cargs(
         "wb_command",
         "-cifti-dilate"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["left-surface"] ?? null) !== null) ? cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-        ...(((params["right-surface"] ?? null) !== null) ? cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push((params["direction"] ?? null));
+    cargs.push(String((params["surface-distance"] ?? null)));
+    cargs.push(String((params["volume-distance"] ?? null)));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["left-surface"] ?? null) !== null) ? cifti_dilate_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+            ...(((params["right-surface"] ?? null) !== null) ? cifti_dilate_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_dilate_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : [])
+        );
+    }
     if ((params["roi-cifti"] ?? null) !== null) {
         cargs.push(
             "-bad-brainordinate-roi",
@@ -325,10 +331,6 @@ function cifti_dilate_cargs(
     if ((params["nearest"] ?? false)) {
         cargs.push("-nearest");
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
-    cargs.push((params["direction"] ?? null));
-    cargs.push(String((params["surface-distance"] ?? null)));
-    cargs.push(String((params["volume-distance"] ?? null)));
     return cargs;
 }
 
@@ -390,11 +392,11 @@ function cifti_dilate_execute(
  *
  * If -bad-brainordinate-roi is specified, all values, including those with value zero, are good, except for locations with a positive value in the ROI.  If it is not specified, only values equal to zero are bad.
  *
- * @param cifti_out the output cifti file
  * @param cifti_in the input cifti file
  * @param direction which dimension to dilate along, ROW or COLUMN
  * @param surface_distance the distance to dilate on surfaces, in mm
  * @param volume_distance the distance to dilate in the volume, in mm
+ * @param cifti_out the output cifti file
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -409,11 +411,11 @@ cifti dscalar or dtseries file, positive values denote brainordinates to have th
  * @returns NamedTuple of outputs (described in `CiftiDilateOutputs`).
  */
 function cifti_dilate(
-    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
     surface_distance: number,
     volume_distance: number,
+    cifti_out: string,
     left_surface: CiftiDilateLeftSurfaceParamsDict | null = null,
     right_surface: CiftiDilateRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiDilateCerebellumSurfaceParamsDict | null = null,
@@ -423,7 +425,7 @@ function cifti_dilate(
     nearest: boolean = false,
     runner: Runner | null = null,
 ): CiftiDilateOutputs {
-    const params = cifti_dilate_params(cifti_out, cifti_in, direction, surface_distance, volume_distance, left_surface, right_surface, cerebellum_surface, roi_cifti, legacy_mode, merged_volume, nearest)
+    const params = cifti_dilate_params(cifti_in, direction, surface_distance, volume_distance, cifti_out, left_surface, right_surface, cerebellum_surface, roi_cifti, legacy_mode, merged_volume, nearest)
     return cifti_dilate_execute(params, runner);
 }
 

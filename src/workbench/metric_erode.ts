@@ -13,13 +13,13 @@ const METRIC_ERODE_METADATA: Metadata = {
 
 interface MetricErodeParamsDict {
     "@type"?: "workbench/metric-erode";
+    "metric": InputPathType;
+    "surface": InputPathType;
+    "distance": number;
     "metric-out": string;
     "area-metric"?: InputPathType | null | undefined;
     "column"?: string | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "metric": InputPathType;
-    "surface": InputPathType;
-    "distance": number;
 }
 type MetricErodeParamsDictTagged = Required<Pick<MetricErodeParamsDict, '@type'>> & MetricErodeParamsDict;
 
@@ -44,10 +44,10 @@ interface MetricErodeOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param metric the metric file to erode
  * @param surface the surface to compute on
  * @param distance distance in mm to erode
+ * @param metric_out the output metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -61,20 +61,20 @@ metric file, positive values denote vertices that have data
  * @returns Parameter dictionary
  */
 function metric_erode_params(
-    metric_out: string,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     column: string | null = null,
     roi_metric: InputPathType | null = null,
 ): MetricErodeParamsDictTagged {
     const params = {
         "@type": "workbench/metric-erode" as const,
-        "metric-out": metric_out,
         "metric": metric,
         "surface": surface,
         "distance": distance,
+        "metric-out": metric_out,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -106,6 +106,9 @@ function metric_erode_cargs(
         "wb_command",
         "-metric-erode"
     );
+    cargs.push(execution.inputFile((params["metric"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(String((params["distance"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
@@ -125,9 +128,6 @@ function metric_erode_cargs(
             execution.inputFile((params["roi-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["metric"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(String((params["distance"] ?? null)));
     return cargs;
 }
 
@@ -185,10 +185,10 @@ function metric_erode_execute(
  *
  * Note that the -corrected-areas option uses an approximate correction for distance along the surface.
  *
- * @param metric_out the output metric
  * @param metric the metric file to erode
  * @param surface the surface to compute on
  * @param distance distance in mm to erode
+ * @param metric_out the output metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -203,16 +203,16 @@ metric file, positive values denote vertices that have data
  * @returns NamedTuple of outputs (described in `MetricErodeOutputs`).
  */
 function metric_erode(
-    metric_out: string,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     column: string | null = null,
     roi_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricErodeOutputs {
-    const params = metric_erode_params(metric_out, metric, surface, distance, area_metric, column, roi_metric)
+    const params = metric_erode_params(metric, surface, distance, metric_out, area_metric, column, roi_metric)
     return metric_erode_execute(params, runner);
 }
 

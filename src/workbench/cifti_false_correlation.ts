@@ -37,14 +37,14 @@ type CiftiFalseCorrelationCerebellumSurfaceParamsDictTagged = Required<Pick<Cift
 
 interface CiftiFalseCorrelationParamsDict {
     "@type"?: "workbench/cifti-false-correlation";
-    "cifti-out": string;
-    "left-surface"?: CiftiFalseCorrelationLeftSurfaceParamsDict | null | undefined;
-    "right-surface"?: CiftiFalseCorrelationRightSurfaceParamsDict | null | undefined;
-    "cerebellum-surface"?: CiftiFalseCorrelationCerebellumSurfaceParamsDict | null | undefined;
     "cifti-in": InputPathType;
     "3D-dist": number;
     "geo-outer": number;
     "geo-inner": number;
+    "cifti-out": string;
+    "left-surface"?: CiftiFalseCorrelationLeftSurfaceParamsDict | null | undefined;
+    "right-surface"?: CiftiFalseCorrelationRightSurfaceParamsDict | null | undefined;
+    "cerebellum-surface"?: CiftiFalseCorrelationCerebellumSurfaceParamsDict | null | undefined;
 }
 type CiftiFalseCorrelationParamsDictTagged = Required<Pick<CiftiFalseCorrelationParamsDict, '@type'>> & CiftiFalseCorrelationParamsDict;
 
@@ -225,11 +225,11 @@ interface CiftiFalseCorrelationOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti dscalar file
  * @param cifti_in the cifti file to use for correlation
  * @param v_3_d_dist maximum 3D distance to check around each vertex
  * @param geo_outer maximum geodesic distance to use for neighboring correlation
  * @param geo_inner minimum geodesic distance to use for neighboring correlation
+ * @param cifti_out the output cifti dscalar file
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -237,22 +237,22 @@ interface CiftiFalseCorrelationOutputs {
  * @returns Parameter dictionary
  */
 function cifti_false_correlation_params(
-    cifti_out: string,
     cifti_in: InputPathType,
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
+    cifti_out: string,
     left_surface: CiftiFalseCorrelationLeftSurfaceParamsDict | null = null,
     right_surface: CiftiFalseCorrelationRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParamsDict | null = null,
 ): CiftiFalseCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-false-correlation" as const,
-        "cifti-out": cifti_out,
         "cifti-in": cifti_in,
         "3D-dist": v_3_d_dist,
         "geo-outer": geo_outer,
         "geo-inner": geo_inner,
+        "cifti-out": cifti_out,
     };
     if (left_surface !== null) {
         params["left-surface"] = left_surface;
@@ -284,16 +284,18 @@ function cifti_false_correlation_cargs(
         "wb_command",
         "-cifti-false-correlation"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["left-surface"] ?? null) !== null) ? cifti_false_correlation_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-        ...(((params["right-surface"] ?? null) !== null) ? cifti_false_correlation_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_false_correlation_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : [])
-    );
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push(String((params["3D-dist"] ?? null)));
     cargs.push(String((params["geo-outer"] ?? null)));
     cargs.push(String((params["geo-inner"] ?? null)));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["left-surface"] ?? null) !== null) ? cifti_false_correlation_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+            ...(((params["right-surface"] ?? null) !== null) ? cifti_false_correlation_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_false_correlation_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : [])
+        );
+    }
     return cargs;
 }
 
@@ -347,11 +349,11 @@ function cifti_false_correlation_execute(
  *
  * For each vertex, compute the average correlation within a range of geodesic distances that don't cross a sulcus/gyrus, and the correlation to the closest vertex crossing a sulcus/gyrus.  A vertex is considered to cross a sulcus/gyrus if the 3D distance is less than a third of the geodesic distance.  The output file contains the ratio between these correlations, and some additional maps to help explain the ratio.
  *
- * @param cifti_out the output cifti dscalar file
  * @param cifti_in the cifti file to use for correlation
  * @param v_3_d_dist maximum 3D distance to check around each vertex
  * @param geo_outer maximum geodesic distance to use for neighboring correlation
  * @param geo_inner minimum geodesic distance to use for neighboring correlation
+ * @param cifti_out the output cifti dscalar file
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -360,17 +362,17 @@ function cifti_false_correlation_execute(
  * @returns NamedTuple of outputs (described in `CiftiFalseCorrelationOutputs`).
  */
 function cifti_false_correlation(
-    cifti_out: string,
     cifti_in: InputPathType,
     v_3_d_dist: number,
     geo_outer: number,
     geo_inner: number,
+    cifti_out: string,
     left_surface: CiftiFalseCorrelationLeftSurfaceParamsDict | null = null,
     right_surface: CiftiFalseCorrelationRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiFalseCorrelationCerebellumSurfaceParamsDict | null = null,
     runner: Runner | null = null,
 ): CiftiFalseCorrelationOutputs {
-    const params = cifti_false_correlation_params(cifti_out, cifti_in, v_3_d_dist, geo_outer, geo_inner, left_surface, right_surface, cerebellum_surface)
+    const params = cifti_false_correlation_params(cifti_in, v_3_d_dist, geo_outer, geo_inner, cifti_out, left_surface, right_surface, cerebellum_surface)
     return cifti_false_correlation_execute(params, runner);
 }
 

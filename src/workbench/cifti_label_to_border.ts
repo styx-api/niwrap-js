@@ -21,10 +21,10 @@ type CiftiLabelToBorderBorderParamsDictTagged = Required<Pick<CiftiLabelToBorder
 
 interface CiftiLabelToBorderParamsDict {
     "@type"?: "workbench/cifti-label-to-border";
+    "cifti-in": InputPathType;
     "border"?: Array<CiftiLabelToBorderBorderParamsDict> | null | undefined;
     "column"?: string | null | undefined;
     "fraction"?: number | null | undefined;
-    "cifti-in": InputPathType;
 }
 type CiftiLabelToBorderParamsDictTagged = Required<Pick<CiftiLabelToBorderParamsDict, '@type'>> & CiftiLabelToBorderParamsDict;
 
@@ -180,6 +180,7 @@ function cifti_label_to_border_cargs(
         "wb_command",
         "-cifti-label-to-border"
     );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     if ((params["border"] ?? null) !== null) {
         cargs.push(...(params["border"] ?? null).map(s => cifti_label_to_border_border_cargs(s, execution)).flat());
     }
@@ -195,7 +196,6 @@ function cifti_label_to_border_cargs(
             String((params["fraction"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }
 

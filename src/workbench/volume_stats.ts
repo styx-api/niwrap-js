@@ -21,12 +21,12 @@ type VolumeStatsRoiParamsDictTagged = Required<Pick<VolumeStatsRoiParamsDict, '@
 
 interface VolumeStatsParamsDict {
     "@type"?: "workbench/volume-stats";
+    "volume-in": InputPathType;
     "roi"?: VolumeStatsRoiParamsDict | null | undefined;
     "subvolume"?: string | null | undefined;
     "percent"?: number | null | undefined;
     "operation"?: string | null | undefined;
     "show-map-name": boolean;
-    "volume-in": InputPathType;
 }
 type VolumeStatsParamsDictTagged = Required<Pick<VolumeStatsParamsDict, '@type'>> & VolumeStatsParamsDict;
 
@@ -117,8 +117,8 @@ function volume_stats_params(
 ): VolumeStatsParamsDictTagged {
     const params = {
         "@type": "workbench/volume-stats" as const,
-        "show-map-name": show_map_name,
         "volume-in": volume_in,
+        "show-map-name": show_map_name,
     };
     if (roi !== null) {
         params["roi"] = roi;
@@ -153,6 +153,7 @@ function volume_stats_cargs(
         "wb_command",
         "-volume-stats"
     );
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     if ((params["roi"] ?? null) !== null) {
         cargs.push(...volume_stats_roi_cargs((params["roi"] ?? null), execution));
     }
@@ -177,7 +178,6 @@ function volume_stats_cargs(
     if ((params["show-map-name"] ?? false)) {
         cargs.push("-show-map-name");
     }
-    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
     return cargs;
 }
 

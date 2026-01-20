@@ -20,10 +20,10 @@ type CiftiMergeDenseCiftiParamsDictTagged = Required<Pick<CiftiMergeDenseCiftiPa
 
 interface CiftiMergeDenseParamsDict {
     "@type"?: "workbench/cifti-merge-dense";
+    "direction": string;
     "cifti-out": string;
     "cifti"?: Array<CiftiMergeDenseCiftiParamsDict> | null | undefined;
     "action"?: string | null | undefined;
-    "direction": string;
 }
 type CiftiMergeDenseParamsDictTagged = Required<Pick<CiftiMergeDenseParamsDict, '@type'>> & CiftiMergeDenseParamsDict;
 
@@ -87,8 +87,8 @@ interface CiftiMergeDenseOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti file
  * @param direction which dimension to merge along, ROW or COLUMN
+ * @param cifti_out the output cifti file
  * @param cifti specify an input cifti file
  * @param action how to handle conflicts between label keys
 
@@ -97,15 +97,15 @@ interface CiftiMergeDenseOutputs {
  * @returns Parameter dictionary
  */
 function cifti_merge_dense_params(
-    cifti_out: string,
     direction: string,
+    cifti_out: string,
     cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
     action: string | null = null,
 ): CiftiMergeDenseParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-merge-dense" as const,
-        "cifti-out": cifti_out,
         "direction": direction,
+        "cifti-out": cifti_out,
     };
     if (cifti !== null) {
         params["cifti"] = cifti;
@@ -134,17 +134,17 @@ function cifti_merge_dense_cargs(
         "wb_command",
         "-cifti-merge-dense"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_merge_dense_cifti_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["cifti"] ?? null) !== null) {
+        cargs.push(...(params["cifti"] ?? null).map(s => cifti_merge_dense_cifti_cargs(s, execution)).flat());
+    }
     if ((params["action"] ?? null) !== null) {
         cargs.push(
             "-label-collision",
             (params["action"] ?? null)
         );
     }
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -198,8 +198,8 @@ function cifti_merge_dense_execute(
  *
  * The input cifti files must have matching mappings along the direction not specified, and the mapping along the specified direction must be brain models.
  *
- * @param cifti_out the output cifti file
  * @param direction which dimension to merge along, ROW or COLUMN
+ * @param cifti_out the output cifti file
  * @param cifti specify an input cifti file
  * @param action how to handle conflicts between label keys
 
@@ -209,13 +209,13 @@ function cifti_merge_dense_execute(
  * @returns NamedTuple of outputs (described in `CiftiMergeDenseOutputs`).
  */
 function cifti_merge_dense(
-    cifti_out: string,
     direction: string,
+    cifti_out: string,
     cifti: Array<CiftiMergeDenseCiftiParamsDict> | null = null,
     action: string | null = null,
     runner: Runner | null = null,
 ): CiftiMergeDenseOutputs {
-    const params = cifti_merge_dense_params(cifti_out, direction, cifti, action)
+    const params = cifti_merge_dense_params(direction, cifti_out, cifti, action)
     return cifti_merge_dense_execute(params, runner);
 }
 

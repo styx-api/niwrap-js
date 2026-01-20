@@ -13,9 +13,9 @@ const FOCI_LIST_COORDS_METADATA: Metadata = {
 
 interface FociListCoordsParamsDict {
     "@type"?: "workbench/foci-list-coords";
-    "names-file-out"?: string | null | undefined;
     "foci-file": InputPathType;
     "coord-file-out": string;
+    "names-file-out"?: string | null | undefined;
 }
 type FociListCoordsParamsDictTagged = Required<Pick<FociListCoordsParamsDict, '@type'>> & FociListCoordsParamsDict;
 
@@ -78,14 +78,14 @@ function foci_list_coords_cargs(
         "wb_command",
         "-foci-list-coords"
     );
+    cargs.push(execution.inputFile((params["foci-file"] ?? null)));
+    cargs.push((params["coord-file-out"] ?? null));
     if ((params["names-file-out"] ?? null) !== null) {
         cargs.push(
             "-names-out",
             (params["names-file-out"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["foci-file"] ?? null)));
-    cargs.push((params["coord-file-out"] ?? null));
     return cargs;
 }
 

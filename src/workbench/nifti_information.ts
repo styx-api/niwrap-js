@@ -20,10 +20,10 @@ type NiftiInformationPrintXmlParamsDictTagged = Required<Pick<NiftiInformationPr
 
 interface NiftiInformationParamsDict {
     "@type"?: "workbench/nifti-information";
+    "nifti-file": string;
     "print-xml"?: NiftiInformationPrintXmlParamsDict | null | undefined;
     "allow-truncated"?: boolean | null | undefined;
     "print-matrix": boolean;
-    "nifti-file": string;
 }
 type NiftiInformationParamsDictTagged = Required<Pick<NiftiInformationParamsDict, '@type'>> & NiftiInformationParamsDict;
 
@@ -107,8 +107,8 @@ function nifti_information_params(
 ): NiftiInformationParamsDictTagged {
     const params = {
         "@type": "workbench/nifti-information" as const,
-        "print-matrix": print_matrix,
         "nifti-file": nifti_file,
+        "print-matrix": print_matrix,
     };
     if (print_xml !== null) {
         params["print-xml"] = print_xml;
@@ -137,6 +137,7 @@ function nifti_information_cargs(
         "wb_command",
         "-nifti-information"
     );
+    cargs.push((params["nifti-file"] ?? null));
     if ((params["print-xml"] ?? null) !== null) {
         cargs.push(...nifti_information_print_xml_cargs((params["print-xml"] ?? null), execution));
     }
@@ -149,7 +150,6 @@ function nifti_information_cargs(
     if ((params["print-matrix"] ?? false)) {
         cargs.push("-print-matrix");
     }
-    cargs.push((params["nifti-file"] ?? null));
     return cargs;
 }
 

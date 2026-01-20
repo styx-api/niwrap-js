@@ -13,8 +13,8 @@ const SURFACE_FLIP_NORMALS_METADATA: Metadata = {
 
 interface SurfaceFlipNormalsParamsDict {
     "@type"?: "workbench/surface-flip-normals";
-    "surface-out": string;
     "surface": InputPathType;
+    "surface-out": string;
 }
 type SurfaceFlipNormalsParamsDictTagged = Required<Pick<SurfaceFlipNormalsParamsDict, '@type'>> & SurfaceFlipNormalsParamsDict;
 
@@ -39,19 +39,19 @@ interface SurfaceFlipNormalsOutputs {
 /**
  * Build parameters.
  *
- * @param surface_out the output surface
  * @param surface the surface to flip the normals of
+ * @param surface_out the output surface
  *
  * @returns Parameter dictionary
  */
 function surface_flip_normals_params(
-    surface_out: string,
     surface: InputPathType,
+    surface_out: string,
 ): SurfaceFlipNormalsParamsDictTagged {
     const params = {
         "@type": "workbench/surface-flip-normals" as const,
-        "surface-out": surface_out,
         "surface": surface,
+        "surface-out": surface_out,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function surface_flip_normals_cargs(
         "wb_command",
         "-surface-flip-normals"
     );
-    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push((params["surface-out"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function surface_flip_normals_execute(
  *
  * Flips all triangles on a surface, resulting in surface normals being flipped the other direction (inward vs outward).  If you transform a surface with an affine that has negative determinant, or a warpfield that similarly flips the surface, you may end up with a surface that has normals pointing inwards, which may have display problems.  Using this command will solve that problem.
  *
- * @param surface_out the output surface
  * @param surface the surface to flip the normals of
+ * @param surface_out the output surface
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceFlipNormalsOutputs`).
  */
 function surface_flip_normals(
-    surface_out: string,
     surface: InputPathType,
+    surface_out: string,
     runner: Runner | null = null,
 ): SurfaceFlipNormalsOutputs {
-    const params = surface_flip_normals_params(surface_out, surface)
+    const params = surface_flip_normals_params(surface, surface_out)
     return surface_flip_normals_execute(params, runner);
 }
 

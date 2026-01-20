@@ -237,11 +237,13 @@ function cifti_average_roi_correlation_cargs(
         "wb_command",
         "-cifti-average-roi-correlation"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["cifti-roi"] ?? null) !== null) ? cifti_average_roi_correlation_cifti_roi_cargs((params["cifti-roi"] ?? null), execution) : []),
-        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_roi_correlation_cifti_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["cifti-roi"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["cifti-roi"] ?? null) !== null) ? cifti_average_roi_correlation_cifti_roi_cargs((params["cifti-roi"] ?? null), execution) : []),
+            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_roi_correlation_cifti_cargs(s, execution)).flat() : [])
+        );
+    }
     if ((params["cerebellum-surf"] ?? null) !== null) {
         cargs.push(
             "-cerebellum-area-surf",

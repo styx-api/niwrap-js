@@ -13,14 +13,14 @@ const VOLUME_VECTOR_OPERATION_METADATA: Metadata = {
 
 interface VolumeVectorOperationParamsDict {
     "@type"?: "workbench/volume-vector-operation";
+    "vectors-a": InputPathType;
+    "vectors-b": InputPathType;
+    "operation": string;
     "volume-out": string;
     "magnitude": boolean;
     "normalize-output": boolean;
     "normalize-b": boolean;
     "normalize-a": boolean;
-    "vectors-a": InputPathType;
-    "vectors-b": InputPathType;
-    "operation": string;
 }
 type VolumeVectorOperationParamsDictTagged = Required<Pick<VolumeVectorOperationParamsDict, '@type'>> & VolumeVectorOperationParamsDict;
 
@@ -45,10 +45,10 @@ interface VolumeVectorOperationOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
+ * @param volume_out the output file
  * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param normalize_output normalize output vectors (not valid for dot product)
  * @param normalize_b normalize vectors of second input
@@ -57,10 +57,10 @@ interface VolumeVectorOperationOutputs {
  * @returns Parameter dictionary
  */
 function volume_vector_operation_params(
-    volume_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
+    volume_out: string,
     magnitude: boolean = false,
     normalize_output: boolean = false,
     normalize_b: boolean = false,
@@ -68,14 +68,14 @@ function volume_vector_operation_params(
 ): VolumeVectorOperationParamsDictTagged {
     const params = {
         "@type": "workbench/volume-vector-operation" as const,
+        "vectors-a": vectors_a,
+        "vectors-b": vectors_b,
+        "operation": operation,
         "volume-out": volume_out,
         "magnitude": magnitude,
         "normalize-output": normalize_output,
         "normalize-b": normalize_b,
         "normalize-a": normalize_a,
-        "vectors-a": vectors_a,
-        "vectors-b": vectors_b,
-        "operation": operation,
     };
     return params;
 }
@@ -98,6 +98,9 @@ function volume_vector_operation_cargs(
         "wb_command",
         "-volume-vector-operation"
     );
+    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
+    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
+    cargs.push((params["operation"] ?? null));
     cargs.push((params["volume-out"] ?? null));
     if ((params["magnitude"] ?? false)) {
         cargs.push("-magnitude");
@@ -111,9 +114,6 @@ function volume_vector_operation_cargs(
     if ((params["normalize-a"] ?? false)) {
         cargs.push("-normalize-a");
     }
-    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
-    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
-    cargs.push((params["operation"] ?? null));
     return cargs;
 }
 
@@ -177,10 +177,10 @@ function volume_vector_operation_execute(
  * ADD
  * SUBTRACT.
  *
- * @param volume_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
+ * @param volume_out the output file
  * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param normalize_output normalize output vectors (not valid for dot product)
  * @param normalize_b normalize vectors of second input
@@ -190,17 +190,17 @@ function volume_vector_operation_execute(
  * @returns NamedTuple of outputs (described in `VolumeVectorOperationOutputs`).
  */
 function volume_vector_operation(
-    volume_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
+    volume_out: string,
     magnitude: boolean = false,
     normalize_output: boolean = false,
     normalize_b: boolean = false,
     normalize_a: boolean = false,
     runner: Runner | null = null,
 ): VolumeVectorOperationOutputs {
-    const params = volume_vector_operation_params(volume_out, vectors_a, vectors_b, operation, magnitude, normalize_output, normalize_b, normalize_a)
+    const params = volume_vector_operation_params(vectors_a, vectors_b, operation, volume_out, magnitude, normalize_output, normalize_b, normalize_a)
     return volume_vector_operation_execute(params, runner);
 }
 

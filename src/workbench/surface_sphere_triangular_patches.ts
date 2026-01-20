@@ -74,8 +74,6 @@ function surface_sphere_triangular_patches_cargs(
         "wb_command",
         "-surface-sphere-triangular-patches"
     );
-    cargs.push(
-    );
     cargs.push(execution.inputFile((params["sphere"] ?? null)));
     cargs.push(String((params["divisions"] ?? null)));
     cargs.push((params["text-out"] ?? null));

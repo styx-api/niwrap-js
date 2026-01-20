@@ -13,14 +13,14 @@ const CIFTI_RESTRICT_DENSE_MAP_METADATA: Metadata = {
 
 interface CiftiRestrictDenseMapParamsDict {
     "@type"?: "workbench/cifti-restrict-dense-map";
+    "cifti-in": InputPathType;
+    "direction": string;
     "cifti-out": string;
     "roi-vol"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-cifti"?: InputPathType | null | undefined;
-    "cifti-in": InputPathType;
-    "direction": string;
 }
 type CiftiRestrictDenseMapParamsDictTagged = Required<Pick<CiftiRestrictDenseMapParamsDict, '@type'>> & CiftiRestrictDenseMapParamsDict;
 
@@ -45,9 +45,9 @@ interface CiftiRestrictDenseMapOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti
  * @param cifti_in the input cifti
  * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
+ * @param cifti_out the output cifti
  * @param roi_vol voxels to use
 
 the roi volume file
@@ -67,9 +67,9 @@ the rois as a cifti file
  * @returns Parameter dictionary
  */
 function cifti_restrict_dense_map_params(
-    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
+    cifti_out: string,
     roi_vol: InputPathType | null = null,
     roi_metric: InputPathType | null = null,
     roi_metric_: InputPathType | null = null,
@@ -78,9 +78,9 @@ function cifti_restrict_dense_map_params(
 ): CiftiRestrictDenseMapParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-restrict-dense-map" as const,
-        "cifti-out": cifti_out,
         "cifti-in": cifti_in,
         "direction": direction,
+        "cifti-out": cifti_out,
     };
     if (roi_vol !== null) {
         params["roi-vol"] = roi_vol;
@@ -118,6 +118,8 @@ function cifti_restrict_dense_map_cargs(
         "wb_command",
         "-cifti-restrict-dense-map"
     );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push((params["direction"] ?? null));
     cargs.push((params["cifti-out"] ?? null));
     if ((params["roi-vol"] ?? null) !== null) {
         cargs.push(
@@ -149,8 +151,6 @@ function cifti_restrict_dense_map_cargs(
             execution.inputFile((params["roi-cifti"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -204,9 +204,9 @@ function cifti_restrict_dense_map_execute(
  *
  * Writes a modified version of <cifti-in>, where all brainordinates outside the specified roi(s) are removed from the file.  The direction can be either an integer starting from 1, or the strings 'ROW' or 'COLUMN'.  If -cifti-roi is specified, no other -*-roi option may be specified.  If not using -cifti-roi, any -*-roi options not present will discard the relevant structure, if present in the input file.
  *
- * @param cifti_out the output cifti
  * @param cifti_in the input cifti
  * @param direction which dimension to change the mapping on (integer, 'ROW', or 'COLUMN')
+ * @param cifti_out the output cifti
  * @param roi_vol voxels to use
 
 the roi volume file
@@ -227,9 +227,9 @@ the rois as a cifti file
  * @returns NamedTuple of outputs (described in `CiftiRestrictDenseMapOutputs`).
  */
 function cifti_restrict_dense_map(
-    cifti_out: string,
     cifti_in: InputPathType,
     direction: string,
+    cifti_out: string,
     roi_vol: InputPathType | null = null,
     roi_metric: InputPathType | null = null,
     roi_metric_: InputPathType | null = null,
@@ -237,7 +237,7 @@ function cifti_restrict_dense_map(
     roi_cifti: InputPathType | null = null,
     runner: Runner | null = null,
 ): CiftiRestrictDenseMapOutputs {
-    const params = cifti_restrict_dense_map_params(cifti_out, cifti_in, direction, roi_vol, roi_metric, roi_metric_, roi_metric_2, roi_cifti)
+    const params = cifti_restrict_dense_map_params(cifti_in, direction, cifti_out, roi_vol, roi_metric, roi_metric_, roi_metric_2, roi_cifti)
     return cifti_restrict_dense_map_execute(params, runner);
 }
 

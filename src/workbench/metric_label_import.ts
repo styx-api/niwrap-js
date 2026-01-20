@@ -13,14 +13,14 @@ const METRIC_LABEL_IMPORT_METADATA: Metadata = {
 
 interface MetricLabelImportParamsDict {
     "@type"?: "workbench/metric-label-import";
+    "input": InputPathType;
+    "label-list-file": string;
     "output": string;
     "file"?: string | null | undefined;
     "column"?: string | null | undefined;
     "value"?: number | null | undefined;
     "drop-unused-labels": boolean;
     "discard-others": boolean;
-    "input": InputPathType;
-    "label-list-file": string;
 }
 type MetricLabelImportParamsDictTagged = Required<Pick<MetricLabelImportParamsDict, '@type'>> & MetricLabelImportParamsDict;
 
@@ -45,9 +45,9 @@ interface MetricLabelImportOutputs {
 /**
  * Build parameters.
  *
- * @param output the output gifti label file
  * @param input the input metric file
  * @param label_list_file text file containing the values and names for labels
+ * @param output the output gifti label file
  * @param file read label name hierarchy from a json file
 
 the input json file
@@ -63,9 +63,9 @@ the numeric value for unlabeled (default 0)
  * @returns Parameter dictionary
  */
 function metric_label_import_params(
-    output: string,
     input: InputPathType,
     label_list_file: string,
+    output: string,
     file: string | null = null,
     column: string | null = null,
     value: number | null = null,
@@ -74,11 +74,11 @@ function metric_label_import_params(
 ): MetricLabelImportParamsDictTagged {
     const params = {
         "@type": "workbench/metric-label-import" as const,
+        "input": input,
+        "label-list-file": label_list_file,
         "output": output,
         "drop-unused-labels": drop_unused_labels,
         "discard-others": discard_others,
-        "input": input,
-        "label-list-file": label_list_file,
     };
     if (file !== null) {
         params["file"] = file;
@@ -110,6 +110,8 @@ function metric_label_import_cargs(
         "wb_command",
         "-metric-label-import"
     );
+    cargs.push(execution.inputFile((params["input"] ?? null)));
+    cargs.push((params["label-list-file"] ?? null));
     cargs.push((params["output"] ?? null));
     if ((params["file"] ?? null) !== null) {
         cargs.push(
@@ -135,8 +137,6 @@ function metric_label_import_cargs(
     if ((params["discard-others"] ?? false)) {
         cargs.push("-discard-others");
     }
-    cargs.push(execution.inputFile((params["input"] ?? null)));
-    cargs.push((params["label-list-file"] ?? null));
     return cargs;
 }
 
@@ -206,9 +206,9 @@ function metric_label_import_execute(
  *
  * By default, it will create new label names with names like LABEL_5 for any values encountered that are not mentioned in the list file, specify -discard-others to instead set these values to the "unlabeled" key.
  *
- * @param output the output gifti label file
  * @param input the input metric file
  * @param label_list_file text file containing the values and names for labels
+ * @param output the output gifti label file
  * @param file read label name hierarchy from a json file
 
 the input json file
@@ -225,9 +225,9 @@ the numeric value for unlabeled (default 0)
  * @returns NamedTuple of outputs (described in `MetricLabelImportOutputs`).
  */
 function metric_label_import(
-    output: string,
     input: InputPathType,
     label_list_file: string,
+    output: string,
     file: string | null = null,
     column: string | null = null,
     value: number | null = null,
@@ -235,7 +235,7 @@ function metric_label_import(
     discard_others: boolean = false,
     runner: Runner | null = null,
 ): MetricLabelImportOutputs {
-    const params = metric_label_import_params(output, input, label_list_file, file, column, value, drop_unused_labels, discard_others)
+    const params = metric_label_import_params(input, label_list_file, output, file, column, value, drop_unused_labels, discard_others)
     return metric_label_import_execute(params, runner);
 }
 

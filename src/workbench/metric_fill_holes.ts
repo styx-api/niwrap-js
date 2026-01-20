@@ -13,10 +13,10 @@ const METRIC_FILL_HOLES_METADATA: Metadata = {
 
 interface MetricFillHolesParamsDict {
     "@type"?: "workbench/metric-fill-holes";
-    "metric-out": string;
-    "area-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "metric-in": InputPathType;
+    "metric-out": string;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type MetricFillHolesParamsDictTagged = Required<Pick<MetricFillHolesParamsDict, '@type'>> & MetricFillHolesParamsDict;
 
@@ -41,9 +41,9 @@ interface MetricFillHolesOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output ROI metric
  * @param surface the surface to use for neighbor information
  * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -51,16 +51,16 @@ the corrected vertex areas, as a metric
  * @returns Parameter dictionary
  */
 function metric_fill_holes_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     area_metric: InputPathType | null = null,
 ): MetricFillHolesParamsDictTagged {
     const params = {
         "@type": "workbench/metric-fill-holes" as const,
-        "metric-out": metric_out,
         "surface": surface,
         "metric-in": metric_in,
+        "metric-out": metric_out,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -86,6 +86,8 @@ function metric_fill_holes_cargs(
         "wb_command",
         "-metric-fill-holes"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
@@ -93,8 +95,6 @@ function metric_fill_holes_cargs(
             execution.inputFile((params["area-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -148,9 +148,9 @@ function metric_fill_holes_execute(
  *
  * Finds all connected areas that are not included in the ROI, and writes ones into all but the largest one, in terms of surface area.
  *
- * @param metric_out the output ROI metric
  * @param surface the surface to use for neighbor information
  * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -159,13 +159,13 @@ the corrected vertex areas, as a metric
  * @returns NamedTuple of outputs (described in `MetricFillHolesOutputs`).
  */
 function metric_fill_holes(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricFillHolesOutputs {
-    const params = metric_fill_holes_params(metric_out, surface, metric_in, area_metric)
+    const params = metric_fill_holes_params(surface, metric_in, metric_out, area_metric)
     return metric_fill_holes_execute(params, runner);
 }
 

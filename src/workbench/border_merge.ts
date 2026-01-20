@@ -235,10 +235,10 @@ function border_merge_cargs(
         "wb_command",
         "-border-merge"
     );
-    cargs.push(
-        (params["border-file-out"] ?? null),
-        ...(((params["border"] ?? null) !== null) ? (params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["border-file-out"] ?? null));
+    if ((params["border"] ?? null) !== null) {
+        cargs.push(...(params["border"] ?? null).map(s => border_merge_border_cargs(s, execution)).flat());
+    }
     return cargs;
 }
 

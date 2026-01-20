@@ -420,14 +420,16 @@ function cifti_create_dense_timeseries_cargs(
         "wb_command",
         "-cifti-create-dense-timeseries"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["volume"] ?? null) !== null) ? cifti_create_dense_timeseries_volume_cargs((params["volume"] ?? null), execution) : []),
-        ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_left_metric_cargs((params["left-metric"] ?? null), execution) : []),
-        ...(((params["right-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_right_metric_cargs((params["right-metric"] ?? null), execution) : []),
-        ...(((params["cerebellum-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_cerebellum_metric_cargs((params["cerebellum-metric"] ?? null), execution) : []),
-        ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_timeseries_metric_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["volume"] ?? null) !== null || (params["left-metric"] ?? null) !== null || (params["right-metric"] ?? null) !== null || (params["cerebellum-metric"] ?? null) !== null || (params["metric"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["volume"] ?? null) !== null) ? cifti_create_dense_timeseries_volume_cargs((params["volume"] ?? null), execution) : []),
+            ...(((params["left-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_left_metric_cargs((params["left-metric"] ?? null), execution) : []),
+            ...(((params["right-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_right_metric_cargs((params["right-metric"] ?? null), execution) : []),
+            ...(((params["cerebellum-metric"] ?? null) !== null) ? cifti_create_dense_timeseries_cerebellum_metric_cargs((params["cerebellum-metric"] ?? null), execution) : []),
+            ...(((params["metric"] ?? null) !== null) ? (params["metric"] ?? null).map(s => cifti_create_dense_timeseries_metric_cargs(s, execution)).flat() : [])
+        );
+    }
     if ((params["unit"] ?? null) !== null) {
         cargs.push(
             "-unit",

@@ -235,10 +235,10 @@ function label_merge_cargs(
         "wb_command",
         "-label-merge"
     );
-    cargs.push(
-        (params["label-out"] ?? null),
-        ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["label-out"] ?? null));
+    if ((params["label"] ?? null) !== null) {
+        cargs.push(...(params["label"] ?? null).map(s => label_merge_label_cargs(s, execution)).flat());
+    }
     return cargs;
 }
 

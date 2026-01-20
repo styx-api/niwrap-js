@@ -13,10 +13,10 @@ const SURFACE_CUT_RESAMPLE_METADATA: Metadata = {
 
 interface SurfaceCutResampleParamsDict {
     "@type"?: "workbench/surface-cut-resample";
-    "surface-out": string;
     "surface-in": InputPathType;
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
+    "surface-out": string;
 }
 type SurfaceCutResampleParamsDictTagged = Required<Pick<SurfaceCutResampleParamsDict, '@type'>> & SurfaceCutResampleParamsDict;
 
@@ -41,25 +41,25 @@ interface SurfaceCutResampleOutputs {
 /**
  * Build parameters.
  *
- * @param surface_out the output surface file
  * @param surface_in the surface file to resample
  * @param current_sphere a sphere surface with the mesh that the input surface is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param surface_out the output surface file
  *
  * @returns Parameter dictionary
  */
 function surface_cut_resample_params(
-    surface_out: string,
     surface_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
+    surface_out: string,
 ): SurfaceCutResampleParamsDictTagged {
     const params = {
         "@type": "workbench/surface-cut-resample" as const,
-        "surface-out": surface_out,
         "surface-in": surface_in,
         "current-sphere": current_sphere,
         "new-sphere": new_sphere,
+        "surface-out": surface_out,
     };
     return params;
 }
@@ -82,10 +82,10 @@ function surface_cut_resample_cargs(
         "wb_command",
         "-surface-cut-resample"
     );
-    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
+    cargs.push((params["surface-out"] ?? null));
     return cargs;
 }
 
@@ -139,22 +139,22 @@ function surface_cut_resample_execute(
  *
  * Resamples a surface file, given two spherical surfaces that are in register.  Barycentric resampling is used, because it is usually better for resampling surfaces, and because it is needed to figure out the new topology anyway.
  *
- * @param surface_out the output surface file
  * @param surface_in the surface file to resample
  * @param current_sphere a sphere surface with the mesh that the input surface is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param surface_out the output surface file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceCutResampleOutputs`).
  */
 function surface_cut_resample(
-    surface_out: string,
     surface_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
+    surface_out: string,
     runner: Runner | null = null,
 ): SurfaceCutResampleOutputs {
-    const params = surface_cut_resample_params(surface_out, surface_in, current_sphere, new_sphere)
+    const params = surface_cut_resample_params(surface_in, current_sphere, new_sphere, surface_out)
     return surface_cut_resample_execute(params, runner);
 }
 

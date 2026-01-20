@@ -37,8 +37,8 @@ type SceneFileMergeSceneFileParamsDictTagged = Required<Pick<SceneFileMergeScene
 
 interface SceneFileMergeParamsDict {
     "@type"?: "workbench/scene-file-merge";
-    "scene-file"?: Array<SceneFileMergeSceneFileParamsDict> | null | undefined;
     "scene-file-out": string;
+    "scene-file"?: Array<SceneFileMergeSceneFileParamsDict> | null | undefined;
 }
 type SceneFileMergeParamsDictTagged = Required<Pick<SceneFileMergeParamsDict, '@type'>> & SceneFileMergeParamsDict;
 
@@ -231,10 +231,10 @@ function scene_file_merge_cargs(
         "wb_command",
         "-scene-file-merge"
     );
+    cargs.push((params["scene-file-out"] ?? null));
     if ((params["scene-file"] ?? null) !== null) {
         cargs.push(...(params["scene-file"] ?? null).map(s => scene_file_merge_scene_file_cargs(s, execution)).flat());
     }
-    cargs.push((params["scene-file-out"] ?? null));
     return cargs;
 }
 

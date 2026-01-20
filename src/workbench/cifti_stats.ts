@@ -21,12 +21,12 @@ type CiftiStatsRoiParamsDictTagged = Required<Pick<CiftiStatsRoiParamsDict, '@ty
 
 interface CiftiStatsParamsDict {
     "@type"?: "workbench/cifti-stats";
+    "cifti-in": InputPathType;
     "roi"?: CiftiStatsRoiParamsDict | null | undefined;
     "column"?: number | null | undefined;
     "percent"?: number | null | undefined;
     "operation"?: string | null | undefined;
     "show-map-name": boolean;
-    "cifti-in": InputPathType;
 }
 type CiftiStatsParamsDictTagged = Required<Pick<CiftiStatsParamsDict, '@type'>> & CiftiStatsParamsDict;
 
@@ -117,8 +117,8 @@ function cifti_stats_params(
 ): CiftiStatsParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-stats" as const,
-        "show-map-name": show_map_name,
         "cifti-in": cifti_in,
+        "show-map-name": show_map_name,
     };
     if (roi !== null) {
         params["roi"] = roi;
@@ -153,6 +153,7 @@ function cifti_stats_cargs(
         "wb_command",
         "-cifti-stats"
     );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     if ((params["roi"] ?? null) !== null) {
         cargs.push(...cifti_stats_roi_cargs((params["roi"] ?? null), execution));
     }
@@ -177,7 +178,6 @@ function cifti_stats_cargs(
     if ((params["show-map-name"] ?? false)) {
         cargs.push("-show-map-name");
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     return cargs;
 }
 

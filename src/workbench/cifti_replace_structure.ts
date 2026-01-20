@@ -46,14 +46,14 @@ type CiftiReplaceStructureVolumeParamsDictTagged = Required<Pick<CiftiReplaceStr
 
 interface CiftiReplaceStructureParamsDict {
     "@type"?: "workbench/cifti-replace-structure";
+    "cifti": string;
+    "direction": string;
     "volume-all"?: CiftiReplaceStructureVolumeAllParamsDict | null | undefined;
     "label"?: Array<CiftiReplaceStructureLabelParamsDict> | null | undefined;
     "metric"?: Array<CiftiReplaceStructureMetricParamsDict> | null | undefined;
     "volume"?: Array<CiftiReplaceStructureVolumeParamsDict> | null | undefined;
     "action"?: string | null | undefined;
     "discard-unused-labels": boolean;
-    "cifti": string;
-    "direction": string;
 }
 type CiftiReplaceStructureParamsDictTagged = Required<Pick<CiftiReplaceStructureParamsDict, '@type'>> & CiftiReplaceStructureParamsDict;
 
@@ -279,9 +279,9 @@ function cifti_replace_structure_params(
 ): CiftiReplaceStructureParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-replace-structure" as const,
-        "discard-unused-labels": discard_unused_labels,
         "cifti": cifti,
         "direction": direction,
+        "discard-unused-labels": discard_unused_labels,
     };
     if (volume_all !== null) {
         params["volume-all"] = volume_all;
@@ -319,6 +319,8 @@ function cifti_replace_structure_cargs(
         "wb_command",
         "-cifti-replace-structure"
     );
+    cargs.push((params["cifti"] ?? null));
+    cargs.push((params["direction"] ?? null));
     if ((params["volume-all"] ?? null) !== null || (params["label"] ?? null) !== null || (params["metric"] ?? null) !== null || (params["volume"] ?? null) !== null) {
         cargs.push(
             ...(((params["volume-all"] ?? null) !== null) ? cifti_replace_structure_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
@@ -336,8 +338,6 @@ function cifti_replace_structure_cargs(
     if ((params["discard-unused-labels"] ?? false)) {
         cargs.push("-discard-unused-labels");
     }
-    cargs.push((params["cifti"] ?? null));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 

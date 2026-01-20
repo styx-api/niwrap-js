@@ -74,8 +74,6 @@ function surface_affine_regression_cargs(
         "wb_command",
         "-surface-affine-regression"
     );
-    cargs.push(
-    );
     cargs.push(execution.inputFile((params["source"] ?? null)));
     cargs.push(execution.inputFile((params["target"] ?? null)));
     cargs.push((params["affine-out"] ?? null));

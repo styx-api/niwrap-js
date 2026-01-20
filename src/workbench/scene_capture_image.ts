@@ -45,6 +45,9 @@ type SceneCaptureImageConnDbLoginParamsDictTagged = Required<Pick<SceneCaptureIm
 
 interface SceneCaptureImageParamsDict {
     "@type"?: "workbench/scene-capture-image";
+    "scene-file": string;
+    "scene-name-or-number": string;
+    "image-file-name": string;
     "size-width-height"?: SceneCaptureImageSizeWidthHeightParamsDict | null | undefined;
     "resolution"?: SceneCaptureImageResolutionParamsDict | null | undefined;
     "set-map-yoke"?: SceneCaptureImageSetMapYokeParamsDict | null | undefined;
@@ -59,9 +62,6 @@ interface SceneCaptureImageParamsDict {
     "no-scene-colors": boolean;
     "size-capture": boolean;
     "size-window": boolean;
-    "scene-file": string;
-    "scene-name-or-number": string;
-    "image-file-name": string;
 }
 type SceneCaptureImageParamsDictTagged = Required<Pick<SceneCaptureImageParamsDict, '@type'>> & SceneCaptureImageParamsDict;
 
@@ -324,14 +324,14 @@ function scene_capture_image_params(
 ): SceneCaptureImageParamsDictTagged {
     const params = {
         "@type": "workbench/scene-capture-image" as const,
+        "scene-file": scene_file,
+        "scene-name-or-number": scene_name_or_number,
+        "image-file-name": image_file_name,
         "print-image-info": print_image_info,
         "show-capture-settings": show_capture_settings,
         "no-scene-colors": no_scene_colors,
         "size-capture": size_capture,
         "size-window": size_window,
-        "scene-file": scene_file,
-        "scene-name-or-number": scene_name_or_number,
-        "image-file-name": image_file_name,
     };
     if (size_width_height !== null) {
         params["size-width-height"] = size_width_height;
@@ -381,6 +381,9 @@ function scene_capture_image_cargs(
         "wb_command",
         "-scene-capture-image"
     );
+    cargs.push((params["scene-file"] ?? null));
+    cargs.push((params["scene-name-or-number"] ?? null));
+    cargs.push((params["image-file-name"] ?? null));
     if ((params["size-width-height"] ?? null) !== null || (params["resolution"] ?? null) !== null || (params["set-map-yoke"] ?? null) !== null || (params["conn-db-login"] ?? null) !== null) {
         cargs.push(
             ...(((params["size-width-height"] ?? null) !== null) ? scene_capture_image_size_width_height_cargs((params["size-width-height"] ?? null), execution) : []),
@@ -434,9 +437,6 @@ function scene_capture_image_cargs(
     if ((params["size-window"] ?? false)) {
         cargs.push("-size-window");
     }
-    cargs.push((params["scene-file"] ?? null));
-    cargs.push((params["scene-name-or-number"] ?? null));
-    cargs.push((params["image-file-name"] ?? null));
     return cargs;
 }
 

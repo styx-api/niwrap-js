@@ -40,11 +40,11 @@ type CiftiExportDenseMappingVolumeParamsDictTagged = Required<Pick<CiftiExportDe
 
 interface CiftiExportDenseMappingParamsDict {
     "@type"?: "workbench/cifti-export-dense-mapping";
+    "cifti": InputPathType;
+    "direction": string;
     "volume-all"?: CiftiExportDenseMappingVolumeAllParamsDict | null | undefined;
     "surface"?: Array<CiftiExportDenseMappingSurfaceParamsDict> | null | undefined;
     "volume"?: Array<CiftiExportDenseMappingVolumeParamsDict> | null | undefined;
-    "cifti": InputPathType;
-    "direction": string;
 }
 type CiftiExportDenseMappingParamsDictTagged = Required<Pick<CiftiExportDenseMappingParamsDict, '@type'>> & CiftiExportDenseMappingParamsDict;
 
@@ -264,6 +264,8 @@ function cifti_export_dense_mapping_cargs(
         "wb_command",
         "-cifti-export-dense-mapping"
     );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push((params["direction"] ?? null));
     if ((params["volume-all"] ?? null) !== null || (params["surface"] ?? null) !== null || (params["volume"] ?? null) !== null) {
         cargs.push(
             ...(((params["volume-all"] ?? null) !== null) ? cifti_export_dense_mapping_volume_all_cargs((params["volume-all"] ?? null), execution) : []),
@@ -271,8 +273,6 @@ function cifti_export_dense_mapping_cargs(
             ...(((params["volume"] ?? null) !== null) ? (params["volume"] ?? null).map(s => cifti_export_dense_mapping_volume_cargs(s, execution)).flat() : [])
         );
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 

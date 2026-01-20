@@ -13,10 +13,10 @@ const SURFACE_GENERATE_INFLATED_METADATA: Metadata = {
 
 interface SurfaceGenerateInflatedParamsDict {
     "@type"?: "workbench/surface-generate-inflated";
+    "anatomical-surface-in": InputPathType;
     "inflated-surface-out": string;
     "very-inflated-surface-out": string;
     "iterations-scale-value"?: number | null | undefined;
-    "anatomical-surface-in": InputPathType;
 }
 type SurfaceGenerateInflatedParamsDictTagged = Required<Pick<SurfaceGenerateInflatedParamsDict, '@type'>> & SurfaceGenerateInflatedParamsDict;
 
@@ -45,9 +45,9 @@ interface SurfaceGenerateInflatedOutputs {
 /**
  * Build parameters.
  *
+ * @param anatomical_surface_in the anatomical surface
  * @param inflated_surface_out the output inflated surface
  * @param very_inflated_surface_out the output very inflated surface
- * @param anatomical_surface_in the anatomical surface
  * @param iterations_scale_value optional iterations scaling
 
 iterations-scale value
@@ -55,16 +55,16 @@ iterations-scale value
  * @returns Parameter dictionary
  */
 function surface_generate_inflated_params(
+    anatomical_surface_in: InputPathType,
     inflated_surface_out: string,
     very_inflated_surface_out: string,
-    anatomical_surface_in: InputPathType,
     iterations_scale_value: number | null = null,
 ): SurfaceGenerateInflatedParamsDictTagged {
     const params = {
         "@type": "workbench/surface-generate-inflated" as const,
+        "anatomical-surface-in": anatomical_surface_in,
         "inflated-surface-out": inflated_surface_out,
         "very-inflated-surface-out": very_inflated_surface_out,
-        "anatomical-surface-in": anatomical_surface_in,
     };
     if (iterations_scale_value !== null) {
         params["iterations-scale-value"] = iterations_scale_value;
@@ -90,17 +90,15 @@ function surface_generate_inflated_cargs(
         "wb_command",
         "-surface-generate-inflated"
     );
-    cargs.push(
-        (params["inflated-surface-out"] ?? null),
-        (params["very-inflated-surface-out"] ?? null)
-    );
+    cargs.push(execution.inputFile((params["anatomical-surface-in"] ?? null)));
+    cargs.push((params["inflated-surface-out"] ?? null));
+    cargs.push((params["very-inflated-surface-out"] ?? null));
     if ((params["iterations-scale-value"] ?? null) !== null) {
         cargs.push(
             "-iterations-scale",
             String((params["iterations-scale-value"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["anatomical-surface-in"] ?? null)));
     return cargs;
 }
 
@@ -155,9 +153,9 @@ function surface_generate_inflated_execute(
  *
  * Generate inflated and very inflated surfaces. The output surfaces are 'matched' (have same XYZ range) to the anatomical surface. In most cases, an iterations-scale of 1.0 (default) is sufficient.  However, if the surface contains a large number of vertices (150,000), try an iterations-scale of 2.5.
  *
+ * @param anatomical_surface_in the anatomical surface
  * @param inflated_surface_out the output inflated surface
  * @param very_inflated_surface_out the output very inflated surface
- * @param anatomical_surface_in the anatomical surface
  * @param iterations_scale_value optional iterations scaling
 
 iterations-scale value
@@ -166,13 +164,13 @@ iterations-scale value
  * @returns NamedTuple of outputs (described in `SurfaceGenerateInflatedOutputs`).
  */
 function surface_generate_inflated(
+    anatomical_surface_in: InputPathType,
     inflated_surface_out: string,
     very_inflated_surface_out: string,
-    anatomical_surface_in: InputPathType,
     iterations_scale_value: number | null = null,
     runner: Runner | null = null,
 ): SurfaceGenerateInflatedOutputs {
-    const params = surface_generate_inflated_params(inflated_surface_out, very_inflated_surface_out, anatomical_surface_in, iterations_scale_value)
+    const params = surface_generate_inflated_params(anatomical_surface_in, inflated_surface_out, very_inflated_surface_out, iterations_scale_value)
     return surface_generate_inflated_execute(params, runner);
 }
 

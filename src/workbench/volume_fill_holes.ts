@@ -13,8 +13,8 @@ const VOLUME_FILL_HOLES_METADATA: Metadata = {
 
 interface VolumeFillHolesParamsDict {
     "@type"?: "workbench/volume-fill-holes";
-    "volume-out": string;
     "volume-in": InputPathType;
+    "volume-out": string;
 }
 type VolumeFillHolesParamsDictTagged = Required<Pick<VolumeFillHolesParamsDict, '@type'>> & VolumeFillHolesParamsDict;
 
@@ -39,19 +39,19 @@ interface VolumeFillHolesOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output ROI volume
  * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
  *
  * @returns Parameter dictionary
  */
 function volume_fill_holes_params(
-    volume_out: string,
     volume_in: InputPathType,
+    volume_out: string,
 ): VolumeFillHolesParamsDictTagged {
     const params = {
         "@type": "workbench/volume-fill-holes" as const,
-        "volume-out": volume_out,
         "volume-in": volume_in,
+        "volume-out": volume_out,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function volume_fill_holes_cargs(
         "wb_command",
         "-volume-fill-holes"
     );
-    cargs.push((params["volume-out"] ?? null));
     cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push((params["volume-out"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function volume_fill_holes_execute(
  *
  * Finds all face-connected parts that are not included in the ROI, and fills all but the largest one with ones.
  *
- * @param volume_out the output ROI volume
  * @param volume_in the input ROI volume
+ * @param volume_out the output ROI volume
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeFillHolesOutputs`).
  */
 function volume_fill_holes(
-    volume_out: string,
     volume_in: InputPathType,
+    volume_out: string,
     runner: Runner | null = null,
 ): VolumeFillHolesOutputs {
-    const params = volume_fill_holes_params(volume_out, volume_in)
+    const params = volume_fill_holes_params(volume_in, volume_out)
     return volume_fill_holes_execute(params, runner);
 }
 

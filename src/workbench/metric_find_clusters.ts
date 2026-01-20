@@ -13,6 +13,10 @@ const METRIC_FIND_CLUSTERS_METADATA: Metadata = {
 
 interface MetricFindClustersParamsDict {
     "@type"?: "workbench/metric-find-clusters";
+    "surface": InputPathType;
+    "metric-in": InputPathType;
+    "value-threshold": number;
+    "minimum-area": number;
     "metric-out": string;
     "startval"?: number | null | undefined;
     "distance"?: number | null | undefined;
@@ -21,10 +25,6 @@ interface MetricFindClustersParamsDict {
     "area-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "less-than": boolean;
-    "surface": InputPathType;
-    "metric-in": InputPathType;
-    "value-threshold": number;
-    "minimum-area": number;
 }
 type MetricFindClustersParamsDictTagged = Required<Pick<MetricFindClustersParamsDict, '@type'>> & MetricFindClustersParamsDict;
 
@@ -49,11 +49,11 @@ interface MetricFindClustersOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param metric_in the input metric
  * @param value_threshold threshold for data values
  * @param minimum_area threshold for cluster area, in mm^2
+ * @param metric_out the output metric
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
@@ -77,11 +77,11 @@ the roi, as a metric
  * @returns Parameter dictionary
  */
 function metric_find_clusters_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     value_threshold: number,
     minimum_area: number,
+    metric_out: string,
     startval: number | null = null,
     distance: number | null = null,
     ratio: number | null = null,
@@ -92,12 +92,12 @@ function metric_find_clusters_params(
 ): MetricFindClustersParamsDictTagged {
     const params = {
         "@type": "workbench/metric-find-clusters" as const,
-        "metric-out": metric_out,
-        "less-than": less_than,
         "surface": surface,
         "metric-in": metric_in,
         "value-threshold": value_threshold,
         "minimum-area": minimum_area,
+        "metric-out": metric_out,
+        "less-than": less_than,
     };
     if (startval !== null) {
         params["startval"] = startval;
@@ -138,6 +138,10 @@ function metric_find_clusters_cargs(
         "wb_command",
         "-metric-find-clusters"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push(String((params["value-threshold"] ?? null)));
+    cargs.push(String((params["minimum-area"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["startval"] ?? null) !== null) {
         cargs.push(
@@ -178,10 +182,6 @@ function metric_find_clusters_cargs(
     if ((params["less-than"] ?? false)) {
         cargs.push("-less-than");
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
-    cargs.push(String((params["value-threshold"] ?? null)));
-    cargs.push(String((params["minimum-area"] ?? null)));
     return cargs;
 }
 
@@ -235,11 +235,11 @@ function metric_find_clusters_execute(
  *
  * Outputs a metric with nonzero integers for all vertices within a large enough cluster, and zeros elsewhere.  The integers denote cluster membership (by default, first cluster found will use value 1, second cluster 2, etc).  Cluster values are not reused across maps of the output, but instead keep counting up.  By default, values greater than <value-threshold> are considered to be in a cluster, use -less-than to test for values less than the threshold.  To apply this as a mask to the data, or to do more complicated thresholding, see -metric-math.
  *
- * @param metric_out the output metric
  * @param surface the surface to compute on
  * @param metric_in the input metric
  * @param value_threshold threshold for data values
  * @param minimum_area threshold for cluster area, in mm^2
+ * @param metric_out the output metric
  * @param startval start labeling clusters from a value other than 1
 
 the value to give the first cluster found
@@ -264,11 +264,11 @@ the roi, as a metric
  * @returns NamedTuple of outputs (described in `MetricFindClustersOutputs`).
  */
 function metric_find_clusters(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     value_threshold: number,
     minimum_area: number,
+    metric_out: string,
     startval: number | null = null,
     distance: number | null = null,
     ratio: number | null = null,
@@ -278,7 +278,7 @@ function metric_find_clusters(
     less_than: boolean = false,
     runner: Runner | null = null,
 ): MetricFindClustersOutputs {
-    const params = metric_find_clusters_params(metric_out, surface, metric_in, value_threshold, minimum_area, startval, distance, ratio, column, area_metric, roi_metric, less_than)
+    const params = metric_find_clusters_params(surface, metric_in, value_threshold, minimum_area, metric_out, startval, distance, ratio, column, area_metric, roi_metric, less_than)
     return metric_find_clusters_execute(params, runner);
 }
 

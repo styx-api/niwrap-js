@@ -13,12 +13,12 @@ const ZIP_SCENE_FILE_METADATA: Metadata = {
 
 interface ZipSceneFileParamsDict {
     "@type"?: "workbench/zip-scene-file";
-    "directory"?: string | null | undefined;
-    "write-scene-file": boolean;
-    "skip-missing": boolean;
     "scene-file": string;
     "extract-folder": string;
     "zip-file": string;
+    "directory"?: string | null | undefined;
+    "write-scene-file": boolean;
+    "skip-missing": boolean;
 }
 type ZipSceneFileParamsDictTagged = Required<Pick<ZipSceneFileParamsDict, '@type'>> & ZipSceneFileParamsDict;
 
@@ -60,11 +60,11 @@ function zip_scene_file_params(
 ): ZipSceneFileParamsDictTagged {
     const params = {
         "@type": "workbench/zip-scene-file" as const,
-        "write-scene-file": write_scene_file,
-        "skip-missing": skip_missing,
         "scene-file": scene_file,
         "extract-folder": extract_folder,
         "zip-file": zip_file,
+        "write-scene-file": write_scene_file,
+        "skip-missing": skip_missing,
     };
     if (directory !== null) {
         params["directory"] = directory;
@@ -90,6 +90,9 @@ function zip_scene_file_cargs(
         "wb_command",
         "-zip-scene-file"
     );
+    cargs.push((params["scene-file"] ?? null));
+    cargs.push((params["extract-folder"] ?? null));
+    cargs.push((params["zip-file"] ?? null));
     if ((params["directory"] ?? null) !== null) {
         cargs.push(
             "-base-dir",
@@ -102,9 +105,6 @@ function zip_scene_file_cargs(
     if ((params["skip-missing"] ?? false)) {
         cargs.push("-skip-missing");
     }
-    cargs.push((params["scene-file"] ?? null));
-    cargs.push((params["extract-folder"] ?? null));
-    cargs.push((params["zip-file"] ?? null));
     return cargs;
 }
 

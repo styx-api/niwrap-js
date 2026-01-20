@@ -13,14 +13,14 @@ const CIFTI_VECTOR_OPERATION_METADATA: Metadata = {
 
 interface CiftiVectorOperationParamsDict {
     "@type"?: "workbench/cifti-vector-operation";
+    "vectors-a": InputPathType;
+    "vectors-b": InputPathType;
+    "operation": string;
     "cifti-out": string;
     "magnitude": boolean;
     "normalize-output": boolean;
     "normalize-b": boolean;
     "normalize-a": boolean;
-    "vectors-a": InputPathType;
-    "vectors-b": InputPathType;
-    "operation": string;
 }
 type CiftiVectorOperationParamsDictTagged = Required<Pick<CiftiVectorOperationParamsDict, '@type'>> & CiftiVectorOperationParamsDict;
 
@@ -45,10 +45,10 @@ interface CiftiVectorOperationOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
+ * @param cifti_out the output file
  * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param normalize_output normalize output vectors (not valid for dot product)
  * @param normalize_b normalize vectors of second input
@@ -57,10 +57,10 @@ interface CiftiVectorOperationOutputs {
  * @returns Parameter dictionary
  */
 function cifti_vector_operation_params(
-    cifti_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
+    cifti_out: string,
     magnitude: boolean = false,
     normalize_output: boolean = false,
     normalize_b: boolean = false,
@@ -68,14 +68,14 @@ function cifti_vector_operation_params(
 ): CiftiVectorOperationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-vector-operation" as const,
+        "vectors-a": vectors_a,
+        "vectors-b": vectors_b,
+        "operation": operation,
         "cifti-out": cifti_out,
         "magnitude": magnitude,
         "normalize-output": normalize_output,
         "normalize-b": normalize_b,
         "normalize-a": normalize_a,
-        "vectors-a": vectors_a,
-        "vectors-b": vectors_b,
-        "operation": operation,
     };
     return params;
 }
@@ -98,6 +98,9 @@ function cifti_vector_operation_cargs(
         "wb_command",
         "-cifti-vector-operation"
     );
+    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
+    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
+    cargs.push((params["operation"] ?? null));
     cargs.push((params["cifti-out"] ?? null));
     if ((params["magnitude"] ?? false)) {
         cargs.push("-magnitude");
@@ -111,9 +114,6 @@ function cifti_vector_operation_cargs(
     if ((params["normalize-a"] ?? false)) {
         cargs.push("-normalize-a");
     }
-    cargs.push(execution.inputFile((params["vectors-a"] ?? null)));
-    cargs.push(execution.inputFile((params["vectors-b"] ?? null)));
-    cargs.push((params["operation"] ?? null));
     return cargs;
 }
 
@@ -177,10 +177,10 @@ function cifti_vector_operation_execute(
  * ADD
  * SUBTRACT.
  *
- * @param cifti_out the output file
  * @param vectors_a first vector input file
  * @param vectors_b second vector input file
  * @param operation what vector operation to do
+ * @param cifti_out the output file
  * @param magnitude output the magnitude of the result (not valid for dot product)
  * @param normalize_output normalize output vectors (not valid for dot product)
  * @param normalize_b normalize vectors of second input
@@ -190,17 +190,17 @@ function cifti_vector_operation_execute(
  * @returns NamedTuple of outputs (described in `CiftiVectorOperationOutputs`).
  */
 function cifti_vector_operation(
-    cifti_out: string,
     vectors_a: InputPathType,
     vectors_b: InputPathType,
     operation: string,
+    cifti_out: string,
     magnitude: boolean = false,
     normalize_output: boolean = false,
     normalize_b: boolean = false,
     normalize_a: boolean = false,
     runner: Runner | null = null,
 ): CiftiVectorOperationOutputs {
-    const params = cifti_vector_operation_params(cifti_out, vectors_a, vectors_b, operation, magnitude, normalize_output, normalize_b, normalize_a)
+    const params = cifti_vector_operation_params(vectors_a, vectors_b, operation, cifti_out, magnitude, normalize_output, normalize_b, normalize_a)
     return cifti_vector_operation_execute(params, runner);
 }
 

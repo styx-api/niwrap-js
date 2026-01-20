@@ -13,11 +13,11 @@ const LABEL_TO_BORDER_METADATA: Metadata = {
 
 interface LabelToBorderParamsDict {
     "@type"?: "workbench/label-to-border";
+    "surface": InputPathType;
+    "label-in": InputPathType;
     "border-out": string;
     "column"?: string | null | undefined;
     "fraction"?: number | null | undefined;
-    "surface": InputPathType;
-    "label-in": InputPathType;
 }
 type LabelToBorderParamsDictTagged = Required<Pick<LabelToBorderParamsDict, '@type'>> & LabelToBorderParamsDict;
 
@@ -42,9 +42,9 @@ interface LabelToBorderOutputs {
 /**
  * Build parameters.
  *
- * @param border_out the output border file
  * @param surface the surface to use for neighbor information
  * @param label_in the input label file
+ * @param border_out the output border file
  * @param column select a single column
 
 the column number or name
@@ -55,17 +55,17 @@ fraction along edge from inside vertex (default 0.33)
  * @returns Parameter dictionary
  */
 function label_to_border_params(
-    border_out: string,
     surface: InputPathType,
     label_in: InputPathType,
+    border_out: string,
     column: string | null = null,
     fraction: number | null = null,
 ): LabelToBorderParamsDictTagged {
     const params = {
         "@type": "workbench/label-to-border" as const,
-        "border-out": border_out,
         "surface": surface,
         "label-in": label_in,
+        "border-out": border_out,
     };
     if (column !== null) {
         params["column"] = column;
@@ -94,6 +94,8 @@ function label_to_border_cargs(
         "wb_command",
         "-label-to-border"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["border-out"] ?? null));
     if ((params["column"] ?? null) !== null) {
         cargs.push(
@@ -107,8 +109,6 @@ function label_to_border_cargs(
             String((params["fraction"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }
 
@@ -162,9 +162,9 @@ function label_to_border_execute(
  *
  * For each label, finds all edges on the mesh that cross the boundary of the label, and draws borders through them.  By default, this is done on all columns in the input file, using the map name as the class name for the border.
  *
- * @param border_out the output border file
  * @param surface the surface to use for neighbor information
  * @param label_in the input label file
+ * @param border_out the output border file
  * @param column select a single column
 
 the column number or name
@@ -176,14 +176,14 @@ fraction along edge from inside vertex (default 0.33)
  * @returns NamedTuple of outputs (described in `LabelToBorderOutputs`).
  */
 function label_to_border(
-    border_out: string,
     surface: InputPathType,
     label_in: InputPathType,
+    border_out: string,
     column: string | null = null,
     fraction: number | null = null,
     runner: Runner | null = null,
 ): LabelToBorderOutputs {
-    const params = label_to_border_params(border_out, surface, label_in, column, fraction)
+    const params = label_to_border_params(surface, label_in, border_out, column, fraction)
     return label_to_border_execute(params, runner);
 }
 

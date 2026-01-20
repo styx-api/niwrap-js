@@ -46,6 +46,10 @@ type CiftiSmoothingSurfaceParamsDictTagged = Required<Pick<CiftiSmoothingSurface
 
 interface CiftiSmoothingParamsDict {
     "@type"?: "workbench/cifti-smoothing";
+    "cifti": InputPathType;
+    "surface-kernel": number;
+    "volume-kernel": number;
+    "direction": string;
     "cifti-out": string;
     "left-surface"?: CiftiSmoothingLeftSurfaceParamsDict | null | undefined;
     "right-surface"?: CiftiSmoothingRightSurfaceParamsDict | null | undefined;
@@ -56,10 +60,6 @@ interface CiftiSmoothingParamsDict {
     "fix-zeros-surface": boolean;
     "fix-zeros-volume": boolean;
     "fwhm": boolean;
-    "cifti": InputPathType;
-    "surface-kernel": number;
-    "volume-kernel": number;
-    "direction": string;
 }
 type CiftiSmoothingParamsDictTagged = Required<Pick<CiftiSmoothingParamsDict, '@type'>> & CiftiSmoothingParamsDict;
 
@@ -296,11 +296,11 @@ interface CiftiSmoothingOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param direction which dimension to smooth along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param left_surface specify the left cortical surface to use
  * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -316,11 +316,11 @@ the regions to smooth within, as a cifti file
  * @returns Parameter dictionary
  */
 function cifti_smoothing_params(
-    cifti_out: string,
     cifti: InputPathType,
     surface_kernel: number,
     volume_kernel: number,
     direction: string,
+    cifti_out: string,
     left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
     right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
@@ -333,15 +333,15 @@ function cifti_smoothing_params(
 ): CiftiSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-smoothing" as const,
+        "cifti": cifti,
+        "surface-kernel": surface_kernel,
+        "volume-kernel": volume_kernel,
+        "direction": direction,
         "cifti-out": cifti_out,
         "merged-volume": merged_volume,
         "fix-zeros-surface": fix_zeros_surface,
         "fix-zeros-volume": fix_zeros_volume,
         "fwhm": fwhm,
-        "cifti": cifti,
-        "surface-kernel": surface_kernel,
-        "volume-kernel": volume_kernel,
-        "direction": direction,
     };
     if (left_surface !== null) {
         params["left-surface"] = left_surface;
@@ -379,13 +379,19 @@ function cifti_smoothing_cargs(
         "wb_command",
         "-cifti-smoothing"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["left-surface"] ?? null) !== null) ? cifti_smoothing_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-        ...(((params["right-surface"] ?? null) !== null) ? cifti_smoothing_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_smoothing_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-        ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_smoothing_surface_cargs(s, execution)).flat() : [])
-    );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push(String((params["surface-kernel"] ?? null)));
+    cargs.push(String((params["volume-kernel"] ?? null)));
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["surface"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["left-surface"] ?? null) !== null) ? cifti_smoothing_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+            ...(((params["right-surface"] ?? null) !== null) ? cifti_smoothing_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_smoothing_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
+            ...(((params["surface"] ?? null) !== null) ? (params["surface"] ?? null).map(s => cifti_smoothing_surface_cargs(s, execution)).flat() : [])
+        );
+    }
     if ((params["roi-cifti"] ?? null) !== null) {
         cargs.push(
             "-cifti-roi",
@@ -404,10 +410,6 @@ function cifti_smoothing_cargs(
     if ((params["fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push(String((params["surface-kernel"] ?? null)));
-    cargs.push(String((params["volume-kernel"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -545,11 +547,11 @@ function cifti_smoothing_execute(
  * THALAMUS_LEFT
  * THALAMUS_RIGHT.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param surface_kernel the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @param volume_kernel the size of the gaussian volume smoothing kernel in mm, as sigma by default
  * @param direction which dimension to smooth along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param left_surface specify the left cortical surface to use
  * @param right_surface specify the right cortical surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -566,11 +568,11 @@ the regions to smooth within, as a cifti file
  * @returns NamedTuple of outputs (described in `CiftiSmoothingOutputs`).
  */
 function cifti_smoothing(
-    cifti_out: string,
     cifti: InputPathType,
     surface_kernel: number,
     volume_kernel: number,
     direction: string,
+    cifti_out: string,
     left_surface: CiftiSmoothingLeftSurfaceParamsDict | null = null,
     right_surface: CiftiSmoothingRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiSmoothingCerebellumSurfaceParamsDict | null = null,
@@ -582,7 +584,7 @@ function cifti_smoothing(
     fwhm: boolean = false,
     runner: Runner | null = null,
 ): CiftiSmoothingOutputs {
-    const params = cifti_smoothing_params(cifti_out, cifti, surface_kernel, volume_kernel, direction, left_surface, right_surface, cerebellum_surface, surface, roi_cifti, merged_volume, fix_zeros_surface, fix_zeros_volume, fwhm)
+    const params = cifti_smoothing_params(cifti, surface_kernel, volume_kernel, direction, cifti_out, left_surface, right_surface, cerebellum_surface, surface, roi_cifti, merged_volume, fix_zeros_surface, fix_zeros_volume, fwhm)
     return cifti_smoothing_execute(params, runner);
 }
 

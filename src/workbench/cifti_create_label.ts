@@ -396,14 +396,16 @@ function cifti_create_label_cargs(
         "wb_command",
         "-cifti-create-label"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["volume"] ?? null) !== null) ? cifti_create_label_volume_cargs((params["volume"] ?? null), execution) : []),
-        ...(((params["left-label"] ?? null) !== null) ? cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution) : []),
-        ...(((params["right-label"] ?? null) !== null) ? cifti_create_label_right_label_cargs((params["right-label"] ?? null), execution) : []),
-        ...(((params["cerebellum-label"] ?? null) !== null) ? cifti_create_label_cerebellum_label_cargs((params["cerebellum-label"] ?? null), execution) : []),
-        ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_create_label_label_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["volume"] ?? null) !== null || (params["left-label"] ?? null) !== null || (params["right-label"] ?? null) !== null || (params["cerebellum-label"] ?? null) !== null || (params["label"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["volume"] ?? null) !== null) ? cifti_create_label_volume_cargs((params["volume"] ?? null), execution) : []),
+            ...(((params["left-label"] ?? null) !== null) ? cifti_create_label_left_label_cargs((params["left-label"] ?? null), execution) : []),
+            ...(((params["right-label"] ?? null) !== null) ? cifti_create_label_right_label_cargs((params["right-label"] ?? null), execution) : []),
+            ...(((params["cerebellum-label"] ?? null) !== null) ? cifti_create_label_cerebellum_label_cargs((params["cerebellum-label"] ?? null), execution) : []),
+            ...(((params["label"] ?? null) !== null) ? (params["label"] ?? null).map(s => cifti_create_label_label_cargs(s, execution)).flat() : [])
+        );
+    }
     return cargs;
 }
 

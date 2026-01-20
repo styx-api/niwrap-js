@@ -13,9 +13,9 @@ const CIFTI_LABEL_PROBABILITY_METADATA: Metadata = {
 
 interface CiftiLabelProbabilityParamsDict {
     "@type"?: "workbench/cifti-label-probability";
+    "label-maps": InputPathType;
     "probability-dscalar-out": string;
     "exclude-unlabeled": boolean;
-    "label-maps": InputPathType;
 }
 type CiftiLabelProbabilityParamsDictTagged = Required<Pick<CiftiLabelProbabilityParamsDict, '@type'>> & CiftiLabelProbabilityParamsDict;
 
@@ -40,22 +40,22 @@ interface CiftiLabelProbabilityOutputs {
 /**
  * Build parameters.
  *
- * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
  * @param label_maps cifti dlabel file containing individual label maps from many subjects
+ * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
  * @param exclude_unlabeled don't make a probability map of the unlabeled key
  *
  * @returns Parameter dictionary
  */
 function cifti_label_probability_params(
-    probability_dscalar_out: string,
     label_maps: InputPathType,
+    probability_dscalar_out: string,
     exclude_unlabeled: boolean = false,
 ): CiftiLabelProbabilityParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-probability" as const,
+        "label-maps": label_maps,
         "probability-dscalar-out": probability_dscalar_out,
         "exclude-unlabeled": exclude_unlabeled,
-        "label-maps": label_maps,
     };
     return params;
 }
@@ -78,11 +78,11 @@ function cifti_label_probability_cargs(
         "wb_command",
         "-cifti-label-probability"
     );
+    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     cargs.push((params["probability-dscalar-out"] ?? null));
     if ((params["exclude-unlabeled"] ?? false)) {
         cargs.push("-exclude-unlabeled");
     }
-    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;
 }
 
@@ -136,20 +136,20 @@ function cifti_label_probability_execute(
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that vertex/voxel, divided by the number of input maps.
  *
- * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
  * @param label_maps cifti dlabel file containing individual label maps from many subjects
+ * @param probability_dscalar_out the relative frequencies of each label at each vertex/voxel
  * @param exclude_unlabeled don't make a probability map of the unlabeled key
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiLabelProbabilityOutputs`).
  */
 function cifti_label_probability(
-    probability_dscalar_out: string,
     label_maps: InputPathType,
+    probability_dscalar_out: string,
     exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): CiftiLabelProbabilityOutputs {
-    const params = cifti_label_probability_params(probability_dscalar_out, label_maps, exclude_unlabeled)
+    const params = cifti_label_probability_params(label_maps, probability_dscalar_out, exclude_unlabeled)
     return cifti_label_probability_execute(params, runner);
 }
 

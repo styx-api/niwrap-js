@@ -13,6 +13,9 @@ const METRIC_DILATE_METADATA: Metadata = {
 
 interface MetricDilateParamsDict {
     "@type"?: "workbench/metric-dilate";
+    "metric": InputPathType;
+    "surface": InputPathType;
+    "distance": number;
     "metric-out": string;
     "area-metric"?: InputPathType | null | undefined;
     "exponent"?: number | null | undefined;
@@ -22,9 +25,6 @@ interface MetricDilateParamsDict {
     "legacy-cutoff": boolean;
     "linear": boolean;
     "nearest": boolean;
-    "metric": InputPathType;
-    "surface": InputPathType;
-    "distance": number;
 }
 type MetricDilateParamsDictTagged = Required<Pick<MetricDilateParamsDict, '@type'>> & MetricDilateParamsDict;
 
@@ -49,10 +49,10 @@ interface MetricDilateOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param metric the metric to dilate
  * @param surface the surface to compute on
  * @param distance distance in mm to dilate
+ * @param metric_out the output metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -75,10 +75,10 @@ metric file, positive values denote vertices to have their values replaced
  * @returns Parameter dictionary
  */
 function metric_dilate_params(
-    metric_out: string,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     exponent: number | null = null,
     column: string | null = null,
@@ -90,13 +90,13 @@ function metric_dilate_params(
 ): MetricDilateParamsDictTagged {
     const params = {
         "@type": "workbench/metric-dilate" as const,
+        "metric": metric,
+        "surface": surface,
+        "distance": distance,
         "metric-out": metric_out,
         "legacy-cutoff": legacy_cutoff,
         "linear": linear,
         "nearest": nearest,
-        "metric": metric,
-        "surface": surface,
-        "distance": distance,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -134,6 +134,9 @@ function metric_dilate_cargs(
         "wb_command",
         "-metric-dilate"
     );
+    cargs.push(execution.inputFile((params["metric"] ?? null)));
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(String((params["distance"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
@@ -174,9 +177,6 @@ function metric_dilate_cargs(
     if ((params["nearest"] ?? false)) {
         cargs.push("-nearest");
     }
-    cargs.push(execution.inputFile((params["metric"] ?? null)));
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(String((params["distance"] ?? null)));
     return cargs;
 }
 
@@ -242,10 +242,10 @@ function metric_dilate_execute(
  *
  * To get the behavior of version 1.3.2 or earlier, use '-legacy-cutoff -exponent 2'.
  *
- * @param metric_out the output metric
  * @param metric the metric to dilate
  * @param surface the surface to compute on
  * @param distance distance in mm to dilate
+ * @param metric_out the output metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -269,10 +269,10 @@ metric file, positive values denote vertices to have their values replaced
  * @returns NamedTuple of outputs (described in `MetricDilateOutputs`).
  */
 function metric_dilate(
-    metric_out: string,
     metric: InputPathType,
     surface: InputPathType,
     distance: number,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     exponent: number | null = null,
     column: string | null = null,
@@ -283,7 +283,7 @@ function metric_dilate(
     nearest: boolean = false,
     runner: Runner | null = null,
 ): MetricDilateOutputs {
-    const params = metric_dilate_params(metric_out, metric, surface, distance, area_metric, exponent, column, roi_metric, roi_metric_, legacy_cutoff, linear, nearest)
+    const params = metric_dilate_params(metric, surface, distance, metric_out, area_metric, exponent, column, roi_metric, roi_metric_, legacy_cutoff, linear, nearest)
     return metric_dilate_execute(params, runner);
 }
 

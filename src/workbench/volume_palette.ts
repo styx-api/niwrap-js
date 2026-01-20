@@ -55,6 +55,8 @@ type VolumePaletteThresholdingParamsDictTagged = Required<Pick<VolumePaletteThre
 
 interface VolumePaletteParamsDict {
     "@type"?: "workbench/volume-palette";
+    "volume": string;
+    "mode": string;
     "pos-percent"?: VolumePalettePosPercentParamsDict | null | undefined;
     "neg-percent"?: VolumePaletteNegPercentParamsDict | null | undefined;
     "pos-user"?: VolumePalettePosUserParamsDict | null | undefined;
@@ -68,8 +70,6 @@ interface VolumePaletteParamsDict {
     "display"?: boolean | null | undefined;
     "interpolate"?: boolean | null | undefined;
     "subvolume"?: string | null | undefined;
-    "volume": string;
-    "mode": string;
 }
 type VolumePaletteParamsDictTagged = Required<Pick<VolumePaletteParamsDict, '@type'>> & VolumePaletteParamsDict;
 
@@ -429,6 +429,8 @@ function volume_palette_cargs(
         "wb_command",
         "-volume-palette"
     );
+    cargs.push((params["volume"] ?? null));
+    cargs.push((params["mode"] ?? null));
     if ((params["pos-percent"] ?? null) !== null || (params["neg-percent"] ?? null) !== null || (params["pos-user"] ?? null) !== null || (params["neg-user"] ?? null) !== null || (params["thresholding"] ?? null) !== null) {
         cargs.push(
             ...(((params["pos-percent"] ?? null) !== null) ? volume_palette_pos_percent_cargs((params["pos-percent"] ?? null), execution) : []),
@@ -486,8 +488,6 @@ function volume_palette_cargs(
             (params["subvolume"] ?? null)
         );
     }
-    cargs.push((params["volume"] ?? null));
-    cargs.push((params["mode"] ?? null));
     return cargs;
 }
 

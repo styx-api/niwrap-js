@@ -13,10 +13,10 @@ const VOLUME_LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 interface VolumeLabelExportTableParamsDict {
     "@type"?: "workbench/volume-label-export-table";
-    "json-out"?: string | null | undefined;
     "label-in": InputPathType;
     "map": string;
     "table-out": string;
+    "json-out"?: string | null | undefined;
 }
 type VolumeLabelExportTableParamsDictTagged = Required<Pick<VolumeLabelExportTableParamsDict, '@type'>> & VolumeLabelExportTableParamsDict;
 
@@ -82,15 +82,15 @@ function volume_label_export_table_cargs(
         "wb_command",
         "-volume-label-export-table"
     );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
+    cargs.push((params["map"] ?? null));
+    cargs.push((params["table-out"] ?? null));
     if ((params["json-out"] ?? null) !== null) {
         cargs.push(
             "-hierarchy",
             (params["json-out"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
-    cargs.push((params["map"] ?? null));
-    cargs.push((params["table-out"] ?? null));
     return cargs;
 }
 

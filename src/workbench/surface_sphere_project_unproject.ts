@@ -13,10 +13,10 @@ const SURFACE_SPHERE_PROJECT_UNPROJECT_METADATA: Metadata = {
 
 interface SurfaceSphereProjectUnprojectParamsDict {
     "@type"?: "workbench/surface-sphere-project-unproject";
-    "sphere-out": string;
     "sphere-in": InputPathType;
     "sphere-project-to": InputPathType;
     "sphere-unproject-from": InputPathType;
+    "sphere-out": string;
 }
 type SurfaceSphereProjectUnprojectParamsDictTagged = Required<Pick<SurfaceSphereProjectUnprojectParamsDict, '@type'>> & SurfaceSphereProjectUnprojectParamsDict;
 
@@ -41,25 +41,25 @@ interface SurfaceSphereProjectUnprojectOutputs {
 /**
  * Build parameters.
  *
- * @param sphere_out the output sphere
  * @param sphere_in a sphere with the desired output mesh
  * @param sphere_project_to a sphere that aligns with sphere-in
  * @param sphere_unproject_from <sphere-project-to> deformed to the desired output space
+ * @param sphere_out the output sphere
  *
  * @returns Parameter dictionary
  */
 function surface_sphere_project_unproject_params(
-    sphere_out: string,
     sphere_in: InputPathType,
     sphere_project_to: InputPathType,
     sphere_unproject_from: InputPathType,
+    sphere_out: string,
 ): SurfaceSphereProjectUnprojectParamsDictTagged {
     const params = {
         "@type": "workbench/surface-sphere-project-unproject" as const,
-        "sphere-out": sphere_out,
         "sphere-in": sphere_in,
         "sphere-project-to": sphere_project_to,
         "sphere-unproject-from": sphere_unproject_from,
+        "sphere-out": sphere_out,
     };
     return params;
 }
@@ -82,10 +82,10 @@ function surface_sphere_project_unproject_cargs(
         "wb_command",
         "-surface-sphere-project-unproject"
     );
-    cargs.push((params["sphere-out"] ?? null));
     cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
     cargs.push(execution.inputFile((params["sphere-project-to"] ?? null)));
     cargs.push(execution.inputFile((params["sphere-unproject-from"] ?? null)));
+    cargs.push((params["sphere-out"] ?? null));
     return cargs;
 }
 
@@ -163,22 +163,22 @@ function surface_sphere_project_unproject_execute(
  *
  * Technical details: Each vertex of <sphere-in> is projected to a triangle of <sphere-project-to>, and its new position is determined by the position of the corresponding triangle in <sphere-unproject-from>.  The output is a sphere with the topology of <sphere-in>, but coordinates shifted by the deformation from <sphere-project-to> to <sphere-unproject-from>.  <sphere-project-to> and <sphere-unproject-from> must have the same topology as each other, but <sphere-in> may have any topology.
  *
- * @param sphere_out the output sphere
  * @param sphere_in a sphere with the desired output mesh
  * @param sphere_project_to a sphere that aligns with sphere-in
  * @param sphere_unproject_from <sphere-project-to> deformed to the desired output space
+ * @param sphere_out the output sphere
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSphereProjectUnprojectOutputs`).
  */
 function surface_sphere_project_unproject(
-    sphere_out: string,
     sphere_in: InputPathType,
     sphere_project_to: InputPathType,
     sphere_unproject_from: InputPathType,
+    sphere_out: string,
     runner: Runner | null = null,
 ): SurfaceSphereProjectUnprojectOutputs {
-    const params = surface_sphere_project_unproject_params(sphere_out, sphere_in, sphere_project_to, sphere_unproject_from)
+    const params = surface_sphere_project_unproject_params(sphere_in, sphere_project_to, sphere_unproject_from, sphere_out)
     return surface_sphere_project_unproject_execute(params, runner);
 }
 

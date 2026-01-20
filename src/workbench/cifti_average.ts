@@ -201,11 +201,13 @@ function cifti_average_cargs(
         "wb_command",
         "-cifti-average"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
-        ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat() : [])
-    );
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["exclude-outliers"] ?? null) !== null || (params["cifti"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["exclude-outliers"] ?? null) !== null) ? cifti_average_exclude_outliers_cargs((params["exclude-outliers"] ?? null), execution) : []),
+            ...(((params["cifti"] ?? null) !== null) ? (params["cifti"] ?? null).map(s => cifti_average_cifti_cargs(s, execution)).flat() : [])
+        );
+    }
     if ((params["limit-GB"] ?? null) !== null) {
         cargs.push(
             "-mem-limit",

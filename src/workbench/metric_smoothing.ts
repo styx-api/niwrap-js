@@ -21,6 +21,9 @@ type MetricSmoothingRoiParamsDictTagged = Required<Pick<MetricSmoothingRoiParams
 
 interface MetricSmoothingParamsDict {
     "@type"?: "workbench/metric-smoothing";
+    "surface": InputPathType;
+    "metric-in": InputPathType;
+    "smoothing-kernel": number;
     "metric-out": string;
     "roi"?: MetricSmoothingRoiParamsDict | null | undefined;
     "method"?: string | null | undefined;
@@ -28,9 +31,6 @@ interface MetricSmoothingParamsDict {
     "column"?: string | null | undefined;
     "fix-zeros": boolean;
     "fwhm": boolean;
-    "surface": InputPathType;
-    "metric-in": InputPathType;
-    "smoothing-kernel": number;
 }
 type MetricSmoothingParamsDictTagged = Required<Pick<MetricSmoothingParamsDict, '@type'>> & MetricSmoothingParamsDict;
 
@@ -100,10 +100,10 @@ interface MetricSmoothingOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output metric
  * @param surface the surface to smooth on
  * @param metric_in the metric to smooth
  * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param metric_out the output metric
  * @param roi select a region of interest to smooth
  * @param method select smoothing method, default GEO_GAUSS_AREA
 
@@ -120,10 +120,10 @@ the column number or name
  * @returns Parameter dictionary
  */
 function metric_smoothing_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
+    metric_out: string,
     roi: MetricSmoothingRoiParamsDict | null = null,
     method: string | null = null,
     area_metric: InputPathType | null = null,
@@ -133,12 +133,12 @@ function metric_smoothing_params(
 ): MetricSmoothingParamsDictTagged {
     const params = {
         "@type": "workbench/metric-smoothing" as const,
-        "metric-out": metric_out,
-        "fix-zeros": fix_zeros,
-        "fwhm": fwhm,
         "surface": surface,
         "metric-in": metric_in,
         "smoothing-kernel": smoothing_kernel,
+        "metric-out": metric_out,
+        "fix-zeros": fix_zeros,
+        "fwhm": fwhm,
     };
     if (roi !== null) {
         params["roi"] = roi;
@@ -173,10 +173,13 @@ function metric_smoothing_cargs(
         "wb_command",
         "-metric-smoothing"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["roi"] ?? null) !== null) ? metric_smoothing_roi_cargs((params["roi"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push(String((params["smoothing-kernel"] ?? null)));
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["roi"] ?? null) !== null) {
+        cargs.push(...metric_smoothing_roi_cargs((params["roi"] ?? null), execution));
+    }
     if ((params["method"] ?? null) !== null) {
         cargs.push(
             "-method",
@@ -201,9 +204,6 @@ function metric_smoothing_cargs(
     if ((params["fwhm"] ?? false)) {
         cargs.push("-fwhm");
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
-    cargs.push(String((params["smoothing-kernel"] ?? null)));
     return cargs;
 }
 
@@ -289,10 +289,10 @@ function metric_smoothing_execute(
  *
  * The GEO_GAUSS_AREA method is the default because it is usually the correct choice.  GEO_GAUSS_EQUAL may be the correct choice when the sum of vertex values is more meaningful then the surface integral (sum of values .* areas), for instance when smoothing vertex areas (the sum is the total surface area, while the surface integral is the sum of squares of the vertex areas).  The GEO_GAUSS method is not recommended, it exists mainly to replicate methods of studies done with caret5's geodesic smoothing.
  *
- * @param metric_out the output metric
  * @param surface the surface to smooth on
  * @param metric_in the metric to smooth
  * @param smoothing_kernel the size of the gaussian smoothing kernel in mm, as sigma by default
+ * @param metric_out the output metric
  * @param roi select a region of interest to smooth
  * @param method select smoothing method, default GEO_GAUSS_AREA
 
@@ -310,10 +310,10 @@ the column number or name
  * @returns NamedTuple of outputs (described in `MetricSmoothingOutputs`).
  */
 function metric_smoothing(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
     smoothing_kernel: number,
+    metric_out: string,
     roi: MetricSmoothingRoiParamsDict | null = null,
     method: string | null = null,
     area_metric: InputPathType | null = null,
@@ -322,7 +322,7 @@ function metric_smoothing(
     fwhm: boolean = false,
     runner: Runner | null = null,
 ): MetricSmoothingOutputs {
-    const params = metric_smoothing_params(metric_out, surface, metric_in, smoothing_kernel, roi, method, area_metric, column, fix_zeros, fwhm)
+    const params = metric_smoothing_params(surface, metric_in, smoothing_kernel, metric_out, roi, method, area_metric, column, fix_zeros, fwhm)
     return metric_smoothing_execute(params, runner);
 }
 

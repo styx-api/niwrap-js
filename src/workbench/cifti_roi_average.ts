@@ -13,13 +13,13 @@ const CIFTI_ROI_AVERAGE_METADATA: Metadata = {
 
 interface CiftiRoiAverageParamsDict {
     "@type"?: "workbench/cifti-roi-average";
+    "cifti-in": InputPathType;
+    "text-out": string;
     "roi-vol"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
     "roi-cifti"?: InputPathType | null | undefined;
-    "cifti-in": InputPathType;
-    "text-out": string;
 }
 type CiftiRoiAverageParamsDictTagged = Required<Pick<CiftiRoiAverageParamsDict, '@type'>> & CiftiRoiAverageParamsDict;
 
@@ -110,6 +110,8 @@ function cifti_roi_average_cargs(
         "wb_command",
         "-cifti-roi-average"
     );
+    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
+    cargs.push((params["text-out"] ?? null));
     if ((params["roi-vol"] ?? null) !== null) {
         cargs.push(
             "-vol-roi",
@@ -140,8 +142,6 @@ function cifti_roi_average_cargs(
             execution.inputFile((params["roi-cifti"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
-    cargs.push((params["text-out"] ?? null));
     return cargs;
 }
 

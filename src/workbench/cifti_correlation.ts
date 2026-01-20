@@ -24,6 +24,7 @@ type CiftiCorrelationRoiOverrideParamsDictTagged = Required<Pick<CiftiCorrelatio
 
 interface CiftiCorrelationParamsDict {
     "@type"?: "workbench/cifti-correlation";
+    "cifti": InputPathType;
     "cifti-out": string;
     "roi-override"?: CiftiCorrelationRoiOverrideParamsDict | null | undefined;
     "limit-GB"?: number | null | undefined;
@@ -31,7 +32,6 @@ interface CiftiCorrelationParamsDict {
     "covariance": boolean;
     "no-demean": boolean;
     "fisher-z": boolean;
-    "cifti": InputPathType;
 }
 type CiftiCorrelationParamsDictTagged = Required<Pick<CiftiCorrelationParamsDict, '@type'>> & CiftiCorrelationParamsDict;
 
@@ -154,8 +154,8 @@ interface CiftiCorrelationOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out output cifti file
  * @param cifti input cifti file
+ * @param cifti_out output cifti file
  * @param roi_override perform correlation from a subset of rows to all rows
  * @param limit_gb restrict memory usage
 
@@ -170,8 +170,8 @@ text file containing one weight per column
  * @returns Parameter dictionary
  */
 function cifti_correlation_params(
-    cifti_out: string,
     cifti: InputPathType,
+    cifti_out: string,
     roi_override: CiftiCorrelationRoiOverrideParamsDict | null = null,
     limit_gb: number | null = null,
     weight_file: string | null = null,
@@ -181,11 +181,11 @@ function cifti_correlation_params(
 ): CiftiCorrelationParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-correlation" as const,
+        "cifti": cifti,
         "cifti-out": cifti_out,
         "covariance": covariance,
         "no-demean": no_demean,
         "fisher-z": fisher_z,
-        "cifti": cifti,
     };
     if (roi_override !== null) {
         params["roi-override"] = roi_override;
@@ -217,10 +217,11 @@ function cifti_correlation_cargs(
         "wb_command",
         "-cifti-correlation"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["roi-override"] ?? null) !== null) ? cifti_correlation_roi_override_cargs((params["roi-override"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["roi-override"] ?? null) !== null) {
+        cargs.push(...cifti_correlation_roi_override_cargs((params["roi-override"] ?? null), execution));
+    }
     if ((params["limit-GB"] ?? null) !== null) {
         cargs.push(
             "-mem-limit",
@@ -242,7 +243,6 @@ function cifti_correlation_cargs(
     if ((params["fisher-z"] ?? false)) {
         cargs.push("-fisher-z");
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
     return cargs;
 }
 
@@ -304,8 +304,8 @@ function cifti_correlation_execute(
  *
  * Restricting the memory usage will make it calculate the output in chunks, and if the input file size is more than 70% of the memory limit, it will also read through the input file as rows are required, resulting in several passes through the input file (once per chunk).  Memory limit does not need to be an integer, you may also specify 0 to calculate a single output row at a time (this may be very slow).
  *
- * @param cifti_out output cifti file
  * @param cifti input cifti file
+ * @param cifti_out output cifti file
  * @param roi_override perform correlation from a subset of rows to all rows
  * @param limit_gb restrict memory usage
 
@@ -321,8 +321,8 @@ text file containing one weight per column
  * @returns NamedTuple of outputs (described in `CiftiCorrelationOutputs`).
  */
 function cifti_correlation(
-    cifti_out: string,
     cifti: InputPathType,
+    cifti_out: string,
     roi_override: CiftiCorrelationRoiOverrideParamsDict | null = null,
     limit_gb: number | null = null,
     weight_file: string | null = null,
@@ -331,7 +331,7 @@ function cifti_correlation(
     fisher_z: boolean = false,
     runner: Runner | null = null,
 ): CiftiCorrelationOutputs {
-    const params = cifti_correlation_params(cifti_out, cifti, roi_override, limit_gb, weight_file, covariance, no_demean, fisher_z)
+    const params = cifti_correlation_params(cifti, cifti_out, roi_override, limit_gb, weight_file, covariance, no_demean, fisher_z)
     return cifti_correlation_execute(params, runner);
 }
 

@@ -13,8 +13,8 @@ const VOLUME_COMPONENTS_TO_FRAMES_METADATA: Metadata = {
 
 interface VolumeComponentsToFramesParamsDict {
     "@type"?: "workbench/volume-components-to-frames";
-    "output": string;
     "input": InputPathType;
+    "output": string;
 }
 type VolumeComponentsToFramesParamsDictTagged = Required<Pick<VolumeComponentsToFramesParamsDict, '@type'>> & VolumeComponentsToFramesParamsDict;
 
@@ -39,19 +39,19 @@ interface VolumeComponentsToFramesOutputs {
 /**
  * Build parameters.
  *
- * @param output the input volume converted to multiple frames of scalar type
  * @param input the RGB/complex-type volume
+ * @param output the input volume converted to multiple frames of scalar type
  *
  * @returns Parameter dictionary
  */
 function volume_components_to_frames_params(
-    output: string,
     input: InputPathType,
+    output: string,
 ): VolumeComponentsToFramesParamsDictTagged {
     const params = {
         "@type": "workbench/volume-components-to-frames" as const,
-        "output": output,
         "input": input,
+        "output": output,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function volume_components_to_frames_cargs(
         "wb_command",
         "-volume-components-to-frames"
     );
-    cargs.push((params["output"] ?? null));
     cargs.push(execution.inputFile((params["input"] ?? null)));
+    cargs.push((params["output"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function volume_components_to_frames_execute(
  *
  * RGB and complex datatypes are not always well supported, this command allows separating them into standard subvolumes for better support.
  *
- * @param output the input volume converted to multiple frames of scalar type
  * @param input the RGB/complex-type volume
+ * @param output the input volume converted to multiple frames of scalar type
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeComponentsToFramesOutputs`).
  */
 function volume_components_to_frames(
-    output: string,
     input: InputPathType,
+    output: string,
     runner: Runner | null = null,
 ): VolumeComponentsToFramesOutputs {
-    const params = volume_components_to_frames_params(output, input)
+    const params = volume_components_to_frames_params(input, output)
     return volume_components_to_frames_execute(params, runner);
 }
 

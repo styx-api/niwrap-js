@@ -13,9 +13,9 @@ const SURFACE_WEDGE_VOLUME_METADATA: Metadata = {
 
 interface SurfaceWedgeVolumeParamsDict {
     "@type"?: "workbench/surface-wedge-volume";
-    "metric": string;
     "inner-surface": InputPathType;
     "outer-surface": InputPathType;
+    "metric": string;
 }
 type SurfaceWedgeVolumeParamsDictTagged = Required<Pick<SurfaceWedgeVolumeParamsDict, '@type'>> & SurfaceWedgeVolumeParamsDict;
 
@@ -40,22 +40,22 @@ interface SurfaceWedgeVolumeOutputs {
 /**
  * Build parameters.
  *
- * @param metric the output metric
  * @param inner_surface the inner surface
  * @param outer_surface the outer surface
+ * @param metric the output metric
  *
  * @returns Parameter dictionary
  */
 function surface_wedge_volume_params(
-    metric: string,
     inner_surface: InputPathType,
     outer_surface: InputPathType,
+    metric: string,
 ): SurfaceWedgeVolumeParamsDictTagged {
     const params = {
         "@type": "workbench/surface-wedge-volume" as const,
-        "metric": metric,
         "inner-surface": inner_surface,
         "outer-surface": outer_surface,
+        "metric": metric,
     };
     return params;
 }
@@ -78,9 +78,9 @@ function surface_wedge_volume_cargs(
         "wb_command",
         "-surface-wedge-volume"
     );
-    cargs.push((params["metric"] ?? null));
     cargs.push(execution.inputFile((params["inner-surface"] ?? null)));
     cargs.push(execution.inputFile((params["outer-surface"] ?? null)));
+    cargs.push((params["metric"] ?? null));
     return cargs;
 }
 
@@ -134,20 +134,20 @@ function surface_wedge_volume_execute(
  *
  * Compute the volume of each vertex's area from one surface to another.  The surfaces must have vertex correspondence, and have consistent triangle orientation.
  *
- * @param metric the output metric
  * @param inner_surface the inner surface
  * @param outer_surface the outer surface
+ * @param metric the output metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceWedgeVolumeOutputs`).
  */
 function surface_wedge_volume(
-    metric: string,
     inner_surface: InputPathType,
     outer_surface: InputPathType,
+    metric: string,
     runner: Runner | null = null,
 ): SurfaceWedgeVolumeOutputs {
-    const params = surface_wedge_volume_params(metric, inner_surface, outer_surface)
+    const params = surface_wedge_volume_params(inner_surface, outer_surface, metric)
     return surface_wedge_volume_execute(params, runner);
 }
 

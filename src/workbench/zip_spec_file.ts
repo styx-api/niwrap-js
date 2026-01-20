@@ -13,11 +13,11 @@ const ZIP_SPEC_FILE_METADATA: Metadata = {
 
 interface ZipSpecFileParamsDict {
     "@type"?: "workbench/zip-spec-file";
-    "directory"?: string | null | undefined;
-    "skip-missing": boolean;
     "spec-file": string;
     "extract-folder": string;
     "zip-file": string;
+    "directory"?: string | null | undefined;
+    "skip-missing": boolean;
 }
 type ZipSpecFileParamsDictTagged = Required<Pick<ZipSpecFileParamsDict, '@type'>> & ZipSpecFileParamsDict;
 
@@ -57,10 +57,10 @@ function zip_spec_file_params(
 ): ZipSpecFileParamsDictTagged {
     const params = {
         "@type": "workbench/zip-spec-file" as const,
-        "skip-missing": skip_missing,
         "spec-file": spec_file,
         "extract-folder": extract_folder,
         "zip-file": zip_file,
+        "skip-missing": skip_missing,
     };
     if (directory !== null) {
         params["directory"] = directory;
@@ -86,6 +86,9 @@ function zip_spec_file_cargs(
         "wb_command",
         "-zip-spec-file"
     );
+    cargs.push((params["spec-file"] ?? null));
+    cargs.push((params["extract-folder"] ?? null));
+    cargs.push((params["zip-file"] ?? null));
     if ((params["directory"] ?? null) !== null) {
         cargs.push(
             "-base-dir",
@@ -95,9 +98,6 @@ function zip_spec_file_cargs(
     if ((params["skip-missing"] ?? false)) {
         cargs.push("-skip-missing");
     }
-    cargs.push((params["spec-file"] ?? null));
-    cargs.push((params["extract-folder"] ?? null));
-    cargs.push((params["zip-file"] ?? null));
     return cargs;
 }
 

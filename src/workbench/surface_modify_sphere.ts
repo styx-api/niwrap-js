@@ -13,10 +13,10 @@ const SURFACE_MODIFY_SPHERE_METADATA: Metadata = {
 
 interface SurfaceModifySphereParamsDict {
     "@type"?: "workbench/surface-modify-sphere";
-    "sphere-out": string;
-    "recenter": boolean;
     "sphere-in": InputPathType;
     "radius": number;
+    "sphere-out": string;
+    "recenter": boolean;
 }
 type SurfaceModifySphereParamsDictTagged = Required<Pick<SurfaceModifySphereParamsDict, '@type'>> & SurfaceModifySphereParamsDict;
 
@@ -41,25 +41,25 @@ interface SurfaceModifySphereOutputs {
 /**
  * Build parameters.
  *
- * @param sphere_out the output sphere
  * @param sphere_in the sphere to modify
  * @param radius the radius the output sphere should have
+ * @param sphere_out the output sphere
  * @param recenter recenter the sphere by means of the bounding box
  *
  * @returns Parameter dictionary
  */
 function surface_modify_sphere_params(
-    sphere_out: string,
     sphere_in: InputPathType,
     radius: number,
+    sphere_out: string,
     recenter: boolean = false,
 ): SurfaceModifySphereParamsDictTagged {
     const params = {
         "@type": "workbench/surface-modify-sphere" as const,
-        "sphere-out": sphere_out,
-        "recenter": recenter,
         "sphere-in": sphere_in,
         "radius": radius,
+        "sphere-out": sphere_out,
+        "recenter": recenter,
     };
     return params;
 }
@@ -82,12 +82,12 @@ function surface_modify_sphere_cargs(
         "wb_command",
         "-surface-modify-sphere"
     );
+    cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
+    cargs.push(String((params["radius"] ?? null)));
     cargs.push((params["sphere-out"] ?? null));
     if ((params["recenter"] ?? false)) {
         cargs.push("-recenter");
     }
-    cargs.push(execution.inputFile((params["sphere-in"] ?? null)));
-    cargs.push(String((params["radius"] ?? null)));
     return cargs;
 }
 
@@ -145,22 +145,22 @@ function surface_modify_sphere_execute(
  *
  * If <sphere-in> is not close to spherical, or not centered around the origin and -recenter is not used, a warning is printed.
  *
- * @param sphere_out the output sphere
  * @param sphere_in the sphere to modify
  * @param radius the radius the output sphere should have
+ * @param sphere_out the output sphere
  * @param recenter recenter the sphere by means of the bounding box
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceModifySphereOutputs`).
  */
 function surface_modify_sphere(
-    sphere_out: string,
     sphere_in: InputPathType,
     radius: number,
+    sphere_out: string,
     recenter: boolean = false,
     runner: Runner | null = null,
 ): SurfaceModifySphereOutputs {
-    const params = surface_modify_sphere_params(sphere_out, sphere_in, radius, recenter)
+    const params = surface_modify_sphere_params(sphere_in, radius, sphere_out, recenter)
     return surface_modify_sphere_execute(params, runner);
 }
 

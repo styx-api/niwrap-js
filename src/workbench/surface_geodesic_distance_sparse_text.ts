@@ -13,11 +13,11 @@ const SURFACE_GEODESIC_DISTANCE_SPARSE_TEXT_METADATA: Metadata = {
 
 interface SurfaceGeodesicDistanceSparseTextParamsDict {
     "@type"?: "workbench/surface-geodesic-distance-sparse-text";
-    "area-metric"?: InputPathType | null | undefined;
-    "naive": boolean;
     "surface": InputPathType;
     "limit": number;
     "text-out": string;
+    "area-metric"?: InputPathType | null | undefined;
+    "naive": boolean;
 }
 type SurfaceGeodesicDistanceSparseTextParamsDictTagged = Required<Pick<SurfaceGeodesicDistanceSparseTextParamsDict, '@type'>> & SurfaceGeodesicDistanceSparseTextParamsDict;
 
@@ -57,10 +57,10 @@ function surface_geodesic_distance_sparse_text_params(
 ): SurfaceGeodesicDistanceSparseTextParamsDictTagged {
     const params = {
         "@type": "workbench/surface-geodesic-distance-sparse-text" as const,
-        "naive": naive,
         "surface": surface,
         "limit": limit,
         "text-out": text_out,
+        "naive": naive,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -86,6 +86,9 @@ function surface_geodesic_distance_sparse_text_cargs(
         "wb_command",
         "-surface-geodesic-distance-sparse-text"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(String((params["limit"] ?? null)));
+    cargs.push((params["text-out"] ?? null));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
             "-corrected-areas",
@@ -95,9 +98,6 @@ function surface_geodesic_distance_sparse_text_cargs(
     if ((params["naive"] ?? false)) {
         cargs.push("-naive");
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(String((params["limit"] ?? null)));
-    cargs.push((params["text-out"] ?? null));
     return cargs;
 }
 

@@ -13,12 +13,12 @@ const FIBER_DOT_PRODUCTS_METADATA: Metadata = {
 
 interface FiberDotProductsParamsDict {
     "@type"?: "workbench/fiber-dot-products";
-    "dot-metric": string;
-    "f-metric": string;
     "white-surf": InputPathType;
     "fiber-file": InputPathType;
     "max-dist": number;
     "direction": string;
+    "dot-metric": string;
+    "f-metric": string;
 }
 type FiberDotProductsParamsDictTagged = Required<Pick<FiberDotProductsParamsDict, '@type'>> & FiberDotProductsParamsDict;
 
@@ -47,31 +47,31 @@ interface FiberDotProductsOutputs {
 /**
  * Build parameters.
  *
- * @param dot_metric the metric of dot products
- * @param f_metric a metric of the f values of the fiber distributions
  * @param white_surf the white/gray boundary surface
  * @param fiber_file the fiber orientation file
  * @param max_dist the maximum distance from any surface vertex a fiber population may be, in mm
  * @param direction test against surface for whether a fiber population should be used
+ * @param dot_metric the metric of dot products
+ * @param f_metric a metric of the f values of the fiber distributions
  *
  * @returns Parameter dictionary
  */
 function fiber_dot_products_params(
-    dot_metric: string,
-    f_metric: string,
     white_surf: InputPathType,
     fiber_file: InputPathType,
     max_dist: number,
     direction: string,
+    dot_metric: string,
+    f_metric: string,
 ): FiberDotProductsParamsDictTagged {
     const params = {
         "@type": "workbench/fiber-dot-products" as const,
-        "dot-metric": dot_metric,
-        "f-metric": f_metric,
         "white-surf": white_surf,
         "fiber-file": fiber_file,
         "max-dist": max_dist,
         "direction": direction,
+        "dot-metric": dot_metric,
+        "f-metric": f_metric,
     };
     return params;
 }
@@ -94,14 +94,12 @@ function fiber_dot_products_cargs(
         "wb_command",
         "-fiber-dot-products"
     );
-    cargs.push(
-        (params["dot-metric"] ?? null),
-        (params["f-metric"] ?? null)
-    );
     cargs.push(execution.inputFile((params["white-surf"] ?? null)));
     cargs.push(execution.inputFile((params["fiber-file"] ?? null)));
     cargs.push(String((params["max-dist"] ?? null)));
     cargs.push((params["direction"] ?? null));
+    cargs.push((params["dot-metric"] ?? null));
+    cargs.push((params["f-metric"] ?? null));
     return cargs;
 }
 
@@ -156,26 +154,26 @@ function fiber_dot_products_execute(
  *
  * For each vertex, this command finds the closest fiber population that satisfies the <direction> test, and computes the absolute value of the dot product of the surface normal and the normalized mean direction of each fiber.  The <direction> test must be one of INSIDE, OUTSIDE, or ANY, which causes the command to only use fiber populations that are inside the surface, outside the surface, or to not care which direction it is from the surface.  Each fiber population is output in a separate metric column.
  *
- * @param dot_metric the metric of dot products
- * @param f_metric a metric of the f values of the fiber distributions
  * @param white_surf the white/gray boundary surface
  * @param fiber_file the fiber orientation file
  * @param max_dist the maximum distance from any surface vertex a fiber population may be, in mm
  * @param direction test against surface for whether a fiber population should be used
+ * @param dot_metric the metric of dot products
+ * @param f_metric a metric of the f values of the fiber distributions
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FiberDotProductsOutputs`).
  */
 function fiber_dot_products(
-    dot_metric: string,
-    f_metric: string,
     white_surf: InputPathType,
     fiber_file: InputPathType,
     max_dist: number,
     direction: string,
+    dot_metric: string,
+    f_metric: string,
     runner: Runner | null = null,
 ): FiberDotProductsOutputs {
-    const params = fiber_dot_products_params(dot_metric, f_metric, white_surf, fiber_file, max_dist, direction)
+    const params = fiber_dot_products_params(white_surf, fiber_file, max_dist, direction, dot_metric, f_metric)
     return fiber_dot_products_execute(params, runner);
 }
 

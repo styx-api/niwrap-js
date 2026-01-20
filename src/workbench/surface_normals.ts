@@ -13,8 +13,8 @@ const SURFACE_NORMALS_METADATA: Metadata = {
 
 interface SurfaceNormalsParamsDict {
     "@type"?: "workbench/surface-normals";
-    "metric-out": string;
     "surface": InputPathType;
+    "metric-out": string;
 }
 type SurfaceNormalsParamsDictTagged = Required<Pick<SurfaceNormalsParamsDict, '@type'>> & SurfaceNormalsParamsDict;
 
@@ -39,19 +39,19 @@ interface SurfaceNormalsOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the normal vectors
  * @param surface the surface to output the normals of
+ * @param metric_out the normal vectors
  *
  * @returns Parameter dictionary
  */
 function surface_normals_params(
-    metric_out: string,
     surface: InputPathType,
+    metric_out: string,
 ): SurfaceNormalsParamsDictTagged {
     const params = {
         "@type": "workbench/surface-normals" as const,
-        "metric-out": metric_out,
         "surface": surface,
+        "metric-out": metric_out,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function surface_normals_cargs(
         "wb_command",
         "-surface-normals"
     );
-    cargs.push((params["metric-out"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push((params["metric-out"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function surface_normals_execute(
  *
  * Computes the normal vectors of the surface file, and outputs them as a 3 column metric file.
  *
- * @param metric_out the normal vectors
  * @param surface the surface to output the normals of
+ * @param metric_out the normal vectors
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceNormalsOutputs`).
  */
 function surface_normals(
-    metric_out: string,
     surface: InputPathType,
+    metric_out: string,
     runner: Runner | null = null,
 ): SurfaceNormalsOutputs {
-    const params = surface_normals_params(metric_out, surface)
+    const params = surface_normals_params(surface, metric_out)
     return surface_normals_execute(params, runner);
 }
 

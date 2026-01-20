@@ -21,6 +21,10 @@ type CiftiExtremaThresholdParamsDictTagged = Required<Pick<CiftiExtremaThreshold
 
 interface CiftiExtremaParamsDict {
     "@type"?: "workbench/cifti-extrema";
+    "cifti": InputPathType;
+    "surface-distance": number;
+    "volume-distance": number;
+    "direction": string;
     "cifti-out": string;
     "threshold"?: CiftiExtremaThresholdParamsDict | null | undefined;
     "volume-kernel"?: number | null | undefined;
@@ -34,10 +38,6 @@ interface CiftiExtremaParamsDict {
     "sum-maps": boolean;
     "merged-volume": boolean;
     "presmooth-fwhm": boolean;
-    "cifti": InputPathType;
-    "surface-distance": number;
-    "volume-distance": number;
-    "direction": string;
 }
 type CiftiExtremaParamsDictTagged = Required<Pick<CiftiExtremaParamsDict, '@type'>> & CiftiExtremaParamsDict;
 
@@ -105,11 +105,11 @@ interface CiftiExtremaOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param surface_distance the minimum distance between extrema of the same type, for surface components
  * @param volume_distance the minimum distance between extrema of the same type, for volume components
  * @param direction which dimension to find extrema along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param threshold ignore small extrema
  * @param volume_kernel smooth volume components before finding extrema
 
@@ -136,11 +136,11 @@ the left surface file
  * @returns Parameter dictionary
  */
 function cifti_extrema_params(
-    cifti_out: string,
     cifti: InputPathType,
     surface_distance: number,
     volume_distance: number,
     direction: string,
+    cifti_out: string,
     threshold: CiftiExtremaThresholdParamsDict | null = null,
     volume_kernel: number | null = null,
     surface_kernel: number | null = null,
@@ -156,6 +156,10 @@ function cifti_extrema_params(
 ): CiftiExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-extrema" as const,
+        "cifti": cifti,
+        "surface-distance": surface_distance,
+        "volume-distance": volume_distance,
+        "direction": direction,
         "cifti-out": cifti_out,
         "only-minima": only_minima,
         "only-maxima": only_maxima,
@@ -163,10 +167,6 @@ function cifti_extrema_params(
         "sum-maps": sum_maps,
         "merged-volume": merged_volume,
         "presmooth-fwhm": presmooth_fwhm,
-        "cifti": cifti,
-        "surface-distance": surface_distance,
-        "volume-distance": volume_distance,
-        "direction": direction,
     };
     if (threshold !== null) {
         params["threshold"] = threshold;
@@ -207,10 +207,14 @@ function cifti_extrema_cargs(
         "wb_command",
         "-cifti-extrema"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["threshold"] ?? null) !== null) ? cifti_extrema_threshold_cargs((params["threshold"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push(String((params["surface-distance"] ?? null)));
+    cargs.push(String((params["volume-distance"] ?? null)));
+    cargs.push((params["direction"] ?? null));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["threshold"] ?? null) !== null) {
+        cargs.push(...cifti_extrema_threshold_cargs((params["threshold"] ?? null), execution));
+    }
     if ((params["volume-kernel"] ?? null) !== null) {
         cargs.push(
             "-volume-presmooth",
@@ -259,10 +263,6 @@ function cifti_extrema_cargs(
     if ((params["presmooth-fwhm"] ?? false)) {
         cargs.push("-presmooth-fwhm");
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
-    cargs.push(String((params["surface-distance"] ?? null)));
-    cargs.push(String((params["volume-distance"] ?? null)));
-    cargs.push((params["direction"] ?? null));
     return cargs;
 }
 
@@ -316,11 +316,11 @@ function cifti_extrema_execute(
  *
  * Finds spatial locations in a cifti file that have more extreme values than all nearby locations in the same component (surface or volume structure).  The input cifti file must have a brain models mapping along the specified direction.  COLUMN is the direction that works on dtseries and dscalar.  For dconn, if it is symmetric use COLUMN, otherwise use ROW.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
  * @param surface_distance the minimum distance between extrema of the same type, for surface components
  * @param volume_distance the minimum distance between extrema of the same type, for volume components
  * @param direction which dimension to find extrema along, ROW or COLUMN
+ * @param cifti_out the output cifti
  * @param threshold ignore small extrema
  * @param volume_kernel smooth volume components before finding extrema
 
@@ -348,11 +348,11 @@ the left surface file
  * @returns NamedTuple of outputs (described in `CiftiExtremaOutputs`).
  */
 function cifti_extrema(
-    cifti_out: string,
     cifti: InputPathType,
     surface_distance: number,
     volume_distance: number,
     direction: string,
+    cifti_out: string,
     threshold: CiftiExtremaThresholdParamsDict | null = null,
     volume_kernel: number | null = null,
     surface_kernel: number | null = null,
@@ -367,7 +367,7 @@ function cifti_extrema(
     presmooth_fwhm: boolean = false,
     runner: Runner | null = null,
 ): CiftiExtremaOutputs {
-    const params = cifti_extrema_params(cifti_out, cifti, surface_distance, volume_distance, direction, threshold, volume_kernel, surface_kernel, surface, surface_, surface_2, only_minima, only_maxima, consolidate_mode, sum_maps, merged_volume, presmooth_fwhm)
+    const params = cifti_extrema_params(cifti, surface_distance, volume_distance, direction, cifti_out, threshold, volume_kernel, surface_kernel, surface, surface_, surface_2, only_minima, only_maxima, consolidate_mode, sum_maps, merged_volume, presmooth_fwhm)
     return cifti_extrema_execute(params, runner);
 }
 

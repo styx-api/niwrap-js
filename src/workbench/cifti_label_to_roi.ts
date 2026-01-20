@@ -13,11 +13,11 @@ const CIFTI_LABEL_TO_ROI_METADATA: Metadata = {
 
 interface CiftiLabelToRoiParamsDict {
     "@type"?: "workbench/cifti-label-to-roi";
+    "label-in": InputPathType;
     "scalar-out": string;
     "map"?: string | null | undefined;
     "label-key"?: number | null | undefined;
     "label-name"?: string | null | undefined;
-    "label-in": InputPathType;
 }
 type CiftiLabelToRoiParamsDictTagged = Required<Pick<CiftiLabelToRoiParamsDict, '@type'>> & CiftiLabelToRoiParamsDict;
 
@@ -42,8 +42,8 @@ interface CiftiLabelToRoiOutputs {
 /**
  * Build parameters.
  *
- * @param scalar_out the output cifti scalar file
  * @param label_in the input cifti label file
+ * @param scalar_out the output cifti scalar file
  * @param map select a single label map to use
 
 the map number or name
@@ -57,16 +57,16 @@ the label name that you want an roi of
  * @returns Parameter dictionary
  */
 function cifti_label_to_roi_params(
-    scalar_out: string,
     label_in: InputPathType,
+    scalar_out: string,
     map: string | null = null,
     label_key: number | null = null,
     label_name: string | null = null,
 ): CiftiLabelToRoiParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-label-to-roi" as const,
-        "scalar-out": scalar_out,
         "label-in": label_in,
+        "scalar-out": scalar_out,
     };
     if (map !== null) {
         params["map"] = map;
@@ -98,6 +98,7 @@ function cifti_label_to_roi_cargs(
         "wb_command",
         "-cifti-label-to-roi"
     );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["scalar-out"] ?? null));
     if ((params["map"] ?? null) !== null) {
         cargs.push(
@@ -117,7 +118,6 @@ function cifti_label_to_roi_cargs(
             (params["label-name"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
     return cargs;
 }
 
@@ -171,8 +171,8 @@ function cifti_label_to_roi_execute(
  *
  * For each map in <label-in>, a map is created in <scalar-out> where all locations labeled with <label-name> or with a key of <label-key> are given a value of 1, and all other locations are given 0.  Exactly one of -name and -key must be specified.  Specify -map to use only one map from <label-in>.
  *
- * @param scalar_out the output cifti scalar file
  * @param label_in the input cifti label file
+ * @param scalar_out the output cifti scalar file
  * @param map select a single label map to use
 
 the map number or name
@@ -187,14 +187,14 @@ the label name that you want an roi of
  * @returns NamedTuple of outputs (described in `CiftiLabelToRoiOutputs`).
  */
 function cifti_label_to_roi(
-    scalar_out: string,
     label_in: InputPathType,
+    scalar_out: string,
     map: string | null = null,
     label_key: number | null = null,
     label_name: string | null = null,
     runner: Runner | null = null,
 ): CiftiLabelToRoiOutputs {
-    const params = cifti_label_to_roi_params(scalar_out, label_in, map, label_key, label_name)
+    const params = cifti_label_to_roi_params(label_in, scalar_out, map, label_key, label_name)
     return cifti_label_to_roi_execute(params, runner);
 }
 

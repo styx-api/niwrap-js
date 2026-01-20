@@ -13,10 +13,10 @@ const METRIC_REMOVE_ISLANDS_METADATA: Metadata = {
 
 interface MetricRemoveIslandsParamsDict {
     "@type"?: "workbench/metric-remove-islands";
-    "metric-out": string;
-    "area-metric"?: InputPathType | null | undefined;
     "surface": InputPathType;
     "metric-in": InputPathType;
+    "metric-out": string;
+    "area-metric"?: InputPathType | null | undefined;
 }
 type MetricRemoveIslandsParamsDictTagged = Required<Pick<MetricRemoveIslandsParamsDict, '@type'>> & MetricRemoveIslandsParamsDict;
 
@@ -41,9 +41,9 @@ interface MetricRemoveIslandsOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the output ROI metric
  * @param surface the surface to use for neighbor information
  * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -51,16 +51,16 @@ the corrected vertex areas, as a metric
  * @returns Parameter dictionary
  */
 function metric_remove_islands_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     area_metric: InputPathType | null = null,
 ): MetricRemoveIslandsParamsDictTagged {
     const params = {
         "@type": "workbench/metric-remove-islands" as const,
-        "metric-out": metric_out,
         "surface": surface,
         "metric-in": metric_in,
+        "metric-out": metric_out,
     };
     if (area_metric !== null) {
         params["area-metric"] = area_metric;
@@ -86,6 +86,8 @@ function metric_remove_islands_cargs(
         "wb_command",
         "-metric-remove-islands"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     cargs.push((params["metric-out"] ?? null));
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
@@ -93,8 +95,6 @@ function metric_remove_islands_cargs(
             execution.inputFile((params["area-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -148,9 +148,9 @@ function metric_remove_islands_execute(
  *
  * Finds all connected areas in the ROI, and zeros out all but the largest one, in terms of surface area.
  *
- * @param metric_out the output ROI metric
  * @param surface the surface to use for neighbor information
  * @param metric_in the input ROI metric
+ * @param metric_out the output ROI metric
  * @param area_metric vertex areas to use instead of computing them from the surface
 
 the corrected vertex areas, as a metric
@@ -159,13 +159,13 @@ the corrected vertex areas, as a metric
  * @returns NamedTuple of outputs (described in `MetricRemoveIslandsOutputs`).
  */
 function metric_remove_islands(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     area_metric: InputPathType | null = null,
     runner: Runner | null = null,
 ): MetricRemoveIslandsOutputs {
-    const params = metric_remove_islands_params(metric_out, surface, metric_in, area_metric)
+    const params = metric_remove_islands_params(surface, metric_in, metric_out, area_metric)
     return metric_remove_islands_execute(params, runner);
 }
 

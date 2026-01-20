@@ -34,6 +34,9 @@ type SceneFileUpdateDataFileRemoveParamsDictTagged = Required<Pick<SceneFileUpda
 
 interface SceneFileUpdateParamsDict {
     "@type"?: "workbench/scene-file-update";
+    "input-scene-file": string;
+    "output-scene-file": string;
+    "scene-name-or-number": string;
     "copy-map-one-palette"?: Array<SceneFileUpdateCopyMapOnePaletteParamsDict> | null | undefined;
     "data-file-add"?: Array<SceneFileUpdateDataFileAddParamsDict> | null | undefined;
     "data-file-remove"?: Array<SceneFileUpdateDataFileRemoveParamsDict> | null | undefined;
@@ -41,9 +44,6 @@ interface SceneFileUpdateParamsDict {
     "error": boolean;
     "remove-missing-files": boolean;
     "fix-map-palette-settings": boolean;
-    "input-scene-file": string;
-    "output-scene-file": string;
-    "scene-name-or-number": string;
 }
 type SceneFileUpdateParamsDictTagged = Required<Pick<SceneFileUpdateParamsDict, '@type'>> & SceneFileUpdateParamsDict;
 
@@ -212,13 +212,13 @@ function scene_file_update_params(
 ): SceneFileUpdateParamsDictTagged {
     const params = {
         "@type": "workbench/scene-file-update" as const,
+        "input-scene-file": input_scene_file,
+        "output-scene-file": output_scene_file,
+        "scene-name-or-number": scene_name_or_number,
         "verbose": verbose,
         "error": error,
         "remove-missing-files": remove_missing_files,
         "fix-map-palette-settings": fix_map_palette_settings,
-        "input-scene-file": input_scene_file,
-        "output-scene-file": output_scene_file,
-        "scene-name-or-number": scene_name_or_number,
     };
     if (copy_map_one_palette !== null) {
         params["copy-map-one-palette"] = copy_map_one_palette;
@@ -250,6 +250,9 @@ function scene_file_update_cargs(
         "wb_command",
         "-scene-file-update"
     );
+    cargs.push((params["input-scene-file"] ?? null));
+    cargs.push((params["output-scene-file"] ?? null));
+    cargs.push((params["scene-name-or-number"] ?? null));
     if ((params["copy-map-one-palette"] ?? null) !== null || (params["data-file-add"] ?? null) !== null || (params["data-file-remove"] ?? null) !== null) {
         cargs.push(
             ...(((params["copy-map-one-palette"] ?? null) !== null) ? (params["copy-map-one-palette"] ?? null).map(s => scene_file_update_copy_map_one_palette_cargs(s, execution)).flat() : []),
@@ -269,9 +272,6 @@ function scene_file_update_cargs(
     if ((params["fix-map-palette-settings"] ?? false)) {
         cargs.push("-fix-map-palette-settings");
     }
-    cargs.push((params["input-scene-file"] ?? null));
-    cargs.push((params["output-scene-file"] ?? null));
-    cargs.push((params["scene-name-or-number"] ?? null));
     return cargs;
 }
 

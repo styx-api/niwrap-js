@@ -13,9 +13,9 @@ const LABEL_EXPORT_TABLE_METADATA: Metadata = {
 
 interface LabelExportTableParamsDict {
     "@type"?: "workbench/label-export-table";
-    "json-out"?: string | null | undefined;
     "label-in": InputPathType;
     "table-out": string;
+    "json-out"?: string | null | undefined;
 }
 type LabelExportTableParamsDictTagged = Required<Pick<LabelExportTableParamsDict, '@type'>> & LabelExportTableParamsDict;
 
@@ -78,14 +78,14 @@ function label_export_table_cargs(
         "wb_command",
         "-label-export-table"
     );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
+    cargs.push((params["table-out"] ?? null));
     if ((params["json-out"] ?? null) !== null) {
         cargs.push(
             "-hierarchy",
             (params["json-out"] ?? null)
         );
     }
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
-    cargs.push((params["table-out"] ?? null));
     return cargs;
 }
 

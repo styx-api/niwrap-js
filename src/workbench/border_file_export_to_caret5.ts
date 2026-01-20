@@ -20,9 +20,9 @@ type BorderFileExportToCaret5SurfaceParamsDictTagged = Required<Pick<BorderFileE
 
 interface BorderFileExportToCaret5ParamsDict {
     "@type"?: "workbench/border-file-export-to-caret5";
-    "surface"?: Array<BorderFileExportToCaret5SurfaceParamsDict> | null | undefined;
     "border-file": string;
     "output-file-prefix": string;
+    "surface"?: Array<BorderFileExportToCaret5SurfaceParamsDict> | null | undefined;
 }
 type BorderFileExportToCaret5ParamsDictTagged = Required<Pick<BorderFileExportToCaret5ParamsDict, '@type'>> & BorderFileExportToCaret5ParamsDict;
 
@@ -122,11 +122,11 @@ function border_file_export_to_caret5_cargs(
         "wb_command",
         "-border-file-export-to-caret5"
     );
+    cargs.push((params["border-file"] ?? null));
+    cargs.push((params["output-file-prefix"] ?? null));
     if ((params["surface"] ?? null) !== null) {
         cargs.push(...(params["surface"] ?? null).map(s => border_file_export_to_caret5_surface_cargs(s, execution)).flat());
     }
-    cargs.push((params["border-file"] ?? null));
-    cargs.push((params["output-file-prefix"] ?? null));
     return cargs;
 }
 

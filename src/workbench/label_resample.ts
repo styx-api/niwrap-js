@@ -36,6 +36,10 @@ type LabelResampleValidRoiOutParamsDictTagged = Required<Pick<LabelResampleValid
 
 interface LabelResampleParamsDict {
     "@type"?: "workbench/label-resample";
+    "label-in": InputPathType;
+    "current-sphere": InputPathType;
+    "new-sphere": InputPathType;
+    "method": string;
     "label-out": string;
     "area-surfs"?: LabelResampleAreaSurfsParamsDict | null | undefined;
     "area-metrics"?: LabelResampleAreaMetricsParamsDict | null | undefined;
@@ -43,10 +47,6 @@ interface LabelResampleParamsDict {
     "roi-metric"?: InputPathType | null | undefined;
     "bypass-sphere-check": boolean;
     "largest": boolean;
-    "label-in": InputPathType;
-    "current-sphere": InputPathType;
-    "new-sphere": InputPathType;
-    "method": string;
 }
 type LabelResampleParamsDictTagged = Required<Pick<LabelResampleParamsDict, '@type'>> & LabelResampleParamsDict;
 
@@ -237,11 +237,11 @@ interface LabelResampleOutputs {
 /**
  * Build parameters.
  *
- * @param label_out the output label file
  * @param label_in the label file to resample
  * @param current_sphere a sphere surface with the mesh that the label file is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
+ * @param label_out the output label file
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
  * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
@@ -254,11 +254,11 @@ the roi, as a metric file
  * @returns Parameter dictionary
  */
 function label_resample_params(
-    label_out: string,
     label_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
+    label_out: string,
     area_surfs: LabelResampleAreaSurfsParamsDict | null = null,
     area_metrics: LabelResampleAreaMetricsParamsDict | null = null,
     valid_roi_out: LabelResampleValidRoiOutParamsDict | null = null,
@@ -268,13 +268,13 @@ function label_resample_params(
 ): LabelResampleParamsDictTagged {
     const params = {
         "@type": "workbench/label-resample" as const,
-        "label-out": label_out,
-        "bypass-sphere-check": bypass_sphere_check,
-        "largest": largest,
         "label-in": label_in,
         "current-sphere": current_sphere,
         "new-sphere": new_sphere,
         "method": method,
+        "label-out": label_out,
+        "bypass-sphere-check": bypass_sphere_check,
+        "largest": largest,
     };
     if (area_surfs !== null) {
         params["area-surfs"] = area_surfs;
@@ -309,12 +309,18 @@ function label_resample_cargs(
         "wb_command",
         "-label-resample"
     );
-    cargs.push(
-        (params["label-out"] ?? null),
-        ...(((params["area-surfs"] ?? null) !== null) ? label_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
-        ...(((params["area-metrics"] ?? null) !== null) ? label_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
-        ...(((params["valid-roi-out"] ?? null) !== null) ? label_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["label-in"] ?? null)));
+    cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
+    cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
+    cargs.push((params["method"] ?? null));
+    cargs.push((params["label-out"] ?? null));
+    if ((params["area-surfs"] ?? null) !== null || (params["area-metrics"] ?? null) !== null || (params["valid-roi-out"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["area-surfs"] ?? null) !== null) ? label_resample_area_surfs_cargs((params["area-surfs"] ?? null), execution) : []),
+            ...(((params["area-metrics"] ?? null) !== null) ? label_resample_area_metrics_cargs((params["area-metrics"] ?? null), execution) : []),
+            ...(((params["valid-roi-out"] ?? null) !== null) ? label_resample_valid_roi_out_cargs((params["valid-roi-out"] ?? null), execution) : [])
+        );
+    }
     if ((params["roi-metric"] ?? null) !== null) {
         cargs.push(
             "-current-roi",
@@ -327,10 +333,6 @@ function label_resample_cargs(
     if ((params["largest"] ?? false)) {
         cargs.push("-largest");
     }
-    cargs.push(execution.inputFile((params["label-in"] ?? null)));
-    cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
-    cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
-    cargs.push((params["method"] ?? null));
     return cargs;
 }
 
@@ -409,11 +411,11 @@ function label_resample_execute(
  * BARYCENTRIC
  * .
  *
- * @param label_out the output label file
  * @param label_in the label file to resample
  * @param current_sphere a sphere surface with the mesh that the label file is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
  * @param method the method name
+ * @param label_out the output label file
  * @param area_surfs specify surfaces to do vertex area correction based on
  * @param area_metrics specify vertex area metrics to do area correction based on
  * @param valid_roi_out output the ROI of vertices that got data from valid source vertices
@@ -427,11 +429,11 @@ the roi, as a metric file
  * @returns NamedTuple of outputs (described in `LabelResampleOutputs`).
  */
 function label_resample(
-    label_out: string,
     label_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
     method: string,
+    label_out: string,
     area_surfs: LabelResampleAreaSurfsParamsDict | null = null,
     area_metrics: LabelResampleAreaMetricsParamsDict | null = null,
     valid_roi_out: LabelResampleValidRoiOutParamsDict | null = null,
@@ -440,7 +442,7 @@ function label_resample(
     largest: boolean = false,
     runner: Runner | null = null,
 ): LabelResampleOutputs {
-    const params = label_resample_params(label_out, label_in, current_sphere, new_sphere, method, area_surfs, area_metrics, valid_roi_out, roi_metric, bypass_sphere_check, largest)
+    const params = label_resample_params(label_in, current_sphere, new_sphere, method, label_out, area_surfs, area_metrics, valid_roi_out, roi_metric, bypass_sphere_check, largest)
     return label_resample_execute(params, runner);
 }
 

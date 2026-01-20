@@ -46,6 +46,7 @@ type CiftiCorrelationGradientDoubleCorrelationParamsDictTagged = Required<Pick<C
 
 interface CiftiCorrelationGradientParamsDict {
     "@type"?: "workbench/cifti-correlation-gradient";
+    "cifti": InputPathType;
     "cifti-out": string;
     "left-surface"?: CiftiCorrelationGradientLeftSurfaceParamsDict | null | undefined;
     "right-surface"?: CiftiCorrelationGradientRightSurfaceParamsDict | null | undefined;
@@ -60,7 +61,6 @@ interface CiftiCorrelationGradientParamsDict {
     "fisher-z": boolean;
     "undo-fisher-z": boolean;
     "presmooth-fwhm": boolean;
-    "cifti": InputPathType;
 }
 type CiftiCorrelationGradientParamsDictTagged = Required<Pick<CiftiCorrelationGradientParamsDict, '@type'>> & CiftiCorrelationGradientParamsDict;
 
@@ -292,8 +292,8 @@ interface CiftiCorrelationGradientOutputs {
 /**
  * Build parameters.
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
+ * @param cifti_out the output cifti
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -321,8 +321,8 @@ the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @returns Parameter dictionary
  */
 function cifti_correlation_gradient_params(
-    cifti_out: string,
     cifti: InputPathType,
+    cifti_out: string,
     left_surface: CiftiCorrelationGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiCorrelationGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null = null,
@@ -339,12 +339,12 @@ function cifti_correlation_gradient_params(
 ): CiftiCorrelationGradientParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-correlation-gradient" as const,
+        "cifti": cifti,
         "cifti-out": cifti_out,
         "covariance": covariance,
         "fisher-z": fisher_z,
         "undo-fisher-z": undo_fisher_z,
         "presmooth-fwhm": presmooth_fwhm,
-        "cifti": cifti,
     };
     if (left_surface !== null) {
         params["left-surface"] = left_surface;
@@ -394,13 +394,16 @@ function cifti_correlation_gradient_cargs(
         "wb_command",
         "-cifti-correlation-gradient"
     );
-    cargs.push(
-        (params["cifti-out"] ?? null),
-        ...(((params["left-surface"] ?? null) !== null) ? cifti_correlation_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
-        ...(((params["right-surface"] ?? null) !== null) ? cifti_correlation_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
-        ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_correlation_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
-        ...(((params["double-correlation"] ?? null) !== null) ? cifti_correlation_gradient_double_correlation_cargs((params["double-correlation"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
+    cargs.push((params["cifti-out"] ?? null));
+    if ((params["left-surface"] ?? null) !== null || (params["right-surface"] ?? null) !== null || (params["cerebellum-surface"] ?? null) !== null || (params["double-correlation"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["left-surface"] ?? null) !== null) ? cifti_correlation_gradient_left_surface_cargs((params["left-surface"] ?? null), execution) : []),
+            ...(((params["right-surface"] ?? null) !== null) ? cifti_correlation_gradient_right_surface_cargs((params["right-surface"] ?? null), execution) : []),
+            ...(((params["cerebellum-surface"] ?? null) !== null) ? cifti_correlation_gradient_cerebellum_surface_cargs((params["cerebellum-surface"] ?? null), execution) : []),
+            ...(((params["double-correlation"] ?? null) !== null) ? cifti_correlation_gradient_double_correlation_cargs((params["double-correlation"] ?? null), execution) : [])
+        );
+    }
     if ((params["limit-GB"] ?? null) !== null) {
         cargs.push(
             "-mem-limit",
@@ -443,7 +446,6 @@ function cifti_correlation_gradient_cargs(
     if ((params["presmooth-fwhm"] ?? false)) {
         cargs.push("-presmooth-fwhm");
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
     return cargs;
 }
 
@@ -497,8 +499,8 @@ function cifti_correlation_gradient_execute(
  *
  * For each structure, compute the correlation of the rows in the structure, and take the gradients of the resulting rows, then average them.  Memory limit does not need to be an integer, you may also specify 0 to use as little memory as possible (this may be very slow).
  *
- * @param cifti_out the output cifti
  * @param cifti the input cifti
+ * @param cifti_out the output cifti
  * @param left_surface specify the left surface to use
  * @param right_surface specify the right surface to use
  * @param cerebellum_surface specify the cerebellum surface to use
@@ -527,8 +529,8 @@ the size of the gaussian surface smoothing kernel in mm, as sigma by default
  * @returns NamedTuple of outputs (described in `CiftiCorrelationGradientOutputs`).
  */
 function cifti_correlation_gradient(
-    cifti_out: string,
     cifti: InputPathType,
+    cifti_out: string,
     left_surface: CiftiCorrelationGradientLeftSurfaceParamsDict | null = null,
     right_surface: CiftiCorrelationGradientRightSurfaceParamsDict | null = null,
     cerebellum_surface: CiftiCorrelationGradientCerebellumSurfaceParamsDict | null = null,
@@ -544,7 +546,7 @@ function cifti_correlation_gradient(
     presmooth_fwhm: boolean = false,
     runner: Runner | null = null,
 ): CiftiCorrelationGradientOutputs {
-    const params = cifti_correlation_gradient_params(cifti_out, cifti, left_surface, right_surface, cerebellum_surface, double_correlation, limit_gb, distance, distance_, volume_kernel, surface_kernel, covariance, fisher_z, undo_fisher_z, presmooth_fwhm)
+    const params = cifti_correlation_gradient_params(cifti, cifti_out, left_surface, right_surface, cerebellum_surface, double_correlation, limit_gb, distance, distance_, volume_kernel, surface_kernel, covariance, fisher_z, undo_fisher_z, presmooth_fwhm)
     return cifti_correlation_gradient_execute(params, runner);
 }
 

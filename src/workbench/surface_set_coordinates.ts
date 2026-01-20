@@ -13,9 +13,9 @@ const SURFACE_SET_COORDINATES_METADATA: Metadata = {
 
 interface SurfaceSetCoordinatesParamsDict {
     "@type"?: "workbench/surface-set-coordinates";
-    "surface-out": string;
     "surface-in": InputPathType;
     "coord-metric": InputPathType;
+    "surface-out": string;
 }
 type SurfaceSetCoordinatesParamsDictTagged = Required<Pick<SurfaceSetCoordinatesParamsDict, '@type'>> & SurfaceSetCoordinatesParamsDict;
 
@@ -40,22 +40,22 @@ interface SurfaceSetCoordinatesOutputs {
 /**
  * Build parameters.
  *
- * @param surface_out the new surface
  * @param surface_in the surface to use for the topology
  * @param coord_metric the new coordinates, as a 3-column metric file
+ * @param surface_out the new surface
  *
  * @returns Parameter dictionary
  */
 function surface_set_coordinates_params(
-    surface_out: string,
     surface_in: InputPathType,
     coord_metric: InputPathType,
+    surface_out: string,
 ): SurfaceSetCoordinatesParamsDictTagged {
     const params = {
         "@type": "workbench/surface-set-coordinates" as const,
-        "surface-out": surface_out,
         "surface-in": surface_in,
         "coord-metric": coord_metric,
+        "surface-out": surface_out,
     };
     return params;
 }
@@ -78,9 +78,9 @@ function surface_set_coordinates_cargs(
         "wb_command",
         "-surface-set-coordinates"
     );
-    cargs.push((params["surface-out"] ?? null));
     cargs.push(execution.inputFile((params["surface-in"] ?? null)));
     cargs.push(execution.inputFile((params["coord-metric"] ?? null)));
+    cargs.push((params["surface-out"] ?? null));
     return cargs;
 }
 
@@ -138,20 +138,20 @@ function surface_set_coordinates_execute(
  *
  * See -surface-coordinates-to-metric for how to get surface coordinates as a metric file, such that you can then modify them via metric commands, etc.
  *
- * @param surface_out the new surface
  * @param surface_in the surface to use for the topology
  * @param coord_metric the new coordinates, as a 3-column metric file
+ * @param surface_out the new surface
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceSetCoordinatesOutputs`).
  */
 function surface_set_coordinates(
-    surface_out: string,
     surface_in: InputPathType,
     coord_metric: InputPathType,
+    surface_out: string,
     runner: Runner | null = null,
 ): SurfaceSetCoordinatesOutputs {
-    const params = surface_set_coordinates_params(surface_out, surface_in, coord_metric)
+    const params = surface_set_coordinates_params(surface_in, coord_metric, surface_out)
     return surface_set_coordinates_execute(params, runner);
 }
 

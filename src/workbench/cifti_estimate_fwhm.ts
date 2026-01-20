@@ -21,11 +21,11 @@ type CiftiEstimateFwhmSurfaceParamsDictTagged = Required<Pick<CiftiEstimateFwhmS
 
 interface CiftiEstimateFwhmParamsDict {
     "@type"?: "workbench/cifti-estimate-fwhm";
+    "cifti": InputPathType;
     "surface"?: Array<CiftiEstimateFwhmSurfaceParamsDict> | null | undefined;
     "demean"?: boolean | null | undefined;
     "column"?: number | null | undefined;
     "merged-volume": boolean;
-    "cifti": InputPathType;
 }
 type CiftiEstimateFwhmParamsDictTagged = Required<Pick<CiftiEstimateFwhmParamsDict, '@type'>> & CiftiEstimateFwhmParamsDict;
 
@@ -110,8 +110,8 @@ function cifti_estimate_fwhm_params(
 ): CiftiEstimateFwhmParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-estimate-fwhm" as const,
-        "merged-volume": merged_volume,
         "cifti": cifti,
+        "merged-volume": merged_volume,
     };
     if (surface !== null) {
         params["surface"] = surface;
@@ -143,6 +143,7 @@ function cifti_estimate_fwhm_cargs(
         "wb_command",
         "-cifti-estimate-fwhm"
     );
+    cargs.push(execution.inputFile((params["cifti"] ?? null)));
     if ((params["surface"] ?? null) !== null) {
         cargs.push(...(params["surface"] ?? null).map(s => cifti_estimate_fwhm_surface_cargs(s, execution)).flat());
     }
@@ -161,7 +162,6 @@ function cifti_estimate_fwhm_cargs(
     if ((params["merged-volume"] ?? false)) {
         cargs.push("-merged-volume");
     }
-    cargs.push(execution.inputFile((params["cifti"] ?? null)));
     return cargs;
 }
 

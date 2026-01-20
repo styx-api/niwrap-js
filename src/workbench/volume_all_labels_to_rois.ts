@@ -13,9 +13,9 @@ const VOLUME_ALL_LABELS_TO_ROIS_METADATA: Metadata = {
 
 interface VolumeAllLabelsToRoisParamsDict {
     "@type"?: "workbench/volume-all-labels-to-rois";
-    "volume-out": string;
     "label-in": InputPathType;
     "map": string;
+    "volume-out": string;
 }
 type VolumeAllLabelsToRoisParamsDictTagged = Required<Pick<VolumeAllLabelsToRoisParamsDict, '@type'>> & VolumeAllLabelsToRoisParamsDict;
 
@@ -40,22 +40,22 @@ interface VolumeAllLabelsToRoisOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output volume file
  * @param label_in the input volume label file
  * @param map the number or name of the label map to use
+ * @param volume_out the output volume file
  *
  * @returns Parameter dictionary
  */
 function volume_all_labels_to_rois_params(
-    volume_out: string,
     label_in: InputPathType,
     map: string,
+    volume_out: string,
 ): VolumeAllLabelsToRoisParamsDictTagged {
     const params = {
         "@type": "workbench/volume-all-labels-to-rois" as const,
-        "volume-out": volume_out,
         "label-in": label_in,
         "map": map,
+        "volume-out": volume_out,
     };
     return params;
 }
@@ -78,9 +78,9 @@ function volume_all_labels_to_rois_cargs(
         "wb_command",
         "-volume-all-labels-to-rois"
     );
-    cargs.push((params["volume-out"] ?? null));
     cargs.push(execution.inputFile((params["label-in"] ?? null)));
     cargs.push((params["map"] ?? null));
+    cargs.push((params["volume-out"] ?? null));
     return cargs;
 }
 
@@ -134,20 +134,20 @@ function volume_all_labels_to_rois_execute(
  *
  * The output volume has a frame for each label in the specified input frame, other than the ??? label, each of which contains an ROI of all voxels that are set to the corresponding label.
  *
- * @param volume_out the output volume file
  * @param label_in the input volume label file
  * @param map the number or name of the label map to use
+ * @param volume_out the output volume file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeAllLabelsToRoisOutputs`).
  */
 function volume_all_labels_to_rois(
-    volume_out: string,
     label_in: InputPathType,
     map: string,
+    volume_out: string,
     runner: Runner | null = null,
 ): VolumeAllLabelsToRoisOutputs {
-    const params = volume_all_labels_to_rois_params(volume_out, label_in, map)
+    const params = volume_all_labels_to_rois_params(label_in, map, volume_out)
     return volume_all_labels_to_rois_execute(params, runner);
 }
 

@@ -13,10 +13,10 @@ const CIFTI_PARCEL_MAPPING_TO_LABEL_METADATA: Metadata = {
 
 interface CiftiParcelMappingToLabelParamsDict {
     "@type"?: "workbench/cifti-parcel-mapping-to-label";
-    "dlabel-out": string;
     "cifti-in": InputPathType;
     "direction": string;
     "template-cifti": InputPathType;
+    "dlabel-out": string;
 }
 type CiftiParcelMappingToLabelParamsDictTagged = Required<Pick<CiftiParcelMappingToLabelParamsDict, '@type'>> & CiftiParcelMappingToLabelParamsDict;
 
@@ -41,25 +41,25 @@ interface CiftiParcelMappingToLabelOutputs {
 /**
  * Build parameters.
  *
- * @param dlabel_out the output dense label file
  * @param cifti_in the input parcellated file
  * @param direction which dimension to take the parcel map from, ROW or COLUMN
  * @param template_cifti a cifti file with the desired dense mapping along column
+ * @param dlabel_out the output dense label file
  *
  * @returns Parameter dictionary
  */
 function cifti_parcel_mapping_to_label_params(
-    dlabel_out: string,
     cifti_in: InputPathType,
     direction: string,
     template_cifti: InputPathType,
+    dlabel_out: string,
 ): CiftiParcelMappingToLabelParamsDictTagged {
     const params = {
         "@type": "workbench/cifti-parcel-mapping-to-label" as const,
-        "dlabel-out": dlabel_out,
         "cifti-in": cifti_in,
         "direction": direction,
         "template-cifti": template_cifti,
+        "dlabel-out": dlabel_out,
     };
     return params;
 }
@@ -82,10 +82,10 @@ function cifti_parcel_mapping_to_label_cargs(
         "wb_command",
         "-cifti-parcel-mapping-to-label"
     );
-    cargs.push((params["dlabel-out"] ?? null));
     cargs.push(execution.inputFile((params["cifti-in"] ?? null)));
     cargs.push((params["direction"] ?? null));
     cargs.push(execution.inputFile((params["template-cifti"] ?? null)));
+    cargs.push((params["dlabel-out"] ?? null));
     return cargs;
 }
 
@@ -143,22 +143,22 @@ function cifti_parcel_mapping_to_label_execute(
  *
  * For ptseries, pscalar, plabel, pconn, and pdconn, using COLUMN for <direction> will work.
  *
- * @param dlabel_out the output dense label file
  * @param cifti_in the input parcellated file
  * @param direction which dimension to take the parcel map from, ROW or COLUMN
  * @param template_cifti a cifti file with the desired dense mapping along column
+ * @param dlabel_out the output dense label file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `CiftiParcelMappingToLabelOutputs`).
  */
 function cifti_parcel_mapping_to_label(
-    dlabel_out: string,
     cifti_in: InputPathType,
     direction: string,
     template_cifti: InputPathType,
+    dlabel_out: string,
     runner: Runner | null = null,
 ): CiftiParcelMappingToLabelOutputs {
-    const params = cifti_parcel_mapping_to_label_params(dlabel_out, cifti_in, direction, template_cifti)
+    const params = cifti_parcel_mapping_to_label_params(cifti_in, direction, template_cifti, dlabel_out)
     return cifti_parcel_mapping_to_label_execute(params, runner);
 }
 

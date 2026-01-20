@@ -13,8 +13,8 @@ const SURFACE_VERTEX_AREAS_METADATA: Metadata = {
 
 interface SurfaceVertexAreasParamsDict {
     "@type"?: "workbench/surface-vertex-areas";
-    "metric": string;
     "surface": InputPathType;
+    "metric": string;
 }
 type SurfaceVertexAreasParamsDictTagged = Required<Pick<SurfaceVertexAreasParamsDict, '@type'>> & SurfaceVertexAreasParamsDict;
 
@@ -39,19 +39,19 @@ interface SurfaceVertexAreasOutputs {
 /**
  * Build parameters.
  *
- * @param metric the output metric
  * @param surface the surface to measure
+ * @param metric the output metric
  *
  * @returns Parameter dictionary
  */
 function surface_vertex_areas_params(
-    metric: string,
     surface: InputPathType,
+    metric: string,
 ): SurfaceVertexAreasParamsDictTagged {
     const params = {
         "@type": "workbench/surface-vertex-areas" as const,
-        "metric": metric,
         "surface": surface,
+        "metric": metric,
     };
     return params;
 }
@@ -74,8 +74,8 @@ function surface_vertex_areas_cargs(
         "wb_command",
         "-surface-vertex-areas"
     );
-    cargs.push((params["metric"] ?? null));
     cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push((params["metric"] ?? null));
     return cargs;
 }
 
@@ -129,18 +129,18 @@ function surface_vertex_areas_execute(
  *
  * Each vertex gets one third of the area of each triangle it is a part of.  Units are mm^2.
  *
- * @param metric the output metric
  * @param surface the surface to measure
+ * @param metric the output metric
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `SurfaceVertexAreasOutputs`).
  */
 function surface_vertex_areas(
-    metric: string,
     surface: InputPathType,
+    metric: string,
     runner: Runner | null = null,
 ): SurfaceVertexAreasOutputs {
-    const params = surface_vertex_areas_params(metric, surface)
+    const params = surface_vertex_areas_params(surface, metric)
     return surface_vertex_areas_execute(params, runner);
 }
 

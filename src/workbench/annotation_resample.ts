@@ -21,9 +21,9 @@ type AnnotationResampleSurfacePairParamsDictTagged = Required<Pick<AnnotationRes
 
 interface AnnotationResampleParamsDict {
     "@type"?: "workbench/annotation-resample";
-    "surface-pair"?: Array<AnnotationResampleSurfacePairParamsDict> | null | undefined;
     "annotation-in": InputPathType;
     "annotation-out": string;
+    "surface-pair"?: Array<AnnotationResampleSurfacePairParamsDict> | null | undefined;
 }
 type AnnotationResampleParamsDictTagged = Required<Pick<AnnotationResampleParamsDict, '@type'>> & AnnotationResampleParamsDict;
 
@@ -127,11 +127,11 @@ function annotation_resample_cargs(
         "wb_command",
         "-annotation-resample"
     );
+    cargs.push(execution.inputFile((params["annotation-in"] ?? null)));
+    cargs.push((params["annotation-out"] ?? null));
     if ((params["surface-pair"] ?? null) !== null) {
         cargs.push(...(params["surface-pair"] ?? null).map(s => annotation_resample_surface_pair_cargs(s, execution)).flat());
     }
-    cargs.push(execution.inputFile((params["annotation-in"] ?? null)));
-    cargs.push((params["annotation-out"] ?? null));
     return cargs;
 }
 

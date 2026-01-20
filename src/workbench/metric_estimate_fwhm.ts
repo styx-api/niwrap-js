@@ -13,11 +13,11 @@ const METRIC_ESTIMATE_FWHM_METADATA: Metadata = {
 
 interface MetricEstimateFwhmParamsDict {
     "@type"?: "workbench/metric-estimate-fwhm";
+    "surface": InputPathType;
+    "metric-in": InputPathType;
     "demean"?: boolean | null | undefined;
     "column"?: string | null | undefined;
     "roi-metric"?: InputPathType | null | undefined;
-    "surface": InputPathType;
-    "metric-in": InputPathType;
 }
 type MetricEstimateFwhmParamsDictTagged = Required<Pick<MetricEstimateFwhmParamsDict, '@type'>> & MetricEstimateFwhmParamsDict;
 
@@ -94,6 +94,8 @@ function metric_estimate_fwhm_cargs(
         "wb_command",
         "-metric-estimate-fwhm"
     );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     if ((params["demean"] ?? null) !== null) {
         cargs.push(
             "-whole-file",
@@ -112,8 +114,6 @@ function metric_estimate_fwhm_cargs(
             execution.inputFile((params["roi-metric"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 

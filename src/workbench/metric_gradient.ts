@@ -36,6 +36,8 @@ type MetricGradientVectorsParamsDictTagged = Required<Pick<MetricGradientVectors
 
 interface MetricGradientParamsDict {
     "@type"?: "workbench/metric-gradient";
+    "surface": InputPathType;
+    "metric-in": InputPathType;
     "metric-out": string;
     "presmooth"?: MetricGradientPresmoothParamsDict | null | undefined;
     "roi"?: MetricGradientRoiParamsDict | null | undefined;
@@ -43,8 +45,6 @@ interface MetricGradientParamsDict {
     "area-metric"?: InputPathType | null | undefined;
     "column"?: string | null | undefined;
     "average-normals": boolean;
-    "surface": InputPathType;
-    "metric-in": InputPathType;
 }
 type MetricGradientParamsDictTagged = Required<Pick<MetricGradientParamsDict, '@type'>> & MetricGradientParamsDict;
 
@@ -239,9 +239,9 @@ interface MetricGradientOutputs {
 /**
  * Build parameters.
  *
- * @param metric_out the magnitude of the gradient
  * @param surface the surface to compute the gradient on
  * @param metric_in the metric to compute the gradient of
+ * @param metric_out the magnitude of the gradient
  * @param presmooth smooth the metric before computing the gradient
  * @param roi select a region of interest to take the gradient of
  * @param vectors output gradient vectors
@@ -256,9 +256,9 @@ the column number or name
  * @returns Parameter dictionary
  */
 function metric_gradient_params(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     presmooth: MetricGradientPresmoothParamsDict | null = null,
     roi: MetricGradientRoiParamsDict | null = null,
     vectors: MetricGradientVectorsParamsDict | null = null,
@@ -268,10 +268,10 @@ function metric_gradient_params(
 ): MetricGradientParamsDictTagged {
     const params = {
         "@type": "workbench/metric-gradient" as const,
-        "metric-out": metric_out,
-        "average-normals": average_normals,
         "surface": surface,
         "metric-in": metric_in,
+        "metric-out": metric_out,
+        "average-normals": average_normals,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
@@ -309,12 +309,16 @@ function metric_gradient_cargs(
         "wb_command",
         "-metric-gradient"
     );
-    cargs.push(
-        (params["metric-out"] ?? null),
-        ...(((params["presmooth"] ?? null) !== null) ? metric_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        ...(((params["roi"] ?? null) !== null) ? metric_gradient_roi_cargs((params["roi"] ?? null), execution) : []),
-        ...(((params["vectors"] ?? null) !== null) ? metric_gradient_vectors_cargs((params["vectors"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["surface"] ?? null)));
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
+    cargs.push((params["metric-out"] ?? null));
+    if ((params["presmooth"] ?? null) !== null || (params["roi"] ?? null) !== null || (params["vectors"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["presmooth"] ?? null) !== null) ? metric_gradient_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
+            ...(((params["roi"] ?? null) !== null) ? metric_gradient_roi_cargs((params["roi"] ?? null), execution) : []),
+            ...(((params["vectors"] ?? null) !== null) ? metric_gradient_vectors_cargs((params["vectors"] ?? null), execution) : [])
+        );
+    }
     if ((params["area-metric"] ?? null) !== null) {
         cargs.push(
             "-corrected-areas",
@@ -330,8 +334,6 @@ function metric_gradient_cargs(
     if ((params["average-normals"] ?? false)) {
         cargs.push("-average-normals");
     }
-    cargs.push(execution.inputFile((params["surface"] ?? null)));
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 
@@ -402,9 +404,9 @@ function metric_gradient_execute(
  *
  * The vector output metric is organized such that the X, Y, and Z components from a single input column are consecutive columns.
  *
- * @param metric_out the magnitude of the gradient
  * @param surface the surface to compute the gradient on
  * @param metric_in the metric to compute the gradient of
+ * @param metric_out the magnitude of the gradient
  * @param presmooth smooth the metric before computing the gradient
  * @param roi select a region of interest to take the gradient of
  * @param vectors output gradient vectors
@@ -420,9 +422,9 @@ the column number or name
  * @returns NamedTuple of outputs (described in `MetricGradientOutputs`).
  */
 function metric_gradient(
-    metric_out: string,
     surface: InputPathType,
     metric_in: InputPathType,
+    metric_out: string,
     presmooth: MetricGradientPresmoothParamsDict | null = null,
     roi: MetricGradientRoiParamsDict | null = null,
     vectors: MetricGradientVectorsParamsDict | null = null,
@@ -431,7 +433,7 @@ function metric_gradient(
     average_normals: boolean = false,
     runner: Runner | null = null,
 ): MetricGradientOutputs {
-    const params = metric_gradient_params(metric_out, surface, metric_in, presmooth, roi, vectors, area_metric, column, average_normals)
+    const params = metric_gradient_params(surface, metric_in, metric_out, presmooth, roi, vectors, area_metric, column, average_normals)
     return metric_gradient_execute(params, runner);
 }
 

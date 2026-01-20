@@ -13,10 +13,10 @@ const BORDER_RESAMPLE_METADATA: Metadata = {
 
 interface BorderResampleParamsDict {
     "@type"?: "workbench/border-resample";
-    "border-out": string;
     "border-in": InputPathType;
     "current-sphere": InputPathType;
     "new-sphere": InputPathType;
+    "border-out": string;
 }
 type BorderResampleParamsDictTagged = Required<Pick<BorderResampleParamsDict, '@type'>> & BorderResampleParamsDict;
 
@@ -41,25 +41,25 @@ interface BorderResampleOutputs {
 /**
  * Build parameters.
  *
- * @param border_out the output border file
  * @param border_in the border file to resample
  * @param current_sphere a sphere surface with the mesh that the metric is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param border_out the output border file
  *
  * @returns Parameter dictionary
  */
 function border_resample_params(
-    border_out: string,
     border_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
+    border_out: string,
 ): BorderResampleParamsDictTagged {
     const params = {
         "@type": "workbench/border-resample" as const,
-        "border-out": border_out,
         "border-in": border_in,
         "current-sphere": current_sphere,
         "new-sphere": new_sphere,
+        "border-out": border_out,
     };
     return params;
 }
@@ -82,10 +82,10 @@ function border_resample_cargs(
         "wb_command",
         "-border-resample"
     );
-    cargs.push((params["border-out"] ?? null));
     cargs.push(execution.inputFile((params["border-in"] ?? null)));
     cargs.push(execution.inputFile((params["current-sphere"] ?? null)));
     cargs.push(execution.inputFile((params["new-sphere"] ?? null)));
+    cargs.push((params["border-out"] ?? null));
     return cargs;
 }
 
@@ -139,22 +139,22 @@ function border_resample_execute(
  *
  * Resamples a border file, given two spherical surfaces that are in register.  Only borders that have the same structure as current-sphere will be resampled.
  *
- * @param border_out the output border file
  * @param border_in the border file to resample
  * @param current_sphere a sphere surface with the mesh that the metric is currently on
  * @param new_sphere a sphere surface that is in register with <current-sphere> and has the desired output mesh
+ * @param border_out the output border file
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `BorderResampleOutputs`).
  */
 function border_resample(
-    border_out: string,
     border_in: InputPathType,
     current_sphere: InputPathType,
     new_sphere: InputPathType,
+    border_out: string,
     runner: Runner | null = null,
 ): BorderResampleOutputs {
-    const params = border_resample_params(border_out, border_in, current_sphere, new_sphere)
+    const params = border_resample_params(border_in, current_sphere, new_sphere, border_out)
     return border_resample_execute(params, runner);
 }
 

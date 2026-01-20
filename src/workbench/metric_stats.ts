@@ -21,12 +21,12 @@ type MetricStatsRoiParamsDictTagged = Required<Pick<MetricStatsRoiParamsDict, '@
 
 interface MetricStatsParamsDict {
     "@type"?: "workbench/metric-stats";
+    "metric-in": InputPathType;
     "roi"?: MetricStatsRoiParamsDict | null | undefined;
     "column"?: string | null | undefined;
     "percent"?: number | null | undefined;
     "operation"?: string | null | undefined;
     "show-map-name": boolean;
-    "metric-in": InputPathType;
 }
 type MetricStatsParamsDictTagged = Required<Pick<MetricStatsParamsDict, '@type'>> & MetricStatsParamsDict;
 
@@ -117,8 +117,8 @@ function metric_stats_params(
 ): MetricStatsParamsDictTagged {
     const params = {
         "@type": "workbench/metric-stats" as const,
-        "show-map-name": show_map_name,
         "metric-in": metric_in,
+        "show-map-name": show_map_name,
     };
     if (roi !== null) {
         params["roi"] = roi;
@@ -153,6 +153,7 @@ function metric_stats_cargs(
         "wb_command",
         "-metric-stats"
     );
+    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     if ((params["roi"] ?? null) !== null) {
         cargs.push(...metric_stats_roi_cargs((params["roi"] ?? null), execution));
     }
@@ -177,7 +178,6 @@ function metric_stats_cargs(
     if ((params["show-map-name"] ?? false)) {
         cargs.push("-show-map-name");
     }
-    cargs.push(execution.inputFile((params["metric-in"] ?? null)));
     return cargs;
 }
 

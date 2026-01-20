@@ -13,11 +13,11 @@ const METADATA_STRING_REPLACE_METADATA: Metadata = {
 
 interface MetadataStringReplaceParamsDict {
     "@type"?: "workbench/metadata-string-replace";
-    "case-insensitive": boolean;
     "input-file": string;
     "find-string": string;
     "replace-string": string;
     "output-file": string;
+    "case-insensitive": boolean;
 }
 type MetadataStringReplaceParamsDictTagged = Required<Pick<MetadataStringReplaceParamsDict, '@type'>> & MetadataStringReplaceParamsDict;
 
@@ -55,11 +55,11 @@ function metadata_string_replace_params(
 ): MetadataStringReplaceParamsDictTagged {
     const params = {
         "@type": "workbench/metadata-string-replace" as const,
-        "case-insensitive": case_insensitive,
         "input-file": input_file,
         "find-string": find_string,
         "replace-string": replace_string,
         "output-file": output_file,
+        "case-insensitive": case_insensitive,
     };
     return params;
 }
@@ -82,13 +82,13 @@ function metadata_string_replace_cargs(
         "wb_command",
         "-metadata-string-replace"
     );
-    if ((params["case-insensitive"] ?? false)) {
-        cargs.push("-case-insensitive");
-    }
     cargs.push((params["input-file"] ?? null));
     cargs.push((params["find-string"] ?? null));
     cargs.push((params["replace-string"] ?? null));
     cargs.push((params["output-file"] ?? null));
+    if ((params["case-insensitive"] ?? false)) {
+        cargs.push("-case-insensitive");
+    }
     return cargs;
 }
 

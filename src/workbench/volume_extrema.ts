@@ -29,6 +29,8 @@ type VolumeExtremaThresholdParamsDictTagged = Required<Pick<VolumeExtremaThresho
 
 interface VolumeExtremaParamsDict {
     "@type"?: "workbench/volume-extrema";
+    "volume-in": InputPathType;
+    "distance": number;
     "volume-out": string;
     "presmooth"?: VolumeExtremaPresmoothParamsDict | null | undefined;
     "threshold"?: VolumeExtremaThresholdParamsDict | null | undefined;
@@ -38,8 +40,6 @@ interface VolumeExtremaParamsDict {
     "only-maxima": boolean;
     "consolidate-mode": boolean;
     "sum-subvols": boolean;
-    "volume-in": InputPathType;
-    "distance": number;
 }
 type VolumeExtremaParamsDictTagged = Required<Pick<VolumeExtremaParamsDict, '@type'>> & VolumeExtremaParamsDict;
 
@@ -152,9 +152,9 @@ interface VolumeExtremaOutputs {
 /**
  * Build parameters.
  *
- * @param volume_out the output extrema volume
  * @param volume_in volume file to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
+ * @param volume_out the output extrema volume
  * @param presmooth smooth the volume before finding extrema
  * @param threshold ignore small extrema
  * @param subvolume select a single subvolume to find extrema in
@@ -171,9 +171,9 @@ the area to find extrema in
  * @returns Parameter dictionary
  */
 function volume_extrema_params(
-    volume_out: string,
     volume_in: InputPathType,
     distance: number,
+    volume_out: string,
     presmooth: VolumeExtremaPresmoothParamsDict | null = null,
     threshold: VolumeExtremaThresholdParamsDict | null = null,
     subvolume: string | null = null,
@@ -185,13 +185,13 @@ function volume_extrema_params(
 ): VolumeExtremaParamsDictTagged {
     const params = {
         "@type": "workbench/volume-extrema" as const,
+        "volume-in": volume_in,
+        "distance": distance,
         "volume-out": volume_out,
         "only-minima": only_minima,
         "only-maxima": only_maxima,
         "consolidate-mode": consolidate_mode,
         "sum-subvols": sum_subvols,
-        "volume-in": volume_in,
-        "distance": distance,
     };
     if (presmooth !== null) {
         params["presmooth"] = presmooth;
@@ -226,11 +226,15 @@ function volume_extrema_cargs(
         "wb_command",
         "-volume-extrema"
     );
-    cargs.push(
-        (params["volume-out"] ?? null),
-        ...(((params["presmooth"] ?? null) !== null) ? volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
-        ...(((params["threshold"] ?? null) !== null) ? volume_extrema_threshold_cargs((params["threshold"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
+    cargs.push(String((params["distance"] ?? null)));
+    cargs.push((params["volume-out"] ?? null));
+    if ((params["presmooth"] ?? null) !== null || (params["threshold"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["presmooth"] ?? null) !== null) ? volume_extrema_presmooth_cargs((params["presmooth"] ?? null), execution) : []),
+            ...(((params["threshold"] ?? null) !== null) ? volume_extrema_threshold_cargs((params["threshold"] ?? null), execution) : [])
+        );
+    }
     if ((params["subvolume"] ?? null) !== null) {
         cargs.push(
             "-subvolume",
@@ -255,8 +259,6 @@ function volume_extrema_cargs(
     if ((params["sum-subvols"] ?? false)) {
         cargs.push("-sum-subvols");
     }
-    cargs.push(execution.inputFile((params["volume-in"] ?? null)));
-    cargs.push(String((params["distance"] ?? null)));
     return cargs;
 }
 
@@ -322,9 +324,9 @@ function volume_extrema_execute(
  *
  * By default, all input subvolumes are used with no smoothing, use -subvolume to specify a single subvolume to use, and -presmooth to smooth the input before finding the extrema.
  *
- * @param volume_out the output extrema volume
  * @param volume_in volume file to find the extrema of
  * @param distance the minimum distance between identified extrema of the same type
+ * @param volume_out the output extrema volume
  * @param presmooth smooth the volume before finding extrema
  * @param threshold ignore small extrema
  * @param subvolume select a single subvolume to find extrema in
@@ -342,9 +344,9 @@ the area to find extrema in
  * @returns NamedTuple of outputs (described in `VolumeExtremaOutputs`).
  */
 function volume_extrema(
-    volume_out: string,
     volume_in: InputPathType,
     distance: number,
+    volume_out: string,
     presmooth: VolumeExtremaPresmoothParamsDict | null = null,
     threshold: VolumeExtremaThresholdParamsDict | null = null,
     subvolume: string | null = null,
@@ -355,7 +357,7 @@ function volume_extrema(
     sum_subvols: boolean = false,
     runner: Runner | null = null,
 ): VolumeExtremaOutputs {
-    const params = volume_extrema_params(volume_out, volume_in, distance, presmooth, threshold, subvolume, roi_volume, only_minima, only_maxima, consolidate_mode, sum_subvols)
+    const params = volume_extrema_params(volume_in, distance, volume_out, presmooth, threshold, subvolume, roi_volume, only_minima, only_maxima, consolidate_mode, sum_subvols)
     return volume_extrema_execute(params, runner);
 }
 

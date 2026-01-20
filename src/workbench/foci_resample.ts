@@ -37,13 +37,13 @@ type FociResampleCerebellumSurfacesParamsDictTagged = Required<Pick<FociResample
 
 interface FociResampleParamsDict {
     "@type"?: "workbench/foci-resample";
+    "foci-in": InputPathType;
     "foci-out": string;
     "left-surfaces"?: FociResampleLeftSurfacesParamsDict | null | undefined;
     "right-surfaces"?: FociResampleRightSurfacesParamsDict | null | undefined;
     "cerebellum-surfaces"?: FociResampleCerebellumSurfacesParamsDict | null | undefined;
     "restore-xyz": boolean;
     "discard-distance-from-surface": boolean;
-    "foci-in": InputPathType;
 }
 type FociResampleParamsDictTagged = Required<Pick<FociResampleParamsDict, '@type'>> & FociResampleParamsDict;
 
@@ -197,8 +197,8 @@ interface FociResampleOutputs {
 /**
  * Build parameters.
  *
- * @param foci_out the output foci file
  * @param foci_in the input foci file
+ * @param foci_out the output foci file
  * @param left_surfaces the left surfaces for resampling
  * @param right_surfaces the right surfaces for resampling
  * @param cerebellum_surfaces the cerebellum surfaces for resampling
@@ -208,8 +208,8 @@ interface FociResampleOutputs {
  * @returns Parameter dictionary
  */
 function foci_resample_params(
-    foci_out: string,
     foci_in: InputPathType,
+    foci_out: string,
     left_surfaces: FociResampleLeftSurfacesParamsDict | null = null,
     right_surfaces: FociResampleRightSurfacesParamsDict | null = null,
     cerebellum_surfaces: FociResampleCerebellumSurfacesParamsDict | null = null,
@@ -218,10 +218,10 @@ function foci_resample_params(
 ): FociResampleParamsDictTagged {
     const params = {
         "@type": "workbench/foci-resample" as const,
+        "foci-in": foci_in,
         "foci-out": foci_out,
         "restore-xyz": restore_xyz,
         "discard-distance-from-surface": discard_distance_from_surface,
-        "foci-in": foci_in,
     };
     if (left_surfaces !== null) {
         params["left-surfaces"] = left_surfaces;
@@ -253,19 +253,21 @@ function foci_resample_cargs(
         "wb_command",
         "-foci-resample"
     );
-    cargs.push(
-        (params["foci-out"] ?? null),
-        ...(((params["left-surfaces"] ?? null) !== null) ? foci_resample_left_surfaces_cargs((params["left-surfaces"] ?? null), execution) : []),
-        ...(((params["right-surfaces"] ?? null) !== null) ? foci_resample_right_surfaces_cargs((params["right-surfaces"] ?? null), execution) : []),
-        ...(((params["cerebellum-surfaces"] ?? null) !== null) ? foci_resample_cerebellum_surfaces_cargs((params["cerebellum-surfaces"] ?? null), execution) : [])
-    );
+    cargs.push(execution.inputFile((params["foci-in"] ?? null)));
+    cargs.push((params["foci-out"] ?? null));
+    if ((params["left-surfaces"] ?? null) !== null || (params["right-surfaces"] ?? null) !== null || (params["cerebellum-surfaces"] ?? null) !== null) {
+        cargs.push(
+            ...(((params["left-surfaces"] ?? null) !== null) ? foci_resample_left_surfaces_cargs((params["left-surfaces"] ?? null), execution) : []),
+            ...(((params["right-surfaces"] ?? null) !== null) ? foci_resample_right_surfaces_cargs((params["right-surfaces"] ?? null), execution) : []),
+            ...(((params["cerebellum-surfaces"] ?? null) !== null) ? foci_resample_cerebellum_surfaces_cargs((params["cerebellum-surfaces"] ?? null), execution) : [])
+        );
+    }
     if ((params["restore-xyz"] ?? false)) {
         cargs.push("-restore-xyz");
     }
     if ((params["discard-distance-from-surface"] ?? false)) {
         cargs.push("-discard-distance-from-surface");
     }
-    cargs.push(execution.inputFile((params["foci-in"] ?? null)));
     return cargs;
 }
 
@@ -319,8 +321,8 @@ function foci_resample_execute(
  *
  * Unprojects foci from the <current-surf> for the structure, then projects them to <new-surf>.  If the foci have meaningful distances above or below the surface, use anatomical surfaces.  If the foci should be on the surface, use registered spheres and the options -discard-distance-from-surface and -restore-xyz.
  *
- * @param foci_out the output foci file
  * @param foci_in the input foci file
+ * @param foci_out the output foci file
  * @param left_surfaces the left surfaces for resampling
  * @param right_surfaces the right surfaces for resampling
  * @param cerebellum_surfaces the cerebellum surfaces for resampling
@@ -331,8 +333,8 @@ function foci_resample_execute(
  * @returns NamedTuple of outputs (described in `FociResampleOutputs`).
  */
 function foci_resample(
-    foci_out: string,
     foci_in: InputPathType,
+    foci_out: string,
     left_surfaces: FociResampleLeftSurfacesParamsDict | null = null,
     right_surfaces: FociResampleRightSurfacesParamsDict | null = null,
     cerebellum_surfaces: FociResampleCerebellumSurfacesParamsDict | null = null,
@@ -340,7 +342,7 @@ function foci_resample(
     discard_distance_from_surface: boolean = false,
     runner: Runner | null = null,
 ): FociResampleOutputs {
-    const params = foci_resample_params(foci_out, foci_in, left_surfaces, right_surfaces, cerebellum_surfaces, restore_xyz, discard_distance_from_surface)
+    const params = foci_resample_params(foci_in, foci_out, left_surfaces, right_surfaces, cerebellum_surfaces, restore_xyz, discard_distance_from_surface)
     return foci_resample_execute(params, runner);
 }
 

@@ -13,9 +13,9 @@ const VOLUME_LABEL_PROBABILITY_METADATA: Metadata = {
 
 interface VolumeLabelProbabilityParamsDict {
     "@type"?: "workbench/volume-label-probability";
+    "label-maps": InputPathType;
     "probability-out": string;
     "exclude-unlabeled": boolean;
-    "label-maps": InputPathType;
 }
 type VolumeLabelProbabilityParamsDictTagged = Required<Pick<VolumeLabelProbabilityParamsDict, '@type'>> & VolumeLabelProbabilityParamsDict;
 
@@ -40,22 +40,22 @@ interface VolumeLabelProbabilityOutputs {
 /**
  * Build parameters.
  *
- * @param probability_out the relative frequencies of each label at each voxel
  * @param label_maps volume label file containing individual label maps from many subjects
+ * @param probability_out the relative frequencies of each label at each voxel
  * @param exclude_unlabeled don't make a probability map of the unlabeled key
  *
  * @returns Parameter dictionary
  */
 function volume_label_probability_params(
-    probability_out: string,
     label_maps: InputPathType,
+    probability_out: string,
     exclude_unlabeled: boolean = false,
 ): VolumeLabelProbabilityParamsDictTagged {
     const params = {
         "@type": "workbench/volume-label-probability" as const,
+        "label-maps": label_maps,
         "probability-out": probability_out,
         "exclude-unlabeled": exclude_unlabeled,
-        "label-maps": label_maps,
     };
     return params;
 }
@@ -78,11 +78,11 @@ function volume_label_probability_cargs(
         "wb_command",
         "-volume-label-probability"
     );
+    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     cargs.push((params["probability-out"] ?? null));
     if ((params["exclude-unlabeled"] ?? false)) {
         cargs.push("-exclude-unlabeled");
     }
-    cargs.push(execution.inputFile((params["label-maps"] ?? null)));
     return cargs;
 }
 
@@ -136,20 +136,20 @@ function volume_label_probability_execute(
  *
  * This command outputs a set of soft ROIs, one for each label in the input, where the value is how many of the input maps had that label at that voxel, divided by the number of input maps.
  *
- * @param probability_out the relative frequencies of each label at each voxel
  * @param label_maps volume label file containing individual label maps from many subjects
+ * @param probability_out the relative frequencies of each label at each voxel
  * @param exclude_unlabeled don't make a probability map of the unlabeled key
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `VolumeLabelProbabilityOutputs`).
  */
 function volume_label_probability(
-    probability_out: string,
     label_maps: InputPathType,
+    probability_out: string,
     exclude_unlabeled: boolean = false,
     runner: Runner | null = null,
 ): VolumeLabelProbabilityOutputs {
-    const params = volume_label_probability_params(probability_out, label_maps, exclude_unlabeled)
+    const params = volume_label_probability_params(label_maps, probability_out, exclude_unlabeled)
     return volume_label_probability_execute(params, runner);
 }
 
