@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_REGISTRATION_METADATA: Metadata = {
-    id: "86707a12f497c1fc5ce28e8b8d8b83ce0463ad5f.boutiques",
+    id: "595eeb7ba9023f3ad07e8d85841e09fcc59f9eff.boutiques",
     name: "antsRegistration",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -283,8 +283,8 @@ type AntsRegistrationRadiusParamsDictTagged = Required<Pick<AntsRegistrationRadi
 
 interface AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDict {
     "@type"?: "metric_ants_neighbourhood_cross_correlation";
-    "fixed_image": string;
-    "moving_image": string;
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
     "metric_weight": number;
     "radius"?: AntsRegistrationRadiusParamsDict | null | undefined;
 }
@@ -324,8 +324,8 @@ type AntsRegistrationNumberOfBinsParamsDictTagged = Required<Pick<AntsRegistrati
 
 interface AntsRegistrationMetricMutualInformationParamsDict {
     "@type"?: "metric_mutual_information";
-    "fixed_image": string;
-    "moving_image": string;
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
     "metric_weight": number;
     "number_of_bins"?: AntsRegistrationNumberOfBinsParamsDict | null | undefined;
 }
@@ -365,8 +365,8 @@ type AntsRegistrationNumberOfBins1ParamsDictTagged = Required<Pick<AntsRegistrat
 
 interface AntsRegistrationMetricMattesParamsDict {
     "@type"?: "metric_mattes";
-    "fixed_image": string;
-    "moving_image": string;
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
     "metric_weight": number;
     "number_of_bins"?: AntsRegistrationNumberOfBins1ParamsDict | null | undefined;
 }
@@ -406,8 +406,8 @@ type AntsRegistrationRadius1ParamsDictTagged = Required<Pick<AntsRegistrationRad
 
 interface AntsRegistrationMetricMeanSquaresParamsDict {
     "@type"?: "metric_mean_squares";
-    "fixed_image": string;
-    "moving_image": string;
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
     "metric_weight": number;
     "radius"?: AntsRegistrationRadius1ParamsDict | null | undefined;
 }
@@ -447,8 +447,8 @@ type AntsRegistrationNumberOfBins2ParamsDictTagged = Required<Pick<AntsRegistrat
 
 interface AntsRegistrationMetricDemonsParamsDict {
     "@type"?: "metric_demons";
-    "fixed_image": string;
-    "moving_image": string;
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
     "metric_weight": number;
     "number_of_bins"?: AntsRegistrationNumberOfBins2ParamsDict | null | undefined;
 }
@@ -488,8 +488,8 @@ type AntsRegistrationRadius2ParamsDictTagged = Required<Pick<AntsRegistrationRad
 
 interface AntsRegistrationMetricGlobalCorrelationParamsDict {
     "@type"?: "metric_global_correlation";
-    "fixed_image": string;
-    "moving_image": string;
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
     "metric_weight": number;
     "radius"?: AntsRegistrationRadius2ParamsDict | null | undefined;
 }
@@ -644,8 +644,8 @@ type AntsRegistrationNeighborhoodRadiusParamsDictTagged = Required<Pick<AntsRegi
 
 interface AntsRegistrationMetricIgdmParamsDict {
     "@type"?: "metric_igdm";
-    "fixed_image": string;
-    "moving_image": string;
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
     "metric_weight": number;
     "fixed_mask": string;
     "moving_mask": string;
@@ -2142,8 +2142,8 @@ function ants_registration_radius_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_ants_neighbourhood_cross_correlation(
-    fixed_image: string,
-    moving_image: string,
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
     metric_weight: number,
     radius: AntsRegistrationRadiusParamsDict | null = null,
 ): AntsRegistrationMetricAntsNeighbourhoodCrossCorrelationParamsDictTagged {
@@ -2173,7 +2173,7 @@ function ants_registration_metric_ants_neighbourhood_cross_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["CC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), (((params["radius"] ?? null) !== null) ? ants_registration_radius_cargs((params["radius"] ?? null), execution) : []).join(""), "]"].join(''));
+    cargs.push(["CC[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["metric_weight"] ?? null)), (((params["radius"] ?? null) !== null) ? ants_registration_radius_cargs((params["radius"] ?? null), execution) : []).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2337,8 +2337,8 @@ function ants_registration_number_of_bins_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_mutual_information(
-    fixed_image: string,
-    moving_image: string,
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
     metric_weight: number,
     number_of_bins: AntsRegistrationNumberOfBinsParamsDict | null = null,
 ): AntsRegistrationMetricMutualInformationParamsDictTagged {
@@ -2368,7 +2368,7 @@ function ants_registration_metric_mutual_information_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["MI[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_registration_number_of_bins_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
+    cargs.push(["MI[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["metric_weight"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_registration_number_of_bins_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2532,8 +2532,8 @@ function ants_registration_number_of_bins_1_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_mattes(
-    fixed_image: string,
-    moving_image: string,
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
     metric_weight: number,
     number_of_bins: AntsRegistrationNumberOfBins1ParamsDict | null = null,
 ): AntsRegistrationMetricMattesParamsDictTagged {
@@ -2563,7 +2563,7 @@ function ants_registration_metric_mattes_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["Mattes[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_registration_number_of_bins_1_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
+    cargs.push(["Mattes[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["metric_weight"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_registration_number_of_bins_1_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2727,8 +2727,8 @@ function ants_registration_radius_1_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_mean_squares(
-    fixed_image: string,
-    moving_image: string,
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
     metric_weight: number,
     radius: AntsRegistrationRadius1ParamsDict | null = null,
 ): AntsRegistrationMetricMeanSquaresParamsDictTagged {
@@ -2758,7 +2758,7 @@ function ants_registration_metric_mean_squares_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["MeanSquares[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), (((params["radius"] ?? null) !== null) ? ants_registration_radius_1_cargs((params["radius"] ?? null), execution) : []).join(""), "]"].join(''));
+    cargs.push(["MeanSquares[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["metric_weight"] ?? null)), (((params["radius"] ?? null) !== null) ? ants_registration_radius_1_cargs((params["radius"] ?? null), execution) : []).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -2922,8 +2922,8 @@ function ants_registration_number_of_bins_2_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_demons(
-    fixed_image: string,
-    moving_image: string,
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
     metric_weight: number,
     number_of_bins: AntsRegistrationNumberOfBins2ParamsDict | null = null,
 ): AntsRegistrationMetricDemonsParamsDictTagged {
@@ -2953,7 +2953,7 @@ function ants_registration_metric_demons_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["Demons[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_registration_number_of_bins_2_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
+    cargs.push(["Demons[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["metric_weight"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_registration_number_of_bins_2_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -3117,8 +3117,8 @@ function ants_registration_radius_2_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_global_correlation(
-    fixed_image: string,
-    moving_image: string,
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
     metric_weight: number,
     radius: AntsRegistrationRadius2ParamsDict | null = null,
 ): AntsRegistrationMetricGlobalCorrelationParamsDictTagged {
@@ -3148,7 +3148,7 @@ function ants_registration_metric_global_correlation_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["GC[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), (((params["radius"] ?? null) !== null) ? ants_registration_radius_2_cargs((params["radius"] ?? null), execution) : []).join(""), "]"].join(''));
+    cargs.push(["GC[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["metric_weight"] ?? null)), (((params["radius"] ?? null) !== null) ? ants_registration_radius_2_cargs((params["radius"] ?? null), execution) : []).join(""), "]"].join(''));
     return cargs;
 }
 
@@ -3858,8 +3858,8 @@ function ants_registration_neighborhood_radius_cargs(
  * @returns Parameter dictionary
  */
 function ants_registration_metric_igdm(
-    fixed_image: string,
-    moving_image: string,
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
     metric_weight: number,
     fixed_mask: string,
     moving_mask: string,
@@ -3893,7 +3893,7 @@ function ants_registration_metric_igdm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["IGDM[", (params["fixed_image"] ?? null), ",", (params["moving_image"] ?? null), ",", String((params["metric_weight"] ?? null)), ",", (params["fixed_mask"] ?? null), ",", (params["moving_mask"] ?? null), (((params["neighborhood_radius"] ?? null) !== null) ? ants_registration_neighborhood_radius_cargs((params["neighborhood_radius"] ?? null), execution) : []).join(""), "]"].join(''));
+    cargs.push(["IGDM[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), ",", String((params["metric_weight"] ?? null)), ",", (params["fixed_mask"] ?? null), ",", (params["moving_mask"] ?? null), (((params["neighborhood_radius"] ?? null) !== null) ? ants_registration_neighborhood_radius_cargs((params["neighborhood_radius"] ?? null), execution) : []).join(""), "]"].join(''));
     return cargs;
 }
 
