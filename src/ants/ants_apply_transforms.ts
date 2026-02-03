@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_APPLY_TRANSFORMS_METADATA: Metadata = {
-    id: "b2a458e411cfbc6687dbc4a31f95f2b6ac33d716.boutiques",
+    id: "acf430f5cb18795b9d919a9679bc7ccd5e72e51d.boutiques",
     name: "antsApplyTransforms",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -433,7 +433,7 @@ function ants_apply_transforms_composite_displacement_field_output_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["[", (params["compositeDisplacementField"] ?? null), ",printOutCompositeWarpFile=", (((params["printOutCompositeWarpFile"] ?? null) !== null) ? ((params["printOutCompositeWarpFile"] ?? null) ? "1" : "0") : ""), "]"].join(''));
+    cargs.push(["[", (params["compositeDisplacementField"] ?? null), ",", (((params["printOutCompositeWarpFile"] ?? null) !== null) ? ((params["printOutCompositeWarpFile"] ?? null) ? "1" : "0") : ""), "]"].join(''));
     return cargs;
 }
 
@@ -511,7 +511,7 @@ function ants_apply_transforms_generic_affine_transform_output_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["Linear[", (params["genericAffineTransformFile"] ?? null), ",calculateInverse=", (((params["calculateInverse"] ?? null) !== null) ? ((params["calculateInverse"] ?? null) ? "1" : "0") : ""), "]"].join(''));
+    cargs.push(["Linear[", (params["genericAffineTransformFile"] ?? null), ",", (((params["calculateInverse"] ?? null) !== null) ? ((params["calculateInverse"] ?? null) ? "1" : "0") : ""), "]"].join(''));
     return cargs;
 }
 
@@ -663,7 +663,7 @@ function ants_apply_transforms_sigma_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["sigma=", String((params["sigma"] ?? null))].join(''));
+    cargs.push(String((params["sigma"] ?? null)));
     return cargs;
 }
 
@@ -699,7 +699,7 @@ function ants_apply_transforms_alpha_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["alpha=", String((params["alpha"] ?? null))].join(''));
+    cargs.push(String((params["alpha"] ?? null)));
     return cargs;
 }
 
@@ -813,7 +813,7 @@ function ants_apply_transforms_gaussian_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["sigma"] ?? null) !== null || (params["alpha"] ?? null) !== null) {
-        cargs.push(["Gaussian[sigma=", (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""), ",alpha=", (((params["alpha"] ?? null) !== null) ? String((params["alpha"] ?? null)) : ""), "]"].join(''));
+        cargs.push(["Gaussian[", (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""), ",", (((params["alpha"] ?? null) !== null) ? String((params["alpha"] ?? null)) : ""), "]"].join(''));
     }
     return cargs;
 }
@@ -1021,7 +1021,7 @@ function ants_apply_transforms_generic_label_cargs(
 ): string[] {
     const cargs: string[] = [];
     if ((params["interpolator"] ?? null) !== null) {
-        cargs.push(["GenericLabel[interpolator=", (params["interpolator"] ?? null), "]"].join(''));
+        cargs.push(["GenericLabel[", (params["interpolator"] ?? null), "]"].join(''));
     }
     return cargs;
 }
