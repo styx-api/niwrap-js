@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DCALC_METADATA: Metadata = {
-    id: "61bba3b4853d5aefabaf672965d70abeb5ac91de.boutiques",
+    id: "99612896b438053febb4d2e09a3dfdacf6248f06.boutiques",
     name: "3dcalc",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
@@ -471,7 +471,6 @@ function v_3dcalc_cargs(
     if ((params["other_datasets"] ?? null) !== null) {
         cargs.push(...(params["other_datasets"] ?? null).map(s => v_3dcalc_other_dataset_config_cargs(s, execution)).flat());
     }
-    cargs.push("-expr");
     cargs.push(
         "-expr",
         (params["expression"] ?? null)
