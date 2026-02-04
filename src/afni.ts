@@ -418,7 +418,7 @@ export {v_3d_zregrid, v_3d_zregrid_execute, v_3d_zregrid_params} from './afni/v_
 export {v_3danisosmooth, v_3danisosmooth_execute, v_3danisosmooth_params} from './afni/v_3danisosmooth'
 export {v_3daxialize, v_3daxialize_execute, v_3daxialize_params} from './afni/v_3daxialize'
 export {v_3dbucket, v_3dbucket_execute, v_3dbucket_params} from './afni/v_3dbucket'
-export {v_3dcalc, v_3dcalc_execute, v_3dcalc_params} from './afni/v_3dcalc'
+export {v_3dcalc, v_3dcalc_execute, v_3dcalc_params, v_3dcalc_dataset_a_file, v_3dcalc_dataset_a_synthetic, v_3dcalc_other_dataset_config, v_3dcalc_taxis_config, v_3dcalc_rgbfac_config} from './afni/v_3dcalc'
 export {v_3dclust, v_3dclust_execute, v_3dclust_params} from './afni/v_3dclust'
 export {v_3dcopy, v_3dcopy_execute, v_3dcopy_params} from './afni/v_3dcopy'
 export {v_3ddelay, v_3ddelay_execute, v_3ddelay_params} from './afni/v_3ddelay'

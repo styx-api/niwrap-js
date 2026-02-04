@@ -4,27 +4,349 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3DCALC_METADATA: Metadata = {
-    id: "4ecc4bd9710b038a889275d36ce45265ee4b3f81.boutiques",
+    id: "61bba3b4853d5aefabaf672965d70abeb5ac91de.boutiques",
     name: "3dcalc",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
+interface V3dcalcDatasetAFileParamsDict {
+    "@type"?: "dataset_a_file";
+    "cx2r"?: "REAL" | "IMAG" | "ABS" | "PHASE" | null | undefined;
+    "file": InputPathType;
+    "selectors"?: string | null | undefined;
+}
+type V3dcalcDatasetAFileParamsDictTagged = Required<Pick<V3dcalcDatasetAFileParamsDict, '@type'>> & V3dcalcDatasetAFileParamsDict;
+
+
+interface V3dcalcDatasetASyntheticParamsDict {
+    "@type"?: "dataset_a_synthetic";
+    "cx2r"?: "REAL" | "IMAG" | "ABS" | "PHASE" | null | undefined;
+    "synth_string": string;
+}
+type V3dcalcDatasetASyntheticParamsDictTagged = Required<Pick<V3dcalcDatasetASyntheticParamsDict, '@type'>> & V3dcalcDatasetASyntheticParamsDict;
+
+
+interface V3dcalcOtherDatasetConfigParamsDict {
+    "@type"?: "other_dataset_config";
+    "cx2r"?: "REAL" | "IMAG" | "ABS" | "PHASE" | null | undefined;
+    "variable_letter": string;
+    "file": InputPathType;
+    "selectors"?: string | null | undefined;
+}
+type V3dcalcOtherDatasetConfigParamsDictTagged = Required<Pick<V3dcalcOtherDatasetConfigParamsDict, '@type'>> & V3dcalcOtherDatasetConfigParamsDict;
+
+
+interface V3dcalcTaxisConfigParamsDict {
+    "@type"?: "taxis_config";
+    "num_points": number;
+    "time_step"?: number | null | undefined;
+}
+type V3dcalcTaxisConfigParamsDictTagged = Required<Pick<V3dcalcTaxisConfigParamsDict, '@type'>> & V3dcalcTaxisConfigParamsDict;
+
+
+interface V3dcalcRgbfacConfigParamsDict {
+    "@type"?: "rgbfac_config";
+    "a": number;
+    "b": number;
+    "c": number;
+}
+type V3dcalcRgbfacConfigParamsDictTagged = Required<Pick<V3dcalcRgbfacConfigParamsDict, '@type'>> & V3dcalcRgbfacConfigParamsDict;
+
+
 interface V3dcalcParamsDict {
     "@type"?: "afni/3dcalc";
-    "in_file_a": InputPathType;
-    "in_file_b"?: InputPathType | null | undefined;
-    "in_file_c"?: InputPathType | null | undefined;
-    "other"?: InputPathType | null | undefined;
-    "overwrite": boolean;
-    "single_idx"?: number | null | undefined;
-    "start_idx"?: number | null | undefined;
-    "stop_idx"?: number | null | undefined;
-    "expr": string;
+    "dataset_a": V3dcalcDatasetAFileParamsDictTagged | V3dcalcDatasetASyntheticParamsDictTagged;
+    "other_datasets"?: Array<V3dcalcOtherDatasetConfigParamsDict> | null | undefined;
+    "expression": string;
     "prefix"?: string | null | undefined;
+    "verbose": boolean;
+    "datum"?: "byte" | "short" | "float" | null | undefined;
+    "fscale": boolean;
+    "gscale": boolean;
+    "nscale": boolean;
+    "usetemp": boolean;
+    "dt"?: number | null | undefined;
+    "taxis"?: V3dcalcTaxisConfigParamsDict | null | undefined;
+    "rgbfac"?: V3dcalcRgbfacConfigParamsDict | null | undefined;
+    "sort_mode"?: "sort" | "SORT" | null | undefined;
+    "isola": boolean;
+    "coordinate_system"?: "dicom" | "RAI" | "SPM" | "LPI" | null | undefined;
 }
 type V3dcalcParamsDictTagged = Required<Pick<V3dcalcParamsDict, '@type'>> & V3dcalcParamsDict;
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function v_3dcalc_dataset_a_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "dataset_a_file": v_3dcalc_dataset_a_file_cargs,
+        "dataset_a_synthetic": v_3dcalc_dataset_a_synthetic_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function v_3dcalc_dataset_a_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param cx2r Method to convert complex numbers to real before loading this dataset.
+ * @param selectors AFNI sub-brick selectors, e.g., '[2..$]' or '<100..200>'.
+ *
+ * @returns Parameter dictionary
+ */
+function v_3dcalc_dataset_a_file(
+    file: InputPathType,
+    cx2r: "REAL" | "IMAG" | "ABS" | "PHASE" | null = null,
+    selectors: string | null = null,
+): V3dcalcDatasetAFileParamsDictTagged {
+    const params = {
+        "@type": "dataset_a_file" as const,
+        "file": file,
+    };
+    if (cx2r !== null) {
+        params["cx2r"] = cx2r;
+    }
+    if (selectors !== null) {
+        params["selectors"] = selectors;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3dcalc_dataset_a_file_cargs(
+    params: V3dcalcDatasetAFileParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["cx2r"] ?? null) !== null) {
+        cargs.push(
+            "-cx2r",
+            (params["cx2r"] ?? null)
+        );
+    }
+    cargs.push("-a");
+    cargs.push([execution.inputFile((params["file"] ?? null)), (((params["selectors"] ?? null) !== null) ? (params["selectors"] ?? null) : "")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param synth_string String definition for 1D or random dataset (e.g., '1D:5@0,5@1').
+ *
+ * @returns Parameter dictionary
+ */
+function v_3dcalc_dataset_a_synthetic(
+    synth_string: string,
+    cx2r: "REAL" | "IMAG" | "ABS" | "PHASE" | null = null,
+): V3dcalcDatasetASyntheticParamsDictTagged {
+    const params = {
+        "@type": "dataset_a_synthetic" as const,
+        "synth_string": synth_string,
+    };
+    if (cx2r !== null) {
+        params["cx2r"] = cx2r;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3dcalc_dataset_a_synthetic_cargs(
+    params: V3dcalcDatasetASyntheticParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["cx2r"] ?? null) !== null) {
+        cargs.push(
+            "-cx2r",
+            (params["cx2r"] ?? null)
+        );
+    }
+    cargs.push("-a");
+    cargs.push((params["synth_string"] ?? null));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param variable_letter The variable letter used in the expression (e.g., 'b', 'c').
+ * @param cx2r Method to convert complex numbers to real for *this specific dataset*.
+ * @param selectors AFNI sub-brick selectors, e.g., '[2]' or '[2..$]'.
+ *
+ * @returns Parameter dictionary
+ */
+function v_3dcalc_other_dataset_config(
+    variable_letter: string,
+    file: InputPathType,
+    cx2r: "REAL" | "IMAG" | "ABS" | "PHASE" | null = null,
+    selectors: string | null = null,
+): V3dcalcOtherDatasetConfigParamsDictTagged {
+    const params = {
+        "@type": "other_dataset_config" as const,
+        "variable_letter": variable_letter,
+        "file": file,
+    };
+    if (cx2r !== null) {
+        params["cx2r"] = cx2r;
+    }
+    if (selectors !== null) {
+        params["selectors"] = selectors;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3dcalc_other_dataset_config_cargs(
+    params: V3dcalcOtherDatasetConfigParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["cx2r"] ?? null) !== null) {
+        cargs.push(
+            "-cx2r",
+            (params["cx2r"] ?? null)
+        );
+    }
+    cargs.push(["-", (params["variable_letter"] ?? null)].join(''));
+    cargs.push([execution.inputFile((params["file"] ?? null)), (((params["selectors"] ?? null) !== null) ? (params["selectors"] ?? null) : "")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param num_points Length of the time axis.
+ * @param time_step Time step in seconds.
+ *
+ * @returns Parameter dictionary
+ */
+function v_3dcalc_taxis_config(
+    num_points: number,
+    time_step: number | null = null,
+): V3dcalcTaxisConfigParamsDictTagged {
+    const params = {
+        "@type": "taxis_config" as const,
+        "num_points": num_points,
+    };
+    if (time_step !== null) {
+        params["time_step"] = time_step;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3dcalc_taxis_config_cargs(
+    params: V3dcalcTaxisConfigParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("-taxis");
+    cargs.push([String((params["num_points"] ?? null)), ":", (((params["time_step"] ?? null) !== null) ? String((params["time_step"] ?? null)) : "")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function v_3dcalc_rgbfac_config(
+    a: number,
+    b: number,
+    c: number,
+): V3dcalcRgbfacConfigParamsDictTagged {
+    const params = {
+        "@type": "rgbfac_config" as const,
+        "a": a,
+        "b": b,
+        "c": c,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3dcalc_rgbfac_config_cargs(
+    params: V3dcalcRgbfacConfigParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("-rgbfac");
+    cargs.push(String((params["a"] ?? null)));
+    cargs.push(String((params["b"] ?? null)));
+    cargs.push(String((params["c"] ?? null)));
+    return cargs;
+}
 
 
 /**
@@ -38,66 +360,94 @@ interface V3dcalcOutputs {
      */
     root: OutputPathType;
     /**
-     * Output image file name.
+     * Output dataset header file (if AFNI format is used).
      */
-    out_file: OutputPathType | null;
+    output_head: OutputPathType | null;
+    /**
+     * Output dataset binary file (if AFNI format is used).
+     */
+    output_brik: OutputPathType | null;
+    /**
+     * Output dataset file (if NIfTI or other format is used).
+     */
+    output_file: OutputPathType | null;
 }
 
 
 /**
  * Build parameters.
  *
- * @param in_file_a Input file to 3dcalc.
- * @param expr Expr.
- * @param in_file_b Operand file to 3dcalc.
- * @param in_file_c Operand file to 3dcalc.
- * @param other Other options.
- * @param overwrite Overwrite output.
- * @param single_idx Volume index for in_file_a.
- * @param start_idx Start index for in_file_a.
- * @param stop_idx Stop index for in_file_a.
- * @param prefix Output image file name.
+ * @param dataset_a Input dataset 'a' (required). This can be a standard file or a synthetic '1D:'/'jRandomDataset:' string. This dataset serves as the template for the output.
+ * @param expression Arithmetic expression to apply to the input datasets (within quotes).
+ * @param other_datasets Additional input datasets (b, c, etc.). Includes 'cx2r' support to ensure the flag precedes the specific dataset.
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param verbose Makes the program print out various information as it progresses.
+ * @param datum Coerce the output data to be stored as the given type.
+ * @param fscale Force scaling of the output to the maximum integer range (for byte or short output).
+ * @param gscale Same as -fscale, but also forces each output sub-brick to get the same scaling factor. Incompatible with -usetemp.
+ * @param nscale Don't do any scaling on output to byte or short datasets.
+ * @param usetemp Create a temporary file to hold intermediate results. Incompatible with -gscale.
+ * @param dt Use 'tstep' as the TR for 'manufactured' 3D+time datasets (in seconds).
+ * @param taxis Force the creation of a time axis. Replaces string input with strict micro-syntax structure 'N:tstep'.
+ * @param rgbfac Factors A, B, C for collapsing RGB input datasets (value = A*r + B*g + C*b).
+ * @param sort_mode Sort each output brick separately. 'sort' = increasing, 'SORT' = decreasing.
+ * @param isola After computation, remove isolated non-zero voxels.
+ * @param coordinate_system Set the coordinate display order (DICOM/RAI or SPM/LPI).
  *
  * @returns Parameter dictionary
  */
 function v_3dcalc_params(
-    in_file_a: InputPathType,
-    expr: string,
-    in_file_b: InputPathType | null = null,
-    in_file_c: InputPathType | null = null,
-    other: InputPathType | null = null,
-    overwrite: boolean = false,
-    single_idx: number | null = null,
-    start_idx: number | null = null,
-    stop_idx: number | null = null,
+    dataset_a: V3dcalcDatasetAFileParamsDictTagged | V3dcalcDatasetASyntheticParamsDictTagged,
+    expression: string,
+    other_datasets: Array<V3dcalcOtherDatasetConfigParamsDict> | null = null,
     prefix: string | null = null,
+    verbose: boolean = false,
+    datum: "byte" | "short" | "float" | null = null,
+    fscale: boolean = false,
+    gscale: boolean = false,
+    nscale: boolean = false,
+    usetemp: boolean = false,
+    dt: number | null = null,
+    taxis: V3dcalcTaxisConfigParamsDict | null = null,
+    rgbfac: V3dcalcRgbfacConfigParamsDict | null = null,
+    sort_mode: "sort" | "SORT" | null = null,
+    isola: boolean = false,
+    coordinate_system: "dicom" | "RAI" | "SPM" | "LPI" | null = null,
 ): V3dcalcParamsDictTagged {
     const params = {
         "@type": "afni/3dcalc" as const,
-        "in_file_a": in_file_a,
-        "overwrite": overwrite,
-        "expr": expr,
+        "dataset_a": dataset_a,
+        "expression": expression,
+        "verbose": verbose,
+        "fscale": fscale,
+        "gscale": gscale,
+        "nscale": nscale,
+        "usetemp": usetemp,
+        "isola": isola,
     };
-    if (in_file_b !== null) {
-        params["in_file_b"] = in_file_b;
-    }
-    if (in_file_c !== null) {
-        params["in_file_c"] = in_file_c;
-    }
-    if (other !== null) {
-        params["other"] = other;
-    }
-    if (single_idx !== null) {
-        params["single_idx"] = single_idx;
-    }
-    if (start_idx !== null) {
-        params["start_idx"] = start_idx;
-    }
-    if (stop_idx !== null) {
-        params["stop_idx"] = stop_idx;
+    if (other_datasets !== null) {
+        params["other_datasets"] = other_datasets;
     }
     if (prefix !== null) {
         params["prefix"] = prefix;
+    }
+    if (datum !== null) {
+        params["datum"] = datum;
+    }
+    if (dt !== null) {
+        params["dt"] = dt;
+    }
+    if (taxis !== null) {
+        params["taxis"] = taxis;
+    }
+    if (rgbfac !== null) {
+        params["rgbfac"] = rgbfac;
+    }
+    if (sort_mode !== null) {
+        params["sort_mode"] = sort_mode;
+    }
+    if (coordinate_system !== null) {
+        params["coordinate_system"] = coordinate_system;
     }
     return params;
 }
@@ -117,46 +467,62 @@ function v_3dcalc_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dcalc");
-    cargs.push(
-        "-a",
-        execution.inputFile((params["in_file_a"] ?? null))
-    );
-    if ((params["in_file_b"] ?? null) !== null) {
-        cargs.push(
-            "-b",
-            execution.inputFile((params["in_file_b"] ?? null))
-        );
+    cargs.push(...v_3dcalc_dataset_a_cargs_dyn_fn((params["dataset_a"] ?? null)["@type"])((params["dataset_a"] ?? null), execution));
+    if ((params["other_datasets"] ?? null) !== null) {
+        cargs.push(...(params["other_datasets"] ?? null).map(s => v_3dcalc_other_dataset_config_cargs(s, execution)).flat());
     }
-    if ((params["in_file_c"] ?? null) !== null) {
-        cargs.push(
-            "-c",
-            execution.inputFile((params["in_file_c"] ?? null))
-        );
-    }
-    if ((params["other"] ?? null) !== null) {
-        cargs.push(execution.inputFile((params["other"] ?? null)));
-    }
-    if ((params["overwrite"] ?? false)) {
-        cargs.push("-overwrite");
-    }
-    if ((params["single_idx"] ?? null) !== null) {
-        cargs.push(String((params["single_idx"] ?? null)));
-    }
-    if ((params["start_idx"] ?? null) !== null) {
-        cargs.push(String((params["start_idx"] ?? null)));
-    }
-    if ((params["stop_idx"] ?? null) !== null) {
-        cargs.push(String((params["stop_idx"] ?? null)));
-    }
+    cargs.push("-expr");
     cargs.push(
         "-expr",
-        (params["expr"] ?? null)
+        (params["expression"] ?? null)
     );
     if ((params["prefix"] ?? null) !== null) {
         cargs.push(
             "-prefix",
             (params["prefix"] ?? null)
         );
+    }
+    if ((params["verbose"] ?? false)) {
+        cargs.push("-verbose");
+    }
+    if ((params["datum"] ?? null) !== null) {
+        cargs.push(
+            "-datum",
+            (params["datum"] ?? null)
+        );
+    }
+    if ((params["fscale"] ?? false)) {
+        cargs.push("-fscale");
+    }
+    if ((params["gscale"] ?? false)) {
+        cargs.push("-gscale");
+    }
+    if ((params["nscale"] ?? false)) {
+        cargs.push("-nscale");
+    }
+    if ((params["usetemp"] ?? false)) {
+        cargs.push("-usetemp");
+    }
+    if ((params["dt"] ?? null) !== null) {
+        cargs.push(
+            "-dt",
+            String((params["dt"] ?? null))
+        );
+    }
+    if ((params["taxis"] ?? null) !== null) {
+        cargs.push(...v_3dcalc_taxis_config_cargs((params["taxis"] ?? null), execution));
+    }
+    if ((params["rgbfac"] ?? null) !== null) {
+        cargs.push(...v_3dcalc_rgbfac_config_cargs((params["rgbfac"] ?? null), execution));
+    }
+    if ((params["sort_mode"] ?? null) !== null) {
+        cargs.push((params["sort_mode"] ?? null));
+    }
+    if ((params["isola"] ?? false)) {
+        cargs.push("-isola");
+    }
+    if ((params["coordinate_system"] ?? null) !== null) {
+        cargs.push((params["coordinate_system"] ?? null));
     }
     return cargs;
 }
@@ -176,7 +542,9 @@ function v_3dcalc_outputs(
 ): V3dcalcOutputs {
     const ret: V3dcalcOutputs = {
         root: execution.outputFile("."),
-        out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
+        output_head: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.HEAD"].join('')) : null,
+        output_brik: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "+orig.BRIK"].join('')) : null,
+        output_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
     };
     return ret;
 }
@@ -185,11 +553,7 @@ function v_3dcalc_outputs(
 /**
  * 3dcalc
  *
- * AFNI's calculator program.
- *
- * Author: AFNI Developers
- *
- * URL: https://afni.nimh.nih.gov/
+ * AFNI's calculator program. Performs voxel-by-voxel arithmetic on 3D datasets, with strict handling of complex/synthetic inputs and state-dependent flags.
  *
  * @param params The parameters.
  * @param runner Command runner
@@ -213,50 +577,73 @@ function v_3dcalc_execute(
 /**
  * 3dcalc
  *
- * AFNI's calculator program.
+ * AFNI's calculator program. Performs voxel-by-voxel arithmetic on 3D datasets, with strict handling of complex/synthetic inputs and state-dependent flags.
  *
- * Author: AFNI Developers
- *
- * URL: https://afni.nimh.nih.gov/
- *
- * @param in_file_a Input file to 3dcalc.
- * @param expr Expr.
- * @param in_file_b Operand file to 3dcalc.
- * @param in_file_c Operand file to 3dcalc.
- * @param other Other options.
- * @param overwrite Overwrite output.
- * @param single_idx Volume index for in_file_a.
- * @param start_idx Start index for in_file_a.
- * @param stop_idx Stop index for in_file_a.
- * @param prefix Output image file name.
+ * @param dataset_a Input dataset 'a' (required). This can be a standard file or a synthetic '1D:'/'jRandomDataset:' string. This dataset serves as the template for the output.
+ * @param expression Arithmetic expression to apply to the input datasets (within quotes).
+ * @param other_datasets Additional input datasets (b, c, etc.). Includes 'cx2r' support to ensure the flag precedes the specific dataset.
+ * @param prefix Use 'pname' for the output dataset prefix name.
+ * @param verbose Makes the program print out various information as it progresses.
+ * @param datum Coerce the output data to be stored as the given type.
+ * @param fscale Force scaling of the output to the maximum integer range (for byte or short output).
+ * @param gscale Same as -fscale, but also forces each output sub-brick to get the same scaling factor. Incompatible with -usetemp.
+ * @param nscale Don't do any scaling on output to byte or short datasets.
+ * @param usetemp Create a temporary file to hold intermediate results. Incompatible with -gscale.
+ * @param dt Use 'tstep' as the TR for 'manufactured' 3D+time datasets (in seconds).
+ * @param taxis Force the creation of a time axis. Replaces string input with strict micro-syntax structure 'N:tstep'.
+ * @param rgbfac Factors A, B, C for collapsing RGB input datasets (value = A*r + B*g + C*b).
+ * @param sort_mode Sort each output brick separately. 'sort' = increasing, 'SORT' = decreasing.
+ * @param isola After computation, remove isolated non-zero voxels.
+ * @param coordinate_system Set the coordinate display order (DICOM/RAI or SPM/LPI).
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dcalcOutputs`).
  */
 function v_3dcalc(
-    in_file_a: InputPathType,
-    expr: string,
-    in_file_b: InputPathType | null = null,
-    in_file_c: InputPathType | null = null,
-    other: InputPathType | null = null,
-    overwrite: boolean = false,
-    single_idx: number | null = null,
-    start_idx: number | null = null,
-    stop_idx: number | null = null,
+    dataset_a: V3dcalcDatasetAFileParamsDictTagged | V3dcalcDatasetASyntheticParamsDictTagged,
+    expression: string,
+    other_datasets: Array<V3dcalcOtherDatasetConfigParamsDict> | null = null,
     prefix: string | null = null,
+    verbose: boolean = false,
+    datum: "byte" | "short" | "float" | null = null,
+    fscale: boolean = false,
+    gscale: boolean = false,
+    nscale: boolean = false,
+    usetemp: boolean = false,
+    dt: number | null = null,
+    taxis: V3dcalcTaxisConfigParamsDict | null = null,
+    rgbfac: V3dcalcRgbfacConfigParamsDict | null = null,
+    sort_mode: "sort" | "SORT" | null = null,
+    isola: boolean = false,
+    coordinate_system: "dicom" | "RAI" | "SPM" | "LPI" | null = null,
     runner: Runner | null = null,
 ): V3dcalcOutputs {
-    const params = v_3dcalc_params(in_file_a, expr, in_file_b, in_file_c, other, overwrite, single_idx, start_idx, stop_idx, prefix)
+    const params = v_3dcalc_params(dataset_a, expression, other_datasets, prefix, verbose, datum, fscale, gscale, nscale, usetemp, dt, taxis, rgbfac, sort_mode, isola, coordinate_system)
     return v_3dcalc_execute(params, runner);
 }
 
 
 export {
+      V3dcalcDatasetAFileParamsDict,
+      V3dcalcDatasetAFileParamsDictTagged,
+      V3dcalcDatasetASyntheticParamsDict,
+      V3dcalcDatasetASyntheticParamsDictTagged,
+      V3dcalcOtherDatasetConfigParamsDict,
+      V3dcalcOtherDatasetConfigParamsDictTagged,
       V3dcalcOutputs,
       V3dcalcParamsDict,
       V3dcalcParamsDictTagged,
+      V3dcalcRgbfacConfigParamsDict,
+      V3dcalcRgbfacConfigParamsDictTagged,
+      V3dcalcTaxisConfigParamsDict,
+      V3dcalcTaxisConfigParamsDictTagged,
       V_3DCALC_METADATA,
       v_3dcalc,
+      v_3dcalc_dataset_a_file,
+      v_3dcalc_dataset_a_synthetic,
       v_3dcalc_execute,
+      v_3dcalc_other_dataset_config,
       v_3dcalc_params,
+      v_3dcalc_rgbfac_config,
+      v_3dcalc_taxis_config,
 };
