@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_APPLY_TRANSFORMS_METADATA: Metadata = {
-    id: "acf430f5cb18795b9d919a9679bc7ccd5e72e51d.boutiques",
+    id: "1c048ebc540b3b7b3e89b3891e2dbf90ecd87dc3.boutiques",
     name: "antsApplyTransforms",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -1094,7 +1094,7 @@ function ants_apply_transforms_use_inverse_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(["[", execution.inputFile((params["transformFileName"] ?? null)), ",useInverse]"].join(''));
+    cargs.push(["[", execution.inputFile((params["transformFileName"] ?? null)), ",1]"].join(''));
     return cargs;
 }
 
