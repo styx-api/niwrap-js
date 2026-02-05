@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMATHS_METADATA: Metadata = {
-    id: "17a5a4282e9fdf33c9fa4e794632c9da02d2c911.boutiques",
+    id: "631824cf78cb774076a4c68e6253996918877e52.boutiques",
     name: "fslmaths",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -13,112 +13,112 @@ const FSLMATHS_METADATA: Metadata = {
 
 interface FslmathsOperationAddParamsDict {
     "@type"?: "operation_add";
-    "add"?: number | null | undefined;
+    "add": number;
 }
 type FslmathsOperationAddParamsDictTagged = Required<Pick<FslmathsOperationAddParamsDict, '@type'>> & FslmathsOperationAddParamsDict;
 
 
 interface FslmathsOperationSubParamsDict {
     "@type"?: "operation_sub";
-    "sub"?: number | null | undefined;
+    "sub": number;
 }
 type FslmathsOperationSubParamsDictTagged = Required<Pick<FslmathsOperationSubParamsDict, '@type'>> & FslmathsOperationSubParamsDict;
 
 
 interface FslmathsOperationMulParamsDict {
     "@type"?: "operation_mul";
-    "mul"?: number | null | undefined;
+    "mul": number;
 }
 type FslmathsOperationMulParamsDictTagged = Required<Pick<FslmathsOperationMulParamsDict, '@type'>> & FslmathsOperationMulParamsDict;
 
 
 interface FslmathsOperationDivParamsDict {
     "@type"?: "operation_div";
-    "div"?: number | null | undefined;
+    "div": number;
 }
 type FslmathsOperationDivParamsDictTagged = Required<Pick<FslmathsOperationDivParamsDict, '@type'>> & FslmathsOperationDivParamsDict;
 
 
 interface FslmathsOperationRemParamsDict {
     "@type"?: "operation_rem";
-    "rem"?: number | null | undefined;
+    "rem": number;
 }
 type FslmathsOperationRemParamsDictTagged = Required<Pick<FslmathsOperationRemParamsDict, '@type'>> & FslmathsOperationRemParamsDict;
 
 
 interface FslmathsOperationMasParamsDict {
     "@type"?: "operation_mas";
-    "mas"?: InputPathType | null | undefined;
+    "mas": InputPathType;
 }
 type FslmathsOperationMasParamsDictTagged = Required<Pick<FslmathsOperationMasParamsDict, '@type'>> & FslmathsOperationMasParamsDict;
 
 
 interface FslmathsOperationThrParamsDict {
     "@type"?: "operation_thr";
-    "thr"?: number | null | undefined;
+    "thr": number;
 }
 type FslmathsOperationThrParamsDictTagged = Required<Pick<FslmathsOperationThrParamsDict, '@type'>> & FslmathsOperationThrParamsDict;
 
 
 interface FslmathsOperationThrpParamsDict {
     "@type"?: "operation_thrp";
-    "thrp"?: number | null | undefined;
+    "thrp": number;
 }
 type FslmathsOperationThrpParamsDictTagged = Required<Pick<FslmathsOperationThrpParamsDict, '@type'>> & FslmathsOperationThrpParamsDict;
 
 
 interface FslmathsOperationThrPParamsDict {
     "@type"?: "operation_thrP";
-    "thrP"?: number | null | undefined;
+    "thrP": number;
 }
 type FslmathsOperationThrPParamsDictTagged = Required<Pick<FslmathsOperationThrPParamsDict, '@type'>> & FslmathsOperationThrPParamsDict;
 
 
 interface FslmathsOperationUthrParamsDict {
     "@type"?: "operation_uthr";
-    "uthr"?: number | null | undefined;
+    "uthr": number;
 }
 type FslmathsOperationUthrParamsDictTagged = Required<Pick<FslmathsOperationUthrParamsDict, '@type'>> & FslmathsOperationUthrParamsDict;
 
 
 interface FslmathsOperationUthrpParamsDict {
     "@type"?: "operation_uthrp";
-    "uthrp"?: number | null | undefined;
+    "uthrp": number;
 }
 type FslmathsOperationUthrpParamsDictTagged = Required<Pick<FslmathsOperationUthrpParamsDict, '@type'>> & FslmathsOperationUthrpParamsDict;
 
 
 interface FslmathsOperationUthrPParamsDict {
     "@type"?: "operation_uthrP";
-    "uthrP"?: number | null | undefined;
+    "uthrP": number;
 }
 type FslmathsOperationUthrPParamsDictTagged = Required<Pick<FslmathsOperationUthrPParamsDict, '@type'>> & FslmathsOperationUthrPParamsDict;
 
 
 interface FslmathsOperationMaxParamsDict {
     "@type"?: "operation_max";
-    "max"?: number | null | undefined;
+    "max": number;
 }
 type FslmathsOperationMaxParamsDictTagged = Required<Pick<FslmathsOperationMaxParamsDict, '@type'>> & FslmathsOperationMaxParamsDict;
 
 
 interface FslmathsOperationMinParamsDict {
     "@type"?: "operation_min";
-    "min"?: number | null | undefined;
+    "min": number;
 }
 type FslmathsOperationMinParamsDictTagged = Required<Pick<FslmathsOperationMinParamsDict, '@type'>> & FslmathsOperationMinParamsDict;
 
 
 interface FslmathsOperationSeedParamsDict {
     "@type"?: "operation_seed";
-    "seed"?: number | null | undefined;
+    "seed": number;
 }
 type FslmathsOperationSeedParamsDictTagged = Required<Pick<FslmathsOperationSeedParamsDict, '@type'>> & FslmathsOperationSeedParamsDict;
 
 
 interface FslmathsOperationRestartParamsDict {
     "@type"?: "operation_restart";
-    "restart"?: InputPathType | null | undefined;
+    "restart": InputPathType;
 }
 type FslmathsOperationRestartParamsDictTagged = Required<Pick<FslmathsOperationRestartParamsDict, '@type'>> & FslmathsOperationRestartParamsDict;
 
@@ -251,7 +251,7 @@ type FslmathsOperationIndexParamsDictTagged = Required<Pick<FslmathsOperationInd
 
 interface FslmathsOperationGridParamsDict {
     "@type"?: "operation_grid";
-    "grid"?: Array<number> | null | undefined;
+    "grid": Array<number>;
 }
 type FslmathsOperationGridParamsDictTagged = Required<Pick<FslmathsOperationGridParamsDict, '@type'>> & FslmathsOperationGridParamsDict;
 
@@ -265,14 +265,14 @@ type FslmathsOperationEdgeParamsDictTagged = Required<Pick<FslmathsOperationEdge
 
 interface FslmathsOperationTfceParamsDict {
     "@type"?: "operation_tfce";
-    "tfce"?: Array<number> | null | undefined;
+    "tfce": Array<number>;
 }
 type FslmathsOperationTfceParamsDictTagged = Required<Pick<FslmathsOperationTfceParamsDict, '@type'>> & FslmathsOperationTfceParamsDict;
 
 
 interface FslmathsOperationTfceSParamsDict {
     "@type"?: "operation_tfceS";
-    "tfceS"?: Array<number> | null | undefined;
+    "tfceS": Array<number>;
 }
 type FslmathsOperationTfceSParamsDictTagged = Required<Pick<FslmathsOperationTfceSParamsDict, '@type'>> & FslmathsOperationTfceSParamsDict;
 
@@ -307,14 +307,14 @@ type FslmathsOperationRandnParamsDictTagged = Required<Pick<FslmathsOperationRan
 
 interface FslmathsOperationInmParamsDict {
     "@type"?: "operation_inm";
-    "inm"?: number | null | undefined;
+    "inm": number;
 }
 type FslmathsOperationInmParamsDictTagged = Required<Pick<FslmathsOperationInmParamsDict, '@type'>> & FslmathsOperationInmParamsDict;
 
 
 interface FslmathsOperationIngParamsDict {
     "@type"?: "operation_ing";
-    "ing"?: number | null | undefined;
+    "ing": number;
 }
 type FslmathsOperationIngParamsDictTagged = Required<Pick<FslmathsOperationIngParamsDict, '@type'>> & FslmathsOperationIngParamsDict;
 
@@ -349,42 +349,42 @@ type FslmathsOperationKernel2DParamsDictTagged = Required<Pick<FslmathsOperation
 
 interface FslmathsOperationKernelBoxParamsDict {
     "@type"?: "operation_kernel_box";
-    "kernel_box"?: number | null | undefined;
+    "kernel_box": number;
 }
 type FslmathsOperationKernelBoxParamsDictTagged = Required<Pick<FslmathsOperationKernelBoxParamsDict, '@type'>> & FslmathsOperationKernelBoxParamsDict;
 
 
 interface FslmathsOperationKernelBoxvParamsDict {
     "@type"?: "operation_kernel_boxv";
-    "kernel_boxv"?: number | null | undefined;
+    "kernel_boxv": number;
 }
 type FslmathsOperationKernelBoxvParamsDictTagged = Required<Pick<FslmathsOperationKernelBoxvParamsDict, '@type'>> & FslmathsOperationKernelBoxvParamsDict;
 
 
 interface FslmathsOperationKernelBoxv3ParamsDict {
     "@type"?: "operation_kernel_boxv3";
-    "kernel_boxv3"?: Array<number> | null | undefined;
+    "kernel_boxv3": Array<number>;
 }
 type FslmathsOperationKernelBoxv3ParamsDictTagged = Required<Pick<FslmathsOperationKernelBoxv3ParamsDict, '@type'>> & FslmathsOperationKernelBoxv3ParamsDict;
 
 
 interface FslmathsOperationKernelGaussParamsDict {
     "@type"?: "operation_kernel_gauss";
-    "kernel_gauss"?: number | null | undefined;
+    "kernel_gauss": number;
 }
 type FslmathsOperationKernelGaussParamsDictTagged = Required<Pick<FslmathsOperationKernelGaussParamsDict, '@type'>> & FslmathsOperationKernelGaussParamsDict;
 
 
 interface FslmathsOperationKernelSphereParamsDict {
     "@type"?: "operation_kernel_sphere";
-    "kernel_sphere"?: number | null | undefined;
+    "kernel_sphere": number;
 }
 type FslmathsOperationKernelSphereParamsDictTagged = Required<Pick<FslmathsOperationKernelSphereParamsDict, '@type'>> & FslmathsOperationKernelSphereParamsDict;
 
 
 interface FslmathsOperationKernelFileParamsDict {
     "@type"?: "operation_kernel_file";
-    "kernel_file"?: InputPathType | null | undefined;
+    "kernel_file": InputPathType;
 }
 type FslmathsOperationKernelFileParamsDictTagged = Required<Pick<FslmathsOperationKernelFileParamsDict, '@type'>> & FslmathsOperationKernelFileParamsDict;
 
@@ -454,7 +454,7 @@ type FslmathsOperationFmeanuParamsDictTagged = Required<Pick<FslmathsOperationFm
 
 interface FslmathsOperationSParamsDict {
     "@type"?: "operation_s";
-    "s"?: number | null | undefined;
+    "s": number;
 }
 type FslmathsOperationSParamsDictTagged = Required<Pick<FslmathsOperationSParamsDict, '@type'>> & FslmathsOperationSParamsDict;
 
@@ -643,28 +643,28 @@ type FslmathsOperationZmedianParamsDictTagged = Required<Pick<FslmathsOperationZ
 
 interface FslmathsOperationTpercParamsDict {
     "@type"?: "operation_Tperc";
-    "Tperc"?: number | null | undefined;
+    "Tperc": number;
 }
 type FslmathsOperationTpercParamsDictTagged = Required<Pick<FslmathsOperationTpercParamsDict, '@type'>> & FslmathsOperationTpercParamsDict;
 
 
 interface FslmathsOperationXpercParamsDict {
     "@type"?: "operation_Xperc";
-    "Xperc"?: number | null | undefined;
+    "Xperc": number;
 }
 type FslmathsOperationXpercParamsDictTagged = Required<Pick<FslmathsOperationXpercParamsDict, '@type'>> & FslmathsOperationXpercParamsDict;
 
 
 interface FslmathsOperationYpercParamsDict {
     "@type"?: "operation_Yperc";
-    "Yperc"?: number | null | undefined;
+    "Yperc": number;
 }
 type FslmathsOperationYpercParamsDictTagged = Required<Pick<FslmathsOperationYpercParamsDict, '@type'>> & FslmathsOperationYpercParamsDict;
 
 
 interface FslmathsOperationZpercParamsDict {
     "@type"?: "operation_Zperc";
-    "Zperc"?: number | null | undefined;
+    "Zperc": number;
 }
 type FslmathsOperationZpercParamsDictTagged = Required<Pick<FslmathsOperationZpercParamsDict, '@type'>> & FslmathsOperationZpercParamsDict;
 
@@ -678,21 +678,21 @@ type FslmathsOperationTar1ParamsDictTagged = Required<Pick<FslmathsOperationTar1
 
 interface FslmathsOperationRoiParamsDict {
     "@type"?: "operation_roi";
-    "roi"?: Array<number> | null | undefined;
+    "roi": Array<number>;
 }
 type FslmathsOperationRoiParamsDictTagged = Required<Pick<FslmathsOperationRoiParamsDict, '@type'>> & FslmathsOperationRoiParamsDict;
 
 
 interface FslmathsOperationBptfParamsDict {
     "@type"?: "operation_bptf";
-    "bptf"?: Array<number> | null | undefined;
+    "bptf": Array<number>;
 }
 type FslmathsOperationBptfParamsDictTagged = Required<Pick<FslmathsOperationBptfParamsDict, '@type'>> & FslmathsOperationBptfParamsDict;
 
 
 interface FslmathsOperationRocParamsDict {
     "@type"?: "operation_roc";
-    "roc"?: Array<number> | null | undefined;
+    "roc": Array<number>;
 }
 type FslmathsOperationRocParamsDictTagged = Required<Pick<FslmathsOperationRocParamsDict, '@type'>> & FslmathsOperationRocParamsDict;
 
@@ -846,14 +846,12 @@ function fslmaths_operations_outputs_dyn_fn(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_add(
-    add: number | null = null,
+    add: number,
 ): FslmathsOperationAddParamsDictTagged {
     const params = {
         "@type": "operation_add" as const,
+        "add": add,
     };
-    if (add !== null) {
-        params["add"] = add;
-    }
     return params;
 }
 
@@ -871,12 +869,10 @@ function fslmaths_operation_add_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["add"] ?? null) !== null) {
-        cargs.push(
-            "-add",
-            String((params["add"] ?? null))
-        );
-    }
+    cargs.push(
+        "-add",
+        String((params["add"] ?? null))
+    );
     return cargs;
 }
 
@@ -889,14 +885,12 @@ function fslmaths_operation_add_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_sub(
-    sub: number | null = null,
+    sub: number,
 ): FslmathsOperationSubParamsDictTagged {
     const params = {
         "@type": "operation_sub" as const,
+        "sub": sub,
     };
-    if (sub !== null) {
-        params["sub"] = sub;
-    }
     return params;
 }
 
@@ -914,12 +908,10 @@ function fslmaths_operation_sub_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sub"] ?? null) !== null) {
-        cargs.push(
-            "-sub",
-            String((params["sub"] ?? null))
-        );
-    }
+    cargs.push(
+        "-sub",
+        String((params["sub"] ?? null))
+    );
     return cargs;
 }
 
@@ -932,14 +924,12 @@ function fslmaths_operation_sub_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_mul(
-    mul: number | null = null,
+    mul: number,
 ): FslmathsOperationMulParamsDictTagged {
     const params = {
         "@type": "operation_mul" as const,
+        "mul": mul,
     };
-    if (mul !== null) {
-        params["mul"] = mul;
-    }
     return params;
 }
 
@@ -957,12 +947,10 @@ function fslmaths_operation_mul_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["mul"] ?? null) !== null) {
-        cargs.push(
-            "-mul",
-            String((params["mul"] ?? null))
-        );
-    }
+    cargs.push(
+        "-mul",
+        String((params["mul"] ?? null))
+    );
     return cargs;
 }
 
@@ -975,14 +963,12 @@ function fslmaths_operation_mul_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_div(
-    div: number | null = null,
+    div: number,
 ): FslmathsOperationDivParamsDictTagged {
     const params = {
         "@type": "operation_div" as const,
+        "div": div,
     };
-    if (div !== null) {
-        params["div"] = div;
-    }
     return params;
 }
 
@@ -1000,12 +986,10 @@ function fslmaths_operation_div_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["div"] ?? null) !== null) {
-        cargs.push(
-            "-div",
-            String((params["div"] ?? null))
-        );
-    }
+    cargs.push(
+        "-div",
+        String((params["div"] ?? null))
+    );
     return cargs;
 }
 
@@ -1018,14 +1002,12 @@ function fslmaths_operation_div_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_rem(
-    rem: number | null = null,
+    rem: number,
 ): FslmathsOperationRemParamsDictTagged {
     const params = {
         "@type": "operation_rem" as const,
+        "rem": rem,
     };
-    if (rem !== null) {
-        params["rem"] = rem;
-    }
     return params;
 }
 
@@ -1043,12 +1025,10 @@ function fslmaths_operation_rem_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["rem"] ?? null) !== null) {
-        cargs.push(
-            "-rem",
-            String((params["rem"] ?? null))
-        );
-    }
+    cargs.push(
+        "-rem",
+        String((params["rem"] ?? null))
+    );
     return cargs;
 }
 
@@ -1061,14 +1041,12 @@ function fslmaths_operation_rem_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_mas(
-    mas: InputPathType | null = null,
+    mas: InputPathType,
 ): FslmathsOperationMasParamsDictTagged {
     const params = {
         "@type": "operation_mas" as const,
+        "mas": mas,
     };
-    if (mas !== null) {
-        params["mas"] = mas;
-    }
     return params;
 }
 
@@ -1086,12 +1064,10 @@ function fslmaths_operation_mas_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["mas"] ?? null) !== null) {
-        cargs.push(
-            "-mas",
-            execution.inputFile((params["mas"] ?? null))
-        );
-    }
+    cargs.push(
+        "-mas",
+        execution.inputFile((params["mas"] ?? null))
+    );
     return cargs;
 }
 
@@ -1104,14 +1080,12 @@ function fslmaths_operation_mas_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_thr(
-    thr: number | null = null,
+    thr: number,
 ): FslmathsOperationThrParamsDictTagged {
     const params = {
         "@type": "operation_thr" as const,
+        "thr": thr,
     };
-    if (thr !== null) {
-        params["thr"] = thr;
-    }
     return params;
 }
 
@@ -1129,12 +1103,10 @@ function fslmaths_operation_thr_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["thr"] ?? null) !== null) {
-        cargs.push(
-            "-thr",
-            String((params["thr"] ?? null))
-        );
-    }
+    cargs.push(
+        "-thr",
+        String((params["thr"] ?? null))
+    );
     return cargs;
 }
 
@@ -1147,14 +1119,12 @@ function fslmaths_operation_thr_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_thrp(
-    thrp: number | null = null,
+    thrp: number,
 ): FslmathsOperationThrpParamsDictTagged {
     const params = {
         "@type": "operation_thrp" as const,
+        "thrp": thrp,
     };
-    if (thrp !== null) {
-        params["thrp"] = thrp;
-    }
     return params;
 }
 
@@ -1172,12 +1142,10 @@ function fslmaths_operation_thrp_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["thrp"] ?? null) !== null) {
-        cargs.push(
-            "-thrp",
-            String((params["thrp"] ?? null))
-        );
-    }
+    cargs.push(
+        "-thrp",
+        String((params["thrp"] ?? null))
+    );
     return cargs;
 }
 
@@ -1190,14 +1158,12 @@ function fslmaths_operation_thrp_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_thr_p(
-    thr_p: number | null = null,
+    thr_p: number,
 ): FslmathsOperationThrPParamsDictTagged {
     const params = {
         "@type": "operation_thrP" as const,
+        "thrP": thr_p,
     };
-    if (thr_p !== null) {
-        params["thrP"] = thr_p;
-    }
     return params;
 }
 
@@ -1215,12 +1181,10 @@ function fslmaths_operation_thr_p_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["thrP"] ?? null) !== null) {
-        cargs.push(
-            "-thrP",
-            String((params["thrP"] ?? null))
-        );
-    }
+    cargs.push(
+        "-thrP",
+        String((params["thrP"] ?? null))
+    );
     return cargs;
 }
 
@@ -1233,14 +1197,12 @@ function fslmaths_operation_thr_p_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_uthr(
-    uthr: number | null = null,
+    uthr: number,
 ): FslmathsOperationUthrParamsDictTagged {
     const params = {
         "@type": "operation_uthr" as const,
+        "uthr": uthr,
     };
-    if (uthr !== null) {
-        params["uthr"] = uthr;
-    }
     return params;
 }
 
@@ -1258,12 +1220,10 @@ function fslmaths_operation_uthr_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["uthr"] ?? null) !== null) {
-        cargs.push(
-            "-uthr",
-            String((params["uthr"] ?? null))
-        );
-    }
+    cargs.push(
+        "-uthr",
+        String((params["uthr"] ?? null))
+    );
     return cargs;
 }
 
@@ -1276,14 +1236,12 @@ function fslmaths_operation_uthr_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_uthrp(
-    uthrp: number | null = null,
+    uthrp: number,
 ): FslmathsOperationUthrpParamsDictTagged {
     const params = {
         "@type": "operation_uthrp" as const,
+        "uthrp": uthrp,
     };
-    if (uthrp !== null) {
-        params["uthrp"] = uthrp;
-    }
     return params;
 }
 
@@ -1301,12 +1259,10 @@ function fslmaths_operation_uthrp_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["uthrp"] ?? null) !== null) {
-        cargs.push(
-            "-uthrp",
-            String((params["uthrp"] ?? null))
-        );
-    }
+    cargs.push(
+        "-uthrp",
+        String((params["uthrp"] ?? null))
+    );
     return cargs;
 }
 
@@ -1319,14 +1275,12 @@ function fslmaths_operation_uthrp_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_uthr_p(
-    uthr_p: number | null = null,
+    uthr_p: number,
 ): FslmathsOperationUthrPParamsDictTagged {
     const params = {
         "@type": "operation_uthrP" as const,
+        "uthrP": uthr_p,
     };
-    if (uthr_p !== null) {
-        params["uthrP"] = uthr_p;
-    }
     return params;
 }
 
@@ -1344,12 +1298,10 @@ function fslmaths_operation_uthr_p_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["uthrP"] ?? null) !== null) {
-        cargs.push(
-            "-uthrP",
-            String((params["uthrP"] ?? null))
-        );
-    }
+    cargs.push(
+        "-uthrP",
+        String((params["uthrP"] ?? null))
+    );
     return cargs;
 }
 
@@ -1362,14 +1314,12 @@ function fslmaths_operation_uthr_p_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_max(
-    max: number | null = null,
+    max: number,
 ): FslmathsOperationMaxParamsDictTagged {
     const params = {
         "@type": "operation_max" as const,
+        "max": max,
     };
-    if (max !== null) {
-        params["max"] = max;
-    }
     return params;
 }
 
@@ -1387,12 +1337,10 @@ function fslmaths_operation_max_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["max"] ?? null) !== null) {
-        cargs.push(
-            "-max",
-            String((params["max"] ?? null))
-        );
-    }
+    cargs.push(
+        "-max",
+        String((params["max"] ?? null))
+    );
     return cargs;
 }
 
@@ -1405,14 +1353,12 @@ function fslmaths_operation_max_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_min(
-    min: number | null = null,
+    min: number,
 ): FslmathsOperationMinParamsDictTagged {
     const params = {
         "@type": "operation_min" as const,
+        "min": min,
     };
-    if (min !== null) {
-        params["min"] = min;
-    }
     return params;
 }
 
@@ -1430,12 +1376,10 @@ function fslmaths_operation_min_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["min"] ?? null) !== null) {
-        cargs.push(
-            "-min",
-            String((params["min"] ?? null))
-        );
-    }
+    cargs.push(
+        "-min",
+        String((params["min"] ?? null))
+    );
     return cargs;
 }
 
@@ -1448,14 +1392,12 @@ function fslmaths_operation_min_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_seed(
-    seed: number | null = null,
+    seed: number,
 ): FslmathsOperationSeedParamsDictTagged {
     const params = {
         "@type": "operation_seed" as const,
+        "seed": seed,
     };
-    if (seed !== null) {
-        params["seed"] = seed;
-    }
     return params;
 }
 
@@ -1473,12 +1415,10 @@ function fslmaths_operation_seed_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["seed"] ?? null) !== null) {
-        cargs.push(
-            "-seed",
-            String((params["seed"] ?? null))
-        );
-    }
+    cargs.push(
+        "-seed",
+        String((params["seed"] ?? null))
+    );
     return cargs;
 }
 
@@ -1491,14 +1431,12 @@ function fslmaths_operation_seed_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_restart(
-    restart: InputPathType | null = null,
+    restart: InputPathType,
 ): FslmathsOperationRestartParamsDictTagged {
     const params = {
         "@type": "operation_restart" as const,
+        "restart": restart,
     };
-    if (restart !== null) {
-        params["restart"] = restart;
-    }
     return params;
 }
 
@@ -1516,12 +1454,10 @@ function fslmaths_operation_restart_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["restart"] ?? null) !== null) {
-        cargs.push(
-            "-restart",
-            execution.inputFile((params["restart"] ?? null))
-        );
-    }
+    cargs.push(
+        "-restart",
+        execution.inputFile((params["restart"] ?? null))
+    );
     return cargs;
 }
 
@@ -2218,14 +2154,12 @@ function fslmaths_operation_index_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_grid(
-    grid: Array<number> | null = null,
+    grid: Array<number>,
 ): FslmathsOperationGridParamsDictTagged {
     const params = {
         "@type": "operation_grid" as const,
+        "grid": grid,
     };
-    if (grid !== null) {
-        params["grid"] = grid;
-    }
     return params;
 }
 
@@ -2243,12 +2177,10 @@ function fslmaths_operation_grid_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["grid"] ?? null) !== null) {
-        cargs.push(
-            "-grid",
-            ...(params["grid"] ?? null).map(String)
-        );
-    }
+    cargs.push(
+        "-grid",
+        ...(params["grid"] ?? null).map(String)
+    );
     return cargs;
 }
 
@@ -2299,14 +2231,12 @@ function fslmaths_operation_edge_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_tfce(
-    tfce: Array<number> | null = null,
+    tfce: Array<number>,
 ): FslmathsOperationTfceParamsDictTagged {
     const params = {
         "@type": "operation_tfce" as const,
+        "tfce": tfce,
     };
-    if (tfce !== null) {
-        params["tfce"] = tfce;
-    }
     return params;
 }
 
@@ -2324,12 +2254,10 @@ function fslmaths_operation_tfce_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["tfce"] ?? null) !== null) {
-        cargs.push(
-            "-tfce",
-            ...(params["tfce"] ?? null).map(String)
-        );
-    }
+    cargs.push(
+        "-tfce",
+        ...(params["tfce"] ?? null).map(String)
+    );
     return cargs;
 }
 
@@ -2342,14 +2270,12 @@ function fslmaths_operation_tfce_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_tfce_s(
-    tfce_s: Array<number> | null = null,
+    tfce_s: Array<number>,
 ): FslmathsOperationTfceSParamsDictTagged {
     const params = {
         "@type": "operation_tfceS" as const,
+        "tfceS": tfce_s,
     };
-    if (tfce_s !== null) {
-        params["tfceS"] = tfce_s;
-    }
     return params;
 }
 
@@ -2367,12 +2293,10 @@ function fslmaths_operation_tfce_s_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["tfceS"] ?? null) !== null) {
-        cargs.push(
-            "-tfceS",
-            ...(params["tfceS"] ?? null).map(String)
-        );
-    }
+    cargs.push(
+        "-tfceS",
+        ...(params["tfceS"] ?? null).map(String)
+    );
     return cargs;
 }
 
@@ -2537,14 +2461,12 @@ function fslmaths_operation_randn_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_inm(
-    inm: number | null = null,
+    inm: number,
 ): FslmathsOperationInmParamsDictTagged {
     const params = {
         "@type": "operation_inm" as const,
+        "inm": inm,
     };
-    if (inm !== null) {
-        params["inm"] = inm;
-    }
     return params;
 }
 
@@ -2562,12 +2484,10 @@ function fslmaths_operation_inm_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["inm"] ?? null) !== null) {
-        cargs.push(
-            "-inm",
-            String((params["inm"] ?? null))
-        );
-    }
+    cargs.push(
+        "-inm",
+        String((params["inm"] ?? null))
+    );
     return cargs;
 }
 
@@ -2580,14 +2500,12 @@ function fslmaths_operation_inm_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_ing(
-    ing: number | null = null,
+    ing: number,
 ): FslmathsOperationIngParamsDictTagged {
     const params = {
         "@type": "operation_ing" as const,
+        "ing": ing,
     };
-    if (ing !== null) {
-        params["ing"] = ing;
-    }
     return params;
 }
 
@@ -2605,12 +2523,10 @@ function fslmaths_operation_ing_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["ing"] ?? null) !== null) {
-        cargs.push(
-            "-ing",
-            String((params["ing"] ?? null))
-        );
-    }
+    cargs.push(
+        "-ing",
+        String((params["ing"] ?? null))
+    );
     return cargs;
 }
 
@@ -2775,14 +2691,12 @@ function fslmaths_operation_kernel_2_d_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_box(
-    kernel_box: number | null = null,
+    kernel_box: number,
 ): FslmathsOperationKernelBoxParamsDictTagged {
     const params = {
         "@type": "operation_kernel_box" as const,
+        "kernel_box": kernel_box,
     };
-    if (kernel_box !== null) {
-        params["kernel_box"] = kernel_box;
-    }
     return params;
 }
 
@@ -2800,12 +2714,10 @@ function fslmaths_operation_kernel_box_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_box"] ?? null) !== null) {
-        cargs.push(
-            "-kernel box",
-            String((params["kernel_box"] ?? null))
-        );
-    }
+    cargs.push(
+        "-kernel box",
+        String((params["kernel_box"] ?? null))
+    );
     return cargs;
 }
 
@@ -2818,14 +2730,12 @@ function fslmaths_operation_kernel_box_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_boxv(
-    kernel_boxv: number | null = null,
+    kernel_boxv: number,
 ): FslmathsOperationKernelBoxvParamsDictTagged {
     const params = {
         "@type": "operation_kernel_boxv" as const,
+        "kernel_boxv": kernel_boxv,
     };
-    if (kernel_boxv !== null) {
-        params["kernel_boxv"] = kernel_boxv;
-    }
     return params;
 }
 
@@ -2843,12 +2753,10 @@ function fslmaths_operation_kernel_boxv_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_boxv"] ?? null) !== null) {
-        cargs.push(
-            "-kernel boxv",
-            String((params["kernel_boxv"] ?? null))
-        );
-    }
+    cargs.push(
+        "-kernel boxv",
+        String((params["kernel_boxv"] ?? null))
+    );
     return cargs;
 }
 
@@ -2861,14 +2769,12 @@ function fslmaths_operation_kernel_boxv_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_boxv3(
-    kernel_boxv3: Array<number> | null = null,
+    kernel_boxv3: Array<number>,
 ): FslmathsOperationKernelBoxv3ParamsDictTagged {
     const params = {
         "@type": "operation_kernel_boxv3" as const,
+        "kernel_boxv3": kernel_boxv3,
     };
-    if (kernel_boxv3 !== null) {
-        params["kernel_boxv3"] = kernel_boxv3;
-    }
     return params;
 }
 
@@ -2886,12 +2792,10 @@ function fslmaths_operation_kernel_boxv3_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_boxv3"] ?? null) !== null) {
-        cargs.push(
-            "-kernel boxv3",
-            ...(params["kernel_boxv3"] ?? null).map(String)
-        );
-    }
+    cargs.push(
+        "-kernel boxv3",
+        ...(params["kernel_boxv3"] ?? null).map(String)
+    );
     return cargs;
 }
 
@@ -2904,14 +2808,12 @@ function fslmaths_operation_kernel_boxv3_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_gauss(
-    kernel_gauss: number | null = null,
+    kernel_gauss: number,
 ): FslmathsOperationKernelGaussParamsDictTagged {
     const params = {
         "@type": "operation_kernel_gauss" as const,
+        "kernel_gauss": kernel_gauss,
     };
-    if (kernel_gauss !== null) {
-        params["kernel_gauss"] = kernel_gauss;
-    }
     return params;
 }
 
@@ -2929,12 +2831,10 @@ function fslmaths_operation_kernel_gauss_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_gauss"] ?? null) !== null) {
-        cargs.push(
-            "-kernel gauss",
-            String((params["kernel_gauss"] ?? null))
-        );
-    }
+    cargs.push(
+        "-kernel gauss",
+        String((params["kernel_gauss"] ?? null))
+    );
     return cargs;
 }
 
@@ -2947,14 +2847,12 @@ function fslmaths_operation_kernel_gauss_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_sphere(
-    kernel_sphere: number | null = null,
+    kernel_sphere: number,
 ): FslmathsOperationKernelSphereParamsDictTagged {
     const params = {
         "@type": "operation_kernel_sphere" as const,
+        "kernel_sphere": kernel_sphere,
     };
-    if (kernel_sphere !== null) {
-        params["kernel_sphere"] = kernel_sphere;
-    }
     return params;
 }
 
@@ -2972,12 +2870,10 @@ function fslmaths_operation_kernel_sphere_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_sphere"] ?? null) !== null) {
-        cargs.push(
-            "-kernel sphere",
-            String((params["kernel_sphere"] ?? null))
-        );
-    }
+    cargs.push(
+        "-kernel sphere",
+        String((params["kernel_sphere"] ?? null))
+    );
     return cargs;
 }
 
@@ -2990,14 +2886,12 @@ function fslmaths_operation_kernel_sphere_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_file(
-    kernel_file: InputPathType | null = null,
+    kernel_file: InputPathType,
 ): FslmathsOperationKernelFileParamsDictTagged {
     const params = {
         "@type": "operation_kernel_file" as const,
+        "kernel_file": kernel_file,
     };
-    if (kernel_file !== null) {
-        params["kernel_file"] = kernel_file;
-    }
     return params;
 }
 
@@ -3015,12 +2909,10 @@ function fslmaths_operation_kernel_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_file"] ?? null) !== null) {
-        cargs.push(
-            "-kernel file",
-            execution.inputFile((params["kernel_file"] ?? null))
-        );
-    }
+    cargs.push(
+        "-kernel file",
+        execution.inputFile((params["kernel_file"] ?? null))
+    );
     return cargs;
 }
 
@@ -3375,14 +3267,12 @@ function fslmaths_operation_fmeanu_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_s(
-    s: number | null = null,
+    s: number,
 ): FslmathsOperationSParamsDictTagged {
     const params = {
         "@type": "operation_s" as const,
+        "s": s,
     };
-    if (s !== null) {
-        params["s"] = s;
-    }
     return params;
 }
 
@@ -3400,12 +3290,10 @@ function fslmaths_operation_s_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["s"] ?? null) !== null) {
-        cargs.push(
-            "-s",
-            String((params["s"] ?? null))
-        );
-    }
+    cargs.push(
+        "-s",
+        String((params["s"] ?? null))
+    );
     return cargs;
 }
 
@@ -4406,14 +4294,12 @@ function fslmaths_operation_zmedian_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_tperc(
-    tperc: number | null = null,
+    tperc: number,
 ): FslmathsOperationTpercParamsDictTagged {
     const params = {
         "@type": "operation_Tperc" as const,
+        "Tperc": tperc,
     };
-    if (tperc !== null) {
-        params["Tperc"] = tperc;
-    }
     return params;
 }
 
@@ -4431,12 +4317,10 @@ function fslmaths_operation_tperc_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["Tperc"] ?? null) !== null) {
-        cargs.push(
-            "-Tperc",
-            String((params["Tperc"] ?? null))
-        );
-    }
+    cargs.push(
+        "-Tperc",
+        String((params["Tperc"] ?? null))
+    );
     return cargs;
 }
 
@@ -4449,14 +4333,12 @@ function fslmaths_operation_tperc_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_xperc(
-    xperc: number | null = null,
+    xperc: number,
 ): FslmathsOperationXpercParamsDictTagged {
     const params = {
         "@type": "operation_Xperc" as const,
+        "Xperc": xperc,
     };
-    if (xperc !== null) {
-        params["Xperc"] = xperc;
-    }
     return params;
 }
 
@@ -4474,12 +4356,10 @@ function fslmaths_operation_xperc_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["Xperc"] ?? null) !== null) {
-        cargs.push(
-            "-Xperc",
-            String((params["Xperc"] ?? null))
-        );
-    }
+    cargs.push(
+        "-Xperc",
+        String((params["Xperc"] ?? null))
+    );
     return cargs;
 }
 
@@ -4492,14 +4372,12 @@ function fslmaths_operation_xperc_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_yperc(
-    yperc: number | null = null,
+    yperc: number,
 ): FslmathsOperationYpercParamsDictTagged {
     const params = {
         "@type": "operation_Yperc" as const,
+        "Yperc": yperc,
     };
-    if (yperc !== null) {
-        params["Yperc"] = yperc;
-    }
     return params;
 }
 
@@ -4517,12 +4395,10 @@ function fslmaths_operation_yperc_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["Yperc"] ?? null) !== null) {
-        cargs.push(
-            "-Yperc",
-            String((params["Yperc"] ?? null))
-        );
-    }
+    cargs.push(
+        "-Yperc",
+        String((params["Yperc"] ?? null))
+    );
     return cargs;
 }
 
@@ -4535,14 +4411,12 @@ function fslmaths_operation_yperc_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_zperc(
-    zperc: number | null = null,
+    zperc: number,
 ): FslmathsOperationZpercParamsDictTagged {
     const params = {
         "@type": "operation_Zperc" as const,
+        "Zperc": zperc,
     };
-    if (zperc !== null) {
-        params["Zperc"] = zperc;
-    }
     return params;
 }
 
@@ -4560,12 +4434,10 @@ function fslmaths_operation_zperc_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["Zperc"] ?? null) !== null) {
-        cargs.push(
-            "-Zperc",
-            String((params["Zperc"] ?? null))
-        );
-    }
+    cargs.push(
+        "-Zperc",
+        String((params["Zperc"] ?? null))
+    );
     return cargs;
 }
 
@@ -4616,14 +4488,12 @@ function fslmaths_operation_tar1_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_roi(
-    roi: Array<number> | null = null,
+    roi: Array<number>,
 ): FslmathsOperationRoiParamsDictTagged {
     const params = {
         "@type": "operation_roi" as const,
+        "roi": roi,
     };
-    if (roi !== null) {
-        params["roi"] = roi;
-    }
     return params;
 }
 
@@ -4641,12 +4511,10 @@ function fslmaths_operation_roi_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(
-            "-roi",
-            ...(params["roi"] ?? null).map(String)
-        );
-    }
+    cargs.push(
+        "-roi",
+        ...(params["roi"] ?? null).map(String)
+    );
     return cargs;
 }
 
@@ -4659,14 +4527,12 @@ function fslmaths_operation_roi_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_bptf(
-    bptf: Array<number> | null = null,
+    bptf: Array<number>,
 ): FslmathsOperationBptfParamsDictTagged {
     const params = {
         "@type": "operation_bptf" as const,
+        "bptf": bptf,
     };
-    if (bptf !== null) {
-        params["bptf"] = bptf;
-    }
     return params;
 }
 
@@ -4684,12 +4550,10 @@ function fslmaths_operation_bptf_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["bptf"] ?? null) !== null) {
-        cargs.push(
-            "-bptf",
-            ...(params["bptf"] ?? null).map(String)
-        );
-    }
+    cargs.push(
+        "-bptf",
+        ...(params["bptf"] ?? null).map(String)
+    );
     return cargs;
 }
 
@@ -4702,14 +4566,12 @@ function fslmaths_operation_bptf_cargs(
  * @returns Parameter dictionary
  */
 function fslmaths_operation_roc(
-    roc: Array<number> | null = null,
+    roc: Array<number>,
 ): FslmathsOperationRocParamsDictTagged {
     const params = {
         "@type": "operation_roc" as const,
+        "roc": roc,
     };
-    if (roc !== null) {
-        params["roc"] = roc;
-    }
     return params;
 }
 
@@ -4727,12 +4589,10 @@ function fslmaths_operation_roc_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["roc"] ?? null) !== null) {
-        cargs.push(
-            "-roc",
-            ...(params["roc"] ?? null).map(String)
-        );
-    }
+    cargs.push(
+        "-roc",
+        ...(params["roc"] ?? null).map(String)
+    );
     return cargs;
 }
 
