@@ -4,122 +4,704 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMATHS_METADATA: Metadata = {
-    id: "c312ba1b97ad7f4433f8466f287cefb9d488d3d4.boutiques",
+    id: "17a5a4282e9fdf33c9fa4e794632c9da02d2c911.boutiques",
     name: "fslmaths",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
 };
 
 
-interface FslmathsOperationParamsDict {
-    "@type"?: "operation";
+interface FslmathsOperationAddParamsDict {
+    "@type"?: "operation_add";
     "add"?: number | null | undefined;
+}
+type FslmathsOperationAddParamsDictTagged = Required<Pick<FslmathsOperationAddParamsDict, '@type'>> & FslmathsOperationAddParamsDict;
+
+
+interface FslmathsOperationSubParamsDict {
+    "@type"?: "operation_sub";
     "sub"?: number | null | undefined;
+}
+type FslmathsOperationSubParamsDictTagged = Required<Pick<FslmathsOperationSubParamsDict, '@type'>> & FslmathsOperationSubParamsDict;
+
+
+interface FslmathsOperationMulParamsDict {
+    "@type"?: "operation_mul";
     "mul"?: number | null | undefined;
+}
+type FslmathsOperationMulParamsDictTagged = Required<Pick<FslmathsOperationMulParamsDict, '@type'>> & FslmathsOperationMulParamsDict;
+
+
+interface FslmathsOperationDivParamsDict {
+    "@type"?: "operation_div";
     "div"?: number | null | undefined;
+}
+type FslmathsOperationDivParamsDictTagged = Required<Pick<FslmathsOperationDivParamsDict, '@type'>> & FslmathsOperationDivParamsDict;
+
+
+interface FslmathsOperationRemParamsDict {
+    "@type"?: "operation_rem";
     "rem"?: number | null | undefined;
+}
+type FslmathsOperationRemParamsDictTagged = Required<Pick<FslmathsOperationRemParamsDict, '@type'>> & FslmathsOperationRemParamsDict;
+
+
+interface FslmathsOperationMasParamsDict {
+    "@type"?: "operation_mas";
     "mas"?: InputPathType | null | undefined;
+}
+type FslmathsOperationMasParamsDictTagged = Required<Pick<FslmathsOperationMasParamsDict, '@type'>> & FslmathsOperationMasParamsDict;
+
+
+interface FslmathsOperationThrParamsDict {
+    "@type"?: "operation_thr";
     "thr"?: number | null | undefined;
+}
+type FslmathsOperationThrParamsDictTagged = Required<Pick<FslmathsOperationThrParamsDict, '@type'>> & FslmathsOperationThrParamsDict;
+
+
+interface FslmathsOperationThrpParamsDict {
+    "@type"?: "operation_thrp";
     "thrp"?: number | null | undefined;
+}
+type FslmathsOperationThrpParamsDictTagged = Required<Pick<FslmathsOperationThrpParamsDict, '@type'>> & FslmathsOperationThrpParamsDict;
+
+
+interface FslmathsOperationThrPParamsDict {
+    "@type"?: "operation_thrP";
     "thrP"?: number | null | undefined;
+}
+type FslmathsOperationThrPParamsDictTagged = Required<Pick<FslmathsOperationThrPParamsDict, '@type'>> & FslmathsOperationThrPParamsDict;
+
+
+interface FslmathsOperationUthrParamsDict {
+    "@type"?: "operation_uthr";
     "uthr"?: number | null | undefined;
+}
+type FslmathsOperationUthrParamsDictTagged = Required<Pick<FslmathsOperationUthrParamsDict, '@type'>> & FslmathsOperationUthrParamsDict;
+
+
+interface FslmathsOperationUthrpParamsDict {
+    "@type"?: "operation_uthrp";
     "uthrp"?: number | null | undefined;
+}
+type FslmathsOperationUthrpParamsDictTagged = Required<Pick<FslmathsOperationUthrpParamsDict, '@type'>> & FslmathsOperationUthrpParamsDict;
+
+
+interface FslmathsOperationUthrPParamsDict {
+    "@type"?: "operation_uthrP";
     "uthrP"?: number | null | undefined;
+}
+type FslmathsOperationUthrPParamsDictTagged = Required<Pick<FslmathsOperationUthrPParamsDict, '@type'>> & FslmathsOperationUthrPParamsDict;
+
+
+interface FslmathsOperationMaxParamsDict {
+    "@type"?: "operation_max";
     "max"?: number | null | undefined;
+}
+type FslmathsOperationMaxParamsDictTagged = Required<Pick<FslmathsOperationMaxParamsDict, '@type'>> & FslmathsOperationMaxParamsDict;
+
+
+interface FslmathsOperationMinParamsDict {
+    "@type"?: "operation_min";
     "min"?: number | null | undefined;
+}
+type FslmathsOperationMinParamsDictTagged = Required<Pick<FslmathsOperationMinParamsDict, '@type'>> & FslmathsOperationMinParamsDict;
+
+
+interface FslmathsOperationSeedParamsDict {
+    "@type"?: "operation_seed";
     "seed"?: number | null | undefined;
+}
+type FslmathsOperationSeedParamsDictTagged = Required<Pick<FslmathsOperationSeedParamsDict, '@type'>> & FslmathsOperationSeedParamsDict;
+
+
+interface FslmathsOperationRestartParamsDict {
+    "@type"?: "operation_restart";
     "restart"?: InputPathType | null | undefined;
+}
+type FslmathsOperationRestartParamsDictTagged = Required<Pick<FslmathsOperationRestartParamsDict, '@type'>> & FslmathsOperationRestartParamsDict;
+
+
+interface FslmathsOperationSaveParamsDict {
+    "@type"?: "operation_save";
     "save": boolean;
+}
+type FslmathsOperationSaveParamsDictTagged = Required<Pick<FslmathsOperationSaveParamsDict, '@type'>> & FslmathsOperationSaveParamsDict;
+
+
+interface FslmathsOperationExpParamsDict {
+    "@type"?: "operation_exp";
     "exp": boolean;
+}
+type FslmathsOperationExpParamsDictTagged = Required<Pick<FslmathsOperationExpParamsDict, '@type'>> & FslmathsOperationExpParamsDict;
+
+
+interface FslmathsOperationLogParamsDict {
+    "@type"?: "operation_log";
     "log": boolean;
+}
+type FslmathsOperationLogParamsDictTagged = Required<Pick<FslmathsOperationLogParamsDict, '@type'>> & FslmathsOperationLogParamsDict;
+
+
+interface FslmathsOperationSinParamsDict {
+    "@type"?: "operation_sin";
     "sin": boolean;
+}
+type FslmathsOperationSinParamsDictTagged = Required<Pick<FslmathsOperationSinParamsDict, '@type'>> & FslmathsOperationSinParamsDict;
+
+
+interface FslmathsOperationCosParamsDict {
+    "@type"?: "operation_cos";
     "cos": boolean;
+}
+type FslmathsOperationCosParamsDictTagged = Required<Pick<FslmathsOperationCosParamsDict, '@type'>> & FslmathsOperationCosParamsDict;
+
+
+interface FslmathsOperationTanParamsDict {
+    "@type"?: "operation_tan";
     "tan": boolean;
+}
+type FslmathsOperationTanParamsDictTagged = Required<Pick<FslmathsOperationTanParamsDict, '@type'>> & FslmathsOperationTanParamsDict;
+
+
+interface FslmathsOperationAsinParamsDict {
+    "@type"?: "operation_asin";
     "asin": boolean;
+}
+type FslmathsOperationAsinParamsDictTagged = Required<Pick<FslmathsOperationAsinParamsDict, '@type'>> & FslmathsOperationAsinParamsDict;
+
+
+interface FslmathsOperationAcosParamsDict {
+    "@type"?: "operation_acos";
     "acos": boolean;
+}
+type FslmathsOperationAcosParamsDictTagged = Required<Pick<FslmathsOperationAcosParamsDict, '@type'>> & FslmathsOperationAcosParamsDict;
+
+
+interface FslmathsOperationAtanParamsDict {
+    "@type"?: "operation_atan";
     "atan": boolean;
+}
+type FslmathsOperationAtanParamsDictTagged = Required<Pick<FslmathsOperationAtanParamsDict, '@type'>> & FslmathsOperationAtanParamsDict;
+
+
+interface FslmathsOperationSqrParamsDict {
+    "@type"?: "operation_sqr";
     "sqr": boolean;
+}
+type FslmathsOperationSqrParamsDictTagged = Required<Pick<FslmathsOperationSqrParamsDict, '@type'>> & FslmathsOperationSqrParamsDict;
+
+
+interface FslmathsOperationSqrtParamsDict {
+    "@type"?: "operation_sqrt";
     "sqrt": boolean;
+}
+type FslmathsOperationSqrtParamsDictTagged = Required<Pick<FslmathsOperationSqrtParamsDict, '@type'>> & FslmathsOperationSqrtParamsDict;
+
+
+interface FslmathsOperationRecipParamsDict {
+    "@type"?: "operation_recip";
     "recip": boolean;
+}
+type FslmathsOperationRecipParamsDictTagged = Required<Pick<FslmathsOperationRecipParamsDict, '@type'>> & FslmathsOperationRecipParamsDict;
+
+
+interface FslmathsOperationAbsParamsDict {
+    "@type"?: "operation_abs";
     "abs": boolean;
+}
+type FslmathsOperationAbsParamsDictTagged = Required<Pick<FslmathsOperationAbsParamsDict, '@type'>> & FslmathsOperationAbsParamsDict;
+
+
+interface FslmathsOperationBinParamsDict {
+    "@type"?: "operation_bin";
     "bin": boolean;
+}
+type FslmathsOperationBinParamsDictTagged = Required<Pick<FslmathsOperationBinParamsDict, '@type'>> & FslmathsOperationBinParamsDict;
+
+
+interface FslmathsOperationBinvParamsDict {
+    "@type"?: "operation_binv";
     "binv": boolean;
+}
+type FslmathsOperationBinvParamsDictTagged = Required<Pick<FslmathsOperationBinvParamsDict, '@type'>> & FslmathsOperationBinvParamsDict;
+
+
+interface FslmathsOperationFillhParamsDict {
+    "@type"?: "operation_fillh";
     "fillh": boolean;
+}
+type FslmathsOperationFillhParamsDictTagged = Required<Pick<FslmathsOperationFillhParamsDict, '@type'>> & FslmathsOperationFillhParamsDict;
+
+
+interface FslmathsOperationFillh26ParamsDict {
+    "@type"?: "operation_fillh26";
     "fillh26": boolean;
+}
+type FslmathsOperationFillh26ParamsDictTagged = Required<Pick<FslmathsOperationFillh26ParamsDict, '@type'>> & FslmathsOperationFillh26ParamsDict;
+
+
+interface FslmathsOperationIndexParamsDict {
+    "@type"?: "operation_index";
     "index": boolean;
+}
+type FslmathsOperationIndexParamsDictTagged = Required<Pick<FslmathsOperationIndexParamsDict, '@type'>> & FslmathsOperationIndexParamsDict;
+
+
+interface FslmathsOperationGridParamsDict {
+    "@type"?: "operation_grid";
     "grid"?: Array<number> | null | undefined;
+}
+type FslmathsOperationGridParamsDictTagged = Required<Pick<FslmathsOperationGridParamsDict, '@type'>> & FslmathsOperationGridParamsDict;
+
+
+interface FslmathsOperationEdgeParamsDict {
+    "@type"?: "operation_edge";
     "edge": boolean;
+}
+type FslmathsOperationEdgeParamsDictTagged = Required<Pick<FslmathsOperationEdgeParamsDict, '@type'>> & FslmathsOperationEdgeParamsDict;
+
+
+interface FslmathsOperationTfceParamsDict {
+    "@type"?: "operation_tfce";
     "tfce"?: Array<number> | null | undefined;
+}
+type FslmathsOperationTfceParamsDictTagged = Required<Pick<FslmathsOperationTfceParamsDict, '@type'>> & FslmathsOperationTfceParamsDict;
+
+
+interface FslmathsOperationTfceSParamsDict {
+    "@type"?: "operation_tfceS";
     "tfceS"?: Array<number> | null | undefined;
+}
+type FslmathsOperationTfceSParamsDictTagged = Required<Pick<FslmathsOperationTfceSParamsDict, '@type'>> & FslmathsOperationTfceSParamsDict;
+
+
+interface FslmathsOperationNanParamsDict {
+    "@type"?: "operation_nan";
     "nan": boolean;
+}
+type FslmathsOperationNanParamsDictTagged = Required<Pick<FslmathsOperationNanParamsDict, '@type'>> & FslmathsOperationNanParamsDict;
+
+
+interface FslmathsOperationNanmParamsDict {
+    "@type"?: "operation_nanm";
     "nanm": boolean;
+}
+type FslmathsOperationNanmParamsDictTagged = Required<Pick<FslmathsOperationNanmParamsDict, '@type'>> & FslmathsOperationNanmParamsDict;
+
+
+interface FslmathsOperationRandParamsDict {
+    "@type"?: "operation_rand";
     "rand": boolean;
+}
+type FslmathsOperationRandParamsDictTagged = Required<Pick<FslmathsOperationRandParamsDict, '@type'>> & FslmathsOperationRandParamsDict;
+
+
+interface FslmathsOperationRandnParamsDict {
+    "@type"?: "operation_randn";
     "randn": boolean;
+}
+type FslmathsOperationRandnParamsDictTagged = Required<Pick<FslmathsOperationRandnParamsDict, '@type'>> & FslmathsOperationRandnParamsDict;
+
+
+interface FslmathsOperationInmParamsDict {
+    "@type"?: "operation_inm";
     "inm"?: number | null | undefined;
+}
+type FslmathsOperationInmParamsDictTagged = Required<Pick<FslmathsOperationInmParamsDict, '@type'>> & FslmathsOperationInmParamsDict;
+
+
+interface FslmathsOperationIngParamsDict {
+    "@type"?: "operation_ing";
     "ing"?: number | null | undefined;
+}
+type FslmathsOperationIngParamsDictTagged = Required<Pick<FslmathsOperationIngParamsDict, '@type'>> & FslmathsOperationIngParamsDict;
+
+
+interface FslmathsOperationRangeParamsDict {
+    "@type"?: "operation_range";
     "range": boolean;
+}
+type FslmathsOperationRangeParamsDictTagged = Required<Pick<FslmathsOperationRangeParamsDict, '@type'>> & FslmathsOperationRangeParamsDict;
+
+
+interface FslmathsOperationTensorDecompParamsDict {
+    "@type"?: "operation_tensor_decomp";
     "tensor_decomp": boolean;
+}
+type FslmathsOperationTensorDecompParamsDictTagged = Required<Pick<FslmathsOperationTensorDecompParamsDict, '@type'>> & FslmathsOperationTensorDecompParamsDict;
+
+
+interface FslmathsOperationKernel3DParamsDict {
+    "@type"?: "operation_kernel_3D";
     "kernel_3D": boolean;
+}
+type FslmathsOperationKernel3DParamsDictTagged = Required<Pick<FslmathsOperationKernel3DParamsDict, '@type'>> & FslmathsOperationKernel3DParamsDict;
+
+
+interface FslmathsOperationKernel2DParamsDict {
+    "@type"?: "operation_kernel_2D";
     "kernel_2D": boolean;
+}
+type FslmathsOperationKernel2DParamsDictTagged = Required<Pick<FslmathsOperationKernel2DParamsDict, '@type'>> & FslmathsOperationKernel2DParamsDict;
+
+
+interface FslmathsOperationKernelBoxParamsDict {
+    "@type"?: "operation_kernel_box";
     "kernel_box"?: number | null | undefined;
+}
+type FslmathsOperationKernelBoxParamsDictTagged = Required<Pick<FslmathsOperationKernelBoxParamsDict, '@type'>> & FslmathsOperationKernelBoxParamsDict;
+
+
+interface FslmathsOperationKernelBoxvParamsDict {
+    "@type"?: "operation_kernel_boxv";
     "kernel_boxv"?: number | null | undefined;
+}
+type FslmathsOperationKernelBoxvParamsDictTagged = Required<Pick<FslmathsOperationKernelBoxvParamsDict, '@type'>> & FslmathsOperationKernelBoxvParamsDict;
+
+
+interface FslmathsOperationKernelBoxv3ParamsDict {
+    "@type"?: "operation_kernel_boxv3";
     "kernel_boxv3"?: Array<number> | null | undefined;
+}
+type FslmathsOperationKernelBoxv3ParamsDictTagged = Required<Pick<FslmathsOperationKernelBoxv3ParamsDict, '@type'>> & FslmathsOperationKernelBoxv3ParamsDict;
+
+
+interface FslmathsOperationKernelGaussParamsDict {
+    "@type"?: "operation_kernel_gauss";
     "kernel_gauss"?: number | null | undefined;
+}
+type FslmathsOperationKernelGaussParamsDictTagged = Required<Pick<FslmathsOperationKernelGaussParamsDict, '@type'>> & FslmathsOperationKernelGaussParamsDict;
+
+
+interface FslmathsOperationKernelSphereParamsDict {
+    "@type"?: "operation_kernel_sphere";
     "kernel_sphere"?: number | null | undefined;
+}
+type FslmathsOperationKernelSphereParamsDictTagged = Required<Pick<FslmathsOperationKernelSphereParamsDict, '@type'>> & FslmathsOperationKernelSphereParamsDict;
+
+
+interface FslmathsOperationKernelFileParamsDict {
+    "@type"?: "operation_kernel_file";
     "kernel_file"?: InputPathType | null | undefined;
+}
+type FslmathsOperationKernelFileParamsDictTagged = Required<Pick<FslmathsOperationKernelFileParamsDict, '@type'>> & FslmathsOperationKernelFileParamsDict;
+
+
+interface FslmathsOperationDilMParamsDict {
+    "@type"?: "operation_dilM";
     "dilM": boolean;
+}
+type FslmathsOperationDilMParamsDictTagged = Required<Pick<FslmathsOperationDilMParamsDict, '@type'>> & FslmathsOperationDilMParamsDict;
+
+
+interface FslmathsOperationDilDParamsDict {
+    "@type"?: "operation_dilD";
     "dilD": boolean;
+}
+type FslmathsOperationDilDParamsDictTagged = Required<Pick<FslmathsOperationDilDParamsDict, '@type'>> & FslmathsOperationDilDParamsDict;
+
+
+interface FslmathsOperationDilFParamsDict {
+    "@type"?: "operation_dilF";
     "dilF": boolean;
+}
+type FslmathsOperationDilFParamsDictTagged = Required<Pick<FslmathsOperationDilFParamsDict, '@type'>> & FslmathsOperationDilFParamsDict;
+
+
+interface FslmathsOperationDilallParamsDict {
+    "@type"?: "operation_dilall";
     "dilall": boolean;
+}
+type FslmathsOperationDilallParamsDictTagged = Required<Pick<FslmathsOperationDilallParamsDict, '@type'>> & FslmathsOperationDilallParamsDict;
+
+
+interface FslmathsOperationEroParamsDict {
+    "@type"?: "operation_ero";
     "ero": boolean;
+}
+type FslmathsOperationEroParamsDictTagged = Required<Pick<FslmathsOperationEroParamsDict, '@type'>> & FslmathsOperationEroParamsDict;
+
+
+interface FslmathsOperationEroFParamsDict {
+    "@type"?: "operation_eroF";
     "eroF": boolean;
+}
+type FslmathsOperationEroFParamsDictTagged = Required<Pick<FslmathsOperationEroFParamsDict, '@type'>> & FslmathsOperationEroFParamsDict;
+
+
+interface FslmathsOperationFmedianParamsDict {
+    "@type"?: "operation_fmedian";
     "fmedian": boolean;
+}
+type FslmathsOperationFmedianParamsDictTagged = Required<Pick<FslmathsOperationFmedianParamsDict, '@type'>> & FslmathsOperationFmedianParamsDict;
+
+
+interface FslmathsOperationFmeanParamsDict {
+    "@type"?: "operation_fmean";
     "fmean": boolean;
+}
+type FslmathsOperationFmeanParamsDictTagged = Required<Pick<FslmathsOperationFmeanParamsDict, '@type'>> & FslmathsOperationFmeanParamsDict;
+
+
+interface FslmathsOperationFmeanuParamsDict {
+    "@type"?: "operation_fmeanu";
     "fmeanu": boolean;
+}
+type FslmathsOperationFmeanuParamsDictTagged = Required<Pick<FslmathsOperationFmeanuParamsDict, '@type'>> & FslmathsOperationFmeanuParamsDict;
+
+
+interface FslmathsOperationSParamsDict {
+    "@type"?: "operation_s";
     "s"?: number | null | undefined;
+}
+type FslmathsOperationSParamsDictTagged = Required<Pick<FslmathsOperationSParamsDict, '@type'>> & FslmathsOperationSParamsDict;
+
+
+interface FslmathsOperationSubsamp2ParamsDict {
+    "@type"?: "operation_subsamp2";
     "subsamp2": boolean;
+}
+type FslmathsOperationSubsamp2ParamsDictTagged = Required<Pick<FslmathsOperationSubsamp2ParamsDict, '@type'>> & FslmathsOperationSubsamp2ParamsDict;
+
+
+interface FslmathsOperationSubsamp2offcParamsDict {
+    "@type"?: "operation_subsamp2offc";
     "subsamp2offc": boolean;
+}
+type FslmathsOperationSubsamp2offcParamsDictTagged = Required<Pick<FslmathsOperationSubsamp2offcParamsDict, '@type'>> & FslmathsOperationSubsamp2offcParamsDict;
+
+
+interface FslmathsOperationTmeanParamsDict {
+    "@type"?: "operation_Tmean";
     "Tmean": boolean;
+}
+type FslmathsOperationTmeanParamsDictTagged = Required<Pick<FslmathsOperationTmeanParamsDict, '@type'>> & FslmathsOperationTmeanParamsDict;
+
+
+interface FslmathsOperationXmeanParamsDict {
+    "@type"?: "operation_Xmean";
     "Xmean": boolean;
+}
+type FslmathsOperationXmeanParamsDictTagged = Required<Pick<FslmathsOperationXmeanParamsDict, '@type'>> & FslmathsOperationXmeanParamsDict;
+
+
+interface FslmathsOperationYmeanParamsDict {
+    "@type"?: "operation_Ymean";
     "Ymean": boolean;
+}
+type FslmathsOperationYmeanParamsDictTagged = Required<Pick<FslmathsOperationYmeanParamsDict, '@type'>> & FslmathsOperationYmeanParamsDict;
+
+
+interface FslmathsOperationZmeanParamsDict {
+    "@type"?: "operation_Zmean";
     "Zmean": boolean;
+}
+type FslmathsOperationZmeanParamsDictTagged = Required<Pick<FslmathsOperationZmeanParamsDict, '@type'>> & FslmathsOperationZmeanParamsDict;
+
+
+interface FslmathsOperationTstdParamsDict {
+    "@type"?: "operation_Tstd";
     "Tstd": boolean;
+}
+type FslmathsOperationTstdParamsDictTagged = Required<Pick<FslmathsOperationTstdParamsDict, '@type'>> & FslmathsOperationTstdParamsDict;
+
+
+interface FslmathsOperationXstdParamsDict {
+    "@type"?: "operation_Xstd";
     "Xstd": boolean;
+}
+type FslmathsOperationXstdParamsDictTagged = Required<Pick<FslmathsOperationXstdParamsDict, '@type'>> & FslmathsOperationXstdParamsDict;
+
+
+interface FslmathsOperationYstdParamsDict {
+    "@type"?: "operation_Ystd";
     "Ystd": boolean;
+}
+type FslmathsOperationYstdParamsDictTagged = Required<Pick<FslmathsOperationYstdParamsDict, '@type'>> & FslmathsOperationYstdParamsDict;
+
+
+interface FslmathsOperationZstdParamsDict {
+    "@type"?: "operation_Zstd";
     "Zstd": boolean;
+}
+type FslmathsOperationZstdParamsDictTagged = Required<Pick<FslmathsOperationZstdParamsDict, '@type'>> & FslmathsOperationZstdParamsDict;
+
+
+interface FslmathsOperationTmaxParamsDict {
+    "@type"?: "operation_Tmax";
     "Tmax": boolean;
+}
+type FslmathsOperationTmaxParamsDictTagged = Required<Pick<FslmathsOperationTmaxParamsDict, '@type'>> & FslmathsOperationTmaxParamsDict;
+
+
+interface FslmathsOperationXmaxParamsDict {
+    "@type"?: "operation_Xmax";
     "Xmax": boolean;
+}
+type FslmathsOperationXmaxParamsDictTagged = Required<Pick<FslmathsOperationXmaxParamsDict, '@type'>> & FslmathsOperationXmaxParamsDict;
+
+
+interface FslmathsOperationYmaxParamsDict {
+    "@type"?: "operation_Ymax";
     "Ymax": boolean;
+}
+type FslmathsOperationYmaxParamsDictTagged = Required<Pick<FslmathsOperationYmaxParamsDict, '@type'>> & FslmathsOperationYmaxParamsDict;
+
+
+interface FslmathsOperationZmaxParamsDict {
+    "@type"?: "operation_Zmax";
     "Zmax": boolean;
+}
+type FslmathsOperationZmaxParamsDictTagged = Required<Pick<FslmathsOperationZmaxParamsDict, '@type'>> & FslmathsOperationZmaxParamsDict;
+
+
+interface FslmathsOperationTmaxnParamsDict {
+    "@type"?: "operation_Tmaxn";
     "Tmaxn": boolean;
+}
+type FslmathsOperationTmaxnParamsDictTagged = Required<Pick<FslmathsOperationTmaxnParamsDict, '@type'>> & FslmathsOperationTmaxnParamsDict;
+
+
+interface FslmathsOperationXmaxnParamsDict {
+    "@type"?: "operation_Xmaxn";
     "Xmaxn": boolean;
+}
+type FslmathsOperationXmaxnParamsDictTagged = Required<Pick<FslmathsOperationXmaxnParamsDict, '@type'>> & FslmathsOperationXmaxnParamsDict;
+
+
+interface FslmathsOperationYmaxnParamsDict {
+    "@type"?: "operation_Ymaxn";
     "Ymaxn": boolean;
+}
+type FslmathsOperationYmaxnParamsDictTagged = Required<Pick<FslmathsOperationYmaxnParamsDict, '@type'>> & FslmathsOperationYmaxnParamsDict;
+
+
+interface FslmathsOperationZmaxnParamsDict {
+    "@type"?: "operation_Zmaxn";
     "Zmaxn": boolean;
+}
+type FslmathsOperationZmaxnParamsDictTagged = Required<Pick<FslmathsOperationZmaxnParamsDict, '@type'>> & FslmathsOperationZmaxnParamsDict;
+
+
+interface FslmathsOperationTminParamsDict {
+    "@type"?: "operation_Tmin";
     "Tmin": boolean;
+}
+type FslmathsOperationTminParamsDictTagged = Required<Pick<FslmathsOperationTminParamsDict, '@type'>> & FslmathsOperationTminParamsDict;
+
+
+interface FslmathsOperationXminParamsDict {
+    "@type"?: "operation_Xmin";
     "Xmin": boolean;
+}
+type FslmathsOperationXminParamsDictTagged = Required<Pick<FslmathsOperationXminParamsDict, '@type'>> & FslmathsOperationXminParamsDict;
+
+
+interface FslmathsOperationYminParamsDict {
+    "@type"?: "operation_Ymin";
     "Ymin": boolean;
+}
+type FslmathsOperationYminParamsDictTagged = Required<Pick<FslmathsOperationYminParamsDict, '@type'>> & FslmathsOperationYminParamsDict;
+
+
+interface FslmathsOperationZminParamsDict {
+    "@type"?: "operation_Zmin";
     "Zmin": boolean;
+}
+type FslmathsOperationZminParamsDictTagged = Required<Pick<FslmathsOperationZminParamsDict, '@type'>> & FslmathsOperationZminParamsDict;
+
+
+interface FslmathsOperationTmedianParamsDict {
+    "@type"?: "operation_Tmedian";
     "Tmedian": boolean;
+}
+type FslmathsOperationTmedianParamsDictTagged = Required<Pick<FslmathsOperationTmedianParamsDict, '@type'>> & FslmathsOperationTmedianParamsDict;
+
+
+interface FslmathsOperationXmedianParamsDict {
+    "@type"?: "operation_Xmedian";
     "Xmedian": boolean;
+}
+type FslmathsOperationXmedianParamsDictTagged = Required<Pick<FslmathsOperationXmedianParamsDict, '@type'>> & FslmathsOperationXmedianParamsDict;
+
+
+interface FslmathsOperationYmedianParamsDict {
+    "@type"?: "operation_Ymedian";
     "Ymedian": boolean;
+}
+type FslmathsOperationYmedianParamsDictTagged = Required<Pick<FslmathsOperationYmedianParamsDict, '@type'>> & FslmathsOperationYmedianParamsDict;
+
+
+interface FslmathsOperationZmedianParamsDict {
+    "@type"?: "operation_Zmedian";
     "Zmedian": boolean;
+}
+type FslmathsOperationZmedianParamsDictTagged = Required<Pick<FslmathsOperationZmedianParamsDict, '@type'>> & FslmathsOperationZmedianParamsDict;
+
+
+interface FslmathsOperationTpercParamsDict {
+    "@type"?: "operation_Tperc";
     "Tperc"?: number | null | undefined;
+}
+type FslmathsOperationTpercParamsDictTagged = Required<Pick<FslmathsOperationTpercParamsDict, '@type'>> & FslmathsOperationTpercParamsDict;
+
+
+interface FslmathsOperationXpercParamsDict {
+    "@type"?: "operation_Xperc";
     "Xperc"?: number | null | undefined;
+}
+type FslmathsOperationXpercParamsDictTagged = Required<Pick<FslmathsOperationXpercParamsDict, '@type'>> & FslmathsOperationXpercParamsDict;
+
+
+interface FslmathsOperationYpercParamsDict {
+    "@type"?: "operation_Yperc";
     "Yperc"?: number | null | undefined;
+}
+type FslmathsOperationYpercParamsDictTagged = Required<Pick<FslmathsOperationYpercParamsDict, '@type'>> & FslmathsOperationYpercParamsDict;
+
+
+interface FslmathsOperationZpercParamsDict {
+    "@type"?: "operation_Zperc";
     "Zperc"?: number | null | undefined;
+}
+type FslmathsOperationZpercParamsDictTagged = Required<Pick<FslmathsOperationZpercParamsDict, '@type'>> & FslmathsOperationZpercParamsDict;
+
+
+interface FslmathsOperationTar1ParamsDict {
+    "@type"?: "operation_Tar1";
     "Tar1": boolean;
+}
+type FslmathsOperationTar1ParamsDictTagged = Required<Pick<FslmathsOperationTar1ParamsDict, '@type'>> & FslmathsOperationTar1ParamsDict;
+
+
+interface FslmathsOperationRoiParamsDict {
+    "@type"?: "operation_roi";
     "roi"?: Array<number> | null | undefined;
+}
+type FslmathsOperationRoiParamsDictTagged = Required<Pick<FslmathsOperationRoiParamsDict, '@type'>> & FslmathsOperationRoiParamsDict;
+
+
+interface FslmathsOperationBptfParamsDict {
+    "@type"?: "operation_bptf";
     "bptf"?: Array<number> | null | undefined;
+}
+type FslmathsOperationBptfParamsDictTagged = Required<Pick<FslmathsOperationBptfParamsDict, '@type'>> & FslmathsOperationBptfParamsDict;
+
+
+interface FslmathsOperationRocParamsDict {
+    "@type"?: "operation_roc";
     "roc"?: Array<number> | null | undefined;
 }
-type FslmathsOperationParamsDictTagged = Required<Pick<FslmathsOperationParamsDict, '@type'>> & FslmathsOperationParamsDict;
+type FslmathsOperationRocParamsDictTagged = Required<Pick<FslmathsOperationRocParamsDict, '@type'>> & FslmathsOperationRocParamsDict;
 
 
 interface FslmathsParamsDict {
     "@type"?: "fsl/fslmaths";
     "datatype_internal"?: "char" | "short" | "int" | "float" | "double" | "input" | null | undefined;
     "input_files": Array<InputPathType>;
-    "operations": Array<FslmathsOperationParamsDict>;
+    "operations": Array<FslmathsOperationAddParamsDictTagged | FslmathsOperationSubParamsDictTagged | FslmathsOperationMulParamsDictTagged | FslmathsOperationDivParamsDictTagged | FslmathsOperationRemParamsDictTagged | FslmathsOperationMasParamsDictTagged | FslmathsOperationThrParamsDictTagged | FslmathsOperationThrpParamsDictTagged | FslmathsOperationThrPParamsDictTagged | FslmathsOperationUthrParamsDictTagged | FslmathsOperationUthrpParamsDictTagged | FslmathsOperationUthrPParamsDictTagged | FslmathsOperationMaxParamsDictTagged | FslmathsOperationMinParamsDictTagged | FslmathsOperationSeedParamsDictTagged | FslmathsOperationRestartParamsDictTagged | FslmathsOperationSaveParamsDictTagged | FslmathsOperationExpParamsDictTagged | FslmathsOperationLogParamsDictTagged | FslmathsOperationSinParamsDictTagged | FslmathsOperationCosParamsDictTagged | FslmathsOperationTanParamsDictTagged | FslmathsOperationAsinParamsDictTagged | FslmathsOperationAcosParamsDictTagged | FslmathsOperationAtanParamsDictTagged | FslmathsOperationSqrParamsDictTagged | FslmathsOperationSqrtParamsDictTagged | FslmathsOperationRecipParamsDictTagged | FslmathsOperationAbsParamsDictTagged | FslmathsOperationBinParamsDictTagged | FslmathsOperationBinvParamsDictTagged | FslmathsOperationFillhParamsDictTagged | FslmathsOperationFillh26ParamsDictTagged | FslmathsOperationIndexParamsDictTagged | FslmathsOperationGridParamsDictTagged | FslmathsOperationEdgeParamsDictTagged | FslmathsOperationTfceParamsDictTagged | FslmathsOperationTfceSParamsDictTagged | FslmathsOperationNanParamsDictTagged | FslmathsOperationNanmParamsDictTagged | FslmathsOperationRandParamsDictTagged | FslmathsOperationRandnParamsDictTagged | FslmathsOperationInmParamsDictTagged | FslmathsOperationIngParamsDictTagged | FslmathsOperationRangeParamsDictTagged | FslmathsOperationTensorDecompParamsDictTagged | FslmathsOperationKernel3DParamsDictTagged | FslmathsOperationKernel2DParamsDictTagged | FslmathsOperationKernelBoxParamsDictTagged | FslmathsOperationKernelBoxvParamsDictTagged | FslmathsOperationKernelBoxv3ParamsDictTagged | FslmathsOperationKernelGaussParamsDictTagged | FslmathsOperationKernelSphereParamsDictTagged | FslmathsOperationKernelFileParamsDictTagged | FslmathsOperationDilMParamsDictTagged | FslmathsOperationDilDParamsDictTagged | FslmathsOperationDilFParamsDictTagged | FslmathsOperationDilallParamsDictTagged | FslmathsOperationEroParamsDictTagged | FslmathsOperationEroFParamsDictTagged | FslmathsOperationFmedianParamsDictTagged | FslmathsOperationFmeanParamsDictTagged | FslmathsOperationFmeanuParamsDictTagged | FslmathsOperationSParamsDictTagged | FslmathsOperationSubsamp2ParamsDictTagged | FslmathsOperationSubsamp2offcParamsDictTagged | FslmathsOperationTmeanParamsDictTagged | FslmathsOperationXmeanParamsDictTagged | FslmathsOperationYmeanParamsDictTagged | FslmathsOperationZmeanParamsDictTagged | FslmathsOperationTstdParamsDictTagged | FslmathsOperationXstdParamsDictTagged | FslmathsOperationYstdParamsDictTagged | FslmathsOperationZstdParamsDictTagged | FslmathsOperationTmaxParamsDictTagged | FslmathsOperationXmaxParamsDictTagged | FslmathsOperationYmaxParamsDictTagged | FslmathsOperationZmaxParamsDictTagged | FslmathsOperationTmaxnParamsDictTagged | FslmathsOperationXmaxnParamsDictTagged | FslmathsOperationYmaxnParamsDictTagged | FslmathsOperationZmaxnParamsDictTagged | FslmathsOperationTminParamsDictTagged | FslmathsOperationXminParamsDictTagged | FslmathsOperationYminParamsDictTagged | FslmathsOperationZminParamsDictTagged | FslmathsOperationTmedianParamsDictTagged | FslmathsOperationXmedianParamsDictTagged | FslmathsOperationYmedianParamsDictTagged | FslmathsOperationZmedianParamsDictTagged | FslmathsOperationTpercParamsDictTagged | FslmathsOperationXpercParamsDictTagged | FslmathsOperationYpercParamsDictTagged | FslmathsOperationZpercParamsDictTagged | FslmathsOperationTar1ParamsDictTagged | FslmathsOperationRoiParamsDictTagged | FslmathsOperationBptfParamsDictTagged | FslmathsOperationRocParamsDictTagged>;
     "output": string;
     "output_datatype"?: "char" | "short" | "int" | "float" | "double" | "input" | null | undefined;
 }
@@ -127,377 +709,4004 @@ type FslmathsParamsDictTagged = Required<Pick<FslmathsParamsDict, '@type'>> & Fs
 
 
 /**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function fslmaths_operations_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "operation_add": fslmaths_operation_add_cargs,
+        "operation_sub": fslmaths_operation_sub_cargs,
+        "operation_mul": fslmaths_operation_mul_cargs,
+        "operation_div": fslmaths_operation_div_cargs,
+        "operation_rem": fslmaths_operation_rem_cargs,
+        "operation_mas": fslmaths_operation_mas_cargs,
+        "operation_thr": fslmaths_operation_thr_cargs,
+        "operation_thrp": fslmaths_operation_thrp_cargs,
+        "operation_thrP": fslmaths_operation_thr_p_cargs,
+        "operation_uthr": fslmaths_operation_uthr_cargs,
+        "operation_uthrp": fslmaths_operation_uthrp_cargs,
+        "operation_uthrP": fslmaths_operation_uthr_p_cargs,
+        "operation_max": fslmaths_operation_max_cargs,
+        "operation_min": fslmaths_operation_min_cargs,
+        "operation_seed": fslmaths_operation_seed_cargs,
+        "operation_restart": fslmaths_operation_restart_cargs,
+        "operation_save": fslmaths_operation_save_cargs,
+        "operation_exp": fslmaths_operation_exp_cargs,
+        "operation_log": fslmaths_operation_log_cargs,
+        "operation_sin": fslmaths_operation_sin_cargs,
+        "operation_cos": fslmaths_operation_cos_cargs,
+        "operation_tan": fslmaths_operation_tan_cargs,
+        "operation_asin": fslmaths_operation_asin_cargs,
+        "operation_acos": fslmaths_operation_acos_cargs,
+        "operation_atan": fslmaths_operation_atan_cargs,
+        "operation_sqr": fslmaths_operation_sqr_cargs,
+        "operation_sqrt": fslmaths_operation_sqrt_cargs,
+        "operation_recip": fslmaths_operation_recip_cargs,
+        "operation_abs": fslmaths_operation_abs_cargs,
+        "operation_bin": fslmaths_operation_bin_cargs,
+        "operation_binv": fslmaths_operation_binv_cargs,
+        "operation_fillh": fslmaths_operation_fillh_cargs,
+        "operation_fillh26": fslmaths_operation_fillh26_cargs,
+        "operation_index": fslmaths_operation_index_cargs,
+        "operation_grid": fslmaths_operation_grid_cargs,
+        "operation_edge": fslmaths_operation_edge_cargs,
+        "operation_tfce": fslmaths_operation_tfce_cargs,
+        "operation_tfceS": fslmaths_operation_tfce_s_cargs,
+        "operation_nan": fslmaths_operation_nan_cargs,
+        "operation_nanm": fslmaths_operation_nanm_cargs,
+        "operation_rand": fslmaths_operation_rand_cargs,
+        "operation_randn": fslmaths_operation_randn_cargs,
+        "operation_inm": fslmaths_operation_inm_cargs,
+        "operation_ing": fslmaths_operation_ing_cargs,
+        "operation_range": fslmaths_operation_range_cargs,
+        "operation_tensor_decomp": fslmaths_operation_tensor_decomp_cargs,
+        "operation_kernel_3D": fslmaths_operation_kernel_3_d_cargs,
+        "operation_kernel_2D": fslmaths_operation_kernel_2_d_cargs,
+        "operation_kernel_box": fslmaths_operation_kernel_box_cargs,
+        "operation_kernel_boxv": fslmaths_operation_kernel_boxv_cargs,
+        "operation_kernel_boxv3": fslmaths_operation_kernel_boxv3_cargs,
+        "operation_kernel_gauss": fslmaths_operation_kernel_gauss_cargs,
+        "operation_kernel_sphere": fslmaths_operation_kernel_sphere_cargs,
+        "operation_kernel_file": fslmaths_operation_kernel_file_cargs,
+        "operation_dilM": fslmaths_operation_dil_m_cargs,
+        "operation_dilD": fslmaths_operation_dil_d_cargs,
+        "operation_dilF": fslmaths_operation_dil_f_cargs,
+        "operation_dilall": fslmaths_operation_dilall_cargs,
+        "operation_ero": fslmaths_operation_ero_cargs,
+        "operation_eroF": fslmaths_operation_ero_f_cargs,
+        "operation_fmedian": fslmaths_operation_fmedian_cargs,
+        "operation_fmean": fslmaths_operation_fmean_cargs,
+        "operation_fmeanu": fslmaths_operation_fmeanu_cargs,
+        "operation_s": fslmaths_operation_s_cargs,
+        "operation_subsamp2": fslmaths_operation_subsamp2_cargs,
+        "operation_subsamp2offc": fslmaths_operation_subsamp2offc_cargs,
+        "operation_Tmean": fslmaths_operation_tmean_cargs,
+        "operation_Xmean": fslmaths_operation_xmean_cargs,
+        "operation_Ymean": fslmaths_operation_ymean_cargs,
+        "operation_Zmean": fslmaths_operation_zmean_cargs,
+        "operation_Tstd": fslmaths_operation_tstd_cargs,
+        "operation_Xstd": fslmaths_operation_xstd_cargs,
+        "operation_Ystd": fslmaths_operation_ystd_cargs,
+        "operation_Zstd": fslmaths_operation_zstd_cargs,
+        "operation_Tmax": fslmaths_operation_tmax_cargs,
+        "operation_Xmax": fslmaths_operation_xmax_cargs,
+        "operation_Ymax": fslmaths_operation_ymax_cargs,
+        "operation_Zmax": fslmaths_operation_zmax_cargs,
+        "operation_Tmaxn": fslmaths_operation_tmaxn_cargs,
+        "operation_Xmaxn": fslmaths_operation_xmaxn_cargs,
+        "operation_Ymaxn": fslmaths_operation_ymaxn_cargs,
+        "operation_Zmaxn": fslmaths_operation_zmaxn_cargs,
+        "operation_Tmin": fslmaths_operation_tmin_cargs,
+        "operation_Xmin": fslmaths_operation_xmin_cargs,
+        "operation_Ymin": fslmaths_operation_ymin_cargs,
+        "operation_Zmin": fslmaths_operation_zmin_cargs,
+        "operation_Tmedian": fslmaths_operation_tmedian_cargs,
+        "operation_Xmedian": fslmaths_operation_xmedian_cargs,
+        "operation_Ymedian": fslmaths_operation_ymedian_cargs,
+        "operation_Zmedian": fslmaths_operation_zmedian_cargs,
+        "operation_Tperc": fslmaths_operation_tperc_cargs,
+        "operation_Xperc": fslmaths_operation_xperc_cargs,
+        "operation_Yperc": fslmaths_operation_yperc_cargs,
+        "operation_Zperc": fslmaths_operation_zperc_cargs,
+        "operation_Tar1": fslmaths_operation_tar1_cargs,
+        "operation_roi": fslmaths_operation_roi_cargs,
+        "operation_bptf": fslmaths_operation_bptf_cargs,
+        "operation_roc": fslmaths_operation_roc_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function fslmaths_operations_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
  * Build parameters.
  *
  * @param add Add following input to current image
- * @param sub Subtract following input from current image
- * @param mul Multiply current image by following input
- * @param div Divide current image by following input
- * @param rem Modulus remainder - divide current image by following input and take remainder
- * @param mas Use (following image>0) to mask current image
- * @param thr Use following number to threshold current image (zero anything below the number)
- * @param thrp Use following percentage (0-100) of ROBUST RANGE to threshold current image (zero anything below the number)
- * @param thr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold below
- * @param uthr Use following number to upper-threshold current image (zero anything above the number)
- * @param uthrp Use following percentage (0-100) of ROBUST RANGE to upper-threshold current image (zero anything above the number)
- * @param uthr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold above
- * @param max Take maximum of following input and current image
- * @param min Take minimum of following input and current image
- * @param seed Seed random number generator with following number
- * @param restart Replace the current image with input for future processing operations
- * @param save Save the current working image to the input filename
- * @param exp Exponential
- * @param log Natural logarithm
- * @param sin Sine function
- * @param cos Cosine function
- * @param tan Tangent function
- * @param asin Arc sine function
- * @param acos Arc cosine function
- * @param atan Arc tangent function
- * @param sqr Square
- * @param sqrt Square root
- * @param recip Reciprocal (1/current image)
- * @param abs Absolute value
- * @param bin Use (current image>0) to binarise
- * @param binv Binarise and invert (binarisation and logical inversion)
- * @param fillh Fill holes in a binary mask (holes are internal - i.e. do not touch the edge of the FOV)
- * @param fillh26 Fill holes using 26 connectivity
- * @param index Replace each nonzero voxel with a unique (subject to wrapping) index number
- * @param grid Add a 3D grid of intensity <value> with grid spacing <spacing>
- * @param edge Edge strength
- * @param tfce Enhance with TFCE, e.g. -tfce 2 0.5 6 (maybe change 6 to 26 for skeletons)
- * @param tfce_s Show support area for voxel (X,Y,Z)
- * @param nan Replace NaNs (improper numbers) with 0
- * @param nanm Make NaN (improper number) mask with 1 for NaN voxels, 0 otherwise
- * @param rand Add uniform noise (range 0:1)
- * @param randn Add Gaussian noise (mean=0 sigma=1)
- * @param inm Intensity normalisation (per 3D volume mean)
- * @param ing Intensity normalisation, global 4D mean
- * @param range Set the output calmin/max to full data range
- * @param tensor_decomp Convert a 4D (6-timepoint) tensor image into L1,2,3,FA,MD,MO,V1,2,3 (remaining image in pipeline is FA)
- * @param kernel_3_d 3x3x3 box centered on target voxel (set as default kernel)
- * @param kernel_2_d 3x3x1 box centered on target voxel
- * @param kernel_box All voxels in a cube of width <size> mm centered on target voxel
- * @param kernel_boxv All voxels in a cube of width <size> voxels centered on target voxel
- * @param kernel_boxv3 All voxels in a cuboid of dimensions X x Y x Z centered on target voxel
- * @param kernel_gauss Gaussian kernel (sigma in mm, not voxels)
- * @param kernel_sphere All voxels in a sphere of radius <size> mm centered on target voxel
- * @param kernel_file Use external file as kernel
- * @param dil_m Mean Dilation of non-zero voxels
- * @param dil_d Modal Dilation of non-zero voxels
- * @param dil_f Maximum filtering of all voxels
- * @param dilall Apply -dilM repeatedly until the entire FOV is covered
- * @param ero Erode by zeroing non-zero voxels when zero voxels found in kernel
- * @param ero_f Minimum filtering of all voxels
- * @param fmedian Median Filtering
- * @param fmean Mean filtering, kernel weighted (conventionally used with gauss kernel)
- * @param fmeanu Mean filtering, kernel weighted, un-normalised (gives edge effects)
- * @param s Create a gauss kernel of sigma mm and perform mean filtering
- * @param subsamp2 Downsamples image by a factor of 2 (keeping new voxels centred on old)
- * @param subsamp2offc Downsamples image by a factor of 2 (non-centred)
- * @param tmean Mean across time
- * @param xmean Mean across X axis
- * @param ymean Mean across Y axis
- * @param zmean Mean across Z axis
- * @param tstd Standard deviation across time
- * @param xstd Standard deviation across X axis
- * @param ystd Standard deviation across Y axis
- * @param zstd Standard deviation across Z axis
- * @param tmax Max across time
- * @param xmax Max across X axis
- * @param ymax Max across Y axis
- * @param zmax Max across Z axis
- * @param tmaxn Time index of max across time
- * @param xmaxn X index of max across X axis
- * @param ymaxn Y index of max across Y axis
- * @param zmaxn Z index of max across Z axis
- * @param tmin Min across time
- * @param xmin Min across X axis
- * @param ymin Min across Y axis
- * @param zmin Min across Z axis
- * @param tmedian Median across time
- * @param xmedian Median across X axis
- * @param ymedian Median across Y axis
- * @param zmedian Median across Z axis
- * @param tperc Nth percentile (0-100) of FULL RANGE across time
- * @param xperc Nth percentile (0-100) of FULL RANGE across X axis
- * @param yperc Nth percentile (0-100) of FULL RANGE across Y axis
- * @param zperc Nth percentile (0-100) of FULL RANGE across Z axis
- * @param tar1 Temporal AR(1) coefficient (use -odt float and probably demean first)
- * @param roi <xmin> <xsize> <ymin> <ysize> <zmin> <zsize> <tmin> <tsize>. Zero outside roi (using voxel coordinates). Inputting -1 for a size will set it to the full image extent for that dimension.
- * @param bptf <lowpass> <highpass>. Bandpass temporal filtering (use -odt float and probably demean first)
- * @param roc <threshold> <output>. ROC analysis
  *
  * @returns Parameter dictionary
  */
-function fslmaths_operation(
+function fslmaths_operation_add(
     add: number | null = null,
-    sub: number | null = null,
-    mul: number | null = null,
-    div: number | null = null,
-    rem: number | null = null,
-    mas: InputPathType | null = null,
-    thr: number | null = null,
-    thrp: number | null = null,
-    thr_p: number | null = null,
-    uthr: number | null = null,
-    uthrp: number | null = null,
-    uthr_p: number | null = null,
-    max: number | null = null,
-    min: number | null = null,
-    seed: number | null = null,
-    restart: InputPathType | null = null,
-    save: boolean = false,
-    exp: boolean = false,
-    log: boolean = false,
-    sin: boolean = false,
-    cos: boolean = false,
-    tan: boolean = false,
-    asin: boolean = false,
-    acos: boolean = false,
-    atan: boolean = false,
-    sqr: boolean = false,
-    sqrt: boolean = false,
-    recip: boolean = false,
-    abs: boolean = false,
-    bin: boolean = false,
-    binv: boolean = false,
-    fillh: boolean = false,
-    fillh26: boolean = false,
-    index: boolean = false,
-    grid: Array<number> | null = null,
-    edge: boolean = false,
-    tfce: Array<number> | null = null,
-    tfce_s: Array<number> | null = null,
-    nan: boolean = false,
-    nanm: boolean = false,
-    rand: boolean = false,
-    randn: boolean = false,
-    inm: number | null = null,
-    ing: number | null = null,
-    range: boolean = false,
-    tensor_decomp: boolean = false,
-    kernel_3_d: boolean = false,
-    kernel_2_d: boolean = false,
-    kernel_box: number | null = null,
-    kernel_boxv: number | null = null,
-    kernel_boxv3: Array<number> | null = null,
-    kernel_gauss: number | null = null,
-    kernel_sphere: number | null = null,
-    kernel_file: InputPathType | null = null,
-    dil_m: boolean = false,
-    dil_d: boolean = false,
-    dil_f: boolean = false,
-    dilall: boolean = false,
-    ero: boolean = false,
-    ero_f: boolean = false,
-    fmedian: boolean = false,
-    fmean: boolean = false,
-    fmeanu: boolean = false,
-    s: number | null = null,
-    subsamp2: boolean = false,
-    subsamp2offc: boolean = false,
-    tmean: boolean = false,
-    xmean: boolean = false,
-    ymean: boolean = false,
-    zmean: boolean = false,
-    tstd: boolean = false,
-    xstd: boolean = false,
-    ystd: boolean = false,
-    zstd: boolean = false,
-    tmax: boolean = false,
-    xmax: boolean = false,
-    ymax: boolean = false,
-    zmax: boolean = false,
-    tmaxn: boolean = false,
-    xmaxn: boolean = false,
-    ymaxn: boolean = false,
-    zmaxn: boolean = false,
-    tmin: boolean = false,
-    xmin: boolean = false,
-    ymin: boolean = false,
-    zmin: boolean = false,
-    tmedian: boolean = false,
-    xmedian: boolean = false,
-    ymedian: boolean = false,
-    zmedian: boolean = false,
-    tperc: number | null = null,
-    xperc: number | null = null,
-    yperc: number | null = null,
-    zperc: number | null = null,
-    tar1: boolean = false,
-    roi: Array<number> | null = null,
-    bptf: Array<number> | null = null,
-    roc: Array<number> | null = null,
-): FslmathsOperationParamsDictTagged {
+): FslmathsOperationAddParamsDictTagged {
     const params = {
-        "@type": "operation" as const,
-        "save": save,
-        "exp": exp,
-        "log": log,
-        "sin": sin,
-        "cos": cos,
-        "tan": tan,
-        "asin": asin,
-        "acos": acos,
-        "atan": atan,
-        "sqr": sqr,
-        "sqrt": sqrt,
-        "recip": recip,
-        "abs": abs,
-        "bin": bin,
-        "binv": binv,
-        "fillh": fillh,
-        "fillh26": fillh26,
-        "index": index,
-        "edge": edge,
-        "nan": nan,
-        "nanm": nanm,
-        "rand": rand,
-        "randn": randn,
-        "range": range,
-        "tensor_decomp": tensor_decomp,
-        "kernel_3D": kernel_3_d,
-        "kernel_2D": kernel_2_d,
-        "dilM": dil_m,
-        "dilD": dil_d,
-        "dilF": dil_f,
-        "dilall": dilall,
-        "ero": ero,
-        "eroF": ero_f,
-        "fmedian": fmedian,
-        "fmean": fmean,
-        "fmeanu": fmeanu,
-        "subsamp2": subsamp2,
-        "subsamp2offc": subsamp2offc,
-        "Tmean": tmean,
-        "Xmean": xmean,
-        "Ymean": ymean,
-        "Zmean": zmean,
-        "Tstd": tstd,
-        "Xstd": xstd,
-        "Ystd": ystd,
-        "Zstd": zstd,
-        "Tmax": tmax,
-        "Xmax": xmax,
-        "Ymax": ymax,
-        "Zmax": zmax,
-        "Tmaxn": tmaxn,
-        "Xmaxn": xmaxn,
-        "Ymaxn": ymaxn,
-        "Zmaxn": zmaxn,
-        "Tmin": tmin,
-        "Xmin": xmin,
-        "Ymin": ymin,
-        "Zmin": zmin,
-        "Tmedian": tmedian,
-        "Xmedian": xmedian,
-        "Ymedian": ymedian,
-        "Zmedian": zmedian,
-        "Tar1": tar1,
+        "@type": "operation_add" as const,
     };
     if (add !== null) {
         params["add"] = add;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_add_cargs(
+    params: FslmathsOperationAddParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["add"] ?? null) !== null) {
+        cargs.push(
+            "-add",
+            String((params["add"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param sub Subtract following input from current image
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_sub(
+    sub: number | null = null,
+): FslmathsOperationSubParamsDictTagged {
+    const params = {
+        "@type": "operation_sub" as const,
+    };
     if (sub !== null) {
         params["sub"] = sub;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_sub_cargs(
+    params: FslmathsOperationSubParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sub"] ?? null) !== null) {
+        cargs.push(
+            "-sub",
+            String((params["sub"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param mul Multiply current image by following input
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_mul(
+    mul: number | null = null,
+): FslmathsOperationMulParamsDictTagged {
+    const params = {
+        "@type": "operation_mul" as const,
+    };
     if (mul !== null) {
         params["mul"] = mul;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_mul_cargs(
+    params: FslmathsOperationMulParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["mul"] ?? null) !== null) {
+        cargs.push(
+            "-mul",
+            String((params["mul"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param div Divide current image by following input
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_div(
+    div: number | null = null,
+): FslmathsOperationDivParamsDictTagged {
+    const params = {
+        "@type": "operation_div" as const,
+    };
     if (div !== null) {
         params["div"] = div;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_div_cargs(
+    params: FslmathsOperationDivParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["div"] ?? null) !== null) {
+        cargs.push(
+            "-div",
+            String((params["div"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param rem Modulus remainder - divide current image by following input and take remainder
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_rem(
+    rem: number | null = null,
+): FslmathsOperationRemParamsDictTagged {
+    const params = {
+        "@type": "operation_rem" as const,
+    };
     if (rem !== null) {
         params["rem"] = rem;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_rem_cargs(
+    params: FslmathsOperationRemParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["rem"] ?? null) !== null) {
+        cargs.push(
+            "-rem",
+            String((params["rem"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param mas Use (following image>0) to mask current image
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_mas(
+    mas: InputPathType | null = null,
+): FslmathsOperationMasParamsDictTagged {
+    const params = {
+        "@type": "operation_mas" as const,
+    };
     if (mas !== null) {
         params["mas"] = mas;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_mas_cargs(
+    params: FslmathsOperationMasParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["mas"] ?? null) !== null) {
+        cargs.push(
+            "-mas",
+            execution.inputFile((params["mas"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param thr Use following number to threshold current image (zero anything below the number)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_thr(
+    thr: number | null = null,
+): FslmathsOperationThrParamsDictTagged {
+    const params = {
+        "@type": "operation_thr" as const,
+    };
     if (thr !== null) {
         params["thr"] = thr;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_thr_cargs(
+    params: FslmathsOperationThrParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["thr"] ?? null) !== null) {
+        cargs.push(
+            "-thr",
+            String((params["thr"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param thrp Use following percentage (0-100) of ROBUST RANGE to threshold current image (zero anything below the number)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_thrp(
+    thrp: number | null = null,
+): FslmathsOperationThrpParamsDictTagged {
+    const params = {
+        "@type": "operation_thrp" as const,
+    };
     if (thrp !== null) {
         params["thrp"] = thrp;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_thrp_cargs(
+    params: FslmathsOperationThrpParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["thrp"] ?? null) !== null) {
+        cargs.push(
+            "-thrp",
+            String((params["thrp"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param thr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold below
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_thr_p(
+    thr_p: number | null = null,
+): FslmathsOperationThrPParamsDictTagged {
+    const params = {
+        "@type": "operation_thrP" as const,
+    };
     if (thr_p !== null) {
         params["thrP"] = thr_p;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_thr_p_cargs(
+    params: FslmathsOperationThrPParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["thrP"] ?? null) !== null) {
+        cargs.push(
+            "-thrP",
+            String((params["thrP"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param uthr Use following number to upper-threshold current image (zero anything above the number)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_uthr(
+    uthr: number | null = null,
+): FslmathsOperationUthrParamsDictTagged {
+    const params = {
+        "@type": "operation_uthr" as const,
+    };
     if (uthr !== null) {
         params["uthr"] = uthr;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_uthr_cargs(
+    params: FslmathsOperationUthrParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["uthr"] ?? null) !== null) {
+        cargs.push(
+            "-uthr",
+            String((params["uthr"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param uthrp Use following percentage (0-100) of ROBUST RANGE to upper-threshold current image (zero anything above the number)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_uthrp(
+    uthrp: number | null = null,
+): FslmathsOperationUthrpParamsDictTagged {
+    const params = {
+        "@type": "operation_uthrp" as const,
+    };
     if (uthrp !== null) {
         params["uthrp"] = uthrp;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_uthrp_cargs(
+    params: FslmathsOperationUthrpParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["uthrp"] ?? null) !== null) {
+        cargs.push(
+            "-uthrp",
+            String((params["uthrp"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param uthr_p Use following percentage (0-100) of ROBUST RANGE of non-zero voxels and threshold above
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_uthr_p(
+    uthr_p: number | null = null,
+): FslmathsOperationUthrPParamsDictTagged {
+    const params = {
+        "@type": "operation_uthrP" as const,
+    };
     if (uthr_p !== null) {
         params["uthrP"] = uthr_p;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_uthr_p_cargs(
+    params: FslmathsOperationUthrPParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["uthrP"] ?? null) !== null) {
+        cargs.push(
+            "-uthrP",
+            String((params["uthrP"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param max Take maximum of following input and current image
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_max(
+    max: number | null = null,
+): FslmathsOperationMaxParamsDictTagged {
+    const params = {
+        "@type": "operation_max" as const,
+    };
     if (max !== null) {
         params["max"] = max;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_max_cargs(
+    params: FslmathsOperationMaxParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["max"] ?? null) !== null) {
+        cargs.push(
+            "-max",
+            String((params["max"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param min Take minimum of following input and current image
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_min(
+    min: number | null = null,
+): FslmathsOperationMinParamsDictTagged {
+    const params = {
+        "@type": "operation_min" as const,
+    };
     if (min !== null) {
         params["min"] = min;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_min_cargs(
+    params: FslmathsOperationMinParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["min"] ?? null) !== null) {
+        cargs.push(
+            "-min",
+            String((params["min"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param seed Seed random number generator with following number
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_seed(
+    seed: number | null = null,
+): FslmathsOperationSeedParamsDictTagged {
+    const params = {
+        "@type": "operation_seed" as const,
+    };
     if (seed !== null) {
         params["seed"] = seed;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_seed_cargs(
+    params: FslmathsOperationSeedParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["seed"] ?? null) !== null) {
+        cargs.push(
+            "-seed",
+            String((params["seed"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param restart Replace the current image with input for future processing operations
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_restart(
+    restart: InputPathType | null = null,
+): FslmathsOperationRestartParamsDictTagged {
+    const params = {
+        "@type": "operation_restart" as const,
+    };
     if (restart !== null) {
         params["restart"] = restart;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_restart_cargs(
+    params: FslmathsOperationRestartParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["restart"] ?? null) !== null) {
+        cargs.push(
+            "-restart",
+            execution.inputFile((params["restart"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param save Save the current working image to the input filename
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_save(
+    save: boolean = false,
+): FslmathsOperationSaveParamsDictTagged {
+    const params = {
+        "@type": "operation_save" as const,
+        "save": save,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_save_cargs(
+    params: FslmathsOperationSaveParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["save"] ?? false)) {
+        cargs.push("-save");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param exp Exponential
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_exp(
+    exp: boolean = false,
+): FslmathsOperationExpParamsDictTagged {
+    const params = {
+        "@type": "operation_exp" as const,
+        "exp": exp,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_exp_cargs(
+    params: FslmathsOperationExpParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["exp"] ?? false)) {
+        cargs.push("-exp");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param log Natural logarithm
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_log(
+    log: boolean = false,
+): FslmathsOperationLogParamsDictTagged {
+    const params = {
+        "@type": "operation_log" as const,
+        "log": log,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_log_cargs(
+    params: FslmathsOperationLogParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["log"] ?? false)) {
+        cargs.push("-log");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param sin Sine function
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_sin(
+    sin: boolean = false,
+): FslmathsOperationSinParamsDictTagged {
+    const params = {
+        "@type": "operation_sin" as const,
+        "sin": sin,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_sin_cargs(
+    params: FslmathsOperationSinParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sin"] ?? false)) {
+        cargs.push("-sin");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param cos Cosine function
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_cos(
+    cos: boolean = false,
+): FslmathsOperationCosParamsDictTagged {
+    const params = {
+        "@type": "operation_cos" as const,
+        "cos": cos,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_cos_cargs(
+    params: FslmathsOperationCosParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["cos"] ?? false)) {
+        cargs.push("-cos");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tan Tangent function
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tan(
+    tan: boolean = false,
+): FslmathsOperationTanParamsDictTagged {
+    const params = {
+        "@type": "operation_tan" as const,
+        "tan": tan,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tan_cargs(
+    params: FslmathsOperationTanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["tan"] ?? false)) {
+        cargs.push("-tan");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param asin Arc sine function
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_asin(
+    asin: boolean = false,
+): FslmathsOperationAsinParamsDictTagged {
+    const params = {
+        "@type": "operation_asin" as const,
+        "asin": asin,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_asin_cargs(
+    params: FslmathsOperationAsinParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["asin"] ?? false)) {
+        cargs.push("-asin");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param acos Arc cosine function
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_acos(
+    acos: boolean = false,
+): FslmathsOperationAcosParamsDictTagged {
+    const params = {
+        "@type": "operation_acos" as const,
+        "acos": acos,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_acos_cargs(
+    params: FslmathsOperationAcosParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["acos"] ?? false)) {
+        cargs.push("-acos");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param atan Arc tangent function
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_atan(
+    atan: boolean = false,
+): FslmathsOperationAtanParamsDictTagged {
+    const params = {
+        "@type": "operation_atan" as const,
+        "atan": atan,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_atan_cargs(
+    params: FslmathsOperationAtanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["atan"] ?? false)) {
+        cargs.push("-atan");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param sqr Square
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_sqr(
+    sqr: boolean = false,
+): FslmathsOperationSqrParamsDictTagged {
+    const params = {
+        "@type": "operation_sqr" as const,
+        "sqr": sqr,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_sqr_cargs(
+    params: FslmathsOperationSqrParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sqr"] ?? false)) {
+        cargs.push("-sqr");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param sqrt Square root
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_sqrt(
+    sqrt: boolean = false,
+): FslmathsOperationSqrtParamsDictTagged {
+    const params = {
+        "@type": "operation_sqrt" as const,
+        "sqrt": sqrt,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_sqrt_cargs(
+    params: FslmathsOperationSqrtParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["sqrt"] ?? false)) {
+        cargs.push("-sqrt");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param recip Reciprocal (1/current image)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_recip(
+    recip: boolean = false,
+): FslmathsOperationRecipParamsDictTagged {
+    const params = {
+        "@type": "operation_recip" as const,
+        "recip": recip,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_recip_cargs(
+    params: FslmathsOperationRecipParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["recip"] ?? false)) {
+        cargs.push("-recip");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param abs Absolute value
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_abs(
+    abs: boolean = false,
+): FslmathsOperationAbsParamsDictTagged {
+    const params = {
+        "@type": "operation_abs" as const,
+        "abs": abs,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_abs_cargs(
+    params: FslmathsOperationAbsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["abs"] ?? false)) {
+        cargs.push("-abs");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param bin Use (current image>0) to binarise
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_bin(
+    bin: boolean = false,
+): FslmathsOperationBinParamsDictTagged {
+    const params = {
+        "@type": "operation_bin" as const,
+        "bin": bin,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_bin_cargs(
+    params: FslmathsOperationBinParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["bin"] ?? false)) {
+        cargs.push("-bin");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param binv Binarise and invert (binarisation and logical inversion)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_binv(
+    binv: boolean = false,
+): FslmathsOperationBinvParamsDictTagged {
+    const params = {
+        "@type": "operation_binv" as const,
+        "binv": binv,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_binv_cargs(
+    params: FslmathsOperationBinvParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["binv"] ?? false)) {
+        cargs.push("-binv");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param fillh Fill holes in a binary mask (holes are internal - i.e. do not touch the edge of the FOV)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_fillh(
+    fillh: boolean = false,
+): FslmathsOperationFillhParamsDictTagged {
+    const params = {
+        "@type": "operation_fillh" as const,
+        "fillh": fillh,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_fillh_cargs(
+    params: FslmathsOperationFillhParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["fillh"] ?? false)) {
+        cargs.push("-fillh");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param fillh26 Fill holes using 26 connectivity
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_fillh26(
+    fillh26: boolean = false,
+): FslmathsOperationFillh26ParamsDictTagged {
+    const params = {
+        "@type": "operation_fillh26" as const,
+        "fillh26": fillh26,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_fillh26_cargs(
+    params: FslmathsOperationFillh26ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["fillh26"] ?? false)) {
+        cargs.push("-fillh26");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param index Replace each nonzero voxel with a unique (subject to wrapping) index number
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_index(
+    index: boolean = false,
+): FslmathsOperationIndexParamsDictTagged {
+    const params = {
+        "@type": "operation_index" as const,
+        "index": index,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_index_cargs(
+    params: FslmathsOperationIndexParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["index"] ?? false)) {
+        cargs.push("-index");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param grid Add a 3D grid of intensity <value> with grid spacing <spacing>
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_grid(
+    grid: Array<number> | null = null,
+): FslmathsOperationGridParamsDictTagged {
+    const params = {
+        "@type": "operation_grid" as const,
+    };
     if (grid !== null) {
         params["grid"] = grid;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_grid_cargs(
+    params: FslmathsOperationGridParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["grid"] ?? null) !== null) {
+        cargs.push(
+            "-grid",
+            ...(params["grid"] ?? null).map(String)
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param edge Edge strength
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_edge(
+    edge: boolean = false,
+): FslmathsOperationEdgeParamsDictTagged {
+    const params = {
+        "@type": "operation_edge" as const,
+        "edge": edge,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_edge_cargs(
+    params: FslmathsOperationEdgeParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["edge"] ?? false)) {
+        cargs.push("-edge");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tfce Enhance with TFCE, e.g. -tfce 2 0.5 6 (maybe change 6 to 26 for skeletons)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tfce(
+    tfce: Array<number> | null = null,
+): FslmathsOperationTfceParamsDictTagged {
+    const params = {
+        "@type": "operation_tfce" as const,
+    };
     if (tfce !== null) {
         params["tfce"] = tfce;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tfce_cargs(
+    params: FslmathsOperationTfceParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["tfce"] ?? null) !== null) {
+        cargs.push(
+            "-tfce",
+            ...(params["tfce"] ?? null).map(String)
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tfce_s Show support area for voxel (X,Y,Z)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tfce_s(
+    tfce_s: Array<number> | null = null,
+): FslmathsOperationTfceSParamsDictTagged {
+    const params = {
+        "@type": "operation_tfceS" as const,
+    };
     if (tfce_s !== null) {
         params["tfceS"] = tfce_s;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tfce_s_cargs(
+    params: FslmathsOperationTfceSParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["tfceS"] ?? null) !== null) {
+        cargs.push(
+            "-tfceS",
+            ...(params["tfceS"] ?? null).map(String)
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param nan Replace NaNs (improper numbers) with 0
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_nan(
+    nan: boolean = false,
+): FslmathsOperationNanParamsDictTagged {
+    const params = {
+        "@type": "operation_nan" as const,
+        "nan": nan,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_nan_cargs(
+    params: FslmathsOperationNanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["nan"] ?? false)) {
+        cargs.push("-nan");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param nanm Make NaN (improper number) mask with 1 for NaN voxels, 0 otherwise
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_nanm(
+    nanm: boolean = false,
+): FslmathsOperationNanmParamsDictTagged {
+    const params = {
+        "@type": "operation_nanm" as const,
+        "nanm": nanm,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_nanm_cargs(
+    params: FslmathsOperationNanmParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["nanm"] ?? false)) {
+        cargs.push("-nanm");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param rand Add uniform noise (range 0:1)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_rand(
+    rand: boolean = false,
+): FslmathsOperationRandParamsDictTagged {
+    const params = {
+        "@type": "operation_rand" as const,
+        "rand": rand,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_rand_cargs(
+    params: FslmathsOperationRandParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["rand"] ?? false)) {
+        cargs.push("-rand");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param randn Add Gaussian noise (mean=0 sigma=1)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_randn(
+    randn: boolean = false,
+): FslmathsOperationRandnParamsDictTagged {
+    const params = {
+        "@type": "operation_randn" as const,
+        "randn": randn,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_randn_cargs(
+    params: FslmathsOperationRandnParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["randn"] ?? false)) {
+        cargs.push("-randn");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param inm Intensity normalisation (per 3D volume mean)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_inm(
+    inm: number | null = null,
+): FslmathsOperationInmParamsDictTagged {
+    const params = {
+        "@type": "operation_inm" as const,
+    };
     if (inm !== null) {
         params["inm"] = inm;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_inm_cargs(
+    params: FslmathsOperationInmParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["inm"] ?? null) !== null) {
+        cargs.push(
+            "-inm",
+            String((params["inm"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ing Intensity normalisation, global 4D mean
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ing(
+    ing: number | null = null,
+): FslmathsOperationIngParamsDictTagged {
+    const params = {
+        "@type": "operation_ing" as const,
+    };
     if (ing !== null) {
         params["ing"] = ing;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ing_cargs(
+    params: FslmathsOperationIngParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["ing"] ?? null) !== null) {
+        cargs.push(
+            "-ing",
+            String((params["ing"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param range Set the output calmin/max to full data range
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_range(
+    range: boolean = false,
+): FslmathsOperationRangeParamsDictTagged {
+    const params = {
+        "@type": "operation_range" as const,
+        "range": range,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_range_cargs(
+    params: FslmathsOperationRangeParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["range"] ?? false)) {
+        cargs.push("-range");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tensor_decomp Convert a 4D (6-timepoint) tensor image into L1,2,3,FA,MD,MO,V1,2,3 (remaining image in pipeline is FA)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tensor_decomp(
+    tensor_decomp: boolean = false,
+): FslmathsOperationTensorDecompParamsDictTagged {
+    const params = {
+        "@type": "operation_tensor_decomp" as const,
+        "tensor_decomp": tensor_decomp,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tensor_decomp_cargs(
+    params: FslmathsOperationTensorDecompParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["tensor_decomp"] ?? false)) {
+        cargs.push("-tensor_decomp");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_3_d 3x3x3 box centered on target voxel (set as default kernel)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_3_d(
+    kernel_3_d: boolean = false,
+): FslmathsOperationKernel3DParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_3D" as const,
+        "kernel_3D": kernel_3_d,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_3_d_cargs(
+    params: FslmathsOperationKernel3DParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_3D"] ?? false)) {
+        cargs.push("-kernel 3D");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_2_d 3x3x1 box centered on target voxel
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_2_d(
+    kernel_2_d: boolean = false,
+): FslmathsOperationKernel2DParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_2D" as const,
+        "kernel_2D": kernel_2_d,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_2_d_cargs(
+    params: FslmathsOperationKernel2DParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_2D"] ?? false)) {
+        cargs.push("-kernel 2D");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_box All voxels in a cube of width <size> mm centered on target voxel
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_box(
+    kernel_box: number | null = null,
+): FslmathsOperationKernelBoxParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_box" as const,
+    };
     if (kernel_box !== null) {
         params["kernel_box"] = kernel_box;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_box_cargs(
+    params: FslmathsOperationKernelBoxParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_box"] ?? null) !== null) {
+        cargs.push(
+            "-kernel box",
+            String((params["kernel_box"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_boxv All voxels in a cube of width <size> voxels centered on target voxel
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_boxv(
+    kernel_boxv: number | null = null,
+): FslmathsOperationKernelBoxvParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_boxv" as const,
+    };
     if (kernel_boxv !== null) {
         params["kernel_boxv"] = kernel_boxv;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_boxv_cargs(
+    params: FslmathsOperationKernelBoxvParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_boxv"] ?? null) !== null) {
+        cargs.push(
+            "-kernel boxv",
+            String((params["kernel_boxv"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_boxv3 All voxels in a cuboid of dimensions X x Y x Z centered on target voxel
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_boxv3(
+    kernel_boxv3: Array<number> | null = null,
+): FslmathsOperationKernelBoxv3ParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_boxv3" as const,
+    };
     if (kernel_boxv3 !== null) {
         params["kernel_boxv3"] = kernel_boxv3;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_boxv3_cargs(
+    params: FslmathsOperationKernelBoxv3ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_boxv3"] ?? null) !== null) {
+        cargs.push(
+            "-kernel boxv3",
+            ...(params["kernel_boxv3"] ?? null).map(String)
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_gauss Gaussian kernel (sigma in mm, not voxels)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_gauss(
+    kernel_gauss: number | null = null,
+): FslmathsOperationKernelGaussParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_gauss" as const,
+    };
     if (kernel_gauss !== null) {
         params["kernel_gauss"] = kernel_gauss;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_gauss_cargs(
+    params: FslmathsOperationKernelGaussParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_gauss"] ?? null) !== null) {
+        cargs.push(
+            "-kernel gauss",
+            String((params["kernel_gauss"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_sphere All voxels in a sphere of radius <size> mm centered on target voxel
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_sphere(
+    kernel_sphere: number | null = null,
+): FslmathsOperationKernelSphereParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_sphere" as const,
+    };
     if (kernel_sphere !== null) {
         params["kernel_sphere"] = kernel_sphere;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_sphere_cargs(
+    params: FslmathsOperationKernelSphereParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_sphere"] ?? null) !== null) {
+        cargs.push(
+            "-kernel sphere",
+            String((params["kernel_sphere"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param kernel_file Use external file as kernel
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_kernel_file(
+    kernel_file: InputPathType | null = null,
+): FslmathsOperationKernelFileParamsDictTagged {
+    const params = {
+        "@type": "operation_kernel_file" as const,
+    };
     if (kernel_file !== null) {
         params["kernel_file"] = kernel_file;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_kernel_file_cargs(
+    params: FslmathsOperationKernelFileParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["kernel_file"] ?? null) !== null) {
+        cargs.push(
+            "-kernel file",
+            execution.inputFile((params["kernel_file"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param dil_m Mean Dilation of non-zero voxels
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_dil_m(
+    dil_m: boolean = false,
+): FslmathsOperationDilMParamsDictTagged {
+    const params = {
+        "@type": "operation_dilM" as const,
+        "dilM": dil_m,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_dil_m_cargs(
+    params: FslmathsOperationDilMParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["dilM"] ?? false)) {
+        cargs.push("-dilM");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param dil_d Modal Dilation of non-zero voxels
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_dil_d(
+    dil_d: boolean = false,
+): FslmathsOperationDilDParamsDictTagged {
+    const params = {
+        "@type": "operation_dilD" as const,
+        "dilD": dil_d,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_dil_d_cargs(
+    params: FslmathsOperationDilDParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["dilD"] ?? false)) {
+        cargs.push("-dilD");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param dil_f Maximum filtering of all voxels
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_dil_f(
+    dil_f: boolean = false,
+): FslmathsOperationDilFParamsDictTagged {
+    const params = {
+        "@type": "operation_dilF" as const,
+        "dilF": dil_f,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_dil_f_cargs(
+    params: FslmathsOperationDilFParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["dilF"] ?? false)) {
+        cargs.push("-dilF");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param dilall Apply -dilM repeatedly until the entire FOV is covered
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_dilall(
+    dilall: boolean = false,
+): FslmathsOperationDilallParamsDictTagged {
+    const params = {
+        "@type": "operation_dilall" as const,
+        "dilall": dilall,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_dilall_cargs(
+    params: FslmathsOperationDilallParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["dilall"] ?? false)) {
+        cargs.push("-dilall");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ero Erode by zeroing non-zero voxels when zero voxels found in kernel
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ero(
+    ero: boolean = false,
+): FslmathsOperationEroParamsDictTagged {
+    const params = {
+        "@type": "operation_ero" as const,
+        "ero": ero,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ero_cargs(
+    params: FslmathsOperationEroParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["ero"] ?? false)) {
+        cargs.push("-ero");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ero_f Minimum filtering of all voxels
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ero_f(
+    ero_f: boolean = false,
+): FslmathsOperationEroFParamsDictTagged {
+    const params = {
+        "@type": "operation_eroF" as const,
+        "eroF": ero_f,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ero_f_cargs(
+    params: FslmathsOperationEroFParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["eroF"] ?? false)) {
+        cargs.push("-eroF");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param fmedian Median Filtering
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_fmedian(
+    fmedian: boolean = false,
+): FslmathsOperationFmedianParamsDictTagged {
+    const params = {
+        "@type": "operation_fmedian" as const,
+        "fmedian": fmedian,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_fmedian_cargs(
+    params: FslmathsOperationFmedianParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["fmedian"] ?? false)) {
+        cargs.push("-fmedian");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param fmean Mean filtering, kernel weighted (conventionally used with gauss kernel)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_fmean(
+    fmean: boolean = false,
+): FslmathsOperationFmeanParamsDictTagged {
+    const params = {
+        "@type": "operation_fmean" as const,
+        "fmean": fmean,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_fmean_cargs(
+    params: FslmathsOperationFmeanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["fmean"] ?? false)) {
+        cargs.push("-fmean");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param fmeanu Mean filtering, kernel weighted, un-normalised (gives edge effects)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_fmeanu(
+    fmeanu: boolean = false,
+): FslmathsOperationFmeanuParamsDictTagged {
+    const params = {
+        "@type": "operation_fmeanu" as const,
+        "fmeanu": fmeanu,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_fmeanu_cargs(
+    params: FslmathsOperationFmeanuParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["fmeanu"] ?? false)) {
+        cargs.push("-fmeanu");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param s Create a gauss kernel of sigma mm and perform mean filtering
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_s(
+    s: number | null = null,
+): FslmathsOperationSParamsDictTagged {
+    const params = {
+        "@type": "operation_s" as const,
+    };
     if (s !== null) {
         params["s"] = s;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_s_cargs(
+    params: FslmathsOperationSParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["s"] ?? null) !== null) {
+        cargs.push(
+            "-s",
+            String((params["s"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param subsamp2 Downsamples image by a factor of 2 (keeping new voxels centred on old)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_subsamp2(
+    subsamp2: boolean = false,
+): FslmathsOperationSubsamp2ParamsDictTagged {
+    const params = {
+        "@type": "operation_subsamp2" as const,
+        "subsamp2": subsamp2,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_subsamp2_cargs(
+    params: FslmathsOperationSubsamp2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["subsamp2"] ?? false)) {
+        cargs.push("-subsamp2");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param subsamp2offc Downsamples image by a factor of 2 (non-centred)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_subsamp2offc(
+    subsamp2offc: boolean = false,
+): FslmathsOperationSubsamp2offcParamsDictTagged {
+    const params = {
+        "@type": "operation_subsamp2offc" as const,
+        "subsamp2offc": subsamp2offc,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_subsamp2offc_cargs(
+    params: FslmathsOperationSubsamp2offcParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["subsamp2offc"] ?? false)) {
+        cargs.push("-subsamp2offc");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tmean Mean across time
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tmean(
+    tmean: boolean = false,
+): FslmathsOperationTmeanParamsDictTagged {
+    const params = {
+        "@type": "operation_Tmean" as const,
+        "Tmean": tmean,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tmean_cargs(
+    params: FslmathsOperationTmeanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tmean"] ?? false)) {
+        cargs.push("-Tmean");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param xmean Mean across X axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_xmean(
+    xmean: boolean = false,
+): FslmathsOperationXmeanParamsDictTagged {
+    const params = {
+        "@type": "operation_Xmean" as const,
+        "Xmean": xmean,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_xmean_cargs(
+    params: FslmathsOperationXmeanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Xmean"] ?? false)) {
+        cargs.push("-Xmean");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ymean Mean across Y axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ymean(
+    ymean: boolean = false,
+): FslmathsOperationYmeanParamsDictTagged {
+    const params = {
+        "@type": "operation_Ymean" as const,
+        "Ymean": ymean,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ymean_cargs(
+    params: FslmathsOperationYmeanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Ymean"] ?? false)) {
+        cargs.push("-Ymean");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param zmean Mean across Z axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_zmean(
+    zmean: boolean = false,
+): FslmathsOperationZmeanParamsDictTagged {
+    const params = {
+        "@type": "operation_Zmean" as const,
+        "Zmean": zmean,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_zmean_cargs(
+    params: FslmathsOperationZmeanParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Zmean"] ?? false)) {
+        cargs.push("-Zmean");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tstd Standard deviation across time
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tstd(
+    tstd: boolean = false,
+): FslmathsOperationTstdParamsDictTagged {
+    const params = {
+        "@type": "operation_Tstd" as const,
+        "Tstd": tstd,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tstd_cargs(
+    params: FslmathsOperationTstdParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tstd"] ?? false)) {
+        cargs.push("-Tstd");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param xstd Standard deviation across X axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_xstd(
+    xstd: boolean = false,
+): FslmathsOperationXstdParamsDictTagged {
+    const params = {
+        "@type": "operation_Xstd" as const,
+        "Xstd": xstd,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_xstd_cargs(
+    params: FslmathsOperationXstdParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Xstd"] ?? false)) {
+        cargs.push("-Xstd");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ystd Standard deviation across Y axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ystd(
+    ystd: boolean = false,
+): FslmathsOperationYstdParamsDictTagged {
+    const params = {
+        "@type": "operation_Ystd" as const,
+        "Ystd": ystd,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ystd_cargs(
+    params: FslmathsOperationYstdParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Ystd"] ?? false)) {
+        cargs.push("-Ystd");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param zstd Standard deviation across Z axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_zstd(
+    zstd: boolean = false,
+): FslmathsOperationZstdParamsDictTagged {
+    const params = {
+        "@type": "operation_Zstd" as const,
+        "Zstd": zstd,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_zstd_cargs(
+    params: FslmathsOperationZstdParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Zstd"] ?? false)) {
+        cargs.push("-Zstd");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tmax Max across time
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tmax(
+    tmax: boolean = false,
+): FslmathsOperationTmaxParamsDictTagged {
+    const params = {
+        "@type": "operation_Tmax" as const,
+        "Tmax": tmax,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tmax_cargs(
+    params: FslmathsOperationTmaxParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tmax"] ?? false)) {
+        cargs.push("-Tmax");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param xmax Max across X axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_xmax(
+    xmax: boolean = false,
+): FslmathsOperationXmaxParamsDictTagged {
+    const params = {
+        "@type": "operation_Xmax" as const,
+        "Xmax": xmax,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_xmax_cargs(
+    params: FslmathsOperationXmaxParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Xmax"] ?? false)) {
+        cargs.push("-Xmax");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ymax Max across Y axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ymax(
+    ymax: boolean = false,
+): FslmathsOperationYmaxParamsDictTagged {
+    const params = {
+        "@type": "operation_Ymax" as const,
+        "Ymax": ymax,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ymax_cargs(
+    params: FslmathsOperationYmaxParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Ymax"] ?? false)) {
+        cargs.push("-Ymax");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param zmax Max across Z axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_zmax(
+    zmax: boolean = false,
+): FslmathsOperationZmaxParamsDictTagged {
+    const params = {
+        "@type": "operation_Zmax" as const,
+        "Zmax": zmax,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_zmax_cargs(
+    params: FslmathsOperationZmaxParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Zmax"] ?? false)) {
+        cargs.push("-Zmax");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tmaxn Time index of max across time
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tmaxn(
+    tmaxn: boolean = false,
+): FslmathsOperationTmaxnParamsDictTagged {
+    const params = {
+        "@type": "operation_Tmaxn" as const,
+        "Tmaxn": tmaxn,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tmaxn_cargs(
+    params: FslmathsOperationTmaxnParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tmaxn"] ?? false)) {
+        cargs.push("-Tmaxn");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param xmaxn X index of max across X axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_xmaxn(
+    xmaxn: boolean = false,
+): FslmathsOperationXmaxnParamsDictTagged {
+    const params = {
+        "@type": "operation_Xmaxn" as const,
+        "Xmaxn": xmaxn,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_xmaxn_cargs(
+    params: FslmathsOperationXmaxnParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Xmaxn"] ?? false)) {
+        cargs.push("-Xmaxn");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ymaxn Y index of max across Y axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ymaxn(
+    ymaxn: boolean = false,
+): FslmathsOperationYmaxnParamsDictTagged {
+    const params = {
+        "@type": "operation_Ymaxn" as const,
+        "Ymaxn": ymaxn,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ymaxn_cargs(
+    params: FslmathsOperationYmaxnParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Ymaxn"] ?? false)) {
+        cargs.push("-Ymaxn");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param zmaxn Z index of max across Z axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_zmaxn(
+    zmaxn: boolean = false,
+): FslmathsOperationZmaxnParamsDictTagged {
+    const params = {
+        "@type": "operation_Zmaxn" as const,
+        "Zmaxn": zmaxn,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_zmaxn_cargs(
+    params: FslmathsOperationZmaxnParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Zmaxn"] ?? false)) {
+        cargs.push("-Zmaxn");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tmin Min across time
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tmin(
+    tmin: boolean = false,
+): FslmathsOperationTminParamsDictTagged {
+    const params = {
+        "@type": "operation_Tmin" as const,
+        "Tmin": tmin,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tmin_cargs(
+    params: FslmathsOperationTminParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tmin"] ?? false)) {
+        cargs.push("-Tmin");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param xmin Min across X axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_xmin(
+    xmin: boolean = false,
+): FslmathsOperationXminParamsDictTagged {
+    const params = {
+        "@type": "operation_Xmin" as const,
+        "Xmin": xmin,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_xmin_cargs(
+    params: FslmathsOperationXminParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Xmin"] ?? false)) {
+        cargs.push("-Xmin");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ymin Min across Y axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ymin(
+    ymin: boolean = false,
+): FslmathsOperationYminParamsDictTagged {
+    const params = {
+        "@type": "operation_Ymin" as const,
+        "Ymin": ymin,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ymin_cargs(
+    params: FslmathsOperationYminParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Ymin"] ?? false)) {
+        cargs.push("-Ymin");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param zmin Min across Z axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_zmin(
+    zmin: boolean = false,
+): FslmathsOperationZminParamsDictTagged {
+    const params = {
+        "@type": "operation_Zmin" as const,
+        "Zmin": zmin,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_zmin_cargs(
+    params: FslmathsOperationZminParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Zmin"] ?? false)) {
+        cargs.push("-Zmin");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tmedian Median across time
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tmedian(
+    tmedian: boolean = false,
+): FslmathsOperationTmedianParamsDictTagged {
+    const params = {
+        "@type": "operation_Tmedian" as const,
+        "Tmedian": tmedian,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tmedian_cargs(
+    params: FslmathsOperationTmedianParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tmedian"] ?? false)) {
+        cargs.push("-Tmedian");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param xmedian Median across X axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_xmedian(
+    xmedian: boolean = false,
+): FslmathsOperationXmedianParamsDictTagged {
+    const params = {
+        "@type": "operation_Xmedian" as const,
+        "Xmedian": xmedian,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_xmedian_cargs(
+    params: FslmathsOperationXmedianParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Xmedian"] ?? false)) {
+        cargs.push("-Xmedian");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param ymedian Median across Y axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_ymedian(
+    ymedian: boolean = false,
+): FslmathsOperationYmedianParamsDictTagged {
+    const params = {
+        "@type": "operation_Ymedian" as const,
+        "Ymedian": ymedian,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_ymedian_cargs(
+    params: FslmathsOperationYmedianParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Ymedian"] ?? false)) {
+        cargs.push("-Ymedian");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param zmedian Median across Z axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_zmedian(
+    zmedian: boolean = false,
+): FslmathsOperationZmedianParamsDictTagged {
+    const params = {
+        "@type": "operation_Zmedian" as const,
+        "Zmedian": zmedian,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_zmedian_cargs(
+    params: FslmathsOperationZmedianParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Zmedian"] ?? false)) {
+        cargs.push("-Zmedian");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tperc Nth percentile (0-100) of FULL RANGE across time
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tperc(
+    tperc: number | null = null,
+): FslmathsOperationTpercParamsDictTagged {
+    const params = {
+        "@type": "operation_Tperc" as const,
+    };
     if (tperc !== null) {
         params["Tperc"] = tperc;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tperc_cargs(
+    params: FslmathsOperationTpercParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tperc"] ?? null) !== null) {
+        cargs.push(
+            "-Tperc",
+            String((params["Tperc"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param xperc Nth percentile (0-100) of FULL RANGE across X axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_xperc(
+    xperc: number | null = null,
+): FslmathsOperationXpercParamsDictTagged {
+    const params = {
+        "@type": "operation_Xperc" as const,
+    };
     if (xperc !== null) {
         params["Xperc"] = xperc;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_xperc_cargs(
+    params: FslmathsOperationXpercParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Xperc"] ?? null) !== null) {
+        cargs.push(
+            "-Xperc",
+            String((params["Xperc"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param yperc Nth percentile (0-100) of FULL RANGE across Y axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_yperc(
+    yperc: number | null = null,
+): FslmathsOperationYpercParamsDictTagged {
+    const params = {
+        "@type": "operation_Yperc" as const,
+    };
     if (yperc !== null) {
         params["Yperc"] = yperc;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_yperc_cargs(
+    params: FslmathsOperationYpercParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Yperc"] ?? null) !== null) {
+        cargs.push(
+            "-Yperc",
+            String((params["Yperc"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param zperc Nth percentile (0-100) of FULL RANGE across Z axis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_zperc(
+    zperc: number | null = null,
+): FslmathsOperationZpercParamsDictTagged {
+    const params = {
+        "@type": "operation_Zperc" as const,
+    };
     if (zperc !== null) {
         params["Zperc"] = zperc;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_zperc_cargs(
+    params: FslmathsOperationZpercParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Zperc"] ?? null) !== null) {
+        cargs.push(
+            "-Zperc",
+            String((params["Zperc"] ?? null))
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tar1 Temporal AR(1) coefficient (use -odt float and probably demean first)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_tar1(
+    tar1: boolean = false,
+): FslmathsOperationTar1ParamsDictTagged {
+    const params = {
+        "@type": "operation_Tar1" as const,
+        "Tar1": tar1,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_tar1_cargs(
+    params: FslmathsOperationTar1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["Tar1"] ?? false)) {
+        cargs.push("-Tar1");
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roi <xmin> <xsize> <ymin> <ysize> <zmin> <zsize> <tmin> <tsize>. Zero outside roi (using voxel coordinates). Inputting -1 for a size will set it to the full image extent for that dimension.
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_roi(
+    roi: Array<number> | null = null,
+): FslmathsOperationRoiParamsDictTagged {
+    const params = {
+        "@type": "operation_roi" as const,
+    };
     if (roi !== null) {
         params["roi"] = roi;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_roi_cargs(
+    params: FslmathsOperationRoiParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["roi"] ?? null) !== null) {
+        cargs.push(
+            "-roi",
+            ...(params["roi"] ?? null).map(String)
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param bptf <lowpass> <highpass>. Bandpass temporal filtering (use -odt float and probably demean first)
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_bptf(
+    bptf: Array<number> | null = null,
+): FslmathsOperationBptfParamsDictTagged {
+    const params = {
+        "@type": "operation_bptf" as const,
+    };
     if (bptf !== null) {
         params["bptf"] = bptf;
     }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_operation_bptf_cargs(
+    params: FslmathsOperationBptfParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    if ((params["bptf"] ?? null) !== null) {
+        cargs.push(
+            "-bptf",
+            ...(params["bptf"] ?? null).map(String)
+        );
+    }
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param roc <threshold> <output>. ROC analysis
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_operation_roc(
+    roc: Array<number> | null = null,
+): FslmathsOperationRocParamsDictTagged {
+    const params = {
+        "@type": "operation_roc" as const,
+    };
     if (roc !== null) {
         params["roc"] = roc;
     }
@@ -513,404 +4722,11 @@ function fslmaths_operation(
  *
  * @returns Command-line arguments.
  */
-function fslmaths_operation_cargs(
-    params: FslmathsOperationParamsDict,
+function fslmaths_operation_roc_cargs(
+    params: FslmathsOperationRocParamsDict,
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["add"] ?? null) !== null) {
-        cargs.push(
-            "-add",
-            String((params["add"] ?? null))
-        );
-    }
-    if ((params["sub"] ?? null) !== null) {
-        cargs.push(
-            "-sub",
-            String((params["sub"] ?? null))
-        );
-    }
-    if ((params["mul"] ?? null) !== null) {
-        cargs.push(
-            "-mul",
-            String((params["mul"] ?? null))
-        );
-    }
-    if ((params["div"] ?? null) !== null) {
-        cargs.push(
-            "-div",
-            String((params["div"] ?? null))
-        );
-    }
-    if ((params["rem"] ?? null) !== null) {
-        cargs.push(
-            "-rem",
-            String((params["rem"] ?? null))
-        );
-    }
-    if ((params["mas"] ?? null) !== null) {
-        cargs.push(
-            "-mas",
-            execution.inputFile((params["mas"] ?? null))
-        );
-    }
-    if ((params["thr"] ?? null) !== null) {
-        cargs.push(
-            "-thr",
-            String((params["thr"] ?? null))
-        );
-    }
-    if ((params["thrp"] ?? null) !== null) {
-        cargs.push(
-            "-thrp",
-            String((params["thrp"] ?? null))
-        );
-    }
-    if ((params["thrP"] ?? null) !== null) {
-        cargs.push(
-            "-thrP",
-            String((params["thrP"] ?? null))
-        );
-    }
-    if ((params["uthr"] ?? null) !== null) {
-        cargs.push(
-            "-uthr",
-            String((params["uthr"] ?? null))
-        );
-    }
-    if ((params["uthrp"] ?? null) !== null) {
-        cargs.push(
-            "-uthrp",
-            String((params["uthrp"] ?? null))
-        );
-    }
-    if ((params["uthrP"] ?? null) !== null) {
-        cargs.push(
-            "-uthrP",
-            String((params["uthrP"] ?? null))
-        );
-    }
-    if ((params["max"] ?? null) !== null) {
-        cargs.push(
-            "-max",
-            String((params["max"] ?? null))
-        );
-    }
-    if ((params["min"] ?? null) !== null) {
-        cargs.push(
-            "-min",
-            String((params["min"] ?? null))
-        );
-    }
-    if ((params["seed"] ?? null) !== null) {
-        cargs.push(
-            "-seed",
-            String((params["seed"] ?? null))
-        );
-    }
-    if ((params["restart"] ?? null) !== null) {
-        cargs.push(
-            "-restart",
-            execution.inputFile((params["restart"] ?? null))
-        );
-    }
-    if ((params["save"] ?? false)) {
-        cargs.push("-save");
-    }
-    if ((params["exp"] ?? false)) {
-        cargs.push("-exp");
-    }
-    if ((params["log"] ?? false)) {
-        cargs.push("-log");
-    }
-    if ((params["sin"] ?? false)) {
-        cargs.push("-sin");
-    }
-    if ((params["cos"] ?? false)) {
-        cargs.push("-cos");
-    }
-    if ((params["tan"] ?? false)) {
-        cargs.push("-tan");
-    }
-    if ((params["asin"] ?? false)) {
-        cargs.push("-asin");
-    }
-    if ((params["acos"] ?? false)) {
-        cargs.push("-acos");
-    }
-    if ((params["atan"] ?? false)) {
-        cargs.push("-atan");
-    }
-    if ((params["sqr"] ?? false)) {
-        cargs.push("-sqr");
-    }
-    if ((params["sqrt"] ?? false)) {
-        cargs.push("-sqrt");
-    }
-    if ((params["recip"] ?? false)) {
-        cargs.push("-recip");
-    }
-    if ((params["abs"] ?? false)) {
-        cargs.push("-abs");
-    }
-    if ((params["bin"] ?? false)) {
-        cargs.push("-bin");
-    }
-    if ((params["binv"] ?? false)) {
-        cargs.push("-binv");
-    }
-    if ((params["fillh"] ?? false)) {
-        cargs.push("-fillh");
-    }
-    if ((params["fillh26"] ?? false)) {
-        cargs.push("-fillh26");
-    }
-    if ((params["index"] ?? false)) {
-        cargs.push("-index");
-    }
-    if ((params["grid"] ?? null) !== null) {
-        cargs.push(
-            "-grid",
-            ...(params["grid"] ?? null).map(String)
-        );
-    }
-    if ((params["edge"] ?? false)) {
-        cargs.push("-edge");
-    }
-    if ((params["tfce"] ?? null) !== null) {
-        cargs.push(
-            "-tfce",
-            ...(params["tfce"] ?? null).map(String)
-        );
-    }
-    if ((params["tfceS"] ?? null) !== null) {
-        cargs.push(
-            "-tfceS",
-            ...(params["tfceS"] ?? null).map(String)
-        );
-    }
-    if ((params["nan"] ?? false)) {
-        cargs.push("-nan");
-    }
-    if ((params["nanm"] ?? false)) {
-        cargs.push("-nanm");
-    }
-    if ((params["rand"] ?? false)) {
-        cargs.push("-rand");
-    }
-    if ((params["randn"] ?? false)) {
-        cargs.push("-randn");
-    }
-    if ((params["inm"] ?? null) !== null) {
-        cargs.push(
-            "-inm",
-            String((params["inm"] ?? null))
-        );
-    }
-    if ((params["ing"] ?? null) !== null) {
-        cargs.push(
-            "-ing",
-            String((params["ing"] ?? null))
-        );
-    }
-    if ((params["range"] ?? false)) {
-        cargs.push("-range");
-    }
-    if ((params["tensor_decomp"] ?? false)) {
-        cargs.push("-tensor_decomp");
-    }
-    if ((params["kernel_3D"] ?? false)) {
-        cargs.push("-kernel 3D");
-    }
-    if ((params["kernel_2D"] ?? false)) {
-        cargs.push("-kernel 2D");
-    }
-    if ((params["kernel_box"] ?? null) !== null) {
-        cargs.push(
-            "-kernel box",
-            String((params["kernel_box"] ?? null))
-        );
-    }
-    if ((params["kernel_boxv"] ?? null) !== null) {
-        cargs.push(
-            "-kernel boxv",
-            String((params["kernel_boxv"] ?? null))
-        );
-    }
-    if ((params["kernel_boxv3"] ?? null) !== null) {
-        cargs.push(
-            "-kernel boxv3",
-            ...(params["kernel_boxv3"] ?? null).map(String)
-        );
-    }
-    if ((params["kernel_gauss"] ?? null) !== null) {
-        cargs.push(
-            "-kernel gauss",
-            String((params["kernel_gauss"] ?? null))
-        );
-    }
-    if ((params["kernel_sphere"] ?? null) !== null) {
-        cargs.push(
-            "-kernel sphere",
-            String((params["kernel_sphere"] ?? null))
-        );
-    }
-    if ((params["kernel_file"] ?? null) !== null) {
-        cargs.push(
-            "-kernel file",
-            execution.inputFile((params["kernel_file"] ?? null))
-        );
-    }
-    if ((params["dilM"] ?? false)) {
-        cargs.push("-dilM");
-    }
-    if ((params["dilD"] ?? false)) {
-        cargs.push("-dilD");
-    }
-    if ((params["dilF"] ?? false)) {
-        cargs.push("-dilF");
-    }
-    if ((params["dilall"] ?? false)) {
-        cargs.push("-dilall");
-    }
-    if ((params["ero"] ?? false)) {
-        cargs.push("-ero");
-    }
-    if ((params["eroF"] ?? false)) {
-        cargs.push("-eroF");
-    }
-    if ((params["fmedian"] ?? false)) {
-        cargs.push("-fmedian");
-    }
-    if ((params["fmean"] ?? false)) {
-        cargs.push("-fmean");
-    }
-    if ((params["fmeanu"] ?? false)) {
-        cargs.push("-fmeanu");
-    }
-    if ((params["s"] ?? null) !== null) {
-        cargs.push(
-            "-s",
-            String((params["s"] ?? null))
-        );
-    }
-    if ((params["subsamp2"] ?? false)) {
-        cargs.push("-subsamp2");
-    }
-    if ((params["subsamp2offc"] ?? false)) {
-        cargs.push("-subsamp2offc");
-    }
-    if ((params["Tmean"] ?? false)) {
-        cargs.push("-Tmean");
-    }
-    if ((params["Xmean"] ?? false)) {
-        cargs.push("-Xmean");
-    }
-    if ((params["Ymean"] ?? false)) {
-        cargs.push("-Ymean");
-    }
-    if ((params["Zmean"] ?? false)) {
-        cargs.push("-Zmean");
-    }
-    if ((params["Tstd"] ?? false)) {
-        cargs.push("-Tstd");
-    }
-    if ((params["Xstd"] ?? false)) {
-        cargs.push("-Xstd");
-    }
-    if ((params["Ystd"] ?? false)) {
-        cargs.push("-Ystd");
-    }
-    if ((params["Zstd"] ?? false)) {
-        cargs.push("-Zstd");
-    }
-    if ((params["Tmax"] ?? false)) {
-        cargs.push("-Tmax");
-    }
-    if ((params["Xmax"] ?? false)) {
-        cargs.push("-Xmax");
-    }
-    if ((params["Ymax"] ?? false)) {
-        cargs.push("-Ymax");
-    }
-    if ((params["Zmax"] ?? false)) {
-        cargs.push("-Zmax");
-    }
-    if ((params["Tmaxn"] ?? false)) {
-        cargs.push("-Tmaxn");
-    }
-    if ((params["Xmaxn"] ?? false)) {
-        cargs.push("-Xmaxn");
-    }
-    if ((params["Ymaxn"] ?? false)) {
-        cargs.push("-Ymaxn");
-    }
-    if ((params["Zmaxn"] ?? false)) {
-        cargs.push("-Zmaxn");
-    }
-    if ((params["Tmin"] ?? false)) {
-        cargs.push("-Tmin");
-    }
-    if ((params["Xmin"] ?? false)) {
-        cargs.push("-Xmin");
-    }
-    if ((params["Ymin"] ?? false)) {
-        cargs.push("-Ymin");
-    }
-    if ((params["Zmin"] ?? false)) {
-        cargs.push("-Zmin");
-    }
-    if ((params["Tmedian"] ?? false)) {
-        cargs.push("-Tmedian");
-    }
-    if ((params["Xmedian"] ?? false)) {
-        cargs.push("-Xmedian");
-    }
-    if ((params["Ymedian"] ?? false)) {
-        cargs.push("-Ymedian");
-    }
-    if ((params["Zmedian"] ?? false)) {
-        cargs.push("-Zmedian");
-    }
-    if ((params["Tperc"] ?? null) !== null) {
-        cargs.push(
-            "-Tperc",
-            String((params["Tperc"] ?? null))
-        );
-    }
-    if ((params["Xperc"] ?? null) !== null) {
-        cargs.push(
-            "-Xperc",
-            String((params["Xperc"] ?? null))
-        );
-    }
-    if ((params["Yperc"] ?? null) !== null) {
-        cargs.push(
-            "-Yperc",
-            String((params["Yperc"] ?? null))
-        );
-    }
-    if ((params["Zperc"] ?? null) !== null) {
-        cargs.push(
-            "-Zperc",
-            String((params["Zperc"] ?? null))
-        );
-    }
-    if ((params["Tar1"] ?? false)) {
-        cargs.push("-Tar1");
-    }
-    if ((params["roi"] ?? null) !== null) {
-        cargs.push(
-            "-roi",
-            ...(params["roi"] ?? null).map(String)
-        );
-    }
-    if ((params["bptf"] ?? null) !== null) {
-        cargs.push(
-            "-bptf",
-            ...(params["bptf"] ?? null).map(String)
-        );
-    }
     if ((params["roc"] ?? null) !== null) {
         cargs.push(
             "-roc",
@@ -951,7 +4767,7 @@ interface FslmathsOutputs {
  */
 function fslmaths_params(
     input_files: Array<InputPathType>,
-    operations: Array<FslmathsOperationParamsDict>,
+    operations: Array<FslmathsOperationAddParamsDictTagged | FslmathsOperationSubParamsDictTagged | FslmathsOperationMulParamsDictTagged | FslmathsOperationDivParamsDictTagged | FslmathsOperationRemParamsDictTagged | FslmathsOperationMasParamsDictTagged | FslmathsOperationThrParamsDictTagged | FslmathsOperationThrpParamsDictTagged | FslmathsOperationThrPParamsDictTagged | FslmathsOperationUthrParamsDictTagged | FslmathsOperationUthrpParamsDictTagged | FslmathsOperationUthrPParamsDictTagged | FslmathsOperationMaxParamsDictTagged | FslmathsOperationMinParamsDictTagged | FslmathsOperationSeedParamsDictTagged | FslmathsOperationRestartParamsDictTagged | FslmathsOperationSaveParamsDictTagged | FslmathsOperationExpParamsDictTagged | FslmathsOperationLogParamsDictTagged | FslmathsOperationSinParamsDictTagged | FslmathsOperationCosParamsDictTagged | FslmathsOperationTanParamsDictTagged | FslmathsOperationAsinParamsDictTagged | FslmathsOperationAcosParamsDictTagged | FslmathsOperationAtanParamsDictTagged | FslmathsOperationSqrParamsDictTagged | FslmathsOperationSqrtParamsDictTagged | FslmathsOperationRecipParamsDictTagged | FslmathsOperationAbsParamsDictTagged | FslmathsOperationBinParamsDictTagged | FslmathsOperationBinvParamsDictTagged | FslmathsOperationFillhParamsDictTagged | FslmathsOperationFillh26ParamsDictTagged | FslmathsOperationIndexParamsDictTagged | FslmathsOperationGridParamsDictTagged | FslmathsOperationEdgeParamsDictTagged | FslmathsOperationTfceParamsDictTagged | FslmathsOperationTfceSParamsDictTagged | FslmathsOperationNanParamsDictTagged | FslmathsOperationNanmParamsDictTagged | FslmathsOperationRandParamsDictTagged | FslmathsOperationRandnParamsDictTagged | FslmathsOperationInmParamsDictTagged | FslmathsOperationIngParamsDictTagged | FslmathsOperationRangeParamsDictTagged | FslmathsOperationTensorDecompParamsDictTagged | FslmathsOperationKernel3DParamsDictTagged | FslmathsOperationKernel2DParamsDictTagged | FslmathsOperationKernelBoxParamsDictTagged | FslmathsOperationKernelBoxvParamsDictTagged | FslmathsOperationKernelBoxv3ParamsDictTagged | FslmathsOperationKernelGaussParamsDictTagged | FslmathsOperationKernelSphereParamsDictTagged | FslmathsOperationKernelFileParamsDictTagged | FslmathsOperationDilMParamsDictTagged | FslmathsOperationDilDParamsDictTagged | FslmathsOperationDilFParamsDictTagged | FslmathsOperationDilallParamsDictTagged | FslmathsOperationEroParamsDictTagged | FslmathsOperationEroFParamsDictTagged | FslmathsOperationFmedianParamsDictTagged | FslmathsOperationFmeanParamsDictTagged | FslmathsOperationFmeanuParamsDictTagged | FslmathsOperationSParamsDictTagged | FslmathsOperationSubsamp2ParamsDictTagged | FslmathsOperationSubsamp2offcParamsDictTagged | FslmathsOperationTmeanParamsDictTagged | FslmathsOperationXmeanParamsDictTagged | FslmathsOperationYmeanParamsDictTagged | FslmathsOperationZmeanParamsDictTagged | FslmathsOperationTstdParamsDictTagged | FslmathsOperationXstdParamsDictTagged | FslmathsOperationYstdParamsDictTagged | FslmathsOperationZstdParamsDictTagged | FslmathsOperationTmaxParamsDictTagged | FslmathsOperationXmaxParamsDictTagged | FslmathsOperationYmaxParamsDictTagged | FslmathsOperationZmaxParamsDictTagged | FslmathsOperationTmaxnParamsDictTagged | FslmathsOperationXmaxnParamsDictTagged | FslmathsOperationYmaxnParamsDictTagged | FslmathsOperationZmaxnParamsDictTagged | FslmathsOperationTminParamsDictTagged | FslmathsOperationXminParamsDictTagged | FslmathsOperationYminParamsDictTagged | FslmathsOperationZminParamsDictTagged | FslmathsOperationTmedianParamsDictTagged | FslmathsOperationXmedianParamsDictTagged | FslmathsOperationYmedianParamsDictTagged | FslmathsOperationZmedianParamsDictTagged | FslmathsOperationTpercParamsDictTagged | FslmathsOperationXpercParamsDictTagged | FslmathsOperationYpercParamsDictTagged | FslmathsOperationZpercParamsDictTagged | FslmathsOperationTar1ParamsDictTagged | FslmathsOperationRoiParamsDictTagged | FslmathsOperationBptfParamsDictTagged | FslmathsOperationRocParamsDictTagged>,
     output: string,
     datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
@@ -993,7 +4809,7 @@ function fslmaths_cargs(
         );
     }
     cargs.push(...(params["input_files"] ?? null).map(f => execution.inputFile(f)));
-    cargs.push(...(params["operations"] ?? null).map(s => fslmaths_operation_cargs(s, execution)).flat());
+    cargs.push(...(params["operations"] ?? null).map(s => fslmaths_operations_cargs_dyn_fn(s["@type"])(s, execution)).flat());
     cargs.push((params["output"] ?? null));
     if ((params["output_datatype"] ?? null) !== null) {
         cargs.push(
@@ -1073,7 +4889,7 @@ function fslmaths_execute(
  */
 function fslmaths(
     input_files: Array<InputPathType>,
-    operations: Array<FslmathsOperationParamsDict>,
+    operations: Array<FslmathsOperationAddParamsDictTagged | FslmathsOperationSubParamsDictTagged | FslmathsOperationMulParamsDictTagged | FslmathsOperationDivParamsDictTagged | FslmathsOperationRemParamsDictTagged | FslmathsOperationMasParamsDictTagged | FslmathsOperationThrParamsDictTagged | FslmathsOperationThrpParamsDictTagged | FslmathsOperationThrPParamsDictTagged | FslmathsOperationUthrParamsDictTagged | FslmathsOperationUthrpParamsDictTagged | FslmathsOperationUthrPParamsDictTagged | FslmathsOperationMaxParamsDictTagged | FslmathsOperationMinParamsDictTagged | FslmathsOperationSeedParamsDictTagged | FslmathsOperationRestartParamsDictTagged | FslmathsOperationSaveParamsDictTagged | FslmathsOperationExpParamsDictTagged | FslmathsOperationLogParamsDictTagged | FslmathsOperationSinParamsDictTagged | FslmathsOperationCosParamsDictTagged | FslmathsOperationTanParamsDictTagged | FslmathsOperationAsinParamsDictTagged | FslmathsOperationAcosParamsDictTagged | FslmathsOperationAtanParamsDictTagged | FslmathsOperationSqrParamsDictTagged | FslmathsOperationSqrtParamsDictTagged | FslmathsOperationRecipParamsDictTagged | FslmathsOperationAbsParamsDictTagged | FslmathsOperationBinParamsDictTagged | FslmathsOperationBinvParamsDictTagged | FslmathsOperationFillhParamsDictTagged | FslmathsOperationFillh26ParamsDictTagged | FslmathsOperationIndexParamsDictTagged | FslmathsOperationGridParamsDictTagged | FslmathsOperationEdgeParamsDictTagged | FslmathsOperationTfceParamsDictTagged | FslmathsOperationTfceSParamsDictTagged | FslmathsOperationNanParamsDictTagged | FslmathsOperationNanmParamsDictTagged | FslmathsOperationRandParamsDictTagged | FslmathsOperationRandnParamsDictTagged | FslmathsOperationInmParamsDictTagged | FslmathsOperationIngParamsDictTagged | FslmathsOperationRangeParamsDictTagged | FslmathsOperationTensorDecompParamsDictTagged | FslmathsOperationKernel3DParamsDictTagged | FslmathsOperationKernel2DParamsDictTagged | FslmathsOperationKernelBoxParamsDictTagged | FslmathsOperationKernelBoxvParamsDictTagged | FslmathsOperationKernelBoxv3ParamsDictTagged | FslmathsOperationKernelGaussParamsDictTagged | FslmathsOperationKernelSphereParamsDictTagged | FslmathsOperationKernelFileParamsDictTagged | FslmathsOperationDilMParamsDictTagged | FslmathsOperationDilDParamsDictTagged | FslmathsOperationDilFParamsDictTagged | FslmathsOperationDilallParamsDictTagged | FslmathsOperationEroParamsDictTagged | FslmathsOperationEroFParamsDictTagged | FslmathsOperationFmedianParamsDictTagged | FslmathsOperationFmeanParamsDictTagged | FslmathsOperationFmeanuParamsDictTagged | FslmathsOperationSParamsDictTagged | FslmathsOperationSubsamp2ParamsDictTagged | FslmathsOperationSubsamp2offcParamsDictTagged | FslmathsOperationTmeanParamsDictTagged | FslmathsOperationXmeanParamsDictTagged | FslmathsOperationYmeanParamsDictTagged | FslmathsOperationZmeanParamsDictTagged | FslmathsOperationTstdParamsDictTagged | FslmathsOperationXstdParamsDictTagged | FslmathsOperationYstdParamsDictTagged | FslmathsOperationZstdParamsDictTagged | FslmathsOperationTmaxParamsDictTagged | FslmathsOperationXmaxParamsDictTagged | FslmathsOperationYmaxParamsDictTagged | FslmathsOperationZmaxParamsDictTagged | FslmathsOperationTmaxnParamsDictTagged | FslmathsOperationXmaxnParamsDictTagged | FslmathsOperationYmaxnParamsDictTagged | FslmathsOperationZmaxnParamsDictTagged | FslmathsOperationTminParamsDictTagged | FslmathsOperationXminParamsDictTagged | FslmathsOperationYminParamsDictTagged | FslmathsOperationZminParamsDictTagged | FslmathsOperationTmedianParamsDictTagged | FslmathsOperationXmedianParamsDictTagged | FslmathsOperationYmedianParamsDictTagged | FslmathsOperationZmedianParamsDictTagged | FslmathsOperationTpercParamsDictTagged | FslmathsOperationXpercParamsDictTagged | FslmathsOperationYpercParamsDictTagged | FslmathsOperationZpercParamsDictTagged | FslmathsOperationTar1ParamsDictTagged | FslmathsOperationRoiParamsDictTagged | FslmathsOperationBptfParamsDictTagged | FslmathsOperationRocParamsDictTagged>,
     output: string,
     datatype_internal: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
     output_datatype: "char" | "short" | "int" | "float" | "double" | "input" | null = null,
@@ -1086,13 +4902,304 @@ function fslmaths(
 
 export {
       FSLMATHS_METADATA,
-      FslmathsOperationParamsDict,
-      FslmathsOperationParamsDictTagged,
+      FslmathsOperationAbsParamsDict,
+      FslmathsOperationAbsParamsDictTagged,
+      FslmathsOperationAcosParamsDict,
+      FslmathsOperationAcosParamsDictTagged,
+      FslmathsOperationAddParamsDict,
+      FslmathsOperationAddParamsDictTagged,
+      FslmathsOperationAsinParamsDict,
+      FslmathsOperationAsinParamsDictTagged,
+      FslmathsOperationAtanParamsDict,
+      FslmathsOperationAtanParamsDictTagged,
+      FslmathsOperationBinParamsDict,
+      FslmathsOperationBinParamsDictTagged,
+      FslmathsOperationBinvParamsDict,
+      FslmathsOperationBinvParamsDictTagged,
+      FslmathsOperationBptfParamsDict,
+      FslmathsOperationBptfParamsDictTagged,
+      FslmathsOperationCosParamsDict,
+      FslmathsOperationCosParamsDictTagged,
+      FslmathsOperationDilDParamsDict,
+      FslmathsOperationDilDParamsDictTagged,
+      FslmathsOperationDilFParamsDict,
+      FslmathsOperationDilFParamsDictTagged,
+      FslmathsOperationDilMParamsDict,
+      FslmathsOperationDilMParamsDictTagged,
+      FslmathsOperationDilallParamsDict,
+      FslmathsOperationDilallParamsDictTagged,
+      FslmathsOperationDivParamsDict,
+      FslmathsOperationDivParamsDictTagged,
+      FslmathsOperationEdgeParamsDict,
+      FslmathsOperationEdgeParamsDictTagged,
+      FslmathsOperationEroFParamsDict,
+      FslmathsOperationEroFParamsDictTagged,
+      FslmathsOperationEroParamsDict,
+      FslmathsOperationEroParamsDictTagged,
+      FslmathsOperationExpParamsDict,
+      FslmathsOperationExpParamsDictTagged,
+      FslmathsOperationFillh26ParamsDict,
+      FslmathsOperationFillh26ParamsDictTagged,
+      FslmathsOperationFillhParamsDict,
+      FslmathsOperationFillhParamsDictTagged,
+      FslmathsOperationFmeanParamsDict,
+      FslmathsOperationFmeanParamsDictTagged,
+      FslmathsOperationFmeanuParamsDict,
+      FslmathsOperationFmeanuParamsDictTagged,
+      FslmathsOperationFmedianParamsDict,
+      FslmathsOperationFmedianParamsDictTagged,
+      FslmathsOperationGridParamsDict,
+      FslmathsOperationGridParamsDictTagged,
+      FslmathsOperationIndexParamsDict,
+      FslmathsOperationIndexParamsDictTagged,
+      FslmathsOperationIngParamsDict,
+      FslmathsOperationIngParamsDictTagged,
+      FslmathsOperationInmParamsDict,
+      FslmathsOperationInmParamsDictTagged,
+      FslmathsOperationKernel2DParamsDict,
+      FslmathsOperationKernel2DParamsDictTagged,
+      FslmathsOperationKernel3DParamsDict,
+      FslmathsOperationKernel3DParamsDictTagged,
+      FslmathsOperationKernelBoxParamsDict,
+      FslmathsOperationKernelBoxParamsDictTagged,
+      FslmathsOperationKernelBoxv3ParamsDict,
+      FslmathsOperationKernelBoxv3ParamsDictTagged,
+      FslmathsOperationKernelBoxvParamsDict,
+      FslmathsOperationKernelBoxvParamsDictTagged,
+      FslmathsOperationKernelFileParamsDict,
+      FslmathsOperationKernelFileParamsDictTagged,
+      FslmathsOperationKernelGaussParamsDict,
+      FslmathsOperationKernelGaussParamsDictTagged,
+      FslmathsOperationKernelSphereParamsDict,
+      FslmathsOperationKernelSphereParamsDictTagged,
+      FslmathsOperationLogParamsDict,
+      FslmathsOperationLogParamsDictTagged,
+      FslmathsOperationMasParamsDict,
+      FslmathsOperationMasParamsDictTagged,
+      FslmathsOperationMaxParamsDict,
+      FslmathsOperationMaxParamsDictTagged,
+      FslmathsOperationMinParamsDict,
+      FslmathsOperationMinParamsDictTagged,
+      FslmathsOperationMulParamsDict,
+      FslmathsOperationMulParamsDictTagged,
+      FslmathsOperationNanParamsDict,
+      FslmathsOperationNanParamsDictTagged,
+      FslmathsOperationNanmParamsDict,
+      FslmathsOperationNanmParamsDictTagged,
+      FslmathsOperationRandParamsDict,
+      FslmathsOperationRandParamsDictTagged,
+      FslmathsOperationRandnParamsDict,
+      FslmathsOperationRandnParamsDictTagged,
+      FslmathsOperationRangeParamsDict,
+      FslmathsOperationRangeParamsDictTagged,
+      FslmathsOperationRecipParamsDict,
+      FslmathsOperationRecipParamsDictTagged,
+      FslmathsOperationRemParamsDict,
+      FslmathsOperationRemParamsDictTagged,
+      FslmathsOperationRestartParamsDict,
+      FslmathsOperationRestartParamsDictTagged,
+      FslmathsOperationRocParamsDict,
+      FslmathsOperationRocParamsDictTagged,
+      FslmathsOperationRoiParamsDict,
+      FslmathsOperationRoiParamsDictTagged,
+      FslmathsOperationSParamsDict,
+      FslmathsOperationSParamsDictTagged,
+      FslmathsOperationSaveParamsDict,
+      FslmathsOperationSaveParamsDictTagged,
+      FslmathsOperationSeedParamsDict,
+      FslmathsOperationSeedParamsDictTagged,
+      FslmathsOperationSinParamsDict,
+      FslmathsOperationSinParamsDictTagged,
+      FslmathsOperationSqrParamsDict,
+      FslmathsOperationSqrParamsDictTagged,
+      FslmathsOperationSqrtParamsDict,
+      FslmathsOperationSqrtParamsDictTagged,
+      FslmathsOperationSubParamsDict,
+      FslmathsOperationSubParamsDictTagged,
+      FslmathsOperationSubsamp2ParamsDict,
+      FslmathsOperationSubsamp2ParamsDictTagged,
+      FslmathsOperationSubsamp2offcParamsDict,
+      FslmathsOperationSubsamp2offcParamsDictTagged,
+      FslmathsOperationTanParamsDict,
+      FslmathsOperationTanParamsDictTagged,
+      FslmathsOperationTar1ParamsDict,
+      FslmathsOperationTar1ParamsDictTagged,
+      FslmathsOperationTensorDecompParamsDict,
+      FslmathsOperationTensorDecompParamsDictTagged,
+      FslmathsOperationTfceParamsDict,
+      FslmathsOperationTfceParamsDictTagged,
+      FslmathsOperationTfceSParamsDict,
+      FslmathsOperationTfceSParamsDictTagged,
+      FslmathsOperationThrPParamsDict,
+      FslmathsOperationThrPParamsDictTagged,
+      FslmathsOperationThrParamsDict,
+      FslmathsOperationThrParamsDictTagged,
+      FslmathsOperationThrpParamsDict,
+      FslmathsOperationThrpParamsDictTagged,
+      FslmathsOperationTmaxParamsDict,
+      FslmathsOperationTmaxParamsDictTagged,
+      FslmathsOperationTmaxnParamsDict,
+      FslmathsOperationTmaxnParamsDictTagged,
+      FslmathsOperationTmeanParamsDict,
+      FslmathsOperationTmeanParamsDictTagged,
+      FslmathsOperationTmedianParamsDict,
+      FslmathsOperationTmedianParamsDictTagged,
+      FslmathsOperationTminParamsDict,
+      FslmathsOperationTminParamsDictTagged,
+      FslmathsOperationTpercParamsDict,
+      FslmathsOperationTpercParamsDictTagged,
+      FslmathsOperationTstdParamsDict,
+      FslmathsOperationTstdParamsDictTagged,
+      FslmathsOperationUthrPParamsDict,
+      FslmathsOperationUthrPParamsDictTagged,
+      FslmathsOperationUthrParamsDict,
+      FslmathsOperationUthrParamsDictTagged,
+      FslmathsOperationUthrpParamsDict,
+      FslmathsOperationUthrpParamsDictTagged,
+      FslmathsOperationXmaxParamsDict,
+      FslmathsOperationXmaxParamsDictTagged,
+      FslmathsOperationXmaxnParamsDict,
+      FslmathsOperationXmaxnParamsDictTagged,
+      FslmathsOperationXmeanParamsDict,
+      FslmathsOperationXmeanParamsDictTagged,
+      FslmathsOperationXmedianParamsDict,
+      FslmathsOperationXmedianParamsDictTagged,
+      FslmathsOperationXminParamsDict,
+      FslmathsOperationXminParamsDictTagged,
+      FslmathsOperationXpercParamsDict,
+      FslmathsOperationXpercParamsDictTagged,
+      FslmathsOperationXstdParamsDict,
+      FslmathsOperationXstdParamsDictTagged,
+      FslmathsOperationYmaxParamsDict,
+      FslmathsOperationYmaxParamsDictTagged,
+      FslmathsOperationYmaxnParamsDict,
+      FslmathsOperationYmaxnParamsDictTagged,
+      FslmathsOperationYmeanParamsDict,
+      FslmathsOperationYmeanParamsDictTagged,
+      FslmathsOperationYmedianParamsDict,
+      FslmathsOperationYmedianParamsDictTagged,
+      FslmathsOperationYminParamsDict,
+      FslmathsOperationYminParamsDictTagged,
+      FslmathsOperationYpercParamsDict,
+      FslmathsOperationYpercParamsDictTagged,
+      FslmathsOperationYstdParamsDict,
+      FslmathsOperationYstdParamsDictTagged,
+      FslmathsOperationZmaxParamsDict,
+      FslmathsOperationZmaxParamsDictTagged,
+      FslmathsOperationZmaxnParamsDict,
+      FslmathsOperationZmaxnParamsDictTagged,
+      FslmathsOperationZmeanParamsDict,
+      FslmathsOperationZmeanParamsDictTagged,
+      FslmathsOperationZmedianParamsDict,
+      FslmathsOperationZmedianParamsDictTagged,
+      FslmathsOperationZminParamsDict,
+      FslmathsOperationZminParamsDictTagged,
+      FslmathsOperationZpercParamsDict,
+      FslmathsOperationZpercParamsDictTagged,
+      FslmathsOperationZstdParamsDict,
+      FslmathsOperationZstdParamsDictTagged,
       FslmathsOutputs,
       FslmathsParamsDict,
       FslmathsParamsDictTagged,
       fslmaths,
       fslmaths_execute,
-      fslmaths_operation,
+      fslmaths_operation_abs,
+      fslmaths_operation_acos,
+      fslmaths_operation_add,
+      fslmaths_operation_asin,
+      fslmaths_operation_atan,
+      fslmaths_operation_bin,
+      fslmaths_operation_binv,
+      fslmaths_operation_bptf,
+      fslmaths_operation_cos,
+      fslmaths_operation_dil_d,
+      fslmaths_operation_dil_f,
+      fslmaths_operation_dil_m,
+      fslmaths_operation_dilall,
+      fslmaths_operation_div,
+      fslmaths_operation_edge,
+      fslmaths_operation_ero,
+      fslmaths_operation_ero_f,
+      fslmaths_operation_exp,
+      fslmaths_operation_fillh,
+      fslmaths_operation_fillh26,
+      fslmaths_operation_fmean,
+      fslmaths_operation_fmeanu,
+      fslmaths_operation_fmedian,
+      fslmaths_operation_grid,
+      fslmaths_operation_index,
+      fslmaths_operation_ing,
+      fslmaths_operation_inm,
+      fslmaths_operation_kernel_2_d,
+      fslmaths_operation_kernel_3_d,
+      fslmaths_operation_kernel_box,
+      fslmaths_operation_kernel_boxv,
+      fslmaths_operation_kernel_boxv3,
+      fslmaths_operation_kernel_file,
+      fslmaths_operation_kernel_gauss,
+      fslmaths_operation_kernel_sphere,
+      fslmaths_operation_log,
+      fslmaths_operation_mas,
+      fslmaths_operation_max,
+      fslmaths_operation_min,
+      fslmaths_operation_mul,
+      fslmaths_operation_nan,
+      fslmaths_operation_nanm,
+      fslmaths_operation_rand,
+      fslmaths_operation_randn,
+      fslmaths_operation_range,
+      fslmaths_operation_recip,
+      fslmaths_operation_rem,
+      fslmaths_operation_restart,
+      fslmaths_operation_roc,
+      fslmaths_operation_roi,
+      fslmaths_operation_s,
+      fslmaths_operation_save,
+      fslmaths_operation_seed,
+      fslmaths_operation_sin,
+      fslmaths_operation_sqr,
+      fslmaths_operation_sqrt,
+      fslmaths_operation_sub,
+      fslmaths_operation_subsamp2,
+      fslmaths_operation_subsamp2offc,
+      fslmaths_operation_tan,
+      fslmaths_operation_tar1,
+      fslmaths_operation_tensor_decomp,
+      fslmaths_operation_tfce,
+      fslmaths_operation_tfce_s,
+      fslmaths_operation_thr,
+      fslmaths_operation_thr_p,
+      fslmaths_operation_thrp,
+      fslmaths_operation_tmax,
+      fslmaths_operation_tmaxn,
+      fslmaths_operation_tmean,
+      fslmaths_operation_tmedian,
+      fslmaths_operation_tmin,
+      fslmaths_operation_tperc,
+      fslmaths_operation_tstd,
+      fslmaths_operation_uthr,
+      fslmaths_operation_uthr_p,
+      fslmaths_operation_uthrp,
+      fslmaths_operation_xmax,
+      fslmaths_operation_xmaxn,
+      fslmaths_operation_xmean,
+      fslmaths_operation_xmedian,
+      fslmaths_operation_xmin,
+      fslmaths_operation_xperc,
+      fslmaths_operation_xstd,
+      fslmaths_operation_ymax,
+      fslmaths_operation_ymaxn,
+      fslmaths_operation_ymean,
+      fslmaths_operation_ymedian,
+      fslmaths_operation_ymin,
+      fslmaths_operation_yperc,
+      fslmaths_operation_ystd,
+      fslmaths_operation_zmax,
+      fslmaths_operation_zmaxn,
+      fslmaths_operation_zmean,
+      fslmaths_operation_zmedian,
+      fslmaths_operation_zmin,
+      fslmaths_operation_zperc,
+      fslmaths_operation_zstd,
       fslmaths_params,
 };
