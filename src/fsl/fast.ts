@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FAST_METADATA: Metadata = {
-    id: "71882fb7c4050cfbb372686192607f9f7bd8489d.boutiques",
+    id: "b308c56439a15f5d65f3450bf5ce835008e43fec.boutiques",
     name: "fast",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -34,6 +34,7 @@ interface FastParamsDict {
     "verbose": boolean;
     "manual_seg"?: InputPathType | null | undefined;
     "iters_afterbias"?: number | null | undefined;
+    "output_probabilities": boolean;
     "in_files": Array<InputPathType>;
 }
 type FastParamsDictTagged = Required<Pick<FastParamsDict, '@type'>> & FastParamsDict;
@@ -50,25 +51,25 @@ interface FastOutputs {
      */
     root: OutputPathType;
     /**
-     * Path/name of mixeltype volume file _mixeltype.
+     * Path/name of binary segmented volume file one val for each class _seg.
      */
-    mixeltype: OutputPathType | null;
-    /**
-     * No description provided.
-     */
-    bias_field: OutputPathType | null;
+    tissue_class_map: OutputPathType | null;
     /**
      * Path/name of partial volume file _pveseg.
      */
     partial_volume_map: OutputPathType | null;
     /**
-     * No description provided.
+     * Path/name of mixeltype volume file _mixeltype.
+     */
+    mixeltype: OutputPathType | null;
+    /**
+     * Estimated bias field (if -b flag is set).
+     */
+    bias_field: OutputPathType | null;
+    /**
+     * Bias-corrected image (if -B flag is set).
      */
     restored_image: OutputPathType | null;
-    /**
-     * Path/name of binary segmented volume file one val for each class  _seg.
-     */
-    tissue_class_map: OutputPathType | null;
 }
 
 
@@ -83,20 +84,21 @@ interface FastOutputs {
  * @param init_seg_smooth initial segmentation spatial smoothness (during bias field estimation); default=0.02
  * @param segments outputs a separate binary image for each tissue type
  * @param init_transform initialise using priors; you must supply a FLIRT transform
- * @param other_priors Alternative prior images.
+ * @param other_priors Alternative prior images (requires 3 files: prior1 prior2 prior3).
  * @param output_biasfield Output estimated bias field.
  * @param output_biascorrected Output restored image (bias-corrected image).
  * @param no_bias Do not remove bias field.
  * @param channels number of input images (channels); default 1
  * @param out_basename Base name of output files.
- * @param use_priors Use priors throughout.
+ * @param use_priors Use priors throughout (requires -a option).
  * @param no_pve Turn off pve (partial volume estimation).
  * @param segment_iters number of segmentation-initialisation iterations; default=15
  * @param mixel_smooth spatial smoothness for mixeltype; default=0.3
- * @param hyper 0.0 <= a floating point number <= 1.0. segmentation spatial smoothness; default=0.1
+ * @param hyper segmentation spatial smoothness (0.0 to 1.0); default=0.1
  * @param verbose Switch on diagnostic messages.
  * @param manual_seg Filename containing intensities.
  * @param iters_afterbias number of main-loop iterations after bias-field removal; default=4
+ * @param output_probabilities outputs individual probability maps
  *
  * @returns Parameter dictionary
  */
@@ -123,6 +125,7 @@ function fast_params(
     verbose: boolean = false,
     manual_seg: InputPathType | null = null,
     iters_afterbias: number | null = null,
+    output_probabilities: boolean = false,
 ): FastParamsDictTagged {
     const params = {
         "@type": "fsl/fast" as const,
@@ -133,6 +136,7 @@ function fast_params(
         "use_priors": use_priors,
         "no_pve": no_pve,
         "verbose": verbose,
+        "output_probabilities": output_probabilities,
         "in_files": in_files,
     };
     if (number_classes !== null) {
@@ -300,6 +304,9 @@ function fast_cargs(
             String((params["iters_afterbias"] ?? null))
         );
     }
+    if ((params["output_probabilities"] ?? false)) {
+        cargs.push("-p");
+    }
     cargs.push(...(params["in_files"] ?? null).map(f => execution.inputFile(f)));
     return cargs;
 }
@@ -319,11 +326,11 @@ function fast_outputs(
 ): FastOutputs {
     const ret: FastOutputs = {
         root: execution.outputFile("."),
+        tissue_class_map: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_seg.nii.gz"].join('')) : null,
+        partial_volume_map: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_pveseg.nii.gz"].join('')) : null,
         mixeltype: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_mixeltype.nii.gz"].join('')) : null,
         bias_field: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_bias.nii.gz"].join('')) : null,
-        partial_volume_map: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_pveseg.nii.gz"].join('')) : null,
         restored_image: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_restore.nii.gz"].join('')) : null,
-        tissue_class_map: ((params["out_basename"] ?? null) !== null) ? execution.outputFile([(params["out_basename"] ?? null), "_seg.nii.gz"].join('')) : null,
     };
     return ret;
 }
@@ -374,20 +381,21 @@ function fast_execute(
  * @param init_seg_smooth initial segmentation spatial smoothness (during bias field estimation); default=0.02
  * @param segments outputs a separate binary image for each tissue type
  * @param init_transform initialise using priors; you must supply a FLIRT transform
- * @param other_priors Alternative prior images.
+ * @param other_priors Alternative prior images (requires 3 files: prior1 prior2 prior3).
  * @param output_biasfield Output estimated bias field.
  * @param output_biascorrected Output restored image (bias-corrected image).
  * @param no_bias Do not remove bias field.
  * @param channels number of input images (channels); default 1
  * @param out_basename Base name of output files.
- * @param use_priors Use priors throughout.
+ * @param use_priors Use priors throughout (requires -a option).
  * @param no_pve Turn off pve (partial volume estimation).
  * @param segment_iters number of segmentation-initialisation iterations; default=15
  * @param mixel_smooth spatial smoothness for mixeltype; default=0.3
- * @param hyper 0.0 <= a floating point number <= 1.0. segmentation spatial smoothness; default=0.1
+ * @param hyper segmentation spatial smoothness (0.0 to 1.0); default=0.1
  * @param verbose Switch on diagnostic messages.
  * @param manual_seg Filename containing intensities.
  * @param iters_afterbias number of main-loop iterations after bias-field removal; default=4
+ * @param output_probabilities outputs individual probability maps
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `FastOutputs`).
@@ -415,9 +423,10 @@ function fast(
     verbose: boolean = false,
     manual_seg: InputPathType | null = null,
     iters_afterbias: number | null = null,
+    output_probabilities: boolean = false,
     runner: Runner | null = null,
 ): FastOutputs {
-    const params = fast_params(in_files, number_classes, bias_iters, bias_lowpass, img_type, init_seg_smooth, segments, init_transform, other_priors, output_biasfield, output_biascorrected, no_bias, channels, out_basename, use_priors, no_pve, segment_iters, mixel_smooth, hyper, verbose, manual_seg, iters_afterbias)
+    const params = fast_params(in_files, number_classes, bias_iters, bias_lowpass, img_type, init_seg_smooth, segments, init_transform, other_priors, output_biasfield, output_biascorrected, no_bias, channels, out_basename, use_priors, no_pve, segment_iters, mixel_smooth, hyper, verbose, manual_seg, iters_afterbias, output_probabilities)
     return fast_execute(params, runner);
 }
 
