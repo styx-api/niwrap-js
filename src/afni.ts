@@ -392,7 +392,7 @@ export {v_3d_tqual, v_3d_tqual_execute, v_3d_tqual_params} from './afni/v_3d_tqu
 export {v_3d_track_id, v_3d_track_id_execute, v_3d_track_id_params} from './afni/v_3d_track_id'
 export {v_3d_trfix, v_3d_trfix_execute, v_3d_trfix_params} from './afni/v_3d_trfix'
 export {v_3d_tsgen, v_3d_tsgen_execute, v_3d_tsgen_params} from './afni/v_3d_tsgen'
-export {v_3d_tshift, v_3d_tshift_execute, v_3d_tshift_params} from './afni/v_3d_tshift'
+export {v_3d_tshift, v_3d_tshift_execute, v_3d_tshift_params, v_3d_tshift_rlt, v_3d_tshift_rlt_plus, v_3d_tshift_no_detrend, v_3d_tshift_align_to_tzero, v_3d_tshift_align_to_slice, v_3d_tshift_align_voxel_wise, v_3d_tshift_tpattern_mode_string, v_3d_tshift_tpattern_mode_file, v_3d_tshift_tr_microsyntax} from './afni/v_3d_tshift'
 export {v_3d_tsmooth, v_3d_tsmooth_execute, v_3d_tsmooth_params} from './afni/v_3d_tsmooth'
 export {v_3d_tsort, v_3d_tsort_execute, v_3d_tsort_params} from './afni/v_3d_tsort'
 export {v_3d_tsplit4_d, v_3d_tsplit4_d_execute, v_3d_tsplit4_d_params} from './afni/v_3d_tsplit4_d'
