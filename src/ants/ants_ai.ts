@@ -4,29 +4,1311 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_AI_METADATA: Metadata = {
-    id: "678184c76f859365d010d230b1d56a4b04e420a7.boutiques",
+    id: "f98d4c5aaab56b9502e0c53129bd6bd3268b4dbf.boutiques",
     name: "antsAI",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
 };
 
 
+interface AntsAiSamplingPercentageParamsDict {
+    "@type"?: "sampling_percentage";
+    "sampling_percentage_value": number;
+}
+type AntsAiSamplingPercentageParamsDictTagged = Required<Pick<AntsAiSamplingPercentageParamsDict, '@type'>> & AntsAiSamplingPercentageParamsDict;
+
+
+interface AntsAiSamplingStrategyParamsDict {
+    "@type"?: "sampling_strategy";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsAiSamplingPercentageParamsDict | null | undefined;
+}
+type AntsAiSamplingStrategyParamsDictTagged = Required<Pick<AntsAiSamplingStrategyParamsDict, '@type'>> & AntsAiSamplingStrategyParamsDict;
+
+
+interface AntsAiNumberOfBinsParamsDict {
+    "@type"?: "number_of_bins";
+    "number_of_bins_value": number;
+    "sampling_strategy"?: AntsAiSamplingStrategyParamsDict | null | undefined;
+}
+type AntsAiNumberOfBinsParamsDictTagged = Required<Pick<AntsAiNumberOfBinsParamsDict, '@type'>> & AntsAiNumberOfBinsParamsDict;
+
+
+interface AntsAiMetricMattesParamsDict {
+    "@type"?: "metric_mattes";
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
+    "number_of_bins"?: AntsAiNumberOfBinsParamsDict | null | undefined;
+}
+type AntsAiMetricMattesParamsDictTagged = Required<Pick<AntsAiMetricMattesParamsDict, '@type'>> & AntsAiMetricMattesParamsDict;
+
+
+interface AntsAiSamplingPercentage1ParamsDict {
+    "@type"?: "sampling_percentage_1";
+    "sampling_percentage_value": number;
+}
+type AntsAiSamplingPercentage1ParamsDictTagged = Required<Pick<AntsAiSamplingPercentage1ParamsDict, '@type'>> & AntsAiSamplingPercentage1ParamsDict;
+
+
+interface AntsAiSamplingStrategy1ParamsDict {
+    "@type"?: "sampling_strategy_1";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsAiSamplingPercentage1ParamsDict | null | undefined;
+}
+type AntsAiSamplingStrategy1ParamsDictTagged = Required<Pick<AntsAiSamplingStrategy1ParamsDict, '@type'>> & AntsAiSamplingStrategy1ParamsDict;
+
+
+interface AntsAiRadiusParamsDict {
+    "@type"?: "radius";
+    "radius_value": number;
+    "sampling_strategy"?: AntsAiSamplingStrategy1ParamsDict | null | undefined;
+}
+type AntsAiRadiusParamsDictTagged = Required<Pick<AntsAiRadiusParamsDict, '@type'>> & AntsAiRadiusParamsDict;
+
+
+interface AntsAiMetricGcParamsDict {
+    "@type"?: "metric_gc";
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
+    "radius"?: AntsAiRadiusParamsDict | null | undefined;
+}
+type AntsAiMetricGcParamsDictTagged = Required<Pick<AntsAiMetricGcParamsDict, '@type'>> & AntsAiMetricGcParamsDict;
+
+
+interface AntsAiSamplingPercentage2ParamsDict {
+    "@type"?: "sampling_percentage_2";
+    "sampling_percentage_value": number;
+}
+type AntsAiSamplingPercentage2ParamsDictTagged = Required<Pick<AntsAiSamplingPercentage2ParamsDict, '@type'>> & AntsAiSamplingPercentage2ParamsDict;
+
+
+interface AntsAiSamplingStrategy2ParamsDict {
+    "@type"?: "sampling_strategy_2";
+    "sampling_strategy_value": "None" | "Regular" | "Random";
+    "sampling_percentage"?: AntsAiSamplingPercentage2ParamsDict | null | undefined;
+}
+type AntsAiSamplingStrategy2ParamsDictTagged = Required<Pick<AntsAiSamplingStrategy2ParamsDict, '@type'>> & AntsAiSamplingStrategy2ParamsDict;
+
+
+interface AntsAiNumberOfBins1ParamsDict {
+    "@type"?: "number_of_bins_1";
+    "number_of_bins_value": number;
+    "sampling_strategy"?: AntsAiSamplingStrategy2ParamsDict | null | undefined;
+}
+type AntsAiNumberOfBins1ParamsDictTagged = Required<Pick<AntsAiNumberOfBins1ParamsDict, '@type'>> & AntsAiNumberOfBins1ParamsDict;
+
+
+interface AntsAiMetricMiParamsDict {
+    "@type"?: "metric_mi";
+    "fixed_image": InputPathType;
+    "moving_image": InputPathType;
+    "number_of_bins"?: AntsAiNumberOfBins1ParamsDict | null | undefined;
+}
+type AntsAiMetricMiParamsDictTagged = Required<Pick<AntsAiMetricMiParamsDict, '@type'>> & AntsAiMetricMiParamsDict;
+
+
+interface AntsAiTransformRigidParamsDict {
+    "@type"?: "transform_rigid";
+    "gradient_step": number;
+}
+type AntsAiTransformRigidParamsDictTagged = Required<Pick<AntsAiTransformRigidParamsDict, '@type'>> & AntsAiTransformRigidParamsDict;
+
+
+interface AntsAiTransformAffineParamsDict {
+    "@type"?: "transform_affine";
+    "gradient_step": number;
+}
+type AntsAiTransformAffineParamsDictTagged = Required<Pick<AntsAiTransformAffineParamsDict, '@type'>> & AntsAiTransformAffineParamsDict;
+
+
+interface AntsAiTransformSimilarityParamsDict {
+    "@type"?: "transform_similarity";
+    "gradient_step": number;
+}
+type AntsAiTransformSimilarityParamsDictTagged = Required<Pick<AntsAiTransformSimilarityParamsDict, '@type'>> & AntsAiTransformSimilarityParamsDict;
+
+
+interface AntsAiTransformAlignGeometricCentersParamsDict {
+    "@type"?: "transform_align_geometric_centers";
+}
+type AntsAiTransformAlignGeometricCentersParamsDictTagged = Required<Pick<AntsAiTransformAlignGeometricCentersParamsDict, '@type'>> & AntsAiTransformAlignGeometricCentersParamsDict;
+
+
+interface AntsAiTransformAlignCentersOfMassParamsDict {
+    "@type"?: "transform_align_centers_of_mass";
+}
+type AntsAiTransformAlignCentersOfMassParamsDictTagged = Required<Pick<AntsAiTransformAlignCentersOfMassParamsDict, '@type'>> & AntsAiTransformAlignCentersOfMassParamsDict;
+
+
+interface AntsAiNumberOfBlobsToMatchParamsDict {
+    "@type"?: "number_of_blobs_to_match";
+    "number_of_blobs_to_match_value": number;
+}
+type AntsAiNumberOfBlobsToMatchParamsDictTagged = Required<Pick<AntsAiNumberOfBlobsToMatchParamsDict, '@type'>> & AntsAiNumberOfBlobsToMatchParamsDict;
+
+
+interface AntsAiAlignBlobsParamsDict {
+    "@type"?: "align_blobs";
+    "number_of_blobs_to_extract": number;
+    "number_of_blobs_to_match"?: AntsAiNumberOfBlobsToMatchParamsDict | null | undefined;
+}
+type AntsAiAlignBlobsParamsDictTagged = Required<Pick<AntsAiAlignBlobsParamsDict, '@type'>> & AntsAiAlignBlobsParamsDict;
+
+
+interface AntsAiArcFractionParamsDict {
+    "@type"?: "arc_fraction";
+    "arc_fraction_value": number;
+}
+type AntsAiArcFractionParamsDictTagged = Required<Pick<AntsAiArcFractionParamsDict, '@type'>> & AntsAiArcFractionParamsDict;
+
+
+interface AntsAiSearchFactorParamsDict {
+    "@type"?: "search_factor";
+    "search_factor_value": number;
+    "arc_fraction"?: AntsAiArcFractionParamsDict | null | undefined;
+}
+type AntsAiSearchFactorParamsDictTagged = Required<Pick<AntsAiSearchFactorParamsDict, '@type'>> & AntsAiSearchFactorParamsDict;
+
+
+interface AntsAiTranslationSearchGridParamsDict {
+    "@type"?: "translation_search_grid";
+    "step_size": number;
+    "grid": Array<number>;
+}
+type AntsAiTranslationSearchGridParamsDictTagged = Required<Pick<AntsAiTranslationSearchGridParamsDict, '@type'>> & AntsAiTranslationSearchGridParamsDict;
+
+
+interface AntsAiConvergenceWindowSizeParamsDict {
+    "@type"?: "convergence_window_size";
+    "convergence_window_size_value": number;
+}
+type AntsAiConvergenceWindowSizeParamsDictTagged = Required<Pick<AntsAiConvergenceWindowSizeParamsDict, '@type'>> & AntsAiConvergenceWindowSizeParamsDict;
+
+
+interface AntsAiConvergenceThresholdParamsDict {
+    "@type"?: "convergence_threshold";
+    "convergence_threshold_value": number;
+    "convergence_window_size"?: AntsAiConvergenceWindowSizeParamsDict | null | undefined;
+}
+type AntsAiConvergenceThresholdParamsDictTagged = Required<Pick<AntsAiConvergenceThresholdParamsDict, '@type'>> & AntsAiConvergenceThresholdParamsDict;
+
+
+interface AntsAiConvergenceParamsDict {
+    "@type"?: "convergence";
+    "number_of_iterations": number;
+    "convergence_threshold"?: AntsAiConvergenceThresholdParamsDict | null | undefined;
+}
+type AntsAiConvergenceParamsDictTagged = Required<Pick<AntsAiConvergenceParamsDict, '@type'>> & AntsAiConvergenceParamsDict;
+
+
+interface AntsAiMovingImageMaskParamsDict {
+    "@type"?: "moving_image_mask";
+    "moving_image_mask_value": InputPathType;
+}
+type AntsAiMovingImageMaskParamsDictTagged = Required<Pick<AntsAiMovingImageMaskParamsDict, '@type'>> & AntsAiMovingImageMaskParamsDict;
+
+
+interface AntsAiMasksParamsDict {
+    "@type"?: "masks";
+    "fixed_image_mask": InputPathType;
+    "moving_image_mask"?: AntsAiMovingImageMaskParamsDict | null | undefined;
+}
+type AntsAiMasksParamsDictTagged = Required<Pick<AntsAiMasksParamsDict, '@type'>> & AntsAiMasksParamsDict;
+
+
 interface AntsAiParamsDict {
     "@type"?: "ants/antsAI";
     "dimensionality"?: 2 | 3 | null | undefined;
-    "metric": "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]";
-    "transform": "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass";
+    "metric": AntsAiMetricMattesParamsDictTagged | AntsAiMetricGcParamsDictTagged | AntsAiMetricMiParamsDictTagged;
+    "transform": AntsAiTransformRigidParamsDictTagged | AntsAiTransformAffineParamsDictTagged | AntsAiTransformSimilarityParamsDictTagged | AntsAiTransformAlignGeometricCentersParamsDictTagged | AntsAiTransformAlignCentersOfMassParamsDictTagged;
     "align_principal_axes"?: boolean | null | undefined;
-    "align_blobs"?: "numberOfBlobsToExtract" | "[numberOfBlobsToExtract,numberOfBlobsToMatch]" | null | undefined;
-    "search_factor"?: "searchFactor" | "[searchFactor,arcFraction]" | null | undefined;
-    "translation_search_grid"?: "[stepSize, AxBxC]" | null | undefined;
-    "convergence"?: "numberOfIterations" | "[numberOfIterations,convergenceThreshold,convergenceWindowSize]" | null | undefined;
-    "masks"?: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null | undefined;
+    "align_blobs"?: AntsAiAlignBlobsParamsDict | null | undefined;
+    "search_factor"?: AntsAiSearchFactorParamsDict | null | undefined;
+    "translation_search_grid"?: AntsAiTranslationSearchGridParamsDict | null | undefined;
+    "convergence"?: AntsAiConvergenceParamsDict | null | undefined;
+    "masks"?: AntsAiMasksParamsDict | null | undefined;
     "output": string;
     "random_seed"?: number | null | undefined;
     "verbose"?: boolean | null | undefined;
 }
 type AntsAiParamsDictTagged = Required<Pick<AntsAiParamsDict, '@type'>> & AntsAiParamsDict;
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function ants_ai_metric_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "metric_mattes": ants_ai_metric_mattes_cargs,
+        "metric_gc": ants_ai_metric_gc_cargs,
+        "metric_mi": ants_ai_metric_mi_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function ants_ai_metric_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function ants_ai_transform_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "transform_rigid": ants_ai_transform_rigid_cargs,
+        "transform_affine": ants_ai_transform_affine_cargs,
+        "transform_similarity": ants_ai_transform_similarity_cargs,
+        "transform_align_geometric_centers": ants_ai_transform_align_geometric_centers_cargs,
+        "transform_align_centers_of_mass": ants_ai_transform_align_centers_of_mass_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function ants_ai_transform_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_sampling_percentage(
+    sampling_percentage_value: number,
+): AntsAiSamplingPercentageParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage" as const,
+        "sampling_percentage_value": sampling_percentage_value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_sampling_percentage_cargs(
+    params: AntsAiSamplingPercentageParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null))].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_sampling_strategy(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsAiSamplingPercentageParamsDict | null = null,
+): AntsAiSamplingStrategyParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_sampling_strategy_cargs(
+    params: AntsAiSamplingStrategyParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), (((params["sampling_percentage"] ?? null) !== null) ? ants_ai_sampling_percentage_cargs((params["sampling_percentage"] ?? null), execution) : []).join("")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_number_of_bins(
+    number_of_bins_value: number,
+    sampling_strategy: AntsAiSamplingStrategyParamsDict | null = null,
+): AntsAiNumberOfBinsParamsDictTagged {
+    const params = {
+        "@type": "number_of_bins" as const,
+        "number_of_bins_value": number_of_bins_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_number_of_bins_cargs(
+    params: AntsAiNumberOfBinsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["number_of_bins_value"] ?? null)), (((params["sampling_strategy"] ?? null) !== null) ? ants_ai_sampling_strategy_cargs((params["sampling_strategy"] ?? null), execution) : []).join("")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_metric_mattes(
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
+    number_of_bins: AntsAiNumberOfBinsParamsDict | null = null,
+): AntsAiMetricMattesParamsDictTagged {
+    const params = {
+        "@type": "metric_mattes" as const,
+        "fixed_image": fixed_image,
+        "moving_image": moving_image,
+    };
+    if (number_of_bins !== null) {
+        params["number_of_bins"] = number_of_bins;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_metric_mattes_cargs(
+    params: AntsAiMetricMattesParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["Mattes[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_ai_number_of_bins_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_sampling_percentage_1(
+    sampling_percentage_value: number,
+): AntsAiSamplingPercentage1ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_1" as const,
+        "sampling_percentage_value": sampling_percentage_value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_sampling_percentage_1_cargs(
+    params: AntsAiSamplingPercentage1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null))].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_sampling_strategy_1(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsAiSamplingPercentage1ParamsDict | null = null,
+): AntsAiSamplingStrategy1ParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy_1" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_sampling_strategy_1_cargs(
+    params: AntsAiSamplingStrategy1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), (((params["sampling_percentage"] ?? null) !== null) ? ants_ai_sampling_percentage_1_cargs((params["sampling_percentage"] ?? null), execution) : []).join("")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_radius(
+    radius_value: number,
+    sampling_strategy: AntsAiSamplingStrategy1ParamsDict | null = null,
+): AntsAiRadiusParamsDictTagged {
+    const params = {
+        "@type": "radius" as const,
+        "radius_value": radius_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_radius_cargs(
+    params: AntsAiRadiusParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["radius_value"] ?? null)), (((params["sampling_strategy"] ?? null) !== null) ? ants_ai_sampling_strategy_1_cargs((params["sampling_strategy"] ?? null), execution) : []).join("")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_metric_gc(
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
+    radius: AntsAiRadiusParamsDict | null = null,
+): AntsAiMetricGcParamsDictTagged {
+    const params = {
+        "@type": "metric_gc" as const,
+        "fixed_image": fixed_image,
+        "moving_image": moving_image,
+    };
+    if (radius !== null) {
+        params["radius"] = radius;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_metric_gc_cargs(
+    params: AntsAiMetricGcParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["GC[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), (((params["radius"] ?? null) !== null) ? ants_ai_radius_cargs((params["radius"] ?? null), execution) : []).join(""), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_sampling_percentage_2(
+    sampling_percentage_value: number,
+): AntsAiSamplingPercentage2ParamsDictTagged {
+    const params = {
+        "@type": "sampling_percentage_2" as const,
+        "sampling_percentage_value": sampling_percentage_value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_sampling_percentage_2_cargs(
+    params: AntsAiSamplingPercentage2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["sampling_percentage_value"] ?? null))].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_sampling_strategy_2(
+    sampling_strategy_value: "None" | "Regular" | "Random",
+    sampling_percentage: AntsAiSamplingPercentage2ParamsDict | null = null,
+): AntsAiSamplingStrategy2ParamsDictTagged {
+    const params = {
+        "@type": "sampling_strategy_2" as const,
+        "sampling_strategy_value": sampling_strategy_value,
+    };
+    if (sampling_percentage !== null) {
+        params["sampling_percentage"] = sampling_percentage;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_sampling_strategy_2_cargs(
+    params: AntsAiSamplingStrategy2ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", (params["sampling_strategy_value"] ?? null), (((params["sampling_percentage"] ?? null) !== null) ? ants_ai_sampling_percentage_2_cargs((params["sampling_percentage"] ?? null), execution) : []).join("")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_number_of_bins_1(
+    number_of_bins_value: number,
+    sampling_strategy: AntsAiSamplingStrategy2ParamsDict | null = null,
+): AntsAiNumberOfBins1ParamsDictTagged {
+    const params = {
+        "@type": "number_of_bins_1" as const,
+        "number_of_bins_value": number_of_bins_value,
+    };
+    if (sampling_strategy !== null) {
+        params["sampling_strategy"] = sampling_strategy;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_number_of_bins_1_cargs(
+    params: AntsAiNumberOfBins1ParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["number_of_bins_value"] ?? null)), (((params["sampling_strategy"] ?? null) !== null) ? ants_ai_sampling_strategy_2_cargs((params["sampling_strategy"] ?? null), execution) : []).join("")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_metric_mi(
+    fixed_image: InputPathType,
+    moving_image: InputPathType,
+    number_of_bins: AntsAiNumberOfBins1ParamsDict | null = null,
+): AntsAiMetricMiParamsDictTagged {
+    const params = {
+        "@type": "metric_mi" as const,
+        "fixed_image": fixed_image,
+        "moving_image": moving_image,
+    };
+    if (number_of_bins !== null) {
+        params["number_of_bins"] = number_of_bins;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_metric_mi_cargs(
+    params: AntsAiMetricMiParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["MI[", execution.inputFile((params["fixed_image"] ?? null)), ",", execution.inputFile((params["moving_image"] ?? null)), (((params["number_of_bins"] ?? null) !== null) ? ants_ai_number_of_bins_1_cargs((params["number_of_bins"] ?? null), execution) : []).join(""), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_transform_rigid(
+    gradient_step: number,
+): AntsAiTransformRigidParamsDictTagged {
+    const params = {
+        "@type": "transform_rigid" as const,
+        "gradient_step": gradient_step,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_transform_rigid_cargs(
+    params: AntsAiTransformRigidParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["Rigid[", String((params["gradient_step"] ?? null)), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_transform_affine(
+    gradient_step: number,
+): AntsAiTransformAffineParamsDictTagged {
+    const params = {
+        "@type": "transform_affine" as const,
+        "gradient_step": gradient_step,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_transform_affine_cargs(
+    params: AntsAiTransformAffineParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["Affine[", String((params["gradient_step"] ?? null)), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_transform_similarity(
+    gradient_step: number,
+): AntsAiTransformSimilarityParamsDictTagged {
+    const params = {
+        "@type": "transform_similarity" as const,
+        "gradient_step": gradient_step,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_transform_similarity_cargs(
+    params: AntsAiTransformSimilarityParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["Similarity[", String((params["gradient_step"] ?? null)), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_transform_align_geometric_centers(
+): AntsAiTransformAlignGeometricCentersParamsDictTagged {
+    const params = {
+        "@type": "transform_align_geometric_centers" as const,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_transform_align_geometric_centers_cargs(
+    params: AntsAiTransformAlignGeometricCentersParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("AlignGeometricCenters");
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_transform_align_centers_of_mass(
+): AntsAiTransformAlignCentersOfMassParamsDictTagged {
+    const params = {
+        "@type": "transform_align_centers_of_mass" as const,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_transform_align_centers_of_mass_cargs(
+    params: AntsAiTransformAlignCentersOfMassParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("AlignCentersOfMass");
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_number_of_blobs_to_match(
+    number_of_blobs_to_match_value: number,
+): AntsAiNumberOfBlobsToMatchParamsDictTagged {
+    const params = {
+        "@type": "number_of_blobs_to_match" as const,
+        "number_of_blobs_to_match_value": number_of_blobs_to_match_value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_number_of_blobs_to_match_cargs(
+    params: AntsAiNumberOfBlobsToMatchParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["number_of_blobs_to_match_value"] ?? null))].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_align_blobs(
+    number_of_blobs_to_extract: number,
+    number_of_blobs_to_match: AntsAiNumberOfBlobsToMatchParamsDict | null = null,
+): AntsAiAlignBlobsParamsDictTagged {
+    const params = {
+        "@type": "align_blobs" as const,
+        "number_of_blobs_to_extract": number_of_blobs_to_extract,
+    };
+    if (number_of_blobs_to_match !== null) {
+        params["number_of_blobs_to_match"] = number_of_blobs_to_match;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_align_blobs_cargs(
+    params: AntsAiAlignBlobsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["[", String((params["number_of_blobs_to_extract"] ?? null)), (((params["number_of_blobs_to_match"] ?? null) !== null) ? ants_ai_number_of_blobs_to_match_cargs((params["number_of_blobs_to_match"] ?? null), execution) : []).join(""), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_arc_fraction(
+    arc_fraction_value: number,
+): AntsAiArcFractionParamsDictTagged {
+    const params = {
+        "@type": "arc_fraction" as const,
+        "arc_fraction_value": arc_fraction_value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_arc_fraction_cargs(
+    params: AntsAiArcFractionParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["arc_fraction_value"] ?? null))].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_search_factor(
+    search_factor_value: number,
+    arc_fraction: AntsAiArcFractionParamsDict | null = null,
+): AntsAiSearchFactorParamsDictTagged {
+    const params = {
+        "@type": "search_factor" as const,
+        "search_factor_value": search_factor_value,
+    };
+    if (arc_fraction !== null) {
+        params["arc_fraction"] = arc_fraction;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_search_factor_cargs(
+    params: AntsAiSearchFactorParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["[", String((params["search_factor_value"] ?? null)), (((params["arc_fraction"] ?? null) !== null) ? ants_ai_arc_fraction_cargs((params["arc_fraction"] ?? null), execution) : []).join(""), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param step_size Translation step size in mm. Default is 25.
+ * @param grid Translation search grid extent in each dimension, specified as AxBxC. Default is 0x0x0.
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_translation_search_grid(
+    step_size: number,
+    grid: Array<number>,
+): AntsAiTranslationSearchGridParamsDictTagged {
+    const params = {
+        "@type": "translation_search_grid" as const,
+        "step_size": step_size,
+        "grid": grid,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_translation_search_grid_cargs(
+    params: AntsAiTranslationSearchGridParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["[", String((params["step_size"] ?? null)), ",", (params["grid"] ?? null).map(String).join("x"), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_convergence_window_size(
+    convergence_window_size_value: number,
+): AntsAiConvergenceWindowSizeParamsDictTagged {
+    const params = {
+        "@type": "convergence_window_size" as const,
+        "convergence_window_size_value": convergence_window_size_value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_convergence_window_size_cargs(
+    params: AntsAiConvergenceWindowSizeParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["convergence_window_size_value"] ?? null))].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_convergence_threshold(
+    convergence_threshold_value: number,
+    convergence_window_size: AntsAiConvergenceWindowSizeParamsDict | null = null,
+): AntsAiConvergenceThresholdParamsDictTagged {
+    const params = {
+        "@type": "convergence_threshold" as const,
+        "convergence_threshold_value": convergence_threshold_value,
+    };
+    if (convergence_window_size !== null) {
+        params["convergence_window_size"] = convergence_window_size;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_convergence_threshold_cargs(
+    params: AntsAiConvergenceThresholdParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", String((params["convergence_threshold_value"] ?? null)), (((params["convergence_window_size"] ?? null) !== null) ? ants_ai_convergence_window_size_cargs((params["convergence_window_size"] ?? null), execution) : []).join("")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_convergence(
+    number_of_iterations: number,
+    convergence_threshold: AntsAiConvergenceThresholdParamsDict | null = null,
+): AntsAiConvergenceParamsDictTagged {
+    const params = {
+        "@type": "convergence" as const,
+        "number_of_iterations": number_of_iterations,
+    };
+    if (convergence_threshold !== null) {
+        params["convergence_threshold"] = convergence_threshold;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_convergence_cargs(
+    params: AntsAiConvergenceParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["[", String((params["number_of_iterations"] ?? null)), (((params["convergence_threshold"] ?? null) !== null) ? ants_ai_convergence_threshold_cargs((params["convergence_threshold"] ?? null), execution) : []).join(""), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_moving_image_mask(
+    moving_image_mask_value: InputPathType,
+): AntsAiMovingImageMaskParamsDictTagged {
+    const params = {
+        "@type": "moving_image_mask" as const,
+        "moving_image_mask_value": moving_image_mask_value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_moving_image_mask_cargs(
+    params: AntsAiMovingImageMaskParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([",", execution.inputFile((params["moving_image_mask_value"] ?? null))].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function ants_ai_masks(
+    fixed_image_mask: InputPathType,
+    moving_image_mask: AntsAiMovingImageMaskParamsDict | null = null,
+): AntsAiMasksParamsDictTagged {
+    const params = {
+        "@type": "masks" as const,
+        "fixed_image_mask": fixed_image_mask,
+    };
+    if (moving_image_mask !== null) {
+        params["moving_image_mask"] = moving_image_mask;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_ai_masks_cargs(
+    params: AntsAiMasksParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(["[", execution.inputFile((params["fixed_image_mask"] ?? null)), (((params["moving_image_mask"] ?? null) !== null) ? ants_ai_moving_image_mask_cargs((params["moving_image_mask"] ?? null), execution) : []).join(""), "]"].join(''));
+    return cargs;
+}
 
 
 /**
@@ -40,7 +1322,7 @@ interface AntsAiOutputs {
      */
     root: OutputPathType;
     /**
-     * The output transform (ITK .mat file).
+     * The output transform file.
      */
     output_transform: OutputPathType;
 }
@@ -49,32 +1331,32 @@ interface AntsAiOutputs {
 /**
  * Build parameters.
  *
- * @param metric These image metrics are available: Mattes: Mattes mutual information (recommended), GC: global correlation, MI: joint histogram mutual information
- * @param transform Several transform options are available. For the rigid, affine, and similarity transforms, the gradientStep characterizes the gradient descent optimization. The other two transform types finds the simple translation transform which aligns the specified image feature.
- * @param output Specify the output transform (output format an ITK .mat file).
+ * @param metric Image similarity metric. Available metrics: Mattes (Mattes mutual information, recommended), GC (global correlation), MI (joint histogram mutual information). Each metric takes a fixed and moving image, with optional sampling parameters.
+ * @param transform Transform type for alignment. The rigid, affine, and similarity transforms take a gradient step parameter that characterizes the gradient descent optimization and is scaled appropriately for each transform using the shift scales estimator. AlignGeometricCenters and AlignCentersOfMass find the simple translation transform aligning the specified image feature. Note that the images are read from the metric option although the metric value itself is not used for the latter two.
+ * @param output Specify the output transform filename (output format is an ITK .mat file).
  * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
- * @param align_principal_axes Boolean indicating alignment by principal axes. Alternatively, one can align using blobs.
- * @param align_blobs Boolean indicating alignment by a set of blobs.
- * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis.
+ * @param align_principal_axes Align images by their principal axes. Alternatively, one can align using blobs (see --align-blobs option).
+ * @param align_blobs Align images using a set of extracted blobs. Specify the number of blobs to extract, and optionally the number of blobs to match (defaults to numberOfBlobsToExtract). Alternatively, one can align using principal axes (see --align-principal-axes option).
+ * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis. Default search factor is 20 degrees with an arc fraction of 1.0.
  * @param translation_search_grid Translation search grid in mm, which will translate the moving image in each dimension in increments of the step size.
- * @param convergence Number of iterations.
- * @param masks Image masks to limit voxels considered by the metric.
- * @param random_seed Use a fixed seed for random number generation.
- * @param verbose Verbose output.
+ * @param convergence Convergence parameters for the optimization. Specify the number of iterations, and optionally a convergence threshold (default 1e-6) and convergence window size (default 10).
+ * @param masks Image masks to limit the voxels considered by the metric. Specify a fixed image mask, and optionally a moving image mask.
+ * @param random_seed Use a fixed seed for random number generation. The default fixed seed is overwritten by this value. The fixed seed can be any nonzero int value. If the specified seed is zero, the system time will be used.
+ * @param verbose Verbose output. Default is 0 (off).
  *
  * @returns Parameter dictionary
  */
 function ants_ai_params(
-    metric: "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]",
-    transform: "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass",
+    metric: AntsAiMetricMattesParamsDictTagged | AntsAiMetricGcParamsDictTagged | AntsAiMetricMiParamsDictTagged,
+    transform: AntsAiTransformRigidParamsDictTagged | AntsAiTransformAffineParamsDictTagged | AntsAiTransformSimilarityParamsDictTagged | AntsAiTransformAlignGeometricCentersParamsDictTagged | AntsAiTransformAlignCentersOfMassParamsDictTagged,
     output: string,
     dimensionality: 2 | 3 | null = null,
     align_principal_axes: boolean | null = null,
-    align_blobs: "numberOfBlobsToExtract" | "[numberOfBlobsToExtract,numberOfBlobsToMatch]" | null = null,
-    search_factor: "searchFactor" | "[searchFactor,arcFraction]" | null = null,
-    translation_search_grid: "[stepSize, AxBxC]" | null = null,
-    convergence: "numberOfIterations" | "[numberOfIterations,convergenceThreshold,convergenceWindowSize]" | null = null,
-    masks: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null = null,
+    align_blobs: AntsAiAlignBlobsParamsDict | null = null,
+    search_factor: AntsAiSearchFactorParamsDict | null = null,
+    translation_search_grid: AntsAiTranslationSearchGridParamsDict | null = null,
+    convergence: AntsAiConvergenceParamsDict | null = null,
+    masks: AntsAiMasksParamsDict | null = null,
     random_seed: number | null = null,
     verbose: boolean | null = null,
 ): AntsAiParamsDictTagged {
@@ -136,51 +1418,51 @@ function ants_ai_cargs(
         );
     }
     cargs.push(
-        "-m",
-        (params["metric"] ?? null)
+        "--metric",
+        ...ants_ai_metric_cargs_dyn_fn((params["metric"] ?? null)["@type"])((params["metric"] ?? null), execution)
     );
     cargs.push(
-        "-t",
-        (params["transform"] ?? null)
+        "--transform",
+        ...ants_ai_transform_cargs_dyn_fn((params["transform"] ?? null)["@type"])((params["transform"] ?? null), execution)
     );
     if ((params["align_principal_axes"] ?? null) !== null) {
         cargs.push(
-            "-p",
+            "--align-principal-axes",
             ((params["align_principal_axes"] ?? null) ? "1" : "0")
         );
     }
     if ((params["align_blobs"] ?? null) !== null) {
         cargs.push(
-            "-b",
-            (params["align_blobs"] ?? null)
+            "--align-blobs",
+            ...ants_ai_align_blobs_cargs((params["align_blobs"] ?? null), execution)
         );
     }
     if ((params["search_factor"] ?? null) !== null) {
         cargs.push(
-            "-s",
-            (params["search_factor"] ?? null)
+            "--search-factor",
+            ...ants_ai_search_factor_cargs((params["search_factor"] ?? null), execution)
         );
     }
     if ((params["translation_search_grid"] ?? null) !== null) {
         cargs.push(
-            "-g",
-            (params["translation_search_grid"] ?? null)
+            "--translation-search-grid",
+            ...ants_ai_translation_search_grid_cargs((params["translation_search_grid"] ?? null), execution)
         );
     }
     if ((params["convergence"] ?? null) !== null) {
         cargs.push(
-            "-c",
-            (params["convergence"] ?? null)
+            "--convergence",
+            ...ants_ai_convergence_cargs((params["convergence"] ?? null), execution)
         );
     }
     if ((params["masks"] ?? null) !== null) {
         cargs.push(
-            "-x",
-            (params["masks"] ?? null)
+            "--masks",
+            ...ants_ai_masks_cargs((params["masks"] ?? null), execution)
         );
     }
     cargs.push(
-        "-o",
+        "--output",
         (params["output"] ?? null)
     );
     if ((params["random_seed"] ?? null) !== null) {
@@ -191,7 +1473,7 @@ function ants_ai_cargs(
     }
     if ((params["verbose"] ?? null) !== null) {
         cargs.push(
-            "-v",
+            "--verbose",
             ((params["verbose"] ?? null) ? "1" : "0")
         );
     }
@@ -213,7 +1495,7 @@ function ants_ai_outputs(
 ): AntsAiOutputs {
     const ret: AntsAiOutputs = {
         root: execution.outputFile("."),
-        output_transform: execution.outputFile([(params["output"] ?? null), ".mat"].join('')),
+        output_transform: execution.outputFile([(params["output"] ?? null)].join('')),
     };
     return ret;
 }
@@ -256,33 +1538,33 @@ function ants_ai_execute(
  *
  * URL: https://github.com/ANTsX/ANTs
  *
- * @param metric These image metrics are available: Mattes: Mattes mutual information (recommended), GC: global correlation, MI: joint histogram mutual information
- * @param transform Several transform options are available. For the rigid, affine, and similarity transforms, the gradientStep characterizes the gradient descent optimization. The other two transform types finds the simple translation transform which aligns the specified image feature.
- * @param output Specify the output transform (output format an ITK .mat file).
+ * @param metric Image similarity metric. Available metrics: Mattes (Mattes mutual information, recommended), GC (global correlation), MI (joint histogram mutual information). Each metric takes a fixed and moving image, with optional sampling parameters.
+ * @param transform Transform type for alignment. The rigid, affine, and similarity transforms take a gradient step parameter that characterizes the gradient descent optimization and is scaled appropriately for each transform using the shift scales estimator. AlignGeometricCenters and AlignCentersOfMass find the simple translation transform aligning the specified image feature. Note that the images are read from the metric option although the metric value itself is not used for the latter two.
+ * @param output Specify the output transform filename (output format is an ITK .mat file).
  * @param dimensionality This option forces the image to be treated as a specified-dimensional image. If not specified, we try to infer the dimensionality from the input image.
- * @param align_principal_axes Boolean indicating alignment by principal axes. Alternatively, one can align using blobs.
- * @param align_blobs Boolean indicating alignment by a set of blobs.
- * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis.
+ * @param align_principal_axes Align images by their principal axes. Alternatively, one can align using blobs (see --align-blobs option).
+ * @param align_blobs Align images using a set of extracted blobs. Specify the number of blobs to extract, and optionally the number of blobs to match (defaults to numberOfBlobsToExtract). Alternatively, one can align using principal axes (see --align-principal-axes option).
+ * @param search_factor Incremental search factor (in degrees) which will sample the arc fraction around the principal axis or default axis. Default search factor is 20 degrees with an arc fraction of 1.0.
  * @param translation_search_grid Translation search grid in mm, which will translate the moving image in each dimension in increments of the step size.
- * @param convergence Number of iterations.
- * @param masks Image masks to limit voxels considered by the metric.
- * @param random_seed Use a fixed seed for random number generation.
- * @param verbose Verbose output.
+ * @param convergence Convergence parameters for the optimization. Specify the number of iterations, and optionally a convergence threshold (default 1e-6) and convergence window size (default 10).
+ * @param masks Image masks to limit the voxels considered by the metric. Specify a fixed image mask, and optionally a moving image mask.
+ * @param random_seed Use a fixed seed for random number generation. The default fixed seed is overwritten by this value. The fixed seed can be any nonzero int value. If the specified seed is zero, the system time will be used.
+ * @param verbose Verbose output. Default is 0 (off).
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `AntsAiOutputs`).
  */
 function ants_ai(
-    metric: "Mattes[fixedImage,movingImage]" | "GC[fixedImage,movingImage]" | "MI[fixedImage,movingImage]",
-    transform: "Rigid[gradientStep]" | "Affine[gradientStep]" | "Similarity[gradientStep]" | "AlignGeometricCenters" | "AlignCentersOfMass",
+    metric: AntsAiMetricMattesParamsDictTagged | AntsAiMetricGcParamsDictTagged | AntsAiMetricMiParamsDictTagged,
+    transform: AntsAiTransformRigidParamsDictTagged | AntsAiTransformAffineParamsDictTagged | AntsAiTransformSimilarityParamsDictTagged | AntsAiTransformAlignGeometricCentersParamsDictTagged | AntsAiTransformAlignCentersOfMassParamsDictTagged,
     output: string,
     dimensionality: 2 | 3 | null = null,
     align_principal_axes: boolean | null = null,
-    align_blobs: "numberOfBlobsToExtract" | "[numberOfBlobsToExtract,numberOfBlobsToMatch]" | null = null,
-    search_factor: "searchFactor" | "[searchFactor,arcFraction]" | null = null,
-    translation_search_grid: "[stepSize, AxBxC]" | null = null,
-    convergence: "numberOfIterations" | "[numberOfIterations,convergenceThreshold,convergenceWindowSize]" | null = null,
-    masks: "fixedImageMask" | "[fixedImageMask,movingImageMask]" | null = null,
+    align_blobs: AntsAiAlignBlobsParamsDict | null = null,
+    search_factor: AntsAiSearchFactorParamsDict | null = null,
+    translation_search_grid: AntsAiTranslationSearchGridParamsDict | null = null,
+    convergence: AntsAiConvergenceParamsDict | null = null,
+    masks: AntsAiMasksParamsDict | null = null,
     random_seed: number | null = null,
     verbose: boolean | null = null,
     runner: Runner | null = null,
@@ -294,10 +1576,91 @@ function ants_ai(
 
 export {
       ANTS_AI_METADATA,
+      AntsAiAlignBlobsParamsDict,
+      AntsAiAlignBlobsParamsDictTagged,
+      AntsAiArcFractionParamsDict,
+      AntsAiArcFractionParamsDictTagged,
+      AntsAiConvergenceParamsDict,
+      AntsAiConvergenceParamsDictTagged,
+      AntsAiConvergenceThresholdParamsDict,
+      AntsAiConvergenceThresholdParamsDictTagged,
+      AntsAiConvergenceWindowSizeParamsDict,
+      AntsAiConvergenceWindowSizeParamsDictTagged,
+      AntsAiMasksParamsDict,
+      AntsAiMasksParamsDictTagged,
+      AntsAiMetricGcParamsDict,
+      AntsAiMetricGcParamsDictTagged,
+      AntsAiMetricMattesParamsDict,
+      AntsAiMetricMattesParamsDictTagged,
+      AntsAiMetricMiParamsDict,
+      AntsAiMetricMiParamsDictTagged,
+      AntsAiMovingImageMaskParamsDict,
+      AntsAiMovingImageMaskParamsDictTagged,
+      AntsAiNumberOfBins1ParamsDict,
+      AntsAiNumberOfBins1ParamsDictTagged,
+      AntsAiNumberOfBinsParamsDict,
+      AntsAiNumberOfBinsParamsDictTagged,
+      AntsAiNumberOfBlobsToMatchParamsDict,
+      AntsAiNumberOfBlobsToMatchParamsDictTagged,
       AntsAiOutputs,
       AntsAiParamsDict,
       AntsAiParamsDictTagged,
+      AntsAiRadiusParamsDict,
+      AntsAiRadiusParamsDictTagged,
+      AntsAiSamplingPercentage1ParamsDict,
+      AntsAiSamplingPercentage1ParamsDictTagged,
+      AntsAiSamplingPercentage2ParamsDict,
+      AntsAiSamplingPercentage2ParamsDictTagged,
+      AntsAiSamplingPercentageParamsDict,
+      AntsAiSamplingPercentageParamsDictTagged,
+      AntsAiSamplingStrategy1ParamsDict,
+      AntsAiSamplingStrategy1ParamsDictTagged,
+      AntsAiSamplingStrategy2ParamsDict,
+      AntsAiSamplingStrategy2ParamsDictTagged,
+      AntsAiSamplingStrategyParamsDict,
+      AntsAiSamplingStrategyParamsDictTagged,
+      AntsAiSearchFactorParamsDict,
+      AntsAiSearchFactorParamsDictTagged,
+      AntsAiTransformAffineParamsDict,
+      AntsAiTransformAffineParamsDictTagged,
+      AntsAiTransformAlignCentersOfMassParamsDict,
+      AntsAiTransformAlignCentersOfMassParamsDictTagged,
+      AntsAiTransformAlignGeometricCentersParamsDict,
+      AntsAiTransformAlignGeometricCentersParamsDictTagged,
+      AntsAiTransformRigidParamsDict,
+      AntsAiTransformRigidParamsDictTagged,
+      AntsAiTransformSimilarityParamsDict,
+      AntsAiTransformSimilarityParamsDictTagged,
+      AntsAiTranslationSearchGridParamsDict,
+      AntsAiTranslationSearchGridParamsDictTagged,
       ants_ai,
+      ants_ai_align_blobs,
+      ants_ai_arc_fraction,
+      ants_ai_convergence,
+      ants_ai_convergence_threshold,
+      ants_ai_convergence_window_size,
       ants_ai_execute,
+      ants_ai_masks,
+      ants_ai_metric_gc,
+      ants_ai_metric_mattes,
+      ants_ai_metric_mi,
+      ants_ai_moving_image_mask,
+      ants_ai_number_of_bins,
+      ants_ai_number_of_bins_1,
+      ants_ai_number_of_blobs_to_match,
       ants_ai_params,
+      ants_ai_radius,
+      ants_ai_sampling_percentage,
+      ants_ai_sampling_percentage_1,
+      ants_ai_sampling_percentage_2,
+      ants_ai_sampling_strategy,
+      ants_ai_sampling_strategy_1,
+      ants_ai_sampling_strategy_2,
+      ants_ai_search_factor,
+      ants_ai_transform_affine,
+      ants_ai_transform_align_centers_of_mass,
+      ants_ai_transform_align_geometric_centers,
+      ants_ai_transform_rigid,
+      ants_ai_transform_similarity,
+      ants_ai_translation_search_grid,
 };
