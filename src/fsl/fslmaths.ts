@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMATHS_METADATA: Metadata = {
-    id: "7324d285c89c99367c00643b876935d59d0a8a33.boutiques",
+    id: "66a664a53298e25acc5b9db7ed981776672a8937.boutiques",
     name: "fslmaths",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -349,14 +349,12 @@ type FslmathsOperationTensorDecompParamsDictTagged = Required<Pick<FslmathsOpera
 
 interface FslmathsOperationKernel3DParamsDict {
     "@type"?: "operation_kernel_3D";
-    "kernel_3D": boolean;
 }
 type FslmathsOperationKernel3DParamsDictTagged = Required<Pick<FslmathsOperationKernel3DParamsDict, '@type'>> & FslmathsOperationKernel3DParamsDict;
 
 
 interface FslmathsOperationKernel2DParamsDict {
     "@type"?: "operation_kernel_2D";
-    "kernel_2D": boolean;
 }
 type FslmathsOperationKernel2DParamsDictTagged = Required<Pick<FslmathsOperationKernel2DParamsDict, '@type'>> & FslmathsOperationKernel2DParamsDict;
 
@@ -2728,16 +2726,12 @@ function fslmaths_operation_tensor_decomp_cargs(
 /**
  * Build parameters.
  *
- * @param kernel_3_d 3x3x3 box centered on target voxel (set as default kernel)
- *
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_3_d(
-    kernel_3_d: boolean = false,
 ): FslmathsOperationKernel3DParamsDictTagged {
     const params = {
         "@type": "operation_kernel_3D" as const,
-        "kernel_3D": kernel_3_d,
     };
     return params;
 }
@@ -2756,9 +2750,8 @@ function fslmaths_operation_kernel_3_d_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_3D"] ?? false)) {
-        cargs.push("-kernel 3D");
-    }
+    cargs.push("-kernel");
+    cargs.push("3D");
     return cargs;
 }
 
@@ -2766,16 +2759,12 @@ function fslmaths_operation_kernel_3_d_cargs(
 /**
  * Build parameters.
  *
- * @param kernel_2_d 3x3x1 box centered on target voxel
- *
  * @returns Parameter dictionary
  */
 function fslmaths_operation_kernel_2_d(
-    kernel_2_d: boolean = false,
 ): FslmathsOperationKernel2DParamsDictTagged {
     const params = {
         "@type": "operation_kernel_2D" as const,
-        "kernel_2D": kernel_2_d,
     };
     return params;
 }
@@ -2794,9 +2783,8 @@ function fslmaths_operation_kernel_2_d_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["kernel_2D"] ?? false)) {
-        cargs.push("-kernel 2D");
-    }
+    cargs.push("-kernel");
+    cargs.push("2D");
     return cargs;
 }
 
@@ -2832,10 +2820,9 @@ function fslmaths_operation_kernel_box_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(
-        "-kernel box",
-        String((params["kernel_box"] ?? null))
-    );
+    cargs.push("-kernel");
+    cargs.push("box");
+    cargs.push(String((params["kernel_box"] ?? null)));
     return cargs;
 }
 
@@ -2871,10 +2858,9 @@ function fslmaths_operation_kernel_boxv_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(
-        "-kernel boxv",
-        String((params["kernel_boxv"] ?? null))
-    );
+    cargs.push("-kernel");
+    cargs.push("boxv");
+    cargs.push(String((params["kernel_boxv"] ?? null)));
     return cargs;
 }
 
@@ -2910,10 +2896,9 @@ function fslmaths_operation_kernel_boxv3_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(
-        "-kernel boxv3",
-        ...(params["kernel_boxv3"] ?? null).map(String)
-    );
+    cargs.push("-kernel");
+    cargs.push("boxv3");
+    cargs.push(...(params["kernel_boxv3"] ?? null).map(String));
     return cargs;
 }
 
@@ -2949,10 +2934,9 @@ function fslmaths_operation_kernel_gauss_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(
-        "-kernel gauss",
-        String((params["kernel_gauss"] ?? null))
-    );
+    cargs.push("-kernel");
+    cargs.push("gauss");
+    cargs.push(String((params["kernel_gauss"] ?? null)));
     return cargs;
 }
 
@@ -2988,10 +2972,9 @@ function fslmaths_operation_kernel_sphere_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(
-        "-kernel sphere",
-        String((params["kernel_sphere"] ?? null))
-    );
+    cargs.push("-kernel");
+    cargs.push("sphere");
+    cargs.push(String((params["kernel_sphere"] ?? null)));
     return cargs;
 }
 
@@ -3027,10 +3010,9 @@ function fslmaths_operation_kernel_file_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    cargs.push(
-        "-kernel file",
-        execution.inputFile((params["kernel_file"] ?? null))
-    );
+    cargs.push("-kernel");
+    cargs.push("file");
+    cargs.push(execution.inputFile((params["kernel_file"] ?? null)));
     return cargs;
 }
 
