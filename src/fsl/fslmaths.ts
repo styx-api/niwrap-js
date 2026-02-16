@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMATHS_METADATA: Metadata = {
-    id: "631824cf78cb774076a4c68e6253996918877e52.boutiques",
+    id: "7324d285c89c99367c00643b876935d59d0a8a33.boutiques",
     name: "fslmaths",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -25,9 +25,23 @@ interface FslmathsOperationSubParamsDict {
 type FslmathsOperationSubParamsDictTagged = Required<Pick<FslmathsOperationSubParamsDict, '@type'>> & FslmathsOperationSubParamsDict;
 
 
+interface FslmathsMulValueParamsDict {
+    "@type"?: "mul_value";
+    "value": number;
+}
+type FslmathsMulValueParamsDictTagged = Required<Pick<FslmathsMulValueParamsDict, '@type'>> & FslmathsMulValueParamsDict;
+
+
+interface FslmathsMulImageParamsDict {
+    "@type"?: "mul_image";
+    "image": InputPathType;
+}
+type FslmathsMulImageParamsDictTagged = Required<Pick<FslmathsMulImageParamsDict, '@type'>> & FslmathsMulImageParamsDict;
+
+
 interface FslmathsOperationMulParamsDict {
     "@type"?: "operation_mul";
-    "mul": number;
+    "mul": FslmathsMulValueParamsDictTagged | FslmathsMulImageParamsDictTagged;
 }
 type FslmathsOperationMulParamsDictTagged = Required<Pick<FslmathsOperationMulParamsDict, '@type'>> & FslmathsOperationMulParamsDict;
 
@@ -839,6 +853,40 @@ function fslmaths_operations_outputs_dyn_fn(
 
 
 /**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
+function fslmaths_mul_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "mul_value": fslmaths_mul_value_cargs,
+        "mul_image": fslmaths_mul_image_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function fslmaths_mul_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
  * Build parameters.
  *
  * @param add Add following input to current image
@@ -919,12 +967,82 @@ function fslmaths_operation_sub_cargs(
 /**
  * Build parameters.
  *
- * @param mul Multiply current image by following input
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_mul_value(
+    value: number,
+): FslmathsMulValueParamsDictTagged {
+    const params = {
+        "@type": "mul_value" as const,
+        "value": value,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_mul_value_cargs(
+    params: FslmathsMulValueParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(String((params["value"] ?? null)));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ *
+ * @returns Parameter dictionary
+ */
+function fslmaths_mul_image(
+    image: InputPathType,
+): FslmathsMulImageParamsDictTagged {
+    const params = {
+        "@type": "mul_image" as const,
+        "image": image,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function fslmaths_mul_image_cargs(
+    params: FslmathsMulImageParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push(execution.inputFile((params["image"] ?? null)));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param mul Multiply current image by following input (a number or an image)
  *
  * @returns Parameter dictionary
  */
 function fslmaths_operation_mul(
-    mul: number,
+    mul: FslmathsMulValueParamsDictTagged | FslmathsMulImageParamsDictTagged,
 ): FslmathsOperationMulParamsDictTagged {
     const params = {
         "@type": "operation_mul" as const,
@@ -949,7 +1067,7 @@ function fslmaths_operation_mul_cargs(
     const cargs: string[] = [];
     cargs.push(
         "-mul",
-        String((params["mul"] ?? null))
+        ...fslmaths_mul_cargs_dyn_fn((params["mul"] ?? null)["@type"])((params["mul"] ?? null), execution)
     );
     return cargs;
 }
@@ -4762,6 +4880,10 @@ function fslmaths(
 
 export {
       FSLMATHS_METADATA,
+      FslmathsMulImageParamsDict,
+      FslmathsMulImageParamsDictTagged,
+      FslmathsMulValueParamsDict,
+      FslmathsMulValueParamsDictTagged,
       FslmathsOperationAbsParamsDict,
       FslmathsOperationAbsParamsDictTagged,
       FslmathsOperationAcosParamsDict,
@@ -4963,6 +5085,8 @@ export {
       FslmathsParamsDictTagged,
       fslmaths,
       fslmaths_execute,
+      fslmaths_mul_image,
+      fslmaths_mul_value,
       fslmaths_operation_abs,
       fslmaths_operation_acos,
       fslmaths_operation_add,

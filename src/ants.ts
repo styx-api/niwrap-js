@@ -68,6 +68,7 @@ export {print_header, print_header_execute, print_header_params} from './ants/pr
 export {rebase_tensor_image, rebase_tensor_image_execute, rebase_tensor_image_params} from './ants/rebase_tensor_image'
 export {resample_image, resample_image_execute, resample_image_params} from './ants/resample_image'
 export {sccan, sccan_execute, sccan_params} from './ants/sccan'
+export {set_direction_by_matrix, set_direction_by_matrix_execute, set_direction_by_matrix_params} from './ants/set_direction_by_matrix'
 export {set_spacing, set_spacing_execute, set_spacing_params} from './ants/set_spacing'
 export {simple_syn_registration, simple_syn_registration_execute, simple_syn_registration_params} from './ants/simple_syn_registration'
 export {simulate_displacement_field, simulate_displacement_field_execute, simulate_displacement_field_params, simulate_displacement_field_bspline_options, simulate_displacement_field_exponential_options} from './ants/simulate_displacement_field'
@@ -140,6 +141,7 @@ import { print_header_execute } from './ants/print_header'
 import { rebase_tensor_image_execute } from './ants/rebase_tensor_image'
 import { resample_image_execute } from './ants/resample_image'
 import { sccan_execute } from './ants/sccan'
+import { set_direction_by_matrix_execute } from './ants/set_direction_by_matrix'
 import { set_spacing_execute } from './ants/set_spacing'
 import { simple_syn_registration_execute } from './ants/simple_syn_registration'
 import { simulate_displacement_field_execute } from './ants/simulate_displacement_field'
@@ -200,6 +202,7 @@ function execute(
         "ants/PrintHeader": print_header_execute,
         "ants/RebaseTensorImage": rebase_tensor_image_execute,
         "ants/ResampleImage": resample_image_execute,
+        "ants/SetDirectionByMatrix": set_direction_by_matrix_execute,
         "ants/SetSpacing": set_spacing_execute,
         "ants/SimulateDisplacementField": simulate_displacement_field_execute,
         "ants/SmoothDisplacementField": smooth_displacement_field_execute,
