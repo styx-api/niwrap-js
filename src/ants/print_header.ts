@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const PRINT_HEADER_METADATA: Metadata = {
-    id: "3d1f9490b54e21b3758d6c6dda5a08e02998973a.boutiques",
+    id: "e98eda0b717c20939b7a3a0e62c760445a15b9c6.boutiques",
     name: "PrintHeader",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -30,17 +30,17 @@ interface PrintHeaderOutputs {
      */
     root: OutputPathType;
     /**
-     * The printed header information from the specified image.
+     * The requested header information. When a specific code is given, values are printed as 'x'-delimited strings (e.g. '1.0x1.0x1.0' for spacing). When no code is given, prints a formatted multi-line report of all header fields and metadata.
      */
-    output: OutputPathType;
+    output: string[];
 }
 
 
 /**
  * Build parameters.
  *
- * @param image The image file to extract header information from. Supported extension: .ext.
- * @param what_information Specify the type of information to print: 0 for origin, 1 for spacing, 2 for size, 3 for index, 4 for direction.
+ * @param image Input image file (any format supported by ITK, e.g. NIfTI, NRRD, MetaImage). Supports 1D through 5D images.
+ * @param what_information Specify which header field to print: 0 = origin, 1 = spacing, 2 = size, 3 = index, 4 = direction. Values are printed as 'x'-delimited strings. If omitted, prints a full header dump.
  *
  * @returns Parameter dictionary
  */
@@ -95,7 +95,7 @@ function print_header_outputs(
 ): PrintHeaderOutputs {
     const ret: PrintHeaderOutputs = {
         root: execution.outputFile("."),
-        output: execution.outputFile(["header_info.txt"].join('')),
+        output: [],
     };
     return ret;
 }
@@ -104,7 +104,7 @@ function print_header_outputs(
 /**
  * PrintHeader
  *
- * A utility to print header information from an image file.
+ * Prints header information from a medical image file. When called with only an image, prints a full header dump including dimensions, bounding box, origin, spacing, intensity range and mean, canonical orientation code, direction cosine matrix, and all image metadata. When called with a specific information code, prints only that property.
  *
  * Author: ANTs Developers
  *
@@ -124,7 +124,7 @@ function print_header_execute(
     params = execution.params(params)
     const cargs = print_header_cargs(params, execution)
     const ret = print_header_outputs(params, execution)
-    execution.run(cargs, undefined);
+    execution.run(cargs, s => ret.output.push(s));
     return ret;
 }
 
@@ -132,14 +132,14 @@ function print_header_execute(
 /**
  * PrintHeader
  *
- * A utility to print header information from an image file.
+ * Prints header information from a medical image file. When called with only an image, prints a full header dump including dimensions, bounding box, origin, spacing, intensity range and mean, canonical orientation code, direction cosine matrix, and all image metadata. When called with a specific information code, prints only that property.
  *
  * Author: ANTs Developers
  *
  * URL: https://github.com/ANTsX/ANTs
  *
- * @param image The image file to extract header information from. Supported extension: .ext.
- * @param what_information Specify the type of information to print: 0 for origin, 1 for spacing, 2 for size, 3 for index, 4 for direction.
+ * @param image Input image file (any format supported by ITK, e.g. NIfTI, NRRD, MetaImage). Supports 1D through 5D images.
+ * @param what_information Specify which header field to print: 0 = origin, 1 = spacing, 2 = size, 3 = index, 4 = direction. Values are printed as 'x'-delimited strings. If omitted, prints a full header dump.
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `PrintHeaderOutputs`).
