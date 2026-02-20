@@ -193,8 +193,8 @@ function dmri_motion_outputs(
 ): DmriMotionOutputs {
     const ret: DmriMotionOutputs = {
         root: execution.outputFile("."),
-        motion_measures_out: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
-        frame_by_frame_out: ((params["outf"] ?? null) !== null) ? execution.outputFile([path.basename((params["outf"] ?? null))].join('')) : null,
+        motion_measures_out: execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
+        frame_by_frame_out: ((params["outf"] ?? null) !== null) ? execution.outputFile([((params["outf"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

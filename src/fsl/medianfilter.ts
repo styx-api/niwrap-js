@@ -91,7 +91,7 @@ function medianfilter_outputs(
 ): MedianfilterOutputs {
     const ret: MedianfilterOutputs = {
         root: execution.outputFile("."),
-        filtered_file: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
+        filtered_file: execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

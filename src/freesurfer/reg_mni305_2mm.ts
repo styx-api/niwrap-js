@@ -97,7 +97,7 @@ function reg_mni305_2mm_outputs(
 ): RegMni3052mmOutputs {
     const ret: RegMni3052mmOutputs = {
         root: execution.outputFile("."),
-        output_regfile: execution.outputFile([path.basename((params["regfile"] ?? null))].join('')),
+        output_regfile: execution.outputFile([((params["regfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

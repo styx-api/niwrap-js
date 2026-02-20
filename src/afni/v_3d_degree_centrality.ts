@@ -164,7 +164,7 @@ function v_3d_degree_centrality_outputs(
 ): V3dDegreeCentralityOutputs {
     const ret: V3dDegreeCentralityOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_file"] ?? null))].join('')),
+        out_file: execution.outputFile([((params["in_file"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
         oned_file_outfile: ((params["oned_file"] ?? null) !== null) ? execution.outputFile([(params["oned_file"] ?? null)].join('')) : null,
     };
     return ret;

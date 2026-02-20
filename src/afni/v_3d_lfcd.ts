@@ -166,7 +166,7 @@ function v_3d_lfcd_outputs(
 ): V3dLfcdOutputs {
     const ret: V3dLfcdOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_afni"].join('')),
+        out_file: execution.outputFile([((params["in_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_afni"].join('')),
     };
     return ret;
 }

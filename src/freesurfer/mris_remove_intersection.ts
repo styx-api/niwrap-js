@@ -124,7 +124,7 @@ function mris_remove_intersection_outputs(
     const ret: MrisRemoveIntersectionOutputs = {
         root: execution.outputFile("."),
         out_corrected_surface: execution.outputFile([(params["corrected_surface_out_file"] ?? null)].join('')),
-        out_map_file: ((params["map_option"] ?? null) !== null) ? execution.outputFile([path.basename((params["map_option"] ?? null))].join('')) : null,
+        out_map_file: ((params["map_option"] ?? null) !== null) ? execution.outputFile([((params["map_option"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

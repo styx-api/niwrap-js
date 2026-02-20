@@ -518,7 +518,7 @@ function mri_vol2vol_outputs(
 ): MriVol2volOutputs {
     const ret: MriVol2volOutputs = {
         root: execution.outputFile("."),
-        output_volume: execution.outputFile([path.basename((params["outvol"] ?? null))].join('')),
+        output_volume: execution.outputFile([((params["outvol"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

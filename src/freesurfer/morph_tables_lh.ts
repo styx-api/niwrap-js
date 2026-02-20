@@ -96,7 +96,7 @@ function morph_tables_lh_outputs(
 ): MorphTablesLhOutputs {
     const ret: MorphTablesLhOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile([path.basename((params["input_file"] ?? null)), "_output.txt"].join('')),
+        output_file: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_output.txt"].join('')),
     };
     return ret;
 }

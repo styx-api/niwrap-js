@@ -86,7 +86,7 @@ function dicom_to_raw_outputs(
 ): DicomToRawOutputs {
     const ret: DicomToRawOutputs = {
         root: execution.outputFile("."),
-        output_raw_file: execution.outputFile([path.basename((params["input_dicom"] ?? null)), ".raw.0001"].join('')),
+        output_raw_file: execution.outputFile([((params["input_dicom"] ?? null).split(/[\\/]/).pop() ?? ""), ".raw.0001"].join('')),
     };
     return ret;
 }

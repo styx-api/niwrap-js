@@ -212,8 +212,8 @@ function mri_exvivo_strip_outputs(
     const ret: MriExvivoStripOutputs = {
         root: execution.outputFile("."),
         output_file: execution.outputFile([(params["outvol"] ?? null)].join('')),
-        prediction_output: ((params["pred"] ?? null) !== null) ? execution.outputFile([path.basename((params["pred"] ?? null))].join('')) : null,
-        normalized_output: ((params["norm"] ?? null) !== null) ? execution.outputFile([path.basename((params["norm"] ?? null))].join('')) : null,
+        prediction_output: ((params["pred"] ?? null) !== null) ? execution.outputFile([((params["pred"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        normalized_output: ((params["norm"] ?? null) !== null) ? execution.outputFile([((params["norm"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

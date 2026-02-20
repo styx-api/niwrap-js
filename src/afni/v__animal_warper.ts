@@ -450,7 +450,7 @@ function v__animal_warper_outputs(
 ): VAnimalWarperOutputs {
     const ret: VAnimalWarperOutputs = {
         root: execution.outputFile("."),
-        warp2std: execution.outputFile(["aw_results/", path.basename((params["input_file"] ?? null)), "_warp2std.nii.gz"].join('')),
+        warp2std: execution.outputFile(["aw_results/", ((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_warp2std.nii.gz"].join('')),
         qc_image_initial: execution.outputFile(["aw_results/init_qc_00.input+base.jpg"].join('')),
         qc_image_initial_sh: execution.outputFile(["aw_results/init_qc_01.input_sh+base.jpg"].join('')),
         dset_followers_out: execution.outputFile(["aw_results/DSET_FOLL.nii.gz"].join('')),

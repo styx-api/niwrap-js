@@ -142,7 +142,7 @@ function smooth_displacement_field_outputs(
     const ret: SmoothDisplacementFieldOutputs = {
         root: execution.outputFile("."),
         smoothed_field: execution.outputFile([(params["output_field"] ?? null)].join('')),
-        confidence_image_out: ((params["confidence_image"] ?? null) !== null) ? execution.outputFile([path.basename((params["confidence_image"] ?? null))].join('')) : null,
+        confidence_image_out: ((params["confidence_image"] ?? null) !== null) ? execution.outputFile([((params["confidence_image"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

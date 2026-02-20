@@ -259,7 +259,7 @@ function surf_info_outputs(
 ): SurfInfoOutputs {
     const ret: SurfInfoOutputs = {
         root: execution.outputFile("."),
-        metrics_output: execution.outputFile([path.basename((params["surface"] ?? null)), "_metrics.txt"].join('')),
+        metrics_output: execution.outputFile([((params["surface"] ?? null).split(/[\\/]/).pop() ?? ""), "_metrics.txt"].join('')),
     };
     return ret;
 }

@@ -557,8 +557,8 @@ function mri_surfcluster_outputs(
         output_surface_file: ((params["o"] ?? null) !== null) ? execution.outputFile([(params["o"] ?? null)].join('')) : null,
         output_cluster_number_file: ((params["ocn"] ?? null) !== null) ? execution.outputFile([(params["ocn"] ?? null)].join('')) : null,
         output_labels: ((params["olab"] ?? null) !== null && (params["ocn"] ?? null) !== null) ? execution.outputFile([(params["olab"] ?? null), "-", (params["ocn"] ?? null), ".label"].join('')) : null,
-        output_summary_file: ((params["sum"] ?? null) !== null) ? execution.outputFile([path.basename((params["sum"] ?? null))].join('')) : null,
-        output_pointset_file: ((params["pointset"] ?? null) !== null) ? execution.outputFile([path.basename((params["pointset"] ?? null))].join('')) : null,
+        output_summary_file: ((params["sum"] ?? null) !== null) ? execution.outputFile([((params["sum"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        output_pointset_file: ((params["pointset"] ?? null) !== null) ? execution.outputFile([((params["pointset"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
         output_max_area_file: ((params["maxareafile"] ?? null) !== null) ? execution.outputFile([(params["maxareafile"] ?? null)].join('')) : null,
     };
     return ret;

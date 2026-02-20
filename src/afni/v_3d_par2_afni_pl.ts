@@ -154,7 +154,7 @@ function v_3d_par2_afni_pl_outputs(
 ): V3dPar2AfniPlOutputs {
     const ret: V3dPar2AfniPlOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile([path.basename((params["input_file"] ?? null)), "_converted"].join('')),
+        output_files: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_converted"].join('')),
     };
     return ret;
 }

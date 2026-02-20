@@ -156,7 +156,7 @@ function mri_synthstrip_outputs(
     const ret: MriSynthstripOutputs = {
         root: execution.outputFile("."),
         output_image_file: ((params["output_image"] ?? null) !== null) ? execution.outputFile([(params["output_image"] ?? null)].join('')) : null,
-        output_mask_file: ((params["mask"] ?? null) !== null) ? execution.outputFile([path.basename((params["mask"] ?? null))].join('')) : null,
+        output_mask_file: ((params["mask"] ?? null) !== null) ? execution.outputFile([((params["mask"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

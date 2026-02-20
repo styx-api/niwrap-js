@@ -115,7 +115,7 @@ function pairreg_outputs(
 ): PairregOutputs {
     const ret: PairregOutputs = {
         root: execution.outputFile("."),
-        output_matrix: execution.outputFile([path.basename((params["outputmatrix"] ?? null))].join('')),
+        output_matrix: execution.outputFile([((params["outputmatrix"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

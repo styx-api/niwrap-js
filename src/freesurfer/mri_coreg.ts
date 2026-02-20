@@ -647,10 +647,10 @@ function mri_coreg_outputs(
         out_registration: execution.outputFile([(params["reg"] ?? null)].join('')),
         out_params: ((params["out_param_file"] ?? null) !== null) ? execution.outputFile([(params["out_param_file"] ?? null)].join('')) : null,
         out_cost: ((params["out_cost_file"] ?? null) !== null) ? execution.outputFile([(params["out_cost_file"] ?? null)].join('')) : null,
-        saved_init_reg: ((params["init_reg_save"] ?? null) !== null) ? execution.outputFile([path.basename((params["init_reg_save"] ?? null))].join('')) : null,
-        saved_init_reg_only: ((params["init_reg_save_only"] ?? null) !== null) ? execution.outputFile([path.basename((params["init_reg_save_only"] ?? null))].join('')) : null,
-        movout_volume: ((params["movout"] ?? null) !== null) ? execution.outputFile([path.basename((params["movout"] ?? null))].join('')) : null,
-        mov_idither_volume: ((params["mov_idither"] ?? null) !== null) ? execution.outputFile([path.basename((params["mov_idither"] ?? null))].join('')) : null,
+        saved_init_reg: ((params["init_reg_save"] ?? null) !== null) ? execution.outputFile([((params["init_reg_save"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        saved_init_reg_only: ((params["init_reg_save_only"] ?? null) !== null) ? execution.outputFile([((params["init_reg_save_only"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        movout_volume: ((params["movout"] ?? null) !== null) ? execution.outputFile([((params["movout"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        mov_idither_volume: ((params["mov_idither"] ?? null) !== null) ? execution.outputFile([((params["mov_idither"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

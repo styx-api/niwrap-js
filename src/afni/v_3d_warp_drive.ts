@@ -397,8 +397,8 @@ function v_3d_warp_drive_outputs(
         root: execution.outputFile("."),
         output_dataset: execution.outputFile([(params["prefix"] ?? null), "+orig"].join('')),
         output_summary: ((params["summary_file"] ?? null) !== null) ? execution.outputFile([(params["summary_file"] ?? null)].join('')) : null,
-        oned_output_file: ((params["oned_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["oned_file"] ?? null))].join('')) : null,
-        matrix_output_file: ((params["oned_matrix_save"] ?? null) !== null) ? execution.outputFile([path.basename((params["oned_matrix_save"] ?? null))].join('')) : null,
+        oned_output_file: ((params["oned_file"] ?? null) !== null) ? execution.outputFile([((params["oned_file"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        matrix_output_file: ((params["oned_matrix_save"] ?? null) !== null) ? execution.outputFile([((params["oned_matrix_save"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

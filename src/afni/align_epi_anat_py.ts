@@ -232,8 +232,8 @@ function align_epi_anat_py_outputs(
 ): AlignEpiAnatPyOutputs {
     const ret: AlignEpiAnatPyOutputs = {
         root: execution.outputFile("."),
-        anat_aligned: execution.outputFile([path.basename((params["anat"] ?? null)), "+orig"].join('')),
-        epi_aligned: execution.outputFile([path.basename((params["epi"] ?? null)), "+orig"].join('')),
+        anat_aligned: execution.outputFile([((params["anat"] ?? null).split(/[\\/]/).pop() ?? ""), "+orig"].join('')),
+        epi_aligned: execution.outputFile([((params["epi"] ?? null).split(/[\\/]/).pop() ?? ""), "+orig"].join('')),
     };
     return ret;
 }

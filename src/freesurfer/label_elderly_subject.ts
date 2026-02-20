@@ -105,7 +105,7 @@ function label_elderly_subject_outputs(
 ): LabelElderlySubjectOutputs {
     const ret: LabelElderlySubjectOutputs = {
         root: execution.outputFile("."),
-        labeled_volume: execution.outputFile([path.basename((params["aseg_volume"] ?? null)), "_labeled.mgz"].join('')),
+        labeled_volume: execution.outputFile([((params["aseg_volume"] ?? null).split(/[\\/]/).pop() ?? ""), "_labeled.mgz"].join('')),
     };
     return ret;
 }

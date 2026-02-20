@@ -190,8 +190,8 @@ function fdr_outputs(
     const ret: FdrOutputs = {
         root: execution.outputFile("."),
         output_adjusted: ((params["adjustedimage"] ?? null) !== null) ? execution.outputFile([(params["adjustedimage"] ?? null), ".nii.gz"].join('')) : null,
-        output_thresholded: execution.outputFile([path.basename((params["infile"] ?? null)), "_thr.nii.gz"].join('')),
-        output_order: execution.outputFile([path.basename((params["infile"] ?? null)), "_order.nii.gz"].join('')),
+        output_thresholded: execution.outputFile([((params["infile"] ?? null).split(/[\\/]/).pop() ?? ""), "_thr.nii.gz"].join('')),
+        output_order: execution.outputFile([((params["infile"] ?? null).split(/[\\/]/).pop() ?? ""), "_order.nii.gz"].join('')),
     };
     return ret;
 }

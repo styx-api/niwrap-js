@@ -149,7 +149,7 @@ function v_3d_diff_outputs(
 ): V3dDiffOutputs {
     const ret: V3dDiffOutputs = {
         root: execution.outputFile("."),
-        output_log: execution.outputFile([path.basename((params["dataset_a"] ?? null)), "_vs_", path.basename((params["dataset_b"] ?? null)), ".log"].join('')),
+        output_log: execution.outputFile([((params["dataset_a"] ?? null).split(/[\\/]/).pop() ?? ""), "_vs_", ((params["dataset_b"] ?? null).split(/[\\/]/).pop() ?? ""), ".log"].join('')),
     };
     return ret;
 }

@@ -374,7 +374,7 @@ function dwibiascorrect_outputs(
     const ret: DwibiascorrectOutputs = {
         root: execution.outputFile("."),
         output_image_file: execution.outputFile([(params["output_image"] ?? null)].join('')),
-        bias_image_file: ((params["bias_image"] ?? null) !== null) ? execution.outputFile([path.basename((params["bias_image"] ?? null))].join('')) : null,
+        bias_image_file: ((params["bias_image"] ?? null) !== null) ? execution.outputFile([((params["bias_image"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

@@ -211,7 +211,7 @@ function v_3dmask_tool_outputs(
 ): V3dmaskToolOutputs {
     const ret: V3dmaskToolOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_mask"].join('')),
+        out_file: execution.outputFile([((params["in_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_mask"].join('')),
         out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;

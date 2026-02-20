@@ -314,8 +314,8 @@ function mris_info_outputs(
 ): MrisInfoOutputs {
     const ret: MrisInfoOutputs = {
         root: execution.outputFile("."),
-        output_file: ((params["outfile"] ?? null) !== null) ? execution.outputFile([path.basename((params["outfile"] ?? null))].join('')) : null,
-        output_edge_file: ((params["edge_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["edge_file"] ?? null))].join('')) : null,
+        output_file: ((params["outfile"] ?? null) !== null) ? execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        output_edge_file: ((params["edge_file"] ?? null) !== null) ? execution.outputFile([((params["edge_file"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

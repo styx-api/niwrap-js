@@ -256,7 +256,7 @@ function v_3d_ecm_outputs(
 ): V3dEcmOutputs {
     const ret: V3dEcmOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_afni"].join('')),
+        out_file: execution.outputFile([((params["in_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_afni"].join('')),
         out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;

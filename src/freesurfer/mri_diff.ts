@@ -343,8 +343,8 @@ function mri_diff_outputs(
     const ret: MriDiffOutputs = {
         root: execution.outputFile("."),
         log_output: ((params["log_file"] ?? null) !== null) ? execution.outputFile([(params["log_file"] ?? null)].join('')) : null,
-        difference_image_output: ((params["difference_image"] ?? null) !== null) ? execution.outputFile([path.basename((params["difference_image"] ?? null))].join('')) : null,
-        suspicious_difference_output: ((params["suspicious_diff_volume"] ?? null) !== null) ? execution.outputFile([path.basename((params["suspicious_diff_volume"] ?? null))].join('')) : null,
+        difference_image_output: ((params["difference_image"] ?? null) !== null) ? execution.outputFile([((params["difference_image"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        suspicious_difference_output: ((params["suspicious_diff_volume"] ?? null) !== null) ? execution.outputFile([((params["suspicious_diff_volume"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

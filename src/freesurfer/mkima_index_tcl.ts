@@ -93,7 +93,7 @@ function mkima_index_tcl_outputs(
 ): MkimaIndexTclOutputs {
     const ret: MkimaIndexTclOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile([path.basename((params["input_file"] ?? null)), "_index_output"].join('')),
+        output_file: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_index_output"].join('')),
     };
     return ret;
 }

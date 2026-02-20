@@ -192,12 +192,12 @@ function fnirt_outputs(
 ): FnirtOutputs {
     const ret: FnirtOutputs = {
         root: execution.outputFile("."),
-        field_file_outfile: ((params["field_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["field_file"] ?? null)), ".nii.gz"].join('')) : null,
-        fieldcoeff_file_outfile: ((params["fieldcoeff_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["fieldcoeff_file"] ?? null)), ".nii.gz"].join('')) : null,
-        jacobian_file_outfile: ((params["jacobian_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["jacobian_file"] ?? null)), ".mat"].join('')) : null,
-        log_file_outfile: ((params["log_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["log_file"] ?? null)), ".txt"].join('')) : null,
+        field_file_outfile: ((params["field_file"] ?? null) !== null) ? execution.outputFile([((params["field_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".nii.gz"].join('')) : null,
+        fieldcoeff_file_outfile: ((params["fieldcoeff_file"] ?? null) !== null) ? execution.outputFile([((params["fieldcoeff_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".nii.gz"].join('')) : null,
+        jacobian_file_outfile: ((params["jacobian_file"] ?? null) !== null) ? execution.outputFile([((params["jacobian_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".mat"].join('')) : null,
+        log_file_outfile: ((params["log_file"] ?? null) !== null) ? execution.outputFile([((params["log_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".txt"].join('')) : null,
         modulatedref_file_outfile: ((params["modulatedref_file"] ?? null) !== null) ? execution.outputFile([(params["modulatedref_file"] ?? null), ".nii.gz"].join('')) : null,
-        warped_file_outfile: ((params["warped_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["warped_file"] ?? null)), ".nii.gz"].join('')) : null,
+        warped_file_outfile: ((params["warped_file"] ?? null) !== null) ? execution.outputFile([((params["warped_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".nii.gz"].join('')) : null,
     };
     return ret;
 }

@@ -111,7 +111,7 @@ function v_3d_skull_strip_outputs(
 ): V3dSkullStripOutputs {
     const ret: V3dSkullStripOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_skullstrip"].join('')),
+        out_file: execution.outputFile([((params["in_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_skullstrip"].join('')),
         out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;

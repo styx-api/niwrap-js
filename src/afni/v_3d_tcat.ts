@@ -132,7 +132,7 @@ function v_3d_tcat_outputs(
 ): V3dTcatOutputs {
     const ret: V3dTcatOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_files"] ?? null)), "_tcat"].join('')),
+        out_file: execution.outputFile([((params["in_files"] ?? null).split(/[\\/]/).pop() ?? ""), "_tcat"].join('')),
     };
     return ret;
 }

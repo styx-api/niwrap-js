@@ -93,7 +93,7 @@ function v__get_afni_orient_outputs(
 ): VGetAfniOrientOutputs {
     const ret: VGetAfniOrientOutputs = {
         root: execution.outputFile("."),
-        output_orient_code: execution.outputFile([path.basename((params["infile"] ?? null)), "_orient_code.txt"].join('')),
+        output_orient_code: execution.outputFile([((params["infile"] ?? null).split(/[\\/]/).pop() ?? ""), "_orient_code.txt"].join('')),
     };
     return ret;
 }

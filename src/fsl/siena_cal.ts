@@ -105,7 +105,7 @@ function siena_cal_outputs(
 ): SienaCalOutputs {
     const ret: SienaCalOutputs = {
         root: execution.outputFile("."),
-        output_dir: execution.outputFile([path.basename((params["input1_file"] ?? null)), "_to_", path.basename((params["input2_file"] ?? null)), "_siena"].join('')),
+        output_dir: execution.outputFile([((params["input1_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_to_", ((params["input2_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_siena"].join('')),
     };
     return ret;
 }

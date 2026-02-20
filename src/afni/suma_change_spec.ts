@@ -128,7 +128,7 @@ function suma_change_spec_outputs(
     const ret: SumaChangeSpecOutputs = {
         root: execution.outputFile("."),
         output_spec: ((params["output"] ?? null) !== null) ? execution.outputFile([(params["output"] ?? null)].join('')) : null,
-        backup_spec: execution.outputFile([path.basename((params["input"] ?? null)), ".bkp"].join('')),
+        backup_spec: execution.outputFile([((params["input"] ?? null).split(/[\\/]/).pop() ?? ""), ".bkp"].join('')),
     };
     return ret;
 }

@@ -216,8 +216,8 @@ function gen_ss_review_table_py_outputs(
 ): GenSsReviewTablePyOutputs {
     const ret: GenSsReviewTablePyOutputs = {
         root: execution.outputFile("."),
-        output_table: ((params["write_table"] ?? null) !== null) ? execution.outputFile([path.basename((params["write_table"] ?? null))].join('')) : null,
-        output_outliers: ((params["write_outliers"] ?? null) !== null) ? execution.outputFile([path.basename((params["write_outliers"] ?? null))].join('')) : null,
+        output_table: ((params["write_table"] ?? null) !== null) ? execution.outputFile([((params["write_table"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        output_outliers: ((params["write_outliers"] ?? null) !== null) ? execution.outputFile([((params["write_outliers"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

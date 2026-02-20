@@ -461,8 +461,8 @@ function v__make_label_table_outputs(
         root: execution.outputFile("."),
         output_labeltable: execution.outputFile([(params["labeltable"] ?? null), ".niml.lt"].join('')),
         output_atlas_pointlist: ((params["atlas_pointlist"] ?? null) !== null) ? execution.outputFile([(params["atlas_pointlist"] ?? null), ".niml.atlas"].join('')) : null,
-        output_csv: ((params["lt_to_csv"] ?? null) !== null) ? execution.outputFile([path.basename((params["lt_to_csv"] ?? null)), ".csv"].join('')) : null,
-        output_niml_atlas: ((params["atlasize_labeled_dset"] ?? null) !== null) ? execution.outputFile([path.basename((params["atlasize_labeled_dset"] ?? null)), ".niml"].join('')) : null,
+        output_csv: ((params["lt_to_csv"] ?? null) !== null) ? execution.outputFile([((params["lt_to_csv"] ?? null).split(/[\\/]/).pop() ?? ""), ".csv"].join('')) : null,
+        output_niml_atlas: ((params["atlasize_labeled_dset"] ?? null) !== null) ? execution.outputFile([((params["atlasize_labeled_dset"] ?? null).split(/[\\/]/).pop() ?? ""), ".niml"].join('')) : null,
     };
     return ret;
 }

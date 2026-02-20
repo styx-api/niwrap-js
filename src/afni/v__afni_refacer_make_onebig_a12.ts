@@ -86,7 +86,7 @@ function v__afni_refacer_make_onebig_a12_outputs(
 ): VAfniRefacerMakeOnebigA12Outputs {
     const ret: VAfniRefacerMakeOnebigA12Outputs = {
         root: execution.outputFile("."),
-        aligned_output: execution.outputFile([path.basename((params["t1w_dataset"] ?? null)), "_aligned_to_MNI.nii.gz"].join('')),
+        aligned_output: execution.outputFile([((params["t1w_dataset"] ?? null).split(/[\\/]/).pop() ?? ""), "_aligned_to_MNI.nii.gz"].join('')),
     };
     return ret;
 }

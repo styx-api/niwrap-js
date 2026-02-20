@@ -171,7 +171,7 @@ function v__align_partial_oblique_outputs(
 ): VAlignPartialObliqueOutputs {
     const ret: VAlignPartialObliqueOutputs = {
         root: execution.outputFile("."),
-        aligned_output: execution.outputFile([path.basename((params["base"] ?? null)), "_alnd_", path.basename((params["input"] ?? null)), ".nii.gz"].join('')),
+        aligned_output: execution.outputFile([((params["base"] ?? null).split(/[\\/]/).pop() ?? ""), "_alnd_", ((params["input"] ?? null).split(/[\\/]/).pop() ?? ""), ".nii.gz"].join('')),
     };
     return ret;
 }

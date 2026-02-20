@@ -89,7 +89,7 @@ function v__afni_orient_sign_outputs(
 ): VAfniOrientSignOutputs {
     const ret: VAfniOrientSignOutputs = {
         root: execution.outputFile("."),
-        outfile: execution.outputFile([path.basename((params["infile"] ?? null)), "_orient.txt"].join('')),
+        outfile: execution.outputFile([((params["infile"] ?? null).split(/[\\/]/).pop() ?? ""), "_orient.txt"].join('')),
     };
     return ret;
 }

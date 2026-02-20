@@ -99,7 +99,7 @@ function v_3d_detrend_outputs(
 ): V3dDetrendOutputs {
     const ret: V3dDetrendOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_detrend"].join('')),
+        out_file: execution.outputFile([((params["in_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_detrend"].join('')),
         out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;

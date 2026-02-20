@@ -185,7 +185,7 @@ function dimon_outputs(
 ): DimonOutputs {
     const ret: DimonOutputs = {
         root: execution.outputFile("."),
-        sorted_files_details: ((params["infile_list"] ?? null) !== null) ? execution.outputFile([path.basename((params["infile_list"] ?? null)), "_details"].join('')) : null,
+        sorted_files_details: ((params["infile_list"] ?? null) !== null) ? execution.outputFile([((params["infile_list"] ?? null).split(/[\\/]/).pop() ?? ""), "_details"].join('')) : null,
     };
     return ret;
 }

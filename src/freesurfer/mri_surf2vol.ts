@@ -400,7 +400,7 @@ function mri_surf2vol_outputs(
     const ret: MriSurf2volOutputs = {
         root: execution.outputFile("."),
         output_volume: execution.outputFile([(params["outfile"] ?? null)].join('')),
-        vertex_volume: ((params["vtxvol"] ?? null) !== null) ? execution.outputFile([path.basename((params["vtxvol"] ?? null))].join('')) : null,
+        vertex_volume: ((params["vtxvol"] ?? null) !== null) ? execution.outputFile([((params["vtxvol"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

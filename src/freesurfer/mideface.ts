@@ -393,7 +393,7 @@ function mideface_outputs(
     const ret: MidefaceOutputs = {
         root: execution.outputFile("."),
         defaced_output: execution.outputFile([(params["output_volume"] ?? null)].join('')),
-        facemask_output: ((params["facemask"] ?? null) !== null) ? execution.outputFile([path.basename((params["facemask"] ?? null))].join('')) : null,
+        facemask_output: ((params["facemask"] ?? null) !== null) ? execution.outputFile([((params["facemask"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

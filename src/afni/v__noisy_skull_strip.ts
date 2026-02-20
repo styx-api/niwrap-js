@@ -120,10 +120,10 @@ function v__noisy_skull_strip_outputs(
 ): VNoisySkullStripOutputs {
     const ret: VNoisySkullStripOutputs = {
         root: execution.outputFile("."),
-        anat_ns: execution.outputFile([path.basename((params["input_file"] ?? null)), ".ns"].join('')),
-        anat_air: execution.outputFile([path.basename((params["input_file"] ?? null)), ".air"].join('')),
-        anat_skl: execution.outputFile([path.basename((params["input_file"] ?? null)), ".skl"].join('')),
-        anat_lsp: execution.outputFile([path.basename((params["input_file"] ?? null)), ".lsp"].join('')),
+        anat_ns: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".ns"].join('')),
+        anat_air: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".air"].join('')),
+        anat_skl: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".skl"].join('')),
+        anat_lsp: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), ".lsp"].join('')),
     };
     return ret;
 }

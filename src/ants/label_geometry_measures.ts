@@ -109,7 +109,7 @@ function label_geometry_measures_outputs(
 ): LabelGeometryMeasuresOutputs {
     const ret: LabelGeometryMeasuresOutputs = {
         root: execution.outputFile("."),
-        output_csv: ((params["csv_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["csv_file"] ?? null))].join('')) : null,
+        output_csv: ((params["csv_file"] ?? null) !== null) ? execution.outputFile([((params["csv_file"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

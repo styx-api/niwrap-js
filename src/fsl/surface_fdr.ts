@@ -90,8 +90,8 @@ function surface_fdr_outputs(
 ): SurfaceFdrOutputs {
     const ret: SurfaceFdrOutputs = {
         root: execution.outputFile("."),
-        pvals_vtk: execution.outputFile([path.basename((params["input_vtk"] ?? null)), "_pvals.vtk"].join('')),
-        fthresh_vtk: execution.outputFile([path.basename((params["input_vtk"] ?? null)), "_Fthresh.vtk"].join('')),
+        pvals_vtk: execution.outputFile([((params["input_vtk"] ?? null).split(/[\\/]/).pop() ?? ""), "_pvals.vtk"].join('')),
+        fthresh_vtk: execution.outputFile([((params["input_vtk"] ?? null).split(/[\\/]/).pop() ?? ""), "_Fthresh.vtk"].join('')),
     };
     return ret;
 }

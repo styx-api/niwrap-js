@@ -153,7 +153,7 @@ function dtigen_outputs(
     const ret: DtigenOutputs = {
         root: execution.outputFile("."),
         output_diffusion_data: execution.outputFile([(params["output_data"] ?? null), ".nii.gz"].join('')),
-        output_kurtosis_map: ((params["kurtosis"] ?? null) !== null) ? execution.outputFile([path.basename((params["kurtosis"] ?? null))].join('')) : null,
+        output_kurtosis_map: ((params["kurtosis"] ?? null) !== null) ? execution.outputFile([((params["kurtosis"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

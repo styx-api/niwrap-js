@@ -165,7 +165,7 @@ function tractstats2table_outputs(
 ): Tractstats2tableOutputs {
     const ret: Tractstats2tableOutputs = {
         root: execution.outputFile("."),
-        output_tablefile: execution.outputFile([path.basename((params["tablefile"] ?? null))].join('')),
+        output_tablefile: execution.outputFile([((params["tablefile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

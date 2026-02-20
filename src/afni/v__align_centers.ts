@@ -203,7 +203,7 @@ function v__align_centers_outputs(
 ): VAlignCentersOutputs {
     const ret: VAlignCentersOutputs = {
         root: execution.outputFile("."),
-        transform_matrix: execution.outputFile([path.basename((params["dset"] ?? null)), "_shft.1D"].join('')),
+        transform_matrix: execution.outputFile([((params["dset"] ?? null).split(/[\\/]/).pop() ?? ""), "_shft.1D"].join('')),
         shifted_dset: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_shft+orig.BRIK"].join('')) : null,
         shifted_child_dsets: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null), "_child_shft+orig.BRIK"].join('')) : null,
     };

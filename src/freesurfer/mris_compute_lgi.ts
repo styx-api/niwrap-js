@@ -139,7 +139,7 @@ function mris_compute_lgi_outputs(
 ): MrisComputeLgiOutputs {
     const ret: MrisComputeLgiOutputs = {
         root: execution.outputFile("."),
-        output_surface_map: execution.outputFile([path.basename((params["input_surface"] ?? null)), "_lgi"].join('')),
+        output_surface_map: execution.outputFile([((params["input_surface"] ?? null).split(/[\\/]/).pop() ?? ""), "_lgi"].join('')),
     };
     return ret;
 }

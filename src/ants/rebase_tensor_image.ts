@@ -110,7 +110,7 @@ function rebase_tensor_image_outputs(
 ): RebaseTensorImageOutputs {
     const ret: RebaseTensorImageOutputs = {
         root: execution.outputFile("."),
-        rebased_image: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
+        rebased_image: execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

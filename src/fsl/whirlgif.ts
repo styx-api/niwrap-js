@@ -146,7 +146,7 @@ function whirlgif_outputs(
 ): WhirlgifOutputs {
     const ret: WhirlgifOutputs = {
         root: execution.outputFile("."),
-        output_file: ((params["outfile"] ?? null) !== null) ? execution.outputFile([path.basename((params["outfile"] ?? null))].join('')) : null,
+        output_file: ((params["outfile"] ?? null) !== null) ? execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

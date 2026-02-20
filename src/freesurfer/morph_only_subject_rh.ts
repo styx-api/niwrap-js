@@ -89,7 +89,7 @@ function morph_only_subject_rh_outputs(
 ): MorphOnlySubjectRhOutputs {
     const ret: MorphOnlySubjectRhOutputs = {
         root: execution.outputFile("."),
-        output_files: execution.outputFile(["/usr/local/freesurfer/subjects/", path.basename((params["subject_dir"] ?? null)), "/rh.morph"].join('')),
+        output_files: execution.outputFile(["/usr/local/freesurfer/subjects/", ((params["subject_dir"] ?? null).split(/[\\/]/).pop() ?? ""), "/rh.morph"].join('')),
     };
     return ret;
 }

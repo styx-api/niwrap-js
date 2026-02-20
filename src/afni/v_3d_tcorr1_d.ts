@@ -137,7 +137,7 @@ function v_3d_tcorr1_d_outputs(
 ): V3dTcorr1DOutputs {
     const ret: V3dTcorr1DOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["xset"] ?? null)), "_correlation.nii.gz"].join('')),
+        out_file: execution.outputFile([((params["xset"] ?? null).split(/[\\/]/).pop() ?? ""), "_correlation.nii.gz"].join('')),
         out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;

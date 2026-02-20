@@ -118,7 +118,7 @@ function texture_cooccurrence_features_outputs(
 ): TextureCooccurrenceFeaturesOutputs {
     const ret: TextureCooccurrenceFeaturesOutputs = {
         root: execution.outputFile("."),
-        features_output: execution.outputFile([path.basename((params["input_image"] ?? null)), "_features.txt"].join('')),
+        features_output: execution.outputFile([((params["input_image"] ?? null).split(/[\\/]/).pop() ?? ""), "_features.txt"].join('')),
     };
     return ret;
 }

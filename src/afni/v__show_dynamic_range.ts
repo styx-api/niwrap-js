@@ -90,8 +90,8 @@ function v__show_dynamic_range_outputs(
 ): VShowDynamicRangeOutputs {
     const ret: VShowDynamicRangeOutputs = {
         root: execution.outputFile("."),
-        minpercchange_file: execution.outputFile([path.basename((params["infile"] ?? null)), "_minpercchange.nii.gz"].join('')),
-        range_file: execution.outputFile([path.basename((params["infile"] ?? null)), ".range.nii.gz"].join('')),
+        minpercchange_file: execution.outputFile([((params["infile"] ?? null).split(/[\\/]/).pop() ?? ""), "_minpercchange.nii.gz"].join('')),
+        range_file: execution.outputFile([((params["infile"] ?? null).split(/[\\/]/).pop() ?? ""), ".range.nii.gz"].join('')),
     };
     return ret;
 }

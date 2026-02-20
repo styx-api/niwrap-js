@@ -102,8 +102,8 @@ function tbss_deproject_outputs(
 ): TbssDeprojectOutputs {
     const ret: TbssDeprojectOutputs = {
         root: execution.outputFile("."),
-        stats_output: execution.outputFile(["stats/", path.basename((params["skeleton_space_input_image"] ?? null))].join('')),
-        fa_output: execution.outputFile(["FA/", path.basename((params["skeleton_space_input_image"] ?? null))].join('')),
+        stats_output: execution.outputFile(["stats/", ((params["skeleton_space_input_image"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
+        fa_output: execution.outputFile(["FA/", ((params["skeleton_space_input_image"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

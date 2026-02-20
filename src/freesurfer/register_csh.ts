@@ -100,7 +100,7 @@ function register_csh_outputs(
 ): RegisterCshOutputs {
     const ret: RegisterCshOutputs = {
         root: execution.outputFile("."),
-        registered_image: execution.outputFile([path.basename((params["new_image"] ?? null)), "_registered"].join('')),
+        registered_image: execution.outputFile([((params["new_image"] ?? null).split(/[\\/]/).pop() ?? ""), "_registered"].join('')),
     };
     return ret;
 }

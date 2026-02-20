@@ -215,7 +215,7 @@ function convertwarp_outputs(
 ): ConvertwarpOutputs {
     const ret: ConvertwarpOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["reference"] ?? null)), "_concatwarp"].join('')),
+        out_file: execution.outputFile([((params["reference"] ?? null).split(/[\\/]/).pop() ?? ""), "_concatwarp"].join('')),
         out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;

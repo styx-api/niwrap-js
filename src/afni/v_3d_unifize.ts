@@ -219,7 +219,7 @@ function v_3d_unifize_outputs(
     const ret: V3dUnifizeOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
-        scale_file_outfile: ((params["scale_file"] ?? null) !== null) ? execution.outputFile([path.basename((params["scale_file"] ?? null))].join('')) : null,
+        scale_file_outfile: ((params["scale_file"] ?? null) !== null) ? execution.outputFile([((params["scale_file"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

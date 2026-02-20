@@ -122,7 +122,7 @@ function fsl_ents_outputs(
 ): FslEntsOutputs {
     const ret: FslEntsOutputs = {
         root: execution.outputFile("."),
-        out_time_series: ((params["outfile"] ?? null) !== null) ? execution.outputFile([path.basename((params["outfile"] ?? null))].join('')) : null,
+        out_time_series: ((params["outfile"] ?? null) !== null) ? execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

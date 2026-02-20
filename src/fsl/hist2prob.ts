@@ -101,7 +101,7 @@ function hist2prob_outputs(
 ): Hist2probOutputs {
     const ret: Hist2probOutputs = {
         root: execution.outputFile("."),
-        output_probability_map: execution.outputFile([path.basename((params["image"] ?? null)), "_probability_map.nii.gz"].join('')),
+        output_probability_map: execution.outputFile([((params["image"] ?? null).split(/[\\/]/).pop() ?? ""), "_probability_map.nii.gz"].join('')),
     };
     return ret;
 }

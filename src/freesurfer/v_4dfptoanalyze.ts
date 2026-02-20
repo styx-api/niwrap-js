@@ -128,8 +128,8 @@ function v_4dfptoanalyze_outputs(
 ): V4dfptoanalyzeOutputs {
     const ret: V4dfptoanalyzeOutputs = {
         root: execution.outputFile("."),
-        analyze_hdr: execution.outputFile([path.basename((params["input_file"] ?? null)), "_analyze.hdr"].join('')),
-        analyze_img: execution.outputFile([path.basename((params["input_file"] ?? null)), "_analyze.img"].join('')),
+        analyze_hdr: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_analyze.hdr"].join('')),
+        analyze_img: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_analyze.img"].join('')),
     };
     return ret;
 }

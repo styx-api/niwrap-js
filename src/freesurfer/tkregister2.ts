@@ -131,7 +131,7 @@ function tkregister2_outputs(
 ): Tkregister2Outputs {
     const ret: Tkregister2Outputs = {
         root: execution.outputFile("."),
-        output_reg_file: execution.outputFile([path.basename((params["reg_file"] ?? null))].join('')),
+        output_reg_file: execution.outputFile([((params["reg_file"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

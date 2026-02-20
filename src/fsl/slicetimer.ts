@@ -182,7 +182,7 @@ function slicetimer_outputs(
 ): SlicetimerOutputs {
     const ret: SlicetimerOutputs = {
         root: execution.outputFile("."),
-        output_timeseries: ((params["outfile"] ?? null) !== null) ? execution.outputFile([path.basename((params["outfile"] ?? null))].join('')) : null,
+        output_timeseries: ((params["outfile"] ?? null) !== null) ? execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

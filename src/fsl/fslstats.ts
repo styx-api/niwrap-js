@@ -320,7 +320,7 @@ function fslstats_outputs(
 ): FslstatsOutputs {
     const ret: FslstatsOutputs = {
         root: execution.outputFile("."),
-        output_stats: execution.outputFile([path.basename((params["input_file"] ?? null)), "_stats.txt"].join('')),
+        output_stats: execution.outputFile([((params["input_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_stats.txt"].join('')),
     };
     return ret;
 }

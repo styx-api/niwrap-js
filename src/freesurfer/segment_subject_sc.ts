@@ -116,7 +116,7 @@ function segment_subject_sc_outputs(
 ): SegmentSubjectScOutputs {
     const ret: SegmentSubjectScOutputs = {
         root: execution.outputFile("."),
-        output_xfm_file: execution.outputFile([path.basename((params["outxfm"] ?? null))].join('')),
+        output_xfm_file: execution.outputFile([((params["outxfm"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

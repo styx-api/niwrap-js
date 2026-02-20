@@ -174,9 +174,9 @@ function tbss_skeleton_outputs(
         root: execution.outputFile("."),
         output_image_file: ((params["output_image"] ?? null) !== null) ? execution.outputFile([(params["output_image"] ?? null)].join('')) : null,
         projected_4d_file: execution.outputFile(["[PROJECTED_4D]"].join('')),
-        alt_4d_file: ((params["alt_4d"] ?? null) !== null) ? execution.outputFile([path.basename((params["alt_4d"] ?? null))].join('')) : null,
-        alt_skeleton_file: ((params["alt_skeleton"] ?? null) !== null) ? execution.outputFile([path.basename((params["alt_skeleton"] ?? null))].join('')) : null,
-        debug2_image_outputs: ((params["debug2_flag"] ?? null) !== null) ? execution.outputFile([path.basename((params["debug2_flag"] ?? null))].join('')) : null,
+        alt_4d_file: ((params["alt_4d"] ?? null) !== null) ? execution.outputFile([((params["alt_4d"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        alt_skeleton_file: ((params["alt_skeleton"] ?? null) !== null) ? execution.outputFile([((params["alt_skeleton"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        debug2_image_outputs: ((params["debug2_flag"] ?? null) !== null) ? execution.outputFile([((params["debug2_flag"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

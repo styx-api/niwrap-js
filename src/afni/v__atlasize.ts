@@ -267,7 +267,7 @@ function v__atlasize_outputs(
 ): VAtlasizeOutputs {
     const ret: VAtlasizeOutputs = {
         root: execution.outputFile("."),
-        niml_file: ((params["dset"] ?? null) !== null) ? execution.outputFile([path.basename((params["dset"] ?? null)), ".niml"].join('')) : null,
+        niml_file: ((params["dset"] ?? null) !== null) ? execution.outputFile([((params["dset"] ?? null).split(/[\\/]/).pop() ?? ""), ".niml"].join('')) : null,
     };
     return ret;
 }

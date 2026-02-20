@@ -91,7 +91,7 @@ function fsl_gen_3_d_outputs(
 ): FslGen3DOutputs {
     const ret: FslGen3DOutputs = {
         root: execution.outputFile("."),
-        output_snapshot: execution.outputFile([path.basename((params["outfile"] ?? null))].join('')),
+        output_snapshot: execution.outputFile([((params["outfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

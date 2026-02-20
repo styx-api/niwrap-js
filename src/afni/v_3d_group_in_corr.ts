@@ -338,7 +338,7 @@ function v_3d_group_in_corr_outputs(
 ): V3dGroupInCorrOutputs {
     const ret: V3dGroupInCorrOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile([path.basename((params["set_a"] ?? null)), ".results.nii"].join('')),
+        output_file: execution.outputFile([((params["set_a"] ?? null).split(/[\\/]/).pop() ?? ""), ".results.nii"].join('')),
     };
     return ret;
 }

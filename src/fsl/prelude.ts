@@ -396,9 +396,9 @@ function prelude_outputs(
     const ret: PreludeOutputs = {
         root: execution.outputFile("."),
         unwrapped_phase_output: execution.outputFile([(params["output_unwrap"] ?? null), ".nii.gz"].join('')),
-        saved_mask_volume: ((params["save_mask"] ?? null) !== null) ? execution.outputFile([path.basename((params["save_mask"] ?? null)), ".nii.gz"].join('')) : null,
-        saved_raw_phase_output: ((params["save_raw_phase"] ?? null) !== null) ? execution.outputFile([path.basename((params["save_raw_phase"] ?? null)), ".nii.gz"].join('')) : null,
-        saved_area_labels_output: ((params["save_labels"] ?? null) !== null) ? execution.outputFile([path.basename((params["save_labels"] ?? null)), ".nii.gz"].join('')) : null,
+        saved_mask_volume: ((params["save_mask"] ?? null) !== null) ? execution.outputFile([((params["save_mask"] ?? null).split(/[\\/]/).pop() ?? ""), ".nii.gz"].join('')) : null,
+        saved_raw_phase_output: ((params["save_raw_phase"] ?? null) !== null) ? execution.outputFile([((params["save_raw_phase"] ?? null).split(/[\\/]/).pop() ?? ""), ".nii.gz"].join('')) : null,
+        saved_area_labels_output: ((params["save_labels"] ?? null) !== null) ? execution.outputFile([((params["save_labels"] ?? null).split(/[\\/]/).pop() ?? ""), ".nii.gz"].join('')) : null,
     };
     return ret;
 }

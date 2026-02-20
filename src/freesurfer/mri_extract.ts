@@ -112,7 +112,7 @@ function mri_extract_outputs(
 ): MriExtractOutputs {
     const ret: MriExtractOutputs = {
         root: execution.outputFile("."),
-        output_extracted_volume: execution.outputFile([path.basename((params["dst_volume"] ?? null))].join('')),
+        output_extracted_volume: execution.outputFile([((params["dst_volume"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

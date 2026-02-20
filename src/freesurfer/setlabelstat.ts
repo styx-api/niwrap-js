@@ -112,7 +112,7 @@ function setlabelstat_outputs(
 ): SetlabelstatOutputs {
     const ret: SetlabelstatOutputs = {
         root: execution.outputFile("."),
-        output_label_file: execution.outputFile([path.basename((params["outlabelfile"] ?? null))].join('')),
+        output_label_file: execution.outputFile([((params["outlabelfile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }

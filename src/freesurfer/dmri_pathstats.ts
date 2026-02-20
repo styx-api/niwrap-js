@@ -291,7 +291,7 @@ function dmri_pathstats_outputs(
         root: execution.outputFile("."),
         out_file: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null)].join('')) : null,
         out_vox_file: ((params["outvox"] ?? null) !== null) ? execution.outputFile([(params["outvox"] ?? null)].join('')) : null,
-        median_file: ((params["median"] ?? null) !== null) ? execution.outputFile([path.basename((params["median"] ?? null))].join('')) : null,
+        median_file: ((params["median"] ?? null) !== null) ? execution.outputFile([((params["median"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

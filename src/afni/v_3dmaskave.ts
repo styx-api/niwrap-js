@@ -127,7 +127,7 @@ function v_3dmaskave_outputs(
 ): V3dmaskaveOutputs {
     const ret: V3dmaskaveOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([path.basename((params["in_file"] ?? null)), "_maskave.1D"].join('')),
+        out_file: execution.outputFile([((params["in_file"] ?? null).split(/[\\/]/).pop() ?? ""), "_maskave.1D"].join('')),
         out_file_: execution.outputFile(["out_file"].join('')),
     };
     return ret;

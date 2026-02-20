@@ -187,8 +187,8 @@ function distancemap_outputs(
     const ret: DistancemapOutputs = {
         root: execution.outputFile("."),
         output_distancemap: execution.outputFile([(params["output_image"] ?? null)].join('')),
-        output_local_maxima: ((params["local_maxima_image"] ?? null) !== null) ? execution.outputFile([path.basename((params["local_maxima_image"] ?? null))].join('')) : null,
-        output_segmented_image: ((params["segmented_image"] ?? null) !== null) ? execution.outputFile([path.basename((params["segmented_image"] ?? null))].join('')) : null,
+        output_local_maxima: ((params["local_maxima_image"] ?? null) !== null) ? execution.outputFile([((params["local_maxima_image"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
+        output_segmented_image: ((params["segmented_image"] ?? null) !== null) ? execution.outputFile([((params["segmented_image"] ?? null).split(/[\\/]/).pop() ?? "")].join('')) : null,
     };
     return ret;
 }

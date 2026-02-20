@@ -254,7 +254,7 @@ function aparcstats2table_outputs(
 ): Aparcstats2tableOutputs {
     const ret: Aparcstats2tableOutputs = {
         root: execution.outputFile("."),
-        output_table: execution.outputFile([path.basename((params["tablefile"] ?? null))].join('')),
+        output_table: execution.outputFile([((params["tablefile"] ?? null).split(/[\\/]/).pop() ?? "")].join('')),
     };
     return ret;
 }
