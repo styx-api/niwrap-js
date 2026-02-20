@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_APPLY_TRANSFORMS_METADATA: Metadata = {
-    id: "1c048ebc540b3b7b3e89b3891e2dbf90ecd87dc3.boutiques",
+    id: "456edfe8dc18e4664a4f204e2869e20f05cd48b7.boutiques",
     name: "antsApplyTransforms",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -1058,6 +1058,7 @@ function ants_apply_transforms_transform_file_name_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push("--transform");
     cargs.push(execution.inputFile((params["transformFileName"] ?? null)));
     return cargs;
 }
@@ -1240,10 +1241,7 @@ function ants_apply_transforms_cargs(
         );
     }
     if ((params["transform"] ?? null) !== null) {
-        cargs.push(
-            "--transform",
-            ...(params["transform"] ?? null).map(s => ants_apply_transforms_transform_cargs_dyn_fn(s["@type"])(s, execution)).flat()
-        );
+        cargs.push(...(params["transform"] ?? null).map(s => ants_apply_transforms_transform_cargs_dyn_fn(s["@type"])(s, execution)).flat());
     }
     if ((params["default_value"] ?? null) !== null) {
         cargs.push(
