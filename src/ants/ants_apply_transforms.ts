@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const ANTS_APPLY_TRANSFORMS_METADATA: Metadata = {
-    id: "456edfe8dc18e4664a4f204e2869e20f05cd48b7.boutiques",
+    id: "d08f3b696aab49b8a116fc5c4aa41fc0b1db60c4.boutiques",
     name: "antsApplyTransforms",
     package: "ants",
     container_image_tag: "antsx/ants:v2.5.3",
@@ -80,17 +80,29 @@ interface AntsApplyTransformsMultiLabelParamsDict {
 type AntsApplyTransformsMultiLabelParamsDictTagged = Required<Pick<AntsApplyTransformsMultiLabelParamsDict, '@type'>> & AntsApplyTransformsMultiLabelParamsDict;
 
 
+interface AntsApplyTransformsGaussianNoParamsParamsDict {
+    "@type"?: "gaussianNoParams";
+}
+type AntsApplyTransformsGaussianNoParamsParamsDictTagged = Required<Pick<AntsApplyTransformsGaussianNoParamsParamsDict, '@type'>> & AntsApplyTransformsGaussianNoParamsParamsDict;
+
+
 interface AntsApplyTransformsGaussianParamsDict {
     "@type"?: "gaussian";
-    "sigma"?: number | null | undefined;
+    "sigma": number;
     "alpha"?: number | null | undefined;
 }
 type AntsApplyTransformsGaussianParamsDictTagged = Required<Pick<AntsApplyTransformsGaussianParamsDict, '@type'>> & AntsApplyTransformsGaussianParamsDict;
 
 
+interface AntsApplyTransformsBsplineNoParamsParamsDict {
+    "@type"?: "bsplineNoParams";
+}
+type AntsApplyTransformsBsplineNoParamsParamsDictTagged = Required<Pick<AntsApplyTransformsBsplineNoParamsParamsDict, '@type'>> & AntsApplyTransformsBsplineNoParamsParamsDict;
+
+
 interface AntsApplyTransformsBsplineParamsDict {
     "@type"?: "bspline";
-    "order"?: number | null | undefined;
+    "order": number;
 }
 type AntsApplyTransformsBsplineParamsDictTagged = Required<Pick<AntsApplyTransformsBsplineParamsDict, '@type'>> & AntsApplyTransformsBsplineParamsDict;
 
@@ -119,9 +131,15 @@ interface AntsApplyTransformsLanczosWindowedSincParamsDict {
 type AntsApplyTransformsLanczosWindowedSincParamsDictTagged = Required<Pick<AntsApplyTransformsLanczosWindowedSincParamsDict, '@type'>> & AntsApplyTransformsLanczosWindowedSincParamsDict;
 
 
+interface AntsApplyTransformsGenericLabelNoParamsParamsDict {
+    "@type"?: "genericLabelNoParams";
+}
+type AntsApplyTransformsGenericLabelNoParamsParamsDictTagged = Required<Pick<AntsApplyTransformsGenericLabelNoParamsParamsDict, '@type'>> & AntsApplyTransformsGenericLabelNoParamsParamsDict;
+
+
 interface AntsApplyTransformsGenericLabelParamsDict {
     "@type"?: "genericLabel";
-    "interpolator"?: string | null | undefined;
+    "interpolator": string;
 }
 type AntsApplyTransformsGenericLabelParamsDictTagged = Required<Pick<AntsApplyTransformsGenericLabelParamsDict, '@type'>> & AntsApplyTransformsGenericLabelParamsDict;
 
@@ -147,7 +165,7 @@ interface AntsApplyTransformsParamsDict {
     "input_image"?: InputPathType | null | undefined;
     "reference_image": InputPathType;
     "output": AntsApplyTransformsWarpedOutputParamsDictTagged | AntsApplyTransformsCompositeDisplacementFieldOutputParamsDictTagged | AntsApplyTransformsGenericAffineTransformOutputParamsDictTagged;
-    "interpolation"?: AntsApplyTransformsLinearParamsDictTagged | AntsApplyTransformsNearestNeighborParamsDictTagged | AntsApplyTransformsMultiLabelnoparamsParamsDictTagged | AntsApplyTransformsMultiLabelParamsDictTagged | AntsApplyTransformsGaussianParamsDictTagged | AntsApplyTransformsBsplineParamsDictTagged | AntsApplyTransformsCosineWindowedSincParamsDictTagged | AntsApplyTransformsWelchWindowedSincParamsDictTagged | AntsApplyTransformsHammingWindowedSincParamsDictTagged | AntsApplyTransformsLanczosWindowedSincParamsDictTagged | AntsApplyTransformsGenericLabelParamsDictTagged | null | undefined;
+    "interpolation"?: AntsApplyTransformsLinearParamsDictTagged | AntsApplyTransformsNearestNeighborParamsDictTagged | AntsApplyTransformsMultiLabelnoparamsParamsDictTagged | AntsApplyTransformsMultiLabelParamsDictTagged | AntsApplyTransformsGaussianNoParamsParamsDictTagged | AntsApplyTransformsGaussianParamsDictTagged | AntsApplyTransformsBsplineNoParamsParamsDictTagged | AntsApplyTransformsBsplineParamsDictTagged | AntsApplyTransformsCosineWindowedSincParamsDictTagged | AntsApplyTransformsWelchWindowedSincParamsDictTagged | AntsApplyTransformsHammingWindowedSincParamsDictTagged | AntsApplyTransformsLanczosWindowedSincParamsDictTagged | AntsApplyTransformsGenericLabelNoParamsParamsDictTagged | AntsApplyTransformsGenericLabelParamsDictTagged | null | undefined;
     "output_data_type"?: "char" | "uchar" | "short" | "int" | "float" | "double" | "default" | null | undefined;
     "transform"?: Array<AntsApplyTransformsTransformFileNameParamsDictTagged | AntsApplyTransformsUseInverseParamsDictTagged> | null | undefined;
     "default_value"?: number | null | undefined;
@@ -211,12 +229,15 @@ function ants_apply_transforms_interpolation_cargs_dyn_fn(
         "nearestNeighbor": ants_apply_transforms_nearest_neighbor_cargs,
         "multiLabelnoparams": ants_apply_transforms_multi_labelnoparams_cargs,
         "multiLabel": ants_apply_transforms_multi_label_cargs,
+        "gaussianNoParams": ants_apply_transforms_gaussian_no_params_cargs,
         "gaussian": ants_apply_transforms_gaussian_cargs,
+        "bsplineNoParams": ants_apply_transforms_bspline_no_params_cargs,
         "bspline": ants_apply_transforms_bspline_cargs,
         "cosineWindowedSinc": ants_apply_transforms_cosine_windowed_sinc_cargs,
         "welchWindowedSinc": ants_apply_transforms_welch_windowed_sinc_cargs,
         "hammingWindowedSinc": ants_apply_transforms_hamming_windowed_sinc_cargs,
         "lanczosWindowedSinc": ants_apply_transforms_lanczos_windowed_sinc_cargs,
+        "genericLabelNoParams": ants_apply_transforms_generic_label_no_params_cargs,
         "genericLabel": ants_apply_transforms_generic_label_cargs,
     };
     return cargsFuncs[t];
@@ -777,21 +798,51 @@ function ants_apply_transforms_multi_label_cargs(
 /**
  * Build parameters.
  *
+ * @returns Parameter dictionary
+ */
+function ants_apply_transforms_gaussian_no_params(
+): AntsApplyTransformsGaussianNoParamsParamsDictTagged {
+    const params = {
+        "@type": "gaussianNoParams" as const,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_apply_transforms_gaussian_no_params_cargs(
+    params: AntsApplyTransformsGaussianNoParamsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("Gaussian");
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
  * @param sigma Sigma value.
  * @param alpha Alpha value.
  *
  * @returns Parameter dictionary
  */
 function ants_apply_transforms_gaussian(
-    sigma: number | null = null,
+    sigma: number,
     alpha: number | null = null,
 ): AntsApplyTransformsGaussianParamsDictTagged {
     const params = {
         "@type": "gaussian" as const,
+        "sigma": sigma,
     };
-    if (sigma !== null) {
-        params["sigma"] = sigma;
-    }
     if (alpha !== null) {
         params["alpha"] = alpha;
     }
@@ -812,9 +863,39 @@ function ants_apply_transforms_gaussian_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["sigma"] ?? null) !== null || (params["alpha"] ?? null) !== null) {
-        cargs.push(["Gaussian[", (((params["sigma"] ?? null) !== null) ? String((params["sigma"] ?? null)) : ""), ",", (((params["alpha"] ?? null) !== null) ? String((params["alpha"] ?? null)) : ""), "]"].join(''));
-    }
+    cargs.push(["Gaussian[", String((params["sigma"] ?? null)), ",", (((params["alpha"] ?? null) !== null) ? String((params["alpha"] ?? null)) : ""), "]"].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @returns Parameter dictionary
+ */
+function ants_apply_transforms_bspline_no_params(
+): AntsApplyTransformsBsplineNoParamsParamsDictTagged {
+    const params = {
+        "@type": "bsplineNoParams" as const,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_apply_transforms_bspline_no_params_cargs(
+    params: AntsApplyTransformsBsplineNoParamsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("BSpline");
     return cargs;
 }
 
@@ -827,14 +908,12 @@ function ants_apply_transforms_gaussian_cargs(
  * @returns Parameter dictionary
  */
 function ants_apply_transforms_bspline(
-    order: number | null = null,
+    order: number,
 ): AntsApplyTransformsBsplineParamsDictTagged {
     const params = {
         "@type": "bspline" as const,
+        "order": order,
     };
-    if (order !== null) {
-        params["order"] = order;
-    }
     return params;
 }
 
@@ -852,9 +931,7 @@ function ants_apply_transforms_bspline_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["order"] ?? null) !== null) {
-        cargs.push(["BSpline[", String((params["order"] ?? null)), "]"].join(''));
-    }
+    cargs.push(["BSpline[", String((params["order"] ?? null)), "]"].join(''));
     return cargs;
 }
 
@@ -990,19 +1067,49 @@ function ants_apply_transforms_lanczos_windowed_sinc_cargs(
 /**
  * Build parameters.
  *
+ * @returns Parameter dictionary
+ */
+function ants_apply_transforms_generic_label_no_params(
+): AntsApplyTransformsGenericLabelNoParamsParamsDictTagged {
+    const params = {
+        "@type": "genericLabelNoParams" as const,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function ants_apply_transforms_generic_label_no_params_cargs(
+    params: AntsApplyTransformsGenericLabelNoParamsParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("GenericLabel");
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
  * @param interpolator Interpolator value.
  *
  * @returns Parameter dictionary
  */
 function ants_apply_transforms_generic_label(
-    interpolator: string | null = null,
+    interpolator: string,
 ): AntsApplyTransformsGenericLabelParamsDictTagged {
     const params = {
         "@type": "genericLabel" as const,
+        "interpolator": interpolator,
     };
-    if (interpolator !== null) {
-        params["interpolator"] = interpolator;
-    }
     return params;
 }
 
@@ -1020,9 +1127,7 @@ function ants_apply_transforms_generic_label_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
-    if ((params["interpolator"] ?? null) !== null) {
-        cargs.push(["GenericLabel[", (params["interpolator"] ?? null), "]"].join(''));
-    }
+    cargs.push(["GenericLabel[", (params["interpolator"] ?? null), "]"].join(''));
     return cargs;
 }
 
@@ -1095,6 +1200,7 @@ function ants_apply_transforms_use_inverse_cargs(
     execution: Execution,
 ): string[] {
     const cargs: string[] = [];
+    cargs.push("--transform");
     cargs.push(["[", execution.inputFile((params["transformFileName"] ?? null)), ",1]"].join(''));
     return cargs;
 }
@@ -1141,7 +1247,7 @@ function ants_apply_transforms_params(
     dimensionality: 2 | 3 | 4 | null = null,
     input_image_type: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
     input_image: InputPathType | null = null,
-    interpolation: AntsApplyTransformsLinearParamsDictTagged | AntsApplyTransformsNearestNeighborParamsDictTagged | AntsApplyTransformsMultiLabelnoparamsParamsDictTagged | AntsApplyTransformsMultiLabelParamsDictTagged | AntsApplyTransformsGaussianParamsDictTagged | AntsApplyTransformsBsplineParamsDictTagged | AntsApplyTransformsCosineWindowedSincParamsDictTagged | AntsApplyTransformsWelchWindowedSincParamsDictTagged | AntsApplyTransformsHammingWindowedSincParamsDictTagged | AntsApplyTransformsLanczosWindowedSincParamsDictTagged | AntsApplyTransformsGenericLabelParamsDictTagged | null = null,
+    interpolation: AntsApplyTransformsLinearParamsDictTagged | AntsApplyTransformsNearestNeighborParamsDictTagged | AntsApplyTransformsMultiLabelnoparamsParamsDictTagged | AntsApplyTransformsMultiLabelParamsDictTagged | AntsApplyTransformsGaussianNoParamsParamsDictTagged | AntsApplyTransformsGaussianParamsDictTagged | AntsApplyTransformsBsplineNoParamsParamsDictTagged | AntsApplyTransformsBsplineParamsDictTagged | AntsApplyTransformsCosineWindowedSincParamsDictTagged | AntsApplyTransformsWelchWindowedSincParamsDictTagged | AntsApplyTransformsHammingWindowedSincParamsDictTagged | AntsApplyTransformsLanczosWindowedSincParamsDictTagged | AntsApplyTransformsGenericLabelNoParamsParamsDictTagged | AntsApplyTransformsGenericLabelParamsDictTagged | null = null,
     output_data_type: "char" | "uchar" | "short" | "int" | "float" | "double" | "default" | null = null,
     transform: Array<AntsApplyTransformsTransformFileNameParamsDictTagged | AntsApplyTransformsUseInverseParamsDictTagged> | null = null,
     default_value: number | null = null,
@@ -1350,7 +1456,7 @@ function ants_apply_transforms(
     dimensionality: 2 | 3 | 4 | null = null,
     input_image_type: 0 | 1 | 2 | 3 | 4 | 5 | null = null,
     input_image: InputPathType | null = null,
-    interpolation: AntsApplyTransformsLinearParamsDictTagged | AntsApplyTransformsNearestNeighborParamsDictTagged | AntsApplyTransformsMultiLabelnoparamsParamsDictTagged | AntsApplyTransformsMultiLabelParamsDictTagged | AntsApplyTransformsGaussianParamsDictTagged | AntsApplyTransformsBsplineParamsDictTagged | AntsApplyTransformsCosineWindowedSincParamsDictTagged | AntsApplyTransformsWelchWindowedSincParamsDictTagged | AntsApplyTransformsHammingWindowedSincParamsDictTagged | AntsApplyTransformsLanczosWindowedSincParamsDictTagged | AntsApplyTransformsGenericLabelParamsDictTagged | null = null,
+    interpolation: AntsApplyTransformsLinearParamsDictTagged | AntsApplyTransformsNearestNeighborParamsDictTagged | AntsApplyTransformsMultiLabelnoparamsParamsDictTagged | AntsApplyTransformsMultiLabelParamsDictTagged | AntsApplyTransformsGaussianNoParamsParamsDictTagged | AntsApplyTransformsGaussianParamsDictTagged | AntsApplyTransformsBsplineNoParamsParamsDictTagged | AntsApplyTransformsBsplineParamsDictTagged | AntsApplyTransformsCosineWindowedSincParamsDictTagged | AntsApplyTransformsWelchWindowedSincParamsDictTagged | AntsApplyTransformsHammingWindowedSincParamsDictTagged | AntsApplyTransformsLanczosWindowedSincParamsDictTagged | AntsApplyTransformsGenericLabelNoParamsParamsDictTagged | AntsApplyTransformsGenericLabelParamsDictTagged | null = null,
     output_data_type: "char" | "uchar" | "short" | "int" | "float" | "double" | "default" | null = null,
     transform: Array<AntsApplyTransformsTransformFileNameParamsDictTagged | AntsApplyTransformsUseInverseParamsDictTagged> | null = null,
     default_value: number | null = null,
@@ -1368,6 +1474,8 @@ export {
       ANTS_APPLY_TRANSFORMS_METADATA,
       AntsApplyTransformsAlphaParamsDict,
       AntsApplyTransformsAlphaParamsDictTagged,
+      AntsApplyTransformsBsplineNoParamsParamsDict,
+      AntsApplyTransformsBsplineNoParamsParamsDictTagged,
       AntsApplyTransformsBsplineParamsDict,
       AntsApplyTransformsBsplineParamsDictTagged,
       AntsApplyTransformsCompositeDisplacementFieldOutputOutputs,
@@ -1375,11 +1483,15 @@ export {
       AntsApplyTransformsCompositeDisplacementFieldOutputParamsDictTagged,
       AntsApplyTransformsCosineWindowedSincParamsDict,
       AntsApplyTransformsCosineWindowedSincParamsDictTagged,
+      AntsApplyTransformsGaussianNoParamsParamsDict,
+      AntsApplyTransformsGaussianNoParamsParamsDictTagged,
       AntsApplyTransformsGaussianParamsDict,
       AntsApplyTransformsGaussianParamsDictTagged,
       AntsApplyTransformsGenericAffineTransformOutputOutputs,
       AntsApplyTransformsGenericAffineTransformOutputParamsDict,
       AntsApplyTransformsGenericAffineTransformOutputParamsDictTagged,
+      AntsApplyTransformsGenericLabelNoParamsParamsDict,
+      AntsApplyTransformsGenericLabelNoParamsParamsDictTagged,
       AntsApplyTransformsGenericLabelParamsDict,
       AntsApplyTransformsGenericLabelParamsDictTagged,
       AntsApplyTransformsHammingWindowedSincParamsDict,
@@ -1413,12 +1525,15 @@ export {
       ants_apply_transforms,
       ants_apply_transforms_alpha,
       ants_apply_transforms_bspline,
+      ants_apply_transforms_bspline_no_params,
       ants_apply_transforms_composite_displacement_field_output,
       ants_apply_transforms_cosine_windowed_sinc,
       ants_apply_transforms_execute,
       ants_apply_transforms_gaussian,
+      ants_apply_transforms_gaussian_no_params,
       ants_apply_transforms_generic_affine_transform_output,
       ants_apply_transforms_generic_label,
+      ants_apply_transforms_generic_label_no_params,
       ants_apply_transforms_hamming_windowed_sinc,
       ants_apply_transforms_lanczos_windowed_sinc,
       ants_apply_transforms_linear,
