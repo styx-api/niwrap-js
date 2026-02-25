@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const MRI_ROBUST_TEMPLATE_METADATA: Metadata = {
-    id: "879b2b379c54ce744a435c993b95da04800bb0ba.boutiques",
+    id: "f043b3273e9985d357cf80355b397d8ee42c3a35.boutiques",
     name: "mri_robust_template",
     package: "freesurfer",
     container_image_tag: "freesurfer/freesurfer:7.4.1",
@@ -13,43 +13,47 @@ const MRI_ROBUST_TEMPLATE_METADATA: Metadata = {
 
 interface MriRobustTemplateParamsDict {
     "@type"?: "freesurfer/mri_robust_template";
-    "mov_files": Array<InputPathType>;
-    "template_file": string;
-    "sat_value"?: number | null | undefined;
-    "satit_flag": boolean;
-    "lta_files"?: Array<string> | null | undefined;
-    "mapmov_files"?: Array<string> | null | undefined;
-    "mapmovhdr_files"?: Array<string> | null | undefined;
-    "weights_files"?: Array<string> | null | undefined;
-    "oneminusw_flag": boolean;
-    "average_type"?: number | null | undefined;
+    "mov": Array<InputPathType>;
+    "template": string;
+    "sat"?: number | null | undefined;
+    "satit": boolean;
+    "lta"?: Array<string> | null | undefined;
+    "mapmov"?: Array<string> | null | undefined;
+    "mapmovhdr"?: Array<string> | null | undefined;
+    "weights"?: Array<string> | null | undefined;
+    "oneminusw": boolean;
+    "average"?: number | null | undefined;
     "inittp"?: number | null | undefined;
-    "fixtp_flag": boolean;
-    "iscale_flag": boolean;
-    "iscaleonly_flag": boolean;
-    "iscalein_files"?: Array<string> | null | undefined;
-    "iscaleout_files"?: Array<string> | null | undefined;
-    "transonly_flag": boolean;
-    "affine_flag": boolean;
-    "ixforms_files"?: Array<string> | null | undefined;
-    "masks_files"?: Array<string> | null | undefined;
-    "vox2vox_flag": boolean;
-    "leastsquares_flag": boolean;
-    "noit_flag": boolean;
+    "fixtp": boolean;
+    "iscale": boolean;
+    "iscaleonly": boolean;
+    "iscalein"?: Array<InputPathType> | null | undefined;
+    "iscaleout"?: Array<string> | null | undefined;
+    "transonly": boolean;
+    "affine": boolean;
+    "ixforms"?: Array<InputPathType> | null | undefined;
+    "masks"?: Array<InputPathType> | null | undefined;
+    "vox2vox": boolean;
+    "leastsquares": boolean;
+    "noit": boolean;
     "maxit"?: number | null | undefined;
     "highit"?: number | null | undefined;
     "epsit"?: number | null | undefined;
     "pairmaxit"?: number | null | undefined;
     "pairepsit"?: number | null | undefined;
     "subsample"?: number | null | undefined;
-    "nomulti_flag": boolean;
-    "floattype_flag": boolean;
-    "finalnearest_flag": boolean;
-    "doubleprec_flag": boolean;
-    "cras_flag": boolean;
+    "nomulti": boolean;
+    "floattype": boolean;
+    "finalnearest": boolean;
+    "doubleprec": boolean;
+    "cras": boolean;
     "res_thresh"?: number | null | undefined;
     "frobnorm_thresh"?: number | null | undefined;
-    "debug_flag": boolean;
+    "conform"?: string | null | undefined;
+    "seed"?: number | null | undefined;
+    "allow_diff_vox_size": boolean;
+    "threads"?: number | null | undefined;
+    "debug": boolean;
 }
 type MriRobustTemplateParamsDictTagged = Required<Pick<MriRobustTemplateParamsDict, '@type'>> & MriRobustTemplateParamsDict;
 
@@ -67,157 +71,158 @@ interface MriRobustTemplateOutputs {
     /**
      * Output template volume (final mean/median image).
      */
-    output_template: OutputPathType;
+    template_output: OutputPathType;
     /**
-     * Output transform file.
+     * Output conformed template volume.
      */
-    output_lta_transform: OutputPathType;
-    /**
-     * Output mapped and resampled image.
-     */
-    output_mapped_image: OutputPathType;
-    /**
-     * Output weights map (outliers).
-     */
-    output_weights_map: OutputPathType;
+    conform_output: OutputPathType | null;
 }
 
 
 /**
  * Build parameters.
  *
- * @param mov_files Input movable volumes to be aligned to common mean/median template.
- * @param template_file Output template volume (final mean/median image).
- * @param sat_value Set outlier sensitivity manually. Higher values mean less sensitivity.
- * @param satit_flag Auto-detect good sensitivity (recommended for head or full brain scans).
- * @param lta_files Output transforms to template (for each input).
- * @param mapmov_files Output images: map and resample each input to template.
- * @param mapmovhdr_files Output images: header-adjusted movables (no resampling).
- * @param weights_files Output weights (outliers) in target space.
- * @param oneminusw_flag Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
- * @param average_type Construct template from: 0 Mean, 1 Median (default).
- * @param inittp Use TP# for spatial init (default random), 0: no init.
- * @param fixtp_flag Map everything to init TP# (init TP is not resampled).
- * @param iscale_flag Allow also intensity scaling (default off).
- * @param iscaleonly_flag Only perform iscale (no transformation, default off).
- * @param iscalein_files Use initial intensity scales.
- * @param iscaleout_files Output final intensity scales (will activate --iscale).
- * @param transonly_flag Find 3 parameter translation only.
- * @param affine_flag Find 12 parameter affine transform.
- * @param ixforms_files Use initial transforms (lta) on source ('id'=identity).
- * @param masks_files Input masks applied to movables.
- * @param vox2vox_flag Output VOX2VOX lta file (default is RAS2RAS).
- * @param leastsquares_flag Use least squares instead of robust M-estimator (for testing only).
- * @param noit_flag Do not iterate, just create first template.
- * @param maxit Iterate max # times (if #tp>2 default 6, else 5 for 2tp reg.).
- * @param highit Iterate max # times on highest resolution (default 5).
- * @param epsit Stop iterations when all transform updates fall below the specified value.
- * @param pairmaxit Iterate max # times (default 5) for individual pairwise registrations.
- * @param pairepsit Stop individual pairwise registration iterations when transform updates fall below the specified value.
- * @param subsample Subsample if dimension > specified value on all axes (default no subsampling).
- * @param nomulti_flag Do not use multi-resolution (only highest resolution).
- * @param floattype_flag Convert images to float internally (default: keep input type).
- * @param finalnearest_flag Use nearest neighbor in final interpolation when creating average.
- * @param doubleprec_flag Use double precision instead of float internally (large memory usage).
- * @param cras_flag Center template at average CRAS, instead of average barycenter.
- * @param res_thresh Volume resolution threshold (default is 0.01 mm).
- * @param frobnorm_thresh Matrix frobenius norm threshold (default is 0.0001).
- * @param debug_flag Show debug output (default no debug output).
+ * @param mov Input movable volumes to be aligned to common mean/median template (at least 2 required).
+ * @param template Output template volume (final mean/median image).
+ * @param sat Set outlier sensitivity manually. Higher values mean less sensitivity.
+ * @param satit Auto-detect good sensitivity (recommended for head or full brain scans).
+ * @param lta Output LTA transforms to template (one per input volume).
+ * @param mapmov Output mapped and resampled images in template space (one per input volume).
+ * @param mapmovhdr Output header-adjusted movable images (no resampling, only vox2ras adjusted).
+ * @param weights Output weight volumes in template space (0=regular, 1=outlier).
+ * @param oneminusw Invert outlier weight map (0=outlier), as in earlier versions.
+ * @param average Construct template from: 0=mean, 1=median (default 1).
+ * @param inittp Use timepoint number for spatial initialization (default: random). 0 constructs template from original volumes without initialization.
+ * @param fixtp Map everything to initial timepoint (init TP is not resampled).
+ * @param iscale Enable intensity scaling (default off).
+ * @param iscaleonly Only perform intensity scaling (no spatial transformation).
+ * @param iscalein Input initial intensity scale files.
+ * @param iscaleout Output final intensity scale files (will activate --iscale).
+ * @param transonly Find 3 parameter translation only.
+ * @param affine Find 12 parameter affine transform.
+ * @param ixforms Use initial LTA transforms on source ('id' for identity).
+ * @param masks Input mask volumes applied to movable images.
+ * @param vox2vox Output VOX2VOX LTA file (default is RAS2RAS).
+ * @param leastsquares Use least squares instead of robust M-estimator (for testing only).
+ * @param noit Do not iterate, just create first template.
+ * @param maxit Maximum number of template iterations (default: 6 if >2 timepoints, 5 otherwise).
+ * @param highit Maximum number of iterations on highest resolution (default: -1, use maxit).
+ * @param epsit Stop template iterations when all transform updates fall below this value (default: -1.0, disabled).
+ * @param pairmaxit Maximum number of iterations for pairwise registrations (default: 5).
+ * @param pairepsit Stop pairwise registration iterations when transform updates fall below this value (default: 0.01).
+ * @param subsample Subsample if voxel dimension exceeds this value on all axes (default: -1, disabled).
+ * @param nomulti Do not use multi-resolution (process highest resolution only).
+ * @param floattype Convert images to float internally (default: keep input type).
+ * @param finalnearest Use nearest neighbor interpolation when creating the final average.
+ * @param doubleprec Use double precision instead of float internally (large memory usage).
+ * @param cras Center template at average CRAS instead of average barycenter.
+ * @param res_thresh Volume resolution threshold in mm (default: 0.01).
+ * @param frobnorm_thresh Matrix Frobenius norm threshold (default: 0.0001).
+ * @param conform Output conformed template (256^3, 1mm isotropic voxels).
+ * @param seed Set random seed for target selection (default: 0).
+ * @param allow_diff_vox_size Allow input volumes with different voxel sizes.
+ * @param threads Set number of OpenMP threads.
+ * @param debug Show debug output.
  *
  * @returns Parameter dictionary
  */
 function mri_robust_template_params(
-    mov_files: Array<InputPathType>,
-    template_file: string,
-    sat_value: number | null = null,
-    satit_flag: boolean = false,
-    lta_files: Array<string> | null = null,
-    mapmov_files: Array<string> | null = null,
-    mapmovhdr_files: Array<string> | null = null,
-    weights_files: Array<string> | null = null,
-    oneminusw_flag: boolean = false,
-    average_type: number | null = null,
+    mov: Array<InputPathType>,
+    template: string,
+    sat: number | null = null,
+    satit: boolean = false,
+    lta: Array<string> | null = null,
+    mapmov: Array<string> | null = null,
+    mapmovhdr: Array<string> | null = null,
+    weights: Array<string> | null = null,
+    oneminusw: boolean = false,
+    average: number | null = null,
     inittp: number | null = null,
-    fixtp_flag: boolean = false,
-    iscale_flag: boolean = false,
-    iscaleonly_flag: boolean = false,
-    iscalein_files: Array<string> | null = null,
-    iscaleout_files: Array<string> | null = null,
-    transonly_flag: boolean = false,
-    affine_flag: boolean = false,
-    ixforms_files: Array<string> | null = null,
-    masks_files: Array<string> | null = null,
-    vox2vox_flag: boolean = false,
-    leastsquares_flag: boolean = false,
-    noit_flag: boolean = false,
+    fixtp: boolean = false,
+    iscale: boolean = false,
+    iscaleonly: boolean = false,
+    iscalein: Array<InputPathType> | null = null,
+    iscaleout: Array<string> | null = null,
+    transonly: boolean = false,
+    affine: boolean = false,
+    ixforms: Array<InputPathType> | null = null,
+    masks: Array<InputPathType> | null = null,
+    vox2vox: boolean = false,
+    leastsquares: boolean = false,
+    noit: boolean = false,
     maxit: number | null = null,
     highit: number | null = null,
     epsit: number | null = null,
     pairmaxit: number | null = null,
     pairepsit: number | null = null,
     subsample: number | null = null,
-    nomulti_flag: boolean = false,
-    floattype_flag: boolean = false,
-    finalnearest_flag: boolean = false,
-    doubleprec_flag: boolean = false,
-    cras_flag: boolean = false,
+    nomulti: boolean = false,
+    floattype: boolean = false,
+    finalnearest: boolean = false,
+    doubleprec: boolean = false,
+    cras: boolean = false,
     res_thresh: number | null = null,
     frobnorm_thresh: number | null = null,
-    debug_flag: boolean = false,
+    conform: string | null = null,
+    seed: number | null = null,
+    allow_diff_vox_size: boolean = false,
+    threads: number | null = null,
+    debug: boolean = false,
 ): MriRobustTemplateParamsDictTagged {
     const params = {
         "@type": "freesurfer/mri_robust_template" as const,
-        "mov_files": mov_files,
-        "template_file": template_file,
-        "satit_flag": satit_flag,
-        "oneminusw_flag": oneminusw_flag,
-        "fixtp_flag": fixtp_flag,
-        "iscale_flag": iscale_flag,
-        "iscaleonly_flag": iscaleonly_flag,
-        "transonly_flag": transonly_flag,
-        "affine_flag": affine_flag,
-        "vox2vox_flag": vox2vox_flag,
-        "leastsquares_flag": leastsquares_flag,
-        "noit_flag": noit_flag,
-        "nomulti_flag": nomulti_flag,
-        "floattype_flag": floattype_flag,
-        "finalnearest_flag": finalnearest_flag,
-        "doubleprec_flag": doubleprec_flag,
-        "cras_flag": cras_flag,
-        "debug_flag": debug_flag,
+        "mov": mov,
+        "template": template,
+        "satit": satit,
+        "oneminusw": oneminusw,
+        "fixtp": fixtp,
+        "iscale": iscale,
+        "iscaleonly": iscaleonly,
+        "transonly": transonly,
+        "affine": affine,
+        "vox2vox": vox2vox,
+        "leastsquares": leastsquares,
+        "noit": noit,
+        "nomulti": nomulti,
+        "floattype": floattype,
+        "finalnearest": finalnearest,
+        "doubleprec": doubleprec,
+        "cras": cras,
+        "allow_diff_vox_size": allow_diff_vox_size,
+        "debug": debug,
     };
-    if (sat_value !== null) {
-        params["sat_value"] = sat_value;
+    if (sat !== null) {
+        params["sat"] = sat;
     }
-    if (lta_files !== null) {
-        params["lta_files"] = lta_files;
+    if (lta !== null) {
+        params["lta"] = lta;
     }
-    if (mapmov_files !== null) {
-        params["mapmov_files"] = mapmov_files;
+    if (mapmov !== null) {
+        params["mapmov"] = mapmov;
     }
-    if (mapmovhdr_files !== null) {
-        params["mapmovhdr_files"] = mapmovhdr_files;
+    if (mapmovhdr !== null) {
+        params["mapmovhdr"] = mapmovhdr;
     }
-    if (weights_files !== null) {
-        params["weights_files"] = weights_files;
+    if (weights !== null) {
+        params["weights"] = weights;
     }
-    if (average_type !== null) {
-        params["average_type"] = average_type;
+    if (average !== null) {
+        params["average"] = average;
     }
     if (inittp !== null) {
         params["inittp"] = inittp;
     }
-    if (iscalein_files !== null) {
-        params["iscalein_files"] = iscalein_files;
+    if (iscalein !== null) {
+        params["iscalein"] = iscalein;
     }
-    if (iscaleout_files !== null) {
-        params["iscaleout_files"] = iscaleout_files;
+    if (iscaleout !== null) {
+        params["iscaleout"] = iscaleout;
     }
-    if (ixforms_files !== null) {
-        params["ixforms_files"] = ixforms_files;
+    if (ixforms !== null) {
+        params["ixforms"] = ixforms;
     }
-    if (masks_files !== null) {
-        params["masks_files"] = masks_files;
+    if (masks !== null) {
+        params["masks"] = masks;
     }
     if (maxit !== null) {
         params["maxit"] = maxit;
@@ -243,6 +248,15 @@ function mri_robust_template_params(
     if (frobnorm_thresh !== null) {
         params["frobnorm_thresh"] = frobnorm_thresh;
     }
+    if (conform !== null) {
+        params["conform"] = conform;
+    }
+    if (seed !== null) {
+        params["seed"] = seed;
+    }
+    if (threads !== null) {
+        params["threads"] = threads;
+    }
     return params;
 }
 
@@ -262,53 +276,53 @@ function mri_robust_template_cargs(
     const cargs: string[] = [];
     cargs.push("mri_robust_template");
     cargs.push(
-        "-mov",
-        ...(params["mov_files"] ?? null).map(f => execution.inputFile(f))
+        "--mov",
+        ...(params["mov"] ?? null).map(f => execution.inputFile(f))
     );
     cargs.push(
-        "-template",
-        (params["template_file"] ?? null)
+        "--template",
+        (params["template"] ?? null)
     );
-    if ((params["sat_value"] ?? null) !== null) {
+    if ((params["sat"] ?? null) !== null) {
         cargs.push(
             "--sat",
-            String((params["sat_value"] ?? null))
+            String((params["sat"] ?? null))
         );
     }
-    if ((params["satit_flag"] ?? false)) {
+    if ((params["satit"] ?? false)) {
         cargs.push("--satit");
     }
-    if ((params["lta_files"] ?? null) !== null) {
+    if ((params["lta"] ?? null) !== null) {
         cargs.push(
             "--lta",
-            ...(params["lta_files"] ?? null)
+            ...(params["lta"] ?? null)
         );
     }
-    if ((params["mapmov_files"] ?? null) !== null) {
+    if ((params["mapmov"] ?? null) !== null) {
         cargs.push(
             "--mapmov",
-            ...(params["mapmov_files"] ?? null)
+            ...(params["mapmov"] ?? null)
         );
     }
-    if ((params["mapmovhdr_files"] ?? null) !== null) {
+    if ((params["mapmovhdr"] ?? null) !== null) {
         cargs.push(
             "--mapmovhdr",
-            ...(params["mapmovhdr_files"] ?? null)
+            ...(params["mapmovhdr"] ?? null)
         );
     }
-    if ((params["weights_files"] ?? null) !== null) {
+    if ((params["weights"] ?? null) !== null) {
         cargs.push(
             "--weights",
-            ...(params["weights_files"] ?? null)
+            ...(params["weights"] ?? null)
         );
     }
-    if ((params["oneminusw_flag"] ?? false)) {
+    if ((params["oneminusw"] ?? false)) {
         cargs.push("--oneminusw");
     }
-    if ((params["average_type"] ?? null) !== null) {
+    if ((params["average"] ?? null) !== null) {
         cargs.push(
             "--average",
-            String((params["average_type"] ?? null))
+            String((params["average"] ?? null))
         );
     }
     if ((params["inittp"] ?? null) !== null) {
@@ -317,52 +331,52 @@ function mri_robust_template_cargs(
             String((params["inittp"] ?? null))
         );
     }
-    if ((params["fixtp_flag"] ?? false)) {
+    if ((params["fixtp"] ?? false)) {
         cargs.push("--fixtp");
     }
-    if ((params["iscale_flag"] ?? false)) {
+    if ((params["iscale"] ?? false)) {
         cargs.push("--iscale");
     }
-    if ((params["iscaleonly_flag"] ?? false)) {
+    if ((params["iscaleonly"] ?? false)) {
         cargs.push("--iscaleonly");
     }
-    if ((params["iscalein_files"] ?? null) !== null) {
+    if ((params["iscalein"] ?? null) !== null) {
         cargs.push(
             "--iscalein",
-            ...(params["iscalein_files"] ?? null)
+            ...(params["iscalein"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["iscaleout_files"] ?? null) !== null) {
+    if ((params["iscaleout"] ?? null) !== null) {
         cargs.push(
             "--iscaleout",
-            ...(params["iscaleout_files"] ?? null)
+            ...(params["iscaleout"] ?? null)
         );
     }
-    if ((params["transonly_flag"] ?? false)) {
+    if ((params["transonly"] ?? false)) {
         cargs.push("--transonly");
     }
-    if ((params["affine_flag"] ?? false)) {
+    if ((params["affine"] ?? false)) {
         cargs.push("--affine");
     }
-    if ((params["ixforms_files"] ?? null) !== null) {
+    if ((params["ixforms"] ?? null) !== null) {
         cargs.push(
             "--ixforms",
-            ...(params["ixforms_files"] ?? null)
+            ...(params["ixforms"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["masks_files"] ?? null) !== null) {
+    if ((params["masks"] ?? null) !== null) {
         cargs.push(
             "--masks",
-            ...(params["masks_files"] ?? null)
+            ...(params["masks"] ?? null).map(f => execution.inputFile(f))
         );
     }
-    if ((params["vox2vox_flag"] ?? false)) {
+    if ((params["vox2vox"] ?? false)) {
         cargs.push("--vox2vox");
     }
-    if ((params["leastsquares_flag"] ?? false)) {
+    if ((params["leastsquares"] ?? false)) {
         cargs.push("--leastsquares");
     }
-    if ((params["noit_flag"] ?? false)) {
+    if ((params["noit"] ?? false)) {
         cargs.push("--noit");
     }
     if ((params["maxit"] ?? null) !== null) {
@@ -401,19 +415,19 @@ function mri_robust_template_cargs(
             String((params["subsample"] ?? null))
         );
     }
-    if ((params["nomulti_flag"] ?? false)) {
+    if ((params["nomulti"] ?? false)) {
         cargs.push("--nomulti");
     }
-    if ((params["floattype_flag"] ?? false)) {
+    if ((params["floattype"] ?? false)) {
         cargs.push("--floattype");
     }
-    if ((params["finalnearest_flag"] ?? false)) {
+    if ((params["finalnearest"] ?? false)) {
         cargs.push("--finalnearest");
     }
-    if ((params["doubleprec_flag"] ?? false)) {
+    if ((params["doubleprec"] ?? false)) {
         cargs.push("--doubleprec");
     }
-    if ((params["cras_flag"] ?? false)) {
+    if ((params["cras"] ?? false)) {
         cargs.push("--cras");
     }
     if ((params["res_thresh"] ?? null) !== null) {
@@ -428,7 +442,28 @@ function mri_robust_template_cargs(
             String((params["frobnorm_thresh"] ?? null))
         );
     }
-    if ((params["debug_flag"] ?? false)) {
+    if ((params["conform"] ?? null) !== null) {
+        cargs.push(
+            "--conform",
+            (params["conform"] ?? null)
+        );
+    }
+    if ((params["seed"] ?? null) !== null) {
+        cargs.push(
+            "--seed",
+            String((params["seed"] ?? null))
+        );
+    }
+    if ((params["allow_diff_vox_size"] ?? false)) {
+        cargs.push("--allow-diff-vox-size");
+    }
+    if ((params["threads"] ?? null) !== null) {
+        cargs.push(
+            "--threads",
+            String((params["threads"] ?? null))
+        );
+    }
+    if ((params["debug"] ?? false)) {
         cargs.push("--debug");
     }
     return cargs;
@@ -449,10 +484,8 @@ function mri_robust_template_outputs(
 ): MriRobustTemplateOutputs {
     const ret: MriRobustTemplateOutputs = {
         root: execution.outputFile("."),
-        output_template: execution.outputFile([(params["template_file"] ?? null)].join('')),
-        output_lta_transform: execution.outputFile(["[TMP_NAME].lta"].join('')),
-        output_mapped_image: execution.outputFile(["[TMP_NAME]_to_template.mgz"].join('')),
-        output_weights_map: execution.outputFile(["[TMP_NAME]_weights.mgz"].join('')),
+        template_output: execution.outputFile([(params["template"] ?? null)].join('')),
+        conform_output: ((params["conform"] ?? null) !== null) ? execution.outputFile([(params["conform"] ?? null)].join('')) : null,
     };
     return ret;
 }
@@ -495,88 +528,96 @@ function mri_robust_template_execute(
  *
  * URL: https://github.com/freesurfer/freesurfer
  *
- * @param mov_files Input movable volumes to be aligned to common mean/median template.
- * @param template_file Output template volume (final mean/median image).
- * @param sat_value Set outlier sensitivity manually. Higher values mean less sensitivity.
- * @param satit_flag Auto-detect good sensitivity (recommended for head or full brain scans).
- * @param lta_files Output transforms to template (for each input).
- * @param mapmov_files Output images: map and resample each input to template.
- * @param mapmovhdr_files Output images: header-adjusted movables (no resampling).
- * @param weights_files Output weights (outliers) in target space.
- * @param oneminusw_flag Weights (outlier) map will be inverted (0=outlier), as in earlier versions.
- * @param average_type Construct template from: 0 Mean, 1 Median (default).
- * @param inittp Use TP# for spatial init (default random), 0: no init.
- * @param fixtp_flag Map everything to init TP# (init TP is not resampled).
- * @param iscale_flag Allow also intensity scaling (default off).
- * @param iscaleonly_flag Only perform iscale (no transformation, default off).
- * @param iscalein_files Use initial intensity scales.
- * @param iscaleout_files Output final intensity scales (will activate --iscale).
- * @param transonly_flag Find 3 parameter translation only.
- * @param affine_flag Find 12 parameter affine transform.
- * @param ixforms_files Use initial transforms (lta) on source ('id'=identity).
- * @param masks_files Input masks applied to movables.
- * @param vox2vox_flag Output VOX2VOX lta file (default is RAS2RAS).
- * @param leastsquares_flag Use least squares instead of robust M-estimator (for testing only).
- * @param noit_flag Do not iterate, just create first template.
- * @param maxit Iterate max # times (if #tp>2 default 6, else 5 for 2tp reg.).
- * @param highit Iterate max # times on highest resolution (default 5).
- * @param epsit Stop iterations when all transform updates fall below the specified value.
- * @param pairmaxit Iterate max # times (default 5) for individual pairwise registrations.
- * @param pairepsit Stop individual pairwise registration iterations when transform updates fall below the specified value.
- * @param subsample Subsample if dimension > specified value on all axes (default no subsampling).
- * @param nomulti_flag Do not use multi-resolution (only highest resolution).
- * @param floattype_flag Convert images to float internally (default: keep input type).
- * @param finalnearest_flag Use nearest neighbor in final interpolation when creating average.
- * @param doubleprec_flag Use double precision instead of float internally (large memory usage).
- * @param cras_flag Center template at average CRAS, instead of average barycenter.
- * @param res_thresh Volume resolution threshold (default is 0.01 mm).
- * @param frobnorm_thresh Matrix frobenius norm threshold (default is 0.0001).
- * @param debug_flag Show debug output (default no debug output).
+ * @param mov Input movable volumes to be aligned to common mean/median template (at least 2 required).
+ * @param template Output template volume (final mean/median image).
+ * @param sat Set outlier sensitivity manually. Higher values mean less sensitivity.
+ * @param satit Auto-detect good sensitivity (recommended for head or full brain scans).
+ * @param lta Output LTA transforms to template (one per input volume).
+ * @param mapmov Output mapped and resampled images in template space (one per input volume).
+ * @param mapmovhdr Output header-adjusted movable images (no resampling, only vox2ras adjusted).
+ * @param weights Output weight volumes in template space (0=regular, 1=outlier).
+ * @param oneminusw Invert outlier weight map (0=outlier), as in earlier versions.
+ * @param average Construct template from: 0=mean, 1=median (default 1).
+ * @param inittp Use timepoint number for spatial initialization (default: random). 0 constructs template from original volumes without initialization.
+ * @param fixtp Map everything to initial timepoint (init TP is not resampled).
+ * @param iscale Enable intensity scaling (default off).
+ * @param iscaleonly Only perform intensity scaling (no spatial transformation).
+ * @param iscalein Input initial intensity scale files.
+ * @param iscaleout Output final intensity scale files (will activate --iscale).
+ * @param transonly Find 3 parameter translation only.
+ * @param affine Find 12 parameter affine transform.
+ * @param ixforms Use initial LTA transforms on source ('id' for identity).
+ * @param masks Input mask volumes applied to movable images.
+ * @param vox2vox Output VOX2VOX LTA file (default is RAS2RAS).
+ * @param leastsquares Use least squares instead of robust M-estimator (for testing only).
+ * @param noit Do not iterate, just create first template.
+ * @param maxit Maximum number of template iterations (default: 6 if >2 timepoints, 5 otherwise).
+ * @param highit Maximum number of iterations on highest resolution (default: -1, use maxit).
+ * @param epsit Stop template iterations when all transform updates fall below this value (default: -1.0, disabled).
+ * @param pairmaxit Maximum number of iterations for pairwise registrations (default: 5).
+ * @param pairepsit Stop pairwise registration iterations when transform updates fall below this value (default: 0.01).
+ * @param subsample Subsample if voxel dimension exceeds this value on all axes (default: -1, disabled).
+ * @param nomulti Do not use multi-resolution (process highest resolution only).
+ * @param floattype Convert images to float internally (default: keep input type).
+ * @param finalnearest Use nearest neighbor interpolation when creating the final average.
+ * @param doubleprec Use double precision instead of float internally (large memory usage).
+ * @param cras Center template at average CRAS instead of average barycenter.
+ * @param res_thresh Volume resolution threshold in mm (default: 0.01).
+ * @param frobnorm_thresh Matrix Frobenius norm threshold (default: 0.0001).
+ * @param conform Output conformed template (256^3, 1mm isotropic voxels).
+ * @param seed Set random seed for target selection (default: 0).
+ * @param allow_diff_vox_size Allow input volumes with different voxel sizes.
+ * @param threads Set number of OpenMP threads.
+ * @param debug Show debug output.
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `MriRobustTemplateOutputs`).
  */
 function mri_robust_template(
-    mov_files: Array<InputPathType>,
-    template_file: string,
-    sat_value: number | null = null,
-    satit_flag: boolean = false,
-    lta_files: Array<string> | null = null,
-    mapmov_files: Array<string> | null = null,
-    mapmovhdr_files: Array<string> | null = null,
-    weights_files: Array<string> | null = null,
-    oneminusw_flag: boolean = false,
-    average_type: number | null = null,
+    mov: Array<InputPathType>,
+    template: string,
+    sat: number | null = null,
+    satit: boolean = false,
+    lta: Array<string> | null = null,
+    mapmov: Array<string> | null = null,
+    mapmovhdr: Array<string> | null = null,
+    weights: Array<string> | null = null,
+    oneminusw: boolean = false,
+    average: number | null = null,
     inittp: number | null = null,
-    fixtp_flag: boolean = false,
-    iscale_flag: boolean = false,
-    iscaleonly_flag: boolean = false,
-    iscalein_files: Array<string> | null = null,
-    iscaleout_files: Array<string> | null = null,
-    transonly_flag: boolean = false,
-    affine_flag: boolean = false,
-    ixforms_files: Array<string> | null = null,
-    masks_files: Array<string> | null = null,
-    vox2vox_flag: boolean = false,
-    leastsquares_flag: boolean = false,
-    noit_flag: boolean = false,
+    fixtp: boolean = false,
+    iscale: boolean = false,
+    iscaleonly: boolean = false,
+    iscalein: Array<InputPathType> | null = null,
+    iscaleout: Array<string> | null = null,
+    transonly: boolean = false,
+    affine: boolean = false,
+    ixforms: Array<InputPathType> | null = null,
+    masks: Array<InputPathType> | null = null,
+    vox2vox: boolean = false,
+    leastsquares: boolean = false,
+    noit: boolean = false,
     maxit: number | null = null,
     highit: number | null = null,
     epsit: number | null = null,
     pairmaxit: number | null = null,
     pairepsit: number | null = null,
     subsample: number | null = null,
-    nomulti_flag: boolean = false,
-    floattype_flag: boolean = false,
-    finalnearest_flag: boolean = false,
-    doubleprec_flag: boolean = false,
-    cras_flag: boolean = false,
+    nomulti: boolean = false,
+    floattype: boolean = false,
+    finalnearest: boolean = false,
+    doubleprec: boolean = false,
+    cras: boolean = false,
     res_thresh: number | null = null,
     frobnorm_thresh: number | null = null,
-    debug_flag: boolean = false,
+    conform: string | null = null,
+    seed: number | null = null,
+    allow_diff_vox_size: boolean = false,
+    threads: number | null = null,
+    debug: boolean = false,
     runner: Runner | null = null,
 ): MriRobustTemplateOutputs {
-    const params = mri_robust_template_params(mov_files, template_file, sat_value, satit_flag, lta_files, mapmov_files, mapmovhdr_files, weights_files, oneminusw_flag, average_type, inittp, fixtp_flag, iscale_flag, iscaleonly_flag, iscalein_files, iscaleout_files, transonly_flag, affine_flag, ixforms_files, masks_files, vox2vox_flag, leastsquares_flag, noit_flag, maxit, highit, epsit, pairmaxit, pairepsit, subsample, nomulti_flag, floattype_flag, finalnearest_flag, doubleprec_flag, cras_flag, res_thresh, frobnorm_thresh, debug_flag)
+    const params = mri_robust_template_params(mov, template, sat, satit, lta, mapmov, mapmovhdr, weights, oneminusw, average, inittp, fixtp, iscale, iscaleonly, iscalein, iscaleout, transonly, affine, ixforms, masks, vox2vox, leastsquares, noit, maxit, highit, epsit, pairmaxit, pairepsit, subsample, nomulti, floattype, finalnearest, doubleprec, cras, res_thresh, frobnorm_thresh, conform, seed, allow_diff_vox_size, threads, debug)
     return mri_robust_template_execute(params, runner);
 }
 
