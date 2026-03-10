@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FSLMERGE_METADATA: Metadata = {
-    id: "acdddf24252447cc2c7bf472678cd573adad7658.boutiques",
+    id: "132b41de2dbed1d8ee9a1fee56e0d37a5fe0b33c.boutiques",
     name: "fslmerge",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -154,7 +154,7 @@ function fslmerge_outputs(
 ): FslmergeOutputs {
     const ret: FslmergeOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([(params["output_file"] ?? null)].join('')),
+        out_file: execution.outputFile([(params["output_file"] ?? null), ".nii.gz"].join('')),
     };
     return ret;
 }

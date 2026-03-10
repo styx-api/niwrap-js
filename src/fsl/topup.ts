@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const TOPUP_METADATA: Metadata = {
-    id: "4b2cf20a0f50a8958ae980e1aaf3e65e9bc5ea52.boutiques",
+    id: "2bc61d13aa7f66f101bf99a72a149b1caf523b4e.boutiques",
     name: "topup",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -288,8 +288,8 @@ function topup_outputs(
         root: execution.outputFile("."),
         fieldcoef: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null), "_fieldcoef.nii.gz"].join('')) : null,
         movpar: ((params["out"] ?? null) !== null) ? execution.outputFile([(params["out"] ?? null), "_movpar.txt"].join('')) : null,
-        fout: ((params["fout"] ?? null) !== null) ? execution.outputFile([(params["fout"] ?? null)].join('')) : null,
-        iout: ((params["iout"] ?? null) !== null) ? execution.outputFile([(params["iout"] ?? null)].join('')) : null,
+        fout: ((params["fout"] ?? null) !== null) ? execution.outputFile([(params["fout"] ?? null), ".nii.gz"].join('')) : null,
+        iout: ((params["iout"] ?? null) !== null) ? execution.outputFile([(params["iout"] ?? null), ".nii.gz"].join('')) : null,
         logout: ((params["logout"] ?? null) !== null) ? execution.outputFile([(params["logout"] ?? null)].join('')) : null,
     };
     return ret;

@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const CONVERTWARP_METADATA: Metadata = {
-    id: "1a7852ca0af8f9dec381ff32fbe50239a29ed0d9.boutiques",
+    id: "fd9c00229c5122d221352b393969d66ef7f8e807.boutiques",
     name: "convertwarp",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -18,6 +18,7 @@ interface ConvertwarpParamsDict {
     "jacobian_max"?: number | null | undefined;
     "jacobian_min"?: number | null | undefined;
     "midmat"?: InputPathType | null | undefined;
+    "out": string;
     "out_abswarp": boolean;
     "out_relwarp": boolean;
     "output_type"?: "NIFTI" | "NIFTI_PAIR" | "NIFTI_GZ" | "NIFTI_PAIR_GZ" | null | undefined;
@@ -47,16 +48,13 @@ interface ConvertwarpOutputs {
      * Name of output file, containing warps that are the combination of all those given as arguments. the format of this will be a field-file (rather than spline coefficients) with any affine components included.
      */
     out_file: OutputPathType;
-    /**
-     * Name of output file, containing the warp as field or coefficients.
-     */
-    out_file_: OutputPathType;
 }
 
 
 /**
  * Build parameters.
  *
+ * @param out Name of output file, containing warps that are the combination of all those given as arguments. the format of this will be a field-file (rather than spline coefficients) with any affine components included.
  * @param reference Name of a file in target space of the full transform.
  * @param abswarp If set it indicates that the warps in --warp1 and --warp2 should be interpreted as absolute. i.e. the values in --warp1/2 are the coordinates in the next space, rather than displacements. this flag is ignored if --warp1/2 was created by fnirt, which always creates relative displacements.
  * @param cons_jacobian Constrain the jacobian of the warpfield to lie within specified min/max limits.
@@ -77,6 +75,7 @@ interface ConvertwarpOutputs {
  * @returns Parameter dictionary
  */
 function convertwarp_params(
+    out: string,
     reference: InputPathType,
     abswarp: boolean = false,
     cons_jacobian: boolean = false,
@@ -98,6 +97,7 @@ function convertwarp_params(
         "@type": "fsl/convertwarp" as const,
         "abswarp": abswarp,
         "cons_jacobian": cons_jacobian,
+        "out": out,
         "out_abswarp": out_abswarp,
         "out_relwarp": out_relwarp,
         "reference": reference,
@@ -166,6 +166,7 @@ function convertwarp_cargs(
     if ((params["midmat"] ?? null) !== null) {
         cargs.push(["--midmat=", execution.inputFile((params["midmat"] ?? null))].join(''));
     }
+    cargs.push(["--out=", (params["out"] ?? null)].join(''));
     if ((params["out_abswarp"] ?? false)) {
         cargs.push("--absout");
     }
@@ -215,8 +216,7 @@ function convertwarp_outputs(
 ): ConvertwarpOutputs {
     const ret: ConvertwarpOutputs = {
         root: execution.outputFile("."),
-        out_file: execution.outputFile([((params["reference"] ?? null).split(/[\\/]/).pop() ?? ""), "_concatwarp"].join('')),
-        out_file_: execution.outputFile(["out_file"].join('')),
+        out_file: execution.outputFile([(params["out"] ?? null)].join('')),
     };
     return ret;
 }
@@ -259,6 +259,7 @@ function convertwarp_execute(
  *
  * URL: https://fsl.fmrib.ox.ac.uk/fsl/fslwiki
  *
+ * @param out Name of output file, containing warps that are the combination of all those given as arguments. the format of this will be a field-file (rather than spline coefficients) with any affine components included.
  * @param reference Name of a file in target space of the full transform.
  * @param abswarp If set it indicates that the warps in --warp1 and --warp2 should be interpreted as absolute. i.e. the values in --warp1/2 are the coordinates in the next space, rather than displacements. this flag is ignored if --warp1/2 was created by fnirt, which always creates relative displacements.
  * @param cons_jacobian Constrain the jacobian of the warpfield to lie within specified min/max limits.
@@ -280,6 +281,7 @@ function convertwarp_execute(
  * @returns NamedTuple of outputs (described in `ConvertwarpOutputs`).
  */
 function convertwarp(
+    out: string,
     reference: InputPathType,
     abswarp: boolean = false,
     cons_jacobian: boolean = false,
@@ -298,7 +300,7 @@ function convertwarp(
     warp2: InputPathType | null = null,
     runner: Runner | null = null,
 ): ConvertwarpOutputs {
-    const params = convertwarp_params(reference, abswarp, cons_jacobian, jacobian_max, jacobian_min, midmat, out_abswarp, out_relwarp, output_type, postmat, premat, relwarp, shift_direction, shift_in_file, warp1, warp2)
+    const params = convertwarp_params(out, reference, abswarp, cons_jacobian, jacobian_max, jacobian_min, midmat, out_abswarp, out_relwarp, output_type, postmat, premat, relwarp, shift_direction, shift_in_file, warp1, warp2)
     return convertwarp_execute(params, runner);
 }
 

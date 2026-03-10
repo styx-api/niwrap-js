@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const FUGUE_METADATA: Metadata = {
-    id: "b2af5c065fecc04b02b5d76d864132d0f7d5f4db.boutiques",
+    id: "8accaed8e26afdcc5d70586bc89db0a31c680b57.boutiques",
     name: "fugue",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -35,8 +35,6 @@ interface FugueParamsDict {
     "phase_conjugate": boolean;
     "phasemap_in_file"?: InputPathType | null | undefined;
     "poly_order"?: number | null | undefined;
-    "save_fmap": boolean;
-    "save_shift": boolean;
     "save_unmasked_fmap": boolean;
     "save_unmasked_shift": boolean;
     "shift_in_file"?: InputPathType | null | undefined;
@@ -104,8 +102,6 @@ interface FugueOutputs {
  * @param phase_conjugate Apply phase conjugate method of unwarping.
  * @param phasemap_in_file Filename for input phase image.
  * @param poly_order Apply polynomial fitting of order n.
- * @param save_fmap Write field map volume.
- * @param save_shift Write pixel shift volume.
  * @param save_unmasked_fmap Saves the unmasked fieldmap when using --savefmap.
  * @param save_unmasked_shift Saves the unmasked shiftmap when using --saveshift.
  * @param shift_in_file Filename for reading pixel shift volume.
@@ -141,8 +137,6 @@ function fugue_params(
     phase_conjugate: boolean = false,
     phasemap_in_file: InputPathType | null = null,
     poly_order: number | null = null,
-    save_fmap: boolean = false,
-    save_shift: boolean = false,
     save_unmasked_fmap: boolean = false,
     save_unmasked_shift: boolean = false,
     shift_in_file: InputPathType | null = null,
@@ -165,8 +159,6 @@ function fugue_params(
         "nokspace": nokspace,
         "pava": pava,
         "phase_conjugate": phase_conjugate,
-        "save_fmap": save_fmap,
-        "save_shift": save_shift,
         "save_unmasked_fmap": save_unmasked_fmap,
         "save_unmasked_shift": save_unmasked_shift,
     };
@@ -311,12 +303,6 @@ function fugue_cargs(
     if ((params["poly_order"] ?? null) !== null) {
         cargs.push(["--poly=", String((params["poly_order"] ?? null))].join(''));
     }
-    if ((params["save_fmap"] ?? false)) {
-        cargs.push("--save_fmap");
-    }
-    if ((params["save_shift"] ?? false)) {
-        cargs.push("--save_shift");
-    }
     if ((params["save_unmasked_fmap"] ?? false)) {
         cargs.push("--unmaskfmap");
     }
@@ -430,8 +416,6 @@ function fugue_execute(
  * @param phase_conjugate Apply phase conjugate method of unwarping.
  * @param phasemap_in_file Filename for input phase image.
  * @param poly_order Apply polynomial fitting of order n.
- * @param save_fmap Write field map volume.
- * @param save_shift Write pixel shift volume.
  * @param save_unmasked_fmap Saves the unmasked fieldmap when using --savefmap.
  * @param save_unmasked_shift Saves the unmasked shiftmap when using --saveshift.
  * @param shift_in_file Filename for reading pixel shift volume.
@@ -468,8 +452,6 @@ function fugue(
     phase_conjugate: boolean = false,
     phasemap_in_file: InputPathType | null = null,
     poly_order: number | null = null,
-    save_fmap: boolean = false,
-    save_shift: boolean = false,
     save_unmasked_fmap: boolean = false,
     save_unmasked_shift: boolean = false,
     shift_in_file: InputPathType | null = null,
@@ -481,7 +463,7 @@ function fugue(
     warped_file: string | null = null,
     runner: Runner | null = null,
 ): FugueOutputs {
-    const params = fugue_params(asym_se_time, despike_2dfilter, despike_threshold, dwell_time, dwell_to_asym_ratio, fmap_in_file, fmap_out_file, forward_warping, fourier_order, icorr, icorr_only, in_file, mask_file, median_2dfilter, no_extend, no_gap_fill, nokspace, output_type, pava, phase_conjugate, phasemap_in_file, poly_order, save_fmap, save_shift, save_unmasked_fmap, save_unmasked_shift, shift_in_file, shift_out_file, smooth2d, smooth3d, unwarp_direction, unwarped_file, warped_file)
+    const params = fugue_params(asym_se_time, despike_2dfilter, despike_threshold, dwell_time, dwell_to_asym_ratio, fmap_in_file, fmap_out_file, forward_warping, fourier_order, icorr, icorr_only, in_file, mask_file, median_2dfilter, no_extend, no_gap_fill, nokspace, output_type, pava, phase_conjugate, phasemap_in_file, poly_order, save_unmasked_fmap, save_unmasked_shift, shift_in_file, shift_out_file, smooth2d, smooth3d, unwarp_direction, unwarped_file, warped_file)
     return fugue_execute(params, runner);
 }
 

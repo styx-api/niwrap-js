@@ -4,7 +4,7 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const APPLYTOPUP_METADATA: Metadata = {
-    id: "3fd3f000d10be8bf5d764ca4ebb15f739a64a341.boutiques",
+    id: "ae279a4be6f94567ba6bf2bcba66ac29645e7f5e.boutiques",
     name: "applytopup",
     package: "fsl",
     container_image_tag: "brainlife/fsl:6.0.4-patched2",
@@ -140,7 +140,7 @@ function applytopup_outputs(
 ): ApplytopupOutputs {
     const ret: ApplytopupOutputs = {
         root: execution.outputFile("."),
-        output_file: execution.outputFile([(params["out"] ?? null)].join('')),
+        output_file: execution.outputFile([(params["out"] ?? null), ".nii.gz"].join('')),
     };
     return ret;
 }
