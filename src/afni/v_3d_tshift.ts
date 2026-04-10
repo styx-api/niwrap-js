@@ -4,29 +4,19 @@
 import { Runner, Execution, Metadata, InputPathType, OutputPathType, getGlobalRunner } from 'styxdefs';
 
 const V_3D_TSHIFT_METADATA: Metadata = {
-    id: "eb1127cdc88eed5f16539462f60c9212dd13437b.boutiques",
+    id: "532465668136863eecd81d4cd122486105f8a4e6.boutiques",
     name: "3dTshift",
     package: "afni",
     container_image_tag: "afni/afni_make_build:AFNI_24.2.06",
 };
 
 
-interface V3dTshiftRltParamsDict {
-    "@type"?: "rlt";
+interface V3dTshiftTrMicrosyntaxParamsDict {
+    "@type"?: "tr_microsyntax";
+    "value": number;
+    "unit"?: "s" | "ms" | "Hz" | null | undefined;
 }
-type V3dTshiftRltParamsDictTagged = Required<Pick<V3dTshiftRltParamsDict, '@type'>> & V3dTshiftRltParamsDict;
-
-
-interface V3dTshiftRltPlusParamsDict {
-    "@type"?: "rlt_plus";
-}
-type V3dTshiftRltPlusParamsDictTagged = Required<Pick<V3dTshiftRltPlusParamsDict, '@type'>> & V3dTshiftRltPlusParamsDict;
-
-
-interface V3dTshiftNoDetrendParamsDict {
-    "@type"?: "no_detrend";
-}
-type V3dTshiftNoDetrendParamsDictTagged = Required<Pick<V3dTshiftNoDetrendParamsDict, '@type'>> & V3dTshiftNoDetrendParamsDict;
+type V3dTshiftTrMicrosyntaxParamsDictTagged = Required<Pick<V3dTshiftTrMicrosyntaxParamsDict, '@type'>> & V3dTshiftTrMicrosyntaxParamsDict;
 
 
 interface V3dTshiftAlignToTzeroParamsDict {
@@ -50,6 +40,24 @@ interface V3dTshiftAlignVoxelWiseParamsDict {
 type V3dTshiftAlignVoxelWiseParamsDictTagged = Required<Pick<V3dTshiftAlignVoxelWiseParamsDict, '@type'>> & V3dTshiftAlignVoxelWiseParamsDict;
 
 
+interface V3dTshiftRltParamsDict {
+    "@type"?: "rlt";
+}
+type V3dTshiftRltParamsDictTagged = Required<Pick<V3dTshiftRltParamsDict, '@type'>> & V3dTshiftRltParamsDict;
+
+
+interface V3dTshiftRltPlusParamsDict {
+    "@type"?: "rlt_plus";
+}
+type V3dTshiftRltPlusParamsDictTagged = Required<Pick<V3dTshiftRltPlusParamsDict, '@type'>> & V3dTshiftRltPlusParamsDict;
+
+
+interface V3dTshiftNoDetrendParamsDict {
+    "@type"?: "no_detrend";
+}
+type V3dTshiftNoDetrendParamsDictTagged = Required<Pick<V3dTshiftNoDetrendParamsDict, '@type'>> & V3dTshiftNoDetrendParamsDict;
+
+
 interface V3dTshiftTpatternModeStringParamsDict {
     "@type"?: "tpattern_mode_string";
     "tpattern_string": "alt+z" | "altplus" | "alt+z2" | "alt-z" | "altminus" | "alt-z2" | "seq+z" | "seqplus" | "seq-z" | "seqminus";
@@ -64,65 +72,19 @@ interface V3dTshiftTpatternModeFileParamsDict {
 type V3dTshiftTpatternModeFileParamsDictTagged = Required<Pick<V3dTshiftTpatternModeFileParamsDict, '@type'>> & V3dTshiftTpatternModeFileParamsDict;
 
 
-interface V3dTshiftTrMicrosyntaxParamsDict {
-    "@type"?: "tr_microsyntax";
-    "value": number;
-    "unit"?: "s" | "ms" | null | undefined;
-}
-type V3dTshiftTrMicrosyntaxParamsDictTagged = Required<Pick<V3dTshiftTrMicrosyntaxParamsDict, '@type'>> & V3dTshiftTrMicrosyntaxParamsDict;
-
-
 interface V3dTshiftParamsDict {
     "@type"?: "afni/3dTshift";
+    "verbose": boolean;
+    "tr"?: V3dTshiftTrMicrosyntaxParamsDict | null | undefined;
+    "shift_strategy"?: V3dTshiftAlignToTzeroParamsDictTagged | V3dTshiftAlignToSliceParamsDictTagged | V3dTshiftAlignVoxelWiseParamsDictTagged | null | undefined;
     "prefix"?: string | null | undefined;
     "ignore"?: number | null | undefined;
-    "in_file": InputPathType;
-    "interp"?: "Fourier" | "linear" | "cubic" | "quintic" | "heptic" | "wsinc5" | "wsinc9" | null | undefined;
-    "num_threads"?: number | null | undefined;
-    "outputtype"?: "NIFTI" | "AFNI" | "NIFTI_GZ" | null | undefined;
     "detrend_strategy"?: V3dTshiftRltParamsDictTagged | V3dTshiftRltPlusParamsDictTagged | V3dTshiftNoDetrendParamsDictTagged | null | undefined;
-    "shift_strategy"?: V3dTshiftAlignToTzeroParamsDictTagged | V3dTshiftAlignToSliceParamsDictTagged | V3dTshiftAlignVoxelWiseParamsDictTagged | null | undefined;
-    "slice_encoding_direction"?: "k" | "k-" | null | undefined;
+    "interp"?: "Fourier" | "linear" | "cubic" | "quintic" | "heptic" | "wsinc5" | "wsinc9" | null | undefined;
     "tpattern"?: V3dTshiftTpatternModeStringParamsDictTagged | V3dTshiftTpatternModeFileParamsDictTagged | null | undefined;
-    "tr"?: V3dTshiftTrMicrosyntaxParamsDict | null | undefined;
-    "verbose": boolean;
+    "in_file": InputPathType;
 }
 type V3dTshiftParamsDictTagged = Required<Pick<V3dTshiftParamsDict, '@type'>> & V3dTshiftParamsDict;
-
-
-/**
- * Get build cargs function by command type.
- *
- * @param t Command type
- *
- * @returns Build cargs function.
- */
-function v_3d_tshift_detrend_strategy_cargs_dyn_fn(
-    t: string,
-): Function | undefined {
-    const cargsFuncs = {
-        "rlt": v_3d_tshift_rlt_cargs,
-        "rlt_plus": v_3d_tshift_rlt_plus_cargs,
-        "no_detrend": v_3d_tshift_no_detrend_cargs,
-    };
-    return cargsFuncs[t];
-}
-
-
-/**
- * Get build outputs function by command type.
- *
- * @param t Command type
- *
- * @returns Build outputs function.
- */
-function v_3d_tshift_detrend_strategy_outputs_dyn_fn(
-    t: string,
-): Function | undefined {
-    const outputsFuncs = {
-    };
-    return outputsFuncs[t];
-}
 
 
 /**
@@ -167,6 +129,41 @@ function v_3d_tshift_shift_strategy_outputs_dyn_fn(
  *
  * @returns Build cargs function.
  */
+function v_3d_tshift_detrend_strategy_cargs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const cargsFuncs = {
+        "rlt": v_3d_tshift_rlt_cargs,
+        "rlt_plus": v_3d_tshift_rlt_plus_cargs,
+        "no_detrend": v_3d_tshift_no_detrend_cargs,
+    };
+    return cargsFuncs[t];
+}
+
+
+/**
+ * Get build outputs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build outputs function.
+ */
+function v_3d_tshift_detrend_strategy_outputs_dyn_fn(
+    t: string,
+): Function | undefined {
+    const outputsFuncs = {
+    };
+    return outputsFuncs[t];
+}
+
+
+/**
+ * Get build cargs function by command type.
+ *
+ * @param t Command type
+ *
+ * @returns Build cargs function.
+ */
 function v_3d_tshift_tpattern_cargs_dyn_fn(
     t: string,
 ): Function | undefined {
@@ -191,6 +188,158 @@ function v_3d_tshift_tpattern_outputs_dyn_fn(
     const outputsFuncs = {
     };
     return outputsFuncs[t];
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param value The TR value. Must be greater than 0.
+ * @param unit Unit for the TR.
+ *
+ * @returns Parameter dictionary
+ */
+function v_3d_tshift_tr_microsyntax(
+    value: number,
+    unit: "s" | "ms" | "Hz" | null = null,
+): V3dTshiftTrMicrosyntaxParamsDictTagged {
+    const params = {
+        "@type": "tr_microsyntax" as const,
+        "value": value,
+    };
+    if (unit !== null) {
+        params["unit"] = unit;
+    }
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3d_tshift_tr_microsyntax_cargs(
+    params: V3dTshiftTrMicrosyntaxParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push([String((params["value"] ?? null)), (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")].join(''));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param tzero The time offset to align to. Must be between the minimum and maximum slice temporal offsets.
+ *
+ * @returns Parameter dictionary
+ */
+function v_3d_tshift_align_to_tzero(
+    tzero: number,
+): V3dTshiftAlignToTzeroParamsDictTagged {
+    const params = {
+        "@type": "align_to_tzero" as const,
+        "tzero": tzero,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3d_tshift_align_to_tzero_cargs(
+    params: V3dTshiftAlignToTzeroParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("-tzero");
+    cargs.push(String((params["tzero"] ?? null)));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param slice_index The index of the reference slice. Must be less than the total number of slices.
+ *
+ * @returns Parameter dictionary
+ */
+function v_3d_tshift_align_to_slice(
+    slice_index: number,
+): V3dTshiftAlignToSliceParamsDictTagged {
+    const params = {
+        "@type": "align_to_slice" as const,
+        "slice_index": slice_index,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3d_tshift_align_to_slice_cargs(
+    params: V3dTshiftAlignToSliceParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("-slice");
+    cargs.push(String((params["slice_index"] ?? null)));
+    return cargs;
+}
+
+
+/**
+ * Build parameters.
+ *
+ * @param voxshift_file Dataset containing fractional TR shift values. Must have the same spatial dimensions as the input.
+ *
+ * @returns Parameter dictionary
+ */
+function v_3d_tshift_align_voxel_wise(
+    voxshift_file: InputPathType,
+): V3dTshiftAlignVoxelWiseParamsDictTagged {
+    const params = {
+        "@type": "align_voxel_wise" as const,
+        "voxshift_file": voxshift_file,
+    };
+    return params;
+}
+
+
+/**
+ * Build command-line arguments from parameters.
+ *
+ * @param params The parameters.
+ * @param execution The execution object for resolving input paths.
+ *
+ * @returns Command-line arguments.
+ */
+function v_3d_tshift_align_voxel_wise_cargs(
+    params: V3dTshiftAlignVoxelWiseParamsDict,
+    execution: Execution,
+): string[] {
+    const cargs: string[] = [];
+    cargs.push("-voxshift");
+    cargs.push(execution.inputFile((params["voxshift_file"] ?? null)));
+    return cargs;
 }
 
 
@@ -293,117 +442,6 @@ function v_3d_tshift_no_detrend_cargs(
 /**
  * Build parameters.
  *
- * @param tzero The time offset to align to (e.g., 0).
- *
- * @returns Parameter dictionary
- */
-function v_3d_tshift_align_to_tzero(
-    tzero: number,
-): V3dTshiftAlignToTzeroParamsDictTagged {
-    const params = {
-        "@type": "align_to_tzero" as const,
-        "tzero": tzero,
-    };
-    return params;
-}
-
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function v_3d_tshift_align_to_tzero_cargs(
-    params: V3dTshiftAlignToTzeroParamsDict,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push("-tzero");
-    cargs.push(String((params["tzero"] ?? null)));
-    return cargs;
-}
-
-
-/**
- * Build parameters.
- *
- * @param slice_index The index of the slice to use as the reference.
- *
- * @returns Parameter dictionary
- */
-function v_3d_tshift_align_to_slice(
-    slice_index: number,
-): V3dTshiftAlignToSliceParamsDictTagged {
-    const params = {
-        "@type": "align_to_slice" as const,
-        "slice_index": slice_index,
-    };
-    return params;
-}
-
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function v_3d_tshift_align_to_slice_cargs(
-    params: V3dTshiftAlignToSliceParamsDict,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push("-slice");
-    cargs.push(String((params["slice_index"] ?? null)));
-    return cargs;
-}
-
-
-/**
- * Build parameters.
- *
- * @param voxshift_file Dataset containing fractional TR shift values.
- *
- * @returns Parameter dictionary
- */
-function v_3d_tshift_align_voxel_wise(
-    voxshift_file: InputPathType,
-): V3dTshiftAlignVoxelWiseParamsDictTagged {
-    const params = {
-        "@type": "align_voxel_wise" as const,
-        "voxshift_file": voxshift_file,
-    };
-    return params;
-}
-
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function v_3d_tshift_align_voxel_wise_cargs(
-    params: V3dTshiftAlignVoxelWiseParamsDict,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push("-voxshift");
-    cargs.push(execution.inputFile((params["voxshift_file"] ?? null)));
-    return cargs;
-}
-
-
-/**
- * Build parameters.
- *
  * @param tpattern_string Standard slice timing pattern code.
  *
  * @returns Parameter dictionary
@@ -440,7 +478,7 @@ function v_3d_tshift_tpattern_mode_string_cargs(
 /**
  * Build parameters.
  *
- * @param tpattern_file File containing temporal offsets.
+ * @param tpattern_file File containing temporal offsets (one per slice).
  *
  * @returns Parameter dictionary
  */
@@ -474,47 +512,6 @@ function v_3d_tshift_tpattern_mode_file_cargs(
 
 
 /**
- * Build parameters.
- *
- * @param value The temporal resolution value.
- * @param unit Unit for the TR (seconds or milliseconds).
- *
- * @returns Parameter dictionary
- */
-function v_3d_tshift_tr_microsyntax(
-    value: number,
-    unit: "s" | "ms" | null = null,
-): V3dTshiftTrMicrosyntaxParamsDictTagged {
-    const params = {
-        "@type": "tr_microsyntax" as const,
-        "value": value,
-    };
-    if (unit !== null) {
-        params["unit"] = unit;
-    }
-    return params;
-}
-
-
-/**
- * Build command-line arguments from parameters.
- *
- * @param params The parameters.
- * @param execution The execution object for resolving input paths.
- *
- * @returns Command-line arguments.
- */
-function v_3d_tshift_tr_microsyntax_cargs(
-    params: V3dTshiftTrMicrosyntaxParamsDict,
-    execution: Execution,
-): string[] {
-    const cargs: string[] = [];
-    cargs.push([String((params["value"] ?? null)), (((params["unit"] ?? null) !== null) ? (params["unit"] ?? null) : "")].join(''));
-    return cargs;
-}
-
-
-/**
  * Output object returned when calling `V3dTshiftParamsDict(...)`.
  *
  * @interface
@@ -525,82 +522,63 @@ interface V3dTshiftOutputs {
      */
     root: OutputPathType;
     /**
-     * Output image file name.
+     * Time-shifted output dataset.
      */
     out_file: OutputPathType | null;
-    /**
-     * Afni formatted timing file, if ``slice_timing`` is a list.
-     */
-    timing_file: OutputPathType;
 }
 
 
 /**
  * Build parameters.
  *
- * @param in_file Input dataset to 3dTshift. The input dataset can have a sub-brick selector attached.
- * @param prefix Prefix for output image file name. The default is 'tshift'.
- * @param ignore Ignore the first 'ii' points. The first ii values will be unchanged in the output (regardless of the -rlt option). They also will not be used in the detrending or time shifting. Default is ii=0.
- * @param interp Different interpolation methods. Fourier (default) is most accurate but slowest. Linear is least accurate. Polynomials: cubic, quintic, heptic. Weighted sinc: wsinc5, wsinc9.
- * @param num_threads Set number of threads.
- * @param outputtype Afni output filetype.
- * @param detrend_strategy Specify how to handle the mean and linear trend during shifting. If unspecified, the default is to remove the trend and add it back.
- * @param shift_strategy Select how the temporal alignment should be calculated.
- * @param slice_encoding_direction 'k' or 'k-'. Direction in which slice_timing is specified (default: k). Only in effect when slice_timing is passed as list.
- * @param tpattern Use specified slice time pattern rather than one in header. Values can be a standard pattern string (e.g. 'alt+z') or a filename prefixed with '@'.
- * @param tr Manually set the TR. You can attach suffix 's' for seconds or 'ms' for milliseconds.
+ * @param in_file Input dataset to 3dTshift. Can include a sub-brick selector (e.g., prefix+orig[4..$]).
  * @param verbose Print lots of messages while program runs.
+ * @param tr Manually set the TR instead of using the value in the dataset header. You can attach a suffix for units.
+ * @param shift_strategy How to determine the temporal alignment target. Default is the average of the tpattern values.
+ * @param prefix Prefix for output file name. Default is 'tshift'.
+ * @param ignore Ignore the first 'ii' points. These values will be unchanged in the output and will not be used in detrending or time shifting. Default is 0.
+ * @param detrend_strategy How to handle the mean and linear trend during shifting. Default is to remove both before shifting and add both back after.
+ * @param interp Interpolation method. Fourier (default) is most accurate but slowest. Linear is least accurate. Polynomials: cubic, quintic, heptic. Weighted sinc: wsinc5, wsinc9.
+ * @param tpattern Use specified slice time pattern rather than the one in the dataset header.
  *
  * @returns Parameter dictionary
  */
 function v_3d_tshift_params(
     in_file: InputPathType,
+    verbose: boolean = false,
+    tr: V3dTshiftTrMicrosyntaxParamsDict | null = null,
+    shift_strategy: V3dTshiftAlignToTzeroParamsDictTagged | V3dTshiftAlignToSliceParamsDictTagged | V3dTshiftAlignVoxelWiseParamsDictTagged | null = null,
     prefix: string | null = null,
     ignore: number | null = null,
-    interp: "Fourier" | "linear" | "cubic" | "quintic" | "heptic" | "wsinc5" | "wsinc9" | null = null,
-    num_threads: number | null = null,
-    outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     detrend_strategy: V3dTshiftRltParamsDictTagged | V3dTshiftRltPlusParamsDictTagged | V3dTshiftNoDetrendParamsDictTagged | null = null,
-    shift_strategy: V3dTshiftAlignToTzeroParamsDictTagged | V3dTshiftAlignToSliceParamsDictTagged | V3dTshiftAlignVoxelWiseParamsDictTagged | null = null,
-    slice_encoding_direction: "k" | "k-" | null = null,
+    interp: "Fourier" | "linear" | "cubic" | "quintic" | "heptic" | "wsinc5" | "wsinc9" | null = null,
     tpattern: V3dTshiftTpatternModeStringParamsDictTagged | V3dTshiftTpatternModeFileParamsDictTagged | null = null,
-    tr: V3dTshiftTrMicrosyntaxParamsDict | null = null,
-    verbose: boolean = false,
 ): V3dTshiftParamsDictTagged {
     const params = {
         "@type": "afni/3dTshift" as const,
-        "in_file": in_file,
         "verbose": verbose,
+        "in_file": in_file,
     };
+    if (tr !== null) {
+        params["tr"] = tr;
+    }
+    if (shift_strategy !== null) {
+        params["shift_strategy"] = shift_strategy;
+    }
     if (prefix !== null) {
         params["prefix"] = prefix;
     }
     if (ignore !== null) {
         params["ignore"] = ignore;
     }
-    if (interp !== null) {
-        params["interp"] = interp;
-    }
-    if (num_threads !== null) {
-        params["num_threads"] = num_threads;
-    }
-    if (outputtype !== null) {
-        params["outputtype"] = outputtype;
-    }
     if (detrend_strategy !== null) {
         params["detrend_strategy"] = detrend_strategy;
     }
-    if (shift_strategy !== null) {
-        params["shift_strategy"] = shift_strategy;
-    }
-    if (slice_encoding_direction !== null) {
-        params["slice_encoding_direction"] = slice_encoding_direction;
+    if (interp !== null) {
+        params["interp"] = interp;
     }
     if (tpattern !== null) {
         params["tpattern"] = tpattern;
-    }
-    if (tr !== null) {
-        params["tr"] = tr;
     }
     return params;
 }
@@ -620,6 +598,18 @@ function v_3d_tshift_cargs(
 ): string[] {
     const cargs: string[] = [];
     cargs.push("3dTshift");
+    if ((params["verbose"] ?? false)) {
+        cargs.push("-verbose");
+    }
+    if ((params["tr"] ?? null) !== null) {
+        cargs.push(
+            "-TR",
+            ...v_3d_tshift_tr_microsyntax_cargs((params["tr"] ?? null), execution)
+        );
+    }
+    if ((params["shift_strategy"] ?? null) !== null) {
+        cargs.push(...v_3d_tshift_shift_strategy_cargs_dyn_fn((params["shift_strategy"] ?? null)["@type"])((params["shift_strategy"] ?? null), execution));
+    }
     if ((params["prefix"] ?? null) !== null) {
         cargs.push(
             "-prefix",
@@ -632,27 +622,14 @@ function v_3d_tshift_cargs(
             String((params["ignore"] ?? null))
         );
     }
-    cargs.push(execution.inputFile((params["in_file"] ?? null)));
+    if ((params["detrend_strategy"] ?? null) !== null) {
+        cargs.push(...v_3d_tshift_detrend_strategy_cargs_dyn_fn((params["detrend_strategy"] ?? null)["@type"])((params["detrend_strategy"] ?? null), execution));
+    }
     if ((params["interp"] ?? null) !== null) {
         cargs.push(
             "-",
             (params["interp"] ?? null)
         );
-    }
-    if ((params["num_threads"] ?? null) !== null) {
-        cargs.push(String((params["num_threads"] ?? null)));
-    }
-    if ((params["outputtype"] ?? null) !== null) {
-        cargs.push((params["outputtype"] ?? null));
-    }
-    if ((params["detrend_strategy"] ?? null) !== null) {
-        cargs.push(...v_3d_tshift_detrend_strategy_cargs_dyn_fn((params["detrend_strategy"] ?? null)["@type"])((params["detrend_strategy"] ?? null), execution));
-    }
-    if ((params["shift_strategy"] ?? null) !== null) {
-        cargs.push(...v_3d_tshift_shift_strategy_cargs_dyn_fn((params["shift_strategy"] ?? null)["@type"])((params["shift_strategy"] ?? null), execution));
-    }
-    if ((params["slice_encoding_direction"] ?? null) !== null) {
-        cargs.push((params["slice_encoding_direction"] ?? null));
     }
     if ((params["tpattern"] ?? null) !== null) {
         cargs.push(
@@ -660,15 +637,7 @@ function v_3d_tshift_cargs(
             ...v_3d_tshift_tpattern_cargs_dyn_fn((params["tpattern"] ?? null)["@type"])((params["tpattern"] ?? null), execution)
         );
     }
-    if ((params["tr"] ?? null) !== null) {
-        cargs.push(
-            "-TR",
-            ...v_3d_tshift_tr_microsyntax_cargs((params["tr"] ?? null), execution)
-        );
-    }
-    if ((params["verbose"] ?? false)) {
-        cargs.push("-verbose");
-    }
+    cargs.push(execution.inputFile((params["in_file"] ?? null)));
     return cargs;
 }
 
@@ -688,7 +657,6 @@ function v_3d_tshift_outputs(
     const ret: V3dTshiftOutputs = {
         root: execution.outputFile("."),
         out_file: ((params["prefix"] ?? null) !== null) ? execution.outputFile([(params["prefix"] ?? null)].join('')) : null,
-        timing_file: execution.outputFile(["timing_file"].join('')),
     };
     return ret;
 }
@@ -731,38 +699,32 @@ function v_3d_tshift_execute(
  *
  * URL: https://afni.nimh.nih.gov/
  *
- * @param in_file Input dataset to 3dTshift. The input dataset can have a sub-brick selector attached.
- * @param prefix Prefix for output image file name. The default is 'tshift'.
- * @param ignore Ignore the first 'ii' points. The first ii values will be unchanged in the output (regardless of the -rlt option). They also will not be used in the detrending or time shifting. Default is ii=0.
- * @param interp Different interpolation methods. Fourier (default) is most accurate but slowest. Linear is least accurate. Polynomials: cubic, quintic, heptic. Weighted sinc: wsinc5, wsinc9.
- * @param num_threads Set number of threads.
- * @param outputtype Afni output filetype.
- * @param detrend_strategy Specify how to handle the mean and linear trend during shifting. If unspecified, the default is to remove the trend and add it back.
- * @param shift_strategy Select how the temporal alignment should be calculated.
- * @param slice_encoding_direction 'k' or 'k-'. Direction in which slice_timing is specified (default: k). Only in effect when slice_timing is passed as list.
- * @param tpattern Use specified slice time pattern rather than one in header. Values can be a standard pattern string (e.g. 'alt+z') or a filename prefixed with '@'.
- * @param tr Manually set the TR. You can attach suffix 's' for seconds or 'ms' for milliseconds.
+ * @param in_file Input dataset to 3dTshift. Can include a sub-brick selector (e.g., prefix+orig[4..$]).
  * @param verbose Print lots of messages while program runs.
+ * @param tr Manually set the TR instead of using the value in the dataset header. You can attach a suffix for units.
+ * @param shift_strategy How to determine the temporal alignment target. Default is the average of the tpattern values.
+ * @param prefix Prefix for output file name. Default is 'tshift'.
+ * @param ignore Ignore the first 'ii' points. These values will be unchanged in the output and will not be used in detrending or time shifting. Default is 0.
+ * @param detrend_strategy How to handle the mean and linear trend during shifting. Default is to remove both before shifting and add both back after.
+ * @param interp Interpolation method. Fourier (default) is most accurate but slowest. Linear is least accurate. Polynomials: cubic, quintic, heptic. Weighted sinc: wsinc5, wsinc9.
+ * @param tpattern Use specified slice time pattern rather than the one in the dataset header.
  * @param runner Command runner
  *
  * @returns NamedTuple of outputs (described in `V3dTshiftOutputs`).
  */
 function v_3d_tshift(
     in_file: InputPathType,
+    verbose: boolean = false,
+    tr: V3dTshiftTrMicrosyntaxParamsDict | null = null,
+    shift_strategy: V3dTshiftAlignToTzeroParamsDictTagged | V3dTshiftAlignToSliceParamsDictTagged | V3dTshiftAlignVoxelWiseParamsDictTagged | null = null,
     prefix: string | null = null,
     ignore: number | null = null,
-    interp: "Fourier" | "linear" | "cubic" | "quintic" | "heptic" | "wsinc5" | "wsinc9" | null = null,
-    num_threads: number | null = null,
-    outputtype: "NIFTI" | "AFNI" | "NIFTI_GZ" | null = null,
     detrend_strategy: V3dTshiftRltParamsDictTagged | V3dTshiftRltPlusParamsDictTagged | V3dTshiftNoDetrendParamsDictTagged | null = null,
-    shift_strategy: V3dTshiftAlignToTzeroParamsDictTagged | V3dTshiftAlignToSliceParamsDictTagged | V3dTshiftAlignVoxelWiseParamsDictTagged | null = null,
-    slice_encoding_direction: "k" | "k-" | null = null,
+    interp: "Fourier" | "linear" | "cubic" | "quintic" | "heptic" | "wsinc5" | "wsinc9" | null = null,
     tpattern: V3dTshiftTpatternModeStringParamsDictTagged | V3dTshiftTpatternModeFileParamsDictTagged | null = null,
-    tr: V3dTshiftTrMicrosyntaxParamsDict | null = null,
-    verbose: boolean = false,
     runner: Runner | null = null,
 ): V3dTshiftOutputs {
-    const params = v_3d_tshift_params(in_file, prefix, ignore, interp, num_threads, outputtype, detrend_strategy, shift_strategy, slice_encoding_direction, tpattern, tr, verbose)
+    const params = v_3d_tshift_params(in_file, verbose, tr, shift_strategy, prefix, ignore, detrend_strategy, interp, tpattern)
     return v_3d_tshift_execute(params, runner);
 }
 
